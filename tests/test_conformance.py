@@ -733,6 +733,56 @@ def test_us_pe_tier3_scope_decisions_are_evidence_backed():
         assert by_name[name].suite is None
 
 
+def test_us_pe_nonstatutory_amount_rows_name_mechanism_and_eligibility():
+    universe = parse_universe(CONFORMANCE_DIR / "us-pe.yaml")
+    by_name = universe.by_name()
+    expected = {
+        "wic": ("gov.usda.wic.value", "is_wic_eligible"),
+        "free_school_meals": (
+            "gov.usda.school_meals.amount.nslp",
+            "school_meal_tier",
+        ),
+        "reduced_price_school_meals": (
+            "gov.usda.school_meals.amount.nslp",
+            "school_meal_tier",
+        ),
+        "chip": (
+            "calibration.gov.hhs.cms.chip.spending.separate_chip.total",
+            "is_chip_eligible",
+        ),
+        "head_start": (
+            "gov.hhs.head_start.spending",
+            "is_head_start_eligible",
+        ),
+        "early_head_start": (
+            "gov.hhs.head_start.early_head_start.spending",
+            "is_early_head_start_eligible",
+        ),
+        "commodity_supplemental_food_program": (
+            "gov.usda.csfp.amount",
+            "commodity_supplemental_food_program_eligible",
+        ),
+    }
+
+    excluded = {
+        name
+        for name, row in by_name.items()
+        if row.exclusion_reason == "oracle_models_nonstatutory_amount"
+    }
+    assert excluded == set(expected)
+
+    for name, (mechanism_path, eligibility_surface) in expected.items():
+        row = by_name[name]
+        assert row.output_vars == (name,)
+        assert row.in_scope is False
+        assert row.suite is None
+        assert row.note is not None
+        assert "PolicyEngine-US 1.767.3" in row.note
+        assert mechanism_path in row.note
+        assert eligibility_surface in row.note
+        assert "compared separately" in row.note
+
+
 def test_serialize_is_stable_roundtrip():
     universe = parse_universe(CONFORMANCE_DIR / "uk.yaml")
     once = serialize(universe)

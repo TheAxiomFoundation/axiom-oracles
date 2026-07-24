@@ -20,10 +20,9 @@ policies:
       - aca_ptc
     in_scope: true
     suite: us-aca-ptc-grid
-    note: 'The us-aca-ptc-grid suite compares six full-year 2026 IRC 36B cases.
-      It binds PE-US used_aca_ptc rather than raw aca_ptc so the compared
-      boundary includes the enrolled-plan premium cap present in Axiom. The
-      committed report is 6/6 within one cent and includes nonzero cases.'
+    note: The us-aca-ptc-grid suite compares six full-year 2026 IRC 36B cases. It binds PE-US used_aca_ptc
+      rather than raw aca_ptc so the compared boundary includes the enrolled-plan premium cap present
+      in Axiom. The committed report is 6/6 within one cent and includes nonzero cases.
   - id: us-pe:acp
     oracle_policy_name: acp
     oracle_policy_type: rules
@@ -31,12 +30,12 @@ policies:
       - acp
     in_scope: false
     exclusion_reason: oracle_models_repealed_law
-    note: 'Lapsed before the 2026 validation year: the Affordable Connectivity Program
-      (47 USC 1752; IIJA 2021 sec. 60502) stopped new enrollments 2024-02-07 and paid
-      its last partial benefit for May 2024 as appropriated funds were exhausted. PolicyEngine-US
-      1.767.3 zeroes gov.fcc.acp.amount for 2026, so acp pays 0 for every synthetic case
-      even with is_acp_eligible forced on and broadband_cost 2400 (probe evidence: scripts/probe_us_repealed_federal.py).
-      Axiom encodes current law and has no current-law ACP surface to compare.'
+    note: 'Lapsed before the 2026 validation year: the Affordable Connectivity Program (47 USC 1752; IIJA
+      2021 sec. 60502) stopped new enrollments 2024-02-07 and paid its last partial benefit for May 2024
+      as appropriated funds were exhausted. PolicyEngine-US 1.767.3 zeroes gov.fcc.acp.amount for 2026,
+      so acp pays 0 for every synthetic case even with is_acp_eligible forced on and broadband_cost 2400
+      (probe evidence: scripts/probe_us_repealed_federal.py). Axiom encodes current law and has no current-law
+      ACP surface to compare.'
   - id: us-pe:additional_medicare_tax
     oracle_policy_name: additional_medicare_tax
     oracle_policy_type: rules
@@ -44,13 +43,11 @@ policies:
       - additional_medicare_tax
     in_scope: true
     suite: us-additional-medicare-grid
-    note: 'The us-additional-medicare-grid suite compares six tax-year 2026
-      Form 8959 cases spanning single, joint, and married-filing-separately wage
-      and self-employment boundaries. It binds PE-US additional_medicare_tax to
-      Axiom''s combined wage and self-employment output; the Axiom fixture
-      supplies per-Person gross SE profit and derives the section 1402(a)(12)
-      adjustment before TaxUnit aggregation. The committed report is 6/6 within
-      one cent and includes nonzero wage and self-employment cases.'
+    note: The us-additional-medicare-grid suite compares six tax-year 2026 Form 8959 cases spanning single,
+      joint, and married-filing-separately wage and self-employment boundaries. It binds PE-US additional_medicare_tax
+      to Axiom's combined wage and self-employment output; the Axiom fixture supplies per-Person gross
+      SE profit and derives the section 1402(a)(12) adjustment before TaxUnit aggregation. The committed
+      report is 6/6 within one cent and includes nonzero wage and self-employment cases.
   - id: us-pe:ak_atap
     oracle_policy_name: ak_atap
     oracle_policy_type: rules
@@ -65,13 +62,10 @@ policies:
       - al_income_tax
     in_scope: true
     suite: al-income-tax-liability
-    note: >-
-      Covered by al-income-tax-liability. The grid and certified full-Populace
-      campaign compare al_income_tax_before_non_refundable_credits; all 1,632
-      positive-weight routed Alabama tax units also have exact equality with
-      final al_income_tax in PolicyEngine-US 1.752.2. Both downstream aggregates,
-      al_non_refundable_credits and al_refundable_credits, are structurally empty
-      in that pinned 2026 model, and the schedule target is nonnegative.
+    note: Covered by al-income-tax-liability. The grid and certified full-Populace campaign compare al_income_tax_before_non_refundable_credits;
+      all 1,632 positive-weight routed Alabama tax units also have exact equality with final al_income_tax
+      in PolicyEngine-US 1.752.2. Both downstream aggregates, al_non_refundable_credits and al_refundable_credits,
+      are structurally empty in that pinned 2026 model, and the schedule target is nonnegative.
   - id: us-pe:al_tanf
     oracle_policy_name: al_tanf
     oracle_policy_type: rules
@@ -79,7 +73,8 @@ policies:
       - al_tanf
     in_scope: true
     suite: al-tanf-ecps
-    note: Covered by al-tanf-ecps — Alabama Family Assistance (al_tanf) vs PE-2026 at population scale (1444/1444 match, 0 unexplained).
+    note: Covered by al-tanf-ecps — Alabama Family Assistance (al_tanf) vs PE-2026 at population scale
+      (1444/1444 match, 0 unexplained).
   - id: us-pe:alternative_minimum_tax
     oracle_policy_name: alternative_minimum_tax
     oracle_policy_type: rules
@@ -102,7 +97,11 @@ policies:
       - ar_income_tax
     in_scope: true
     suite: null
-    note: The state-tax Populace campaign validates the narrower Arkansas Act 2 individual schedule component ar_income_tax_before_non_refundable_credits_indiv at Person grain and sums both sides to TaxUnit only for accounting. The reviewed RuleSpec does not expose broad final ar_income_tax or the former six-case liability-grid output, so that stale grid suite has been retired and broad ar_income_tax remains uncovered.
+    note: The state-tax Populace campaign validates the narrower Arkansas Act 2 individual schedule component
+      ar_income_tax_before_non_refundable_credits_indiv at Person grain and sums both sides to TaxUnit
+      only for accounting. The reviewed RuleSpec does not expose broad final ar_income_tax or the former
+      six-case liability-grid output, so that stale grid suite has been retired and broad ar_income_tax
+      remains uncovered.
   - id: us-pe:ar_tea
     oracle_policy_name: ar_tea
     oracle_policy_type: rules
@@ -117,11 +116,9 @@ policies:
       - az_income_tax
     in_scope: true
     suite: null
-    note: >-
-      The az-income-tax-liability grid and full-Populace campaign validate only
-      az_income_tax_before_non_refundable_credits. Final az_income_tax also applies
-      charitable-contribution, dependent, family, increased-excise-tax, and
-      property-tax credits; 499 of 1,585 routed units differ from the narrow target.
+    note: The az-income-tax-liability grid and full-Populace campaign validate only az_income_tax_before_non_refundable_credits.
+      Final az_income_tax also applies charitable-contribution, dependent, family, increased-excise-tax,
+      and property-tax credits; 499 of 1,585 routed units differ from the narrow target.
   - id: us-pe:az_tanf
     oracle_policy_name: az_tanf
     oracle_policy_type: rules
@@ -147,10 +144,10 @@ policies:
       - ca_income_tax
     in_scope: true
     suite: null
-    note: 'The ca-income-tax-liability suite is a six-case ordinary resident single/joint grid against
+    note: The ca-income-tax-liability suite is a six-case ordinary resident single/joint grid against
       ca_income_tax_before_refundable_credits. It does not cover refundable credits, and its RuleSpec
       slice also excludes the high-rate, head-of-household, AMT, and mental-health-tax branches, so it
-      does not establish final ca_income_tax liability.'
+      does not establish final ca_income_tax liability.
   - id: us-pe:ca_tanf
     oracle_policy_name: ca_tanf
     oracle_policy_type: rules
@@ -190,10 +187,12 @@ policies:
     oracle_policy_type: rules
     output_vars:
       - chip
-    in_scope: true
-    suite: null
-    note: In-scope uncovered — PE-US computes CHIP eligibility/value; only Medicaid MAGI categories have
-      a live suite so far.
+    in_scope: false
+    exclusion_reason: oracle_models_nonstatutory_amount
+    note: PolicyEngine-US 1.767.3 imputes this annual Person value as state separate-CHIP spending divided
+      by enrollment, using calibration.gov.hhs.cms.chip.spending.separate_chip.total[state_code] and calibration.gov.hhs.cms.chip.enrollment.separate_chip[state_code],
+      then gates it on chip_enrolled (eligibility plus take-up). This is a per-capita expenditure imputation,
+      not a statutory amount formula; is_chip_eligible is compared separately.
   - id: us-pe:co_income_tax
     oracle_policy_name: co_income_tax
     oracle_policy_type: rules
@@ -201,7 +200,9 @@ policies:
       - co_income_tax
     in_scope: true
     suite: null
-    note: In-scope uncovered — the reviewed Colorado Populace comparison validates only the C.R.S. section 39-22-104(1.7)(c) base tax on completed-return Colorado taxable income. Section 39-22-627 temporary rate adjustments and credits needed for final co_income_tax remain outside that suite.
+    note: In-scope uncovered — the reviewed Colorado Populace comparison validates only the C.R.S. section
+      39-22-104(1.7)(c) base tax on completed-return Colorado taxable income. Section 39-22-627 temporary
+      rate adjustments and credits needed for final co_income_tax remain outside that suite.
   - id: us-pe:co_tanf
     oracle_policy_name: co_tanf
     oracle_policy_type: rules
@@ -215,8 +216,13 @@ policies:
     oracle_policy_type: rules
     output_vars:
       - commodity_supplemental_food_program
-    in_scope: true
-    suite: null
+    in_scope: false
+    exclusion_reason: oracle_models_nonstatutory_amount
+    note: 'PolicyEngine-US 1.767.3 imputes this annual Person value directly from gov.usda.csfp.amount,
+      an administrative cost-per-participant parameter derived from program cost divided by participation,
+      and gates it on commodity_supplemental_food_program_eligible. This is a food-package/caseload service-value
+      imputation, not a statutory amount formula; commodity_supplemental_food_program_eligible is compared
+      separately (rulespec-us PR #1008).'
   - id: us-pe:ct_income_tax
     oracle_policy_name: ct_income_tax
     oracle_policy_type: rules
@@ -224,10 +230,9 @@ policies:
       - ct_income_tax
     in_scope: true
     suite: null
-    note: >-
-      The ct-income-tax-liability grid and full-Populace campaign validate only
-      ct_income_tax_before_refundable_credits. Final ct_income_tax additionally
-      subtracts refundable ct_eitc; 90 of 951 routed units differ from the narrow target.
+    note: The ct-income-tax-liability grid and full-Populace campaign validate only ct_income_tax_before_refundable_credits.
+      Final ct_income_tax additionally subtracts refundable ct_eitc; 90 of 951 routed units differ from
+      the narrow target.
   - id: us-pe:ct_tfa
     oracle_policy_name: ct_tfa
     oracle_policy_type: rules
@@ -250,9 +255,9 @@ policies:
       - dc_income_tax
     in_scope: true
     suite: null
-    note: 'The dc-income-tax-liability suite is a six-case ordinary resident wage-earner grid against
-      dc_income_tax_before_credits. It does not cover nonrefundable or refundable credits or establish
-      the full-population filing-method branches required for final dc_income_tax liability.'
+    note: The dc-income-tax-liability suite is a six-case ordinary resident wage-earner grid against dc_income_tax_before_credits.
+      It does not cover nonrefundable or refundable credits or establish the full-population filing-method
+      branches required for final dc_income_tax liability.
   - id: us-pe:dc_tanf
     oracle_policy_name: dc_tanf
     oracle_policy_type: rules
@@ -267,11 +272,9 @@ policies:
       - de_income_tax
     in_scope: true
     suite: null
-    note: >-
-      The de-income-tax-liability grid and full-Populace campaign validate only
-      de_income_tax_before_non_refundable_credits_unit. Final de_income_tax also
-      applies personal, aged-personal, child-care, nonrefundable-EITC, and
-      refundable-EITC credits; 839 of 936 routed units differ from the narrow target.
+    note: The de-income-tax-liability grid and full-Populace campaign validate only de_income_tax_before_non_refundable_credits_unit.
+      Final de_income_tax also applies personal, aged-personal, child-care, nonrefundable-EITC, and refundable-EITC
+      credits; 839 of 936 routed units differ from the narrow target.
   - id: us-pe:de_tanf
     oracle_policy_name: de_tanf
     oracle_policy_type: rules
@@ -279,14 +282,20 @@ policies:
       - de_tanf
     in_scope: true
     suite: de-tanf-ecps
-    note: Covered by de-tanf-ecps — Delaware TANF (de_tanf) vs PE-2026 at population scale (781/781 match, 0 unexplained).
+    note: Covered by de-tanf-ecps — Delaware TANF (de_tanf) vs PE-2026 at population scale (781/781 match,
+      0 unexplained).
   - id: us-pe:early_head_start
     oracle_policy_name: early_head_start
     oracle_policy_type: rules
     output_vars:
       - early_head_start
-    in_scope: true
-    suite: null
+    in_scope: false
+    exclusion_reason: oracle_models_nonstatutory_amount
+    note: 'PolicyEngine-US 1.767.3 imputes this annual Person value as state Early Head Start spending
+      per funded slot, gov.hhs.head_start.early_head_start.spending[state_code_str] / gov.hhs.head_start.early_head_start.enrollment[state_code_str]
+      (zero for nonpositive enrollment), multiplied by takes_up_early_head_start_if_eligible. This is
+      an administrative slot-cost imputation, not a statutory amount formula; is_early_head_start_eligible
+      is compared separately (rulespec-us PR #1010).'
   - id: us-pe:ebb
     oracle_policy_name: ebb
     oracle_policy_type: rules
@@ -294,12 +303,11 @@ policies:
       - ebb
     in_scope: false
     exclusion_reason: oracle_models_repealed_law
-    note: 'Lapsed before the 2026 validation year: the Emergency Broadband Benefit (Consolidated
-      Appropriations Act 2021; 47 USC 1752 note) closed enrollment and transitioned to the
-      Affordable Connectivity Program on 2021-12-31. PolicyEngine-US 1.767.3 sets gov.fcc.ebb.amount
-      to 0 for 2026, so ebb pays 0 for every synthetic case even with is_ebb_eligible forced
-      on and broadband_cost 2400 (probe evidence: scripts/probe_us_repealed_federal.py). No
-      current-law EBB surface exists for Axiom to compare.'
+    note: 'Lapsed before the 2026 validation year: the Emergency Broadband Benefit (Consolidated Appropriations
+      Act 2021; 47 USC 1752 note) closed enrollment and transitioned to the Affordable Connectivity Program
+      on 2021-12-31. PolicyEngine-US 1.767.3 sets gov.fcc.ebb.amount to 0 for 2026, so ebb pays 0 for
+      every synthetic case even with is_ebb_eligible forced on and broadband_cost 2400 (probe evidence:
+      scripts/probe_us_repealed_federal.py). No current-law EBB surface exists for Axiom to compare.'
   - id: us-pe:educational_assistance
     oracle_policy_name: educational_assistance
     oracle_policy_type: pure_input
@@ -325,13 +333,11 @@ policies:
       - elderly_disabled_credit
     in_scope: true
     suite: us-elderly-disabled-grid
-    note: 'The us-elderly-disabled-grid suite compares the statutory section
-      22 potential before the section 26 liability/credit-order cap on nine
-      exactly expressible 2026 companion cases. It covers aged and proven
-      permanent-total-disability branches plus Social Security and AGI
-      reductions; the empty-relation no-qualified-person diagnostic is omitted
-      because PE requires a TaxUnit member and the fixture supplies no facts
-      for one. The committed report is 9/9 within one cent.'
+    note: The us-elderly-disabled-grid suite compares the statutory section 22 potential before the section
+      26 liability/credit-order cap on nine exactly expressible 2026 companion cases. It covers aged and
+      proven permanent-total-disability branches plus Social Security and AGI reductions; the empty-relation
+      no-qualified-person diagnostic is omitted because PE requires a TaxUnit member and the fixture supplies
+      no facts for one. The committed report is 9/9 within one cent.
   - id: us-pe:employee_medicare_tax
     oracle_policy_name: employee_medicare_tax
     oracle_policy_type: rules
@@ -371,17 +377,13 @@ policies:
       - energy_efficient_home_improvement_credit
     in_scope: false
     exclusion_reason: oracle_models_repealed_law
-    note: >-
-      Lapsed before the 2026 validation year: IRC 25C(i), as amended by the One
-      Big Beautiful Bill Act, Pub. L. No. 119-21, sec. 70505 (2025), provides
-      that the credit does not apply to property placed in service after
-      2025-12-31. PolicyEngine-US 1.767.3 sets
-      gov.irs.credits.energy_efficient_home_improvement.in_effect to false
-      throughout 2026, so energy_efficient_home_improvement_credit is 0 even
-      with employment_income 200000 and heat_pump_expenditures 50000; the
-      otherwise computed capped component is 2000 and the tax-liability limit is
-      36734 (probe evidence: scripts/probe_us_ira_2026.py). Axiom encodes current
-      law and has no live 2026 section 25C surface to compare.
+    note: 'Lapsed before the 2026 validation year: IRC 25C(i), as amended by the One Big Beautiful Bill
+      Act, Pub. L. No. 119-21, sec. 70505 (2025), provides that the credit does not apply to property
+      placed in service after 2025-12-31. PolicyEngine-US 1.767.3 sets gov.irs.credits.energy_efficient_home_improvement.in_effect
+      to false throughout 2026, so energy_efficient_home_improvement_credit is 0 even with employment_income
+      200000 and heat_pump_expenditures 50000; the otherwise computed capped component is 2000 and the
+      tax-liability limit is 36734 (probe evidence: scripts/probe_us_ira_2026.py). Axiom encodes current
+      law and has no live 2026 section 25C surface to compare.'
   - id: us-pe:financial_assistance
     oracle_policy_name: financial_assistance
     oracle_policy_type: pure_input
@@ -411,8 +413,13 @@ policies:
     oracle_policy_type: rules
     output_vars:
       - free_school_meals
-    in_scope: true
-    suite: null
+    in_scope: false
+    exclusion_reason: oracle_models_nonstatutory_amount
+    note: 'PolicyEngine-US 1.767.3 imputes this annual SPM-unit value from the FREE branch of school_meal_tier:
+      the NSLP-plus-SBP reimbursement differential over the paid tier from gov.usda.school_meals.amount.nslp[state_group_str][tier]
+      and gov.usda.school_meals.amount.sbp[state_group_str][tier], multiplied by gov.usda.school_meals.school_days
+      and the SPM-unit count of is_in_k12_school. This is a reimbursement-rate service-value imputation,
+      not a statutory amount formula; the school_meal_tier eligibility classification is compared separately.'
   - id: us-pe:ga_income_tax
     oracle_policy_name: ga_income_tax
     oracle_policy_type: rules
@@ -420,11 +427,9 @@ policies:
       - ga_income_tax
     in_scope: true
     suite: null
-    note: >-
-      The ga-income-tax-liability grid and full-Populace campaign validate only
-      ga_income_tax_before_non_refundable_credits. Final ga_income_tax also applies
-      child-care, low-income, child, and itemizer credits; 670 of 2,187 routed
-      units differ from the narrow target.
+    note: The ga-income-tax-liability grid and full-Populace campaign validate only ga_income_tax_before_non_refundable_credits.
+      Final ga_income_tax also applies child-care, low-income, child, and itemizer credits; 670 of 2,187
+      routed units differ from the narrow target.
   - id: us-pe:ga_tanf
     oracle_policy_name: ga_tanf
     oracle_policy_type: rules
@@ -432,14 +437,20 @@ policies:
       - ga_tanf
     in_scope: true
     suite: ga-tanf-ecps
-    note: Covered by ga-tanf-ecps — Georgia TANF (ga_tanf) vs PE-2026 at population scale (1896/1897 match, 1 residual dispositioned bridge_artifact, 0 unexplained).
+    note: Covered by ga-tanf-ecps — Georgia TANF (ga_tanf) vs PE-2026 at population scale (1896/1897 match,
+      1 residual dispositioned bridge_artifact, 0 unexplained).
   - id: us-pe:head_start
     oracle_policy_name: head_start
     oracle_policy_type: rules
     output_vars:
       - head_start
-    in_scope: true
-    suite: null
+    in_scope: false
+    exclusion_reason: oracle_models_nonstatutory_amount
+    note: 'PolicyEngine-US 1.767.3 imputes this annual Person value as state Head Start spending per funded
+      slot, gov.hhs.head_start.spending[state_code_str] / gov.hhs.head_start.enrollment[state_code_str]
+      (zero for nonpositive enrollment), multiplied by takes_up_head_start_if_eligible. This is an administrative
+      slot-cost imputation, not a statutory amount formula; is_head_start_eligible is compared separately
+      (rulespec-us PR #1010).'
   - id: us-pe:hi_income_tax
     oracle_policy_name: hi_income_tax
     oracle_policy_type: rules
@@ -447,11 +458,9 @@ policies:
       - hi_income_tax
     in_scope: true
     suite: null
-    note: >-
-      The hi-income-tax-liability grid and full-Populace campaign validate only
-      hi_income_tax_before_non_refundable_credits. Final hi_income_tax additionally
-      subtracts the food-excise, child-care, low-income-renter, and EITC refundable
-      credits; 583 of 1,519 routed units differ from the narrow target.
+    note: The hi-income-tax-liability grid and full-Populace campaign validate only hi_income_tax_before_non_refundable_credits.
+      Final hi_income_tax additionally subtracts the food-excise, child-care, low-income-renter, and EITC
+      refundable credits; 583 of 1,519 routed units differ from the narrow target.
   - id: us-pe:hi_tanf
     oracle_policy_name: hi_tanf
     oracle_policy_type: rules
@@ -480,11 +489,9 @@ policies:
       - ia_income_tax
     in_scope: true
     suite: null
-    note: >-
-      The ia-income-tax-liability grid and full-Populace campaign validate only
-      ia_income_tax_before_credits. Final ia_income_tax also applies the exemption
-      credit, tax-exempt and reduced-tax alternatives, and refundable CDCC and EITC;
-      795 of 976 routed units differ from the narrow target.
+    note: The ia-income-tax-liability grid and full-Populace campaign validate only ia_income_tax_before_credits.
+      Final ia_income_tax also applies the exemption credit, tax-exempt and reduced-tax alternatives,
+      and refundable CDCC and EITC; 795 of 976 routed units differ from the narrow target.
   - id: us-pe:id_income_tax
     oracle_policy_name: id_income_tax
     oracle_policy_type: rules
@@ -492,9 +499,9 @@ policies:
       - id_income_tax
     in_scope: true
     suite: null
-    note: 'The id-income-tax-liability suite is a six-case childless wage-earner grid against
-      id_income_tax_before_refundable_credits. It excludes the refundable grocery credit and does not
-      establish the public-benefit-fund and refundable-credit adjustments in final id_income_tax.'
+    note: The id-income-tax-liability suite is a six-case childless wage-earner grid against id_income_tax_before_refundable_credits.
+      It excludes the refundable grocery credit and does not establish the public-benefit-fund and refundable-credit
+      adjustments in final id_income_tax.
   - id: us-pe:id_tafi
     oracle_policy_name: id_tafi
     oracle_policy_type: rules
@@ -509,12 +516,10 @@ policies:
       - il_income_tax
     in_scope: true
     suite: null
-    note: >-
-      The il-income-tax-liability grid and full-Populace campaign validate only
-      il_income_tax_before_non_refundable_credits. Final il_income_tax also applies
-      property-tax and K-12-expense credits plus pass-through withholding,
-      pass-through-entity, EITC, and child-tax refundable credits; 855 of 2,332
-      routed units differ from the narrow target.
+    note: The il-income-tax-liability grid and full-Populace campaign validate only il_income_tax_before_non_refundable_credits.
+      Final il_income_tax also applies property-tax and K-12-expense credits plus pass-through withholding,
+      pass-through-entity, EITC, and child-tax refundable credits; 855 of 2,332 routed units differ from
+      the narrow target.
   - id: us-pe:il_tanf
     oracle_policy_name: il_tanf
     oracle_policy_type: rules
@@ -529,11 +534,9 @@ policies:
       - in_income_tax
     in_scope: true
     suite: null
-    note: >-
-      The in-income-tax-liability grid and full-Populace campaign validate only
-      in_agi_tax. Final in_income_tax additionally applies the 529-plan credit,
-      refundable EITC, and unified elderly credit; 207 of 1,292 routed units
-      differ from the narrow target.
+    note: The in-income-tax-liability grid and full-Populace campaign validate only in_agi_tax. Final
+      in_income_tax additionally applies the 529-plan credit, refundable EITC, and unified elderly credit;
+      207 of 1,292 routed units differ from the narrow target.
   - id: us-pe:in_tanf
     oracle_policy_name: in_tanf
     oracle_policy_type: rules
@@ -573,11 +576,9 @@ policies:
       - ks_income_tax
     in_scope: true
     suite: null
-    note: >-
-      The ks-income-tax-liability grid and full-Populace campaign validate only
-      ks_income_tax_before_credits. Final ks_income_tax additionally applies CDCC,
-      nonrefundable EITC, and refundable EITC; 115 of 989 routed units differ
-      from the narrow target.
+    note: The ks-income-tax-liability grid and full-Populace campaign validate only ks_income_tax_before_credits.
+      Final ks_income_tax additionally applies CDCC, nonrefundable EITC, and refundable EITC; 115 of 989
+      routed units differ from the narrow target.
   - id: us-pe:ks_tanf
     oracle_policy_name: ks_tanf
     oracle_policy_type: rules
@@ -593,9 +594,9 @@ policies:
       - ky_income_tax
     in_scope: true
     suite: null
-    note: 'The ky-income-tax-liability suite is a six-case childless wage-earner grid against
-      ky_income_tax_before_refundable_credits. Its slice assumes the family-size and other credits are
-      inactive and does not cover refundable credits, so it does not establish final ky_income_tax.'
+    note: The ky-income-tax-liability suite is a six-case childless wage-earner grid against ky_income_tax_before_refundable_credits.
+      Its slice assumes the family-size and other credits are inactive and does not cover refundable credits,
+      so it does not establish final ky_income_tax.
   - id: us-pe:ky_ktap
     oracle_policy_name: ky_ktap
     oracle_policy_type: rules
@@ -617,11 +618,9 @@ policies:
       - la_income_tax
     in_scope: true
     suite: null
-    note: >-
-      The la-income-tax-liability grid and full-Populace campaign validate only
-      la_income_tax_before_non_refundable_credits. Final la_income_tax additionally
-      applies nonrefundable CDCC, refundable CDCC, and EITC; 305 of 1,847 routed
-      units differ from the narrow target.
+    note: The la-income-tax-liability grid and full-Populace campaign validate only la_income_tax_before_non_refundable_credits.
+      Final la_income_tax additionally applies nonrefundable CDCC, refundable CDCC, and EITC; 305 of 1,847
+      routed units differ from the narrow target.
   - id: us-pe:lifetime_learning_credit
     oracle_policy_name: lifetime_learning_credit
     oracle_policy_type: rules
@@ -629,12 +628,10 @@ policies:
       - lifetime_learning_credit
     in_scope: true
     suite: us-llc-grid
-    note: 'The us-llc-grid suite compares all 12 ground-truth section 25A(c)
-      companion cases against PE-US lifetime_learning_credit at the same final,
-      liability-capped boundary. It includes exact phaseout endpoints,
-      two-student aggregate expenses, and a diagnostic proving that a $2,000
-      potential is capped to $500. The committed report is 12/12 within one
-      cent.'
+    note: The us-llc-grid suite compares all 12 ground-truth section 25A(c) companion cases against PE-US
+      lifetime_learning_credit at the same final, liability-capped boundary. It includes exact phaseout
+      endpoints, two-student aggregate expenses, and a diagnostic proving that a $2,000 potential is capped
+      to $500. The committed report is 12/12 within one cent.
   - id: us-pe:ma_income_tax
     oracle_policy_name: ma_income_tax
     oracle_policy_type: rules
@@ -642,10 +639,10 @@ policies:
       - ma_income_tax
     in_scope: true
     suite: null
-    note: 'The ma-income-tax-liability suite compares only a six-case Part B resident wage-earner and
-      surtax grid against ma_income_tax. It assumes Part A and Part C income, additional deductions and
-      exemptions, and credits are absent and has no certified full-Populace projection, so it does not
-      establish final ma_income_tax liability.'
+    note: The ma-income-tax-liability suite compares only a six-case Part B resident wage-earner and surtax
+      grid against ma_income_tax. It assumes Part A and Part C income, additional deductions and exemptions,
+      and credits are absent and has no certified full-Populace projection, so it does not establish final
+      ma_income_tax liability.
   - id: us-pe:ma_tafdc
     oracle_policy_name: ma_tafdc
     oracle_policy_type: rules
@@ -660,10 +657,10 @@ policies:
       - md_income_tax
     in_scope: true
     suite: null
-    note: 'The md-income-tax-liability suite is a six-case resident wage-earner grid; the legally
-      matching campaign target is md_income_tax_before_credits. It excludes all credits, and the
-      full-Populace capital-gains-surtax comparison has unresolved oracle-law differences, so it does
-      not establish final md_income_tax.'
+    note: The md-income-tax-liability suite is a six-case resident wage-earner grid; the legally matching
+      campaign target is md_income_tax_before_credits. It excludes all credits, and the full-Populace
+      capital-gains-surtax comparison has unresolved oracle-law differences, so it does not establish
+      final md_income_tax.
   - id: us-pe:md_tca
     oracle_policy_name: md_tca
     oracle_policy_type: rules
@@ -678,10 +675,9 @@ policies:
       - me_income_tax
     in_scope: true
     suite: null
-    note: 'The me-income-tax-liability suite is a six-case resident wage-earner grid against
-      me_income_tax_before_refundable_credits. It excludes refundable credits, and the official 2026
-      main schedule disagrees with the pinned oracle on the full population, so it does not establish
-      final me_income_tax.'
+    note: The me-income-tax-liability suite is a six-case resident wage-earner grid against me_income_tax_before_refundable_credits.
+      It excludes refundable credits, and the official 2026 main schedule disagrees with the pinned oracle
+      on the full population, so it does not establish final me_income_tax.
   - id: us-pe:me_tanf
     oracle_policy_name: me_tanf
     oracle_policy_type: rules
@@ -713,11 +709,9 @@ policies:
       - mi_income_tax
     in_scope: true
     suite: null
-    note: >-
-      The mi-income-tax-liability grid and full-Populace campaign validate only
-      mi_income_tax_before_non_refundable_credits. Final mi_income_tax additionally
-      subtracts EITC, home-heating, and homestead-property-tax refundable credits;
-      381 of 1,788 routed units differ from the narrow target.
+    note: The mi-income-tax-liability grid and full-Populace campaign validate only mi_income_tax_before_non_refundable_credits.
+      Final mi_income_tax additionally subtracts EITC, home-heating, and homestead-property-tax refundable
+      credits; 381 of 1,788 routed units differ from the narrow target.
   - id: us-pe:mn_income_tax
     oracle_policy_name: mn_income_tax
     oracle_policy_type: rules
@@ -725,9 +719,9 @@ policies:
       - mn_income_tax
     in_scope: true
     suite: null
-    note: 'The mn-income-tax-liability suite is a six-case childless wage-earner grid against
-      mn_income_tax_before_refundable_credits. It excludes working-family and other refundable credits
-      and has no certified full-Populace projection, so it does not establish final mn_income_tax.'
+    note: The mn-income-tax-liability suite is a six-case childless wage-earner grid against mn_income_tax_before_refundable_credits.
+      It excludes working-family and other refundable credits and has no certified full-Populace projection,
+      so it does not establish final mn_income_tax.
   - id: us-pe:mn_mfip
     oracle_policy_name: mn_mfip
     oracle_policy_type: rules
@@ -743,9 +737,9 @@ policies:
       - mo_income_tax
     in_scope: true
     suite: null
-    note: 'The mo-income-tax-liability suite is a six-case ordinary resident wage-earner schedule grid
+    note: The mo-income-tax-liability suite is a six-case ordinary resident wage-earner schedule grid
       against mo_income_tax_before_credits. It excludes nonrefundable and refundable credits and has no
-      certified full-Populace projection, so it does not establish final mo_income_tax.'
+      certified full-Populace projection, so it does not establish final mo_income_tax.
   - id: us-pe:mo_tanf
     oracle_policy_name: mo_tanf
     oracle_policy_type: rules
@@ -760,7 +754,10 @@ policies:
       - ms_income_tax
     in_scope: true
     suite: null
-    note: Broad final ms_income_tax remains uncovered. The ms-income-tax-liability artifact and state-tax Populace campaign validate only the narrower section 27-7-5 schedule-before-credits surface against PolicyEngine ms_income_tax_before_credits_unit; they do not encode or validate every credit needed for final Mississippi liability.
+    note: Broad final ms_income_tax remains uncovered. The ms-income-tax-liability artifact and state-tax
+      Populace campaign validate only the narrower section 27-7-5 schedule-before-credits surface against
+      PolicyEngine ms_income_tax_before_credits_unit; they do not encode or validate every credit needed
+      for final Mississippi liability.
   - id: us-pe:ms_tanf
     oracle_policy_name: ms_tanf
     oracle_policy_type: rules
@@ -775,12 +772,10 @@ policies:
       - mt_income_tax
     in_scope: true
     suite: null
-    note: >-
-      The mt-income-tax-liability grid and full-Populace campaign validate only
-      mt_income_tax_before_non_refundable_credits_joint. Final mt_income_tax selects
-      Person-grain separate liability when mt_files_separately and subtracts EITC
-      and the elderly-homeowner-or-renter credit in both filing branches; 153 of
-      1,171 routed units differ from the narrow target.
+    note: The mt-income-tax-liability grid and full-Populace campaign validate only mt_income_tax_before_non_refundable_credits_joint.
+      Final mt_income_tax selects Person-grain separate liability when mt_files_separately and subtracts
+      EITC and the elderly-homeowner-or-renter credit in both filing branches; 153 of 1,171 routed units
+      differ from the narrow target.
   - id: us-pe:mt_tanf
     oracle_policy_name: mt_tanf
     oracle_policy_type: rules
@@ -795,13 +790,11 @@ policies:
       - nc_income_tax
     in_scope: true
     suite: nc-income-tax-liability
-    note: >-
-      Covered by nc-income-tax-liability. The grid and certified full-Populace
-      campaign compare nc_income_tax_before_credits; all 2,169 positive-weight
-      routed North Carolina tax units also have exact equality with final
-      nc_income_tax in PolicyEngine-US 1.752.2. The only listed downstream credit
-      is the repealed nc_ctc, whose schedule amounts have been zero since 2018;
-      PolicyEngine models no refundable North Carolina income-tax credit in 2026.
+    note: Covered by nc-income-tax-liability. The grid and certified full-Populace campaign compare nc_income_tax_before_credits;
+      all 2,169 positive-weight routed North Carolina tax units also have exact equality with final nc_income_tax
+      in PolicyEngine-US 1.752.2. The only listed downstream credit is the repealed nc_ctc, whose schedule
+      amounts have been zero since 2018; PolicyEngine models no refundable North Carolina income-tax credit
+      in 2026.
   - id: us-pe:nc_tanf
     oracle_policy_name: nc_tanf
     oracle_policy_type: rules
@@ -816,9 +809,9 @@ policies:
       - nd_income_tax
     in_scope: true
     suite: null
-    note: 'The nd-income-tax-liability suite is a six-case official-schedule grid against
-      nd_income_tax_before_credits. It excludes all credits, and the pinned oracle uses stale 2025
-      thresholds on the full population, so it does not establish final nd_income_tax.'
+    note: The nd-income-tax-liability suite is a six-case official-schedule grid against nd_income_tax_before_credits.
+      It excludes all credits, and the pinned oracle uses stale 2025 thresholds on the full population,
+      so it does not establish final nd_income_tax.
   - id: us-pe:nd_tanf
     oracle_policy_name: nd_tanf
     oracle_policy_type: rules
@@ -840,10 +833,9 @@ policies:
       - ne_income_tax
     in_scope: true
     suite: null
-    note: 'The ne-income-tax-liability suite is a six-case single/joint schedule grid against
-      ne_income_tax_before_credits. It excludes the personal-exemption and other nonrefundable credits,
-      the federal-liability adjustment, and refundable credits, so it does not establish final
-      ne_income_tax.'
+    note: The ne-income-tax-liability suite is a six-case single/joint schedule grid against ne_income_tax_before_credits.
+      It excludes the personal-exemption and other nonrefundable credits, the federal-liability adjustment,
+      and refundable credits, so it does not establish final ne_income_tax.
   - id: us-pe:net_investment_income_tax
     oracle_policy_name: net_investment_income_tax
     oracle_policy_type: rules
@@ -851,11 +843,9 @@ policies:
       - net_investment_income_tax
     in_scope: true
     suite: us-niit-grid
-    note: 'The us-niit-grid suite compares six 2026 individual section 1411
-      cases against PE-US net_investment_income_tax, including status
-      thresholds, mixed investment income, gains, and passive rent. With no
-      section 911 amounts, both legs use AGI equal to NIIT MAGI; the committed
-      report is 6/6 with nonzero cases.'
+    note: The us-niit-grid suite compares six 2026 individual section 1411 cases against PE-US net_investment_income_tax,
+      including status thresholds, mixed investment income, gains, and passive rent. With no section 911
+      amounts, both legs use AGI equal to NIIT MAGI; the committed report is 6/6 with nonzero cases.
   - id: us-pe:new_clean_vehicle_credit
     oracle_policy_name: new_clean_vehicle_credit
     oracle_policy_type: rules
@@ -877,7 +867,13 @@ policies:
       - nh_income_tax
     in_scope: false
     exclusion_reason: oracle_models_repealed_law
-    note: 'EXCLUDED oracle_models_repealed_law. RSA Chapter 77 was repealed in its entirety by 2021, 91:189, II, effective January 1, 2025. PolicyEngine-US 1.767.3 retains the nh_income_tax output and legacy interest-and-dividends tax base, but its in_effect parameter is false from 2025. A positive interest-and-dividend activation probe produces a nonzero 2024 liability and exactly zero nh_income_tax_before_refundable_credits and nh_income_tax in 2025 and 2026 (probe evidence: scripts/probe_us_nh_repealed_income_tax.py). There is no current-law Chapter 77 tax instrument to compare; the RuleSpec repeal-result module records that legal absence rather than an operative zero-rate schedule.'
+    note: 'EXCLUDED oracle_models_repealed_law. RSA Chapter 77 was repealed in its entirety by 2021, 91:189,
+      II, effective January 1, 2025. PolicyEngine-US 1.767.3 retains the nh_income_tax output and legacy
+      interest-and-dividends tax base, but its in_effect parameter is false from 2025. A positive interest-and-dividend
+      activation probe produces a nonzero 2024 liability and exactly zero nh_income_tax_before_refundable_credits
+      and nh_income_tax in 2025 and 2026 (probe evidence: scripts/probe_us_nh_repealed_income_tax.py).
+      There is no current-law Chapter 77 tax instrument to compare; the RuleSpec repeal-result module
+      records that legal absence rather than an operative zero-rate schedule.'
   - id: us-pe:nj_income_tax
     oracle_policy_name: nj_income_tax
     oracle_policy_type: rules
@@ -885,11 +881,9 @@ policies:
       - nj_income_tax
     in_scope: true
     suite: null
-    note: >-
-      The nj-income-tax-liability grid and full-Populace campaign validate only
-      nj_main_income_tax. Final nj_income_tax also applies the AGI filing-threshold
-      zero-tax branch and property-tax, EITC, CDCC, and child-tax refundable
-      credits; 314 of 1,693 routed units differ from the narrow target.
+    note: The nj-income-tax-liability grid and full-Populace campaign validate only nj_main_income_tax.
+      Final nj_income_tax also applies the AGI filing-threshold zero-tax branch and property-tax, EITC,
+      CDCC, and child-tax refundable credits; 314 of 1,693 routed units differ from the narrow target.
   - id: us-pe:nj_wfnj
     oracle_policy_name: nj_wfnj
     oracle_policy_type: rules
@@ -904,12 +898,9 @@ policies:
       - nm_income_tax
     in_scope: true
     suite: null
-    note: >-
-      The nm-income-tax-liability grid and full-Populace campaign validate only
-      nm_income_tax_before_non_refundable_credits. Final nm_income_tax additionally
-      subtracts CDCC, CTC, medical-expense, EITC, low-income-comprehensive, and
-      property-tax refundable credits; 674 of 1,475 routed units differ from the
-      narrow target.
+    note: The nm-income-tax-liability grid and full-Populace campaign validate only nm_income_tax_before_non_refundable_credits.
+      Final nm_income_tax additionally subtracts CDCC, CTC, medical-expense, EITC, low-income-comprehensive,
+      and property-tax refundable credits; 674 of 1,475 routed units differ from the narrow target.
   - id: us-pe:nm_works
     oracle_policy_name: nm_works
     oracle_policy_type: rules
@@ -931,7 +922,9 @@ policies:
       - ny_income_tax
     in_scope: true
     suite: null
-    note: In-scope uncovered — ny-income-tax-liability now validates only the complete 2026 Tax Law section 601 main-tax schedules. The section 601(d-5) supplemental tax and credits needed for the final ny_income_tax program remain outside that suite.
+    note: In-scope uncovered — ny-income-tax-liability now validates only the complete 2026 Tax Law section
+      601 main-tax schedules. The section 601(d-5) supplemental tax and credits needed for the final ny_income_tax
+      program remain outside that suite.
   - id: us-pe:ny_tanf
     oracle_policy_name: ny_tanf
     oracle_policy_type: rules
@@ -947,11 +940,9 @@ policies:
       - oh_income_tax
     in_scope: true
     suite: null
-    note: >-
-      The oh-income-tax-liability grid and full-Populace campaign validate only
-      oh_income_tax_before_non_refundable_credits. Final oh_income_tax additionally
-      applies EITC, CDCC, senior, retirement, non-public-school, exemption, and
-      joint-filing credits; 481 of 2,144 routed units differ from the narrow target.
+    note: The oh-income-tax-liability grid and full-Populace campaign validate only oh_income_tax_before_non_refundable_credits.
+      Final oh_income_tax additionally applies EITC, CDCC, senior, retirement, non-public-school, exemption,
+      and joint-filing credits; 481 of 2,144 routed units differ from the narrow target.
   - id: us-pe:oh_owf
     oracle_policy_name: oh_owf
     oracle_policy_type: rules
@@ -966,11 +957,9 @@ policies:
       - ok_income_tax
     in_scope: true
     suite: null
-    note: >-
-      The ok-income-tax-liability grid and full-Populace campaign validate only
-      ok_income_tax_before_credits. Final ok_income_tax additionally applies the
-      child-care-or-child-tax credit plus refundable property-tax, sales-tax, and
-      EITC branches; 396 of 1,292 routed units differ from the narrow target.
+    note: The ok-income-tax-liability grid and full-Populace campaign validate only ok_income_tax_before_credits.
+      Final ok_income_tax additionally applies the child-care-or-child-tax credit plus refundable property-tax,
+      sales-tax, and EITC branches; 396 of 1,292 routed units differ from the narrow target.
   - id: us-pe:ok_tanf
     oracle_policy_name: ok_tanf
     oracle_policy_type: rules
@@ -985,9 +974,9 @@ policies:
       - or_income_tax
     in_scope: true
     suite: null
-    note: 'The or-income-tax-liability suite is a six-case ordinary resident wage-earner schedule grid
+    note: The or-income-tax-liability suite is a six-case ordinary resident wage-earner schedule grid
       against or_income_tax_before_credits. It excludes nonrefundable and refundable credits and has no
-      certified full-Populace projection, so it does not establish final or_income_tax.'
+      certified full-Populace projection, so it does not establish final or_income_tax.
   - id: us-pe:or_tanf
     oracle_policy_name: or_tanf
     oracle_policy_type: rules
@@ -1002,11 +991,9 @@ policies:
       - pa_income_tax
     in_scope: true
     suite: null
-    note: >-
-      The pa-income-tax-liability grid and full-Populace campaign validate only
-      pa_income_tax_before_forgiveness. Final pa_income_tax additionally applies
-      pa_tax_forgiveness_amount and refundable CDCC and EITC; 496 of 2,457 routed
-      units differ from the narrow target.
+    note: The pa-income-tax-liability grid and full-Populace campaign validate only pa_income_tax_before_forgiveness.
+      Final pa_income_tax additionally applies pa_tax_forgiveness_amount and refundable CDCC and EITC;
+      496 of 2,457 routed units differ from the narrow target.
   - id: us-pe:pa_tanf
     oracle_policy_name: pa_tanf
     oracle_policy_type: rules
@@ -1021,13 +1008,11 @@ policies:
       - qualified_business_income_deduction
     in_scope: true
     suite: us-qbid-grid
-    note: 'The us-qbid-grid suite compares 11 ground-truth 2026 section 199A
-      cases using the corrected $201,750/$403,500 thresholds and
-      $75,000/$150,000 phase-in widths. The committed report is 10/11 raw and
-      fully dispositioned: PE-US 1.767.3 applies its $400 floor to all QBI
-      because it lacks Axiom''s distinct active-business-QBI fact, producing
-      $400 instead of zero in qbid-above-nowages. There are no unexplained or
-      Axiom-owned divergences.'
+    note: 'The us-qbid-grid suite compares 11 ground-truth 2026 section 199A cases using the corrected
+      $201,750/$403,500 thresholds and $75,000/$150,000 phase-in widths. The committed report is 10/11
+      raw and fully dispositioned: PE-US 1.767.3 applies its $400 floor to all QBI because it lacks Axiom''s
+      distinct active-business-QBI fact, producing $400 instead of zero in qbid-above-nowages. There are
+      no unexplained or Axiom-owned divergences.'
   - id: us-pe:recovery_rebate_credit
     oracle_policy_name: recovery_rebate_credit
     oracle_policy_type: rules
@@ -1035,19 +1020,23 @@ policies:
       - recovery_rebate_credit
     in_scope: false
     exclusion_reason: oracle_models_repealed_law
-    note: 'Lapsed before the 2026 validation year: the economic impact payment credits under
-      IRC 6428 (CARES Act, 2020), 6428A (CAA 2021, for 2020) and 6428B (ARPA 2021, for 2021)
-      applied only to the 2020-2021 tax years. PolicyEngine-US 1.767.3 sums rrc_cares + rrc_caa
-      + rrc_arpa, each 0 at 2026, so recovery_rebate_credit is 0 for every synthetic case
-      (probe evidence: scripts/probe_us_repealed_federal.py). There is no current-law recovery
-      rebate for 2026 for Axiom to compare.'
+    note: 'Lapsed before the 2026 validation year: the economic impact payment credits under IRC 6428
+      (CARES Act, 2020), 6428A (CAA 2021, for 2020) and 6428B (ARPA 2021, for 2021) applied only to the
+      2020-2021 tax years. PolicyEngine-US 1.767.3 sums rrc_cares + rrc_caa + rrc_arpa, each 0 at 2026,
+      so recovery_rebate_credit is 0 for every synthetic case (probe evidence: scripts/probe_us_repealed_federal.py).
+      There is no current-law recovery rebate for 2026 for Axiom to compare.'
   - id: us-pe:reduced_price_school_meals
     oracle_policy_name: reduced_price_school_meals
     oracle_policy_type: rules
     output_vars:
       - reduced_price_school_meals
-    in_scope: true
-    suite: null
+    in_scope: false
+    exclusion_reason: oracle_models_nonstatutory_amount
+    note: 'PolicyEngine-US 1.767.3 imputes this annual SPM-unit value from the REDUCED branch of school_meal_tier:
+      the NSLP-plus-SBP reimbursement differential over the paid tier from gov.usda.school_meals.amount.nslp[state_group_str][tier]
+      and gov.usda.school_meals.amount.sbp[state_group_str][tier], multiplied by gov.usda.school_meals.school_days
+      and the SPM-unit count of is_in_k12_school. This is a reimbursement-rate service-value imputation,
+      not a statutory amount formula; the school_meal_tier eligibility classification is compared separately.'
   - id: us-pe:residential_clean_energy_credit
     oracle_policy_name: residential_clean_energy_credit
     oracle_policy_type: rules
@@ -1069,10 +1058,9 @@ policies:
       - ri_income_tax
     in_scope: true
     suite: null
-    note: 'The ri-income-tax-liability suite is a six-case full-year resident wage-earner schedule grid
-      against ri_income_tax_before_non_refundable_credits. It excludes nonrefundable and refundable
-      credits and has no certified full-Populace projection, so it does not establish final
-      ri_income_tax.'
+    note: The ri-income-tax-liability suite is a six-case full-year resident wage-earner schedule grid
+      against ri_income_tax_before_non_refundable_credits. It excludes nonrefundable and refundable credits
+      and has no certified full-Populace projection, so it does not establish final ri_income_tax.
   - id: us-pe:ri_works
     oracle_policy_name: ri_works
     oracle_policy_type: rules
@@ -1094,14 +1082,11 @@ policies:
       - savers_credit
     in_scope: true
     suite: us-savers-credit-grid
-    note: 'The us-savers-credit-grid suite binds PE-US
-      savers_credit_potential to Axiom''s statutory pre-section-26 boundary on
-      all 12 companion cases; savers-joint-both proves the lawful $2,000 result
-      from separately capped spouses. The committed report is 11/12 raw and
-      fully dispositioned: PE Core treats the published $24,250 inclusive
-      first-tier maximum as the next bracket''s lower bound, returning $400
-      rather than $1,000 at equality. There are no unexplained or Axiom-owned
-      divergences.'
+    note: 'The us-savers-credit-grid suite binds PE-US savers_credit_potential to Axiom''s statutory pre-section-26
+      boundary on all 12 companion cases; savers-joint-both proves the lawful $2,000 result from separately
+      capped spouses. The committed report is 11/12 raw and fully dispositioned: PE Core treats the published
+      $24,250 inclusive first-tier maximum as the next bracket''s lower bound, returning $400 rather than
+      $1,000 at equality. There are no unexplained or Axiom-owned divergences.'
   - id: us-pe:sc_income_tax
     oracle_policy_name: sc_income_tax
     oracle_policy_type: rules
@@ -1109,11 +1094,9 @@ policies:
       - sc_income_tax
     in_scope: true
     suite: null
-    note: >-
-      The sc-income-tax-liability grid and full-Populace campaign validate only
-      sc_income_tax_before_non_refundable_credits. Final sc_income_tax additionally
-      applies CDCC, EITC, two-wage-earner, and refundable tuition credits; 184 of
-      1,457 routed units differ from the narrow target.
+    note: The sc-income-tax-liability grid and full-Populace campaign validate only sc_income_tax_before_non_refundable_credits.
+      Final sc_income_tax additionally applies CDCC, EITC, two-wage-earner, and refundable tuition credits;
+      184 of 1,457 routed units differ from the narrow target.
   - id: us-pe:sc_tanf
     oracle_policy_name: sc_tanf
     oracle_policy_type: rules
@@ -1135,11 +1118,10 @@ policies:
       - self_employment_tax
     in_scope: true
     suite: us-seca-grid
-    note: 'The us-seca-grid suite compares six 2026 ordinary SECA cases,
-      including the $400 floor, OASDI cap and wage coordination, against PE-US
-      self_employment_tax summed from Person to TaxUnit. Both boundaries include
-      OASDI plus ordinary Medicare and exclude the separate 0.9% Additional
-      Medicare Tax; the committed report is 6/6 with nonzero cases.'
+    note: The us-seca-grid suite compares six 2026 ordinary SECA cases, including the $400 floor, OASDI
+      cap and wage coordination, against PE-US self_employment_tax summed from Person to TaxUnit. Both
+      boundaries include OASDI plus ordinary Medicare and exclude the separate 0.9% Additional Medicare
+      Tax; the committed report is 6/6 with nonzero cases.
   - id: us-pe:snap
     oracle_policy_name: snap
     oracle_policy_type: rules
@@ -1169,18 +1151,14 @@ policies:
       - spm_unit_capped_housing_subsidy
     in_scope: false
     exclusion_reason: technical
-    note: >-
-      Technical SPM resource-accounting construct, not a statutory housing
-      benefit: PolicyEngine-US 1.767.3 computes min(housing_assistance,
-      max(spm_unit_spm_threshold_housing_portion - hud_ttp, 0)). The
-      housing-assistance and tenant-payment operands are modeled HUD amounts,
-      but the outer cap comes from Census SPM thresholds, tenure housing shares,
-      and geographic adjustment rather than a statutory payment parameter;
-      forcing housing_assistance 30000, the SPM housing portion 17720, and
-      hud_ttp 10000 returns 7720 (probe evidence:
-      scripts/probe_us_ira_2026.py). Validate Section 8 or HAP against hud_hap,
-      or against housing_assistance with take-up pinned, and exclude this SPM
-      post-processing row as technical.
+    note: 'Technical SPM resource-accounting construct, not a statutory housing benefit: PolicyEngine-US
+      1.767.3 computes min(housing_assistance, max(spm_unit_spm_threshold_housing_portion - hud_ttp, 0)).
+      The housing-assistance and tenant-payment operands are modeled HUD amounts, but the outer cap comes
+      from Census SPM thresholds, tenure housing shares, and geographic adjustment rather than a statutory
+      payment parameter; forcing housing_assistance 30000, the SPM housing portion 17720, and hud_ttp
+      10000 returns 7720 (probe evidence: scripts/probe_us_ira_2026.py). Validate Section 8 or HAP against
+      hud_hap, or against housing_assistance with take-up pinned, and exclude this SPM post-processing
+      row as technical.'
   - id: us-pe:ssi
     oracle_policy_name: ssi
     oracle_policy_type: rules
@@ -1260,12 +1238,10 @@ policies:
       - ut_income_tax
     in_scope: true
     suite: null
-    note: >-
-      The ut-income-tax-liability grid and full-Populace campaign validate only
-      ut_income_tax_before_credits. Final ut_income_tax also applies the taxpayer
-      credit, tax-exempt branch, EITC, retirement, Social Security, at-home-parent,
-      child, military-retirement, and 529-plan credits; 872 of 1,251 routed units
-      differ from the narrow target.
+    note: The ut-income-tax-liability grid and full-Populace campaign validate only ut_income_tax_before_credits.
+      Final ut_income_tax also applies the taxpayer credit, tax-exempt branch, EITC, retirement, Social
+      Security, at-home-parent, child, military-retirement, and 529-plan credits; 872 of 1,251 routed
+      units differ from the narrow target.
   - id: us-pe:va_income_tax
     oracle_policy_name: va_income_tax
     oracle_policy_type: rules
@@ -1273,11 +1249,9 @@ policies:
       - va_income_tax
     in_scope: true
     suite: null
-    note: >-
-      The va-income-tax-liability grid and full-Populace campaign validate only
-      va_income_tax_before_non_refundable_credits. Final va_income_tax additionally
-      applies nonrefundable EITC, the spouse-tax adjustment, and refundable EITC;
-      419 of 1,710 routed units differ from the narrow target.
+    note: The va-income-tax-liability grid and full-Populace campaign validate only va_income_tax_before_non_refundable_credits.
+      Final va_income_tax additionally applies nonrefundable EITC, the spouse-tax adjustment, and refundable
+      EITC; 419 of 1,710 routed units differ from the narrow target.
   - id: us-pe:va_tanf
     oracle_policy_name: va_tanf
     oracle_policy_type: rules
@@ -1292,12 +1266,10 @@ policies:
       - vt_income_tax
     in_scope: true
     suite: null
-    note: >-
-      The vt-income-tax-liability grid and full-Populace campaign validate only
-      vt_income_tax_before_non_refundable_credits. Final vt_income_tax additionally
-      applies charitable and 529-plan credits, adds child-care contributions, and
-      subtracts refundable EITC, CDCC, CTC, and veteran credits; 437 of 922 routed
-      units differ from the narrow target.
+    note: The vt-income-tax-liability grid and full-Populace campaign validate only vt_income_tax_before_non_refundable_credits.
+      Final vt_income_tax additionally applies charitable and 529-plan credits, adds child-care contributions,
+      and subtracts refundable EITC, CDCC, CTC, and veteran credits; 437 of 922 routed units differ from
+      the narrow target.
   - id: us-pe:vt_reach_up
     oracle_policy_name: vt_reach_up
     oracle_policy_type: rules
@@ -1312,10 +1284,9 @@ policies:
       - wa_income_tax
     in_scope: true
     suite: null
-    note: 'The wa-income-tax-liability suite is a six-case RCW 82.87 capital-gains grid against
-      wa_income_tax_before_refundable_credits. It excludes refundable credits and does not certify the
-      full-population asset-sourcing and loss-carryforward surface, so it does not establish final
-      wa_income_tax.'
+    note: The wa-income-tax-liability suite is a six-case RCW 82.87 capital-gains grid against wa_income_tax_before_refundable_credits.
+      It excludes refundable credits and does not certify the full-population asset-sourcing and loss-carryforward
+      surface, so it does not establish final wa_income_tax.
   - id: us-pe:wa_tanf
     oracle_policy_name: wa_tanf
     oracle_policy_type: rules
@@ -1331,10 +1302,9 @@ policies:
       - wi_income_tax
     in_scope: true
     suite: null
-    note: 'The wi-income-tax-liability suite is a six-case ordinary resident wage-earner schedule grid
-      against wi_income_tax_before_credits. It excludes credits and the retirement-income-exclusion
-      alternative, and the pinned oracle has stale or unrounded 2026 brackets, so it does not establish
-      final wi_income_tax.'
+    note: The wi-income-tax-liability suite is a six-case ordinary resident wage-earner schedule grid
+      against wi_income_tax_before_credits. It excludes credits and the retirement-income-exclusion alternative,
+      and the pinned oracle has stale or unrounded 2026 brackets, so it does not establish final wi_income_tax.
   - id: us-pe:wi_works
     oracle_policy_name: wi_works
     oracle_policy_type: rules
@@ -1347,8 +1317,13 @@ policies:
     oracle_policy_type: rules
     output_vars:
       - wic
-    in_scope: true
-    suite: null
+    in_scope: false
+    exclusion_reason: oracle_models_nonstatutory_amount
+    note: 'PolicyEngine-US 1.767.3 imputes this monthly Person value from the average food-package parameter
+      gov.usda.wic.value[wic_food_package_str], adjusted with gov.usda.wic.cvb.current, gov.usda.wic.cvb.included_in_value,
+      and gov.usda.wic.cvb.replaces_included_value, then gates it on is_wic_eligible and would_claim_wic
+      (subject to gov.usda.wic.abolish_wic). This is a package-value imputation, not a statutory amount
+      formula; is_wic_eligible is compared separately (rulespec-us PR #1010).'
   - id: us-pe:workers_compensation
     oracle_policy_name: workers_compensation
     oracle_policy_type: pure_input
@@ -1366,12 +1341,9 @@ policies:
       - wv_income_tax
     in_scope: true
     suite: null
-    note: >-
-      The wv-income-tax-liability grid and full-Populace campaign validate only
-      wv_income_tax_before_non_refundable_credits. Final wv_income_tax additionally
-      applies low-income-family and CDCC credits plus refundable state-CTC and
-      homestead-excess-property-tax credits; 217 of 1,608 routed units differ from
-      the narrow target.
+    note: The wv-income-tax-liability grid and full-Populace campaign validate only wv_income_tax_before_non_refundable_credits.
+      Final wv_income_tax additionally applies low-income-family and CDCC credits plus refundable state-CTC
+      and homestead-excess-property-tax credits; 217 of 1,608 routed units differ from the narrow target.
   - id: us-pe:wv_works
     oracle_policy_name: wv_works
     oracle_policy_type: rules
