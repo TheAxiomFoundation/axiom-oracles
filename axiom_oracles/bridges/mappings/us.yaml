@@ -29804,7 +29804,7 @@ mappings:
     program: tax
     mapping_type: not_comparable
     candidate_priority: P4
-    rationale: Axiom validates exactly one of four filing-status flags, whereas PolicyEngine consumes its own categorical filing-status input.
+    rationale: Axiom validates exactly one of five filing-status flags, including qualifying surviving spouse, whereas PolicyEngine consumes its own categorical filing-status input.
 
   - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_base_income_source_hold_applies
     country: us
@@ -29974,6 +29974,104 @@ mappings:
     policyengine_variable: il_income_tax
     candidate_priority: P4
     rationale: Axiom's signed terminal candidate is valid only when every typed hold is absent and returns zero otherwise; PolicyEngine il_income_tax composes its broader final modeled liability.
+
+
+  # Nevada Constitution article 10, section 1(9) prohibits a personal income
+  # tax on natural persons while expressly preserving taxes on business income
+  # or revenue. PolicyEngine has no active Nevada individual-income-tax surface,
+  # so these bounded legal and source-hold outputs are exact tax-scoped
+  # non-comparables. Downstream zero values are fail-closed sentinels, not
+  # substantive claims of complete signed net liability.
+  - legal_id: us-nv:policies/income_tax/2026_resident_zero_liability#nv_pit_2026_natural_person_income_tax_prohibition_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom output records the applicability of Nevada's constitutional prohibition on taxing a natural person's wages or personal income. PolicyEngine exposes no legal-authority applicability predicate for a state with no active individual income-tax program.
+
+  - legal_id: us-nv:policies/income_tax/2026_resident_zero_liability#nv_pit_2026_constitutional_prohibition_current_for_tax_year
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom output records that the current official constitutional text and amendment history support applying the prohibition in tax year 2026. PolicyEngine exposes no source-currentness predicate for Nevada constitutional authority.
+
+  - legal_id: us-nv:policies/income_tax/2026_resident_zero_liability#nv_pit_2026_business_income_or_revenue_tax_carveout_preserved
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom output preserves the constitutional boundary permitting taxes on business income or revenue. It is a scope predicate, not a PolicyEngine individual-income-tax variable.
+
+  - legal_id: us-nv:policies/income_tax/2026_resident_zero_liability#nv_pit_2026_resident_personal_income_tax_imposed
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom boolean states the legal absence of a Nevada personal income tax for a natural-person resident. PolicyEngine has no active Nevada individual-income-tax imposition variable.
+
+  - legal_id: us-nv:policies/income_tax/2026_resident_zero_liability#nv_pit_2026_deduction_and_exemption_stage_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This output states that no Nevada personal-income-tax deduction or exemption stage applies because no natural-person personal income tax is imposed. PolicyEngine exposes no corresponding non-applicability predicate.
+
+  - legal_id: us-nv:policies/income_tax/2026_resident_zero_liability#nv_pit_2026_surtax_stage_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This output states that no Nevada personal-income-tax surtax stage applies. PolicyEngine exposes no Nevada personal-income-tax surtax-stage applicability variable.
+
+  - legal_id: us-nv:policies/income_tax/2026_resident_zero_liability#nv_pit_2026_resident_personal_income_tax_before_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns exact zero before credits as the legal consequence of Nevada's constitutional prohibition on natural-person personal income tax. PolicyEngine has no active Nevada before-credit personal-income-tax variable.
+
+  - legal_id: us-nv:policies/income_tax/2026_resident_zero_liability#nv_pit_2026_nonrefundable_credit_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed Axiom hold records that complete tax-year-2026 Nevada nonrefundable-credit authority is not pinned. PolicyEngine exposes no source-completeness judgment for that legal surface.
+
+  - legal_id: us-nv:policies/income_tax/2026_resident_zero_liability#nv_pit_2026_resident_personal_income_tax_after_nonrefundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns a fail-closed zero sentinel while the nonrefundable-credit source hold remains active; it does not substantively assert a complete after-credit amount. PolicyEngine has no corresponding held Nevada output.
+
+  - legal_id: us-nv:policies/income_tax/2026_resident_zero_liability#nv_pit_2026_refundable_credit_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed Axiom hold records that the pinned constitutional prohibition does not prove the absence of independently refundable tax-year-2026 Nevada credits. PolicyEngine exposes no corresponding source-completeness judgment.
+
+  - legal_id: us-nv:policies/income_tax/2026_resident_zero_liability#nv_pit_2026_resident_refundable_personal_income_tax_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns a fail-closed zero sentinel while the refundable-credit source hold remains active; it does not substantively assert that Nevada refundable credits equal zero. PolicyEngine has no corresponding held output.
+
+  - legal_id: us-nv:policies/income_tax/2026_resident_zero_liability#nv_pit_2026_net_liability_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed Axiom hold records that complete credit ordering and signed net-liability authority are not pinned. PolicyEngine exposes no one-to-one legal source-completeness judgment.
+
+  - legal_id: us-nv:policies/income_tax/2026_resident_zero_liability#nv_pit_2026_resident_net_personal_income_tax_liability_before_payments
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns a fail-closed zero sentinel while the net-liability source hold remains active; it does not substantively assert complete signed net liability. PolicyEngine exposes no corresponding held Nevada liability output.
 
 
 prefixes:
