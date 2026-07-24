@@ -28797,6 +28797,80 @@ mappings:
     candidate_priority: P4
     rationale: Axiom's signed net-liability output is deliberately zero while the annual Arkansas income, deduction, tax, and credit chain remains source held; it must not be interpreted as zero Arkansas tax or compared to completed PolicyEngine liability.
 
+  # Florida does not impose chapter 220 individual income tax on a natural
+  # person. PolicyEngine therefore has no active Florida individual-income-tax
+  # program surface to compare. Exact entries keep every complete legal output
+  # in tax-scoped coverage without inventing an oracle variable.
+  - legal_id: us-fl:policies/income_tax/2026_resident_zero_liability#fl_pit_2026_natural_person_income_tax_constitutional_boundary_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom output records the applicability of Florida Constitution article VII section 5(a) to natural-person residents. PolicyEngine exposes no legal-authority applicability predicate for a state with no active individual income-tax program.
+
+  - legal_id: us-fl:policies/income_tax/2026_resident_zero_liability#fl_pit_2026_chapter_220_taxpayer_definition_excludes_natural_person
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom output records the section 220.03(1)(z) statutory classification limiting a chapter 220 taxpayer to a corporation. PolicyEngine exposes no equivalent legal-definition predicate.
+
+  - legal_id: us-fl:policies/income_tax/2026_resident_zero_liability#fl_pit_2026_resident_individual_income_tax_imposed
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom boolean states the legal absence of a Florida chapter 220 individual income tax for a natural-person resident. PolicyEngine has no active Florida individual-income-tax imposition variable.
+
+  - legal_id: us-fl:policies/income_tax/2026_resident_zero_liability#fl_pit_2026_deduction_and_exemption_stage_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom output states that no Florida individual income-tax deduction or exemption stage applies because no natural-person tax is imposed. PolicyEngine exposes no corresponding non-applicability predicate.
+
+  - legal_id: us-fl:policies/income_tax/2026_resident_zero_liability#fl_pit_2026_surtax_stage_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom output states that no Florida individual income-tax surtax stage applies. PolicyEngine exposes no Florida surtax-stage applicability variable.
+
+  - legal_id: us-fl:policies/income_tax/2026_resident_zero_liability#fl_pit_2026_credit_stage_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom output states that no Florida individual income-tax credit stage applies. PolicyEngine exposes no Florida income-tax credit-stage applicability variable.
+
+  - legal_id: us-fl:policies/income_tax/2026_resident_zero_liability#fl_pit_2026_resident_income_tax_before_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns exact zero before credits as the legal consequence of no Florida individual income tax. PolicyEngine has no active Florida before-credit income-tax variable to compare.
+
+  - legal_id: us-fl:policies/income_tax/2026_resident_zero_liability#fl_pit_2026_resident_income_tax_after_nonrefundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns exact zero after nonrefundable credits because no Florida individual income-tax or credit stage applies. PolicyEngine has no corresponding Florida output.
+
+  - legal_id: us-fl:policies/income_tax/2026_resident_zero_liability#fl_pit_2026_resident_refundable_income_tax_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns exact zero Florida refundable individual income-tax credits because chapter 220 does not impose an individual tax. PolicyEngine has no corresponding Florida income-tax credit output.
+
+  - legal_id: us-fl:policies/income_tax/2026_resident_zero_liability#fl_pit_2026_resident_net_income_tax_liability_before_payments
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns exact zero annual resident net individual income-tax liability before payments as the legal consequence of no imposed Florida individual income tax. PolicyEngine exposes no active Florida individual-income-tax liability variable.
+
   # The District's TY2026 resident module intentionally stops after a bounded
   # adjusted-gross-income surface.  Its later annual stages are typed holds
   # and fail-closed sentinels until final D-40 materials are available.  Exact
