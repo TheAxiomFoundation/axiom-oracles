@@ -28591,6 +28591,102 @@ mappings:
     candidate_priority: P4
     rationale: Axiom's signed net-liability output is deliberately zero while the annual income, deduction, tax, and credit chain remains source held; it must not be interpreted as zero Arizona tax. PolicyEngine az_income_tax is a completed modeled liability.
 
+  # Arkansas's TY2026 resident annual-return interface is fully source held.
+  # Act 2 supplies the ordinary rate schedule, but the pinned corpus does not
+  # supply the net-income, deduction, exemption, surtax, or credit chain.
+  # Exact entries keep every readiness judgment and fail-closed sentinel in
+  # tax-scoped coverage without comparing it to a substantive PE calculation.
+  - legal_id: us-ar:policies/income_tax/2026_resident_liability_source_hold#ar_pit_2026_input_domain_is_valid
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom validates full-year Arkansas residence, aligned federal and state filing units, and the federal-AGI input boundary. PolicyEngine uses its own entity and input schema and exposes no one-to-one validation output for this interface contract.
+
+  - legal_id: us-ar:policies/income_tax/2026_resident_liability_source_hold#ar_pit_2026_income_base_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold records that the pinned corpus does not establish the additions, subtractions, and conformity rules needed to construct Arkansas net income from federal outputs and raw facts. It is source-readiness metadata, not an Arkansas income variable modeled by PolicyEngine.
+
+  - legal_id: us-ar:policies/income_tax/2026_resident_liability_source_hold#ar_pit_2026_deduction_and_exemption_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold records that complete operative TY2026 Arkansas resident deduction and exemption authority is absent from the pinned corpus. PolicyEngine computes its modeled deductions and exemptions and exposes no corresponding source-readiness judgment.
+
+  - legal_id: us-ar:policies/income_tax/2026_resident_liability_source_hold#ar_pit_2026_tax_and_surtax_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold prevents the source-complete Act 2 schedule pilot from being applied before Arkansas taxable net income is constructed and records the absent specialty-tax surface. PolicyEngine exposes no analogous source-readiness predicate.
+
+  - legal_id: us-ar:policies/income_tax/2026_resident_liability_source_hold#ar_pit_2026_credit_surface_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold records that complete TY2026 Arkansas nonrefundable and refundable credit eligibility, limitation, ordering, and carryforward authority is unavailable. PolicyEngine computes modeled credits and has no equivalent source-readiness variable.
+
+  - legal_id: us-ar:policies/income_tax/2026_resident_liability_source_hold#ar_pit_2026_complete_liability_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This output combines Axiom's Arkansas income-base, deduction, exemption, tax, surtax, and credit source holds. It is a completion-state predicate rather than a tax result with a PolicyEngine analog.
+
+  - legal_id: us-ar:policies/income_tax/2026_resident_liability_source_hold#ar_pit_2026_net_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while Arkansas net-income construction is source held; that zero is not a claim of completed Arkansas net income and cannot be compared to a substantive PolicyEngine amount.
+
+  - legal_id: us-ar:policies/income_tax/2026_resident_liability_source_hold#ar_pit_2026_deductions_and_exemptions
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while the complete TY2026 Arkansas deduction and exemption chain is source held. PolicyEngine's modeled deductions and exemptions are substantive calculations.
+
+  - legal_id: us-ar:policies/income_tax/2026_resident_liability_source_hold#ar_pit_2026_taxable_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while its Arkansas net-income, deduction, and exemption stages are incomplete; that zero does not claim completed Arkansas taxable income.
+
+  - legal_id: us-ar:policies/income_tax/2026_resident_liability_source_hold#ar_pit_2026_tax_before_credits_including_surtaxes
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel because taxable net income and the complete TY2026 tax and surtax surface are source held. PolicyEngine's before-credit tax is a substantive modeled result.
+
+  - legal_id: us-ar:policies/income_tax/2026_resident_liability_source_hold#ar_pit_2026_tax_after_nonrefundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while annual tax and complete nonrefundable-credit authority and ordering are source held. It must not be compared to a substantive PolicyEngine after-credit calculation.
+
+  - legal_id: us-ar:policies/income_tax/2026_resident_liability_source_hold#ar_pit_2026_refundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while complete TY2026 Arkansas refundable-credit eligibility, limitations, and ordering are source held. PolicyEngine's modeled refundable credits are substantive outputs.
+
+  - legal_id: us-ar:policies/income_tax/2026_resident_liability_source_hold#ar_pit_2026_net_income_tax_liability_before_payments
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom's signed net-liability output is deliberately zero while the annual Arkansas income, deduction, tax, and credit chain remains source held; it must not be interpreted as zero Arkansas tax or compared to completed PolicyEngine liability.
+
   # The District's TY2026 resident module intentionally stops after a bounded
   # adjusted-gross-income surface.  Its later annual stages are typed holds
   # and fail-closed sentinels until final D-40 materials are available.  Exact
