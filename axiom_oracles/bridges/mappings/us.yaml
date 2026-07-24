@@ -30307,6 +30307,103 @@ mappings:
     candidate_priority: P4
     rationale: Axiom returns a fail-closed zero sentinel while the net-liability source hold remains active; it does not substantively assert complete signed net liability. PolicyEngine exposes no corresponding held Nevada liability output.
 
+  # Texas Constitution article VIII, sections 24-a and 24-b prohibit taxes on
+  # individual net income and capital gains while preserving specified
+  # non-income taxes. PolicyEngine has no active Texas individual-income-tax
+  # surface, so these bounded legal and source-hold outputs are exact
+  # tax-scoped non-comparables. Downstream zero values are fail-closed
+  # sentinels, not substantive claims of complete signed net liability.
+  - legal_id: us-tx:policies/income_tax/2026_resident_zero_liability#tx_pit_2026_individual_net_income_tax_prohibition_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom output records the applicability of Texas's constitutional prohibition on taxing an individual's net income. PolicyEngine exposes no legal-authority applicability predicate for a state with no active individual income-tax program.
+
+  - legal_id: us-tx:policies/income_tax/2026_resident_zero_liability#tx_pit_2026_capital_gains_tax_prohibition_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom output records Texas's separate constitutional prohibition on taxes imposed on an individual, family, estate, or trust's realized or unrealized capital gains. PolicyEngine exposes no corresponding Texas legal-prohibition predicate.
+
+  - legal_id: us-tx:policies/income_tax/2026_resident_zero_liability#tx_pit_2026_non_income_tax_carveouts_preserved
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom scope predicate preserves section 24-b's express ad valorem, sales-tax, and use-tax carveouts. It is not a PolicyEngine individual-income-tax variable.
+
+  - legal_id: us-tx:policies/income_tax/2026_resident_zero_liability#tx_pit_2026_resident_individual_income_tax_imposed
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom boolean states the legal absence of a Texas net-income tax for a resident individual. PolicyEngine has no active Texas individual-income-tax imposition variable.
+
+  - legal_id: us-tx:policies/income_tax/2026_resident_zero_liability#tx_pit_2026_deduction_and_exemption_stage_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This output states that no Texas individual-income-tax deduction or exemption stage applies because no resident individual net-income tax is imposed. PolicyEngine exposes no corresponding non-applicability predicate.
+
+  - legal_id: us-tx:policies/income_tax/2026_resident_zero_liability#tx_pit_2026_surtax_stage_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This output states that no Texas individual-income-tax surtax stage applies. PolicyEngine exposes no Texas individual-income-tax surtax-stage applicability variable.
+
+  - legal_id: us-tx:policies/income_tax/2026_resident_zero_liability#tx_pit_2026_resident_individual_income_tax_before_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns exact zero before credits as the legal consequence of Texas's constitutional prohibition on individual net-income tax. PolicyEngine has no active Texas before-credit individual-income-tax variable.
+
+  - legal_id: us-tx:policies/income_tax/2026_resident_zero_liability#tx_pit_2026_nonrefundable_credit_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed Axiom hold records that complete tax-year-2026 Texas nonrefundable-credit authority is not pinned. PolicyEngine exposes no source-completeness judgment for that legal surface.
+
+  - legal_id: us-tx:policies/income_tax/2026_resident_zero_liability#tx_pit_2026_resident_individual_income_tax_after_nonrefundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns a fail-closed zero sentinel while the nonrefundable-credit source hold remains active; it does not substantively assert a complete after-credit amount. PolicyEngine has no corresponding held Texas output.
+
+  - legal_id: us-tx:policies/income_tax/2026_resident_zero_liability#tx_pit_2026_refundable_credit_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed Axiom hold records that the pinned constitutional prohibitions do not prove the absence of independently refundable tax-year-2026 Texas credits. PolicyEngine exposes no corresponding source-completeness judgment.
+
+  - legal_id: us-tx:policies/income_tax/2026_resident_zero_liability#tx_pit_2026_resident_refundable_individual_income_tax_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns a fail-closed zero sentinel while the refundable-credit source hold remains active; it does not substantively assert that Texas refundable credits equal zero. PolicyEngine has no corresponding held output.
+
+  - legal_id: us-tx:policies/income_tax/2026_resident_zero_liability#tx_pit_2026_net_liability_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed Axiom hold records that complete credit ordering and signed net-liability authority are not pinned. PolicyEngine exposes no one-to-one legal source-completeness judgment.
+
+  - legal_id: us-tx:policies/income_tax/2026_resident_zero_liability#tx_pit_2026_resident_net_individual_income_tax_liability_before_payments
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns a fail-closed zero sentinel while the net-liability source hold remains active; it does not substantively assert complete signed net liability. PolicyEngine exposes no corresponding held Texas liability output.
+
   # Kansas's bounded TY2026 resident core has eight amount stages with aligned
   # PolicyEngine variables. Readiness judgments, literal parameters,
   # non-identical ordering intermediates, and fail-closed public sentinels are
