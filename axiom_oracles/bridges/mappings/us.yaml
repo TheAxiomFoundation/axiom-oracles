@@ -29737,8 +29737,10 @@ mappings:
   # South Dakota does not have a personal income tax. SDCL chapter 10-43 and
   # section 10-43-2 confine the state's income-tax chapter to banks and
   # financial corporations. PolicyEngine has no active South Dakota
-  # individual-income-tax surface, so these complete legal outputs are exact
-  # tax-scoped non-comparables.
+  # individual-income-tax surface, so these bounded legal and source-hold
+  # outputs are exact tax-scoped non-comparables. Downstream zero values are
+  # fail-closed sentinels, not substantive claims of complete signed net
+  # liability.
   - legal_id: us-sd:policies/income_tax/2026_resident_zero_liability#sd_pit_2026_personal_income_tax_absence_applies
     country: us
     program: tax
@@ -29774,13 +29776,6 @@ mappings:
     candidate_priority: P4
     rationale: This output states that no South Dakota personal-income-tax surtax stage applies. PolicyEngine exposes no South Dakota personal-income-tax surtax-stage applicability variable.
 
-  - legal_id: us-sd:policies/income_tax/2026_resident_zero_liability#sd_pit_2026_credit_stage_applies
-    country: us
-    program: tax
-    mapping_type: not_comparable
-    candidate_priority: P4
-    rationale: This output states that no South Dakota personal-income-tax credit stage applies. PolicyEngine exposes no South Dakota personal-income-tax credit-stage applicability variable.
-
   - legal_id: us-sd:policies/income_tax/2026_resident_zero_liability#sd_pit_2026_resident_personal_income_tax_before_credits
     country: us
     program: tax
@@ -29788,26 +29783,47 @@ mappings:
     candidate_priority: P4
     rationale: Axiom returns exact zero before credits as the legal consequence of South Dakota's absence of a natural-person personal income tax. PolicyEngine has no active South Dakota before-credit personal-income-tax variable.
 
+  - legal_id: us-sd:policies/income_tax/2026_resident_zero_liability#sd_pit_2026_nonrefundable_credit_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed Axiom hold records that complete tax-year-2026 South Dakota nonrefundable-credit authority is not pinned. PolicyEngine exposes no source-completeness judgment for that legal surface.
+
   - legal_id: us-sd:policies/income_tax/2026_resident_zero_liability#sd_pit_2026_resident_personal_income_tax_after_nonrefundable_credits
     country: us
     program: tax
     mapping_type: not_comparable
     candidate_priority: P4
-    rationale: Axiom returns exact zero after nonrefundable credits because no South Dakota personal-income-tax or credit stage applies. PolicyEngine has no corresponding South Dakota output.
+    rationale: Axiom returns a fail-closed zero sentinel while the nonrefundable-credit source hold remains active; it does not substantively assert a complete after-credit amount. PolicyEngine has no corresponding held South Dakota output.
+
+  - legal_id: us-sd:policies/income_tax/2026_resident_zero_liability#sd_pit_2026_refundable_credit_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed Axiom hold records that the pinned no-personal-income-tax authority does not prove the absence of independently refundable tax-year-2026 South Dakota credits. PolicyEngine exposes no corresponding source-completeness judgment.
 
   - legal_id: us-sd:policies/income_tax/2026_resident_zero_liability#sd_pit_2026_resident_refundable_personal_income_tax_credits
     country: us
     program: tax
     mapping_type: not_comparable
     candidate_priority: P4
-    rationale: Axiom returns exact zero South Dakota refundable personal-income-tax credits because South Dakota has no natural-person personal-income-tax system. PolicyEngine has no corresponding South Dakota personal-income-tax credit output.
+    rationale: Axiom returns a fail-closed zero sentinel while the refundable-credit source hold remains active; it does not substantively assert that South Dakota refundable credits equal zero. PolicyEngine has no corresponding held output.
+
+  - legal_id: us-sd:policies/income_tax/2026_resident_zero_liability#sd_pit_2026_net_liability_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed Axiom hold records that credit ordering and complete signed net-liability authority remain unresolved. PolicyEngine exposes no source-completeness judgment for that boundary.
 
   - legal_id: us-sd:policies/income_tax/2026_resident_zero_liability#sd_pit_2026_resident_net_personal_income_tax_liability_before_payments
     country: us
     program: tax
     mapping_type: not_comparable
     candidate_priority: P4
-    rationale: Axiom returns exact zero annual resident net personal-income-tax liability before payments as the legal consequence of South Dakota's absence of personal income tax. PolicyEngine exposes no active South Dakota individual-income-tax liability variable.
+    rationale: Axiom returns a fail-closed zero sentinel while the net-liability source hold remains active; it does not substantively assert complete signed net liability. PolicyEngine exposes no corresponding held South Dakota liability output.
 
 
 prefixes:
