@@ -864,6 +864,29 @@ for (const st of POPULACE_CAMPAIGN_STATES) {
 }
 
 const SNAP_SUITE_RE = /^([a-z]{2})-snap-ecps$/;
+// USDA SNAP Quality Control lanes: same program family as the ECPS suites,
+// compared against the QC administrative sample instead.
+const SNAP_QC_SUITE_RE = /^([a-z]{2})-snap-qc$/;
+// State income-tax liability grids (completed-return boundary).
+const STATE_TAX_SUITE_RE = /^([a-z]{2})-income-tax-liability$/;
+// TANF household suites without an explicit override.
+const TANF_ECPS_SUITE_RE = /^([a-z]{2})-tanf-ecps$/;
+
+// Fallback labels: humanize the slug instead of echoing it raw
+// ("uk-council-tax-reduction" → "UK council tax reduction").
+const SLUG_ACRONYMS = new Set([
+  "uk", "us", "dk", "be", "de", "tv", "vat", "jsa", "pe", "lbtt", "ltt",
+  "ecps", "qc",
+]);
+function humanizeSlug(slug) {
+  return slug
+    .split("-")
+    .map((part) =>
+      SLUG_ACRONYMS.has(part) ? part.toUpperCase() : part,
+    )
+    .join(" ")
+    .replace(/^./, (c) => c.toUpperCase());
+}
 
 /** Resolve display + grouping metadata for a suite slug. */
 export function suiteMeta(suite) {
@@ -885,11 +908,53 @@ export function suiteMeta(suite) {
     };
   }
 
+  const snapQc = slug.match(SNAP_QC_SUITE_RE);
+  if (snapQc && US_STATE_NAMES[snapQc[1].toUpperCase()]) {
+    const abbr = snapQc[1].toUpperCase();
+    return {
+      suite: slug,
+      family: "snap",
+      jurisdiction: abbr,
+      label: `${US_STATE_NAMES[abbr]} SNAP (vs SNAP QC)`,
+      region: "us",
+      kind: "household",
+      order: 105,
+    };
+  }
+
+  const stateTax = slug.match(STATE_TAX_SUITE_RE);
+  if (stateTax && US_STATE_NAMES[stateTax[1].toUpperCase()]) {
+    const abbr = stateTax[1].toUpperCase();
+    return {
+      suite: slug,
+      family: "state_income_tax",
+      jurisdiction: abbr,
+      label: `${US_STATE_NAMES[abbr]} income tax`,
+      region: "us",
+      kind: "household",
+      order: 45,
+    };
+  }
+
+  const tanf = slug.match(TANF_ECPS_SUITE_RE);
+  if (tanf && US_STATE_NAMES[tanf[1].toUpperCase()]) {
+    const abbr = tanf[1].toUpperCase();
+    return {
+      suite: slug,
+      family: "tanf",
+      jurisdiction: abbr,
+      label: `${US_STATE_NAMES[abbr]} TANF`,
+      region: "us",
+      kind: "household",
+      order: 222,
+    };
+  }
+
   return {
     suite: slug,
     family: slug || "unknown",
     jurisdiction: null,
-    label: slug || "Unnamed run",
+    label: slug ? humanizeSlug(slug) : "Unnamed run",
     region: slug.startsWith("uk-")
       ? "uk"
       : slug.startsWith("be-")
@@ -898,7 +963,9 @@ export function suiteMeta(suite) {
           ? "ca"
           : slug.startsWith("de-")
             ? "de"
-            : "us",
+            : slug.startsWith("dk-")
+              ? "dk"
+              : "us",
     kind: "household",
     order: 500,
   };
