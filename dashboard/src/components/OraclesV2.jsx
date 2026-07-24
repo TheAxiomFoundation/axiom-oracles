@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { loadOracleData } from "../utils/data";
+import { BASE_PATH } from "../utils/basePath";
 import { causeFor, countUnexplained } from "../utils/programs";
 import {
   engineLabel,
@@ -602,7 +603,7 @@ export default function OraclesV2() {
   const [overviewQuery, setOverviewQuery] = useState("");
 
   useEffect(() => {
-    loadOracleData("")
+    loadOracleData(BASE_PATH)
       .then(setData)
       .catch((e) => setError(e.message));
     // Deep-link, read once on mount.
@@ -811,7 +812,7 @@ export default function OraclesV2() {
               aria-label="Axiom Foundation"
             >
               <img
-                src="/axiom-foundation.svg"
+                src={`${BASE_PATH}/axiom-foundation.svg`}
                 alt="Axiom Foundation"
                 className="brand-axiom"
               />
