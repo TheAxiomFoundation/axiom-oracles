@@ -223,7 +223,7 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-23T19:54:11Z",
+    "generated_at": "2026-07-24T03:53:21Z",
     "generated_by": "scripts/run_comparison.py::hi-income-tax-liability",
     "rulespecs": [
       {

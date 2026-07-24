@@ -2509,6 +2509,26 @@ def _run_snap_qc_compare(runner: dict, output: Path) -> None:
     output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
 
 
+
+
+def _run_spsm_ca_compare(runner: dict, output: Path) -> None:
+    """Statistics Canada SPSD/M lanes (licensed local install required).
+
+    Shells to the lane's generator, which runs SPSM under Wine over the
+    full licensed database and writes an aggregate-only dashboard report
+    carrying the SPSD/M Licence s.4.1 attribution notice. The generator
+    hard-fails with installation instructions when no licensed Package is
+    present, so CI (which cannot hold a licence) never silently produces
+    an empty report.
+    """
+    del output  # the generator writes the dashboard artifact directly
+    script = REPO_ROOT / "scripts" / "generate_ca_federal_tax_spsm.py"
+    subprocess.run(
+        [sys.executable, str(script), "--run-spsm"],
+        check=True,
+        cwd=REPO_ROOT,
+    )
+
 RUNNERS = {
     "axiom-encode-snap-ecps-compare": _run_axiom_encode_snap_ecps_compare,
     "axiom-encode-tax-ecps-compare": _run_axiom_encode_tax_ecps_compare,
@@ -2517,6 +2537,7 @@ RUNNERS = {
     "euromod-synthetic-compare": _run_euromod_synthetic_compare,
     "gettsim-synthetic-compare": _run_gettsim_synthetic_compare,
     "snap-qc-compare": _run_snap_qc_compare,
+    "spsm-ca-compare": _run_spsm_ca_compare,
     "state-income-tax-liability-grid": _run_state_income_tax_liability_grid,
     "uk-council-tax-reduction-grid": _run_uk_council_tax_reduction_grid,
     "uk-capital-gains-tax-grid": _run_uk_capital_gains_tax_grid,

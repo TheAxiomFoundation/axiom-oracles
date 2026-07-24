@@ -223,7 +223,7 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-23T19:55:14Z",
+    "generated_at": "2026-07-24T03:54:36Z",
     "generated_by": "scripts/run_comparison.py::nc-income-tax-liability",
     "rulespecs": [
       {
