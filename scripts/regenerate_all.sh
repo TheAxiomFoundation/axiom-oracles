@@ -41,6 +41,8 @@ done
 # Rebundle the front page's single-fetch overview after any report changes
 # (CI gates on its consistency with the manifest).
 .venv/bin/python scripts/generate_dashboard_overview.py || echo "!! overview bundle failed"
+# Full-evidence reports run to GBs; keep only the newest generation each.
+.venv/bin/python scripts/prune_superseded_reports.py || echo "!! report prune failed"
 .venv/bin/python -m pytest tests/ -q
 
 if ! git diff --quiet dashboard/public/data; then

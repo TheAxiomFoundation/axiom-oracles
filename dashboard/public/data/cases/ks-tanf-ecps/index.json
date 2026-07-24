@@ -2,6 +2,27 @@
  "suite": "ks-tanf-ecps",
  "count": 861,
  "chunks": 2,
+ "input_slots": [
+  "axiom:ks-tanf-compiled#input.all_persons_in_home_in_same_assistance_plan",
+  "axiom:ks-tanf-compiled#input.application_day_of_month",
+  "axiom:ks-tanf-compiled#input.assistance_plan_person_count",
+  "axiom:ks-tanf-compiled#input.assistance_reinstated_after_required_information_or_cooperation_provided_in_month_following_closure",
+  "axiom:ks-tanf-compiled#input.assistance_suspended_and_reinstated_in_month_following_one_month_suspension",
+  "axiom:ks-tanf-compiled#input.cash_application_filed_in_response_to_sanction_notice_with_cooperation_within_45_days_and_received_in_month_following_closure",
+  "axiom:ks-tanf-compiled#input.cash_review_or_application_returned_in_month_following_end_of_review_period",
+  "axiom:ks-tanf-compiled#input.days_in_month",
+  "axiom:ks-tanf-compiled#input.monthly_cash_benefit_before_proration",
+  "axiom:ks-tanf-compiled#input.only_excluded_person_is_qualifying_ssi_recipient_or_joint_custody_child",
+  "axiom:ks-tanf-compiled#input.shared_living_arrangement_is_commercial_bona_fide_landlord_tenant",
+  "axiom:ks-tanf-compiled#input.shared_living_arrangement_with_person_not_in_budget_plan",
+  "axiom:ks-tanf-compiled#input.shelter_group_i_applies",
+  "axiom:ks-tanf-compiled#input.shelter_group_ii_applies",
+  "axiom:ks-tanf-compiled#input.shelter_group_iii_applies",
+  "axiom:ks-tanf-compiled#input.shelter_group_iv_applies",
+  "axiom:ks-tanf-compiled#input.shelter_group_v_applies",
+  "axiom:ks-tanf-compiled#input.specialized_living_commercial_board_room_or_room_only_arrangement",
+  "axiom:ks-tanf-compiled#input.tanf_case_reopened_in_month_following_effective_date_of_closure"
+ ],
  "chunk_size": 500,
  "engines": {
   "left": "axiom",
@@ -10,6 +31,6 @@
  "mismatch_concepts": [
   "us-ks:policies/dcf/keesm#ks_tanf_maximum_benefit"
  ],
- "source": "axiom-policyengine-ks-tanf-ecps-0-2026-07-06.json",
+ "source": "axiom-policyengine-ks-tanf-ecps-0-2026-07-24.json",
  "total_cases": 861
 }

@@ -154,9 +154,15 @@ function Triangulation({ runs, bySuite, onPick }) {
  * values both engines agreed on. Intermediate engine outputs land here as
  * harnesses start recording them.
  */
-function HouseholdDetail({ c, conceptLabels, oracleLabel }) {
+function HouseholdDetail({ c, conceptLabels, oracleLabel, inputSlots }) {
   const records = Array.isArray(c.i) ? c.i : null;
   const matched = c.v || [];
+  const [showDefaults, setShowDefaults] = useState(false);
+  const defaultedSlots = useMemo(() => {
+    if (!showDefaults || !Array.isArray(inputSlots)) return [];
+    const present = new Set((records || []).map((r) => r.n));
+    return inputSlots.filter((n) => !present.has(n));
+  }, [showDefaults, inputSlots, records]);
   return (
     <div className="v2-hhd">
       <div className="v2-hhd-block">
@@ -204,8 +210,34 @@ function HouseholdDetail({ c, conceptLabels, oracleLabel }) {
             {c.i0 > 0 && (
               <p className="v2-hhd-note">
                 {c.i0.toLocaleString()} more inputs sit at their zero /
-                false defaults and aren&apos;t listed.
+                false defaults
+                {Array.isArray(inputSlots) && inputSlots.length > 0 ? (
+                  <>
+                    {" — "}
+                    <button
+                      type="button"
+                      className="v2-linklike"
+                      onClick={() => setShowDefaults((v) => !v)}
+                    >
+                      {showDefaults ? "hide them" : "show them"}
+                    </button>
+                  </>
+                ) : (
+                  " and aren't listed."
+                )}
               </p>
+            )}
+            {defaultedSlots.length > 0 && (
+              <div className="v2-hhd-grid v2-hhd-record">
+                {defaultedSlots.map((n) => (
+                  <span key={n} style={{ display: "contents" }}>
+                    <span className="mono v2-hhd-k" title={n}>
+                      {inputName(n)}
+                    </span>
+                    <span className="mono">0 / no (default)</span>
+                  </span>
+                ))}
+              </div>
             )}
           </>
         ) : (
@@ -499,6 +531,9 @@ export default function HouseholdsView({ title, reports, onBack, backLabel }) {
                             oracleLabel={engineLabel(
                               oracleBySuite.get(c.s) || oracles[0],
                             )}
+                            inputSlots={
+                              bySuite[c.s]?.index?.input_slots || null
+                            }
                           />
                         </td>
                       </tr>

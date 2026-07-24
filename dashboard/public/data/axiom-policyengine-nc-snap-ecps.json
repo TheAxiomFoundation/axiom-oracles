@@ -8,18 +8,18 @@
       "components": [],
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
-      "left_weighted_sum": 310799128.03735,
-      "match_rate": 95.307443,
-      "match_weight": 4913313.223434,
-      "mismatch_count": 87,
-      "mismatch_weight": 248849.136185,
+      "left_weighted_sum": 310774893.902394,
+      "match_rate": 94.983819,
+      "match_weight": 4910527.108418,
+      "mismatch_count": 93,
+      "mismatch_weight": 251635.2512,
       "missing_both_count": 0,
       "missing_left_count": 0,
       "missing_right_count": 0,
       "parent": null,
       "right_weighted_sum": 296447765.725676,
-      "weighted_difference": 14351362.311674,
-      "weighted_match_rate": 95.179362
+      "weighted_difference": 14327128.176717,
+      "weighted_match_rate": 95.125391
     },
     {
       "category": "food",
@@ -53,10 +53,11 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3246,
+        "axiom_input_records_count": 3258,
         "axiom_relations_count": 2,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -108,10 +109,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 11394,
+        "axiom_input_records_count": 11406,
         "axiom_relations_count": 10,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -160,10 +168,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 7320,
+        "axiom_input_records_count": 7332,
         "axiom_relations_count": 6,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -208,10 +223,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 11394,
+        "axiom_input_records_count": 11406,
         "axiom_relations_count": 10,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -260,10 +282,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 7320,
+        "axiom_input_records_count": 7332,
         "axiom_relations_count": 6,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -308,10 +337,11 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3246,
+        "axiom_input_records_count": 3258,
         "axiom_relations_count": 2,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -363,10 +393,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 13431,
+        "axiom_input_records_count": 13443,
         "axiom_relations_count": 12,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -417,10 +454,11 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 7320,
+        "axiom_input_records_count": 7332,
         "axiom_relations_count": 6,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -476,10 +514,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 5283,
+        "axiom_input_records_count": 5295,
         "axiom_relations_count": 4,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -522,10 +567,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 19542,
+        "axiom_input_records_count": 19554,
         "axiom_relations_count": 18,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -582,10 +634,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 7320,
+        "axiom_input_records_count": 7332,
         "axiom_relations_count": 6,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -630,10 +689,11 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 13431,
+        "axiom_input_records_count": 13443,
         "axiom_relations_count": 12,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -691,14 +751,78 @@
       "right_errors": []
     },
     {
+      "case_id": "ecps-27263",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 9369,
+        "axiom_relations_count": 8,
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_summary": {
+          "ages": [
+            25,
+            2,
+            0,
+            28
+          ],
+          "household_size": 4,
+          "yearly_earned_income_per_person": [
+            10933.1,
+            0.0,
+            0.0,
+            7653.17
+          ],
+          "yearly_earned_income_total": 18586.27
+        },
+        "household_weight": 0.002134998794645071,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "37119",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "description": "SNAP benefit amount",
+          "difference": -7.145345052083371,
+          "kind": "amount_difference",
+          "left": 688.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 695.1453450520834,
+          "tolerance": 7
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
       "case_id": "ecps-27287",
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 13431,
+        "axiom_input_records_count": 13443,
         "axiom_relations_count": 12,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -749,10 +873,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3246,
+        "axiom_input_records_count": 3258,
         "axiom_relations_count": 2,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -793,10 +924,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3246,
+        "axiom_input_records_count": 3258,
         "axiom_relations_count": 2,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -837,10 +975,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "left": 0.0,
+          "right": 6.09359868367513
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3246,
+        "axiom_input_records_count": 3258,
         "axiom_relations_count": 2,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -881,10 +1026,11 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 5283,
+        "axiom_input_records_count": 5295,
         "axiom_relations_count": 4,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -910,9 +1056,9 @@
         {
           "concept": "us:statutes/7/2014/u#snap_benefit",
           "description": "SNAP benefit amount",
-          "difference": 318.0,
+          "difference": 317.0,
           "kind": "amount_difference",
-          "left": 318.0,
+          "left": 317.0,
           "parent": null,
           "relative_tolerance": 0,
           "right": 0.0,
@@ -938,10 +1084,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 7320,
+        "axiom_input_records_count": 7332,
         "axiom_relations_count": 6,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -986,10 +1139,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 11394,
+        "axiom_input_records_count": 11406,
         "axiom_relations_count": 10,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -1038,10 +1198,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 9357,
+        "axiom_input_records_count": 9369,
         "axiom_relations_count": 8,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -1084,14 +1251,78 @@
       "right_errors": []
     },
     {
+      "case_id": "ecps-27402",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 9369,
+        "axiom_relations_count": 8,
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_summary": {
+          "ages": [
+            39,
+            34,
+            8,
+            4
+          ],
+          "household_size": 4,
+          "yearly_earned_income_per_person": [
+            44938.58,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 44938.58
+        },
+        "household_weight": 1877.0128173828125,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "37067",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "description": "SNAP benefit amount",
+          "difference": -7.345316569010407,
+          "kind": "amount_difference",
+          "left": 161.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 168.3453165690104,
+          "tolerance": 7
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
       "case_id": "ecps-27443",
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 11394,
+        "axiom_input_records_count": 11406,
         "axiom_relations_count": 10,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -1140,10 +1371,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "left": 0.0,
+          "right": 6.09359868367513
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 5283,
+        "axiom_input_records_count": 5295,
         "axiom_relations_count": 4,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -1186,10 +1424,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3246,
+        "axiom_input_records_count": 3258,
         "axiom_relations_count": 2,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -1230,10 +1475,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 11394,
+        "axiom_input_records_count": 11406,
         "axiom_relations_count": 10,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -1282,10 +1534,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 9357,
+        "axiom_input_records_count": 9369,
         "axiom_relations_count": 8,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -1332,10 +1591,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 11394,
+        "axiom_input_records_count": 11406,
         "axiom_relations_count": 10,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -1384,10 +1650,11 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 7320,
+        "axiom_input_records_count": 7332,
         "axiom_relations_count": 6,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -1443,10 +1710,11 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 5283,
+        "axiom_input_records_count": 5295,
         "axiom_relations_count": 4,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -1500,10 +1768,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 13431,
+        "axiom_input_records_count": 13443,
         "axiom_relations_count": 12,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -1554,10 +1829,11 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3246,
+        "axiom_input_records_count": 3258,
         "axiom_relations_count": 2,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -1609,10 +1885,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 11394,
+        "axiom_input_records_count": 11406,
         "axiom_relations_count": 10,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -1661,10 +1944,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 11394,
+        "axiom_input_records_count": 11406,
         "axiom_relations_count": 10,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -1709,14 +1999,78 @@
       "right_errors": []
     },
     {
+      "case_id": "ecps-27617",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 9369,
+        "axiom_relations_count": 8,
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_summary": {
+          "ages": [
+            50,
+            37,
+            13,
+            11
+          ],
+          "household_size": 4,
+          "yearly_earned_income_per_person": [
+            43732.4,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 43732.4
+        },
+        "household_weight": 60.185115814208984,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "37045",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "description": "SNAP benefit amount",
+          "difference": -7.345316569010407,
+          "kind": "amount_difference",
+          "left": 185.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 192.3453165690104,
+          "tolerance": 7
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
       "case_id": "ecps-27628",
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 5283,
+        "axiom_input_records_count": 5295,
         "axiom_relations_count": 4,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -1759,10 +2113,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "left": 0.0,
+          "right": 6.09359868367513
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3246,
+        "axiom_input_records_count": 3258,
         "axiom_relations_count": 2,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -1803,10 +2164,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3246,
+        "axiom_input_records_count": 3258,
         "axiom_relations_count": 2,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -1847,10 +2215,11 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 5283,
+        "axiom_input_records_count": 5295,
         "axiom_relations_count": 4,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -1904,10 +2273,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 7320,
+        "axiom_input_records_count": 7332,
         "axiom_relations_count": 6,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -1952,10 +2328,11 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 9357,
+        "axiom_input_records_count": 9369,
         "axiom_relations_count": 8,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -1985,9 +2362,9 @@
         {
           "concept": "us:statutes/7/2014/u#snap_benefit",
           "description": "SNAP benefit amount",
-          "difference": 249.0,
+          "difference": 248.0,
           "kind": "amount_difference",
-          "left": 249.0,
+          "left": 248.0,
           "parent": null,
           "relative_tolerance": 0,
           "right": 0.0,
@@ -2013,10 +2390,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3246,
+        "axiom_input_records_count": 3258,
         "axiom_relations_count": 2,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -2057,10 +2441,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 9357,
+        "axiom_input_records_count": 9369,
         "axiom_relations_count": 8,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -2107,10 +2498,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 9357,
+        "axiom_input_records_count": 9369,
         "axiom_relations_count": 8,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -2153,14 +2551,78 @@
       "right_errors": []
     },
     {
+      "case_id": "ecps-27734",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 9369,
+        "axiom_relations_count": 8,
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_summary": {
+          "ages": [
+            34,
+            34,
+            10,
+            5
+          ],
+          "household_size": 4,
+          "yearly_earned_income_per_person": [
+            0.0,
+            43732.4,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 43732.4
+        },
+        "household_weight": 77.41531372070312,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "37103",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "description": "SNAP benefit amount",
+          "difference": -7.345316569010407,
+          "kind": "amount_difference",
+          "left": 185.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 192.3453165690104,
+          "tolerance": 7
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
       "case_id": "ecps-27735",
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 7320,
+        "axiom_input_records_count": 7332,
         "axiom_relations_count": 6,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -2205,10 +2667,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3246,
+        "axiom_input_records_count": 3258,
         "axiom_relations_count": 2,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -2249,10 +2718,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 7320,
+        "axiom_input_records_count": 7332,
         "axiom_relations_count": 6,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -2297,10 +2773,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3246,
+        "axiom_input_records_count": 3258,
         "axiom_relations_count": 2,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -2341,10 +2824,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 7320,
+        "axiom_input_records_count": 7332,
         "axiom_relations_count": 6,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -2389,10 +2879,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 5283,
+        "axiom_input_records_count": 5295,
         "axiom_relations_count": 4,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -2435,10 +2932,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 11394,
+        "axiom_input_records_count": 11406,
         "axiom_relations_count": 10,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -2487,10 +2991,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "left": 0.0,
+          "right": 6.09359868367513
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3246,
+        "axiom_input_records_count": 3258,
         "axiom_relations_count": 2,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -2531,10 +3042,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 9357,
+        "axiom_input_records_count": 9369,
         "axiom_relations_count": 8,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -2581,10 +3099,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3246,
+        "axiom_input_records_count": 3258,
         "axiom_relations_count": 2,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -2625,10 +3150,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 13431,
+        "axiom_input_records_count": 13443,
         "axiom_relations_count": 12,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -2662,9 +3194,9 @@
         {
           "concept": "us:statutes/7/2014/u#snap_benefit",
           "description": "SNAP benefit amount",
-          "difference": 376.11181640625,
+          "difference": 375.11181640625,
           "kind": "amount_difference",
-          "left": 461.0,
+          "left": 460.0,
           "parent": null,
           "relative_tolerance": 0,
           "right": 84.88818359375,
@@ -2679,10 +3211,11 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 13431,
+        "axiom_input_records_count": 13443,
         "axiom_relations_count": 12,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -2716,9 +3249,9 @@
         {
           "concept": "us:statutes/7/2014/u#snap_benefit",
           "description": "SNAP benefit amount",
-          "difference": 836.0,
+          "difference": 835.0,
           "kind": "amount_difference",
-          "left": 836.0,
+          "left": 835.0,
           "parent": null,
           "relative_tolerance": 0,
           "right": 0.0,
@@ -2744,10 +3277,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 13431,
+        "axiom_input_records_count": 13443,
         "axiom_relations_count": 12,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -2798,10 +3338,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 7320,
+        "axiom_input_records_count": 7332,
         "axiom_relations_count": 6,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -2846,10 +3393,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 11394,
+        "axiom_input_records_count": 11406,
         "axiom_relations_count": 10,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -2898,10 +3452,11 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3246,
+        "axiom_input_records_count": 3258,
         "axiom_relations_count": 2,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -2953,10 +3508,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 11394,
+        "axiom_input_records_count": 11406,
         "axiom_relations_count": 10,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -2988,9 +3550,9 @@
         {
           "concept": "us:statutes/7/2014/u#snap_benefit",
           "description": "SNAP benefit amount",
-          "difference": 281.0,
+          "difference": 280.0,
           "kind": "amount_difference",
-          "left": 281.0,
+          "left": 280.0,
           "parent": null,
           "relative_tolerance": 0,
           "right": 0.0,
@@ -3005,10 +3567,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3246,
+        "axiom_input_records_count": 3258,
         "axiom_relations_count": 2,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -3049,10 +3618,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 13431,
+        "axiom_input_records_count": 13443,
         "axiom_relations_count": 12,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -3103,10 +3679,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 11394,
+        "axiom_input_records_count": 11406,
         "axiom_relations_count": 10,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -3155,10 +3738,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "left": 0.0,
+          "right": 6.09359868367513
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3246,
+        "axiom_input_records_count": 3258,
         "axiom_relations_count": 2,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -3199,10 +3789,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 9357,
+        "axiom_input_records_count": 9369,
         "axiom_relations_count": 8,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -3249,10 +3846,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 15468,
+        "axiom_input_records_count": 15480,
         "axiom_relations_count": 14,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -3305,10 +3909,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 9357,
+        "axiom_input_records_count": 9369,
         "axiom_relations_count": 8,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -3355,10 +3966,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 11394,
+        "axiom_input_records_count": 11406,
         "axiom_relations_count": 10,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -3390,9 +4008,9 @@
         {
           "concept": "us:statutes/7/2014/u#snap_benefit",
           "description": "SNAP benefit amount",
-          "difference": -7.179484049479157,
+          "difference": -8.179484049479157,
           "kind": "amount_difference",
-          "left": 213.0,
+          "left": 212.0,
           "parent": null,
           "relative_tolerance": 0,
           "right": 220.17948404947916,
@@ -3407,10 +4025,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 9357,
+        "axiom_input_records_count": 9369,
         "axiom_relations_count": 8,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -3440,9 +4065,9 @@
         {
           "concept": "us:statutes/7/2014/u#snap_benefit",
           "description": "SNAP benefit amount",
-          "difference": 10.454508463541629,
+          "difference": 9.454508463541629,
           "kind": "amount_difference",
-          "left": 945.0,
+          "left": 944.0,
           "parent": null,
           "relative_tolerance": 0,
           "right": 934.5454915364584,
@@ -3457,10 +4082,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 7320,
+        "axiom_input_records_count": 7332,
         "axiom_relations_count": 6,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -3505,10 +4137,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 11394,
+        "axiom_input_records_count": 11406,
         "axiom_relations_count": 10,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -3557,10 +4196,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 7320,
+        "axiom_input_records_count": 7332,
         "axiom_relations_count": 6,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -3605,10 +4251,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 11394,
+        "axiom_input_records_count": 11406,
         "axiom_relations_count": 10,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -3657,10 +4310,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 13431,
+        "axiom_input_records_count": 13443,
         "axiom_relations_count": 12,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -3711,10 +4371,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 9357,
+        "axiom_input_records_count": 9369,
         "axiom_relations_count": 8,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -3761,10 +4428,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 11394,
+        "axiom_input_records_count": 11406,
         "axiom_relations_count": 10,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -3813,10 +4487,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 9357,
+        "axiom_input_records_count": 9369,
         "axiom_relations_count": 8,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -3863,10 +4544,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 7320,
+        "axiom_input_records_count": 7332,
         "axiom_relations_count": 6,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -3911,10 +4599,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 9357,
+        "axiom_input_records_count": 9369,
         "axiom_relations_count": 8,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -3961,10 +4656,11 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 9357,
+        "axiom_input_records_count": 9369,
         "axiom_relations_count": 8,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -4018,14 +4714,78 @@
       "right_errors": []
     },
     {
+      "case_id": "ecps-28322",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 9369,
+        "axiom_relations_count": 8,
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_summary": {
+          "ages": [
+            43,
+            12,
+            8,
+            6
+          ],
+          "household_size": 4,
+          "yearly_earned_income_per_person": [
+            34439.27,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 34439.27
+        },
+        "household_weight": 541.6166381835938,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "37179",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "description": "SNAP benefit amount",
+          "difference": -7.345296223958314,
+          "kind": "amount_difference",
+          "left": 371.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 378.3452962239583,
+          "tolerance": 7
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
       "case_id": "ecps-28338",
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 5283,
+        "axiom_input_records_count": 5295,
         "axiom_relations_count": 4,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -4068,10 +4828,11 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 7320,
+        "axiom_input_records_count": 7332,
         "axiom_relations_count": 6,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -4127,10 +4888,11 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 13431,
+        "axiom_input_records_count": 13443,
         "axiom_relations_count": 12,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -4192,10 +4954,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 13431,
+        "axiom_input_records_count": 13443,
         "axiom_relations_count": 12,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -4246,10 +5015,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 9357,
+        "axiom_input_records_count": 9369,
         "axiom_relations_count": 8,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -4296,10 +5072,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 11394,
+        "axiom_input_records_count": 11406,
         "axiom_relations_count": 10,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -4348,10 +5131,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "left": 0.0,
+          "right": 6.09359868367513
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3246,
+        "axiom_input_records_count": 3258,
         "axiom_relations_count": 2,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -4392,10 +5182,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 11394,
+        "axiom_input_records_count": 11406,
         "axiom_relations_count": 10,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -4444,10 +5241,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 11394,
+        "axiom_input_records_count": 11406,
         "axiom_relations_count": 10,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -4496,10 +5300,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 7320,
+        "axiom_input_records_count": 7332,
         "axiom_relations_count": 6,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -4544,10 +5355,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 11394,
+        "axiom_input_records_count": 11406,
         "axiom_relations_count": 10,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -4596,10 +5414,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 11394,
+        "axiom_input_records_count": 11406,
         "axiom_relations_count": 10,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -4644,14 +5469,78 @@
       "right_errors": []
     },
     {
+      "case_id": "ecps-28453",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 9369,
+        "axiom_relations_count": 8,
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_summary": {
+          "ages": [
+            41,
+            44,
+            5,
+            3
+          ],
+          "household_size": 4,
+          "yearly_earned_income_per_person": [
+            49312.14,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 49312.14
+        },
+        "household_weight": 229.88299560546875,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "37191",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "description": "SNAP benefit amount",
+          "difference": -7.2453460693359375,
+          "kind": "amount_difference",
+          "left": 66.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 73.24534606933594,
+          "tolerance": 7
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
       "case_id": "ecps-28478",
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 11394,
+        "axiom_input_records_count": 11406,
         "axiom_relations_count": 10,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -4700,10 +5589,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 17505,
+        "axiom_input_records_count": 17517,
         "axiom_relations_count": 16,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -4758,10 +5654,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 9357,
+        "axiom_input_records_count": 9369,
         "axiom_relations_count": 8,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -4808,10 +5711,11 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 7320,
+        "axiom_input_records_count": 7332,
         "axiom_relations_count": 6,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -4867,10 +5771,11 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 5283,
+        "axiom_input_records_count": 5295,
         "axiom_relations_count": 4,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -4924,10 +5829,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3246,
+        "axiom_input_records_count": 3258,
         "axiom_relations_count": 2,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -4968,10 +5880,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 13431,
+        "axiom_input_records_count": 13443,
         "axiom_relations_count": 12,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -5022,10 +5941,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 5283,
+        "axiom_input_records_count": 5295,
         "axiom_relations_count": 4,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -5068,10 +5994,17 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3246,
+        "axiom_input_records_count": 3258,
         "axiom_relations_count": 2,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -5112,10 +6045,11 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 5283,
+        "axiom_input_records_count": 5295,
         "axiom_relations_count": 4,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -5190,10 +6124,10 @@
     }
   ],
   "dashboard_truncation": {
-    "shown_case_rows": 100,
-    "shown_mismatches": 118,
+    "shown_case_rows": 106,
+    "shown_mismatches": 124,
     "total_case_rows": 1854,
-    "total_mismatches": 118
+    "total_mismatches": 124
   },
   "engines": {
     "left": "axiom",
@@ -5460,6 +6394,22 @@
     },
     {
       "ages": null,
+      "case_id": "ecps-27263",
+      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "description": "SNAP benefit amount",
+      "difference": -7.145345052083371,
+      "kind": "amount_difference",
+      "left": 688.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 695.1453450520834,
+      "scenario": null,
+      "tolerance": 7,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
       "case_id": "ecps-27287",
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
@@ -5527,9 +6477,9 @@
       "case_id": "ecps-27338",
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
-      "difference": 318.0,
+      "difference": 317.0,
       "kind": "amount_difference",
-      "left": 318.0,
+      "left": 317.0,
       "parent": null,
       "pregnant_head": null,
       "relative_tolerance": 0,
@@ -5598,6 +6548,22 @@
       "pregnant_head": null,
       "relative_tolerance": 0,
       "right": 114.72029622395833,
+      "scenario": null,
+      "tolerance": 7,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-27402",
+      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "description": "SNAP benefit amount",
+      "difference": -7.345316569010407,
+      "kind": "amount_difference",
+      "left": 161.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 168.3453165690104,
       "scenario": null,
       "tolerance": 7,
       "yearly_earned_income": null
@@ -5844,6 +6810,22 @@
     },
     {
       "ages": null,
+      "case_id": "ecps-27617",
+      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "description": "SNAP benefit amount",
+      "difference": -7.345316569010407,
+      "kind": "amount_difference",
+      "left": 185.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 192.3453165690104,
+      "scenario": null,
+      "tolerance": 7,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
       "case_id": "ecps-27628",
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
@@ -5943,9 +6925,9 @@
       "case_id": "ecps-27672",
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
-      "difference": 249.0,
+      "difference": 248.0,
       "kind": "amount_difference",
-      "left": 249.0,
+      "left": 248.0,
       "parent": null,
       "pregnant_head": null,
       "relative_tolerance": 0,
@@ -6014,6 +6996,22 @@
       "pregnant_head": null,
       "relative_tolerance": 0,
       "right": 83.14530944824219,
+      "scenario": null,
+      "tolerance": 7,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-27734",
+      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "description": "SNAP benefit amount",
+      "difference": -7.345316569010407,
+      "kind": "amount_difference",
+      "left": 185.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 192.3453165690104,
       "scenario": null,
       "tolerance": 7,
       "yearly_earned_income": null
@@ -6183,9 +7181,9 @@
       "case_id": "ecps-27886",
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
-      "difference": 376.11181640625,
+      "difference": 375.11181640625,
       "kind": "amount_difference",
-      "left": 461.0,
+      "left": 460.0,
       "parent": null,
       "pregnant_head": null,
       "relative_tolerance": 0,
@@ -6199,9 +7197,9 @@
       "case_id": "ecps-27904",
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
-      "difference": 836.0,
+      "difference": 835.0,
       "kind": "amount_difference",
-      "left": 836.0,
+      "left": 835.0,
       "parent": null,
       "pregnant_head": null,
       "relative_tolerance": 0,
@@ -6311,9 +7309,9 @@
       "case_id": "ecps-27981",
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
-      "difference": 281.0,
+      "difference": 280.0,
       "kind": "amount_difference",
-      "left": 281.0,
+      "left": 280.0,
       "parent": null,
       "pregnant_head": null,
       "relative_tolerance": 0,
@@ -6439,9 +7437,9 @@
       "case_id": "ecps-28060",
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
-      "difference": -7.179484049479157,
+      "difference": -8.179484049479157,
       "kind": "amount_difference",
-      "left": 213.0,
+      "left": 212.0,
       "parent": null,
       "pregnant_head": null,
       "relative_tolerance": 0,
@@ -6455,9 +7453,9 @@
       "case_id": "ecps-28066",
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
-      "difference": 10.454508463541629,
+      "difference": 9.454508463541629,
       "kind": "amount_difference",
-      "left": 945.0,
+      "left": 944.0,
       "parent": null,
       "pregnant_head": null,
       "relative_tolerance": 0,
@@ -6656,6 +7654,22 @@
       "right": false,
       "scenario": null,
       "tolerance": 0,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-28322",
+      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "description": "SNAP benefit amount",
+      "difference": -7.345296223958314,
+      "kind": "amount_difference",
+      "left": 371.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 378.3452962239583,
+      "scenario": null,
+      "tolerance": 7,
       "yearly_earned_income": null
     },
     {
@@ -6884,6 +7898,22 @@
     },
     {
       "ages": null,
+      "case_id": "ecps-28453",
+      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "description": "SNAP benefit amount",
+      "difference": -7.2453460693359375,
+      "kind": "amount_difference",
+      "left": 66.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 73.24534606933594,
+      "scenario": null,
+      "tolerance": 7,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
       "case_id": "ecps-28478",
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
@@ -7098,10 +8128,10 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "e19f1b7573c74512f20a6b71a0c55dbbf333d41b",
+      "axiom_rules_engine_sha": "48797e101c093bb388be718c6f5d8fc9d9f94a7d",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-06T21:01:11Z",
+    "generated_at": "2026-07-24T06:45:53Z",
     "generated_by": "scripts/run_comparison.py::nc-snap-ecps",
     "oracle": {
       "name": "policyengine",
@@ -7111,7 +8141,7 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": "a0bcc5a39fa57f02f0c75c9d4a9e6bfd8670c58c"
+        "sha": "ca2d424fcb85ce8c3a8f4706113331710f114460"
       }
     ],
     "run_kind": "manual",
@@ -7135,19 +8165,19 @@
       },
       "dispositions_file": null,
       "expired_entries": [],
-      "explained_rate": 96.817691,
+      "explained_rate": 96.655879,
       "orphaned_entries": [],
-      "raw_match_rate": 96.817691,
+      "raw_match_rate": 96.655879,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 118
+      "unexplained_count": 124
     },
     "error_count": 0,
     "errors_by_engine": [],
-    "match_count": 3590,
-    "mismatch_count": 118,
+    "match_count": 3584,
+    "mismatch_count": 124,
     "mismatches_by_concept": [
       {
-        "count": 87,
+        "count": 93,
         "value": "us:statutes/7/2014/u#snap_benefit"
       },
       {
@@ -7157,7 +8187,7 @@
     ],
     "mismatches_by_kind": [
       {
-        "count": 87,
+        "count": 93,
         "value": "amount_difference"
       },
       {
@@ -7171,15 +8201,16 @@
     ],
     "mismatches_by_scenario": [
       {
-        "count": 118,
+        "count": 124,
         "value": null
       }
     ],
+    "stored_mismatch_example_count": 124,
     "weighted": {
       "comparison_weight": 10324324.719237,
-      "match_rate": 94.573674,
-      "match_weight": 9764093.192451,
-      "mismatch_weight": 560231.526786
+      "match_rate": 94.546688,
+      "match_weight": 9761307.077435,
+      "mismatch_weight": 563017.641802
     }
   }
 }

@@ -3683,9 +3683,11 @@ def _merge_dispositions(report: dict) -> dict:
 
 def _write_dashboard_report(report: dict, filename: str) -> None:
     DASHBOARD_DATA_DIR.mkdir(parents=True, exist_ok=True)
+    from axiom_oracles.comparison.report import strip_heavy_case_metadata
+
     report = _merge_dispositions(report)
     target = DASHBOARD_DATA_DIR / filename
-    slim = _slim_report_for_dashboard(report)
+    slim = _slim_report_for_dashboard(strip_heavy_case_metadata(report))
     truncation = slim.get("dashboard_truncation")
     target.write_text(json.dumps(slim, indent=2, sort_keys=True))
     print(f"Wrote dashboard report: {target}")

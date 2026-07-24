@@ -29,6 +29,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -81,6 +82,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -131,6 +133,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -179,6 +182,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -341,10 +345,10 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "e19f1b7573c74512f20a6b71a0c55dbbf333d41b",
+      "axiom_rules_engine_sha": "48797e101c093bb388be718c6f5d8fc9d9f94a7d",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-06T22:23:52Z",
+    "generated_at": "2026-07-24T06:10:50Z",
     "generated_by": "scripts/run_comparison.py::az-tanf-ecps",
     "oracle": {
       "name": "policyengine",
@@ -354,7 +358,7 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": "e7398df81b56ef221db57ec56a43b3d3c6c03d91"
+        "sha": "ca2d424fcb85ce8c3a8f4706113331710f114460"
       }
     ],
     "run_kind": "manual",
@@ -406,6 +410,7 @@
         "value": null
       }
     ],
+    "stored_mismatch_example_count": 4,
     "weighted": {
       "comparison_weight": 3482952.063627,
       "match_rate": 99.995701,

@@ -25,6 +25,9 @@ documentation: docs/snap-qc-oracle-playbook.md
 runner:
   type: snap-qc-compare
   parameters:
+    # Loaded-case count overstates this suite (in-bridge filtering), so
+    # the size heuristic under-persists; keep full per-case evidence.
+    include_case_inputs: true
     jurisdiction: us-co
     fiscal_year: 2024
     sample_size: 0

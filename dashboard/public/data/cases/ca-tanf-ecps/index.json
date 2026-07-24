@@ -2,6 +2,14 @@
  "suite": "ca-tanf-ecps",
  "count": 7101,
  "chunks": 15,
+ "input_slots": [
+  "axiom:ca-tanf-compiled#input.assistance_unit_is_exempt",
+  "axiom:ca-tanf-compiled#input.ca_countable_earned_income_after_disregard",
+  "axiom:ca-tanf-compiled#input.ca_countable_other_unearned_income",
+  "axiom:ca-tanf-compiled#input.household_has_minor_or_pregnant_member",
+  "axiom:ca-tanf-compiled#input.household_in_ca_map_region_1",
+  "axiom:ca-tanf-compiled#input.persons_on_aid"
+ ],
  "chunk_size": 500,
  "engines": {
   "left": "axiom",
@@ -10,6 +18,6 @@
  "mismatch_concepts": [
   "us-ca:policies/cdss/calworks#ca_tanf_benefit"
  ],
- "source": "axiom-policyengine-ca-tanf-ecps-0-2026-07-06.json",
+ "source": "axiom-policyengine-ca-tanf-ecps-0-2026-07-24.json",
  "total_cases": 7101
 }
