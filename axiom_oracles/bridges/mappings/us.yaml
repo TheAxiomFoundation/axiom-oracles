@@ -29952,13 +29952,10 @@ mappings:
   - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_itemized_deduction
     country: *ks_2026_country
     program: *ks_2026_program
-    mapping_type: direct_variable
+    mapping_type: not_comparable
     policyengine_variable: ks_itemized_deductions
-    entity: tax_unit
-    period: year
-    unit: USD
-    comparison: money
-    rationale: Same Kansas itemized deduction when the aligned federal component inputs contain only the supported statutory categories.
+    candidate_priority: P4
+    rationale: Axiom constructs the four categories enumerated by K.S.A. 79-32,120 and subtracts depreciation tied to listed Kansas credits without double-subtracting state income tax from the separate property-tax amount. PolicyEngine starts from its broader federal itemized-deductions-less-SALT aggregate and does not expose the same Kansas depreciation adjustment, so the outputs are not one-to-one.
 
   - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_candidate_kansas_adjusted_gross_income
     country: *ks_2026_country

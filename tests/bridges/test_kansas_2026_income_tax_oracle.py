@@ -15,7 +15,6 @@ RULESPEC_RELATIVE_PATH = Path(
 EXPECTED_OUTPUT_COUNT = 31
 EXPECTED_DIRECT_VARIABLES = {
     "ks_pit_2026_standard_deduction": "ks_standard_deduction",
-    "ks_pit_2026_itemized_deduction": "ks_itemized_deductions",
     "ks_pit_2026_candidate_kansas_adjusted_gross_income": "ks_agi",
     "ks_pit_2026_candidate_personal_exemptions": "ks_exemptions",
     "ks_pit_2026_candidate_taxable_income": "ks_taxable_income",
@@ -136,5 +135,5 @@ def test_kansas_2026_core_remains_in_coverage(
 
     assert len(items) == EXPECTED_OUTPUT_COUNT
     assert {item["program"] for item in items} == {"tax"}
-    assert sum(item["status"] == "comparable" for item in items) == 8
-    assert sum(item["status"] == "known_not_comparable" for item in items) == 23
+    assert sum(item["status"] == "comparable" for item in items) == 7
+    assert sum(item["status"] == "known_not_comparable" for item in items) == 24
