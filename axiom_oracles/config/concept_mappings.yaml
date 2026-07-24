@@ -2910,6 +2910,84 @@ concepts:
         scope: {type: country, geoid: US}
       policyengine: sc_income_tax_before_non_refundable_credits
       taxsim: siitax
+  us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_sciad:
+    description: South Carolina Income Adjusted Deduction on the shared 2026 resident-core profile
+    category: tax
+    comparison: amount
+    tolerance: 0.01
+    priority: high
+    locales: [US-SC]
+    scope: {type: country, geoid: US}
+    targets:
+      axiom:
+        name: sc_pit_2026_candidate_sciad
+        scope: {type: country, geoid: US}
+      policyengine: sc_sciad
+  us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_net_capital_gain_deduction:
+    description: South Carolina net-capital-gain deduction on aligned 2026 inputs
+    category: tax
+    comparison: amount
+    tolerance: 0.01
+    priority: high
+    locales: [US-SC]
+    scope: {type: country, geoid: US}
+    targets:
+      axiom:
+        name: sc_pit_2026_candidate_net_capital_gain_deduction
+        scope: {type: country, geoid: US}
+      policyengine: sc_net_capital_gain_deduction
+  us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_taxable_income:
+    description: South Carolina taxable income on the shared supported 2026 resident-core profile
+    category: tax
+    comparison: amount
+    tolerance: 0.01
+    priority: high
+    locales: [US-SC]
+    scope: {type: country, geoid: US}
+    targets:
+      axiom:
+        name: sc_pit_2026_candidate_taxable_income
+        scope: {type: country, geoid: US}
+      policyengine: sc_taxable_income
+  us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_tax_before_credits:
+    description: South Carolina Act 110 schedule tax before nonrefundable credits
+    category: tax
+    comparison: amount
+    tolerance: 0.01
+    priority: high
+    locales: [US-SC]
+    scope: {type: country, geoid: US}
+    targets:
+      axiom:
+        name: sc_pit_2026_candidate_tax_before_credits
+        scope: {type: country, geoid: US}
+      policyengine: sc_income_tax_before_non_refundable_credits
+  us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_two_wage_earner_credit:
+    description: South Carolina two-wage-earner credit potential before liability ordering
+    category: tax
+    comparison: amount
+    tolerance: 0.01
+    priority: high
+    locales: [US-SC]
+    scope: {type: country, geoid: US}
+    targets:
+      axiom:
+        name: sc_pit_2026_candidate_two_wage_earner_credit
+        scope: {type: country, geoid: US}
+      policyengine: sc_two_wage_earner_credit_potential
+  us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_earned_income_credit:
+    description: South Carolina 2026 earned-income credit potential before liability ordering
+    category: tax
+    comparison: amount
+    tolerance: 0.01
+    priority: high
+    locales: [US-SC]
+    scope: {type: country, geoid: US}
+    targets:
+      axiom:
+        name: sc_pit_2026_candidate_earned_income_credit
+        scope: {type: country, geoid: US}
+      policyengine: sc_eitc_potential
   us-ks:policies/income_tax/pilot_liability_pipeline#ks_pit_pilot_income_tax_liability:
     description: Kansas individual income tax liability (ordinary resident wage-earner core)
     category: tax
