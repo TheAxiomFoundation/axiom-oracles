@@ -28478,24 +28478,28 @@ mappings:
   # manual gap.
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_input_domain_is_valid
     country: us
+    program: tax
     mapping_type: not_comparable
     candidate_priority: P4
     rationale: Axiom's fail-closed validation of its raw-input contract is a RuleSpec harness judgment; PolicyEngine computes SC tax from its own entity/input schema and exposes no corresponding domain-validity variable.
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_base_profile_applies
     country: us
+    program: tax
     mapping_type: not_comparable
     candidate_priority: P4
     rationale: Axiom's source-readiness gate excludes unencoded Article 9, age-65, and special-tax branches; PolicyEngine has no variable for this bounded-profile applicability judgment.
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_supported_profile_applies
     country: us
+    program: tax
     mapping_type: not_comparable
     candidate_priority: P4
     rationale: Axiom's final transitive source-readiness gate excludes unsupported credit and refundable-credit branches; PolicyEngine computes those branches directly and has no equivalent applicability judgment.
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_lower_rate
     country: us
+    program: tax
     mapping_type: parameter_value
     policyengine_parameter: gov.states.sc.tax.income.rates
     parameter_key_path: [rates, 0]
@@ -28505,6 +28509,7 @@ mappings:
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_upper_rate
     country: us
+    program: tax
     mapping_type: parameter_value
     policyengine_parameter: gov.states.sc.tax.income.rates
     parameter_key_path: [rates, 1]
@@ -28514,6 +28519,7 @@ mappings:
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_upper_bracket_floor
     country: us
+    program: tax
     mapping_type: parameter_value
     policyengine_parameter: gov.states.sc.tax.income.rates
     parameter_key_path: [thresholds, 1]
@@ -28524,6 +28530,7 @@ mappings:
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_upper_bracket_subtraction
     country: us
+    program: tax
     mapping_type: not_comparable
     policyengine_parameter: gov.states.sc.tax.income.rates
     candidate_priority: P4
@@ -28531,6 +28538,7 @@ mappings:
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_net_capital_gain_deduction_rate
     country: us
+    program: tax
     mapping_type: parameter_value
     policyengine_parameter: gov.states.sc.tax.income.deductions.net_capital_gain.rate
     period: year
@@ -28539,6 +28547,7 @@ mappings:
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_under_65_retirement_cap
     country: us
+    program: tax
     mapping_type: parameter_value
     policyengine_parameter: gov.states.sc.tax.income.subtractions.retirement.cap
     parameter_key_path: [amounts, 0]
@@ -28549,6 +28558,7 @@ mappings:
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_age_65_threshold
     country: us
+    program: tax
     mapping_type: parameter_value
     policyengine_parameter: gov.states.sc.tax.income.subtractions.retirement.cap
     parameter_key_path: [thresholds, 1]
@@ -28558,6 +28568,7 @@ mappings:
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_sciad_single_or_separate_base
     country: us
+    program: tax
     mapping_type: parameter_value
     policyengine_parameter: gov.states.sc.tax.income.deductions.sciad.amount
     parameter_key: SINGLE
@@ -28568,6 +28579,7 @@ mappings:
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_sciad_head_base
     country: us
+    program: tax
     mapping_type: parameter_value
     policyengine_parameter: gov.states.sc.tax.income.deductions.sciad.amount
     parameter_key: HEAD_OF_HOUSEHOLD
@@ -28578,6 +28590,7 @@ mappings:
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_sciad_joint_or_surviving_base
     country: us
+    program: tax
     mapping_type: parameter_value
     policyengine_parameter: gov.states.sc.tax.income.deductions.sciad.amount
     parameter_key: JOINT
@@ -28588,6 +28601,7 @@ mappings:
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_sciad_single_or_separate_phaseout_start
     country: us
+    program: tax
     mapping_type: parameter_value
     policyengine_parameter: gov.states.sc.tax.income.deductions.sciad.phase_out.start
     parameter_key: SINGLE
@@ -28598,6 +28612,7 @@ mappings:
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_sciad_head_phaseout_start
     country: us
+    program: tax
     mapping_type: parameter_value
     policyengine_parameter: gov.states.sc.tax.income.deductions.sciad.phase_out.start
     parameter_key: HEAD_OF_HOUSEHOLD
@@ -28608,6 +28623,7 @@ mappings:
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_sciad_joint_or_surviving_phaseout_start
     country: us
+    program: tax
     mapping_type: parameter_value
     policyengine_parameter: gov.states.sc.tax.income.deductions.sciad.phase_out.start
     parameter_key: JOINT
@@ -28618,6 +28634,7 @@ mappings:
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_sciad_single_or_separate_phaseout_denominator
     country: us
+    program: tax
     mapping_type: parameter_value
     policyengine_parameter: gov.states.sc.tax.income.deductions.sciad.phase_out.width
     parameter_key: SINGLE
@@ -28628,6 +28645,7 @@ mappings:
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_sciad_head_phaseout_denominator
     country: us
+    program: tax
     mapping_type: parameter_value
     policyengine_parameter: gov.states.sc.tax.income.deductions.sciad.phase_out.width
     parameter_key: HEAD_OF_HOUSEHOLD
@@ -28638,6 +28656,7 @@ mappings:
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_sciad_joint_or_surviving_phaseout_denominator
     country: us
+    program: tax
     mapping_type: parameter_value
     policyengine_parameter: gov.states.sc.tax.income.deductions.sciad.phase_out.width
     parameter_key: JOINT
@@ -28648,6 +28667,7 @@ mappings:
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_sciad_reduction_rounding_increment
     country: us
+    program: tax
     mapping_type: not_comparable
     policyengine_variable: sc_sciad
     candidate_priority: P4
@@ -28655,18 +28675,21 @@ mappings:
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_regular_workday_count_ceiling
     country: us
+    program: tax
     mapping_type: not_comparable
     candidate_priority: P4
     rationale: This 366-day physical input-domain ceiling belongs to Axiom's fail-closed contract; PolicyEngine does not model the public-safety workday deduction or a corresponding ceiling.
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_public_safety_daily_deduction
     country: us
+    program: tax
     mapping_type: not_comparable
     candidate_priority: P4
     rationale: PolicyEngine-US 1.767.3 has no South Carolina public-safety subsistence deduction variable or daily-amount parameter.
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_two_wage_earner_tenths_percent
     country: us
+    program: tax
     mapping_type: not_comparable
     policyengine_parameter: gov.states.sc.tax.income.credits.two_wage_earner.rate
     candidate_priority: P4
@@ -28674,6 +28697,7 @@ mappings:
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_tenths_percent_rate_divisor
     country: us
+    program: tax
     mapping_type: not_comparable
     policyengine_parameter: gov.states.sc.tax.income.credits.two_wage_earner.rate
     candidate_priority: P4
@@ -28681,6 +28705,7 @@ mappings:
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_two_wage_earner_rate
     country: us
+    program: tax
     mapping_type: parameter_value
     policyengine_parameter: gov.states.sc.tax.income.credits.two_wage_earner.rate
     parameter_key_path: [rates, 0]
@@ -28690,6 +28715,7 @@ mappings:
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_two_wage_earner_income_cap
     country: us
+    program: tax
     mapping_type: parameter_value
     policyengine_parameter: gov.states.sc.tax.income.credits.two_wage_earner.rate
     parameter_key_path: [thresholds, 1]
@@ -28700,18 +28726,21 @@ mappings:
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_nursing_care_credit_rate
     country: us
+    program: tax
     mapping_type: not_comparable
     candidate_priority: P4
     rationale: PolicyEngine-US 1.767.3 does not model the section 12-6-3390 nursing-care credit or expose its 20 percent rate.
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_nursing_care_credit_cap
     country: us
+    program: tax
     mapping_type: not_comparable
     candidate_priority: P4
     rationale: PolicyEngine-US 1.767.3 does not model the section 12-6-3390 nursing-care credit or expose its 300 dollar cap.
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_eitc_match_rate
     country: us
+    program: tax
     mapping_type: parameter_value
     policyengine_parameter: gov.states.sc.tax.income.credits.eitc.rate
     period: year
@@ -28720,6 +28749,7 @@ mappings:
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_eitc_credit_cap
     country: us
+    program: tax
     mapping_type: parameter_value
     policyengine_parameter: gov.states.sc.tax.income.credits.eitc.max
     period: year
@@ -28729,20 +28759,15 @@ mappings:
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_federal_section_63_deduction_addback
     country: us
+    program: tax
     mapping_type: not_comparable
     policyengine_variable: sc_taxable_income
     candidate_priority: P4
     rationale: PolicyEngine's 2026 sc_taxable_income starts from federal AGI and therefore has no standalone reversal of the federal section 63 deduction.
 
-  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_itemized_tax_addback
-    country: us
-    mapping_type: not_comparable
-    policyengine_variable: sc_state_tax_addback
-    candidate_priority: P4
-    rationale: Axiom's source-specific itemized state-tax reversal is not the same formula as PolicyEngine's legacy sc_state_tax_addback and is bypassed by PolicyEngine's AGI-based 2026 taxable-income formula.
-
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_additions
     country: us
+    program: tax
     mapping_type: not_comparable
     policyengine_variable: sc_additions
     candidate_priority: P4
@@ -28750,6 +28775,7 @@ mappings:
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_article_9_subtractions
     country: us
+    program: tax
     mapping_type: not_comparable
     policyengine_variable: sc_subtractions
     candidate_priority: P4
@@ -28757,6 +28783,7 @@ mappings:
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_state_income
     country: us
+    program: tax
     mapping_type: not_comparable
     policyengine_variable: sc_taxable_income
     candidate_priority: P4
@@ -28764,6 +28791,7 @@ mappings:
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_sciad_base
     country: us
+    program: tax
     mapping_type: not_comparable
     policyengine_parameter: gov.states.sc.tax.income.deductions.sciad.amount
     candidate_priority: P4
@@ -28771,6 +28799,7 @@ mappings:
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_sciad_phaseout_start
     country: us
+    program: tax
     mapping_type: not_comparable
     policyengine_parameter: gov.states.sc.tax.income.deductions.sciad.phase_out.start
     candidate_priority: P4
@@ -28778,6 +28807,7 @@ mappings:
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_sciad_phaseout_denominator
     country: us
+    program: tax
     mapping_type: not_comparable
     policyengine_parameter: gov.states.sc.tax.income.deductions.sciad.phase_out.width
     candidate_priority: P4
@@ -28785,6 +28815,7 @@ mappings:
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_sciad_reduction
     country: us
+    program: tax
     mapping_type: not_comparable
     policyengine_variable: sc_sciad
     candidate_priority: P4
@@ -28792,6 +28823,7 @@ mappings:
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_sciad
     country: us
+    program: tax
     mapping_type: direct_variable
     policyengine_variable: sc_sciad
     entity: tax_unit
@@ -28802,6 +28834,7 @@ mappings:
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_net_capital_gain_deduction
     country: us
+    program: tax
     mapping_type: direct_variable
     policyengine_variable: sc_net_capital_gain_deduction
     entity: tax_unit
@@ -28812,6 +28845,7 @@ mappings:
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_primary_retirement_deduction
     country: us
+    program: tax
     mapping_type: not_comparable
     policyengine_variable: sc_retirement_deduction_indv
     candidate_priority: P4
@@ -28819,6 +28853,7 @@ mappings:
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_spouse_retirement_deduction
     country: us
+    program: tax
     mapping_type: not_comparable
     policyengine_variable: sc_retirement_deduction_indv
     candidate_priority: P4
@@ -28826,12 +28861,14 @@ mappings:
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_public_safety_subsistence_deduction
     country: us
+    program: tax
     mapping_type: not_comparable
     candidate_priority: P4
     rationale: PolicyEngine-US 1.767.3 has no South Carolina public-safety workday/subsistence deduction variable.
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_deductions_and_exemptions
     country: us
+    program: tax
     mapping_type: not_comparable
     policyengine_variable: sc_subtractions
     candidate_priority: P4
@@ -28839,26 +28876,23 @@ mappings:
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_taxable_income
     country: us
-    mapping_type: direct_variable
+    program: tax
+    mapping_type: not_comparable
     policyengine_variable: sc_taxable_income
-    entity: tax_unit
-    period: year
-    unit: USD
-    comparison: money
-    rationale: Same nonnegative South Carolina taxable-income stage on the core's shared supported profile; unsupported deduction inputs must remain inactive in positive comparisons.
+    candidate_priority: P4
+    rationale: Axiom's candidate includes its supported public-safety subsistence deduction, which PolicyEngine-US 1.767.3 does not model, as well as a deliberately bounded additions-and-subtractions inventory. PolicyEngine sc_taxable_income therefore is not one-to-one across the RuleSpec input domain.
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_tax_before_credits
     country: us
-    mapping_type: direct_variable
+    program: tax
+    mapping_type: not_comparable
     policyengine_variable: sc_income_tax_before_non_refundable_credits
-    entity: tax_unit
-    period: year
-    unit: USD
-    comparison: money
-    rationale: Same Act 110 two-bracket tax applied to South Carolina taxable income before any nonrefundable credit.
+    candidate_priority: P4
+    rationale: Both engines apply the Act 110 schedule, but they can receive different South Carolina taxable income because Axiom supports a public-safety deduction absent from PolicyEngine and bounds other modification branches. The resulting before-credit outputs are not one-to-one across the RuleSpec input domain.
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_primary_qualified_earned_income
     country: us
+    program: tax
     mapping_type: not_comparable
     policyengine_variable: sc_gross_earned_income
     candidate_priority: P4
@@ -28866,6 +28900,7 @@ mappings:
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_spouse_qualified_earned_income
     country: us
+    program: tax
     mapping_type: not_comparable
     policyengine_variable: sc_gross_earned_income
     candidate_priority: P4
@@ -28873,32 +28908,30 @@ mappings:
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_two_wage_earner_credit
     country: us
-    mapping_type: direct_variable
+    program: tax
+    mapping_type: not_comparable
     policyengine_variable: sc_two_wage_earner_credit_potential
-    entity: tax_unit
-    period: year
-    unit: USD
-    comparison: money
-    rationale: Same uncapped-by-liability two-wage-earner credit potential on aligned joint-filer earned-income inputs.
+    candidate_priority: P4
+    rationale: Axiom expressly denies the credit when either spouse claims an IRC section 911 or 931 benefit. PolicyEngine-US 1.767.3 checks joint filing and spouse earned income but exposes no corresponding disqualification predicate, so the credit potentials are not one-to-one.
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_nursing_care_credit
     country: us
+    program: tax
     mapping_type: not_comparable
     candidate_priority: P4
     rationale: PolicyEngine-US 1.767.3 has no section 12-6-3390 nursing-care credit variable.
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_earned_income_credit
     country: us
-    mapping_type: direct_variable
+    program: tax
+    mapping_type: not_comparable
     policyengine_variable: sc_eitc_potential
-    entity: tax_unit
-    period: year
-    unit: USD
-    comparison: money
-    rationale: Same 125 percent federal-EITC match capped at 200 dollars before liability-order capping in 2026.
+    candidate_priority: P4
+    rationale: Both engines apply the 125 percent match and 200 dollar cap, but PolicyEngine-US 1.767.3 rounds the uncapped match to one decimal place while Axiom preserves the unrounded Money result. The outputs are not one-to-one for fractional-dollar federal credits.
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_nonrefundable_credits
     country: us
+    program: tax
     mapping_type: not_comparable
     policyengine_variable: sc_non_refundable_credits
     candidate_priority: P4
@@ -28906,6 +28939,7 @@ mappings:
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_tax_after_nonrefundable_credits
     country: us
+    program: tax
     mapping_type: not_comparable
     policyengine_variable: sc_income_tax_before_refundable_credits
     candidate_priority: P4
@@ -28913,6 +28947,7 @@ mappings:
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_net_income_tax_liability
     country: us
+    program: tax
     mapping_type: not_comparable
     policyengine_variable: sc_income_tax
     candidate_priority: P4
@@ -28920,12 +28955,14 @@ mappings:
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_supported_state_income
     country: us
+    program: tax
     mapping_type: not_comparable
     candidate_priority: P4
     rationale: This public amount is forced to zero whenever Axiom's bounded source-readiness gate fails; PolicyEngine exposes no equivalently gated pre-deduction state-income stage.
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_supported_deductions_and_exemptions
     country: us
+    program: tax
     mapping_type: not_comparable
     policyengine_variable: sc_subtractions
     candidate_priority: P4
@@ -28933,6 +28970,7 @@ mappings:
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_supported_taxable_income
     country: us
+    program: tax
     mapping_type: not_comparable
     policyengine_variable: sc_taxable_income
     candidate_priority: P4
@@ -28940,6 +28978,7 @@ mappings:
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_supported_tax_before_credits
     country: us
+    program: tax
     mapping_type: not_comparable
     policyengine_variable: sc_income_tax_before_non_refundable_credits
     candidate_priority: P4
@@ -28947,6 +28986,7 @@ mappings:
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_supported_tax_after_nonrefundable_credits
     country: us
+    program: tax
     mapping_type: not_comparable
     policyengine_variable: sc_income_tax_before_refundable_credits
     candidate_priority: P4
@@ -28954,6 +28994,7 @@ mappings:
 
   - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_supported_net_income_tax_liability
     country: us
+    program: tax
     mapping_type: not_comparable
     policyengine_variable: sc_income_tax
     candidate_priority: P4
