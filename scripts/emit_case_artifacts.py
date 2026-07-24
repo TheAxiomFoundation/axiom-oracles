@@ -193,6 +193,20 @@ def compact_case(case: dict, explained: dict) -> dict:
         # Consumed by write_artifacts for the suite-level slot dictionary,
         # stripped before chunks are written.
         row["_all_input_names"] = [{"name": r.get("name")} for r in records]
+    outputs = (case.get("metadata") or {}).get("axiom_all_outputs")
+    if isinstance(outputs, dict) and outputs:
+        kept_o = []
+        dropped_o = 0
+        for name in sorted(outputs):
+            value = outputs[name]
+            if value is None or value is False or value == 0:
+                dropped_o += 1
+                continue
+            kept_o.append({"n": name, "v": value})
+        row["o"] = kept_o
+        if dropped_o:
+            row["o0"] = dropped_o
+        row["_all_output_names"] = sorted(outputs)
     else:
         synth = engine_pair_records(case.get("metadata") or {})
         if synth:
@@ -281,8 +295,12 @@ def write_artifacts(
             if record.get("name")
         }
     )
+    output_slots = sorted(
+        {name for row in rows for name in row.get("_all_output_names", [])}
+    )
     for row in rows:
         row.pop("_all_input_names", None)
+        row.pop("_all_output_names", None)
     chunks = [rows[i : i + CHUNK_SIZE] for i in range(0, len(rows), CHUNK_SIZE)]
     for i, chunk in enumerate(chunks):
         (out_dir / f"chunk-{i}.json").write_text(
@@ -296,6 +314,7 @@ def write_artifacts(
         "count": len(rows),
         "chunks": len(chunks),
         **({"input_slots": input_slots} if input_slots else {}),
+        **({"output_slots": output_slots} if output_slots else {}),
         "chunk_size": CHUNK_SIZE,
         "engines": meta.get("engines"),
         "mismatch_concepts": concepts,

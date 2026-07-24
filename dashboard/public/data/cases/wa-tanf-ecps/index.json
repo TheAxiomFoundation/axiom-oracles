@@ -21,6 +21,9 @@
   "axiom:wa-tanf-compiled#input.recipient_gets_cash_assistance_with_person",
   "axiom:wa-tanf-compiled#input.recipient_is_dependent_child_under_two_years_of_age"
  ],
+ "output_slots": [
+  "wa_tanf_monthly_benefit"
+ ],
  "chunk_size": 500,
  "engines": {
   "left": "axiom",

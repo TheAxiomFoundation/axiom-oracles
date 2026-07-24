@@ -60,7 +60,7 @@
       "axiom_rules_engine_sha": "48797e101c093bb388be718c6f5d8fc9d9f94a7d",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-24T06:28:52Z",
+    "generated_at": "2026-07-24T18:20:05Z",
     "generated_by": "scripts/run_comparison.py::wa-tanf-ecps",
     "oracle": {
       "name": "policyengine",

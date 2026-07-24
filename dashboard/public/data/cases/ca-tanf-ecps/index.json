@@ -10,6 +10,10 @@
   "axiom:ca-tanf-compiled#input.household_in_ca_map_region_1",
   "axiom:ca-tanf-compiled#input.persons_on_aid"
  ],
+ "output_slots": [
+  "ca_tanf_countable_income",
+  "ca_tanf_monthly_benefit"
+ ],
  "chunk_size": 500,
  "engines": {
   "left": "axiom",

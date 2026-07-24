@@ -31,6 +31,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
+        "axiom_all_outputs_count": 4,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 25,
@@ -84,6 +85,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
+        "axiom_all_outputs_count": 4,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 25,
@@ -135,6 +137,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
+        "axiom_all_outputs_count": 4,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 25,
@@ -184,6 +187,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
+        "axiom_all_outputs_count": 4,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 25,
@@ -348,7 +352,7 @@
       "axiom_rules_engine_sha": "48797e101c093bb388be718c6f5d8fc9d9f94a7d",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-24T06:10:50Z",
+    "generated_at": "2026-07-24T18:10:59Z",
     "generated_by": "scripts/run_comparison.py::az-tanf-ecps",
     "oracle": {
       "name": "policyengine",

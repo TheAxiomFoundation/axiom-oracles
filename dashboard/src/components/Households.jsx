@@ -154,10 +154,17 @@ function Triangulation({ runs, bySuite, onPick }) {
  * values both engines agreed on. Intermediate engine outputs land here as
  * harnesses start recording them.
  */
-function HouseholdDetail({ c, conceptLabels, oracleLabel, inputSlots }) {
+function HouseholdDetail({ c, conceptLabels, oracleLabel, inputSlots, outputSlots }) {
   const records = Array.isArray(c.i) ? c.i : null;
+  const outputs = Array.isArray(c.o) ? c.o : null;
   const matched = c.v || [];
   const [showDefaults, setShowDefaults] = useState(false);
+  const [showZeroOutputs, setShowZeroOutputs] = useState(false);
+  const zeroOutputSlots = useMemo(() => {
+    if (!showZeroOutputs || !Array.isArray(outputSlots)) return [];
+    const present = new Set((outputs || []).map((r) => r.n));
+    return outputSlots.filter((n) => !present.has(n));
+  }, [showZeroOutputs, outputSlots, outputs]);
   const defaultedSlots = useMemo(() => {
     if (!showDefaults || !Array.isArray(inputSlots)) return [];
     const present = new Set((records || []).map((r) => r.n));
@@ -238,6 +245,63 @@ function HouseholdDetail({ c, conceptLabels, oracleLabel, inputSlots }) {
                   </span>
                 ))}
               </div>
+            )}
+            {outputs && (
+              <>
+                <div className="mono v2-hhd-head">
+                  engine outputs (axiom) — full computed surface
+                </div>
+                <div className="v2-hhd-grid v2-hhd-record">
+                  {outputs.map((rec, ri) => (
+                    <span key={ri} style={{ display: "contents" }}>
+                      <span className="mono v2-hhd-k" title={rec.n}>
+                        {inputName(rec.n)}
+                      </span>
+                      <span className="mono">
+                        {typeof rec.v === "number"
+                          ? rec.v.toLocaleString()
+                          : typeof rec.v === "boolean"
+                            ? rec.v
+                              ? "yes"
+                              : "no"
+                            : String(rec.v)}
+                      </span>
+                    </span>
+                  ))}
+                </div>
+                {c.o0 > 0 && (
+                  <p className="v2-hhd-note">
+                    {c.o0.toLocaleString()} more outputs evaluate to zero /
+                    false
+                    {Array.isArray(outputSlots) && outputSlots.length > 0 ? (
+                      <>
+                        {" — "}
+                        <button
+                          type="button"
+                          className="v2-linklike"
+                          onClick={() => setShowZeroOutputs((v) => !v)}
+                        >
+                          {showZeroOutputs ? "hide them" : "show them"}
+                        </button>
+                      </>
+                    ) : (
+                      "."
+                    )}
+                  </p>
+                )}
+                {zeroOutputSlots.length > 0 && (
+                  <div className="v2-hhd-grid v2-hhd-record">
+                    {zeroOutputSlots.map((n) => (
+                      <span key={n} style={{ display: "contents" }}>
+                        <span className="mono v2-hhd-k" title={n}>
+                          {inputName(n)}
+                        </span>
+                        <span className="mono">0 / no</span>
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </>
             )}
           </>
         ) : (
@@ -533,6 +597,9 @@ export default function HouseholdsView({ title, reports, onBack, backLabel }) {
                             )}
                             inputSlots={
                               bySuite[c.s]?.index?.input_slots || null
+                            }
+                            outputSlots={
+                              bySuite[c.s]?.index?.output_slots || null
                             }
                           />
                         </td>

@@ -17,6 +17,9 @@
   "axiom:mn-tanf-compiled#input.unit_receives_no_income_other_than_mfip",
   "axiom:mn-tanf-compiled#input.unit_receives_unearned_income_only"
  ],
+ "output_slots": [
+  "mn_mfip_monthly_cash_benefit"
+ ],
  "chunk_size": 500,
  "engines": {
   "left": "axiom",

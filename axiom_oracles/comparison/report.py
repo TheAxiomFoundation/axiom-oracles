@@ -402,6 +402,7 @@ def _case_report_metadata(
         "axiom_input_records",
         "axiom_input_record_overlays",
         "axiom_relations",
+        "axiom_all_outputs",
     }
     compact = {
         key: value
@@ -410,7 +411,7 @@ def _case_report_metadata(
     }
     for key in stripped:
         value = metadata.get(key)
-        if isinstance(value, list | tuple):
+        if isinstance(value, (list, tuple, dict)):
             compact[f"{key}_count"] = len(value)
     summary = _household_summary(case)
     if summary:
@@ -753,6 +754,7 @@ def strip_heavy_case_metadata(report: dict) -> dict:
         "axiom_input_records",
         "axiom_input_record_overlays",
         "axiom_relations",
+        "axiom_all_outputs",
     )
     cases = report.get("cases")
     if not cases:
@@ -764,7 +766,7 @@ def strip_heavy_case_metadata(report: dict) -> dict:
             metadata = dict(metadata)
             for key in heavy:
                 value = metadata.pop(key, None)
-                if isinstance(value, (list, tuple)):
+                if isinstance(value, (list, tuple, dict)):
                     metadata.setdefault(f"{key}_count", len(value))
             case = {**case, "metadata": metadata}
         slim_cases.append(case)

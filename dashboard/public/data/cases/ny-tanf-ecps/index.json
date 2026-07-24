@@ -41,6 +41,15 @@
   "axiom:ny-tanf-compiled#input.working_applicant_eligible_for_public_assistance_without_earned_income_disregard",
   "axiom:ny-tanf-compiled#input.working_applicant_received_public_assistance_in_one_of_previous_four_months"
  ],
+ "output_slots": [
+  "ny_tanf_benefit",
+  "standard_of_need",
+  "us-ny:policies/otda/tanf-state-plan-2024-2026/standard-of-need-and-monthly-grant#monthly_grant_and_allowance_exclusive_of_home_energy",
+  "us-ny:policies/otda/tanf-state-plan-2024-2026/standard-of-need-and-monthly-grant#monthly_grant_and_allowance_with_home_energy",
+  "us-ny:policies/otda/tanf-state-plan-2024-2026/standard-of-need-and-monthly-grant#monthly_home_energy_payment",
+  "us-ny:policies/otda/tanf-state-plan-2024-2026/standard-of-need-and-monthly-grant#monthly_rent_allowance_with_children",
+  "us-ny:policies/otda/tanf-state-plan-2024-2026/standard-of-need-and-monthly-grant#monthly_supplemental_home_energy_payment"
+ ],
  "chunk_size": 500,
  "engines": {
   "left": "axiom",

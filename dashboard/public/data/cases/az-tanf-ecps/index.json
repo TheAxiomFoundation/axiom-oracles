@@ -29,6 +29,12 @@
   "axiom:az-tanf-compiled#input.supplemental_benefit_amount",
   "axiom:az-tanf-compiled#input.tribal_tanf_budgetary_unit_for_which_ca_needy_family_test_is_not_conducted"
  ],
+ "output_slots": [
+  "az_tanf_eligible_no_pay",
+  "az_tanf_monthly_cash_benefit",
+  "az_tanf_payable",
+  "az_tanf_prospectively_eligible"
+ ],
  "chunk_size": 500,
  "engines": {
   "left": "axiom",
