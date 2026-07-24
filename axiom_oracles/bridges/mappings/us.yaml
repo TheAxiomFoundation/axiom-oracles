@@ -28472,6 +28472,116 @@ mappings:
     candidate_priority: P3
     rationale: The us/fiit program surfaces income tax before credits from the encoded section 1(j) and section 55 chain, but the program takes taxable income as a runtime input because upstream income assembly (sections 61-63) is not yet encoded. PolicyEngine computes income_tax_before_credits from fully modeled taxable income, so this program output is not comparable until the upstream chain is encoded.
 
+  # Alabama's TY2026 resident module is a source-readiness surface. Its public
+  # monetary stages fail closed until the missing annual income-base,
+  # deduction, tax, surtax, credit, and ordering authority is pinned. Exact
+  # mappings keep every output in tax coverage without treating a zero
+  # sentinel as a completed Alabama tax result.
+  - legal_id: us-al:policies/income_tax/2026_resident_liability_source_hold#al_pit_2026_filing_status_is_valid
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom validates that exactly one supported Alabama filing-status flag is selected. PolicyEngine uses its own categorical filing-status input and exposes no equivalent RuleSpec input-contract predicate.
+
+  - legal_id: us-al:policies/income_tax/2026_resident_liability_source_hold#al_pit_2026_input_domain_is_valid
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom's fail-closed input-domain gate requires full-year Alabama residence, aligned filing units, and a valid filing status. PolicyEngine exposes no one-to-one validation output for that contract.
+
+  - legal_id: us-al:policies/income_tax/2026_resident_liability_source_hold#al_pit_2026_income_base_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold records that the complete TY2026 Alabama income-base and modification authority is unavailable. It is source-readiness metadata rather than a substantive tax variable modeled by PolicyEngine.
+
+  - legal_id: us-al:policies/income_tax/2026_resident_liability_source_hold#al_pit_2026_october_amendments_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold records that the pinned Code pages flag October 1, 2026 amendments to Alabama deductions and exemptions but do not contain Acts 2026-604 and 2026-603 or their revised language. It is temporal source-readiness metadata with no PolicyEngine analog.
+
+  - legal_id: us-al:policies/income_tax/2026_resident_liability_source_hold#al_pit_2026_deduction_and_exemption_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold records that complete TY2026 Alabama deduction and exemption authority is unavailable. PolicyEngine computes its modeled deductions and exemptions and exposes no corresponding source-readiness judgment.
+
+  - legal_id: us-al:policies/income_tax/2026_resident_liability_source_hold#al_pit_2026_tax_and_surtax_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold records that the final TY2026 annual tax, surtax, and specialty-tax implementation surface is unavailable. It has no one-to-one PolicyEngine analog.
+
+  - legal_id: us-al:policies/income_tax/2026_resident_liability_source_hold#al_pit_2026_credit_surface_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold records that the complete TY2026 Alabama nonrefundable and refundable credit surface and ordering are unavailable. PolicyEngine exposes no equivalent source-readiness predicate.
+
+  - legal_id: us-al:policies/income_tax/2026_resident_liability_source_hold#al_pit_2026_complete_liability_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This output combines Axiom's annual income, deduction, tax, surtax, and credit source holds. It is a completion-state predicate rather than a completed Alabama liability result.
+
+  - legal_id: us-al:policies/income_tax/2026_resident_liability_source_hold#al_pit_2026_adjusted_gross_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while the Alabama income-base and modification stage is source held. That sentinel is not a completed adjusted-gross-income amount comparable to PolicyEngine.
+
+  - legal_id: us-al:policies/income_tax/2026_resident_liability_source_hold#al_pit_2026_deductions_and_exemptions
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while complete TY2026 deduction and exemption authority is source held. PolicyEngine's modeled deductions are substantive amounts, not readiness sentinels.
+
+  - legal_id: us-al:policies/income_tax/2026_resident_liability_source_hold#al_pit_2026_taxable_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel because its income, deduction, and exemption chain is incomplete. The value must not be compared to PolicyEngine's completed Alabama taxable income.
+
+  - legal_id: us-al:policies/income_tax/2026_resident_liability_source_hold#al_pit_2026_tax_before_credits_including_surtaxes
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while the final annual tax, surtax, and specialty-tax surface is source held. PolicyEngine's before-credit tax is a substantive modeled result.
+
+  - legal_id: us-al:policies/income_tax/2026_resident_liability_source_hold#al_pit_2026_tax_after_nonrefundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while complete TY2026 nonrefundable-credit authority and ordering are source held. It is not comparable to a completed PolicyEngine tax result.
+
+  - legal_id: us-al:policies/income_tax/2026_resident_liability_source_hold#al_pit_2026_refundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while complete TY2026 refundable-credit authority is source held. PolicyEngine's modeled refundable credits are substantive amounts, not readiness sentinels.
+
+  - legal_id: us-al:policies/income_tax/2026_resident_liability_source_hold#al_pit_2026_net_income_tax_liability_before_payments
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom's signed net-liability output is deliberately zero while the annual income, deduction, tax, surtax, and credit chain remains source held; it must not be interpreted as zero Alabama tax or compared to a completed PolicyEngine liability.
+
   # Arizona's TY2026 resident annual-return interface is fully source held.
   # Its amount outputs are fail-closed sentinels, not claims of zero tax.
   # Exact entries keep every output in tax-scoped coverage without comparing

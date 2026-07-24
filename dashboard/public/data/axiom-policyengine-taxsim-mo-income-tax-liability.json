@@ -223,7 +223,7 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-24T03:54:04Z",
+    "generated_at": "2026-07-24T09:03:32Z",
     "generated_by": "scripts/run_comparison.py::mo-income-tax-liability",
     "rulespecs": [
       {
