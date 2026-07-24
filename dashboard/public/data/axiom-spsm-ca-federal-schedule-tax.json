@@ -1,0 +1,271 @@
+{
+  "aggregates": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 967396,
+      "components": [],
+      "concept": "ca:policies/cra/t1-2025/federal-tax-on-taxable-income#federal_2025_t1_tax_on_taxable_income_line_76",
+      "description": "Federal tax on taxable income (2025 T1 Step 5 Part A) vs SPSM federal tax before credits",
+      "match_count": 958555,
+      "mismatch_count": 8841
+    }
+  ],
+  "case_count": 327970,
+  "concepts": [
+    {
+      "concept": "ca:policies/cra/t1-2025/federal-tax-on-taxable-income#federal_2025_t1_tax_on_taxable_income_line_76",
+      "description": "Federal tax on taxable income (2025 T1 Step 5 Part A) vs SPSM imfedtax, both driven from SPSM taxable income"
+    }
+  ],
+  "engines": {
+    "left": "axiom",
+    "right": "spsm"
+  },
+  "locales": [
+    "CA"
+  ],
+  "mismatches": [
+    {
+      "difference": -3445242.15,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": 17878.35,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 27187.54,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": -3714492.67,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": -5487949.75,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": -4867585.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": -324355.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": 52545.63,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": -4157208.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": -7513.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": -4756.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": 20801.37,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 33439.48,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 1407259.43,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 47230.12,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": -4332583.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": -4380.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": 15005.25,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 51722.76,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 373013.27,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 12290.97,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 65050.84,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": -3556106.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": -19109.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": -58856.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": -660.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": -554.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": -3703873.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": -27124.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": 104481.19,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": -7682970.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": -2945.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": -644.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": -818.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": -3426.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": -5630479.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": -19251.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": -8164.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": 37748.23,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 51839.91,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": -3339751.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": -4261.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": -9088.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": 436771.33,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": -6968081.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": -3821.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": -1334.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": -1634.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": -3653147.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": -6690.0,
+      "kind": "spsm_above_axiom"
+    }
+  ],
+  "population": "spsd-synthetic-2022",
+  "provenance": {
+    "attribution": "This analysis is based on Statistics Canada's Social Policy Simulation Database and Model. The assumptions and calculations underlying the simulation results were prepared by the Axiom Foundation and the responsibility for the use and interpretation of these data is entirely that of the author(s).",
+    "generated": "2026-07-23",
+    "generated_at": "2026-07-24T03:38:17Z",
+    "generator": "scripts/generate_ca_federal_tax_spsm.py",
+    "licence": "SPSD/M Licence Agreement v34; no Package contents are redistributed with this repository (s.3.1).",
+    "oracle": "spsm",
+    "oracle_run": {
+      "case_output_include": "axiom_fedtax.cpi",
+      "dialogue_control_file": "$spsd/ba25",
+      "input_fingerprints": [
+        {
+          "bytes": 13134,
+          "file": "ba25.cpr",
+          "sha256": "e342036bd75e3407f0d27cafedca04b74a977b40f77ff739adc492d4cf5b169d"
+        },
+        {
+          "bytes": 728124,
+          "file": "ba25.mpr",
+          "sha256": "c37d0c198ba057e8bf405c68558d0331154534400e146765d658e677ab865238"
+        }
+      ],
+      "sample": "full-database"
+    },
+    "privacy": "Aggregate results only: per-household extract rows are Database-derived (SPSD/M Licence s.3.1) and never leave the local reports/ directory."
+  },
+  "schema_version": "axiom.comparison_report.v2",
+  "scope": {
+    "geoid": "CA",
+    "type": "country"
+  },
+  "suite": "ca-federal-schedule-tax-spsm",
+  "summary": {
+    "amt_overwrite_class_count": 8588,
+    "comparison_count": 967396,
+    "match_count": 958555,
+    "match_rate": 99.09,
+    "mismatch_count": 8841,
+    "unclassified_count": 253
+  }
+}

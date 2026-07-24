@@ -196,6 +196,13 @@
       "source": "comparisons/parameter-oracles.yaml"
     },
     {
+      "suite": "ca-federal-schedule-tax-spsm",
+      "name": "ca-federal-schedule-tax-spsm",
+      "report": "axiom-spsm-ca-federal-schedule-tax.json",
+      "repos": [],
+      "source": "comparisons/ca-federal-schedule-tax-spsm.yaml"
+    },
+    {
       "suite": "ca-income-tax-liability",
       "name": "ca-income-tax-liability",
       "report": "axiom-policyengine-taxsim-ca-income-tax-liability.json",

@@ -1,0 +1,29 @@
+{
+  "schema_version": "axiom-oracles/spsm-pin/v1",
+  "description": "Pinned identity of the Statistics Canada SPSD/M oracle. The Package (model + synthetic database) is licensed to the operator and is NEVER vendored, committed, or redistributed in any part (SPSD/M Licence Agreement s.3.1); this file records only the public identity of what oracle numbers were computed with. Committed artifacts that present SPSD/M-derived results carry the s.4.1 attribution notice.",
+  "package": {
+    "name": "Social Policy Simulation Database and Model (SPSD/M)",
+    "publisher": "Statistics Canada",
+    "catalogue": "89F0002X",
+    "version": "34.0",
+    "release_date": "2026-02",
+    "installer": "SPSMV3401Setup.exe + disk1..disk4.pak (GEA-packed)",
+    "contact": "spsdm@statcan.gc.ca"
+  },
+  "model_scope": {
+    "database_base_year": 2022,
+    "parameterized_years": "1997-2030",
+    "legislation_cutoff": "2025-12-18",
+    "notes": "Per the v34.0 README and Addendum: 2022 microdata base with a dynamic labour adjustment for 2020-2021 employment patterns; incorporates income-tax and transfer changes announced before the cutoff. The Addendum catalogues federal/provincial algorithm and parameter changes since v30.3."
+  },
+  "platform": {
+    "official": "Windows 11 only (32-bit x86 binaries); StatCan states the package is not compatible with macOS.",
+    "harness": "Driven under Wine on macOS by this repo's adapter, mirroring the EUROMOD-under-Rosetta precedent. The Wine build and prefix used for a run are recorded in each report's provenance."
+  },
+  "licence": {
+    "agreement": "SPSD/M Licence Agreement v34 (executed)",
+    "use": "statistical and research purposes (s.2.1)",
+    "redistribution": "no part of the Package may be committed or redistributed (s.3.1)",
+    "publication_notice": "This analysis is based on Statistics Canada's Social Policy Simulation Database and Model. The assumptions and calculations underlying the simulation results were prepared by the Axiom Foundation and the responsibility for the use and interpretation of these data is entirely that of the author(s)."
+  }
+}

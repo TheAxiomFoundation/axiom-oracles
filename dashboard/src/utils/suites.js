@@ -79,6 +79,14 @@ export const FAMILY_LABELS = {
 };
 
 const SUITE_OVERRIDES = {
+  "ca-federal-schedule-tax-spsm": {
+    family: "canada_personal_income_tax",
+    jurisdiction: "CAN",
+    label: "Canada federal schedule tax (vs SPSD/M)",
+    region: "ca",
+    kind: "household",
+    order: 300,
+  },
   "fiit-ecps": {
     family: "federal_income_tax",
     jurisdiction: "US",
