@@ -625,6 +625,69 @@ def _euromod_release_from_model_root(model_root: str | None) -> str | None:
     return None
 
 
+def _complete_rulespecs_from_affected_map(
+    config: dict, runner: dict, rulespecs: list[dict]
+) -> list[dict]:
+    """Fill missing or SHA-less rulespec entries for the suite's mapped repos.
+
+    ``comparisons/affected_map.json`` is the committed statement of which
+    rulespec repos each suite exercises — the same map
+    ``select_affected_suites.py`` diffs report SHAs against. For every mapped
+    repo this report cannot yet prove a SHA for, resolve one honestly:
+
+    * the runner's own fresh-clone SHA when it recorded one
+      (``_cloned_rulespec_us_sha``, the tax lane's temp clone), else
+    * the checkout the supervised-layout conventions resolve
+      (:func:`axiom_oracles.provenance.resolve_rulespec_checkout` — the same
+      locations the harnesses themselves search).
+
+    Entries that already carry a SHA are untouched, and declared-path entries
+    always win over convention lookups. Unresolvable repos keep or gain a
+    ``sha: None`` entry so the selector's conservative "cannot prove fresh"
+    reading stays intact. Never raises — provenance must annotate a run,
+    never fail one.
+    """
+    try:
+        from axiom_oracles.provenance import resolve_rulespec_checkout
+
+        map_path = COMPARISONS_DIR / "affected_map.json"
+        if not map_path.exists():
+            return rulespecs
+        affected_map = json.loads(map_path.read_text())
+        suite = (config.get("dashboard") or {}).get("suite", config.get("name"))
+        registry_name = config.get("name")
+        mapped_repos: list[str] = []
+        for entry in affected_map.get("suites", []):
+            if entry.get("suite") == suite or entry.get("name") == registry_name:
+                for repo in entry.get("repos", []):
+                    if repo not in mapped_repos:
+                        mapped_repos.append(repo)
+        if not mapped_repos:
+            return rulespecs
+        by_repo = {e.get("repo"): e for e in rulespecs}
+        completed = list(rulespecs)
+        for repo in mapped_repos:
+            if by_repo.get(repo, {}).get("sha"):
+                continue
+            sha = None
+            if repo == "TheAxiomFoundation/rulespec-us":
+                sha = runner.get("_cloned_rulespec_us_sha")
+            if sha is None:
+                checkout = resolve_rulespec_checkout(repo)
+                if checkout is not None:
+                    sha = _git_head_sha(checkout)
+            if repo in by_repo:
+                if sha:
+                    by_repo[repo]["sha"] = sha
+            else:
+                entry = {"repo": repo, "sha": sha}
+                by_repo[repo] = entry
+                completed.append(entry)
+        return completed
+    except Exception:
+        return rulespecs
+
+
 def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
     """Assemble the provenance block for a completed comparison run.
 
@@ -667,8 +730,14 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
     # The SNAP QC lane resolves its rulespec checkout inside the bridge (env
     # fallback and workspace default), so read the root it actually ran
     # against off the just-written report — otherwise the affected-rerun
-    # staleness check has no SHA to diff for this suite.
-    if runner_type == "snap-qc-compare" and not rulespec_paths:
+    # staleness check has no SHA to diff for this suite. NEVER for a skip
+    # re-emit: the recorded root is a path, and resolving it against a
+    # freshly materialized clone would stamp re-emitted numbers as fresh.
+    if (
+        runner_type == "snap-qc-compare"
+        and not rulespec_paths
+        and not runner.get("_reemitted_report")
+    ):
         try:
             report_provenance = (
                 json.loads(output.read_text()).get("summary", {}).get("provenance", {})
@@ -686,6 +755,29 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
         slug = repo_slug_from_remote(str(remote))
         if slug:
             rulespecs = [{"repo": slug, "sha": None}]
+    # A `sha: null` (or absent) entry for a mapped repo reads as "cannot prove
+    # fresh" to select_affected_suites.py, which re-selects the suite on every
+    # 6-hourly sweep even right after a successful refresh. Complete the gaps
+    # from what the run actually had in hand: the exact SHA of the runner's own
+    # fresh clone when there was one, else the checkout the supervised-layout
+    # conventions resolve (the same conventions the harnesses themselves use).
+    # Only for runner types whose runs are always REAL executions — a
+    # skip-capable lane (euromod/gettsim/snap-qc re-emit the committed report
+    # when a model root or data file is absent) must never have current SHAs
+    # stamped onto re-emitted numbers, or the selector would mark rules-stale
+    # results fresh.
+    if runner_type in (
+        "axiom-encode-snap-ecps-compare",
+        "axiom-encode-tax-ecps-compare",
+        "axiom-oracles-compare",
+    ):
+        rulespecs = _complete_rulespecs_from_affected_map(config, runner, rulespecs)
+    # A skip-capable runner that re-emitted the committed report never
+    # executed any rules this run — no matter which path produced a rulespec
+    # entry (configured roots included), its SHA must not be recorded, or the
+    # selector would mark rules-stale numbers fresh (#296 review).
+    if runner.get("_reemitted_report"):
+        rulespecs = [{**entry, "sha": None} for entry in rulespecs]
 
     # Engine identity (Axiom side under test).
     axiom_rules_ref = runner.get("axiom_rules_repo") or params.get("axiom_rules_repo")
@@ -929,11 +1021,21 @@ def _print_coverage_warnings(config: dict) -> None:
 
 
 def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
-    """`axiom-encode tax-ecps-compare` via uv run with the pinned PE stack."""
+    """`axiom-encode tax-populace-compare` via uv run with the pinned PE stack.
+
+    The encoder renamed the subcommand from tax-ecps-compare in its
+    ECPS→Populace rename (no alias survives on axiom-encode main); the runner
+    type keeps the old name so existing suite YAMLs stay valid.
+    """
     axiom_encode_repo = _resolve_path(runner["axiom_encode_repo"], "axiom_encode_repo")
     axiom_rules_repo = _resolve_path(runner["axiom_rules_repo"], "axiom_rules_repo")
     _ensure_engine_binary(axiom_rules_repo, kind="release")
     rulespec_root = _ensure_rulespec_us_checkout(runner["rulespec_remote"])
+    # The clone is deleted in the finally below, before provenance is stamped —
+    # record its HEAD now so the report can say which rulespec-us SHA it ran
+    # against (a `sha: null` entry reads as "cannot prove fresh" to
+    # select_affected_suites.py and re-selects the suite every run).
+    runner["_cloned_rulespec_us_sha"] = _git_head_sha(rulespec_root)
     params = runner["parameters"]
     pinned = params.get("pinned", True)
     # PolicyEngine-US 1.729.0 is the model version the certified pinned Populace
@@ -983,7 +1085,7 @@ def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
         str(axiom_encode_repo),
         *pe_pins,
         "axiom-encode",
-        "tax-ecps-compare",
+        "tax-populace-compare",
         "--rulespec-root",
         str(rulespec_root),
         "--axiom-rules-engine-path",
@@ -1430,9 +1532,11 @@ def _concept_args(params: dict) -> list[str]:
 def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
     """`axiom_oracles.cli compare <left> <right>` (in-repo CLI).
 
-    Runs via `uv run --python 3.13` against pinned PolicyEngine versions so
-    PE 4.11.0's pydantic-based models load cleanly. Mirrors the
-    `axiom-encode-tax-ecps-compare` runner's environment.
+    Runs via `uv run --python <parameters.python|3.14>` against pinned
+    PolicyEngine versions so PE 4.11.0's pydantic-based models load cleanly.
+    Mirrors the `axiom-encode-tax-ecps-compare` runner's environment; a suite
+    whose engine stack needs a different interpreter can pin `python:` in its
+    parameters.
     """
     axiom_rules_repo = _resolve_path(runner["axiom_rules_repo"], "axiom_rules_repo")
     params = runner["parameters"]
@@ -1446,8 +1550,11 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
         _ensure_engine_binary(axiom_rules_repo, kind="release")
         _ensure_composed_axiom_program(params, axiom_rules_repo)
     # Tax-Calculator is an optional extra; install its pin into the isolated
-    # `uv run` when either side is the taxcalc adapter.
-    taxcalc_pins = ("taxcalc==6.7.1",) if "taxcalc" in engines else ()
+    # `uv run` when either side is the taxcalc adapter. Without an explicit
+    # numba floor the resolver satisfies taxcalc's numba requirement with the
+    # ancient sdist-only numba 0.53.1, whose build fails on any current
+    # Python — modern numba wheels resolve fine alongside the PE pins (#296).
+    taxcalc_pins = ("taxcalc==6.7.1", "numba>=0.60") if "taxcalc" in engines else ()
     # TAXSIM ships as policyengine-taxsim, which bundles the pinned NBER
     # binary (adapters/taxsim/taxsim_pins.json records its identity).
     taxsim_pins = (
@@ -1457,7 +1564,7 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
         "uv",
         "run",
         "--python",
-        "3.14",
+        str(params.get("python", "3.14")),
         "--no-project",
         "--with-editable",
         str(REPO_ROOT),
@@ -1586,17 +1693,41 @@ def _ensure_composed_axiom_program(params: dict, axiom_rules_repo: Path) -> None
             str(root.parent) for root in roots
         )
 
-    subprocess.run(
-        [
-            str(axiom_rules_repo / "target" / "release" / "axiom-rules-engine"),
-            "compile",
-            "--program",
-            str(composed_path),
-            "--output",
-            str(compiled_path),
-        ],
-        check=True,
-        cwd=REPO_ROOT,
+    # Post-hard-cut engines compile compose output via compile-composed with
+    # explicit --rulespec-root flags naming staged pure rulespec-<cc> roots;
+    # older engines fall back to the legacy env-resolved `compile` inside
+    # compile_with_engine (#296).
+    from axiom_oracles.engine_compat import (
+        compile_with_engine,
+        explicit_engine_roots,
+        import_prefixes,
+        stage_pure_root,
+    )
+
+    root_candidates: list[Path] = list(roots)
+    if roots_env:
+        root_candidates.append(_expand_path(roots_env))
+    engine_roots = explicit_engine_roots(root_candidates)
+    composed_doc: dict = {}
+    try:
+        composed_doc = yaml.safe_load(composed_path.read_text()) or {}
+    except (OSError, yaml.YAMLError):
+        composed_doc = {}
+    jurisdictions = import_prefixes(
+        [e for e in (composed_doc.get("imports") or []) if isinstance(e, str)]
+    )
+    staged_roots: list[Path] = []
+    if engine_roots and jurisdictions:
+        stage_dir = Path(tempfile.mkdtemp(prefix="composed-roots."))
+        staged_roots = [
+            stage_pure_root(root, jurisdictions, stage_dir) for root in engine_roots
+        ]
+    compile_with_engine(
+        axiom_rules_repo / "target" / "release" / "axiom-rules-engine",
+        composed_path,
+        compiled_path,
+        roots=staged_roots or engine_roots,
+        composed=(composed_doc.get("module") or {}).get("kind") == "composition",
         env=compile_env,
     )
 
@@ -1628,6 +1759,10 @@ def _run_euromod_synthetic_compare(runner: dict, output: Path) -> None:
             if (model_root is None or not model_root.exists())
             else "EUROMOD_PYTHON unset"
         )
+        # Re-emits must never be stamped fresh: with rulespec checkouts now
+        # materialized in CI, resolving any configured root would relabel
+        # skipped numbers with current SHAs (#296 review).
+        runner["_reemitted_report"] = True
         committed = DASHBOARD_DATA_DIR / runner.get("dashboard_filename", "")
         dashboard_filename = params.get("dashboard_filename")
         if dashboard_filename:
@@ -1853,6 +1988,8 @@ def _run_gettsim_synthetic_compare(runner: dict, output: Path) -> None:
     params = runner["parameters"]
     skip_reason, model_root = _gettsim_synthetic_skip_reason(params)
     if skip_reason is not None or model_root is None:
+        # See the euromod runner: re-emits must never be stamped fresh.
+        runner["_reemitted_report"] = True
         _reemit_gettsim_synthetic_report(
             params,
             output,
@@ -2472,6 +2609,11 @@ def _run_snap_qc_compare(runner: dict, output: Path) -> None:
 
     skip_reason = _snap_qc_skip_reason(runner, params, fiscal_year)
     if skip_reason is not None:
+        # Mark the re-emit so provenance never resolves the report-recorded
+        # rulespec_root PATH to its current SHA: with the CI workspace
+        # materializer cloning that path fresh at main HEAD, resolving it
+        # would stamp a skipped run's re-emitted numbers as fresh (#296).
+        runner["_reemitted_report"] = True
         _reemit_snap_qc_committed_report(runner, params, output, skip_reason)
         return
 
@@ -2646,6 +2788,20 @@ def _ensure_rulespec_us_checkout(remote: str) -> Path:
         check=True,
     )
     return target
+
+
+def _git_head_sha(repo: Path) -> str | None:
+    """Best-effort HEAD SHA of a checkout; None when unresolvable."""
+    try:
+        result = subprocess.run(
+            ["git", "-C", str(repo), "rev-parse", "HEAD"],
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+    except (subprocess.CalledProcessError, FileNotFoundError, OSError):
+        return None
+    return result.stdout.strip() or None
 
 
 def _print_summary(output: Path) -> None:

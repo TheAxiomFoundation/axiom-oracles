@@ -67,6 +67,20 @@ class TaxsimPackageRunner(EngineAdapter):
                 continue
             runner = getattr(module, attr_name, None)
             if runner is not None:
+                # policyengine-taxsim's own executable search assumes
+                # sys.prefix carries the wheel's share/ data files, which is
+                # false inside uv `--with` overlay environments — resolve the
+                # bundled binary ourselves (pins.installed_binary_path also
+                # walks the sys.path archive roots) and pass it explicitly;
+                # None keeps its native search for source-layout dev runs.
+                from .pins import installed_binary_path
+
+                binary = installed_binary_path()
+                if binary is not None:
+                    # Its signature annotates taxsim_path as str, but
+                    # _validate_executable calls .exists() on it — a Path is
+                    # what actually works.
+                    return lambda frame: runner(frame, taxsim_path=binary)
                 return runner
         raise RuntimeError(
             "Could not import policyengine-taxsim's TaxsimRunner. Install the "

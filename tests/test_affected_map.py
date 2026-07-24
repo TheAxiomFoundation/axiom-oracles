@@ -363,6 +363,42 @@ def test_every_runnable_map_name_resolves_in_the_registry():
 
     for entry in entries:
         if entry["name"] is None:
-            assert entry["source"] == "comparisons/parameter-oracles.yaml", (
-                f"{entry['suite']}: only parameter suites may be non-runnable"
+            if entry["source"] == "comparisons/parameter-oracles.yaml":
+                continue
+            # The only other legitimate non-runnable class: a registry suite
+            # explicitly declaring `ci: manual` in its own YAML (#296).
+            import yaml
+
+            config = yaml.safe_load(
+                (Path(__file__).parents[1] / entry["source"]).read_text()
             )
+            assert config.get("ci") == "manual", (
+                f"{entry['suite']}: non-runnable entries must be parameter "
+                "suites or declare `ci: manual`"
+            )
+
+
+def test_ci_manual_registry_suite_emits_null_name():
+    """A registry suite declaring `ci: manual` (or/ut SNAP — the encoder's
+    snap-populace-compare has no jurisdiction config for them, #296) must be
+    routed to the manual lane exactly like a parameter suite: `name: null`,
+    excluded from both the 6-hourly rerun matrix and the weekly matrix."""
+    gen = _load("generate_affected_map.py")
+    entries = {e["suite"]: e for e in gen.build_map()["suites"]}
+    assert entries["or-snap-ecps"]["name"] is None
+    assert entries["ut-snap-ecps"]["name"] is None
+    # The sibling supported-jurisdiction suites stay dispatchable.
+    assert entries["az-snap-ecps"]["name"] == "az-snap-ecps"
+    assert entries["co-snap-ecps"]["name"] == "co-snap-ecps"
+
+
+def test_direct_oracle_pair_suites_carry_no_rulespec_dependency():
+    """An axiom-oracles-compare suite with no `axiom` side executes no
+    RuleSpec, so rules movement cannot change its numbers — mapping concept
+    prefixes to repos would re-select it every time rulespec-us moves, only to
+    re-emit the same numbers (#296)."""
+    gen = _load("generate_affected_map.py")
+    entries = {e["suite"]: e for e in gen.build_map()["suites"]}
+    assert entries["taxcalc-fiit-ecps"]["repos"] == []
+    # An axiom-sided compare over the same concept space keeps its mapping.
+    assert "TheAxiomFoundation/rulespec-us" in entries["co-state-income-tax-taxsim"]["repos"]

@@ -126,7 +126,7 @@ jobs:
               '${{ steps.select.outputs.matrix }}' || true
             if [ "$manual_count" != "0" ]; then
               echo ""
-              echo "$manual_count stale suite(s) have no CI-runnable registry name and await the manual parameter lane (scripts/run_parameter_comparisons.py):"
+              echo "$manual_count stale suite(s) have no CI-runnable registry name and await the manual lane (parameter suites: scripts/run_parameter_comparisons.py; ci-manual registry suites: a supervised run_comparison.py run):"
               for s in ${{ steps.select.outputs.manual }}; do echo "- $s"; done
             fi
           } >> "$GITHUB_STEP_SUMMARY"
@@ -204,6 +204,18 @@ jobs:
             }}
           restore-keys: |
             populace-hf-${{ runner.os }}-
+
+      - name: Materialize supervised workspace for this suite
+        # Clones the suite's mapped rulespec repos into ~/TheAxiomFoundation
+        # and provides the supervised-layout conventions the harnesses resolve
+        # (~/rulespec-*, ~/.axiom-oracles/roots, ~/rulespec-uk-official, the
+        # axiom-compose venv) — data-driven from affected_map.json and the
+        # suite YAML, skip-if-present. Without this, every leg whose suite
+        # needs any of it dies before the comparison starts (#296, #300).
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        working-directory: axiom-oracles
+        run: python3 scripts/materialize_ci_workspace.py ${{ matrix.name }}
 
       - name: Rerun comparison (affected)
         env:
