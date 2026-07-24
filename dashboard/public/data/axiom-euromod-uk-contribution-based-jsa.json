@@ -280,7 +280,7 @@
       "axiom_rules_engine_sha": "e5e40d40353f8459da4e46a9feae7279c2fecccc",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-24T14:22:59Z",
+    "generated_at": "2026-07-24T19:58:00Z",
     "generated_by": "scripts/run_comparison.py::uk-contribution-based-jsa-ukmod",
     "oracle": {
       "euromod_country": "UK",
