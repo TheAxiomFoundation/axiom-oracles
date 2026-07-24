@@ -142,6 +142,10 @@ def test_canada_official_registry_covers_numeric_and_non_numeric_surfaces() -> N
     assert get_oracle("cra-pdoc").implemented is True
     assert get_oracle("canada-benefits-finder").comparison_role == "coverage"
     assert get_oracle("statcan-spsdm").mode == "licensed_local_model"
+    assert get_oracle("statcan-spsdm").implemented is True
+    assert "full-database federal schedule-tax suite" in get_oracle(
+        "statcan-spsdm"
+    ).notes
 
 
 def test_official_comparison_wrapper_does_not_shadow_imported_module(
