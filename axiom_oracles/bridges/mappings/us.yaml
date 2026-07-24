@@ -29976,6 +29976,158 @@ mappings:
     rationale: Axiom's signed terminal candidate is valid only when every typed hold is absent and returns zero otherwise; PolicyEngine il_income_tax composes its broader final modeled liability.
 
 
+  # Alaska excludes individuals from its chapter tax but provides two
+  # resident credits payable as refunds, subject to appropriation. PolicyEngine
+  # has no active Alaska individual-income-tax surface. Exact not-comparable
+  # entries preserve the distinction between substantive pre-credit zeros,
+  # private statutory candidates, and held public refund/liability sentinels.
+  - legal_id: us-ak:policies/income_tax/2026_resident_zero_liability#ak_pit_2026_political_credit_cap
+    country: &ak_2026_country us
+    program: &ak_2026_program tax
+    mapping_type: &ak_2026_mapping_type not_comparable
+    candidate_priority: &ak_2026_priority P4
+    rationale: This private Axiom parameter records the statutory $100 political-credit cap. PolicyEngine exposes no active Alaska individual-credit parameter.
+
+  - legal_id: us-ak:policies/income_tax/2026_resident_zero_liability#ak_pit_2026_dependent_care_credit_rate
+    country: *ak_2026_country
+    program: *ak_2026_program
+    mapping_type: *ak_2026_mapping_type
+    candidate_priority: *ak_2026_priority
+    rationale: This private Axiom parameter records the statutory 16 percent federal dependent-care-credit linkage. PolicyEngine exposes no active Alaska counterpart.
+
+  - legal_id: us-ak:policies/income_tax/2026_resident_zero_liability#ak_pit_2026_chapter_tax_applies_to_individual
+    country: *ak_2026_country
+    program: *ak_2026_program
+    mapping_type: *ak_2026_mapping_type
+    candidate_priority: *ak_2026_priority
+    rationale: This Axiom boolean records that Alaska's chapter tax does not apply to an individual. PolicyEngine exposes no Alaska legal-applicability predicate.
+
+  - legal_id: us-ak:policies/income_tax/2026_resident_zero_liability#ak_pit_2026_corporate_tax_boundary_preserved
+    country: *ak_2026_country
+    program: *ak_2026_program
+    mapping_type: *ak_2026_mapping_type
+    candidate_priority: *ak_2026_priority
+    rationale: This Axiom scope output preserves Alaska's separate corporate-tax boundary and is not an individual-income-tax amount comparable to PolicyEngine.
+
+  - legal_id: us-ak:policies/income_tax/2026_resident_zero_liability#ak_pit_2026_credit_return_surface_applies
+    country: *ak_2026_country
+    program: *ak_2026_program
+    mapping_type: *ak_2026_mapping_type
+    candidate_priority: *ak_2026_priority
+    rationale: This Axiom output records the statutory ability to file an individual return for section 43.20.013 credits. PolicyEngine has no equivalent Alaska filing-purpose predicate.
+
+  - legal_id: us-ak:policies/income_tax/2026_resident_zero_liability#ak_pit_2026_supported_resident_credit_profile_applies
+    country: *ak_2026_country
+    program: *ak_2026_program
+    mapping_type: *ak_2026_mapping_type
+    candidate_priority: *ak_2026_priority
+    rationale: This private Axiom judgment bounds candidate arithmetic to a resident individual profile. PolicyEngine exposes no one-to-one input-domain judgment.
+
+  - legal_id: us-ak:policies/income_tax/2026_resident_zero_liability#ak_pit_2026_deduction_and_exemption_stage_applies
+    country: *ak_2026_country
+    program: *ak_2026_program
+    mapping_type: *ak_2026_mapping_type
+    candidate_priority: *ak_2026_priority
+    rationale: This output records non-applicability of an Alaska individual deduction and exemption stage. PolicyEngine exposes no active Alaska stage predicate.
+
+  - legal_id: us-ak:policies/income_tax/2026_resident_zero_liability#ak_pit_2026_surtax_stage_applies
+    country: *ak_2026_country
+    program: *ak_2026_program
+    mapping_type: *ak_2026_mapping_type
+    candidate_priority: *ak_2026_priority
+    rationale: This output records non-applicability of an Alaska individual-income-tax surtax stage. PolicyEngine exposes no active Alaska stage predicate.
+
+  - legal_id: us-ak:policies/income_tax/2026_resident_zero_liability#ak_pit_2026_alaska_adjusted_gross_income
+    country: *ak_2026_country
+    program: *ak_2026_program
+    mapping_type: *ak_2026_mapping_type
+    candidate_priority: *ak_2026_priority
+    rationale: Axiom returns substantive zero because Alaska has no individual chapter-tax income-base stage. PolicyEngine has no active Alaska adjusted-gross-income variable.
+
+  - legal_id: us-ak:policies/income_tax/2026_resident_zero_liability#ak_pit_2026_deductions_and_exemptions
+    country: *ak_2026_country
+    program: *ak_2026_program
+    mapping_type: *ak_2026_mapping_type
+    candidate_priority: *ak_2026_priority
+    rationale: Axiom returns substantive zero because Alaska has no individual chapter-tax deduction or exemption stage. PolicyEngine has no active counterpart.
+
+  - legal_id: us-ak:policies/income_tax/2026_resident_zero_liability#ak_pit_2026_taxable_income
+    country: *ak_2026_country
+    program: *ak_2026_program
+    mapping_type: *ak_2026_mapping_type
+    candidate_priority: *ak_2026_priority
+    rationale: Axiom returns substantive zero because Alaska's chapter tax does not apply to individuals. PolicyEngine has no active Alaska individual taxable-income variable.
+
+  - legal_id: us-ak:policies/income_tax/2026_resident_zero_liability#ak_pit_2026_tax_before_credits
+    country: *ak_2026_country
+    program: *ak_2026_program
+    mapping_type: *ak_2026_mapping_type
+    candidate_priority: *ak_2026_priority
+    rationale: Axiom returns exact pre-credit zero under Alaska's statutory individual exclusion. PolicyEngine has no active Alaska before-credit tax variable.
+
+  - legal_id: us-ak:policies/income_tax/2026_resident_zero_liability#ak_pit_2026_nonrefundable_credits
+    country: *ak_2026_country
+    program: *ak_2026_program
+    mapping_type: *ak_2026_mapping_type
+    candidate_priority: *ak_2026_priority
+    rationale: Axiom returns zero because the resident credits in the pinned section are payable as refunds, not offsets against individual chapter tax. PolicyEngine has no active Alaska nonrefundable-credit variable.
+
+  - legal_id: us-ak:policies/income_tax/2026_resident_zero_liability#ak_pit_2026_tax_after_nonrefundable_credits
+    country: *ak_2026_country
+    program: *ak_2026_program
+    mapping_type: *ak_2026_mapping_type
+    candidate_priority: *ak_2026_priority
+    rationale: Axiom returns substantive zero after nonrefundable credits because no individual chapter tax applies and the pinned resident credits are refund payments. PolicyEngine has no counterpart.
+
+  - legal_id: us-ak:policies/income_tax/2026_resident_zero_liability#ak_pit_2026_political_credit_statutory_candidate
+    country: *ak_2026_country
+    program: *ak_2026_program
+    mapping_type: *ak_2026_mapping_type
+    candidate_priority: *ak_2026_priority
+    rationale: This private Axiom person-level value is statutory candidate arithmetic before current claim mechanics and appropriation. PolicyEngine exposes no active Alaska political-credit variable.
+
+  - legal_id: us-ak:policies/income_tax/2026_resident_zero_liability#ak_pit_2026_dependent_care_credit_statutory_candidate
+    country: *ak_2026_country
+    program: *ak_2026_program
+    mapping_type: *ak_2026_mapping_type
+    candidate_priority: *ak_2026_priority
+    rationale: This private Axiom person-level value is the statutory 16 percent federal-credit candidate before current claim mechanics and appropriation. PolicyEngine has no active Alaska counterpart.
+
+  - legal_id: us-ak:policies/income_tax/2026_resident_zero_liability#ak_pit_2026_combined_refundable_credit_statutory_candidate
+    country: *ak_2026_country
+    program: *ak_2026_program
+    mapping_type: *ak_2026_mapping_type
+    candidate_priority: *ak_2026_priority
+    rationale: This private Axiom value combines two person-level statutory candidates but is not a certified payable refund. PolicyEngine exposes no active Alaska combined-credit variable.
+
+  - legal_id: us-ak:policies/income_tax/2026_resident_zero_liability#ak_pit_2026_refundable_credit_source_hold_applies
+    country: *ak_2026_country
+    program: *ak_2026_program
+    mapping_type: *ak_2026_mapping_type
+    candidate_priority: *ak_2026_priority
+    rationale: This typed Axiom hold records that a tax-year-2026 appropriation and current claim mechanics are not pinned. PolicyEngine exposes no source-completeness judgment.
+
+  - legal_id: us-ak:policies/income_tax/2026_resident_zero_liability#ak_pit_2026_refundable_credits
+    country: *ak_2026_country
+    program: *ak_2026_program
+    mapping_type: *ak_2026_mapping_type
+    candidate_priority: *ak_2026_priority
+    rationale: Axiom returns a fail-closed zero sentinel while the refundable-credit hold remains active; it does not assert that the payable Alaska refund equals zero. PolicyEngine has no corresponding held output.
+
+  - legal_id: us-ak:policies/income_tax/2026_resident_zero_liability#ak_pit_2026_complete_liability_source_hold_applies
+    country: *ak_2026_country
+    program: *ak_2026_program
+    mapping_type: *ak_2026_mapping_type
+    candidate_priority: *ak_2026_priority
+    rationale: This typed Axiom hold records that signed net liability cannot be completed until the payable refundable-credit amount is established. PolicyEngine exposes no equivalent source judgment.
+
+  - legal_id: us-ak:policies/income_tax/2026_resident_zero_liability#ak_pit_2026_net_income_tax_liability_before_payments
+    country: *ak_2026_country
+    program: *ak_2026_program
+    mapping_type: *ak_2026_mapping_type
+    candidate_priority: *ak_2026_priority
+    rationale: Axiom returns a fail-closed zero sentinel while signed liability remains held; it does not assert complete zero net liability. PolicyEngine has no corresponding held Alaska output.
+
   # Nevada Constitution article 10, section 1(9) prohibits a personal income
   # tax on natural persons while expressly preserving taxes on business income
   # or revenue. PolicyEngine has no active Nevada individual-income-tax surface,
