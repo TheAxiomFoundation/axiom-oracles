@@ -35,12 +35,12 @@ description: >-
   entirely that of the author(s).
 
 runner:
-  type: script
-  script: scripts/generate_ca_federal_tax_spsm.py
-  requires:
-    - licensed SPSD/M v34.0 installation (SPSM_HOME)
-    - Wine (macOS) or native Windows
-    - rulespec-ca checkout at $HOME/rulespec-ca
+  type: spsm-ca-compare
+  # Requires locally: licensed SPSD/M v34.0 (SPSM_HOME), Wine on macOS or
+  # native Windows, and a rulespec-ca checkout at $HOME/rulespec-ca. See
+  # docs/spsdm-reproduction.md.
+  parameters:
+    generator: scripts/generate_ca_federal_tax_spsm.py
 
 artifacts:
   report_basename: axiom-spsm-ca-federal-schedule-tax
