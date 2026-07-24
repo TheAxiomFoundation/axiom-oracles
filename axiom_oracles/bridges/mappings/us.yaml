@@ -29989,24 +29989,18 @@ mappings:
   - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_candidate_taxable_income
     country: *ks_2026_country
     program: *ks_2026_program
-    mapping_type: direct_variable
+    mapping_type: not_comparable
     policyengine_variable: ks_taxable_income
-    entity: tax_unit
-    period: year
-    unit: USD
-    comparison: money
-    rationale: Same nonnegative Kansas taxable income on the bounded profile after aligned deductions and exemptions.
+    candidate_priority: P4
+    rationale: Axiom taxable income depends on its explicit Kansas deduction election, including the four-category itemized calculation and Kansas depreciation adjustment. PolicyEngine's taxable income inherits its broader aggregate itemized-deduction construction, so this downstream amount is not one-to-one.
 
   - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_candidate_tax_before_credits
     country: *ks_2026_country
     program: *ks_2026_program
-    mapping_type: direct_variable
+    mapping_type: not_comparable
     policyengine_variable: ks_income_tax_before_credits
-    entity: tax_unit
-    period: year
-    unit: USD
-    comparison: money
-    rationale: Same TY2026 Kansas ordinary rate schedule before credits for aligned single and joint resident returns.
+    candidate_priority: P4
+    rationale: The rate schedule aligns, but Axiom tax before credits is applied to taxable income that can diverge under the non-comparable Kansas itemized-deduction construction. The resulting downstream amount is therefore not one-to-one with PolicyEngine.
 
   - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_candidate_tax_after_nonrefundable_credits
     country: *ks_2026_country
@@ -30030,13 +30024,10 @@ mappings:
   - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_candidate_net_income_tax_liability
     country: *ks_2026_country
     program: *ks_2026_program
-    mapping_type: direct_variable
+    mapping_type: not_comparable
     policyengine_variable: ks_income_tax
-    entity: tax_unit
-    period: year
-    unit: USD
-    comparison: money
-    rationale: Same signed Kansas income-tax amount after the total EITC when all held credit branches are absent and payments are excluded.
+    candidate_priority: P4
+    rationale: Axiom net liability inherits the non-comparable Kansas itemized-deduction and taxable-income construction before subtracting the aligned total EITC. PolicyEngine's final Kansas income tax therefore is not one-to-one for the full supported profile.
 
   - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_supported_kansas_adjusted_gross_income
     country: *ks_2026_country

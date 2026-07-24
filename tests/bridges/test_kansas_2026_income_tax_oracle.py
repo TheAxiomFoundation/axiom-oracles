@@ -17,10 +17,7 @@ EXPECTED_DIRECT_VARIABLES = {
     "ks_pit_2026_standard_deduction": "ks_standard_deduction",
     "ks_pit_2026_candidate_kansas_adjusted_gross_income": "ks_agi",
     "ks_pit_2026_candidate_personal_exemptions": "ks_exemptions",
-    "ks_pit_2026_candidate_taxable_income": "ks_taxable_income",
-    "ks_pit_2026_candidate_tax_before_credits": "ks_income_tax_before_credits",
     "ks_pit_2026_candidate_earned_income_credit": "ks_total_eitc",
-    "ks_pit_2026_candidate_net_income_tax_liability": "ks_income_tax",
 }
 
 
@@ -135,5 +132,5 @@ def test_kansas_2026_core_remains_in_coverage(
 
     assert len(items) == EXPECTED_OUTPUT_COUNT
     assert {item["program"] for item in items} == {"tax"}
-    assert sum(item["status"] == "comparable" for item in items) == 7
-    assert sum(item["status"] == "known_not_comparable" for item in items) == 24
+    assert sum(item["status"] == "comparable" for item in items) == 4
+    assert sum(item["status"] == "known_not_comparable" for item in items) == 27
