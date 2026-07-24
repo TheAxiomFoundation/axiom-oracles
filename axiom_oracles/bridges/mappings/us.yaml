@@ -28899,6 +28899,129 @@ mappings:
     candidate_priority: P4
     rationale: Axiom's signed net-liability output is deliberately zero while the annual Arkansas income, deduction, tax, and credit chain remains source held; it must not be interpreted as zero Arkansas tax or compared to completed PolicyEngine liability.
 
+  # Connecticut's TY2026 resident annual-return interface exposes one bounded
+  # statutory EITC branch while every complete annual-liability stage is held.
+  # Exact entries keep the full module in tax-scoped coverage without treating
+  # source-readiness judgments or fail-closed sentinels as PE calculations.
+  - legal_id: us-ct:policies/income_tax/2026_resident_liability_source_hold#ct_pit_2026_refundable_eitc_rate
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This private Axiom parameter is the forty-percent statutory multiplier used by the bounded section 12-704e branch. PolicyEngine does not expose this exact source parameter as a standalone annual-return output for one-to-one comparison.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_liability_source_hold#ct_pit_2026_refundable_eitc_qualifying_child_addition
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This private Axiom parameter is the statutory $250 addition used once when an eligible section 12-704e claimant has at least one federal qualifying child. PolicyEngine does not expose this exact source parameter as a standalone annual-return output for one-to-one comparison.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_liability_source_hold#ct_pit_2026_filing_status_is_valid
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom validates that exactly one of four Connecticut filing-status input flags is selected. PolicyEngine uses a categorical filing-status input and exposes no equivalent RuleSpec input-contract predicate.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_liability_source_hold#ct_pit_2026_input_domain_is_valid
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom's domain gate requires full-year Connecticut residence, aligned federal and state filing units, one valid filing status, a nonnegative supplied federal EITC, and a nonnegative integral federal qualifying-child count. PolicyEngine exposes no one-to-one validation output for that interface contract.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_liability_source_hold#ct_pit_2026_income_and_modification_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold records that the pinned corpus lacks final CT-1040 modification materials and a complete annual implementation inventory needed for a complete operative income base. It is source-readiness metadata, not a Connecticut income variable modeled by PolicyEngine.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_liability_source_hold#ct_pit_2026_deduction_and_exemption_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold records that Connecticut's exemption chain cannot execute while adjusted gross income and final TY2026 return implementation remain source held. PolicyEngine exposes no corresponding readiness judgment.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_liability_source_hold#ct_pit_2026_tax_and_surtax_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold prevents the schedule pilot from being applied before Connecticut taxable income is constructed and records the incomplete TY2026 AMT and specialty-tax implementation. PolicyEngine has no analogous source-readiness predicate.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_liability_source_hold#ct_pit_2026_credit_surface_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold records that the complete TY2026 Connecticut credit inventory, eligibility chain, ordering, limitations, and carryforwards are not established by the pinned supplement and return materials. PolicyEngine computes modeled credits and has no equivalent readiness variable.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_liability_source_hold#ct_pit_2026_complete_liability_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This output combines Axiom's Connecticut income, exemption, tax, AMT, surtax, and credit source holds. It is a completion-state predicate rather than a tax result with a PolicyEngine analog.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_liability_source_hold#ct_pit_2026_encoded_refundable_earned_income_credit
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This bounded Axiom branch multiplies a supplied allowed federal EITC output by forty percent and adds $250 once when that positive credit has at least one raw federal qualifying child, only when its explicit residency, alignment, filing-status, and input-validity domain passes. PolicyEngine computes federal and Connecticut EITC from its own household facts and does not expose a result with the same federal-output boundary and fail-closed domain behavior.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_liability_source_hold#ct_pit_2026_adjusted_gross_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while Connecticut's complete TY2026 modification chain is source held; that zero is not a claim of completed Connecticut adjusted gross income.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_liability_source_hold#ct_pit_2026_deductions_and_exemptions
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while adjusted gross income and the complete TY2026 exemption implementation are source held. PolicyEngine's modeled exemption is a substantive calculation.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_liability_source_hold#ct_pit_2026_taxable_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while its Connecticut adjusted-gross-income and exemption stages are incomplete; that zero does not claim completed Connecticut taxable income.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_liability_source_hold#ct_pit_2026_tax_before_credits_including_surtaxes
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel because taxable income and the complete TY2026 schedule, AMT, recapture, surtax, and specialty-tax implementation are source held. PolicyEngine's before-credit tax is a substantive modeled result.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_liability_source_hold#ct_pit_2026_tax_after_nonrefundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while annual tax and the complete nonrefundable-credit inventory and ordering are source held. It cannot truthfully be compared to a substantive PolicyEngine after-credit calculation.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_liability_source_hold#ct_pit_2026_refundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This complete-stage output remains a zero sentinel while the full TY2026 refundable-credit inventory is source held; the separately exposed bounded EITC branch is not promoted into a claim of complete refundable credits.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_liability_source_hold#ct_pit_2026_net_income_tax_liability_before_payments
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom's signed net-liability output is deliberately zero while the annual Connecticut income, exemption, tax, and credit chain remains source held; it must not be interpreted as zero Connecticut tax or compared to completed PolicyEngine liability.
+
   # The District's TY2026 resident module intentionally stops after a bounded
   # adjusted-gross-income surface.  Its later annual stages are typed holds
   # and fail-closed sentinels until final D-40 materials are available.  Exact
