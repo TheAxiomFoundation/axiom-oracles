@@ -82,7 +82,7 @@ const ORACLE_IDENTITY = {
   },
 };
 
-const REGION_LABELS = { us: "US", ca: "CA", uk: "UK", be: "BE", de: "DE" };
+const REGION_LABELS = { us: "US", ca: "CA", uk: "UK", be: "BE", de: "DE", dk: "DK" };
 
 /**
  * The unit of counting is the household case: one household compared once,
@@ -367,7 +367,7 @@ function OracleCard({ oracle, selected, onSelect }) {
   );
 }
 
-const REGION_ORDER = ["us", "ca", "uk", "be"];
+const REGION_ORDER = ["us", "ca", "uk", "be", "de", "dk"];
 
 function ProgRow({ p, onOpenProgram }) {
   return (
