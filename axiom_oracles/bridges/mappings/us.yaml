@@ -29829,6 +29829,265 @@ mappings:
     candidate_priority: P4
     rationale: Axiom returns a fail-closed zero sentinel while the net-liability source hold remains active; it does not substantively assert complete signed net liability. PolicyEngine exposes no corresponding held Nevada liability output.
 
+  # Kansas's bounded TY2026 resident core has eight amount stages with aligned
+  # PolicyEngine variables. Readiness judgments, literal parameters,
+  # non-identical ordering intermediates, and fail-closed public sentinels are
+  # classified exactly but are not compared as substantive PolicyEngine values.
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_input_domain_is_valid
+    country: &ks_2026_country us
+    program: &ks_2026_program tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: &ks_2026_readiness_rationale Axiom exposes a private raw-input and source-readiness judgment for its bounded Kansas interface. PolicyEngine uses its own categorical and entity inputs and exposes no one-to-one readiness predicate.
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_base_profile_applies
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: *ks_2026_readiness_rationale
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_supported_profile_applies
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: *ks_2026_readiness_rationale
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_lower_rate
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: &ks_2026_parameter_rationale Axiom keeps this pinned TY2026 statutory component private inside the bounded pipeline. No one-to-one PolicyEngine parameter comparison is registered for this internal RuleSpec value.
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_upper_rate
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: *ks_2026_parameter_rationale
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_joint_bracket_ceiling
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: *ks_2026_parameter_rationale
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_single_bracket_ceiling
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: *ks_2026_parameter_rationale
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_single_standard_deduction
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: *ks_2026_parameter_rationale
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_joint_standard_deduction
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: *ks_2026_parameter_rationale
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_single_additional_standard_deduction
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: *ks_2026_parameter_rationale
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_joint_additional_standard_deduction
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: *ks_2026_parameter_rationale
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_single_personal_exemption
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: *ks_2026_parameter_rationale
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_joint_personal_exemption
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: *ks_2026_parameter_rationale
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_dependent_exemption
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: *ks_2026_parameter_rationale
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_earned_income_credit_rate
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: *ks_2026_parameter_rationale
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_standard_deduction
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: direct_variable
+    policyengine_variable: ks_standard_deduction
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same Kansas standard deduction for aligned single or joint filing status and aged-or-blind count.
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_itemized_deduction
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: direct_variable
+    policyengine_variable: ks_itemized_deductions
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same Kansas itemized deduction when the aligned federal component inputs contain only the supported statutory categories.
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_candidate_kansas_adjusted_gross_income
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: direct_variable
+    policyengine_variable: ks_agi
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same Kansas adjusted gross income on the bounded profile when all held modification branches are absent.
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_candidate_deduction
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom exposes the elected greater deduction after its explicit Kansas itemization election. PolicyEngine exposes standard and itemized amounts separately and does not expose this bounded election intermediate.
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_candidate_personal_exemptions
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: direct_variable
+    policyengine_variable: ks_exemptions
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same Kansas exemption amount for aligned single and joint returns without held head-of-household, unborn-child, or disabled-veteran branches.
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_candidate_taxable_income
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: direct_variable
+    policyengine_variable: ks_taxable_income
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same nonnegative Kansas taxable income on the bounded profile after aligned deductions and exemptions.
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_candidate_tax_before_credits
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: direct_variable
+    policyengine_variable: ks_income_tax_before_credits
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same TY2026 Kansas ordinary rate schedule before credits for aligned single and joint resident returns.
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_candidate_tax_after_nonrefundable_credits
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    policyengine_variable: ks_income_tax_before_refundable_credits
+    candidate_priority: P4
+    rationale: Axiom holds all nonrefundable-credit branches and treats the statutory Kansas EITC as refundable at the final stage. PolicyEngine internally splits EITC between nonrefundable and refundable components, so the intermediate ordering boundaries are not identical.
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_candidate_earned_income_credit
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: direct_variable
+    policyengine_variable: ks_total_eitc
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same total Kansas earned income credit as 17 percent of the aligned federal earned income credit.
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_candidate_net_income_tax_liability
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: direct_variable
+    policyengine_variable: ks_income_tax
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same signed Kansas income-tax amount after the total EITC when all held credit branches are absent and payments are excluded.
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_supported_kansas_adjusted_gross_income
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    policyengine_variable: ks_agi
+    candidate_priority: P4
+    rationale: &ks_2026_supported_rationale This public Axiom stage returns a fail-closed zero sentinel whenever any unsupported Kansas branch is present. PolicyEngine computes a substantive amount and exposes no matching source-readiness gate; the corresponding private candidate has the exact mapping where available.
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_supported_deductions_and_exemptions
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: *ks_2026_supported_rationale
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_supported_taxable_income
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    policyengine_variable: ks_taxable_income
+    candidate_priority: P4
+    rationale: *ks_2026_supported_rationale
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_supported_tax_before_credits
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    policyengine_variable: ks_income_tax_before_credits
+    candidate_priority: P4
+    rationale: *ks_2026_supported_rationale
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_supported_tax_after_nonrefundable_credits
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    policyengine_variable: ks_income_tax_before_refundable_credits
+    candidate_priority: P4
+    rationale: *ks_2026_supported_rationale
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_supported_net_income_tax_liability
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    policyengine_variable: ks_income_tax
+    candidate_priority: P4
+    rationale: *ks_2026_supported_rationale
+
 
 prefixes:
   - legal_id_prefix: us-dc:statutes/4/4-205/49#
