@@ -29659,6 +29659,83 @@ mappings:
     rationale: Axiom's bounded public result is zero for held credit/refundable branches; PolicyEngine final sc_income_tax computes its modeled CDCC, EITC, two-wage-earner, and tuition-credit stack.
 
 
+  # The South Dakota Department of Revenue's January 2026 guide states that
+  # South Dakota does not have a personal income tax. SDCL chapter 10-43 and
+  # section 10-43-2 confine the state's income-tax chapter to banks and
+  # financial corporations. PolicyEngine has no active South Dakota
+  # individual-income-tax surface, so these complete legal outputs are exact
+  # tax-scoped non-comparables.
+  - legal_id: us-sd:policies/income_tax/2026_resident_zero_liability#sd_pit_2026_personal_income_tax_absence_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom output records the applicability of South Dakota's official no-personal-income-tax position for tax year 2026. PolicyEngine exposes no legal-authority applicability predicate for a state with no active individual income-tax program.
+
+  - legal_id: us-sd:policies/income_tax/2026_resident_zero_liability#sd_pit_2026_business_and_entity_taxes_outside_scope
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom output preserves the statutory boundary for bank-franchise and other business or entity taxes. It is a scope predicate, not a PolicyEngine individual-income-tax variable.
+
+  - legal_id: us-sd:policies/income_tax/2026_resident_zero_liability#sd_pit_2026_resident_personal_income_tax_imposed
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom boolean states the legal absence of a South Dakota personal income tax for a natural-person resident. PolicyEngine has no active South Dakota individual-income-tax imposition variable.
+
+  - legal_id: us-sd:policies/income_tax/2026_resident_zero_liability#sd_pit_2026_deduction_and_exemption_stage_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This output states that no South Dakota personal-income-tax deduction or exemption stage applies because no natural-person personal income tax is imposed. PolicyEngine exposes no corresponding non-applicability predicate.
+
+  - legal_id: us-sd:policies/income_tax/2026_resident_zero_liability#sd_pit_2026_surtax_stage_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This output states that no South Dakota personal-income-tax surtax stage applies. PolicyEngine exposes no South Dakota personal-income-tax surtax-stage applicability variable.
+
+  - legal_id: us-sd:policies/income_tax/2026_resident_zero_liability#sd_pit_2026_credit_stage_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This output states that no South Dakota personal-income-tax credit stage applies. PolicyEngine exposes no South Dakota personal-income-tax credit-stage applicability variable.
+
+  - legal_id: us-sd:policies/income_tax/2026_resident_zero_liability#sd_pit_2026_resident_personal_income_tax_before_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns exact zero before credits as the legal consequence of South Dakota's absence of a natural-person personal income tax. PolicyEngine has no active South Dakota before-credit personal-income-tax variable.
+
+  - legal_id: us-sd:policies/income_tax/2026_resident_zero_liability#sd_pit_2026_resident_personal_income_tax_after_nonrefundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns exact zero after nonrefundable credits because no South Dakota personal-income-tax or credit stage applies. PolicyEngine has no corresponding South Dakota output.
+
+  - legal_id: us-sd:policies/income_tax/2026_resident_zero_liability#sd_pit_2026_resident_refundable_personal_income_tax_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns exact zero South Dakota refundable personal-income-tax credits because South Dakota has no natural-person personal-income-tax system. PolicyEngine has no corresponding South Dakota personal-income-tax credit output.
+
+  - legal_id: us-sd:policies/income_tax/2026_resident_zero_liability#sd_pit_2026_resident_net_personal_income_tax_liability_before_payments
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns exact zero annual resident net personal-income-tax liability before payments as the legal consequence of South Dakota's absence of personal income tax. PolicyEngine exposes no active South Dakota individual-income-tax liability variable.
+
+
 prefixes:
   - legal_id_prefix: us-dc:statutes/4/4-205/49#
     country: us
