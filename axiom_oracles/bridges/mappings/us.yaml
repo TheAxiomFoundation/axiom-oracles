@@ -29732,6 +29732,250 @@ mappings:
     candidate_priority: P4
     rationale: Axiom's bounded public result is zero for held credit/refundable branches; PolicyEngine final sc_income_tax computes its modeled CDCC, EITC, two-wage-earner, and tuition-credit stack.
 
+  # Illinois's TY2026 resident module is an explicitly bounded source-ready
+  # profile. Exact classifications prevent the broad us-il fallback from
+  # hiding new outputs and prevent profile-gated zero sentinels from being
+  # mistaken for PolicyEngine's population-wide Illinois tax variables.
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_individual_income_tax_rate
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This is Axiom's private statutory-rate implementation constant; the module's executable output contract is not a one-to-one PolicyEngine parameter surface.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_personal_exemption_amount
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This private Axiom constant pins IDOR's tax-year-2026 $2,925 amount inside a bounded exemption composition rather than exposing a PolicyEngine parameter path.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_age_or_blindness_exemption_amount
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This is a private RuleSpec helper amount used by four raw-fact exemption branches, not a public one-to-one PolicyEngine output.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_joint_exemption_and_property_credit_agi_ceiling
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom privately reuses this statutory joint-return ceiling across two bounded stages; PolicyEngine exposes no identical combined implementation output.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_other_exemption_and_property_credit_agi_ceiling
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom privately reuses this nonjoint ceiling across exemption and property-credit stages; it is not a one-to-one PolicyEngine result.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_residential_property_tax_credit_rate
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This private rate feeds Axiom's single-use-residence bounded branch and is not independently comparable to a population-wide PolicyEngine output.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_earned_income_credit_rate
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This private 20 percent implementation constant is composed only for the actually allowed federal-credit branch; expanded Illinois eligibility remains held.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_child_tax_credit_rate
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This private 40 percent helper is applied to Axiom's bounded Illinois EITC candidate and is not a standalone PolicyEngine output.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_input_domain_is_valid
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom's nonnegative raw-input contract is a fail-closed harness judgment; PolicyEngine has no corresponding tax variable.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_filing_status_is_valid
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom validates exactly one of five filing-status flags, including qualifying surviving spouse, whereas PolicyEngine consumes its own categorical filing-status input.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_base_income_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed readiness hold covers unencoded section 203 and bonus-depreciation chains, not a tax amount modeled by PolicyEngine.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_special_tax_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This readiness judgment identifies held recapture and gaming or cannabis surcharge branches; PolicyEngine exposes no equivalent completion-state predicate.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_credit_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold combines omitted attribution, expanded-EITC, and specialty-credit surfaces rather than computing a PolicyEngine credit amount.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_complete_liability_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This is Axiom's combined completion-state predicate for all held annual-liability surfaces, with no PolicyEngine analog.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_supported_profile_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom's final source-readiness gate restricts outputs to an aligned full-year resident profile; PolicyEngine computes across its broader modeled population.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_directly_encoded_additions
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This aggregate contains only three explicitly encoded federal-category additions and does not equal PolicyEngine's complete Illinois addition inventory.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_directly_encoded_subtractions
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This aggregate contains only three explicitly encoded federal-category subtractions and does not equal PolicyEngine's complete Illinois subtraction inventory.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_supported_profile_candidate_base_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: il_base_income
+    candidate_priority: P4
+    rationale: Axiom gates a bounded section 203 component inventory to zero outside its supported profile; PolicyEngine il_base_income composes its broader modeled modification surface.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_basic_exemption_units
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This private helper counts Axiom's supported-profile basic exemption units, including its dependent-filer boundary, and has no standalone PolicyEngine output.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_taxpayer_age_exemption
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This private raw-fact helper isolates one taxpayer age exemption circumstance rather than a PolicyEngine tax output.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_taxpayer_blindness_exemption
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This private raw-fact helper isolates one taxpayer blindness exemption circumstance rather than a PolicyEngine tax output.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_joint_spouse_age_exemption
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This private joint-return spouse-age helper has no standalone one-to-one PolicyEngine variable.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_joint_spouse_blindness_exemption
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This private joint-return spouse-blindness helper has no standalone one-to-one PolicyEngine variable.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_exemption_agi_ceiling
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This private filing-status selector combines two Axiom constants and is not a public PolicyEngine output.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_supported_profile_candidate_exemption
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom's exemption is computed only for its supported profile and is zero on held cases, unlike a population-wide PolicyEngine exemption output.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_supported_profile_candidate_taxable_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: il_taxable_income
+    candidate_priority: P4
+    rationale: Axiom's taxable-income candidate is bounded by explicit section 203 holds and zero outside the profile; PolicyEngine il_taxable_income covers its full modeled inventory.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_supported_profile_candidate_tax_before_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: il_income_tax_before_non_refundable_credits
+    candidate_priority: P4
+    rationale: Axiom's before-credit amount excludes specialty taxes and is profile-gated to zero, so it is not one-to-one with PolicyEngine's broader before-credit variable.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_supported_profile_residential_property_tax_credit
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: il_property_tax_credit
+    candidate_priority: P4
+    rationale: Axiom computes only the single-use-principal-residence branch and holds multi-use attribution, unlike PolicyEngine's broader modeled credit.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_supported_profile_candidate_tax_after_nonrefundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: il_income_tax_after_non_refundable_credits
+    candidate_priority: P4
+    rationale: Axiom excludes education, other-state, and other specialty nonrefundable credits and zero-gates held cases; the PolicyEngine stage has a broader credit inventory.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_supported_profile_earned_income_credit
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: il_eitc
+    candidate_priority: P4
+    rationale: Axiom computes only 20 percent of an actually allowed federal section 32 credit and holds Illinois hypothetical-federal-credit eligibility branches.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_supported_profile_child_tax_credit
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: il_child_tax_credit
+    candidate_priority: P4
+    rationale: Axiom's child credit inherits the bounded Illinois EITC profile and zero gate, so it is not population-wide one-to-one with PolicyEngine's modeled credit.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_supported_profile_refundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom aggregate includes only its bounded EITC and child-credit branches and excludes pass-through-entity and other refundable credits.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_supported_profile_candidate_net_income_tax_liability_before_payments
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: il_income_tax
+    candidate_priority: P4
+    rationale: Axiom's signed terminal candidate is valid only when every typed hold is absent and returns zero otherwise; PolicyEngine il_income_tax composes its broader final modeled liability.
+
+
   # Nevada Constitution article 10, section 1(9) prohibits a personal income
   # tax on natural persons while expressly preserving taxes on business income
   # or revenue. PolicyEngine has no active Nevada individual-income-tax surface,
@@ -29931,6 +30175,99 @@ mappings:
     mapping_type: not_comparable
     candidate_priority: P4
     rationale: Axiom's signed net-liability output is deliberately zero while the annual current-law, income, deduction, tax, statewide surtax, and credit chain remains source held; it must not be interpreted as zero Indiana tax or compared to completed PolicyEngine liability.
+
+
+  # The South Dakota Department of Revenue's January 2026 guide states that
+  # South Dakota does not have a personal income tax. SDCL chapter 10-43 and
+  # section 10-43-2 confine the state's income-tax chapter to banks and
+  # financial corporations. PolicyEngine has no active South Dakota
+  # individual-income-tax surface, so these bounded legal and source-hold
+  # outputs are exact tax-scoped non-comparables. Downstream zero values are
+  # fail-closed sentinels, not substantive claims of complete signed net
+  # liability.
+  - legal_id: us-sd:policies/income_tax/2026_resident_zero_liability#sd_pit_2026_personal_income_tax_absence_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom output records the applicability of South Dakota's official no-personal-income-tax position for tax year 2026. PolicyEngine exposes no legal-authority applicability predicate for a state with no active individual income-tax program.
+
+  - legal_id: us-sd:policies/income_tax/2026_resident_zero_liability#sd_pit_2026_business_and_entity_taxes_outside_scope
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom output preserves the statutory boundary for bank-franchise and other business or entity taxes. It is a scope predicate, not a PolicyEngine individual-income-tax variable.
+
+  - legal_id: us-sd:policies/income_tax/2026_resident_zero_liability#sd_pit_2026_resident_personal_income_tax_imposed
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom boolean states the legal absence of a South Dakota personal income tax for a natural-person resident. PolicyEngine has no active South Dakota individual-income-tax imposition variable.
+
+  - legal_id: us-sd:policies/income_tax/2026_resident_zero_liability#sd_pit_2026_deduction_and_exemption_stage_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This output states that no South Dakota personal-income-tax deduction or exemption stage applies because no natural-person personal income tax is imposed. PolicyEngine exposes no corresponding non-applicability predicate.
+
+  - legal_id: us-sd:policies/income_tax/2026_resident_zero_liability#sd_pit_2026_surtax_stage_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This output states that no South Dakota personal-income-tax surtax stage applies. PolicyEngine exposes no South Dakota personal-income-tax surtax-stage applicability variable.
+
+  - legal_id: us-sd:policies/income_tax/2026_resident_zero_liability#sd_pit_2026_resident_personal_income_tax_before_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns exact zero before credits as the legal consequence of South Dakota's absence of a natural-person personal income tax. PolicyEngine has no active South Dakota before-credit personal-income-tax variable.
+
+  - legal_id: us-sd:policies/income_tax/2026_resident_zero_liability#sd_pit_2026_nonrefundable_credit_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed Axiom hold records that complete tax-year-2026 South Dakota nonrefundable-credit authority is not pinned. PolicyEngine exposes no source-completeness judgment for that legal surface.
+
+  - legal_id: us-sd:policies/income_tax/2026_resident_zero_liability#sd_pit_2026_resident_personal_income_tax_after_nonrefundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns a fail-closed zero sentinel while the nonrefundable-credit source hold remains active; it does not substantively assert a complete after-credit amount. PolicyEngine has no corresponding held South Dakota output.
+
+  - legal_id: us-sd:policies/income_tax/2026_resident_zero_liability#sd_pit_2026_refundable_credit_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed Axiom hold records that the pinned no-personal-income-tax authority does not prove the absence of independently refundable tax-year-2026 South Dakota credits. PolicyEngine exposes no corresponding source-completeness judgment.
+
+  - legal_id: us-sd:policies/income_tax/2026_resident_zero_liability#sd_pit_2026_resident_refundable_personal_income_tax_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns a fail-closed zero sentinel while the refundable-credit source hold remains active; it does not substantively assert that South Dakota refundable credits equal zero. PolicyEngine has no corresponding held output.
+
+  - legal_id: us-sd:policies/income_tax/2026_resident_zero_liability#sd_pit_2026_net_liability_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed Axiom hold records that credit ordering and complete signed net-liability authority remain unresolved. PolicyEngine exposes no source-completeness judgment for that boundary.
+
+  - legal_id: us-sd:policies/income_tax/2026_resident_zero_liability#sd_pit_2026_resident_net_personal_income_tax_liability_before_payments
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns a fail-closed zero sentinel while the net-liability source hold remains active; it does not substantively assert complete signed net liability. PolicyEngine exposes no corresponding held South Dakota liability output.
 
 
 prefixes:
