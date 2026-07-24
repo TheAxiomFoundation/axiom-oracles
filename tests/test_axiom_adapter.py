@@ -2,6 +2,7 @@ import json
 import subprocess
 from pathlib import Path
 
+import pytest
 import yaml
 
 from axiom_oracles.adapters.axiom import (
@@ -17,12 +18,20 @@ from axiom_oracles.comparison.mappings import comparable_mappings, load_program_
 from axiom_oracles.core.case import Case, Concepts, Entity
 
 
+@pytest.fixture(autouse=True)
+def _isolated_rulespec_roots(monkeypatch, tmp_path):
+    """Keep unit tests off the machine's real supervised layout: with no
+    isolation, the adapter's default root resolution finds a real
+    ~/TheAxiomFoundation checkout and stages a filtered copy of it (#296)."""
+    monkeypatch.setenv("AXIOM_RULESPEC_ROOT", str(tmp_path / "no-roots"))
+
+
 def test_axiom_runner_executes_rulespec_program_with_case_inputs(tmp_path: Path) -> None:
     calls = []
 
     def fake_run(args, **kwargs):
         calls.append((args, kwargs))
-        if args[1] == "compile":
+        if args[1] in ("compile", "compile-composed"):
             return subprocess.CompletedProcess(args, 0, stdout="", stderr="")
         request = json.loads(kwargs["input"])
         assert request["queries"][0]["outputs"] == [
@@ -163,7 +172,7 @@ def test_axiom_runner_aliases_unique_local_output_to_qualified_id(
 
 def test_axiom_runner_accepts_explicit_input_records(tmp_path: Path) -> None:
     def fake_run(args, **kwargs):
-        if args[1] == "compile":
+        if args[1] in ("compile", "compile-composed"):
             return subprocess.CompletedProcess(args, 0, stdout="", stderr="")
         request = json.loads(kwargs["input"])
         assert request["dataset"]["inputs"] == [
@@ -285,7 +294,7 @@ def test_axiom_runner_selects_best_input_overlay_candidate(tmp_path: Path) -> No
 
     def fake_run(args, **kwargs):
         calls.append((args, kwargs))
-        if args[1] == "compile":
+        if args[1] in ("compile", "compile-composed"):
             return subprocess.CompletedProcess(args, 0, stdout="", stderr="")
         request = json.loads(kwargs["input"])
         itemization_records = [
@@ -381,7 +390,7 @@ def test_axiom_runner_selects_best_input_overlay_candidate(tmp_path: Path) -> No
 def test_axiom_runner_records_execution_errors_per_case(tmp_path: Path) -> None:
     def fake_run(args, **kwargs):
         del kwargs
-        if args[1] == "compile":
+        if args[1] in ("compile", "compile-composed"):
             return subprocess.CompletedProcess(args, 0, stdout="", stderr="")
         return subprocess.CompletedProcess(
             args,
@@ -412,7 +421,7 @@ def test_axiom_runner_can_prune_inputs_not_consumed_by_generated_program(
 
     def fake_run(args, **kwargs):
         calls.append((args, kwargs))
-        if args[1] == "compile":
+        if args[1] in ("compile", "compile-composed"):
             output_path = Path(args[args.index("--output") + 1])
             output_path.write_text(
                 json.dumps(
@@ -548,11 +557,21 @@ def test_axiom_runner_writes_generated_program_rules(tmp_path: Path) -> None:
 
     def fake_run(args, **kwargs):
         calls.append((args, kwargs))
-        if args[1] == "compile":
+        if args[1] in ("compile", "compile-composed"):
             program_path = Path(args[args.index("--program") + 1])
             program = yaml.safe_load(program_path.read_text())
+            # Post-hard-cut engines compile the composition-form twin (the
+            # module.kind mapping makes the out-of-root generated program
+            # acceptable to compile-composed, #296); the payload is otherwise
+            # the legacy generated program unchanged.
             assert program == {
                 "format": "rulespec/v1",
+                "module": {
+                    "kind": "composition",
+                    "summary": (
+                        "axiom-oracles generated oracle-bridge program (generated)"
+                    ),
+                },
                 "imports": ["us:statutes/26/example"],
                 "rules": [
                     {
@@ -644,7 +663,7 @@ def test_axiom_runner_writes_generated_program_rules(tmp_path: Path) -> None:
     )
 
     assert result.errors == ()
-    assert [call[0][1] for call in calls] == ["compile", "run-compiled"]
+    assert [call[0][1] for call in calls] == ["compile-composed", "run-compiled"]
 
 
 def test_axiom_runner_writes_generated_program_under_canonical_target(
@@ -654,13 +673,16 @@ def test_axiom_runner_writes_generated_program_under_canonical_target(
 
     def fake_run(args, **kwargs):
         calls.append((args, kwargs))
-        if args[1] == "compile":
+        if args[1] in ("compile", "compile-composed"):
             program_path = Path(args[args.index("--program") + 1])
-            assert program_path.parts[-3:] == (
-                "rulespec-us",
-                "tax",
-                "oracle-bridge.yaml",
+            # The new-engine attempt compiles the composition-form twin at the
+            # temp root; the legacy generated program still lands under its
+            # canonical target path for the old-engine fallback (#296).
+            assert program_path.name == "generated-program.composed.yaml"
+            legacy_program = (
+                program_path.parent / "rulespec-us" / "tax" / "oracle-bridge.yaml"
             )
+            assert legacy_program.exists()
             output_path = Path(args[args.index("--output") + 1])
             output_path.write_text(
                 json.dumps(
@@ -744,7 +766,7 @@ def test_axiom_runner_writes_generated_program_under_canonical_target(
     assert result.values == {
         "us:tax/oracle-bridge#taxable_income": 0
     }
-    assert [call[0][1] for call in calls] == ["compile", "run-compiled"]
+    assert [call[0][1] for call in calls] == ["compile-composed", "run-compiled"]
 
 
 def test_axiom_tax_concept_is_comparable_to_policyengine() -> None:
@@ -954,3 +976,118 @@ def test_cli_builds_generated_tax_axiom_runner_for_state_income_tax() -> None:
     assert "deduction_provided_in_section_199A" in generated_rule_names
     assert "us:statutes/26/24/d" not in US_TAX_ORACLE_IMPORTS
     assert "us:statutes/26/63" not in US_TAX_ORACLE_IMPORTS
+
+
+def test_output_aliases_map_qualified_requests_to_bare_artifact_ids(tmp_path):
+    """Originless compile-composed programs (compose output, the generated
+    oracle bridge) compile rules under BARE ids while the concept map requests
+    the qualified `module#name` form — the alias layer must bridge that
+    direction too, but only on an unambiguous local-name match (#296)."""
+    from axiom_oracles.adapters.axiom.runner import _output_aliases_from_artifact
+
+    artifact = tmp_path / "program.compiled.json"
+    artifact.write_text(
+        json.dumps(
+            {
+                "program": {
+                    "derived": [
+                        # Post-hard-cut engines emit generated rules with a
+                        # bare name and NO id field at all.
+                        {"name": "state_income_tax"},
+                        {"id": "dup_name", "name": "ambiguous"},
+                        {"id": "us:x/y#ambiguous", "name": "ambiguous"},
+                    ]
+                }
+            }
+        )
+    )
+    aliases = _output_aliases_from_artifact(
+        [
+            "us:tax/oracle-bridge#state_income_tax",
+            "us:tax/oracle-bridge#ambiguous",
+            "us:x/y#ambiguous",
+        ],
+        artifact,
+    )
+    assert aliases == {
+        "us:tax/oracle-bridge#state_income_tax": "state_income_tax"
+    }
+
+
+def test_candidate_selection_sees_remapped_bare_ids(tmp_path: Path) -> None:
+    """The overlay-candidate path must remap bare artifact ids onto the
+    qualified result-selection output BEFORE selection runs — engine-main
+    compile-composed artifacts key values bare, and selection previously read
+    only the qualified id off raw candidates, yielding None for every case
+    (#296)."""
+    calls = []
+
+    def fake_run(args, **kwargs):
+        calls.append((args, kwargs))
+        if args[1] in ("compile", "compile-composed"):
+            output_path = Path(args[args.index("--output") + 1])
+            output_path.write_text(
+                json.dumps(
+                    {
+                        "program": {
+                            "derived": [
+                                {"id": "state_income_tax", "name": "state_income_tax"}
+                            ],
+                            "parameters": [],
+                            "relations": [],
+                        }
+                    }
+                )
+            )
+            return subprocess.CompletedProcess(args, 0, stdout="", stderr="")
+        request = json.loads(kwargs["input"])
+        assert request["queries"][0]["outputs"] == ["state_income_tax"]
+        return subprocess.CompletedProcess(
+            args,
+            0,
+            stdout=json.dumps(
+                {
+                    "results": [
+                        {
+                            "outputs": {
+                                "state_income_tax": {
+                                    "kind": "scalar",
+                                    "value": {"kind": "integer", "value": 1234},
+                                }
+                            }
+                        }
+                    ]
+                }
+            ),
+            stderr="",
+        )
+
+    runner = AxiomRulesRunner(
+        binary_path=tmp_path / "axiom-rules",
+        program_imports=("us:statutes/26/1",),
+        subprocess_run=fake_run,
+    )
+    case = Case(
+        case_id="case-1",
+        period="2026",
+        metadata={
+            "axiom_inputs": {"us:statutes/26/1#input.agi": 50_000},
+            "axiom_input_record_overlays": [
+                [{"name": "us:statutes/26/1#input.filing", "entity": "TaxUnit",
+                  "entity_id": "tax_unit", "value": 1}],
+                [{"name": "us:statutes/26/1#input.filing", "entity": "TaxUnit",
+                  "entity_id": "tax_unit", "value": 2}],
+            ],
+            "axiom_result_selection": {
+                "strategy": "min",
+                "output": "us:tax/oracle-bridge#state_income_tax",
+            },
+        },
+    )
+
+    [result] = runner.run_cases(
+        [case], ["us:tax/oracle-bridge#state_income_tax"]
+    )
+
+    assert result.errors == ()
+    assert result.values["us:tax/oracle-bridge#state_income_tax"] == 1234.0

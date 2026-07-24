@@ -188,6 +188,12 @@ def test_stamp_preserves_insertion_order(tmp_path):
 
 def test_build_run_provenance_threads_rulespecs_and_oracle(tmp_path, monkeypatch):
     run_comparison = _load_run_comparison()
+    # Hermetic: ssi-ecps is a real mapped suite, so the affected-map completion
+    # would otherwise fill the sha from this machine's supervised checkout —
+    # this test pins the declared-roots threading, so nothing may resolve.
+    import axiom_oracles.provenance as provenance
+
+    monkeypatch.setattr(provenance, "resolve_rulespec_checkout", lambda slug: None)
     output = tmp_path / "r.json"
     output.write_text(json.dumps({"suite": "ssi-ecps"}))
     config = {
@@ -252,3 +258,50 @@ def test_direct_de_oracle_provenance_has_both_engines_and_no_rulespecs(
         "gettsim_version": "1.2.1",
         "gettsim_policy_date": "2025-06-30",
     }
+
+
+def test_resolve_rulespec_checkout_prefers_git_bearing_candidates(
+    monkeypatch, tmp_path
+):
+    """The resolver walks the supervised-layout conventions and prefers the
+    first candidate that can actually prove a SHA — an rsync'd root without
+    .git is a last resort, never a silent winner over a real checkout."""
+    from axiom_oracles import provenance
+
+    home = tmp_path
+    monkeypatch.setattr(Path, "home", classmethod(lambda cls: home))
+    rsync_copy = home / ".axiom-oracles" / "roots" / "rulespec-us"
+    rsync_copy.mkdir(parents=True)
+    org_checkout = home / "TheAxiomFoundation" / "rulespec-us"
+    org_checkout.mkdir(parents=True)
+
+    monkeypatch.setattr(
+        provenance,
+        "_git_sha",
+        lambda path: "e" * 40 if path == org_checkout else None,
+    )
+    assert provenance.resolve_rulespec_checkout(
+        "TheAxiomFoundation/rulespec-us"
+    ) == org_checkout
+
+    # Without any git-bearing candidate the first existing path still returns
+    # (its SHA will be None — the selector's conservative reading survives).
+    monkeypatch.setattr(provenance, "_git_sha", lambda path: None)
+    assert provenance.resolve_rulespec_checkout(
+        "TheAxiomFoundation/rulespec-us"
+    ) == org_checkout
+
+    assert provenance.resolve_rulespec_checkout("TheAxiomFoundation/rulespec-nz") is None
+
+
+def test_resolve_rulespec_checkout_walks_uk_official_alias(monkeypatch, tmp_path):
+    from axiom_oracles import provenance
+
+    home = tmp_path
+    monkeypatch.setattr(Path, "home", classmethod(lambda cls: home))
+    official = home / "rulespec-uk-official"
+    official.mkdir(parents=True)
+    monkeypatch.setattr(provenance, "_git_sha", lambda path: "f" * 40)
+    assert provenance.resolve_rulespec_checkout(
+        "TheAxiomFoundation/rulespec-uk"
+    ) == official

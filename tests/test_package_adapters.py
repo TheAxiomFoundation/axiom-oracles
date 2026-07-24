@@ -251,3 +251,29 @@ def test_prd_package_runner_wraps_external_prd_households() -> None:
     assert results[0].engine == "prd"
     assert results[0].household_id == "case-1"
     assert results[0].values == {"value.snap": 120}
+
+
+def test_taxsim_installed_binary_path_walks_sys_path_archive_roots(
+    monkeypatch, tmp_path
+):
+    """uv `--with` overlay envs put the wheel's share/ data files in a cached
+    archive root while sys.prefix points at a bare temp dir — the resolver
+    must find the bundled binary through the site-packages entries (#296)."""
+    from axiom_oracles.adapters.taxsim import pins
+
+    site = tmp_path / "archive" / "lib" / "python3.14" / "site-packages"
+    site.mkdir(parents=True)
+    exe = (
+        tmp_path
+        / "archive"
+        / "share"
+        / "policyengine_taxsim"
+        / "taxsimtest"
+        / "taxsimtest-osx.exe"
+    )
+    exe.parent.mkdir(parents=True)
+    exe.touch()
+    monkeypatch.setattr(pins.sys, "path", [str(site)])
+    monkeypatch.setattr(pins.sys, "prefix", str(tmp_path / "empty-prefix"))
+    monkeypatch.setattr(pins.sys, "base_prefix", str(tmp_path / "empty-prefix"))
+    assert pins.installed_binary_path("darwin") == exe

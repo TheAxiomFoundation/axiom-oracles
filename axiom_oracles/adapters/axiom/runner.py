@@ -19,6 +19,12 @@ from ...core.engine import EngineAdapter
 from ...core.household import Household
 from ...core.results import EngineResult
 from ...core.case import Case
+from ...engine_compat import (
+    StagedRootCache,
+    compile_with_engine,
+    explicit_engine_roots,
+    import_prefixes,
+)
 
 
 SubprocessRun = Callable[..., subprocess.CompletedProcess[str]]
@@ -77,6 +83,7 @@ class AxiomRulesRunner(EngineAdapter):
         self.prune_unsupported_inputs = prune_unsupported_inputs
         self.batch_size = batch_size
         self._subprocess_run = subprocess_run
+        self._staged_roots: StagedRootCache | None = None
 
     def run_cases(
         self,
@@ -91,7 +98,18 @@ class AxiomRulesRunner(EngineAdapter):
             temp_path = Path(temp_dir)
             program_path = self._program_path(temp_path)
             artifact_path = self._artifact_path(temp_path, program_path)
-            output_aliases = _output_aliases_from_artifact(output_targets, artifact_path)
+            # Aliases cover per-case result-selection outputs too: candidate
+            # selection reads its (often qualified) output id off candidate
+            # values before the final remap, so bare-id artifact values must
+            # be re-keyed at the candidate level (#296).
+            output_aliases = _output_aliases_from_artifact(
+                list(
+                    dict.fromkeys(
+                        [*output_targets, *_result_selection_outputs(cases)]
+                    )
+                ),
+                artifact_path,
+            )
             execution_targets = [
                 output_aliases.get(output, output) for output in output_targets
             ]
@@ -104,12 +122,14 @@ class AxiomRulesRunner(EngineAdapter):
                 execution_targets,
                 cases,
                 allowed_program_refs,
+                output_aliases=output_aliases,
             )
             results = self._run_cases(
                 cases,
                 execution_targets,
                 artifact_path,
                 allowed_program_refs=allowed_program_refs,
+                output_aliases=output_aliases,
             )
             return [
                 _remap_output_aliases(result, output_aliases) for result in results
@@ -157,24 +177,86 @@ class AxiomRulesRunner(EngineAdapter):
                 "AXIOM_RULESPEC_PROGRAM."
             )
         artifact_path = temp_dir / "program.compiled.json"
-        process = self._subprocess_run(
-            [
-                str(self.binary_path),
-                "compile",
-                "--program",
-                str(program_path),
-                "--output",
-                str(artifact_path),
-            ],
-            env=self._compile_env(),
-            text=True,
-            capture_output=True,
-            check=False,
+        program_doc = self._load_program_doc(program_path)
+        imports = [
+            entry
+            for entry in (program_doc.get("imports") or [])
+            if isinstance(entry, str)
+        ]
+        # Post-hard-cut engines refuse a program outside every configured root
+        # under `compile`; out-of-root programs (this adapter's generated
+        # oracle bridge, compose output) must be `module.kind: composition`
+        # and go through `compile-composed`. The generated program is emitted
+        # in legacy shape for old engines — write the composition-form twin
+        # for the new-engine attempt.
+        composed = (program_doc.get("module") or {}).get("kind") == "composition"
+        compile_program_path = Path(program_path)
+        legacy_program_path = Path(program_path)
+        if not composed and self.program_imports:
+            compile_program_path = temp_dir / "generated-program.composed.yaml"
+            compile_program_path.write_text(
+                yaml.safe_dump(
+                    {
+                        "format": program_doc.get("format", "rulespec/v1"),
+                        "module": {
+                            "kind": "composition",
+                            "summary": (
+                                "axiom-oracles generated oracle-bridge program "
+                                f"({self.generated_program_target or 'generated'})"
+                            ),
+                        },
+                        "imports": program_doc.get("imports") or [],
+                        "rules": program_doc.get("rules") or [],
+                    },
+                    sort_keys=False,
+                )
+            )
+            composed = True
+        roots = explicit_engine_roots(
+            list(self.rulespec_repo_roots) or list(_default_rulespec_repo_roots()),
+            program=None if composed else compile_program_path,
         )
-        if process.returncode != 0:
-            stderr = process.stderr.strip() or "Axiom RuleSpec compile failed"
-            raise RuntimeError(stderr)
+        # The engine requires a root's top level to hold only jurisdiction
+        # dirs; upstream rulespec-us also carries programs/ and repo plumbing,
+        # so compile against staged filtered copies. An atomic in-root program
+        # compiles as its staged twin so program and root stay consistent.
+        jurisdictions = import_prefixes(imports)
+        staged_roots: list[Path] = []
+        if roots and jurisdictions:
+            if self._staged_roots is None:
+                self._staged_roots = StagedRootCache()
+            for root in roots:
+                staged = self._staged_roots.staged(root, jurisdictions)
+                staged_roots.append(staged)
+                if not composed:
+                    try:
+                        relative = compile_program_path.resolve().relative_to(
+                            root.resolve()
+                        )
+                    except ValueError:
+                        continue
+                    staged_twin = staged / relative
+                    if staged_twin.exists():
+                        compile_program_path = staged_twin
+        compile_with_engine(
+            self.binary_path,
+            compile_program_path,
+            artifact_path,
+            roots=staged_roots or roots,
+            composed=composed,
+            env=self._compile_env(),
+            legacy_program=legacy_program_path,
+            run=self._subprocess_run,
+        )
         return artifact_path
+
+    @staticmethod
+    def _load_program_doc(program_path: Path) -> dict:
+        try:
+            doc = yaml.safe_load(Path(program_path).read_text())
+        except (OSError, yaml.YAMLError):
+            return {}
+        return doc if isinstance(doc, dict) else {}
 
     def _run_case(
         self,
@@ -183,17 +265,21 @@ class AxiomRulesRunner(EngineAdapter):
         artifact_path: Path,
         *,
         allowed_program_refs: "_AllowedProgramRefs | None" = None,
+        output_aliases: Mapping[str, str] | None = None,
     ) -> EngineResult:
         period = _period_for_case(case)
         input_record_overlays = _case_input_record_overlays(case, period)
         if input_record_overlays:
             candidate_results = [
-                self._run_case_once(
-                    case,
-                    output_targets,
-                    artifact_path,
-                    allowed_program_refs=allowed_program_refs,
-                    input_record_overlay=overlay,
+                _remap_output_aliases(
+                    self._run_case_once(
+                        case,
+                        output_targets,
+                        artifact_path,
+                        allowed_program_refs=allowed_program_refs,
+                        input_record_overlay=overlay,
+                    ),
+                    output_aliases or {},
                 )
                 for overlay in input_record_overlays
             ]
@@ -212,6 +298,7 @@ class AxiomRulesRunner(EngineAdapter):
         artifact_path: Path,
         *,
         allowed_program_refs: "_AllowedProgramRefs | None" = None,
+        output_aliases: Mapping[str, str] | None = None,
     ) -> list[EngineResult]:
         if not output_targets:
             return [
@@ -238,6 +325,7 @@ class AxiomRulesRunner(EngineAdapter):
                     output_targets,
                     artifact_path,
                     allowed_program_refs=allowed_program_refs,
+                    output_aliases=output_aliases,
                 )
                 for case in cases
             ]
@@ -253,6 +341,16 @@ class AxiomRulesRunner(EngineAdapter):
                 ],
             )
             for index in range(overlay_count)
+        ]
+        # Candidate selection reads its output id off each candidate's values
+        # — remap bare artifact ids to the requested aliases BEFORE selection,
+        # not only on the final results (#296).
+        candidate_batches = [
+            [
+                _remap_output_aliases(result, output_aliases or {})
+                for result in candidate_batch
+            ]
+            for candidate_batch in candidate_batches
         ]
         return [
             _select_candidate_result(
@@ -679,12 +777,34 @@ def _output_aliases_from_artifact(
             continue
         name = derived.get("name")
         identifier = derived.get("id")
-        if isinstance(name, str) and isinstance(identifier, str):
-            local_to_ids.setdefault(name, []).append(identifier)
+        if not isinstance(name, str):
+            continue
+        # Post-hard-cut engines key an originless program's generated rules by
+        # bare name with NO id field; queries match that name (#296).
+        if not isinstance(identifier, str) or not identifier:
+            identifier = name
+        local_to_ids.setdefault(name, []).append(identifier)
 
+    all_ids = {
+        identifier
+        for identifiers in local_to_ids.values()
+        for identifier in identifiers
+    }
     aliases: dict[str, str] = {}
     for output in output_targets:
         if ":" in output or "#" in output:
+            # The symmetric case: an originless compile-composed program
+            # (compose output, the generated oracle bridge) carries BARE rule
+            # ids, while the concept map requests the qualified
+            # `module#name` form. When the artifact lacks the qualified id
+            # but holds the fragment's local name unambiguously, query the
+            # bare id and remap the result back (#296).
+            if output in all_ids:
+                continue
+            local_name = output.rsplit("#", 1)[-1]
+            identifiers = local_to_ids.get(local_name, [])
+            if len(identifiers) == 1:
+                aliases[output] = identifiers[0]
             continue
         identifiers = local_to_ids.get(output, [])
         if len(identifiers) == 1:
@@ -720,8 +840,14 @@ def _execution_output_targets(
     output_targets: list[str],
     cases: list[Case],
     allowed_program_refs: "_AllowedProgramRefs | None",
+    *,
+    output_aliases: Mapping[str, str] | None = None,
 ) -> list[str]:
-    outputs = list(dict.fromkeys([*output_targets, *_result_selection_outputs(cases)]))
+    aliases = output_aliases or {}
+    selection_outputs = [
+        aliases.get(output, output) for output in _result_selection_outputs(cases)
+    ]
+    outputs = list(dict.fromkeys([*output_targets, *selection_outputs]))
     if allowed_program_refs is None:
         return outputs
     return [output for output in outputs if allowed_program_refs.accepts_output(output)]
@@ -1128,6 +1254,11 @@ def _allowed_program_refs_from_artifact(artifact_path: Path) -> _AllowedProgramR
             continue
         if isinstance(derived.get("id"), str):
             public_values.add(derived["id"])
+        # Post-hard-cut engines emit generated rules with a bare name and no
+        # id — those names are queryable outputs and must survive pruning
+        # (#296).
+        if isinstance(derived.get("name"), str):
+            public_values.add(derived["name"])
         _collect_input_slots(derived.get("expr"), input_slots)
     for parameter in program.get("parameters", []):
         if not isinstance(parameter, Mapping):
