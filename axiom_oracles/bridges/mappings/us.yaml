@@ -28498,6 +28498,13 @@ mappings:
     candidate_priority: P4
     rationale: This typed hold records that the complete TY2026 Alabama income-base and modification authority is unavailable. It is source-readiness metadata rather than a substantive tax variable modeled by PolicyEngine.
 
+  - legal_id: us-al:policies/income_tax/2026_resident_liability_source_hold#al_pit_2026_october_amendments_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold records that the pinned Code pages flag October 1, 2026 amendments to Alabama deductions and exemptions but do not contain Acts 2026-604 and 2026-603 or their revised language. It is temporal source-readiness metadata with no PolicyEngine analog.
+
   - legal_id: us-al:policies/income_tax/2026_resident_liability_source_hold#al_pit_2026_deduction_and_exemption_source_hold_applies
     country: us
     program: tax
