@@ -339,3 +339,36 @@ def test_snap_qc_skip_reemit_never_resolves_recorded_root(tmp_path, monkeypatch)
     config["runner"].pop("_reemitted_report")
     block = run_comparison._build_run_provenance(config, "snap-qc-compare", output)
     assert block.get("rulespecs"), "real runs still record the root they used"
+
+
+def test_reemit_strips_shas_from_explicitly_configured_roots(tmp_path):
+    """NEGATIVE (cross-family review round 2): a suite that CONFIGURES
+    rulespec_root(s) bypasses the recorded-root special case — the general
+    path collection would still resolve the checkout's current SHA on a skip.
+    The re-emit flag must strip SHAs from every rulespec entry, whatever path
+    produced it (#296)."""
+    run_comparison = _load_run_comparison()
+    checkout = tmp_path / "rulespec-us"
+    checkout.mkdir()
+    import subprocess as sp
+
+    sp.run(["git", "init", "-q", str(checkout)], check=True)
+    sp.run(["git", "-C", str(checkout), "commit", "-q", "--allow-empty",
+            "-m", "x"], check=True,
+           env={**__import__("os").environ,
+                "GIT_AUTHOR_NAME": "t", "GIT_AUTHOR_EMAIL": "t@t",
+                "GIT_COMMITTER_NAME": "t", "GIT_COMMITTER_EMAIL": "t@t"})
+    output = tmp_path / "r.json"
+    output.write_text(json.dumps({"suite": "az-snap-qc"}))
+    config = {
+        "name": "az-snap-qc",
+        "runner": {
+            "type": "snap-qc-compare",
+            "_reemitted_report": True,
+            "rulespec_root": str(checkout),
+            "parameters": {"jurisdiction": "us-az", "fiscal_year": 2024},
+        },
+    }
+    block = run_comparison._build_run_provenance(config, "snap-qc-compare", output)
+    for entry in block.get("rulespecs", []):
+        assert entry.get("sha") is None, entry

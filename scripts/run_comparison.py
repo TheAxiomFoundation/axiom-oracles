@@ -772,6 +772,12 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
         "axiom-oracles-compare",
     ):
         rulespecs = _complete_rulespecs_from_affected_map(config, runner, rulespecs)
+    # A skip-capable runner that re-emitted the committed report never
+    # executed any rules this run — no matter which path produced a rulespec
+    # entry (configured roots included), its SHA must not be recorded, or the
+    # selector would mark rules-stale numbers fresh (#296 review).
+    if runner.get("_reemitted_report"):
+        rulespecs = [{**entry, "sha": None} for entry in rulespecs]
 
     # Engine identity (Axiom side under test).
     axiom_rules_ref = runner.get("axiom_rules_repo") or params.get("axiom_rules_repo")
@@ -1753,6 +1759,10 @@ def _run_euromod_synthetic_compare(runner: dict, output: Path) -> None:
             if (model_root is None or not model_root.exists())
             else "EUROMOD_PYTHON unset"
         )
+        # Re-emits must never be stamped fresh: with rulespec checkouts now
+        # materialized in CI, resolving any configured root would relabel
+        # skipped numbers with current SHAs (#296 review).
+        runner["_reemitted_report"] = True
         committed = DASHBOARD_DATA_DIR / runner.get("dashboard_filename", "")
         dashboard_filename = params.get("dashboard_filename")
         if dashboard_filename:
@@ -1978,6 +1988,8 @@ def _run_gettsim_synthetic_compare(runner: dict, output: Path) -> None:
     params = runner["parameters"]
     skip_reason, model_root = _gettsim_synthetic_skip_reason(params)
     if skip_reason is not None or model_root is None:
+        # See the euromod runner: re-emits must never be stamped fresh.
+        runner["_reemitted_report"] = True
         _reemit_gettsim_synthetic_report(
             params,
             output,
