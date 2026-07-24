@@ -28591,6 +28591,114 @@ mappings:
     candidate_priority: P4
     rationale: Axiom's signed net-liability output is deliberately zero while the annual income, deduction, tax, and credit chain remains source held; it must not be interpreted as zero Arizona tax. PolicyEngine az_income_tax is a completed modeled liability.
 
+  # The District's TY2026 resident module intentionally stops after a bounded
+  # adjusted-gross-income surface.  Its later annual stages are typed holds
+  # and fail-closed sentinels until final D-40 materials are available.  Exact
+  # entries keep every output in tax-scoped coverage without treating those
+  # sentinels as zero tax or as PolicyEngine equivalents.
+  - legal_id: us-dc:policies/income_tax/2026_resident_liability_source_hold#dc_pit_2026_filing_status_is_valid
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom validates that exactly one of its four District filing-status input flags is selected. PolicyEngine uses its own categorical filing-status input and exposes no equivalent RuleSpec input-contract predicate.
+
+  - legal_id: us-dc:policies/income_tax/2026_resident_liability_source_hold#dc_pit_2026_input_domain_is_valid
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom's fail-closed input-domain gate requires full-year District residence, aligned federal and District filing units, a valid filing status, and nonnegative exclusion inputs. PolicyEngine exposes no one-to-one validation output for that contract.
+
+  - legal_id: us-dc:policies/income_tax/2026_resident_liability_source_hold#dc_pit_2026_supported_income_profile_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom readiness judgment excludes unencoded District additions, above-the-line adjustments, and federal-conformity differences. PolicyEngine computes its modeled DC income modifications directly and has no corresponding bounded-profile applicability variable.
+
+  - legal_id: us-dc:policies/income_tax/2026_resident_liability_source_hold#dc_pit_2026_directly_encoded_gross_income_exclusions
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom aggregates only three directly encoded District exclusions covering United States obligation interest, state or local income-tax refunds, and Social Security or tier-1 railroad benefits. PolicyEngine exposes no variable with exactly that bounded component inventory.
+
+  - legal_id: us-dc:policies/income_tax/2026_resident_liability_source_hold#dc_pit_2026_profile_candidate_adjusted_gross_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: dc_agi
+    candidate_priority: P4
+    rationale: Axiom's private candidate subtracts only its three directly encoded exclusions from supplied federal AGI and is computed before the supported-profile gate. PolicyEngine dc_agi composes its modeled District modifications, so the two values are not one-to-one across the RuleSpec input domain.
+
+  - legal_id: us-dc:policies/income_tax/2026_resident_liability_source_hold#dc_pit_2026_supported_profile_adjusted_gross_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: dc_agi
+    candidate_priority: P4
+    rationale: Axiom publishes its bounded adjusted-gross-income candidate only when the explicit input and supported-profile gates pass, returning zero otherwise. PolicyEngine dc_agi has neither those readiness gates nor the same bounded component inventory.
+
+  - legal_id: us-dc:policies/income_tax/2026_resident_liability_source_hold#dc_pit_2026_deduction_and_exemption_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold records that final TY2026 D-40 deduction and exemption implementation values are unavailable. It is source-readiness metadata, not a District tax variable modeled by PolicyEngine.
+
+  - legal_id: us-dc:policies/income_tax/2026_resident_liability_source_hold#dc_pit_2026_credit_surface_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold records that final TY2026 D-40 credit tables, schedules, and ordering are unavailable. PolicyEngine computes its modeled credits and exposes no corresponding source-readiness judgment.
+
+  - legal_id: us-dc:policies/income_tax/2026_resident_liability_source_hold#dc_pit_2026_complete_liability_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This output combines Axiom's deduction, exemption, credit, and annual-liability source holds. It is a completion-state predicate rather than a tax result with a PolicyEngine analog.
+
+  - legal_id: us-dc:policies/income_tax/2026_resident_liability_source_hold#dc_pit_2026_taxable_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: dc_taxable_income
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while the TY2026 deduction and exemption stage is source held; that zero does not claim completed District taxable income. PolicyEngine dc_taxable_income computes a substantive modeled amount.
+
+  - legal_id: us-dc:policies/income_tax/2026_resident_liability_source_hold#dc_pit_2026_tax_before_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: dc_income_tax_before_credits
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel because its annual taxable-income stage is incomplete; the existing estimated-tax or statutory schedule is not substituted. PolicyEngine's before-credit variable is a substantive modeled tax result.
+
+  - legal_id: us-dc:policies/income_tax/2026_resident_liability_source_hold#dc_pit_2026_tax_after_nonrefundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while final TY2026 credit surfaces and ordering are source held. PolicyEngine computes modeled nonrefundable credits, so no zero-sentinel comparison would be truthful.
+
+  - legal_id: us-dc:policies/income_tax/2026_resident_liability_source_hold#dc_pit_2026_refundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while final TY2026 refundable-credit authority and return implementation are source held. PolicyEngine's modeled refundable-credit amounts are substantive outputs, not readiness sentinels.
+
+  - legal_id: us-dc:policies/income_tax/2026_resident_liability_source_hold#dc_pit_2026_net_income_tax_liability_before_payments
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: dc_income_tax
+    candidate_priority: P4
+    rationale: Axiom's signed net-liability output is deliberately zero while the annual deduction, exemption, and credit chain remains source held; it must not be interpreted as zero District tax. PolicyEngine dc_income_tax is a completed modeled liability.
+
   # South Carolina's 2026 resident core has a mixed oracle surface.  Keep
   # every executable output exact here: otherwise the broad us-sc fallback
   # below falsely reports the whole module as one undifferentiated agency-
