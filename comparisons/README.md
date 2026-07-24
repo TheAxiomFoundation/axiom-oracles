@@ -15,6 +15,39 @@ uv run scripts/run_comparison.py co-snap-qc --summary
 uv run scripts/run_comparison.py uk-universal-credit-efrs --summary
 ```
 
+## CI workspace materialization and the manual lane
+
+The comparison harnesses resolve rulespec checkouts, synced roots, and the
+axiom-compose venv from supervised-layout conventions under `$HOME`
+(`~/TheAxiomFoundation/<repo>`, `~/rulespec-us`, `~/.axiom-oracles/roots`,
+`~/rulespec-uk-official`, `~/axiom-compose/.venv`, `~/axiom-oracles`). Both CI
+workflows materialize that layout per matrix leg with
+`scripts/materialize_ci_workspace.py <registry-name>` — data-driven from
+`affected_map.json` (which repos to clone) and the suite YAML (which
+conventions to link, whether to build the compose venv), skip-if-present so a
+supervised machine is never touched (#296, #300).
+
+Engine compiles follow the post-hard-cut contract via
+`axiom_oracles/engine_compat.py`: explicit repeatable `--rulespec-root` flags
+naming canonical `rulespec-<cc>` checkouts (staged pure — jurisdiction dirs
+only), `compile-composed` for out-of-root compositions (compose output, the
+generated oracle-bridge programs), and a legacy env-resolved fallback for
+pre-hard-cut engine builds on supervised machines.
+
+A suite CI cannot execute at all declares `ci: manual` at the top level of its
+YAML (with a comment saying why and what unblocks it). The affected-map
+generator then emits `name: null`, the 6-hourly selector routes it to the
+manual lane instead of dispatching a doomed leg, and the weekly matrix skips
+it. Its committed report refreshes only via a supervised
+`run_comparison.py` run.
+
+Reports must carry real rulespec SHAs: `provenance.rulespecs[].sha` is what
+`select_affected_suites.py` diffs against repo HEADs, and a `null` SHA means
+"cannot prove fresh" — re-selected every sweep. The always-real runner lanes
+complete missing SHAs from the affected map plus the checkout the run actually
+resolved; skip-capable lanes (euromod/gettsim/snap-qc) are deliberately
+excluded so a re-emitted report is never stamped fresh.
+
 ## How to add a new comparison
 
 Drop a new `<name>.yaml` in this directory matching the schema below. The
@@ -59,13 +92,16 @@ set for a probe that does not belong in the shared grid.
 
 ### `axiom-encode-tax-ecps-compare`
 
-Invokes `axiom-encode tax-populace-compare` (registered as `tax-ecps-compare`
-too — same command) via `uv run`. Builds a release `axiom-rules-engine` binary
-if missing; clones `rulespec-us` fresh into a directory named exactly
-`rulespec-us` (required by the engine import resolver). Honors a `pinned`
-parameter that controls the PolicyEngine version stack. The runner installs the
-local `axiom-encode` checkout with `--with-editable` so comparison configs can
-validate unmerged harness changes before they land.
+Invokes `axiom-encode tax-populace-compare` (renamed from `tax-ecps-compare`
+in the encoder's ECPS→Populace rename; no alias survives on axiom-encode main
+— the runner type keeps the old name so existing suite YAMLs stay valid) via
+`uv run`. Builds a release `axiom-rules-engine` binary if missing; clones
+`rulespec-us` fresh into a directory named exactly `rulespec-us` (required by
+the engine import resolver) and records the clone's HEAD SHA into the report's
+`provenance.rulespecs`. Honors a `pinned` parameter that controls the
+PolicyEngine version stack. The runner installs the local `axiom-encode`
+checkout with `--with-editable` so comparison configs can validate unmerged
+harness changes before they land.
 
 The oracle population is the pinned Populace US artifact (resolved and
 sha256-verified inside axiom-encode; axiom-encode#952). The harness emits a
