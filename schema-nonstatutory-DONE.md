@@ -15,6 +15,8 @@ Completed on branch `fed-parity/federal-grid-suites`.
   sdist/wheel build pass.
 - Verified implementation commit:
   `9e1a4c81031bd50d9b65dfceeb2e3dd275d0aa65`.
+- Final report commit:
+  `251befada9ca1e2bd8a24d5efc98efc3958e1377`.
 
 The complete final report, seven notes, ratchet analysis, gate outputs, and
 commit list are in

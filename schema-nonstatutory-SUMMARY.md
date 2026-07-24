@@ -1,9 +1,10 @@
 # Nonstatutory amount exclusions — final report
 
-Status: complete  
-Branch: `fed-parity/federal-grid-suites`  
-Starting commit: `249adb5ebd01bcb6a44a4f53b8b99bd196745c1b`  
-Verified implementation commit: `9e1a4c81031bd50d9b65dfceeb2e3dd275d0aa65`
+- Status: complete
+- Branch: `fed-parity/federal-grid-suites`
+- Starting commit: `249adb5ebd01bcb6a44a4f53b8b99bd196745c1b`
+- Verified implementation commit:
+  `9e1a4c81031bd50d9b65dfceeb2e3dd275d0aa65`
 
 ## Schema and generator
 
@@ -231,5 +232,7 @@ All final checks passed:
   scope, detail, ratchet, and burndown artifacts.
 - `9e1a4c81031bd50d9b65dfceeb2e3dd275d0aa65` — record the correct 2026-07-24
   UTC snapshots and preserve the prior July 23 history point.
+- `251befada9ca1e2bd8a24d5efc98efc3958e1377` — write the final report,
+  completion marker, and completed progress state.
 
 No pushes, pull requests, or GitHub writes were made.
