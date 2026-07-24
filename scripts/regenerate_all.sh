@@ -38,6 +38,9 @@ done
 # Ship each disposition's prose explanation (evidence.mechanism) so the
 # dashboard can say WHY a class is dispositioned, not just that it is.
 .venv/bin/python scripts/emit_disposition_artifacts.py || echo "!! disposition artifacts failed"
+# Rebundle the front page's single-fetch overview after any report changes
+# (CI gates on its consistency with the manifest).
+.venv/bin/python scripts/generate_dashboard_overview.py || echo "!! overview bundle failed"
 .venv/bin/python -m pytest tests/ -q
 
 if ! git diff --quiet dashboard/public/data; then
