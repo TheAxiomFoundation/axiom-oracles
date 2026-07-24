@@ -28801,7 +28801,7 @@ mappings:
   # person. PolicyEngine therefore has no active Florida individual-income-tax
   # program surface to compare. Exact entries keep every complete legal output
   # in tax-scoped coverage without inventing an oracle variable.
-  - legal_id: us-fl:policies/income_tax/2026_resident_zero_liability#fl_pit_2026_natural_person_income_tax_constitutional_boundary_applies
+  - legal_id: us-fl:policies/income_tax/2026_resident_zero_liability#fl_pit_2026_natural_person_income_tax_constitutional_limit_applies
     country: us
     program: tax
     mapping_type: not_comparable
