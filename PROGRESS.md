@@ -232,3 +232,37 @@ out of scope for this lane. All CI gates (scoreboard/ratchet/apply_dispositions
 
 Issues filed: axiom-oracles#227 (SSI resource screen, FIXED), #228 (SSI v1-slice
 residual), #229 (small-suite grounding).
+
+---
+
+## PR #354 repair — 2026-07-25
+
+### State
+
+- Branch: `fed-parity/federal-grid-suites`; starting HEAD `a5771329`.
+- Target: seven federal suites, no Saver's Credit suite, canonical RuleSpec
+  `3373e8411f7e141fd50879e3de964386f606f7f6` / tree
+  `7e00f195ea81ff9aa21c58d53151e937d974a016`.
+- Required freeze: us-pe 34/127 covered, 0 unexplained, 0 Axiom-attributed;
+  committed ratchet must not regress main's floor of 27.
+- Constraints: local commits only; no pushes/GitHub writes; preserve this
+  load-bearing ledger and all pre-existing suites/reports, including
+  `fiit-ecps`.
+
+### Done
+
+- Read `/private/tmp/review-354-VERDICT.md` in full.
+- Confirmed the worktree was clean at `a5771329`.
+- Confirmed the tracked root `PROGRESS.md` is present and preserved.
+
+### Next
+
+- Reapply the exact Saver's Credit withdrawal shape from `bc500bc4`, retaining
+  issue #9151 evidence only in a harness-valid location.
+- Align the QBID fixture binding with merged RuleSpec main and rerun QBID.
+- Restore canonical SHA/tree verification on every federal config and in the
+  generator; restore the seven-report manifest union.
+- Add PolicyEngine issue #9150 evidence (and #9151 only if its disposition can
+  validly survive), plus the generic nonstatutory schema/README contract.
+- Rerun all seven federal suites and the full 2026-07-25 UTC regeneration and
+  validation battery; write `fix-354-DONE.md` only after every gate passes.
