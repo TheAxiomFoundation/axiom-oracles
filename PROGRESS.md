@@ -232,3 +232,32 @@ out of scope for this lane. All CI gates (scoreboard/ratchet/apply_dispositions
 
 Issues filed: axiom-oracles#227 (SSI resource screen, FIXED), #228 (SSI v1-slice
 residual), #229 (small-suite grounding).
+
+---
+
+# Blind adversarial review: PR #354
+
+## State
+
+Review restarted against live head
+`a577132904328d626b997311a41abdd244c99a47` after the PR was force-updated
+during the audit. The original frozen head was
+`2a41f72297346f422936b28b19bf9f39f87d3cef`. No PR source or remote refs will
+be modified.
+
+## Done
+
+- Verified the original PR base/head through GitHub and created an isolated
+  worktree.
+- Audited the original head's diff, provenance, boundary, counts, ratchet, and
+  dispositions.
+- Ran all ten CI `--check` gates and the full test suite on the original frozen
+  head: `1695 passed, 33 skipped`.
+- Detected and verified the live head change through GitHub; created this second
+  isolated checkout rather than mixing evidence from the two immutable trees.
+
+## Next
+
+- Re-audit the live head's exact shape and artifacts.
+- Re-run the required report comparisons and validation battery on this head.
+- Write `review-354-VERDICT.md`, export it, and remove both throwaway worktrees.
