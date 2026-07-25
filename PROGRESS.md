@@ -323,8 +323,15 @@ residual), #229 (small-suite grounding).
 - Corrected the corrupted 35 ratchet floor to the honest seven-suite floor of
   34, which remains above main's committed floor of 27. All eight derived
   `--check` gates pass after regeneration.
+- Complete validation battery passes: registry listing, rule verification,
+  state-tax Populace contract, all ten CI `--check` gates, Ruff, and full
+  pytest. Pytest result: 1,791 passed / 57 skipped in 169.99 seconds, with the
+  unavailable Node/esbuild dashboard loader taking its designed skip.
+- The conformance-universe gate validated UK and BE and returned its documented
+  clean no-op for local PE-UK/PE-US checkouts whose versions do not match the
+  committed pins; every other gate performed a full check.
 
 ### Next
 
-- Run the remaining complete static-check battery, Ruff, and full pytest; write
-  `fix-354-DONE.md` only after every gate passes.
+- Perform the final scope/provenance/count audit, then write and commit
+  `fix-354-DONE.md`.
