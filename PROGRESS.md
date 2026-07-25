@@ -275,13 +275,18 @@ residual), #229 (small-suite grounding).
   `evidence.upstream_url`.
 - QBID binding validation: 35 targeted generator/disposition tests pass, Ruff
   passes on the touched Python, and the disposition consistency gate passes.
+- Restored the `d3a07de7` canonical-snapshot guard and pinned every one of the
+  seven live federal configs to RuleSpec SHA `3373e841...` / tree
+  `7e00f195...`. The runner now rejects partial pins, noncanonical roots, dirty
+  worktrees, and tree mismatches before execution, then stamps the verified
+  upstream SHA.
+- Provenance validation: 19 targeted tests pass, Ruff passes, and a direct
+  verification of the real configured checkout succeeded for all seven suites.
 
 ### Next
 
-- Restore the canonical SHA/tree guard, then rerun QBID and record its real
-  11-case table.
-- Restore canonical SHA/tree verification on every federal config and in the
-  generator; restore the seven-report manifest union.
+- Rerun QBID against the verified snapshot and record its real 11-case table.
+- Restore the seven-report manifest union.
 - Add PolicyEngine issue #9150 evidence (and #9151 only if its disposition can
   validly survive), plus the generic nonstatutory schema/README contract.
 - Rerun all seven federal suites and the full 2026-07-25 UTC regeneration and

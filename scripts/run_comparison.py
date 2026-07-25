@@ -748,6 +748,16 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
         except Exception:  # provenance must annotate, never fail a run
             pass
     rulespecs = rulespec_provenance(rulespec_paths)
+    verified_upstream_sha = params.get(_VERIFIED_RULESPEC_UPSTREAM_SHA)
+    if verified_upstream_sha and rulespecs:
+        # The federal runner set this private marker only after checking that
+        # the clean local snapshot's tree equals the public upstream tree pin.
+        # Record the merged-main commit whose content ran, not a local
+        # content-equivalent materialization commit.
+        rulespecs = [
+            {**entry, "sha": str(verified_upstream_sha)}
+            for entry in rulespecs
+        ]
     remote = runner.get("rulespec_remote") or params.get("rulespec_remote")
     if remote and not rulespecs:
         from axiom_oracles.provenance import repo_slug_from_remote
@@ -2139,6 +2149,94 @@ def _run_state_income_tax_liability_grid(runner: dict, output: Path) -> None:
     output.write_text(source.read_text())
 
 
+_VERIFIED_RULESPEC_UPSTREAM_SHA = "_verified_rulespec_upstream_sha"
+
+
+def _verify_federal_rulespec_snapshot(
+    params: dict,
+    roots: list[Path],
+) -> None:
+    """Fail closed unless a pinned federal RuleSpec snapshot is exact and clean.
+
+    A sandbox may have the upstream tree through local Git objects even when it
+    cannot fetch the signed GitHub merge commit itself. The pair of public
+    config pins records that upstream commit and its tree. A content-equivalent
+    checkout is acceptable only when its canonical basename is ``rulespec-us``,
+    its working tree is clean, and ``HEAD^{tree}`` equals the pinned upstream
+    tree. Only after those checks do we expose the upstream SHA to the
+    provenance stamper.
+    """
+    upstream_sha = str(params.get("rulespec_upstream_sha") or "").strip()
+    upstream_tree = str(params.get("rulespec_upstream_tree") or "").strip()
+    if not upstream_sha and not upstream_tree:
+        return
+    if not upstream_sha or not upstream_tree:
+        raise SystemExit(
+            "federal-tax-liability-grid requires rulespec_upstream_sha and "
+            "rulespec_upstream_tree together"
+        )
+    if len(roots) != 1:
+        raise SystemExit(
+            "a pinned federal rulespec snapshot requires exactly one "
+            "rulespec_roots entry"
+        )
+    if any(
+        len(value) != 40
+        or any(char not in "0123456789abcdef" for char in value.lower())
+        for value in (upstream_sha, upstream_tree)
+    ):
+        raise SystemExit(
+            "rulespec_upstream_sha and rulespec_upstream_tree must be "
+            "40-character hexadecimal Git object IDs"
+        )
+
+    root = roots[0].resolve()
+    if root.name != "rulespec-us":
+        raise SystemExit(
+            "the pinned federal rulespec snapshot must use the canonical "
+            f"'rulespec-us' basename (got {root})"
+        )
+    try:
+        status = subprocess.run(
+            ["git", "-C", str(root), "status", "--porcelain"],
+            capture_output=True,
+            text=True,
+            check=True,
+        ).stdout
+        local_head = subprocess.run(
+            ["git", "-C", str(root), "rev-parse", "HEAD"],
+            capture_output=True,
+            text=True,
+            check=True,
+        ).stdout.strip()
+        local_tree = subprocess.run(
+            ["git", "-C", str(root), "rev-parse", "HEAD^{tree}"],
+            capture_output=True,
+            text=True,
+            check=True,
+        ).stdout.strip()
+    except (OSError, subprocess.CalledProcessError) as exc:
+        raise SystemExit(
+            f"cannot verify pinned federal rulespec snapshot {root}: {exc}"
+        ) from exc
+    if status.strip():
+        raise SystemExit(
+            f"pinned federal rulespec snapshot {root} has working-tree changes"
+        )
+    if local_tree != upstream_tree:
+        raise SystemExit(
+            "pinned federal rulespec snapshot tree mismatch: "
+            f"expected {upstream_tree}, got {local_tree}"
+        )
+
+    params[_VERIFIED_RULESPEC_UPSTREAM_SHA] = upstream_sha
+    print(
+        "Verified rulespec-us snapshot "
+        f"tree {local_tree[:12]} for upstream main {upstream_sha[:12]} "
+        f"(local HEAD {local_head[:12]})."
+    )
+
+
 def _run_federal_tax_liability_grid(runner: dict, output: Path) -> None:
     """Run one independent federal RuleSpec-fixture vs PolicyEngine case grid.
 
@@ -2190,6 +2288,7 @@ def _run_federal_tax_liability_grid(runner: dict, output: Path) -> None:
         # the checkout that actually ran so it stamps the clone's exact SHA,
         # rather than the missing development-worktree path.
         params["rulespec_roots"] = [str(roots[0])]
+    _verify_federal_rulespec_snapshot(params, roots)
     pins = _resolve_pe_oracle_pins(params)
     generator = REPO_ROOT / "scripts" / "generate_federal_tax_liability.py"
     cmd = [

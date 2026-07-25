@@ -10,6 +10,7 @@ from dataclasses import replace
 from pathlib import Path
 
 import pytest
+import yaml
 
 
 REPO_ROOT = Path(__file__).parents[1]
@@ -35,6 +36,31 @@ def _load_runner():
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
+
+
+def test_every_live_federal_grid_pins_canonical_rulespec_snapshot():
+    upstream_sha = "3373e8411f7e141fd50879e3de964386f606f7f6"
+    upstream_tree = "7e00f195ea81ff9aa21c58d53151e937d974a016"
+    federal_configs = []
+    for path in sorted((REPO_ROOT / "comparisons").glob("*.yaml")):
+        config = yaml.safe_load(path.read_text())
+        runner = config.get("runner") or {}
+        if runner.get("type") != "federal-tax-liability-grid":
+            continue
+        federal_configs.append(path.name)
+        parameters = runner["parameters"]
+        assert parameters["rulespec_upstream_sha"] == upstream_sha, path
+        assert parameters["rulespec_upstream_tree"] == upstream_tree, path
+
+    assert federal_configs == [
+        "us-aca-ptc-grid.yaml",
+        "us-additional-medicare-grid.yaml",
+        "us-elderly-disabled-grid.yaml",
+        "us-llc-grid.yaml",
+        "us-niit-grid.yaml",
+        "us-qbid-grid.yaml",
+        "us-seca-grid.yaml",
+    ]
 
 
 def test_all_eight_contract_grids_are_explicit_and_independent():
@@ -587,6 +613,103 @@ def test_registry_runner_uses_suite_pin_overrides_and_configured_roots(
     assert cmd[cmd.index("--policy") + 1] == "net_investment_income_tax"
     assert cmd[cmd.index("--rulespec-root") + 1] == str(rulespec.resolve())
     assert cmd[cmd.index("--output") + 1] == str(output)
+
+
+def test_registry_verifies_snapshot_tree_and_stamps_upstream_sha(tmp_path):
+    runner = _load_runner()
+    rulespec = tmp_path / "rulespec-us"
+    rulespec.mkdir()
+    subprocess.run(["git", "init", "-q", str(rulespec)], check=True)
+    subprocess.run(
+        ["git", "-C", str(rulespec), "config", "user.email", "test@example.com"],
+        check=True,
+    )
+    subprocess.run(
+        ["git", "-C", str(rulespec), "config", "user.name", "Test"],
+        check=True,
+    )
+    (rulespec / "fixture.yaml").write_text("value: 1\n")
+    subprocess.run(["git", "-C", str(rulespec), "add", "."], check=True)
+    subprocess.run(
+        ["git", "-C", str(rulespec), "commit", "-qm", "snapshot"],
+        check=True,
+    )
+    tree = subprocess.run(
+        ["git", "-C", str(rulespec), "rev-parse", "HEAD^{tree}"],
+        capture_output=True,
+        text=True,
+        check=True,
+    ).stdout.strip()
+    upstream_sha = "a" * 40
+    params = {
+        "rulespec_roots": [str(rulespec)],
+        "rulespec_upstream_sha": upstream_sha,
+        "rulespec_upstream_tree": tree,
+        "policyengine_version": "4.18.9",
+        "policyengine_us_version": "1.767.3",
+        "policyengine_core_version": "3.30.3",
+    }
+
+    runner._verify_federal_rulespec_snapshot(params, [rulespec])
+
+    assert params[runner._VERIFIED_RULESPEC_UPSTREAM_SHA] == upstream_sha
+    output = tmp_path / "report.json"
+    output.write_text('{"suite": "federal-test"}\n')
+    block = runner._build_run_provenance(
+        {
+            "name": "federal-test",
+            "runner": {
+                "type": "federal-tax-liability-grid",
+                "parameters": params,
+            },
+        },
+        "federal-tax-liability-grid",
+        output,
+    )
+    assert block["rulespecs"] == [
+        {
+            "repo": "TheAxiomFoundation/rulespec-us",
+            "sha": upstream_sha,
+        }
+    ]
+
+
+def test_registry_rejects_dirty_or_tree_mismatched_snapshot(tmp_path):
+    runner = _load_runner()
+    rulespec = tmp_path / "rulespec-us"
+    rulespec.mkdir()
+    subprocess.run(["git", "init", "-q", str(rulespec)], check=True)
+    subprocess.run(
+        ["git", "-C", str(rulespec), "config", "user.email", "test@example.com"],
+        check=True,
+    )
+    subprocess.run(
+        ["git", "-C", str(rulespec), "config", "user.name", "Test"],
+        check=True,
+    )
+    (rulespec / "fixture.yaml").write_text("value: 1\n")
+    subprocess.run(["git", "-C", str(rulespec), "add", "."], check=True)
+    subprocess.run(
+        ["git", "-C", str(rulespec), "commit", "-qm", "snapshot"],
+        check=True,
+    )
+    tree = subprocess.run(
+        ["git", "-C", str(rulespec), "rev-parse", "HEAD^{tree}"],
+        capture_output=True,
+        text=True,
+        check=True,
+    ).stdout.strip()
+    params = {
+        "rulespec_upstream_sha": "a" * 40,
+        "rulespec_upstream_tree": "b" * 40,
+    }
+    with pytest.raises(SystemExit, match="tree mismatch"):
+        runner._verify_federal_rulespec_snapshot(params, [rulespec])
+
+    params["rulespec_upstream_tree"] = tree
+    (rulespec / "fixture.yaml").write_text("value: 2\n")
+    with pytest.raises(SystemExit, match="working-tree changes"):
+        runner._verify_federal_rulespec_snapshot(params, [rulespec])
 
 
 def test_registry_runner_clones_declared_remote_when_dev_root_is_absent(
