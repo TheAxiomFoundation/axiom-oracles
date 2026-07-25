@@ -206,6 +206,12 @@
     "axiom-policyengine-vt-income-tax-populace.json",
     "axiom-policyengine-wv-income-tax-populace.json",
     "axiom-spsm-ca-federal-schedule-tax.json",
-    "axiom-policyengine-us-qbid-grid.json"
+    "axiom-policyengine-us-qbid-grid.json",
+    "axiom-policyengine-us-aca-ptc-grid.json",
+    "axiom-policyengine-us-niit-grid.json",
+    "axiom-policyengine-us-seca-grid.json",
+    "axiom-policyengine-us-additional-medicare-grid.json",
+    "axiom-policyengine-us-elderly-disabled-grid.json",
+    "axiom-policyengine-us-llc-grid.json"
   ]
 }

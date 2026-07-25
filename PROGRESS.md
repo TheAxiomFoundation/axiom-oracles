@@ -309,9 +309,14 @@ residual), #229 (small-suite grounding).
 - Restored the generic nonstatutory exclusion contract: schema validation now
   requires a note identifying the governing instrument and why the modeled
   amount is non-statutory, and `conformance/README.md` documents that rule.
+- Reran the other six live federal suites for real against the guarded snapshot:
+  ACA PTC 6/6, Additional Medicare 5/5, elderly/disabled 9/9, LLC 12/12,
+  NIIT 6/6, and SECA 6/6. No expected value changed.
+- The manifest writer preserved all 206 sibling entries and added the seven
+  federal reports exactly once (213 total). All seven reports cite RuleSpec
+  `3373e8411f7e141fd50879e3de964386f606f7f6`.
 
 ### Next
 
-- Restore the seven-report manifest union.
-- Rerun all seven federal suites and the full 2026-07-25 UTC regeneration and
-  validation battery; write `fix-354-DONE.md` only after every gate passes.
+- Run the full 2026-07-25 UTC derived-artifact regeneration and validation
+  battery; write `fix-354-DONE.md` only after every gate passes.

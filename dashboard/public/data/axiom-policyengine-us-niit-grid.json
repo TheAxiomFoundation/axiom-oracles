@@ -317,7 +317,7 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-25T12:11:04Z",
+    "generated_at": "2026-07-25T15:22:23Z",
     "generated_by": "scripts/run_comparison.py::us-niit-grid",
     "oracle": {
       "name": "policyengine",

@@ -553,7 +553,7 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-25T12:11:35Z",
+    "generated_at": "2026-07-25T15:23:20Z",
     "generated_by": "scripts/run_comparison.py::us-elderly-disabled-grid",
     "oracle": {
       "name": "policyengine",
