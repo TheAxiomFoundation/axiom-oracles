@@ -31037,6 +31037,115 @@ mappings:
     candidate_priority: P4
     rationale: This signed-liability zero is a fail-closed sentinel while the annual Colorado chain is held and must not be interpreted as zero tax.
 
+  # Kentucky's TY2026 full-year-resident module is a source-readiness
+  # boundary. Exact P4 mappings keep its source holds and fail-closed
+  # sentinels from being treated as completed Kentucky tax results or compared
+  # with PolicyEngine's projected state-tax outputs.
+  - legal_id: us-ky:policies/income_tax/2026_full_year_resident_source_hold#ky_pit_2026_input_domain_is_valid
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom validates the bounded Kentucky full-year-resident and aligned-filing-unit contract; PolicyEngine exposes no one-to-one predicate.
+
+  - legal_id: us-ky:policies/income_tax/2026_full_year_resident_source_hold#ky_pit_2026_final_return_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that the operative TY2026 Kentucky Form 740 final-return package is absent from the pinned corpus.
+
+  - legal_id: us-ky:policies/income_tax/2026_full_year_resident_source_hold#ky_pit_2026_income_and_modification_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that the complete TY2026 Kentucky income-base, addition, and subtraction chain is not pinned.
+
+  - legal_id: us-ky:policies/income_tax/2026_full_year_resident_source_hold#ky_pit_2026_deduction_and_exemption_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that the complete TY2026 Kentucky final-return deduction, election, and exemption chain is not pinned.
+
+  - legal_id: us-ky:policies/income_tax/2026_full_year_resident_source_hold#ky_pit_2026_tax_and_surtax_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: The regular 3.5 percent rate is official, but this hold records that final-return net income and the complete Kentucky statewide tax surface remain incomplete.
+
+  - legal_id: us-ky:policies/income_tax/2026_full_year_resident_source_hold#ky_pit_2026_nonrefundable_credit_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that complete TY2026 Kentucky nonrefundable-credit eligibility, limitations, ordering, recaptures, and carryforwards are not pinned.
+
+  - legal_id: us-ky:policies/income_tax/2026_full_year_resident_source_hold#ky_pit_2026_refundable_credit_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that complete TY2026 Kentucky refundable-credit eligibility, limitations, ordering, recaptures, and refundability are not pinned.
+
+  - legal_id: us-ky:policies/income_tax/2026_full_year_resident_source_hold#ky_pit_2026_complete_liability_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This completion-state predicate combines Axiom's Kentucky final-return, income, deduction, tax, surtax, and credit source holds.
+
+  - legal_id: us-ky:policies/income_tax/2026_full_year_resident_source_hold#ky_pit_2026_state_income_after_modifications
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while the TY2026 Kentucky income, addition, and subtraction chain is held, not completed state income after modifications.
+
+  - legal_id: us-ky:policies/income_tax/2026_full_year_resident_source_hold#ky_pit_2026_deductions_and_exemptions
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while the Kentucky final-return deduction, election, and exemption chain is held, not a completed deduction amount.
+
+  - legal_id: us-ky:policies/income_tax/2026_full_year_resident_source_hold#ky_pit_2026_taxable_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while Kentucky income, deductions, and exemptions are held, not completed Kentucky taxable or net income.
+
+  - legal_id: us-ky:policies/income_tax/2026_full_year_resident_source_hold#ky_pit_2026_tax_before_credits_including_statewide_surtaxes
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while final-return net income and statewide tax applicability are held, not completed before-credit Kentucky tax.
+
+  - legal_id: us-ky:policies/income_tax/2026_full_year_resident_source_hold#ky_pit_2026_tax_after_nonrefundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while Kentucky nonrefundable-credit authority and ordering are held, not completed after-credit tax.
+
+  - legal_id: us-ky:policies/income_tax/2026_full_year_resident_source_hold#ky_pit_2026_refundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while the Kentucky refundable-credit inventory and ordering are held, not a completed credit amount.
+
+  - legal_id: us-ky:policies/income_tax/2026_full_year_resident_source_hold#ky_pit_2026_net_income_tax_liability_before_payments
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This signed-liability zero is a fail-closed sentinel while the annual Kentucky chain is held and must not be interpreted as zero tax.
+
 prefixes:
   - legal_id_prefix: us-dc:statutes/4/4-205/49#
     country: us
