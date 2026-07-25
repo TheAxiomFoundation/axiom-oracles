@@ -239,11 +239,11 @@ residual), #229 (small-suite grounding).
 
 ## State
 
-Review restarted against live head
+Review complete against live head
 `a577132904328d626b997311a41abdd244c99a47` after the PR was force-updated
 during the audit. The original frozen head was
 `2a41f72297346f422936b28b19bf9f39f87d3cef`. No PR source or remote refs will
-be modified.
+be modified. Verdict: request changes.
 
 ## Done
 
@@ -255,9 +255,25 @@ be modified.
   head: `1695 passed, 33 skipped`.
 - Detected and verified the live head change through GitHub; created this second
   isolated checkout rather than mixing evidence from the two immutable trees.
+- Confirmed the live head adds eight federal suites, retains Saver's Credit,
+  and reports `35/127`, contrary to the required seven-suite `34/127` freeze.
+- Verified six current RuleSpec reports by independent replay; their complete
+  `.cases` match tables are byte-identical to the committed tables.
+- Confirmed QBID cannot replay against RuleSpec main `3373e841...` because its
+  fixture validator expects superseded inputs; the committed report instead
+  cites `dc6602f...`.
+- Confirmed Saver's Credit cannot replay because its fixture no longer exists
+  on RuleSpec main; its committed report also cites `dc6602f...`.
+- Confirmed all federal report entries are absent from the dashboard manifest
+  and both dispositions omit the filed PolicyEngine issue links.
+- Verified the Additional Medicare suite's five cases are wage-only,
+  non-vacuous, and correctly bounded by the RuleSpec fail-closed SE leg and
+  corpus-chain note.
+- Ran all ten CI `--check` gates, lint, registry validation, rule-verification,
+  state-tax contract, and full pytest on the live head. Pytest passed offline
+  as `1786 passed, 57 skipped`; with unusable `npx` visible it instead had one
+  environment-only esbuild download failure after `1787 passed, 55 skipped`.
 
 ## Next
 
-- Re-audit the live head's exact shape and artifacts.
-- Re-run the required report comparisons and validation battery on this head.
 - Write `review-354-VERDICT.md`, export it, and remove both throwaway worktrees.
