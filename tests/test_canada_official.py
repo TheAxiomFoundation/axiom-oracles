@@ -127,21 +127,28 @@ def test_canada_is_a_supported_country_scope() -> None:
     assert scope.as_dict() == {"type": "country", "geoid": "CA"}
 
 
-def test_canada_official_registry_covers_numeric_and_non_numeric_surfaces() -> None:
+def test_canada_official_registry_contains_only_reproducible_numeric_oracles() -> None:
     assert {item.oracle_id for item in ORACLES} == {
         "cra-child-family",
         "cra-pdoc",
-        "cra-gst-hst",
-        "rq-webras",
-        "esdc-ei-estimator",
-        "esdc-retirement-calculator",
-        "esdc-canada-disability-benefit",
-        "canada-benefits-finder",
         "statcan-spsdm",
     }
-    assert get_oracle("cra-pdoc").implemented is True
-    assert get_oracle("canada-benefits-finder").comparison_role == "coverage"
+    assert all(item.implemented for item in ORACLES)
+    assert all(item.comparison_role == "numeric" for item in ORACLES)
+    assert {item.oracle_id for item in ORACLES}.isdisjoint(
+        {
+            "cra-gst-hst",
+            "rq-webras",
+            "esdc-ei-estimator",
+            "esdc-retirement-calculator",
+            "esdc-canada-disability-benefit",
+            "canada-benefits-finder",
+        }
+    )
     assert get_oracle("statcan-spsdm").mode == "licensed_local_model"
+    assert "full-database federal schedule-tax suite" in get_oracle(
+        "statcan-spsdm"
+    ).notes
 
 
 def test_official_comparison_wrapper_does_not_shadow_imported_module(

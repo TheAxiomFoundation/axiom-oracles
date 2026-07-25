@@ -816,6 +816,15 @@ def resolve_program_path(
     cwd_program = Path.cwd() / config.program_relative_path
     if cwd_program.exists():
         return cwd_program.resolve()
+    # The country monorepo's jurisdiction twin is the canonical copy — it is
+    # the only layout post-hard-cut engines can resolve imports from (a state
+    # repo is not a valid engine root) — so prefer it; the standalone state
+    # repo remains the supervised-machine fallback.
+    monorepo_program = (
+        workspace_root / "rulespec-us" / config.jurisdiction / config.program_relative_path
+    )
+    if monorepo_program.exists():
+        return monorepo_program.resolve()
     return (workspace_root / config.repo_name / config.program_relative_path).resolve()
 
 
@@ -1640,23 +1649,52 @@ def compile_program(
     output: Path,
     *,
     env: dict[str, str],
+    workspace_root: Path | None = None,
 ) -> None:
-    result = subprocess.run(
-        [
-            str(binary),
-            "compile",
-            "--program",
-            str(program),
-            "--output",
-            str(output),
-        ],
-        text=True,
-        capture_output=True,
-        check=False,
+    # Post-hard-cut engines take explicit --rulespec-root flags naming
+    # canonical rulespec-<cc> checkouts (staged pure: jurisdiction dirs only)
+    # and compile the composition via compile-composed; older engines reject
+    # both and fall back to the legacy env-resolved `compile` inside
+    # compile_with_engine (#296).
+    from axiom_oracles.engine_compat import (
+        compile_with_engine,
+        explicit_engine_roots,
+        import_prefixes,
+        stage_pure_root,
+    )
+
+    program_doc: dict = {}
+    try:
+        program_doc = yaml.safe_load(Path(program).read_text()) or {}
+    except (OSError, yaml.YAMLError):
+        program_doc = {}
+    composed = (
+        isinstance(program_doc, dict)
+        and (program_doc.get("module") or {}).get("kind") == "composition"
+    )
+    candidates: list[Path | str] = []
+    if workspace_root is not None:
+        candidates.append(workspace_root)
+    roots = explicit_engine_roots(candidates, program=program)
+    jurisdictions = import_prefixes(
+        [e for e in (program_doc.get("imports") or []) if isinstance(e, str)]
+        if isinstance(program_doc, dict)
+        else []
+    )
+    staged_roots: list[Path] = []
+    if roots and jurisdictions:
+        with_stage = tempfile.mkdtemp(prefix="snap-populace-roots-")
+        staged_roots = [
+            stage_pure_root(root, jurisdictions, Path(with_stage)) for root in roots
+        ]
+    compile_with_engine(
+        binary,
+        Path(program),
+        Path(output),
+        roots=staged_roots or roots,
+        composed=composed,
         env=env,
     )
-    if result.returncode != 0:
-        raise RuntimeError(result.stderr.strip() or result.stdout.strip())
 
 
 def run_axiom_cases(
@@ -2053,7 +2091,9 @@ def main(args: argparse.Namespace | None = None) -> int:
     with tempfile.TemporaryDirectory(prefix=config.temp_prefix) as temp_dir:
         artifact = Path(temp_dir) / "program.compiled.json"
         print(f"Compiling {config.display_name} RuleSpec composition...")
-        compile_program(axiom_binary, program, artifact, env=env)
+        compile_program(
+            axiom_binary, program, artifact, env=env, workspace_root=workspace_root
+        )
         print("Running the Axiom rules engine over projected Populace records...")
         results = run_axiom_cases(
             binary=axiom_binary,

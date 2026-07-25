@@ -188,6 +188,12 @@ def test_stamp_preserves_insertion_order(tmp_path):
 
 def test_build_run_provenance_threads_rulespecs_and_oracle(tmp_path, monkeypatch):
     run_comparison = _load_run_comparison()
+    # Hermetic: ssi-ecps is a real mapped suite, so the affected-map completion
+    # would otherwise fill the sha from this machine's supervised checkout —
+    # this test pins the declared-roots threading, so nothing may resolve.
+    import axiom_oracles.provenance as provenance
+
+    monkeypatch.setattr(provenance, "resolve_rulespec_checkout", lambda slug: None)
     output = tmp_path / "r.json"
     output.write_text(json.dumps({"suite": "ssi-ecps"}))
     config = {
@@ -252,3 +258,117 @@ def test_direct_de_oracle_provenance_has_both_engines_and_no_rulespecs(
         "gettsim_version": "1.2.1",
         "gettsim_policy_date": "2025-06-30",
     }
+
+
+def test_resolve_rulespec_checkout_prefers_git_bearing_candidates(
+    monkeypatch, tmp_path
+):
+    """The resolver walks the supervised-layout conventions and prefers the
+    first candidate that can actually prove a SHA — an rsync'd root without
+    .git is a last resort, never a silent winner over a real checkout."""
+    from axiom_oracles import provenance
+
+    home = tmp_path
+    monkeypatch.setattr(Path, "home", classmethod(lambda cls: home))
+    rsync_copy = home / ".axiom-oracles" / "roots" / "rulespec-us"
+    rsync_copy.mkdir(parents=True)
+    org_checkout = home / "TheAxiomFoundation" / "rulespec-us"
+    org_checkout.mkdir(parents=True)
+
+    monkeypatch.setattr(
+        provenance,
+        "_git_sha",
+        lambda path: "e" * 40 if path == org_checkout else None,
+    )
+    assert provenance.resolve_rulespec_checkout(
+        "TheAxiomFoundation/rulespec-us"
+    ) == org_checkout
+
+    # Without any git-bearing candidate the first existing path still returns
+    # (its SHA will be None — the selector's conservative reading survives).
+    monkeypatch.setattr(provenance, "_git_sha", lambda path: None)
+    assert provenance.resolve_rulespec_checkout(
+        "TheAxiomFoundation/rulespec-us"
+    ) == org_checkout
+
+    assert provenance.resolve_rulespec_checkout("TheAxiomFoundation/rulespec-nz") is None
+
+
+def test_resolve_rulespec_checkout_walks_uk_official_alias(monkeypatch, tmp_path):
+    from axiom_oracles import provenance
+
+    home = tmp_path
+    monkeypatch.setattr(Path, "home", classmethod(lambda cls: home))
+    official = home / "rulespec-uk-official"
+    official.mkdir(parents=True)
+    monkeypatch.setattr(provenance, "_git_sha", lambda path: "f" * 40)
+    assert provenance.resolve_rulespec_checkout(
+        "TheAxiomFoundation/rulespec-uk"
+    ) == official
+
+
+def test_snap_qc_skip_reemit_never_resolves_recorded_root(tmp_path, monkeypatch):
+    """NEGATIVE (cross-family review): a snap-qc skip re-emits the committed
+    report; with the CI materializer cloning the recorded rulespec_root path
+    fresh at main HEAD, resolving that path would stamp the re-emitted numbers
+    as fresh. The re-emit marker must suppress the path resolution (#296)."""
+    run_comparison = _load_run_comparison()
+    checkout = tmp_path / "rulespec-us"
+    checkout.mkdir()
+    output = tmp_path / "r.json"
+    output.write_text(
+        json.dumps(
+            {
+                "suite": "az-snap-qc",
+                "summary": {"provenance": {"rulespec_root": str(checkout)}},
+            }
+        )
+    )
+    config = {
+        "name": "az-snap-qc",
+        "runner": {
+            "type": "snap-qc-compare",
+            "_reemitted_report": True,
+            "parameters": {"jurisdiction": "us-az", "fiscal_year": 2024},
+        },
+    }
+    block = run_comparison._build_run_provenance(config, "snap-qc-compare", output)
+    assert "rulespecs" not in block
+
+    # A real (non-re-emitted) run keeps the recorded-root resolution.
+    config["runner"].pop("_reemitted_report")
+    block = run_comparison._build_run_provenance(config, "snap-qc-compare", output)
+    assert block.get("rulespecs"), "real runs still record the root they used"
+
+
+def test_reemit_strips_shas_from_explicitly_configured_roots(tmp_path):
+    """NEGATIVE (cross-family review round 2): a suite that CONFIGURES
+    rulespec_root(s) bypasses the recorded-root special case — the general
+    path collection would still resolve the checkout's current SHA on a skip.
+    The re-emit flag must strip SHAs from every rulespec entry, whatever path
+    produced it (#296)."""
+    run_comparison = _load_run_comparison()
+    checkout = tmp_path / "rulespec-us"
+    checkout.mkdir()
+    import subprocess as sp
+
+    sp.run(["git", "init", "-q", str(checkout)], check=True)
+    sp.run(["git", "-C", str(checkout), "commit", "-q", "--allow-empty",
+            "-m", "x"], check=True,
+           env={**__import__("os").environ,
+                "GIT_AUTHOR_NAME": "t", "GIT_AUTHOR_EMAIL": "t@t",
+                "GIT_COMMITTER_NAME": "t", "GIT_COMMITTER_EMAIL": "t@t"})
+    output = tmp_path / "r.json"
+    output.write_text(json.dumps({"suite": "az-snap-qc"}))
+    config = {
+        "name": "az-snap-qc",
+        "runner": {
+            "type": "snap-qc-compare",
+            "_reemitted_report": True,
+            "rulespec_root": str(checkout),
+            "parameters": {"jurisdiction": "us-az", "fiscal_year": 2024},
+        },
+    }
+    block = run_comparison._build_run_provenance(config, "snap-qc-compare", output)
+    for entry in block.get("rulespecs", []):
+        assert entry.get("sha") is None, entry

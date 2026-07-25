@@ -28472,6 +28472,3007 @@ mappings:
     candidate_priority: P3
     rationale: The us/fiit program surfaces income tax before credits from the encoded section 1(j) and section 55 chain, but the program takes taxable income as a runtime input because upstream income assembly (sections 61-63) is not yet encoded. PolicyEngine computes income_tax_before_credits from fully modeled taxable income, so this program output is not comparable until the upstream chain is encoded.
 
+  # Maine's TY2026 resident annual-return interface is source held after the
+  # federal/raw-fact boundary. Exact entries retain all readiness judgments
+  # and fail-closed sentinels in tax-scoped coverage without treating those
+  # sentinels as substantive Maine tax calculations.
+  - legal_id: us-me:policies/income_tax/2026_resident_liability_source_hold#me_pit_2026_filing_status_is_valid
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom validates that exactly one Maine individual filing-status schedule applies. PolicyEngine uses its own filing-status entity and exposes no one-to-one interface-validation output.
+
+  - legal_id: us-me:policies/income_tax/2026_resident_liability_source_hold#me_pit_2026_input_domain_is_valid
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom validates full-year Maine residence, aligned federal and state filing units, filing status, and the federal-AGI boundary. This interface contract has no one-to-one PolicyEngine output.
+
+  - legal_id: us-me:policies/income_tax/2026_resident_liability_source_hold#me_pit_2026_income_base_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold records that the pinned corpus lacks the complete sections 5102 and 5122 transformation from federal outputs to Maine adjusted gross income. It is source-readiness metadata, not a substantive PolicyEngine income variable.
+
+  - legal_id: us-me:policies/income_tax/2026_resident_liability_source_hold#me_pit_2026_deduction_and_exemption_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold records that published 2026 basic amounts do not complete Maine deduction, exemption, itemized-choice, and phaseout mechanics. PolicyEngine exposes modeled amounts rather than this source-readiness judgment.
+
+  - legal_id: us-me:policies/income_tax/2026_resident_liability_source_hold#me_pit_2026_tax_and_surtax_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold prevents the source-complete 2026 rate and surcharge pilot from being applied before Maine taxable income is constructed and records the incomplete specialty-tax surface. PolicyEngine exposes no analogous readiness predicate.
+
+  - legal_id: us-me:policies/income_tax/2026_resident_liability_source_hold#me_pit_2026_credit_surface_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold records that the complete 2026 nonrefundable and refundable credit eligibility, limitation, carryforward, and ordering surface is unavailable. PolicyEngine computes modeled credits and has no equivalent source-readiness variable.
+
+  - legal_id: us-me:policies/income_tax/2026_resident_liability_source_hold#me_pit_2026_complete_liability_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This output combines Axiom's Maine income, deduction, exemption, tax, surtax, and credit source holds. It is a completion-state predicate rather than a tax result with a PolicyEngine analog.
+
+  - legal_id: us-me:policies/income_tax/2026_resident_liability_source_hold#me_pit_2026_state_adjusted_gross_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom deliberately returns zero while Maine adjusted-gross-income construction is source held. That fail-closed sentinel is not completed Maine AGI and cannot be compared to PolicyEngine's substantive modeled amount.
+
+  - legal_id: us-me:policies/income_tax/2026_resident_liability_source_hold#me_pit_2026_deductions_and_exemptions
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom deliberately returns zero while complete Maine deduction and exemption mechanics are source held. That sentinel is not a substantive deduction or exemption result.
+
+  - legal_id: us-me:policies/income_tax/2026_resident_liability_source_hold#me_pit_2026_taxable_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom deliberately returns zero while Maine income, deduction, and exemption stages remain incomplete. It does not claim completed Maine taxable income.
+
+  - legal_id: us-me:policies/income_tax/2026_resident_liability_source_hold#me_pit_2026_tax_before_credits_including_surtaxes
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom deliberately returns zero because Maine taxable income and the complete annual tax and surtax surface are source held. PolicyEngine's before-credit tax is a substantive modeled result.
+
+  - legal_id: us-me:policies/income_tax/2026_resident_liability_source_hold#me_pit_2026_tax_after_nonrefundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom deliberately returns zero while annual tax and complete nonrefundable-credit authority and ordering are source held. It is not comparable to PolicyEngine's substantive after-credit result.
+
+  - legal_id: us-me:policies/income_tax/2026_resident_liability_source_hold#me_pit_2026_refundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom deliberately returns zero while complete 2026 Maine refundable-credit eligibility, phaseouts, limitations, and ordering are source held. PolicyEngine's modeled credits are substantive outputs.
+
+  - legal_id: us-me:policies/income_tax/2026_resident_liability_source_hold#me_pit_2026_net_income_tax_liability_before_payments
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom's signed net-liability output is deliberately zero while the annual Maine income, deduction, tax, and credit chain remains source held. It must not be interpreted as zero Maine tax or compared to completed PolicyEngine liability.
+
+  # Alabama's TY2026 resident module is a source-readiness surface. Its public
+  # monetary stages fail closed until the missing annual income-base,
+  # deduction, tax, surtax, credit, and ordering authority is pinned. Exact
+  # mappings keep every output in tax coverage without treating a zero
+  # sentinel as a completed Alabama tax result.
+  - legal_id: us-al:policies/income_tax/2026_resident_liability_source_hold#al_pit_2026_filing_status_is_valid
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom validates that exactly one supported Alabama filing-status flag is selected. PolicyEngine uses its own categorical filing-status input and exposes no equivalent RuleSpec input-contract predicate.
+
+  - legal_id: us-al:policies/income_tax/2026_resident_liability_source_hold#al_pit_2026_input_domain_is_valid
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom's fail-closed input-domain gate requires full-year Alabama residence, aligned filing units, and a valid filing status. PolicyEngine exposes no one-to-one validation output for that contract.
+
+  - legal_id: us-al:policies/income_tax/2026_resident_liability_source_hold#al_pit_2026_income_base_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold records that the complete TY2026 Alabama income-base and modification authority is unavailable. It is source-readiness metadata rather than a substantive tax variable modeled by PolicyEngine.
+
+  - legal_id: us-al:policies/income_tax/2026_resident_liability_source_hold#al_pit_2026_october_amendments_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold records that the pinned Code pages flag October 1, 2026 amendments to Alabama deductions and exemptions but do not contain Acts 2026-604 and 2026-603 or their revised language. It is temporal source-readiness metadata with no PolicyEngine analog.
+
+  - legal_id: us-al:policies/income_tax/2026_resident_liability_source_hold#al_pit_2026_deduction_and_exemption_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold records that complete TY2026 Alabama deduction and exemption authority is unavailable. PolicyEngine computes its modeled deductions and exemptions and exposes no corresponding source-readiness judgment.
+
+  - legal_id: us-al:policies/income_tax/2026_resident_liability_source_hold#al_pit_2026_tax_and_surtax_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold records that the final TY2026 annual tax, surtax, and specialty-tax implementation surface is unavailable. It has no one-to-one PolicyEngine analog.
+
+  - legal_id: us-al:policies/income_tax/2026_resident_liability_source_hold#al_pit_2026_credit_surface_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold records that the complete TY2026 Alabama nonrefundable and refundable credit surface and ordering are unavailable. PolicyEngine exposes no equivalent source-readiness predicate.
+
+  - legal_id: us-al:policies/income_tax/2026_resident_liability_source_hold#al_pit_2026_complete_liability_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This output combines Axiom's annual income, deduction, tax, surtax, and credit source holds. It is a completion-state predicate rather than a completed Alabama liability result.
+
+  - legal_id: us-al:policies/income_tax/2026_resident_liability_source_hold#al_pit_2026_adjusted_gross_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while the Alabama income-base and modification stage is source held. That sentinel is not a completed adjusted-gross-income amount comparable to PolicyEngine.
+
+  - legal_id: us-al:policies/income_tax/2026_resident_liability_source_hold#al_pit_2026_deductions_and_exemptions
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while complete TY2026 deduction and exemption authority is source held. PolicyEngine's modeled deductions are substantive amounts, not readiness sentinels.
+
+  - legal_id: us-al:policies/income_tax/2026_resident_liability_source_hold#al_pit_2026_taxable_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel because its income, deduction, and exemption chain is incomplete. The value must not be compared to PolicyEngine's completed Alabama taxable income.
+
+  - legal_id: us-al:policies/income_tax/2026_resident_liability_source_hold#al_pit_2026_tax_before_credits_including_surtaxes
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while the final annual tax, surtax, and specialty-tax surface is source held. PolicyEngine's before-credit tax is a substantive modeled result.
+
+  - legal_id: us-al:policies/income_tax/2026_resident_liability_source_hold#al_pit_2026_tax_after_nonrefundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while complete TY2026 nonrefundable-credit authority and ordering are source held. It is not comparable to a completed PolicyEngine tax result.
+
+  - legal_id: us-al:policies/income_tax/2026_resident_liability_source_hold#al_pit_2026_refundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while complete TY2026 refundable-credit authority is source held. PolicyEngine's modeled refundable credits are substantive amounts, not readiness sentinels.
+
+  - legal_id: us-al:policies/income_tax/2026_resident_liability_source_hold#al_pit_2026_net_income_tax_liability_before_payments
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom's signed net-liability output is deliberately zero while the annual income, deduction, tax, surtax, and credit chain remains source held; it must not be interpreted as zero Alabama tax or compared to a completed PolicyEngine liability.
+
+  # Arizona's TY2026 resident annual-return interface is fully source held.
+  # Its amount outputs are fail-closed sentinels, not claims of zero tax.
+  # Exact entries keep every output in tax-scoped coverage without comparing
+  # readiness metadata or sentinels to substantive PolicyEngine calculations.
+  - legal_id: us-az:policies/income_tax/2026_resident_liability_source_hold#az_pit_2026_federal_adjusted_gross_income_boundary
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This private Axiom output preserves the supplied federal adjusted-gross-income boundary for the held annual interface. It is an input-boundary diagnostic, not a substantive Arizona result for one-to-one PolicyEngine comparison.
+
+  - legal_id: us-az:policies/income_tax/2026_resident_liability_source_hold#az_pit_2026_filing_status_is_valid
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom validates that exactly one of four Arizona filing-status input flags is selected. PolicyEngine uses a categorical filing-status input and exposes no equivalent RuleSpec input-contract predicate.
+
+  - legal_id: us-az:policies/income_tax/2026_resident_liability_source_hold#az_pit_2026_input_domain_is_valid
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom's domain gate requires full-year Arizona residence, aligned federal and state filing units, and one valid filing status. PolicyEngine exposes no one-to-one validation output for that interface contract.
+
+  - legal_id: us-az:policies/income_tax/2026_resident_liability_source_hold#az_pit_2026_income_and_modification_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold records that the pinned corpus lacks the complete Arizona adjusted-gross-income additions, subtractions, and conformity chain. It is source-readiness metadata, not an Arizona tax variable modeled by PolicyEngine.
+
+  - legal_id: us-az:policies/income_tax/2026_resident_liability_source_hold#az_pit_2026_deduction_and_exemption_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold records that final TY2026 deduction values and election mechanics are unavailable. PolicyEngine computes its modeled deductions and exposes no corresponding source-readiness judgment.
+
+  - legal_id: us-az:policies/income_tax/2026_resident_liability_source_hold#az_pit_2026_annual_tax_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold prevents Axiom from substituting a 2026 estimated-payment rate for source-complete annual tax and surtax authority. PolicyEngine exposes no analogous annual-source readiness predicate.
+
+  - legal_id: us-az:policies/income_tax/2026_resident_liability_source_hold#az_pit_2026_credit_surface_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold records that the final TY2026 credit inventory, ordering, limitations, and carryforwards are unavailable. PolicyEngine computes modeled credits and has no equivalent source-readiness variable.
+
+  - legal_id: us-az:policies/income_tax/2026_resident_liability_source_hold#az_pit_2026_complete_liability_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This output combines Axiom's income, deduction, annual-tax, and credit source holds. It is a completion-state predicate rather than a tax result with a PolicyEngine analog.
+
+  - legal_id: us-az:policies/income_tax/2026_resident_liability_source_hold#az_pit_2026_arizona_adjusted_gross_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while the Arizona additions, subtractions, and conformity chain is source held; that zero does not claim completed Arizona adjusted gross income.
+
+  - legal_id: us-az:policies/income_tax/2026_resident_liability_source_hold#az_pit_2026_deductions_and_exemptions
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while final TY2026 deduction values and election mechanics are source held. PolicyEngine's modeled deductions and exemptions are substantive calculations.
+
+  - legal_id: us-az:policies/income_tax/2026_resident_liability_source_hold#az_pit_2026_taxable_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: az_taxable_income
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while its Arizona AGI, deduction, and exemption stages are incomplete. PolicyEngine az_taxable_income computes a substantive modeled amount.
+
+  - legal_id: us-az:policies/income_tax/2026_resident_liability_source_hold#az_pit_2026_tax_before_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: az_income_tax_before_non_refundable_credits
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel because final TY2026 annual tax and surtax authority is incomplete and the estimated-payment rate is not substituted. PolicyEngine's before-credit variable is a substantive modeled tax result.
+
+  - legal_id: us-az:policies/income_tax/2026_resident_liability_source_hold#az_pit_2026_nonrefundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while the complete TY2026 nonrefundable-credit inventory, ordering, limitations, and carryforwards are source held. PolicyEngine computes substantive modeled credits.
+
+  - legal_id: us-az:policies/income_tax/2026_resident_liability_source_hold#az_pit_2026_tax_after_nonrefundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while annual tax and the complete nonrefundable-credit surface are source held. It must not be compared to a substantive PolicyEngine after-credit calculation.
+
+  - legal_id: us-az:policies/income_tax/2026_resident_liability_source_hold#az_pit_2026_refundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while final TY2026 refundable-credit authority, ordering, and limitations are source held. PolicyEngine's modeled refundable-credit values are substantive outputs.
+
+  - legal_id: us-az:policies/income_tax/2026_resident_liability_source_hold#az_pit_2026_net_income_tax_liability_before_payments
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: az_income_tax
+    candidate_priority: P4
+    rationale: Axiom's signed net-liability output is deliberately zero while the annual income, deduction, tax, and credit chain remains source held; it must not be interpreted as zero Arizona tax. PolicyEngine az_income_tax is a completed modeled liability.
+
+  # Arkansas's TY2026 resident annual-return interface is fully source held.
+  # Act 2 supplies the ordinary rate schedule, but the pinned corpus does not
+  # supply the net-income, deduction, exemption, surtax, or credit chain.
+  # Exact entries keep every readiness judgment and fail-closed sentinel in
+  # tax-scoped coverage without comparing it to a substantive PE calculation.
+  - legal_id: us-ar:policies/income_tax/2026_resident_liability_source_hold#ar_pit_2026_input_domain_is_valid
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom validates full-year Arkansas residence, aligned federal and state filing units, and the federal-AGI input boundary. PolicyEngine uses its own entity and input schema and exposes no one-to-one validation output for this interface contract.
+
+  - legal_id: us-ar:policies/income_tax/2026_resident_liability_source_hold#ar_pit_2026_income_base_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold records that the pinned corpus does not establish the additions, subtractions, and conformity rules needed to construct Arkansas net income from federal outputs and raw facts. It is source-readiness metadata, not an Arkansas income variable modeled by PolicyEngine.
+
+  - legal_id: us-ar:policies/income_tax/2026_resident_liability_source_hold#ar_pit_2026_deduction_and_exemption_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold records that complete operative TY2026 Arkansas resident deduction and exemption authority is absent from the pinned corpus. PolicyEngine computes its modeled deductions and exemptions and exposes no corresponding source-readiness judgment.
+
+  - legal_id: us-ar:policies/income_tax/2026_resident_liability_source_hold#ar_pit_2026_tax_and_surtax_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold prevents the source-complete Act 2 schedule pilot from being applied before Arkansas taxable net income is constructed and records the absent specialty-tax surface. PolicyEngine exposes no analogous source-readiness predicate.
+
+  - legal_id: us-ar:policies/income_tax/2026_resident_liability_source_hold#ar_pit_2026_credit_surface_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold records that complete TY2026 Arkansas nonrefundable and refundable credit eligibility, limitation, ordering, and carryforward authority is unavailable. PolicyEngine computes modeled credits and has no equivalent source-readiness variable.
+
+  - legal_id: us-ar:policies/income_tax/2026_resident_liability_source_hold#ar_pit_2026_complete_liability_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This output combines Axiom's Arkansas income-base, deduction, exemption, tax, surtax, and credit source holds. It is a completion-state predicate rather than a tax result with a PolicyEngine analog.
+
+  - legal_id: us-ar:policies/income_tax/2026_resident_liability_source_hold#ar_pit_2026_net_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while Arkansas net-income construction is source held; that zero is not a claim of completed Arkansas net income and cannot be compared to a substantive PolicyEngine amount.
+
+  - legal_id: us-ar:policies/income_tax/2026_resident_liability_source_hold#ar_pit_2026_deductions_and_exemptions
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while the complete TY2026 Arkansas deduction and exemption chain is source held. PolicyEngine's modeled deductions and exemptions are substantive calculations.
+
+  - legal_id: us-ar:policies/income_tax/2026_resident_liability_source_hold#ar_pit_2026_taxable_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while its Arkansas net-income, deduction, and exemption stages are incomplete; that zero does not claim completed Arkansas taxable income.
+
+  - legal_id: us-ar:policies/income_tax/2026_resident_liability_source_hold#ar_pit_2026_tax_before_credits_including_surtaxes
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel because taxable net income and the complete TY2026 tax and surtax surface are source held. PolicyEngine's before-credit tax is a substantive modeled result.
+
+  - legal_id: us-ar:policies/income_tax/2026_resident_liability_source_hold#ar_pit_2026_tax_after_nonrefundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while annual tax and complete nonrefundable-credit authority and ordering are source held. It must not be compared to a substantive PolicyEngine after-credit calculation.
+
+  - legal_id: us-ar:policies/income_tax/2026_resident_liability_source_hold#ar_pit_2026_refundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while complete TY2026 Arkansas refundable-credit eligibility, limitations, and ordering are source held. PolicyEngine's modeled refundable credits are substantive outputs.
+
+  - legal_id: us-ar:policies/income_tax/2026_resident_liability_source_hold#ar_pit_2026_net_income_tax_liability_before_payments
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom's signed net-liability output is deliberately zero while the annual Arkansas income, deduction, tax, and credit chain remains source held; it must not be interpreted as zero Arkansas tax or compared to completed PolicyEngine liability.
+
+  # Connecticut's TY2026 resident annual-return interface exposes one bounded
+  # statutory EITC branch while every complete annual-liability stage is held.
+  # Exact entries keep the full module in tax-scoped coverage without treating
+  # source-readiness judgments or fail-closed sentinels as PE calculations.
+  - legal_id: us-ct:policies/income_tax/2026_resident_liability_source_hold#ct_pit_2026_refundable_eitc_rate
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This private Axiom parameter is the forty-percent statutory multiplier used by the bounded section 12-704e branch. PolicyEngine does not expose this exact source parameter as a standalone annual-return output for one-to-one comparison.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_liability_source_hold#ct_pit_2026_refundable_eitc_qualifying_child_addition
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This private Axiom parameter is the statutory $250 addition used once when an eligible section 12-704e claimant has at least one federal qualifying child. PolicyEngine does not expose this exact source parameter as a standalone annual-return output for one-to-one comparison.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_liability_source_hold#ct_pit_2026_filing_status_is_valid
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom validates that exactly one of four Connecticut filing-status input flags is selected. PolicyEngine uses a categorical filing-status input and exposes no equivalent RuleSpec input-contract predicate.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_liability_source_hold#ct_pit_2026_input_domain_is_valid
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom's domain gate requires full-year Connecticut residence, aligned federal and state filing units, one valid filing status, a nonnegative supplied federal EITC, and a nonnegative integral federal qualifying-child count. PolicyEngine exposes no one-to-one validation output for that interface contract.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_liability_source_hold#ct_pit_2026_income_and_modification_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold records that the pinned corpus lacks final CT-1040 modification materials and a complete annual implementation inventory needed for a complete operative income base. It is source-readiness metadata, not a Connecticut income variable modeled by PolicyEngine.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_liability_source_hold#ct_pit_2026_deduction_and_exemption_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold records that Connecticut's exemption chain cannot execute while adjusted gross income and final TY2026 return implementation remain source held. PolicyEngine exposes no corresponding readiness judgment.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_liability_source_hold#ct_pit_2026_tax_and_surtax_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold prevents the schedule pilot from being applied before Connecticut taxable income is constructed and records the incomplete TY2026 AMT and specialty-tax implementation. PolicyEngine has no analogous source-readiness predicate.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_liability_source_hold#ct_pit_2026_credit_surface_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold records that the complete TY2026 Connecticut credit inventory, eligibility chain, ordering, limitations, and carryforwards are not established by the pinned supplement and return materials. PolicyEngine computes modeled credits and has no equivalent readiness variable.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_liability_source_hold#ct_pit_2026_complete_liability_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This output combines Axiom's Connecticut income, exemption, tax, AMT, surtax, and credit source holds. It is a completion-state predicate rather than a tax result with a PolicyEngine analog.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_liability_source_hold#ct_pit_2026_encoded_refundable_earned_income_credit
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This bounded Axiom branch multiplies a supplied allowed federal EITC output by forty percent and adds $250 once when that positive credit has at least one raw federal qualifying child, only when its explicit residency, alignment, filing-status, and input-validity domain passes. PolicyEngine computes federal and Connecticut EITC from its own household facts and does not expose a result with the same federal-output boundary and fail-closed domain behavior.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_liability_source_hold#ct_pit_2026_adjusted_gross_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while Connecticut's complete TY2026 modification chain is source held; that zero is not a claim of completed Connecticut adjusted gross income.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_liability_source_hold#ct_pit_2026_deductions_and_exemptions
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while adjusted gross income and the complete TY2026 exemption implementation are source held. PolicyEngine's modeled exemption is a substantive calculation.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_liability_source_hold#ct_pit_2026_taxable_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while its Connecticut adjusted-gross-income and exemption stages are incomplete; that zero does not claim completed Connecticut taxable income.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_liability_source_hold#ct_pit_2026_tax_before_credits_including_surtaxes
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel because taxable income and the complete TY2026 schedule, AMT, recapture, surtax, and specialty-tax implementation are source held. PolicyEngine's before-credit tax is a substantive modeled result.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_liability_source_hold#ct_pit_2026_tax_after_nonrefundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while annual tax and the complete nonrefundable-credit inventory and ordering are source held. It cannot truthfully be compared to a substantive PolicyEngine after-credit calculation.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_liability_source_hold#ct_pit_2026_refundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This complete-stage output remains a zero sentinel while the full TY2026 refundable-credit inventory is source held; the separately exposed bounded EITC branch is not promoted into a claim of complete refundable credits.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_liability_source_hold#ct_pit_2026_net_income_tax_liability_before_payments
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom's signed net-liability output is deliberately zero while the annual Connecticut income, exemption, tax, and credit chain remains source held; it must not be interpreted as zero Connecticut tax or compared to completed PolicyEngine liability.
+
+  # Florida does not impose chapter 220 individual income tax on a natural
+  # person. PolicyEngine therefore has no active Florida individual-income-tax
+  # program surface to compare. Exact entries keep every complete legal output
+  # in tax-scoped coverage without inventing an oracle variable.
+  - legal_id: us-fl:policies/income_tax/2026_resident_zero_liability#fl_pit_2026_natural_person_income_tax_constitutional_limit_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom output records the applicability of Florida Constitution article VII section 5(a) to natural-person residents. PolicyEngine exposes no legal-authority applicability predicate for a state with no active individual income-tax program.
+
+  - legal_id: us-fl:policies/income_tax/2026_resident_zero_liability#fl_pit_2026_chapter_220_taxpayer_definition_excludes_natural_person
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom output records the section 220.03(1)(z) statutory classification limiting a chapter 220 taxpayer to a corporation. PolicyEngine exposes no equivalent legal-definition predicate.
+
+  - legal_id: us-fl:policies/income_tax/2026_resident_zero_liability#fl_pit_2026_resident_individual_income_tax_imposed
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom boolean states the legal absence of a Florida chapter 220 individual income tax for a natural-person resident. PolicyEngine has no active Florida individual-income-tax imposition variable.
+
+  - legal_id: us-fl:policies/income_tax/2026_resident_zero_liability#fl_pit_2026_deduction_and_exemption_stage_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom output states that no Florida individual income-tax deduction or exemption stage applies because no natural-person tax is imposed. PolicyEngine exposes no corresponding non-applicability predicate.
+
+  - legal_id: us-fl:policies/income_tax/2026_resident_zero_liability#fl_pit_2026_surtax_stage_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom output states that no Florida individual income-tax surtax stage applies. PolicyEngine exposes no Florida surtax-stage applicability variable.
+
+  - legal_id: us-fl:policies/income_tax/2026_resident_zero_liability#fl_pit_2026_credit_stage_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom output states that no Florida individual income-tax credit stage applies. PolicyEngine exposes no Florida income-tax credit-stage applicability variable.
+
+  - legal_id: us-fl:policies/income_tax/2026_resident_zero_liability#fl_pit_2026_resident_income_tax_before_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns exact zero before credits as the legal consequence of no Florida individual income tax. PolicyEngine has no active Florida before-credit income-tax variable to compare.
+
+  - legal_id: us-fl:policies/income_tax/2026_resident_zero_liability#fl_pit_2026_resident_income_tax_after_nonrefundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns exact zero after nonrefundable credits because no Florida individual income-tax or credit stage applies. PolicyEngine has no corresponding Florida output.
+
+  - legal_id: us-fl:policies/income_tax/2026_resident_zero_liability#fl_pit_2026_resident_refundable_income_tax_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns exact zero Florida refundable individual income-tax credits because chapter 220 does not impose an individual tax. PolicyEngine has no corresponding Florida income-tax credit output.
+
+  - legal_id: us-fl:policies/income_tax/2026_resident_zero_liability#fl_pit_2026_resident_net_income_tax_liability_before_payments
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns exact zero annual resident net individual income-tax liability before payments as the legal consequence of no imposed Florida individual income tax. PolicyEngine exposes no active Florida individual-income-tax liability variable.
+
+  # Tennessee's former Hall income tax has a permanent post-2020 zero rate,
+  # Revenue treats it as repealed and directs taxpayers not to file returns,
+  # and Tennessee has no tax on earned income. PolicyEngine therefore has no
+  # active Tennessee individual-income-tax surface. Exact entries keep every
+  # complete legal output in tax-scoped coverage without inventing an oracle.
+  - legal_id: us-tn:policies/income_tax/2026_resident_zero_liability#tn_pit_2026_hall_income_tax_zero_rate_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom output records the enacted permanent zero Hall-income-tax rate for tax years beginning on or after January 1, 2021. PolicyEngine exposes no active Tennessee individual-income-tax rate parameter.
+
+  - legal_id: us-tn:policies/income_tax/2026_resident_zero_liability#tn_pit_2026_no_earned_income_tax_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom output records current Tennessee Revenue guidance that the state has no income tax on earned income. PolicyEngine exposes no corresponding legal-applicability predicate.
+
+  - legal_id: us-tn:policies/income_tax/2026_resident_zero_liability#tn_pit_2026_hall_income_tax_return_required
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom output records that Revenue directs taxpayers not to file Hall income-tax returns for periods beginning on or after January 1, 2021. PolicyEngine exposes no Tennessee filing-obligation predicate.
+
+  - legal_id: us-tn:policies/income_tax/2026_resident_zero_liability#tn_pit_2026_resident_individual_income_tax_imposed
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom boolean states the legal absence of an operative Tennessee resident individual income tax in 2026. PolicyEngine has no active Tennessee individual-income-tax imposition variable.
+
+  - legal_id: us-tn:policies/income_tax/2026_resident_zero_liability#tn_pit_2026_deduction_and_exemption_stage_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom output states that no Tennessee individual income-tax deduction or exemption stage applies after repeal of the Hall tax. PolicyEngine exposes no corresponding non-applicability predicate.
+
+  - legal_id: us-tn:policies/income_tax/2026_resident_zero_liability#tn_pit_2026_surtax_stage_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom output states that no Tennessee resident individual-income-tax surtax stage applies. PolicyEngine exposes no Tennessee surtax-stage applicability variable.
+
+  - legal_id: us-tn:policies/income_tax/2026_resident_zero_liability#tn_pit_2026_credit_stage_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom output states that no Tennessee resident individual-income-tax credit-return stage applies. PolicyEngine exposes no Tennessee income-tax credit-stage applicability variable.
+
+  - legal_id: us-tn:policies/income_tax/2026_resident_zero_liability#tn_pit_2026_resident_income_tax_before_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns substantive zero before credits under Tennessee's enacted permanent zero Hall-tax rate and current repeal administration. PolicyEngine has no active Tennessee before-credit income-tax variable.
+
+  - legal_id: us-tn:policies/income_tax/2026_resident_zero_liability#tn_pit_2026_resident_income_tax_after_nonrefundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns substantive zero after nonrefundable credits because no Tennessee resident individual-income-tax or credit-return stage applies. PolicyEngine has no corresponding Tennessee output.
+
+  - legal_id: us-tn:policies/income_tax/2026_resident_zero_liability#tn_pit_2026_resident_refundable_income_tax_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns substantive zero Tennessee refundable resident individual-income-tax credits because the Hall tax is repealed and no return is filed. PolicyEngine has no corresponding Tennessee income-tax credit output.
+
+  - legal_id: us-tn:policies/income_tax/2026_resident_zero_liability#tn_pit_2026_resident_net_income_tax_liability_before_payments
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns substantive zero annual resident net individual-income-tax liability before payments under Tennessee's permanent post-2020 zero rate and no-return administration. PolicyEngine exposes no active Tennessee individual-income-tax liability variable.
+
+  # The District's TY2026 resident module intentionally stops after a bounded
+  # adjusted-gross-income surface.  Its later annual stages are typed holds
+  # and fail-closed sentinels until final D-40 materials are available.  Exact
+  # entries keep every output in tax-scoped coverage without treating those
+  # sentinels as zero tax or as PolicyEngine equivalents.
+  - legal_id: us-dc:policies/income_tax/2026_resident_liability_source_hold#dc_pit_2026_filing_status_is_valid
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom validates that exactly one of its four District filing-status input flags is selected. PolicyEngine uses its own categorical filing-status input and exposes no equivalent RuleSpec input-contract predicate.
+
+  - legal_id: us-dc:policies/income_tax/2026_resident_liability_source_hold#dc_pit_2026_input_domain_is_valid
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom's fail-closed input-domain gate requires full-year District residence, aligned federal and District filing units, a valid filing status, and nonnegative exclusion inputs. PolicyEngine exposes no one-to-one validation output for that contract.
+
+  - legal_id: us-dc:policies/income_tax/2026_resident_liability_source_hold#dc_pit_2026_supported_income_profile_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom readiness judgment excludes unencoded District additions, above-the-line adjustments, and federal-conformity differences. PolicyEngine computes its modeled DC income modifications directly and has no corresponding bounded-profile applicability variable.
+
+  - legal_id: us-dc:policies/income_tax/2026_resident_liability_source_hold#dc_pit_2026_directly_encoded_gross_income_exclusions
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom aggregates only three directly encoded District exclusions covering United States obligation interest, state or local income-tax refunds, and Social Security or tier-1 railroad benefits. PolicyEngine exposes no variable with exactly that bounded component inventory.
+
+  - legal_id: us-dc:policies/income_tax/2026_resident_liability_source_hold#dc_pit_2026_profile_candidate_adjusted_gross_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: dc_agi
+    candidate_priority: P4
+    rationale: Axiom's private candidate subtracts only its three directly encoded exclusions from supplied federal AGI and is computed before the supported-profile gate. PolicyEngine dc_agi composes its modeled District modifications, so the two values are not one-to-one across the RuleSpec input domain.
+
+  - legal_id: us-dc:policies/income_tax/2026_resident_liability_source_hold#dc_pit_2026_supported_profile_adjusted_gross_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: dc_agi
+    candidate_priority: P4
+    rationale: Axiom publishes its bounded adjusted-gross-income candidate only when the explicit input and supported-profile gates pass, returning zero otherwise. PolicyEngine dc_agi has neither those readiness gates nor the same bounded component inventory.
+
+  - legal_id: us-dc:policies/income_tax/2026_resident_liability_source_hold#dc_pit_2026_deduction_and_exemption_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold records that final TY2026 D-40 deduction and exemption implementation values are unavailable. It is source-readiness metadata, not a District tax variable modeled by PolicyEngine.
+
+  - legal_id: us-dc:policies/income_tax/2026_resident_liability_source_hold#dc_pit_2026_credit_surface_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold records that final TY2026 D-40 credit tables, schedules, and ordering are unavailable. PolicyEngine computes its modeled credits and exposes no corresponding source-readiness judgment.
+
+  - legal_id: us-dc:policies/income_tax/2026_resident_liability_source_hold#dc_pit_2026_complete_liability_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This output combines Axiom's deduction, exemption, credit, and annual-liability source holds. It is a completion-state predicate rather than a tax result with a PolicyEngine analog.
+
+  - legal_id: us-dc:policies/income_tax/2026_resident_liability_source_hold#dc_pit_2026_taxable_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: dc_taxable_income
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while the TY2026 deduction and exemption stage is source held; that zero does not claim completed District taxable income. PolicyEngine dc_taxable_income computes a substantive modeled amount.
+
+  - legal_id: us-dc:policies/income_tax/2026_resident_liability_source_hold#dc_pit_2026_tax_before_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: dc_income_tax_before_credits
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel because its annual taxable-income stage is incomplete; the existing estimated-tax or statutory schedule is not substituted. PolicyEngine's before-credit variable is a substantive modeled tax result.
+
+  - legal_id: us-dc:policies/income_tax/2026_resident_liability_source_hold#dc_pit_2026_tax_after_nonrefundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while final TY2026 credit surfaces and ordering are source held. PolicyEngine computes modeled nonrefundable credits, so no zero-sentinel comparison would be truthful.
+
+  - legal_id: us-dc:policies/income_tax/2026_resident_liability_source_hold#dc_pit_2026_refundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while final TY2026 refundable-credit authority and return implementation are source held. PolicyEngine's modeled refundable-credit amounts are substantive outputs, not readiness sentinels.
+
+  - legal_id: us-dc:policies/income_tax/2026_resident_liability_source_hold#dc_pit_2026_net_income_tax_liability_before_payments
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: dc_income_tax
+    candidate_priority: P4
+    rationale: Axiom's signed net-liability output is deliberately zero while the annual deduction, exemption, and credit chain remains source held; it must not be interpreted as zero District tax. PolicyEngine dc_income_tax is a completed modeled liability.
+
+  # South Carolina's 2026 resident core has a mixed oracle surface.  Keep
+  # every executable output exact here: otherwise the broad us-sc fallback
+  # below falsely reports the whole module as one undifferentiated agency-
+  # manual gap.
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_input_domain_is_valid
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom's fail-closed validation of its raw-input contract is a RuleSpec harness judgment; PolicyEngine computes SC tax from its own entity/input schema and exposes no corresponding domain-validity variable.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_base_profile_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom's source-readiness gate excludes unencoded Article 9, age-65, and special-tax branches; PolicyEngine has no variable for this bounded-profile applicability judgment.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_supported_profile_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom's final transitive source-readiness gate excludes unsupported credit and refundable-credit branches; PolicyEngine computes those branches directly and has no equivalent applicability judgment.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_lower_rate
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.sc.tax.income.rates
+    parameter_key_path: [rates, 0]
+    period: year
+    comparison: rate
+    rationale: Same enacted 1.99 percent first-bracket rate in the PolicyEngine-US 2026 South Carolina marginal-rate scale.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_upper_rate
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.sc.tax.income.rates
+    parameter_key_path: [rates, 1]
+    period: year
+    comparison: rate
+    rationale: Same enacted 5.21 percent second-bracket rate in the PolicyEngine-US 2026 South Carolina marginal-rate scale.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_upper_bracket_floor
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.sc.tax.income.rates
+    parameter_key_path: [thresholds, 1]
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same 30,000 dollar second-bracket threshold in the PolicyEngine-US 2026 South Carolina marginal-rate scale.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_upper_bracket_subtraction
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_parameter: gov.states.sc.tax.income.rates
+    candidate_priority: P4
+    rationale: Axiom exposes the statutory 966 dollar subtraction form; PolicyEngine represents the identical continuous schedule as marginal rates and thresholds, without a standalone subtraction parameter.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_net_capital_gain_deduction_rate
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.sc.tax.income.deductions.net_capital_gain.rate
+    period: year
+    comparison: rate
+    rationale: Same 44 percent South Carolina net-capital-gain deduction rate.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_under_65_retirement_cap
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.sc.tax.income.subtractions.retirement.cap
+    parameter_key_path: [amounts, 0]
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same 3,000 dollar retirement-income deduction cap below age 65.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_age_65_threshold
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.sc.tax.income.subtractions.retirement.cap
+    parameter_key_path: [thresholds, 1]
+    period: year
+    comparison: count
+    rationale: Same age-65 breakpoint in PolicyEngine's South Carolina retirement-cap scale.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_sciad_single_or_separate_base
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.sc.tax.income.deductions.sciad.amount
+    parameter_key: SINGLE
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same 15,000 dollar 2026 SCIAD base; PolicyEngine stores SINGLE and SEPARATE as equal cells.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_sciad_head_base
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.sc.tax.income.deductions.sciad.amount
+    parameter_key: HEAD_OF_HOUSEHOLD
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same 22,500 dollar 2026 head-of-household SCIAD base.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_sciad_joint_or_surviving_base
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.sc.tax.income.deductions.sciad.amount
+    parameter_key: JOINT
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same 30,000 dollar 2026 SCIAD base; PolicyEngine stores JOINT and SURVIVING_SPOUSE as equal cells.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_sciad_single_or_separate_phaseout_start
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.sc.tax.income.deductions.sciad.phase_out.start
+    parameter_key: SINGLE
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same 40,000 dollar 2026 SCIAD phase-out start for single and separate filers.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_sciad_head_phaseout_start
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.sc.tax.income.deductions.sciad.phase_out.start
+    parameter_key: HEAD_OF_HOUSEHOLD
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same 60,000 dollar 2026 head-of-household SCIAD phase-out start.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_sciad_joint_or_surviving_phaseout_start
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.sc.tax.income.deductions.sciad.phase_out.start
+    parameter_key: JOINT
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same 80,000 dollar 2026 SCIAD phase-out start for joint and surviving-spouse filers.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_sciad_single_or_separate_phaseout_denominator
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.sc.tax.income.deductions.sciad.phase_out.width
+    parameter_key: SINGLE
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same 55,000 dollar 2026 SCIAD phase-out width for single and separate filers.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_sciad_head_phaseout_denominator
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.sc.tax.income.deductions.sciad.phase_out.width
+    parameter_key: HEAD_OF_HOUSEHOLD
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same 82,500 dollar 2026 head-of-household SCIAD phase-out width.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_sciad_joint_or_surviving_phaseout_denominator
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.sc.tax.income.deductions.sciad.phase_out.width
+    parameter_key: JOINT
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same 110,000 dollar 2026 SCIAD phase-out width for joint and surviving-spouse filers.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_sciad_reduction_rounding_increment
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: sc_sciad
+    candidate_priority: P4
+    rationale: PolicyEngine applies the same ten-dollar floor inside sc_sciad but does not expose that formula literal as a standalone parameter or variable.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_regular_workday_count_ceiling
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This 366-day physical input-domain ceiling belongs to Axiom's fail-closed contract; PolicyEngine does not model the public-safety workday deduction or a corresponding ceiling.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_public_safety_daily_deduction
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: PolicyEngine-US 1.767.3 has no South Carolina public-safety subsistence deduction variable or daily-amount parameter.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_two_wage_earner_tenths_percent
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_parameter: gov.states.sc.tax.income.credits.two_wage_earner.rate
+    candidate_priority: P4
+    rationale: Axiom separately exposes the statutory seven-tenths numerator; PolicyEngine stores only the resulting 0.007 rate scale.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_tenths_percent_rate_divisor
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_parameter: gov.states.sc.tax.income.credits.two_wage_earner.rate
+    candidate_priority: P4
+    rationale: Axiom separately exposes the decimal-conversion divisor; PolicyEngine stores only the resulting 0.007 rate scale.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_two_wage_earner_rate
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.sc.tax.income.credits.two_wage_earner.rate
+    parameter_key_path: [rates, 0]
+    period: year
+    comparison: rate
+    rationale: Same 0.007 South Carolina two-wage-earner credit rate.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_two_wage_earner_income_cap
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.sc.tax.income.credits.two_wage_earner.rate
+    parameter_key_path: [thresholds, 1]
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same 50,000 dollar income ceiling encoded as the zero-rate threshold in PolicyEngine's two-wage-earner scale.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_nursing_care_credit_rate
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: PolicyEngine-US 1.767.3 does not model the section 12-6-3390 nursing-care credit or expose its 20 percent rate.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_nursing_care_credit_cap
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: PolicyEngine-US 1.767.3 does not model the section 12-6-3390 nursing-care credit or expose its 300 dollar cap.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_eitc_match_rate
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.sc.tax.income.credits.eitc.rate
+    period: year
+    comparison: rate
+    rationale: Same 125 percent South Carolina match of the federal earned-income credit.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_eitc_credit_cap
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.sc.tax.income.credits.eitc.max
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same Act 110 maximum South Carolina earned-income credit of 200 dollars beginning in 2026.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_federal_section_63_deduction_addback
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: sc_taxable_income
+    candidate_priority: P4
+    rationale: PolicyEngine's 2026 sc_taxable_income starts from federal AGI and therefore has no standalone reversal of the federal section 63 deduction.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_additions
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: sc_additions
+    candidate_priority: P4
+    rationale: Axiom's supported Article 9 and section 63 additions are a bounded subset with a 2026 deduction reversal; PolicyEngine sc_additions has a different legacy/OBBBA component inventory and is bypassed by its 2026 AGI formula.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_article_9_subtractions
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: sc_subtractions
+    candidate_priority: P4
+    rationale: Axiom exposes only the gross-income subtractions preceding its separate deduction stage; PolicyEngine sc_subtractions aggregates those with SCIAD, retirement, capital-gain, dependent, and other deductions.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_state_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: sc_taxable_income
+    candidate_priority: P4
+    rationale: This Axiom pre-deduction state-income intermediate precedes SCIAD and other South Carolina deductions; PolicyEngine exposes only the later sc_taxable_income aggregate.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_sciad_base
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_parameter: gov.states.sc.tax.income.deductions.sciad.amount
+    candidate_priority: P4
+    rationale: PolicyEngine stores filing-status-specific SCIAD cells but exposes no computed tax-unit selector result; the individual cells are mapped separately above.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_sciad_phaseout_start
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_parameter: gov.states.sc.tax.income.deductions.sciad.phase_out.start
+    candidate_priority: P4
+    rationale: PolicyEngine stores filing-status-specific SCIAD start cells but exposes no computed tax-unit selector result; the individual cells are mapped separately above.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_sciad_phaseout_denominator
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_parameter: gov.states.sc.tax.income.deductions.sciad.phase_out.width
+    candidate_priority: P4
+    rationale: PolicyEngine stores filing-status-specific SCIAD width cells but exposes no computed tax-unit selector result; the individual cells are mapped separately above.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_sciad_reduction
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: sc_sciad
+    candidate_priority: P4
+    rationale: PolicyEngine exposes the final SCIAD only, not the rounded phase-out reduction intermediate.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_sciad
+    country: us
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: sc_sciad
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same filing-status-specific 2026 SCIAD, including AGI phase-out, ten-dollar floor, and nonnegative result.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_net_capital_gain_deduction
+    country: us
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: sc_net_capital_gain_deduction
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same 44 percent deduction of nonnegative South Carolina net capital gain when the aligned oracle input supplies that net gain.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_primary_retirement_deduction
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: sc_retirement_deduction_indv
+    candidate_priority: P4
+    rationale: Axiom returns the primary filer's general-plus-military deduction at TaxUnit grain; PolicyEngine separates person-level general and military variables and does not expose this combined primary selector.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_spouse_retirement_deduction
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: sc_retirement_deduction_indv
+    candidate_priority: P4
+    rationale: Axiom returns the spouse's general-plus-military deduction at TaxUnit grain; PolicyEngine separates person-level general and military variables and does not expose this combined spouse selector.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_public_safety_subsistence_deduction
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: PolicyEngine-US 1.767.3 has no South Carolina public-safety workday/subsistence deduction variable.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_deductions_and_exemptions
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: sc_subtractions
+    candidate_priority: P4
+    rationale: Axiom's bounded supported-deduction aggregate omits held dependent and specialty branches and includes public-safety amounts absent from PolicyEngine; it is not one-to-one with sc_subtractions.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_taxable_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: sc_taxable_income
+    candidate_priority: P4
+    rationale: Axiom's candidate includes its supported public-safety subsistence deduction, which PolicyEngine-US 1.767.3 does not model, as well as a deliberately bounded additions-and-subtractions inventory. PolicyEngine sc_taxable_income therefore is not one-to-one across the RuleSpec input domain.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_tax_before_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: sc_income_tax_before_non_refundable_credits
+    candidate_priority: P4
+    rationale: Both engines apply the Act 110 schedule, but they can receive different South Carolina taxable income because Axiom supports a public-safety deduction absent from PolicyEngine and bounds other modification branches. The resulting before-credit outputs are not one-to-one across the RuleSpec input domain.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_primary_qualified_earned_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: sc_gross_earned_income
+    candidate_priority: P4
+    rationale: Axiom selects the primary person's qualified earned income into a TaxUnit output; PolicyEngine exposes person-level sc_gross_earned_income without a primary-selector aggregate.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_spouse_qualified_earned_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: sc_gross_earned_income
+    candidate_priority: P4
+    rationale: Axiom selects the spouse's qualified earned income into a TaxUnit output; PolicyEngine exposes person-level sc_gross_earned_income without a spouse-selector aggregate.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_two_wage_earner_credit
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: sc_two_wage_earner_credit_potential
+    candidate_priority: P4
+    rationale: Axiom expressly denies the credit when either spouse claims an IRC section 911 or 931 benefit. PolicyEngine-US 1.767.3 checks joint filing and spouse earned income but exposes no corresponding disqualification predicate, so the credit potentials are not one-to-one.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_nursing_care_credit
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: PolicyEngine-US 1.767.3 has no section 12-6-3390 nursing-care credit variable.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_earned_income_credit
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: sc_eitc_potential
+    candidate_priority: P4
+    rationale: Both engines apply the 125 percent match and 200 dollar cap, but PolicyEngine-US 1.767.3 rounds the uncapped match to one decimal place while Axiom preserves the unrounded Money result. The outputs are not one-to-one for fractional-dollar federal credits.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_nonrefundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: sc_non_refundable_credits
+    candidate_priority: P4
+    rationale: Axiom includes the nursing-care credit absent from PolicyEngine and gates out CDCC and other held credit branches; its aggregate is not one-to-one with sc_non_refundable_credits.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_tax_after_nonrefundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: sc_income_tax_before_refundable_credits
+    candidate_priority: P4
+    rationale: The closest PolicyEngine stage applies a different nonrefundable-credit inventory and ordering, including CDCC but excluding Axiom's nursing-care credit.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_net_income_tax_liability
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: sc_income_tax
+    candidate_priority: P4
+    rationale: Axiom's bounded candidate holds refundable tuition and exceptional-needs branches absent; PolicyEngine final sc_income_tax subtracts its modeled refundable tuition credit.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_supported_state_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This public amount is forced to zero whenever Axiom's bounded source-readiness gate fails; PolicyEngine exposes no equivalently gated pre-deduction state-income stage.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_supported_deductions_and_exemptions
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: sc_subtractions
+    candidate_priority: P4
+    rationale: This public bounded-profile aggregate is zero on held profiles and has a different component inventory from PolicyEngine sc_subtractions.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_supported_taxable_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: sc_taxable_income
+    candidate_priority: P4
+    rationale: Axiom's public taxable-income output is intentionally zero outside its source-ready profile, whereas PolicyEngine sc_taxable_income computes across its whole modeled SC population; compare the candidate stage only on aligned positive cases.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_supported_tax_before_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: sc_income_tax_before_non_refundable_credits
+    candidate_priority: P4
+    rationale: Axiom's public schedule tax is intentionally zero outside its source-ready profile, unlike PolicyEngine's population-wide before-credit variable; compare the candidate stage on aligned positive cases.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_supported_tax_after_nonrefundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: sc_income_tax_before_refundable_credits
+    candidate_priority: P4
+    rationale: In addition to Axiom's source-readiness zero gate, the two engines model different nonrefundable-credit inventories, so these stages are not one-to-one.
+
+  - legal_id: us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_supported_net_income_tax_liability
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: sc_income_tax
+    candidate_priority: P4
+    rationale: Axiom's bounded public result is zero for held credit/refundable branches; PolicyEngine final sc_income_tax computes its modeled CDCC, EITC, two-wage-earner, and tuition-credit stack.
+
+  # Illinois's TY2026 resident module is an explicitly bounded source-ready
+  # profile. Exact classifications prevent the broad us-il fallback from
+  # hiding new outputs and prevent profile-gated zero sentinels from being
+  # mistaken for PolicyEngine's population-wide Illinois tax variables.
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_individual_income_tax_rate
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This is Axiom's private statutory-rate implementation constant; the module's executable output contract is not a one-to-one PolicyEngine parameter surface.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_personal_exemption_amount
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This private Axiom constant pins IDOR's tax-year-2026 $2,925 amount inside a bounded exemption composition rather than exposing a PolicyEngine parameter path.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_age_or_blindness_exemption_amount
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This is a private RuleSpec helper amount used by four raw-fact exemption branches, not a public one-to-one PolicyEngine output.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_joint_exemption_and_property_credit_agi_ceiling
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom privately reuses this statutory joint-return ceiling across two bounded stages; PolicyEngine exposes no identical combined implementation output.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_other_exemption_and_property_credit_agi_ceiling
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom privately reuses this nonjoint ceiling across exemption and property-credit stages; it is not a one-to-one PolicyEngine result.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_residential_property_tax_credit_rate
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This private rate feeds Axiom's single-use-residence bounded branch and is not independently comparable to a population-wide PolicyEngine output.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_earned_income_credit_rate
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This private 20 percent implementation constant is composed only for the actually allowed federal-credit branch; expanded Illinois eligibility remains held.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_child_tax_credit_rate
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This private 40 percent helper is applied to Axiom's bounded Illinois EITC candidate and is not a standalone PolicyEngine output.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_input_domain_is_valid
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom's nonnegative raw-input contract is a fail-closed harness judgment; PolicyEngine has no corresponding tax variable.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_filing_status_is_valid
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom validates exactly one of five filing-status flags, including qualifying surviving spouse, whereas PolicyEngine consumes its own categorical filing-status input.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_base_income_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed readiness hold covers unencoded section 203 and bonus-depreciation chains, not a tax amount modeled by PolicyEngine.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_special_tax_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This readiness judgment identifies held recapture and gaming or cannabis surcharge branches; PolicyEngine exposes no equivalent completion-state predicate.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_credit_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold combines omitted attribution, expanded-EITC, and specialty-credit surfaces rather than computing a PolicyEngine credit amount.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_complete_liability_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This is Axiom's combined completion-state predicate for all held annual-liability surfaces, with no PolicyEngine analog.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_supported_profile_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom's final source-readiness gate restricts outputs to an aligned full-year resident profile; PolicyEngine computes across its broader modeled population.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_directly_encoded_additions
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This aggregate contains only three explicitly encoded federal-category additions and does not equal PolicyEngine's complete Illinois addition inventory.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_directly_encoded_subtractions
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This aggregate contains only three explicitly encoded federal-category subtractions and does not equal PolicyEngine's complete Illinois subtraction inventory.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_supported_profile_candidate_base_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: il_base_income
+    candidate_priority: P4
+    rationale: Axiom gates a bounded section 203 component inventory to zero outside its supported profile; PolicyEngine il_base_income composes its broader modeled modification surface.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_basic_exemption_units
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This private helper counts Axiom's supported-profile basic exemption units, including its dependent-filer boundary, and has no standalone PolicyEngine output.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_taxpayer_age_exemption
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This private raw-fact helper isolates one taxpayer age exemption circumstance rather than a PolicyEngine tax output.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_taxpayer_blindness_exemption
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This private raw-fact helper isolates one taxpayer blindness exemption circumstance rather than a PolicyEngine tax output.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_joint_spouse_age_exemption
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This private joint-return spouse-age helper has no standalone one-to-one PolicyEngine variable.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_joint_spouse_blindness_exemption
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This private joint-return spouse-blindness helper has no standalone one-to-one PolicyEngine variable.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_exemption_agi_ceiling
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This private filing-status selector combines two Axiom constants and is not a public PolicyEngine output.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_supported_profile_candidate_exemption
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom's exemption is computed only for its supported profile and is zero on held cases, unlike a population-wide PolicyEngine exemption output.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_supported_profile_candidate_taxable_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: il_taxable_income
+    candidate_priority: P4
+    rationale: Axiom's taxable-income candidate is bounded by explicit section 203 holds and zero outside the profile; PolicyEngine il_taxable_income covers its full modeled inventory.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_supported_profile_candidate_tax_before_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: il_income_tax_before_non_refundable_credits
+    candidate_priority: P4
+    rationale: Axiom's before-credit amount excludes specialty taxes and is profile-gated to zero, so it is not one-to-one with PolicyEngine's broader before-credit variable.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_supported_profile_residential_property_tax_credit
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: il_property_tax_credit
+    candidate_priority: P4
+    rationale: Axiom computes only the single-use-principal-residence branch and holds multi-use attribution, unlike PolicyEngine's broader modeled credit.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_supported_profile_candidate_tax_after_nonrefundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: il_income_tax_after_non_refundable_credits
+    candidate_priority: P4
+    rationale: Axiom excludes education, other-state, and other specialty nonrefundable credits and zero-gates held cases; the PolicyEngine stage has a broader credit inventory.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_supported_profile_earned_income_credit
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: il_eitc
+    candidate_priority: P4
+    rationale: Axiom computes only 20 percent of an actually allowed federal section 32 credit and holds Illinois hypothetical-federal-credit eligibility branches.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_supported_profile_child_tax_credit
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: il_child_tax_credit
+    candidate_priority: P4
+    rationale: Axiom's child credit inherits the bounded Illinois EITC profile and zero gate, so it is not population-wide one-to-one with PolicyEngine's modeled credit.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_supported_profile_refundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom aggregate includes only its bounded EITC and child-credit branches and excludes pass-through-entity and other refundable credits.
+
+  - legal_id: us-il:policies/income_tax/2026_full_year_resident_core#il_pit_2026_supported_profile_candidate_net_income_tax_liability_before_payments
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: il_income_tax
+    candidate_priority: P4
+    rationale: Axiom's signed terminal candidate is valid only when every typed hold is absent and returns zero otherwise; PolicyEngine il_income_tax composes its broader final modeled liability.
+
+
+  # Alaska excludes individuals from its chapter tax but provides two
+  # resident credits payable as refunds, subject to appropriation. PolicyEngine
+  # has no active Alaska individual-income-tax surface. Exact not-comparable
+  # entries preserve the distinction between substantive pre-credit zeros,
+  # private statutory candidates, and held public refund/liability sentinels.
+  - legal_id: us-ak:policies/income_tax/2026_resident_zero_liability#ak_pit_2026_political_credit_cap
+    country: &ak_2026_country us
+    program: &ak_2026_program tax
+    mapping_type: &ak_2026_mapping_type not_comparable
+    candidate_priority: &ak_2026_priority P4
+    rationale: This private Axiom parameter records the statutory $100 political-credit cap. PolicyEngine exposes no active Alaska individual-credit parameter.
+
+  - legal_id: us-ak:policies/income_tax/2026_resident_zero_liability#ak_pit_2026_dependent_care_credit_rate
+    country: *ak_2026_country
+    program: *ak_2026_program
+    mapping_type: *ak_2026_mapping_type
+    candidate_priority: *ak_2026_priority
+    rationale: This private Axiom parameter records the statutory 16 percent federal dependent-care-credit linkage. PolicyEngine exposes no active Alaska counterpart.
+
+  - legal_id: us-ak:policies/income_tax/2026_resident_zero_liability#ak_pit_2026_chapter_tax_applies_to_individual
+    country: *ak_2026_country
+    program: *ak_2026_program
+    mapping_type: *ak_2026_mapping_type
+    candidate_priority: *ak_2026_priority
+    rationale: This Axiom boolean records that Alaska's chapter tax does not apply to an individual. PolicyEngine exposes no Alaska legal-applicability predicate.
+
+  - legal_id: us-ak:policies/income_tax/2026_resident_zero_liability#ak_pit_2026_corporate_tax_boundary_preserved
+    country: *ak_2026_country
+    program: *ak_2026_program
+    mapping_type: *ak_2026_mapping_type
+    candidate_priority: *ak_2026_priority
+    rationale: This Axiom scope output preserves Alaska's separate corporate-tax boundary and is not an individual-income-tax amount comparable to PolicyEngine.
+
+  - legal_id: us-ak:policies/income_tax/2026_resident_zero_liability#ak_pit_2026_credit_return_surface_applies
+    country: *ak_2026_country
+    program: *ak_2026_program
+    mapping_type: *ak_2026_mapping_type
+    candidate_priority: *ak_2026_priority
+    rationale: This Axiom output records the statutory ability to file an individual return for section 43.20.013 credits. PolicyEngine has no equivalent Alaska filing-purpose predicate.
+
+  - legal_id: us-ak:policies/income_tax/2026_resident_zero_liability#ak_pit_2026_supported_resident_credit_profile_applies
+    country: *ak_2026_country
+    program: *ak_2026_program
+    mapping_type: *ak_2026_mapping_type
+    candidate_priority: *ak_2026_priority
+    rationale: This private Axiom judgment bounds candidate arithmetic to a resident individual profile. PolicyEngine exposes no one-to-one input-domain judgment.
+
+  - legal_id: us-ak:policies/income_tax/2026_resident_zero_liability#ak_pit_2026_deduction_and_exemption_stage_applies
+    country: *ak_2026_country
+    program: *ak_2026_program
+    mapping_type: *ak_2026_mapping_type
+    candidate_priority: *ak_2026_priority
+    rationale: This output records non-applicability of an Alaska individual deduction and exemption stage. PolicyEngine exposes no active Alaska stage predicate.
+
+  - legal_id: us-ak:policies/income_tax/2026_resident_zero_liability#ak_pit_2026_surtax_stage_applies
+    country: *ak_2026_country
+    program: *ak_2026_program
+    mapping_type: *ak_2026_mapping_type
+    candidate_priority: *ak_2026_priority
+    rationale: This output records non-applicability of an Alaska individual-income-tax surtax stage. PolicyEngine exposes no active Alaska stage predicate.
+
+  - legal_id: us-ak:policies/income_tax/2026_resident_zero_liability#ak_pit_2026_alaska_adjusted_gross_income
+    country: *ak_2026_country
+    program: *ak_2026_program
+    mapping_type: *ak_2026_mapping_type
+    candidate_priority: *ak_2026_priority
+    rationale: Axiom returns substantive zero because Alaska has no individual chapter-tax income-base stage. PolicyEngine has no active Alaska adjusted-gross-income variable.
+
+  - legal_id: us-ak:policies/income_tax/2026_resident_zero_liability#ak_pit_2026_deductions_and_exemptions
+    country: *ak_2026_country
+    program: *ak_2026_program
+    mapping_type: *ak_2026_mapping_type
+    candidate_priority: *ak_2026_priority
+    rationale: Axiom returns substantive zero because Alaska has no individual chapter-tax deduction or exemption stage. PolicyEngine has no active counterpart.
+
+  - legal_id: us-ak:policies/income_tax/2026_resident_zero_liability#ak_pit_2026_taxable_income
+    country: *ak_2026_country
+    program: *ak_2026_program
+    mapping_type: *ak_2026_mapping_type
+    candidate_priority: *ak_2026_priority
+    rationale: Axiom returns substantive zero because Alaska's chapter tax does not apply to individuals. PolicyEngine has no active Alaska individual taxable-income variable.
+
+  - legal_id: us-ak:policies/income_tax/2026_resident_zero_liability#ak_pit_2026_tax_before_credits
+    country: *ak_2026_country
+    program: *ak_2026_program
+    mapping_type: *ak_2026_mapping_type
+    candidate_priority: *ak_2026_priority
+    rationale: Axiom returns exact pre-credit zero under Alaska's statutory individual exclusion. PolicyEngine has no active Alaska before-credit tax variable.
+
+  - legal_id: us-ak:policies/income_tax/2026_resident_zero_liability#ak_pit_2026_nonrefundable_credits
+    country: *ak_2026_country
+    program: *ak_2026_program
+    mapping_type: *ak_2026_mapping_type
+    candidate_priority: *ak_2026_priority
+    rationale: Axiom returns zero because the resident credits in the pinned section are payable as refunds, not offsets against individual chapter tax. PolicyEngine has no active Alaska nonrefundable-credit variable.
+
+  - legal_id: us-ak:policies/income_tax/2026_resident_zero_liability#ak_pit_2026_tax_after_nonrefundable_credits
+    country: *ak_2026_country
+    program: *ak_2026_program
+    mapping_type: *ak_2026_mapping_type
+    candidate_priority: *ak_2026_priority
+    rationale: Axiom returns substantive zero after nonrefundable credits because no individual chapter tax applies and the pinned resident credits are refund payments. PolicyEngine has no counterpart.
+
+  - legal_id: us-ak:policies/income_tax/2026_resident_zero_liability#ak_pit_2026_political_credit_statutory_candidate
+    country: *ak_2026_country
+    program: *ak_2026_program
+    mapping_type: *ak_2026_mapping_type
+    candidate_priority: *ak_2026_priority
+    rationale: This private Axiom person-level value is statutory candidate arithmetic before current claim mechanics and appropriation. PolicyEngine exposes no active Alaska political-credit variable.
+
+  - legal_id: us-ak:policies/income_tax/2026_resident_zero_liability#ak_pit_2026_dependent_care_credit_statutory_candidate
+    country: *ak_2026_country
+    program: *ak_2026_program
+    mapping_type: *ak_2026_mapping_type
+    candidate_priority: *ak_2026_priority
+    rationale: This private Axiom person-level value is the statutory 16 percent federal-credit candidate before current claim mechanics and appropriation. PolicyEngine has no active Alaska counterpart.
+
+  - legal_id: us-ak:policies/income_tax/2026_resident_zero_liability#ak_pit_2026_combined_refundable_credit_statutory_candidate
+    country: *ak_2026_country
+    program: *ak_2026_program
+    mapping_type: *ak_2026_mapping_type
+    candidate_priority: *ak_2026_priority
+    rationale: This private Axiom value combines two person-level statutory candidates but is not a certified payable refund. PolicyEngine exposes no active Alaska combined-credit variable.
+
+  - legal_id: us-ak:policies/income_tax/2026_resident_zero_liability#ak_pit_2026_refundable_credit_source_hold_applies
+    country: *ak_2026_country
+    program: *ak_2026_program
+    mapping_type: *ak_2026_mapping_type
+    candidate_priority: *ak_2026_priority
+    rationale: This typed Axiom hold records that a tax-year-2026 appropriation and current claim mechanics are not pinned. PolicyEngine exposes no source-completeness judgment.
+
+  - legal_id: us-ak:policies/income_tax/2026_resident_zero_liability#ak_pit_2026_refundable_credits
+    country: *ak_2026_country
+    program: *ak_2026_program
+    mapping_type: *ak_2026_mapping_type
+    candidate_priority: *ak_2026_priority
+    rationale: Axiom returns a fail-closed zero sentinel while the refundable-credit hold remains active; it does not assert that the payable Alaska refund equals zero. PolicyEngine has no corresponding held output.
+
+  - legal_id: us-ak:policies/income_tax/2026_resident_zero_liability#ak_pit_2026_complete_liability_source_hold_applies
+    country: *ak_2026_country
+    program: *ak_2026_program
+    mapping_type: *ak_2026_mapping_type
+    candidate_priority: *ak_2026_priority
+    rationale: This typed Axiom hold records that signed net liability cannot be completed until the payable refundable-credit amount is established. PolicyEngine exposes no equivalent source judgment.
+
+  - legal_id: us-ak:policies/income_tax/2026_resident_zero_liability#ak_pit_2026_net_income_tax_liability_before_payments
+    country: *ak_2026_country
+    program: *ak_2026_program
+    mapping_type: *ak_2026_mapping_type
+    candidate_priority: *ak_2026_priority
+    rationale: Axiom returns a fail-closed zero sentinel while signed liability remains held; it does not assert complete zero net liability. PolicyEngine has no corresponding held Alaska output.
+
+  # Nevada Constitution article 10, section 1(9) prohibits a personal income
+  # tax on natural persons while expressly preserving taxes on business income
+  # or revenue. PolicyEngine has no active Nevada individual-income-tax surface,
+  # so these bounded legal and source-hold outputs are exact tax-scoped
+  # non-comparables. Downstream zero values are fail-closed sentinels, not
+  # substantive claims of complete signed net liability.
+  - legal_id: us-nv:policies/income_tax/2026_resident_zero_liability#nv_pit_2026_natural_person_income_tax_prohibition_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom output records the applicability of Nevada's constitutional prohibition on taxing a natural person's wages or personal income. PolicyEngine exposes no legal-authority applicability predicate for a state with no active individual income-tax program.
+
+  - legal_id: us-nv:policies/income_tax/2026_resident_zero_liability#nv_pit_2026_constitutional_prohibition_current_for_tax_year
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom output records that the current official constitutional text and amendment history support applying the prohibition in tax year 2026. PolicyEngine exposes no source-currentness predicate for Nevada constitutional authority.
+
+  - legal_id: us-nv:policies/income_tax/2026_resident_zero_liability#nv_pit_2026_business_income_or_revenue_tax_carveout_preserved
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom output preserves the constitutional boundary permitting taxes on business income or revenue. It is a scope predicate, not a PolicyEngine individual-income-tax variable.
+
+  - legal_id: us-nv:policies/income_tax/2026_resident_zero_liability#nv_pit_2026_resident_personal_income_tax_imposed
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom boolean states the legal absence of a Nevada personal income tax for a natural-person resident. PolicyEngine has no active Nevada individual-income-tax imposition variable.
+
+  - legal_id: us-nv:policies/income_tax/2026_resident_zero_liability#nv_pit_2026_deduction_and_exemption_stage_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This output states that no Nevada personal-income-tax deduction or exemption stage applies because no natural-person personal income tax is imposed. PolicyEngine exposes no corresponding non-applicability predicate.
+
+  - legal_id: us-nv:policies/income_tax/2026_resident_zero_liability#nv_pit_2026_surtax_stage_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This output states that no Nevada personal-income-tax surtax stage applies. PolicyEngine exposes no Nevada personal-income-tax surtax-stage applicability variable.
+
+  - legal_id: us-nv:policies/income_tax/2026_resident_zero_liability#nv_pit_2026_resident_personal_income_tax_before_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns exact zero before credits as the legal consequence of Nevada's constitutional prohibition on natural-person personal income tax. PolicyEngine has no active Nevada before-credit personal-income-tax variable.
+
+  - legal_id: us-nv:policies/income_tax/2026_resident_zero_liability#nv_pit_2026_nonrefundable_credit_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed Axiom hold records that complete tax-year-2026 Nevada nonrefundable-credit authority is not pinned. PolicyEngine exposes no source-completeness judgment for that legal surface.
+
+  - legal_id: us-nv:policies/income_tax/2026_resident_zero_liability#nv_pit_2026_resident_personal_income_tax_after_nonrefundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns a fail-closed zero sentinel while the nonrefundable-credit source hold remains active; it does not substantively assert a complete after-credit amount. PolicyEngine has no corresponding held Nevada output.
+
+  - legal_id: us-nv:policies/income_tax/2026_resident_zero_liability#nv_pit_2026_refundable_credit_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed Axiom hold records that the pinned constitutional prohibition does not prove the absence of independently refundable tax-year-2026 Nevada credits. PolicyEngine exposes no corresponding source-completeness judgment.
+
+  - legal_id: us-nv:policies/income_tax/2026_resident_zero_liability#nv_pit_2026_resident_refundable_personal_income_tax_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns a fail-closed zero sentinel while the refundable-credit source hold remains active; it does not substantively assert that Nevada refundable credits equal zero. PolicyEngine has no corresponding held output.
+
+  - legal_id: us-nv:policies/income_tax/2026_resident_zero_liability#nv_pit_2026_net_liability_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed Axiom hold records that complete credit ordering and signed net-liability authority are not pinned. PolicyEngine exposes no one-to-one legal source-completeness judgment.
+
+  - legal_id: us-nv:policies/income_tax/2026_resident_zero_liability#nv_pit_2026_resident_net_personal_income_tax_liability_before_payments
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns a fail-closed zero sentinel while the net-liability source hold remains active; it does not substantively assert complete signed net liability. PolicyEngine exposes no corresponding held Nevada liability output.
+
+  # Texas Constitution article VIII, sections 24-a and 24-b prohibit taxes on
+  # individual net income and capital gains while preserving specified
+  # non-income taxes. PolicyEngine has no active Texas individual-income-tax
+  # surface, so these bounded legal and source-hold outputs are exact
+  # tax-scoped non-comparables. Downstream zero values are fail-closed
+  # sentinels, not substantive claims of complete signed net liability.
+  - legal_id: us-tx:policies/income_tax/2026_resident_zero_liability#tx_pit_2026_individual_net_income_tax_prohibition_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom output records the applicability of Texas's constitutional prohibition on taxing an individual's net income. PolicyEngine exposes no legal-authority applicability predicate for a state with no active individual income-tax program.
+
+  - legal_id: us-tx:policies/income_tax/2026_resident_zero_liability#tx_pit_2026_capital_gains_tax_prohibition_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom output records Texas's separate constitutional prohibition on taxes imposed on an individual, family, estate, or trust's realized or unrealized capital gains. PolicyEngine exposes no corresponding Texas legal-prohibition predicate.
+
+  - legal_id: us-tx:policies/income_tax/2026_resident_zero_liability#tx_pit_2026_non_income_tax_carveouts_preserved
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom scope predicate preserves section 24-b's express ad valorem, sales-tax, and use-tax carveouts. It is not a PolicyEngine individual-income-tax variable.
+
+  - legal_id: us-tx:policies/income_tax/2026_resident_zero_liability#tx_pit_2026_resident_individual_income_tax_imposed
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom boolean states the legal absence of a Texas net-income tax for a resident individual. PolicyEngine has no active Texas individual-income-tax imposition variable.
+
+  - legal_id: us-tx:policies/income_tax/2026_resident_zero_liability#tx_pit_2026_deduction_and_exemption_stage_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This output states that no Texas individual-income-tax deduction or exemption stage applies because no resident individual net-income tax is imposed. PolicyEngine exposes no corresponding non-applicability predicate.
+
+  - legal_id: us-tx:policies/income_tax/2026_resident_zero_liability#tx_pit_2026_surtax_stage_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This output states that no Texas individual-income-tax surtax stage applies. PolicyEngine exposes no Texas individual-income-tax surtax-stage applicability variable.
+
+  - legal_id: us-tx:policies/income_tax/2026_resident_zero_liability#tx_pit_2026_resident_individual_income_tax_before_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns exact zero before credits as the legal consequence of Texas's constitutional prohibition on individual net-income tax. PolicyEngine has no active Texas before-credit individual-income-tax variable.
+
+  - legal_id: us-tx:policies/income_tax/2026_resident_zero_liability#tx_pit_2026_nonrefundable_credit_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed Axiom hold records that complete tax-year-2026 Texas nonrefundable-credit authority is not pinned. PolicyEngine exposes no source-completeness judgment for that legal surface.
+
+  - legal_id: us-tx:policies/income_tax/2026_resident_zero_liability#tx_pit_2026_resident_individual_income_tax_after_nonrefundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns a fail-closed zero sentinel while the nonrefundable-credit source hold remains active; it does not substantively assert a complete after-credit amount. PolicyEngine has no corresponding held Texas output.
+
+  - legal_id: us-tx:policies/income_tax/2026_resident_zero_liability#tx_pit_2026_refundable_credit_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed Axiom hold records that the pinned constitutional prohibitions do not prove the absence of independently refundable tax-year-2026 Texas credits. PolicyEngine exposes no corresponding source-completeness judgment.
+
+  - legal_id: us-tx:policies/income_tax/2026_resident_zero_liability#tx_pit_2026_resident_refundable_individual_income_tax_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns a fail-closed zero sentinel while the refundable-credit source hold remains active; it does not substantively assert that Texas refundable credits equal zero. PolicyEngine has no corresponding held output.
+
+  - legal_id: us-tx:policies/income_tax/2026_resident_zero_liability#tx_pit_2026_net_liability_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed Axiom hold records that complete credit ordering and signed net-liability authority are not pinned. PolicyEngine exposes no one-to-one legal source-completeness judgment.
+
+  - legal_id: us-tx:policies/income_tax/2026_resident_zero_liability#tx_pit_2026_resident_net_individual_income_tax_liability_before_payments
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns a fail-closed zero sentinel while the net-liability source hold remains active; it does not substantively assert complete signed net liability. PolicyEngine exposes no corresponding held Texas liability output.
+
+  # Current official Wyoming sources state that Wyoming has no individual or
+  # state income tax. PolicyEngine has no active Wyoming individual-income-tax
+  # surface, so these bounded legal and source-hold outputs are exact
+  # tax-scoped non-comparables. Downstream zero values are fail-closed
+  # sentinels, not substantive claims of complete signed net liability.
+  - legal_id: us-wy:policies/income_tax/2026_resident_zero_liability#wy_pit_2026_individual_income_tax_absence_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom output records the current State of Wyoming portal's affirmative statement that Wyoming has no individual income tax. PolicyEngine exposes no legal-authority applicability predicate for a state with no active individual-income-tax program.
+
+  - legal_id: us-wy:policies/income_tax/2026_resident_zero_liability#wy_pit_2026_state_income_tax_absence_current_for_tax_year
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom output records that a May 2026 Wyoming Legislative Service Office report independently states that Wyoming has no state income tax. PolicyEngine exposes no source-currentness predicate for Wyoming authority.
+
+  - legal_id: us-wy:policies/income_tax/2026_resident_zero_liability#wy_pit_2026_resident_individual_income_tax_imposed
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom boolean states the legal absence of a Wyoming individual income tax for a resident. PolicyEngine has no active Wyoming individual-income-tax imposition variable.
+
+  - legal_id: us-wy:policies/income_tax/2026_resident_zero_liability#wy_pit_2026_deduction_and_exemption_stage_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This output states that no Wyoming individual-income-tax deduction or exemption stage applies because no resident individual income tax is imposed. PolicyEngine exposes no corresponding non-applicability predicate.
+
+  - legal_id: us-wy:policies/income_tax/2026_resident_zero_liability#wy_pit_2026_surtax_stage_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This output states that no Wyoming individual-income-tax surtax stage applies. PolicyEngine exposes no Wyoming individual-income-tax surtax-stage applicability variable.
+
+  - legal_id: us-wy:policies/income_tax/2026_resident_zero_liability#wy_pit_2026_resident_individual_income_tax_before_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns exact zero before credits as the legal consequence of Wyoming's absence of an individual income tax. PolicyEngine has no active Wyoming before-credit individual-income-tax variable.
+
+  - legal_id: us-wy:policies/income_tax/2026_resident_zero_liability#wy_pit_2026_nonrefundable_credit_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed Axiom hold records that complete tax-year-2026 Wyoming nonrefundable-credit authority is not pinned. PolicyEngine exposes no source-completeness judgment for that legal surface.
+
+  - legal_id: us-wy:policies/income_tax/2026_resident_zero_liability#wy_pit_2026_resident_individual_income_tax_after_nonrefundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns a fail-closed zero sentinel while the nonrefundable-credit source hold remains active; it does not substantively assert a complete after-credit amount. PolicyEngine has no corresponding held Wyoming output.
+
+  - legal_id: us-wy:policies/income_tax/2026_resident_zero_liability#wy_pit_2026_refundable_credit_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed Axiom hold records that the pinned no-income-tax sources do not prove the absence of independently refundable tax-year-2026 Wyoming credits. PolicyEngine exposes no corresponding source-completeness judgment.
+
+  - legal_id: us-wy:policies/income_tax/2026_resident_zero_liability#wy_pit_2026_resident_refundable_individual_income_tax_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns a fail-closed zero sentinel while the refundable-credit source hold remains active; it does not substantively assert that Wyoming refundable credits equal zero. PolicyEngine has no corresponding held output.
+
+  - legal_id: us-wy:policies/income_tax/2026_resident_zero_liability#wy_pit_2026_net_liability_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed Axiom hold records that complete credit ordering and signed net-liability authority are not pinned. PolicyEngine exposes no one-to-one legal source-completeness judgment.
+
+  - legal_id: us-wy:policies/income_tax/2026_resident_zero_liability#wy_pit_2026_resident_net_individual_income_tax_liability_before_payments
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns a fail-closed zero sentinel while the net-liability source hold remains active; it does not substantively assert complete signed net liability. PolicyEngine exposes no corresponding held Wyoming liability output.
+
+  # Kansas's bounded TY2026 resident core has eight amount stages with aligned
+  # PolicyEngine variables. Readiness judgments, literal parameters,
+  # non-identical ordering intermediates, and fail-closed public sentinels are
+  # classified exactly but are not compared as substantive PolicyEngine values.
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_input_domain_is_valid
+    country: &ks_2026_country us
+    program: &ks_2026_program tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: &ks_2026_readiness_rationale Axiom exposes a private raw-input and source-readiness judgment for its bounded Kansas interface. PolicyEngine uses its own categorical and entity inputs and exposes no one-to-one readiness predicate.
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_base_profile_applies
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: *ks_2026_readiness_rationale
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_supported_profile_applies
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: *ks_2026_readiness_rationale
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_lower_rate
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: &ks_2026_parameter_rationale Axiom keeps this pinned TY2026 statutory component private inside the bounded pipeline. No one-to-one PolicyEngine parameter comparison is registered for this internal RuleSpec value.
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_upper_rate
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: *ks_2026_parameter_rationale
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_joint_bracket_ceiling
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: *ks_2026_parameter_rationale
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_single_bracket_ceiling
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: *ks_2026_parameter_rationale
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_single_standard_deduction
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: *ks_2026_parameter_rationale
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_joint_standard_deduction
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: *ks_2026_parameter_rationale
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_single_additional_standard_deduction
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: *ks_2026_parameter_rationale
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_joint_additional_standard_deduction
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: *ks_2026_parameter_rationale
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_single_personal_exemption
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: *ks_2026_parameter_rationale
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_joint_personal_exemption
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: *ks_2026_parameter_rationale
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_dependent_exemption
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: *ks_2026_parameter_rationale
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_earned_income_credit_rate
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: *ks_2026_parameter_rationale
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_standard_deduction
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: direct_variable
+    policyengine_variable: ks_standard_deduction
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same Kansas standard deduction for aligned single or joint filing status and aged-or-blind count.
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_itemized_deduction
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    policyengine_variable: ks_itemized_deductions
+    candidate_priority: P4
+    rationale: Axiom constructs the four categories enumerated by K.S.A. 79-32,120 and subtracts depreciation tied to listed Kansas credits without double-subtracting state income tax from the separate property-tax amount. PolicyEngine starts from its broader federal itemized-deductions-less-SALT aggregate and does not expose the same Kansas depreciation adjustment, so the outputs are not one-to-one.
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_candidate_kansas_adjusted_gross_income
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: direct_variable
+    policyengine_variable: ks_agi
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same Kansas adjusted gross income on the bounded profile when all held modification branches are absent.
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_candidate_deduction
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom exposes the elected greater deduction after its explicit Kansas itemization election. PolicyEngine exposes standard and itemized amounts separately and does not expose this bounded election intermediate.
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_candidate_personal_exemptions
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: direct_variable
+    policyengine_variable: ks_exemptions
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same Kansas exemption amount for aligned single and joint returns without held head-of-household, unborn-child, or disabled-veteran branches.
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_candidate_taxable_income
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    policyengine_variable: ks_taxable_income
+    candidate_priority: P4
+    rationale: Axiom taxable income depends on its explicit Kansas deduction election, including the four-category itemized calculation and Kansas depreciation adjustment. PolicyEngine's taxable income inherits its broader aggregate itemized-deduction construction, so this downstream amount is not one-to-one.
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_candidate_tax_before_credits
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    policyengine_variable: ks_income_tax_before_credits
+    candidate_priority: P4
+    rationale: The rate schedule aligns, but Axiom tax before credits is applied to taxable income that can diverge under the non-comparable Kansas itemized-deduction construction. The resulting downstream amount is therefore not one-to-one with PolicyEngine.
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_candidate_tax_after_nonrefundable_credits
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    policyengine_variable: ks_income_tax_before_refundable_credits
+    candidate_priority: P4
+    rationale: Axiom holds all nonrefundable-credit branches and treats the statutory Kansas EITC as refundable at the final stage. PolicyEngine internally splits EITC between nonrefundable and refundable components, so the intermediate ordering boundaries are not identical.
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_candidate_earned_income_credit
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: direct_variable
+    policyengine_variable: ks_total_eitc
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same total Kansas earned income credit as 17 percent of the aligned federal earned income credit.
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_candidate_net_income_tax_liability
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    policyengine_variable: ks_income_tax
+    candidate_priority: P4
+    rationale: Axiom net liability inherits the non-comparable Kansas itemized-deduction and taxable-income construction before subtracting the aligned total EITC. PolicyEngine's final Kansas income tax therefore is not one-to-one for the full supported profile.
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_supported_kansas_adjusted_gross_income
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    policyengine_variable: ks_agi
+    candidate_priority: P4
+    rationale: &ks_2026_supported_rationale This public Axiom stage returns a fail-closed zero sentinel whenever any unsupported Kansas branch is present. PolicyEngine computes a substantive amount and exposes no matching source-readiness gate; the corresponding private candidate has the exact mapping where available.
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_supported_deductions_and_exemptions
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: *ks_2026_supported_rationale
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_supported_taxable_income
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    policyengine_variable: ks_taxable_income
+    candidate_priority: P4
+    rationale: *ks_2026_supported_rationale
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_supported_tax_before_credits
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    policyengine_variable: ks_income_tax_before_credits
+    candidate_priority: P4
+    rationale: *ks_2026_supported_rationale
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_supported_tax_after_nonrefundable_credits
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    policyengine_variable: ks_income_tax_before_refundable_credits
+    candidate_priority: P4
+    rationale: *ks_2026_supported_rationale
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_supported_refundable_credits
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    policyengine_variable: ks_total_eitc
+    candidate_priority: P4
+    rationale: Axiom exposes the refundable Kansas earned income credit only when its bounded supported-profile gate holds and returns a zero sentinel for invalid or source-held profiles. PolicyEngine's ks_total_eitc has no equivalent source-readiness gate, so it is not a one-to-one comparison for this public output.
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_supported_net_income_tax_liability
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    policyengine_variable: ks_income_tax
+    candidate_priority: P4
+    rationale: *ks_2026_supported_rationale
+  # Indiana's TY2026 resident module is a source-readiness surface. Its
+  # monetary stages fail closed until final current-year income-base,
+  # deduction, tax, statewide surtax, credit, and ordering authority is
+  # pinned. Exact mappings prevent those zero sentinels from being treated as
+  # completed Indiana tax results.
+  - legal_id: us-in:policies/income_tax/2026_resident_liability_source_hold#in_pit_2026_input_domain_is_valid
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom's input-domain gate requires a full-year Indiana resident return, aligned federal and Indiana filing units, and a nonnegative integer dependent count. PolicyEngine exposes no one-to-one validation output for that interface contract.
+
+  - legal_id: us-in:policies/income_tax/2026_resident_liability_source_hold#in_pit_2026_current_law_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold records that final TY2026 Indiana codification and IT-40 annual-return materials are unavailable in the pinned corpus. It is source-readiness metadata rather than a substantive tax variable modeled by PolicyEngine.
+
+  - legal_id: us-in:policies/income_tax/2026_resident_liability_source_hold#in_pit_2026_income_base_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold records that the complete current-year Indiana adjusted-gross-income modification and conformity chain is unavailable. PolicyEngine computes modeled income and exposes no corresponding source-readiness judgment.
+
+  - legal_id: us-in:policies/income_tax/2026_resident_liability_source_hold#in_pit_2026_deduction_and_exemption_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold records that final TY2026 Indiana deduction, exemption, and dependent schedule authority is unavailable. PolicyEngine's modeled deductions and exemptions are substantive results, not completion-state predicates.
+
+  - legal_id: us-in:policies/income_tax/2026_resident_liability_source_hold#in_pit_2026_tax_and_surtax_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold records that taxable income and the complete TY2026 statewide individual tax, surtax, and specialty-tax surface are unavailable even though the regular 2.95 percent rate is known. It has no one-to-one PolicyEngine analog.
+
+  - legal_id: us-in:policies/income_tax/2026_resident_liability_source_hold#in_pit_2026_credit_surface_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold records that the complete TY2026 Indiana nonrefundable and refundable credit surface, ordering, recapture, and carryforward rules are unavailable. PolicyEngine exposes no equivalent source-readiness predicate.
+
+  - legal_id: us-in:policies/income_tax/2026_resident_liability_source_hold#in_pit_2026_complete_liability_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This output combines Axiom's current-law, income, deduction, tax, statewide surtax, and credit source holds. It is a completion-state predicate rather than a completed Indiana liability result.
+
+  - legal_id: us-in:policies/income_tax/2026_resident_liability_source_hold#in_pit_2026_indiana_adjusted_gross_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while the current-year Indiana income-base and conformity stage is source held. That sentinel is not a completed adjusted-gross-income amount comparable to PolicyEngine.
+
+  - legal_id: us-in:policies/income_tax/2026_resident_liability_source_hold#in_pit_2026_deductions_and_exemptions
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while complete TY2026 Indiana deduction and exemption authority is source held. PolicyEngine's modeled deductions are substantive amounts, not readiness sentinels.
+
+  - legal_id: us-in:policies/income_tax/2026_resident_liability_source_hold#in_pit_2026_taxable_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel because its current-year income, deduction, and exemption chain is incomplete. The value must not be compared to PolicyEngine's completed Indiana taxable income.
+
+  - legal_id: us-in:policies/income_tax/2026_resident_liability_source_hold#in_pit_2026_tax_before_credits_including_statewide_surtaxes
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while taxable income and the final annual statewide tax, surtax, and specialty-tax surface are source held. PolicyEngine's before-credit tax is a substantive modeled result.
+
+  - legal_id: us-in:policies/income_tax/2026_resident_liability_source_hold#in_pit_2026_tax_after_nonrefundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while complete TY2026 Indiana nonrefundable-credit authority and ordering are source held. It is not comparable to a completed PolicyEngine tax result.
+
+  - legal_id: us-in:policies/income_tax/2026_resident_liability_source_hold#in_pit_2026_refundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while complete TY2026 Indiana refundable-credit authority, limitations, ordering, and recapture are source held. PolicyEngine's modeled refundable credits are substantive amounts.
+
+  - legal_id: us-in:policies/income_tax/2026_resident_liability_source_hold#in_pit_2026_net_income_tax_liability_before_payments
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom's signed net-liability output is deliberately zero while the annual current-law, income, deduction, tax, statewide surtax, and credit chain remains source held; it must not be interpreted as zero Indiana tax or compared to completed PolicyEngine liability.
+
+
+  # The South Dakota Department of Revenue's January 2026 guide states that
+  # South Dakota does not have a personal income tax. SDCL chapter 10-43 and
+  # section 10-43-2 confine the state's income-tax chapter to banks and
+  # financial corporations. PolicyEngine has no active South Dakota
+  # individual-income-tax surface, so these bounded legal and source-hold
+  # outputs are exact tax-scoped non-comparables. Downstream zero values are
+  # fail-closed sentinels, not substantive claims of complete signed net
+  # liability.
+  - legal_id: us-sd:policies/income_tax/2026_resident_zero_liability#sd_pit_2026_personal_income_tax_absence_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom output records the applicability of South Dakota's official no-personal-income-tax position for tax year 2026. PolicyEngine exposes no legal-authority applicability predicate for a state with no active individual income-tax program.
+
+  - legal_id: us-sd:policies/income_tax/2026_resident_zero_liability#sd_pit_2026_business_and_entity_taxes_outside_scope
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom output preserves the statutory boundary for bank-franchise and other business or entity taxes. It is a scope predicate, not a PolicyEngine individual-income-tax variable.
+
+  - legal_id: us-sd:policies/income_tax/2026_resident_zero_liability#sd_pit_2026_resident_personal_income_tax_imposed
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom boolean states the legal absence of a South Dakota personal income tax for a natural-person resident. PolicyEngine has no active South Dakota individual-income-tax imposition variable.
+
+  - legal_id: us-sd:policies/income_tax/2026_resident_zero_liability#sd_pit_2026_deduction_and_exemption_stage_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This output states that no South Dakota personal-income-tax deduction or exemption stage applies because no natural-person personal income tax is imposed. PolicyEngine exposes no corresponding non-applicability predicate.
+
+  - legal_id: us-sd:policies/income_tax/2026_resident_zero_liability#sd_pit_2026_surtax_stage_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This output states that no South Dakota personal-income-tax surtax stage applies. PolicyEngine exposes no South Dakota personal-income-tax surtax-stage applicability variable.
+
+  - legal_id: us-sd:policies/income_tax/2026_resident_zero_liability#sd_pit_2026_resident_personal_income_tax_before_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns exact zero before credits as the legal consequence of South Dakota's absence of a natural-person personal income tax. PolicyEngine has no active South Dakota before-credit personal-income-tax variable.
+
+  - legal_id: us-sd:policies/income_tax/2026_resident_zero_liability#sd_pit_2026_nonrefundable_credit_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed Axiom hold records that complete tax-year-2026 South Dakota nonrefundable-credit authority is not pinned. PolicyEngine exposes no source-completeness judgment for that legal surface.
+
+  - legal_id: us-sd:policies/income_tax/2026_resident_zero_liability#sd_pit_2026_resident_personal_income_tax_after_nonrefundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns a fail-closed zero sentinel while the nonrefundable-credit source hold remains active; it does not substantively assert a complete after-credit amount. PolicyEngine has no corresponding held South Dakota output.
+
+  - legal_id: us-sd:policies/income_tax/2026_resident_zero_liability#sd_pit_2026_refundable_credit_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed Axiom hold records that the pinned no-personal-income-tax authority does not prove the absence of independently refundable tax-year-2026 South Dakota credits. PolicyEngine exposes no corresponding source-completeness judgment.
+
+  - legal_id: us-sd:policies/income_tax/2026_resident_zero_liability#sd_pit_2026_resident_refundable_personal_income_tax_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns a fail-closed zero sentinel while the refundable-credit source hold remains active; it does not substantively assert that South Dakota refundable credits equal zero. PolicyEngine has no corresponding held output.
+
+  - legal_id: us-sd:policies/income_tax/2026_resident_zero_liability#sd_pit_2026_net_liability_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed Axiom hold records that credit ordering and complete signed net-liability authority remain unresolved. PolicyEngine exposes no source-completeness judgment for that boundary.
+
+  - legal_id: us-sd:policies/income_tax/2026_resident_zero_liability#sd_pit_2026_resident_net_personal_income_tax_liability_before_payments
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns a fail-closed zero sentinel while the net-liability source hold remains active; it does not substantively assert complete signed net liability. PolicyEngine exposes no corresponding held South Dakota liability output.
+  # Colorado's TY2026 full-year-resident module is a source-readiness
+  # boundary. Exact P4 mappings prevent federal-boundary diagnostics and
+  # fail-closed Colorado sentinels from being mistaken for completed state-tax
+  # results.
+  - legal_id: us-co:policies/income_tax/2026_full_year_resident_source_hold#co_pit_2026_federal_taxable_income_boundary
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: The preserved federal starting point is an input-boundary diagnostic, not an independently computed Colorado result.
+
+  - legal_id: us-co:policies/income_tax/2026_full_year_resident_source_hold#co_pit_2026_input_domain_is_valid
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom validates the bounded full-year-resident and aligned-filing-unit contract; PolicyEngine exposes no one-to-one predicate.
+
+  - legal_id: us-co:policies/income_tax/2026_full_year_resident_source_hold#co_pit_2026_modification_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that the complete operative TY2026 Colorado modification chain is not pinned.
+
+  - legal_id: us-co:policies/income_tax/2026_full_year_resident_source_hold#co_pit_2026_rate_adjustment_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that the final TY2026 section 39-22-627 annual rate determination is not pinned.
+
+  - legal_id: us-co:policies/income_tax/2026_full_year_resident_source_hold#co_pit_2026_surtax_surface_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that complete TY2026 individual surtax and specialty-tax applicability is not established.
+
+  - legal_id: us-co:policies/income_tax/2026_full_year_resident_source_hold#co_pit_2026_credit_surface_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that complete TY2026 credit eligibility, limitations, carryforwards, and ordering are not pinned.
+
+  - legal_id: us-co:policies/income_tax/2026_full_year_resident_source_hold#co_pit_2026_complete_liability_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This completion-state predicate combines Axiom's modification, annual-rate, surtax, and credit source holds.
+
+  - legal_id: us-co:policies/income_tax/2026_full_year_resident_source_hold#co_pit_2026_state_income_after_modifications
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while the TY2026 Colorado modification chain is held, not completed state income after additions and subtractions.
+
+  - legal_id: us-co:policies/income_tax/2026_full_year_resident_source_hold#co_pit_2026_taxable_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while Colorado modifications are held, not completed Colorado taxable income.
+
+  - legal_id: us-co:policies/income_tax/2026_full_year_resident_source_hold#co_pit_2026_tax_before_credits_including_rate_adjustment_and_surtaxes
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while taxable income, the annual rate, and surtax applicability are held, not before-credit tax.
+
+  - legal_id: us-co:policies/income_tax/2026_full_year_resident_source_hold#co_pit_2026_tax_after_nonrefundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while nonrefundable-credit authority and ordering are held, not completed after-credit tax.
+
+  - legal_id: us-co:policies/income_tax/2026_full_year_resident_source_hold#co_pit_2026_refundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while the refundable-credit inventory and ordering are held, not a completed credit amount.
+
+  - legal_id: us-co:policies/income_tax/2026_full_year_resident_source_hold#co_pit_2026_net_income_tax_liability_before_payments
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This signed-liability zero is a fail-closed sentinel while the annual Colorado chain is held and must not be interpreted as zero tax.
+
+  # Kentucky's TY2026 full-year-resident module is a source-readiness
+  # boundary. Exact P4 mappings keep its source holds and fail-closed
+  # sentinels from being treated as completed Kentucky tax results or compared
+  # with PolicyEngine's projected state-tax outputs.
+  - legal_id: us-ky:policies/income_tax/2026_full_year_resident_source_hold#ky_pit_2026_input_domain_is_valid
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom validates the bounded Kentucky full-year-resident and aligned-filing-unit contract; PolicyEngine exposes no one-to-one predicate.
+
+  - legal_id: us-ky:policies/income_tax/2026_full_year_resident_source_hold#ky_pit_2026_final_return_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that the operative TY2026 Kentucky Form 740 final-return package is absent from the pinned corpus.
+
+  - legal_id: us-ky:policies/income_tax/2026_full_year_resident_source_hold#ky_pit_2026_income_and_modification_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that the complete TY2026 Kentucky income-base, addition, and subtraction chain is not pinned.
+
+  - legal_id: us-ky:policies/income_tax/2026_full_year_resident_source_hold#ky_pit_2026_deduction_and_exemption_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that the complete TY2026 Kentucky final-return deduction, election, and exemption chain is not pinned.
+
+  - legal_id: us-ky:policies/income_tax/2026_full_year_resident_source_hold#ky_pit_2026_tax_and_surtax_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: The regular 3.5 percent rate is official, but this hold records that final-return net income and the complete Kentucky statewide tax surface remain incomplete.
+
+  - legal_id: us-ky:policies/income_tax/2026_full_year_resident_source_hold#ky_pit_2026_nonrefundable_credit_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that complete TY2026 Kentucky nonrefundable-credit eligibility, limitations, ordering, recaptures, and carryforwards are not pinned.
+
+  - legal_id: us-ky:policies/income_tax/2026_full_year_resident_source_hold#ky_pit_2026_refundable_credit_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that complete TY2026 Kentucky refundable-credit eligibility, limitations, ordering, recaptures, and refundability are not pinned.
+
+  - legal_id: us-ky:policies/income_tax/2026_full_year_resident_source_hold#ky_pit_2026_complete_liability_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This completion-state predicate combines Axiom's Kentucky final-return, income, deduction, tax, surtax, and credit source holds.
+
+  - legal_id: us-ky:policies/income_tax/2026_full_year_resident_source_hold#ky_pit_2026_state_income_after_modifications
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while the TY2026 Kentucky income, addition, and subtraction chain is held, not completed state income after modifications.
+
+  - legal_id: us-ky:policies/income_tax/2026_full_year_resident_source_hold#ky_pit_2026_deductions_and_exemptions
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while the Kentucky final-return deduction, election, and exemption chain is held, not a completed deduction amount.
+
+  - legal_id: us-ky:policies/income_tax/2026_full_year_resident_source_hold#ky_pit_2026_taxable_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while Kentucky income, deductions, and exemptions are held, not completed Kentucky taxable or net income.
+
+  - legal_id: us-ky:policies/income_tax/2026_full_year_resident_source_hold#ky_pit_2026_tax_before_credits_including_statewide_surtaxes
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while final-return net income and statewide tax applicability are held, not completed before-credit Kentucky tax.
+
+  - legal_id: us-ky:policies/income_tax/2026_full_year_resident_source_hold#ky_pit_2026_tax_after_nonrefundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while Kentucky nonrefundable-credit authority and ordering are held, not completed after-credit tax.
+
+  - legal_id: us-ky:policies/income_tax/2026_full_year_resident_source_hold#ky_pit_2026_refundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while the Kentucky refundable-credit inventory and ordering are held, not a completed credit amount.
+
+  - legal_id: us-ky:policies/income_tax/2026_full_year_resident_source_hold#ky_pit_2026_net_income_tax_liability_before_payments
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This signed-liability zero is a fail-closed sentinel while the annual Kentucky chain is held and must not be interpreted as zero tax.
+
+  # Idaho's TY2026 full-year-resident module is a source-readiness boundary.
+  # Exact P4 mappings prevent federal-boundary diagnostics, source holds, and
+  # fail-closed Idaho sentinels from being mistaken for completed state-tax
+  # results or compared to PolicyEngine's projected Idaho outputs.
+  - legal_id: us-id:policies/income_tax/2026_full_year_resident_source_hold#id_pit_2026_federal_adjusted_gross_income_boundary
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: The preserved federal adjusted-gross-income value is an allowed input-boundary diagnostic, not an independently computed Idaho result.
+
+  - legal_id: us-id:policies/income_tax/2026_full_year_resident_source_hold#id_pit_2026_input_domain_is_valid
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom validates the bounded full-year-resident and aligned-filing-unit contract; PolicyEngine exposes no one-to-one predicate.
+
+  - legal_id: us-id:policies/income_tax/2026_full_year_resident_source_hold#id_pit_2026_income_and_modification_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that the substantive TY2026 Idaho income-base, addition, and subtraction chain is not pinned.
+
+  - legal_id: us-id:policies/income_tax/2026_full_year_resident_source_hold#id_pit_2026_deduction_and_exemption_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that the complete substantive TY2026 Idaho deduction and exemption chain is not pinned.
+
+  - legal_id: us-id:policies/income_tax/2026_full_year_resident_source_hold#id_pit_2026_indexed_schedule_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that the official TY2026 section 63-3024 indexed thresholds are not pinned.
+
+  - legal_id: us-id:policies/income_tax/2026_full_year_resident_source_hold#id_pit_2026_surtax_surface_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that complete TY2026 Idaho individual surtax and specialty-tax applicability is not established.
+
+  - legal_id: us-id:policies/income_tax/2026_full_year_resident_source_hold#id_pit_2026_nonrefundable_credit_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that complete TY2026 Idaho nonrefundable-credit eligibility, limitations, carryforwards, and ordering are not pinned.
+
+  - legal_id: us-id:policies/income_tax/2026_full_year_resident_source_hold#id_pit_2026_refundable_credit_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that complete TY2026 Idaho refundable-credit eligibility, limitations, and ordering are not pinned.
+
+  - legal_id: us-id:policies/income_tax/2026_full_year_resident_source_hold#id_pit_2026_complete_liability_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This completion-state predicate combines Axiom's Idaho income, deduction, indexed-schedule, surtax, and credit source holds.
+
+  - legal_id: us-id:policies/income_tax/2026_full_year_resident_source_hold#id_pit_2026_state_income_after_modifications
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while the TY2026 Idaho income, addition, and subtraction chain is held, not completed state income after modifications.
+
+  - legal_id: us-id:policies/income_tax/2026_full_year_resident_source_hold#id_pit_2026_taxable_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while Idaho income, deductions, and exemptions are held, not completed Idaho taxable income.
+
+  - legal_id: us-id:policies/income_tax/2026_full_year_resident_source_hold#id_pit_2026_tax_before_credits_including_indexed_schedule_and_surtaxes
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while taxable income, the annual indexed schedule, and surtax applicability are held, not completed before-credit tax.
+
+  - legal_id: us-id:policies/income_tax/2026_full_year_resident_source_hold#id_pit_2026_tax_after_nonrefundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while Idaho nonrefundable-credit authority and ordering are held, not completed after-credit tax.
+
+  - legal_id: us-id:policies/income_tax/2026_full_year_resident_source_hold#id_pit_2026_refundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while the Idaho refundable-credit inventory and ordering are held, not a completed credit amount.
+
+  - legal_id: us-id:policies/income_tax/2026_full_year_resident_source_hold#id_pit_2026_net_income_tax_liability_before_payments
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This signed-liability zero is a fail-closed sentinel while the annual Idaho chain is held and must not be interpreted as zero tax.
+
+  # Massachusetts's TY2026 full-year-resident module is a source-readiness
+  # boundary. Exact P4 mappings prevent federal-boundary diagnostics, source
+  # holds, and fail-closed Massachusetts sentinels from being mistaken for
+  # completed state-tax results or compared to PolicyEngine projections.
+  - legal_id: us-ma:policies/income_tax/2026_full_year_resident_source_hold#ma_pit_2026_federal_adjusted_gross_income_boundary
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: The preserved federal adjusted-gross-income value is an allowed input-boundary diagnostic, not an independently computed Massachusetts result.
+
+  - legal_id: us-ma:policies/income_tax/2026_full_year_resident_source_hold#ma_pit_2026_input_domain_is_valid
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom validates the bounded full-year-resident and aligned-filing-unit contract; PolicyEngine exposes no one-to-one predicate.
+
+  - legal_id: us-ma:policies/income_tax/2026_full_year_resident_source_hold#ma_pit_2026_income_and_modification_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that the complete TY2026 Massachusetts income-definition, classification, addition, and subtraction chain is not pinned.
+
+  - legal_id: us-ma:policies/income_tax/2026_full_year_resident_source_hold#ma_pit_2026_deduction_and_exemption_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that the complete TY2026 Massachusetts deduction and exemption determinations and final-return instructions are not pinned.
+
+  - legal_id: us-ma:policies/income_tax/2026_full_year_resident_source_hold#ma_pit_2026_income_classification_and_rate_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that complete final-return classification and loss ordering for all Part A, Part B, and Part C income is not pinned.
+
+  - legal_id: us-ma:policies/income_tax/2026_full_year_resident_source_hold#ma_pit_2026_surtax_integration_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: The official 2026 Massachusetts surtax threshold and rate are pinned, but the source-complete taxable Parts and final-return integration are not.
+
+  - legal_id: us-ma:policies/income_tax/2026_full_year_resident_source_hold#ma_pit_2026_nonrefundable_credit_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that complete TY2026 Massachusetts nonrefundable-credit eligibility, certifications, limitations, carryforwards, and ordering are not pinned.
+
+  - legal_id: us-ma:policies/income_tax/2026_full_year_resident_source_hold#ma_pit_2026_refundable_credit_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that complete TY2026 Massachusetts refundable-credit eligibility, certifications, annual authorizations, limitations, and ordering are not pinned.
+
+  - legal_id: us-ma:policies/income_tax/2026_full_year_resident_source_hold#ma_pit_2026_final_return_ordering_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that the operative TY2026 final Massachusetts Form 1 and instructions are absent from the pinned corpus.
+
+  - legal_id: us-ma:policies/income_tax/2026_full_year_resident_source_hold#ma_pit_2026_complete_liability_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This completion-state predicate combines Axiom's Massachusetts income, deduction, classification, surtax, credit, and final-return ordering source holds.
+
+  - legal_id: us-ma:policies/income_tax/2026_full_year_resident_source_hold#ma_pit_2026_state_income_after_modifications
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while the TY2026 Massachusetts income, classification, addition, and subtraction chain is held, not completed state income after modifications.
+
+  - legal_id: us-ma:policies/income_tax/2026_full_year_resident_source_hold#ma_pit_2026_taxable_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while Massachusetts income, deductions, and exemptions are held, not completed Massachusetts taxable income.
+
+  - legal_id: us-ma:policies/income_tax/2026_full_year_resident_source_hold#ma_pit_2026_tax_before_credits_including_surtax
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while taxable Parts, special-rate classification, loss ordering, and surtax integration are held, not completed before-credit tax.
+
+  - legal_id: us-ma:policies/income_tax/2026_full_year_resident_source_hold#ma_pit_2026_tax_after_nonrefundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while Massachusetts nonrefundable-credit authority and ordering are held, not completed after-credit tax.
+
+  - legal_id: us-ma:policies/income_tax/2026_full_year_resident_source_hold#ma_pit_2026_refundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while the Massachusetts refundable-credit inventory and ordering are held, not a completed credit amount.
+
+  - legal_id: us-ma:policies/income_tax/2026_full_year_resident_source_hold#ma_pit_2026_net_income_tax_liability_before_payments
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This signed-liability zero is a fail-closed sentinel while the annual Massachusetts chain is held and must not be interpreted as zero tax.
+
+  # Maryland's TY2026 full-year-resident State module is a source-readiness
+  # boundary. Exact P4 mappings prevent federal-boundary diagnostics, source
+  # holds, and fail-closed Maryland sentinels from being mistaken for completed
+  # State-tax results or compared to PolicyEngine projections.
+  - legal_id: us-md:policies/income_tax/2026_full_year_resident_source_hold#md_pit_2026_preserved_federal_return_agi_diagnostic
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: The preserved federal adjusted-gross-income value is an allowed input-boundary diagnostic, not an independently computed Maryland result.
+
+  - legal_id: us-md:policies/income_tax/2026_full_year_resident_source_hold#md_pit_2026_input_domain_is_valid
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom validates the bounded full-year-resident and aligned-filing-unit contract; PolicyEngine exposes no one-to-one predicate.
+
+  - legal_id: us-md:policies/income_tax/2026_full_year_resident_source_hold#md_pit_2026_income_and_modification_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that the complete TY2026 Maryland federal starting-point, addition, and subtraction chain is not pinned.
+
+  - legal_id: us-md:policies/income_tax/2026_full_year_resident_source_hold#md_pit_2026_deduction_and_exemption_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: The personal-exemption statute is pinned, but this hold records that the complete TY2026 Maryland deduction and final-return chain is not.
+
+  - legal_id: us-md:policies/income_tax/2026_full_year_resident_source_hold#md_pit_2026_tax_schedule_and_surtax_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: The regular statutory schedules and additional capital-gain tax are pinned, but operative filed tax tables, rounding, upstream facts, and the full exception surface are not.
+
+  - legal_id: us-md:policies/income_tax/2026_full_year_resident_source_hold#md_pit_2026_nonrefundable_credit_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that complete TY2026 Maryland State nonrefundable-credit eligibility, limitations, recaptures, carryforwards, and ordering are not pinned.
+
+  - legal_id: us-md:policies/income_tax/2026_full_year_resident_source_hold#md_pit_2026_refundable_credit_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that complete TY2026 Maryland State refundable-credit eligibility, limitations, and ordering are not pinned.
+
+  - legal_id: us-md:policies/income_tax/2026_full_year_resident_source_hold#md_pit_2026_complete_liability_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This completion-state predicate combines Axiom's Maryland income, deduction, schedule, capital-gain-tax, and State credit source holds.
+
+  - legal_id: us-md:policies/income_tax/2026_full_year_resident_source_hold#md_pit_2026_state_income_after_modifications
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while the TY2026 Maryland income, addition, and subtraction chain is held, not completed State income after modifications.
+
+  - legal_id: us-md:policies/income_tax/2026_full_year_resident_source_hold#md_pit_2026_taxable_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while Maryland income, deductions, and exemptions are held, not completed Maryland taxable income.
+
+  - legal_id: us-md:policies/income_tax/2026_full_year_resident_source_hold#md_pit_2026_state_tax_before_credits_including_capital_gain_tax
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while taxable income, filed tax-table rules, and additional capital-gain-tax applicability are held, not completed State tax before credits.
+
+  - legal_id: us-md:policies/income_tax/2026_full_year_resident_source_hold#md_pit_2026_state_tax_after_nonrefundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while Maryland State nonrefundable-credit authority and ordering are held, not completed after-credit State tax.
+
+  - legal_id: us-md:policies/income_tax/2026_full_year_resident_source_hold#md_pit_2026_state_refundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while the Maryland State refundable-credit inventory and ordering are held, not a completed credit amount.
+
+  - legal_id: us-md:policies/income_tax/2026_full_year_resident_source_hold#md_pit_2026_net_state_income_tax_liability_before_payments
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This signed-liability zero is a fail-closed sentinel while the annual Maryland State chain is held and must not be interpreted as zero tax.
+
 prefixes:
   - legal_id_prefix: us-dc:statutes/4/4-205/49#
     country: us

@@ -2,6 +2,8 @@
 // Each suite's full case rows (matches AND mismatches) are chunked JSON;
 // this caches per suite so the explorer and triangulation share one fetch.
 
+import { BASE_PATH } from "./basePath";
+
 const cache = new Map();
 const dispositionCache = new Map();
 
@@ -11,7 +13,7 @@ const dispositionCache = new Map();
  */
 export async function loadSuiteDispositions(suite) {
   if (dispositionCache.has(suite)) return dispositionCache.get(suite);
-  const promise = fetch(`/data/dispositions/${suite}.json`)
+  const promise = fetch(`${BASE_PATH}/data/dispositions/${suite}.json`)
     .then((r) => (r.ok ? r.json() : null))
     .catch(() => null);
   dispositionCache.set(suite, promise);
@@ -21,7 +23,7 @@ export async function loadSuiteDispositions(suite) {
 export async function loadSuiteCases(suite) {
   if (cache.has(suite)) return cache.get(suite);
   const promise = (async () => {
-    const base = `/data/cases/${suite}`;
+    const base = `${BASE_PATH}/data/cases/${suite}`;
     const indexResp = await fetch(`${base}/index.json`);
     if (!indexResp.ok) return null;
     const index = await indexResp.json();
