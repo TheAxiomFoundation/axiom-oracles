@@ -23,8 +23,9 @@ conformant  ⇔  covered == in_scope
   "all programs" accounting stays honest: an excluded-with-reason policy is
   neither covered nor silently dropped — it is counted and shown.
 * **`covered`** — an in-scope policy whose named suite has a **live committed
-  comparison report present**. A suite named in the universe with no report is
-  in scope and *not* covered. Coverage is evidence, not intent.
+  comparison report that attests execution** (see below). A suite named in the
+  universe with no report is in scope and *not* covered; so is one whose report
+  did not run. Coverage is evidence, not intent.
 * **`unexplained_total`** — mismatches on covered suites with no explanatory
   disposition (from each report's `summary.dispositioned.unexplained_count`, or
   the raw `mismatch_count` for an undispositioned v2 report).
@@ -38,6 +39,78 @@ conformant *for that policy* when every one of its residuals is a documented
 upstream (oracle) behaviour — which is exactly the UK Universal Credit lane
 today (raw 42%, explained 100%, unexplained 0, axiom-attributed 0).
 
+## Execution attestation — a covered suite must have RUN
+
+The predicate reads a report's mismatch signals. Nothing in it used to ask
+whether the report was the product of a run, and a report that ran *nothing*
+has no mismatches: the graceful-skip artifact `run_comparison.py` emits when a
+EUROMOD runtime is unavailable (`case_count: 0`, empty comparisons, one skip
+error) scored as zero-unexplained, zero-Axiom-attributed — **conformant**
+(axiom-oracles#355). Coverage was decided by suite-name registration, never by
+evidence the named suite compared the outputs the universe registers.
+
+Every candidate report is now attested against the universe's declared oracle
+(`axiom_oracles/conformance/attestation.py`), in two layers:
+
+1. **Execution — never waivable.** Strictly positive cases *and* comparisons;
+   zero errors at every level the schema records them (`errors[]`,
+   `summary.error_count`, `summary.errors_by_engine`, per-case
+   `left_errors`/`right_errors`); Axiom **and** the universe's declared oracle
+   both party to the comparison, and not the same engine twice; a recorded
+   oracle identity (`provenance.oracle`) that does not contradict the universe's
+   *model* identity — a `UK_2026` run cannot attest a `BE_2025` universe, and
+   policyengine-uk evidence cannot attest a policyengine-us claim, though both
+   write the same engine name; and, when the runner stamped an attestation,
+   `executed: true` with counts that agree with the report body — a stamp cannot
+   claim more than the artifact shows. A report failing any of these covers
+   nothing: the policy scores **uncovered**, with the reason on the drill-down
+   row, rather than covered-with-zero-unexplained.
+2. **Output binding.** At least one of the universe row's registered
+   `output_vars` must carry positive comparison evidence in the covering report.
+   A suite that ran cleanly against some other surface does not attest the
+   policy it is registered under.
+
+Evidence for layer 2 comes from a runner-stamped
+`report["attestation"].outputs` (which names, per compared concept, the engine
+variable each side was read from), from the grid `engines` shape that records
+the compared variable directly, or from the concept→engine-target bindings the
+comparison machinery itself uses (`config/concept_mappings.yaml` and the
+PolicyEngine oracle registry) applied to the report's positive aggregates.
+
+`attestation_waivers.yaml` names the reports that predate stamping and cannot
+show that binding. It is **hand-authored and shrink-only**: a new unbound row
+fails `scripts/conformance_attestation.py --check` instead of landing there, a
+waiver that is no longer needed is stale and fails too, and each is pinned to
+its suite so re-pointing a policy drops it. Two reasons are distinguished, and
+only the first is a statement about what a run did:
+
+| Reason | Meaning |
+| --- | --- |
+| `compared_surface_differs` | The report records every surface it compared and none is a registered output — the suite ran against a different surface (e.g. a state grid comparing PolicyEngine's `*_before_refundable_credits` where the row registers the final `*_income_tax`). |
+| `oracle_variable_not_recorded` | The artifact does not record which oracle variable each compared concept was bound to, so the binding cannot be verified either way. Regenerating the report with a stamped attestation resolves it. |
+
+Waived rows stay covered but are **published**: the scoreboard carries
+`covered_with_waived_output_attestation` per jurisdiction, so a conformant badge
+says how many of its bindings rest on a waiver rather than on evidence.
+
+### Oracle release drift — measured, not blocking
+
+The identity check blocks on the oracle's *model* (system, country, package) but
+only **records** a different *release*. Reports legitimately lag a universe
+re-pin: a PolicyEngine bump lands long before every population suite is rerun,
+and retracting coverage backed by millions of real comparisons because the
+universe moved would be the wrong trade. So each covered row carries
+`oracle_release_drift` (the release its report actually recorded) and the
+jurisdiction carries `covered_with_oracle_release_drift`.
+
+Today that is **0 for be, uk and uk-pe** and **25 of us-pe's 34 covered
+policies** — `fiit-ecps` ran policyengine-us 1.729.0, `ca-snap-ecps` 1.705.1 and
+the TANF/SSI/Medicaid population suites 1.752.2, against a universe pinned at
+1.767.3. The claim a badge makes is "Axiom conforms to *this* oracle at *this*
+release", so closing that gap means rerunning those suites at the pinned release
+(or re-pinning the universe to what the evidence actually covers). Making drift
+blocking is that scope decision, not a code change.
+
 ## The pieces
 
 | File / dir | What it is | Generated by |
@@ -46,7 +119,8 @@ today (raw 42%, explained 100%, unexplained 0, axiom-attributed 0).
 | `scoreboard.json` | Per-jurisdiction headline + the exact predicate verdict. Mirrored to `dashboard/public/data/conformance_scoreboard.json`. | `scripts/conformance_scoreboard.py` |
 | `detail/<jur>.json` | Per-policy drill-down (covered/uncovered/excluded, raw + explained rates). Mirrored to `dashboard/public/data/conformance_detail_<jur>.json`. | `scripts/conformance_scoreboard.py` |
 | `history/<jur>/<YYYY-MM-DD>.json` | Dated scoreboard snapshots — the burn-down source of truth (survives rebases). | `scripts/conformance_scoreboard.py --snapshot` |
-| `ratchet.yaml` | Monotonic floors/ceilings: `covered` may only rise; `unexplained`/`axiom_attributed_open` may only fall. | `scripts/conformance_ratchet.py` |
+| `ratchet.yaml` | Monotonic floors/ceilings: `covered` may only rise; `unexplained`/`axiom_attributed_open`/`bridge_artifacts` may only fall. | `scripts/conformance_ratchet.py` |
+| `attestation_waivers.yaml` | Schema `axiom_oracles.attestation_waivers.v1`. The enumerated, shrink-only set of covered policies whose committed report cannot bind its comparisons to the registered outputs, each pinned to its suite with the reason. HAND-AUTHORED; `--prune` only removes. | `scripts/conformance_attestation.py --prune` |
 | `compositions/<jur>.yaml` | Schema `axiom_oracles.compositions.v1`. Per covered suite: the runnable Axiom **program** the harness composes (RuleSpec import-set + repo-relative files), the query entity, the supplied-input surface, and the engine→input bridge — so the covered verdict is reproducible outside the harness. | `scripts/generate_conformance_compositions.py` |
 
 `dashboard/public/data/conformance_burndown.json` is built from the dated
@@ -182,9 +256,9 @@ passthroughs are excluded `input_carrying` rather than carried as in-scope
 ## How ratchets move
 
 Ratchets make progress irreversible. `covered_min` may only rise;
-`unexplained_max` and `axiom_attributed_open_max` may only fall. CI
-(`conformance_ratchet.py --check`) recomputes the live scoreboard and fails,
-naming the exact invariant, if any regressed:
+`unexplained_max`, `axiom_attributed_open_max` and `bridge_artifacts_max` may
+only fall. CI (`conformance_ratchet.py --check`) recomputes the live scoreboard
+and fails, naming the exact invariant, if any regressed:
 
 * You **encode a new suite** that covers a policy → `covered` rises → re-pin:
   ```bash
@@ -197,6 +271,13 @@ naming the exact invariant, if any regressed:
 * A change **introduces an Axiom encoding gap** (a disposition classed
   `axiom_encoding_gap`, or a linked open rulespec issue) → `axiom_attributed_open`
   rises → CI fails until the encoding is fixed.
+* A change **classes more mismatches as `bridge_artifact`** → CI fails. This kind
+  is *explained* by definition — "the comparison harness fed the engines
+  different inputs; not an engine or encoding defect"
+  (`dispositions/README.md`) — so growth in it is invisible to the predicate,
+  which is exactly why it is ratcheted. Confirm each new row really is a
+  different-inputs artifact rather than an encoding or scope gap wearing that
+  label; if the growth is genuine, re-pin and say why in the PR.
 
 The denominator (`policies_in_scope`) is recorded, not ratcheted: when the oracle
 model legitimately adds an in-scope policy, coverage is read against the new base.
@@ -264,6 +345,10 @@ Wired in `.github/workflows/ci.yml`, following the repo's existing gate patterns
 * **Composition drift** — regenerate == committed (derived from the suites, so
   it always bites: a covered suite whose program composition changed must
   refresh `conformance/compositions/<jur>.yaml`).
+* **Execution attestation** — every covered policy's report shows a real run
+  against the declared oracle, bound to a registered output or named in the
+  shrink-only waiver file. Derived from the committed reports, so it always
+  bites.
 * **Scoreboard freshness** — regenerated scoreboard + detail == committed copies.
 * **Ratchets** — no monotonic invariant regressed.
 * **Burn-down freshness** — regenerated series == committed.

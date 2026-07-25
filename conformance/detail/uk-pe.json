@@ -19,7 +19,13 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 0,
       "note": "rates-given-category \u2014 PE-UK applies the AA rate table (gov.dwp.attendance_allowance.higher 114.60, .lower 76.70 per week, annualised over WEEKS_IN_YEAR = 52) over a frozen aa_category FRS input. Covered by the uk-attendance-allowance-pe case-grid suite: the encoded SI 2026/148 Schedule 1 Part III weekly rates (uk/policies/attendance_allowance_composed_amount_pipeline.yaml) are applied over the same supplied award category and annualised over the same 52 weeks; the award category is a frozen input on both engines, so the grid binds the rate schedule (higher \u00a35,959.20, lower \u00a33,988.40, none \u00a30 \u2014 all 3 cases match to the penny), not the SSCBA 1992 s.64-66 needs assessment (matrix row 14 \u2192 SSCBA 1992 s.64-67).",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "attendance_allowance"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk-pe:business_rates",
@@ -37,7 +43,13 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 0,
       "note": "Covered by the uk-business-rates case-grid suite. PE-UK does not compute an individual ratepayer's bill (the LGFA 1988 Pt III multiplier and reliefs); its business_rates is a distributional incidence model \u2014 shareholding times the total non-domestic rates revenue across England, Scotland, Wales and Northern Ireland. The rulespec module (uk/policies/govuk/business-rates.yaml, LGFA 1988 s.43 enabling authority) restates that product with both quantities as supplied inputs, so the surfaces are commensurable; all 6 cases match to the penny in relative terms, residuals being PE float32 artifacts on the large revenue magnitude (matrix row 7 \u2192 LGFA 1988 Pt III).",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "business_rates"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk-pe:capital_gains_tax",
@@ -55,7 +67,13 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 0,
       "note": "Covered by the uk-capital-gains-tax case-grid suite. The rulespec module (uk/policies/govuk/capital-gains-tax.yaml, TCGA 1992 s.1H/1I/1K) reproduces PE-UK's capital_gains_tax band split \u2014 annual exempt amount \u00a33,000 (s.1K) deducted from chargeable gains, then charged at the s.1H basic 18% rate within the unused basic rate band and 24% above (PE's higher and additional CGT rates are both 24%). capital_gains, taxable income (adjusted_net_income less allowances) and the basic rate limit are supplied inputs on both sides, so the surfaces are commensurable; all 6 cases match to the penny, residuals sub-0.01 (PE float32) inside tolerance (matrix row 9 \u2192 TCGA 1992; FA rate schedule).",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "capital_gains_tax"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk-pe:carer_support_payment",
@@ -73,7 +91,13 @@
       "oracle_attributed": 232,
       "bridge_artifacts": 0,
       "note": "rates-given-category \u2014 the carer-support-payment-final suite compares the rules-computed entitlement amount (carer_support_payment_annual_amount); PE-UK's carer_support_payment (the Scotland CA replacement, \u22652025) is a hybrid amount-or-reported variable, so the bound comparison is the rate/amount given the award, not the full eligibility rule (matrix row 28).",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "carer_support_payment"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk-pe:carers_allowance",
@@ -91,7 +115,13 @@
       "oracle_attributed": 232,
       "bridge_artifacts": 0,
       "note": "rates-given-category \u2014 the carers-allowance-final suite compares the rules-computed entitlement amount (carers_allowance_annual_amount); PE-UK's carers_allowance variable is a hybrid (care-hours test OR reported fallback, zeroed in Scotland \u22652025), so the bound comparison is the rate/amount given the award, not the full hours-eligibility rule (matrix row 19).",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "carers_allowance"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk-pe:child_benefit",
@@ -109,7 +139,13 @@
       "oracle_attributed": 232,
       "bridge_artifacts": 0,
       "note": null,
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "child_benefit_respective_amount"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk-pe:council_tax",
@@ -127,7 +163,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "PE-UK carries council_tax as a reported FRS liability (no formula): it applies no bands/valuation and computes no statutory charge, so there is no simulated surface to compare. In-scope uncovered on the rulespec side once PE adds a computed base (matrix row 6 \u2192 LGFA 1992 Pt I).",
-      "status": "excluded:input_carrying"
+      "status": "excluded:input_carrying",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk-pe:council_tax_benefit",
@@ -145,7 +185,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "Legacy pre-2013 Council Tax Benefit: PE-UK reads a *_reported amount and applies only a passthrough, never computing the abolished scheme's award from statute. The current-scheme analogue is council_tax_reduction (a distinct in-scope program). Not a comparable statutory surface (matrix row 20).",
-      "status": "excluded:input_carrying"
+      "status": "excluded:input_carrying",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk-pe:council_tax_reduction",
@@ -163,7 +207,13 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 0,
       "note": "Covered by the uk-council-tax-reduction case-grid suite. council_tax_reduction gained a formula in PE-UK 2.89.2 (#1769 national core + #1771 Kingston, both merged), resolving the matrix ambiguity at HEAD 45eb181c where the variable was absent. The suite compares PE-UK's England pension-age path (gov.local_authorities.england.council_tax_reduction.pensioners: max-support 1, capital limit 16000, withdrawal 0.20) against the rulespec SI 2012/2885 England pension-age scheme (uk/policies/govuk/council-tax-reduction.yaml) on a synthetic pensioner grid, bridging PE's own applicable amount / applicable income / non-dependant deductions / council_tax liability / savings into the rulespec supplied inputs (the uk-pension-credit bridge pattern). council_tax is a supplied input on both sides, so the schemes are commensurable; all 11 cases match to the penny (the taper interior, the capital screen, single and couple), residuals sub-0.001 (PE float32), inside tolerance. The England pension-age income test does not inherit the #1794 Housing Benefit earnings-disregard defect \u2014 council_tax_reduction_applicable_income applies no earnings disregard. matrix row 29 \u2192 LGFA 1992 s.13A + Sch.1A; SI 2012/2885.",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "council_tax_reduction"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk-pe:dla",
@@ -181,7 +231,11 @@
       "oracle_attributed": 232,
       "bridge_artifacts": 0,
       "note": "rates-given-category \u2014 PE-UK applies the DLA care/mobility rate tables over a frozen dla_sc_category/dla_m_category FRS input, so the comparison binds the rate schedule, not the award-eligibility rules. Compared via disability-living-allowance-final (matrix row 16).",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "waived:oracle_variable_not_recorded",
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk-pe:esa_contrib",
@@ -199,7 +253,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "Contributory ESA is a pure reported passthrough in PE-UK (no formula) \u2014 the value carries the FRS-reported award, computing no WRAG/support components. Nothing statutory to compare (matrix row 17 \u2192 WRA 2007 Pt 1).",
-      "status": "excluded:input_carrying"
+      "status": "excluded:input_carrying",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk-pe:esa_income",
@@ -217,7 +275,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "Income-related ESA: PE-UK reads esa_income_reported and applies only a capital/tariff screen, never computing WRAG/support components or the means-test award from statute. The tariff-income helper alone is compared in uk-tax-benefits-efrs, but the program-level award is a reported ceiling \u2014 no statutory maximum to bind (matrix row 23 \u2192 ESA Regs 2008).",
-      "status": "excluded:input_carrying"
+      "status": "excluded:input_carrying",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk-pe:fuel_duty",
@@ -235,7 +297,13 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 0,
       "note": "Covered by the uk-fuel-duty case-grid suite. The module grounds the HODA 1979 s.6(1A) standing rate (\u00a30.5795/litre) and subtracts a supplied temporary Budget-resolution reduction (the 5p cut extension, not carried into the consolidated s.6(1A) text) and the rural relief, so both engines apply PolicyEngine's in-force 2026 effective rate to the same supplied litres; matches penny-exact (matrix row 10 \u2192 HODA 1979 s.6).",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "fuel_duty"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk-pe:housing_benefit",
@@ -253,7 +321,11 @@
       "oracle_attributed": 232,
       "bridge_artifacts": 0,
       "note": null,
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "waived:oracle_variable_not_recorded",
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk-pe:incapacity_benefit",
@@ -271,7 +343,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "Incapacity Benefit, Armed Forces Compensation Scheme (afcs) and Industrial Injuries Disablement Benefit (iidb) are pure reported passthroughs in PE-UK (no formulas) \u2014 legacy/closed benefits carried from microdata, computing no entitlement. Nothing statutory to compare (matrix row 25).",
-      "status": "excluded:input_carrying"
+      "status": "excluded:input_carrying",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk-pe:income_tax",
@@ -289,7 +365,14 @@
       "oracle_attributed": 232,
       "bridge_artifacts": 0,
       "note": null,
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "income_tax",
+        "personal_allowance"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk-pe:lbtt_ltt",
@@ -307,7 +390,14 @@
       "oracle_attributed": 6,
       "bridge_artifacts": 0,
       "note": "Covered by the uk-lbtt-ltt case-grid suite. The rulespec modules (uk/policies/govuk/lbtt.yaml, SSI 2015/126 + LBTT(S)A 2013 Sch 2A; uk/policies/govuk/ltt.yaml, WSI 2018/128 + LTT(W)A 2017 s.24) reproduce PE-UK's land_and_buildings_transaction_tax and land_transaction_tax band splits on the supplied main and additional residential purchase prices. LBTT main-home purchases match to the penny; the LBTT Additional Dwelling Supplement (PE-UK 6% vs the statutory 8% from 5 December 2024) and the stale Welsh LTT primary and higher-rate scales are dispositioned as upstream PolicyEngine staleness (matrix row 31 \u2192 LBTT(S)A 2013 / LTT(W)A 2017; PolicyEngine-UK",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "land_and_buildings_transaction_tax",
+        "land_transaction_tax"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk-pe:legacy_means_tested",
@@ -325,7 +415,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "EXCLUDED oracle_models_repealed_law. PolicyEngine-UK 2.89.2 deactivates the legacy means-tested benefits for 2026 under Universal Credit migration: gov.dwp.income_support.active and gov.dwp.JSA.income.active are both False for 2026 (both True in 2018), so income_support and jsa_income compute structurally 0 for every household \u2014 verified live: a lone parent with no earnings renting from the council gets income_support=0 and jsa_income=0 while universal_credit=14,746 fires. Only the applicable-amount/tariff helpers (income_support_applicable_amount; WTC/CTC reported inputs) run; no award surface produces a non-zero value, so the only achievable comparison is vacuous (0==0). Parallels the UK tax-credits repeal case (matrix row 30).",
-      "status": "excluded:oracle_models_repealed_law"
+      "status": "excluded:oracle_models_repealed_law",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk-pe:marriage_allowance",
@@ -343,7 +437,11 @@
       "oracle_attributed": 232,
       "bridge_artifacts": 0,
       "note": null,
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "waived:oracle_variable_not_recorded",
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk-pe:national_insurance",
@@ -361,7 +459,16 @@
       "oracle_attributed": 232,
       "bridge_artifacts": 0,
       "note": null,
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "ni_class_1_employee_additional",
+        "ni_class_1_employee_primary",
+        "ni_class_4_main",
+        "ni_class_4_maximum"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk-pe:pension_credit",
@@ -379,7 +486,14 @@
       "oracle_attributed": 232,
       "bridge_artifacts": 0,
       "note": null,
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "guarantee_credit",
+        "savings_credit"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk-pe:pip",
@@ -397,7 +511,11 @@
       "oracle_attributed": 232,
       "bridge_artifacts": 0,
       "note": "rates-given-category \u2014 PE-UK applies the PIP daily-living/mobility rate tables over a frozen pip_dl_category/pip_m_category FRS input, so the comparison binds the rate schedule, not the award-eligibility rules. Compared via personal-independence-payment-final (matrix row 8).",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "waived:oracle_variable_not_recorded",
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk-pe:scottish_child_payment",
@@ -415,7 +533,13 @@
       "oracle_attributed": 232,
       "bridge_artifacts": 0,
       "note": null,
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "scottish_child_payment"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk-pe:sda",
@@ -433,7 +557,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "Severe Disablement Allowance (closed legacy benefit): PE-UK reads sda_reported and multiplies by a max rate, computing no eligibility from statute. Only the rate parameter is compared in the matrix; the program award is a reported ceiling (matrix row 32 \u2192 SSCBA 1992 s.68).",
-      "status": "excluded:input_carrying"
+      "status": "excluded:input_carrying",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk-pe:ssmg",
@@ -451,7 +579,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "Sure Start Maternity Grant: PE-UK reads ssmg_reported and multiplies by the \u00a3500 rate, computing no eligibility from statute. Only the rate parameter is compared in the matrix; the program award is a reported ceiling (matrix row 33 \u2192 uksi/2005/3061).",
-      "status": "excluded:input_carrying"
+      "status": "excluded:input_carrying",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk-pe:stamp_duty_land_tax",
@@ -469,7 +601,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "PE-UK takes stamp_duty_land_tax straight from microdata (no formula) \u2014 the SDLT tier liability is a reported input, not a computed surface. The residential/non-residential SDLT transaction sub-variables (sdlt_on_*_property_transactions) exist and compute, but no program output binds them to a comparison (matrix row 13 \u2192 FA 2003 Pt 4).",
-      "status": "excluded:input_carrying"
+      "status": "excluded:input_carrying",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk-pe:state_pension",
@@ -487,7 +623,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "PE-UK carries the State Pension as an uprated reported amount, not an accrual computation, so there is no commensurable statutory surface. The top-level state_pension formula sums basic_state_pension + additional_state_pension + new_state_pension and applies an uprating factor (so the generator's shallow kind heuristic, reading only the summing top-level formula, labels it rules); but each component is a state_pension_reported passthrough. basic_state_pension and new_state_pension read the FRS-reported gross State Pension (state_pension_reported), take its share of the data-year flat maximum (share = min(reported, max_data) / max_data) and re-base that share onto the period maximum; additional_state_pension is the reported amount above the flat ceiling, uprated. None reads a National Insurance qualifying-years record \u2014 the award is the reported amount, uprated and bucketed by magnitude and state_pension_type. The rulespec encoding (uk/policies/govuk/state-pension.yaml) instead computes entitlement from qualifying years (new: full_new_state_pension_weekly_rate \u00d7 min(1, qualifying_years/35), Pensions Act 2014 s.3; basic: category-A basic rate \u00d7 min(1, qualifying_years/30), SSCBA 1992 s.44; weekly rates from SI 2026/148). The two surfaces are not commensurable: PE consumes a reported money amount, rulespec a qualifying-years count, with no mapping between them, so the only achievable agreement is by construction (feeding both the \"full\" case), which is vacuous. Same reported-carry class as sda (SSCBA 1992 s.68 \u2014 reads sda_reported \u00d7 max rate) and esa_income; corrects the prior note's \"from accrual rules\" \u2014 PE does not model accrual (matrix row 4 \u2192 Pensions Act 2014; SSCBA 1992 s.44).",
-      "status": "excluded:input_carrying"
+      "status": "excluded:input_carrying",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk-pe:student_loan_repayments",
@@ -505,7 +645,13 @@
       "oracle_attributed": 232,
       "bridge_artifacts": 0,
       "note": null,
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "student_loan_repayment"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk-pe:tax_free_childcare",
@@ -523,7 +669,13 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 0,
       "note": "Covered by the uk-tax-free-childcare-pe case-grid suite. PE-UK computes tax_free_childcare as min(eligible_childcare_expense * rate / (1 - rate), cap) with rate 0.20, which grosses up to 25% of the qualifying payment \u2014 the same top-up as Childcare Payments Act 2014 s.1 (\"the amount of the top-up payment is 25% of the amount of the qualifying payment\"), resolving the prior \"20% vs 25%\" framing: they are the same top-up on different bases (25% of the parent payment = 20% of the total account). The suite compares the rulespec CPA 2014 s.1 top-up (uk/policies/tax_free_childcare_composed_top_up_pipeline.yaml) against PE over a supplied qualifying childcare payment on an eligible household; the grid stays below the \u00a38,000 payment at which the \u00a32,000 per-child cap binds, so PE's min(..., cap) reduces to the uncapped 25% top-up and all 3 cases match to the penny (\u00a32,000 \u2192 \u00a3500, \u00a34,000 \u2192 \u00a31,000, \u00a36,000 \u2192 \u00a31,500). The per-child entitlement-period cap is a separate parameter not yet in corpus and is a documented scope boundary (matrix row 27 \u2192 Childcare Payments Act 2014).",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "tax_free_childcare"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk-pe:tv_licence",
@@ -541,7 +693,13 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 0,
       "note": "Covered by the uk-tv-licence case-grid suite. The module grounds the SI 2004/692 Schedule 1 fee (\u00a3180 for 2026-27) and the Communications Act 2003 s.365 concession structure (over-75 free for Pension Credit claimants, blind 50 per cent); both tv_licence and free_tv_licence_value match PolicyEngine penny-exact (matrix row 34 \u2192 uksi/2004/692).",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "tv_licence"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk-pe:universal_credit",
@@ -559,7 +717,11 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 0,
       "note": null,
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "waived:oracle_variable_not_recorded",
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk-pe:vat",
@@ -577,7 +739,13 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 0,
       "note": "Covered by the uk-vat case-grid suite. The module encodes VATA 1994 s.2(1) standard rate (20 per cent) and s.29A reduced rate (5 per cent) applied to the supplied full/reduced consumption split and grossed by the microdata coverage factor; matches PolicyEngine vat penny-exact (matrix row 1 \u2192 VATA 1994 s.2/s.29A).",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "vat"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk-pe:winter_fuel_allowance",
@@ -595,7 +763,13 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 0,
       "note": "Covered by the uk-winter-fuel-payment-pe case-grid suite. PE-UK 2.89.2 computes winter_fuel_allowance from the SI 2025/969 standard amounts (gov.dwp.winter_fuel_payment.amount.lower 200, .higher 300, higher_age_requirement 80) under the 2024/25 means test (eligibility.require_benefits true from 2024, taxable_income_test.maximum_taxable_income 35000 from 2025), zeroed in Scotland. The suite compares this against the rulespec SI 2025/969 reg 3(1)/3(4) England-and-Wales award pipeline (uk/policies/winter_fuel_payment_composed_award_pipeline.yaml), supplying the state-pension-age, 80+ and income-below-recovery-threshold judgments to the pipeline from the same age/income facts PolicyEngine reads; all 7 cases match to the penny (the 200/300 age tiers, the household non-per-member allocation for couples, the 35000 income-recovery withdrawal, and the state-pension-age gate). Scotland's devolved PAWHP is outside the pipeline's scope and not placed (matrix row 24 \u2192 uksi/2025/969; Scotland PAWHP separate).",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "winter_fuel_allowance"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     }
   ]
 }

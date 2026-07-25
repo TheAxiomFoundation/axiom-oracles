@@ -20,6 +20,8 @@
       "oracle_attributed": 28,
       "bridge_artifacts": 0,
       "conformant": true,
+      "covered_with_waived_output_attestation": 1,
+      "covered_with_oracle_release_drift": 0,
       "uncovered_policies": [],
       "blocking_reasons": []
     },
@@ -45,6 +47,8 @@
       "oracle_attributed": 16,
       "bridge_artifacts": 0,
       "conformant": true,
+      "covered_with_waived_output_attestation": 0,
+      "covered_with_oracle_release_drift": 0,
       "uncovered_policies": [],
       "blocking_reasons": []
     },
@@ -64,6 +68,8 @@
       "oracle_attributed": 238,
       "bridge_artifacts": 0,
       "conformant": true,
+      "covered_with_waived_output_attestation": 5,
+      "covered_with_oracle_release_drift": 0,
       "uncovered_policies": [],
       "blocking_reasons": []
     },
@@ -85,6 +91,8 @@
       "oracle_attributed": 16661,
       "bridge_artifacts": 3340,
       "conformant": false,
+      "covered_with_waived_output_attestation": 14,
+      "covered_with_oracle_release_drift": 25,
       "uncovered_policies": [
         "ak_atap",
         "alternative_minimum_tax",

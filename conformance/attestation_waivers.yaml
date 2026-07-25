@@ -1,0 +1,128 @@
+# axiom_oracles.attestation_waivers.v1 — hand-authored, shrink-only. See axiom_oracles/conformance/waivers.py.
+schema: axiom_oracles.attestation_waivers.v1
+_comment: 'Output-attestation waivers — covered policies whose committed report cannot bind its comparisons
+  to the universe''s registered outputs. HAND-AUTHORED and SHRINK-ONLY: a new unbound row fails the gate
+  (scripts/conformance_attestation.py --check) instead of landing here, and a waiver that is no longer
+  needed must be pruned. Execution attestation itself is never waivable.'
+waivers:
+- jurisdiction: be
+  policy_id: be:tintb_be
+  suite: be-marital-quotient
+  reason: compared_surface_differs
+  note: The suite compares one concept — belgium_pit_couple_federal_and_local_tax_before_withholding,
+    bound to EUROMOD tin_s (total PIT) — while tintb_be writes tintasp_s / tintals_s / tintami_s / tintcmg_s
+    / tintadt_s and the sin* income-list intermediates. The marital quotient reaches tin_s only through
+    the PIT it feeds, so the committed evidence tests the policy end-to-end rather than at its own outputs.
+- jurisdiction: uk-pe
+  policy_id: uk-pe:dla
+  suite: uk-tax-benefits-efrs
+  reason: oracle_variable_not_recorded
+  note: The EFRS bridge report records Axiom concept ids per aggregate, not the PolicyEngine variable
+    each was compared against; 7 of its 51 compared surfaces have no committed concept→PE binding, so
+    dla_sc / dla_m cannot be shown from the artifact. Regenerating with a stamped attestation binds them.
+- jurisdiction: uk-pe
+  policy_id: uk-pe:housing_benefit
+  suite: uk-tax-benefits-efrs
+  reason: oracle_variable_not_recorded
+  note: Same EFRS recording gap — the report's housing-benefit aggregates carry Axiom concept ids whose
+    PolicyEngine targets (housing_benefit, housing_benefit_applicable_amount) are not recorded in the
+    artifact.
+- jurisdiction: uk-pe
+  policy_id: uk-pe:marriage_allowance
+  suite: uk-tax-benefits-efrs
+  reason: oracle_variable_not_recorded
+  note: Same EFRS recording gap — the marriage-allowance surface is listed in the suite config but the
+    report does not record the PolicyEngine variable it was compared against.
+- jurisdiction: uk-pe
+  policy_id: uk-pe:pip
+  suite: uk-tax-benefits-efrs
+  reason: oracle_variable_not_recorded
+  note: Same EFRS recording gap — pip_dl / pip_m are not recoverable from the report's concept ids.
+- jurisdiction: uk-pe
+  policy_id: uk-pe:universal_credit
+  suite: uk-universal-credit-efrs
+  reason: oracle_variable_not_recorded
+  note: 22 of the report's 25 compared surfaces (including uk:statutes/ukpga/2012/5/8#universal_credit_award_amount
+    at 61,898 comparisons and the uk:benefits/universal-credit#amount parent at 750,298) have no committed
+    concept→PolicyEngine binding, so the artifact cannot show that PE's universal_credit was the compared
+    variable. The three that do resolve are UC inputs (uc_assessable_capital, uc_tariff_income, uc_childcare_work_condition).
+- jurisdiction: us-pe
+  policy_id: us-pe:aca_ptc
+  suite: us-aca-ptc-grid
+  reason: oracle_variable_not_recorded
+  note: The grid's single concept (us:policies/aca/ptc_pipeline#aca_ptc_annual_premium_tax_credit) has
+    no committed concept→PolicyEngine binding, so the artifact cannot name aca_ptc as the compared variable.
+- jurisdiction: us-pe
+  policy_id: us-pe:additional_medicare_tax
+  suite: us-additional-medicare-grid
+  reason: oracle_variable_not_recorded
+  note: The grid's single concept has no committed concept→PolicyEngine binding, so additional_medicare_tax
+    cannot be shown as the compared variable.
+- jurisdiction: us-pe
+  policy_id: us-pe:al_income_tax
+  suite: al-income-tax-liability
+  reason: compared_surface_differs
+  note: The report records policyengine = al_income_tax_before_refundable_credits; the universe row registers
+    the final al_income_tax. The liability grid deliberately compares the pre-refundable-credit surface.
+- jurisdiction: us-pe
+  policy_id: us-pe:ctc
+  suite: fiit-ecps
+  reason: compared_surface_differs
+  note: All 13 compared surfaces resolve, and the child-tax-credit one is PolicyEngine's ctc_value, not
+    the ctc variable the universe row registers.
+- jurisdiction: us-pe
+  policy_id: us-pe:elderly_disabled_credit
+  suite: us-elderly-disabled-grid
+  reason: oracle_variable_not_recorded
+  note: The grid's single concept has no committed concept→PolicyEngine binding.
+- jurisdiction: us-pe
+  policy_id: us-pe:income_tax_before_refundable_credits
+  suite: fiit-ecps
+  reason: compared_surface_differs
+  note: All 13 compared surfaces resolve; the income-tax ones are income_tax, income_tax_main_rates and
+    income_tax_capped_non_refundable_credits — not income_tax_before_refundable_credits.
+- jurisdiction: us-pe
+  policy_id: us-pe:ks_tanf
+  suite: ks-tanf-ecps
+  reason: compared_surface_differs
+  note: The suite's one compared surface resolves to ks_tanf_maximum_benefit; the universe row registers
+    the final ks_tanf award.
+- jurisdiction: us-pe
+  policy_id: us-pe:lifetime_learning_credit
+  suite: us-llc-grid
+  reason: oracle_variable_not_recorded
+  note: The grid's single concept has no committed concept→PolicyEngine binding.
+- jurisdiction: us-pe
+  policy_id: us-pe:medicaid
+  suite: medicaid-magi-co-ecps
+  reason: compared_surface_differs
+  note: All 6 compared surfaces resolve, and every one is a category flag (is_adult_for_medicaid, is_infant_for_medicaid,
+    is_older_child_for_medicaid, is_pregnant_for_medicaid, is_ssi_recipient_for_medicaid, is_young_child_for_medicaid)
+    rather than the medicaid variable the universe row registers.
+- jurisdiction: us-pe
+  policy_id: us-pe:nc_income_tax
+  suite: nc-income-tax-liability
+  reason: compared_surface_differs
+  note: The report records policyengine = nc_income_tax_before_credits; the universe row registers the
+    final nc_income_tax.
+- jurisdiction: us-pe
+  policy_id: us-pe:net_investment_income_tax
+  suite: us-niit-grid
+  reason: oracle_variable_not_recorded
+  note: The grid's single concept has no committed concept→PolicyEngine binding.
+- jurisdiction: us-pe
+  policy_id: us-pe:qualified_business_income_deduction
+  suite: us-qbid-grid
+  reason: oracle_variable_not_recorded
+  note: The grid's single concept has no committed concept→PolicyEngine binding.
+- jurisdiction: us-pe
+  policy_id: us-pe:self_employment_tax
+  suite: us-seca-grid
+  reason: oracle_variable_not_recorded
+  note: The grid's single concept has no committed concept→PolicyEngine binding.
+- jurisdiction: us-pe
+  policy_id: us-pe:snap
+  suite: ca-snap-ecps
+  reason: compared_surface_differs
+  note: Both compared surfaces resolve — is_snap_eligible and snap_normal_allotment — neither of which
+    is the snap variable the universe row registers.
