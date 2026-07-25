@@ -1,7 +1,26 @@
 {
  "suite": "ga-tanf-ecps",
- "count": 1,
- "chunks": 1,
+ "count": 1897,
+ "chunks": 4,
+ "input_slots": [
+  "axiom:ga-tanf-compiled#input.allowable_earned_income_deductions",
+  "axiom:ga-tanf-compiled#input.assistance_unit_has_employed_individual",
+  "axiom:ga-tanf-compiled#input.assistance_unit_included_income",
+  "axiom:ga-tanf-compiled#input.assistance_unit_member_count",
+  "axiom:ga-tanf-compiled#input.determination_is_at_application",
+  "axiom:ga-tanf-compiled#input.determination_is_at_application_renewal_or_change",
+  "axiom:ga-tanf-compiled#input.earned_income_from_additional_jobs",
+  "axiom:ga-tanf-compiled#input.earned_income_from_primary_job",
+  "axiom:ga-tanf-compiled#input.household_has_minor_or_pregnant_member",
+  "axiom:ga-tanf-compiled#input.income_allocated_to_non_assistance_unit_members",
+  "axiom:ga-tanf-compiled#input.income_deemed_from_non_assistance_unit_members",
+  "axiom:ga-tanf-compiled#input.individual_is_employed",
+  "axiom:ga-tanf-compiled#input.son_trial_budget_is_necessary",
+  "axiom:ga-tanf-compiled#input.son_trial_budget_net_countable_income"
+ ],
+ "output_slots": [
+  "ga_tanf_monthly_benefit"
+ ],
  "chunk_size": 500,
  "engines": {
   "left": "axiom",
@@ -10,7 +29,6 @@
  "mismatch_concepts": [
   "us-ga:policies/dfcs/tanf#ga_tanf_benefit"
  ],
- "source": "axiom-policyengine-ga-tanf-ecps.json",
- "total_cases": 1897,
- "partial": "mismatch-only"
+ "source": "axiom-policyengine-ga-tanf-ecps-0-2026-07-25.json",
+ "total_cases": 1897
 }

@@ -777,8 +777,7 @@
       "name": "ny-snap-ecps",
       "report": "axiom-policyengine-ny-snap-ecps.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us",
-        "TheAxiomFoundation/rulespec-us-ny"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/ny-snap-ecps.yaml"
     },

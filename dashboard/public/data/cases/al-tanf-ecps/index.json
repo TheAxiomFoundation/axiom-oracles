@@ -1,0 +1,37 @@
+{
+ "suite": "al-tanf-ecps",
+ "count": 1444,
+ "chunks": 3,
+ "input_slots": [
+  "axiom:al-tanf-compiled#input.additional_member_application_made_after_first_day_of_month",
+  "axiom:al-tanf-compiled#input.application_date_day",
+  "axiom:al-tanf-compiled#input.appropriate_payment_standard",
+  "axiom:al-tanf-compiled#input.assistance_recoupment_for_prior_overpayment",
+  "axiom:al-tanf-compiled#input.assistance_unit_size",
+  "axiom:al-tanf-compiled#input.child_or_incapacitated_adult_care_expenses",
+  "axiom:al-tanf-compiled#input.countable_unearned_income",
+  "axiom:al-tanf-compiled#input.current_assistance_recoupment_for_prior_overpayment",
+  "axiom:al-tanf-compiled#input.current_household_size_payment_standard",
+  "axiom:al-tanf-compiled#input.gross_earned_income",
+  "axiom:al-tanf-compiled#input.household_has_minor_or_pregnant_member",
+  "axiom:al-tanf-compiled#input.initial_payment_authorized_for_month_of_application_and_prorated_from_date_application_received",
+  "axiom:al-tanf-compiled#input.initial_prorated_assistance_payment",
+  "axiom:al-tanf-compiled#input.new_household_size_payment_standard",
+  "axiom:al-tanf-compiled#input.rounded_total_net_available_income",
+  "axiom:al-tanf-compiled#input.sanction_amount",
+  "axiom:al-tanf-compiled#input.sanction_reduction_under_rule_660_2_2_18",
+  "axiom:al-tanf-compiled#input.sanction_reduction_under_rule_660_2_2_23"
+ ],
+ "output_slots": [
+  "al_tanf_monthly_benefit",
+  "al_tanf_payable"
+ ],
+ "chunk_size": 500,
+ "engines": {
+  "left": "axiom",
+  "right": "policyengine"
+ },
+ "mismatch_concepts": [],
+ "source": "axiom-policyengine-al-tanf-ecps-0-2026-07-25.json",
+ "total_cases": 1444
+}
