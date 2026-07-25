@@ -71,8 +71,7 @@
       "name": "az-snap-ecps",
       "report": "axiom-policyengine-az-snap-ecps.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us",
-        "TheAxiomFoundation/rulespec-us-az"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/az-snap-ecps.yaml"
     },
@@ -216,8 +215,7 @@
       "name": "ca-snap-ecps",
       "report": "axiom-policyengine-ca-snap-ecps.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us",
-        "TheAxiomFoundation/rulespec-us-ca"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/ca-snap-ecps.yaml"
     },
