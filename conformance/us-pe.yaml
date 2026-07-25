@@ -43,11 +43,17 @@ policies:
       - additional_medicare_tax
     in_scope: true
     suite: us-additional-medicare-grid
-    note: The us-additional-medicare-grid suite compares six tax-year 2026 Form 8959 cases spanning single,
-      joint, and married-filing-separately wage and self-employment boundaries. It binds PE-US additional_medicare_tax
-      to Axiom's combined wage and self-employment output; the Axiom fixture supplies per-Person gross
-      SE profit and derives the section 1402(a)(12) adjustment before TaxUnit aggregation. The committed
-      report is 6/6 within one cent and includes nonzero wage and self-employment cases.
+    note: >-
+      The us-additional-medicare-grid suite compares PE-US
+      additional_medicare_tax with Axiom's combined final only on the
+      explicitly bounded tax-year-2026 zero-self-employment domain: five
+      wage-only GRID-CONTRACT cases across single, joint, and
+      married-filing-separately status, four nonzero. For zero-SE inputs,
+      PE-US additional_medicare_tax equals the section 3101(b)(2) wage-only
+      amount and Axiom's combined output remains valid. The suite does not test
+      or claim the section 1401(b)(2) self-employment leg; SE leg pending the 26
+      CFR 1.1401-1 operative-authority chain, axiom-corpus#523. The committed
+      report is 5/5 within one cent.
   - id: us-pe:ak_atap
     oracle_policy_name: ak_atap
     oracle_policy_type: rules

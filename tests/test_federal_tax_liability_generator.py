@@ -62,7 +62,6 @@ def test_all_eight_contract_grids_are_explicit_and_independent():
             "amt-single-250k",
             "amt-joint-300k",
             "amt-mfs-150k",
-            "amt-single-wage-se",
             "amt-joint-450k",
         ],
         "self_employment_tax": [
@@ -144,6 +143,14 @@ def test_all_eight_contract_grids_are_explicit_and_independent():
     }
     for key, expected in expected_case_ids.items():
         assert [case.case_id for case in generator.POLICIES[key].cases] == expected
+    additional_medicare = generator.POLICIES["additional_medicare_tax"].cases
+    assert all(
+        case.inputs["self_employment_income"] == 0 for case in additional_medicare
+    )
+    assert any(
+        case.inputs["primary_wages"] + case.inputs["spouse_wages"] > 200_000
+        for case in additional_medicare
+    )
 
 
 def test_policyengine_bindings_match_the_reviewed_output_boundaries():
@@ -315,40 +322,27 @@ def test_llc_grid_binds_explicit_status_and_liability_capped_final():
     }
 
 
-def test_additional_medicare_fixture_validates_gross_se_person_boundary():
+def test_additional_medicare_fixture_enforces_wage_only_person_boundary():
     generator = _load_generator()
     case = next(
         case
         for case in generator.POLICIES["additional_medicare_tax"].cases
-        if case.case_id == "amt-single-wage-se"
+        if case.case_id == "amt-single-250k"
     )
     additional_module = "us:policies/income_tax/additional_medicare_tax_pipeline"
     se_module = "us:policies/income_tax/self_employment_tax_pipeline"
     relation = f"{se_module}#relation.self_employed_individual_of_tax_unit"
     actual = {
         "us:statutes/26/3101/b/2#input.filing_status": 0,
-        f"{additional_module}#input.wages": 100_000,
-        (
-            f"{additional_module}#input."
-            "international_social_security_agreement_under_section_233_in_effect"
-        ): False,
-        (
-            f"{additional_module}#input."
-            "self_employment_income_is_subject_exclusively_to_foreign_social_"
-            "security_laws_under_agreement"
-        ): False,
-        (
-            f"{additional_module}#input."
-            "self_employment_income_amount_subject_exclusively_to_foreign_"
-            "social_security_laws_under_agreement"
-        ): 0,
+        f"{additional_module}#input.wages": 250_000,
+        f"{additional_module}#input.no_foreign_system_exclusive_se_income": True,
         relation: [
             {
-                f"{se_module}#input.gross_self_employment_profit": 150_000,
+                f"{se_module}#input.gross_self_employment_profit": 0,
                 (
                     "us:statutes/26/1402/b#input."
                     "wages_paid_to_individual_during_taxable_year_for_section_1401_a"
-                ): 100_000,
+                ): 250_000,
                 ("us:statutes/26/1402/b#input.individual_is_nonresident_alien"): False,
                 (
                     "us:statutes/26/1402/b#input."
@@ -365,6 +359,13 @@ def test_additional_medicare_fixture_validates_gross_se_person_boundary():
     }
 
     generator._validate_additional_medicare_fixture(case, actual)
+
+    positive_se_case = replace(
+        case,
+        inputs={**case.inputs, "self_employment_income": 1},
+    )
+    with pytest.raises(ValueError, match="wage-only, zero-self-employment"):
+        generator._validate_additional_medicare_fixture(positive_se_case, actual)
 
     stale_flat_fixture = dict(actual)
     stale_flat_fixture.pop(relation)
@@ -465,11 +466,11 @@ def test_v2_report_counts_one_pair_per_case():
     assert report["engine_bindings"]["policyengine"]["outputs"] == [
         "additional_medicare_tax"
     ]
-    assert report["summary"]["comparison_count"] == 6
-    assert report["summary"]["match_count"] == 5
+    assert report["summary"]["comparison_count"] == 5
+    assert report["summary"]["match_count"] == 4
     assert report["summary"]["mismatch_count"] == 1
-    assert report["aggregates"][0]["comparison_count"] == 6
-    assert report["aggregates"][0]["match_count"] == 5
+    assert report["aggregates"][0]["comparison_count"] == 5
+    assert report["aggregates"][0]["match_count"] == 4
     assert report["aggregates"][0]["mismatch_count"] == 1
     assert len(report["mismatches"]) == 1
 

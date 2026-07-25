@@ -1,23 +1,25 @@
 # Federal Additional Medicare Tax — Axiom vs PolicyEngine-US, tax year 2026.
 #
-# Axiom boundary: the RuleSpec composition combines the section 3101(b)(2)
-# wage leg and section 1401(b)(2) self-employment leg after reducing the latter
-# threshold by wages. Its runtime boundary relates the TaxUnit to Persons with
-# GRID-CONTRACT gross self-employment profit and each Person's wages. The
-# imported self-employment pipeline applies the section 1402(a)(12) 0.9235
-# adjustment and section 1402(b) floor/exclusions before aggregating the
-# completed income to TaxUnit. The generator validates those raw per-Person
-# inputs case by case.
-# Code: rulespec-us@613990fd
-# us/policies/income_tax/additional_medicare_tax_pipeline.yaml:17-65,198-340;
-# us/policies/income_tax/self_employment_tax_pipeline.yaml:96-231,347-385.
+# Axiom boundary: the merged composition keeps the encoded section 3101(b)(2)
+# wage leg live, but fail-closes its combined final whenever imported federal
+# self-employment income is nonzero. This suite therefore selects exactly the
+# five GRID-CONTRACT P1 cases with zero self-employment income. The per-Person
+# relation remains explicit and is validated case by case so the zero-SE
+# boundary cannot be satisfied by silently dropping a Person input.
+#
+# This suite does not test or claim the section 1401(b)(2) self-employment leg.
+# SE leg pending the 26 CFR 1.1401-1 operative-authority chain,
+# axiom-corpus#523.
+# Code: rulespec-us main@3373e841
+# us/policies/income_tax/additional_medicare_tax_pipeline.yaml:30-56,120-145,
+# 411-446.
 #
 # PolicyEngine binding decision: compare `additional_medicare_tax` directly.
-# It is a TaxUnit Form 8959 total that applies the 0.9% rate to combined gross
-# wages and `taxable_self_employment_income` over the filing-status threshold,
-# so it includes both the wage and SECA legs. PolicyEngine derives taxable SE
-# income from Schedule C-style `self_employment_income`, including the 0.9235
-# employer-share adjustment and $400 floor.
+# It is a TaxUnit Form 8959 total that applies the 0.9% rate to wages plus
+# taxable self-employment income over the filing-status threshold. On this
+# suite's explicit zero-SE inputs, that public total equals the section
+# 3101(b)(2) wage-only value, making the boundary commensurable without
+# asserting anything about the unavailable self-employment leg.
 # Code: policyengine-us@49d19b239a593dbac8920ac6fd80cfe33372343a
 # policyengine_us/variables/gov/irs/tax/federal_income/
 # additional_medicare_tax.py:4-19;
@@ -34,8 +36,9 @@
 name: us-additional-medicare-grid
 title: Federal Additional Medicare Tax — Axiom vs PolicyEngine
 description: >-
-  Compares the combined wage and self-employment Additional Medicare Tax
-  between Axiom and PolicyEngine-US on the six exact GRID-CONTRACT P1 cases.
+  Compares Additional Medicare Tax only on the five exact wage-only,
+  zero-self-employment GRID-CONTRACT P1 cases. SE leg pending the 26 CFR
+  1.1401-1 operative-authority chain, axiom-corpus#523.
 
 runner:
   type: federal-tax-liability-grid

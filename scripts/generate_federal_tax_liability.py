@@ -76,8 +76,10 @@ def _case(
     return FederalCase(case_id, filing_status, inputs)
 
 
-# GRID-CONTRACT P1.  ``self_employment_income`` is Schedule C-style gross net
-# profit; PolicyEngine applies the section 1402(a)(12) employer-share factor.
+# GRID-CONTRACT P1, restricted to the five wage-only cases. The merged
+# RuleSpec composition fail-closes its combined output when imported federal
+# self-employment income is nonzero, so the former positive-SE case is outside
+# this suite's reviewed domain until the operative section 1401 authority lands.
 _ADDITIONAL_MEDICARE_CASES = (
     _case(
         "amt-single-150k",
@@ -106,13 +108,6 @@ _ADDITIONAL_MEDICARE_CASES = (
         primary_wages=150_000,
         spouse_wages=0,
         self_employment_income=0,
-    ),
-    _case(
-        "amt-single-wage-se",
-        "single",
-        primary_wages=100_000,
-        spouse_wages=0,
-        self_employment_income=150_000,
     ),
     _case(
         "amt-joint-450k",
@@ -1076,6 +1071,11 @@ def _validate_additional_medicare_fixture(
 ) -> None:
     pipeline = "us:policies/income_tax/additional_medicare_tax_pipeline"
     status_codes = {"single": 0, "joint": 1, "separate": 2}
+    if Decimal(str(case.inputs["self_employment_income"])) != 0:
+        raise ValueError(
+            f"us-additional-medicare-grid: case {case.case_id!r} is outside "
+            "the reviewed wage-only, zero-self-employment domain"
+        )
     _require_fixture_values(
         suite="us-additional-medicare-grid",
         case_id=case.case_id,
@@ -1088,16 +1088,7 @@ def _validate_additional_medicare_fixture(
                 Decimal(str(case.inputs["primary_wages"]))
                 + Decimal(str(case.inputs["spouse_wages"]))
             ),
-            f"{pipeline}#input."
-            "international_social_security_agreement_under_section_233_in_effect": (
-                False
-            ),
-            f"{pipeline}#input."
-            "self_employment_income_is_subject_exclusively_to_foreign_social_"
-            "security_laws_under_agreement": False,
-            f"{pipeline}#input."
-            "self_employment_income_amount_subject_exclusively_to_foreign_"
-            "social_security_laws_under_agreement": 0,
+            f"{pipeline}#input.no_foreign_system_exclusive_se_income": True,
         },
     )
     _validate_self_employment_relation(
@@ -1775,7 +1766,9 @@ POLICIES: dict[str, PolicyConfig] = {
         ),
         pe_output_variables=("additional_medicare_tax",),
         pe_boundary=(
-            "TaxUnit Form 8959 total over wage and taxable self-employment income"
+            "TaxUnit Additional Medicare Tax restricted to zero "
+            "self-employment income, where the public total equals the "
+            "section 3101(b)(2) wage-only amount"
         ),
         cases=_ADDITIONAL_MEDICARE_CASES,
         pe_situation=_payroll_situation,
