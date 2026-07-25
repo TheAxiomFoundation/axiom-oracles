@@ -31255,6 +31255,122 @@ mappings:
     candidate_priority: P4
     rationale: This signed-liability zero is a fail-closed sentinel while the annual Idaho chain is held and must not be interpreted as zero tax.
 
+  # Massachusetts's TY2026 full-year-resident module is a source-readiness
+  # boundary. Exact P4 mappings prevent federal-boundary diagnostics, source
+  # holds, and fail-closed Massachusetts sentinels from being mistaken for
+  # completed state-tax results or compared to PolicyEngine projections.
+  - legal_id: us-ma:policies/income_tax/2026_full_year_resident_source_hold#ma_pit_2026_federal_adjusted_gross_income_boundary
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: The preserved federal adjusted-gross-income value is an allowed input-boundary diagnostic, not an independently computed Massachusetts result.
+
+  - legal_id: us-ma:policies/income_tax/2026_full_year_resident_source_hold#ma_pit_2026_input_domain_is_valid
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom validates the bounded full-year-resident and aligned-filing-unit contract; PolicyEngine exposes no one-to-one predicate.
+
+  - legal_id: us-ma:policies/income_tax/2026_full_year_resident_source_hold#ma_pit_2026_income_and_modification_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that the complete TY2026 Massachusetts income-definition, classification, addition, and subtraction chain is not pinned.
+
+  - legal_id: us-ma:policies/income_tax/2026_full_year_resident_source_hold#ma_pit_2026_deduction_and_exemption_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that the complete TY2026 Massachusetts deduction and exemption determinations and final-return instructions are not pinned.
+
+  - legal_id: us-ma:policies/income_tax/2026_full_year_resident_source_hold#ma_pit_2026_income_classification_and_rate_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that complete final-return classification and loss ordering for all Part A, Part B, and Part C income is not pinned.
+
+  - legal_id: us-ma:policies/income_tax/2026_full_year_resident_source_hold#ma_pit_2026_surtax_integration_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: The official 2026 Massachusetts surtax threshold and rate are pinned, but the source-complete taxable Parts and final-return integration are not.
+
+  - legal_id: us-ma:policies/income_tax/2026_full_year_resident_source_hold#ma_pit_2026_nonrefundable_credit_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that complete TY2026 Massachusetts nonrefundable-credit eligibility, certifications, limitations, carryforwards, and ordering are not pinned.
+
+  - legal_id: us-ma:policies/income_tax/2026_full_year_resident_source_hold#ma_pit_2026_refundable_credit_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that complete TY2026 Massachusetts refundable-credit eligibility, certifications, annual authorizations, limitations, and ordering are not pinned.
+
+  - legal_id: us-ma:policies/income_tax/2026_full_year_resident_source_hold#ma_pit_2026_final_return_ordering_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that the operative TY2026 final Massachusetts Form 1 and instructions are absent from the pinned corpus.
+
+  - legal_id: us-ma:policies/income_tax/2026_full_year_resident_source_hold#ma_pit_2026_complete_liability_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This completion-state predicate combines Axiom's Massachusetts income, deduction, classification, surtax, credit, and final-return ordering source holds.
+
+  - legal_id: us-ma:policies/income_tax/2026_full_year_resident_source_hold#ma_pit_2026_state_income_after_modifications
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while the TY2026 Massachusetts income, classification, addition, and subtraction chain is held, not completed state income after modifications.
+
+  - legal_id: us-ma:policies/income_tax/2026_full_year_resident_source_hold#ma_pit_2026_taxable_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while Massachusetts income, deductions, and exemptions are held, not completed Massachusetts taxable income.
+
+  - legal_id: us-ma:policies/income_tax/2026_full_year_resident_source_hold#ma_pit_2026_tax_before_credits_including_surtax
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while taxable Parts, special-rate classification, loss ordering, and surtax integration are held, not completed before-credit tax.
+
+  - legal_id: us-ma:policies/income_tax/2026_full_year_resident_source_hold#ma_pit_2026_tax_after_nonrefundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while Massachusetts nonrefundable-credit authority and ordering are held, not completed after-credit tax.
+
+  - legal_id: us-ma:policies/income_tax/2026_full_year_resident_source_hold#ma_pit_2026_refundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while the Massachusetts refundable-credit inventory and ordering are held, not a completed credit amount.
+
+  - legal_id: us-ma:policies/income_tax/2026_full_year_resident_source_hold#ma_pit_2026_net_income_tax_liability_before_payments
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This signed-liability zero is a fail-closed sentinel while the annual Massachusetts chain is held and must not be interpreted as zero tax.
+
 prefixes:
   - legal_id_prefix: us-dc:statutes/4/4-205/49#
     country: us
