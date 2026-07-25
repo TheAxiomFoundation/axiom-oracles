@@ -1333,15 +1333,6 @@
       "source": "comparisons/us-qbid-grid.yaml"
     },
     {
-      "suite": "us-savers-credit-grid",
-      "name": "us-savers-credit-grid",
-      "report": "axiom-policyengine-us-savers-credit-grid.json",
-      "repos": [
-        "TheAxiomFoundation/rulespec-us"
-      ],
-      "source": "comparisons/us-savers-credit-grid.yaml"
-    },
-    {
       "suite": "us-seca-grid",
       "name": "us-seca-grid",
       "report": "axiom-policyengine-us-seca-grid.json",

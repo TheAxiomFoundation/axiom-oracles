@@ -315,8 +315,16 @@ residual), #229 (small-suite grounding).
 - The manifest writer preserved all 206 sibling entries and added the seven
   federal reports exactly once (213 total). All seven reports cite RuleSpec
   `3373e8411f7e141fd50879e3de964386f606f7f6`.
+- Completed the UTC 2026-07-25 derived regeneration: dispositions, grids,
+  affected map, vacuous-gate freshness, scoreboard + dated snapshot, ratchet,
+  burndown, and dashboard overview. Saver is absent from every generated live
+  registry. Final us-pe headline is 34/127 covered, 0 unexplained,
+  0 Axiom-attributed, 16,661 oracle-attributed, and 3,340 bridge artifacts.
+- Corrected the corrupted 35 ratchet floor to the honest seven-suite floor of
+  34, which remains above main's committed floor of 27. All eight derived
+  `--check` gates pass after regeneration.
 
 ### Next
 
-- Run the full 2026-07-25 UTC derived-artifact regeneration and validation
-  battery; write `fix-354-DONE.md` only after every gate passes.
+- Run the remaining complete static-check battery, Ruff, and full pytest; write
+  `fix-354-DONE.md` only after every gate passes.
