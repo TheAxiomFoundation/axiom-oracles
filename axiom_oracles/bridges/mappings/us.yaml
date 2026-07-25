@@ -31146,6 +31146,115 @@ mappings:
     candidate_priority: P4
     rationale: This signed-liability zero is a fail-closed sentinel while the annual Kentucky chain is held and must not be interpreted as zero tax.
 
+  # Idaho's TY2026 full-year-resident module is a source-readiness boundary.
+  # Exact P4 mappings prevent federal-boundary diagnostics, source holds, and
+  # fail-closed Idaho sentinels from being mistaken for completed state-tax
+  # results or compared to PolicyEngine's projected Idaho outputs.
+  - legal_id: us-id:policies/income_tax/2026_full_year_resident_source_hold#id_pit_2026_federal_adjusted_gross_income_boundary
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: The preserved federal adjusted-gross-income value is an allowed input-boundary diagnostic, not an independently computed Idaho result.
+
+  - legal_id: us-id:policies/income_tax/2026_full_year_resident_source_hold#id_pit_2026_input_domain_is_valid
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom validates the bounded full-year-resident and aligned-filing-unit contract; PolicyEngine exposes no one-to-one predicate.
+
+  - legal_id: us-id:policies/income_tax/2026_full_year_resident_source_hold#id_pit_2026_income_and_modification_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that the substantive TY2026 Idaho income-base, addition, and subtraction chain is not pinned.
+
+  - legal_id: us-id:policies/income_tax/2026_full_year_resident_source_hold#id_pit_2026_deduction_and_exemption_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that the complete substantive TY2026 Idaho deduction and exemption chain is not pinned.
+
+  - legal_id: us-id:policies/income_tax/2026_full_year_resident_source_hold#id_pit_2026_indexed_schedule_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that the official TY2026 section 63-3024 indexed thresholds are not pinned.
+
+  - legal_id: us-id:policies/income_tax/2026_full_year_resident_source_hold#id_pit_2026_surtax_surface_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that complete TY2026 Idaho individual surtax and specialty-tax applicability is not established.
+
+  - legal_id: us-id:policies/income_tax/2026_full_year_resident_source_hold#id_pit_2026_nonrefundable_credit_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that complete TY2026 Idaho nonrefundable-credit eligibility, limitations, carryforwards, and ordering are not pinned.
+
+  - legal_id: us-id:policies/income_tax/2026_full_year_resident_source_hold#id_pit_2026_refundable_credit_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that complete TY2026 Idaho refundable-credit eligibility, limitations, and ordering are not pinned.
+
+  - legal_id: us-id:policies/income_tax/2026_full_year_resident_source_hold#id_pit_2026_complete_liability_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This completion-state predicate combines Axiom's Idaho income, deduction, indexed-schedule, surtax, and credit source holds.
+
+  - legal_id: us-id:policies/income_tax/2026_full_year_resident_source_hold#id_pit_2026_state_income_after_modifications
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while the TY2026 Idaho income, addition, and subtraction chain is held, not completed state income after modifications.
+
+  - legal_id: us-id:policies/income_tax/2026_full_year_resident_source_hold#id_pit_2026_taxable_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while Idaho income, deductions, and exemptions are held, not completed Idaho taxable income.
+
+  - legal_id: us-id:policies/income_tax/2026_full_year_resident_source_hold#id_pit_2026_tax_before_credits_including_indexed_schedule_and_surtaxes
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while taxable income, the annual indexed schedule, and surtax applicability are held, not completed before-credit tax.
+
+  - legal_id: us-id:policies/income_tax/2026_full_year_resident_source_hold#id_pit_2026_tax_after_nonrefundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while Idaho nonrefundable-credit authority and ordering are held, not completed after-credit tax.
+
+  - legal_id: us-id:policies/income_tax/2026_full_year_resident_source_hold#id_pit_2026_refundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while the Idaho refundable-credit inventory and ordering are held, not a completed credit amount.
+
+  - legal_id: us-id:policies/income_tax/2026_full_year_resident_source_hold#id_pit_2026_net_income_tax_liability_before_payments
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This signed-liability zero is a fail-closed sentinel while the annual Idaho chain is held and must not be interpreted as zero tax.
+
 prefixes:
   - legal_id_prefix: us-dc:statutes/4/4-205/49#
     country: us
