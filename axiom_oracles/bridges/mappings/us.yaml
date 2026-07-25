@@ -31371,6 +31371,108 @@ mappings:
     candidate_priority: P4
     rationale: This signed-liability zero is a fail-closed sentinel while the annual Massachusetts chain is held and must not be interpreted as zero tax.
 
+  # Maryland's TY2026 full-year-resident State module is a source-readiness
+  # boundary. Exact P4 mappings prevent federal-boundary diagnostics, source
+  # holds, and fail-closed Maryland sentinels from being mistaken for completed
+  # State-tax results or compared to PolicyEngine projections.
+  - legal_id: us-md:policies/income_tax/2026_full_year_resident_source_hold#md_pit_2026_preserved_federal_return_agi_diagnostic
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: The preserved federal adjusted-gross-income value is an allowed input-boundary diagnostic, not an independently computed Maryland result.
+
+  - legal_id: us-md:policies/income_tax/2026_full_year_resident_source_hold#md_pit_2026_input_domain_is_valid
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom validates the bounded full-year-resident and aligned-filing-unit contract; PolicyEngine exposes no one-to-one predicate.
+
+  - legal_id: us-md:policies/income_tax/2026_full_year_resident_source_hold#md_pit_2026_income_and_modification_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that the complete TY2026 Maryland federal starting-point, addition, and subtraction chain is not pinned.
+
+  - legal_id: us-md:policies/income_tax/2026_full_year_resident_source_hold#md_pit_2026_deduction_and_exemption_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: The personal-exemption statute is pinned, but this hold records that the complete TY2026 Maryland deduction and final-return chain is not.
+
+  - legal_id: us-md:policies/income_tax/2026_full_year_resident_source_hold#md_pit_2026_tax_schedule_and_surtax_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: The regular statutory schedules and additional capital-gain tax are pinned, but operative filed tax tables, rounding, upstream facts, and the full exception surface are not.
+
+  - legal_id: us-md:policies/income_tax/2026_full_year_resident_source_hold#md_pit_2026_nonrefundable_credit_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that complete TY2026 Maryland State nonrefundable-credit eligibility, limitations, recaptures, carryforwards, and ordering are not pinned.
+
+  - legal_id: us-md:policies/income_tax/2026_full_year_resident_source_hold#md_pit_2026_refundable_credit_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that complete TY2026 Maryland State refundable-credit eligibility, limitations, and ordering are not pinned.
+
+  - legal_id: us-md:policies/income_tax/2026_full_year_resident_source_hold#md_pit_2026_complete_liability_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This completion-state predicate combines Axiom's Maryland income, deduction, schedule, capital-gain-tax, and State credit source holds.
+
+  - legal_id: us-md:policies/income_tax/2026_full_year_resident_source_hold#md_pit_2026_state_income_after_modifications
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while the TY2026 Maryland income, addition, and subtraction chain is held, not completed State income after modifications.
+
+  - legal_id: us-md:policies/income_tax/2026_full_year_resident_source_hold#md_pit_2026_taxable_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while Maryland income, deductions, and exemptions are held, not completed Maryland taxable income.
+
+  - legal_id: us-md:policies/income_tax/2026_full_year_resident_source_hold#md_pit_2026_state_tax_before_credits_including_capital_gain_tax
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while taxable income, filed tax-table rules, and additional capital-gain-tax applicability are held, not completed State tax before credits.
+
+  - legal_id: us-md:policies/income_tax/2026_full_year_resident_source_hold#md_pit_2026_state_tax_after_nonrefundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while Maryland State nonrefundable-credit authority and ordering are held, not completed after-credit State tax.
+
+  - legal_id: us-md:policies/income_tax/2026_full_year_resident_source_hold#md_pit_2026_state_refundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while the Maryland State refundable-credit inventory and ordering are held, not a completed credit amount.
+
+  - legal_id: us-md:policies/income_tax/2026_full_year_resident_source_hold#md_pit_2026_net_state_income_tax_liability_before_payments
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This signed-liability zero is a fail-closed sentinel while the annual Maryland State chain is held and must not be interpreted as zero tax.
+
 prefixes:
   - legal_id_prefix: us-dc:statutes/4/4-205/49#
     country: us
