@@ -243,7 +243,9 @@ Review complete against live head
 `a577132904328d626b997311a41abdd244c99a47` after the PR was force-updated
 during the audit. The original frozen head was
 `2a41f72297346f422936b28b19bf9f39f87d3cef`. No PR source or remote refs will
-be modified. Verdict: request changes.
+be modified. Verdict: request changes. The committed verdict was exported to
+`/private/tmp/review-354-VERDICT.md` with SHA-256
+`47990f9881fce2dc1e16e4a21b8b9100cb673d3e225e704d151faab7becb3f2e`.
 
 ## Done
 
@@ -273,7 +275,8 @@ be modified. Verdict: request changes.
   state-tax contract, and full pytest on the live head. Pytest passed offline
   as `1786 passed, 57 skipped`; with unusable `npx` visible it instead had one
   environment-only esbuild download failure after `1787 passed, 55 skipped`.
+- Wrote and committed `review-354-VERDICT.md`; verified its exported byte hash.
 
 ## Next
 
-- Write `review-354-VERDICT.md`, export it, and remove both throwaway worktrees.
+- None. Remove both throwaway worktrees after this final progress commit.
