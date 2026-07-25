@@ -56,7 +56,7 @@ runner:
     policyengine_core_version: "3.30.3"
     rulespec_remote: https://github.com/TheAxiomFoundation/rulespec-us.git
     rulespec_roots:
-      - $HOME/TheAxiomFoundation/wt-fed-credits
+      - /private/tmp/oracle-rerun/rulespec-us
 
 artifacts:
   report_basename: axiom-policyengine-us-elderly-disabled-grid
