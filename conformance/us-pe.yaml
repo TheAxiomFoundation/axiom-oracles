@@ -1087,12 +1087,19 @@ policies:
     output_vars:
       - savers_credit
     in_scope: true
-    suite: us-savers-credit-grid
-    note: 'The us-savers-credit-grid suite binds PE-US savers_credit_potential to Axiom''s statutory pre-section-26
-      boundary on all 12 companion cases; savers-joint-both proves the lawful $2,000 result from separately
-      capped spouses. The committed report is 11/12 raw and fully dispositioned: PE Core treats the published
-      $24,250 inclusive first-tier maximum as the next bracket''s lower bound, returning $400 rather than
-      $1,000 at equality. There are no unexplained or Axiom-owned divergences.'
+    suite: null
+    note: >-
+      Coverage withdrawn because the Saver's Credit pipeline and companion
+      fixture were split out of rulespec-us PR #1004 and are absent from
+      canonical main. Reinstatement is pending the Notice 2025-67 corpus chain
+      tracked at https://github.com/TheAxiomFoundation/axiom-corpus/issues/506.
+      Historical boundary evidence, not live coverage, is preserved at
+      https://github.com/PolicyEngine/policyengine-us/issues/9151: PE-US
+      1.767.3 stores Notice 2025-67's correct 2026 tier values, but PolicyEngine
+      Core 3.30.3's right-exclusive scale digitization treats the published
+      $24,250 single-filer inclusive 50% maximum as the 20% tier's lower bound.
+      At $24,250 AGI and $2,000 contributions, the statutory amount is
+      $2,000 * 50% = $1,000 while PE returns $2,000 * 20% = $400.
   - id: us-pe:sc_income_tax
     oracle_policy_name: sc_income_tax
     oracle_policy_type: rules

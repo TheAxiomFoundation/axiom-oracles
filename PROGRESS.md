@@ -254,11 +254,20 @@ residual), #229 (small-suite grounding).
 - Read `/private/tmp/review-354-VERDICT.md` in full.
 - Confirmed the worktree was clean at `a5771329`.
 - Confirmed the tracked root `PROGRESS.md` is present and preserved.
+- Reapplied the Saver's Credit withdrawal shape from `bc500bc4`: removed its
+  config and stale report and returned the us-pe row to `suite: null`.
+- Recorded that reinstatement awaits the Notice 2025-67 corpus chain
+  (`axiom-corpus#506`). Retained the #9151 disposition as historical evidence
+  after verifying that an orphan disposition is a supported, non-scoring state;
+  its issue link is in `evidence.upstream_url`, not `linked_issue`.
+- Withdrawal validation: `apply_dispositions.py --check` passes with the
+  expected informational orphan note, and `run_comparison.py --list` exposes
+  exactly seven federal suites. Targeted tests reached 96 passed / 3 skipped;
+  the only two failures are the intentionally stale 35-covered scoreboard and
+  ratchet, both queued for the required full regeneration to 34.
 
 ### Next
 
-- Reapply the exact Saver's Credit withdrawal shape from `bc500bc4`, retaining
-  issue #9151 evidence only in a harness-valid location.
 - Align the QBID fixture binding with merged RuleSpec main and rerun QBID.
 - Restore canonical SHA/tree verification on every federal config and in the
   generator; restore the seven-report manifest union.

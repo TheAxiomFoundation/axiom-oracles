@@ -1,6 +1,6 @@
 schema: axiom_oracles.dispositions.v1
 suite: us-savers-credit-grid
-updated: "2026-07-23"
+updated: "2026-07-25"
 entries:
   - id: first-tier-maximum-enters-next-bracket-at-equality
     concept: us:policies/income_tax/savers_credit_pipeline#federal_savers_credit
@@ -24,10 +24,10 @@ entries:
           equals: 400
         - expression: "1000 - 400"
           equals: 600
-      upstream_url: https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/parameters/gov/irs/credits/retirement_saving/rate/joint.yaml
+      upstream_url: https://github.com/PolicyEngine/policyengine-us/issues/9151
       sources:
-        - comparisons/us-savers-credit-grid.yaml
         - https://www.irs.gov/irb/2025-49_IRB
+        - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/parameters/gov/irs/credits/retirement_saving/rate/joint.yaml
     expires_on_source_change: true
     pinned:
       left: 1000
