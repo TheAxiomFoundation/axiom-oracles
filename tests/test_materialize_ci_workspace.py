@@ -151,14 +151,16 @@ def test_real_failing_suites_produce_working_plans(tmp_path):
     mcw = _load()
     amap = _real_map()
 
-    # Encoder SNAP class (az/ca/co/ny): state repo + federal repo clones; the
-    # harness resolves them from <workspace>/TheAxiomFoundation.
+    # az/ca SNAP migrated off the encoder harness onto the generic
+    # composed-program runner (household-input-panel): only the federal
+    # monorepo clones now, and the compose venv is required.
     plan = mcw.build_plan(
         _real_config("az-snap-ecps"), mcw.mapped_repos(amap, "az-snap-ecps"), tmp_path
     )
     cloned = {a["repo"] for a in plan if a["kind"] == "clone"}
-    assert {"TheAxiomFoundation/rulespec-us", "TheAxiomFoundation/rulespec-us-az"} <= cloned
-    assert "compose-venv" not in _kinds(plan)
+    assert "TheAxiomFoundation/rulespec-us" in cloned
+    assert "TheAxiomFoundation/rulespec-us-az" not in cloned
+    assert "compose-venv" in _kinds(plan)
 
     # Composed-program class (tanf/ssi/medicaid + al/fl/... snap): compose
     # venv plus the roots conventions.
