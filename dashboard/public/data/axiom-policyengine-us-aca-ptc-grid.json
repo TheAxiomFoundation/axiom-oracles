@@ -213,6 +213,7 @@
     },
     "policyengine": {
       "boundary": "TaxUnit annual benchmark credit capped by enrolled marketplace premium for twelve months",
+      "diagnostic_outputs": [],
       "outputs": [
         "used_aca_ptc"
       ]
@@ -226,7 +227,7 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-23T04:33:21Z",
+    "generated_at": "2026-07-25T12:10:53Z",
     "generated_by": "scripts/run_comparison.py::us-aca-ptc-grid",
     "oracle": {
       "name": "policyengine",
@@ -237,7 +238,7 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": "e9a8e0d71ed5d9ec0c0a6351d26a1205d9614616"
+        "sha": "3373e8411f7e141fd50879e3de964386f606f7f6"
       }
     ],
     "run_kind": "manual",

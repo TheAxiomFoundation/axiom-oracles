@@ -19,6 +19,7 @@
     {
       "axiom": 0.0,
       "axiom_fixture_inputs": {
+        "us:policies/income_tax/net_investment_income_tax_pipeline#input.niit_income_categories_are_disjoint_post_classification_amounts": true,
         "us:statutes/26/1411#input.adjusted_gross_income": 170000,
         "us:statutes/26/1411#input.allocable_investment_deductions": 0,
         "us:statutes/26/1411#input.annuity_income": 0,
@@ -62,6 +63,7 @@
     {
       "axiom": 1140.0,
       "axiom_fixture_inputs": {
+        "us:policies/income_tax/net_investment_income_tax_pipeline#input.niit_income_categories_are_disjoint_post_classification_amounts": true,
         "us:statutes/26/1411#input.adjusted_gross_income": 230000,
         "us:statutes/26/1411#input.allocable_investment_deductions": 0,
         "us:statutes/26/1411#input.annuity_income": 0,
@@ -105,6 +107,7 @@
     {
       "axiom": 1900.0,
       "axiom_fixture_inputs": {
+        "us:policies/income_tax/net_investment_income_tax_pipeline#input.niit_income_categories_are_disjoint_post_classification_amounts": true,
         "us:statutes/26/1411#input.adjusted_gross_income": 300000,
         "us:statutes/26/1411#input.allocable_investment_deductions": 0,
         "us:statutes/26/1411#input.annuity_income": 0,
@@ -148,6 +151,7 @@
     {
       "axiom": 1140.0,
       "axiom_fixture_inputs": {
+        "us:policies/income_tax/net_investment_income_tax_pipeline#input.niit_income_categories_are_disjoint_post_classification_amounts": true,
         "us:statutes/26/1411#input.adjusted_gross_income": 180000,
         "us:statutes/26/1411#input.allocable_investment_deductions": 0,
         "us:statutes/26/1411#input.annuity_income": 0,
@@ -191,6 +195,7 @@
     {
       "axiom": 11400.0,
       "axiom_fixture_inputs": {
+        "us:policies/income_tax/net_investment_income_tax_pipeline#input.niit_income_categories_are_disjoint_post_classification_amounts": true,
         "us:statutes/26/1411#input.adjusted_gross_income": 500000,
         "us:statutes/26/1411#input.allocable_investment_deductions": 0,
         "us:statutes/26/1411#input.annuity_income": 0,
@@ -234,6 +239,7 @@
     {
       "axiom": 1900.0,
       "axiom_fixture_inputs": {
+        "us:policies/income_tax/net_investment_income_tax_pipeline#input.niit_income_categories_are_disjoint_post_classification_amounts": true,
         "us:statutes/26/1411#input.adjusted_gross_income": 300000,
         "us:statutes/26/1411#input.allocable_investment_deductions": 0,
         "us:statutes/26/1411#input.annuity_income": 0,
@@ -297,6 +303,7 @@
     },
     "policyengine": {
       "boundary": "TaxUnit section 1411 tax; AGI equals MAGI because the grid has no section 911 exclusions",
+      "diagnostic_outputs": [],
       "outputs": [
         "net_investment_income_tax"
       ]
@@ -310,7 +317,7 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-23T04:33:27Z",
+    "generated_at": "2026-07-25T12:11:04Z",
     "generated_by": "scripts/run_comparison.py::us-niit-grid",
     "oracle": {
       "name": "policyengine",
@@ -321,7 +328,7 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": "f0eaa0cf657a40edfcb5491fde243cd051ec67af"
+        "sha": "3373e8411f7e141fd50879e3de964386f606f7f6"
       }
     ],
     "run_kind": "manual",

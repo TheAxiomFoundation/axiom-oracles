@@ -19,6 +19,7 @@
     {
       "axiom": 800.0,
       "axiom_fixture_inputs": {
+        "us:policies/income_tax/lifetime_learning_credit_pipeline#input.qualified_tuition_and_related_expenses_are_net_of_deduction_allowed_expenses": true,
         "us:statutes/26/25A#input.cdcc": 0,
         "us:statutes/26/25A#input.filing_status": 0,
         "us:statutes/26/25A#input.foreign_tax_credit": 0,
@@ -70,6 +71,7 @@
     {
       "axiom": 2000.0,
       "axiom_fixture_inputs": {
+        "us:policies/income_tax/lifetime_learning_credit_pipeline#input.qualified_tuition_and_related_expenses_are_net_of_deduction_allowed_expenses": true,
         "us:statutes/26/25A#input.cdcc": 0,
         "us:statutes/26/25A#input.filing_status": 0,
         "us:statutes/26/25A#input.foreign_tax_credit": 0,
@@ -121,6 +123,7 @@
     {
       "axiom": 1000.0,
       "axiom_fixture_inputs": {
+        "us:policies/income_tax/lifetime_learning_credit_pipeline#input.qualified_tuition_and_related_expenses_are_net_of_deduction_allowed_expenses": true,
         "us:statutes/26/25A#input.cdcc": 0,
         "us:statutes/26/25A#input.filing_status": 0,
         "us:statutes/26/25A#input.foreign_tax_credit": 0,
@@ -172,6 +175,7 @@
     {
       "axiom": 0.0,
       "axiom_fixture_inputs": {
+        "us:policies/income_tax/lifetime_learning_credit_pipeline#input.qualified_tuition_and_related_expenses_are_net_of_deduction_allowed_expenses": true,
         "us:statutes/26/25A#input.cdcc": 0,
         "us:statutes/26/25A#input.filing_status": 0,
         "us:statutes/26/25A#input.foreign_tax_credit": 0,
@@ -223,6 +227,7 @@
     {
       "axiom": 800.0,
       "axiom_fixture_inputs": {
+        "us:policies/income_tax/lifetime_learning_credit_pipeline#input.qualified_tuition_and_related_expenses_are_net_of_deduction_allowed_expenses": true,
         "us:statutes/26/25A#input.cdcc": 0,
         "us:statutes/26/25A#input.filing_status": 1,
         "us:statutes/26/25A#input.foreign_tax_credit": 0,
@@ -274,6 +279,7 @@
     {
       "axiom": 180.0,
       "axiom_fixture_inputs": {
+        "us:policies/income_tax/lifetime_learning_credit_pipeline#input.qualified_tuition_and_related_expenses_are_net_of_deduction_allowed_expenses": true,
         "us:statutes/26/25A#input.cdcc": 0,
         "us:statutes/26/25A#input.filing_status": 1,
         "us:statutes/26/25A#input.foreign_tax_credit": 0,
@@ -325,6 +331,7 @@
     {
       "axiom": 0.0,
       "axiom_fixture_inputs": {
+        "us:policies/income_tax/lifetime_learning_credit_pipeline#input.qualified_tuition_and_related_expenses_are_net_of_deduction_allowed_expenses": true,
         "us:statutes/26/25A#input.cdcc": 0,
         "us:statutes/26/25A#input.filing_status": 0,
         "us:statutes/26/25A#input.foreign_tax_credit": 0,
@@ -376,6 +383,7 @@
     {
       "axiom": 2000.0,
       "axiom_fixture_inputs": {
+        "us:policies/income_tax/lifetime_learning_credit_pipeline#input.qualified_tuition_and_related_expenses_are_net_of_deduction_allowed_expenses": true,
         "us:statutes/26/25A#input.cdcc": 0,
         "us:statutes/26/25A#input.filing_status": 0,
         "us:statutes/26/25A#input.foreign_tax_credit": 0,
@@ -427,6 +435,7 @@
     {
       "axiom": 1999.8,
       "axiom_fixture_inputs": {
+        "us:policies/income_tax/lifetime_learning_credit_pipeline#input.qualified_tuition_and_related_expenses_are_net_of_deduction_allowed_expenses": true,
         "us:statutes/26/25A#input.cdcc": 0,
         "us:statutes/26/25A#input.filing_status": 0,
         "us:statutes/26/25A#input.foreign_tax_credit": 0,
@@ -478,6 +487,7 @@
     {
       "axiom": 0.0,
       "axiom_fixture_inputs": {
+        "us:policies/income_tax/lifetime_learning_credit_pipeline#input.qualified_tuition_and_related_expenses_are_net_of_deduction_allowed_expenses": true,
         "us:statutes/26/25A#input.cdcc": 0,
         "us:statutes/26/25A#input.filing_status": 0,
         "us:statutes/26/25A#input.foreign_tax_credit": 0,
@@ -529,6 +539,7 @@
     {
       "axiom": 2000.0,
       "axiom_fixture_inputs": {
+        "us:policies/income_tax/lifetime_learning_credit_pipeline#input.qualified_tuition_and_related_expenses_are_net_of_deduction_allowed_expenses": true,
         "us:statutes/26/25A#input.cdcc": 0,
         "us:statutes/26/25A#input.filing_status": 0,
         "us:statutes/26/25A#input.foreign_tax_credit": 0,
@@ -599,6 +610,7 @@
     {
       "axiom": 500.0,
       "axiom_fixture_inputs": {
+        "us:policies/income_tax/lifetime_learning_credit_pipeline#input.qualified_tuition_and_related_expenses_are_net_of_deduction_allowed_expenses": true,
         "us:statutes/26/25A#input.cdcc": 0,
         "us:statutes/26/25A#input.filing_status": 0,
         "us:statutes/26/25A#input.foreign_tax_credit": 0,
@@ -687,7 +699,7 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-23T08:13:02Z",
+    "generated_at": "2026-07-25T12:11:45Z",
     "generated_by": "scripts/run_comparison.py::us-llc-grid",
     "oracle": {
       "name": "policyengine",
@@ -698,7 +710,7 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": "dc6602f246f333902bd964271919902b638a6112"
+        "sha": "3373e8411f7e141fd50879e3de964386f606f7f6"
       }
     ],
     "run_kind": "manual",

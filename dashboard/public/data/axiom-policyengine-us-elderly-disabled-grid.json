@@ -19,6 +19,7 @@
     {
       "axiom": 412.5,
       "axiom_fixture_inputs": {
+        "us:policies/income_tax/elderly_disabled_credit_pipeline#input.all_under_65_section_22_qualified_individuals_were_permanently_and_totally_disabled_when_retired": false,
         "us:statutes/26/22#input.adjusted_gross_income": 8000,
         "us:statutes/26/22#input.filing_status": 0,
         "us:statutes/26/22#input.is_nonresident_alien": false,
@@ -71,6 +72,7 @@
     {
       "axiom": 412.5,
       "axiom_fixture_inputs": {
+        "us:policies/income_tax/elderly_disabled_credit_pipeline#input.all_under_65_section_22_qualified_individuals_were_permanently_and_totally_disabled_when_retired": false,
         "us:statutes/26/22#input.adjusted_gross_income": 12000,
         "us:statutes/26/22#input.filing_status": 0,
         "us:statutes/26/22#input.is_nonresident_alien": false,
@@ -123,6 +125,7 @@
     {
       "axiom": 300.0,
       "axiom_fixture_inputs": {
+        "us:policies/income_tax/elderly_disabled_credit_pipeline#input.all_under_65_section_22_qualified_individuals_were_permanently_and_totally_disabled_when_retired": false,
         "us:statutes/26/22#input.adjusted_gross_income": 15000,
         "us:statutes/26/22#input.filing_status": 1,
         "us:statutes/26/22#input.is_nonresident_alien": false,
@@ -185,6 +188,7 @@
     {
       "axiom": 0.0,
       "axiom_fixture_inputs": {
+        "us:policies/income_tax/elderly_disabled_credit_pipeline#input.all_under_65_section_22_qualified_individuals_were_permanently_and_totally_disabled_when_retired": false,
         "us:statutes/26/22#input.adjusted_gross_income": 30000,
         "us:statutes/26/22#input.filing_status": 0,
         "us:statutes/26/22#input.is_nonresident_alien": false,
@@ -237,6 +241,7 @@
     {
       "axiom": 0.0,
       "axiom_fixture_inputs": {
+        "us:policies/income_tax/elderly_disabled_credit_pipeline#input.all_under_65_section_22_qualified_individuals_were_permanently_and_totally_disabled_when_retired": false,
         "us:statutes/26/22#input.adjusted_gross_income": 8000,
         "us:statutes/26/22#input.filing_status": 0,
         "us:statutes/26/22#input.is_nonresident_alien": false,
@@ -289,6 +294,7 @@
     {
       "axiom": 450.0,
       "axiom_fixture_inputs": {
+        "us:policies/income_tax/elderly_disabled_credit_pipeline#input.all_under_65_section_22_qualified_individuals_were_permanently_and_totally_disabled_when_retired": false,
         "us:statutes/26/22#input.adjusted_gross_income": 12000,
         "us:statutes/26/22#input.filing_status": 1,
         "us:statutes/26/22#input.is_nonresident_alien": false,
@@ -351,6 +357,7 @@
     {
       "axiom": 300.0,
       "axiom_fixture_inputs": {
+        "us:policies/income_tax/elderly_disabled_credit_pipeline#input.all_under_65_section_22_qualified_individuals_were_permanently_and_totally_disabled_when_retired": true,
         "us:statutes/26/22#input.adjusted_gross_income": 0,
         "us:statutes/26/22#input.filing_status": 0,
         "us:statutes/26/22#input.is_nonresident_alien": false,
@@ -403,6 +410,7 @@
     {
       "axiom": 750.0,
       "axiom_fixture_inputs": {
+        "us:policies/income_tax/elderly_disabled_credit_pipeline#input.all_under_65_section_22_qualified_individuals_were_permanently_and_totally_disabled_when_retired": false,
         "us:statutes/26/22#input.adjusted_gross_income": 7500,
         "us:statutes/26/22#input.filing_status": 0,
         "us:statutes/26/22#input.is_nonresident_alien": false,
@@ -455,6 +463,7 @@
     {
       "axiom": 749.85,
       "axiom_fixture_inputs": {
+        "us:policies/income_tax/elderly_disabled_credit_pipeline#input.all_under_65_section_22_qualified_individuals_were_permanently_and_totally_disabled_when_retired": false,
         "us:statutes/26/22#input.adjusted_gross_income": 7502,
         "us:statutes/26/22#input.filing_status": 0,
         "us:statutes/26/22#input.is_nonresident_alien": false,
@@ -544,7 +553,7 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-23T08:12:49Z",
+    "generated_at": "2026-07-25T12:11:35Z",
     "generated_by": "scripts/run_comparison.py::us-elderly-disabled-grid",
     "oracle": {
       "name": "policyengine",
@@ -555,7 +564,7 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": "dc6602f246f333902bd964271919902b638a6112"
+        "sha": "3373e8411f7e141fd50879e3de964386f606f7f6"
       }
     ],
     "run_kind": "manual",
