@@ -1,21 +1,31 @@
+# Arizona SNAP / Food Assistance -- Axiom vs PolicyEngine on Enhanced CPS.
+
 name: az-snap-ecps
-title: Arizona SNAP — Axiom vs PolicyEngine
-description: >-
-  Compares Arizona SNAP eligibility and benefit amount produced by the
-  RuleSpec composition against PolicyEngine on the Enhanced CPS, filtered to
-  Arizona households.
+title: Arizona SNAP -- Axiom vs PolicyEngine
+description: Compares Arizona SNAP eligibility and benefit amount from the
+  composed axiom-programs/us-az/snap/fy-2026 spec against PolicyEngine on the
+  Enhanced CPS, filtered to Arizona households.
 
 runner:
-  type: axiom-encode-snap-ecps-compare
-  axiom_encode_repo: $HOME/axiom-encode
+  type: axiom-oracles-compare
   axiom_rules_repo: $HOME/axiom-rules-engine
   parameters:
-    jurisdiction: us-az
+    left: axiom
+    right: policyengine
+    concepts:
+      - us:statutes/7/2014/o#snap_eligible
+      - us:statutes/7/2014/u#snap_benefit
     sample_size: 0
-    year: 2026
-    month: 1
-    utility_projection: policyengine-type
-    tolerance: 1.5
+    period: 2026-01
+    population: enhanced-cps
+    axiom_compose_binary: $HOME/axiom-compose/.venv/bin/axiom-compose
+    axiom_program: $HOME/rulespec-us/programs/us-az/snap/fy-2026.yaml
+    axiom_composed_program: /tmp/az-snap-composed.yaml
+    axiom_compiled_program: /tmp/az-snap-compiled.json
+    axiom_rulespec_repo_roots: $HOME
+    rulespec_roots:
+      - $HOME/rulespec-us
+    jurisdiction_fips: "04"
 
 artifacts:
   report_basename: axiom-policyengine-az-snap-ecps
