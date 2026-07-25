@@ -324,7 +324,7 @@ residual), #229 (small-suite grounding).
   34, which remains above main's committed floor of 27. All eight derived
   `--check` gates pass after regeneration.
 - Complete validation battery passes: registry listing, rule verification,
-  state-tax Populace contract, all ten CI `--check` gates, Ruff, and full
+  state-tax Populace contract, all eleven current CI `--check` gates, Ruff, and full
   pytest. Pytest result: 1,791 passed / 57 skipped in 169.99 seconds, with the
   unavailable Node/esbuild dashboard loader taking its designed skip.
 - The conformance-universe gate validated UK and BE and returned its documented
@@ -333,5 +333,4 @@ residual), #229 (small-suite grounding).
 
 ### Next
 
-- Perform the final scope/provenance/count audit, then write and commit
-  `fix-354-DONE.md`.
+- None. Final scope/provenance/count audit passed; see `fix-354-DONE.md`.
