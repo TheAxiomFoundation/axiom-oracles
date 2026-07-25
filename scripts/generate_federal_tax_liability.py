@@ -318,11 +318,6 @@ def _qbid_case(
     active_business_qbi: float = 0,
     net_capital_gain: float = 0,
 ) -> FederalCase:
-    threshold = {
-        "single": 201_750,
-        "joint": 403_500,
-        "separate": 201_775,
-    }[filing_status]
     return _case(
         case_id,
         filing_status,
@@ -332,7 +327,6 @@ def _qbid_case(
         reit_dividends=reit_dividends,
         ptp_income=ptp_income,
         taxable_income_before_qbid=taxable_income_before_qbid,
-        threshold=threshold,
         active_business_qbi=active_business_qbi,
         net_capital_gain=net_capital_gain,
     )
@@ -1254,10 +1248,11 @@ def _validate_qbid_fixture(
         case_id=case.case_id,
         actual=actual,
         expected={
-            (f"{pipeline}qualified_business_income_threshold_amount_2026"): inputs[
-                "threshold"
-            ],
-            f"{statute}filing_status": status_codes[case.filing_status],
+            f"{pipeline}filing_status": status_codes[case.filing_status],
+            (
+                f"{pipeline}"
+                "supplied_amounts_are_for_taxpayers_only_qualified_trade_or_business"
+            ): True,
             f"{statute}qualified_trade_or_business_w2_wages": inputs["w2_wages"],
             f"{statute}qualified_trade_or_business_unadjusted_basis": inputs["ubia"],
             f"{statute}qualified_business_income": inputs["qbi"],
@@ -1280,7 +1275,6 @@ def _validate_qbid_fixture(
             ): 0,
             (f"{statute}w2_wages_allocable_to_qualified_cooperative_payments"): 0,
             f"{statute}taxpayer_is_corporation": False,
-            f"{statute}minimum_deduction_cost_of_living_adjustment": 0,
             f"{statute}qualified_production_activities_income": 0,
             (
                 f"{statute}"

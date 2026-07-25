@@ -242,7 +242,7 @@ def test_qbid_grid_binds_correct_2026_band_and_active_business_diagnostic():
     }
 
     phasein = cases["qbid-phasein"]
-    assert phasein.inputs["threshold"] == 201_750
+    assert "threshold" not in phasein.inputs
     assert phasein.inputs["taxable_income_before_qbid"] == 239_250
     situation = generator._qbid_situation(phasein)
     assert situation["people"]["head"]["qualified_business_income"][2026] == (200_000)
@@ -255,6 +255,75 @@ def test_qbid_grid_binds_correct_2026_band_and_active_business_diagnostic():
     assert passive.inputs["active_business_qbi"] == 0
     active = cases["qbid-active-minimum"]
     assert active.inputs["active_business_qbi"] == 1_000
+
+
+def test_qbid_fixture_binding_matches_merged_pipeline_surface(monkeypatch):
+    generator = _load_generator()
+    cases = {
+        case.case_id: case
+        for case in generator.POLICIES["qualified_business_income_deduction"].cases
+    }
+    captured = {}
+
+    def capture_fixture_values(**kwargs):
+        captured.update(kwargs)
+
+    monkeypatch.setattr(generator, "_require_fixture_values", capture_fixture_values)
+    generator._validate_qbid_fixture(cases["qbid-phasein"], {})
+
+    pipeline = (
+        "us:policies/income_tax/"
+        "qualified_business_income_deduction_pipeline#input."
+    )
+    statute = "us:statutes/26/199A#input."
+    capital_gain = "us:statutes/26/1/h#input."
+    expected = captured["expected"]
+    assert set(expected) == {
+        f"{pipeline}filing_status",
+        (
+            f"{pipeline}"
+            "supplied_amounts_are_for_taxpayers_only_qualified_trade_or_business"
+        ),
+        f"{statute}qualified_trade_or_business_w2_wages",
+        f"{statute}qualified_trade_or_business_unadjusted_basis",
+        f"{statute}qualified_business_income",
+        f"{statute}taxable_income_computed_without_section_199A",
+        (
+            f"{statute}"
+            "qualified_business_income_allocable_to_qualified_cooperative_payments"
+        ),
+        f"{statute}w2_wages_allocable_to_qualified_cooperative_payments",
+        f"{statute}qualified_reit_dividends",
+        f"{statute}qualified_publicly_traded_partnership_income",
+        f"{statute}taxpayer_is_corporation",
+        (
+            f"{statute}"
+            "aggregate_qualified_business_income_from_active_qualified_"
+            "trades_or_businesses"
+        ),
+        f"{statute}qualified_production_activities_income",
+        (
+            f"{statute}"
+            "taxpayer_is_specified_agricultural_or_horticultural_cooperative"
+        ),
+        f"{statute}cooperative_w2_wages",
+        (
+            f"{capital_gain}"
+            "net_capital_gain_taken_into_account_as_investment_income_"
+            "under_section_163_d_4_B_iii"
+        ),
+        f"{capital_gain}long_term_capital_gains",
+        f"{capital_gain}short_term_capital_gains",
+        f"{capital_gain}qualified_dividend_income",
+    }
+    assert expected[f"{pipeline}filing_status"] == 0
+    assert (
+        expected[
+            f"{pipeline}"
+            "supplied_amounts_are_for_taxpayers_only_qualified_trade_or_business"
+        ]
+        is True
+    )
 
 
 def test_savers_grid_uses_completed_person_contributions_and_two_caps():

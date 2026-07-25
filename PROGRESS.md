@@ -265,10 +265,21 @@ residual), #229 (small-suite grounding).
   exactly seven federal suites. Targeted tests reached 96 passed / 3 skipped;
   the only two failures are the intentionally stale 35-covered scoreboard and
   ratchet, both queued for the required full regeneration to 34.
+- Traced merged RuleSpec main's QBID pipeline and companion. The pipeline now
+  imports all nine Rev. Proc. 2025-32 parameters, accepts pipeline-level filing
+  status, and requires the sole-business attestation; the retired runtime
+  threshold, statute-level status, and minimum-COLA inputs are absent.
+- Updated the generator to bind the exact 19-input surface and removed the
+  misleading threshold field from report case inputs. Added a unit contract for
+  the full key set and moved PolicyEngine issue #9150 into
+  `evidence.upstream_url`.
+- QBID binding validation: 35 targeted generator/disposition tests pass, Ruff
+  passes on the touched Python, and the disposition consistency gate passes.
 
 ### Next
 
-- Align the QBID fixture binding with merged RuleSpec main and rerun QBID.
+- Restore the canonical SHA/tree guard, then rerun QBID and record its real
+  11-case table.
 - Restore canonical SHA/tree verification on every federal config and in the
   generator; restore the seven-report manifest union.
 - Add PolicyEngine issue #9150 evidence (and #9151 only if its disposition can

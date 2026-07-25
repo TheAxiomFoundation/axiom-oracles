@@ -12,9 +12,13 @@
 # Sources:
 # https://www.irs.gov/pub/irs-drop/rp-25-32.pdf#page=21
 # https://www.congress.gov/119/plaws/publ21/PLAW-119publ21.pdf
-# RuleSpec: rulespec-us@dc6602f2
+# RuleSpec: rulespec-us@3373e841
 # us/policies/income_tax/
-# qualified_business_income_deduction_pipeline.yaml:15-59,82-314,316-391.
+# qualified_business_income_deduction_pipeline.yaml:15-113,116-616;
+# us/policies/irs/rev-proc-2025-32/qualified-business-income.yaml.
+# The merged companion also carries four fail-closed diagnostics (surviving
+# spouse, corporation, multiple-business attestation, and invalid status 9);
+# this comparison retains its reviewed 11-case selection.
 #
 # PolicyEngine binding: `qualified_business_income_deduction`. PE-US 1.767.3
 # has the correct 2026 phase-out starts and lengths at
@@ -41,7 +45,7 @@ name: us-qbid-grid
 title: Federal qualified business income deduction — Axiom vs PolicyEngine
 description: >-
   Compares the 2026 Axiom section 199A composition against PolicyEngine-US
-  on all 11 ground-truth QBI companion cases, carrying the known active-QBI
+  on 11 reviewed ground-truth QBI companion cases, carrying the known active-QBI
   floor divergence through an evidence-backed disposition.
 
 runner:

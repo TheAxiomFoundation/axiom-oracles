@@ -1,6 +1,6 @@
 schema: axiom_oracles.dispositions.v1
 suite: us-qbid-grid
-updated: "2026-07-23"
+updated: "2026-07-25"
 entries:
   - id: qbid-floor-uses-all-qbi-instead-of-active-business-qbi
     concept: us:policies/income_tax/qualified_business_income_deduction_pipeline#federal_qualified_business_income_deduction
@@ -20,10 +20,11 @@ entries:
       arithmetic:
         - expression: "400 - 0"
           equals: 400
-      upstream_url: https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/variables/gov/irs/income/taxable_income/deductions/qualified_business_income_deduction/qualified_business_income_deduction.py#L20-L34
+      upstream_url: https://github.com/PolicyEngine/policyengine-us/issues/9150
       sources:
         - comparisons/us-qbid-grid.yaml
         - https://www.congress.gov/119/plaws/publ21/PLAW-119publ21.pdf
+        - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/variables/gov/irs/income/taxable_income/deductions/qualified_business_income_deduction/qualified_business_income_deduction.py#L20-L34
     expires_on_source_change: true
     pinned:
       left: 0
