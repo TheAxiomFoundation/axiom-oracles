@@ -1297,6 +1297,24 @@
       "source": "comparisons/us-additional-medicare-grid.yaml"
     },
     {
+      "suite": "us-elderly-disabled-grid",
+      "name": "us-elderly-disabled-grid",
+      "report": "axiom-policyengine-us-elderly-disabled-grid.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/us-elderly-disabled-grid.yaml"
+    },
+    {
+      "suite": "us-llc-grid",
+      "name": "us-llc-grid",
+      "report": "axiom-policyengine-us-llc-grid.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/us-llc-grid.yaml"
+    },
+    {
       "suite": "us-niit-grid",
       "name": "us-niit-grid",
       "report": "axiom-policyengine-us-niit-grid.json",
@@ -1304,6 +1322,24 @@
         "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/us-niit-grid.yaml"
+    },
+    {
+      "suite": "us-qbid-grid",
+      "name": "us-qbid-grid",
+      "report": "axiom-policyengine-us-qbid-grid.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/us-qbid-grid.yaml"
+    },
+    {
+      "suite": "us-savers-credit-grid",
+      "name": "us-savers-credit-grid",
+      "report": "axiom-policyengine-us-savers-credit-grid.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/us-savers-credit-grid.yaml"
     },
     {
       "suite": "us-seca-grid",

@@ -411,22 +411,12 @@
       },
       {
         "date": "2026-07-25",
-        "in_scope": 136,
-        "covered": 27,
-        "uncovered": 109,
-        "unexplained": 0,
-        "axiom_attributed_open": 0,
-        "gap": 109,
-        "conformant": false
-      },
-      {
-        "date": "2026-07-25",
         "in_scope": 127,
-        "covered": 34,
-        "uncovered": 93,
+        "covered": 35,
+        "uncovered": 92,
         "unexplained": 0,
         "axiom_attributed_open": 0,
-        "gap": 93,
+        "gap": 92,
         "conformant": false
       }
     ]
