@@ -199,12 +199,12 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-24T19:53:47Z",
+    "generated_at": "2026-07-25T03:46:42Z",
     "generated_by": "scripts/run_comparison.py::ma-income-tax-liability",
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": "3a06a99dbc91a7d747759a79a506fa07ae9d42da"
+        "sha": "9a88f94dcb253309f96371e4df2d877e39cdf436"
       }
     ],
     "run_kind": "affected-rerun",
