@@ -30732,6 +30732,14 @@ mappings:
     candidate_priority: P4
     rationale: *ks_2026_supported_rationale
 
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_supported_refundable_credits
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    policyengine_variable: ks_total_eitc
+    candidate_priority: P4
+    rationale: Axiom exposes the refundable Kansas earned income credit only when its bounded supported-profile gate holds and returns a zero sentinel for invalid or source-held profiles. PolicyEngine's ks_total_eitc has no equivalent source-readiness gate, so it is not a one-to-one comparison for this public output.
+
   - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_supported_net_income_tax_liability
     country: *ks_2026_country
     program: *ks_2026_program
