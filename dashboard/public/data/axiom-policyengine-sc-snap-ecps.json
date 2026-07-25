@@ -8,18 +8,18 @@
       "components": [],
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
-      "left_weighted_sum": 85684510.951222,
+      "left_weighted_sum": 85662870.107774,
       "match_rate": 90.179267,
-      "match_weight": 2338136.722836,
+      "match_weight": 2338038.247581,
       "mismatch_count": 126,
-      "mismatch_weight": 210745.863747,
+      "mismatch_weight": 210844.339002,
       "missing_both_count": 0,
       "missing_left_count": 0,
       "missing_right_count": 0,
       "parent": null,
       "right_weighted_sum": 89929217.2572,
-      "weighted_difference": -4244706.305978,
-      "weighted_match_rate": 91.731833
+      "weighted_difference": -4266347.149426,
+      "weighted_match_rate": 91.72797
     },
     {
       "category": "food",
@@ -53,6 +53,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -108,6 +109,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -154,6 +162,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -213,6 +222,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -270,6 +280,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -327,6 +338,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -381,6 +399,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -436,6 +455,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "left": 0.0,
+          "right": 6.09359868367513
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -480,6 +506,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -526,6 +559,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -570,6 +610,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -616,6 +663,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -671,6 +719,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -726,6 +775,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -781,6 +831,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -836,6 +887,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -884,6 +942,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -939,6 +998,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -1000,6 +1060,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -1052,6 +1119,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -1109,6 +1177,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -1164,6 +1233,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -1219,6 +1289,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -1263,6 +1340,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -1311,6 +1395,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -1356,6 +1447,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -1411,6 +1503,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -1466,6 +1559,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -1521,6 +1615,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -1576,6 +1671,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -1637,6 +1733,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -1694,6 +1791,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -1749,6 +1847,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -1804,6 +1903,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -1861,6 +1961,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -1907,6 +2014,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -1964,6 +2072,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -2019,6 +2128,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -2069,6 +2185,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -2120,56 +2237,11 @@
       "right_errors": []
     },
     {
-      "case_id": "ecps-28965",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 50.0,
-      "metadata": {
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 5063,
-        "axiom_relations_count": 4,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            39,
-            12
-          ],
-          "household_size": 2,
-          "yearly_earned_income_per_person": [
-            14328.31,
-            0.0
-          ],
-          "yearly_earned_income_total": 14328.31
-        },
-        "household_weight": 0.040591295808553696,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "45043",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [
-        {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
-          "description": "SNAP benefit amount",
-          "difference": 7.765218098958314,
-          "kind": "amount_difference",
-          "left": 322.0,
-          "parent": null,
-          "relative_tolerance": 0,
-          "right": 314.2347819010417,
-          "tolerance": 7
-        }
-      ],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
       "case_id": "ecps-28994",
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -2227,6 +2299,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -2273,6 +2352,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -2321,6 +2407,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -2378,6 +2465,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -2433,6 +2521,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -2487,6 +2582,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -2533,6 +2635,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -2579,6 +2688,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -2627,6 +2743,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -2682,6 +2799,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -2737,6 +2855,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -2792,6 +2911,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -2844,6 +2970,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -2899,6 +3026,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -2964,6 +3092,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -3021,6 +3150,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -3076,6 +3206,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -3128,6 +3265,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -3176,6 +3320,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -3220,6 +3371,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -3275,6 +3427,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -3319,6 +3478,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -3376,6 +3536,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -3424,6 +3591,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -3479,6 +3647,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -3523,6 +3698,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -3578,6 +3754,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -3629,10 +3806,68 @@
       "right_errors": []
     },
     {
+      "case_id": "ecps-29271",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 8427,
+        "axiom_relations_count": 8,
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_summary": {
+          "ages": [
+            52,
+            51,
+            17,
+            15
+          ],
+          "household_size": 4,
+          "yearly_earned_income_per_person": [
+            34242.47,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 34242.47
+        },
+        "household_weight": 98.5158462524414,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "45087",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "description": "SNAP benefit amount",
+          "difference": -7.245402018229186,
+          "kind": "amount_difference",
+          "left": 375.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 382.2454020182292,
+          "tolerance": 7
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
       "case_id": "ecps-29280",
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -3688,6 +3923,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -3745,6 +3981,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -3797,6 +4040,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -3854,6 +4098,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -3909,6 +4154,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -3957,6 +4209,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -4014,6 +4267,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -4062,6 +4322,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -4117,6 +4378,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -4172,6 +4434,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -4229,6 +4492,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -4284,6 +4548,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -4334,6 +4605,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -4382,6 +4660,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -4437,6 +4716,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -4492,6 +4772,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -4540,6 +4827,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -4592,6 +4886,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -4647,6 +4942,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -4702,6 +4998,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -4759,6 +5056,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "left": 0.0,
+          "right": 6.09359868367513
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -4805,6 +5109,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -4860,6 +5165,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -4908,6 +5220,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -4958,6 +5277,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -5010,6 +5336,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -5071,6 +5398,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -5128,6 +5456,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -5172,6 +5507,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -5229,6 +5565,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -5284,6 +5621,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -5341,6 +5679,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -5396,6 +5735,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -5451,6 +5791,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -5506,6 +5847,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -5552,6 +5900,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -5609,6 +5958,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -5664,6 +6014,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -5721,6 +6072,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -5778,6 +6130,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -5835,6 +6188,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -5890,6 +6244,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -5953,6 +6308,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -6007,6 +6369,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -6062,6 +6425,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -6121,6 +6485,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -6176,6 +6541,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -6226,6 +6598,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -6276,6 +6655,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -6331,6 +6711,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -6387,6 +6774,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -6435,6 +6829,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -6481,6 +6882,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -6529,6 +6937,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -6579,6 +6994,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -6625,6 +7047,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -6658,9 +7081,9 @@
         {
           "concept": "us:statutes/7/2014/u#snap_benefit",
           "description": "SNAP benefit amount",
-          "difference": 391.0,
+          "difference": 390.0,
           "kind": "amount_difference",
-          "left": 391.0,
+          "left": 390.0,
           "parent": null,
           "relative_tolerance": 0,
           "right": 0.0,
@@ -6686,6 +7109,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -6736,6 +7166,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -6790,6 +7227,7 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -6849,6 +7287,13 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -7969,22 +8414,6 @@
     },
     {
       "ages": null,
-      "case_id": "ecps-28965",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
-      "description": "SNAP benefit amount",
-      "difference": 7.765218098958314,
-      "kind": "amount_difference",
-      "left": 322.0,
-      "parent": null,
-      "pregnant_head": null,
-      "relative_tolerance": 0,
-      "right": 314.2347819010417,
-      "scenario": null,
-      "tolerance": 7,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
       "case_id": "ecps-28994",
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
@@ -8669,6 +9098,22 @@
       "right": true,
       "scenario": null,
       "tolerance": 0,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-29271",
+      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "description": "SNAP benefit amount",
+      "difference": -7.245402018229186,
+      "kind": "amount_difference",
+      "left": 375.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 382.2454020182292,
+      "scenario": null,
+      "tolerance": 7,
       "yearly_earned_income": null
     },
     {
@@ -10116,9 +10561,9 @@
       "case_id": "ecps-29753",
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
-      "difference": 391.0,
+      "difference": 390.0,
       "kind": "amount_difference",
-      "left": 391.0,
+      "left": 390.0,
       "parent": null,
       "pregnant_head": null,
       "relative_tolerance": 0,
@@ -10231,10 +10676,10 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "e19f1b7573c74512f20a6b71a0c55dbbf333d41b",
+      "axiom_rules_engine_sha": "48797e101c093bb388be718c6f5d8fc9d9f94a7d",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-06T21:06:57Z",
+    "generated_at": "2026-07-24T05:35:41Z",
     "generated_by": "scripts/run_comparison.py::sc-snap-ecps",
     "oracle": {
       "name": "policyengine",
@@ -10244,7 +10689,7 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": "a0bcc5a39fa57f02f0c75c9d4a9e6bfd8670c58c"
+        "sha": "ca2d424fcb85ce8c3a8f4706113331710f114460"
       }
     ],
     "run_kind": "manual",
@@ -10308,11 +10753,12 @@
         "value": null
       }
     ],
+    "stored_mismatch_example_count": 206,
     "weighted": {
       "comparison_weight": 5097765.173164,
-      "match_rate": 88.551696,
-      "match_weight": 4514157.536364,
-      "mismatch_weight": 583607.6368
+      "match_rate": 88.549765,
+      "match_weight": 4514059.061109,
+      "mismatch_weight": 583706.112055
     }
   }
 }

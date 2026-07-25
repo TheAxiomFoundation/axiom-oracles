@@ -8,6 +8,9 @@ runner:
   axiom_encode_repo: $HOME/axiom-encode
   axiom_rules_repo: $HOME/axiom-rules-engine
   parameters:
+    # Loaded-case count overstates this suite (in-bridge filtering), so
+    # the size heuristic under-persists; keep full per-case evidence.
+    include_case_inputs: true
     jurisdiction: us-co
     sample_size: 0
     year: 2026

@@ -546,11 +546,34 @@ def attach_generic_inputs(
             _, fragment = member_relation.split("#", maxsplit=1)
             bare_name = fragment.removeprefix("relation.")
 
+        # A composed program can declare the same conceptual relation under
+        # more than one absolute id (e.g. the statutory
+        # us:statutes/7/2012/j#relation.member_of_household plus the
+        # state-plan composition module's own #relation.member_of_household).
+        # Emit tuples for every declared variant so whichever id the
+        # program's rules consume resolves; with multiple declared variants
+        # the engine rejects the ambiguous bare form, so emit the bare name
+        # only when it is unambiguous.
+        declared = [
+            str(rel.get("name"))
+            for rel in (program.get("relations") or [])
+            if isinstance(rel, dict) and rel.get("name")
+        ]
+        variants = [
+            name
+            for name in declared
+            if name.split("#", 1)[-1].removeprefix("relation.") == bare_name
+        ]
+        if member_relation not in variants:
+            variants.insert(0, member_relation)
+        emit_bare = bare_name != member_relation and len(variants) == 1
+
         relation_records: list[dict[str, Any]] = []
         for pid in person_ids:
             tuple_pair = [pid, household_entity_id]
-            relation_records.append({"name": member_relation, "tuple": tuple_pair})
-            if bare_name != member_relation:
+            for name in variants:
+                relation_records.append({"name": name, "tuple": tuple_pair})
+            if emit_bare:
                 relation_records.append({"name": bare_name, "tuple": tuple_pair})
 
         metadata[AXIOM_INPUT_RECORDS_METADATA_KEY] = input_dicts

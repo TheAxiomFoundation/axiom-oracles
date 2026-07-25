@@ -2,6 +2,39 @@
  "suite": "az-tanf-ecps",
  "count": 1341,
  "chunks": 3,
+ "input_slots": [
+  "axiom:az-tanf-compiled#input.adult_caretaker_is_nonparent_caretaker_relative_applying_for_child_only",
+  "axiom:az-tanf-compiled#input.all_members_of_caretaker_relative_family_registered_to_case",
+  "axiom:az-tanf-compiled#input.budgetary_unit_has_obligation_to_pay_shelter_cost",
+  "axiom:az-tanf-compiled#input.budgetary_unit_has_shelter_cost_obligation_but_fails_to_provide_verification",
+  "axiom:az-tanf-compiled#input.ca_earned_income_deductions",
+  "axiom:az-tanf-compiled#input.caretaker_relative_family_earned_income",
+  "axiom:az-tanf-compiled#input.caretaker_relative_family_unearned_income",
+  "axiom:az-tanf-compiled#input.caretaker_relative_is_parent_or_nonparent_caretaker_relative_applying_for_self_and_child",
+  "axiom:az-tanf-compiled#input.case_change_has_occurred",
+  "axiom:az-tanf-compiled#input.current_federal_poverty_level_for_caretaker_relative_family_size",
+  "axiom:az-tanf-compiled#input.federal_poverty_level_for_payment_standard_base_year",
+  "axiom:az-tanf-compiled#input.gross_countable_income",
+  "axiom:az-tanf-compiled#input.household_has_minor_or_pregnant_member",
+  "axiom:az-tanf-compiled#input.kinship_care_case",
+  "axiom:az-tanf-compiled#input.kinship_foster_care_case",
+  "axiom:az-tanf-compiled#input.kinship_foster_care_child_only_case",
+  "axiom:az-tanf-compiled#input.legal_permanent_guardian_case",
+  "axiom:az-tanf-compiled#input.participant_in_military_receives_basic_allowance_for_housing",
+  "axiom:az-tanf-compiled#input.participant_is_on_lease_and_resides_in_government_subsidized_housing_unit",
+  "axiom:az-tanf-compiled#input.participant_with_shelter_cost_obligation_is_in_foreclosure_and_mortgage_company_accepts_back_payments",
+  "axiom:az-tanf-compiled#input.participant_works_in_exchange_for_rent",
+  "axiom:az-tanf-compiled#input.regular_benefit_amount",
+  "axiom:az-tanf-compiled#input.shelter_costs_paid_by_third_party_for_fewer_than_three_months",
+  "axiom:az-tanf-compiled#input.supplemental_benefit_amount",
+  "axiom:az-tanf-compiled#input.tribal_tanf_budgetary_unit_for_which_ca_needy_family_test_is_not_conducted"
+ ],
+ "output_slots": [
+  "az_tanf_eligible_no_pay",
+  "az_tanf_monthly_cash_benefit",
+  "az_tanf_payable",
+  "az_tanf_prospectively_eligible"
+ ],
  "chunk_size": 500,
  "engines": {
   "left": "axiom",
@@ -10,6 +43,6 @@
  "mismatch_concepts": [
   "us-az:policies/des/faa5#az_tanf_benefit"
  ],
- "source": "axiom-policyengine-az-tanf-ecps-0-2026-07-06.json",
+ "source": "axiom-policyengine-az-tanf-ecps-0-2026-07-24.json",
  "total_cases": 1341
 }

@@ -181,10 +181,10 @@
   "population": "enhanced-cps",
   "provenance": {
     "engine": {
-      "axiom_rules_engine_sha": "e19f1b7573c74512f20a6b71a0c55dbbf333d41b",
+      "axiom_rules_engine_sha": "48797e101c093bb388be718c6f5d8fc9d9f94a7d",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-23T02:41:56Z",
+    "generated_at": "2026-07-24T06:33:17Z",
     "generated_by": "scripts/run_comparison.py::co-snap-ecps",
     "oracle": {
       "name": "policyengine",
@@ -234,6 +234,7 @@
       }
     ],
     "mismatches_by_scenario": {},
+    "stored_mismatch_example_count": 1,
     "weighted": {
       "comparison_weight": 2144,
       "match_rate": 99.95335820895522,

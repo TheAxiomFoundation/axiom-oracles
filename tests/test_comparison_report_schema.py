@@ -183,3 +183,28 @@ def test_small_suite_default_keeps_full_evidence() -> None:
     assert case["matches"] == [
         {"concept": "us:test#income_tax", "left": 0, "right": 0}
     ]
+
+
+def test_strip_heavy_case_metadata_keeps_counts() -> None:
+    from axiom_oracles.comparison.report import strip_heavy_case_metadata
+
+    report = {
+        "cases": [
+            {
+                "case_id": "c1",
+                "metadata": {
+                    "axiom_input_records": [{"name": "a"}, {"name": "b"}],
+                    "axiom_relations": [{"name": "r"}],
+                    "household_summary": {"ages": [40]},
+                },
+            }
+        ]
+    }
+    slim = strip_heavy_case_metadata(report)
+    md = slim["cases"][0]["metadata"]
+    assert "axiom_input_records" not in md
+    assert md["axiom_input_records_count"] == 2
+    assert md["axiom_relations_count"] == 1
+    assert md["household_summary"] == {"ages": [40]}
+    # original untouched
+    assert "axiom_input_records" in report["cases"][0]["metadata"]

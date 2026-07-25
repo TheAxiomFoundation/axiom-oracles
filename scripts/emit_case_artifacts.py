@@ -105,6 +105,12 @@ def engine_pair_records(metadata: dict) -> list[dict]:
     for key in sorted(metadata):
         if not key.startswith("axiom_") or key in ENGINE_PAIR_SKIP:
             continue
+        # Bookkeeping columns (axiom_input_records_count, axiom_relations_
+        # count) are metadata about the projection, not household inputs —
+        # rendering them as panel rows is how "input records count 507"
+        # ended up masquerading as the household's only information.
+        if key.endswith("_count"):
+            continue
         # The snap_*-prefixed diagnostic columns duplicate the short-name
         # intermediates (snap_gross_monthly_income == gross_income) and
         # echo the compared allotment itself.
@@ -166,6 +172,15 @@ def compact_case(case: dict, explained: dict) -> dict:
         dropped = 0
         for r in records:
             value = r.get("value")
+            if isinstance(value, dict):
+                value = value.get("value")
+            try:
+                if value is not None and not isinstance(value, bool):
+                    value = float(value)
+                    if value == int(value):
+                        value = int(value)
+            except (TypeError, ValueError):
+                pass
             if value is None or value is False or value == 0 or value == "":
                 dropped += 1
                 continue
@@ -175,6 +190,23 @@ def compact_case(case: dict, explained: dict) -> dict:
         row["i"] = kept
         if dropped:
             row["i0"] = dropped
+        # Consumed by write_artifacts for the suite-level slot dictionary,
+        # stripped before chunks are written.
+        row["_all_input_names"] = [{"name": r.get("name")} for r in records]
+    outputs = (case.get("metadata") or {}).get("axiom_all_outputs")
+    if isinstance(outputs, dict) and outputs:
+        kept_o = []
+        dropped_o = 0
+        for name in sorted(outputs):
+            value = outputs[name]
+            if value is None or value is False or value == 0:
+                dropped_o += 1
+                continue
+            kept_o.append({"n": name, "v": value})
+        row["o"] = kept_o
+        if dropped_o:
+            row["o0"] = dropped_o
+        row["_all_output_names"] = sorted(outputs)
     else:
         synth = engine_pair_records(case.get("metadata") or {})
         if synth:
@@ -255,6 +287,20 @@ def write_artifacts(
     out_dir.mkdir(parents=True, exist_ok=True)
     for stale in out_dir.glob("chunk-*.json"):
         stale.unlink()
+    input_slots = sorted(
+        {
+            record.get("name")
+            for row in rows
+            for record in row.get("_all_input_names", [])
+            if record.get("name")
+        }
+    )
+    output_slots = sorted(
+        {name for row in rows for name in row.get("_all_output_names", [])}
+    )
+    for row in rows:
+        row.pop("_all_input_names", None)
+        row.pop("_all_output_names", None)
     chunks = [rows[i : i + CHUNK_SIZE] for i in range(0, len(rows), CHUNK_SIZE)]
     for i, chunk in enumerate(chunks):
         (out_dir / f"chunk-{i}.json").write_text(
@@ -267,6 +313,8 @@ def write_artifacts(
         "suite": suite,
         "count": len(rows),
         "chunks": len(chunks),
+        **({"input_slots": input_slots} if input_slots else {}),
+        **({"output_slots": output_slots} if output_slots else {}),
         "chunk_size": CHUNK_SIZE,
         "engines": meta.get("engines"),
         "mismatch_concepts": concepts,

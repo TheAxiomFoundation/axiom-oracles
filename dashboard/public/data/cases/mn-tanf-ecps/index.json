@@ -2,12 +2,30 @@
  "suite": "mn-tanf-ecps",
  "count": 991,
  "chunks": 2,
+ "input_slots": [
+  "axiom:mn-tanf-compiled#input.family_wage_level_for_corresponding_payment_month",
+  "axiom:mn-tanf-compiled#input.household_has_minor_or_pregnant_member",
+  "axiom:mn-tanf-compiled#input.mfip_food_portion_amount_under_section_0020_09",
+  "axiom:mn-tanf-compiled#input.net_earned_income_in_budget_month",
+  "axiom:mn-tanf-compiled#input.prorated_benefit_under_section_0022_12_03",
+  "axiom:mn-tanf-compiled#input.recoupment_amount_if_applicable",
+  "axiom:mn-tanf-compiled#input.transitional_standard_for_corresponding_payment_month",
+  "axiom:mn-tanf-compiled#input.unearned_income_in_budget_month",
+  "axiom:mn-tanf-compiled#input.unit_has_both_earned_and_unearned_income",
+  "axiom:mn-tanf-compiled#input.unit_has_earned_income_only",
+  "axiom:mn-tanf-compiled#input.unit_is_applicant_case",
+  "axiom:mn-tanf-compiled#input.unit_receives_no_income_other_than_mfip",
+  "axiom:mn-tanf-compiled#input.unit_receives_unearned_income_only"
+ ],
+ "output_slots": [
+  "mn_mfip_monthly_cash_benefit"
+ ],
  "chunk_size": 500,
  "engines": {
   "left": "axiom",
   "right": "policyengine"
  },
  "mismatch_concepts": [],
- "source": "axiom-policyengine-mn-tanf-ecps-0-2026-07-06.json",
+ "source": "axiom-policyengine-mn-tanf-ecps-0-2026-07-24.json",
  "total_cases": 991
 }

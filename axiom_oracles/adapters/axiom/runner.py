@@ -61,6 +61,7 @@ class AxiomRulesRunner(EngineAdapter):
         generated_program_target: str | None = None,
         rulespec_repo_roots: tuple[str | Path, ...] = (),
         prune_unsupported_inputs: bool = False,
+        record_all_outputs: bool = False,
         batch_size: int = 5_000,
         subprocess_run: SubprocessRun = subprocess.run,
     ) -> None:
@@ -81,6 +82,7 @@ class AxiomRulesRunner(EngineAdapter):
             str(Path(root).expanduser()) for root in rulespec_repo_roots
         )
         self.prune_unsupported_inputs = prune_unsupported_inputs
+        self.record_all_outputs = record_all_outputs
         self.batch_size = batch_size
         self._subprocess_run = subprocess_run
         self._staged_roots: StagedRootCache | None = None
@@ -124,6 +126,28 @@ class AxiomRulesRunner(EngineAdapter):
                 allowed_program_refs,
                 output_aliases=output_aliases,
             )
+            if self.record_all_outputs:
+                # Full-evidence mode: also query every derived rule in the
+                # compared concepts' dependency closure, so each case
+                # records the complete computation chain (intermediates
+                # included). Rules OUTSIDE the closure are not queried —
+                # forcing them evaluates program surfaces whose inputs the
+                # projector legitimately prunes (e.g. citizenship modules)
+                # and fails every case with missing-input errors.
+                known = set(execution_targets)
+                case_entity = str(
+                    cases[0].metadata.get(AXIOM_ENTITY_METADATA_KEY)
+                    or self.default_entity
+                )
+                execution_targets = execution_targets + [
+                    name
+                    for name in _derived_closure_ids(
+                        artifact_path,
+                        execution_targets,
+                        entity=case_entity,
+                    )
+                    if name not in known
+                ]
             results = self._run_cases(
                 cases,
                 execution_targets,
@@ -743,6 +767,67 @@ def _generated_program_path(temp_dir: Path, target: str | None) -> Path:
             "generated RuleSpec program target must be an absolute module target."
         )
     return temp_dir / f"rulespec-{prefix}" / relative_path.with_suffix(".yaml")
+
+
+def _derived_closure_ids(
+    artifact_path: Path,
+    roots: list[str],
+    *,
+    entity: str | None = None,
+) -> list[str]:
+    """Qualified ids of every derived rule reachable from ``roots``.
+
+    Walks ``{"kind": "derived", "name": ...}`` references in the compiled
+    expr trees. Roots may be qualified ids or local names.
+    """
+
+    try:
+        compiled = json.loads(artifact_path.read_text())
+    except (OSError, json.JSONDecodeError):
+        return []
+    program = compiled.get("program", compiled)
+    rules = [r for r in program.get("derived", []) or [] if isinstance(r, dict)]
+    by_name: dict[str, dict] = {}
+    for rule in rules:
+        for key in (rule.get("name"), rule.get("id")):
+            if isinstance(key, str) and key:
+                by_name.setdefault(key, rule)
+
+    def refs(node) -> list[str]:
+        found = []
+        if isinstance(node, dict):
+            if node.get("kind") == "derived" and isinstance(
+                node.get("name"), str
+            ):
+                found.append(node["name"])
+            for child in node.values():
+                found.extend(refs(child))
+        elif isinstance(node, list):
+            for child in node:
+                found.extend(refs(child))
+        return found
+
+    seen: set[str] = set()
+    queue = [root for root in roots if root in by_name]
+    closure_ids: list[str] = []
+    while queue:
+        key = queue.pop()
+        rule = by_name.get(key)
+        if rule is None:
+            continue
+        identifier = rule.get("id") or rule.get("name")
+        if not isinstance(identifier, str) or identifier in seen:
+            continue
+        seen.add(identifier)
+        # Queries evaluate at the case's entity; rules scoped to other
+        # entities (per-Person intermediates) would be force-evaluated at
+        # the wrong scope and fail on entity-mismatched inputs. They are
+        # still walked THROUGH so household-level rules beyond them stay
+        # reachable — just not queried.
+        if entity is None or (rule.get("entity") or entity) == entity:
+            closure_ids.append(identifier)
+        queue.extend(refs(rule.get("expr")))
+    return sorted(closure_ids)
 
 
 def _output_targets(variables: list[str] | None) -> list[str]:

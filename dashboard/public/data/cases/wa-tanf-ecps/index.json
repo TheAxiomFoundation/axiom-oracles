@@ -2,12 +2,34 @@
  "suite": "wa-tanf-ecps",
  "count": 1467,
  "chunks": 3,
+ "input_slots": [
+  "axiom:wa-tanf-compiled#input.assistance_unit_size",
+  "axiom:wa-tanf-compiled#input.care_paid_before_benefit_approval",
+  "axiom:wa-tanf-compiled#input.care_provider_is_not_parent_or_stepparent",
+  "axiom:wa-tanf-compiled#input.cash_assistance_family_gross_earned_income",
+  "axiom:wa-tanf-compiled#input.countable_unearned_income_after_exclusions_and_disregards",
+  "axiom:wa-tanf-compiled#input.deemed_or_allocated_income_from_financially_responsible_nonmembers",
+  "axiom:wa-tanf-compiled#input.dependent_care_amount_paid_prorated_to_eligibility_date",
+  "axiom:wa-tanf-compiled#input.expense_verified",
+  "axiom:wa-tanf-compiled#input.gross_monthly_income",
+  "axiom:wa-tanf-compiled#input.hours_worked_per_month",
+  "axiom:wa-tanf-compiled#input.household_gross_earned_income",
+  "axiom:wa-tanf-compiled#input.household_has_minor_or_pregnant_member",
+  "axiom:wa-tanf-compiled#input.income_allocated_to_persons_outside_assistance_unit",
+  "axiom:wa-tanf-compiled#input.number_of_family_members",
+  "axiom:wa-tanf-compiled#input.other_cash_assistance_deductions_allowed_under_wac_388_450_0177_and_388_450_0178",
+  "axiom:wa-tanf-compiled#input.recipient_gets_cash_assistance_with_person",
+  "axiom:wa-tanf-compiled#input.recipient_is_dependent_child_under_two_years_of_age"
+ ],
+ "output_slots": [
+  "wa_tanf_monthly_benefit"
+ ],
  "chunk_size": 500,
  "engines": {
   "left": "axiom",
   "right": "policyengine"
  },
  "mismatch_concepts": [],
- "source": "axiom-policyengine-wa-tanf-ecps-0-2026-07-06.json",
+ "source": "axiom-policyengine-wa-tanf-ecps-0-2026-07-24.json",
  "total_cases": 1467
 }

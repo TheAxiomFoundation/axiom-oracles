@@ -157,6 +157,42 @@ def cli() -> None:
     """Axiom program validation and oracle-comparison tools."""
 
 
+
+def _attach_axiom_outputs(
+    cases: list[Case],
+    axiom_results: list,
+    concept_ids: tuple[str, ...],
+) -> list[Case]:
+    """Stash the axiom engine's non-compared outputs into case metadata.
+
+    In full-evidence mode the runner queries every derived rule; the values
+    beyond the compared concepts' targets are the household's complete
+    computed surface (intermediates included). They land under
+    ``axiom_all_outputs`` — kept in the reports/ artifact, summarized to a
+    count in committed dashboard copies, and surfaced by the case
+    explorer's outputs panel.
+    """
+
+    compared = set(engine_targets_for_concepts(list(concept_ids), "axiom"))
+    compared.update(concept_ids)
+    by_id = {result.household_id: result for result in axiom_results}
+    out = []
+    for case in cases:
+        result = by_id.get(case.case_id)
+        extras = {}
+        if result is not None:
+            for name, value in (result.values or {}).items():
+                if name in compared:
+                    continue
+                if isinstance(value, (int, float, bool)):
+                    extras[name] = value
+        if extras:
+            metadata = dict(case.metadata)
+            metadata["axiom_all_outputs"] = extras
+            case = replace(case, metadata=metadata)
+        out.append(case)
+    return out
+
 @cli.command("coverage")
 @click.option(
     "--compiled-program",
@@ -564,6 +600,15 @@ def compare(
         concept_ids = tuple(mapping.concept_id for mapping in mappings)
         cases = [replace(case, outputs=concept_ids) for case in cases]
 
+        # Resolved once: small suites (or an explicit flag) persist full
+        # evidence — raw input records AND the axiom engine's complete
+        # output surface per case.
+        full_evidence = (
+            include_case_inputs
+            if include_case_inputs is not None
+            else len(cases) <= FULL_CASE_INPUT_LIMIT
+        )
+
         left_runner = _build_runner(
             left,
             accessnyc_mode,
@@ -575,6 +620,7 @@ def compare(
             axiom_engine_binary=axiom_engine_binary,
             axiom_entity_id=axiom_entity_id,
             axiom_batch_size=axiom_batch_size,
+            axiom_record_all_outputs=full_evidence,
             paired_engine=right,
         )
         right_runner = _build_runner(
@@ -588,6 +634,7 @@ def compare(
             axiom_engine_binary=axiom_engine_binary,
             axiom_entity_id=axiom_entity_id,
             axiom_batch_size=axiom_batch_size,
+            axiom_record_all_outputs=full_evidence,
             paired_engine=left,
         )
 
@@ -608,11 +655,7 @@ def compare(
                 # loaded-case count overstates suites whose jurisdiction
                 # filter runs inside the bridge (state tax slices), so an
                 # explicit --include-case-inputs wins over the heuristic.
-                include_inputs=(
-                    include_case_inputs
-                    if include_case_inputs is not None
-                    else len(cases) <= FULL_CASE_INPUT_LIMIT
-                ),
+                include_inputs=full_evidence,
             )
             total_batches = (len(cases) + comparison_batch_size - 1) // comparison_batch_size
             for batch_index, case_batch in enumerate(
@@ -653,6 +696,12 @@ def compare(
                 except RuntimeError as exc:
                     raise click.ClickException(str(exc)) from exc
 
+                if full_evidence and "axiom" in (left, right):
+                    accumulator_cases = _attach_axiom_outputs(
+                        accumulator_cases,
+                        left_results if left == "axiom" else right_results,
+                        concept_ids,
+                    )
                 accumulator.add_batch(
                     accumulator_cases,
                     comparator.compare(left_results, right_results),
@@ -1072,6 +1121,7 @@ def _build_runner(
     axiom_engine_binary: Path | None = None,
     axiom_entity_id: str = "tax_unit",
     axiom_batch_size: int = 5_000,
+    axiom_record_all_outputs: bool = False,
     paired_engine: str | None = None,
 ) -> EngineAdapter:
     if engine == "accessnyc":
@@ -1141,6 +1191,7 @@ def _build_runner(
             generated_program_target=generated_program_target,
             prune_unsupported_inputs=bool(program_imports),
             batch_size=axiom_batch_size,
+            record_all_outputs=axiom_record_all_outputs,
         )
     if engine == "taxsim":
         return TaxsimPackageRunner()

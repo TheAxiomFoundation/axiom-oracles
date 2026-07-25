@@ -402,6 +402,7 @@ def _case_report_metadata(
         "axiom_input_records",
         "axiom_input_record_overlays",
         "axiom_relations",
+        "axiom_all_outputs",
     }
     compact = {
         key: value
@@ -410,7 +411,7 @@ def _case_report_metadata(
     }
     for key in stripped:
         value = metadata.get(key)
-        if isinstance(value, list | tuple):
+        if isinstance(value, (list, tuple, dict)):
             compact[f"{key}_count"] = len(value)
     summary = _household_summary(case)
     if summary:
@@ -737,6 +738,39 @@ def _clean_float(value: float) -> float:
     if rounded.is_integer():
         return int(rounded)
     return rounded
+
+
+def strip_heavy_case_metadata(report: dict) -> dict:
+    """Drop raw input-record dumps from every case row, keeping counts.
+
+    Committed dashboard copies must never carry them — at roughly 2 MB per
+    generic-projector household they turn a small suite's dashboard copy
+    into gigabytes — while the full reports/ artifact stays the complete
+    record and feeds the case-explorer input panel via
+    scripts/emit_case_artifacts.py.
+    """
+
+    heavy = (
+        "axiom_input_records",
+        "axiom_input_record_overlays",
+        "axiom_relations",
+        "axiom_all_outputs",
+    )
+    cases = report.get("cases")
+    if not cases:
+        return report
+    slim_cases = []
+    for case in cases:
+        metadata = case.get("metadata")
+        if metadata and any(key in metadata for key in heavy):
+            metadata = dict(metadata)
+            for key in heavy:
+                value = metadata.pop(key, None)
+                if isinstance(value, (list, tuple, dict)):
+                    metadata.setdefault(f"{key}_count", len(value))
+            case = {**case, "metadata": metadata}
+        slim_cases.append(case)
+    return {**report, "cases": slim_cases}
 
 
 def _top_level_json_entry(key: str, value: object) -> str:
