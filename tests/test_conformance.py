@@ -151,6 +151,27 @@ def test_oracle_models_repealed_law_requires_a_note():
     ).validate() == []
 
 
+def test_oracle_models_nonstatutory_amount_requires_a_note():
+    row = UniversePolicy(
+        id="us-pe:wic",
+        oracle_policy_name="wic",
+        output_vars=("wic",),
+        in_scope=False,
+        exclusion_reason="oracle_models_nonstatutory_amount",
+    )
+    assert any(
+        "oracle_models_nonstatutory_amount requires a `note`" in problem
+        for problem in row.validate()
+    )
+    assert replace(
+        row,
+        note=(
+            "7 CFR Part 246 defines the in-kind food package; the oracle amount "
+            "is an administratively estimated package value."
+        ),
+    ).validate() == []
+
+
 def test_oracle_dataset_lacks_input_keeps_the_observable_output_var():
     """Unlike extension_not_available (no OutputVar), this reason carries a real
     queryable surface — the whole point is the output IS observable, just never
@@ -588,6 +609,13 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
         "mn-tanf-ecps",
         "ny-tanf-ecps",
         "wa-tanf-ecps",
+        "us-aca-ptc-grid",
+        "us-additional-medicare-grid",
+        "us-elderly-disabled-grid",
+        "us-llc-grid",
+        "us-niit-grid",
+        "us-qbid-grid",
+        "us-seca-grid",
     }
     covered = {p.suite for p in universe.in_scope() if p.suite is not None}
     assert covered <= live_pe_suites
@@ -597,6 +625,25 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
         assert by_name[program].suite == "fiit-ecps", program
     # SNAP is one national row registered to its canonical (largest) suite.
     assert by_name["snap"].suite == "ca-snap-ecps"
+    assert by_name["aca_ptc"].suite == "us-aca-ptc-grid"
+    assert (
+        by_name["additional_medicare_tax"].suite
+        == "us-additional-medicare-grid"
+    )
+    assert (
+        by_name["elderly_disabled_credit"].suite
+        == "us-elderly-disabled-grid"
+    )
+    assert by_name["lifetime_learning_credit"].suite == "us-llc-grid"
+    assert by_name["net_investment_income_tax"].suite == "us-niit-grid"
+    assert (
+        by_name["qualified_business_income_deduction"].suite
+        == "us-qbid-grid"
+    )
+    assert by_name["savers_credit"].suite is None
+    assert "axiom-corpus/issues/506" in by_name["savers_credit"].note
+    assert "policyengine-us/issues/9151" in by_name["savers_credit"].note
+    assert by_name["self_employment_tax"].suite == "us-seca-grid"
     # State income-tax coverage counts only a comparison that proves the final
     # public variable. These blocked grids exercise useful narrower components,
     # but none proves the corresponding final liability.
@@ -674,6 +721,88 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
     assert covered_state_income_taxes == set(final_equivalent_state_targets)
     # Per-state TANF suites bind their state's variable (incl. renamed ones).
     assert by_name["mn_mfip"].suite == "mn-tanf-ecps"
+
+
+def test_us_pe_tier3_scope_decisions_are_evidence_backed():
+    universe = parse_universe(CONFORMANCE_DIR / "us-pe.yaml")
+    by_name = universe.by_name()
+
+    credit_25c = by_name["energy_efficient_home_improvement_credit"]
+    assert credit_25c.in_scope is False
+    assert credit_25c.exclusion_reason == "oracle_models_repealed_law"
+    assert credit_25c.suite is None
+    assert credit_25c.note
+    assert "scripts/probe_us_ira_2026.py" in credit_25c.note
+
+    spm_cap = by_name["spm_unit_capped_housing_subsidy"]
+    assert spm_cap.in_scope is False
+    assert spm_cap.exclusion_reason == "technical"
+    assert spm_cap.suite is None
+    assert spm_cap.note
+    assert "hud_hap" in spm_cap.note
+    assert "scripts/probe_us_ira_2026.py" in spm_cap.note
+
+    held_rows = (
+        "residential_clean_energy_credit",
+        "new_clean_vehicle_credit",
+        "used_clean_vehicle_credit",
+        "high_efficiency_electric_home_rebate",
+        "residential_efficiency_electrification_rebate",
+    )
+    for name in held_rows:
+        assert by_name[name].in_scope is True
+        assert by_name[name].exclusion_reason is None
+        assert by_name[name].suite is None
+
+
+def test_us_pe_nonstatutory_amount_rows_name_mechanism_and_eligibility():
+    universe = parse_universe(CONFORMANCE_DIR / "us-pe.yaml")
+    by_name = universe.by_name()
+    expected = {
+        "wic": ("gov.usda.wic.value", "is_wic_eligible"),
+        "free_school_meals": (
+            "gov.usda.school_meals.amount.nslp",
+            "school_meal_tier",
+        ),
+        "reduced_price_school_meals": (
+            "gov.usda.school_meals.amount.nslp",
+            "school_meal_tier",
+        ),
+        "chip": (
+            "calibration.gov.hhs.cms.chip.spending.separate_chip.total",
+            "is_chip_eligible",
+        ),
+        "head_start": (
+            "gov.hhs.head_start.spending",
+            "is_head_start_eligible",
+        ),
+        "early_head_start": (
+            "gov.hhs.head_start.early_head_start.spending",
+            "is_early_head_start_eligible",
+        ),
+        "commodity_supplemental_food_program": (
+            "gov.usda.csfp.amount",
+            "commodity_supplemental_food_program_eligible",
+        ),
+    }
+
+    excluded = {
+        name
+        for name, row in by_name.items()
+        if row.exclusion_reason == "oracle_models_nonstatutory_amount"
+    }
+    assert excluded == set(expected)
+
+    for name, (mechanism_path, eligibility_surface) in expected.items():
+        row = by_name[name]
+        assert row.output_vars == (name,)
+        assert row.in_scope is False
+        assert row.suite is None
+        assert row.note is not None
+        assert "PolicyEngine-US 1.767.3" in row.note
+        assert mechanism_path in row.note
+        assert eligibility_surface in row.note
+        assert "compared separately" in row.note
 
 
 def test_serialize_is_stable_roundtrip():

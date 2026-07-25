@@ -232,3 +232,105 @@ out of scope for this lane. All CI gates (scoreboard/ratchet/apply_dispositions
 
 Issues filed: axiom-oracles#227 (SSI resource screen, FIXED), #228 (SSI v1-slice
 residual), #229 (small-suite grounding).
+
+---
+
+## PR #354 repair — 2026-07-25
+
+### State
+
+- Branch: `fed-parity/federal-grid-suites`; starting HEAD `a5771329`.
+- Target: seven federal suites, no Saver's Credit suite, canonical RuleSpec
+  `3373e8411f7e141fd50879e3de964386f606f7f6` / tree
+  `7e00f195ea81ff9aa21c58d53151e937d974a016`.
+- Required freeze: us-pe 34/127 covered, 0 unexplained, 0 Axiom-attributed;
+  committed ratchet must not regress main's floor of 27.
+- Constraints: local commits only; no pushes/GitHub writes; preserve this
+  load-bearing ledger and all pre-existing suites/reports, including
+  `fiit-ecps`.
+
+### Done
+
+- Read `/private/tmp/review-354-VERDICT.md` in full.
+- Confirmed the worktree was clean at `a5771329`.
+- Confirmed the tracked root `PROGRESS.md` is present and preserved.
+- Reapplied the Saver's Credit withdrawal shape from `bc500bc4`: removed its
+  config and stale report and returned the us-pe row to `suite: null`.
+- Recorded that reinstatement awaits the Notice 2025-67 corpus chain
+  (`axiom-corpus#506`). Retained the #9151 disposition as historical evidence
+  after verifying that an orphan disposition is a supported, non-scoring state;
+  its issue link is in `evidence.upstream_url`, not `linked_issue`.
+- Withdrawal validation: `apply_dispositions.py --check` passes with the
+  expected informational orphan note, and `run_comparison.py --list` exposes
+  exactly seven federal suites. Targeted tests reached 96 passed / 3 skipped;
+  the only two failures are the intentionally stale 35-covered scoreboard and
+  ratchet, both queued for the required full regeneration to 34.
+- Traced merged RuleSpec main's QBID pipeline and companion. The pipeline now
+  imports all nine Rev. Proc. 2025-32 parameters, accepts pipeline-level filing
+  status, and requires the sole-business attestation; the retired runtime
+  threshold, statute-level status, and minimum-COLA inputs are absent.
+- Updated the generator to bind the exact 19-input surface and removed the
+  misleading threshold field from report case inputs. Added a unit contract for
+  the full key set and moved PolicyEngine issue #9150 into
+  `evidence.upstream_url`.
+- QBID binding validation: 35 targeted generator/disposition tests pass, Ruff
+  passes on the touched Python, and the disposition consistency gate passes.
+- Restored the `d3a07de7` canonical-snapshot guard and pinned every one of the
+  seven live federal configs to RuleSpec SHA `3373e841...` / tree
+  `7e00f195...`. The runner now rejects partial pins, noncanonical roots, dirty
+  worktrees, and tree mismatches before execution, then stamps the verified
+  upstream SHA.
+- Provenance validation: 19 targeted tests pass, Ruff passes, and a direct
+  verification of the real configured checkout succeeded for all seven suites.
+- Reran `us-qbid-grid` for real through `run_comparison.py` with the offline
+  pinned oracle stack. The guard verified RuleSpec `3373e841...` /
+  `7e00f195...`; every case carried exactly 19 fixture inputs. Result: 10/11
+  raw, 11/11 explained, 0 unexplained. The sole mismatch remains the
+  dispositioned #9150 row; no expected value or tolerance changed.
+
+### QBID replay table
+
+| case | Axiom | PolicyEngine | match |
+| --- | ---: | ---: | :---: |
+| qbid-ti-limited | 12,000 | 12,000 | yes |
+| qbid-basic-100k | 20,000 | 20,000 | yes |
+| qbid-joint-150k | 30,000 | 30,000 | yes |
+| qbid-phasein | 27,500 | 27,500 | yes |
+| qbid-above-nowages | 0 | 400 | no — #9150 |
+| qbid-reit-only | 4,000 | 4,000 | yes |
+| qbid-zero | 0 | 0 | yes |
+| qbid-single-at-threshold | 30,000 | 30,000 | yes |
+| qbid-single-one-dollar-over-threshold | 29,999.6 | 29,999.599609375 | yes |
+| qbid-active-minimum | 400 | 400 | yes |
+| qbid-net-capital-gain-limit | 14,000 | 14,000 | yes |
+
+### Generic exclusion contract
+
+- Restored the generic nonstatutory exclusion contract: schema validation now
+  requires a note identifying the governing instrument and why the modeled
+  amount is non-statutory, and `conformance/README.md` documents that rule.
+- Reran the other six live federal suites for real against the guarded snapshot:
+  ACA PTC 6/6, Additional Medicare 5/5, elderly/disabled 9/9, LLC 12/12,
+  NIIT 6/6, and SECA 6/6. No expected value changed.
+- The manifest writer preserved all 206 sibling entries and added the seven
+  federal reports exactly once (213 total). All seven reports cite RuleSpec
+  `3373e8411f7e141fd50879e3de964386f606f7f6`.
+- Completed the UTC 2026-07-25 derived regeneration: dispositions, grids,
+  affected map, vacuous-gate freshness, scoreboard + dated snapshot, ratchet,
+  burndown, and dashboard overview. Saver is absent from every generated live
+  registry. Final us-pe headline is 34/127 covered, 0 unexplained,
+  0 Axiom-attributed, 16,661 oracle-attributed, and 3,340 bridge artifacts.
+- Corrected the corrupted 35 ratchet floor to the honest seven-suite floor of
+  34, which remains above main's committed floor of 27. All eight derived
+  `--check` gates pass after regeneration.
+- Complete validation battery passes: registry listing, rule verification,
+  state-tax Populace contract, all eleven current CI `--check` gates, Ruff, and full
+  pytest. Pytest result: 1,791 passed / 57 skipped in 169.99 seconds, with the
+  unavailable Node/esbuild dashboard loader taking its designed skip.
+- The conformance-universe gate validated UK and BE and returned its documented
+  clean no-op for local PE-UK/PE-US checkouts whose versions do not match the
+  committed pins; every other gate performed a full check.
+
+### Next
+
+- None. Final scope/provenance/count audit passed; see `fix-354-DONE.md`.

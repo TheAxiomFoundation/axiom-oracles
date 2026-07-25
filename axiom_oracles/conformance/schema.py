@@ -248,6 +248,15 @@ class UniversePolicy:
                     f"{self.id}: oracle_models_repealed_law requires a `note` "
                     "recording the repeal citation and probe evidence pointer"
                 )
+            if (
+                self.exclusion_reason == "oracle_models_nonstatutory_amount"
+                and not self.note
+            ):
+                problems.append(
+                    f"{self.id}: oracle_models_nonstatutory_amount requires a "
+                    "`note` recording the governing instrument and why its "
+                    "amount is non-statutory"
+                )
             # comparability is an in-scope concept; an excluded row must not carry
             # a non-default value (it would be meaningless).
             if self.comparability != "full":

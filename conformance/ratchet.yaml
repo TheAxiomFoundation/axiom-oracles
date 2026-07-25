@@ -20,23 +20,7 @@ ratchets:
   axiom_attributed_open_max: 0
   policies_in_scope: 23
 - jurisdiction: us-pe
-  # Intentional reclassifications: the Arkansas Act 2 Person-grain component,
-  # Colorado statutory base tax, Mississippi section 27-7-5 schedule, and 15
-  # still-blocked state grids are narrower than their corresponding broad final
-  # liabilities. Those source-faithful surfaces remain available for comparison,
-  # but bounded or before-credit suites do not count as final-variable coverage.
-  # New Hampshire's Chapter 77 tax was also intentionally reclassified: repeal
-  # made the retained PolicyEngine output inapplicable after 2024, so its
-  # constant-zero diagnostic is not current-law coverage.
-  # A subsequent exact-equivalence audit traced every remaining state-income-tax
-  # target through the pinned PolicyEngine-US 1.752.2 final-variable graph and
-  # checked every positive-weight routed Populace unit. Twenty-two additional
-  # grids validate only before-credit, pre-forgiveness, main-tax, or joint-only
-  # targets that differ from final liability on the certified population.
-  # Alabama and North Carolina remain covered because their 2026 downstream
-  # branches are provably zero and target-to-final equality is population-complete.
-  # Verified post-reclassification totals: 27 covered, 109 uncovered, 136 in scope.
-  covered_min: 27
+  covered_min: 34
   unexplained_max: 0
   axiom_attributed_open_max: 0
-  policies_in_scope: 136
+  policies_in_scope: 127

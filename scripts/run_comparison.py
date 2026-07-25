@@ -748,6 +748,16 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
         except Exception:  # provenance must annotate, never fail a run
             pass
     rulespecs = rulespec_provenance(rulespec_paths)
+    verified_upstream_sha = params.get(_VERIFIED_RULESPEC_UPSTREAM_SHA)
+    if verified_upstream_sha and rulespecs:
+        # The federal runner set this private marker only after checking that
+        # the clean local snapshot's tree equals the public upstream tree pin.
+        # Record the merged-main commit whose content ran, not a local
+        # content-equivalent materialization commit.
+        rulespecs = [
+            {**entry, "sha": str(verified_upstream_sha)}
+            for entry in rulespecs
+        ]
     remote = runner.get("rulespec_remote") or params.get("rulespec_remote")
     if remote and not rulespecs:
         from axiom_oracles.provenance import repo_slug_from_remote
@@ -860,6 +870,14 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
         # run). Matches the pin the runner installs into its isolated env.
         if "taxcalc" in engines:
             oracle["taxcalc"] = "6.7.1"
+    elif runner_type == "federal-tax-liability-grid":
+        pins = _resolve_pe_oracle_pins(params)
+        oracle = {
+            "name": "policyengine",
+            "policyengine_package": pins[0],
+            "policyengine_us": pins[1].split("==", 1)[-1],
+            "policyengine_core": pins[2].split("==", 1)[-1],
+        }
     elif runner_type == "axiom-encode-snap-ecps-compare":
         oracle = {"name": "policyengine", "policyengine_us": "1.705.1"}
     elif runner_type == "euromod-synthetic-compare":
@@ -2131,6 +2149,170 @@ def _run_state_income_tax_liability_grid(runner: dict, output: Path) -> None:
     output.write_text(source.read_text())
 
 
+_VERIFIED_RULESPEC_UPSTREAM_SHA = "_verified_rulespec_upstream_sha"
+
+
+def _verify_federal_rulespec_snapshot(
+    params: dict,
+    roots: list[Path],
+) -> None:
+    """Fail closed unless a pinned federal RuleSpec snapshot is exact and clean.
+
+    A sandbox may have the upstream tree through local Git objects even when it
+    cannot fetch the signed GitHub merge commit itself. The pair of public
+    config pins records that upstream commit and its tree. A content-equivalent
+    checkout is acceptable only when its canonical basename is ``rulespec-us``,
+    its working tree is clean, and ``HEAD^{tree}`` equals the pinned upstream
+    tree. Only after those checks do we expose the upstream SHA to the
+    provenance stamper.
+    """
+    upstream_sha = str(params.get("rulespec_upstream_sha") or "").strip()
+    upstream_tree = str(params.get("rulespec_upstream_tree") or "").strip()
+    if not upstream_sha and not upstream_tree:
+        return
+    if not upstream_sha or not upstream_tree:
+        raise SystemExit(
+            "federal-tax-liability-grid requires rulespec_upstream_sha and "
+            "rulespec_upstream_tree together"
+        )
+    if len(roots) != 1:
+        raise SystemExit(
+            "a pinned federal rulespec snapshot requires exactly one "
+            "rulespec_roots entry"
+        )
+    if any(
+        len(value) != 40
+        or any(char not in "0123456789abcdef" for char in value.lower())
+        for value in (upstream_sha, upstream_tree)
+    ):
+        raise SystemExit(
+            "rulespec_upstream_sha and rulespec_upstream_tree must be "
+            "40-character hexadecimal Git object IDs"
+        )
+
+    root = roots[0].resolve()
+    if root.name != "rulespec-us":
+        raise SystemExit(
+            "the pinned federal rulespec snapshot must use the canonical "
+            f"'rulespec-us' basename (got {root})"
+        )
+    try:
+        status = subprocess.run(
+            ["git", "-C", str(root), "status", "--porcelain"],
+            capture_output=True,
+            text=True,
+            check=True,
+        ).stdout
+        local_head = subprocess.run(
+            ["git", "-C", str(root), "rev-parse", "HEAD"],
+            capture_output=True,
+            text=True,
+            check=True,
+        ).stdout.strip()
+        local_tree = subprocess.run(
+            ["git", "-C", str(root), "rev-parse", "HEAD^{tree}"],
+            capture_output=True,
+            text=True,
+            check=True,
+        ).stdout.strip()
+    except (OSError, subprocess.CalledProcessError) as exc:
+        raise SystemExit(
+            f"cannot verify pinned federal rulespec snapshot {root}: {exc}"
+        ) from exc
+    if status.strip():
+        raise SystemExit(
+            f"pinned federal rulespec snapshot {root} has working-tree changes"
+        )
+    if local_tree != upstream_tree:
+        raise SystemExit(
+            "pinned federal rulespec snapshot tree mismatch: "
+            f"expected {upstream_tree}, got {local_tree}"
+        )
+
+    params[_VERIFIED_RULESPEC_UPSTREAM_SHA] = upstream_sha
+    print(
+        "Verified rulespec-us snapshot "
+        f"tree {local_tree[:12]} for upstream main {upstream_sha[:12]} "
+        f"(local HEAD {local_head[:12]})."
+    )
+
+
+def _run_federal_tax_liability_grid(runner: dict, output: Path) -> None:
+    """Run one independent federal RuleSpec-fixture vs PolicyEngine case grid.
+
+    Unlike the legacy all-state generator, this wrapper selects exactly one
+    policy and has no committed-report fallback: a missing fixture or an
+    unavailable PolicyEngine wheel fails the run instead of replaying evidence.
+    The RuleSpec roots come from the comparison YAML and are passed explicitly
+    to the generator, eliminating the state generator's fixed-sibling flaw.
+    """
+    params = runner["parameters"]
+    required_pins = {
+        "policyengine_version": "4.18.9",
+        "policyengine_us_version": "1.767.3",
+        "policyengine_core_version": "3.30.3",
+    }
+    incorrect_pins = {
+        key: params.get(key)
+        for key, expected in required_pins.items()
+        if params.get(key) != expected
+    }
+    if incorrect_pins:
+        expected = ", ".join(
+            f"{key}={version}" for key, version in required_pins.items()
+        )
+        raise SystemExit(
+            "federal-tax-liability-grid requires the reviewed 2026 oracle "
+            f"stack ({expected}); received {incorrect_pins}"
+        )
+    raw_roots = params.get("rulespec_roots") or []
+    if not isinstance(raw_roots, list) or not raw_roots:
+        raise SystemExit(
+            "federal-tax-liability-grid requires runner.parameters.rulespec_roots"
+        )
+    roots = [
+        expanded
+        for raw_root in raw_roots
+        if (expanded := _expand_path(str(raw_root))).exists()
+    ]
+    if not roots:
+        remote = params.get("rulespec_remote")
+        if not remote:
+            attempted = ", ".join(str(_expand_path(root)) for root in raw_roots)
+            raise SystemExit(
+                "rulespec_roots: no configured path exists "
+                f"({attempted}) and no rulespec_remote fallback is declared"
+            )
+        roots = [_ensure_rulespec_us_checkout(str(remote))]
+        # The config object is shared with the outer provenance stamper. Record
+        # the checkout that actually ran so it stamps the clone's exact SHA,
+        # rather than the missing development-worktree path.
+        params["rulespec_roots"] = [str(roots[0])]
+    _verify_federal_rulespec_snapshot(params, roots)
+    pins = _resolve_pe_oracle_pins(params)
+    generator = REPO_ROOT / "scripts" / "generate_federal_tax_liability.py"
+    cmd = [
+        "uv",
+        "run",
+        "--python",
+        str(params.get("python", "3.13")),
+        "--no-project",
+        *(arg for pin in pins for arg in ("--with", pin)),
+        "python",
+        str(generator),
+        "--policy",
+        str(params["policy"]),
+        *(
+            arg
+            for root in roots
+            for arg in ("--rulespec-root", str(root))
+        ),
+        "--output",
+        str(output),
+    ]
+    subprocess.run(cmd, check=True, cwd=REPO_ROOT)
+
+
 def _run_uk_council_tax_reduction_grid(runner: dict, output: Path) -> None:
     """Council Tax Reduction grid: rulespec-uk pension-age scheme vs PolicyEngine-UK.
 
@@ -2677,6 +2859,7 @@ RUNNERS = {
     "axiom-encode-uk-efrs-compare": _run_axiom_encode_uk_efrs_compare,
     "axiom-oracles-compare": _run_axiom_oracles_compare,
     "euromod-synthetic-compare": _run_euromod_synthetic_compare,
+    "federal-tax-liability-grid": _run_federal_tax_liability_grid,
     "gettsim-synthetic-compare": _run_gettsim_synthetic_compare,
     "snap-qc-compare": _run_snap_qc_compare,
     "spsm-ca-compare": _run_spsm_ca_compare,

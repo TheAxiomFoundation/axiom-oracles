@@ -1,0 +1,65 @@
+# Federal Additional Medicare Tax — Axiom vs PolicyEngine-US, tax year 2026.
+#
+# Axiom boundary: the merged composition keeps the encoded section 3101(b)(2)
+# wage leg live, but fail-closes its combined final whenever imported federal
+# self-employment income is nonzero. This suite therefore selects exactly the
+# five GRID-CONTRACT P1 cases with zero self-employment income. The per-Person
+# relation remains explicit and is validated case by case so the zero-SE
+# boundary cannot be satisfied by silently dropping a Person input.
+#
+# This suite does not test or claim the section 1401(b)(2) self-employment leg.
+# SE leg pending the 26 CFR 1.1401-1 operative-authority chain,
+# axiom-corpus#523.
+# Code: rulespec-us main@3373e841
+# us/policies/income_tax/additional_medicare_tax_pipeline.yaml:30-56,120-145,
+# 411-446.
+#
+# PolicyEngine binding decision: compare `additional_medicare_tax` directly.
+# It is a TaxUnit Form 8959 total that applies the 0.9% rate to wages plus
+# taxable self-employment income over the filing-status threshold. On this
+# suite's explicit zero-SE inputs, that public total equals the section
+# 3101(b)(2) wage-only value, making the boundary commensurable without
+# asserting anything about the unavailable self-employment leg.
+# Code: policyengine-us@49d19b239a593dbac8920ac6fd80cfe33372343a
+# policyengine_us/variables/gov/irs/tax/federal_income/
+# additional_medicare_tax.py:4-19;
+# policyengine_us/variables/gov/irs/tax/self_employment/
+# taxable_self_employment_income.py:4-32.
+#
+# The exact suite stack is PolicyEngine 4.18.9, PE-US 1.767.3 and core 3.30.3:
+# PE-US matches the conformance universe label and includes the 2026
+# OBBBA-era parameters; this is the known-good Python 3.13 import pair.
+#
+# Run locally:
+#   uv run python scripts/run_comparison.py us-additional-medicare-grid --summary
+
+name: us-additional-medicare-grid
+title: Federal Additional Medicare Tax — Axiom vs PolicyEngine
+description: >-
+  Compares Additional Medicare Tax only on the five exact wage-only,
+  zero-self-employment GRID-CONTRACT P1 cases. SE leg pending the 26 CFR
+  1.1401-1 operative-authority chain, axiom-corpus#523.
+
+runner:
+  type: federal-tax-liability-grid
+  parameters:
+    policy: additional_medicare_tax
+    period: "2026"
+    concept: >-
+      us:policies/income_tax/additional_medicare_tax_pipeline#federal_additional_medicare_tax
+    python: "3.13"
+    policyengine_version: "4.18.9"
+    policyengine_us_version: "1.767.3"
+    policyengine_core_version: "3.30.3"
+    rulespec_remote: https://github.com/TheAxiomFoundation/rulespec-us.git
+    rulespec_roots:
+      - /private/tmp/oracle-rerun/rulespec-us
+    rulespec_upstream_sha: 3373e8411f7e141fd50879e3de964386f606f7f6
+    rulespec_upstream_tree: 7e00f195ea81ff9aa21c58d53151e937d974a016
+
+artifacts:
+  report_basename: axiom-policyengine-us-additional-medicare-grid
+
+dashboard:
+  filename: axiom-policyengine-us-additional-medicare-grid.json
+  suite: us-additional-medicare-grid
