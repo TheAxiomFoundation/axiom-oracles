@@ -282,10 +282,30 @@ residual), #229 (small-suite grounding).
   upstream SHA.
 - Provenance validation: 19 targeted tests pass, Ruff passes, and a direct
   verification of the real configured checkout succeeded for all seven suites.
+- Reran `us-qbid-grid` for real through `run_comparison.py` with the offline
+  pinned oracle stack. The guard verified RuleSpec `3373e841...` /
+  `7e00f195...`; every case carried exactly 19 fixture inputs. Result: 10/11
+  raw, 11/11 explained, 0 unexplained. The sole mismatch remains the
+  dispositioned #9150 row; no expected value or tolerance changed.
+
+### QBID replay table
+
+| case | Axiom | PolicyEngine | match |
+| --- | ---: | ---: | :---: |
+| qbid-ti-limited | 12,000 | 12,000 | yes |
+| qbid-basic-100k | 20,000 | 20,000 | yes |
+| qbid-joint-150k | 30,000 | 30,000 | yes |
+| qbid-phasein | 27,500 | 27,500 | yes |
+| qbid-above-nowages | 0 | 400 | no — #9150 |
+| qbid-reit-only | 4,000 | 4,000 | yes |
+| qbid-zero | 0 | 0 | yes |
+| qbid-single-at-threshold | 30,000 | 30,000 | yes |
+| qbid-single-one-dollar-over-threshold | 29,999.6 | 29,999.599609375 | yes |
+| qbid-active-minimum | 400 | 400 | yes |
+| qbid-net-capital-gain-limit | 14,000 | 14,000 | yes |
 
 ### Next
 
-- Rerun QBID against the verified snapshot and record its real 11-case table.
 - Restore the seven-report manifest union.
 - Add PolicyEngine issue #9150 evidence (and #9151 only if its disposition can
   validly survive), plus the generic nonstatutory schema/README contract.
