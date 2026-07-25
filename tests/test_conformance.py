@@ -151,6 +151,27 @@ def test_oracle_models_repealed_law_requires_a_note():
     ).validate() == []
 
 
+def test_oracle_models_nonstatutory_amount_requires_a_note():
+    row = UniversePolicy(
+        id="us-pe:wic",
+        oracle_policy_name="wic",
+        output_vars=("wic",),
+        in_scope=False,
+        exclusion_reason="oracle_models_nonstatutory_amount",
+    )
+    assert any(
+        "oracle_models_nonstatutory_amount requires a `note`" in problem
+        for problem in row.validate()
+    )
+    assert replace(
+        row,
+        note=(
+            "7 CFR Part 246 defines the in-kind food package; the oracle amount "
+            "is an administratively estimated package value."
+        ),
+    ).validate() == []
+
+
 def test_oracle_dataset_lacks_input_keeps_the_observable_output_var():
     """Unlike extension_not_available (no OutputVar), this reason carries a real
     queryable surface — the whole point is the output IS observable, just never

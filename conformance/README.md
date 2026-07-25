@@ -127,6 +127,8 @@ one reason:
 | `unobservable_boundary` | The oracle simulates the policy AND writes its outputs, but the comparison boundary depends on engine-internal variables absent from VARCONFIG — only the final output is queryable, so any non-degenerate comparison is impossible and the degenerate one vacuous. Requires a `note`. Canonical cases: UKMOD `bmu_s` (simplified national Council Tax Reduction), and the UKMOD TCO indirect-tax extension (`tco_calcbase`/`tco_calcadjusted`, whose consumption-tax bases are non-`_s` non-registry variables). |
 | `extension_not_available` | The oracle *would* simulate the policy as a real instrument, but the compute content is not in the public release — the body is definitional only (no `OutputVar`) because the required extension/add-on and its microdata prerequisite are absent. Distinct from `technical` (genuine scaffolding) and `unobservable_boundary` (where the policy DOES compute). Requires a `note`. Canonical case: EUROMOD BE `tco_be` indirect tax (axiom-oracles#144). |
 | `oracle_dataset_lacks_input` | The oracle DOES simulate the policy and its output IS observable (a queryable `_s` surface), but the input that *activates* it is absent from the public dataset's schema, so under the registration-free setup the policy never triggers and the only achievable comparison is vacuous (0 == 0). Distinct from `unobservable_boundary` (policy computes, but the comparison *boundary* is engine-internal) and `extension_not_available` (the compute content itself is absent). Requires a `note` naming the absent input and the probe evidence pointer. Canonical case: EUROMOD BE `bfapl_be` parental-leave allowance — encoded in rulespec-be#86 (RD 29.10.1997 / RD 02.01.1991) but the `lpb` parental-leave-months input is absent from the BE HHoT demo schema, so `bfapl_s` stays 0 for every synthetic case (probe lineage: axiom-oracles#150/#158/#160). |
+| `oracle_models_repealed_law` | The oracle retains a policy whose governing law was repealed before the validation period, so Axiom has no current-law instrument to compare. Requires a `note` recording the repeal citation and probe evidence pointer. |
+| `oracle_models_nonstatutory_amount` | The oracle computes a monetary value whose amount is discretionary, administratively imputed, or an in-kind service equivalent rather than a formula, rate, or cap fixed by statute or regulation. Distinct from a repealed statutory instrument. Requires a `note` naming the governing instrument and explaining why the modeled amount is non-statutory. |
 
 ### Comparability of an in-scope surface
 
@@ -164,7 +166,7 @@ passthroughs are excluded `input_carrying` rather than carried as in-scope
    vacuously).
 3. **Author the scope decisions.** For each row set `in_scope` and either the
    covering `suite` (for a policy an Axiom suite compares) or an
-   `exclusion_reason` (+ a `note` for `unobservable_boundary`). Ground each
+   `exclusion_reason` (+ the reason-specific `note` required above). Ground each
    decision in the model's own per-policy `Comment` and switch state — both in
    the XML — cross-checked against any coverage matrix. Re-run the generator; it
    preserves your decisions and refreshes the facts.

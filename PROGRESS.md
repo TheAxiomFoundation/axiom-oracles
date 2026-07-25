@@ -304,10 +304,14 @@ residual), #229 (small-suite grounding).
 | qbid-active-minimum | 400 | 400 | yes |
 | qbid-net-capital-gain-limit | 14,000 | 14,000 | yes |
 
+### Generic exclusion contract
+
+- Restored the generic nonstatutory exclusion contract: schema validation now
+  requires a note identifying the governing instrument and why the modeled
+  amount is non-statutory, and `conformance/README.md` documents that rule.
+
 ### Next
 
 - Restore the seven-report manifest union.
-- Add PolicyEngine issue #9150 evidence (and #9151 only if its disposition can
-  validly survive), plus the generic nonstatutory schema/README contract.
 - Rerun all seven federal suites and the full 2026-07-25 UTC regeneration and
   validation battery; write `fix-354-DONE.md` only after every gate passes.
