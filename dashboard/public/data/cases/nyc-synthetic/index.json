@@ -1,0 +1,17 @@
+{
+ "suite": "nyc-synthetic",
+ "count": 813,
+ "chunks": 2,
+ "chunk_size": 500,
+ "engines": {
+  "left": "axiom",
+  "right": "policyengine"
+ },
+ "mismatch_concepts": [
+  "us:tax/federal-income-tax#liability",
+  "us:tax/federal-income-tax#tax_before_credits",
+  "us:tax/federal-income-tax#taxable_income"
+ ],
+ "source": "axiom-policyengine.json (embedded)",
+ "total_cases": 813
+}
