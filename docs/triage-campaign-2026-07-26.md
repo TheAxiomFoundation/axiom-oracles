@@ -6,7 +6,7 @@ characterized. Method: per-row verification against persisted household
 evidence (input/output panels), PE parameter surfaces as oracle ground
 truth, PE-side decomposition where our reports can't decide.
 
-## Ledger (start: 14,479 unexplained across 34 suites)
+## Ledger (start: 14,479 → **5,505** unexplained; batches 1-2 banked)
 
 | Block | Was | Now | Mechanism / next step |
 |---|---|---|---|

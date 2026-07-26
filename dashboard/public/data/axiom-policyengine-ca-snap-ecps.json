@@ -29058,7 +29058,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -29127,7 +29127,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -29196,7 +29196,7 @@
       "difference": -224.53474934895834,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -29217,7 +29217,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -29238,7 +29238,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-asset-waiver-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -29355,7 +29355,7 @@
       "difference": -23.973597208658855,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -29376,7 +29376,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -29397,7 +29397,7 @@
       "difference": -23.973597208658855,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-asset-waiver-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -29418,7 +29418,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-asset-waiver-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -29455,7 +29455,7 @@
       "difference": -80.08474222819011,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -29476,7 +29476,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -29881,7 +29881,7 @@
       "difference": -52.03474426269531,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -29902,7 +29902,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -30051,7 +30051,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -30120,7 +30120,7 @@
       "difference": -140.14500935872397,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -30141,7 +30141,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -30178,7 +30178,7 @@
       "difference": -206.22029622395834,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -30199,7 +30199,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -30220,7 +30220,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-asset-waiver-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -30273,7 +30273,7 @@
       "difference": -124.01999918619792,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -30294,7 +30294,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -30363,7 +30363,7 @@
       "difference": -71.30975341796875,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -30384,7 +30384,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -30405,7 +30405,7 @@
       "difference": -23.973597208658855,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -30426,7 +30426,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -30447,7 +30447,7 @@
       "difference": -393.2132161458333,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -30468,7 +30468,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -30585,7 +30585,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-asset-waiver-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -30654,7 +30654,7 @@
       "difference": -24.38976542154948,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-asset-waiver-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -30675,7 +30675,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-asset-waiver-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -30808,7 +30808,7 @@
       "difference": -66.57951354980469,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -30829,7 +30829,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -30866,7 +30866,7 @@
       "difference": -76.69498697916667,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -30887,7 +30887,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -30924,7 +30924,7 @@
       "difference": -23.973597208658855,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -30945,7 +30945,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -30982,7 +30982,7 @@
       "difference": -23.973597208658855,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -31003,7 +31003,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -31040,7 +31040,7 @@
       "difference": -23.973597208658855,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -31061,7 +31061,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -31146,7 +31146,7 @@
       "difference": -23.973597208658855,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -31167,7 +31167,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -31188,7 +31188,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-asset-waiver-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -31241,7 +31241,7 @@
       "difference": -23.973597208658855,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -31262,7 +31262,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -31395,7 +31395,7 @@
       "difference": -23.973597208658855,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -31416,7 +31416,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -31437,7 +31437,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -31522,7 +31522,7 @@
       "difference": -111.26998901367188,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -31543,7 +31543,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -31580,7 +31580,7 @@
       "difference": -23.973597208658855,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -31601,7 +31601,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -31622,7 +31622,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -31643,7 +31643,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-asset-waiver-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -31744,7 +31744,7 @@
       "difference": -174.24908447265625,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -31765,7 +31765,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -31882,7 +31882,7 @@
       "difference": -377.2741292317708,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -31903,7 +31903,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -32036,7 +32036,7 @@
       "difference": -23.973597208658855,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -32057,7 +32057,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -32094,7 +32094,7 @@
       "difference": -23.973597208658855,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -32115,7 +32115,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -32184,7 +32184,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-asset-waiver-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -32205,7 +32205,7 @@
       "difference": -23.973597208658855,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-asset-waiver-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -32226,7 +32226,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-asset-waiver-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -32327,7 +32327,7 @@
       "difference": -23.973597208658855,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -32348,7 +32348,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -32577,7 +32577,7 @@
       "difference": -130.91999308268228,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -32598,7 +32598,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -32619,7 +32619,7 @@
       "difference": -65.15451049804688,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -32640,7 +32640,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -32725,7 +32725,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-asset-waiver-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -32746,7 +32746,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-asset-waiver-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -32831,7 +32831,7 @@
       "difference": -86.98475138346355,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -32852,7 +32852,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -32937,7 +32937,7 @@
       "difference": -49.320343017578125,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -32958,7 +32958,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -33011,7 +33011,7 @@
       "difference": -370.3203531901042,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -33032,7 +33032,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -33053,7 +33053,7 @@
       "difference": -23.973597208658855,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-asset-waiver-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -33074,7 +33074,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-asset-waiver-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -33191,7 +33191,7 @@
       "difference": -164.12408447265625,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -33212,7 +33212,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -33249,7 +33249,7 @@
       "difference": -86.44498697916667,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -33270,7 +33270,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -33355,7 +33355,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-asset-waiver-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -33520,7 +33520,7 @@
       "difference": -148.03477986653647,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -33541,7 +33541,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -33594,7 +33594,7 @@
       "difference": -289.97410074869794,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -33615,7 +33615,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -33796,7 +33796,7 @@
       "difference": -26.564768473307293,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -33817,7 +33817,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -33918,7 +33918,7 @@
       "difference": -23.973597208658855,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -33939,7 +33939,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -33976,7 +33976,7 @@
       "difference": -71.81998697916667,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -33997,7 +33997,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -34130,7 +34130,7 @@
       "difference": -52.54534912109375,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -34151,7 +34151,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -34172,7 +34172,7 @@
       "difference": -23.973597208658855,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-asset-waiver-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -34193,7 +34193,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-asset-waiver-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -34262,7 +34262,7 @@
       "difference": -23.973597208658855,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -34283,7 +34283,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -34320,7 +34320,7 @@
       "difference": -96.19497680664062,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -34341,7 +34341,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -34410,7 +34410,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -34479,7 +34479,7 @@
       "difference": -23.973597208658855,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -34500,7 +34500,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -34521,7 +34521,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-asset-waiver-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -34542,7 +34542,7 @@
       "difference": -128.42413330078125,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -34563,7 +34563,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -34600,7 +34600,7 @@
       "difference": -263.12408447265625,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -34621,7 +34621,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -34642,7 +34642,7 @@
       "difference": -23.973597208658855,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -34663,7 +34663,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -34700,7 +34700,7 @@
       "difference": -23.973597208658855,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -34721,7 +34721,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -34774,7 +34774,7 @@
       "difference": -66.80975341796875,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -34795,7 +34795,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -34832,7 +34832,7 @@
       "difference": -159.04497273763022,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -34853,7 +34853,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -34906,7 +34906,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -34959,7 +34959,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -35044,7 +35044,7 @@
       "difference": -61.62950134277344,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -35065,7 +35065,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -35102,7 +35102,7 @@
       "difference": -23.973597208658855,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -35123,7 +35123,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -35224,7 +35224,7 @@
       "difference": -224.53474934895834,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -35245,7 +35245,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -35330,7 +35330,7 @@
       "difference": -74.14498392740886,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -35351,7 +35351,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -35404,7 +35404,7 @@
       "difference": -54.73475646972656,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -35425,7 +35425,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -35446,7 +35446,7 @@
       "difference": -23.973597208658855,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -35467,7 +35467,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -35728,7 +35728,7 @@
       "difference": -23.973597208658855,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -35749,7 +35749,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -35802,7 +35802,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-asset-waiver-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -35823,7 +35823,7 @@
       "difference": -62.519999186197914,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -35844,7 +35844,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -35881,7 +35881,7 @@
       "difference": -33.02412414550781,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -35902,7 +35902,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -35923,7 +35923,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-asset-waiver-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -35992,7 +35992,7 @@
       "difference": -23.973597208658855,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -36013,7 +36013,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -36114,7 +36114,7 @@
       "difference": -23.973597208658855,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -36135,7 +36135,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -36172,7 +36172,7 @@
       "difference": -23.973597208658855,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -36193,7 +36193,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -36246,7 +36246,7 @@
       "difference": -283.7491048177083,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -36267,7 +36267,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -36304,7 +36304,7 @@
       "difference": -171.94498697916666,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -36325,7 +36325,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -36410,7 +36410,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-asset-waiver-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -36543,7 +36543,7 @@
       "difference": -40.54498291015625,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -36564,7 +36564,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -36617,7 +36617,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-asset-waiver-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -36734,7 +36734,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -36803,7 +36803,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -36952,7 +36952,7 @@
       "difference": -247.52408854166666,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -36973,7 +36973,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -37042,7 +37042,7 @@
       "difference": -111.0449727376302,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -37063,7 +37063,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -37116,7 +37116,7 @@
       "difference": -23.973597208658855,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -37137,7 +37137,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -37206,7 +37206,7 @@
       "difference": -447.5881754557292,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -37227,7 +37227,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -37264,7 +37264,7 @@
       "difference": -106.24498494466145,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -37285,7 +37285,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -37306,7 +37306,7 @@
       "difference": -49.62034606933594,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -37327,7 +37327,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -37412,7 +37412,7 @@
       "difference": -40.61997985839844,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -37433,7 +37433,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -37470,7 +37470,7 @@
       "difference": -140.30975341796875,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -37491,7 +37491,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -37672,7 +37672,7 @@
       "difference": -101.29498291015625,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -37693,7 +37693,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -37810,7 +37810,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-asset-waiver-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -37831,7 +37831,7 @@
       "difference": -198.12032063802084,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -37852,7 +37852,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -37937,7 +37937,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-asset-waiver-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -37974,7 +37974,7 @@
       "difference": -241.99532063802084,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -37995,7 +37995,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -38016,7 +38016,7 @@
       "difference": -382.1881917317708,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -38037,7 +38037,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -38090,7 +38090,7 @@
       "difference": -23.973597208658855,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-asset-waiver-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -38111,7 +38111,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-asset-waiver-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -38196,7 +38196,7 @@
       "difference": -443.3794759114583,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -38217,7 +38217,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -38286,7 +38286,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -38595,7 +38595,7 @@
       "difference": -150.04497273763022,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -38616,7 +38616,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -38637,7 +38637,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -38690,7 +38690,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-asset-waiver-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -38727,7 +38727,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -38748,7 +38748,7 @@
       "difference": -144.43477376302084,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -38769,7 +38769,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -38790,7 +38790,7 @@
       "difference": -304.6953531901042,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -38811,7 +38811,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -38864,7 +38864,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -38885,7 +38885,7 @@
       "difference": -51.87034606933594,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -38906,7 +38906,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -39183,7 +39183,7 @@
       "difference": -23.973597208658855,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -39204,7 +39204,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -39241,7 +39241,7 @@
       "difference": -23.973597208658855,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -39262,7 +39262,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -39395,7 +39395,7 @@
       "difference": -50.14498392740885,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -39416,7 +39416,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -39485,7 +39485,7 @@
       "difference": -25.88976542154948,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -39506,7 +39506,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -39591,7 +39591,7 @@
       "difference": -204.79532877604166,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -39612,7 +39612,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -39713,7 +39713,7 @@
       "difference": -23.973597208658855,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -39734,7 +39734,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -39803,7 +39803,7 @@
       "difference": -27.914759318033855,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -39824,7 +39824,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -39925,7 +39925,7 @@
       "difference": -326.67946370442706,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -39946,7 +39946,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -39999,7 +39999,7 @@
       "difference": -23.973597208658855,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -40020,7 +40020,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -40089,7 +40089,7 @@
       "difference": -29.084762573242188,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -40110,7 +40110,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -40147,7 +40147,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-asset-waiver-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -40200,7 +40200,7 @@
       "difference": -182.2347412109375,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -40221,7 +40221,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -40242,7 +40242,7 @@
       "difference": -23.973597208658855,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -40263,7 +40263,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -40284,7 +40284,7 @@
       "difference": -55.48475138346354,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -40305,7 +40305,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -40390,7 +40390,7 @@
       "difference": -23.973597208658855,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -40411,7 +40411,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -40448,7 +40448,7 @@
       "difference": -23.973597208658855,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -40469,7 +40469,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -40506,7 +40506,7 @@
       "difference": -67.02951049804688,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -40527,7 +40527,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -40628,7 +40628,7 @@
       "difference": -268.9953206380208,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -40649,7 +40649,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -40718,7 +40718,7 @@
       "difference": -32.83473205566406,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -40739,7 +40739,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -40760,7 +40760,7 @@
       "difference": -221.74540201822916,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-gross-band-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -40781,7 +40781,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-gross-band-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -40818,7 +40818,7 @@
       "difference": -145.5991007486979,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-benefit-not-encoded",
+        "id": "ca-bbce-asset-waiver-snap_benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "amount_difference",
@@ -40839,7 +40839,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-asset-waiver-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
@@ -40908,7 +40908,7 @@
       "difference": null,
       "disposition": {
         "disposition": "axiom_encoding_gap",
-        "id": "calfresh-bbce-eligibility-not-encoded",
+        "id": "ca-bbce-asset-waiver-snap_eligible",
         "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
       "kind": "eligibility_right_only",
