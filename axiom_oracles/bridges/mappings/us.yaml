@@ -31473,6 +31473,108 @@ mappings:
     candidate_priority: P4
     rationale: This signed-liability zero is a fail-closed sentinel while the annual Maryland State chain is held and must not be interpreted as zero tax.
 
+  # Michigan's TY2026 full-year-resident module is a source-readiness
+  # boundary. Exact P4 mappings keep its source holds and fail-closed
+  # sentinels from being treated as completed Michigan tax results or compared
+  # with PolicyEngine's projected state-tax outputs.
+  - legal_id: us-mi:policies/income_tax/e2e_resident_liability_pipeline#mi_pit_e2e_input_domain_is_valid
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom validates the bounded Michigan full-year-resident and aligned-filing-unit contract; PolicyEngine exposes no one-to-one predicate.
+
+  - legal_id: us-mi:policies/income_tax/e2e_resident_liability_pipeline#mi_pit_e2e_income_base_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that the complete TY2026 federal-to-Michigan income-base, addition, and subtraction chain is not pinned.
+
+  - legal_id: us-mi:policies/income_tax/e2e_resident_liability_pipeline#mi_pit_e2e_deduction_and_exemption_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that the complete TY2026 Michigan deduction, exemption, indexing, and exception chain is not pinned.
+
+  - legal_id: us-mi:policies/income_tax/e2e_resident_liability_pipeline#mi_pit_e2e_tax_and_surtax_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: The official 2026 individual income-tax rate is pinned, but this hold records that the complete Michigan tax, surtax, and special-tax surface remains incomplete.
+
+  - legal_id: us-mi:policies/income_tax/e2e_resident_liability_pipeline#mi_pit_e2e_credit_surface_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that the complete TY2026 Michigan nonrefundable- and refundable-credit inventory, eligibility rules, limitations, and ordering are not pinned.
+
+  - legal_id: us-mi:policies/income_tax/e2e_resident_liability_pipeline#mi_pit_e2e_complete_liability_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This completion-state predicate combines Axiom's Michigan income-base, deduction, exemption, tax, surtax, and credit source holds.
+
+  - legal_id: us-mi:policies/income_tax/e2e_resident_liability_pipeline#mi_pit_e2e_fail_closed_sentinel
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This negative-one integer is an explicit fail-closed source-hold indicator, not a Michigan tax-law amount or a PolicyEngine output.
+
+  - legal_id: us-mi:policies/income_tax/e2e_resident_liability_pipeline#mi_pit_e2e_net_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while the TY2026 federal-to-Michigan income-base, addition, and subtraction chain is held, not completed Michigan net income.
+
+  - legal_id: us-mi:policies/income_tax/e2e_resident_liability_pipeline#mi_pit_e2e_deductions_and_exemptions
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while Michigan deduction, exemption, indexing, and exception authority is held, not a completed deduction or exemption amount.
+
+  - legal_id: us-mi:policies/income_tax/e2e_resident_liability_pipeline#mi_pit_e2e_taxable_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while Michigan net income, deductions, and exemptions are held, not completed Michigan taxable income.
+
+  - legal_id: us-mi:policies/income_tax/e2e_resident_liability_pipeline#mi_pit_e2e_tax_before_credits_including_surtaxes
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while taxable income and complete tax, surtax, and special-tax applicability are held, not completed before-credit Michigan tax.
+
+  - legal_id: us-mi:policies/income_tax/e2e_resident_liability_pipeline#mi_pit_e2e_tax_after_nonrefundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while Michigan nonrefundable-credit authority and ordering are held, not completed after-credit tax.
+
+  - legal_id: us-mi:policies/income_tax/e2e_resident_liability_pipeline#mi_pit_e2e_refundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is a fail-closed sentinel while the Michigan refundable-credit inventory and ordering are held, not a completed credit amount.
+
+  - legal_id: us-mi:policies/income_tax/e2e_resident_liability_pipeline#mi_pit_e2e_net_income_tax_liability_before_payments
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This signed-liability zero is a fail-closed sentinel while the annual Michigan chain is held and must not be interpreted as zero tax.
+
   - legal_id: us-mo:policies/dss/snap/1105-000-00/1105-015-00/1105-015-04/1105-015-04-05/block-1#elderly_disabled_individual_minimum_age
     country: us
     program: snap
