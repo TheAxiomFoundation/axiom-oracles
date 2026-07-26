@@ -66,6 +66,14 @@ jobs:
         # changed must refresh conformance/compositions/<jur>.yaml.
         run: uv run scripts/generate_conformance_compositions.py --all --check
 
+      - name: Execution attestation (a covered suite must have RUN)
+        # Derived from the committed reports (no external runtime needed), so
+        # this always bites: a suite that produced no case/comparison, errored,
+        # ran against another oracle, or whose comparisons are not bound to the
+        # policy's registered outputs cannot cover an in-scope policy. The
+        # waiver file is shrink-only — a new unbound row fails here.
+        run: uv run scripts/conformance_attestation.py --check
+
       - name: Validate conformance scoreboard is up to date
         run: uv run scripts/conformance_scoreboard.py --check
 

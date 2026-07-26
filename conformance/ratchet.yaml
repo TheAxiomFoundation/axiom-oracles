@@ -1,23 +1,27 @@
 # axiom_oracles.conformance_ratchet.v1 — GENERATED; advance only via the ratchet script.
 schema: axiom_oracles.conformance_ratchet.v1
 _comment: Conformance ratchets — monotonic floors/ceilings enforced by scripts/conformance_ratchet.py
-  --check. covered_min may only rise; unexplained_max and axiom_attributed_open_max may only fall. Re-pin
-  with `uv run scripts/conformance_ratchet.py` after a genuine improvement; the gate refuses regressions.
+  --check. covered_min may only rise; unexplained_max, axiom_attributed_open_max and bridge_artifacts_max
+  may only fall. Re-pin with `uv run scripts/conformance_ratchet.py` after a genuine improvement; the
+  gate refuses regressions.
 ratchets:
 - jurisdiction: be
   covered_min: 23
   unexplained_max: 0
   axiom_attributed_open_max: 0
+  bridge_artifacts_max: 0
   policies_in_scope: 23
 - jurisdiction: uk
   covered_min: 21
   unexplained_max: 0
   axiom_attributed_open_max: 0
+  bridge_artifacts_max: 0
   policies_in_scope: 21
 - jurisdiction: uk-pe
   covered_min: 23
   unexplained_max: 0
   axiom_attributed_open_max: 0
+  bridge_artifacts_max: 0
   policies_in_scope: 23
 - jurisdiction: us-pe
   covered_min: 34
@@ -31,4 +35,8 @@ ratchets:
   # resume falling from here.
   unexplained_max: 441
   axiom_attributed_open_max: 243
+  # 2026-07-26 (#355): bridge_artifact is explained by definition, so growth in
+  # it is invisible to the predicate — ceilinged here so it cannot absorb a new
+  # residual unremarked. 3,067 of these sit in one ssi-ecps disposition.
+  bridge_artifacts_max: 3340
   policies_in_scope: 127

@@ -44,6 +44,7 @@ from axiom_oracles.conformance.scoreboard import (  # noqa: E402
     PolicyScore,
     score_jurisdiction,
 )
+from axiom_oracles.conformance.waivers import parse as parse_waivers  # noqa: E402
 
 CONFORMANCE_DIR = REPO_ROOT / "conformance"
 DETAIL_DIR = CONFORMANCE_DIR / "detail"
@@ -54,6 +55,8 @@ DASHBOARD_DATA_DIR = REPO_ROOT / "dashboard" / "public" / "data"
 SCOREBOARD_PATH = CONFORMANCE_DIR / "scoreboard.json"
 #: Dashboard-served mirror (identical bytes) so the static site can fetch it.
 DASHBOARD_SCOREBOARD_PATH = DASHBOARD_DATA_DIR / "conformance_scoreboard.json"
+#: Enumerated, shrink-only output-attestation debt (see conformance/waivers.py).
+WAIVERS_PATH = CONFORMANCE_DIR / "attestation_waivers.yaml"
 
 SCOREBOARD_SCHEMA = "axiom_oracles.conformance_scoreboard.v1"
 
@@ -75,19 +78,22 @@ def _universe_paths() -> list[Path]:
     return sorted(
         p
         for p in CONFORMANCE_DIR.glob("*.yaml")
-        if p.stem not in {"ratchet"}
+        if p.stem not in {"ratchet", "attestation_waivers"}
     )
 
 
 def build_scoreboard() -> tuple[dict, dict[str, list[PolicyScore]]]:
     """Compute the summary scoreboard doc + per-jurisdiction policy detail."""
     reports = _load_reports()
+    waivers = parse_waivers(WAIVERS_PATH)
     jurisdictions: list[dict] = []
     details: dict[str, list[PolicyScore]] = {}
 
     for path in _universe_paths():
         universe = parse_universe(path)
-        scoreboard, policy_scores = score_jurisdiction(universe, reports)
+        scoreboard, policy_scores = score_jurisdiction(
+            universe, reports, waivers=waivers
+        )
         jurisdictions.append(scoreboard.to_summary())
         details[universe.jurisdiction] = policy_scores
 
@@ -192,6 +198,18 @@ def _markdown(document: dict) -> str:
             f"Oracle-attributed: {summary['oracle_attributed']} · "
             f"Bridge artifacts: {summary['bridge_artifacts']}"
         )
+        waived = summary.get("covered_with_waived_output_attestation") or 0
+        if waived:
+            lines.append(
+                f"- Covered on a waived output binding: **{waived}** "
+                "(conformance/attestation_waivers.yaml)"
+            )
+        drift = summary.get("covered_with_oracle_release_drift") or 0
+        if drift:
+            lines.append(
+                f"- Covered against a different oracle release: **{drift}** "
+                "(report provenance vs the universe's pinned release)"
+            )
         excl = summary.get("excluded_by_reason") or {}
         if excl:
             parts = ", ".join(f"{k}: {v}" for k, v in excl.items())

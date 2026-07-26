@@ -19,7 +19,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "be:ILDef_be",
@@ -37,7 +41,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "be:ILsDef_be",
@@ -55,7 +63,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "be:ILsUDBDef_be",
@@ -73,7 +85,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "be:InitVars_be",
@@ -91,7 +107,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "Initialises input variables consumed by later policies (writes bsa_s/bls_s/etc. as inputs), not a computed instrument.",
-      "status": "excluded:input_carrying"
+      "status": "excluded:input_carrying",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "be:SetDefault_be",
@@ -109,7 +129,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "be:TUDef_be",
@@ -127,7 +151,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "be:TransLMA_be",
@@ -145,7 +173,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "Labour-market-transition module, switched off; the XML comment says 'DO NOT SWITCH ON; ONLY WORKS WITH THE [transition data]'. Carries transition inputs, not a distinct benefit/tax.",
-      "status": "excluded:input_carrying"
+      "status": "excluded:input_carrying",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "be:bch_be",
@@ -163,7 +195,13 @@
       "oracle_attributed": 4,
       "bridge_artifacts": 0,
       "note": null,
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "bch_s"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "be:bchba_be",
@@ -181,7 +219,13 @@
       "oracle_attributed": 1,
       "bridge_artifacts": 0,
       "note": null,
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "bchba_s"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "be:bed_be",
@@ -199,7 +243,13 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 0,
       "note": "BEN: study allowances (Flemish + French Community, 147 functions). The be-study-allowance suite live-compares bed_s region-routed to the Flemish study-financing decree of 8 June 2007 / Groeipakket decree of 27 April 2018 or the French-Community decree of 18 November 2021, and matches EUROMOD exactly (6/6, axiom-oracles#167). bed_be's stochastic non-take-up correction IS active under the real dataset-configuration name (its !IsUsedDatabase gate matches only be_????_hhot dataset names), so the suite runs each household as its own engine run (axiom-oracles#168) and pins $bed_FlTakeUp/$bed_FrTakeUp to 1.0 via euromod_constant_overrides to hold bed_s on the statutory amount. Brussels' random 90/10 split stays out of scope on hypothetical data.",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "bed_s"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "be:bfapl_be",
@@ -217,7 +267,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "BEN: parental-leave allowance (RVA/ONEM career-break), encoded in rulespec-be#86 (RD 29.10.1997 durations + RD 02.01.1991 amounts). EUROMOD bfapl_be simulates it and writes bfapl_s, but the lpb parental-leave-months input column is absent from the BE HHoT demo dataset schema, so bfapl_s stays 0 for every synthetic case under the registration-free setup \u2014 the only achievable comparison is vacuous (0 == 0). Probe evidence: exhaustive leave-lane input sweep in axiom-oracles#150/#158, lpb absence recorded in docs/be-coverage-matrix.md; lineage rulespec-be#86 / axiom-oracles#160.",
-      "status": "excluded:oracle_dataset_lacks_input"
+      "status": "excluded:oracle_dataset_lacks_input",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "be:bmact_be",
@@ -235,7 +289,13 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 0,
       "note": "BEN: maternity-leave indemnity. The be-maternity-leave suite live-compares bmact_s and matches EUROMOD exactly (3/3); the published dashboard report exists, so the policy is now covered.",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "bmact_s"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "be:bpact_be",
@@ -253,7 +313,13 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 0,
       "note": "BEN: paternity/birth-leave compensation. The be-birth-leave suite live-compares bpact_s and matches EUROMOD exactly (3/3); the published dashboard report exists, so the policy is now covered.",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "bpact_s"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "be:bsa_be",
@@ -271,7 +337,13 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 0,
       "note": null,
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "bsa_s"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "be:bsaoa_be",
@@ -289,7 +361,13 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 0,
       "note": "Elderly income guarantee (GRAPA/IGO). Marked 'TO BE SWITCHED ON MANUALLY, otherwise from data' in BE_2025, so it is off in a default run, but activatable per run via euromod_policy_switch_overrides [(bsaoa_be, True)] (the bun_be precedent \u2014 the adapter patches the model XML; no extension switch enables it). The be-elderly-income-support suite switches bsaoa_be on and live-compares bsaoa_s (garantie de revenus aux personnes agees) against the composed RuleSpec payable amount, matching EUROMOD exactly (1/1). Now covered; the prior not_a_policy exclusion is superseded by the published activated suite.",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "bsaoa_s"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "be:bun_be",
@@ -307,7 +385,13 @@
       "oracle_attributed": 4,
       "bridge_artifacts": 0,
       "note": "Unemployment benefit marked 'PART SIMULATED' and switched OFF in BE_2025 (unemployment income carried from input data in a default run), but activatable per run via euromod_policy_switch_overrides (the bsaoa_be precedent) for hypothetical cases. The be-unemployment suite switches bun_be on and compares bun_s against the composed RD 25.11.1991 pilot; all four cases are dispositioned upstream_engine_gap (EUROMOD's stylised bun_s vs the statute's Article 111/114/115 amounts).",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "bun_s"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "be:bwkrg_be",
@@ -325,7 +409,13 @@
       "oracle_attributed": 5,
       "bridge_artifacts": 0,
       "note": null,
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "bwkrg_s"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "be:byr_be",
@@ -343,7 +433,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "Early-retirement benefit (12 functions, 106 params) carrying policy switch n/a in BE_2025, not off. A live probe forcing byr_be on via the model-XML switch overlay (same mechanism as GRAPA bsaoa_be) returns no byr_s column while the run succeeds, so n/a is structural \u2014 the functions never register in the spine and no override resurrects them. poa (old-age pension) has no computing policy at all; both flow as pure input into ils_ben and disposable income. The rulespec-be worker-pension encoding (retirement_and_survivor.yaml; RD No. 50, RD 23.12.1996) validates via other oracles, not EUROMOD.",
-      "status": "excluded:input_carrying"
+      "status": "excluded:input_carrying",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "be:hhot_switch_be",
@@ -361,7 +455,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "be:neg_be",
@@ -379,7 +477,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "be:output_std_be",
@@ -397,7 +499,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "be:output_std_hh_be",
@@ -415,7 +521,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "be:random_be",
@@ -433,7 +543,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "be:tci_be",
@@ -451,7 +565,13 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 0,
       "note": null,
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "tci_s"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "be:tco_be",
@@ -469,7 +589,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "Indirect consumption tax (VAT/excise). In BE_2025 its body is 15 DefConst/DefIl functions with no OutputVar and no compute function, and the public EUROMOD_RELEASES_J2.0+ ships no consumption-tax extension (no CT_X* add-on computes VAT/excise) and no COICOP expenditure microdata. So the oracle cannot simulate a comparable amount; the policy would be a real tax only with the absent extension. Verdict recorded in euromod_be_coverage.json (tco_be.conformance), axiom-oracles#144.",
-      "status": "excluded:extension_not_available"
+      "status": "excluded:extension_not_available",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "be:tinfe_be",
@@ -487,7 +611,13 @@
       "oracle_attributed": 2,
       "bridge_artifacts": 0,
       "note": "TAX: PIT fiscal expenditures. The be-work-bonus-credit suite live-compares tinfe_be's refundable Article 289ter/1 low-wage work-bonus credit output tintcly_s (which EUROMOD BE_2025 labels the earned-income/EITC credit) against the encoded belgium_pit_pilot_article_289ter1_low_wage_work_bonus_credit on a four-point earnings sweep: 30k and 45k match, while the 10k and 14k low-wage cases expose ec-jrc issue #12 (BE_2025 bases the credit on the UNCAPPED i_tsceerdA_s/i_tsceerdB_s schedule rather than the reductions actually granted) and are dispositioned upstream_engine_gap, so explained_rate is 100 with unexplained_total 0. Scope note on the other tinfe_be outputs, kept honest: EUROMOD BE_2025 computes tintcch_s as a flat 350 EUR per dependent child low-tax reduction (the $tinfe_ChildRed_Amt mechanism), NOT the Article 145/35 childcare-EXPENSE reduction; and BE_2025's tinfe_be simulates neither the encoded Article 145/8 pension-savings reduction nor the Article 145/35 childcare-expense, Article 145/33 donation, or service-voucher reductions (no input columns or constants for them in the model). Those encoded instruments therefore have no BE_2025 oracle counterpart and remain the documented residual gap \u2014 coverage here is the work-bonus-EITC (tintcly_s) component only.",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "tintcly_s"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "be:tinkt_be",
@@ -505,7 +635,13 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 0,
       "note": "TAX: separately-taxed movable/capital income tax. The be-capital-income-tax suite live-compares tinkt_s (movable_withholding) and matches EUROMOD exactly (3/3).",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "tinkt_s"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "be:tinmu_be",
@@ -523,7 +659,13 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 0,
       "note": "TAX: municipal PIT surcharge (communal centimes). The be-local-municipal-pit suite live-compares tinmu_s (communal_additions) and matches EUROMOD exactly (3/3).",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "tinmu_s"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "be:tinna_be",
@@ -541,7 +683,13 @@
       "oracle_attributed": 1,
       "bridge_artifacts": 0,
       "note": null,
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "tin_s"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "be:tinrg_be",
@@ -559,7 +707,13 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 0,
       "note": "TAX: regional PIT additional tax. The be-regional-pit-surcharge suite live-compares tinrg_s (special financing law of 16 January 1989 article 5/2 \u2014 the reduced State tax times the region's additional-tax percentage, 32.591% Brussels / 33.257% Flanders and Wallonia) and matches EUROMOD exactly (3/3, one case per region).",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "tinrg_s"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "be:tintace_be",
@@ -577,7 +731,13 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 0,
       "note": "TAX: PIT professional-expense forfait (article_51_forfaits). The be-article-51-forfait suite live-compares tintace_s as its own surface on a five-point single-worker earnings sweep (12k / 22k / 27k / 35k / 60k) that straddles the indexed forfait cap. EUROMOD BE_2025 computes tintace_s = min(0.30 * il_netYem, 5930) on employment income after ordinary employee SSC; the encoded belgium_pit_pilot_worker_forfait_professional_expenses applies the identical Article 51 employee rate (30%) and indexed cap (5,930 EUR) to the pipeline's own post-employee-SSC remuneration, bridged on the engine's post-uprating gross (yem). Matches EUROMOD exactly (5/5).",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "tintace_s"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "be:tintb_be",
@@ -595,7 +755,11 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 0,
       "note": "TAX: PIT deductions & marital quotient \u2014 a distinct policy from the covered tinna worker PIT. The be-marital-quotient suite live-compares the CIR 1992 Article 87 marital quotient (quotient conjugal \u2014 30% of the single earner's professional income, capped at the indexed 13,460 EUR, imputed to the zero-income spouse and taxed separately through the Article 130 scale) against EUROMOD tin_s on a single-earner married-couple grid at 30k/45k/60k. The three cases are dispositioned as explained residuals (upstream_engine_gap) with the 13.07% SSC + Article 51 forfait decomposition, exact at 60k; zero unexplained and zero Axiom-attributed, so the surface is covered and conformant for this policy.",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "waived:compared_surface_differs",
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "be:tprhm_be",
@@ -613,7 +777,13 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 0,
       "note": null,
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "tprhm_s"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "be:tscee_be",
@@ -631,7 +801,14 @@
       "oracle_attributed": 2,
       "bridge_artifacts": 0,
       "note": null,
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "tscee_s",
+        "tsceerd_s"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "be:tsceesp_be",
@@ -649,7 +826,13 @@
       "oracle_attributed": 4,
       "bridge_artifacts": 0,
       "note": null,
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "tsceesp_s"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "be:tscer_be",
@@ -667,7 +850,13 @@
       "oracle_attributed": 2,
       "bridge_artifacts": 0,
       "note": null,
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "tscer_s"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "be:tscpe_be",
@@ -685,7 +874,13 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 0,
       "note": "SIC: pensioner health/disability + solidarity contribution; encoded in non_labour_income_contributions.yaml (Law 30.03.1994 art. 68 solidarity + Law 14.07.1994 art. 191 health 3.55%), NOT chapter_10_special_contributions (that is the Law 29.06.1981 art. 38 employer/fringe special contributions). The be-pensioner-contributions suite live-compares tscpe_s and matches EUROMOD exactly (6/6). rulespec-be#89 encoded the art. 191 low-pension health floor and carried the indexed 2025 art. 68 solidarity thresholds, both grounded in the Service federal des Pensions 2025 withholding tables, clearing the two axiom_encoding_gap residuals that previously held this uncovered.",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "tscpe_s"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "be:tscse_be",
@@ -703,7 +898,13 @@
       "oracle_attributed": 3,
       "bridge_artifacts": 0,
       "note": null,
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "tscse_s"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "be:uprate_be",
@@ -721,7 +922,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "be:yem_be",
@@ -739,7 +944,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "Minimum-wage definition (Type inc, switched off in BE_2025); a definitional input, not a benefit or tax the oracle pays out.",
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "be:yemcomp_be",
@@ -757,7 +966,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "BEN: Covid-19 temporary-unemployment wage compensation for employees (RD 30.03.2020 family), Switch=on in BE_2025 and writing bwkmcee_s. Every compute branch is gated on bwkmceemy_s (months in the wage-compensation scheme): Elig_Cond (bwkmceemy_s > 0), both part/full-time BenCalc Comp_Cond branches (bwkmceemy_s>=1 & lhw<38, bwkmceemy_s>=1 & lhw>=38), and the final award bwkmcee_s = i_bwkmcee_s*bwkmceemy_s/12. bwkmceemy_s and lmcee_s are DefVar-initialised to 0; their only writer is policy TransLMA_be (Switch=off, comment \"DO NOT SWITCH ON; ONLY WORKS WITH THE LMA ADD-ON\"), which selects lay-off spells from lindi (sector) x dgn x i_mc_rand_* draws. None of {lmcee, lmcee_s, bwkmceemy, bwkmceemy_s, lindi, i_mc_rand_1, lma} exist in the BE_training_data schema (273 cols), so the worker template overlay drops any injected activator (the row is reindexed to the dataset header) and bwkmcee_s stays 0 for every synthetic case \u2014 the only achievable comparison is vacuous (0 == 0). Probe evidence (axiom-oracles#142, mirrors the bfapl #150/#158 lineage): 112-combination live sweep over {TransLMA_be off/on} x {6 activator-injection sets incl. all_activators} x {dgn 0/1} x {lhw 20/40} x {employee/self-employed} under BE_2025, real-config BE_2024_c1_2015_03_e2 over BE_training_data \u2014 112/112 cells returned bwkmcee_s=0 (with internal bwkmceemy_s=lmcee_s=0 even when TransLMA_be is forced on and every activator column is injected, confirming the overlay drop). Lineage: docs/be-coverage-matrix.md.",
-      "status": "excluded:oracle_dataset_lacks_input"
+      "status": "excluded:oracle_dataset_lacks_input",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "be:ysecomp_be",
@@ -775,7 +988,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "BEN: Covid-19 wage compensation for the self-employed (droit passerelle / bridging right, Law 23.03.2020 family), Switch=on in BE_2025 and writing bwkmcse_s. Every eligibility and BenCalc branch is gated on lmcse_s (>=1) / bwkmcsemy_s (>0) \u2014 Elig_Cond loc=1 & bwkmcsemy_s>0 and loc!=1 & bwkmcsemy_s>0, the four income-tier Comp_Cond branches all lead with lmcse_s>=1, and the awards bwkmcse01_s/bwkmcse02_s = i_bwkmcse0*_s*bwkmcsemy_s/12. lmcse_s and bwkmcsemy_s are DefVar-initialised to 0; the sole writer is TransLMA_be (Switch=off, \"DO NOT SWITCH ON; ONLY WORKS WITH THE LMA ADD-ON\"), selecting from lindi x dgn x i_mc_rand_* draws. None of {lmcse, lmcse_s, bwkmcsemy, bwkmcsemy_s, lindi, i_mc_rand_1, lma} \u2014 nor even ysemy (self-employed months) \u2014 exist in the BE_training_data schema, so the overlay drops any injected activator and bwkmcse_s stays 0 for every synthetic case (vacuous 0 == 0). Probe evidence: the same 112-combination BE_2025 sweep (axiom-oracles#142) returned bwkmcse_s=0 in 112/112 cells, self-employed rows (yse>0, yem=0) included, with TransLMA_be forced on and every activator injected. Lineage: docs/be-coverage-matrix.md.",
-      "status": "excluded:oracle_dataset_lacks_input"
+      "status": "excluded:oracle_dataset_lacks_input",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     }
   ]
 }

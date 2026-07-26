@@ -9,9 +9,14 @@ against an exact predicate:
                     AND axiom_attributed_open == 0
 
 "Covered" is decided from *live evidence*, not intent: an in-scope policy counts
-as covered only when its named suite has a committed comparison report present.
-A suite named in the universe but with no report is in scope and NOT covered —
-the honest gap the predicate is built to expose.
+as covered only when its named suite has a committed comparison report that
+**attests execution** — a real run against the universe's declared oracle, with
+strictly positive cases and comparisons, zero errors, and comparison evidence
+bound to the policy's registered outputs (see
+:mod:`axiom_oracles.conformance.attestation`). A suite named in the universe but
+with no report is in scope and NOT covered; so is one whose report is a skipped
+or errored shell, which would otherwise score as zero-unexplained and satisfy the
+predicate while verifying nothing (axiom-oracles#355).
 
 Attribution splits the residual mismatches by whose defect they are:
 
@@ -30,7 +35,13 @@ from __future__ import annotations
 
 from dataclasses import asdict, dataclass, field
 
+from axiom_oracles.conformance.attestation import (
+    ExecutionAttestation,
+    OracleTargetResolver,
+    attest,
+)
 from axiom_oracles.conformance.loader import Universe
+from axiom_oracles.conformance.waivers import WaiverIndex
 
 #: Disposition kinds that count as *explained* (do not block conformance).
 _EXPLAINED_KINDS = ("explained_residual", "upstream_engine_gap", "bridge_artifact")
@@ -63,6 +74,19 @@ class PolicyScore:
     note: str | None = None
     #: One-word status for the drill-down table.
     status: str = "excluded"
+    #: How the covering report attests this policy's outputs: ``attested`` when
+    #: a registered output carries positive comparison evidence, ``waived:<reason>``
+    #: when the committed waiver file accounts for a binding the artifact cannot
+    #: show, None when the policy is not covered.
+    output_attestation: str | None = None
+    #: Registered outputs the covering report shows positive comparisons for.
+    attested_outputs: list[str] = field(default_factory=list)
+    #: Why the covering report could not attest execution (uncovered rows only).
+    attestation_problems: list[str] = field(default_factory=list)
+    #: The oracle release the covering report records when it differs from the
+    #: release the universe pins — the conformance claim is scoped to a release,
+    #: so a covered policy verified against an older one is worth seeing.
+    oracle_release_drift: str | None = None
 
 
 @dataclass
@@ -82,6 +106,15 @@ class JurisdictionScoreboard:
     bridge_artifacts: int
     #: The exact conformance predicate.
     conformant: bool
+    #: Covered policies whose output binding rests on a committed waiver rather
+    #: than on evidence in the report. Published, not hidden: a conformant badge
+    #: with a non-zero count here is resting on that many un-attested bindings.
+    covered_with_waived_output_attestation: int = 0
+    #: Covered policies whose report records an oracle RELEASE other than the one
+    #: this universe pins. Not blocking (reports legitimately lag a re-pin), but
+    #: the claim is "Axiom conforms to this oracle at this release", so the count
+    #: says how much of it was verified against a different one.
+    covered_with_oracle_release_drift: int = 0
     #: Uncovered in-scope policies (the gap list) by name.
     uncovered_policies: list[str] = field(default_factory=list)
     #: Human-readable reasons the predicate is not yet satisfied (empty when
@@ -158,17 +191,70 @@ def _disposition_signals(report: dict) -> tuple[int, int, int, int]:
     return unexplained, axiom_open, oracle_attributed, bridge
 
 
+def _attestation_index(
+    suite_index: dict[str, dict],
+    universe: Universe,
+    resolver: OracleTargetResolver | None,
+) -> dict[str, ExecutionAttestation]:
+    """Attest each report this universe names, once, against its own oracle.
+
+    Only the named suites: attestation walks a report's case rows to catch
+    per-case engine errors the summary never sees, and the population reports
+    carry six figures of them — attesting all 200+ committed reports per
+    jurisdiction would be four full passes over the whole corpus for nothing.
+    """
+    named = {policy.suite for policy in universe.in_scope() if policy.suite}
+    return {
+        suite: attest(
+            suite_index[suite], oracle=universe.oracle, resolver=resolver
+        )
+        for suite in sorted(named & set(suite_index))
+    }
+
+
+def _uncovered_row(policy, status: str, problems: list[str] | None = None) -> PolicyScore:
+    """The drill-down row for an in-scope policy no live evidence covers."""
+    return PolicyScore(
+        id=policy.id,
+        oracle_policy_name=policy.oracle_policy_name,
+        in_scope=True,
+        exclusion_reason=None,
+        suite=policy.suite,
+        covered=False,
+        note=policy.note,
+        status=status,
+        attestation_problems=list(problems or []),
+    )
+
+
 def score_jurisdiction(
     universe: Universe,
     reports: list[dict],
+    *,
+    waivers: WaiverIndex | None = None,
+    resolver: OracleTargetResolver | None = None,
 ) -> tuple[JurisdictionScoreboard, list[PolicyScore]]:
-    """Compute the scoreboard + per-policy drill-down for one jurisdiction."""
+    """Compute the scoreboard + per-policy drill-down for one jurisdiction.
+
+    ``waivers`` accounts for covered policies whose committed report predates
+    output attestation (see :mod:`axiom_oracles.conformance.waivers`); without
+    one, an unbound policy is uncovered. ``resolver`` is injectable so tests can
+    pin the concept→oracle-variable bindings instead of loading the packaged
+    registry.
+    """
+    waivers = waivers if waivers is not None else WaiverIndex([])
     suite_index = _report_suite_index(reports)
+    attestations = _attestation_index(suite_index, universe, resolver)
 
     policy_scores: list[PolicyScore] = []
     excluded_by_reason: dict[str, int] = {}
     covered = 0
+    waived_output_attestation = 0
+    release_drift_count = 0
     uncovered_policies: list[str] = []
+    #: Human-readable "this suite ran nothing" / "this suite ran something else"
+    #: lines, surfaced in blocking_reasons so a red badge says why.
+    attestation_failures: list[str] = []
     #: Suites of the DISTINCT covered reports, so each report's mismatch signals
     #: are counted once toward the jurisdiction headline even when several
     #: in-scope policies share one report (the PE-UK case: 12 programs covered by
@@ -199,19 +285,45 @@ def score_jurisdiction(
         report = suite_index.get(policy.suite) if policy.suite else None
         if report is None:
             uncovered_policies.append(policy.oracle_policy_name)
+            policy_scores.append(_uncovered_row(policy, "uncovered"))
+            continue
+
+        # A report only covers a policy when it attests execution against the
+        # declared oracle AND its comparisons bind to the policy's registered
+        # outputs. Failing either, the policy is uncovered — never covered with
+        # a vacuous zero-unexplained residual (axiom-oracles#355).
+        attestation = attestations[policy.suite]
+        output_attestation: str | None = None
+        if not attestation.eligible:
+            uncovered_policies.append(policy.oracle_policy_name)
+            attestation_failures.extend(attestation.problems)
             policy_scores.append(
-                PolicyScore(
-                    id=policy.id,
-                    oracle_policy_name=policy.oracle_policy_name,
-                    in_scope=True,
-                    exclusion_reason=None,
-                    suite=policy.suite,
-                    covered=False,
-                    note=policy.note,
-                    status="uncovered",
-                )
+                _uncovered_row(policy, "unattested", list(attestation.problems))
             )
             continue
+
+        binding_gap = attestation.binding_gap(policy.output_vars)
+        if binding_gap is None:
+            output_attestation = "attested"
+        else:
+            waiver = waivers.waiver_for(
+                universe.jurisdiction, policy.id, policy.suite
+            )
+            if waiver is None:
+                uncovered_policies.append(policy.oracle_policy_name)
+                failure = (
+                    f"{policy.suite}: no registered output of {policy.id} "
+                    f"({', '.join(policy.output_vars) or 'none'}) carries "
+                    f"comparison evidence in the covering report [{binding_gap}]"
+                )
+                attestation_failures.append(failure)
+                policy_scores.append(_uncovered_row(policy, "unbound", [failure]))
+                continue
+            output_attestation = f"waived:{waiver.reason}"
+            waived_output_attestation += 1
+
+        if attestation.oracle_release_drift is not None:
+            release_drift_count += 1
 
         # Covered: pull the report's comparison stats + disposition signals.
         covered += 1
@@ -254,6 +366,11 @@ def score_jurisdiction(
                 bridge_artifacts=bridge,
                 note=policy.note,
                 status=status,
+                output_attestation=output_attestation,
+                attested_outputs=sorted(
+                    attestation.attested_outputs & set(policy.output_vars)
+                ),
+                oracle_release_drift=attestation.oracle_release_drift,
             )
         )
 
@@ -289,6 +406,8 @@ def score_jurisdiction(
             f"{in_scope - covered} of {in_scope} in-scope policies are not "
             f"covered by a live suite: {', '.join(uncovered_policies)}"
         )
+    for failure in attestation_failures:
+        blocking_reasons.append(f"execution attestation failed — {failure}")
     if unexplained_total > 0:
         blocking_reasons.append(
             f"{unexplained_total} unexplained mismatch(es) across covered suites"
@@ -311,6 +430,8 @@ def score_jurisdiction(
         oracle_attributed=oracle_attributed,
         bridge_artifacts=bridge_artifacts,
         conformant=conformant,
+        covered_with_waived_output_attestation=waived_output_attestation,
+        covered_with_oracle_release_drift=release_drift_count,
         uncovered_policies=uncovered_policies,
         blocking_reasons=blocking_reasons,
     )

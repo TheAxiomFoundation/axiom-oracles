@@ -19,11 +19,22 @@ REPO_ROOT = Path(__file__).parents[1]
 SCRIPTS = REPO_ROOT / "scripts"
 CONFORMANCE_DIR = REPO_ROOT / "conformance"
 
+from axiom_oracles.conformance.attestation import (  # noqa: E402
+    EXECUTION_ATTESTATION_SCHEMA,
+    OracleTargetResolver,
+    attest,
+)
 from axiom_oracles.conformance.loader import (  # noqa: E402
     OracleIdentity,
     Universe,
     parse as parse_universe,
     serialize,
+)
+from axiom_oracles.conformance.waivers import (  # noqa: E402
+    AttestationWaiver,
+    WaiverIndex,
+    parse as parse_waivers,
+    serialize as serialize_waivers,
 )
 from axiom_oracles.conformance.ratchet import (  # noqa: E402
     RatchetInvariant,
@@ -1049,16 +1060,63 @@ def _universe(policies: list[UniversePolicy]) -> Universe:
     )
 
 
-def _report(suite: str, *, comparisons: int, matches: int, dispositioned=None):
+def _report(
+    suite: str,
+    *,
+    comparisons: int,
+    matches: int,
+    dispositioned=None,
+    cases: int | None = None,
+    engines: dict | None = None,
+    errors: list | None = None,
+    error_count: int | None = None,
+    outputs: tuple[str, ...] | None = ("x_s",),
+    executed: bool = True,
+):
+    """A report shaped like a real run: it ATTESTS execution unless told not to.
+
+    Coverage now requires an execution attestation, so the default helper stamps
+    one (positive cases + comparisons, no errors, both engines, evidence for the
+    ``x_s`` output ``_in_scope`` registers). Every negative test below turns off
+    exactly one of those and asserts coverage is refused.
+    """
     summary = {
         "comparison_count": comparisons,
         "match_count": matches,
         "mismatch_count": comparisons - matches,
     }
+    if error_count is not None:
+        summary["error_count"] = error_count
     if dispositioned is not None:
         summary["dispositioned"] = dispositioned
-    return {"suite": suite, "engines": {"left": "euromod", "right": "axiom"},
-            "summary": summary, "mismatches": []}
+    case_count = comparisons if cases is None else cases
+    engines = engines if engines is not None else {"left": "euromod", "right": "axiom"}
+    attestation = {
+        "schema_version": EXECUTION_ATTESTATION_SCHEMA,
+        "executed": executed,
+        "case_count": case_count,
+        "comparison_count": comparisons,
+        "error_count": error_count if error_count is not None else len(errors or []),
+        "engines": engines,
+        "outputs": [
+            {
+                "concept": f"tx:{name}",
+                "engine": "euromod",
+                "variable": name,
+                "comparisons": comparisons,
+            }
+            for name in (outputs or ())
+        ],
+    }
+    return {
+        "suite": suite,
+        "engines": engines,
+        "case_count": case_count,
+        "summary": summary,
+        "mismatches": [],
+        "errors": list(errors or []),
+        "attestation": attestation,
+    }
 
 
 def test_scoreboard_conformant_when_all_covered_and_clean():
@@ -1283,43 +1341,68 @@ def test_committed_be_scoreboard_counts_dataset_lacks_input_exclusion():
 # ---------------------------------------------------------------------------
 
 
-def _summary(covered, unexplained, axiom_open, in_scope=10):
+def _summary(covered, unexplained, axiom_open, in_scope=10, bridge=0):
     return {
         "jurisdiction": "uk",
         "covered": covered,
         "unexplained_total": unexplained,
         "axiom_attributed_open": axiom_open,
         "policies_in_scope": in_scope,
+        "bridge_artifacts": bridge,
     }
 
 
+def _ratchet(**kw) -> RatchetInvariant:
+    base = dict(
+        jurisdiction="uk",
+        covered_min=4,
+        unexplained_max=0,
+        axiom_attributed_open_max=0,
+        policies_in_scope=10,
+        bridge_artifacts_max=0,
+    )
+    base.update(kw)
+    return RatchetInvariant(**base)
+
+
 def test_ratchet_passes_when_stable():
-    ratchet = RatchetInvariant("uk", covered_min=4, unexplained_max=0,
-                               axiom_attributed_open_max=0, policies_in_scope=10)
+    ratchet = _ratchet()
     assert check_regressions(ratchet, _summary(4, 0, 0)) == []
     # Improvement (more covered) also passes.
     assert check_regressions(ratchet, _summary(6, 0, 0)) == []
 
 
 def test_ratchet_fails_when_coverage_falls():
-    ratchet = RatchetInvariant("uk", covered_min=4, unexplained_max=0,
-                               axiom_attributed_open_max=0, policies_in_scope=10)
-    violations = check_regressions(ratchet, _summary(3, 0, 0))
+    violations = check_regressions(_ratchet(), _summary(3, 0, 0))
     assert violations and "covered" in violations[0]
 
 
 def test_ratchet_fails_when_unexplained_rises():
-    ratchet = RatchetInvariant("uk", covered_min=4, unexplained_max=0,
-                               axiom_attributed_open_max=0, policies_in_scope=10)
-    violations = check_regressions(ratchet, _summary(4, 1, 0))
+    violations = check_regressions(_ratchet(), _summary(4, 1, 0))
     assert violations and "unexplained_total" in violations[0]
 
 
 def test_ratchet_fails_when_axiom_gap_rises():
-    ratchet = RatchetInvariant("uk", covered_min=4, unexplained_max=0,
-                               axiom_attributed_open_max=0, policies_in_scope=10)
-    violations = check_regressions(ratchet, _summary(4, 0, 1))
+    violations = check_regressions(_ratchet(), _summary(4, 0, 1))
     assert violations and "axiom_attributed_open" in violations[0]
+
+
+def test_ratchet_fails_when_bridge_artifacts_rise():
+    """NEGATIVE: the explanatory bucket that blocks nothing still has a ceiling.
+
+    A bridge artifact is explained by definition, so growth in it is invisible
+    to the predicate — which is precisely why it must not grow unremarked.
+    """
+    violations = check_regressions(_ratchet(bridge_artifacts_max=5), _summary(4, 0, 0, bridge=6))
+    assert violations and "bridge_artifacts" in violations[0]
+
+
+def test_ratchet_fails_when_no_bridge_ceiling_is_pinned():
+    """NEGATIVE: an unpinned ceiling is an incomplete ratchet, not a pass."""
+    violations = check_regressions(
+        _ratchet(bridge_artifacts_max=None), _summary(4, 0, 0, bridge=99)
+    )
+    assert violations and "bridge_artifacts_max" in violations[0]
 
 
 # ---------------------------------------------------------------------------
@@ -1617,6 +1700,497 @@ def test_compositions_check_fails_on_mutated_commit():
     path.write_text(tampered)
     try:
         rc = _run_compositions_check(gen)
+    finally:
+        path.write_text(original)
+    assert rc == 1
+
+
+# ---------------------------------------------------------------------------
+# Execution attestation (axiom-oracles#355)
+#
+# The predicate used to read a report's mismatch signals without ever asking
+# whether the report was the product of a run. Every test below removes exactly
+# one piece of execution evidence and asserts coverage is REFUSED — a gate that
+# cannot fail verifies nothing.
+# ---------------------------------------------------------------------------
+
+
+def _tx_universe(**policy_kw):
+    return _universe([_in_scope(id="tx:a", oracle_policy_name="a", suite="suite-a",
+                                **policy_kw)])
+
+
+def _skip_shell(suite: str = "suite-a") -> dict:
+    """The artifact run_comparison.py emits when a suite cannot run here.
+
+    Zero cases, zero comparisons, empty aggregates, one skip error — and, before
+    this gate, `_disposition_signals` scored it (0, 0, 0, 0): covered, zero
+    unexplained, therefore CONFORMANT.
+    """
+    return {
+        "schema_version": "axiom.comparison_report.v2",
+        "suite": suite,
+        "population": "synthetic",
+        "case_count": 0,
+        "engines": {"left": "euromod", "right": "axiom"},
+        "aggregates": [],
+        "cases": [],
+        "mismatches": [],
+        "concepts": [],
+        "errors": ["skipped: EUROMOD model root unavailable"],
+        "locales": [],
+        "scope": None,
+        "summary": {"comparison_count": 0, "match_count": 0, "mismatch_count": 0},
+    }
+
+
+def test_skip_shell_does_not_cover_a_policy():
+    """NEGATIVE (the reported bug): a graceful-skip artifact covers nothing."""
+    board, scores = score_jurisdiction(_tx_universe(), [_skip_shell()])
+    assert board.covered == 0
+    assert board.conformant is False
+    assert scores[0].status == "unattested"
+    assert any("executed nothing" in p for p in scores[0].attestation_problems)
+
+
+def test_zero_case_report_does_not_cover_a_policy():
+    """NEGATIVE: zero cases is not a run, however clean the summary looks."""
+    report = _report("suite-a", comparisons=0, matches=0, cases=0)
+    board, scores = score_jurisdiction(_tx_universe(), [report])
+    assert board.covered == 0
+    assert board.conformant is False
+    assert scores[0].status == "unattested"
+
+
+def test_zero_comparison_report_does_not_cover_a_policy():
+    """NEGATIVE: cases that produced no comparison verify nothing."""
+    report = _report("suite-a", comparisons=0, matches=0, cases=12)
+    board, _ = score_jurisdiction(_tx_universe(), [report])
+    assert board.covered == 0
+    assert board.conformant is False
+
+
+def test_errored_report_does_not_cover_a_policy():
+    """NEGATIVE: an errored run is not evidence of conformance."""
+    report = _report(
+        "suite-a", comparisons=5, matches=5, errors=["engine crashed on case 3"]
+    )
+    board, scores = score_jurisdiction(_tx_universe(), [report])
+    assert board.covered == 0
+    assert board.conformant is False
+    assert any("engine error" in p for p in scores[0].attestation_problems)
+
+
+def test_per_case_errors_are_counted_even_when_the_summary_omits_them():
+    """NEGATIVE: a case-level error never reaches summary.error_count."""
+    report = _report("suite-a", comparisons=5, matches=5)
+    report["cases"] = [{"case_id": "c1", "left_errors": ["boom"], "right_errors": []}]
+    board, _ = score_jurisdiction(_tx_universe(), [report])
+    assert board.covered == 0
+
+
+def test_summary_error_count_blocks_coverage():
+    """NEGATIVE: errors recorded only in the summary still block."""
+    report = _report("suite-a", comparisons=5, matches=5, error_count=2)
+    board, _ = score_jurisdiction(_tx_universe(), [report])
+    assert board.covered == 0
+
+
+def test_wrong_engine_report_does_not_cover_a_policy():
+    """NEGATIVE: a real run against a DIFFERENT oracle attests nothing here.
+
+    The universe declares a euromod oracle; this report compared Axiom against
+    PolicyEngine. It ran, it has millions of comparisons — and it is no evidence
+    for the euromod conformance claim.
+    """
+    report = _report(
+        "suite-a",
+        comparisons=5,
+        matches=5,
+        engines={"left": "axiom", "right": "policyengine"},
+    )
+    board, scores = score_jurisdiction(_tx_universe(), [report])
+    assert board.covered == 0
+    assert any("declared oracle" in p for p in scores[0].attestation_problems)
+
+
+def test_report_without_axiom_does_not_cover_a_policy():
+    """NEGATIVE: an oracle-vs-oracle cross-check says nothing about Axiom."""
+    report = _report(
+        "suite-a",
+        comparisons=5,
+        matches=5,
+        engines={"left": "taxcalc", "right": "euromod"},
+    )
+    board, scores = score_jurisdiction(_tx_universe(), [report])
+    assert board.covered == 0
+    assert any("axiom" in p for p in scores[0].attestation_problems)
+
+
+def test_engine_compared_against_itself_does_not_cover_a_policy():
+    """NEGATIVE: axiom-vs-axiom is the definition of vacuous verification."""
+    report = _report(
+        "suite-a", comparisons=5, matches=5, engines={"left": "axiom", "right": "axiom"}
+    )
+    board, _ = score_jurisdiction(_tx_universe(), [report])
+    assert board.covered == 0
+
+
+def test_report_missing_a_registered_output_does_not_cover_a_policy():
+    """NEGATIVE: a suite that ran against some OTHER surface covers nothing.
+
+    The universe registers ``x_s`` for this policy; the report attests real
+    comparisons, but all of them are for ``y_s``. Registration by suite name is
+    exactly what #355 says must stop being sufficient.
+    """
+    universe = _tx_universe()
+    report = _report("suite-a", comparisons=5, matches=5, outputs=("y_s",))
+    board, scores = score_jurisdiction(universe, [report])
+    assert board.covered == 0
+    assert board.conformant is False
+    assert scores[0].status == "unbound"
+    assert any("registered output" in p for p in scores[0].attestation_problems)
+
+
+def test_report_covering_one_of_several_registered_outputs_binds():
+    """POSITIVE: evidence for any registered output binds the policy."""
+    universe = _universe([
+        _in_scope(id="tx:a", oracle_policy_name="a", suite="suite-a",
+                  output_vars=("x_s", "x_sub_s")),
+    ])
+    report = _report("suite-a", comparisons=5, matches=5, outputs=("x_s",))
+    board, scores = score_jurisdiction(universe, [report])
+    assert board.covered == 1
+    assert scores[0].output_attestation == "attested"
+    assert scores[0].attested_outputs == ["x_s"]
+
+
+def test_stamped_executed_false_does_not_cover_a_policy():
+    """NEGATIVE: a runner that declares it skipped cannot be read as covering."""
+    report = _report("suite-a", comparisons=5, matches=5, executed=False)
+    board, scores = score_jurisdiction(_tx_universe(), [report])
+    assert board.covered == 0
+    assert any("executed: false" in p for p in scores[0].attestation_problems)
+
+
+def test_stamp_that_contradicts_the_report_body_is_rejected():
+    """NEGATIVE: the stamp is producer-written, so it is cross-checked.
+
+    A lane cannot stamp `comparison_count: 5000` over an artifact whose own
+    summary counted zero — the stamp must come from the run that wrote the body.
+    """
+    report = _report("suite-a", comparisons=0, matches=0, cases=0)
+    report["attestation"]["case_count"] = 400
+    report["attestation"]["comparison_count"] = 5000
+    board, scores = score_jurisdiction(_tx_universe(), [report])
+    assert board.covered == 0
+    assert any("contradicts the report body" in p for p in scores[0].attestation_problems)
+
+
+def test_attested_report_covers_and_publishes_its_evidence():
+    """POSITIVE: the ordinary case still covers, and says what it rests on."""
+    board, scores = score_jurisdiction(
+        _tx_universe(), [_report("suite-a", comparisons=5, matches=5)]
+    )
+    assert board.covered == 1
+    assert board.conformant is True
+    assert board.covered_with_waived_output_attestation == 0
+    assert scores[0].output_attestation == "attested"
+    assert scores[0].attested_outputs == ["x_s"]
+
+
+# ---------------------------------------------------------------------------
+# Derived attestation — reports written before runners stamped one
+# ---------------------------------------------------------------------------
+
+
+def _unstamped(report: dict) -> dict:
+    report = dict(report)
+    report.pop("attestation", None)
+    return report
+
+
+def test_unstamped_report_binds_through_the_committed_concept_targets():
+    """An old report's aggregates bind via the mapping the RUN itself used."""
+    resolver = OracleTargetResolver({"tx:concept": {"euromod": frozenset({"x_s"})}})
+    report = _unstamped(_report("suite-a", comparisons=5, matches=5))
+    report["aggregates"] = [{"concept": "tx:concept", "comparison_count": 5}]
+    board, scores = score_jurisdiction(
+        _tx_universe(), [report], resolver=resolver
+    )
+    assert board.covered == 1
+    assert scores[0].output_attestation == "attested"
+
+
+def test_unstamped_report_binds_through_the_engine_variable_map():
+    """The grid ``engines`` shape names the compared variable directly."""
+    report = _unstamped(
+        _report(
+            "suite-a",
+            comparisons=5,
+            matches=5,
+            engines={"axiom": "tx:pipeline", "euromod": "x_s"},
+        )
+    )
+    board, scores = score_jurisdiction(
+        _tx_universe(), [report], resolver=OracleTargetResolver()
+    )
+    assert board.covered == 1
+    assert scores[0].attested_outputs == ["x_s"]
+
+
+def test_unresolved_concepts_report_a_recording_gap_not_a_wrong_surface():
+    """An artifact that names no oracle variable cannot be read either way.
+
+    ``oracle_variable_not_recorded`` and ``compared_surface_differs`` are kept
+    apart on purpose: only the second is a statement about what the run did.
+    """
+    report = _unstamped(_report("suite-a", comparisons=5, matches=5))
+    report["aggregates"] = [{"concept": "tx:unmapped", "comparison_count": 5}]
+    attestation = attest(
+        report, oracle="euromod", resolver=OracleTargetResolver()
+    )
+    assert attestation.eligible
+    assert attestation.binding_gap(("x_s",)) == "oracle_variable_not_recorded"
+
+    resolver = OracleTargetResolver({"tx:unmapped": {"euromod": frozenset({"y_s"})}})
+    attestation = attest(report, oracle="euromod", resolver=resolver)
+    assert attestation.binding_gap(("x_s",)) == "compared_surface_differs"
+
+
+def test_ukmod_backend_attests_against_the_euromod_engine_name():
+    """UKMOD and EUROMOD are one runtime; reports write ``euromod``."""
+    report = _report("suite-a", comparisons=5, matches=5)
+    attestation = attest(report, oracle="ukmod")
+    assert attestation.eligible
+    assert attestation.oracle_engine == "euromod"
+
+
+# ---------------------------------------------------------------------------
+# Oracle identity — which oracle the run actually drove
+# ---------------------------------------------------------------------------
+
+
+def _euromod_oracle(**kw) -> OracleIdentity:
+    base = dict(model="EUROMOD", release="J2.0", system="BE_2025", country="BE",
+                backend="euromod")
+    base.update(kw)
+    return OracleIdentity(**base)
+
+
+def _with_provenance(report: dict, oracle: dict) -> dict:
+    report = dict(report)
+    report["provenance"] = {"oracle": oracle}
+    return report
+
+
+def test_report_from_another_policy_system_does_not_cover_a_policy():
+    """NEGATIVE: a UK_2026 run cannot attest a BE_2025 universe.
+
+    Both write ``euromod`` into the engine pair, so the engine-NAME check passes
+    and only the recorded identity separates them.
+    """
+    report = _with_provenance(
+        _report("suite-a", comparisons=5, matches=5),
+        {"name": "euromod", "euromod_system": "UK_2026", "euromod_country": "UK"},
+    )
+    attestation = attest(report, oracle=_euromod_oracle())
+    assert not attestation.eligible
+    assert any("EUROMOD system" in p for p in attestation.problems)
+    assert any("country" in p for p in attestation.problems)
+
+
+def test_report_from_another_countrys_policyengine_does_not_cover_a_policy():
+    """NEGATIVE: policyengine-uk evidence cannot attest a policyengine-us claim."""
+    report = _with_provenance(
+        _report("suite-a", comparisons=5, matches=5,
+                engines={"left": "axiom", "right": "policyengine"}),
+        {"name": "policyengine", "policyengine_uk": "2.89.2"},
+    )
+    oracle = OracleIdentity("policyengine-us", "1.767.3", "us", "US", "policyengine")
+    attestation = attest(report, oracle=oracle)
+    assert not attestation.eligible
+    assert any("policyengine-us" in p for p in attestation.problems)
+
+
+def test_release_difference_is_recorded_but_does_not_block():
+    """A report lagging a universe re-pin stays covered — and says so.
+
+    Reports legitimately lag: a PolicyEngine bump lands long before every
+    population suite is rerun. Blocking on it would retract coverage backed by
+    real comparisons, so the release is published instead.
+    """
+    report = _with_provenance(
+        _report("suite-a", comparisons=5, matches=5,
+                engines={"left": "axiom", "right": "policyengine"}),
+        {"name": "policyengine", "policyengine_us": "1.752.2"},
+    )
+    oracle = OracleIdentity("policyengine-us", "1.767.3", "us", "US", "policyengine")
+    attestation = attest(report, oracle=oracle)
+    assert attestation.eligible
+    assert attestation.oracle_release_drift == "1.752.2"
+
+
+def test_euromod_release_suffix_is_not_drift():
+    """``EUROMOD_RELEASES_J2.0+`` is the J2.0 release, recorded by path.
+
+    The BE model root is EUROMOD_J2.0/EUROMOD_RELEASES_J2.0+, so the runner
+    stamps "J2.0+" for the release the universe pins as "J2.0" — one release,
+    two path conventions.
+    """
+    report = _with_provenance(
+        _report("suite-a", comparisons=5, matches=5),
+        {"name": "euromod", "euromod_release": "J2.0+", "euromod_system": "BE_2025",
+         "euromod_country": "BE"},
+    )
+    attestation = attest(report, oracle=_euromod_oracle())
+    assert attestation.eligible
+    assert attestation.oracle_release_drift is None
+
+
+def test_report_without_provenance_records_no_identity_either_way():
+    """Silence is not evidence: no provenance neither passes nor fails identity."""
+    attestation = attest(
+        _report("suite-a", comparisons=5, matches=5), oracle=_euromod_oracle()
+    )
+    assert attestation.eligible
+    assert attestation.oracle_release_drift is None
+
+
+def test_release_drift_is_counted_on_the_scoreboard():
+    report = _with_provenance(
+        _report("suite-a", comparisons=5, matches=5),
+        {"name": "euromod", "euromod_release": "J1.9", "euromod_system": "TX",
+         "euromod_country": "TX"},
+    )
+    universe = Universe(
+        jurisdiction="tx",
+        oracle=OracleIdentity("EUROMOD", "J2.0", "TX", "TX", "euromod"),
+        policies=[_in_scope(id="tx:a", oracle_policy_name="a", suite="suite-a")],
+    )
+    board, scores = score_jurisdiction(universe, [report])
+    assert board.covered == 1
+    assert board.covered_with_oracle_release_drift == 1
+    assert scores[0].oracle_release_drift == "J1.9"
+
+
+# ---------------------------------------------------------------------------
+# Output-attestation waivers — enumerated, pinned, shrink-only
+# ---------------------------------------------------------------------------
+
+
+def _waiver(**kw) -> AttestationWaiver:
+    base = dict(
+        jurisdiction="tx",
+        policy_id="tx:a",
+        suite="suite-a",
+        reason="oracle_variable_not_recorded",
+    )
+    base.update(kw)
+    return AttestationWaiver(**base)
+
+
+def test_waiver_restores_coverage_and_is_published_on_the_scoreboard():
+    """A waived row stays covered — and the badge says how many it rests on."""
+    report = _report("suite-a", comparisons=5, matches=5, outputs=("y_s",))
+    board, scores = score_jurisdiction(
+        _tx_universe(), [report], waivers=WaiverIndex([_waiver()])
+    )
+    assert board.covered == 1
+    assert board.conformant is True
+    assert board.covered_with_waived_output_attestation == 1
+    assert scores[0].output_attestation == "waived:oracle_variable_not_recorded"
+
+
+def test_waiver_is_pinned_to_its_suite():
+    """NEGATIVE: re-pointing the policy at another suite drops the waiver.
+
+    The waiver is a statement about ONE report's recording, so it must not
+    follow the policy to a suite whose evidence has never been examined.
+    """
+    universe = _universe([
+        _in_scope(id="tx:a", oracle_policy_name="a", suite="suite-b"),
+    ])
+    report = _report("suite-b", comparisons=5, matches=5, outputs=("y_s",))
+    board, _ = score_jurisdiction(
+        universe, [report], waivers=WaiverIndex([_waiver(suite="suite-a")])
+    )
+    assert board.covered == 0
+
+
+def test_waiver_never_rescues_a_failed_execution_attestation():
+    """NEGATIVE: execution attestation is not waivable, only output binding."""
+    board, _ = score_jurisdiction(
+        _tx_universe(), [_skip_shell()], waivers=WaiverIndex([_waiver()])
+    )
+    assert board.covered == 0
+
+
+def test_waiver_reason_vocabulary_is_closed():
+    problems = _waiver(reason="because-we-said-so").validate()
+    assert problems and "not one of" in problems[0]
+
+
+def test_committed_waiver_file_round_trips():
+    """The committed file parses, and re-serializing it is byte-identical."""
+    path = CONFORMANCE_DIR / "attestation_waivers.yaml"
+    index = parse_waivers(path)
+    assert len(index) > 0
+    assert serialize_waivers(list(index)) == path.read_text()
+
+
+# ---------------------------------------------------------------------------
+# The attestation gate script
+# ---------------------------------------------------------------------------
+
+
+def _run_attestation_check(module) -> int:
+    import sys
+
+    argv = sys.argv
+    sys.argv = ["prog", "--check"]
+    try:
+        return module.main()
+    finally:
+        sys.argv = argv
+
+
+def test_attestation_gate_passes_on_committed():
+    """POSITIVE: every committed universe row attests execution today."""
+    gate = _load_script("conformance_attestation.py")
+    assert _run_attestation_check(gate) == 0
+
+
+def test_attestation_gate_fails_on_a_stale_waiver():
+    """NEGATIVE: waivers are shrink-only — a stale row must fail the gate."""
+    gate = _load_script("conformance_attestation.py")
+    path = CONFORMANCE_DIR / "attestation_waivers.yaml"
+    original = path.read_text()
+    extra = list(parse_waivers(path)) + [
+        AttestationWaiver(
+            jurisdiction="uk",
+            policy_id="uk:bch_uk",
+            suite="uk-child-benefit",
+            reason="oracle_variable_not_recorded",
+        )
+    ]
+    path.write_text(serialize_waivers(extra))
+    try:
+        rc = _run_attestation_check(gate)
+    finally:
+        path.write_text(original)
+    assert rc == 1
+
+
+def test_attestation_gate_fails_when_a_waiver_is_removed_while_still_needed():
+    """NEGATIVE: dropping a needed waiver must fail rather than silently uncover."""
+    gate = _load_script("conformance_attestation.py")
+    path = CONFORMANCE_DIR / "attestation_waivers.yaml"
+    original = path.read_text()
+    kept = [w for w in parse_waivers(path) if w.policy_id != "be:tintb_be"]
+    path.write_text(serialize_waivers(kept))
+    try:
+        rc = _run_attestation_check(gate)
     finally:
         path.write_text(original)
     assert rc == 1

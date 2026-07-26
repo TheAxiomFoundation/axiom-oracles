@@ -27,6 +27,10 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).parents[1]
 SCRIPTS = REPO_ROOT / "scripts"
 
+from axiom_oracles.conformance.attestation import (  # noqa: E402
+    EXECUTION_ATTESTATION_SCHEMA,
+)
+
 
 def _load_script(name: str):
     module_path = SCRIPTS / name
@@ -49,6 +53,8 @@ def _sandbox_scoreboard(tmp_path):
     sb.DETAIL_DIR = conf / "detail"
     sb.SCOREBOARD_PATH = conf / "scoreboard.json"
     sb.DASHBOARD_SCOREBOARD_PATH = data / "conformance_scoreboard.json"
+    # No waivers in the sandbox: the synthetic report attests its own binding.
+    sb.WAIVERS_PATH = conf / "attestation_waivers.yaml"
     return sb, data, conf
 
 
@@ -72,15 +78,40 @@ def _minimal_universe_yaml() -> str:
 
 
 def _report(suite: str, *, comparisons: int, matches: int) -> dict:
+    """A report that ATTESTS execution, so it actually covers the tx:a policy.
+
+    Coverage requires an execution attestation, and this fixture stands in for a
+    real bot-refreshed report — without the stamp it would cover nothing and the
+    staleness invariant below would pass vacuously.
+    """
     return {
         "suite": suite,
         "engines": {"left": "euromod", "right": "axiom"},
+        "case_count": comparisons,
         "summary": {
             "comparison_count": comparisons,
             "match_count": matches,
             "mismatch_count": comparisons - matches,
+            "error_count": 0,
         },
         "mismatches": [],
+        "errors": [],
+        "attestation": {
+            "schema_version": EXECUTION_ATTESTATION_SCHEMA,
+            "executed": True,
+            "case_count": comparisons,
+            "comparison_count": comparisons,
+            "error_count": 0,
+            "engines": {"left": "euromod", "right": "axiom"},
+            "outputs": [
+                {
+                    "concept": "tx:a",
+                    "engine": "euromod",
+                    "variable": "a_s",
+                    "comparisons": comparisons,
+                }
+            ],
+        },
     }
 
 

@@ -19,7 +19,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:takeup_adjustment"
+      "status": "excluded:takeup_adjustment",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:ConstDef_uk",
@@ -37,7 +41,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:FYADefault_uk",
@@ -55,7 +63,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:FYA_uk",
@@ -73,7 +85,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:ILDef_uk",
@@ -91,7 +107,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:ILSDef_uk",
@@ -109,7 +129,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:ILSUDBDef_uk",
@@ -127,7 +151,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:InitVars_uk",
@@ -145,7 +173,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:input_carrying"
+      "status": "excluded:input_carrying",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:Output_init_uk",
@@ -163,7 +195,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:Output_std_hh_uk",
@@ -181,7 +217,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:Output_std_uk",
@@ -199,7 +239,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:PAA_uk",
@@ -217,7 +261,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "State-pension-age adjustment (Comment 'DEF: Pension age adjustment - changes in earnings and pensions due to increase in the state pension age'; Type ben but a switch-type toggle). Its functions only *adjust input variables* for the SPA-rise counterfactual: for people below state pension age it subtracts the observed state pension (formula (-boact_s) into boact_s), swaps observed earnings/hours/ self-employment for imputed values (yem := yemiv, lhw00 := lhwiv00, yse := yseiv, output_add_var each), and re-derives lhw. It computes no distinct payable instrument \u2014 boact_s is written only to zero it out pre-SPA, not to pay a benefit. This is input-carrying (the InitVars pattern), not a scored surface; reclassified from the initial seed's in-scope guess (evidence: UK.xml UK_2026 PAA_uk function body).",
-      "status": "excluded:input_carrying"
+      "status": "excluded:input_carrying",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:SetDefault_uk",
@@ -235,7 +283,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:TUDef_uk",
@@ -253,7 +305,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:Uprate_uk",
@@ -271,7 +327,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:UseHBAI_uk",
@@ -289,7 +349,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:bcap_uk",
@@ -307,7 +371,13 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 0,
       "note": "BEN: benefit cap on Housing Benefit and Universal Credit (UC Regs 2013 reg 80A/81). bcap_uk computes the cap reduction, not a benefit: brd_s reduces the legacy-benefit stack (i_bcap_finalAmt = (bsa_s+bsadi_s+bho_s+bwkmt_s+bfamt_s) - brd_s) and brduc_s reduces UC (i_bcap_finalAmt += bsauc_s - brduc_s), each capped at the relevant award and gated by the reg-80A annual limits (single GBP 14,753 / couple-or-lone-parent GBP 22,020, London GBP 16,967 / 25,323) via amount#2/#4. bcap_uk writes brd_s/brduc_s/bsadi02_s but does NOT write back into bsauc_s or bho_s: UKMOD reports the UNCAPPED award and carries the cap effect only in the separate reduction outputs (verified: no bcap_uk function outputs bsauc_s in UK_2026). The uk-benefit-cap suite covers the UC reduction output brduc_s against the composed UC pilot's uc_pilot_benefit_cap_reduction (the direct analog of the reg-80A/81 reduction: rulespec-uk uk/regulations/uksi/2013/376/80A and /81, applied inside universal_credit_composed_award_pipeline). It matches 7/7 on the single-no-child cases (UKMOD's cap base il_bencap equals bsauc_s when child benefit is nil, to a <= GBP 0.17/month weekly-rounding residual absorbed by the GBP 1 tolerance) and the nil-reduction cases (earnings-exempt, and the couple-no-child unit that matches no UKMOD UC-cap branch \u2014 i_bcap_AmtCap covers only couple/lone-parent-with-child and single-no-child). The grid is deliberately single-no-child: a with-children unit would diverge because UKMOD's il_bencap sums bsauc_s + child benefit (bch_s) + other welfare while the single-benefit UC pilot base is UC-only, so the pilot reduction would be smaller by exactly the monthly child benefit. That is a known Axiom cap-base scope boundary (the UC-only pilot does not add non-UC welfare to the reg-81 excess), not a defect in the reg-80A/81 reduction the pilot encodes, so it is documented here rather than compared. brd_s (the legacy-benefit reduction) likewise stays uncovered \u2014 the Axiom UC pilot is UC-only. Runs on the x64 UKMOD runtime.",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "brduc_s"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:bch_uk",
@@ -325,7 +395,13 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 0,
       "note": "BEN: Child Benefit. The uk-child-benefit suite live-compares the composed UK Child Benefit pipeline (SSCBA 1992 s.141 with the SI 2006/965 reg.2 enhanced GBP 27.05 / other GBP 17.90 weekly rates, annualised over 52 weeks) against UKMOD's pre-charge Child Benefit on a single-parent grid (one/two/three children x 20k/70k/80k/90k straddling the HICBC taper), matching 12/12. The gross surface bridges to UKMOD by summing paid bch_s and the separately-reported charge clawback bchrd_s (UKMOD policy bchrd_uk nets the clawback into bch_s), so the summed [bch_s, bchrd_s] reconstructs the gross pre-charge entitlement \u2014 the parity target. The HICBC (ITEPA 2003 ss.681B-681H) is now corpus-grounded (axiom-corpus#221) and encoded on the Axiom side (rulespec-uk#84 closed #75), so the suite also wires a net-of-charge surface (bch_s alone vs Axiom's post-charge amount); the committed report exercises the gross bridge surface. The ~0.27% 52-vs-52.14-weeks convention residual is inside tolerance; all cases recover the same statutory weekly rates. bch_s is the compared surface, so bch_uk is covered.",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "bch_s"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:bched01_uk",
@@ -343,7 +419,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "BEN: Free School Meals (Scotland). EXCLUDED oracle_models_nonstatutory_amount. Not a Child Benefit education-age extension despite the bch* prefix. bched01_s is a passported, means-tested devolved benefit: eligibility passports off receipt of other means-tested awards (bsa_s, bunmt_s, bsadi_s, bfamt_s/bwkmt_s with il_TC_means thresholds, bsauc_s with i_UC_means_earned_adj, boamtmm_s) crossed with primary/secondary age bands and region (drgn1=12 Scotland, drgn1=13 NI), valued at $BFSMprim / $BFSMsec and scaled by the take-up factors $BFSMPrUnTakeUp/$BFSMPrMtTakeUp/$BFSMScMtTakeUp. Not encoded in Axiom (no FSM pipeline in rulespec-uk), and the synthetic UK grids run drgn1=2, so no current case activates it. Groundability assessment (this-wave): FSM is not a standalone statutory rate-and-threshold rule that grounds cleanly like the Scottish Child Payment \u2014 it is a passported service (Education (Scotland) Act 1980 s.53-55 powers; devolved Scottish/NI administration) whose eligibility is derived from receipt of the upstream means-tested benefits and whose rate is set administratively and take-up-scaled. Encoding it therefore requires the upstream benefits (UC/IS/JSA/ESA/HB/PC) encoded first plus a non-standard derived-entitlement layer, not a self-contained corpus ingest. Exclusion basis (verified 2026-07-07 against primary sources): s.53 of the Education (Scotland) Act 1980 imposes an IN-KIND duty to \"provide ... a school lunch, free of charge\" (s.53(2)) with NO monetary amount \u2014 FSM pays no cash, so UKMOD's bched01_s is a modelled per-meal cost-equivalent, not a legislated cash award. The qualifying-income thresholds ARE statutory (e.g. the UC net-earnings limit raised to GBP 995/month from 1 April 2026 by SSI 2025/44 amending the 1980 Act), but no benefit AMOUNT exists in statute for Axiom (which encodes statutory monetary rules) to compare \u2014 so it is not comparable from statute.",
-      "status": "excluded:oracle_models_nonstatutory_amount"
+      "status": "excluded:oracle_models_nonstatutory_amount",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:bched02_uk",
@@ -361,7 +441,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "BEN: School Clothing Grant (Scotland). EXCLUDED oracle_models_nonstatutory_amount. Not a Child Benefit education-age extension despite the bch* prefix. bched02_s passports off the same means-tested awards as bched01_uk (bsa_s/bunmt_s/bsadi_s/bfamt_s/bwkmt_s/bsauc_s/boamtmm_s) for dependent children aged 12-18 (dec!=6, dec!=0) at the secondary grant rate $BScSCGsec. A passported devolved payment, not encoded in Axiom; the synthetic UK grids run drgn1=2 so no current case activates it. Groundability assessment (this-wave): like FSM (bched01_uk), the School Clothing Grant is a passported, take-up-scaled, administratively-set Scottish service, not a clean standalone statutory rate. Exclusion basis (verified 2026-07-07 against primary sources): s.54 of the Education (Scotland) Act 1980 confers the clothing-provision duty with NO monetary amount; the \"national minimum\" school clothing grant (GBP 120 primary / GBP 150 secondary) is a Scottish Government-COSLA administrative agreement, NOT fixed in any SSI, and each of the 32 local authorities sets its own amount above that floor. So bched02_s pays an administratively-set, LA-varying figure with no statutory basis for Axiom to encode \u2014 not comparable from statute.",
-      "status": "excluded:oracle_models_nonstatutory_amount"
+      "status": "excluded:oracle_models_nonstatutory_amount",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:bchht_uk",
@@ -379,7 +463,13 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 0,
       "note": "BEN: Child Winter Heating Assistance (Scotland) (UKMOD comment \"BEN: Child Winter Heating Assistance (Scotland)\"), not a Child Benefit household/HICBC test component despite the bch* prefix. bchht_s is a devolved Scottish disability payment: paid at $SCWHA to a child under 18 in Scotland (drgn1=12) whose highest-rate DLA/PIP care indicator (i_bdisc01 or i_bdiscwa01) reaches $DLACareHigh*0.95. The CWHA payment itself is not encoded in Axiom, and the synthetic UK grids run drgn1=2 with no disability inputs, so no current case activates it. Groundability assessment (this-wave): CWHA is the readiest of the three devolved bch* rows to encode \u2014 it is a clean flat-rate top-up (not a take-up-scaled passported service like FSM/School Clothing), its disability passport is ALREADY encoded (rulespec-uk uk/policies/govuk/disability-living-allowance.yaml and personal-independence-payment.yaml, WRA 2012 ss.77-79), and its gating care indicators (bdisc, bdiscwa) are admissible columns of the training_data schema. Uncovered until the flat CWHA amount (Scotland, child under 18, highest-rate care) is encoded on top of that passport and a Scotland/disability surface is built with the care inputs supplied; requires the x64 UKMOD runtime to regenerate. Out of scope for the child-benefit + benefit-cap lane.",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "bchht_s"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:bchmt01_uk",
@@ -397,7 +487,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "Scottish Child Payment bridging payments: every function n/a in UK_2026 \u2014 the transitional bridging scheme has ended.",
-      "status": "excluded:not_a_policy"
+      "status": "excluded:not_a_policy",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:bchmt_uk",
@@ -415,7 +509,13 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 0,
       "note": "BEN: Scottish Child Payment (UKMOD comment \"BEN: Child Payment (Scotland)\"), not a Child Benefit means-test variant despite the bch* prefix (distinct from the excluded bchmt01_uk SCP bridging scheme). bchmt_s is a devolved Scotland-only (drgn1=12) means-tested payment: eligibility passports off il_bchmt (the summed qualifying awards boamt_s+bsadi_s+bunmt_s+bsa_s+bwkmt_s+bfamt_s+bsauc_s) with dependent children in the benefit unit, and the final BenCalc consumes UKMOD's stochastic take-up draw (i_rand_tu<=$SCPTUu6y for children under 6 / <=$SCPTU6to15y for 6-15, switch=switch) so the reported bchmt_s is take-up-adjusted away from the statutory entitlement \u2014 the same take-up-draw exposure documented for bsauc_s. Axiom DOES encode the Scottish Child Payment (rulespec-uk uk/policies/govuk/scottish-child-payment.yaml, SSI 2020/351 regs 18/20, output scottish_child_payment_annual_amount = weekly amount * weeks_in_year, gated on person_lives_in_scotland and child_age<max_age and applicant_or_partner_receives_qualifying_benefit), so the prior \"not encoded\" note was stale. It is uncovered only because the synthetic UK grids run drgn1=2, so no current case activates it. Build path (child-benefit-style Scotland surface): a benefit-unit grid routed to Scotland (drgn1=12) that produces a qualifying means-tested award so UKMOD's il_bchmt fires, comparing scottish_child_payment_annual_amount against bchmt_s with the take-up constants pinned to 1.0 via euromod_constant_overrides ($SCPTUu6y/$SCPTU6to15y, per the #168 study-allowance/UC-PC take-up-pinning pattern) so bchmt_s reports the statutory entitlement; requires the x64 UKMOD runtime to regenerate. Out of scope for the child-benefit + benefit-cap lane.",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "bchmt_s"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:bchrd_uk",
@@ -433,7 +533,14 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 0,
       "note": "BEN: Reduce child benefit (from 2013) \u2014 the High Income Child Benefit Charge clawback (ITEPA 2003 ss.681B-681H). bchrd_uk computes bchrd_s = ((adjusted_net_income - $ITCBthresh)/200)*1% * bch_s, capped at bch_s, then nets bchrd_s back into bch_s (UK_2026: threshold GBP 60,000, full clawback at GBP 80,000). The uk-child-benefit suite live-compares the composed Axiom Child Benefit pipeline against UKMOD's gross pre-charge entitlement whose euromod target is the summed list [bch_s, bchrd_s] \u2014 so bchrd_uk's distinct output bchrd_s is exercised as a summand of the compared surface (matching 12/12 on the single-parent grid whose income sweep 20k/70k/80k/90k straddles the taper). The HICBC is now corpus-grounded (axiom-corpus#221) and encoded on the Axiom side (rulespec-uk#84 closed #75), so a direct net-of-charge surface (bch_s alone vs Axiom's post-charge entitlement) is wired into the suite too; the committed report exercises the gross bridge surface, which already consumes bchrd_s. bchrd_s is a compared surface, so bchrd_uk is covered \u2014 mirroring bch_uk.",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "bch_s",
+        "bchrd_s"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:bcrdicm_uk",
@@ -451,7 +558,13 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 0,
       "note": "BEN: Scottish Carer's Allowance Supplement (from Sept 2018). The UK_2026 policy is switch=on and computes a distinct payable instrument bcrdicm_s = the flat weekly supplement $CASupW, gated on being a Carer's Allowance recipient in Scotland (Elig_Cond (bcrdi>0) & (drgn1=12)); it then sums bcrdi + bcrdicm_s into i_bcrdi for downstream means tests. It is a genuine comparable surface (a flat supplement on a Scottish-carer case), NOT input-carrying \u2014 distinct from the boact_uk/PAA_uk uprating- passthrough exclusions. Two properties bound its comparability: (i) eligibility keys off bcrdi, the reported Carer's Allowance data input \u2014 which IS an admissible column of the registration-free training_data schema (verified: bcrdi present in Input/training_data.txt), so a supplied-receipt synthetic case (bcrdi>0, drgn1=12) can fire the supplement (this is NOT an oracle_dataset_lacks_input case \u2014 the activating input exists); (ii) it is a devolved Scotland-only payment. The encoding blocker is Axiom-side: rulespec-uk does not encode the supplement (no Social Security (Scotland) Act 2018, asp 9, s.70-74 CAS surface), and the supplement passports off Carer's Allowance, which is itself unencoded (rulespec-uk#55, SSCBA 1992 s.70) \u2014 so CAS needs CA encoded first, then the flat weekly supplement layered on a Scottish-carer case. Uncovered next-wave surface pending that encoding; the supplied-receipt grid + x64 UKMOD regen make it gradable once encoded (evidence: UK.xml UK_2026 bcrdicm_uk function body; training_data.txt bcrdi column; rulespec-uk#55).",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "bcrdicm_s"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:bdi_uk",
@@ -469,7 +582,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "Adjusts existing disability-benefit inputs (bdisc/bdimb/\u2026) rather than computing a distinct instrument; its only near-output (receive_pip_s) is an imputed-input flag, not a payable amount.",
-      "status": "excluded:not_a_policy"
+      "status": "excluded:not_a_policy",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:bdisc_uk",
@@ -487,7 +604,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "Adjusts the number of DLA recipients post-2011 (a recipient reweighting), not a distinct payable benefit; writes no queryable _s output in UK_2026.",
-      "status": "excluded:not_a_policy"
+      "status": "excluded:not_a_policy",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:bho_uk",
@@ -505,7 +626,13 @@
       "oracle_attributed": 3,
       "bridge_artifacts": 0,
       "note": "BEN: Housing Benefit. The UK_2026 policy is switch=on and computes the full HB entitlement bho_s from statute: applicable amount (personal allowances i_bho_PersAllow by age/couple/lone-parent status + disability/carer/family premiums + child element with the two-child limit), the means test ymn01_s, the 65% taper of excess income over the applicable amount, maximum HB = eligible rent (xhcrt + xhcsc) less non-dependant deductions, and the size-criteria (bedroom-tax) 14%/25% reduction for i_excess_nRooms excess rooms. This is a genuine benefit-unit comparable surface: rulespec-uk encodes the composed HB entitlement pipeline (housing_benefit_composed_entitlement_pipeline, rulespec-uk#83), so bho_s is the parity target on synthetic HHoT renter cases (rent/tenure supplied through the projection layer's xhcrt/xhcsc + amrtn, bedroom counts through amrrm/bhoro). The uk-housing-benefit suite builds that comparison: single/couple, working-age/pension-age renters, an earnings sweep crossing the 65% taper, and a non-dependant-deduction case, bridging UKMOD's assessed HB means ymn01_s into the pipeline's applicable income so both engines taper the identical income (the bho_s award formula i_bho_maxHousBen - 0.65*(ymn01_s - i_bho_prelimAmt) mirrors the pipeline's rent_after_taper less non-dependant deductions). Like UC/PC/ir-ESA, bho_s embeds UKMOD's take-up correction (the \"fully random\" i_bho_probtu group gate on i_rand_tu against $HBTUWAWork/$HBTUWANowork/$HBTUPen, and a \"based on observed take-up\" path that gates on the bho data input, absent on synthetic households) and a UC-transition that can zero a would-be award away from statutory entitlement; the clean pre-correction value is i_bho_noUC. The comparison spec pins those take-up rates to 1.0 via euromod_constant_overrides (or#168) so a runner regeneration returns statutory entitlements, disposing any residual zeros upstream_engine_gap (recharacterization per or#168/or#170). Uncovered until the x64 runner emits the committed report (UKMOD has no macOS wheel; scripts/regenerate_euromod_uk.sh is the source of the numbers) (evidence: UK.xml UK_2026 bho_uk function body).",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "bho_s"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:bhosc01_uk",
@@ -523,7 +650,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "BEN: Discretionary Housing Payments (Scotland) \u2014 bedroom-tax mitigation. EXCLUDED oracle_models_nonstatutory_amount. Verdict: scoped out (not encoded), a modelled policy assumption rather than a statutory formula. The UK_2026 policy is switch=on and computes a distinct payable bhosc01_s: for a Scottish social renter (amrtn=5 & drgn1=12 & dhr=1) subject to the bedroom tax it pays back the size-criteria reduction (14% of (xhcrt + xhcsc) for one excess room, 25% for more), gated on being on HB (bho_s>0) or UC (bsauc_s>0), plus a benefit-cap top-up limited to housing costs xhc_hbai. UKMOD models this as if formulaic, but the underlying instrument is not: DHPs rest on the Discretionary Financial Assistance Regulations 2001 (SI 2001/1167) reg 2(2), which gives the relevant authority a discretion \"as to whether or not to make discretionary housing payments in a particular case; and as to the amount of the payments\" \u2014 no statutory formula, percentage, or cap. Administered by the 32 Scottish local authorities and demand-led/budget-capped (the Scottish Government funds full bedroom-tax mitigation as a policy commitment, not a statutory entitlement to a fixed amount). The only statutory numbers UKMOD uses here (14%/25%) are the HB/UC size-criteria percentages, already encoded where they ARE statutory: rulespec-uk uk/regulations/uksi/2013/376/schedule/4/paragraph/36 (Universal Credit under-occupancy: 0.14 one excess bedroom, 0.25 two or more). So encoding \"pay back 14%/25% of eligible rent\" as if a Scottish statutory formula would misrepresent a discretionary, LA-administered, budget-capped payment (and the corpus carries no DHP source to ground it). Excluded as a real UKMOD surface whose paid amount is not comparable from statute; the size-criteria percentages it references are already covered on the UC side. Probe: bhosc01_s stayed 0 on the synthetic Scottish social-renter case even with excess bedrooms supplied (the UC/HB passport did not fire), so no gradable surface activates either (evidence: UK.xml UK_2026 bhosc01_uk function body; SI 2001/1167 reg 2(2)).",
-      "status": "excluded:oracle_models_nonstatutory_amount"
+      "status": "excluded:oracle_models_nonstatutory_amount",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:bmact_uk",
@@ -541,7 +672,13 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 0,
       "note": "BEN: Statutory Maternity Pay. The UKMOD Comment says \"(not simulated in the baseline)\", but the UK_2026 policy is switch=on and computes bmact_s from ordinary demographic/earnings inputs \u2014 female (dgn=0) with a newborn (dag<1, baby-months dmb), earnings above the SMP lower-earnings-limit ($SMPlel), working hours (liwwh>6), and previous earnings i_yempv_bmact \u2014 with the 90%/flat-rate SMP formula over i_durweeks_bmact2. Confirmed empirically against UKMOD_PUBLIC_B2026.03/UK_2026: bmact_s is nonzero and earnings-responsive on synthetic HHoT cases (lone mother, annual gross \u00a38k->\u00a35,370.49, \u00a325k->\u00a316,782.79, below the \u00a3130 LEL->\u00a30), reconstructed exactly by the composed rulespec-uk SMP pipeline (SSCBA 1992 Part XII ss.164-166). Now COVERED by the uk-statutory-maternity-pay suite (5 cases, 5/5 match). UKMOD applies the earnings-related 90% rate over the full 39-week period for the HHoT case rather than the flat prescribed rate. bmact_uk does not consume the stochastic take-up draw i_rand_tu.",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "bmact_s"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:bmamt01_uk",
@@ -559,7 +696,13 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 0,
       "note": "BEN: Healthy Start food voucher (rest of UK). Unlike the statutory-pay policies this is a passported means-tested payment: the Elig_Cond requires a qualifying means-tested benefit in payment (bsa_s>0 | bunmt_s>0 | boamt_s>0 | bfamt_s>0 | bsauc_s>0 ...), and the amount is $HSFood (\u00a34.25/week per eligible child, doubled to \u00a38.50/week for a child under one, 2026-27). Confirmed computable against UKMOD_PUBLIC_B2026.03/UK_2026: for a zero-earnings lone parent with a newborn who is passported onto Universal Credit (bsauc_s>0, take-up pinned on via euromod_constant_overrides $ISTUNochild/$ISTUChild=1.0), bmamt01_s=\u00a3443.21. It does NOT consume the stochastic i_rand_tu take-up draw, so it is a deterministic passported surface. Now COVERED by the uk-healthy-start suite (2 cases, 2/2 match): the composed rulespec-uk pilot (SI 2005/3262 reg.8) annualises the determined weekly value over 52 benefit weeks, about 0.27% below UKMOD's 365/7 convention, within the 0.3% relative tolerance.",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "bmamt01_s"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:bmamt_uk",
@@ -577,7 +720,13 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 0,
       "note": "BEN: Sure Start Maternity Grant (rest of UK). Passported means-tested lump sum: the Elig_Cond requires a qualifying means-tested benefit in payment (bsa_s>0 | bunmt_s>0 | boamt_s>0 | bsauc_s>0 ...) and a child under 1 with no other dependent children, paying $BSurMaG (\u00a3500, 2026-27). Confirmed computable against UKMOD_PUBLIC_B2026.03/UK_2026: for a zero-earnings lone parent with a newborn passported onto Universal Credit (bsauc_s>0, take-up pinned on via euromod_constant_overrides $ISTUNochild/$ISTUChild=1.0), bmamt_s=\u00a3500.00 (= $BSurMaG). It does NOT consume the stochastic i_rand_tu take-up draw, so it is a deterministic passported surface. Now COVERED by the uk-sure-start-maternity-grant suite (1 case, 1/1 match): the composed rulespec-uk pilot (SI 2005/3061 reg.5) exposes the \u00a3500 lump sum as a Person-level annual entitlement, matching to the penny.",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "bmamt_s"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:bmanc_uk",
@@ -595,7 +744,13 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 0,
       "note": "BEN: Maternity Allowance. The UKMOD Comment says \"(not simulated in the baseline)\", but the UK_2026 policy is switch=on and computes bmanc_s from ordinary demographic/earnings inputs (eligible parent, newborn age-weeks, duration weeks, previous earnings i_yempv_bmanc). Maternity Allowance is payable only where Statutory Maternity Pay is not (Comp_Cond requires bmact_s=0), so it is exercised with a self-employed lone mother (yse>0, yem=0). Confirmed empirically against UKMOD_PUBLIC_B2026.03/UK_2026: bmanc_s is nonzero and earnings-responsive (self-employment \u00a39k->\u00a36,041.80, \u00a315k->\u00a310,069.67), reconstructed exactly by the composed rulespec-uk MA pipeline (SSCBA 1992 Part II ss.35/35A/35B). Now COVERED by the uk-maternity-allowance suite (3 cases, 3/3 match). bmanc_uk does not consume the stochastic take-up draw.",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "bmanc_s"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:bmascmt01_uk",
@@ -613,7 +768,13 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 0,
       "note": "BEN: Best Start Foods (Scotland). Passported means-tested payment: the Elig_Cond requires a qualifying means-tested benefit in payment (bsa_s>0 | bunmt_s>0 | boamt_s>0 | bsauc_s>0 ...) AND Scottish residence (drgn1=12), paying $BScBSF0 (\u00a311.20/week under 1) or $BScBSF1to2 (\u00a35.60/week ages 1-3), 2026-27. Confirmed computable against UKMOD_PUBLIC_B2026.03/UK_2026: for a zero-earnings lone parent in Scotland (drgn1=12) with a newborn passported onto Universal Credit (bsauc_s>0, take-up pinned on via euromod_constant_overrides $ISTUNochild/$ISTUChild=1.0), bmascmt01_s=\u00a3584.00. Unlike its sibling bmascmt_uk (Best Start Grant), Best Start Foods does NOT consume the stochastic i_rand_tu take-up draw, so it is a deterministic passported surface. Now COVERED by the uk-best-start-foods suite (2 cases, 2/2 match): the composed rulespec-uk pilot (SSI 2019/193 reg.13, \u00a35.60 basic rate per SSI 2026/170) annualises the weekly value over 52 benefit weeks, about 0.27% below UKMOD's 365/7 convention, within the 0.3% relative tolerance.",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "bmascmt01_s"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:bmascmt_uk",
@@ -631,7 +792,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "BEN: Best Start Grant (Scotland \u2014 Pregnancy and Baby, Early Learning, School Age payments). RECATEGORIZED to takeup_adjustment on probe evidence. Each component BenCalc gates the award on the stochastic per-benefit-unit take-up draw i_rand_tu (Comp_Cond i_rand_tu<=$BSGfirst / $BSGsec / $BSGearly / $BSGschool, with $BSGfirst commented \"Take-up estimate: Best Start Grant pregnancy and baby take-up\"), the same random-draw device UKMOD applies to Universal Credit (see BTA_uk / random_uk and euromod_issues.json ukmod-uc-bsauc-takeup-stochastic-zeroing). Verified live against UKMOD_PUBLIC_B2026.03/UK_2026: for a passported Scottish lone parent (bsauc_s>0, take-up gate off) bmascmt_s=\u00a30.00 \u2014 the draw does not pass \u2014 whereas overriding the take-up constants ($BSGfirst.. = 1) recovers the deterministic statutory amount bmascmt_s=\u00a3796.65 (= $BScStGFirstbaby). Because the baseline award is a stochastic draw, not a reproducible per-household statutory result, this is a take-up-adjustment surface (like the excluded BTA_uk), not a clean arithmetic oracle. Distinct from the sibling bmascmt01_uk (Best Start Foods), which has no take-up gate and stays in scope.",
-      "status": "excluded:takeup_adjustment"
+      "status": "excluded:takeup_adjustment",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:bmu_uk",
@@ -649,7 +814,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "UKMOD Country Report \u00a72.5.6: Council Tax Reduction is a deliberately simplified national scheme; post-2013 local heterogeneity is 'not reflected'. The applicable amount (i_bmu_prelimAmt) and non-dependant deductions (i_bmu_Deductions2) are i_-locals absent from VARCONFIG; only bmu_s/ymn01_s are queryable, so no non-degenerate comparison is possible. rulespec-uk encodes the SI 2012/2885 pension-age prescribed scheme taking exactly those internals as inputs.",
-      "status": "excluded:unobservable_boundary"
+      "status": "excluded:unobservable_boundary",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:boact_uk",
@@ -667,7 +836,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "State Pension (contributory). UKMOD does not compute the state pension from contribution records \u2014 its whole UK_2026 body is boact_s = boact00 * (SPSingle/SPSingle0): it takes the reported state- pension data input boact00 and applies an uprating factor. This is an uprating passthrough of a data input, computing no distinct entitlement from statute, so it is input-carrying, not a scored surface. Confirmed by the uk-pension-credit suite, whose live worker verifies \"the boact_uk policy only uprates the boact00 state-pension data input\" and feeds boact_s as an income-test input rather than a parity target. Reclassified from the initial seed's in-scope guess (evidence: UK.xml UK_2026 boact_uk body).",
-      "status": "excluded:input_carrying"
+      "status": "excluded:input_carrying",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:boaht_uk",
@@ -685,7 +858,13 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 0,
       "note": "BEN: Pensioner's annual heating allowance (Winter Fuel Payment). The UK_2026 policy is switch=on and computes a distinct payable boaht_s at benefit-unit level: a base amount if anyone in the unit is of state-pension age ($WFA, with an additional $WFAAdd80 where anyone is 80+), on separate England/Wales (drgn1!=12) and Scotland (drgn1=12, $WFASc/$WFAAdd80Sc) branches from 2025, then allocated across pension-age members. It reflects the 2024/25 means-testing reform: every BenCalc comp_Cond now carries il_toty < amount#3 ($WFCBThresh, GBP 35,000/year) so the payment is withdrawn above the income claw-back threshold \u2014 the policy is no longer a universal pensioner payment. The uk-winter-fuel suite covers it for England and Wales against the composed rulespec-uk winter_fuel_payment_composed_award_pipeline (Social Fund Winter Fuel Payment Regulations 2025 (SI 2025/969) reg 3: GBP 200 under-80, GBP 300 at-80, matching UKMOD's $WFA 200 + $WFAAdd80 100), on a pensioner grid crossing the under-80/80+ tiers and the GBP 35,000 recovery threshold, matching boaht_s exactly (7/7): the award is a household amount that does not scale with the pension-age member count (verified: couple both under-80 = GBP 200, couple one 80+ = GBP 300; UKMOD allocates it per member and the adapter sums and annualizes), and Winter Fuel does not draw UKMOD's stochastic take-up correction, so the surface is a clean deterministic comparable. Scotland (drgn1=12, $WFASc 211 / $WFAAdd80Sc giving GBP 211/317) runs a higher devolved instrument (Pension Age Winter Heating Payment, not SI 2025/969) that Axiom does not encode, so it is out of scope for this England-and-Wales surface. Runs on the x64 UKMOD runtime.",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "boaht_s"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:bpact_uk",
@@ -703,7 +882,13 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 0,
       "note": "BEN: Statutory Paternity Pay. The UKMOD Comment says \"(not simulated in the baseline)\", but the UK_2026 policy is switch=on and computes bpact_s from ordinary inputs (eligible parent, previous earnings i_yempv_bpact). Confirmed empirically against UKMOD_PUBLIC_B2026.03/UK_2026: bpact_s is nonzero and earnings-responsive on synthetic HHoT cases (lone father, annual gross \u00a38k->\u00a3275.41, \u00a325k->\u00a3860.66, below the \u00a3130 LEL->\u00a30), reconstructed exactly by the composed rulespec-uk SPP pipeline (SSCBA 1992 Part 12ZA ss.171ZA/171ZE/171ZJ). Now COVERED by the uk-statutory-paternity-pay suite (5 cases, 5/5 match). UKMOD applies the earnings-related 90% rate over the 2-week period for the HHoT case. bpact_uk does not consume the stochastic take-up draw.",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "bpact_s"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:bsa_uk",
@@ -721,7 +906,13 @@
       "oracle_attributed": 4,
       "bridge_artifacts": 0,
       "note": "BEN: Social Assistance (income-based JSA, Income Support and Pension Credit). UKMOD computes Pension Credit inside this policy \u2014 boamt_s = guarantee credit boamtmm_s + savings credit boamtxp_s. The uk-pension-credit suite live-compares boamt_s against the composed RuleSpec guarantee-credit award (State Pension Credit Act 2002 s.2 + SPC Regs 2002 reg.6 standard-minimum-guarantee) on a single/couple pensioner grid crossing the guarantee level; the standard minimum guarantee matches to the penny (single 238.00/wk, couple 363.25/wk). boamt_s embeds a take-up / UC-transition correction that can zero a hypothetical award away from entitlement (ukmod-pc-boamt-takeup-transition); those points are dispositioned upstream_engine_gap, so unexplained=0 and Axiom-attributed=0 and the surface is covered. (JSA/IS legs of bsa_uk are separate uncovered surfaces; Pension Credit boamt_s is the compared one.)",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "boamt_s"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:bsadi_uk",
@@ -739,7 +930,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "BEN: Social Assistance (income-related Employment and Support Allowance). EXCLUDED oracle_dataset_lacks_input. The ir-ESA phase selector ddipd / ddipd00 (0 = Income Support fallback, 1 = Work-Related Activity Group, 3 = Support Group) \u2014 the input that activates the ESA-specific components bsadi01_s (WRAG) and bsadi00_s (Support) \u2014 is ABSENT from the registration-free training_data column schema (364 columns; ddipd, ddipd00, ddi02 and the bfapl-class LCW/LCWRA inputs all absent). The euromod adapter builds each synthetic household from a template of the dataset header columns and skips any key not in the header, so ddipd cannot be supplied even synthetically; the ir-ESA WRAG/Support surface can never be exercised on the registration-free dataset (ddipd defaults to 0, routing bsadi_s to its Income Support fallback). PROBE (scripts/probe_uk_repealed_and_missing_input.py, live UKMOD_PUBLIC_B2026.03/UK_2026): a disabled single adult with the admissible disability indicators set (ddi=1, bdisc>0) but no ddipd returns bsadi_s=0, bsadi01_s=0, bsadi00_s=0. Same class as EUROMOD BE bfapl (lpb column absent, oracles#160). The wave-2 note reported bsadi firing WRAG/Support after supplying ddipd, which the schema-bounded adapter cannot do; ir-ESA remains extant law (unlike repealed tax credits), so the block is the missing dataset input, not repeal.",
-      "status": "excluded:oracle_dataset_lacks_input"
+      "status": "excluded:oracle_dataset_lacks_input",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:bsaec_uk",
@@ -757,7 +952,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "Cost of Living Payment: every function n/a in UK_2026 \u2014 the one-off payments have ended.",
-      "status": "excluded:not_a_policy"
+      "status": "excluded:not_a_policy",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:bsauc_uk",
@@ -775,7 +974,13 @@
       "oracle_attributed": 9,
       "bridge_artifacts": 0,
       "note": null,
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "bsauc_s"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:bunct_uk",
@@ -793,7 +998,13 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 0,
       "note": "BEN: Contributory unemployment benefit (contribution-based Jobseeker's Allowance). The UK_2026 policy is switch=on and, once eligible, computes a distinct payable bunct_s from statute (age-banded rate $JSARate1824/$JSARate withdrawn pound-for-pound against the pension/earnings disregard base i_bunct_IncDisregard) \u2014 so it is NOT input-carrying. But eligibility is data-gated on the reported benefit-receipt input: the \"eligibility fully simulated\" Elig function is switch=OFF (its own comment warns it \"will SEVERELY overestimate eligibility\"), and the active path derives the qualifying-months variable liwmy_s from (bunct>0) receipt or an (les=5) unemployment status plus a liwwh work-history threshold, then gates the final Elig on liwmy_s>=$UB_QperMin. The activating inputs ARE admissible columns of the registration-free training_data schema (verified: bunct and liwwh both present in Input/training_data.txt; liwmy_s is derived, not a raw column), so this is NOT an oracle_dataset_lacks_input case \u2014 the current synthetic grids simply set them to non-activating values (no receipt, drgn1=2). A supplied-receipt/history case (bunct>0 or les=5 with liwwh above the work-history threshold) fires bunct_s from statute, so the surface is comparable for those cases (testing UKMOD's rate and withdrawal arithmetic, not its eligibility). The encoding blocker is Axiom-side: rulespec-uk does not encode contributory JSA (only the income-based JSA capital tariff, uksi/1996/207/116; the contributory scheme itself \u2014 Jobseekers Act 1995, age-banded flat rates $JSARate1824/$JSARate with pound-for-pound earnings withdrawal \u2014 is unencoded, adjacent to rulespec-uk#53). Uncovered next-wave surface, comparable under supplied-receipt cases once the contributory rates are encoded (evidence: UK.xml UK_2026 bunct_uk function body + verbatim \"SEVERELY overestimate eligibility\" switch-off comment; training_data.txt bunct/liwwh columns; rulespec-uk#53).",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "bunct_s"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:bwkmt_bfamt_uk",
@@ -811,7 +1022,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "BEN: Tax credits (Working Tax Credit and Child Tax Credit). EXCLUDED oracle_models_repealed_law. Tax credits ended 5 April 2025 (GOV.UK www.gov.uk/tax-credits-have-ended) \u2014 abolished from the 2025-26 tax year, no new claims and no payments after 5 April 2025; the caseload migrated to Universal Credit / Pension Credit. UKMOD UK_2026 retains bwkmt_bfamt_uk (switch=on, outputs bwkmt_s/bfamt_s/bwkmtcm_s/bfamttm_s/ydg04_s) but gates entitlement through the same Universal-Credit transition as Housing Benefit ('taker of ben bef 1st obs trans' \u2014 new claims routed to UC), so on the registration-free training_data no synthetic case is a pre-transition legacy tax-credit claimant. PROBE (scripts/probe_uk_repealed_and_missing_input.py, live UKMOD_PUBLIC_B2026.03/UK_2026): single childless 30h (les=2 and les=3) and a lone parent with one child at 35h all return bwkmt_s=0 and bfamt_s=0 with the WTC/CTC take-up rates pinned to 1.0 and $UCtransition=0 (the wave-2 note's nonzero figures are not reproducible on UK_2026). Because WTC/CTC are repealed, rulespec-uk encodes no current-law tax-credit surface by design, so no dataset input would make this comparable \u2014 the exclusion is oracle_models_repealed_law, distinct from oracle_dataset_lacks_input.",
-      "status": "excluded:oracle_models_repealed_law"
+      "status": "excluded:oracle_models_repealed_law",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:cjrs_uk",
@@ -829,7 +1044,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "Coronavirus Job Retention Scheme 2020/21: every function is switched n/a in UK_2026 (produces no output) \u2014 a dormant historical module.",
-      "status": "excluded:not_a_policy"
+      "status": "excluded:not_a_policy",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:countries_uk",
@@ -847,7 +1066,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:covshocks_benreceipt_uk",
@@ -865,7 +1088,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "Covid-19 receipt shocks 2020/21: every function n/a in UK_2026 \u2014 dormant historical module.",
-      "status": "excluded:not_a_policy"
+      "status": "excluded:not_a_policy",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:lha_uk",
@@ -883,7 +1110,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:mif_uk",
@@ -901,7 +1132,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:neg_uk",
@@ -919,7 +1154,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:random_uk",
@@ -937,7 +1176,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:seiss_uk",
@@ -955,7 +1198,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "Self-employment Income Support Scheme 2020/21: every function n/a in UK_2026 \u2014 dormant historical module.",
-      "status": "excluded:not_a_policy"
+      "status": "excluded:not_a_policy",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:tco_calcadjusted_uk",
@@ -973,7 +1220,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "Indirect-tax TCO extension: writes tco_adj_* figures inflated to national accounts, none in VARCONFIG; not per-case queryable.",
-      "status": "excluded:unobservable_boundary"
+      "status": "excluded:unobservable_boundary",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:tco_calcbase_uk",
@@ -991,7 +1242,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "Indirect-tax (excise/VAT) TCO extension: writes internal tco_ta_* consumption-tax bases that are not _s outputs and not in VARCONFIG; not a per-case queryable instrument. Out of scope for the direct-tax/benefit conformance surface.",
-      "status": "excluded:unobservable_boundary"
+      "status": "excluded:unobservable_boundary",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:tco_calcprelim_uk",
@@ -1009,7 +1264,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:tco_ce_uk",
@@ -1027,7 +1286,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:tco_cq_uk",
@@ -1045,7 +1308,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:tco_cy_uk",
@@ -1063,7 +1330,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:tco_paraminit_uk",
@@ -1081,7 +1352,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:tin_uk",
@@ -1099,7 +1374,13 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 0,
       "note": null,
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "tin_s"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:tinta_uk",
@@ -1117,7 +1398,13 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 0,
       "note": "TAX: Personal tax allowance. The UK_2026 policy is switch=on and computes the final personal allowance tinta_s = preliminary allowance $ITPerAll less the income-limit taper (half of taxable income il_tinty in excess of $ITAllLim, floored at zero) \u2014 i.e. the Income Tax Act 2007 s.35(1)-(3) allowance with its adjusted-net-income withdrawal. This is a genuine, cleanly comparable surface: it needs only an income sweep on a single individual (no household structure, receipt history, or take-up draw), so it is the most directly gradable of the uncovered UK surfaces. rulespec-uk encodes exactly this computation \u2014 uk_pit_pilot_personal_allowance in pilot_worker_oracle_pipeline is ceil(max(0, personal_allowance_base_amount - max(0, adjusted_net_income - adjusted_net_income_reduction_threshold)/2)) against ITA 2007 s.35. The uk-personal-allowance suite now surfaces uk_pit_pilot_personal_allowance against tinta_s directly on a single-individual sweep (40k/100k/110k/125.14k/150k straddling the taper and full withdrawal); the concept mapping binds it to euromod tinta_s, and the comparison (comparisons/uk-personal-allowance-ukmod.yaml) regenerates on the x64 UKMOD runner via scripts/regenerate_euromod_uk.sh. Covered once that runner commits axiom-euromod-uk-personal-allowance.json (the euromod runtime has no macOS wheel, so the live match rate is generated on the provisioned runner, per axiom-oracles#190). Evidence: UK.xml UK_2026 tinta_uk function body; rulespec-uk s.35 encoding.",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "tinta_s"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:tpcee_uk",
@@ -1135,7 +1422,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:input_carrying"
+      "status": "excluded:input_carrying",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:tscee_tscse_uk",
@@ -1153,7 +1444,13 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 0,
       "note": null,
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "tscee_s"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:tscer_uk",
@@ -1171,7 +1468,13 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 0,
       "note": null,
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "tscer_s"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:ukpovertyline_uk",
@@ -1189,7 +1492,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "uk:yem_uk",
@@ -1207,7 +1514,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     }
   ]
 }
