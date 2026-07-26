@@ -313,15 +313,6 @@
       "source": "comparisons/parameter-oracles.yaml"
     },
     {
-      "suite": "ct-income-tax-liability",
-      "name": "ct-income-tax-liability",
-      "report": "axiom-policyengine-taxsim-ct-income-tax-liability.json",
-      "repos": [
-        "TheAxiomFoundation/rulespec-us"
-      ],
-      "source": "comparisons/ct-income-tax-liability.yaml"
-    },
-    {
       "suite": "dc-income-tax-liability",
       "name": "dc-income-tax-liability",
       "report": "axiom-policyengine-taxsim-dc-income-tax-liability.json",

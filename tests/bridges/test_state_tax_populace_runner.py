@@ -265,6 +265,64 @@ def test_policyengine_target_calculation_is_limited_to_ready_states() -> None:
     assert targets == {"UT": {1: 0.0, 2: 0.0}}
 
 
+def test_connecticut_target_recovers_policyengine_pre_credit_total_exactly() -> None:
+    calls = []
+
+    class FakeSimulation:
+        def __init__(self, dataset):
+            assert dataset == "dataset"
+
+        def calculate(self, variable, period):
+            calls.append((variable, period))
+            return {
+                "ct_income_tax_after_personal_credits": [250.0, 1_000.0, 0.0],
+                "ct_personal_credit_rate": [0.75, 0.5, 0.0],
+            }[variable]
+
+    targets = calculate_policyengine_targets(
+        dataset="dataset",
+        raw_tax_units=pd.DataFrame({"tax_unit_id": [1, 2, 3]}),
+        routes=tuple(
+            TaxUnitRoute(index, index, "CT", "09", 1, DISPOSITION_READY)
+            for index in range(1, 4)
+        ),
+        year=2026,
+        microsimulation_factory=FakeSimulation,
+    )
+
+    assert targets == {"CT": {1: 1_000.0, 2: 2_000.0, 3: 0.0}}
+    assert calls == [
+        ("ct_income_tax_after_personal_credits", 2026),
+        ("ct_personal_credit_rate", 2026),
+    ]
+
+
+def test_connecticut_target_recovery_fails_closed_on_unit_credit_rate() -> None:
+    class FakeSimulation:
+        def __init__(self, dataset):
+            assert dataset == "dataset"
+
+        def calculate(self, variable, period):
+            return {
+                "ct_income_tax_after_personal_credits": [0.0],
+                "ct_personal_credit_rate": [1.0],
+            }[variable]
+
+    with pytest.raises(
+        StateTaxPopulationRoutingError,
+        match=r"personal-credit rate in \[0, 1\)",
+    ):
+        calculate_policyengine_targets(
+            dataset="dataset",
+            raw_tax_units=pd.DataFrame({"tax_unit_id": [1]}),
+            routes=(
+                TaxUnitRoute(1, 1, "CT", "09", 1, DISPOSITION_READY),
+            ),
+            year=2026,
+            microsimulation_factory=FakeSimulation,
+        )
+
+
 def test_arkansas_person_target_is_validated_and_summed_to_tax_units() -> None:
     calls = []
 
@@ -601,10 +659,6 @@ def test_reviewed_connecticut_projection_covers_all_filing_statuses() -> None:
             "HEAD_OF_HOUSEHOLD",
             "SURVIVING_SPOUSE",
         ],
-        "ct_personal_credit_rate": [0, 0.01, 0.02, 0.03, 0.04],
-        "ct_amt": [0, 20, 0, 40, 0],
-        "ct_property_tax_credit_potential": [1, 2, 3, 4, 5],
-        "ct_stillborn_credit": [0, 0, 750, 0, 0],
     }
 
     class FakeSimulation:
@@ -626,24 +680,39 @@ def test_reviewed_connecticut_projection_covers_all_filing_statuses() -> None:
         microsimulation_factory=FakeSimulation,
     )["CT"]
 
-    prefix = "us-ct:policies/income_tax/pilot_liability_pipeline#input."
+    prefix = (
+        "us-ct:policies/income_tax/"
+        "2026_resident_ordinary_tax_before_personal_credit#input."
+    )
+    assert projections[f"{prefix}ct_pit_2026_connecticut_taxable_income"] == {
+        1: 1,
+        2: 2,
+        3: 3,
+        4: 4,
+        5: 5,
+    }
+    assert projections[f"{prefix}ct_pit_2026_connecticut_adjusted_gross_income"] == {
+        1: 11,
+        2: 12,
+        3: 13,
+        4: 14,
+        5: 15,
+    }
     assert projections[
-        f"{prefix}ct_pit_pilot_filing_status_joint_or_surviving_spouse"
+        f"{prefix}ct_pit_2026_is_full_year_connecticut_resident_return"
+    ] == {1: True, 2: True, 3: True, 4: True, 5: True}
+    assert projections[
+        f"{prefix}ct_pit_2026_ordinary_tax_filing_status_single"
+    ] == {1: True, 2: False, 3: False, 4: False, 5: False}
+    assert projections[
+        f"{prefix}ct_pit_2026_ordinary_tax_filing_status_joint_or_surviving_spouse"
     ] == {1: False, 2: True, 3: False, 4: False, 5: True}
-    assert projections[f"{prefix}ct_pit_pilot_filing_status_head_of_household"] == {
-        1: False,
-        2: False,
-        3: False,
-        4: True,
-        5: False,
-    }
-    assert projections[f"{prefix}ct_pit_pilot_filing_status_separate"] == {
-        1: False,
-        2: False,
-        3: True,
-        4: False,
-        5: False,
-    }
+    assert projections[
+        f"{prefix}ct_pit_2026_ordinary_tax_filing_status_head_of_household"
+    ] == {1: False, 2: False, 3: False, 4: True, 5: False}
+    assert projections[
+        f"{prefix}ct_pit_2026_ordinary_tax_filing_status_married_separate"
+    ] == {1: False, 2: False, 3: True, 4: False, 5: False}
 
 
 def test_reviewed_new_york_projection_covers_all_filing_statuses() -> None:

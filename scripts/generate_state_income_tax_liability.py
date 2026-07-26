@@ -156,21 +156,19 @@ _PE_VAR = {
     # deduction). The before-refundable variable nets the 77-2716.01 personal
     # exemption credit (a post-tax nonrefundable credit) that this core excludes.
     "NE": "ne_income_tax_before_credits",
-    # Maine, Minnesota, and Connecticut use a before-refundable-credits variable
-    # as the exact statutory analog of each composed pipeline. Delaware instead
+    # Maine and Minnesota use a before-refundable-credits variable as the exact
+    # statutory analog of each composed pipeline. Delaware instead
     # targets the unit-level tax before nonrefundable credits because its promoted
     # RuleSpec encodes the section 1102 schedule and branch selection, not credits.
     # Delaware's later variables net nonrefundable credits and refundable EITC;
     # Maine and Minnesota net their refundable credits in the final variable;
-    # Connecticut's target excludes refundable EITC while subtracting the ordered
-    # property-tax and stillborn nonrefundable credits encoded by RuleSpec.
     # Maryland uses the state-only before-credits target: county tax is separate,
     # and the before-refundable target additionally subtracts nonrefundable credits.
     "DE": "de_income_tax_before_non_refundable_credits_unit",
     "MD": "md_income_tax_before_credits",
     "ME": "me_income_tax_before_refundable_credits",
     "MN": "mn_income_tax_before_refundable_credits",
-    "CT": "ct_income_tax_before_refundable_credits",
+    "CT": "ct_resident_ordinary_tax_before_personal_credit_derived",
     # Arizona levies a single flat rate (43-1011) on Arizona taxable income (AGI
     # less the 43-1041 standard deduction). az_income_tax equals
     # az_income_tax_before_refundable_credits on this childless grid (no refundable
@@ -245,6 +243,11 @@ _GRID_EXCLUDED_STATES = {
         "reviewed RuleSpec exposes only the Person-grain Act 2 schedule "
         "component; no broad liability output or six-case grid fixtures"
     ),
+    "CT": (
+        "canonical RuleSpec exposes the full-year-resident ordinary section "
+        "12-700 component with a 98-fixture boundary suite; no broad liability "
+        "output or legacy six-case grid fixtures"
+    ),
 }
 
 # Ordered grid state list; new eligible states append through _TAXSIM_STATE.
@@ -259,6 +262,10 @@ _MODULE["AL"] = (
     "us-al:policies/income_tax/"
     "2026_section_40_18_5_schedule_before_credits"
 )
+_MODULE["CT"] = (
+    "us-ct:policies/income_tax/"
+    "2026_resident_ordinary_tax_before_personal_credit"
+)
 _MODULE["KY"] = (
     "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits"
 )
@@ -269,6 +276,9 @@ _LIABILITY_OUTPUT = {
 _LIABILITY_OUTPUT["AL"] = (
     f"{_MODULE['AL']}#"
     "al_pit_2026_section_40_18_5_schedule_before_credits"
+)
+_LIABILITY_OUTPUT["CT"] = (
+    f"{_MODULE['CT']}#ct_pit_2026_resident_ordinary_tax_before_personal_credit"
 )
 _LIABILITY_OUTPUT["KY"] = (
     f"{_MODULE['KY']}#ky_pit_2026_krs_141_020_schedule_before_credits"
@@ -286,9 +296,11 @@ _POPULACE_OUTPUT = {
         f"{_MODULE['AR']}#"
         "ar_pit_pilot_income_tax_before_non_refundable_credits_indiv"
     ),
+    "CT": _LIABILITY_OUTPUT["CT"],
 }
 _POPULACE_PE_VAR = {
     "AR": "ar_income_tax_before_non_refundable_credits_indiv",
+    "CT": "ct_resident_ordinary_tax_before_personal_credit_derived",
 }
 _POPULACE_AGGREGATION = {
     "AR": "person_sum_to_tax_unit",

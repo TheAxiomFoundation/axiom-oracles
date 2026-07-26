@@ -36,7 +36,7 @@ def test_packaged_contract_has_exact_campaign_inventory() -> None:
 
     assert len(contract.jurisdictions) == 43
     assert set(contract.by_state()) == EXPECTED_STATE_CODES
-    assert sum(len(item.inputs) for item in contract.jurisdictions) == 157
+    assert sum(len(item.inputs) for item in contract.jurisdictions) == 155
     assert sum(len(item.relations) for item in contract.jurisdictions) == 2
     assert len({item.program for item in contract.jurisdictions}) == 43
     assert len({item.output for item in contract.jurisdictions}) == 43
@@ -189,7 +189,7 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
         ),
         "explicit_input_count": EXPECTED_EXPLICIT_INPUT_COUNT,
         "explicit_relation_count": EXPECTED_EXPLICIT_RELATION_COUNT,
-        "blocked_input_count": EXPECTED_EXPLICIT_INPUT_COUNT - 64,
+        "blocked_input_count": EXPECTED_EXPLICIT_INPUT_COUNT - 62,
         "blocked_relation_count": 0,
     }
     assert "NH" not in contract.by_state()
@@ -197,14 +197,7 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
         "AL": ["al_taxable_income"],
         "AZ": ["az_taxable_income"],
         "AR": ["ar_taxable_income_indiv"],
-        "CT": [
-            "ct_taxable_income",
-            "ct_agi",
-            "ct_personal_credit_rate",
-            "ct_amt",
-            "ct_property_tax_credit_potential",
-            "ct_stillborn_credit",
-        ],
+            "CT": ["ct_taxable_income", "ct_agi"],
         "CO": ["co_taxable_income"],
         "DE": ["de_taxable_income_indv", "de_files_separately"],
         "GA": ["ga_taxable_income"],
@@ -286,11 +279,13 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
         "filing_status",
         "filing_status",
         "filing_status",
+        "filing_status",
     ]
     assert [item.policyengine_transform for item in ct_derived] == [
-        "filing_status_joint_or_surviving_spouse",
-        "filing_status_is_head_of_household",
+        "filing_status_is_single",
         "filing_status_is_separate",
+        "filing_status_is_head_of_household",
+        "filing_status_joint_or_surviving_spouse",
     ]
     de = contract.by_state()["DE"]
     assert de.policyengine_target == (
@@ -493,7 +488,7 @@ def test_contract_rejects_incomplete_explicit_slot_inventory() -> None:
     jurisdiction, _ = _first_input(document)
     jurisdiction["inputs"].pop()
 
-    with pytest.raises(StateTaxPopulaceContractError, match="exactly 157"):
+    with pytest.raises(StateTaxPopulaceContractError, match="exactly 155"):
         validate_state_tax_populace_contract(document)
 
 

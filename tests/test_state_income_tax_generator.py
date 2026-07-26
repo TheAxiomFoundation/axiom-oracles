@@ -313,6 +313,25 @@ def test_arkansas_legacy_grid_is_explicitly_decoupled() -> None:
     assert generator._POPULACE_AGGREGATION["AR"] == "person_sum_to_tax_unit"
 
 
+def test_connecticut_canonical_component_retires_the_legacy_grid() -> None:
+    generator = _load_generator()
+
+    assert "CT" in generator._TAXSIM_STATE
+    assert "CT" in generator._POPULACE_STATES
+    assert "CT" not in generator._STATES
+    assert "98-fixture" in generator._GRID_EXCLUDED_STATES["CT"]
+    assert generator._MODULE["CT"].endswith(
+        "/2026_resident_ordinary_tax_before_personal_credit"
+    )
+    assert generator._LIABILITY_OUTPUT["CT"].endswith(
+        "#ct_pit_2026_resident_ordinary_tax_before_personal_credit"
+    )
+    assert (
+        generator._POPULACE_PE_VAR["CT"]
+        == "ct_resident_ordinary_tax_before_personal_credit_derived"
+    )
+
+
 def test_finalize_report_adds_v21_dispositions_and_provenance():
     generator = _load_generator()
     report = {

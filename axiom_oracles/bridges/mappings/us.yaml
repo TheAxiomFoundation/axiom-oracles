@@ -29121,6 +29121,486 @@ mappings:
     candidate_priority: P4
     rationale: Axiom's signed net-liability output is deliberately zero while the annual Connecticut income, exemption, tax, and credit chain remains source held; it must not be interpreted as zero Connecticut tax or compared to completed PolicyEngine liability.
 
+  # Canonical Connecticut TY2026 full-year-resident ordinary section 12-700
+  # tax before the personal credit. PolicyEngine publishes every statutory
+  # component and the after-personal-credit result, so the pre-credit total is
+  # recovered exactly from PE's own formula rather than reimplemented here.
+  - legal_id: us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_ordinary_tax_filing_status_is_valid
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom validates exactly one of four schedule flags; PolicyEngine uses a categorical filing-status input and exposes no one-to-one validation judgment.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_ordinary_tax_input_domain_is_valid
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom validates its bounded full-year-resident completed-return input contract; PolicyEngine exposes no equivalent domain judgment.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_ordinary_tax_schedule_scale
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom exposes an internal schedule-normalization scale; PolicyEngine's filing-status-indexed rate parameters require no one-to-one output with this helper.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_ordinary_tax_head_first_ceiling
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.ct.tax.income.rates.head_of_household
+    parameter_key_path: [thresholds, 1]
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same first-bracket ceiling in PolicyEngine's Connecticut head-of-household rate scale.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_ordinary_tax_joint_first_ceiling
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.ct.tax.income.rates.joint
+    parameter_key_path: [thresholds, 1]
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same first-bracket ceiling in PolicyEngine's Connecticut joint rate scale.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_ordinary_tax_rate_1
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.ct.tax.income.rates.single
+    parameter_key_path: [rates, 0]
+    period: year
+    comparison: rate
+    rationale: Same first marginal rate in PolicyEngine's Connecticut rate scale.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_ordinary_tax_rate_2
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.ct.tax.income.rates.single
+    parameter_key_path: [rates, 1]
+    period: year
+    comparison: rate
+    rationale: Same second marginal rate in PolicyEngine's Connecticut rate scale.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_ordinary_tax_rate_3
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.ct.tax.income.rates.single
+    parameter_key_path: [rates, 2]
+    period: year
+    comparison: rate
+    rationale: Same third marginal rate in PolicyEngine's Connecticut rate scale.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_ordinary_tax_rate_4
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.ct.tax.income.rates.single
+    parameter_key_path: [rates, 3]
+    period: year
+    comparison: rate
+    rationale: Same fourth marginal rate in PolicyEngine's Connecticut rate scale.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_ordinary_tax_rate_5
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.ct.tax.income.rates.single
+    parameter_key_path: [rates, 4]
+    period: year
+    comparison: rate
+    rationale: Same fifth marginal rate in PolicyEngine's Connecticut rate scale.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_ordinary_tax_rate_6
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.ct.tax.income.rates.single
+    parameter_key_path: [rates, 5]
+    period: year
+    comparison: rate
+    rationale: Same sixth marginal rate in PolicyEngine's Connecticut rate scale.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_ordinary_tax_rate_7
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.ct.tax.income.rates.single
+    parameter_key_path: [rates, 6]
+    period: year
+    comparison: rate
+    rationale: Same seventh marginal rate in PolicyEngine's Connecticut rate scale.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_ordinary_tax_single_floor_2
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.ct.tax.income.rates.single
+    parameter_key_path: [thresholds, 1]
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same second-bracket floor in PolicyEngine's Connecticut single rate scale.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_ordinary_tax_single_floor_3
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.ct.tax.income.rates.single
+    parameter_key_path: [thresholds, 2]
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same third-bracket floor in PolicyEngine's Connecticut single rate scale.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_ordinary_tax_single_floor_4
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.ct.tax.income.rates.single
+    parameter_key_path: [thresholds, 3]
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same fourth-bracket floor in PolicyEngine's Connecticut single rate scale.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_ordinary_tax_single_floor_5
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.ct.tax.income.rates.single
+    parameter_key_path: [thresholds, 4]
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same fifth-bracket floor in PolicyEngine's Connecticut single rate scale.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_ordinary_tax_single_floor_6
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.ct.tax.income.rates.single
+    parameter_key_path: [thresholds, 5]
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same sixth-bracket floor in PolicyEngine's Connecticut single rate scale.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_ordinary_tax_single_floor_7
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.ct.tax.income.rates.single
+    parameter_key_path: [thresholds, 6]
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same seventh-bracket floor in PolicyEngine's Connecticut single rate scale.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_ordinary_tax_single_phaseout_start
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.ct.tax.income.add_back.start
+    parameter_key_path: [SINGLE]
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same single-filer low-rate phaseout start in PolicyEngine.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_ordinary_tax_head_phaseout_start
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.ct.tax.income.add_back.start
+    parameter_key_path: [HEAD_OF_HOUSEHOLD]
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same head-of-household low-rate phaseout start in PolicyEngine.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_ordinary_tax_joint_phaseout_start
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.ct.tax.income.add_back.start
+    parameter_key_path: [JOINT]
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same joint-filer low-rate phaseout start in PolicyEngine.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_ordinary_tax_separate_phaseout_start
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.ct.tax.income.add_back.start
+    parameter_key_path: [SEPARATE]
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same married-separate low-rate phaseout start in PolicyEngine.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_ordinary_tax_single_phaseout_increment
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.ct.tax.income.add_back.increment
+    parameter_key_path: [SINGLE]
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same single-filer low-rate phaseout increment in PolicyEngine.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_ordinary_tax_head_phaseout_increment
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.ct.tax.income.add_back.increment
+    parameter_key_path: [HEAD_OF_HOUSEHOLD]
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same head-of-household low-rate phaseout increment in PolicyEngine.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_ordinary_tax_separate_phaseout_increment
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.ct.tax.income.add_back.increment
+    parameter_key_path: [SEPARATE]
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same married-separate low-rate phaseout increment in PolicyEngine.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_ordinary_tax_single_phaseout_amount
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.ct.tax.income.add_back.amount
+    parameter_key_path: [SINGLE]
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same single-filer low-rate phaseout amount in PolicyEngine.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_ordinary_tax_single_phaseout_maximum
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.ct.tax.income.add_back.max_amount
+    parameter_key_path: [SINGLE]
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same single-filer low-rate phaseout maximum in PolicyEngine.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_ordinary_tax_single_low_recapture_start
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.ct.tax.income.recapture.low.start
+    parameter_key_path: [SINGLE]
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same single-filer low-tier recapture start in PolicyEngine.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_ordinary_tax_single_middle_recapture_start
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.ct.tax.income.recapture.middle.start
+    parameter_key_path: [SINGLE]
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same single-filer middle-tier recapture start in PolicyEngine.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_ordinary_tax_single_high_recapture_start
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.ct.tax.income.recapture.high.start
+    parameter_key_path: [SINGLE]
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same single-filer high-tier recapture start in PolicyEngine.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_ordinary_tax_single_recapture_increment
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.ct.tax.income.recapture.low.increment
+    parameter_key_path: [SINGLE]
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same statutory recapture increment used by PolicyEngine's Connecticut tiers.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_ordinary_tax_single_low_recapture_amount
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.ct.tax.income.recapture.low.amount
+    parameter_key_path: [SINGLE]
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same single-filer low-tier recapture amount in PolicyEngine.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_ordinary_tax_single_middle_recapture_amount
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.ct.tax.income.recapture.middle.amount
+    parameter_key_path: [SINGLE]
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same single-filer middle-tier recapture amount in PolicyEngine.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_ordinary_tax_single_high_recapture_amount
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.ct.tax.income.recapture.high.amount
+    parameter_key_path: [SINGLE]
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same single-filer high-tier recapture amount in PolicyEngine.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_ordinary_tax_single_low_recapture_maximum
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.ct.tax.income.recapture.low.max_amount
+    parameter_key_path: [SINGLE]
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same single-filer low-tier recapture maximum in PolicyEngine.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_ordinary_tax_single_middle_recapture_maximum
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.ct.tax.income.recapture.middle.max_amount
+    parameter_key_path: [SINGLE]
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same single-filer middle-tier recapture maximum in PolicyEngine.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_ordinary_tax_single_high_recapture_maximum
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.ct.tax.income.recapture.high.max_amount
+    parameter_key_path: [SINGLE]
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same single-filer high-tier recapture maximum in PolicyEngine.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_ordinary_tax_head_middle_recapture_amount
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.ct.tax.income.recapture.middle.amount
+    parameter_key_path: [HEAD_OF_HOUSEHOLD]
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same head-of-household middle-tier recapture amount in PolicyEngine.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_ordinary_tax_head_middle_recapture_maximum
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.ct.tax.income.recapture.middle.max_amount
+    parameter_key_path: [HEAD_OF_HOUSEHOLD]
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same head-of-household middle-tier recapture maximum in PolicyEngine.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_ordinary_schedule_tax
+    country: us
+    program: tax
+    mapping_type: derived_expression
+    expression: ct_income_tax_after_personal_credits / (1 - ct_personal_credit_rate) - ct_income_tax_phase_out_add_back - ct_income_tax_low_tax_recapture - ct_income_tax_middle_tax_recapture - ct_income_tax_high_tax_recapture
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    rationale: PolicyEngine's own pre-credit total, recovered algebraically, less its four separately published section 12-700 addback and recapture components.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_ordinary_low_rate_phaseout_addback
+    country: us
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: ct_income_tax_phase_out_add_back
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same Connecticut low-rate phaseout addback component.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_ordinary_low_recapture
+    country: us
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: ct_income_tax_low_tax_recapture
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same Connecticut low-tier recapture component.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_ordinary_middle_recapture
+    country: us
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: ct_income_tax_middle_tax_recapture
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same Connecticut middle-tier recapture component.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_ordinary_high_recapture
+    country: us
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: ct_income_tax_high_tax_recapture
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same Connecticut high-tier recapture component.
+
+  - legal_id: us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_resident_ordinary_tax_before_personal_credit
+    country: us
+    program: tax
+    mapping_type: derived_expression
+    expression: ct_income_tax_after_personal_credits / (1 - ct_personal_credit_rate)
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    rationale: PolicyEngine computes this same pre-credit total internally and publishes after-personal-credit tax as total times one minus its personal-credit rate; the rate is strictly below one throughout the parameter domain.
+
   # Florida does not impose chapter 220 individual income tax on a natural
   # person. PolicyEngine therefore has no active Florida individual-income-tax
   # program surface to compare. Exact entries keep every complete legal output

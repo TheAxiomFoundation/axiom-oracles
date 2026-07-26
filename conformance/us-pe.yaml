@@ -236,9 +236,11 @@ policies:
       - ct_income_tax
     in_scope: true
     suite: null
-    note: The ct-income-tax-liability grid and full-Populace campaign validate only ct_income_tax_before_refundable_credits.
-      Final ct_income_tax additionally subtracts refundable ct_eitc; 90 of 951 routed units differ from
-      the narrow target.
+    note: The ct-income-tax-populace campaign validates only the canonical full-year-resident
+      ordinary section 12-700 tax before the personal credit, recovered exactly from
+      ct_income_tax_after_personal_credits and ct_personal_credit_rate. It does not claim
+      the personal credit, alternative minimum tax, property-tax or stillborn credits,
+      refundable ct_eitc, payments, refunds, or final ct_income_tax.
   - id: us-pe:ct_tfa
     oracle_policy_name: ct_tfa
     oracle_policy_type: rules

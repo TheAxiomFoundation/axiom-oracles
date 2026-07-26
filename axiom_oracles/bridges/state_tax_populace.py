@@ -74,6 +74,14 @@ ALLOWED_NONSTANDARD_COMPARISON_SURFACES = frozenset(
             "ar_income_tax_before_non_refundable_credits_indiv",
             "person_sum_to_tax_unit",
         ),
+        (
+            "CT",
+            "us-ct:policies/income_tax/"
+            "2026_resident_ordinary_tax_before_personal_credit#"
+            "ct_pit_2026_resident_ordinary_tax_before_personal_credit",
+            "ct_resident_ordinary_tax_before_personal_credit_derived",
+            "tax_unit",
+        ),
     }
 )
 
@@ -125,17 +133,15 @@ EXPECTED_STATE_FIPS = {
     "WV": "54",
 }
 EXPECTED_STATE_CODES = frozenset(EXPECTED_STATE_FIPS)
-EXPECTED_PROGRAM_OVERRIDES = {
-    "AL": (
-        "us-al:policies/income_tax/"
-        "2026_section_40_18_5_schedule_before_credits"
-    ),
-    "KY": "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits",
-}
 EXPECTED_OUTPUT_OVERRIDES = {
     "AL": (
         "us-al:policies/income_tax/2026_section_40_18_5_schedule_before_credits"
         "#al_pit_2026_section_40_18_5_schedule_before_credits"
+    ),
+    "CT": (
+        "us-ct:policies/income_tax/"
+        "2026_resident_ordinary_tax_before_personal_credit#"
+        "ct_pit_2026_resident_ordinary_tax_before_personal_credit"
     ),
     "KY": (
         "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits"
@@ -146,16 +152,27 @@ EXPECTED_OUTPUT_OVERRIDES = {
         "#ny_pit_pilot_main_income_tax"
     ),
 }
-EXPECTED_EXPLICIT_INPUT_COUNT = 157
+EXPECTED_PROGRAM_OVERRIDES = {
+    "AL": (
+        "us-al:policies/income_tax/"
+        "2026_section_40_18_5_schedule_before_credits"
+    ),
+    "CT": (
+        "us-ct:policies/income_tax/"
+        "2026_resident_ordinary_tax_before_personal_credit"
+    ),
+    "KY": "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits",
+}
+EXPECTED_EXPLICIT_INPUT_COUNT = 155
 EXPECTED_EXPLICIT_RELATION_COUNT = 2
 EXPECTED_SLOT_INVENTORY_SHA256 = (
-    "382c5ef97df228a80d14acc6dae5e6d7fd7fdd0456b0d100a3a0c6f04201d253"
+    "4f31d23afa8bd3c1c7dbfd732da46c2bb1cdbe75983f505394dc869c0b1aa4e2"
 )
 EXPECTED_JURISDICTION_REGISTRY_SHA256 = (
-    "8ae07f40c6e9ec3f41842d54d3c3e8f41a6f289a90305303da23dd7d00c213dc"
+    "b20f427b2ebf234a9162aaff60d624c7310065a4a031c1c6278392853e59db04"
 )
 EXPECTED_SOURCE_METADATA_SHA256 = (
-    "ebb9b4d722739d2c3df2009edc61a3caa967094dd5a19025751813a1c9230795"
+    "fb9af30e7909867adaf82d451ca17743ba4fee7eab5e9c677635fa6a4f989fe7"
 )
 # Exact boundaries admitted only after independent legal and dependency-graph
 # review.  The comparison target itself is forbidden below, so these remain
@@ -183,39 +200,17 @@ ALLOWED_PE_UPSTREAM_BOUNDARIES: frozenset[tuple[str, str, str]] = frozenset(
         ),
         (
             "CT",
-            "us-ct:policies/income_tax/pilot_liability_pipeline#input."
-            "ct_pit_pilot_state_taxable_income",
+            "us-ct:policies/income_tax/"
+            "2026_resident_ordinary_tax_before_personal_credit#input."
+            "ct_pit_2026_connecticut_taxable_income",
             "ct_taxable_income",
         ),
         (
             "CT",
-            "us-ct:policies/income_tax/pilot_liability_pipeline#input."
-            "ct_pit_pilot_adjusted_gross_income",
+            "us-ct:policies/income_tax/"
+            "2026_resident_ordinary_tax_before_personal_credit#input."
+            "ct_pit_2026_connecticut_adjusted_gross_income",
             "ct_agi",
-        ),
-        (
-            "CT",
-            "us-ct:policies/income_tax/pilot_liability_pipeline#input."
-            "ct_pit_pilot_personal_credit_rate",
-            "ct_personal_credit_rate",
-        ),
-        (
-            "CT",
-            "us-ct:policies/income_tax/pilot_liability_pipeline#input."
-            "ct_pit_pilot_alternative_minimum_tax",
-            "ct_amt",
-        ),
-        (
-            "CT",
-            "us-ct:policies/income_tax/pilot_liability_pipeline#input."
-            "ct_pit_pilot_property_tax_credit_potential",
-            "ct_property_tax_credit_potential",
-        ),
-        (
-            "CT",
-            "us-ct:policies/income_tax/pilot_liability_pipeline#input."
-            "ct_pit_pilot_stillborn_credit",
-            "ct_stillborn_credit",
         ),
         (
             "CO",
@@ -473,22 +468,33 @@ ALLOWED_DERIVED_PE_BOUNDARIES: frozenset[tuple[str, str, str, str]] = frozenset(
         ),
         (
             "CT",
-            "us-ct:policies/income_tax/pilot_liability_pipeline#input."
-            "ct_pit_pilot_filing_status_joint_or_surviving_spouse",
+            "us-ct:policies/income_tax/"
+            "2026_resident_ordinary_tax_before_personal_credit#input."
+            "ct_pit_2026_ordinary_tax_filing_status_single",
+            "filing_status",
+            "filing_status_is_single",
+        ),
+        (
+            "CT",
+            "us-ct:policies/income_tax/"
+            "2026_resident_ordinary_tax_before_personal_credit#input."
+            "ct_pit_2026_ordinary_tax_filing_status_joint_or_surviving_spouse",
             "filing_status",
             "filing_status_joint_or_surviving_spouse",
         ),
         (
             "CT",
-            "us-ct:policies/income_tax/pilot_liability_pipeline#input."
-            "ct_pit_pilot_filing_status_head_of_household",
+            "us-ct:policies/income_tax/"
+            "2026_resident_ordinary_tax_before_personal_credit#input."
+            "ct_pit_2026_ordinary_tax_filing_status_head_of_household",
             "filing_status",
             "filing_status_is_head_of_household",
         ),
         (
             "CT",
-            "us-ct:policies/income_tax/pilot_liability_pipeline#input."
-            "ct_pit_pilot_filing_status_separate",
+            "us-ct:policies/income_tax/"
+            "2026_resident_ordinary_tax_before_personal_credit#input."
+            "ct_pit_2026_ordinary_tax_filing_status_married_separate",
             "filing_status",
             "filing_status_is_separate",
         ),
@@ -575,6 +581,17 @@ ALLOWED_DERIVED_PE_BOUNDARIES: frozenset[tuple[str, str, str, str]] = frozenset(
             "wv_pit_pilot_filing_status_is_separate",
             "filing_status",
             "filing_status_is_separate",
+        ),
+    }
+)
+
+ALLOWED_ROUTE_RESIDENCY_INPUTS: frozenset[tuple[str, str]] = frozenset(
+    {
+        (
+            "CT",
+            "us-ct:policies/income_tax/"
+            "2026_resident_ordinary_tax_before_personal_credit#input."
+            "ct_pit_2026_is_full_year_connecticut_resident_return",
         ),
     }
 )
@@ -1264,6 +1281,23 @@ def _validate_slot(
             or slot.policyengine_transform
         ):
             errors.append(f"{label}: statutory constant may not declare PE metadata")
+    elif slot.source_kind == "raw_populace":
+        if "#input." in slot.slot and (
+            jurisdiction.state,
+            slot.slot,
+        ) not in ALLOWED_ROUTE_RESIDENCY_INPUTS:
+            errors.append(
+                f"{label}: raw Populace source is not in the independently "
+                "reviewed route-residency allowlist"
+            )
+        if (
+            slot.policyengine_variable
+            or slot.policyengine_variables
+            or slot.policyengine_relationship
+            or slot.policyengine_transform
+            or slot.constant_value is not None
+        ):
+            errors.append(f"{label}: raw Populace source may not declare PE metadata")
     elif (
         slot.policyengine_variable
         or slot.policyengine_variables

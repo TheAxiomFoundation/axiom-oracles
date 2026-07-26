@@ -26,6 +26,17 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 REPORTS = REPO_ROOT / "reports"
 DASH_DATA = REPO_ROOT / "dashboard" / "public" / "data"
 
+_DESCRIPTION_BY_OUTPUT = {
+    (
+        "us-ct:policies/income_tax/"
+        "2026_resident_ordinary_tax_before_personal_credit"
+        "#ct_pit_2026_resident_ordinary_tax_before_personal_credit"
+    ): (
+        "Connecticut resident ordinary section 12-700 tax before the "
+        "personal credit over every routed tax unit in the pinned US Populace"
+    ),
+}
+
 
 def latest_campaign_report() -> Path:
     candidates = sorted(REPORTS.glob("state-tax-populace-campaign-*.json"))
@@ -43,15 +54,13 @@ def project_state(
     matched = compared - mismatch_count
     rate = (matched / compared * 100) if compared else 100.0
     concept = entry["output"]
-    description = (
-        "State income tax liability over every routed tax unit in the "
-        "pinned US Populace"
+    description = _DESCRIPTION_BY_OUTPUT.get(
+        concept,
+        (
+            "State income tax liability over every routed tax unit in the "
+            "pinned US Populace"
+        ),
     )
-    if state == "AL":
-        description = (
-            "Alabama Code section 40-18-5 schedule before nonrefundable "
-            "credits over every routed tax unit in the pinned US Populace"
-        )
     aggregate = {
         "comparison": "amount",
         "comparison_count": compared,
