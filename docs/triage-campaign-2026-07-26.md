@@ -6,7 +6,12 @@ characterized. Method: per-row verification against persisted household
 evidence (input/output panels), PE parameter surfaces as oracle ground
 truth, PE-side decomposition where our reports can't decide.
 
-## Ledger (start: 14,479 → **5,505** unexplained; batches 1-2 banked)
+## Ledger (start: 14,479 → **5,244**; batch 3 = SE-fix eliminations + re-verified BBCE)
+
+Fleet under the self-employment fix: AL 79→53, GA 300→250, MA 262→255,
+SC 206→180, TN 89→68 — real eliminations. BBCE dispositions re-verified
+on the new baselines: AL 10, GA 170, MA 206, SC 126 (TN non-BBCE, CO
+already at 1). Pending disk: AZ/FL/NY/CA/NC reruns under the fix.
 
 | Block | Was | Now | Mechanism / next step |
 |---|---|---|---|
@@ -26,6 +31,22 @@ cap-gains-heavy filers. Needs wave-grade per-concept treatment. Downstream rows:
 | co-state-income-tax-taxsim | 530 | todo | no dispositions file; fresh triage (see promotion-wave class patterns) |
 | income-tax-liability grids (~14 suites × ~6) | ~85 | todo | wave-era classes (fixture uprating vintage etc.); read one suite, generalize |
 | small suites (nyc-synthetic 12, medicaid-thresholds 12, ak-apa 9, md-tca 5, ...) | ~40 | todo | individual reads |
+
+## PROVEN: AL 79 → 53 after the self-employment mapping fix (−33%)
+
+## MAJOR FINDING (2026-07-26, verified 12/12 on AL)
+
+The SNAP axiom-side (axiom-pays/axiom-eligible) class root cause is a
+PROJECTION BUG, not law divergence: the mapping table's
+snap_gross_monthly_earned_income rule sums only YEARLY_EARNED_INCOME
+(wages); SELF_EMPLOYMENT_INCOME is loaded as a person fact but never
+mapped, so business owners project as zero-income households. PE counts
+self-employment in snap_earned_income netted at exactly 0.6 (verified:
+39771/66285, 18036/30061). Dead hypotheses, tested: TANF/SSI imputation
+(0/12), assets (asset_ok true 12/12). FIX the mapping (include SE,
+document netting choice), rerun states — this class should vanish and
+raw match rates rise. Same class likely explains axiom-side rows in all
+states (CA 70 axiom-pays + 69 axiom-eligible etc.).
 
 ## Key facts established
 

@@ -68,6 +68,14 @@ mappings:
       transform: monthly
       from_facts:
         - YEARLY_EARNED_INCOME
+        # SNAP counts self-employment as earned income net of the cost of
+        # producing it (7 CFR 273.9(b)(1)(ii), 273.11(a)). ECPS carries
+        # gross self-employment; 0.6 is the oracle's own modeled netting
+        # (verified against PE snap_earned_income to 4 decimals on the
+        # 2026-07 triage: 39771/66285, 18036/30061). Without this fact the
+        # projection rendered business owners as zero-income households —
+        # the verified root cause of every axiom-side AL SNAP residual.
+        - { fact: SELF_EMPLOYMENT_INCOME, scale: 0.6 }
       aggregate: sum_over_people
 
   - match: { kind: substring, value: snap_total_monthly_unearned_income }

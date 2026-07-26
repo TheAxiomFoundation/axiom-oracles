@@ -1,6 +1,6 @@
 schema: axiom_oracles.dispositions.v1
 suite: ma-snap-ecps
-updated: '2026-07-26'
+updated: '2026-07-27'
 entries:
 - id: ma-bbce-gross-band-snap_eligible
   concept: us:statutes/7/2014/o#snap_eligible
@@ -81,6 +81,8 @@ entries:
     - ecps-2872
     - ecps-2877
     - ecps-2886
+    - ecps-2904
+    - ecps-2921
     - ecps-2924
     - ecps-2926
     - ecps-2936
@@ -118,16 +120,16 @@ entries:
   disposition: axiom_encoding_gap
   evidence:
     mechanism: |-
-      Massachusetts's broad-based categorical eligibility (SNAP 200-percent-
-      class state option; PolicyEngine models gross screen x2 FPL, x2 for
-      elderly/disabled households, at 2026-01 per gov/hhs/tanf/non_cash
-      parameters) is not in the composed us-ma/snap/fy-2026 program, which
-      applies only the standard federal tests. Every selected row is verified
-      per-row against axiom's persisted output surface: household gross income
-      sits inside the band above the federal 130 percent limit the composed
-      program applies and at or below the state's BBCE screen, verified
-      against axiom's own computed gross income and limit. Axiom-side modeling
-      boundary, tracked for encoding in rulespec-us#1098.
+      Massachusetts's broad-based categorical eligibility (SNAP state option;
+      PolicyEngine models gross screen x2.0 FPL, x2.0 for elderly/disabled
+      households, at 2026-01 per gov/hhs/tanf/non_cash parameters) is not in
+      the composed us-ma/snap/fy-2026 program, which applies only the standard
+      federal tests. Every selected row is verified per-row against axiom's
+      persisted output surface: household gross income sits inside the band
+      above the federal 130 percent limit the composed program applies and at
+      or below the state's BBCE screen, verified against axiom's own computed
+      gross income and limit. Axiom-side modeling boundary, tracked for
+      encoding in rulespec-us#1098.
   linked_issue: https://github.com/TheAxiomFoundation/rulespec-us/issues/1098
   expires_on_source_change: true
 - id: ma-bbce-net-waiver-snap_eligible
@@ -135,21 +137,21 @@ entries:
   kind: eligibility_right_only
   case_selector:
     case_ids:
+    - ecps-2510
     - ecps-2880
     - ecps-2915
     - ecps-3044
   disposition: axiom_encoding_gap
   evidence:
     mechanism: |-
-      Massachusetts's broad-based categorical eligibility (SNAP 200-percent-
-      class state option; PolicyEngine models gross screen x2 FPL, x2 for
-      elderly/disabled households, at 2026-01 per gov/hhs/tanf/non_cash
-      parameters) is not in the composed us-ma/snap/fy-2026 program, which
-      applies only the standard federal tests. Every selected row is verified
-      per-row against axiom's persisted output surface: the household passes
-      axiom's gross test and fails only the net-income test, which the state's
-      BBCE waives. Axiom-side modeling boundary, tracked for encoding in
-      rulespec-us#1098.
+      Massachusetts's broad-based categorical eligibility (SNAP state option;
+      PolicyEngine models gross screen x2.0 FPL, x2.0 for elderly/disabled
+      households, at 2026-01 per gov/hhs/tanf/non_cash parameters) is not in
+      the composed us-ma/snap/fy-2026 program, which applies only the standard
+      federal tests. Every selected row is verified per-row against axiom's
+      persisted output surface: the household passes axiom's gross test and
+      fails only the net-income test, which the state's BBCE waives. Axiom-
+      side modeling boundary, tracked for encoding in rulespec-us#1098.
   linked_issue: https://github.com/TheAxiomFoundation/rulespec-us/issues/1098
   expires_on_source_change: true
 - id: ma-bbce-gross-band-snap_benefit
@@ -219,6 +221,7 @@ entries:
     - ecps-2872
     - ecps-2877
     - ecps-2886
+    - ecps-2904
     - ecps-2926
     - ecps-2942
     - ecps-2947
@@ -247,16 +250,16 @@ entries:
   disposition: axiom_encoding_gap
   evidence:
     mechanism: |-
-      Massachusetts's broad-based categorical eligibility (SNAP 200-percent-
-      class state option; PolicyEngine models gross screen x2 FPL, x2 for
-      elderly/disabled households, at 2026-01 per gov/hhs/tanf/non_cash
-      parameters) is not in the composed us-ma/snap/fy-2026 program, which
-      applies only the standard federal tests. Every selected row is verified
-      per-row against axiom's persisted output surface: household gross income
-      sits inside the band above the federal 130 percent limit the composed
-      program applies and at or below the state's BBCE screen, verified
-      against axiom's own computed gross income and limit. Axiom-side modeling
-      boundary, tracked for encoding in rulespec-us#1098.
+      Massachusetts's broad-based categorical eligibility (SNAP state option;
+      PolicyEngine models gross screen x2.0 FPL, x2.0 for elderly/disabled
+      households, at 2026-01 per gov/hhs/tanf/non_cash parameters) is not in
+      the composed us-ma/snap/fy-2026 program, which applies only the standard
+      federal tests. Every selected row is verified per-row against axiom's
+      persisted output surface: household gross income sits inside the band
+      above the federal 130 percent limit the composed program applies and at
+      or below the state's BBCE screen, verified against axiom's own computed
+      gross income and limit. Axiom-side modeling boundary, tracked for
+      encoding in rulespec-us#1098.
   linked_issue: https://github.com/TheAxiomFoundation/rulespec-us/issues/1098
   expires_on_source_change: true
 - id: ma-bbce-net-waiver-snap_benefit
@@ -264,20 +267,20 @@ entries:
   kind: amount_difference
   case_selector:
     case_ids:
+    - ecps-2510
     - ecps-2880
     - ecps-2915
     - ecps-3044
   disposition: axiom_encoding_gap
   evidence:
     mechanism: |-
-      Massachusetts's broad-based categorical eligibility (SNAP 200-percent-
-      class state option; PolicyEngine models gross screen x2 FPL, x2 for
-      elderly/disabled households, at 2026-01 per gov/hhs/tanf/non_cash
-      parameters) is not in the composed us-ma/snap/fy-2026 program, which
-      applies only the standard federal tests. Every selected row is verified
-      per-row against axiom's persisted output surface: the household passes
-      axiom's gross test and fails only the net-income test, which the state's
-      BBCE waives. Axiom-side modeling boundary, tracked for encoding in
-      rulespec-us#1098.
+      Massachusetts's broad-based categorical eligibility (SNAP state option;
+      PolicyEngine models gross screen x2.0 FPL, x2.0 for elderly/disabled
+      households, at 2026-01 per gov/hhs/tanf/non_cash parameters) is not in
+      the composed us-ma/snap/fy-2026 program, which applies only the standard
+      federal tests. Every selected row is verified per-row against axiom's
+      persisted output surface: the household passes axiom's gross test and
+      fails only the net-income test, which the state's BBCE waives. Axiom-
+      side modeling boundary, tracked for encoding in rulespec-us#1098.
   linked_issue: https://github.com/TheAxiomFoundation/rulespec-us/issues/1098
   expires_on_source_change: true

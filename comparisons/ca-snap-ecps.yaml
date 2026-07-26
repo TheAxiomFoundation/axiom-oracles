@@ -19,12 +19,12 @@ runner:
     period: 2026-01
     population: enhanced-cps
     axiom_compose_binary: $HOME/axiom-compose/.venv/bin/axiom-compose
-    axiom_program: $HOME/rulespec-us/programs/us-ca/snap/fy-2026.yaml
+    axiom_program: /private/tmp/claude-501/-Users-pavelmakarchuk-axiom-oracles/015608b8-312a-41d9-8436-5777e8ebcbe4/scratchpad/rulespec-clean/rulespec-us/programs/us-ca/snap/fy-2026.yaml
     axiom_composed_program: /tmp/ca-snap-composed.yaml
     axiom_compiled_program: /tmp/ca-snap-compiled.json
-    axiom_rulespec_repo_roots: $HOME
+    axiom_rulespec_repo_roots: /private/tmp/claude-501/-Users-pavelmakarchuk-axiom-oracles/015608b8-312a-41d9-8436-5777e8ebcbe4/scratchpad/rulespec-clean
     rulespec_roots:
-      - $HOME/rulespec-us
+      - /private/tmp/claude-501/-Users-pavelmakarchuk-axiom-oracles/015608b8-312a-41d9-8436-5777e8ebcbe4/scratchpad/rulespec-clean/rulespec-us
     jurisdiction_fips: "06"
 
 artifacts:
