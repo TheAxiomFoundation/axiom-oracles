@@ -108,39 +108,52 @@
 
 .brand-axiom {
   display: inline-block;
-  height: 32px;
-  width: auto;
+  width: 100px;
+  height: auto;
 }
 
-.brand-divider {
-  display: inline-block;
-  width: 1px;
-  height: 22px;
-  background: var(--hairline);
+.brand-title {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 3px;
+  border-left: 1px solid var(--hairline);
+  padding-left: 12px;
+  text-decoration: none;
 }
 
-.brand-product {
-  /* A sibling of the wordmark: same Geist light, same amber gradient,
-     same inverted-A trick the logo itself uses. */
-  font-family: var(--font-sans), "Geist", "Helvetica Neue", sans-serif;
-  font-weight: 300;
-  font-size: 22px;
-  letter-spacing: 0.14em;
-  background: linear-gradient(90deg, var(--accent) 0%, var(--accent-deep) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+.brand-eyebrow {
+  font-family: var(--font-mono), "JetBrains Mono", ui-monospace, Menlo,
+    monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--ink-mute);
   line-height: 1;
 }
 
-.brand-flip {
-  /* The logo's ∀ is a mirrored Geist A — do exactly the same here. */
-  display: inline-block;
-  transform: scaleY(-1);
-  background: linear-gradient(90deg, var(--accent) 0%, var(--accent-deep) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+.brand-name {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--ink);
+  line-height: 1.1;
+}
+
+.all-demos-link {
+  margin-left: auto;
+  font-family: var(--font-mono), "JetBrains Mono", ui-monospace, Menlo,
+    monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--ink-mute);
+  text-decoration: none;
+  transition: color 120ms ease;
+}
+
+.all-demos-link:hover {
+  color: var(--accent);
+  text-decoration: underline;
 }
 
 .card-flat {
