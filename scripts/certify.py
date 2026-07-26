@@ -594,6 +594,22 @@ def main() -> int:
 
     certificates = build_all()
     if args.check:
+        # An unexpected certificate is a defect, not a curiosity: certificates/
+        # is inside the bot's derived_paths, so a retired or stray file there is
+        # restored and committed by a refresh (round-3 audit finding 7).
+        expected = {_out_path(program).name for program in certificates}
+        if OUT_DIR.exists():
+            stray = sorted(
+                p.name for p in OUT_DIR.glob("*.json") if p.name not in expected
+            )
+            if stray:
+                print(
+                    "certificates/ contains files no program generates: "
+                    + ", ".join(stray)
+                    + " — remove them or add their program to PROGRAMS",
+                    file=sys.stderr,
+                )
+                return 1
         for program, certificate in certificates.items():
             path = _out_path(program)
             if not path.exists():

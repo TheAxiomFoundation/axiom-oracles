@@ -169,11 +169,18 @@ def _staleness_gate(clone: Path, script: str) -> subprocess.CompletedProcess:
 def _assert_origin_tip_green(origin: Path, tmp_path: Path) -> Path:
     """Clone origin's tip and assert ci.yml's staleness gates all pass on it."""
     verify = _clone(origin, tmp_path / f"verify-{len(list(tmp_path.iterdir()))}")
+    # Every gate ci.yml runs on main must be asserted here, or an artifact can
+    # verify inside the bot's worktree and still be omitted from the commit —
+    # exactly the stale-certificate failure class (round-3 audit finding 7).
+    # Adding a gate to ci.yml means adding it here.
     for script in (
         "apply_dispositions.py",
         "conformance_scoreboard.py",
         "conformance_burndown.py",
         "check_vacuous_gate.py",
+        "generate_dashboard_overview.py",
+        "exercise_census.py",
+        "certify.py",
     ):
         result = _staleness_gate(verify, script)
         assert result.returncode == 0, (
