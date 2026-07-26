@@ -31635,6 +31635,196 @@ mappings:
     mapping_type: not_comparable
     rationale: "Source-specific intermediate output (rule `persons_grouped_together_as_one_snap_household`, grounded against `us-mo/manual/dss/snap/1105-000-00/1105-015-00/block-1`). Not present in the requested PolicyEngine adapter catalog. Promote to `direct_variable` by adding an adapter entry once a one-to-one PE target is identified."
 
+  - legal_id: us-mo:manual/dss/snap/1115-000-00/1115-035-00/1115-035-25/block-1#missouri_snap_excess_shelter_deduction
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    candidate_priority: P2
+    rationale: Missouri SNAP Manual 1115.035.25 state-specific utility, shelter, or household intermediate output. PolicyEngine exposes generic SNAP outcomes and parameters, not this Missouri administrative intermediate as a one-to-one oracle variable. Keep not_comparable until an exact PolicyEngine adapter target is identified.
+
+  - legal_id: us-mo:manual/dss/snap/1115-000-00/1115-035-00/1115-035-25/block-1#missouri_snap_homeless_standard_eligible
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    candidate_priority: P2
+    rationale: Missouri SNAP Manual 1115.035.25 state-specific utility, shelter, or household intermediate output. PolicyEngine exposes generic SNAP outcomes and parameters, not this Missouri administrative intermediate as a one-to-one oracle variable. Keep not_comparable until an exact PolicyEngine adapter target is identified.
+
+  - legal_id: us-mo:manual/dss/snap/1115-000-00/1115-035-00/1115-035-25/block-1#missouri_snap_limited_utility_allowance_state_option
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    candidate_priority: P2
+    rationale: Missouri SNAP Manual 1115.035.25 state-specific utility, shelter, or household intermediate output. PolicyEngine exposes generic SNAP outcomes and parameters, not this Missouri administrative intermediate as a one-to-one oracle variable. Keep not_comparable until an exact PolicyEngine adapter target is identified.
+
+  - legal_id: us-mo:manual/dss/snap/1115-000-00/1115-035-00/1115-035-25/block-1#missouri_snap_prorated_rent_share
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    candidate_priority: P2
+    rationale: Missouri SNAP Manual 1115.035.25 state-specific utility, shelter, or household intermediate output. PolicyEngine exposes generic SNAP outcomes and parameters, not this Missouri administrative intermediate as a one-to-one oracle variable. Keep not_comparable until an exact PolicyEngine adapter target is identified.
+
+  - legal_id: us-mo:manual/dss/snap/1115-000-00/1115-035-00/1115-035-25/block-1#missouri_snap_selected_homeless_or_excess_shelter_deduction
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    candidate_priority: P2
+    rationale: Missouri SNAP Manual 1115.035.25 state-specific utility, shelter, or household intermediate output. PolicyEngine exposes generic SNAP outcomes and parameters, not this Missouri administrative intermediate as a one-to-one oracle variable. Keep not_comparable until an exact PolicyEngine adapter target is identified.
+
+  - legal_id: us-mo:manual/dss/snap/1115-000-00/1115-035-00/1115-035-25/block-1#missouri_snap_excess_shelter_cost_before_cap
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    candidate_priority: P3
+    rationale: Missouri SNAP Manual 1115.035.25 state-specific utility, shelter, or household intermediate output. PolicyEngine exposes generic SNAP outcomes and parameters, not this Missouri administrative intermediate as a one-to-one oracle variable. Keep not_comparable until an exact PolicyEngine adapter target is identified.
+
+  - legal_id: us-mo:manual/dss/snap/1115-000-00/1115-035-00/1115-035-25/block-1#missouri_snap_excess_shelter_income_share
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    candidate_priority: P3
+    rationale: Missouri SNAP Manual 1115.035.25 state-specific utility, shelter, or household intermediate output. PolicyEngine exposes generic SNAP outcomes and parameters, not this Missouri administrative intermediate as a one-to-one oracle variable. Keep not_comparable until an exact PolicyEngine adapter target is identified.
+
+  - legal_id: us-mo:manual/dss/snap/1115-000-00/1115-035-00/1115-035-25/block-1#missouri_snap_individual_utility_allowance_state_option
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    candidate_priority: P3
+    rationale: Missouri SNAP Manual 1115.035.25 state-specific utility, shelter, or household intermediate output. PolicyEngine exposes generic SNAP outcomes and parameters, not this Missouri administrative intermediate as a one-to-one oracle variable. Keep not_comparable until an exact PolicyEngine adapter target is identified.
+
+  - legal_id: us-mo:manual/dss/snap/1115-000-00/1115-035-00/1115-035-25/block-1#missouri_snap_liheap_sua_threshold
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    candidate_priority: P3
+    rationale: Missouri SNAP Manual 1115.035.25 state-specific utility, shelter, or household intermediate output. PolicyEngine exposes generic SNAP outcomes and parameters, not this Missouri administrative intermediate as a one-to-one oracle variable. Keep not_comparable until an exact PolicyEngine adapter target is identified.
+
+  - legal_id: us-mo:manual/dss/snap/1115-000-00/1115-035-00/1115-035-25/block-1#missouri_snap_lower_utility_allowance_amount
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    candidate_priority: P3
+    rationale: Missouri SNAP Manual 1115.035.25 state-specific utility, shelter, or household intermediate output. PolicyEngine exposes generic SNAP outcomes and parameters, not this Missouri administrative intermediate as a one-to-one oracle variable. Keep not_comparable until an exact PolicyEngine adapter target is identified.
+
+  - legal_id: us-mo:manual/dss/snap/1115-000-00/1115-035-00/1115-035-25/block-1#missouri_snap_lower_utility_allowance_entitled
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    candidate_priority: P3
+    rationale: Missouri SNAP Manual 1115.035.25 state-specific utility, shelter, or household intermediate output. PolicyEngine exposes generic SNAP outcomes and parameters, not this Missouri administrative intermediate as a one-to-one oracle variable. Keep not_comparable until an exact PolicyEngine adapter target is identified.
+
+  - legal_id: us-mo:manual/dss/snap/1115-000-00/1115-035-00/1115-035-25/block-1#missouri_snap_non_heating_cooling_standard_amount
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    candidate_priority: P3
+    rationale: Missouri SNAP Manual 1115.035.25 state-specific utility, shelter, or household intermediate output. PolicyEngine exposes generic SNAP outcomes and parameters, not this Missouri administrative intermediate as a one-to-one oracle variable. Keep not_comparable until an exact PolicyEngine adapter target is identified.
+
+  - legal_id: us-mo:manual/dss/snap/1115-000-00/1115-035-00/1115-035-25/block-1#missouri_snap_non_heating_cooling_standard_entitled
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    candidate_priority: P3
+    rationale: Missouri SNAP Manual 1115.035.25 state-specific utility, shelter, or household intermediate output. PolicyEngine exposes generic SNAP outcomes and parameters, not this Missouri administrative intermediate as a one-to-one oracle variable. Keep not_comparable until an exact PolicyEngine adapter target is identified.
+
+  - legal_id: us-mo:manual/dss/snap/1115-000-00/1115-035-00/1115-035-25/block-1#missouri_snap_occupied_and_vacated_home_actual_utilities_allowed
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    candidate_priority: P3
+    rationale: Missouri SNAP Manual 1115.035.25 state-specific utility, shelter, or household intermediate output. PolicyEngine exposes generic SNAP outcomes and parameters, not this Missouri administrative intermediate as a one-to-one oracle variable. Keep not_comparable until an exact PolicyEngine adapter target is identified.
+
+  - legal_id: us-mo:manual/dss/snap/1115-000-00/1115-035-00/1115-035-25/block-1#missouri_snap_shared_utility_household_receives_full_standard
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    candidate_priority: P3
+    rationale: Missouri SNAP Manual 1115.035.25 state-specific utility, shelter, or household intermediate output. PolicyEngine exposes generic SNAP outcomes and parameters, not this Missouri administrative intermediate as a one-to-one oracle variable. Keep not_comparable until an exact PolicyEngine adapter target is identified.
+
+  - legal_id: us-mo:manual/dss/snap/1115-000-00/1115-035-00/1115-035-25/block-1#missouri_snap_standard_utility_allowance_amount
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    candidate_priority: P3
+    rationale: Missouri SNAP Manual 1115.035.25 state-specific utility, shelter, or household intermediate output. PolicyEngine exposes generic SNAP outcomes and parameters, not this Missouri administrative intermediate as a one-to-one oracle variable. Keep not_comparable until an exact PolicyEngine adapter target is identified.
+
+  - legal_id: us-mo:manual/dss/snap/1115-000-00/1115-035-00/1115-035-25/block-1#missouri_snap_standard_utility_allowance_entitled
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    candidate_priority: P3
+    rationale: Missouri SNAP Manual 1115.035.25 state-specific utility, shelter, or household intermediate output. PolicyEngine exposes generic SNAP outcomes and parameters, not this Missouri administrative intermediate as a one-to-one oracle variable. Keep not_comparable until an exact PolicyEngine adapter target is identified.
+
+  - legal_id: us-mo:manual/dss/snap/1115-000-00/1115-035-00/1115-035-25/block-1#missouri_snap_standard_utility_allowance_state_option
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    candidate_priority: P3
+    rationale: Missouri SNAP Manual 1115.035.25 state-specific utility, shelter, or household intermediate output. PolicyEngine exposes generic SNAP outcomes and parameters, not this Missouri administrative intermediate as a one-to-one oracle variable. Keep not_comparable until an exact PolicyEngine adapter target is identified.
+
+  - legal_id: us-mo:manual/dss/snap/1115-000-00/1115-035-00/1115-035-25/block-1#missouri_snap_telephone_standard_amount
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    candidate_priority: P3
+    rationale: Missouri SNAP Manual 1115.035.25 state-specific utility, shelter, or household intermediate output. PolicyEngine exposes generic SNAP outcomes and parameters, not this Missouri administrative intermediate as a one-to-one oracle variable. Keep not_comparable until an exact PolicyEngine adapter target is identified.
+
+  - legal_id: us-mo:manual/dss/snap/1115-000-00/1115-035-00/1115-035-25/block-1#missouri_snap_telephone_standard_entitled
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    candidate_priority: P3
+    rationale: Missouri SNAP Manual 1115.035.25 state-specific utility, shelter, or household intermediate output. PolicyEngine exposes generic SNAP outcomes and parameters, not this Missouri administrative intermediate as a one-to-one oracle variable. Keep not_comparable until an exact PolicyEngine adapter target is identified.
+
+  - legal_id: us-mo:manual/dss/snap/1115-000-00/1115-035-00/1115-035-25/block-1#missouri_snap_total_utility_allowance
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    candidate_priority: P3
+    rationale: Missouri SNAP Manual 1115.035.25 state-specific utility, shelter, or household intermediate output. PolicyEngine exposes generic SNAP outcomes and parameters, not this Missouri administrative intermediate as a one-to-one oracle variable. Keep not_comparable until an exact PolicyEngine adapter target is identified.
+
+  - legal_id: us-mo:manual/dss/snap/1115-000-00/1115-035-00/1115-035-25/block-1#missouri_snap_unreimbursed_disaster_home_repair_allowed
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    candidate_priority: P3
+    rationale: Missouri SNAP Manual 1115.035.25 state-specific utility, shelter, or household intermediate output. PolicyEngine exposes generic SNAP outcomes and parameters, not this Missouri administrative intermediate as a one-to-one oracle variable. Keep not_comparable until an exact PolicyEngine adapter target is identified.
+
+  - legal_id: us-mo:manual/dss/snap/1115-000-00/1115-035-00/1115-035-25/block-1#missouri_snap_utility_cost_for_shelter_calculation
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    candidate_priority: P3
+    rationale: Missouri SNAP Manual 1115.035.25 state-specific utility, shelter, or household intermediate output. PolicyEngine exposes generic SNAP outcomes and parameters, not this Missouri administrative intermediate as a one-to-one oracle variable. Keep not_comparable until an exact PolicyEngine adapter target is identified.
+
+  - legal_id: us-mo:manual/dss/snap/1115-000-00/1115-035-00/1115-035-25/block-1#missouri_snap_utility_standard_reassessment_required
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    candidate_priority: P3
+    rationale: Missouri SNAP Manual 1115.035.25 state-specific utility, shelter, or household intermediate output. PolicyEngine exposes generic SNAP outcomes and parameters, not this Missouri administrative intermediate as a one-to-one oracle variable. Keep not_comparable until an exact PolicyEngine adapter target is identified.
+
+  - legal_id: us-mo:manual/dss/snap/1115-000-00/1115-035-00/1115-035-25/block-1#missouri_snap_vacated_home_shelter_costs_allowed
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    candidate_priority: P3
+    rationale: Missouri SNAP Manual 1115.035.25 state-specific utility, shelter, or household intermediate output. PolicyEngine exposes generic SNAP outcomes and parameters, not this Missouri administrative intermediate as a one-to-one oracle variable. Keep not_comparable until an exact PolicyEngine adapter target is identified.
+
+  - legal_id: us-mo:manual/dss/snap/1115-000-00/1115-035-00/1115-035-25/block-1#missouri_snap_vacated_home_telephone_standard
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    candidate_priority: P3
+    rationale: Missouri SNAP Manual 1115.035.25 state-specific utility, shelter, or household intermediate output. PolicyEngine exposes generic SNAP outcomes and parameters, not this Missouri administrative intermediate as a one-to-one oracle variable. Keep not_comparable until an exact PolicyEngine adapter target is identified.
+
+  - legal_id: us-mo:manual/dss/snap/1115-000-00/1115-035-00/1115-035-25/block-1#missouri_snap_vacated_only_home_utility_allowance
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    candidate_priority: P3
+    rationale: Missouri SNAP Manual 1115.035.25 state-specific utility, shelter, or household intermediate output. PolicyEngine exposes generic SNAP outcomes and parameters, not this Missouri administrative intermediate as a one-to-one oracle variable. Keep not_comparable until an exact PolicyEngine adapter target is identified.
+
+
 prefixes:
   - legal_id_prefix: us-dc:statutes/4/4-205/49#
     country: us
