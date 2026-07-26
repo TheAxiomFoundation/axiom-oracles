@@ -301,6 +301,31 @@ def main() -> int:
             "amt_overwrite_class_count": amt_class,
             "unclassified_count": len(other),
             "match_rate": round(100.0 * matches / n, 2) if n else 0,
+            # Standard disposition accounting: the AMT-overwrite class is
+            # verified per-row (imamtdf > 0; glass-box Atxcalc.cpp T691
+            # row 94 replaces imfedtax with netminamt) and attributed to
+            # the oracle's variable semantics — an upstream engine
+            # behavior, not a rules disagreement.
+            "dispositioned": {
+                "schema_version": "axiom_oracles.dispositions.v1",
+                "dispositions_file": None,
+                "counts": {
+                    "axiom_encoding_gap": 0,
+                    "bridge_artifact": 0,
+                    "explained_residual": 0,
+                    "unexplained": 0,
+                    "upstream_engine_gap": amt_class,
+                },
+                "unexplained_count": len(other),
+                "raw_match_rate": round(100.0 * matches / n, 2) if n else 0,
+                "explained_rate": round(
+                    100.0 * (matches + amt_class) / n, 2
+                )
+                if n
+                else 0,
+                "expired_entries": [],
+                "orphaned_entries": [],
+            },
         },
         "mismatches": other[:50],
         "provenance": {
