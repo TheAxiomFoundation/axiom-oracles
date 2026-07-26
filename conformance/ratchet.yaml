@@ -21,12 +21,14 @@ ratchets:
   policies_in_scope: 23
 - jurisdiction: us-pe
   covered_min: 34
-  # 2026-07-26: deliberately raised 0 -> 684. The az/ca SNAP migration off
-  # the legacy encoder harness (which matched by construction and carried
-  # no comparison information) onto the generic composed-program runner
-  # surfaced California's real residual surface: 684 mismatches over 7,101
-  # households, fingerprinted and tracked for per-row triage in
-  # axiom-oracles#362. Ratchet resumes falling from here.
-  unexplained_max: 684
-  axiom_attributed_open_max: 0
+  # 2026-07-26: the az/ca SNAP migration off the legacy encoder harness
+  # (matched by construction, no comparison information) surfaced
+  # California's real residual surface: 684 mismatches over 7,101
+  # households (axiom-oracles#362). 243 are per-row verified as the
+  # CalFresh BBCE modeling boundary and dispositioned axiom_encoding_gap
+  # against rulespec-us#1098 (hence axiom_attributed_open_max below);
+  # 441 remain unexplained pending PE-side decomposition. Both axes
+  # resume falling from here.
+  unexplained_max: 441
+  axiom_attributed_open_max: 243
   policies_in_scope: 127

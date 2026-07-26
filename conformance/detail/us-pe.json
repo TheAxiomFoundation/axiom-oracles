@@ -2210,12 +2210,12 @@
       "matches": 13518,
       "raw_match_rate": 95.183777,
       "explained_rate": 95.183777,
-      "unexplained": 684,
-      "axiom_attributed_open": 0,
+      "unexplained": 441,
+      "axiom_attributed_open": 243,
       "oracle_attributed": 0,
       "bridge_artifacts": 0,
       "note": "SNAP is one national PE-US variable (snap). Covered by ca-snap-ecps, the largest of 11 state-scoped SNAP suites validating the same snap surface vs PE-2026 (CA/AZ/CO/NY/OR/UT match to the cent; AL/MA/NC/SC/TN carry residuals 79/404/118/206/89 not yet dispositioned). The row registers the canonical largest-population suite; the other ten corroborate and their residuals are tracked for disposition \u2014 the scoreboard scores one suite per row, not silently dropped.",
-      "status": "unexplained"
+      "status": "axiom-gap"
     },
     {
       "id": "us-pe:social_security",
