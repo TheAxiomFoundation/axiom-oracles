@@ -307,6 +307,26 @@ def test_recent_state_income_tax_oracle_registrations():
     assert "NH" not in generator._STATES
 
 
+def test_kentucky_registry_uses_canonical_live_schedule_surface() -> None:
+    generator = _load_generator()
+    module = (
+        "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits"
+    )
+
+    assert generator._MODULE["KY"] == module
+    assert generator._LIABILITY_OUTPUT["KY"] == (
+        f"{module}#ky_pit_2026_krs_141_020_schedule_before_credits"
+    )
+    assert (
+        generator._PE_VAR["KY"]
+        == "ky_income_tax_before_non_refundable_credits_unit"
+    )
+    assert generator._TOL["KY"] == (0.01, 1e-7)
+    assert generator._POPULACE_TOL["KY"] == (0.01, 1e-7)
+    assert "KY" in generator._LIVE_AXIOM_STATES
+    assert "KY" in generator._STATES
+
+
 def test_arkansas_legacy_grid_is_explicitly_decoupled() -> None:
     generator = _load_generator()
 

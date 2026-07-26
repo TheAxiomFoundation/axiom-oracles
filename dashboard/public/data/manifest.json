@@ -213,6 +213,7 @@
     "axiom-policyengine-us-additional-medicare-grid.json",
     "axiom-policyengine-us-elderly-disabled-grid.json",
     "axiom-policyengine-us-llc-grid.json",
-    "axiom-taxsim-co-tax-intersection-ecps.json"
+    "axiom-taxsim-co-tax-intersection-ecps.json",
+    "axiom-policyengine-ky-income-tax-populace.json"
   ]
 }

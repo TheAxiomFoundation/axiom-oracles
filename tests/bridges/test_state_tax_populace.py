@@ -36,7 +36,7 @@ def test_packaged_contract_has_exact_campaign_inventory() -> None:
 
     assert len(contract.jurisdictions) == 43
     assert set(contract.by_state()) == EXPECTED_STATE_CODES
-    assert sum(len(item.inputs) for item in contract.jurisdictions) == 162
+    assert sum(len(item.inputs) for item in contract.jurisdictions) == 157
     assert sum(len(item.relations) for item in contract.jurisdictions) == 2
     assert len({item.program for item in contract.jurisdictions}) == 43
     assert len({item.output for item in contract.jurisdictions}) == 43
@@ -120,8 +120,8 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
 
     assert summary == {
         "jurisdiction_count": 43,
-        "ready_count": 28,
-        "blocked_count": 15,
+        "ready_count": 29,
+        "blocked_count": 14,
         "ready_states": [
             "AL",
             "AR",
@@ -135,6 +135,7 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
             "IL",
             "IN",
             "KS",
+            "KY",
             "LA",
             "MI",
             "MS",
@@ -167,6 +168,7 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
                 "IL",
                 "IN",
                 "KS",
+                "KY",
                 "LA",
                 "MI",
                 "MS",
@@ -187,7 +189,7 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
         ),
         "explicit_input_count": EXPECTED_EXPLICIT_INPUT_COUNT,
         "explicit_relation_count": EXPECTED_EXPLICIT_RELATION_COUNT,
-        "blocked_input_count": EXPECTED_EXPLICIT_INPUT_COUNT - 63,
+        "blocked_input_count": EXPECTED_EXPLICIT_INPUT_COUNT - 64,
         "blocked_relation_count": 0,
     }
     assert "NH" not in contract.by_state()
@@ -237,6 +239,17 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
         ]
         assert [item.policyengine_variable for item in inputs] == variables
         assert all(item.source_kind == "pe_upstream_boundary" for item in inputs)
+    ky_input = contract.by_state()["KY"].inputs[0]
+    assert ky_input.source_kind == "derived"
+    assert list(ky_input.policyengine_variables) == [
+        "ky_taxable_income_indiv",
+        "ky_taxable_income_joint",
+        "ky_files_separately",
+    ]
+    assert (
+        ky_input.policyengine_transform
+        == "filing_method_selected_person_summed_taxable_income"
+    )
     va_derived = [
         item
         for item in contract.by_state()["VA"].inputs
@@ -480,7 +493,7 @@ def test_contract_rejects_incomplete_explicit_slot_inventory() -> None:
     jurisdiction, _ = _first_input(document)
     jurisdiction["inputs"].pop()
 
-    with pytest.raises(StateTaxPopulaceContractError, match="exactly 162"):
+    with pytest.raises(StateTaxPopulaceContractError, match="exactly 157"):
         validate_state_tax_populace_contract(document)
 
 

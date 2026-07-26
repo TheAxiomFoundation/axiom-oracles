@@ -88,6 +88,7 @@ STATE_RULES = {
         (r"^(policies/dhs/csmm/|statutes/320/)", ("state_ssi_supplement", None)),
     ],
     "ks": [(r"^policies/dcf/keesm/", ("tanf", None))],
+    "ky": [(r"^policies/income_tax/", ("state_income_tax", None))],
     "mi": [(r"^policies/mdhhs/", ("state_ssi_supplement", None))],
     "mn": [
         (r"^policies/dhs/combined-manual/0020", ("state_ssi_supplement", None)),

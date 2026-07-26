@@ -668,7 +668,7 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
         "il_income_tax": "il_income_tax_before_non_refundable_credits",
         "in_income_tax": "in_agi_tax",
         "ks_income_tax": "ks_income_tax_before_credits",
-        "ky_income_tax": "ky_income_tax_before_refundable_credits",
+        "ky_income_tax": "ky_income_tax_before_non_refundable_credits_unit",
         "la_income_tax": "la_income_tax_before_non_refundable_credits",
         "ma_income_tax": "ma_income_tax",
         "md_income_tax": "md_income_tax_before_credits",

@@ -1134,7 +1134,7 @@
       "axiom_attributed_open": null,
       "oracle_attributed": null,
       "bridge_artifacts": null,
-      "note": "The ky-income-tax-liability suite is a six-case childless wage-earner grid against ky_income_tax_before_refundable_credits. Its slice assumes the family-size and other credits are inactive and does not cover refundable credits, so it does not establish final ky_income_tax.",
+      "note": "The ky-income-tax-liability suite validates the narrow KRS 141.020 schedule before credits against ky_income_tax_before_non_refundable_credits_unit. It does not encode or establish final ky_income_tax because upstream annual-return construction and all credits remain outside this surface.",
       "status": "uncovered"
     },
     {

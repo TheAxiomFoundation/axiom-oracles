@@ -31160,6 +31160,38 @@ mappings:
     candidate_priority: P4
     rationale: This signed-liability zero is a fail-closed sentinel while the annual Kentucky chain is held and must not be interpreted as zero tax.
 
+  # KRS 141.020 is a narrow schedule-before-credits surface, separate from the
+  # annual-return source hold above. The caller supplies completed Kentucky net
+  # income; the module applies only the official 2026 rate and claims neither
+  # upstream return construction nor any post-credit liability.
+  - legal_id: us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits#ky_pit_2026_krs_141_020_rate
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.ky.tax.income.rate
+    period: year
+    unit: rate
+    comparison: rate
+    rationale: KRS 141.020(2)(f) and PolicyEngine's Kentucky income-tax rate parameter both supply the 3.5 percent rate for tax year 2026.
+
+  - legal_id: us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits#ky_pit_2026_krs_141_020_net_income_boundary
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom exposes its nonnegative caller-supplied completed-net-income boundary as a private diagnostic. PolicyEngine splits Kentucky taxable income between joint and separate-return Person variables and does not expose this selected TaxUnit boundary as one standalone variable; the reviewed Populace bridge follows PolicyEngine's upstream ky_files_separately branch to select the corresponding Person-summed boundary.
+
+  - legal_id: us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits#ky_pit_2026_krs_141_020_schedule_before_credits
+    country: us
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: ky_income_tax_before_non_refundable_credits_unit
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Both outputs apply Kentucky's annual income-tax rate to completed nonnegative Kentucky net or taxable income before subtracting any allowable nonrefundable or refundable credits.
+
   # Idaho's TY2026 full-year-resident module is a source-readiness boundary.
   # Exact P4 mappings prevent federal-boundary diagnostics, source holds, and
   # fail-closed Idaho sentinels from being mistaken for completed state-tax

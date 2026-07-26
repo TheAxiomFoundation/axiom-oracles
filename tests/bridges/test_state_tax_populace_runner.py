@@ -942,6 +942,60 @@ def test_hawaii_completed_capital_gains_worksheet_projection() -> None:
     ]
 
 
+def test_kentucky_completed_net_income_projection_follows_filing_method() -> None:
+    calls = []
+    values = {
+        "person_id": [11, 12, 21],
+        "tax_unit_id": [1, 1, 2],
+        "ky_taxable_income_indiv": [40_000.0, 20_000.0, 35_000.0],
+        "ky_taxable_income_joint": [55_000.0, 0.0, 42_000.0],
+        "ky_files_separately": [True, False],
+    }
+
+    class FakeSimulation:
+        def __init__(self, dataset):
+            assert dataset == "dataset"
+
+        def calculate(self, variable, period, map_to=None):
+            calls.append((variable, period))
+            if variable == "tax_unit_id":
+                assert map_to == "person"
+            else:
+                assert map_to is None
+            return values[variable]
+
+    projections = calculate_policyengine_projection_inputs(
+        dataset="dataset",
+        raw_tax_units=pd.DataFrame({"tax_unit_id": [1, 2]}),
+        raw_persons=pd.DataFrame(
+            {
+                "person_id": [11, 12, 21],
+                "person_tax_unit_id": [1, 1, 2],
+            }
+        ),
+        routes=(
+            TaxUnitRoute(1, 1, "KY", "21", 1, DISPOSITION_READY),
+            TaxUnitRoute(2, 2, "KY", "21", 1, DISPOSITION_READY),
+        ),
+        year=2026,
+        microsimulation_factory=FakeSimulation,
+    )
+
+    slot = (
+        "us-ky:policies/income_tax/"
+        "2026_krs_141_020_schedule_before_credits#input."
+        "ky_pit_2026_krs_141_020_completed_net_income"
+    )
+    assert projections["KY"] == {slot: {1: 60_000.0, 2: 42_000.0}}
+    assert calls == [
+        ("person_id", 2026),
+        ("tax_unit_id", 2026),
+        ("ky_taxable_income_indiv", 2026),
+        ("ky_taxable_income_joint", 2026),
+        ("ky_files_separately", 2026),
+    ]
+
+
 def test_reviewed_montana_person_sums_and_capital_gain_transform() -> None:
     calls = []
     values = {

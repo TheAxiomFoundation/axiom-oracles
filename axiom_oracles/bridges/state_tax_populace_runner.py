@@ -49,6 +49,7 @@ DISPOSITION_UNKNOWN_GEOGRAPHY = "excluded_unknown_geography"
 _REVIEWED_PERSON_SUM_VARIABLES_BY_STATE = {
     "DE": frozenset({"de_taxable_income_joint"}),
     "HI": frozenset({"long_term_capital_gains"}),
+    "KY": frozenset({"ky_taxable_income_indiv", "ky_taxable_income_joint"}),
     "MT": frozenset(
         {
             "long_term_capital_gains",
@@ -688,6 +689,13 @@ def calculate_policyengine_projection_inputs(
             variable
             for slot in jurisdiction.inputs
             if slot.policyengine_transform
+            == "filing_method_selected_person_summed_taxable_income"
+            for variable in slot.policyengine_variables[:2]
+        )
+        person_variables.update(
+            variable
+            for slot in jurisdiction.inputs
+            if slot.policyengine_transform
             == "tax_unit_net_and_person_sum_to_capital_gains_worksheet_line_10"
             for variable in slot.policyengine_variables[1:]
         )
@@ -785,6 +793,41 @@ def calculate_policyengine_projection_inputs(
                 )
             if slot.policyengine_transform == "person_sum_to_tax_unit":
                 projected = person_sums[source_variables[0]]
+            elif (
+                slot.policyengine_transform
+                == "filing_method_selected_person_summed_taxable_income"
+            ):
+                if len(source_variables) != 3:
+                    raise StateTaxPopulationRoutingError(
+                        f"{state}: completed Kentucky net-income transform "
+                        "requires separate-return and joint taxable-income sums "
+                        "plus the filing-method branch"
+                    )
+                separate_values, joint_values = (
+                    person_sums[variable] for variable in source_variables[:2]
+                )
+                filing_separately_values = _array_values(
+                    sim.calculate(source_variables[2], period=year)
+                )
+                if len(filing_separately_values) != len(tax_unit_ids):
+                    raise StateTaxPopulationRoutingError(
+                        f"{state}: PolicyEngine boundary {source_variables[2]!r} "
+                        f"returned {len(filing_separately_values)} rows for "
+                        f"{len(tax_unit_ids)} tax units"
+                    )
+                projected = [
+                    _apply_projection_transform(
+                        (separate_value, joint_value, filing_separately),
+                        transform=slot.policyengine_transform,
+                        label=slot.slot,
+                    )
+                    for separate_value, joint_value, filing_separately in zip(
+                        separate_values,
+                        joint_values,
+                        filing_separately_values,
+                        strict=True,
+                    )
+                ]
             elif (
                 slot.policyengine_transform
                 == "person_sums_to_net_long_term_capital_gain"
@@ -1514,6 +1557,25 @@ def _apply_projection_transform(
         long_term = _finite_number(value[0], label=f"{label}:long_term")
         short_term = _finite_number(value[1], label=f"{label}:short_term")
         return max(0.0, min(long_term, long_term + short_term))
+    if transform == "filing_method_selected_person_summed_taxable_income":
+        if not isinstance(value, tuple) or len(value) != 3:
+            raise StateTaxPopulationRoutingError(
+                f"{label}: completed Kentucky net-income transform requires exact "
+                "(separate-return, joint) Person sums and filing-method branch"
+            )
+        separate = _finite_number(value[0], label=f"{label}:separate_return")
+        joint = _finite_number(value[1], label=f"{label}:joint")
+        filing_separately = _projection_scalar(
+            value[2], label=f"{label}:filing_separately"
+        )
+        if not isinstance(filing_separately, bool):
+            if filing_separately not in {0.0, 1.0}:
+                raise StateTaxPopulationRoutingError(
+                    f"{label}: filing-method branch must be boolean; "
+                    f"got {filing_separately}"
+                )
+            filing_separately = bool(filing_separately)
+        return max(0.0, separate if filing_separately else joint)
     if (
         transform
         == "tax_unit_net_and_person_sum_to_capital_gains_worksheet_line_10"
