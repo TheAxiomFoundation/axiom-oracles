@@ -62,9 +62,17 @@ cd "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 # Every tree holding a report or report-derived artifact this script may
 # refresh, regenerate, and commit. The EUROMOD-BE coverage rollup lives
 # outside the two data trees, so it is listed explicitly.
+#
+# certificates/ MUST be here. It was omitted when census+certify were first
+# wired in, and the failure was silent in the worst way: certify.py wrote the
+# corrected certificate, verify_derived confirmed it in the worktree, and then
+# `git add -- "${derived_paths[@]}"` skipped it — so the bot pushed a STALE
+# certificate with every command exiting 0. set -e cannot see that class of
+# bug. Anything a regenerate_derived step writes belongs in this list.
 derived_paths=(
   dashboard/public/data/
   conformance/
+  certificates/
   axiom_oracles/data/euromod_be_coverage.json
 )
 manifest="dashboard/public/data/manifest.json"

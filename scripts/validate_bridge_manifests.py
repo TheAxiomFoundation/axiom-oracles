@@ -42,6 +42,45 @@ def load_manifests() -> dict[Path, dict]:
     }
 
 
+def _known_suites() -> set[str]:
+    names = set()
+    for path in sorted(DATA_DIR.glob("*.json")):
+        try:
+            payload = json.loads(path.read_text())
+        except (OSError, json.JSONDecodeError):
+            continue
+        if isinstance(payload, dict) and payload.get("suite"):
+            names.add(str(payload["suite"]))
+    return names
+
+
+KNOWN_SUITES = _known_suites()
+
+
+def _covered_by_resolves(text: str) -> bool:
+    """A covered_by entry must point at something that exists.
+
+    A length-and-substring heuristic accepts any sufficiently long string
+    (audit F5 demonstrated "ABCDEFGHIJKL" passing). Require the entry to
+    mention either a repository path that exists or a suite with a committed
+    report — the prose around it may stay free-form.
+    """
+    if "tbd" in text.lower():
+        return False
+    for token in text.replace(",", " ").replace("(", " ").replace(")", " ").split():
+        candidate = token.strip("'\"`;")
+        if candidate and (REPO_ROOT / candidate).exists():
+            return True
+        if candidate in KNOWN_SUITES:
+            return True
+        # rulespec-us and sibling repos are not in this checkout; accept a
+        # concrete file reference in one of them (a path-shaped token with a
+        # recognised encoding suffix), which a reviewer can follow.
+        if candidate.endswith((".yaml", ".yml", ".json")) and "/" in candidate:
+            return True
+    return False
+
+
 def _report_for(suite_names: list[str]) -> tuple[str | None, dict | None]:
     for path in sorted(DATA_DIR.glob("*.json")):
         try:
@@ -64,6 +103,11 @@ def validate(path: Path, manifest: dict) -> tuple[list[str], list[str]]:
     for field in ("suite", "program", "bindings", "population", "oracle"):
         if field not in manifest:
             errors.append(f"{name}: missing required field `{field}`")
+    aliases = manifest.get("aliases")
+    if aliases is not None and not isinstance(aliases, list):
+        # A scalar alias iterates character-by-character everywhere aliases are
+        # consumed, which silently bypasses collision detection (audit F5).
+        errors.append(f"{name}: `aliases` must be a list, got {type(aliases).__name__}")
     if errors:
         return errors, findings
 
@@ -111,10 +155,12 @@ def validate(path: Path, manifest: dict) -> tuple[list[str], list[str]]:
             else:
                 for ref in covered_by:
                     text = str(ref)
-                    if len(text) < 12 or "tbd" in text.lower():
+                    if not _covered_by_resolves(text):
                         errors.append(
                             f"{name}: bridged binding [{index}] covered_by "
-                            f"entry {text!r} is a placeholder, not evidence"
+                            f"entry {text!r} resolves to nothing — name a "
+                            "repository path that exists or a suite with a "
+                            "committed report"
                         )
             if not binding.get("source") or not binding.get("mechanism"):
                 errors.append(
@@ -163,7 +209,16 @@ def validate(path: Path, manifest: dict) -> tuple[list[str], list[str]]:
         findings.append(f"{name}: {partial} binding(s) audit=partial — audit debt")
 
     completeness = (manifest.get("completeness") or {}).get("status")
-    if completeness != "verified":
+    if completeness == "verified":
+        # Nothing can confirm this yet: verification requires reconciling the
+        # bindings against the engine's metadata.input_catalog, which the
+        # current artifacts do not carry. A self-asserted `verified` is an
+        # unbacked claim, not a state (audit F5).
+        errors.append(
+            f"{name}: completeness=verified cannot be self-asserted — no "
+            "input_catalog is available to reconcile bindings against"
+        )
+    else:
         findings.append(
             f"{name}: completeness={completeness} — input-catalog verification "
             "pending (engine main's metadata.input_catalog)"

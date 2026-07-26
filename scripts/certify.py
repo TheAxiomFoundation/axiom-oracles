@@ -106,6 +106,54 @@ PROGRAMS: dict[str, dict] = {
 }
 
 
+#: The only disposition kinds with defined meaning. An unrecognized kind in a
+#: report's counts is a defect, not a silently-ignored extra column.
+KNOWN_DISPOSITION_KINDS = {
+    "explained_residual",
+    "upstream_engine_gap",
+    "bridge_artifact",
+    "axiom_encoding_gap",
+    "unexplained",
+}
+
+
+def _as_int(raw) -> int:
+    """Coerce a count defensively.
+
+    Counts arrive from generated JSON. A bool is not a count, a float count is
+    a producer bug rather than a value to truncate, and a non-numeric is not
+    zero — each becomes 0 here and the caller's conservation check then fails
+    loudly, which is the intended outcome (audit finding 2).
+    """
+    if isinstance(raw, bool) or raw is None:
+        return 0
+    if isinstance(raw, int):
+        return raw
+    if isinstance(raw, float):
+        return int(raw) if raw.is_integer() else 0
+    return 0
+
+
+def _dispositions_suite(path: Path) -> str | None:
+    """The suite a dispositions file declares, or None if unreadable.
+
+    Hashing a file proves which bytes were cited; only parsing it proves the
+    citation is about this suite.
+    """
+    try:
+        import yaml
+    except ModuleNotFoundError:  # pragma: no cover - environment guard
+        sys.exit(
+            "certify needs PyYAML to suite-bind dispositions files. Run under "
+            "the project env (`uv run python scripts/certify.py`)."
+        )
+    try:
+        payload = yaml.safe_load(path.read_text())
+    except Exception:
+        return None
+    return str(payload.get("suite")) if isinstance(payload, dict) else None
+
+
 def sha256_of(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
@@ -136,16 +184,36 @@ def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
             f"{reported_suite!r}, not this suite"
         )
 
-    comparisons = int(summary.get("comparison_count") or 0)
-    matches = int(summary.get("match_count") or 0)
-    mismatch_count = int(summary.get("mismatch_count") or 0)
-    error_count = int(
-        summary.get("error_count") or summary.get("error_case_count") or 0
+    comparisons = _as_int(summary.get("comparison_count"))
+    matches = _as_int(summary.get("match_count"))
+    mismatch_count = _as_int(summary.get("mismatch_count"))
+    # Errors appear under several shapes across runners; a check that reads
+    # only one key lets an errored run certify (audit finding 2). Count them
+    # all, including the top-level list.
+    errors_by_engine = summary.get("errors_by_engine") or {}
+    error_count = (
+        _as_int(summary.get("error_count"))
+        + _as_int(summary.get("error_case_count"))
+        + sum(_as_int(v) for v in errors_by_engine.values())
+        + len(report.get("errors") or [])
     )
     if comparisons <= 0:
         defects.append(
             f"{entry['suite']}: zero comparisons — a report that did no work "
             "cannot evidence anything"
+        )
+    # A positive comparison count must be backed by per-case evidence
+    # somewhere: inline cases or committed chunks. Counts alone are an
+    # assertion, not evidence (audit finding 2).
+    inline_cases = len(report.get("cases") or [])
+    chunk_dir = REPO_ROOT / "dashboard" / "public" / "data" / "cases" / str(
+        reported_suite or entry["suite"]
+    )
+    chunk_files = sorted(chunk_dir.glob("chunk-*.json")) if chunk_dir.is_dir() else []
+    if comparisons > 0 and not inline_cases and not chunk_files:
+        defects.append(
+            f"{entry['suite']}: claims {comparisons} comparisons with no "
+            "per-case evidence (no inline cases, no committed chunks)"
         )
     if matches + mismatch_count != comparisons:
         defects.append(
@@ -161,7 +229,16 @@ def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
     # Weighted evidence must not contradict the raw counts (a zero raw
     # mismatch count with nonzero weighted mismatch mass is hidden failure).
     weighted = summary.get("weighted") or {}
-    weighted_mismatch = float(weighted.get("mismatch_weight") or 0)
+    try:
+        weighted_mismatch = float(weighted.get("mismatch_weight") or 0)
+    except (TypeError, ValueError):
+        weighted_mismatch = 0.0
+        defects.append(f"{entry['suite']}: weighted mismatch_weight is not numeric")
+    if weighted_mismatch != weighted_mismatch or weighted_mismatch in (
+        float("inf"), float("-inf")
+    ):
+        defects.append(f"{entry['suite']}: weighted mismatch_weight is not finite")
+        weighted_mismatch = 0.0
     if mismatch_count == 0 and weighted_mismatch > 0:
         defects.append(
             f"{entry['suite']}: raw mismatch count is 0 but weighted mismatch "
@@ -187,12 +264,20 @@ def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
     disposition_file = dispositioned.get("dispositions_file")
     classified = sum(int(v or 0) for v in counts.values())
     if disposition_file:
-        dispositions_path = REPO_ROOT / disposition_file
-        if not dispositions_path.exists():
+        if str(disposition_file).startswith("/") or ".." in str(disposition_file):
             defects.append(
-                f"{entry['suite']}: dispositions_file {disposition_file!r} "
-                "does not exist in the repository"
+                f"{entry['suite']}: dispositions_file {disposition_file!r} is "
+                "not a repository-relative path"
             )
+            dispositions_path = None
+        else:
+            dispositions_path = REPO_ROOT / disposition_file
+        if dispositions_path is None or not dispositions_path.exists():
+            if dispositions_path is not None:
+                defects.append(
+                    f"{entry['suite']}: dispositions_file {disposition_file!r} "
+                    "does not exist in the repository"
+                )
             unexplained = mismatch_count
         else:
             evidence.append(
@@ -203,7 +288,33 @@ def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
                     "sha256": sha256_of(dispositions_path),
                 }
             )
-            unexplained = int(dispositioned.get("unexplained_count") or 0)
+            # The file must declare the suite it is cited for, or one report's
+            # mismatches can be "explained" by another suite's file entirely
+            # (audit finding 3).
+            declared = _dispositions_suite(dispositions_path)
+            if declared is not None and declared not in accepted:
+                defects.append(
+                    f"{entry['suite']}: {disposition_file} declares suite "
+                    f"{declared!r}, which is not this suite"
+                )
+            unexplained = _as_int(dispositioned.get("unexplained_count"))
+            # counts.unexplained and unexplained_count must agree; a summary
+            # that reports both, differently, is not a reconciled aggregate.
+            counted_unexplained = _as_int(counts.get("unexplained"))
+            if counted_unexplained != unexplained:
+                defects.append(
+                    f"{entry['suite']}: counts.unexplained "
+                    f"({counted_unexplained}) disagrees with unexplained_count "
+                    f"({unexplained})"
+                )
+                unexplained = max(unexplained, counted_unexplained)
+            unknown = set(counts) - KNOWN_DISPOSITION_KINDS
+            if unknown:
+                defects.append(
+                    f"{entry['suite']}: unknown disposition kind(s) "
+                    f"{sorted(unknown)} — only {sorted(KNOWN_DISPOSITION_KINDS)} "
+                    "carry defined meaning"
+                )
             if classified != mismatch_count:
                 defects.append(
                     f"{entry['suite']}: disposition counts ({classified}) do "
@@ -320,22 +431,37 @@ def build_certificate(program: str, spec: dict) -> dict:
     # today, so certified is necessarily false — by design, not oversight: a
     # certificate resting on attested premises is scaffolding, and saying so
     # is the point.
-    certified = bool(
-        conformant
-        and exercise_complete
-        and not blockers
-        and attested.get("closed", {}).get("status") == "computed"
-        and attested.get("executable", {}).get("status") == "computed"
+    # A status string alone must never authorize certification: flipping two
+    # registry strings to "computed" would otherwise certify while the
+    # underlying values are false and the emitted mode is still attested
+    # (audit finding 7). Require, per premise, that it is genuinely computed
+    # AND true. Nothing computes closed/executable yet, so `certified` is
+    # explicitly UNAVAILABLE rather than silently false — an unreachable
+    # claim reported as a verdict is its own defect.
+    def _premise_ok(name: str) -> bool:
+        block = attested.get(name) or {}
+        return block.get("status") == "computed" and block.get("value") is True
+
+    premises_computed = _premise_ok("closed") and _premise_ok("executable")
+    certified_state = (
+        "unavailable"
+        if not premises_computed
+        else ("yes" if (conformant and exercise_complete and not blockers) else "no")
     )
+    certified = certified_state == "yes"
     return {
         "schema": SCHEMA,
         "program": program,
         "period": spec["period"],
         "certified": {
             "value": certified,
+            "state": certified_state,
             "rule": "computed(conformant AND exercised AND closed AND "
-            "executable) with zero open defects; attested premises never "
-            "satisfy it",
+            "executable) with zero open defects. A premise counts only when "
+            "its mode is computed AND its value is true; attested premises "
+            "never satisfy it. state=unavailable means no producer computes "
+            "closed/executable yet, so certification is not merely withheld "
+            "but not yet offerable.",
         },
         "verdicts": {
             "conformant": {
@@ -407,7 +533,7 @@ def main() -> int:
         path.write_text(json.dumps(certificate, indent=2, sort_keys=True) + "\n")
         verdicts = certificate["verdicts"]
         print(
-            f"{program}: CERTIFIED={certificate['certified']['value']} | "
+            f"{program}: CERTIFIED={certificate['certified']['state'].upper()} | "
             f"conformant={verdicts['conformant']['value']} "
             f"exercised={verdicts['exercised']['value']} "
             f"closed={verdicts['closed'].get('status')} "

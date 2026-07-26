@@ -50,7 +50,7 @@ import hashlib
 import json
 import sys
 from collections import defaultdict
-from decimal import Decimal, InvalidOperation
+from decimal import Decimal, InvalidOperation, localcontext
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -61,6 +61,36 @@ OUTPUT_PATH = REPO_ROOT / "conformance" / "exercise-census.json"
 SCHEMA = "axiom_oracles.exercise_census.v1"
 
 MANIFEST_DIR = REPO_ROOT / "axiom_oracles" / "bridges" / "manifests"
+
+
+def _manifest_strict_clean() -> dict[str, bool]:
+    """Which manifests are strict-clean, per the validator itself.
+
+    `bridge_audited` previously meant only "a manifest exists", so an unpinned
+    manifest with partial catchalls and unverified completeness still reported
+    audited (audit finding 5). The label must mean what it says, and the
+    validator — not this script — decides.
+    """
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location(
+        "_vbm", Path(__file__).resolve().parent / "validate_bridge_manifests.py"
+    )
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    clean: dict[str, bool] = {}
+    for path, manifest in module.load_manifests().items():
+        errors, findings = module.validate(path, manifest)
+        ok = not errors and not findings
+        if isinstance(manifest, dict):
+            names = [manifest.get("suite")]
+            aliases = manifest.get("aliases")
+            if isinstance(aliases, list):
+                names.extend(aliases)
+            for name in names:
+                if name:
+                    clean[str(name)] = ok
+    return clean
 
 
 def _bridged_through_by_suite() -> dict[str, dict[str, str]]:
@@ -99,9 +129,10 @@ def _bridged_through_by_suite() -> dict[str, dict[str, str]]:
 
 
 BRIDGED_THROUGH: dict[str, dict[str, str]] = _bridged_through_by_suite()
+MANIFEST_STRICT_CLEAN: dict[str, bool] = _manifest_strict_clean()
 
 
-def _iter_suite_reports() -> list[tuple[str, dict]]:
+def _iter_suite_reports() -> list[tuple[str, dict, Path]]:
     reports = []
     for path in sorted(DATA_DIR.glob("*.json")):
         try:
@@ -109,7 +140,7 @@ def _iter_suite_reports() -> list[tuple[str, dict]]:
         except (OSError, json.JSONDecodeError):
             continue
         if isinstance(payload, dict) and payload.get("suite"):
-            reports.append((str(payload["suite"]), payload))
+            reports.append((str(payload["suite"]), payload, path))
     return reports
 
 
@@ -128,11 +159,20 @@ def _canonical_value(raw) -> str:
     if isinstance(raw, str):
         try:
             number = Decimal(raw)
-        except InvalidOperation:
+        except (InvalidOperation, ValueError):
             return json.dumps(raw, sort_keys=True)
+        # A non-finite is not an observation of a value; keep it distinct from
+        # any numeric and from the look-alike string (audit finding 6).
+        if not number.is_finite():
+            return json.dumps(f"__nonfinite__{raw}", sort_keys=True)
         if number == 0:
             return "0"
-        return format(number.normalize(), "f")
+        # normalize() honours the ambient context, whose 28-digit default
+        # merged distinct exact integers such as ...678901 and ...678902
+        # (audit finding 6). Give it room to be exact.
+        with localcontext() as ctx:
+            ctx.prec = 200
+            return format(number.normalize(), "f")
     return json.dumps(raw, sort_keys=True, default=str)
 
 
@@ -161,7 +201,7 @@ def _chunk_cases(suite: str) -> tuple[list[dict], list[dict]]:
     return cases, manifest
 
 
-def _census_suite(suite: str, report: dict) -> dict:
+def _census_suite(suite: str, report: dict, report_path: Path) -> dict:
     field_values: dict[str, set[str]] = defaultdict(set)
     concept_values: dict[str, set[str]] = defaultdict(set)
     scanned = 0
@@ -215,6 +255,11 @@ def _census_suite(suite: str, report: dict) -> dict:
     varied = sum(1 for f in fields.values() if f["state"] == "varied")
     return {
         "cases_scanned": scanned,
+        # The row is bound to the exact report it counted. Without this, two
+        # reports claiming one suite are indistinguishable and a row can
+        # inherit the other's evidence (audit finding 4).
+        "report": str(report_path.relative_to(REPO_ROOT)),
+        "report_sha256": hashlib.sha256(report_path.read_bytes()).hexdigest(),
         "evidence_source": "chunks" if chunk_cases else "inline",
         "inline_cases_not_counted": len(inline_cases) if chunk_cases else 0,
         "chunk_manifest": chunk_manifest,
@@ -223,14 +268,26 @@ def _census_suite(suite: str, report: dict) -> dict:
         "varied_fields": varied,
         "constant_fields": len(fields) - varied,
         "bridged_through": BRIDGED_THROUGH.get(suite, {}),
-        "bridge_audited": suite in BRIDGED_THROUGH,
+        "bridge_declared": suite in BRIDGED_THROUGH,
+        # Audited means the validator finds nothing outstanding — not merely
+        # that a manifest file exists (audit finding 5).
+        "bridge_audited": MANIFEST_STRICT_CLEAN.get(suite, False),
     }
 
 
 def build_census() -> dict:
-    suites = {}
-    for suite, report in _iter_suite_reports():
-        suites[suite] = _census_suite(suite, report)
+    suites: dict[str, dict] = {}
+    contested: dict[str, list[str]] = defaultdict(list)
+    for suite, report, path in _iter_suite_reports():
+        contested[suite].append(str(path.relative_to(REPO_ROOT)))
+        suites[suite] = _census_suite(suite, report, path)
+    # A suite claimed by more than one report is an ambiguity the census must
+    # NOT resolve silently by sort order — it is recorded on the row so the
+    # certificate can treat it as a defect (audit finding 4; live case:
+    # nyc-synthetic, 813 cases vs 10, sharing one chunk directory).
+    for suite, paths in contested.items():
+        if len(paths) > 1:
+            suites[suite]["contested_reports"] = sorted(paths)
     return {
         "schema": SCHEMA,
         "_comment": (

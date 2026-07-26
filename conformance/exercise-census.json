@@ -4,6 +4,7 @@
   "suites": {
     "ak-apa-state-supplement": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 9,
       "chunk_manifest": [],
@@ -40,11 +41,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-ak-apa-state-supplement.json",
+      "report_sha256": "d2733cfca89985f63469a93031b207a91bbb268d92e2befe34a0f4408bb24d24",
       "varied_fields": 2,
       "verdict_concepts": {}
     },
     "ak-atap-standards": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 3,
       "chunk_manifest": [],
@@ -81,11 +85,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-ak-atap-standards.json",
+      "report_sha256": "a3661e95fb2a7e9fae0a28250d9573abf34638a5097a67bd8097301fec092e9f",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
     "al-income-tax-populace": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 1632,
       "chunk_manifest": [
@@ -110,6 +117,8 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-al-income-tax-populace.json",
+      "report_sha256": "43f4ed663caa2ebc29b6ecd8e8d35227a4e816bd42c3ad81fd7c85f6194b0ec7",
       "varied_fields": 0,
       "verdict_concepts": {
         "us-al:policies/income_tax/2026_section_40_18_5_schedule_before_credits#al_pit_2026_section_40_18_5_schedule_before_credits": {
@@ -119,6 +128,7 @@
     },
     "al-snap-ecps": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 1444,
       "chunk_manifest": [
@@ -220,6 +230,8 @@
       },
       "evidence_source": "chunks",
       "inline_cases_not_counted": 44,
+      "report": "dashboard/public/data/axiom-policyengine-al-snap-ecps.json",
+      "report_sha256": "cd0b84b538af2b77465d90c13dd0f517a9c830e147150b1d708b089376ca13d5",
       "varied_fields": 7,
       "verdict_concepts": {
         "us:statutes/7/2014/o#snap_eligible": {
@@ -232,6 +244,7 @@
     },
     "al-tanf-ecps": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 1444,
       "chunk_manifest": [
@@ -269,6 +282,8 @@
       },
       "evidence_source": "chunks",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-al-tanf-ecps.json",
+      "report_sha256": "552c1e06e71de8e5e943aff8a333a34138edfe9ccd85b6495eeef66eaf41435e",
       "varied_fields": 3,
       "verdict_concepts": {
         "us-al:policies/dhr/tanf#al_tanf_benefit": {
@@ -278,6 +293,7 @@
     },
     "al-tanf-payment-standards": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 4,
       "chunk_manifest": [],
@@ -314,11 +330,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-al-tanf-payment-standards.json",
+      "report_sha256": "0a4f0cae977577490429b410ac6338db66a800fac27cb89aebfa94c4afca5ff0",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
     "ar-income-tax-populace": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 1475,
       "chunk_manifest": [
@@ -339,6 +358,8 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-ar-income-tax-populace.json",
+      "report_sha256": "fabf0d4c913b2e1885ae3a973c42f69f8cd1b10f7c2d52e2e05ee9a5a55d319a",
       "varied_fields": 0,
       "verdict_concepts": {
         "us-ar:policies/income_tax/pilot_liability_pipeline#ar_pit_pilot_income_tax_before_non_refundable_credits_indiv": {
@@ -348,6 +369,7 @@
     },
     "az-income-tax-liability": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -360,11 +382,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 6,
+      "report": "dashboard/public/data/axiom-policyengine-taxsim-az-income-tax-liability.json",
+      "report_sha256": "3a8faeb10335b804765eddba9f284cebc369c3913ca1a4079ab4be534ea0f617",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "az-income-tax-populace": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 1585,
       "chunk_manifest": [
@@ -389,6 +414,8 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-az-income-tax-populace.json",
+      "report_sha256": "2bba6f24b843caf572e36cbc58e60bea37dde70686a723cfbac40ee35c1b712a",
       "varied_fields": 0,
       "verdict_concepts": {
         "us-az:policies/income_tax/pilot_liability_pipeline#az_pit_pilot_income_tax_liability": {
@@ -398,6 +425,7 @@
     },
     "az-snap-ecps": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 1341,
       "chunk_manifest": [
@@ -507,6 +535,8 @@
       },
       "evidence_source": "chunks",
       "inline_cases_not_counted": 306,
+      "report": "dashboard/public/data/axiom-policyengine-az-snap-ecps.json",
+      "report_sha256": "038f6a95face55d368a0ab7ed0e7180dbde716158acdb76393005e6cbf0f08d7",
       "varied_fields": 9,
       "verdict_concepts": {
         "us:statutes/7/2014/o#snap_eligible": {
@@ -519,6 +549,7 @@
     },
     "az-snap-qc": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 922,
       "chunk_manifest": [
@@ -535,11 +566,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 922,
+      "report": "dashboard/public/data/axiom-snapqc-az-snap.json",
+      "report_sha256": "994dd940cbef1d41d5f1cec26b3efc27a394fd6b56cc50728ac0d3051af34a0f",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "az-tanf-deductions": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 2,
       "chunk_manifest": [],
@@ -576,11 +610,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-az-tanf-deductions.json",
+      "report_sha256": "109fca4557b8c92b8baac2900150b42000d73e59af5211ea9870d1c1713c8417",
       "varied_fields": 3,
       "verdict_concepts": {}
     },
     "az-tanf-ecps": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 1341,
       "chunk_manifest": [
@@ -642,6 +679,8 @@
       },
       "evidence_source": "chunks",
       "inline_cases_not_counted": 4,
+      "report": "dashboard/public/data/axiom-policyengine-az-tanf-ecps.json",
+      "report_sha256": "308d12ec7fd814ce028036f0084d40698123539b51989795d4a7226faf82686e",
       "varied_fields": 6,
       "verdict_concepts": {
         "us-az:policies/des/faa5#az_tanf_benefit": {
@@ -651,6 +690,7 @@
     },
     "be-article-51-forfait": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 5,
       "chunk_manifest": [],
@@ -679,11 +719,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-euromod-be-article-51-forfait.json",
+      "report_sha256": "89a8365197e1f31997d639dabe4815f27f156057e58456465842db9521771251",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
     "be-birth-leave": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 3,
       "chunk_manifest": [],
@@ -716,11 +759,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-euromod-be-birth-leave.json",
+      "report_sha256": "a92eb0c6df831ae64429c103ee3531bd04ab97e35a0694f59924702e322becf9",
       "varied_fields": 2,
       "verdict_concepts": {}
     },
     "be-cadastral-income-indexation": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 2,
       "chunk_manifest": [],
@@ -749,11 +795,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-euromod-be-cadastral-income-indexation.json",
+      "report_sha256": "4aed3317ab74ccc549e9d78e4c9ca02c2875d509d5983560e06d4b999ad0b177",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
     "be-capital-income-tax": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 3,
       "chunk_manifest": [],
@@ -786,11 +835,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-euromod-be-capital-income-tax.json",
+      "report_sha256": "86d668666d2ed3c357dae5a678465697a58a803ae3b958e9e786ca7775231d3d",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
     "be-elderly-income-support": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 1,
       "chunk_manifest": [],
@@ -815,11 +867,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-euromod-be-elderly-income-support.json",
+      "report_sha256": "a818208fa0c6d8bc920409210a91af5169af262ac1371889e39518fabffbfd9c",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "be-employer-ssc": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 2,
       "chunk_manifest": [],
@@ -860,11 +915,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-euromod-be-employer-ssc.json",
+      "report_sha256": "47834b070dbf64738eb6ec4c19f52c7f49f91687bc9786158a8974b96da36ffa",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
     "be-family-birth-allowance": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 7,
       "chunk_manifest": [],
@@ -901,11 +959,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-euromod-be-family-birth-allowance.json",
+      "report_sha256": "d5ce0e1f481fbbf56a74585ab977ae9874b36f9a2d0ec5566b2e0ebd728aeddf",
       "varied_fields": 3,
       "verdict_concepts": {}
     },
     "be-family-child-benefit-base": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 17,
       "chunk_manifest": [],
@@ -942,11 +1003,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-euromod-be-family-child-benefit-base.json",
+      "report_sha256": "cef61c2d139046b3dd93b7669ec8468720032b3f13e4d804ee2dddae1c0e1094",
       "varied_fields": 4,
       "verdict_concepts": {}
     },
     "be-family-child-benefit-brussels-same-age-household": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 4,
       "chunk_manifest": [],
@@ -999,11 +1063,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-euromod-be-family-child-benefit-brussels-same-age-household.json",
+      "report_sha256": "a0cb64270f13c9735545b668ae33755253c835599802b89f02ce40baefd34372",
       "varied_fields": 4,
       "verdict_concepts": {}
     },
     "be-family-child-benefit-income-list": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 4,
       "chunk_manifest": [],
@@ -1056,11 +1123,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-euromod-be-family-child-benefit-income-list.json",
+      "report_sha256": "be228ffaea02e403a08f1fabfd7ecb778526cdd55f7c0bd1a928cdf5cb28e6bc",
       "varied_fields": 3,
       "verdict_concepts": {}
     },
     "be-family-child-benefit-social-supplement": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 3,
       "chunk_manifest": [],
@@ -1101,11 +1171,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-euromod-be-family-child-benefit-social-supplement.json",
+      "report_sha256": "efd1e7a3ee6e913259de4d267cf66c2061a7ed09f15dbf513bac7bf99b14fbc2",
       "varied_fields": 3,
       "verdict_concepts": {}
     },
     "be-family-child-benefit-wallonia-social-supplement": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 8,
       "chunk_manifest": [],
@@ -1146,11 +1219,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-euromod-be-family-child-benefit-wallonia-social-supplement.json",
+      "report_sha256": "acd0a61d6d104a84d1c02266318a1172d66b715b8698be1d4d9854b11c51da58",
       "varied_fields": 3,
       "verdict_concepts": {}
     },
     "be-flemish-jobbonus": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 7,
       "chunk_manifest": [],
@@ -1187,11 +1263,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-euromod-be-flemish-jobbonus.json",
+      "report_sha256": "66bf0d0ba9d149484acfbc06f153ed29b72a52ba594714593c3351e4fecaf073",
       "varied_fields": 4,
       "verdict_concepts": {}
     },
     "be-flemish-social-protection-premium": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 2,
       "chunk_manifest": [],
@@ -1220,11 +1299,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-euromod-be-flemish-social-protection-premium.json",
+      "report_sha256": "79240a157f501ba26a50b5c3f234be43f7e0529183670a2d7429925f7b655e99",
       "varied_fields": 2,
       "verdict_concepts": {}
     },
     "be-local-municipal-pit": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 3,
       "chunk_manifest": [],
@@ -1261,11 +1343,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-euromod-be-local-municipal-pit.json",
+      "report_sha256": "71d7d0ca01e2489dc4ada3ee4c21d001aa048fe026e8cacfac68cb0639a92ca8",
       "varied_fields": 2,
       "verdict_concepts": {}
     },
     "be-marital-quotient": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 3,
       "chunk_manifest": [
@@ -1283,11 +1368,14 @@
       },
       "evidence_source": "chunks",
       "inline_cases_not_counted": 3,
+      "report": "dashboard/public/data/axiom-euromod-be-marital-quotient.json",
+      "report_sha256": "7c06481abace2624b6726af93905670bdd597d99365e80a41d20c7e2a8ba1edb",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
     "be-maternity-leave": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 3,
       "chunk_manifest": [],
@@ -1320,11 +1408,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-euromod-be-maternity-leave.json",
+      "report_sha256": "8a6b8afdc30be1629e4df5d8a89e267ec2937767b20090a77c9063dd7ba1f382",
       "varied_fields": 2,
       "verdict_concepts": {}
     },
     "be-pensioner-contributions": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [],
@@ -1353,11 +1444,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-euromod-be-pensioner-contributions.json",
+      "report_sha256": "578206059d08a5f57a394b54b500f9c02a8d68741e3aa7829ec36aa7a4c9efe8",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
     "be-property-tax": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 3,
       "chunk_manifest": [],
@@ -1390,11 +1484,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-euromod-be-property-tax.json",
+      "report_sha256": "2892ca056e3a2317c767b3176e0fe369a253313ac2d8e2a3acb6092ca53bba38",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
     "be-regional-pit-surcharge": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 3,
       "chunk_manifest": [],
@@ -1431,11 +1528,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-euromod-be-regional-pit-surcharge.json",
+      "report_sha256": "e15006b0f6463d4db94cc8e2170a9c7a6469341505ce24fe19883f640df00df2",
       "varied_fields": 2,
       "verdict_concepts": {}
     },
     "be-self-employed-ssc": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 7,
       "chunk_manifest": [],
@@ -1472,11 +1572,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-euromod-be-self-employed-ssc.json",
+      "report_sha256": "bb7098e272306021b56a12c33a6bfb909a99473ee039d7882f0d7e22015891bc",
       "varied_fields": 2,
       "verdict_concepts": {}
     },
     "be-social-assistance": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 2,
       "chunk_manifest": [],
@@ -1501,11 +1604,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-euromod-be-social-assistance.json",
+      "report_sha256": "183536b955d41de464d32b42fbbf0edfd9cd3b1b1044d1c2d77c736c3b7e2368",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
     "be-special-social-security-contribution": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 7,
       "chunk_manifest": [],
@@ -1546,11 +1652,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-euromod-be-special-social-security-contribution.json",
+      "report_sha256": "0ae9fa2add4cdc6b5f0082e343c847d7ce0d01c6dac4410b77b35397436160de",
       "varied_fields": 5,
       "verdict_concepts": {}
     },
     "be-study-allowance": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [],
@@ -1575,11 +1684,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-euromod-be-study-allowance.json",
+      "report_sha256": "e0575b5e7405746a4e1b9f7a4a740657b5f6bc34276ed5590a66426306671f5f",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
     "be-unemployment": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 4,
       "chunk_manifest": [],
@@ -1608,11 +1720,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-euromod-be-unemployment.json",
+      "report_sha256": "13e3edc696ddef96280f8b759dc06fbb949d8ce5c0b9450ddc3767cb0798bbb5",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
     "be-work-bonus-credit": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 2,
       "chunk_manifest": [
@@ -1625,11 +1740,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 4,
+      "report": "dashboard/public/data/axiom-euromod-be-work-bonus-credit.json",
+      "report_sha256": "33960718273e134bf28debbba98af917882bdcac6334d838b08e85fe217dabc8",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "be-worker-disposable-income-list": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 2,
       "chunk_manifest": [],
@@ -1658,11 +1776,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-euromod-be-worker-disposable-income-list.json",
+      "report_sha256": "efd4a5807274b1561c8a2c1aa1b65df8d3d1bbaa5751ca288a28b3a3de3e8536",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
     "be-worker-pit": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 3,
       "chunk_manifest": [],
@@ -1691,11 +1812,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-euromod-be-worker-pit.json",
+      "report_sha256": "fa9748943283c027ceb63f90850ae6fe80da97eccd09e7b56dd89114026a8a48",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
     "be-worker-ssc": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 2,
       "chunk_manifest": [],
@@ -1724,11 +1848,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-euromod-be-worker-ssc.json",
+      "report_sha256": "d098027482d74f6a6fee509c1cf21337d769f0d01218344c0a61fae2ef690c9d",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
     "be-worker-tax-income-list": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 2,
       "chunk_manifest": [],
@@ -1757,11 +1884,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-euromod-be-worker-tax-income-list.json",
+      "report_sha256": "6f00b3f17926b007354fd97c125406bda68650bbf55915cc3fc903ff03e0de17",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
     "ca-capi-limits": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 2,
       "chunk_manifest": [],
@@ -1798,11 +1928,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-ca-capi-limits.json",
+      "report_sha256": "6633d2b88817919c0498ad4ea8f71e971c5fdcabc16584cc695106d1d2ba0215",
       "varied_fields": 2,
       "verdict_concepts": {}
     },
     "ca-federal-schedule-tax-spsm": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 0,
       "chunk_manifest": [],
@@ -1810,11 +1943,14 @@
       "evidence_fields": {},
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-spsm-ca-federal-schedule-tax.json",
+      "report_sha256": "43ea38709da55d16aaf485771572dfb779631e05d9c00f283c77515919ff5ed4",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "ca-income-tax-liability": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 2,
       "chunk_manifest": [
@@ -1827,11 +1963,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 6,
+      "report": "dashboard/public/data/axiom-policyengine-taxsim-ca-income-tax-liability.json",
+      "report_sha256": "ae707b795e50dc4097335a534832980f124359fa101b3db8cd5b91371c299fa3",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "ca-snap-ecps": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 7101,
       "chunk_manifest": [
@@ -1993,6 +2132,8 @@
       },
       "evidence_source": "chunks",
       "inline_cases_not_counted": 499,
+      "report": "dashboard/public/data/axiom-policyengine-ca-snap-ecps.json",
+      "report_sha256": "a5ded34100a124ec3c6409a409fb64bca788d510b5233d1c9992a1809e6b484d",
       "varied_fields": 9,
       "verdict_concepts": {
         "us:statutes/7/2014/o#snap_eligible": {
@@ -2005,6 +2146,7 @@
     },
     "ca-snap-qc": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 883,
       "chunk_manifest": [
@@ -2021,11 +2163,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 883,
+      "report": "dashboard/public/data/axiom-snapqc-ca-snap.json",
+      "report_sha256": "4a4266dbf8badbaa651d60b314b13928056acbc83d7b7bbbcf35aac70682d3e2",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "ca-tanf-ecps": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 7101,
       "chunk_manifest": [
@@ -2119,6 +2264,8 @@
       },
       "evidence_source": "chunks",
       "inline_cases_not_counted": 177,
+      "report": "dashboard/public/data/axiom-policyengine-ca-tanf-ecps.json",
+      "report_sha256": "30a36604fc2c5390dca52a419ce399ad5474906d912bba456ee96443063e9431",
       "varied_fields": 3,
       "verdict_concepts": {
         "us-ca:policies/cdss/calworks#ca_tanf_benefit": {
@@ -2128,6 +2275,7 @@
     },
     "co-health-thresholds": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 8,
       "chunk_manifest": [],
@@ -2168,11 +2316,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-co-health-thresholds.json",
+      "report_sha256": "1d49a1115047654d90a288cfc4cec58921b63f845169ae2e5cc796be606d012d",
       "varied_fields": 4,
       "verdict_concepts": {}
     },
     "co-income-tax-liability": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -2185,11 +2336,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 6,
+      "report": "dashboard/public/data/axiom-policyengine-taxsim-co-income-tax-liability.json",
+      "report_sha256": "14bdc377b6150d8ec6fe4f33be8d0c9c4e257a3ef3240cbc4ac825dd801bf057",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "co-income-tax-populace": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 1201,
       "chunk_manifest": [
@@ -2210,6 +2364,8 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-co-income-tax-populace.json",
+      "report_sha256": "726c236d3a122582715aaa19f9087faffeca2c10bf58854efe63a52664e74087",
       "varied_fields": 0,
       "verdict_concepts": {
         "us-co:policies/income_tax/pilot_liability_pipeline#co_pit_pilot_income_tax_liability": {
@@ -2218,7 +2374,8 @@
       }
     },
     "co-snap-ecps": {
-      "bridge_audited": true,
+      "bridge_audited": false,
+      "bridge_declared": true,
       "bridged_through": {
         "dependent_care_deduction": "PE's computed deduction is fed as expenses_paid with reimbursed=0 and necessary=(deduction>0); the receiving formula max(0, paid - reimbursed) reproduces it identically.",
         "medical_deduction": "PE's computed medical deduction fed through."
@@ -2275,6 +2432,8 @@
       },
       "evidence_source": "chunks",
       "inline_cases_not_counted": 1,
+      "report": "dashboard/public/data/axiom-policyengine-co-snap-ecps.json",
+      "report_sha256": "4ce6eb95a89453a5b7c4b8e5ed7bbf48851ae6749d77587f1f1022a723595be0",
       "varied_fields": 7,
       "verdict_concepts": {
         "us:statutes/7/2014/o#snap_eligible": {
@@ -2287,6 +2446,7 @@
     },
     "co-snap-qc": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 856,
       "chunk_manifest": [
@@ -2303,11 +2463,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 856,
+      "report": "dashboard/public/data/axiom-snapqc-co-snap.json",
+      "report_sha256": "dfb65174abf36e92beadfd8cb78430c85ef18f55d5586bf924b40d6d48bb607c",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "co-state-income-tax-ecps": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 31,
       "chunk_manifest": [
@@ -2320,11 +2483,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 31,
+      "report": "dashboard/public/data/axiom-policyengine-co-state-income-tax-ecps.json",
+      "report_sha256": "634f61b75a91675fe073b1ff59ecb0576df4c2633bbba6b73e2b9dd516db9311",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "co-state-income-tax-taxsim": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 1201,
       "chunk_manifest": [
@@ -2350,11 +2516,14 @@
       },
       "evidence_source": "chunks",
       "inline_cases_not_counted": 530,
+      "report": "dashboard/public/data/axiom-taxsim-co-state-income-tax-ecps.json",
+      "report_sha256": "7912cdcc33ed49cd0c87d80e44bbc3c6d659c6c62ae4633f88bde2aa9ec9439f",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "co-state-supplement": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 1,
       "chunk_manifest": [],
@@ -2391,11 +2560,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-co-state-supplement.json",
+      "report_sha256": "8ed529c27d5151f146acf9b1966b5cb031a7ec692d19e11f6ba77265eba5c2cb",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "co-tanf-coverage": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 0,
       "chunk_manifest": [],
@@ -2403,11 +2575,14 @@
       "evidence_fields": {},
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-co-tanf-coverage.json",
+      "report_sha256": "8af7ed5850666b8e46597163157f1101251889fe4083d74f72013a7593dc8cf0",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "co-tanf-ecps": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 1045,
       "chunk_manifest": [
@@ -2437,6 +2612,8 @@
       },
       "evidence_source": "chunks",
       "inline_cases_not_counted": 3,
+      "report": "dashboard/public/data/axiom-policyengine-co-tanf-ecps.json",
+      "report_sha256": "26c889286f5a6d8db5cf15380994070c5edc9a2861c2cfd58e6c4f2612219173",
       "varied_fields": 2,
       "verdict_concepts": {
         "us-co:policies/cdhs/colorado-works#co_tanf_benefit": {
@@ -2446,6 +2623,7 @@
     },
     "co-tax-intersection-taxsim": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 1201,
       "chunk_manifest": [
@@ -2471,11 +2649,14 @@
       },
       "evidence_source": "chunks",
       "inline_cases_not_counted": 359,
+      "report": "dashboard/public/data/axiom-taxsim-co-tax-intersection-ecps.json",
+      "report_sha256": "37a21367db520cd54540d6e0613b5bd9c273b96179daa98a9b18e8b6790b8d24",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "csfp-parameters": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 1,
       "chunk_manifest": [],
@@ -2512,11 +2693,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-csfp-parameters.json",
+      "report_sha256": "2953ed6c87bc1cb6d9bfc49dec42e8d86e6943cbb9ad08f1eda8488d09c64918",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "ct-income-tax-liability": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -2529,11 +2713,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 6,
+      "report": "dashboard/public/data/axiom-policyengine-taxsim-ct-income-tax-liability.json",
+      "report_sha256": "e582daf029d3788b2c44395ad574b1f0eede53e1b640ad205bbc13de244a47f6",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "ct-income-tax-populace": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 951,
       "chunk_manifest": [
@@ -2550,6 +2737,8 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-ct-income-tax-populace.json",
+      "report_sha256": "3e2abf968c087857a3865077288f136d6464310a78fb752ce8c7633d52995ab4",
       "varied_fields": 0,
       "verdict_concepts": {
         "us-ct:policies/income_tax/pilot_liability_pipeline#ct_pit_pilot_income_tax_liability": {
@@ -2559,6 +2748,7 @@
     },
     "dc-income-tax-liability": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -2571,11 +2761,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 6,
+      "report": "dashboard/public/data/axiom-policyengine-taxsim-dc-income-tax-liability.json",
+      "report_sha256": "dd84ecab060a0070aa9d865cffad578accbb5d2d226a0d35d6c1a3bd2fc2358b",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "de-income-tax-liability": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [],
@@ -2583,11 +2776,14 @@
       "evidence_fields": {},
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-taxsim-de-income-tax-liability.json",
+      "report_sha256": "0e4ce511d04d2862f07e28eddfdbc51921b5c3de344374530143e9291e8db464",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "de-income-tax-populace": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 936,
       "chunk_manifest": [
@@ -2604,6 +2800,8 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-de-income-tax-populace.json",
+      "report_sha256": "7e974b978e02e2c013c56e916548f298fd0c6d401d1b298ef7ca51060c83444c",
       "varied_fields": 0,
       "verdict_concepts": {
         "us-de:policies/income_tax/pilot_liability_pipeline#de_pit_pilot_income_tax_liability": {
@@ -2613,6 +2811,7 @@
     },
     "de-tanf-ecps": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 781,
       "chunk_manifest": [
@@ -2662,6 +2861,8 @@
       },
       "evidence_source": "chunks",
       "inline_cases_not_counted": 781,
+      "report": "dashboard/public/data/axiom-policyengine-de-tanf-ecps.json",
+      "report_sha256": "13734767307d17097ae562b4caf7bf387a40785ad0c545593485097647fbf786",
       "varied_fields": 5,
       "verdict_concepts": {
         "us-de:regulations/title-16/4000-financial-responsibility#de_tanf_benefit": {
@@ -2671,6 +2872,7 @@
     },
     "de-worker-dual-oracle": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 12,
       "chunk_manifest": [
@@ -2683,11 +2885,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 13,
+      "report": "dashboard/public/data/euromod-gettsim-de-worker-dual-oracle.json",
+      "report_sha256": "9ca9c35bdd8cdb20a1667b1143d3ce46b5a6a45106fb264a8185f0ed67724587",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "dk-child-youth-benefit": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 7,
       "chunk_manifest": [],
@@ -2720,11 +2925,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-euromod-dk-child-youth-benefit.json",
+      "report_sha256": "0dd2caab6d832cae3642efc11f5e2c55cf2c390a95121fa471e67cd1639982cf",
       "varied_fields": 2,
       "verdict_concepts": {}
     },
     "fiit-ecps": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 12691,
       "chunk_manifest": [
@@ -2837,11 +3045,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 629,
+      "report": "dashboard/public/data/axiom-policyengine-fiit-ecps.json",
+      "report_sha256": "7caca46fc19e19609ca04d319d9e73d832da13d67901dc325329430d9043f51d",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "fl-snap-ecps": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 3968,
       "chunk_manifest": [
@@ -2959,6 +3170,8 @@
       },
       "evidence_source": "chunks",
       "inline_cases_not_counted": 500,
+      "report": "dashboard/public/data/axiom-policyengine-fl-snap-ecps.json",
+      "report_sha256": "d88289a98bd18d075eb74e9c17984d6386b82596aa15460efcefda9048f36a9e",
       "varied_fields": 7,
       "verdict_concepts": {
         "us:statutes/7/2014/o#snap_eligible": {
@@ -2971,6 +3184,7 @@
     },
     "fl-tca-standards": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 15,
       "chunk_manifest": [],
@@ -3007,11 +3221,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-fl-tca-standards.json",
+      "report_sha256": "50ebb505394aaafee81468444b4e84a7ba24f61f2cc99681adc3f280b8c5b5e3",
       "varied_fields": 2,
       "verdict_concepts": {}
     },
     "ga-health-thresholds": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 5,
       "chunk_manifest": [],
@@ -3048,11 +3265,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-ga-health-thresholds.json",
+      "report_sha256": "8988114bbf8bf660cc732f1597274a6a764f8229f29823c4696e1ad1f9a538cd",
       "varied_fields": 3,
       "verdict_concepts": {}
     },
     "ga-income-tax-liability": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -3065,11 +3285,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 6,
+      "report": "dashboard/public/data/axiom-policyengine-taxsim-ga-income-tax-liability.json",
+      "report_sha256": "c66f7a630ba73fad85d6b8bfa4bb808d99c743083906ad0255b31198a9075178",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "ga-income-tax-populace": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 2187,
       "chunk_manifest": [
@@ -3098,6 +3321,8 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-ga-income-tax-populace.json",
+      "report_sha256": "f920498a2393fcdefe0cda6f5eb26ffa8c1f5e234c914cd648e48f42b376e871",
       "varied_fields": 0,
       "verdict_concepts": {
         "us-ga:policies/income_tax/pilot_liability_pipeline#ga_pit_pilot_income_tax_liability": {
@@ -3107,6 +3332,7 @@
     },
     "ga-snap-ecps": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 1897,
       "chunk_manifest": [
@@ -3208,6 +3434,8 @@
       },
       "evidence_source": "chunks",
       "inline_cases_not_counted": 162,
+      "report": "dashboard/public/data/axiom-policyengine-ga-snap-ecps.json",
+      "report_sha256": "a98d7b27d436ba0ae6639806986e1e4fac7b091da438871e3bd70ce70679112c",
       "varied_fields": 7,
       "verdict_concepts": {
         "us:statutes/7/2014/o#snap_eligible": {
@@ -3220,6 +3448,7 @@
     },
     "ga-snap-qc": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 945,
       "chunk_manifest": [
@@ -3236,11 +3465,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 945,
+      "report": "dashboard/public/data/axiom-snapqc-ga-snap.json",
+      "report_sha256": "b6c0578caa07fef7f3c1265b2b31c5211a4dbb2571fcce0d332d96756946b774",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "ga-tanf-ecps": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 1897,
       "chunk_manifest": [
@@ -3282,6 +3514,8 @@
       },
       "evidence_source": "chunks",
       "inline_cases_not_counted": 1,
+      "report": "dashboard/public/data/axiom-policyengine-ga-tanf-ecps.json",
+      "report_sha256": "08045338a85d63886068df207a2e39b2d6fa608035ee5bc4666d6545b177cf48",
       "varied_fields": 3,
       "verdict_concepts": {
         "us-ga:policies/dfcs/tanf#ga_tanf_benefit": {
@@ -3291,6 +3525,7 @@
     },
     "ga-tanf-standards": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 8,
       "chunk_manifest": [],
@@ -3327,11 +3562,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-ga-tanf-standards.json",
+      "report_sha256": "88c0214d2ee4dfa7c52dafa7b5ad16403e74151ce1fcd30ce2fe08c799187185",
       "varied_fields": 3,
       "verdict_concepts": {}
     },
     "hi-income-tax-liability": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -3344,11 +3582,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 6,
+      "report": "dashboard/public/data/axiom-policyengine-taxsim-hi-income-tax-liability.json",
+      "report_sha256": "101d5fc2257432136a40300c746b691649a518d35a3d1e1f0265c48450709c99",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "hi-income-tax-parameters": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 12,
       "chunk_manifest": [],
@@ -3385,11 +3626,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-hi-income-tax-parameters.json",
+      "report_sha256": "2f025b57a52c4f5297f2a1b5439c88d3ca8793fd9aa1d7e26da4822ba720bc06",
       "varied_fields": 3,
       "verdict_concepts": {}
     },
     "hi-income-tax-populace": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 1519,
       "chunk_manifest": [
@@ -3414,6 +3658,8 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-hi-income-tax-populace.json",
+      "report_sha256": "521b6656e4ed93d62ec8c6da975fc32c0e040890b2e896fd0b999e96c3ed2736",
       "varied_fields": 0,
       "verdict_concepts": {
         "us-hi:policies/income_tax/pilot_liability_pipeline#hi_pit_pilot_income_tax_liability": {
@@ -3423,6 +3669,7 @@
     },
     "ia-income-tax-liability": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -3435,11 +3682,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 6,
+      "report": "dashboard/public/data/axiom-policyengine-taxsim-ia-income-tax-liability.json",
+      "report_sha256": "bfdf37aa7c9072bc14c28beb312b600dd5c879c4f02995a6d36d715f39e9ab9d",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "ia-income-tax-parameters": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 4,
       "chunk_manifest": [],
@@ -3476,11 +3726,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-ia-income-tax-parameters.json",
+      "report_sha256": "6cef088805a40bd1b62c37dadceae8819c02e2ac5f2e7c66b98cbeaf41373c09",
       "varied_fields": 2,
       "verdict_concepts": {}
     },
     "ia-income-tax-populace": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 976,
       "chunk_manifest": [
@@ -3497,6 +3750,8 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-ia-income-tax-populace.json",
+      "report_sha256": "9807c5dd6254dab91160401a07d816721936ca2160983054a412c89069ed144d",
       "varied_fields": 0,
       "verdict_concepts": {
         "us-ia:policies/income_tax/pilot_liability_pipeline#ia_pit_pilot_income_tax_liability": {
@@ -3506,6 +3761,7 @@
     },
     "id-income-tax-liability": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -3518,11 +3774,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 6,
+      "report": "dashboard/public/data/axiom-policyengine-taxsim-id-income-tax-liability.json",
+      "report_sha256": "f793d5363d36e3c78db9d1234244e769bc558c168b81b113d1f2deadcca78d43",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "il-income-tax-liability": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [],
@@ -3530,11 +3789,14 @@
       "evidence_fields": {},
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-taxsim-il-income-tax-liability.json",
+      "report_sha256": "282701ebd2d4a382dd5b8d285f7a7c4392b8dce4531ce261141f8511c6ce6e86",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "il-income-tax-populace": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 2332,
       "chunk_manifest": [
@@ -3563,6 +3825,8 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-il-income-tax-populace.json",
+      "report_sha256": "36c319649a17385649e3636cb7675d212f1085665016cf3bb38a765db8dced9e",
       "varied_fields": 0,
       "verdict_concepts": {
         "us-il:policies/income_tax/pilot_liability_pipeline#il_pit_pilot_income_tax_liability": {
@@ -3572,6 +3836,7 @@
     },
     "in-income-tax-liability": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -3584,11 +3849,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 6,
+      "report": "dashboard/public/data/axiom-policyengine-taxsim-in-income-tax-liability.json",
+      "report_sha256": "f161851f85246cf9e5ad34dd011d88b278de19d3aa068bd02bcf274817cc9d98",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "in-income-tax-populace": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 1292,
       "chunk_manifest": [
@@ -3609,6 +3877,8 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-in-income-tax-populace.json",
+      "report_sha256": "216d46105e0c124ae08c3c4fd2563f30c603652cfe2a9f1ea894f73d7bd77878",
       "varied_fields": 0,
       "verdict_concepts": {
         "us-in:policies/income_tax/pilot_liability_pipeline#in_pit_pilot_income_tax_liability": {
@@ -3618,6 +3888,7 @@
     },
     "irs-adjustment-parameters": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 10,
       "chunk_manifest": [],
@@ -3654,11 +3925,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-irs-adjustment-parameters.json",
+      "report_sha256": "a512ac81cfff8f70871f25fa75c9affbe3e856c6dffc11b1e6e5dff2c0dd315d",
       "varied_fields": 4,
       "verdict_concepts": {}
     },
     "ks-income-tax-liability": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -3671,11 +3945,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 6,
+      "report": "dashboard/public/data/axiom-policyengine-taxsim-ks-income-tax-liability.json",
+      "report_sha256": "2145e5cb4bac3458b88a9282ad569c182b03df040ac0a521a0b1f0693ecad55e",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "ks-income-tax-populace": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 989,
       "chunk_manifest": [
@@ -3692,6 +3969,8 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-ks-income-tax-populace.json",
+      "report_sha256": "845fd2bb42ccdc9f01c0e6d7cdaefcdf8c03250adf57c2d8f2f3dd07a92922ee",
       "varied_fields": 0,
       "verdict_concepts": {
         "us-ks:policies/income_tax/pilot_liability_pipeline#ks_pit_pilot_income_tax_liability": {
@@ -3701,6 +3980,7 @@
     },
     "ks-tanf-ecps": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 861,
       "chunk_manifest": [
@@ -3726,6 +4006,8 @@
       },
       "evidence_source": "chunks",
       "inline_cases_not_counted": 861,
+      "report": "dashboard/public/data/axiom-policyengine-ks-tanf-ecps.json",
+      "report_sha256": "85821d83459e505939fa77e59ec244513353d5f300ec6e01dff17e6f4cd54aea",
       "varied_fields": 2,
       "verdict_concepts": {
         "us-ks:policies/dcf/keesm#ks_tanf_maximum_benefit": {
@@ -3735,6 +4017,7 @@
     },
     "ky-income-tax-liability": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -3747,11 +4030,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 6,
+      "report": "dashboard/public/data/axiom-policyengine-taxsim-ky-income-tax-liability.json",
+      "report_sha256": "e0de638ea1b4a5eedbd52b56afb12f67ca3592bb379c3db9958129caf0df0d3f",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "ky-income-tax-populace": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 891,
       "chunk_manifest": [
@@ -3768,6 +4054,8 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-ky-income-tax-populace.json",
+      "report_sha256": "a1f9957c02a3999f0ba2d3d0e715b255814ca0d15c0999832d0c8bb2202aa6e2",
       "varied_fields": 0,
       "verdict_concepts": {
         "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits#ky_pit_2026_krs_141_020_schedule_before_credits": {
@@ -3777,6 +4065,7 @@
     },
     "la-income-tax-liability": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -3789,11 +4078,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 6,
+      "report": "dashboard/public/data/axiom-policyengine-taxsim-la-income-tax-liability.json",
+      "report_sha256": "e52244268195d541669781b1e0ab6507a337b60bccb2d7e51a4def35755513dc",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "la-income-tax-populace": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 1847,
       "chunk_manifest": [
@@ -3818,6 +4110,8 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-la-income-tax-populace.json",
+      "report_sha256": "7796823d051e1b3391ec5b738cf88c4ecccbef5aaac5049b5135dc57e29dd506",
       "varied_fields": 0,
       "verdict_concepts": {
         "us-la:policies/income_tax/pilot_liability_pipeline#la_pit_pilot_income_tax_liability": {
@@ -3827,6 +4121,7 @@
     },
     "lifeline-parameters": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 1,
       "chunk_manifest": [],
@@ -3863,11 +4158,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-lifeline-parameters.json",
+      "report_sha256": "43e5c3059a5cae622aa57882bf538c05445c22833c1ee1cf9922c880d780409b",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "ma-income-tax-liability": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -3880,11 +4178,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 6,
+      "report": "dashboard/public/data/axiom-policyengine-taxsim-ma-income-tax-liability.json",
+      "report_sha256": "8c41b0202b6d12b7b41ce7c0b640f2c834b5a99a82965a17fcb1b603ec05928d",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "ma-snap-ecps": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 1632,
       "chunk_manifest": [
@@ -3998,6 +4299,8 @@
       },
       "evidence_source": "chunks",
       "inline_cases_not_counted": 161,
+      "report": "dashboard/public/data/axiom-policyengine-ma-snap-ecps.json",
+      "report_sha256": "636f12a73eee0eb706b626159fb0fd37b978857403fe4e56743d16e93f5f34f1",
       "varied_fields": 7,
       "verdict_concepts": {
         "us:statutes/7/2014/o#snap_eligible": {
@@ -4010,6 +4313,7 @@
     },
     "md-income-tax-liability": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -4022,11 +4326,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 6,
+      "report": "dashboard/public/data/axiom-policyengine-taxsim-md-income-tax-liability.json",
+      "report_sha256": "1f82c363d57bf86ffadec0631518cd03b113077fbd8d367e2afacf4b88989d78",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "md-snap-qc": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 722,
       "chunk_manifest": [
@@ -4043,11 +4350,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 722,
+      "report": "dashboard/public/data/axiom-snapqc-md-snap.json",
+      "report_sha256": "ab8f9693e095bff7e9fb8f325fb7bf5fb57fb7ecdd4bb3fa8fb5f55888105b16",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "md-tca-payments": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 5,
       "chunk_manifest": [],
@@ -4084,11 +4394,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-md-tca-payments.json",
+      "report_sha256": "9d193dacec34745ef3f485646a30759916cf6336b8cfe0026451a52c13bde057",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
     "me-income-tax-liability": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -4101,11 +4414,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 6,
+      "report": "dashboard/public/data/axiom-policyengine-taxsim-me-income-tax-liability.json",
+      "report_sha256": "c4d9f1cf3c2959dca9a7e98ebb889168b6f3499c5d937813d887549d3dd92c2f",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "me-tanf-standards": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 8,
       "chunk_manifest": [],
@@ -4142,11 +4458,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-me-tanf-standards.json",
+      "report_sha256": "457d199634c7e61f227d8fa8a64ed2b29c72312a9e62d387ea57234e8849d285",
       "varied_fields": 2,
       "verdict_concepts": {}
     },
     "medicaid-magi-co-ecps": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 1045,
       "chunk_manifest": [
@@ -4176,6 +4495,8 @@
       },
       "evidence_source": "chunks",
       "inline_cases_not_counted": 45,
+      "report": "dashboard/public/data/axiom-policyengine-medicaid-magi-co-ecps.json",
+      "report_sha256": "eda4ca7ac9297f0e756333212f8b19f22bd2ad328668bbfae7c596d594e4ef7e",
       "varied_fields": 2,
       "verdict_concepts": {
         "us:regulations/42-cfr/435#adult_eligible": {
@@ -4200,6 +4521,7 @@
     },
     "medicaid-thresholds-states": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 196,
       "chunk_manifest": [],
@@ -4236,11 +4558,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-medicaid-thresholds-states.json",
+      "report_sha256": "faa02e8aa1ca8f99c8892f2165eaa8994568025823ce542e43254e33a5e144e9",
       "varied_fields": 4,
       "verdict_concepts": {}
     },
     "mi-income-tax-liability": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -4253,11 +4578,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 6,
+      "report": "dashboard/public/data/axiom-policyengine-taxsim-mi-income-tax-liability.json",
+      "report_sha256": "55188d2e1541d3908a0d24eb4ab36ad26d36cecb7fb126a271b4da03c8478840",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "mi-income-tax-populace": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 1788,
       "chunk_manifest": [
@@ -4282,6 +4610,8 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-mi-income-tax-populace.json",
+      "report_sha256": "36a9590e316c0c109e41cd9ced7652ec94ec7e194284af23256cc33f9b4a5219",
       "varied_fields": 0,
       "verdict_concepts": {
         "us-mi:policies/income_tax/pilot_liability_pipeline#mi_pit_pilot_income_tax_liability": {
@@ -4291,6 +4621,7 @@
     },
     "mi-ssp-payments": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [],
@@ -4327,11 +4658,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-mi-ssp-payments.json",
+      "report_sha256": "07aae791b403172daf385a36db748e8182a3734019cbe5f04b8a819d7b0aa1c0",
       "varied_fields": 3,
       "verdict_concepts": {}
     },
     "mn-income-tax-liability": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -4344,11 +4678,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 6,
+      "report": "dashboard/public/data/axiom-policyengine-taxsim-mn-income-tax-liability.json",
+      "report_sha256": "03f86d0157656e1fe08f4c83cf9b50c0b3b792f4eb72afe5ccc4d09546f43db7",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "mn-tanf-ecps": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 991,
       "chunk_manifest": [
@@ -4406,6 +4743,8 @@
       },
       "evidence_source": "chunks",
       "inline_cases_not_counted": 991,
+      "report": "dashboard/public/data/axiom-policyengine-mn-tanf-ecps.json",
+      "report_sha256": "af90bd80cb19d70f6eac4209426e23ee1ff77fc8f44c5feed7ba1822e172d743",
       "varied_fields": 5,
       "verdict_concepts": {
         "us-mn:policies/dhs/combined-manual#mn_mfip_benefit": {
@@ -4415,6 +4754,7 @@
     },
     "mo-income-tax-liability": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -4427,11 +4767,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 6,
+      "report": "dashboard/public/data/axiom-policyengine-taxsim-mo-income-tax-liability.json",
+      "report_sha256": "e5bf9a8adb54407ddaad4a550ee497a7b24129fa4bbb5e291e6c1cdf3128b032",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "ms-income-tax-liability": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -4444,11 +4787,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 6,
+      "report": "dashboard/public/data/axiom-policyengine-taxsim-ms-income-tax-liability.json",
+      "report_sha256": "97e42e95bc32dbe53d71deaf112870e006aa55fe889a2b4e786901b25204dc4e",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "ms-income-tax-populace": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 1497,
       "chunk_manifest": [
@@ -4469,6 +4815,8 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-ms-income-tax-populace.json",
+      "report_sha256": "8bf9d940e246447ed93692c300c6ae4d2549c5f727dbcd3d653d8437a6069781",
       "varied_fields": 0,
       "verdict_concepts": {
         "us-ms:policies/income_tax/pilot_liability_pipeline#ms_pit_pilot_income_tax_liability": {
@@ -4478,6 +4826,7 @@
     },
     "mt-income-tax-liability": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -4490,11 +4839,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 6,
+      "report": "dashboard/public/data/axiom-policyengine-taxsim-mt-income-tax-liability.json",
+      "report_sha256": "3f48774c8b857a6424fa60b75da8d70f004292f154959d47ae25b9204e39e7a7",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "mt-income-tax-populace": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 1171,
       "chunk_manifest": [
@@ -4515,6 +4867,8 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-mt-income-tax-populace.json",
+      "report_sha256": "88fccb5e078101fd96bfbabc1d8ab5f652d4e10d4137c9c65a9bda9c4c244020",
       "varied_fields": 0,
       "verdict_concepts": {
         "us-mt:policies/income_tax/pilot_liability_pipeline#mt_pit_pilot_income_tax_liability": {
@@ -4524,6 +4878,7 @@
     },
     "nc-income-tax-liability": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -4536,11 +4891,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 6,
+      "report": "dashboard/public/data/axiom-policyengine-taxsim-nc-income-tax-liability.json",
+      "report_sha256": "5b11272748cff45bf5d3b7c5a7f8b1dd5a6aa5eb847f733c3f72fe94de8402e4",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "nc-income-tax-populace": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 2169,
       "chunk_manifest": [
@@ -4569,6 +4927,8 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-nc-income-tax-populace.json",
+      "report_sha256": "e37dfffa9f96cbbf4fffc32df813d90eaf785566896f4e42cd8b0af6892a166e",
       "varied_fields": 0,
       "verdict_concepts": {
         "us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability": {
@@ -4578,6 +4938,7 @@
     },
     "nc-snap-ecps": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 1854,
       "chunk_manifest": [
@@ -4707,6 +5068,8 @@
       },
       "evidence_source": "chunks",
       "inline_cases_not_counted": 93,
+      "report": "dashboard/public/data/axiom-policyengine-nc-snap-ecps.json",
+      "report_sha256": "93d1aa09b370ee5a0460ffdc1e61017d15495848f2d9550509ce64f026ab640b",
       "varied_fields": 12,
       "verdict_concepts": {
         "us:statutes/7/2014/o#snap_eligible": {
@@ -4719,6 +5082,7 @@
     },
     "nd-income-tax-liability": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 3,
       "chunk_manifest": [
@@ -4731,11 +5095,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 6,
+      "report": "dashboard/public/data/axiom-policyengine-taxsim-nd-income-tax-liability.json",
+      "report_sha256": "4afe0513055ea0137d6a573eb2c7fc8e04fd6b1768d10a8937035a5f74b3dd33",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "ne-income-tax-liability": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -4748,11 +5115,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 6,
+      "report": "dashboard/public/data/axiom-policyengine-taxsim-ne-income-tax-liability.json",
+      "report_sha256": "34abad046bc4d7c9b8225dec4dd2f078928ebaa50df516b1be58b679be1205d9",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "nj-income-tax-liability": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [],
@@ -4760,11 +5130,14 @@
       "evidence_fields": {},
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-taxsim-nj-income-tax-liability.json",
+      "report_sha256": "c13927b1c3fa64e00e4e5a9c420dd99d96a6efa3e81377c0173368cd7a0ad40a",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "nj-income-tax-populace": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 1693,
       "chunk_manifest": [
@@ -4789,6 +5162,8 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-nj-income-tax-populace.json",
+      "report_sha256": "2578470053d235561b71019471daf02cdb196cdd2bf465c5bc6df554afc843ca",
       "varied_fields": 0,
       "verdict_concepts": {
         "us-nj:policies/income_tax/pilot_liability_pipeline#nj_pit_pilot_income_tax_liability": {
@@ -4798,6 +5173,7 @@
     },
     "nm-income-tax-liability": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -4810,11 +5186,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 6,
+      "report": "dashboard/public/data/axiom-policyengine-taxsim-nm-income-tax-liability.json",
+      "report_sha256": "d2c54d9377de13dd74cdfbc159bde5f7a9cc4552ed85cb4d629cf1ad05a0adb3",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "nm-income-tax-populace": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 1475,
       "chunk_manifest": [
@@ -4835,6 +5214,8 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-nm-income-tax-populace.json",
+      "report_sha256": "682302c1a4ba6458c4f65c689bebb998fa118d059fa33c9b77c65cc6acac9713",
       "varied_fields": 0,
       "verdict_concepts": {
         "us-nm:policies/income_tax/pilot_liability_pipeline#nm_pit_pilot_income_tax_liability": {
@@ -4844,6 +5225,7 @@
     },
     "ny-income-tax-liability": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -4856,11 +5238,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 6,
+      "report": "dashboard/public/data/axiom-policyengine-taxsim-ny-income-tax-liability.json",
+      "report_sha256": "bca691db5e5134a051d4cf3b38129c0813aa9caa471fba50804a2910df02534e",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "ny-income-tax-populace": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 3741,
       "chunk_manifest": [
@@ -4901,6 +5286,8 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-ny-income-tax-populace.json",
+      "report_sha256": "8f995c7773f67ff99230f82c97ebd663d5b9dd8560af2bbda332ad6d96f8e1ed",
       "varied_fields": 0,
       "verdict_concepts": {
         "us-ny:policies/income_tax/pilot_liability_pipeline#ny_pit_pilot_main_income_tax": {
@@ -4910,6 +5297,7 @@
     },
     "ny-snap-ecps": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 3187,
       "chunk_manifest": [
@@ -5035,6 +5423,8 @@
       },
       "evidence_source": "chunks",
       "inline_cases_not_counted": 266,
+      "report": "dashboard/public/data/axiom-policyengine-ny-snap-ecps.json",
+      "report_sha256": "c08d91d44759e0b0edaadc335e9f4761f6df9edeaed494a2659bfa13cdbd21a2",
       "varied_fields": 7,
       "verdict_concepts": {
         "us:statutes/7/2014/o#snap_eligible": {
@@ -5047,6 +5437,7 @@
     },
     "ny-snap-qc": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 847,
       "chunk_manifest": [
@@ -5063,11 +5454,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 847,
+      "report": "dashboard/public/data/axiom-snapqc-ny-snap.json",
+      "report_sha256": "95c95f4f6f8c7ff925ba8ef3ed7182c1df4d5a6e747f947df2668ad7ccf8e945",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "ny-tanf-ecps": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 3187,
       "chunk_manifest": [
@@ -5141,6 +5535,8 @@
       },
       "evidence_source": "chunks",
       "inline_cases_not_counted": 36,
+      "report": "dashboard/public/data/axiom-policyengine-ny-tanf-ecps.json",
+      "report_sha256": "4e787b6a0e8624f2c6ecd9c27b9355b498c42e16833fe328f73cdf8a820cfb19",
       "varied_fields": 5,
       "verdict_concepts": {
         "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit": {
@@ -5150,6 +5546,7 @@
     },
     "ny-tanf-standards": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 4,
       "chunk_manifest": [],
@@ -5186,11 +5583,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-ny-tanf-standards.json",
+      "report_sha256": "83e13e50632697006d0be3603f48692fe200d12a7a02876b9d00a022e4d10c8e",
       "varied_fields": 2,
       "verdict_concepts": {}
     },
     "nyc-income-tax-ecps-diagnostic": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 847,
       "chunk_manifest": [],
@@ -5263,11 +5663,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-nyc-income-tax-components-ecps.json",
+      "report_sha256": "88513de406a6de65467f0d573d619b1c0b77c15405bbf129df645c536a3d1f75",
       "varied_fields": 11,
       "verdict_concepts": {}
     },
     "nyc-income-tax-gap": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 11,
       "chunk_manifest": [],
@@ -5304,11 +5707,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-nyc-income-tax-components.json",
+      "report_sha256": "cfe367a213b7e724f641b66c381dd00e59b5b59b4483638196f2498cebd22eb3",
       "varied_fields": 4,
       "verdict_concepts": {}
     },
     "nyc-synthetic": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 813,
       "chunk_manifest": [
@@ -5322,6 +5728,10 @@
         }
       ],
       "constant_fields": 1,
+      "contested_reports": [
+        "dashboard/public/data/axiom-policyengine.json",
+        "dashboard/public/data/policyengine-taxsim.json"
+      ],
       "evidence_fields": {
         "result_selection": {
           "distinct": 1,
@@ -5330,11 +5740,14 @@
       },
       "evidence_source": "chunks",
       "inline_cases_not_counted": 10,
+      "report": "dashboard/public/data/policyengine-taxsim.json",
+      "report_sha256": "9d74ebb1aff476c794e9b999abe113c14724a0b7ca28f8918e37eea6b3746a0a",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "oh-income-tax-liability": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -5347,11 +5760,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 6,
+      "report": "dashboard/public/data/axiom-policyengine-taxsim-oh-income-tax-liability.json",
+      "report_sha256": "67f7ee79be5fa01aeb52bff60f66aec3b6fa9721b81a1ca0e50b9a9966515fbe",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "oh-income-tax-populace": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 2144,
       "chunk_manifest": [
@@ -5380,6 +5796,8 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-oh-income-tax-populace.json",
+      "report_sha256": "93db3cce961f9afc3af60097f1912d3080dbf5fb8bef5b405007c34eef4d818d",
       "varied_fields": 0,
       "verdict_concepts": {
         "us-oh:policies/income_tax/pilot_liability_pipeline#oh_pit_pilot_income_tax_liability": {
@@ -5389,6 +5807,7 @@
     },
     "ok-income-tax-liability": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -5401,11 +5820,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 6,
+      "report": "dashboard/public/data/axiom-policyengine-taxsim-ok-income-tax-liability.json",
+      "report_sha256": "899d6b3529d8d84f170ba1a689e4a031fb5e4384fc815b2f202e0d23692899ef",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "ok-income-tax-populace": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 1292,
       "chunk_manifest": [
@@ -5426,6 +5848,8 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-ok-income-tax-populace.json",
+      "report_sha256": "3b9d89b8d960d5c4ada026571fcc835156f819d7b5ea5d4f0f308835286d4724",
       "varied_fields": 0,
       "verdict_concepts": {
         "us-ok:policies/income_tax/pilot_liability_pipeline#ok_pit_pilot_income_tax_liability": {
@@ -5435,6 +5859,7 @@
     },
     "or-income-tax-liability": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -5447,11 +5872,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 6,
+      "report": "dashboard/public/data/axiom-policyengine-taxsim-or-income-tax-liability.json",
+      "report_sha256": "19c307a224cf380c018573e1f83fccd1c13bbf278f457e6d39640abe1cfdbb88",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "or-snap-ecps": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 0,
       "chunk_manifest": [],
@@ -5459,11 +5887,14 @@
       "evidence_fields": {},
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-or-snap-ecps.json",
+      "report_sha256": "79bdaacd1b510971f46863b96b7f8aaf2150fd8bf10f281b23522a253c20ad3c",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "pa-income-tax-liability": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [],
@@ -5471,11 +5902,14 @@
       "evidence_fields": {},
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-taxsim-pa-income-tax-liability.json",
+      "report_sha256": "824350e566867b639136c915d338107e2ab3f65c2a1cfe1b2d4c2ce7da446028",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "pa-income-tax-populace": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 2457,
       "chunk_manifest": [
@@ -5504,6 +5938,8 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-pa-income-tax-populace.json",
+      "report_sha256": "ff033e2de07c7447fdf57794679fc574ce4f36616af7b7beb7003b552b859dd8",
       "varied_fields": 0,
       "verdict_concepts": {
         "us-pa:policies/income_tax/pilot_liability_pipeline#pa_pit_pilot_income_tax_liability": {
@@ -5513,6 +5949,7 @@
     },
     "pell-parameters": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 2,
       "chunk_manifest": [],
@@ -5549,11 +5986,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-pell-parameters.json",
+      "report_sha256": "6e8a4b7ceaf968a8fdc1408f6f9863cac6db664e6fc3e296fe1dd08f1d40526b",
       "varied_fields": 2,
       "verdict_concepts": {}
     },
     "ri-income-tax-liability": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -5566,11 +6006,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 6,
+      "report": "dashboard/public/data/axiom-policyengine-taxsim-ri-income-tax-liability.json",
+      "report_sha256": "47360ef2b1d46d13c437c58dd7fab4001f55e75498da33253278a4c02dc0ac76",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "sc-income-tax-liability": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -5583,11 +6026,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 6,
+      "report": "dashboard/public/data/axiom-policyengine-taxsim-sc-income-tax-liability.json",
+      "report_sha256": "4c3b6f0a9cb305d0b71a394ba596e32d7135fe0dd2ff8ade029a15eeca0c422f",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "sc-income-tax-populace": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 1457,
       "chunk_manifest": [
@@ -5608,6 +6054,8 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-sc-income-tax-populace.json",
+      "report_sha256": "872c99d518d94300d16ae15bb8b4a092d2691c2be2ccda87342b52617caa1d6d",
       "varied_fields": 0,
       "verdict_concepts": {
         "us-sc:policies/income_tax/pilot_liability_pipeline#sc_pit_pilot_income_tax_liability": {
@@ -5617,6 +6065,7 @@
     },
     "sc-snap-ecps": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 1283,
       "chunk_manifest": [
@@ -5738,6 +6187,8 @@
       },
       "evidence_source": "chunks",
       "inline_cases_not_counted": 113,
+      "report": "dashboard/public/data/axiom-policyengine-sc-snap-ecps.json",
+      "report_sha256": "f475772b97c097530d143597226669342f8fd784f86efc6485c139601131aaff",
       "varied_fields": 8,
       "verdict_concepts": {
         "us:statutes/7/2014/o#snap_eligible": {
@@ -5750,6 +6201,7 @@
     },
     "ssa-parameters": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 8,
       "chunk_manifest": [],
@@ -5782,11 +6234,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-ssa-parameters.json",
+      "report_sha256": "af3ed8f99bac46212f074fd542e8ba101de17bb72c3139b41050d9fa80bd1454",
       "varied_fields": 3,
       "verdict_concepts": {}
     },
     "ssi-ecps": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 4044,
       "chunk_manifest": [
@@ -5831,11 +6286,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 1000,
+      "report": "dashboard/public/data/axiom-policyengine-ssi-ecps.json",
+      "report_sha256": "94c295e1c2e04302c67f67a3c870f8c62c79395340f82a45df3b4a89aa5b5ab4",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "ssi-parameters": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 3,
       "chunk_manifest": [],
@@ -5872,11 +6330,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-ssi-parameters.json",
+      "report_sha256": "9df8f011e8159708acf544ea06af46e65764eb91c0e1e42114bd0d18c7a0e42b",
       "varied_fields": 4,
       "verdict_concepts": {}
     },
     "taxcalc-fiit-ecps": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 5,
       "chunk_manifest": [
@@ -5889,11 +6350,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 31,
+      "report": "dashboard/public/data/taxcalc-policyengine-fiit-ecps.json",
+      "report_sha256": "2cc274bb5e920051a1d3b44be1bf408e005a6b8c021a7213520116a2dadd69da",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "tn-snap-ecps": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 1427,
       "chunk_manifest": [
@@ -5999,6 +6463,8 @@
       },
       "evidence_source": "chunks",
       "inline_cases_not_counted": 59,
+      "report": "dashboard/public/data/axiom-policyengine-tn-snap-ecps.json",
+      "report_sha256": "6bb4d9e30a8b5409ab970b8798843832ba9415708fa516740bc13e24af63358d",
       "varied_fields": 7,
       "verdict_concepts": {
         "us:statutes/7/2014/o#snap_eligible": {
@@ -6011,6 +6477,7 @@
     },
     "tx-snap-qc": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 906,
       "chunk_manifest": [
@@ -6027,11 +6494,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 906,
+      "report": "dashboard/public/data/axiom-snapqc-tx-snap.json",
+      "report_sha256": "76925f92bd0b795ab9b9faf505a1c487065dd5d6352993daa9d40af3ac2e7108",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "tx-tanf-parameters": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 4,
       "chunk_manifest": [],
@@ -6068,11 +6538,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-tx-tanf-parameters.json",
+      "report_sha256": "610db673d983c8148fa3a31d2214b45e3baaccfbfa6de09e6f410df66f612273",
       "varied_fields": 3,
       "verdict_concepts": {}
     },
     "uk-attendance-allowance-pe": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 3,
       "chunk_manifest": [],
@@ -6080,11 +6553,14 @@
       "evidence_fields": {},
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-uk-attendance-allowance-pe.json",
+      "report_sha256": "249450634367a1abb4a3050269e28fd03190f48c6f22de15d292105167a557c5",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "uk-benefit-cap": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 7,
       "chunk_manifest": [],
@@ -6137,11 +6613,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-euromod-uk-benefit-cap.json",
+      "report_sha256": "7b7d5ecc8767aefe340788bbdfbce998f69cf69a2ce1fec066a0dadee0625566",
       "varied_fields": 6,
       "verdict_concepts": {}
     },
     "uk-best-start-foods": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 2,
       "chunk_manifest": [],
@@ -6170,11 +6649,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-euromod-uk-best-start-foods.json",
+      "report_sha256": "e453ad5376c8419f07cab9ffaf7012810729021579edd2b5906645bb3389dc3b",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
     "uk-business-rates": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [],
@@ -6182,11 +6664,14 @@
       "evidence_fields": {},
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-uk-business-rates.json",
+      "report_sha256": "6e737a7bc7a72f3380b0ebb646a18b8dd30698bed0eec04697954ff3891f5127",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "uk-capital-gains-tax": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [],
@@ -6194,11 +6679,14 @@
       "evidence_fields": {},
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-uk-capital-gains-tax.json",
+      "report_sha256": "f7f51ae2c6d3829465e2898904a54ef656b098ac353dec1c4b43c9adab3ce564",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "uk-child-benefit": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 12,
       "chunk_manifest": [],
@@ -6231,11 +6719,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-euromod-uk-child-benefit.json",
+      "report_sha256": "6e0e0b2350245d9f397fb5896bb4d466aba2586c0baea3c9fa5900420380c900",
       "varied_fields": 2,
       "verdict_concepts": {}
     },
     "uk-child-winter-heating-payment": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 1,
       "chunk_manifest": [],
@@ -6264,11 +6755,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-euromod-uk-child-winter-heating-payment.json",
+      "report_sha256": "b2fb2d326bbc05ac9c421ff02ffaedd1961daeae15c8d80fa640548defa4f4fb",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "uk-contribution-based-jsa": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 2,
       "chunk_manifest": [
@@ -6281,11 +6775,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 2,
+      "report": "dashboard/public/data/axiom-euromod-uk-contribution-based-jsa.json",
+      "report_sha256": "fcefa5ee2a9b25863a97b4e54da7a8baa7329d09e686d5774aa16b1b33383572",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "uk-council-tax-reduction": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 11,
       "chunk_manifest": [],
@@ -6293,11 +6790,14 @@
       "evidence_fields": {},
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-uk-council-tax-reduction.json",
+      "report_sha256": "dfc2d8f68862cac1c92ae1f9e748625013cdb4a5785a5d81eb6d9cb318ce3cb9",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "uk-employer-nic": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 5,
       "chunk_manifest": [],
@@ -6326,11 +6826,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-euromod-uk-employer-nic.json",
+      "report_sha256": "61fd7293970f8cdc82b4c53f487aa02ef6b48d54cb42efa300b6c8910396041d",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
     "uk-fuel-duty": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 9,
       "chunk_manifest": [],
@@ -6338,11 +6841,14 @@
       "evidence_fields": {},
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-uk-fuel-duty.json",
+      "report_sha256": "723bac1fb7c10d15b2c92fb94e3ed6b59fcddbde4a6349a84f9afbeb527f7c26",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "uk-healthy-start": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 2,
       "chunk_manifest": [],
@@ -6371,11 +6877,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-euromod-uk-healthy-start.json",
+      "report_sha256": "da47f6ee9cad60a58cd316297872777deada9b6cf6c13496aa859f46c7a5d165",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
     "uk-housing-benefit": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 3,
       "chunk_manifest": [
@@ -6388,11 +6897,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 5,
+      "report": "dashboard/public/data/axiom-euromod-uk-housing-benefit.json",
+      "report_sha256": "5bab28c65815a920ad257ba9a9a7acddeed40b23db4527c5c5d7d1be5eaeee40",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "uk-income-tax-dividend": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 5,
       "chunk_manifest": [],
@@ -6429,11 +6941,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-euromod-uk-income-tax-dividend.json",
+      "report_sha256": "222739f3fb43c107503bca7e8e540689b3b9fcd8ace79d9dbbe3fb04fabe4da7",
       "varied_fields": 2,
       "verdict_concepts": {}
     },
     "uk-income-tax-mixed": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 3,
       "chunk_manifest": [
@@ -6446,11 +6961,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 3,
+      "report": "dashboard/public/data/axiom-euromod-uk-income-tax-mixed.json",
+      "report_sha256": "6aa0ac1872399dcd7f7ca005878f107038994a47c0e216f19898d721459ed71b",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "uk-income-tax-savings": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 5,
       "chunk_manifest": [],
@@ -6487,11 +7005,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-euromod-uk-income-tax-savings.json",
+      "report_sha256": "72f596de77c612d5d94984032b7efc09b79528d8f598b33c892ab946018fd69b",
       "varied_fields": 2,
       "verdict_concepts": {}
     },
     "uk-income-tax-scottish": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 9,
       "chunk_manifest": [],
@@ -6520,11 +7041,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-euromod-uk-income-tax-scottish.json",
+      "report_sha256": "9cbf2f586efca4ea005b426b0f1d7a534c3a95aa4abc46423c77f70a3dd84112",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
     "uk-lbtt-ltt": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -6537,11 +7061,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 12,
+      "report": "dashboard/public/data/axiom-policyengine-uk-lbtt-ltt.json",
+      "report_sha256": "133225a32b1b7e592dfc1613f0851f874c06750a39842edd7beed2810628470f",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "uk-maternity-allowance": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 3,
       "chunk_manifest": [],
@@ -6570,11 +7097,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-euromod-uk-maternity-allowance.json",
+      "report_sha256": "4849292bdf7c74400ed124f89def038c86d2dea8a919c3a3acbc7a6f4b159e8b",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
     "uk-pension-credit": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 4,
       "chunk_manifest": [
@@ -6587,11 +7117,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 12,
+      "report": "dashboard/public/data/axiom-euromod-uk-pension-credit.json",
+      "report_sha256": "1aef4c90fce71f2ec1e1c62713266101319ae096c7e6420312c48802bbe87c38",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "uk-personal-allowance": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 5,
       "chunk_manifest": [],
@@ -6620,11 +7153,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-euromod-uk-personal-allowance.json",
+      "report_sha256": "9ca1f7f3658644626e5a8c5146180efd75d283ee25e2c4e0be9f92ff33587c81",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
     "uk-scottish-carer-supplement": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 1,
       "chunk_manifest": [
@@ -6637,11 +7173,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 1,
+      "report": "dashboard/public/data/axiom-euromod-uk-scottish-carer-supplement.json",
+      "report_sha256": "70ec86ed9115c563d74cbf81407f2f01f75d7b3f4a64038ace764d660c161b7f",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "uk-scottish-child-payment": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 3,
       "chunk_manifest": [
@@ -6654,11 +7193,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 4,
+      "report": "dashboard/public/data/axiom-euromod-uk-scottish-child-payment.json",
+      "report_sha256": "f47f00aba8b959d9bc071cafbe1e58ce1873619551552b5b0ee77fa4405c0251",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "uk-self-employed-nic": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 5,
       "chunk_manifest": [],
@@ -6687,11 +7229,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-euromod-uk-self-employed-nic.json",
+      "report_sha256": "271f4e0d140c84c1b1502747a7e1be24a43f7206a48a69334eb7026a5cc6ee78",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
     "uk-statutory-maternity-pay": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 5,
       "chunk_manifest": [],
@@ -6720,11 +7265,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-euromod-uk-statutory-maternity-pay.json",
+      "report_sha256": "e5b483d06d7021fea02cfc109351e45a50f975869b16d3419c1d1dae278452ad",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
     "uk-statutory-paternity-pay": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 5,
       "chunk_manifest": [],
@@ -6753,11 +7301,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-euromod-uk-statutory-paternity-pay.json",
+      "report_sha256": "6e8fbae042ce691038d61a46a5b9db8fdc0267b3299359537e1c535dc8dad9c3",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
     "uk-sure-start-maternity-grant": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 1,
       "chunk_manifest": [],
@@ -6782,11 +7333,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-euromod-uk-sure-start-maternity-grant.json",
+      "report_sha256": "ff9efaf3f1f8dc85661073d14d7424ccfbe1e8c38900d9ebdf1e7c3710003813",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "uk-tax-benefits-efrs": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 166,
       "chunk_manifest": [
@@ -6799,11 +7353,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 166,
+      "report": "dashboard/public/data/axiom-policyengine-uk-tax-benefits-efrs.json",
+      "report_sha256": "54e28fa4196f4424e458388bcdd65d0b527256e35f1a83b10c4834b3baa8cee3",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "uk-tax-free-childcare-pe": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 3,
       "chunk_manifest": [],
@@ -6811,11 +7368,14 @@
       "evidence_fields": {},
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-uk-tax-free-childcare-pe.json",
+      "report_sha256": "4bc79c8317f1c13cf4f1a8af19cb5ef035bf667411d0f008dca524436d9ddfb3",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "uk-tv-licence": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 18,
       "chunk_manifest": [],
@@ -6823,11 +7383,14 @@
       "evidence_fields": {},
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-uk-tv-licence.json",
+      "report_sha256": "2fe643d2496834243bfe46dc2eb8386793875febe0b34061e558db4aac901edf",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "uk-universal-credit": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 11,
       "chunk_manifest": [
@@ -6840,11 +7403,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 19,
+      "report": "dashboard/public/data/axiom-euromod-uk-universal-credit.json",
+      "report_sha256": "09972d8fe1e636923939535d664f053d2b36f206db0a189f64fd05c2d9c57b16",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "uk-universal-credit-efrs": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 0,
       "chunk_manifest": [],
@@ -6852,11 +7418,14 @@
       "evidence_fields": {},
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-uk-universal-credit-efrs.json",
+      "report_sha256": "2bc58e1b5c238a8185a035b98f178e9ca0f7edfcc917ad8eb30e586f2286cec6",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "uk-vat": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 9,
       "chunk_manifest": [],
@@ -6864,11 +7433,14 @@
       "evidence_fields": {},
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-uk-vat.json",
+      "report_sha256": "40ebf7eace25dd273b905f421b4440b9d049171437036041b3b23d702c6faeb2",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "uk-winter-fuel": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 7,
       "chunk_manifest": [],
@@ -6917,11 +7489,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-euromod-uk-winter-fuel.json",
+      "report_sha256": "abf70b0d8848f7853396776813f2f6cc9bf35b763ff7e0070bf410e437a0e683",
       "varied_fields": 6,
       "verdict_concepts": {}
     },
     "uk-winter-fuel-payment-pe": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 7,
       "chunk_manifest": [],
@@ -6929,11 +7504,14 @@
       "evidence_fields": {},
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-uk-winter-fuel-payment-pe.json",
+      "report_sha256": "5acbdf3fc6c7d38950237a5310ae6df220eb0984f4c92c81e0bf404e09b3cbab",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "uk-worker-nic": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 5,
       "chunk_manifest": [],
@@ -6962,11 +7540,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-euromod-uk-worker-nic.json",
+      "report_sha256": "5628c8dee6554e161e82ad6e126e9025e640bf9f81fbfc1fe4d915528708d940",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
     "uk-worker-pit": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 5,
       "chunk_manifest": [],
@@ -6995,11 +7576,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-euromod-uk-worker-pit.json",
+      "report_sha256": "02e991f84a68724b25d5311cee8c5b5739110028b320fa517b7eb5c5f64a5a0a",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
     "us-aca-ptc-grid": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [],
@@ -7007,11 +7591,14 @@
       "evidence_fields": {},
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-us-aca-ptc-grid.json",
+      "report_sha256": "4bc6c1fd78d1a6f814f0b6006133be47a9642b0e7a0f3561b2c705759d15328a",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "us-additional-medicare-grid": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 5,
       "chunk_manifest": [],
@@ -7019,11 +7606,14 @@
       "evidence_fields": {},
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-us-additional-medicare-grid.json",
+      "report_sha256": "68fdf6f6fa31bd5d379e21361728da44af4cc76116e8d123e0535c46adc93b9f",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "us-elderly-disabled-grid": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 9,
       "chunk_manifest": [],
@@ -7031,11 +7621,14 @@
       "evidence_fields": {},
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-us-elderly-disabled-grid.json",
+      "report_sha256": "5d60586914c1e4fb5b78dfc97cafd7d967d35177f3dedf7ead03ab15acb1b256",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "us-llc-grid": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 12,
       "chunk_manifest": [],
@@ -7043,11 +7636,14 @@
       "evidence_fields": {},
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-us-llc-grid.json",
+      "report_sha256": "ce17489c559dbd0c4b6e133a8d1dbbf274097db8bbf33b28640cb287f305cba3",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "us-niit-grid": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [],
@@ -7055,11 +7651,14 @@
       "evidence_fields": {},
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-us-niit-grid.json",
+      "report_sha256": "56ed1c8640c370f8dd5297bd901999f981340490c22cb6be293e89690bc24bfa",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "us-qbid-grid": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 11,
       "chunk_manifest": [],
@@ -7067,11 +7666,14 @@
       "evidence_fields": {},
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-us-qbid-grid.json",
+      "report_sha256": "02a4daa68ecdfc18b2d840721ecb00b1e9c251c28e8a1789caeac55ec4536b3d",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "us-seca-grid": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [],
@@ -7079,11 +7681,14 @@
       "evidence_fields": {},
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-us-seca-grid.json",
+      "report_sha256": "613fdde642742e4c922f685a4e6915adccfa4c46dbdcc145609e65cdd72dbf68",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "ut-income-tax-liability": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -7096,11 +7701,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 6,
+      "report": "dashboard/public/data/axiom-policyengine-taxsim-ut-income-tax-liability.json",
+      "report_sha256": "2dffab4808c1f3af469af08a7d0471a42f2a275165d13e813e5ab8585b11116b",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "ut-income-tax-populace": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 1251,
       "chunk_manifest": [
@@ -7121,6 +7729,8 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-ut-income-tax-populace.json",
+      "report_sha256": "07fa41e45d8e1350fd574c1a9d1de6648ab7f4528479a6041ab1cc81c4ddf23d",
       "varied_fields": 0,
       "verdict_concepts": {
         "us-ut:policies/income_tax/pilot_liability_pipeline#ut_pit_pilot_income_tax_liability": {
@@ -7130,6 +7740,7 @@
     },
     "ut-snap-ecps": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 0,
       "chunk_manifest": [],
@@ -7137,11 +7748,14 @@
       "evidence_fields": {},
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-ut-snap-ecps.json",
+      "report_sha256": "bb13c82621f8212c99e1560dde65d9c7aad5e9becc61b383784d03a6777b2925",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "va-income-tax-liability": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -7154,11 +7768,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 6,
+      "report": "dashboard/public/data/axiom-policyengine-taxsim-va-income-tax-liability.json",
+      "report_sha256": "c286afc192b0b348ac160945d0306b8d973866e93765a0dc69afb669b4350be6",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "va-income-tax-populace": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 1710,
       "chunk_manifest": [
@@ -7183,6 +7800,8 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-va-income-tax-populace.json",
+      "report_sha256": "69921ea3b1ad5de600307118f2c8af4d3a6ecdd79b92ba89cee340c785492d0a",
       "varied_fields": 0,
       "verdict_concepts": {
         "us-va:policies/income_tax/pilot_liability_pipeline#va_pit_pilot_income_tax_liability": {
@@ -7192,6 +7811,7 @@
     },
     "vt-income-tax-liability": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -7204,11 +7824,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 6,
+      "report": "dashboard/public/data/axiom-policyengine-taxsim-vt-income-tax-liability.json",
+      "report_sha256": "57e8b80f764c9f26858a07adc1a6cce1d43cd2e8c5cc2737f7398517460a036b",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "vt-income-tax-populace": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 922,
       "chunk_manifest": [
@@ -7225,6 +7848,8 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-vt-income-tax-populace.json",
+      "report_sha256": "841678384ae396092c21e5be3612991396d307f46ed5f3eb1ba61a4565ccf9bf",
       "varied_fields": 0,
       "verdict_concepts": {
         "us-vt:policies/income_tax/pilot_liability_pipeline#vt_pit_pilot_income_tax_liability": {
@@ -7234,6 +7859,7 @@
     },
     "wa-income-tax-liability": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -7246,11 +7872,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 6,
+      "report": "dashboard/public/data/axiom-policyengine-taxsim-wa-income-tax-liability.json",
+      "report_sha256": "e52ec2a234680c862c010848c4d29b003f12b9e59b0a6465679f39484d656d01",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "wa-tanf-ecps": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 1467,
       "chunk_manifest": [
@@ -7300,6 +7929,8 @@
       },
       "evidence_source": "chunks",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-wa-tanf-ecps.json",
+      "report_sha256": "8c785d16b837473206e4374d4b792de72ccb854fc9712fc716e67b2a9f816d8c",
       "varied_fields": 6,
       "verdict_concepts": {
         "us-wa:regulations/388#wa_tanf_benefit": {
@@ -7309,6 +7940,7 @@
     },
     "wa-tanf-payment-standard": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 4,
       "chunk_manifest": [],
@@ -7345,11 +7977,14 @@
       },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-wa-tanf-payment-standard.json",
+      "report_sha256": "b585fd65b2e28bd87f55c3b8bccae6d34f29d68f29cfbbfa3dbd7061dd8704b1",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
     "wi-income-tax-liability": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -7362,11 +7997,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 6,
+      "report": "dashboard/public/data/axiom-policyengine-taxsim-wi-income-tax-liability.json",
+      "report_sha256": "86ec16174775a3e4e4f46bcf59f007bbfe7eb8a01bacce07c34050293b565caa",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "wv-income-tax-liability": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -7379,11 +8017,14 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 6,
+      "report": "dashboard/public/data/axiom-policyengine-taxsim-wv-income-tax-liability.json",
+      "report_sha256": "ff23e0b18fa39162da9e43f1b8abac289dd78b97f596f4f6cd441d6877861552",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "wv-income-tax-populace": {
       "bridge_audited": false,
+      "bridge_declared": false,
       "bridged_through": {},
       "cases_scanned": 1608,
       "chunk_manifest": [
@@ -7408,6 +8049,8 @@
       "evidence_fields": {},
       "evidence_source": "chunks",
       "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-policyengine-wv-income-tax-populace.json",
+      "report_sha256": "e4d9dc9f24a09c5bab69df3a67c5e17d79fc0eda44d329eb3ab50d2c3ecf33ad",
       "varied_fields": 0,
       "verdict_concepts": {
         "us-wv:policies/income_tax/pilot_liability_pipeline#wv_pit_pilot_income_tax_liability": {
