@@ -6692,7 +6692,7 @@
     "sha256": "16be6338f9d0",
     "source": "pinned"
   },
-  "generated_at": "2026-07-26T21:16:03Z",
+  "generated_at": "2026-07-26T21:28:09Z",
   "generated_by": "scripts/run_state_tax_populace.py",
   "requested_states": [
     "CT"
@@ -7412,7 +7412,7 @@
       "policyengine-us": "1.752.2"
     },
     "rulespec": {
-      "commit": "595ce4a474111f4803e817764099346ebeb1e38a",
+      "commit": "d7eee1c1104f40f4ff77bcd9f86f392222981a11",
       "repository": "TheAxiomFoundation/rulespec-us",
       "working_tree": "clean"
     }
