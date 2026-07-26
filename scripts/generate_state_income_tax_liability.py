@@ -143,10 +143,11 @@ _PE_VAR = {
     # before-non-refundable variable nets the phased-out 59-10-1018 taxpayer
     # credit that this flat core excludes.
     "UT": "ut_income_tax_before_credits",
-    # Alabama and Idaho retain their reviewed before-credit targets. Kentucky's
-    # canonical KRS 141.020 schedule applies before every allowable credit, so
-    # its exact PolicyEngine analog is the unit-level tax before nonrefundable
-    # credits, not the later before-refundable-credits stage.
+    # Alabama's canonical section 40-18-5 surface maps only to the schedule
+    # before nonrefundable credits; it does not claim final annual liability.
+    # Kentucky's canonical KRS 141.020 schedule also applies before every
+    # allowable credit, so its exact PolicyEngine analog is the unit-level tax
+    # before nonrefundable credits. Idaho retains its reviewed target.
     "AL": "al_income_tax_before_non_refundable_credits",
     "ID": "id_income_tax_before_refundable_credits",
     "KY": "ky_income_tax_before_non_refundable_credits_unit",
@@ -236,6 +237,10 @@ _POPULACE_STATES = tuple(_TAXSIM_STATE)
 # concept. Keep the reason explicit and independently testable while the
 # Populace campaign validates the narrow component truthfully.
 _GRID_EXCLUDED_STATES = {
+    "AL": (
+        "canonical RuleSpec exposes only the section 40-18-5 schedule on "
+        "completed taxable income; no broad annual-liability or TAXSIM surface"
+    ),
     "AR": (
         "reviewed RuleSpec exposes only the Person-grain Act 2 schedule "
         "component; no broad liability output or six-case grid fixtures"
@@ -250,6 +255,10 @@ _MODULE = {
     st: f"us-{st.lower()}:policies/income_tax/pilot_liability_pipeline"
     for st in _TAXSIM_STATE
 }
+_MODULE["AL"] = (
+    "us-al:policies/income_tax/"
+    "2026_section_40_18_5_schedule_before_credits"
+)
 _MODULE["KY"] = (
     "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits"
 )
@@ -257,6 +266,10 @@ _LIABILITY_OUTPUT = {
     st: f"{_MODULE[st]}#{st.lower()}_pit_pilot_income_tax_liability"
     for st in _TAXSIM_STATE
 }
+_LIABILITY_OUTPUT["AL"] = (
+    f"{_MODULE['AL']}#"
+    "al_pit_2026_section_40_18_5_schedule_before_credits"
+)
 _LIABILITY_OUTPUT["KY"] = (
     f"{_MODULE['KY']}#ky_pit_2026_krs_141_020_schedule_before_credits"
 )

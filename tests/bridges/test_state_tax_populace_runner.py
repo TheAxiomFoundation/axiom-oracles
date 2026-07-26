@@ -574,8 +574,13 @@ def test_reviewed_alabama_filing_status_projection_selects_joint_schedule() -> N
         microsimulation_factory=FakeSimulation,
     )
 
-    prefix = "us-al:policies/income_tax/pilot_liability_pipeline#input."
-    assert projections["AL"][f"{prefix}al_pit_pilot_joint_schedule_applies"] == {
+    prefix = (
+        "us-al:policies/income_tax/"
+        "2026_section_40_18_5_schedule_before_credits#input."
+    )
+    assert projections["AL"][
+        f"{prefix}al_pit_2026_section_40_18_5_married_joint_schedule_applies"
+    ] == {
         1: False,
         2: True,
         3: False,

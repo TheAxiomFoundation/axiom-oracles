@@ -126,9 +126,17 @@ EXPECTED_STATE_FIPS = {
 }
 EXPECTED_STATE_CODES = frozenset(EXPECTED_STATE_FIPS)
 EXPECTED_PROGRAM_OVERRIDES = {
+    "AL": (
+        "us-al:policies/income_tax/"
+        "2026_section_40_18_5_schedule_before_credits"
+    ),
     "KY": "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits",
 }
 EXPECTED_OUTPUT_OVERRIDES = {
+    "AL": (
+        "us-al:policies/income_tax/2026_section_40_18_5_schedule_before_credits"
+        "#al_pit_2026_section_40_18_5_schedule_before_credits"
+    ),
     "KY": (
         "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits"
         "#ky_pit_2026_krs_141_020_schedule_before_credits"
@@ -141,13 +149,13 @@ EXPECTED_OUTPUT_OVERRIDES = {
 EXPECTED_EXPLICIT_INPUT_COUNT = 157
 EXPECTED_EXPLICIT_RELATION_COUNT = 2
 EXPECTED_SLOT_INVENTORY_SHA256 = (
-    "db839abc67cd6521f3b6da747b89ed65969dea5f2f1ad72e60d9eb7b6eafd026"
+    "382c5ef97df228a80d14acc6dae5e6d7fd7fdd0456b0d100a3a0c6f04201d253"
 )
 EXPECTED_JURISDICTION_REGISTRY_SHA256 = (
-    "d38109d180ab4c6ab87ecb049eb80f3a4eb5ed2a971061f470a071925a356b7c"
+    "8ae07f40c6e9ec3f41842d54d3c3e8f41a6f289a90305303da23dd7d00c213dc"
 )
 EXPECTED_SOURCE_METADATA_SHA256 = (
-    "2cc8843bca97cd7b78177142b0d53df915429d0120741417487f2792915afd09"
+    "ebb9b4d722739d2c3df2009edc61a3caa967094dd5a19025751813a1c9230795"
 )
 # Exact boundaries admitted only after independent legal and dependency-graph
 # review.  The comparison target itself is forbidden below, so these remain
@@ -156,8 +164,9 @@ ALLOWED_PE_UPSTREAM_BOUNDARIES: frozenset[tuple[str, str, str]] = frozenset(
     {
         (
             "AL",
-            "us-al:policies/income_tax/pilot_liability_pipeline#input."
-            "al_pit_pilot_state_taxable_income",
+            "us-al:policies/income_tax/"
+            "2026_section_40_18_5_schedule_before_credits#input."
+            "al_pit_2026_section_40_18_5_completed_taxable_income",
             "al_taxable_income",
         ),
         (
@@ -435,8 +444,9 @@ ALLOWED_DERIVED_PE_BOUNDARIES: frozenset[tuple[str, str, str, str]] = frozenset(
     {
         (
             "AL",
-            "us-al:policies/income_tax/pilot_liability_pipeline#input."
-            "al_pit_pilot_joint_schedule_applies",
+            "us-al:policies/income_tax/"
+            "2026_section_40_18_5_schedule_before_credits#input."
+            "al_pit_2026_section_40_18_5_married_joint_schedule_applies",
             "filing_status",
             "filing_status_joint_or_surviving_spouse",
         ),

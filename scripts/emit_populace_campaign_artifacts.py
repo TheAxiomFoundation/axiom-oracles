@@ -43,16 +43,22 @@ def project_state(
     matched = compared - mismatch_count
     rate = (matched / compared * 100) if compared else 100.0
     concept = entry["output"]
+    description = (
+        "State income tax liability over every routed tax unit in the "
+        "pinned US Populace"
+    )
+    if state == "AL":
+        description = (
+            "Alabama Code section 40-18-5 schedule before nonrefundable "
+            "credits over every routed tax unit in the pinned US Populace"
+        )
     aggregate = {
         "comparison": "amount",
         "comparison_count": compared,
         "compared": compared,
         "components": [],
         "concept": concept,
-        "description": (
-            "State income tax liability over every routed tax unit in the "
-            "pinned US Populace"
-        ),
+        "description": description,
         "match_count": matched,
         "match_rate": rate,
         "matched": matched,

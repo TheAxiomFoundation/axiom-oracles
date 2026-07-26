@@ -28684,6 +28684,105 @@ mappings:
     candidate_priority: P4
     rationale: Axiom's signed net-liability output is deliberately zero while the annual income, deduction, tax, surtax, and credit chain remains source held; it must not be interpreted as zero Alabama tax or compared to a completed PolicyEngine liability.
 
+  # Alabama Code section 40-18-5 is a narrow schedule surface. Exact entries
+  # override the jurisdiction-wide fallback without representing this module as
+  # a completed annual-return liability pipeline.
+  - legal_id: us-al:policies/income_tax/2026_section_40_18_5_schedule_before_credits#al_pit_2026_section_40_18_5_first_rate
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.al.tax.income.rates.single
+    parameter_key_path: [rates, 0]
+    period: year
+    comparison: rate
+    rationale: Same two percent first-bracket rate; PolicyEngine's Alabama joint and nonjoint scales share all three marginal rates, so the single scale is the exact canonical parameter target.
+
+  - legal_id: us-al:policies/income_tax/2026_section_40_18_5_schedule_before_credits#al_pit_2026_section_40_18_5_second_rate
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.al.tax.income.rates.single
+    parameter_key_path: [rates, 1]
+    period: year
+    comparison: rate
+    rationale: Same four percent second-bracket rate; PolicyEngine's Alabama joint and nonjoint scales share all three marginal rates, so the single scale is the exact canonical parameter target.
+
+  - legal_id: us-al:policies/income_tax/2026_section_40_18_5_schedule_before_credits#al_pit_2026_section_40_18_5_third_rate
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.al.tax.income.rates.single
+    parameter_key_path: [rates, 2]
+    period: year
+    comparison: rate
+    rationale: Same five percent third-bracket rate; PolicyEngine's Alabama joint and nonjoint scales share all three marginal rates, so the single scale is the exact canonical parameter target.
+
+  - legal_id: us-al:policies/income_tax/2026_section_40_18_5_schedule_before_credits#al_pit_2026_section_40_18_5_nonjoint_first_bracket_ceiling
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.al.tax.income.rates.single
+    parameter_key_path: [thresholds, 1]
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same 500 dollar first-bracket ceiling in PolicyEngine's Alabama nonjoint schedule.
+
+  - legal_id: us-al:policies/income_tax/2026_section_40_18_5_schedule_before_credits#al_pit_2026_section_40_18_5_nonjoint_second_bracket_ceiling
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.al.tax.income.rates.single
+    parameter_key_path: [thresholds, 2]
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same 3,000 dollar second-bracket ceiling in PolicyEngine's Alabama nonjoint schedule.
+
+  - legal_id: us-al:policies/income_tax/2026_section_40_18_5_schedule_before_credits#al_pit_2026_section_40_18_5_joint_first_bracket_ceiling
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.al.tax.income.rates.joint
+    parameter_key_path: [thresholds, 1]
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same 1,000 dollar first-bracket ceiling in PolicyEngine's Alabama joint schedule.
+
+  - legal_id: us-al:policies/income_tax/2026_section_40_18_5_schedule_before_credits#al_pit_2026_section_40_18_5_joint_second_bracket_ceiling
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.al.tax.income.rates.joint
+    parameter_key_path: [thresholds, 2]
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same 6,000 dollar second-bracket ceiling in PolicyEngine's Alabama joint schedule.
+
+  - legal_id: us-al:policies/income_tax/2026_section_40_18_5_schedule_before_credits#al_pit_2026_section_40_18_5_taxable_income_boundary
+    country: us
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: al_taxable_income
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    rationale: RuleSpec preserves the completed Alabama taxable-income boundary supplied by the validated Populace projection before applying the nonnegative schedule floor.
+
+  - legal_id: us-al:policies/income_tax/2026_section_40_18_5_schedule_before_credits#al_pit_2026_section_40_18_5_schedule_before_credits
+    country: us
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: al_income_tax_before_non_refundable_credits
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Both outputs apply the Alabama section 40-18-5 schedule to completed Alabama taxable income before nonrefundable credits; neither mapping claims final annual liability.
+
   # Arizona's TY2026 resident annual-return interface is fully source held.
   # Its amount outputs are fail-closed sentinels, not claims of zero tax.
   # Exact entries keep every output in tax-scoped coverage without comparing

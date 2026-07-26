@@ -612,22 +612,22 @@ jurisdictions:
   fips: '01'
   taxsim_state_code: 1
   jurisdiction: us-al
-  program: us-al:policies/income_tax/pilot_liability_pipeline
-  output: us-al:policies/income_tax/pilot_liability_pipeline#al_pit_pilot_income_tax_liability
+  program: us-al:policies/income_tax/2026_section_40_18_5_schedule_before_credits
+  output: us-al:policies/income_tax/2026_section_40_18_5_schedule_before_credits#al_pit_2026_section_40_18_5_schedule_before_credits
   policyengine:
     target: al_income_tax_before_non_refundable_credits
     tolerance: 0.01
     relative_tolerance: 0.0000001
   status: ready
-  evidence: RuleSpec applies Alabama Code section 40-18-5 to completed-return Alabama taxable income, selecting the statutory joint schedule for joint and surviving-spouse filers. Independent legal and semantic review plus a full certified-Populace run covered all 1,632 positive-weight routed Alabama tax units and found zero differences outside $0.01 absolute or 1e-7 relative tolerance; the maximum absolute difference was $0.20.
+  evidence: The canonical RuleSpec surface applies only Alabama Code section 40-18-5 to completed Alabama taxable income and selects the statutory joint schedule for joint and surviving-spouse filers. It stops before credits and does not claim completed annual liability. Independent legal and semantic review plus the full certified Populace validates the upstream projection and this narrow comparison.
   inputs:
-  - slot: us-al:policies/income_tax/pilot_liability_pipeline#input.al_pit_pilot_state_taxable_income
+  - slot: us-al:policies/income_tax/2026_section_40_18_5_schedule_before_credits#input.al_pit_2026_section_40_18_5_completed_taxable_income
     source_kind: pe_upstream_boundary
     status: ready
-    evidence: Alabama Code section 40-18-5 applies the individual schedule to Alabama taxable income. PolicyEngine al_taxable_income is a direct upstream dependency of the distinct al_income_tax_before_non_refundable_credits target; rulespec-us#971 and the full-Populace review verified this completed-return boundary.
+    evidence: Alabama Code section 40-18-5 applies the individual schedule to Alabama taxable income. PolicyEngine al_taxable_income is a direct upstream dependency of the distinct al_income_tax_before_non_refundable_credits target; the projection is validated before RuleSpec evaluation.
     policyengine_variable: al_taxable_income
     policyengine_relationship: upstream
-  - slot: us-al:policies/income_tax/pilot_liability_pipeline#input.al_pit_pilot_joint_schedule_applies
+  - slot: us-al:policies/income_tax/2026_section_40_18_5_schedule_before_credits#input.al_pit_2026_section_40_18_5_married_joint_schedule_applies
     source_kind: derived
     status: ready
     evidence: Section 40-18-5 supplies the wider schedule for joint returns; PolicyEngine maps its surviving-spouse status to that schedule as well. The reviewed transform accepts only the five canonical filing-status labels and maps exactly JOINT and SURVIVING_SPOUSE to true.

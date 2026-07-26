@@ -596,7 +596,6 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
         "ssi-ecps",
         "ca-snap-ecps",
         "medicaid-magi-co-ecps",
-        "al-income-tax-liability",
         "nc-income-tax-liability",
         "ms-income-tax-liability",
         "al-tanf-ecps",
@@ -656,6 +655,7 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
     assert nh_income_tax.note
     assert "probe_us_nh_repealed_income_tax.py" in nh_income_tax.note
     narrow_state_targets = {
+        "al_income_tax": "al_income_tax_before_non_refundable_credits",
         "az_income_tax": "az_income_tax_before_non_refundable_credits",
         "ca_income_tax": "ca_income_tax_before_refundable_credits",
         "ct_income_tax": "ct_income_tax_before_refundable_credits",
@@ -699,11 +699,11 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
         assert row.in_scope is True, final_variable
         assert row.suite is None, final_variable
         assert compared_surface in row.note, final_variable
-    # Alabama and North Carolina are the two reviewed 2026 exceptions: their
-    # narrower targets are provably identical to the generated final variables
-    # over every positive-weight routed Populace tax unit.
+    # North Carolina is the reviewed 2026 exception whose narrower target
+    # is provably identical to the generated final variable over every
+    # positive-weight routed Populace tax unit. Alabama deliberately is not
+    # promoted from its schedule-before-credits comparison to final liability.
     final_equivalent_state_targets = {
-        "al_income_tax": ("al_income_tax_before_non_refundable_credits", "1,632"),
         "nc_income_tax": ("nc_income_tax_before_credits", "2,169"),
     }
     for final_variable, (compared_surface, population_count) in (
