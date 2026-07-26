@@ -114,6 +114,18 @@ def test_kansas_2026_direct_and_not_comparable_boundaries() -> None:
             assert mapping.rationale
 
 
+def test_kansas_2026_candidate_deduction_rationale_matches_election_semantics() -> None:
+    mapping = _module_mappings()["ks_pit_2026_candidate_deduction"]
+
+    assert (
+        mapping.rationale
+        == "Axiom exposes the candidate deduction selected by its explicit "
+        "Kansas itemization election. PolicyEngine exposes standard and "
+        "itemized amounts separately and does not expose this bounded "
+        "election intermediate."
+    )
+
+
 @pytest.mark.parametrize("program", [None, "tax"])
 def test_kansas_2026_core_remains_in_coverage(
     tmp_path: Path,

@@ -30637,7 +30637,7 @@ mappings:
     program: *ks_2026_program
     mapping_type: not_comparable
     candidate_priority: P4
-    rationale: Axiom exposes the elected greater deduction after its explicit Kansas itemization election. PolicyEngine exposes standard and itemized amounts separately and does not expose this bounded election intermediate.
+    rationale: Axiom exposes the candidate deduction selected by its explicit Kansas itemization election. PolicyEngine exposes standard and itemized amounts separately and does not expose this bounded election intermediate.
 
   - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_candidate_personal_exemptions
     country: *ks_2026_country
