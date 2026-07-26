@@ -2333,16 +2333,12 @@ concepts:
       policyengine: ut_income_tax_before_credits
       taxsim: siitax
 
-  us-al:policies/income_tax/pilot_liability_pipeline#al_pit_pilot_income_tax_liability:
-    description: Alabama income tax liability (resident wage earner; the section 40-18-5 graduated tax (2/4/5 per cent) on Alabama taxable income (Alabama AGI less the section 40-18-15 deductions and the section 40-18-19 exemptions))
+  us-al:policies/income_tax/2026_section_40_18_5_schedule_before_credits#al_pit_2026_section_40_18_5_schedule_before_credits:
+    description: Alabama Code section 40-18-5 graduated schedule tax on completed Alabama taxable income, before nonrefundable credits
     category: tax
     comparison: amount
-    # Compared against PolicyEngine al_income_tax_before_non_refundable_credits,
-    # the exact section 40-18-5 schedule-tax analog before credits.
-    # Against TAXSIM 2024 every case diverges by the 2024-to-2026 vintage,
-    # dispositioned in dispositions/al-income-tax-liability.yaml. The tight
-    # absolute tolerance catches structural bracket errors.
-    tolerance: 1
+    tolerance: 0.01
+    relative_tolerance: 0.0000001
     priority: high
     locales: [US-AL]
     scope:
@@ -2350,12 +2346,11 @@ concepts:
       geoid: US
     targets:
       axiom:
-        name: al_pit_pilot_income_tax_liability
+        name: al_pit_2026_section_40_18_5_schedule_before_credits
         scope:
           type: country
           geoid: US
       policyengine: al_income_tax_before_non_refundable_credits
-      taxsim: siitax
   us-id:policies/income_tax/pilot_liability_pipeline#id_pit_pilot_income_tax_liability:
     description: Idaho income tax liability (resident wage earner; the section 63-3024 tax (5.3 per cent) on Idaho taxable income above the indexed filing-status no-tax threshold)
     category: tax

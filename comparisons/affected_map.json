@@ -22,15 +22,6 @@
       "source": "comparisons/parameter-oracles.yaml"
     },
     {
-      "suite": "al-income-tax-liability",
-      "name": "al-income-tax-liability",
-      "report": "axiom-policyengine-taxsim-al-income-tax-liability.json",
-      "repos": [
-        "TheAxiomFoundation/rulespec-us"
-      ],
-      "source": "comparisons/al-income-tax-liability.yaml"
-    },
-    {
       "suite": "al-snap-ecps",
       "name": "al-snap-ecps",
       "report": "axiom-policyengine-al-snap-ecps.json",
