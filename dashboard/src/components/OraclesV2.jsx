@@ -806,8 +806,6 @@ export default function OraclesV2() {
           <span className="brand-group">
             <a
               href={AXIOM_APP_URL}
-              target="_blank"
-              rel="noreferrer"
               className="brand-link"
               aria-label="Axiom Foundation"
             >
@@ -817,15 +815,14 @@ export default function OraclesV2() {
                 className="brand-axiom"
               />
             </a>
-            <span className="brand-divider" aria-hidden="true" />
-            <span className="brand-product" aria-label="Oracles">
-              OR
-              <span className="brand-flip" aria-hidden="true">
-                A
-              </span>
-              CLES
-            </span>
+            <a href={`${BASE_PATH}/`} className="brand-title">
+              <span className="brand-eyebrow">Interactive</span>
+              <span className="brand-name">Oracles</span>
+            </a>
           </span>
+          <a href="https://axiom.org/demos" className="all-demos-link">
+            All demos
+          </a>
         </div>
       </header>
       <main className="v2-main">
