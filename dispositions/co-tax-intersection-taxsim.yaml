@@ -1,6 +1,6 @@
 schema: axiom_oracles.dispositions.v1
 suite: co-tax-intersection-taxsim
-updated: '2026-07-22'
+updated: '2026-07-27'
 entries:
 - id: taxsim-2026-ctc-child-credit-machinery-absent
   concept: us:tax/federal-income-tax#ctc
@@ -214,14 +214,20 @@ entries:
     - ecps-tax-unit-59341
   disposition: upstream_engine_gap
   evidence:
-    mechanism: |-
-      The pinned TAXSIM 2.30.0 binary's 2026 law year does not model the
+    mechanism: 'The pinned TAXSIM 2.30.0 binary''s 2026 law year does not model
+      the
+
       qualifying-child credit machinery (documented in docs/policyengine-
+
       taxsim.md and verified against the binary: 2025 models the full OBBBA
+
       $2,200/child credit, 2026 returns only the $500 other-dependent path).
-      On every selected row TAXSIM's v22 equals exactly 500 x depx (or zero),
+
+      On every selected row TAXSIM''s v22 equals exactly 500 x depx (or zero),
+
       while the axiom side computes the enacted 26 USC 24 credit. NBER model
-      gap, not an Axiom defect.
+
+      gap, not an Axiom defect.'
     arithmetic:
     - expression: 500 * 1
       equals: 500.0
@@ -290,12 +296,15 @@ entries:
     - ecps-tax-unit-59341
   disposition: upstream_engine_gap
   evidence:
-    mechanism: |-
-      Same 2026 TAXSIM gap as the CTC class: EITC with qualifying children
+    mechanism: 'Same 2026 TAXSIM gap as the CTC class: EITC with qualifying children
+
       returns zero at the 2026 law year (childless EITC is modeled; 2025
+
       models both). Every selected row has depx > 0, TAXSIM v25 = 0, and a
+
       positive axiom EITC under the enacted 26 USC 32. NBER model gap, not an
-      Axiom defect.
+
+      Axiom defect.'
   expires_on_source_change: true
   linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
 - id: taxsim-input-lacks-blindness-column-63f-increments
@@ -325,14 +334,19 @@ entries:
     - ecps-tax-unit-59198
   disposition: explained_residual
   evidence:
-    mechanism: |-
-      Every residual is an exact whole multiple of the 2026 section 63(f)
+    mechanism: 'Every residual is an exact whole multiple of the 2026 section 63(f)
+
       additional standard deduction ($2,050 unmarried / $1,650 per married
+
       individual). The TAXSIM input format carries no blindness column and its
+
       aged handling differs from the ECPS leaves the axiom projection reads
+
       (is_blind and per-member age), so axiom counts more 63(f) increments
+
       than TAXSIM can see. Input-format scope difference, not a computation
-      disagreement.
+
+      disagreement.'
     arithmetic:
     - expression: 32200.0 + 1 * 1650
       equals: 33850.0
@@ -550,13 +564,12 @@ entries:
     - ecps-tax-unit-59285
   disposition: axiom_encoding_gap
   evidence:
-    mechanism: |-
-      On every selected wages-only row the summed axiom statute targets
-      (us:statutes/26/3101/a plus 3101/b/1) equal exactly 7.65 per cent of
-      total tax-unit wages, including units with wages far above the 2026
-      contribution and benefit base — the encoded rules apply no 26 USC
-      3121(a)(1) cap, while TAXSIM (and PolicyEngine) cap the OASDI portion
-      per employee. Tracked upstream in axiom-encode#1214.
+    mechanism: "On every selected wages-only row the summed axiom statute targets\n\
+      (us:statutes/26/3101/a plus 3101/b/1) equal exactly 7.65 per cent of\ntotal\
+      \ tax-unit wages, including units with wages far above the 2026\ncontribution\
+      \ and benefit base \u2014 the encoded rules apply no 26 USC\n3121(a)(1) cap,\
+      \ while TAXSIM (and PolicyEngine) cap the OASDI portion\nper employee. Tracked\
+      \ upstream in axiom-encode#1214."
     arithmetic:
     - expression: 0.0765 * 301206.94
       equals: 23042.33
@@ -676,13 +689,17 @@ entries:
     - ecps-tax-unit-59316
   disposition: axiom_encoding_gap
   evidence:
-    mechanism: |-
-      All remaining employee_fica residual rows involve the SECA (26 USC
+    mechanism: 'All remaining employee_fica residual rows involve the SECA (26 USC
+
       1401/1402) chain; signs are mixed and no single-rate signature fits, so
+
       the class is fingerprinted for pull-one-case triage (axiom-oracles#304
+
       lists the representative case) rather than asserted. Classified on the
+
       axiom side because the uncapped-OASDI gap (axiom-encode#1214) already
-      contaminates every SECA-adjacent sum.
+
+      contaminates every SECA-adjacent sum.'
   expires_on_source_change: true
   linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
 - id: liability-composite-of-member-classes-and-niit-addmed-scope
@@ -957,15 +974,14 @@ entries:
     - ecps-tax-unit-59341
   disposition: explained_residual
   evidence:
-    mechanism: |-
-      Each selected liability residual reproduces, within $15, the sum of the
-      unit's own component-class residuals (CTC and EITC 2026 TAXSIM gaps, AMT
-      and tax-before-credits classes) minus TAXSIM's niit and addmed outputs —
-      NIIT because the composed axiom program excludes us:statutes/26/1411
-      until the upstream duplicate-rule encoding is fixed (axiom-encode#1213),
-      additional Medicare because TAXSIM folds it into fiitax while the axiom
-      liability target excludes it. No independent liability-level
-      disagreement remains on these rows.
+    mechanism: "Each selected liability residual reproduces, within $15, the sum\
+      \ of the\nunit's own component-class residuals (CTC and EITC 2026 TAXSIM gaps,\
+      \ AMT\nand tax-before-credits classes) minus TAXSIM's niit and addmed outputs\
+      \ \u2014\nNIIT because the composed axiom program excludes us:statutes/26/1411\n\
+      until the upstream duplicate-rule encoding is fixed (axiom-encode#1213),\n\
+      additional Medicare because TAXSIM folds it into fiitax while the axiom\n\
+      liability target excludes it. No independent liability-level\ndisagreement\
+      \ remains on these rows."
     arithmetic:
     - expression: -664.0 + -4668.08
       equals: -5332.08
@@ -978,3 +994,252 @@ entries:
       tolerance: 15.0
   expires_on_source_change: true
   linked_issue: https://github.com/TheAxiomFoundation/axiom-encode/issues/1213
+- id: taxsim-blindness-63f-extension-standard_deduction
+  concept: us:tax/federal-income-tax#standard_deduction
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-135487
+    - ecps-tax-unit-135503
+    - ecps-tax-unit-135628
+    - ecps-tax-unit-135642
+    - ecps-tax-unit-135669
+    - ecps-tax-unit-135725
+    - ecps-tax-unit-135783
+    - ecps-tax-unit-135801
+    - ecps-tax-unit-135805
+    - ecps-tax-unit-135959
+    - ecps-tax-unit-135984
+    - ecps-tax-unit-136279
+    - ecps-tax-unit-58412
+    - ecps-tax-unit-58689
+    - ecps-tax-unit-58748
+    - ecps-tax-unit-58922
+    - ecps-tax-unit-59089
+    - ecps-tax-unit-59103
+    - ecps-tax-unit-59198
+  disposition: explained_residual
+  evidence:
+    mechanism: 'TAXSIM''s input schema has no blindness column, so the 63(f) additional
+
+      standard deduction axiom applies from ECPS-observed blind facts ($2,050
+
+      single / $1,650 married per blind filer or spouse, 2026) has no TAXSIM
+
+      counterpart. Extension of the original class to newly verified rows:
+
+      each selected row''s difference equals the case''s blind member count
+
+      times the filing-status increment, verified against the loaded ECPS
+
+      blind facts; taxable/tax/liability rows are the same delta propagated
+
+      (chain rows selected only when blindness is the case''s sole leaf
+
+      divergence and the downstream delta is bounded by the top marginal rate
+
+      on the increment).'
+    arithmetic:
+    - expression: 1 * 1650
+      equals: 1650.0
+      tolerance: 1.0
+    - expression: 1 * 2050
+      equals: 2050.0
+      tolerance: 1.0
+    - expression: 1 * 1650
+      equals: 1650.0
+      tolerance: 1.0
+  expires_on_source_change: true
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
+- id: taxsim-blindness-63f-extension-taxable_income
+  concept: us:tax/federal-income-tax#taxable_income
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-135487
+    - ecps-tax-unit-135503
+    - ecps-tax-unit-135642
+    - ecps-tax-unit-135725
+    - ecps-tax-unit-135783
+    - ecps-tax-unit-135805
+    - ecps-tax-unit-136279
+    - ecps-tax-unit-59089
+    - ecps-tax-unit-59103
+  disposition: explained_residual
+  evidence:
+    mechanism: 'TAXSIM''s input schema has no blindness column, so the 63(f) additional
+
+      standard deduction axiom applies from ECPS-observed blind facts ($2,050
+
+      single / $1,650 married per blind filer or spouse, 2026) has no TAXSIM
+
+      counterpart. Extension of the original class to newly verified rows:
+
+      each selected row''s difference equals the case''s blind member count
+
+      times the filing-status increment, verified against the loaded ECPS
+
+      blind facts; taxable/tax/liability rows are the same delta propagated
+
+      (chain rows selected only when blindness is the case''s sole leaf
+
+      divergence and the downstream delta is bounded by the top marginal rate
+
+      on the increment).'
+    arithmetic:
+    - expression: -(1 * 1650)
+      equals: -1650.0
+      tolerance: 1.0
+    - expression: -(1 * 2050)
+      equals: -2050.0
+      tolerance: 1.0
+    - expression: -(1 * 1650)
+      equals: -1650.0
+      tolerance: 1.0
+  expires_on_source_change: true
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
+- id: taxsim-blindness-63f-extension-tax_before_credits
+  concept: us:tax/federal-income-tax#tax_before_credits
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-135487
+    - ecps-tax-unit-135503
+    - ecps-tax-unit-135725
+    - ecps-tax-unit-135783
+    - ecps-tax-unit-135805
+    - ecps-tax-unit-59103
+  disposition: explained_residual
+  evidence:
+    mechanism: 'TAXSIM''s input schema has no blindness column, so the 63(f) additional
+
+      standard deduction axiom applies from ECPS-observed blind facts ($2,050
+
+      single / $1,650 married per blind filer or spouse, 2026) has no TAXSIM
+
+      counterpart. Extension of the original class to newly verified rows:
+
+      each selected row''s difference equals the case''s blind member count
+
+      times the filing-status increment, verified against the loaded ECPS
+
+      blind facts; taxable/tax/liability rows are the same delta propagated
+
+      (chain rows selected only when blindness is the case''s sole leaf
+
+      divergence and the downstream delta is bounded by the top marginal rate
+
+      on the increment).'
+    arithmetic:
+    - expression: 612.5 - 165.0
+      equals: 447.5
+      tolerance: 0.01
+    - expression: 760.5 - 205.0
+      equals: 555.5
+      tolerance: 0.01
+    - expression: 760.5 - 451.0
+      equals: 309.5
+      tolerance: 0.01
+  expires_on_source_change: true
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
+- id: taxsim-blindness-63f-extension-liability
+  concept: us:tax/state-income-tax#liability
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-135487
+    - ecps-tax-unit-135503
+    - ecps-tax-unit-135725
+    - ecps-tax-unit-135783
+    - ecps-tax-unit-135805
+    - ecps-tax-unit-59103
+  disposition: explained_residual
+  evidence:
+    mechanism: 'TAXSIM''s input schema has no blindness column, so the 63(f) additional
+
+      standard deduction axiom applies from ECPS-observed blind facts ($2,050
+
+      single / $1,650 married per blind filer or spouse, 2026) has no TAXSIM
+
+      counterpart. Extension of the original class to newly verified rows:
+
+      each selected row''s difference equals the case''s blind member count
+
+      times the filing-status increment, verified against the loaded ECPS
+
+      blind facts; taxable/tax/liability rows are the same delta propagated
+
+      (chain rows selected only when blindness is the case''s sole leaf
+
+      divergence and the downstream delta is bounded by the top marginal rate
+
+      on the increment).'
+    arithmetic:
+    - expression: 612.5 - 69.4
+      equals: 543.1
+      tolerance: 0.01
+    - expression: 760.5 - 88.6
+      equals: 671.9
+      tolerance: 0.01
+    - expression: 760.5 - 91.19
+      equals: 669.31
+      tolerance: 0.01
+  expires_on_source_change: true
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
+- id: capgains-worksheet-bucket-routing-tbc
+  concept: us:tax/federal-income-tax#tax_before_credits
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-154451
+    - ecps-tax-unit-154480
+    - ecps-tax-unit-154519
+    - ecps-tax-unit-154724
+    - ecps-tax-unit-154841
+    - ecps-tax-unit-154897
+    - ecps-tax-unit-154917
+    - ecps-tax-unit-155152
+    - ecps-tax-unit-156218
+    - ecps-tax-unit-156423
+    - ecps-tax-unit-156467
+    - ecps-tax-unit-156922
+    - ecps-tax-unit-157006
+    - ecps-tax-unit-157643
+    - ecps-tax-unit-157701
+    - ecps-tax-unit-157868
+    - ecps-tax-unit-158759
+    - ecps-tax-unit-158820
+    - ecps-tax-unit-159140
+    - ecps-tax-unit-159167
+    - ecps-tax-unit-159221
+    - ecps-tax-unit-159302
+    - ecps-tax-unit-160120
+    - ecps-tax-unit-160186
+    - ecps-tax-unit-160319
+    - ecps-tax-unit-160520
+    - ecps-tax-unit-160751
+    - ecps-tax-unit-162276
+    - ecps-tax-unit-164175
+    - ecps-tax-unit-59063
+    - ecps-tax-unit-59245
+    - ecps-tax-unit-59264
+  disposition: bridge_artifact
+  evidence:
+    mechanism: "For filers whose income is dominated by capital gains and dividends,\n\
+      axiom's tax computation routes through the capital-gains worksheet\nconcepts\
+      \ while the mapped tax_before_credits bucket carries zero, and\nTAXSIM reports\
+      \ the schedule total in its tbc column \u2014 yet final\nliability agrees\
+      \ within 2 percent on every selected row. A concept-\nbucket routing artifact\
+      \ of the comparison mapping, not a tax\ndisagreement; the liability agreement\
+      \ is the proof."
+    arithmetic:
+    - expression: 6759288.214859375 - 6759257.37
+      equals: 30.84
+      tolerance: 135185.15
+    - expression: 11902438.2240625 - 11885169.89
+      equals: 17268.33
+      tolerance: 237703.4
+    - expression: 3099172.15115625 - 3096530.12
+      equals: 2642.03
+      tolerance: 61930.6
+  expires_on_source_change: true
