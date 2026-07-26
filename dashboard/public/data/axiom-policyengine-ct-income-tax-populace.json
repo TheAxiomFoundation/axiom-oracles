@@ -37,14 +37,14 @@
    "sha256": "16be6338f9d0",
    "source": "pinned"
   },
-  "generated_at": "2026-07-26T12:41:51Z",
+  "generated_at": "2026-07-26T21:16:03Z",
   "generated_by": "scripts/emit_populace_campaign_artifacts.py::ct-income-tax-populace",
   "max_absolute_difference": 0.4592000003904104,
   "relative_tolerance": 1e-07,
   "rulespecs": [
    {
     "repo": "TheAxiomFoundation/rulespec-us",
-    "sha": "196492ee5dc5f2064ce25effe583399377f51469"
+    "sha": "595ce4a474111f4803e817764099346ebeb1e38a"
    }
   ],
   "run_kind": "manual",
@@ -60,7 +60,7 @@
     "policyengine-us": "1.752.2"
    },
    "rulespec": {
-    "commit": "196492ee5dc5f2064ce25effe583399377f51469",
+    "commit": "595ce4a474111f4803e817764099346ebeb1e38a",
     "repository": "TheAxiomFoundation/rulespec-us",
     "working_tree": "clean"
    }

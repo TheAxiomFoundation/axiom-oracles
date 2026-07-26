@@ -1,12 +1,4 @@
 {
-  "generated_at": "2026-07-26T12:41:51Z",
-  "generated_by": "scripts/run_state_tax_populace.py",
-  "run_kind": "manual",
-  "provenance_backfill": {
-    "method": "original_campaign_artifact_birth_time",
-    "evidence": "The original campaign report file birth time and modification time were both 2026-07-26T12:41:51Z before its first commit; scripts/run_state_tax_populace.py writes the report once after the completed campaign. The run was the local, explicitly CT-scoped certification invocation, so run_kind is manual.",
-    "reason": "The historical runner did not yet emit generated_at, generated_by, or run_kind; all three fields are backfilled here so projections preserve the actual campaign-run provenance instead of substituting projection time."
-  },
   "comparison": {
     "compared_count": 951,
     "mismatch_count": 0,
@@ -6700,14 +6692,16 @@
     "sha256": "16be6338f9d0",
     "source": "pinned"
   },
+  "generated_at": "2026-07-26T21:16:03Z",
+  "generated_by": "scripts/run_state_tax_populace.py",
   "requested_states": [
     "CT"
   ],
   "routing": {
-    "blocked_projection_count": 25262,
-    "eligible_ready_count": 45297,
+    "blocked_projection_count": 24371,
+    "eligible_ready_count": 46188,
     "errored_count": 0,
-    "excluded_count": 42222,
+    "excluded_count": 41331,
     "non_applicable_count": 16960,
     "population_scope": {
       "filtered_slices_allowed": false,
@@ -6719,7 +6713,7 @@
     "positive_weight_count": 87519,
     "sample_size_per_state": 0,
     "schema_version": "axiom.state_tax_populace_routing_report.v1",
-    "selected_ready_count": 45297,
+    "selected_ready_count": 46188,
     "state_count": 51,
     "states": {
       "AK": {
@@ -6945,14 +6939,14 @@
       },
       "KY": {
         "dispositions": {
-          "blocked_projection": 891
+          "ready": 891
         },
         "fips": "21",
         "positive_weight_count": 891,
-        "selected_count": 0,
+        "selected_count": 891,
         "tax_unit_count": 891,
         "weighted_dispositions": {
-          "blocked_projection": 2345188.746109797
+          "ready": 2345188.746109797
         },
         "weighted_tax_units": 2345188.746109797
       },
@@ -7397,14 +7391,15 @@
       "weighted_tax_units": 0.0
     },
     "weighted_dispositions": {
-      "blocked_projection": 49627937.57347716,
+      "blocked_projection": 47282748.827367365,
       "not_applicable_no_broad_pit": 36626340.684484586,
-      "ready": 90281515.55617918
+      "ready": 92626704.30228896
     },
-    "weighted_eligible_ready_tax_units": 90281515.55617918,
-    "weighted_excluded_tax_units": 86254278.25796175,
+    "weighted_eligible_ready_tax_units": 92626704.30228896,
+    "weighted_excluded_tax_units": 83909089.51185195,
     "weighted_tax_units": 176535793.81414092
   },
+  "run_kind": "manual",
   "runtime_provenance": {
     "axiom_engine": {
       "commit": "ffd8213271947b0189a9dd61a055c1e0e78908a0",
@@ -7417,7 +7412,7 @@
       "policyengine-us": "1.752.2"
     },
     "rulespec": {
-      "commit": "196492ee5dc5f2064ce25effe583399377f51469",
+      "commit": "595ce4a474111f4803e817764099346ebeb1e38a",
       "repository": "TheAxiomFoundation/rulespec-us",
       "working_tree": "clean"
     }
