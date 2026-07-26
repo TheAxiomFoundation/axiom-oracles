@@ -4,12 +4,16 @@
     "co-snap-ecps: 1 unexplained mismatch(es) \u2014 disposition or fix before this leg counts",
     "exercise: census incomplete (missing per-case evidence or unaudited bridge) for at least one suite"
   ],
+  "certified": {
+    "rule": "computed(conformant AND exercised AND closed AND executable) with zero open defects; attested premises never satisfy it",
+    "value": false
+  },
   "evidence": [
     {
       "artifact": "conformance/exercise-census.json",
       "claim": "exercise census",
       "mode": "computed",
-      "sha256": "5e5e12a0e04e343051a525825a323c74898516f600b9094cb17983184e6036d8"
+      "sha256": "0135186bbbf660ec38d548fcd3a8e247cd049902a0a1752e74f052af6d7158a1"
     },
     {
       "artifact": "dashboard/public/data/axiom-policyengine-co-snap-ecps.json",
@@ -56,8 +60,10 @@
           "note": "reality-oracle disagreements are leads, not defects",
           "oracle": "USDA SNAP QC FY2024 administrative sample (rulespec overlay, per-patch citations in report provenance)",
           "oracle_type": "reality",
+          "report_defects": [],
           "suite": "co-snap-qc",
-          "unexplained": 0
+          "unexplained": 0,
+          "weighted_mismatch_mass": null
         }
       ],
       "reference_legs": [
@@ -69,8 +75,10 @@
           "mismatches": 1,
           "oracle": "policyengine-us 1.705.1 over the populace population",
           "oracle_type": "reference",
+          "report_defects": [],
           "suite": "co-snap-ecps",
-          "unexplained": 1
+          "unexplained": 1,
+          "weighted_mismatch_mass": 1.0
         }
       ],
       "value": false
@@ -78,9 +86,10 @@
     "executable": {
       "mode": "attested",
       "source": "TheAxiomFoundation/ops launch-readiness/receipts/engine-v0.1.1-receipt-2026-07-26.md",
+      "source_commit": "81ccb7b",
       "status": "fail_open_item",
       "value": {
-        "detail": "rc=0, snap_monthly_allotment=478; committed fixture predates the input-naming cutover so eligibility is unresolved (gated output $0) and net income lands at 226 vs certified 226.50 \u2014 fixture regeneration pending",
+        "detail": "rc=0, snap_monthly_allotment=478; committed fixture predates the input-naming cutover: SSN inputs default false, eligibility evaluates not_holds, the correctly-gated output returns 0, net income 226 vs certified 226.50 \u2014 fixture regeneration pending; the gated binding is the intended contract",
         "golden_values_reproduce": false,
         "loads_and_runs": true,
         "tuple": "engine v0.1.1 x program-artifacts-59a10dab866e"
@@ -92,7 +101,6 @@
         "co-snap-ecps": {
           "bridge_audited": true,
           "bridged_through": [
-            "child_support_deduction",
             "dependent_care_deduction",
             "medical_deduction"
           ],

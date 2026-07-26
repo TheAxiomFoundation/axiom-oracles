@@ -44,9 +44,11 @@ Modes::
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import sys
 from collections import defaultdict
+from decimal import Decimal, InvalidOperation
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -101,19 +103,52 @@ def _iter_suite_reports() -> list[tuple[str, dict]]:
     return reports
 
 
-def _chunk_cases(suite: str) -> list[dict]:
+def _canonical_value(raw) -> str:
+    """Canonicalize an observed value for distinctness counting.
+
+    JSON-string identity is wrong for numbers: 1 vs 1.0 and 0.0 vs -0.0 are
+    the same observation, while large integers must not collapse through
+    float parsing (2026-07-26 audit, finding 17). Decimal, normalized, with
+    signed zero collapsed.
+    """
+    if isinstance(raw, bool) or raw is None:
+        return json.dumps(raw)
+    if isinstance(raw, (int, float)):
+        raw = str(raw)
+    if isinstance(raw, str):
+        try:
+            number = Decimal(raw)
+        except InvalidOperation:
+            return json.dumps(raw, sort_keys=True)
+        if number == 0:
+            return "0"
+        return format(number.normalize(), "f")
+    return json.dumps(raw, sort_keys=True, default=str)
+
+
+def _chunk_cases(suite: str) -> tuple[list[dict], list[dict]]:
+    """Return (cases, chunk_manifest) — each chunk named and sha-bound so a
+    census row is pinned to the exact evidence it counted (finding 10)."""
     cases: list[dict] = []
+    manifest: list[dict] = []
     suite_dir = CASES_DIR / suite
     if not suite_dir.is_dir():
-        return cases
+        return cases, manifest
     for chunk in sorted(suite_dir.glob("chunk-*.json")):
         try:
-            payload = json.loads(chunk.read_text())
+            raw = chunk.read_text()
+            payload = json.loads(raw)
         except (OSError, json.JSONDecodeError):
             continue
+        manifest.append(
+            {
+                "chunk": str(chunk.relative_to(REPO_ROOT)),
+                "sha256": hashlib.sha256(raw.encode()).hexdigest(),
+            }
+        )
         rows = payload if isinstance(payload, list) else payload.get("cases") or []
         cases.extend(row for row in rows if isinstance(row, dict))
-    return cases
+    return cases, manifest
 
 
 def _census_suite(suite: str, report: dict) -> dict:
@@ -128,33 +163,33 @@ def _census_suite(suite: str, report: dict) -> dict:
         for record in case.get("i") or []:
             if isinstance(record, dict) and record.get("n") is not None:
                 field_values[str(record["n"])].add(
-                    json.dumps(record.get("v"), sort_keys=True, default=str)
+                    _canonical_value(record.get("v"))
                 )
         for verdict in case.get("v") or []:
             if isinstance(verdict, dict) and verdict.get("c"):
                 concept_values[str(verdict["c"])].add(
-                    json.dumps(verdict.get("l"), sort_keys=True, default=str)
+                    _canonical_value(verdict.get("l"))
                 )
         # Inline report cases: scalar metadata entries are stage evidence.
         metadata = case.get("metadata")
         if isinstance(metadata, dict):
             for key, value in metadata.items():
                 if isinstance(value, (int, float, str, bool)) or value is None:
-                    field_values[str(key)].add(
-                        json.dumps(value, sort_keys=True, default=str)
-                    )
+                    field_values[str(key)].add(_canonical_value(value))
 
     # Chunks are the full per-case record when they exist; the inline report
     # usually keeps a single illustrative case. Mixing the two would count
-    # every field of that one inline case as "constant" and drown the signal.
-    chunk_cases = _chunk_cases(suite)
+    # every field of that one inline case as "constant" and drown the signal —
+    # but the inline cases must not vanish silently either (finding 7): their
+    # count is recorded so eclipse is visible.
+    chunk_cases, chunk_manifest = _chunk_cases(suite)
+    inline_cases = [c for c in report.get("cases") or [] if isinstance(c, dict)]
     if chunk_cases:
         for case in chunk_cases:
             eat_case(case)
     else:
-        for case in report.get("cases") or []:
-            if isinstance(case, dict):
-                eat_case(case)
+        for case in inline_cases:
+            eat_case(case)
 
     fields = {
         name: {
@@ -170,6 +205,9 @@ def _census_suite(suite: str, report: dict) -> dict:
     varied = sum(1 for f in fields.values() if f["state"] == "varied")
     return {
         "cases_scanned": scanned,
+        "evidence_source": "chunks" if chunk_cases else "inline",
+        "inline_cases_not_counted": len(inline_cases) if chunk_cases else 0,
+        "chunk_manifest": chunk_manifest,
         "evidence_fields": fields,
         "verdict_concepts": concepts,
         "varied_fields": varied,

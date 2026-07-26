@@ -85,21 +85,31 @@ bindings:
         nonzero cases, reimbursement netting and necessity gate)
       - co-snap-qc (real sampled expenses from the FY2024 admin sample)
     audit: read
-  - kind: bridged
-    dimension: child_support_deduction
+  # Reclassified 2026-07-26 (cross-family audit, finding 8): the value is a
+  # population fact projected per unit, not a PE-computed derivation — the
+  # exclusion's qualification logic is still not independently exercised
+  # here, but the binding kind was wrong.
+  - kind: projected
+    input: child_support_deduction
     source: projected_child_support_payment(values)
-    mechanism: population child-support payment fed through; the exclusion's
-      qualification logic is not independently exercised here.
-    covered_by:
-      - co-snap-qc
+    note: population child-support payment projected per unit; the
+      exclusion's own qualification logic is not exercised in this suite.
     audit: read
   - kind: bridged
     dimension: medical_deduction
     source: policyengine:snap_excess_medical_expense_deduction
     mechanism: PE's computed medical deduction fed through.
     covered_by:
-      - co-snap-qc
+      - co-snap-qc suite (dashboard/public/data/axiom-snapqc-co-snap.json),
+        real sampled medical expenses from the FY2024 admin sample
     audit: read
+  - kind: mapped
+    group: member relation (ages, citizenship) and categorical-eligibility
+      and utility-region inputs
+    source_function: snap_populace per-unit member/categorical/region blocks
+    note: named by the 2026-07-26 audit as omitted from this manifest;
+      recorded as explicit debt until line-audited and enumerated.
+    audit: partial
   - kind: constant
     group: base fixture remainder
     source_function: project_base_inputs

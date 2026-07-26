@@ -90,12 +90,15 @@ PROGRAMS: dict[str, dict] = {
                     "loads_and_runs": True,
                     "golden_values_reproduce": False,
                     "detail": "rc=0, snap_monthly_allotment=478; committed "
-                    "fixture predates the input-naming cutover so eligibility "
-                    "is unresolved (gated output $0) and net income lands at "
-                    "226 vs certified 226.50 — fixture regeneration pending",
+                    "fixture predates the input-naming cutover: SSN inputs "
+                    "default false, eligibility evaluates not_holds, the "
+                    "correctly-gated output returns 0, net income 226 vs "
+                    "certified 226.50 — fixture regeneration pending; the "
+                    "gated binding is the intended contract",
                 },
                 "source": "TheAxiomFoundation/ops launch-readiness/receipts/"
                 "engine-v0.1.1-receipt-2026-07-26.md",
+                "source_commit": "81ccb7b",
                 "status": "fail_open_item",
             },
         },
@@ -111,42 +114,140 @@ def _load(path: Path) -> dict:
     return json.loads(path.read_text())
 
 
-def _suite_verdict(entry: dict) -> tuple[dict, dict]:
-    """Compute one suite's conformance leg from its committed report."""
+def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
+    """Compute one suite's conformance leg from its committed report.
+
+    Hardened per the 2026-07-26 cross-family audit: a report only counts as a
+    comparison when it identifies itself as this suite, performed a nonzero
+    number of comparisons without engine errors, and its counts conserve.
+    A zero-work or mislabeled report is a defect, never a clean leg.
+    """
+    defects: list[str] = []
     report_path = REPO_ROOT / entry["report"]
     report = _load(report_path)
     summary = report.get("summary") or {}
+
+    # Report identity: the artifact must claim the suite it is cited for.
+    reported_suite = report.get("suite")
+    accepted = {entry["suite"], *entry.get("aliases", [])}
+    if reported_suite not in accepted:
+        defects.append(
+            f"{entry['suite']}: report {entry['report']} identifies as "
+            f"{reported_suite!r}, not this suite"
+        )
+
+    comparisons = int(summary.get("comparison_count") or 0)
+    matches = int(summary.get("match_count") or 0)
+    mismatch_count = int(summary.get("mismatch_count") or 0)
+    error_count = int(
+        summary.get("error_count") or summary.get("error_case_count") or 0
+    )
+    if comparisons <= 0:
+        defects.append(
+            f"{entry['suite']}: zero comparisons — a report that did no work "
+            "cannot evidence anything"
+        )
+    if matches + mismatch_count != comparisons:
+        defects.append(
+            f"{entry['suite']}: counts do not conserve "
+            f"({matches} + {mismatch_count} != {comparisons})"
+        )
+    if error_count:
+        defects.append(
+            f"{entry['suite']}: {error_count} engine error(s) recorded — "
+            "errored cases are not comparisons"
+        )
+
+    # Weighted evidence must not contradict the raw counts (a zero raw
+    # mismatch count with nonzero weighted mismatch mass is hidden failure).
+    weighted = summary.get("weighted") or {}
+    weighted_mismatch = float(weighted.get("mismatch_weight") or 0)
+    if mismatch_count == 0 and weighted_mismatch > 0:
+        defects.append(
+            f"{entry['suite']}: raw mismatch count is 0 but weighted mismatch "
+            f"mass is {weighted_mismatch} — weighted failures hidden"
+        )
+
+    # Disposition accounting. Three explicit modes:
+    #   file   — a dispositions file is named; it must exist, be hashed, and
+    #            its counts must conserve against the mismatch count.
+    #   none   — no machinery; every mismatch is unexplained by definition.
+    #   inline — classifications exist with no file (generator-classified);
+    #            unvalidated, so the leg is defective until migrated.
     dispositioned = summary.get("dispositioned") or {}
     counts = dispositioned.get("counts") or {}
-    mismatch_count = int(summary.get("mismatch_count") or 0)
-    # A mismatch with no disposition machinery applied is unexplained by
-    # definition — absence of a dispositions file never counts as explained.
-    unexplained = (
-        int(dispositioned.get("unexplained_count") or 0)
-        if dispositioned
-        else mismatch_count
+    evidence: list[dict] = [
+        {
+            "claim": f"suite:{entry['suite']}",
+            "mode": "computed",
+            "artifact": entry["report"],
+            "sha256": sha256_of(report_path),
+        }
+    ]
+    disposition_file = dispositioned.get("dispositions_file")
+    classified = sum(int(v or 0) for v in counts.values())
+    if disposition_file:
+        dispositions_path = REPO_ROOT / disposition_file
+        if not dispositions_path.exists():
+            defects.append(
+                f"{entry['suite']}: dispositions_file {disposition_file!r} "
+                "does not exist in the repository"
+            )
+            unexplained = mismatch_count
+        else:
+            evidence.append(
+                {
+                    "claim": f"dispositions:{entry['suite']}",
+                    "mode": "computed",
+                    "artifact": disposition_file,
+                    "sha256": sha256_of(dispositions_path),
+                }
+            )
+            unexplained = int(dispositioned.get("unexplained_count") or 0)
+            if classified != mismatch_count:
+                defects.append(
+                    f"{entry['suite']}: disposition counts ({classified}) do "
+                    f"not conserve against mismatches ({mismatch_count})"
+                )
+    elif classified and classified != int(
+        dispositioned.get("unexplained_count") or 0
+    ):
+        defects.append(
+            f"{entry['suite']}: inline classifications present with no "
+            "dispositions file — unvalidated; migrate before they can explain"
+        )
+        unexplained = mismatch_count
+    else:
+        unexplained = mismatch_count
+
+    # Slim-report guard: when the summary claims mismatches the report body
+    # does not carry and no per-case chunks exist, the aggregate cannot be
+    # audited from committed evidence.
+    stored = len(report.get("mismatches") or [])
+    chunk_dir = REPO_ROOT / "dashboard" / "public" / "data" / "cases" / str(
+        reported_suite or entry["suite"]
     )
-    if dispositioned and dispositioned.get("dispositions_file") is None:
-        unexplained = max(unexplained, mismatch_count)
+    if mismatch_count > stored and not chunk_dir.is_dir():
+        defects.append(
+            f"{entry['suite']}: {mismatch_count} mismatches claimed, "
+            f"{stored} stored, no per-case chunks — aggregate unauditable"
+        )
+
     axiom_open = int(counts.get("axiom_encoding_gap") or 0)
     leg = {
         "suite": entry["suite"],
         "oracle_type": entry["oracle_type"],
         "oracle": entry["oracle"],
-        "comparisons": summary.get("comparison_count"),
-        "matches": summary.get("match_count"),
+        "comparisons": comparisons,
+        "matches": matches,
         "mismatches": mismatch_count,
+        "weighted_mismatch_mass": weighted_mismatch or None,
         "unexplained": unexplained,
         "axiom_attributed_open": axiom_open,
-        "clean": unexplained == 0 and axiom_open == 0,
+        "report_defects": defects,
+        "clean": not defects and unexplained == 0 and axiom_open == 0,
     }
-    evidence = {
-        "claim": f"suite:{entry['suite']}",
-        "mode": "computed",
-        "artifact": entry["report"],
-        "sha256": sha256_of(report_path),
-    }
-    return leg, evidence
+    return leg, evidence, defects
 
 
 def _exercise_block(suites: list[dict], census: dict) -> tuple[dict, bool]:
@@ -185,10 +286,12 @@ def build_certificate(program: str, spec: dict) -> dict:
             "sha256": sha256_of(CENSUS_PATH),
         }
     ]
+    all_defects: list[str] = []
     for entry in spec["suites"]:
-        leg, ev = _suite_verdict(entry)
+        leg, evs, defects = _suite_verdict(entry)
         legs.append(leg)
-        evidence.append(ev)
+        evidence.extend(evs)
+        all_defects.extend(defects)
 
     reference_legs = [leg for leg in legs if leg["oracle_type"] == "reference"]
     reality_legs = [leg for leg in legs if leg["oracle_type"] == "reality"]
@@ -197,9 +300,9 @@ def build_certificate(program: str, spec: dict) -> dict:
 
     exercise_rows, exercise_complete = _exercise_block(spec["suites"], census)
 
-    blockers = []
+    blockers = list(all_defects)
     for leg in reference_legs:
-        if not leg["clean"]:
+        if leg["unexplained"] or leg["axiom_attributed_open"]:
             blockers.append(
                 f"{leg['suite']}: {leg['unexplained']} unexplained mismatch(es) "
                 f"— disposition or fix before this leg counts"
@@ -211,10 +314,29 @@ def build_certificate(program: str, spec: dict) -> dict:
         )
 
     attested = spec.get("attested") or {}
+    # The single public predicate (adopted from the 2026-07-26 design review):
+    # "certified" is reserved for the conjunction of all four verdicts holding
+    # in computed mode with no open defects. closed and executable are attested
+    # today, so certified is necessarily false — by design, not oversight: a
+    # certificate resting on attested premises is scaffolding, and saying so
+    # is the point.
+    certified = bool(
+        conformant
+        and exercise_complete
+        and not blockers
+        and attested.get("closed", {}).get("status") == "computed"
+        and attested.get("executable", {}).get("status") == "computed"
+    )
     return {
         "schema": SCHEMA,
         "program": program,
         "period": spec["period"],
+        "certified": {
+            "value": certified,
+            "rule": "computed(conformant AND exercised AND closed AND "
+            "executable) with zero open defects; attested premises never "
+            "satisfy it",
+        },
         "verdicts": {
             "conformant": {
                 "value": conformant,
@@ -285,7 +407,8 @@ def main() -> int:
         path.write_text(json.dumps(certificate, indent=2, sort_keys=True) + "\n")
         verdicts = certificate["verdicts"]
         print(
-            f"{program}: conformant={verdicts['conformant']['value']} "
+            f"{program}: CERTIFIED={certificate['certified']['value']} | "
+            f"conformant={verdicts['conformant']['value']} "
             f"exercised={verdicts['exercised']['value']} "
             f"closed={verdicts['closed'].get('status')} "
             f"executable={verdicts['executable'].get('status')}"

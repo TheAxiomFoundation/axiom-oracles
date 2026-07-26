@@ -67,9 +67,16 @@ def validate(path: Path, manifest: dict) -> tuple[list[str], list[str]]:
     if errors:
         return errors, findings
 
+    bindings = manifest["bindings"]
+    if not isinstance(bindings, list) or not bindings:
+        errors.append(f"{name}: bindings must be a non-empty list")
+        return errors, findings
     seen_inputs: set[str] = set()
     partial = 0
-    for index, binding in enumerate(manifest["bindings"]):
+    for index, binding in enumerate(bindings):
+        if not isinstance(binding, dict):
+            errors.append(f"{name}: bindings[{index}] is not a mapping")
+            continue
         kind = binding.get("kind")
         if kind not in KINDS:
             errors.append(f"{name}: bindings[{index}] kind `{kind}` not in {sorted(KINDS)}")
@@ -94,10 +101,39 @@ def validate(path: Path, manifest: dict) -> tuple[list[str], list[str]]:
             if input_name in seen_inputs:
                 errors.append(f"{name}: input `{input_name}` bound more than once")
             seen_inputs.add(input_name)
-        if kind == "bridged" and not binding.get("covered_by"):
+        if kind == "bridged":
+            covered_by = binding.get("covered_by")
+            if not isinstance(covered_by, list) or not covered_by:
+                errors.append(
+                    f"{name}: bridged binding [{index}] needs covered_by as a "
+                    "non-empty list of evidence references"
+                )
+            else:
+                for ref in covered_by:
+                    text = str(ref)
+                    if len(text) < 12 or "tbd" in text.lower():
+                        errors.append(
+                            f"{name}: bridged binding [{index}] covered_by "
+                            f"entry {text!r} is a placeholder, not evidence"
+                        )
+            if not binding.get("source") or not binding.get("mechanism"):
+                errors.append(
+                    f"{name}: bridged binding [{index}] requires source and "
+                    "mechanism"
+                )
+        if kind in ("mapped", "projected") and not (
+            binding.get("source") or binding.get("source_function")
+        ):
             errors.append(
-                f"{name}: bridged binding [{index}] must say where the "
-                "bridged derivation IS covered (`covered_by`)"
+                f"{name}: {kind} binding [{index}] requires source or "
+                "source_function"
+            )
+        if kind == "constant" and not (
+            binding.get("reason") or binding.get("note")
+            or binding.get("source_function")
+        ):
+            errors.append(
+                f"{name}: constant binding [{index}] requires a reason"
             )
 
     suite_names = [manifest["suite"], *(manifest.get("aliases") or [])]
@@ -147,7 +183,18 @@ def main() -> int:
 
     all_errors: list[str] = []
     all_findings: list[str] = []
+    claimed: dict[str, str] = {}
     for path, manifest in manifests.items():
+        if isinstance(manifest, dict):
+            for claim in [manifest.get("suite"), *(manifest.get("aliases") or [])]:
+                if not claim:
+                    continue
+                if claim in claimed:
+                    all_errors.append(
+                        f"{path.name}: suite/alias {claim!r} already claimed "
+                        f"by {claimed[claim]} — namespace must be unique"
+                    )
+                claimed[str(claim)] = path.name
         errors, findings = validate(path, manifest)
         all_errors.extend(errors)
         all_findings.extend(findings)

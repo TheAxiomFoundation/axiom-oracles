@@ -6,6 +6,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 9,
+      "chunk_manifest": [],
       "constant_fields": 5,
       "evidence_fields": {
         "axiom_formula": {
@@ -37,6 +38,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 2,
       "verdict_concepts": {}
     },
@@ -44,6 +47,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 3,
+      "chunk_manifest": [],
       "constant_fields": 6,
       "evidence_fields": {
         "axiom_formula": {
@@ -75,6 +79,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -82,8 +88,28 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 1632,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/al-income-tax-populace/chunk-0.json",
+          "sha256": "8930a128f7689df32da9eb1e588db636f7081bcb16f9bc95afd30f6f5aab74a1"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/al-income-tax-populace/chunk-1.json",
+          "sha256": "40f6de228f46855f3a923c20e022e0e68afafd05018f8f38bca7c62f95ae5402"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/al-income-tax-populace/chunk-2.json",
+          "sha256": "7b636c1861ba55114c02807da802383874ae6e9a8a45c64e3058d76237bac9c0"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/al-income-tax-populace/chunk-3.json",
+          "sha256": "3fc953393c2780a3e1f6ed1e88d08e33538dea9e849082e519e4b7bfec0a5fe1"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {
         "us-al:policies/income_tax/2026_section_40_18_5_schedule_before_credits#al_pit_2026_section_40_18_5_schedule_before_credits": {
@@ -95,6 +121,20 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 1444,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/al-snap-ecps/chunk-0.json",
+          "sha256": "b04ec5357841af5ff809e576358ba49c67cd1aef701678f93d90d7e3cb741a9f"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/al-snap-ecps/chunk-1.json",
+          "sha256": "bec1b99386799dda410109c86f30018380752fca680ef662a4dfcd2451822c94"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/al-snap-ecps/chunk-2.json",
+          "sha256": "14b2d6fde314ef6de819fb24e7fcf5a6a85553b0fa9b11ed231f75a7f7455e98"
+        }
+      ],
       "constant_fields": 13,
       "evidence_fields": {
         "axiom:al-snap-compiled#input.household_lives_in_application_state": {
@@ -178,6 +218,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 44,
       "varied_fields": 7,
       "verdict_concepts": {
         "us:statutes/7/2014/o#snap_eligible": {
@@ -192,6 +234,20 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 1444,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/al-tanf-ecps/chunk-0.json",
+          "sha256": "f30a8f308d8a86841b64e3e899fbf39e8a77df583a6e18cbb16d0ecf9bfab541"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/al-tanf-ecps/chunk-1.json",
+          "sha256": "bdf798df855fcc9b075687deb0c1664384907fc1ef38076956eaf159925a08b8"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/al-tanf-ecps/chunk-2.json",
+          "sha256": "af27c32f1c36dcfac968922fd1312f206da1ee1d36e5fcccef68a6550b46c9e8"
+        }
+      ],
       "constant_fields": 1,
       "evidence_fields": {
         "axiom:al-tanf-compiled#input.assistance_unit_size": {
@@ -211,6 +267,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 0,
       "varied_fields": 3,
       "verdict_concepts": {
         "us-al:policies/dhr/tanf#al_tanf_benefit": {
@@ -222,6 +280,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 4,
+      "chunk_manifest": [],
       "constant_fields": 6,
       "evidence_fields": {
         "axiom_formula": {
@@ -253,6 +312,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -260,8 +321,24 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 1475,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/ar-income-tax-populace/chunk-0.json",
+          "sha256": "7235b38008d52084ef8d4bba588ca3de831a7a568ce9980bd0c89d68ea3a5957"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ar-income-tax-populace/chunk-1.json",
+          "sha256": "236df8d55c5dd4818d9ffadae8ec0e0459b57da106aa7a39b133b9588d4d1fda"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ar-income-tax-populace/chunk-2.json",
+          "sha256": "7593b4c0a1851e19c155be445a9b425703312e097f7109100b8a8b7737685869"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {
         "us-ar:policies/income_tax/pilot_liability_pipeline#ar_pit_pilot_income_tax_before_non_refundable_credits_indiv": {
@@ -273,8 +350,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 6,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/az-income-tax-liability/chunk-0.json",
+          "sha256": "09f52baae1279e64815117f37afc583f26b4a711180326c04a5435c392ca565b"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 6,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -282,8 +367,28 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 1585,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/az-income-tax-populace/chunk-0.json",
+          "sha256": "2ca624531e6bb4071318632408df3881029b41289eb445d4c8ebfefbe8954661"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/az-income-tax-populace/chunk-1.json",
+          "sha256": "883b0006eb92774d6e1a57b3abcc55732fb780734bddbc6c95cea74f1775be71"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/az-income-tax-populace/chunk-2.json",
+          "sha256": "f97a5e5de9f1ed8eb0ae1bbd361b7e3b6731fea00ba9ece51bc2cfcce2ea24a0"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/az-income-tax-populace/chunk-3.json",
+          "sha256": "2c613fbdb3fa663705e500ecb924c471c5904cef78b1577581702498e4f64660"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {
         "us-az:policies/income_tax/pilot_liability_pipeline#az_pit_pilot_income_tax_liability": {
@@ -295,6 +400,20 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 1341,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/az-snap-ecps/chunk-0.json",
+          "sha256": "94da78ba6585a950e85010a636f8a0c2229fbbb3e0b06cf2456b03ea4a2be30a"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/az-snap-ecps/chunk-1.json",
+          "sha256": "68ceb11ad0677dca5bedba654c0348ad8d05c953cff96c1901aebf0346d117c3"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/az-snap-ecps/chunk-2.json",
+          "sha256": "eb98426af2e19d7273c9ce2fb255626db3681ed5dd0bf08e662fc8c29605d98f"
+        }
+      ],
       "constant_fields": 13,
       "evidence_fields": {
         "axiom:az-snap-compiled#input.budgetary_unit_is_considered_for_na_expanded_categorical_eligibility": {
@@ -386,6 +505,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 306,
       "varied_fields": 9,
       "verdict_concepts": {
         "us:statutes/7/2014/o#snap_eligible": {
@@ -400,8 +521,20 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 922,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/az-snap-qc/chunk-0.json",
+          "sha256": "54694fc9b73c674b844fab7e375834eb0ad0f2288793522fe06acc24ca6c190e"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/az-snap-qc/chunk-1.json",
+          "sha256": "7658b4bad2efb5f62db569bb6157745e09a094806557c0c1888912749f3c55d8"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 922,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -409,6 +542,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 2,
+      "chunk_manifest": [],
       "constant_fields": 4,
       "evidence_fields": {
         "axiom_formula": {
@@ -440,6 +574,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 3,
       "verdict_concepts": {}
     },
@@ -447,6 +583,20 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 1341,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/az-tanf-ecps/chunk-0.json",
+          "sha256": "215f086370f25e5cdbb7f34267c750221632799bf8d667c97dd51298d38da311"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/az-tanf-ecps/chunk-1.json",
+          "sha256": "5986a8eb506ae1794defe970748be3a0bbfcea4f898fab854940c992f6fddd68"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/az-tanf-ecps/chunk-2.json",
+          "sha256": "935c413150443a14b52b0f0f820541ccdd0cb34048c47f7d84d08a95cdbb8727"
+        }
+      ],
       "constant_fields": 4,
       "evidence_fields": {
         "axiom:az-tanf-compiled#input.all_members_of_caretaker_relative_family_registered_to_case": {
@@ -490,6 +640,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 4,
       "varied_fields": 6,
       "verdict_concepts": {
         "us-az:policies/des/faa5#az_tanf_benefit": {
@@ -501,6 +653,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 5,
+      "chunk_manifest": [],
       "constant_fields": 4,
       "evidence_fields": {
         "axiom_entity": {
@@ -524,6 +677,8 @@
           "state": "varied"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -531,6 +686,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 3,
+      "chunk_manifest": [],
       "constant_fields": 4,
       "evidence_fields": {
         "axiom_entity": {
@@ -558,6 +714,8 @@
           "state": "varied"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 2,
       "verdict_concepts": {}
     },
@@ -565,6 +723,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 2,
+      "chunk_manifest": [],
       "constant_fields": 4,
       "evidence_fields": {
         "axiom_entity": {
@@ -588,6 +747,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -595,6 +756,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 3,
+      "chunk_manifest": [],
       "constant_fields": 5,
       "evidence_fields": {
         "axiom_entity": {
@@ -622,6 +784,8 @@
           "state": "varied"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -629,6 +793,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 1,
+      "chunk_manifest": [],
       "constant_fields": 4,
       "evidence_fields": {
         "axiom_entity": {
@@ -648,6 +813,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -655,6 +822,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 2,
+      "chunk_manifest": [],
       "constant_fields": 7,
       "evidence_fields": {
         "axiom_alias_qualified_inputs": {
@@ -690,6 +858,8 @@
           "state": "varied"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -697,6 +867,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 7,
+      "chunk_manifest": [],
       "constant_fields": 4,
       "evidence_fields": {
         "axiom_entity": {
@@ -728,6 +899,8 @@
           "state": "varied"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 3,
       "verdict_concepts": {}
     },
@@ -735,6 +908,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 17,
+      "chunk_manifest": [],
       "constant_fields": 3,
       "evidence_fields": {
         "axiom_entity": {
@@ -766,6 +940,8 @@
           "state": "varied"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 4,
       "verdict_concepts": {}
     },
@@ -773,6 +949,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 4,
+      "chunk_manifest": [],
       "constant_fields": 7,
       "evidence_fields": {
         "axiom_entity": {
@@ -820,6 +997,8 @@
           "state": "varied"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 4,
       "verdict_concepts": {}
     },
@@ -827,6 +1006,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 4,
+      "chunk_manifest": [],
       "constant_fields": 8,
       "evidence_fields": {
         "axiom_entity": {
@@ -874,6 +1054,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 3,
       "verdict_concepts": {}
     },
@@ -881,6 +1063,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 3,
+      "chunk_manifest": [],
       "constant_fields": 5,
       "evidence_fields": {
         "axiom_entity": {
@@ -916,6 +1099,8 @@
           "state": "varied"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 3,
       "verdict_concepts": {}
     },
@@ -923,6 +1108,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 8,
+      "chunk_manifest": [],
       "constant_fields": 5,
       "evidence_fields": {
         "axiom_entity": {
@@ -958,6 +1144,8 @@
           "state": "varied"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 3,
       "verdict_concepts": {}
     },
@@ -965,6 +1153,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 7,
+      "chunk_manifest": [],
       "constant_fields": 3,
       "evidence_fields": {
         "axiom_entity": {
@@ -996,6 +1185,8 @@
           "state": "varied"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 4,
       "verdict_concepts": {}
     },
@@ -1003,6 +1194,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 2,
+      "chunk_manifest": [],
       "constant_fields": 3,
       "evidence_fields": {
         "axiom_entity": {
@@ -1026,6 +1218,8 @@
           "state": "varied"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 2,
       "verdict_concepts": {}
     },
@@ -1033,6 +1227,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 3,
+      "chunk_manifest": [],
       "constant_fields": 5,
       "evidence_fields": {
         "axiom_entity": {
@@ -1064,6 +1259,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 2,
       "verdict_concepts": {}
     },
@@ -1071,6 +1268,12 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 3,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/be-marital-quotient/chunk-0.json",
+          "sha256": "eceeeb62445f183280610c47c7a4ba97a902df111ebd7ea6daeeb2ec76c1ed5b"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {
         "inputs": {
@@ -1078,6 +1281,8 @@
           "state": "varied"
         }
       },
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 3,
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -1085,6 +1290,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 3,
+      "chunk_manifest": [],
       "constant_fields": 4,
       "evidence_fields": {
         "axiom_entity": {
@@ -1112,6 +1318,8 @@
           "state": "varied"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 2,
       "verdict_concepts": {}
     },
@@ -1119,6 +1327,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 6,
+      "chunk_manifest": [],
       "constant_fields": 4,
       "evidence_fields": {
         "axiom_entity": {
@@ -1142,6 +1351,8 @@
           "state": "varied"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -1149,6 +1360,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 3,
+      "chunk_manifest": [],
       "constant_fields": 5,
       "evidence_fields": {
         "axiom_entity": {
@@ -1176,6 +1388,8 @@
           "state": "varied"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -1183,6 +1397,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 3,
+      "chunk_manifest": [],
       "constant_fields": 5,
       "evidence_fields": {
         "axiom_entity": {
@@ -1214,6 +1429,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 2,
       "verdict_concepts": {}
     },
@@ -1221,6 +1438,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 7,
+      "chunk_manifest": [],
       "constant_fields": 5,
       "evidence_fields": {
         "axiom_entity": {
@@ -1252,6 +1470,8 @@
           "state": "varied"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 2,
       "verdict_concepts": {}
     },
@@ -1259,6 +1479,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 2,
+      "chunk_manifest": [],
       "constant_fields": 3,
       "evidence_fields": {
         "axiom_entity": {
@@ -1278,6 +1499,8 @@
           "state": "varied"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -1285,6 +1508,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 7,
+      "chunk_manifest": [],
       "constant_fields": 3,
       "evidence_fields": {
         "axiom_entity": {
@@ -1320,6 +1544,8 @@
           "state": "varied"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 5,
       "verdict_concepts": {}
     },
@@ -1327,6 +1553,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 6,
+      "chunk_manifest": [],
       "constant_fields": 3,
       "evidence_fields": {
         "axiom_entity": {
@@ -1346,6 +1573,8 @@
           "state": "varied"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -1353,6 +1582,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 4,
+      "chunk_manifest": [],
       "constant_fields": 4,
       "evidence_fields": {
         "axiom_entity": {
@@ -1376,6 +1606,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -1383,8 +1615,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 2,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/be-work-bonus-credit/chunk-0.json",
+          "sha256": "6618479f6d4d04597f4891ae64329e873bc9796ad2cf4427b4965c2cff2a6c32"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 4,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -1392,6 +1632,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 2,
+      "chunk_manifest": [],
       "constant_fields": 4,
       "evidence_fields": {
         "axiom_entity": {
@@ -1415,6 +1656,8 @@
           "state": "varied"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -1422,6 +1665,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 3,
+      "chunk_manifest": [],
       "constant_fields": 4,
       "evidence_fields": {
         "axiom_entity": {
@@ -1445,6 +1689,8 @@
           "state": "varied"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -1452,6 +1698,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 2,
+      "chunk_manifest": [],
       "constant_fields": 4,
       "evidence_fields": {
         "axiom_entity": {
@@ -1475,6 +1722,8 @@
           "state": "varied"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -1482,6 +1731,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 2,
+      "chunk_manifest": [],
       "constant_fields": 4,
       "evidence_fields": {
         "axiom_entity": {
@@ -1505,6 +1755,8 @@
           "state": "varied"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -1512,6 +1764,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 2,
+      "chunk_manifest": [],
       "constant_fields": 5,
       "evidence_fields": {
         "axiom_formula": {
@@ -1543,6 +1796,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 2,
       "verdict_concepts": {}
     },
@@ -1550,8 +1805,11 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 0,
+      "chunk_manifest": [],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -1559,8 +1817,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 2,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/ca-income-tax-liability/chunk-0.json",
+          "sha256": "fb1f74c205def7a3d236f1622949282af6e33b0abc3414d20a268be11cdf1d0b"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 6,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -1568,6 +1834,68 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 7101,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/ca-snap-ecps/chunk-0.json",
+          "sha256": "145896036e2fd81a96de0e2e51a119ff79aed2497c6f007bb0bfca982a74a75e"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ca-snap-ecps/chunk-1.json",
+          "sha256": "7f7e2046ff4016090f812226c5f76b5d1b6470b840c4628657b54a32edffed76"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ca-snap-ecps/chunk-10.json",
+          "sha256": "0f6702dea0b89a8b42da0f977bf877353f8e427d5a7b0958a367f471fd2c498c"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ca-snap-ecps/chunk-11.json",
+          "sha256": "24168c44dae8fdbe4fef9ab6d9e678940b68b6e4f721191ab08487399d91c79e"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ca-snap-ecps/chunk-12.json",
+          "sha256": "88c0397c9d7bc21ed350f4c261eb5ae0f6f02a856e4800f8af67d63cf9c18da4"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ca-snap-ecps/chunk-13.json",
+          "sha256": "2b37afb3cc8246f2546fc4f205d5d730db1c720df33bd7be5d722850bb766b26"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ca-snap-ecps/chunk-14.json",
+          "sha256": "05a21ac60aa34a8b741a1bb675ac3149c093c278b21ee7dd38bd46966341829d"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ca-snap-ecps/chunk-2.json",
+          "sha256": "8a80a55c34382a22e78cc64cb71cce5713a00acce17a83eca4b7f4a9133bfe53"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ca-snap-ecps/chunk-3.json",
+          "sha256": "fb57cd147b3f609cc00e7b878398400eb31cb91ae08ced8f1c6ebf61d58e49dc"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ca-snap-ecps/chunk-4.json",
+          "sha256": "12aba850a1358443d5bc8af42ae387962072dbf2b5b9d77c9318b63af6f28288"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ca-snap-ecps/chunk-5.json",
+          "sha256": "33c164b3d8d9f2a0e48c1a7d076f482aa3aeae332c27dff9b5f08eb3ca5fd16c"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ca-snap-ecps/chunk-6.json",
+          "sha256": "9e2353e6f2b8b8e1687f9df653f5afd218fca230b310941dfe415c609cba0fd1"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ca-snap-ecps/chunk-7.json",
+          "sha256": "1f5896a0e755ba3a07e4752586c201b5c3e118534e42fc166ae081ef589bd882"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ca-snap-ecps/chunk-8.json",
+          "sha256": "23fabbc29243275d93cdac9e529eabbb59ab52d80557122fb8e23db925fd99f3"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ca-snap-ecps/chunk-9.json",
+          "sha256": "0b63862c56ccbccaa861c09af5aa70a7d41827d5fd1b9b454fe5bc1bbc90d443"
+        }
+      ],
       "constant_fields": 14,
       "evidence_fields": {
         "axiom:ca-snap-compiled#input.gross_monthly_income": {
@@ -1663,6 +1991,8 @@
           "state": "varied"
         }
       },
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 499,
       "varied_fields": 9,
       "verdict_concepts": {
         "us:statutes/7/2014/o#snap_eligible": {
@@ -1677,8 +2007,20 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 883,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/ca-snap-qc/chunk-0.json",
+          "sha256": "f9c3f295cd69c04cba5381fc29e67ded10c1903792c4966fd4df7a38fa1721c0"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ca-snap-qc/chunk-1.json",
+          "sha256": "9a12c1dcab53c7975f45b5051e649f6f1c6889febebeaa86b0f4f5104d5ea1b7"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 883,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -1686,6 +2028,68 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 7101,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/ca-tanf-ecps/chunk-0.json",
+          "sha256": "4c04ca7b8d70eed16fbda97716bca22a5cef99d8d888d9a4958f9eb0738966b7"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ca-tanf-ecps/chunk-1.json",
+          "sha256": "334ebd69553e49560384fd67c59609e6098cd759134a384f94da395057b97538"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ca-tanf-ecps/chunk-10.json",
+          "sha256": "cc7724ae46f9438cc97218f34c34a7fced29590cccc0a1de30b64070d361925a"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ca-tanf-ecps/chunk-11.json",
+          "sha256": "ddd54ea9a5212cb220fb05abfb270962add9e2ff8e1178b94ef2146e395f42d1"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ca-tanf-ecps/chunk-12.json",
+          "sha256": "deef9f868fc2242d33e79849a92f1e8f281eb83948a97c0f5aa782846c5d7581"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ca-tanf-ecps/chunk-13.json",
+          "sha256": "edad5b55aac779da67011c6a666182ca5e5e3b0ec99512f8f3a1c8f8f6eabe8c"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ca-tanf-ecps/chunk-14.json",
+          "sha256": "28bf9dcc09314e7848132bbe843e1b4f8c332337a7711c0e390b967bee8f8ac3"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ca-tanf-ecps/chunk-2.json",
+          "sha256": "8c73bba84f0ac30047624c911bbb955d7689aef76355c6b4843cbaa86f3be0a8"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ca-tanf-ecps/chunk-3.json",
+          "sha256": "bb88621b69f0fee6f309244880761cfa1051160463c418b02430954dadcc9354"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ca-tanf-ecps/chunk-4.json",
+          "sha256": "9d6fe90befddf73f643800899e562d4691dcf6a5be9f5674acd76760797fa045"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ca-tanf-ecps/chunk-5.json",
+          "sha256": "e8a77c55eba246b11ffae662fe813e87fc54b4eeaa34515ba7e5caca3d70ef10"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ca-tanf-ecps/chunk-6.json",
+          "sha256": "3a40b27cc0a28512fe86b593c5d64342a89855a0a429164ee7a693f1f5f29c66"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ca-tanf-ecps/chunk-7.json",
+          "sha256": "62f9a977a0be88f42dda111e94280e17d22402e41afd9447a3672be617aeaf53"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ca-tanf-ecps/chunk-8.json",
+          "sha256": "5a754dd3b7de22910b0aad25a00b6a4ec0bfc721bc43d44a34d86ce056333e1e"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ca-tanf-ecps/chunk-9.json",
+          "sha256": "ae4a7fe026d9bd73098ea3b47707da2237dee6eb25850ddc70ad329b1f6bdc85"
+        }
+      ],
       "constant_fields": 3,
       "evidence_fields": {
         "axiom:ca-tanf-compiled#input.assistance_unit_is_exempt": {
@@ -1713,6 +2117,8 @@
           "state": "varied"
         }
       },
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 177,
       "varied_fields": 3,
       "verdict_concepts": {
         "us-ca:policies/cdss/calworks#ca_tanf_benefit": {
@@ -1724,6 +2130,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 8,
+      "chunk_manifest": [],
       "constant_fields": 4,
       "evidence_fields": {
         "axiom_effective_fpl_limit": {
@@ -1759,6 +2166,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 4,
       "verdict_concepts": {}
     },
@@ -1766,8 +2175,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 6,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/co-income-tax-liability/chunk-0.json",
+          "sha256": "2ea9462489881c72f33924681b726d4696cd2039d76c8c92cbc7f9abd2aa0c72"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 6,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -1775,8 +2192,24 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 1201,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/co-income-tax-populace/chunk-0.json",
+          "sha256": "287615ed6723b91b3f80ecb2a12a7e9d8b7c6a8ddb6d98455534883ad1d65c97"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/co-income-tax-populace/chunk-1.json",
+          "sha256": "6bc75b3f23a50cd5afb710bff8801ca9cc2d356108686b1aae3a328ac95b4a4c"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/co-income-tax-populace/chunk-2.json",
+          "sha256": "aded0f9a1839e49574f5302eb13323d012b083dc10c525a03b369ab9e7cd6ab3"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {
         "us-co:policies/income_tax/pilot_liability_pipeline#co_pit_pilot_income_tax_liability": {
@@ -1787,11 +2220,24 @@
     "co-snap-ecps": {
       "bridge_audited": true,
       "bridged_through": {
-        "child_support_deduction": "population child-support payment fed through; the exclusion's qualification logic is not independently exercised here.",
         "dependent_care_deduction": "PE's computed deduction is fed as expenses_paid with reimbursed=0 and necessary=(deduction>0); the receiving formula max(0, paid - reimbursed) reproduces it identically.",
         "medical_deduction": "PE's computed medical deduction fed through."
       },
       "cases_scanned": 1072,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/co-snap-ecps/chunk-0.json",
+          "sha256": "17777f8b5be2e9b54cf7d7cc5aa90126e5262a00dea9877f88a30d53c871935c"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/co-snap-ecps/chunk-1.json",
+          "sha256": "ecc9cb82355dad8678fb9a714fda4ce8914e51f0ac59f30f93d2c72b3a48e488"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/co-snap-ecps/chunk-2.json",
+          "sha256": "86fec9ff5ab2c439c084d8fa9d0f682d1bb7feae6c4ab842d0de8a078bae31e6"
+        }
+      ],
       "constant_fields": 1,
       "evidence_fields": {
         "gross_income": {
@@ -1827,6 +2273,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 1,
       "varied_fields": 7,
       "verdict_concepts": {
         "us:statutes/7/2014/o#snap_eligible": {
@@ -1841,8 +2289,20 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 856,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/co-snap-qc/chunk-0.json",
+          "sha256": "d64558d6040df9729a2cfadf27f212b4177af3da81b2ac14b4ac35afaf9947d6"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/co-snap-qc/chunk-1.json",
+          "sha256": "41b8a587a9aad7d2ec177a1520614e3e81bcb02e34269d5099b204bcfe218a11"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 856,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -1850,8 +2310,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 31,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/co-state-income-tax-ecps/chunk-0.json",
+          "sha256": "ee1d9324033859ca9ee3bccfa5d93d1eabdbadaa7777994c0126a11236c54027"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 31,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -1859,6 +2327,20 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 1201,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/co-state-income-tax-taxsim/chunk-0.json",
+          "sha256": "729054bc11f8edcc28d81499c5920c3ea6a7fe41d58a21a22e0c993de08ea040"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/co-state-income-tax-taxsim/chunk-1.json",
+          "sha256": "994432c234d39417158cc86c8894d7d3c8af4a7d9c7693923996d820b90f04a6"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/co-state-income-tax-taxsim/chunk-2.json",
+          "sha256": "b04bfe86a029c05662532c6892adf2940fd89b30ba6fb2bcc0cf73c98a52bd89"
+        }
+      ],
       "constant_fields": 1,
       "evidence_fields": {
         "result_selection": {
@@ -1866,6 +2348,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 530,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -1873,6 +2357,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 1,
+      "chunk_manifest": [],
       "constant_fields": 7,
       "evidence_fields": {
         "axiom_formula": {
@@ -1904,6 +2389,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -1911,8 +2398,11 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 0,
+      "chunk_manifest": [],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -1920,6 +2410,20 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 1045,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/co-tanf-ecps/chunk-0.json",
+          "sha256": "527b32614a52d72e0e9accca9fa169dc4da17d0a3d23fec676e7bf27c483bc4c"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/co-tanf-ecps/chunk-1.json",
+          "sha256": "c4dfae732ad63473e7f00d83bc147d53ddf720cbeb3d34f9eded5eb6a17e3f76"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/co-tanf-ecps/chunk-2.json",
+          "sha256": "6dc8c2b73acf9c191da5c755bd1d4608f0bd9cc188f114c7fcc8a44b51b532fa"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {
         "input_records": {
@@ -1931,6 +2435,8 @@
           "state": "varied"
         }
       },
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 3,
       "varied_fields": 2,
       "verdict_concepts": {
         "us-co:policies/cdhs/colorado-works#co_tanf_benefit": {
@@ -1942,6 +2448,20 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 1201,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/co-tax-intersection-taxsim/chunk-0.json",
+          "sha256": "eb2f5cd67c4e2250783500f67f9d216aa6b4a6721ccb0e7847e18b6ebd1c54dc"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/co-tax-intersection-taxsim/chunk-1.json",
+          "sha256": "c1652bfa6da3f37d7a6b86dac5c466bcd3256c77c26e21f065c720a87622806a"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/co-tax-intersection-taxsim/chunk-2.json",
+          "sha256": "550bbcd620210ba6e1abe02bfac5b829ae038b32fca0a04e58b7b6bb1cd3f524"
+        }
+      ],
       "constant_fields": 1,
       "evidence_fields": {
         "result_selection": {
@@ -1949,6 +2469,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 359,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -1956,6 +2478,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 1,
+      "chunk_manifest": [],
       "constant_fields": 7,
       "evidence_fields": {
         "axiom_formula": {
@@ -1987,6 +2510,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -1994,8 +2519,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 6,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/ct-income-tax-liability/chunk-0.json",
+          "sha256": "498991f3106c104b743bc865d4ed13a530053c6ceed95ae5c75c2cee1fe38e3d"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 6,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -2003,8 +2536,20 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 951,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/ct-income-tax-populace/chunk-0.json",
+          "sha256": "8982946469f42356996290facb364587a7e8be0204b33439e9366e8238d8adce"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ct-income-tax-populace/chunk-1.json",
+          "sha256": "d4b253eadb96b6c40dadd025001f436b361cf4dc2a4feadd8136c31215f03729"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {
         "us-ct:policies/income_tax/pilot_liability_pipeline#ct_pit_pilot_income_tax_liability": {
@@ -2016,8 +2561,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 6,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/dc-income-tax-liability/chunk-0.json",
+          "sha256": "bd0eb68f8a14acef75817d3000e5621e132919a2e28cf147baf07e75f886334d"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 6,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -2025,8 +2578,11 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 6,
+      "chunk_manifest": [],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -2034,8 +2590,20 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 936,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/de-income-tax-populace/chunk-0.json",
+          "sha256": "a5ec60dad1f47765eacdd22bc3db5481fa18d4500bc0b7498cc25607558407ab"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/de-income-tax-populace/chunk-1.json",
+          "sha256": "eebed65d38987e38e96d2616742561fe69877e4bd8f447d5fa8e7aa772456bb2"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {
         "us-de:policies/income_tax/pilot_liability_pipeline#de_pit_pilot_income_tax_liability": {
@@ -2047,6 +2615,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 781,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/de-tanf-ecps/chunk-0.json",
+          "sha256": "c7474923ed809fd58cd692b4abcff9d4860b2f64dbe714f2fc4031a0e9b54f16"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/de-tanf-ecps/chunk-1.json",
+          "sha256": "9a80c981d2fa6b70fa8aeeef5f22102082b638f592e46c4458f2cc94281c3222"
+        }
+      ],
       "constant_fields": 3,
       "evidence_fields": {
         "axiom:de-tanf-compiled#input.applicable_tanf_standard_of_need": {
@@ -2082,6 +2660,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 781,
       "varied_fields": 5,
       "verdict_concepts": {
         "us-de:regulations/title-16/4000-financial-responsibility#de_tanf_benefit": {
@@ -2093,8 +2673,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 12,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/de-worker-dual-oracle/chunk-0.json",
+          "sha256": "3e12757833e6ddaa8e8882b3b4a45f96463519c4a64ff4056b88a4575b597237"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 13,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -2102,6 +2690,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 7,
+      "chunk_manifest": [],
       "constant_fields": 4,
       "evidence_fields": {
         "axiom_entity": {
@@ -2129,6 +2718,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 2,
       "verdict_concepts": {}
     },
@@ -2136,8 +2727,116 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 12691,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/fiit-ecps/chunk-0.json",
+          "sha256": "e9cfd4320269ec87091160cb5c20210080a34ebc59758f88834cfe69792faf9d"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/fiit-ecps/chunk-1.json",
+          "sha256": "0ee28b32dbc14fb3689d35ee9df44b51344539a6f6e29fbc3e1a05d2e018fbce"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/fiit-ecps/chunk-10.json",
+          "sha256": "10889e74e53f38db0d611f9e06e8440acd7f10f83e261d43c2141abc0f2c7c1a"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/fiit-ecps/chunk-11.json",
+          "sha256": "0a8110fa028796843e76991faa3d5555a1c2a18fa49a2565ba1d46811d36429d"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/fiit-ecps/chunk-12.json",
+          "sha256": "2abe90bdd0c2a5de35e63b11d1baaf0b50cc3f81dad5e0ca3c77e044159324a8"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/fiit-ecps/chunk-13.json",
+          "sha256": "3180a32bfda3b022634a8a75997d1f0b91e62c79a55ef2cfe75c680b0514ad35"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/fiit-ecps/chunk-14.json",
+          "sha256": "85b327a269dd2ea2a569be1edd522634529338a627c79db90ed193555881098f"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/fiit-ecps/chunk-15.json",
+          "sha256": "a67af88ae5a0d1e62cc9233aedf15bbc9a01b1bb8281da50a5471c7e8a1c71fe"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/fiit-ecps/chunk-16.json",
+          "sha256": "304010cc14b2fe363d2f18b1f16f346a75b3da96c2729399e97a0a0635697392"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/fiit-ecps/chunk-17.json",
+          "sha256": "5689065474be09c9314b113de8a416db03b71532290497b450cb9661f1efc52f"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/fiit-ecps/chunk-18.json",
+          "sha256": "b3b100a27158c60baa5bd0206593ce45e5aa4aab181b67258f673cf827df69f9"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/fiit-ecps/chunk-19.json",
+          "sha256": "42f9f4d6a36b3ebbf695a09b7a6a039b4bf38f9395f4e01eab40879ca0b0e85d"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/fiit-ecps/chunk-2.json",
+          "sha256": "363f553a070ab72d9fc31d5fcc263125297cadf00c5f39219c707d011a8a1643"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/fiit-ecps/chunk-20.json",
+          "sha256": "d979eda9c0148c6b919dec34b574c6daf48ee7cea5c55592188855f86a4dda62"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/fiit-ecps/chunk-21.json",
+          "sha256": "5b4c84293795415353a7139ebab460097c37e836dfbc72751329313d6a63de82"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/fiit-ecps/chunk-22.json",
+          "sha256": "e771ea62c042e9e71331aef93f873832b0adb38c4137a71e13bb3aa71067a1e6"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/fiit-ecps/chunk-23.json",
+          "sha256": "6a3f1a767fd6d291901ef5da494e26660b0b62f8505a7a4cff3ee58f3b1e1c64"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/fiit-ecps/chunk-24.json",
+          "sha256": "eaf3e0f8f753f3b8eda4659a1e1435495fa06bc75aa5dd417a1519baf3b6ff62"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/fiit-ecps/chunk-25.json",
+          "sha256": "adafe10a904d2253c7ebabe265a6c378e5e2ef40b5bdd9913881c3a6967624f9"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/fiit-ecps/chunk-3.json",
+          "sha256": "fd1f4ebb38de3b659c27b7ba02a351c412c180604cd8fcaf788ae57fcb319e94"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/fiit-ecps/chunk-4.json",
+          "sha256": "7c1d4164d7671d1b6eb73c409eb62d9c3e9ac0fdbb523747ec10b4898178adbb"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/fiit-ecps/chunk-5.json",
+          "sha256": "537059a8d5e93ed540f368dbfd6a4838cc0cfc703c931c0ef43cb9747d59773e"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/fiit-ecps/chunk-6.json",
+          "sha256": "aacee82d1d6800e7a7ec89860ae7a1d655438e81577054408256038d563313b0"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/fiit-ecps/chunk-7.json",
+          "sha256": "36e42f52726d66ef5a50b0fbf8c4930ee8a51e6161b4f7db4618402a7c483cd9"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/fiit-ecps/chunk-8.json",
+          "sha256": "a1b7d2b88399af89656c0d00c3292160fdd90df84ccdf37b0eac092ad6a68d5d"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/fiit-ecps/chunk-9.json",
+          "sha256": "462a13e394d5aa67668025b46e33c03578e5b8cb79cbc3a9ed746c17d9a17660"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 629,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -2145,6 +2844,40 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 3968,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/fl-snap-ecps/chunk-0.json",
+          "sha256": "9354badfae24ffd2c3b9092b901560e921e6c8512fadef144c8f2f2b3d6205d1"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/fl-snap-ecps/chunk-1.json",
+          "sha256": "94314315fff2681e0e8b1285f44c35965c98772ddef393f4a096f4c09a49409d"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/fl-snap-ecps/chunk-2.json",
+          "sha256": "b0db13d4dca3b4b2a5f7bef3d400f65a0da20a8c1bf958e71a727f7a42dbff30"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/fl-snap-ecps/chunk-3.json",
+          "sha256": "6bc6933be2c6e3becce01adad87d3bfa6352f9eb3eeb318ada071271579e1620"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/fl-snap-ecps/chunk-4.json",
+          "sha256": "e862c3a31ce75c2da668ec54fbd5a8e30adec30241f9c9e74df196decefc7d69"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/fl-snap-ecps/chunk-5.json",
+          "sha256": "ff1d731ef48b67717b9fc7dfedb70c151d61a81c3d0c86997e3f49c08a781329"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/fl-snap-ecps/chunk-6.json",
+          "sha256": "0cc92ccfe949d470dec38d595a997bdbc8348b632466623cccded43c5beee16a"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/fl-snap-ecps/chunk-7.json",
+          "sha256": "1e105c8e9eb3ca74bfaeb6840bfb80462fa95211d73989fbf2b406924e8789d2"
+        }
+      ],
       "constant_fields": 12,
       "evidence_fields": {
         "axiom:fl-snap-compiled#input.household_incurs_heating_or_cooling_expenses_separately_from_rent_or_mortgage": {
@@ -2224,6 +2957,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 500,
       "varied_fields": 7,
       "verdict_concepts": {
         "us:statutes/7/2014/o#snap_eligible": {
@@ -2238,6 +2973,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 15,
+      "chunk_manifest": [],
       "constant_fields": 5,
       "evidence_fields": {
         "axiom_formula": {
@@ -2269,6 +3005,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 2,
       "verdict_concepts": {}
     },
@@ -2276,6 +3014,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 5,
+      "chunk_manifest": [],
       "constant_fields": 4,
       "evidence_fields": {
         "axiom_formula": {
@@ -2307,6 +3046,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 3,
       "verdict_concepts": {}
     },
@@ -2314,8 +3055,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 6,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/ga-income-tax-liability/chunk-0.json",
+          "sha256": "ea58c1ef4508dc8475b3300bf4abc31220586c22b36032b49be7632a8753a2b4"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 6,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -2323,8 +3072,32 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 2187,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/ga-income-tax-populace/chunk-0.json",
+          "sha256": "b8a44c1b44b8fb5193e3ef9ed23ec497eca1288656a1d2dc2edb2263af4bbbee"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ga-income-tax-populace/chunk-1.json",
+          "sha256": "6f9a93c9d7cb469d18e04aec11ab3ecc59694eeac269b24ebadadfb1da420e34"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ga-income-tax-populace/chunk-2.json",
+          "sha256": "965b3026f6d06d90e662d99eec8d23186635de072a33cd94560db02e692c1a6e"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ga-income-tax-populace/chunk-3.json",
+          "sha256": "41110f8a3b99a3c87c6818b6da4d19500c320e555fbfc9d8ae1209d9b965edaf"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ga-income-tax-populace/chunk-4.json",
+          "sha256": "19ea5306e3c9a8aed41d87ecb78a9f966f1d381793d66f07d9ba1ad834a2eac6"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {
         "us-ga:policies/income_tax/pilot_liability_pipeline#ga_pit_pilot_income_tax_liability": {
@@ -2336,6 +3109,24 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 1897,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/ga-snap-ecps/chunk-0.json",
+          "sha256": "74fd7d08a27f44898b8c193f59cc462958142dab5f4e2e731b7846de8ca67bde"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ga-snap-ecps/chunk-1.json",
+          "sha256": "42a9e550b1da0b1ca0cb34839298b9cf8eba8a2c3fbdc00cd1275107bc7a1e05"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ga-snap-ecps/chunk-2.json",
+          "sha256": "9234e8d574999d4dd72b21683489c5605d888e8e68b4cbb064b3bfc1afe3cc49"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ga-snap-ecps/chunk-3.json",
+          "sha256": "8888a04c7f9203120c8c94d9c82be62117b3f01300935af4e30ee7c42bf8ee62"
+        }
+      ],
       "constant_fields": 12,
       "evidence_fields": {
         "axiom:ga-snap-compiled#input.household_incurs_heating_or_cooling_expenses_separately_from_rent_or_mortgage": {
@@ -2415,6 +3206,8 @@
           "state": "varied"
         }
       },
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 162,
       "varied_fields": 7,
       "verdict_concepts": {
         "us:statutes/7/2014/o#snap_eligible": {
@@ -2429,8 +3222,20 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 945,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/ga-snap-qc/chunk-0.json",
+          "sha256": "ea9fbee3ec3b12e8ae5ba63027627e8cda1f53871b93254e3afe274692073729"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ga-snap-qc/chunk-1.json",
+          "sha256": "4dba8f97cbd091af3c3eae574cdf3d263d387b192fffd79d7e3fe48854c7f5cf"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 945,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -2438,6 +3243,24 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 1897,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/ga-tanf-ecps/chunk-0.json",
+          "sha256": "01db61c3c42b3fb3f06b62cbed08960baab75c20ef9e8a3dc5083cf9ea5523c5"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ga-tanf-ecps/chunk-1.json",
+          "sha256": "f7995367f71565e9e7fe0304700150400e4f8fe5cc27896ddd289457234766f9"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ga-tanf-ecps/chunk-2.json",
+          "sha256": "351d3ab9852fea09e40ec0640bfc1b7c8edb952489487872882c460831138be8"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ga-tanf-ecps/chunk-3.json",
+          "sha256": "7affbdac82471f78fb2f6551ba5ba40b5641ea0dfd701a9054cfcbd53fdf70a1"
+        }
+      ],
       "constant_fields": 1,
       "evidence_fields": {
         "axiom:ga-tanf-compiled#input.allowable_earned_income_deductions": {
@@ -2457,6 +3280,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 1,
       "varied_fields": 3,
       "verdict_concepts": {
         "us-ga:policies/dfcs/tanf#ga_tanf_benefit": {
@@ -2468,6 +3293,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 8,
+      "chunk_manifest": [],
       "constant_fields": 4,
       "evidence_fields": {
         "axiom_formula": {
@@ -2499,6 +3325,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 3,
       "verdict_concepts": {}
     },
@@ -2506,8 +3334,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 6,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/hi-income-tax-liability/chunk-0.json",
+          "sha256": "a99c08027f4d352fb49f4a7c6cefa9a00d00e8c9f3271d0d9cf749846bc93cc4"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 6,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -2515,6 +3351,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 12,
+      "chunk_manifest": [],
       "constant_fields": 4,
       "evidence_fields": {
         "axiom_formula": {
@@ -2546,6 +3383,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 3,
       "verdict_concepts": {}
     },
@@ -2553,8 +3392,28 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 1519,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/hi-income-tax-populace/chunk-0.json",
+          "sha256": "2d571e783a8b0f48897f592c667e3b1abb2df384ca63fcdd8e98343c637fcc6d"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/hi-income-tax-populace/chunk-1.json",
+          "sha256": "d0443f9b1bb2c00bb3e492d5878835ef24fb3eb133ea022fd3bc5644a0e077c1"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/hi-income-tax-populace/chunk-2.json",
+          "sha256": "3d3104724820a8dcdc0be30c1903d2c4f120a5d8c350ed14e36c467f6dda27d0"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/hi-income-tax-populace/chunk-3.json",
+          "sha256": "d0a558898db105603158741241c6e60db2ad944ab38f6e9bc1545dd968bf7ffc"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {
         "us-hi:policies/income_tax/pilot_liability_pipeline#hi_pit_pilot_income_tax_liability": {
@@ -2566,8 +3425,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 6,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/ia-income-tax-liability/chunk-0.json",
+          "sha256": "5d8d792acb497e76b0f62140ef21d2f892776eb8d2bd476f00412c061aad75ec"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 6,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -2575,6 +3442,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 4,
+      "chunk_manifest": [],
       "constant_fields": 5,
       "evidence_fields": {
         "axiom_formula": {
@@ -2606,6 +3474,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 2,
       "verdict_concepts": {}
     },
@@ -2613,8 +3483,20 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 976,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/ia-income-tax-populace/chunk-0.json",
+          "sha256": "749e3afd4edb633a082117dd9a69ca653da72bea2f163fb187e7c5443eb2a96e"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ia-income-tax-populace/chunk-1.json",
+          "sha256": "9b984eebf81678bb5b5bc9375b7edd97c8f33d5eb59d17b6a63e2df2471b123b"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {
         "us-ia:policies/income_tax/pilot_liability_pipeline#ia_pit_pilot_income_tax_liability": {
@@ -2626,8 +3508,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 6,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/id-income-tax-liability/chunk-0.json",
+          "sha256": "e153d2b1dd59853003c661877427cb8f0abd7b28159868223bf35e8867ab0cac"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 6,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -2635,8 +3525,11 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 6,
+      "chunk_manifest": [],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -2644,8 +3537,32 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 2332,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/il-income-tax-populace/chunk-0.json",
+          "sha256": "b8228cda631714291706f0aa8f0ae53011dd7169737e7d43bf14f05eed32e9f4"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/il-income-tax-populace/chunk-1.json",
+          "sha256": "79ad909f39b38cca910b8089ce9d6e395f3f3d674a7d5e7d53456ff162eac4ef"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/il-income-tax-populace/chunk-2.json",
+          "sha256": "f7eeeb060ca7db6c4990cede317cdc41c6212a45ecd9e04222be5aba3117754a"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/il-income-tax-populace/chunk-3.json",
+          "sha256": "b7b71c76960c4144456236c0041f61bde8bd07abf8514813c6c0a570fb154876"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/il-income-tax-populace/chunk-4.json",
+          "sha256": "0942cd6aa0ef6e42a29487fa8607b28c84e4877e20b3b5e5c87cb4d086f76ae0"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {
         "us-il:policies/income_tax/pilot_liability_pipeline#il_pit_pilot_income_tax_liability": {
@@ -2657,8 +3574,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 6,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/in-income-tax-liability/chunk-0.json",
+          "sha256": "44fedb9ba00467767d2b5dd6c00689e39d137b312352571c83af644f9379983a"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 6,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -2666,8 +3591,24 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 1292,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/in-income-tax-populace/chunk-0.json",
+          "sha256": "fb0160ced9bbe6625a6eb9906eb267082adfd25ad273ffb621e3856c358353ea"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/in-income-tax-populace/chunk-1.json",
+          "sha256": "b93f4c91f6e4e668ae52b9ea1406b746f02353aeeafce1d406e373e35a02ee2c"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/in-income-tax-populace/chunk-2.json",
+          "sha256": "e2d99b6c863eeb92ea2fc0a781b26fd9efdeba7712f68924bf5e7b0fc4b00b1b"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {
         "us-in:policies/income_tax/pilot_liability_pipeline#in_pit_pilot_income_tax_liability": {
@@ -2679,6 +3620,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 10,
+      "chunk_manifest": [],
       "constant_fields": 3,
       "evidence_fields": {
         "axiom_formula": {
@@ -2710,6 +3652,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 4,
       "verdict_concepts": {}
     },
@@ -2717,8 +3661,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 6,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/ks-income-tax-liability/chunk-0.json",
+          "sha256": "9d432d940e657fe1b060e188be7f704b3a2ebb831d4ac48efdd5caed917dea0d"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 6,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -2726,8 +3678,20 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 989,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/ks-income-tax-populace/chunk-0.json",
+          "sha256": "19f3c8827d6a603541532e21cf9695c247c112d9fd7cb5c5080552270976bb1b"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ks-income-tax-populace/chunk-1.json",
+          "sha256": "2a4263fdb290755bcd93a5a95663f4fce40e5502c60e2e1c55016b2e82dd3ac0"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {
         "us-ks:policies/income_tax/pilot_liability_pipeline#ks_pit_pilot_income_tax_liability": {
@@ -2739,6 +3703,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 861,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/ks-tanf-ecps/chunk-0.json",
+          "sha256": "82205318a7ad2897f985128a5de16d873bde3c33f21e9df6bf70a6d02ab79026"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ks-tanf-ecps/chunk-1.json",
+          "sha256": "724954baedb77043034bc91b6c0e9cf739d6352e7f2999e3df521ea6e0e38af4"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {
         "input_records": {
@@ -2750,6 +3724,8 @@
           "state": "varied"
         }
       },
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 861,
       "varied_fields": 2,
       "verdict_concepts": {
         "us-ks:policies/dcf/keesm#ks_tanf_maximum_benefit": {
@@ -2761,8 +3737,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 6,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/ky-income-tax-liability/chunk-0.json",
+          "sha256": "9af52a63f4e9958e0f8719f2501c65bcae9c6f9bd7163822b952eae6771e62ce"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 6,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -2770,8 +3754,20 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 891,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/ky-income-tax-populace/chunk-0.json",
+          "sha256": "4c25e640698204d4618a562149308820c72efcf317b180e04baa46d8c485af04"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ky-income-tax-populace/chunk-1.json",
+          "sha256": "ce494b98087aec2bf02a3316604337e38faec0d267044bb9ef7687ef7a4f10f7"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {
         "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits#ky_pit_2026_krs_141_020_schedule_before_credits": {
@@ -2783,8 +3779,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 6,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/la-income-tax-liability/chunk-0.json",
+          "sha256": "1d6123408ae5edcda6b077cf8cadf53302836104bffb070a7b3d132f9071f47a"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 6,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -2792,8 +3796,28 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 1847,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/la-income-tax-populace/chunk-0.json",
+          "sha256": "0ca6b297f43cf7a5e079530955b0e8a124ccfde12fa040089ce810358954c4d8"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/la-income-tax-populace/chunk-1.json",
+          "sha256": "d56ac95d349c84c89d65aed1517e2b7a7fc02f7488143595eda16c32129c7d2c"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/la-income-tax-populace/chunk-2.json",
+          "sha256": "79e03bed701155627d2e4ec3159344794a59f1e9396bcbf4cc543080c1a9c3e9"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/la-income-tax-populace/chunk-3.json",
+          "sha256": "580af54c23b09bd2f50baa2b7eecc5e3826f18ad4830f07c0720ec895a6eacb1"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {
         "us-la:policies/income_tax/pilot_liability_pipeline#la_pit_pilot_income_tax_liability": {
@@ -2805,6 +3829,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 1,
+      "chunk_manifest": [],
       "constant_fields": 7,
       "evidence_fields": {
         "axiom_formula": {
@@ -2836,6 +3861,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -2843,8 +3870,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 6,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/ma-income-tax-liability/chunk-0.json",
+          "sha256": "26321657a79e75557105ee45c4294b06a876ca30e77608c37bf8ab85b36c2164"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 6,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -2852,6 +3887,24 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 1632,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/ma-snap-ecps/chunk-0.json",
+          "sha256": "3a7c6c5c54d056f358912010e502c4bd89312439ac882505713b8eddd68031bc"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ma-snap-ecps/chunk-1.json",
+          "sha256": "b18d9bff6b23cf2a1e60d6ee6fa4d163fd1992253a991455d015e96c5b995ed2"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ma-snap-ecps/chunk-2.json",
+          "sha256": "4c7440101abf143c3db698b2ffbb1b6ebe33fe1b1ed1fa6b69f77ac218951ec0"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ma-snap-ecps/chunk-3.json",
+          "sha256": "dc9f9a0fc3513979cba0ab1805516f1f54bc0e5d0e86098d7979ebf004115dd6"
+        }
+      ],
       "constant_fields": 15,
       "evidence_fields": {
         "axiom:ma-snap-compiled#input.application_day_of_month": {
@@ -2943,6 +3996,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 161,
       "varied_fields": 7,
       "verdict_concepts": {
         "us:statutes/7/2014/o#snap_eligible": {
@@ -2957,8 +4012,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 6,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/md-income-tax-liability/chunk-0.json",
+          "sha256": "54500d37cadf12e80a9e2479318e2130d1eea7f6614547d3b187da5317bbbc09"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 6,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -2966,8 +4029,20 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 722,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/md-snap-qc/chunk-0.json",
+          "sha256": "83d5d5a7adba7de6ebebecb7d2183011dad2bcdcf4340b161580a4cdd66fdd76"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/md-snap-qc/chunk-1.json",
+          "sha256": "17b0f3637a997858b6947baebdc844ee826e25307d73a97c974af0193108c972"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 722,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -2975,6 +4050,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 5,
+      "chunk_manifest": [],
       "constant_fields": 6,
       "evidence_fields": {
         "axiom_formula": {
@@ -3006,6 +4082,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -3013,8 +4091,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 6,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/me-income-tax-liability/chunk-0.json",
+          "sha256": "5a2da907d7ed361f7feec4987d12af3338ab1a950bbb8ab37a232cc667f2c233"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 6,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -3022,6 +4108,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 8,
+      "chunk_manifest": [],
       "constant_fields": 5,
       "evidence_fields": {
         "axiom_formula": {
@@ -3053,6 +4140,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 2,
       "verdict_concepts": {}
     },
@@ -3060,6 +4149,20 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 1045,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/medicaid-magi-co-ecps/chunk-0.json",
+          "sha256": "95d45327de17867db87ec07a78c909c249bab134e55fbddcc1da2302767b10fd"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/medicaid-magi-co-ecps/chunk-1.json",
+          "sha256": "bbb618e725c6bf03981154b2574d23bcbc4d93e718e589bfb4b61c15386078a7"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/medicaid-magi-co-ecps/chunk-2.json",
+          "sha256": "0cd1b747757a4222bfb6f059a8ee5a0b07c6daac3633b5cb22e99c8a4ee366b7"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {
         "input_records": {
@@ -3071,6 +4174,8 @@
           "state": "varied"
         }
       },
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 45,
       "varied_fields": 2,
       "verdict_concepts": {
         "us:regulations/42-cfr/435#adult_eligible": {
@@ -3097,6 +4202,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 196,
+      "chunk_manifest": [],
       "constant_fields": 3,
       "evidence_fields": {
         "axiom_rule": {
@@ -3128,6 +4234,8 @@
           "state": "varied"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 4,
       "verdict_concepts": {}
     },
@@ -3135,8 +4243,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 6,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/mi-income-tax-liability/chunk-0.json",
+          "sha256": "590760f379172eced05509e0f98e391856634ddfdd64ac1b4dc95caa20afc8bd"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 6,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -3144,8 +4260,28 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 1788,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/mi-income-tax-populace/chunk-0.json",
+          "sha256": "410fff96ca4fff0e131cb74099706bb5ea136cd182cdf0c9bb3329b95a1fdf60"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/mi-income-tax-populace/chunk-1.json",
+          "sha256": "8b60aa68f9b64befa17db0e5b21887ac850ed2da8272f92e374b5914f14949a9"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/mi-income-tax-populace/chunk-2.json",
+          "sha256": "951d3d759517acc60044919d960c8236600056226b0e3cf38ad66056ed2e8719"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/mi-income-tax-populace/chunk-3.json",
+          "sha256": "f6916e29d52d60831f6c65438d5319d56d2d330571ab5dc5d43a8a4cfb04b17e"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {
         "us-mi:policies/income_tax/pilot_liability_pipeline#mi_pit_pilot_income_tax_liability": {
@@ -3157,6 +4293,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 6,
+      "chunk_manifest": [],
       "constant_fields": 4,
       "evidence_fields": {
         "axiom_formula": {
@@ -3188,6 +4325,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 3,
       "verdict_concepts": {}
     },
@@ -3195,8 +4334,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 6,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/mn-income-tax-liability/chunk-0.json",
+          "sha256": "2eb0e57ea469cb814a58612b8be4dd2fcbe39b747a72f4a5d84fdecddab905b5"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 6,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -3204,6 +4351,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 991,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/mn-tanf-ecps/chunk-0.json",
+          "sha256": "22b28ec22a5bd9413b305db6dcd5ebdcb71917fa3c26491b10f538073ab3f606"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/mn-tanf-ecps/chunk-1.json",
+          "sha256": "32a4df43bb0d9b5a65eeb96874b9c8d6bc4f852e1d07bb44bacc65a7b0500349"
+        }
+      ],
       "constant_fields": 5,
       "evidence_fields": {
         "axiom:mn-tanf-compiled#input.family_wage_level_for_corresponding_payment_month": {
@@ -3247,6 +4404,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 991,
       "varied_fields": 5,
       "verdict_concepts": {
         "us-mn:policies/dhs/combined-manual#mn_mfip_benefit": {
@@ -3258,8 +4417,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 6,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/mo-income-tax-liability/chunk-0.json",
+          "sha256": "1fc09015bfd32062814fb3025fc627c46405d062eea9c0f5e06d1ed43064cd43"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 6,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -3267,8 +4434,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 6,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/ms-income-tax-liability/chunk-0.json",
+          "sha256": "f76355ab8b114ba4a817c8aa4b91c26ef63f1fd745fd38dcdb9c41cc88b9a668"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 6,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -3276,8 +4451,24 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 1497,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/ms-income-tax-populace/chunk-0.json",
+          "sha256": "dfa7fb5714afeecad5683058b1ad5e00921750563d87c0effb51a5a4b20db61d"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ms-income-tax-populace/chunk-1.json",
+          "sha256": "d9eb048f010932a43f452eb585ae8e41e66023ee0cde1f3d80b7190aac2f4206"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ms-income-tax-populace/chunk-2.json",
+          "sha256": "0b14043eba5c3cb7781b0a3cdbdfbb58cd30df0d13ccfcfc82ec755500d6a711"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {
         "us-ms:policies/income_tax/pilot_liability_pipeline#ms_pit_pilot_income_tax_liability": {
@@ -3289,8 +4480,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 6,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/mt-income-tax-liability/chunk-0.json",
+          "sha256": "66192c4138e4e877d1033f744e6ebb30d65bb51fa1874ea2f252c5df0fe40994"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 6,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -3298,8 +4497,24 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 1171,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/mt-income-tax-populace/chunk-0.json",
+          "sha256": "0a8fadb54b1ca48a49e64bf3a1f0c60c07a0c69b48f87467a7a0edf091333145"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/mt-income-tax-populace/chunk-1.json",
+          "sha256": "d062b16be55de91ce1f8f4b736ce9b6e47e014c2c614fa336ccb603080d44fc2"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/mt-income-tax-populace/chunk-2.json",
+          "sha256": "f7b3c184835fdd651bb91a50072ea7860f942da3f9361524dbdfde608c9deddf"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {
         "us-mt:policies/income_tax/pilot_liability_pipeline#mt_pit_pilot_income_tax_liability": {
@@ -3311,8 +4526,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 6,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/nc-income-tax-liability/chunk-0.json",
+          "sha256": "dda169f0fede59431204a12e50f8dca388dee826b99718950803eee8d6cb39c7"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 6,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -3320,8 +4543,32 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 2169,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/nc-income-tax-populace/chunk-0.json",
+          "sha256": "0d0e9b993c40ec68c8d90a333ca0d05580b6cd445306467627b985db938bfb48"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/nc-income-tax-populace/chunk-1.json",
+          "sha256": "6553d16a190b4c381fe4c28dae6efdd9b7c58048fc00501232e3e8c3fae11ccd"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/nc-income-tax-populace/chunk-2.json",
+          "sha256": "7f2cc7544e6bbb9e64f46b8e3d02f82393d24bc32994bd901ed165c041555ca4"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/nc-income-tax-populace/chunk-3.json",
+          "sha256": "d3cdf52d4346755c9337ccbabe8473021b9483ff2c6970ba4fc3a68112b39791"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/nc-income-tax-populace/chunk-4.json",
+          "sha256": "3a54f1574dcbe1a19e3c06fc43ed65dbc0131c1079deaec3d291f7b3400e3c6f"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {
         "us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability": {
@@ -3333,6 +4580,24 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 1854,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/nc-snap-ecps/chunk-0.json",
+          "sha256": "0e4432929e208d4c507bf3b0263386fe85daf59a85f8011c85e24895f3b7027d"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/nc-snap-ecps/chunk-1.json",
+          "sha256": "1ab7c6a19f8366f676757786de1748c595171157aa749a9f8d6da5a3b77aafbd"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/nc-snap-ecps/chunk-2.json",
+          "sha256": "ac4279097fdaf31cc8a225463e357fc738f7f06115c2f0589bd3b79fcbfc7232"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/nc-snap-ecps/chunk-3.json",
+          "sha256": "e5d3c79fd3c44f1cc85433b2b9d5750f20d15ed5e6be7195c22bf2697113ac06"
+        }
+      ],
       "constant_fields": 14,
       "evidence_fields": {
         "axiom:nc-snap-compiled#input.date_of_application_day_of_month": {
@@ -3440,6 +4705,8 @@
           "state": "varied"
         }
       },
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 93,
       "varied_fields": 12,
       "verdict_concepts": {
         "us:statutes/7/2014/o#snap_eligible": {
@@ -3454,8 +4721,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 3,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/nd-income-tax-liability/chunk-0.json",
+          "sha256": "32d482accfa66a313a907df9cfda8560385bcb3a969c8db228824bb51f293a17"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 6,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -3463,8 +4738,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 6,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/ne-income-tax-liability/chunk-0.json",
+          "sha256": "c6a9e7ea14004bd9dad0a5a6c0be0a00f242aeda0d09391598137ee32066a647"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 6,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -3472,8 +4755,11 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 6,
+      "chunk_manifest": [],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -3481,8 +4767,28 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 1693,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/nj-income-tax-populace/chunk-0.json",
+          "sha256": "aa0b6539e3117dcc8cafa27101adf26c49a7bd8d9f1324fc06ab2ca45648d0fc"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/nj-income-tax-populace/chunk-1.json",
+          "sha256": "fb658e3b2e2e4084ec47ff702452303ad2de159f385c5233a474ed880bf86208"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/nj-income-tax-populace/chunk-2.json",
+          "sha256": "81c3c8e1828b46074102fa06cfc8723b869295b8aabb4188635df595fdfdb301"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/nj-income-tax-populace/chunk-3.json",
+          "sha256": "79cc8f55e131a5b847b3dc77d5865dc4973a694a05abd2112a4065a9cd80bdfc"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {
         "us-nj:policies/income_tax/pilot_liability_pipeline#nj_pit_pilot_income_tax_liability": {
@@ -3494,8 +4800,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 6,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/nm-income-tax-liability/chunk-0.json",
+          "sha256": "07c547c6843d2b5948ec0dc836929c022dae3d6ff1dc0f6dd7612bfc0264572b"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 6,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -3503,8 +4817,24 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 1475,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/nm-income-tax-populace/chunk-0.json",
+          "sha256": "b673234105f9fcf5485a08b1fd46c30e620c09f0a8cf8b777a9436a145afd0d4"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/nm-income-tax-populace/chunk-1.json",
+          "sha256": "920921f02b75a20c129bfe295c996701e4b5f8fcc39ed77e28ade42ec665b3f2"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/nm-income-tax-populace/chunk-2.json",
+          "sha256": "7cab8aefe903688a532be20ccc1c7d9b6fd3780007cb43a03ac2f12c8a316f4b"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {
         "us-nm:policies/income_tax/pilot_liability_pipeline#nm_pit_pilot_income_tax_liability": {
@@ -3516,8 +4846,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 6,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/ny-income-tax-liability/chunk-0.json",
+          "sha256": "bfe2c90d1d8dd8e40b04aa008d8e7111a6357fcbd4823efe4242ac55674952a5"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 6,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -3525,8 +4863,44 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 3741,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/ny-income-tax-populace/chunk-0.json",
+          "sha256": "a1d59c9dc0caca24c5f79d8a6d2317ebf6a965cc29e5fe83bada86cb4e69f23e"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ny-income-tax-populace/chunk-1.json",
+          "sha256": "25df6cf95ab410b10dfb5d2b0845933b223b543bb0fc27f410564d4ce443854a"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ny-income-tax-populace/chunk-2.json",
+          "sha256": "ea7df8d6bc86b0001cda921bf812934165eb54b60c0e6f5b90a0a17498cf9b54"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ny-income-tax-populace/chunk-3.json",
+          "sha256": "40e488d1fe85d30cd2ad4bfd649b4f22835be238f82b1606dc5896495524e10f"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ny-income-tax-populace/chunk-4.json",
+          "sha256": "86852e6896194caab43e37cd51fb0710f994e3b3f53a2f03d89c6bcdafbbd50e"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ny-income-tax-populace/chunk-5.json",
+          "sha256": "3260823ba9095359e5561164cc4a16db7ece0fc5056df66a6a7b556129022918"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ny-income-tax-populace/chunk-6.json",
+          "sha256": "6c5b56bdc87df146186f2255730ebdcc8aab96c5d91d1f34b2b8078f7b8b6453"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ny-income-tax-populace/chunk-7.json",
+          "sha256": "09323ae4d42b35519c20caa156ae584977b8d1efdb7d6a7d0f7cd8ee4fc924b3"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {
         "us-ny:policies/income_tax/pilot_liability_pipeline#ny_pit_pilot_main_income_tax": {
@@ -3538,6 +4912,36 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 3187,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/ny-snap-ecps/chunk-0.json",
+          "sha256": "f8c0d2f75bccfc56a27af882faf9ea6866470f851921d386e984e6bed520628e"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ny-snap-ecps/chunk-1.json",
+          "sha256": "8359fbb2b08838c85c4ff1ed71200c80cd32c5d92503c9d2a781fcdf9e16061e"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ny-snap-ecps/chunk-2.json",
+          "sha256": "12409ddfbf8afb1cf5d3e8aab363020210eb2a0caf0f0ec722bd85d11f7b9c5a"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ny-snap-ecps/chunk-3.json",
+          "sha256": "10242d0d4a1d7f38d342715f705343dda7a2f461dbf1cc44a215b38d6c23dcd4"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ny-snap-ecps/chunk-4.json",
+          "sha256": "2b0b00f21e1fbc67744225507a8d82c7fcb1eaa619136e4119829d8d02316d35"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ny-snap-ecps/chunk-5.json",
+          "sha256": "fe69ab2cda06890cf7d13e19606bea7e3a6024ef371930d64783279657469aac"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ny-snap-ecps/chunk-6.json",
+          "sha256": "2510562343e7cfb96e8b125ea51dbf21eb33b2b92b163e25508de189fc45fed3"
+        }
+      ],
       "constant_fields": 15,
       "evidence_fields": {
         "axiom:ny-snap-compiled#input.household_incurred_or_anticipated_heating_or_cooling_costs_separate_from_rent_or_mortgage": {
@@ -3629,6 +5033,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 266,
       "varied_fields": 7,
       "verdict_concepts": {
         "us:statutes/7/2014/o#snap_eligible": {
@@ -3643,8 +5049,20 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 847,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/ny-snap-qc/chunk-0.json",
+          "sha256": "3e1da483a81c6094922ed47ee0e199da2c4583f4d9fef6e1c5d52a50b48548dc"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ny-snap-qc/chunk-1.json",
+          "sha256": "395b122d09b95d67d6b4a8d158f5bf3b48a87ff4edb863d6ee6e2f1351f80cb4"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 847,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -3652,6 +5070,36 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 3187,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/ny-tanf-ecps/chunk-0.json",
+          "sha256": "954da2061d79a451c8c86c1573643005c1bcbaf1d85ce343a982070ddb585fda"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ny-tanf-ecps/chunk-1.json",
+          "sha256": "84ef238b9d7cfeef12e704281e772388fce19aca2974fc94fad24a329f59df96"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ny-tanf-ecps/chunk-2.json",
+          "sha256": "061b4f31b329b4d03c31ef892b36bdef406b99ea356b0069e88e086ebf05ea18"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ny-tanf-ecps/chunk-3.json",
+          "sha256": "c5280f6af509efcd645221c57fd054b66e6d5032873d4070f2da7491cf809ce5"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ny-tanf-ecps/chunk-4.json",
+          "sha256": "ec3d312dcd9eb9b53cb5982d353cb0b62d5a359461a39e441ddfd13ccc135515"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ny-tanf-ecps/chunk-5.json",
+          "sha256": "9e68b9f7285fe6cc890c02719375936557d1786f54892b3db99c2ef38d4b864b"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ny-tanf-ecps/chunk-6.json",
+          "sha256": "e97554f995c94c94095930cc2d1e49510f6be433830de694fabb66c744cd8973"
+        }
+      ],
       "constant_fields": 4,
       "evidence_fields": {
         "axiom:ny-tanf-compiled#input.earned_income": {
@@ -3691,6 +5139,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 36,
       "varied_fields": 5,
       "verdict_concepts": {
         "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit": {
@@ -3702,6 +5152,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 4,
+      "chunk_manifest": [],
       "constant_fields": 5,
       "evidence_fields": {
         "axiom_formula": {
@@ -3733,6 +5184,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 2,
       "verdict_concepts": {}
     },
@@ -3740,6 +5193,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 847,
+      "chunk_manifest": [],
       "constant_fields": 5,
       "evidence_fields": {
         "adjusted_gross_income": {
@@ -3807,6 +5261,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 11,
       "verdict_concepts": {}
     },
@@ -3814,6 +5270,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 11,
+      "chunk_manifest": [],
       "constant_fields": 3,
       "evidence_fields": {
         "component": {
@@ -3845,6 +5302,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 4,
       "verdict_concepts": {}
     },
@@ -3852,6 +5311,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 813,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/nyc-synthetic/chunk-0.json",
+          "sha256": "926461ac54ac1e3a6e5212ab14908aadd5964fe21b6a732966d279d380011d08"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/nyc-synthetic/chunk-1.json",
+          "sha256": "b66b11112cfb71c19761579c511cbb9bf9b46a6a8cce549ccac8c9a0e0fdbd3e"
+        }
+      ],
       "constant_fields": 1,
       "evidence_fields": {
         "result_selection": {
@@ -3859,6 +5328,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 10,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -3866,8 +5337,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 6,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/oh-income-tax-liability/chunk-0.json",
+          "sha256": "c3b63af9528cff2c3cc30adf8fe38dfa970952c365a70d22b955cc6151ee3d62"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 6,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -3875,8 +5354,32 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 2144,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/oh-income-tax-populace/chunk-0.json",
+          "sha256": "bb37e802dfc5a68642e905b435b260934953048faacce4cbb8be80f934cfa9b4"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/oh-income-tax-populace/chunk-1.json",
+          "sha256": "9d69f3e2d8a083f02042448aec374e1a144268dae175a3a17b0e029724d8c168"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/oh-income-tax-populace/chunk-2.json",
+          "sha256": "42d2bdaf43b0f76bfb3215d6ddd0a2a2aae7e7159635df1dd2aa03d510f27110"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/oh-income-tax-populace/chunk-3.json",
+          "sha256": "dd6dceb1c46791dbd8494a218118ef7bba3dd9d3358737748d4e28d8921918db"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/oh-income-tax-populace/chunk-4.json",
+          "sha256": "f5c3e557fd35d2a7e1ac1060ddfb77441bf8d653f1482cedb5a6b6611e8f6b23"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {
         "us-oh:policies/income_tax/pilot_liability_pipeline#oh_pit_pilot_income_tax_liability": {
@@ -3888,8 +5391,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 6,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/ok-income-tax-liability/chunk-0.json",
+          "sha256": "bfc790cd040caef5829ad3a25357bd49d4a5e2ec4ccec346709d52cc266b39d2"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 6,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -3897,8 +5408,24 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 1292,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/ok-income-tax-populace/chunk-0.json",
+          "sha256": "9dda23068dc9d005d5182f84ad5ad64eb75827a8a83c391ef3e6d6ff06eab333"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ok-income-tax-populace/chunk-1.json",
+          "sha256": "379763287fe6c892012a0799be0e3374ef6fd850f665f3b2478c2c5018e8688e"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ok-income-tax-populace/chunk-2.json",
+          "sha256": "aa3dab007cf7210308814fe294d9b69da7b22d3e4e40f17dc526f84ca11327f1"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {
         "us-ok:policies/income_tax/pilot_liability_pipeline#ok_pit_pilot_income_tax_liability": {
@@ -3910,8 +5437,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 6,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/or-income-tax-liability/chunk-0.json",
+          "sha256": "ba1113ecc0446fb348ac5af095c3c38334b7243ae9c265b84eb76eef0a3d35d5"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 6,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -3919,8 +5454,11 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 0,
+      "chunk_manifest": [],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -3928,8 +5466,11 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 6,
+      "chunk_manifest": [],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -3937,8 +5478,32 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 2457,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/pa-income-tax-populace/chunk-0.json",
+          "sha256": "6c6b563f8880aa735b423082e093408f5656c365a2f761e653658d7a0b7d9639"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/pa-income-tax-populace/chunk-1.json",
+          "sha256": "10cfe09a8c7e7f600ab705c2e53b59e3247839df9689d36f5056d48be303204a"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/pa-income-tax-populace/chunk-2.json",
+          "sha256": "967bf5c78620e3712ccf4dc5c4d2ba824e7c15782ceab88a87d765ddd3f35f8d"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/pa-income-tax-populace/chunk-3.json",
+          "sha256": "816b0570ae5fd3cd6d1e9b0defd6cd6d7d4f01432cc12bfd4633ec9256c2bbe9"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/pa-income-tax-populace/chunk-4.json",
+          "sha256": "f3c7f9232440f27e8b7f54c84b99a77cff597a3efb1d7b5da7dd6472ebc581a3"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {
         "us-pa:policies/income_tax/pilot_liability_pipeline#pa_pit_pilot_income_tax_liability": {
@@ -3950,6 +5515,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 2,
+      "chunk_manifest": [],
       "constant_fields": 5,
       "evidence_fields": {
         "axiom_formula": {
@@ -3981,6 +5547,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 2,
       "verdict_concepts": {}
     },
@@ -3988,8 +5556,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 6,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/ri-income-tax-liability/chunk-0.json",
+          "sha256": "b603f275dcbb540e36a84b30af16b3aa91625269ff314facbcdf5426ebfab341"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 6,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -3997,8 +5573,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 6,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/sc-income-tax-liability/chunk-0.json",
+          "sha256": "c613acf583b6d3d4b783a874c7178dabe365f3b62361bf28445d24ceb612d2de"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 6,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -4006,8 +5590,24 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 1457,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/sc-income-tax-populace/chunk-0.json",
+          "sha256": "b214cacd9d9624a397452aa47bc8206b1b489e6f6cf4bdad8879afbb9f9e5c6e"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/sc-income-tax-populace/chunk-1.json",
+          "sha256": "4cd5d6cba05bf135f6f32700e562dadc6e6e7d6234495687c4df4c456eddf256"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/sc-income-tax-populace/chunk-2.json",
+          "sha256": "d6ae806f612807da90a5bccac310ec1f21f31cc8b1e882a007c918784b9aa83d"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {
         "us-sc:policies/income_tax/pilot_liability_pipeline#sc_pit_pilot_income_tax_liability": {
@@ -4019,6 +5619,20 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 1283,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/sc-snap-ecps/chunk-0.json",
+          "sha256": "e3bef3bb49a7fa35fc3c1b55b55042ada62c0cabc9bf353272b351ec5e443bc7"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/sc-snap-ecps/chunk-1.json",
+          "sha256": "6f32d41f613cf12361197bc5dac86a45e03370ee8c242da424e9ef18b3532143"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/sc-snap-ecps/chunk-2.json",
+          "sha256": "3736fe2c978c5ecc69d5464496a4613d63d89874ac17dcc2c124dc5b70be58f1"
+        }
+      ],
       "constant_fields": 17,
       "evidence_fields": {
         "axiom:sc-snap-compiled#input.application_day_of_month": {
@@ -4122,6 +5736,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 113,
       "varied_fields": 8,
       "verdict_concepts": {
         "us:statutes/7/2014/o#snap_eligible": {
@@ -4136,6 +5752,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 8,
+      "chunk_manifest": [],
       "constant_fields": 3,
       "evidence_fields": {
         "axiom_rule": {
@@ -4163,6 +5780,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 3,
       "verdict_concepts": {}
     },
@@ -4170,8 +5789,48 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 4044,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/ssi-ecps/chunk-0.json",
+          "sha256": "9aa265c2b577b0e662e10729174a05da7e5236b629edf9c3c9ba392b46568806"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ssi-ecps/chunk-1.json",
+          "sha256": "ee3dff7489ea65ffd2ee2b468c64703a90d41af2b8d138899d2571bee3619e66"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ssi-ecps/chunk-2.json",
+          "sha256": "10b239538c35db2de842142ff53b7e341b1ceedf6a6045a4fca666916b231188"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ssi-ecps/chunk-3.json",
+          "sha256": "893fd3b4f5079ba4a5bebda9c5b2fb9d91ed60682536fdcd81352d2ed60fca2f"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ssi-ecps/chunk-4.json",
+          "sha256": "fc17f55e0e1ee4b0fc391ad35e0f1a4b0fcaa51d395d8d5fb54fb6c93ac5bf1e"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ssi-ecps/chunk-5.json",
+          "sha256": "1fda7976d9c48ba51e2d1ec3646c9c6e4bd3c60ff527f2764ba09d7dd53f1b5e"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ssi-ecps/chunk-6.json",
+          "sha256": "e65f100b2582ba6be0c88e30b8a77c39b62ae5695d6aae3717f0c02eedf0f99f"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ssi-ecps/chunk-7.json",
+          "sha256": "e286e13e5174b6a364ee6703e8ee81d50d329c0cc8b800c1d8cf1a869ee736f4"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ssi-ecps/chunk-8.json",
+          "sha256": "1b92691760320af4b2a6077ba24d93809d5dd5af220fa7e8ba675c2d6fffcb08"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 1000,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -4179,6 +5838,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 3,
+      "chunk_manifest": [],
       "constant_fields": 3,
       "evidence_fields": {
         "axiom_formula": {
@@ -4210,6 +5870,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 4,
       "verdict_concepts": {}
     },
@@ -4217,8 +5879,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 5,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/taxcalc-fiit-ecps/chunk-0.json",
+          "sha256": "1febd8d1d2d52d109088325de12abaa87978dc0550afb95655795e4ede43213f"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 31,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -4226,6 +5896,20 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 1427,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/tn-snap-ecps/chunk-0.json",
+          "sha256": "f5623d39584ffb75d3ac0b3977ecf6aeecd3b8ef8487f8227ae81f6ce53baf77"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/tn-snap-ecps/chunk-1.json",
+          "sha256": "eb5a4dd784ba14c3964ac32d120061acfbc0e4fbb3552fcc1ebda31f8d7ab4d8"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/tn-snap-ecps/chunk-2.json",
+          "sha256": "3af7195f802861c6d9f6b4c3c08b6ec081eb6937da615538acf407c4f165c14f"
+        }
+      ],
       "constant_fields": 14,
       "evidence_fields": {
         "axiom:tn-snap-compiled#input.application_day_of_month": {
@@ -4313,6 +5997,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 59,
       "varied_fields": 7,
       "verdict_concepts": {
         "us:statutes/7/2014/o#snap_eligible": {
@@ -4327,8 +6013,20 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 906,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/tx-snap-qc/chunk-0.json",
+          "sha256": "d1b1f2473b21ab7f542c15d02bfee2ca81c785a498577d92174fffaf73620c02"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/tx-snap-qc/chunk-1.json",
+          "sha256": "e594a0f76dee40d2787a754befaa85cfb9de7e7ab90f0c5808c13dca455e7ad8"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 906,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -4336,6 +6034,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 4,
+      "chunk_manifest": [],
       "constant_fields": 4,
       "evidence_fields": {
         "axiom_formula": {
@@ -4367,6 +6066,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 3,
       "verdict_concepts": {}
     },
@@ -4374,8 +6075,11 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 3,
+      "chunk_manifest": [],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -4383,6 +6087,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 7,
+      "chunk_manifest": [],
       "constant_fields": 5,
       "evidence_fields": {
         "adults": {
@@ -4430,6 +6135,8 @@
           "state": "varied"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 6,
       "verdict_concepts": {}
     },
@@ -4437,6 +6144,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 2,
+      "chunk_manifest": [],
       "constant_fields": 4,
       "evidence_fields": {
         "axiom_entity": {
@@ -4460,6 +6168,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -4467,8 +6177,11 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 6,
+      "chunk_manifest": [],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -4476,8 +6189,11 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 6,
+      "chunk_manifest": [],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -4485,6 +6201,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 12,
+      "chunk_manifest": [],
       "constant_fields": 4,
       "evidence_fields": {
         "axiom_entity": {
@@ -4512,6 +6229,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 2,
       "verdict_concepts": {}
     },
@@ -4519,6 +6238,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 1,
+      "chunk_manifest": [],
       "constant_fields": 5,
       "evidence_fields": {
         "axiom_entity": {
@@ -4542,6 +6262,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -4549,8 +6271,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 2,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/uk-contribution-based-jsa/chunk-0.json",
+          "sha256": "d4d9dce6955042f9a9d1b1750cffd8a59a62a67469ac5ba0443e580c40fa0f17"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 2,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -4558,8 +6288,11 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 11,
+      "chunk_manifest": [],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -4567,6 +6300,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 5,
+      "chunk_manifest": [],
       "constant_fields": 4,
       "evidence_fields": {
         "axiom_entity": {
@@ -4590,6 +6324,8 @@
           "state": "varied"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -4597,8 +6333,11 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 9,
+      "chunk_manifest": [],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -4606,6 +6345,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 2,
+      "chunk_manifest": [],
       "constant_fields": 4,
       "evidence_fields": {
         "axiom_entity": {
@@ -4629,6 +6369,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -4636,8 +6378,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 3,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/uk-housing-benefit/chunk-0.json",
+          "sha256": "eed42e20c4852575a1bf6515a18c85e2b3484dda75522219e398d599ab95709a"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 5,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -4645,6 +6395,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 5,
+      "chunk_manifest": [],
       "constant_fields": 5,
       "evidence_fields": {
         "axiom_entity": {
@@ -4676,6 +6427,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 2,
       "verdict_concepts": {}
     },
@@ -4683,8 +6436,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 3,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/uk-income-tax-mixed/chunk-0.json",
+          "sha256": "432dbfe4040a05d6839a5aa4441207777435481386338a02c88ad0931163af2f"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 3,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -4692,6 +6453,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 5,
+      "chunk_manifest": [],
       "constant_fields": 5,
       "evidence_fields": {
         "axiom_entity": {
@@ -4723,6 +6485,8 @@
           "state": "varied"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 2,
       "verdict_concepts": {}
     },
@@ -4730,6 +6494,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 9,
+      "chunk_manifest": [],
       "constant_fields": 4,
       "evidence_fields": {
         "axiom_entity": {
@@ -4753,6 +6518,8 @@
           "state": "varied"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -4760,8 +6527,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 6,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/uk-lbtt-ltt/chunk-0.json",
+          "sha256": "0a80e82870f8d0e72d8416ccb432ee406a9e575be7988a570f37fa96b3f568fd"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 12,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -4769,6 +6544,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 3,
+      "chunk_manifest": [],
       "constant_fields": 4,
       "evidence_fields": {
         "axiom_entity": {
@@ -4792,6 +6568,8 @@
           "state": "varied"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -4799,8 +6577,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 4,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/uk-pension-credit/chunk-0.json",
+          "sha256": "391d50cb46bc61e7fdf72a53c1da6afbb886c1020bdbcb21bd51683b9142cd63"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 12,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -4808,6 +6594,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 5,
+      "chunk_manifest": [],
       "constant_fields": 4,
       "evidence_fields": {
         "axiom_entity": {
@@ -4831,6 +6618,8 @@
           "state": "varied"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -4838,8 +6627,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 1,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/uk-scottish-carer-supplement/chunk-0.json",
+          "sha256": "c6f1f1da0c637659534cce6472290e54d7432c5d82da16ca4895fe82b905f7c9"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 1,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -4847,8 +6644,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 3,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/uk-scottish-child-payment/chunk-0.json",
+          "sha256": "2bd75b3a91440c466ee8963db03b84a8b8efcc9bd8314a0a9dad349d6c477087"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 4,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -4856,6 +6661,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 5,
+      "chunk_manifest": [],
       "constant_fields": 4,
       "evidence_fields": {
         "axiom_entity": {
@@ -4879,6 +6685,8 @@
           "state": "varied"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -4886,6 +6694,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 5,
+      "chunk_manifest": [],
       "constant_fields": 4,
       "evidence_fields": {
         "axiom_entity": {
@@ -4909,6 +6718,8 @@
           "state": "varied"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -4916,6 +6727,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 5,
+      "chunk_manifest": [],
       "constant_fields": 4,
       "evidence_fields": {
         "axiom_entity": {
@@ -4939,6 +6751,8 @@
           "state": "varied"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -4946,6 +6760,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 1,
+      "chunk_manifest": [],
       "constant_fields": 4,
       "evidence_fields": {
         "axiom_entity": {
@@ -4965,6 +6780,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -4972,8 +6789,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 166,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/uk-tax-benefits-efrs/chunk-0.json",
+          "sha256": "9c88e45f111acb089a2dc0017bee02e0b38eb8430eb6b279bc90ceb109b2c8bd"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 166,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -4981,8 +6806,11 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 3,
+      "chunk_manifest": [],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -4990,8 +6818,11 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 18,
+      "chunk_manifest": [],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -4999,8 +6830,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 11,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/uk-universal-credit/chunk-0.json",
+          "sha256": "a315751e68a99f08fba246ff57dc69b1cac8186453ba34d9c88f22e847c86d6f"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 19,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -5008,8 +6847,11 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 0,
+      "chunk_manifest": [],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -5017,8 +6859,11 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 9,
+      "chunk_manifest": [],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -5026,6 +6871,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 7,
+      "chunk_manifest": [],
       "constant_fields": 4,
       "evidence_fields": {
         "annual_income": {
@@ -5069,6 +6915,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 6,
       "verdict_concepts": {}
     },
@@ -5076,8 +6924,11 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 7,
+      "chunk_manifest": [],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -5085,6 +6936,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 5,
+      "chunk_manifest": [],
       "constant_fields": 4,
       "evidence_fields": {
         "axiom_entity": {
@@ -5108,6 +6960,8 @@
           "state": "varied"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -5115,6 +6969,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 5,
+      "chunk_manifest": [],
       "constant_fields": 4,
       "evidence_fields": {
         "axiom_entity": {
@@ -5138,6 +6993,8 @@
           "state": "varied"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -5145,8 +7002,11 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 6,
+      "chunk_manifest": [],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -5154,8 +7014,11 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 5,
+      "chunk_manifest": [],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -5163,8 +7026,11 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 9,
+      "chunk_manifest": [],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -5172,8 +7038,11 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 12,
+      "chunk_manifest": [],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -5181,8 +7050,11 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 6,
+      "chunk_manifest": [],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -5190,8 +7062,11 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 11,
+      "chunk_manifest": [],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -5199,8 +7074,11 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 6,
+      "chunk_manifest": [],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -5208,8 +7086,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 6,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/ut-income-tax-liability/chunk-0.json",
+          "sha256": "22ac4df54e797e1b2507165ddc66610870ea02d21d0876b242bec75d05b52bd7"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 6,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -5217,8 +7103,24 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 1251,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/ut-income-tax-populace/chunk-0.json",
+          "sha256": "48aa1bbb8edc994609c089ba679b5b50bb51e02bfa84b877ce18ee1970c758e1"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ut-income-tax-populace/chunk-1.json",
+          "sha256": "d31d2e1a6e902c056ba9acd77634adb7249affe6f65b0e2ea3c6397f7cc2ae90"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/ut-income-tax-populace/chunk-2.json",
+          "sha256": "a1d44acdcf8d1f78165396fc6651e5685add4ff4d17cb25acc9bcb0546e69c39"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {
         "us-ut:policies/income_tax/pilot_liability_pipeline#ut_pit_pilot_income_tax_liability": {
@@ -5230,8 +7132,11 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 0,
+      "chunk_manifest": [],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -5239,8 +7144,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 6,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/va-income-tax-liability/chunk-0.json",
+          "sha256": "1ed2090ca7455504c7457ff84fd3bf1fb3064db98d9570dd9526575c742afbf8"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 6,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -5248,8 +7161,28 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 1710,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/va-income-tax-populace/chunk-0.json",
+          "sha256": "f416138bfe9a94e8a875629691dfd1ae3535b4692a93db45034a79e6fb922075"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/va-income-tax-populace/chunk-1.json",
+          "sha256": "6026757f2de2952e6e6e0e41ee8a8395e614f368df5537cbb8d3db38ca0bcbd4"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/va-income-tax-populace/chunk-2.json",
+          "sha256": "2520a39e02cd3ab890bc860e45c9aaa8bf69636b2f1d6f53821acdd121d462a9"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/va-income-tax-populace/chunk-3.json",
+          "sha256": "1393a162c723d24045c8aa6fec613ce574a96295f97195bd5fafc1fda7b36baf"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {
         "us-va:policies/income_tax/pilot_liability_pipeline#va_pit_pilot_income_tax_liability": {
@@ -5261,8 +7194,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 6,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/vt-income-tax-liability/chunk-0.json",
+          "sha256": "646b27520c558dbff13ebadf17805127fba7bd54405a0fdcaffd41dea9ce43ce"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 6,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -5270,8 +7211,20 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 922,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/vt-income-tax-populace/chunk-0.json",
+          "sha256": "88c864e9a382482555156d21332cc129232ba3fe2dd9642a4c0cd5e0ea0299d4"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/vt-income-tax-populace/chunk-1.json",
+          "sha256": "bb5ef631450100c14fda59d9754790f393a6e31990cceecfac9807ffd28e1b24"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {
         "us-vt:policies/income_tax/pilot_liability_pipeline#vt_pit_pilot_income_tax_liability": {
@@ -5283,8 +7236,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 6,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/wa-income-tax-liability/chunk-0.json",
+          "sha256": "c0d2e25b0f7ff9e163fb05618955d929dd75666b819321277067da1667fb7a1a"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 6,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -5292,6 +7253,20 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 1467,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/wa-tanf-ecps/chunk-0.json",
+          "sha256": "045fc008a8186fe67efe41a775ba7c2c249d3cdc48cd8bb736f7da633c801685"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/wa-tanf-ecps/chunk-1.json",
+          "sha256": "0e66a5b7573a9832d2ce212c78fefd9c4f96f8f4efedc7ef6c5527759121154a"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/wa-tanf-ecps/chunk-2.json",
+          "sha256": "61a2ca97cd19ab72c1fabeeeae164c163de495a3e63e0eee4a54114fab612d24"
+        }
+      ],
       "constant_fields": 1,
       "evidence_fields": {
         "axiom:wa-tanf-compiled#input.assistance_unit_size": {
@@ -5323,6 +7298,8 @@
           "state": "varied"
         }
       },
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 0,
       "varied_fields": 6,
       "verdict_concepts": {
         "us-wa:regulations/388#wa_tanf_benefit": {
@@ -5334,6 +7311,7 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 4,
+      "chunk_manifest": [],
       "constant_fields": 6,
       "evidence_fields": {
         "axiom_formula": {
@@ -5365,6 +7343,8 @@
           "state": "constant"
         }
       },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -5372,8 +7352,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 6,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/wi-income-tax-liability/chunk-0.json",
+          "sha256": "96702bbd4196b87255392d0fc6fc693e7cb3499b1f695025ce31db2b49577ba4"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 6,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -5381,8 +7369,16 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 6,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/wv-income-tax-liability/chunk-0.json",
+          "sha256": "549480d92d50f1d565180cefa4efcda6e724bffaa23a5c2a948858b675626639"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 6,
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -5390,8 +7386,28 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 1608,
+      "chunk_manifest": [
+        {
+          "chunk": "dashboard/public/data/cases/wv-income-tax-populace/chunk-0.json",
+          "sha256": "5b3baacdb763eb66ca1e228bfd57ccdd1d4a7b521841970ca9b407749e44ea9b"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/wv-income-tax-populace/chunk-1.json",
+          "sha256": "1fb24c763a73225364706e92b877b5cfa5a9756ce112b56a461a4533d27ba370"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/wv-income-tax-populace/chunk-2.json",
+          "sha256": "9e0de255361a81889723ce5666fdb1a6548d6ba6a923a3588e5858f5a85dae7c"
+        },
+        {
+          "chunk": "dashboard/public/data/cases/wv-income-tax-populace/chunk-3.json",
+          "sha256": "f1d603e816ab96ab2f0d76ed4f772316731e7075dfb0fb28773a196f3c3be5e2"
+        }
+      ],
       "constant_fields": 0,
       "evidence_fields": {},
+      "evidence_source": "chunks",
+      "inline_cases_not_counted": 0,
       "varied_fields": 0,
       "verdict_concepts": {
         "us-wv:policies/income_tax/pilot_liability_pipeline#wv_pit_pilot_income_tax_liability": {
