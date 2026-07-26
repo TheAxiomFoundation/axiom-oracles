@@ -8,18 +8,18 @@
       "oracle_policy_name": "aca_ptc",
       "in_scope": true,
       "exclusion_reason": null,
-      "suite": null,
-      "covered": false,
-      "comparisons": null,
-      "matches": null,
-      "raw_match_rate": null,
-      "explained_rate": null,
-      "unexplained": null,
-      "axiom_attributed_open": null,
-      "oracle_attributed": null,
-      "bridge_artifacts": null,
-      "note": "In-scope uncovered \u2014 PE-US computes the ACA premium tax credit (IRC 36B); no PE-backed PTC comparison suite runs yet.",
-      "status": "uncovered"
+      "suite": "us-aca-ptc-grid",
+      "covered": true,
+      "comparisons": 6,
+      "matches": 6,
+      "raw_match_rate": 100,
+      "explained_rate": 100,
+      "unexplained": 0,
+      "axiom_attributed_open": 0,
+      "oracle_attributed": 0,
+      "bridge_artifacts": 0,
+      "note": "The us-aca-ptc-grid suite compares six full-year 2026 IRC 36B cases. It binds PE-US used_aca_ptc rather than raw aca_ptc so the compared boundary includes the enrolled-plan premium cap present in Axiom. The committed report is 6/6 within one cent and includes nonzero cases.",
+      "status": "conformant"
     },
     {
       "id": "us-pe:acp",
@@ -44,18 +44,18 @@
       "oracle_policy_name": "additional_medicare_tax",
       "in_scope": true,
       "exclusion_reason": null,
-      "suite": null,
-      "covered": false,
-      "comparisons": null,
-      "matches": null,
-      "raw_match_rate": null,
-      "explained_rate": null,
-      "unexplained": null,
-      "axiom_attributed_open": null,
-      "oracle_attributed": null,
-      "bridge_artifacts": null,
-      "note": "In-scope uncovered \u2014 PE-US computes the 0.9% Additional Medicare Tax; not in the fiit-ecps payroll concept set.",
-      "status": "uncovered"
+      "suite": "us-additional-medicare-grid",
+      "covered": true,
+      "comparisons": 5,
+      "matches": 5,
+      "raw_match_rate": 100,
+      "explained_rate": 100,
+      "unexplained": 0,
+      "axiom_attributed_open": 0,
+      "oracle_attributed": 0,
+      "bridge_artifacts": 0,
+      "note": "The us-additional-medicare-grid suite compares PE-US additional_medicare_tax with Axiom's combined final only on the explicitly bounded tax-year-2026 zero-self-employment domain: five wage-only GRID-CONTRACT cases across single, joint, and married-filing-separately status, four nonzero. For zero-SE inputs, PE-US additional_medicare_tax equals the section 3101(b)(2) wage-only amount and Axiom's combined output remains valid. The suite does not test or claim the section 1401(b)(2) self-employment leg; SE leg pending the 26 CFR 1.1401-1 operative-authority chain, axiom-corpus#523. The committed report is 5/5 within one cent.",
+      "status": "conformant"
     },
     {
       "id": "us-pe:ak_atap",
@@ -330,8 +330,8 @@
     {
       "id": "us-pe:chip",
       "oracle_policy_name": "chip",
-      "in_scope": true,
-      "exclusion_reason": null,
+      "in_scope": false,
+      "exclusion_reason": "oracle_models_nonstatutory_amount",
       "suite": null,
       "covered": false,
       "comparisons": null,
@@ -342,8 +342,8 @@
       "axiom_attributed_open": null,
       "oracle_attributed": null,
       "bridge_artifacts": null,
-      "note": "In-scope uncovered \u2014 PE-US computes CHIP eligibility/value; only Medicaid MAGI categories have a live suite so far.",
-      "status": "uncovered"
+      "note": "PolicyEngine-US 1.767.3 imputes this annual Person value as state separate-CHIP spending divided by enrollment, using calibration.gov.hhs.cms.chip.spending.separate_chip.total[state_code] and calibration.gov.hhs.cms.chip.enrollment.separate_chip[state_code], then gates it on chip_enrolled (eligibility plus take-up). This is a per-capita expenditure imputation, not a statutory amount formula; is_chip_eligible is compared separately.",
+      "status": "excluded:oracle_models_nonstatutory_amount"
     },
     {
       "id": "us-pe:co_income_tax",
@@ -384,8 +384,8 @@
     {
       "id": "us-pe:commodity_supplemental_food_program",
       "oracle_policy_name": "commodity_supplemental_food_program",
-      "in_scope": true,
-      "exclusion_reason": null,
+      "in_scope": false,
+      "exclusion_reason": "oracle_models_nonstatutory_amount",
       "suite": null,
       "covered": false,
       "comparisons": null,
@@ -396,8 +396,8 @@
       "axiom_attributed_open": null,
       "oracle_attributed": null,
       "bridge_artifacts": null,
-      "note": null,
-      "status": "uncovered"
+      "note": "PolicyEngine-US 1.767.3 imputes this annual Person value directly from gov.usda.csfp.amount, an administrative cost-per-participant parameter derived from program cost divided by participation, and gates it on commodity_supplemental_food_program_eligible. This is a food-package/caseload service-value imputation, not a statutory amount formula; commodity_supplemental_food_program_eligible is compared separately (rulespec-us PR #1008).",
+      "status": "excluded:oracle_models_nonstatutory_amount"
     },
     {
       "id": "us-pe:ct_income_tax",
@@ -528,8 +528,8 @@
     {
       "id": "us-pe:early_head_start",
       "oracle_policy_name": "early_head_start",
-      "in_scope": true,
-      "exclusion_reason": null,
+      "in_scope": false,
+      "exclusion_reason": "oracle_models_nonstatutory_amount",
       "suite": null,
       "covered": false,
       "comparisons": null,
@@ -540,8 +540,8 @@
       "axiom_attributed_open": null,
       "oracle_attributed": null,
       "bridge_artifacts": null,
-      "note": null,
-      "status": "uncovered"
+      "note": "PolicyEngine-US 1.767.3 imputes this annual Person value as state Early Head Start spending per funded slot, gov.hhs.head_start.early_head_start.spending[state_code_str] / gov.hhs.head_start.early_head_start.enrollment[state_code_str] (zero for nonpositive enrollment), multiplied by takes_up_early_head_start_if_eligible. This is an administrative slot-cost imputation, not a statutory amount formula; is_early_head_start_eligible is compared separately (rulespec-us PR #1010).",
+      "status": "excluded:oracle_models_nonstatutory_amount"
     },
     {
       "id": "us-pe:ebb",
@@ -602,18 +602,18 @@
       "oracle_policy_name": "elderly_disabled_credit",
       "in_scope": true,
       "exclusion_reason": null,
-      "suite": null,
-      "covered": false,
-      "comparisons": null,
-      "matches": null,
-      "raw_match_rate": null,
-      "explained_rate": null,
-      "unexplained": null,
-      "axiom_attributed_open": null,
-      "oracle_attributed": null,
-      "bridge_artifacts": null,
-      "note": null,
-      "status": "uncovered"
+      "suite": "us-elderly-disabled-grid",
+      "covered": true,
+      "comparisons": 9,
+      "matches": 9,
+      "raw_match_rate": 100,
+      "explained_rate": 100,
+      "unexplained": 0,
+      "axiom_attributed_open": 0,
+      "oracle_attributed": 0,
+      "bridge_artifacts": 0,
+      "note": "The us-elderly-disabled-grid suite compares the statutory section 22 potential before the section 26 liability/credit-order cap on nine exactly expressible 2026 companion cases. It covers aged and proven permanent-total-disability branches plus Social Security and AGI reductions; the empty-relation no-qualified-person diagnostic is omitted because PE requires a TaxUnit member and the fixture supplies no facts for one. The committed report is 9/9 within one cent.",
+      "status": "conformant"
     },
     {
       "id": "us-pe:employee_medicare_tax",
@@ -690,8 +690,8 @@
     {
       "id": "us-pe:energy_efficient_home_improvement_credit",
       "oracle_policy_name": "energy_efficient_home_improvement_credit",
-      "in_scope": true,
-      "exclusion_reason": null,
+      "in_scope": false,
+      "exclusion_reason": "oracle_models_repealed_law",
       "suite": null,
       "covered": false,
       "comparisons": null,
@@ -702,8 +702,8 @@
       "axiom_attributed_open": null,
       "oracle_attributed": null,
       "bridge_artifacts": null,
-      "note": null,
-      "status": "uncovered"
+      "note": "Lapsed before the 2026 validation year: IRC 25C(i), as amended by the One Big Beautiful Bill Act, Pub. L. No. 119-21, sec. 70505 (2025), provides that the credit does not apply to property placed in service after 2025-12-31. PolicyEngine-US 1.767.3 sets gov.irs.credits.energy_efficient_home_improvement.in_effect to false throughout 2026, so energy_efficient_home_improvement_credit is 0 even with employment_income 200000 and heat_pump_expenditures 50000; the otherwise computed capped component is 2000 and the tax-liability limit is 36734 (probe evidence: scripts/probe_us_ira_2026.py). Axiom encodes current law and has no live 2026 section 25C surface to compare.",
+      "status": "excluded:oracle_models_repealed_law"
     },
     {
       "id": "us-pe:financial_assistance",
@@ -762,8 +762,8 @@
     {
       "id": "us-pe:free_school_meals",
       "oracle_policy_name": "free_school_meals",
-      "in_scope": true,
-      "exclusion_reason": null,
+      "in_scope": false,
+      "exclusion_reason": "oracle_models_nonstatutory_amount",
       "suite": null,
       "covered": false,
       "comparisons": null,
@@ -774,8 +774,8 @@
       "axiom_attributed_open": null,
       "oracle_attributed": null,
       "bridge_artifacts": null,
-      "note": null,
-      "status": "uncovered"
+      "note": "PolicyEngine-US 1.767.3 imputes this annual SPM-unit value from the FREE branch of school_meal_tier: the NSLP-plus-SBP reimbursement differential over the paid tier from gov.usda.school_meals.amount.nslp[state_group_str][tier] and gov.usda.school_meals.amount.sbp[state_group_str][tier], multiplied by gov.usda.school_meals.school_days and the SPM-unit count of is_in_k12_school. This is a reimbursement-rate service-value imputation, not a statutory amount formula; the school_meal_tier eligibility classification is compared separately.",
+      "status": "excluded:oracle_models_nonstatutory_amount"
     },
     {
       "id": "us-pe:ga_income_tax",
@@ -816,8 +816,8 @@
     {
       "id": "us-pe:head_start",
       "oracle_policy_name": "head_start",
-      "in_scope": true,
-      "exclusion_reason": null,
+      "in_scope": false,
+      "exclusion_reason": "oracle_models_nonstatutory_amount",
       "suite": null,
       "covered": false,
       "comparisons": null,
@@ -828,8 +828,8 @@
       "axiom_attributed_open": null,
       "oracle_attributed": null,
       "bridge_artifacts": null,
-      "note": null,
-      "status": "uncovered"
+      "note": "PolicyEngine-US 1.767.3 imputes this annual Person value as state Head Start spending per funded slot, gov.hhs.head_start.spending[state_code_str] / gov.hhs.head_start.enrollment[state_code_str] (zero for nonpositive enrollment), multiplied by takes_up_head_start_if_eligible. This is an administrative slot-cost imputation, not a statutory amount formula; is_head_start_eligible is compared separately (rulespec-us PR #1010).",
+      "status": "excluded:oracle_models_nonstatutory_amount"
     },
     {
       "id": "us-pe:hi_income_tax",
@@ -1196,18 +1196,18 @@
       "oracle_policy_name": "lifetime_learning_credit",
       "in_scope": true,
       "exclusion_reason": null,
-      "suite": null,
-      "covered": false,
-      "comparisons": null,
-      "matches": null,
-      "raw_match_rate": null,
-      "explained_rate": null,
-      "unexplained": null,
-      "axiom_attributed_open": null,
-      "oracle_attributed": null,
-      "bridge_artifacts": null,
-      "note": null,
-      "status": "uncovered"
+      "suite": "us-llc-grid",
+      "covered": true,
+      "comparisons": 12,
+      "matches": 12,
+      "raw_match_rate": 100,
+      "explained_rate": 100,
+      "unexplained": 0,
+      "axiom_attributed_open": 0,
+      "oracle_attributed": 0,
+      "bridge_artifacts": 0,
+      "note": "The us-llc-grid suite compares all 12 ground-truth section 25A(c) companion cases against PE-US lifetime_learning_credit at the same final, liability-capped boundary. It includes exact phaseout endpoints, two-student aggregate expenses, and a diagnostic proving that a $2,000 potential is capped to $500. The committed report is 12/12 within one cent.",
+      "status": "conformant"
     },
     {
       "id": "us-pe:ma_income_tax",
@@ -1628,18 +1628,18 @@
       "oracle_policy_name": "net_investment_income_tax",
       "in_scope": true,
       "exclusion_reason": null,
-      "suite": null,
-      "covered": false,
-      "comparisons": null,
-      "matches": null,
-      "raw_match_rate": null,
-      "explained_rate": null,
-      "unexplained": null,
-      "axiom_attributed_open": null,
-      "oracle_attributed": null,
-      "bridge_artifacts": null,
-      "note": null,
-      "status": "uncovered"
+      "suite": "us-niit-grid",
+      "covered": true,
+      "comparisons": 6,
+      "matches": 6,
+      "raw_match_rate": 100,
+      "explained_rate": 100,
+      "unexplained": 0,
+      "axiom_attributed_open": 0,
+      "oracle_attributed": 0,
+      "bridge_artifacts": 0,
+      "note": "The us-niit-grid suite compares six 2026 individual section 1411 cases against PE-US net_investment_income_tax, including status thresholds, mixed investment income, gains, and passive rent. With no section 911 amounts, both legs use AGI equal to NIIT MAGI; the committed report is 6/6 with nonzero cases.",
+      "status": "conformant"
     },
     {
       "id": "us-pe:new_clean_vehicle_credit",
@@ -1970,18 +1970,18 @@
       "oracle_policy_name": "qualified_business_income_deduction",
       "in_scope": true,
       "exclusion_reason": null,
-      "suite": null,
-      "covered": false,
-      "comparisons": null,
-      "matches": null,
-      "raw_match_rate": null,
-      "explained_rate": null,
-      "unexplained": null,
-      "axiom_attributed_open": null,
-      "oracle_attributed": null,
-      "bridge_artifacts": null,
-      "note": null,
-      "status": "uncovered"
+      "suite": "us-qbid-grid",
+      "covered": true,
+      "comparisons": 11,
+      "matches": 10,
+      "raw_match_rate": 90.909091,
+      "explained_rate": 100,
+      "unexplained": 0,
+      "axiom_attributed_open": 0,
+      "oracle_attributed": 1,
+      "bridge_artifacts": 0,
+      "note": "The us-qbid-grid suite compares 11 ground-truth 2026 section 199A cases using the corrected $201,750/$403,500 thresholds and $75,000/$150,000 phase-in widths. The committed report is 10/11 raw and fully dispositioned: PE-US 1.767.3 applies its $400 floor to all QBI because it lacks Axiom's distinct active-business-QBI fact, producing $400 instead of zero in qbid-above-nowages. There are no unexplained or Axiom-owned divergences.",
+      "status": "conformant"
     },
     {
       "id": "us-pe:recovery_rebate_credit",
@@ -2004,8 +2004,8 @@
     {
       "id": "us-pe:reduced_price_school_meals",
       "oracle_policy_name": "reduced_price_school_meals",
-      "in_scope": true,
-      "exclusion_reason": null,
+      "in_scope": false,
+      "exclusion_reason": "oracle_models_nonstatutory_amount",
       "suite": null,
       "covered": false,
       "comparisons": null,
@@ -2016,8 +2016,8 @@
       "axiom_attributed_open": null,
       "oracle_attributed": null,
       "bridge_artifacts": null,
-      "note": null,
-      "status": "uncovered"
+      "note": "PolicyEngine-US 1.767.3 imputes this annual SPM-unit value from the REDUCED branch of school_meal_tier: the NSLP-plus-SBP reimbursement differential over the paid tier from gov.usda.school_meals.amount.nslp[state_group_str][tier] and gov.usda.school_meals.amount.sbp[state_group_str][tier], multiplied by gov.usda.school_meals.school_days and the SPM-unit count of is_in_k12_school. This is a reimbursement-rate service-value imputation, not a statutory amount formula; the school_meal_tier eligibility classification is compared separately.",
+      "status": "excluded:oracle_models_nonstatutory_amount"
     },
     {
       "id": "us-pe:residential_clean_energy_credit",
@@ -2124,7 +2124,7 @@
       "axiom_attributed_open": null,
       "oracle_attributed": null,
       "bridge_artifacts": null,
-      "note": null,
+      "note": "Coverage withdrawn because the Saver's Credit pipeline and companion fixture were split out of rulespec-us PR #1004 and are absent from canonical main. Reinstatement is pending the Notice 2025-67 corpus chain tracked at https://github.com/TheAxiomFoundation/axiom-corpus/issues/506. Historical boundary evidence, not live coverage, is preserved at https://github.com/PolicyEngine/policyengine-us/issues/9151: PE-US 1.767.3 stores Notice 2025-67's correct 2026 tier values, but PolicyEngine Core 3.30.3's right-exclusive scale digitization treats the published $24,250 single-filer inclusive 50% maximum as the 20% tier's lower bound. At $24,250 AGI and $2,000 contributions, the statutory amount is $2,000 * 50% = $1,000 while PE returns $2,000 * 20% = $400.",
       "status": "uncovered"
     },
     {
@@ -2186,18 +2186,18 @@
       "oracle_policy_name": "self_employment_tax",
       "in_scope": true,
       "exclusion_reason": null,
-      "suite": null,
-      "covered": false,
-      "comparisons": null,
-      "matches": null,
-      "raw_match_rate": null,
-      "explained_rate": null,
-      "unexplained": null,
-      "axiom_attributed_open": null,
-      "oracle_attributed": null,
-      "bridge_artifacts": null,
-      "note": "In-scope uncovered \u2014 PE-US computes SECA (self-employment tax); fiit-ecps compares employee/employer OASDI+Medicare but not the SECA surface.",
-      "status": "uncovered"
+      "suite": "us-seca-grid",
+      "covered": true,
+      "comparisons": 6,
+      "matches": 6,
+      "raw_match_rate": 100,
+      "explained_rate": 100,
+      "unexplained": 0,
+      "axiom_attributed_open": 0,
+      "oracle_attributed": 0,
+      "bridge_artifacts": 0,
+      "note": "The us-seca-grid suite compares six 2026 ordinary SECA cases, including the $400 floor, OASDI cap and wage coordination, against PE-US self_employment_tax summed from Person to TaxUnit. Both boundaries include OASDI plus ordinary Medicare and exclude the separate 0.9% Additional Medicare Tax; the committed report is 6/6 with nonzero cases.",
+      "status": "conformant"
     },
     {
       "id": "us-pe:snap",
@@ -2238,8 +2238,8 @@
     {
       "id": "us-pe:spm_unit_capped_housing_subsidy",
       "oracle_policy_name": "spm_unit_capped_housing_subsidy",
-      "in_scope": true,
-      "exclusion_reason": null,
+      "in_scope": false,
+      "exclusion_reason": "technical",
       "suite": null,
       "covered": false,
       "comparisons": null,
@@ -2250,8 +2250,8 @@
       "axiom_attributed_open": null,
       "oracle_attributed": null,
       "bridge_artifacts": null,
-      "note": null,
-      "status": "uncovered"
+      "note": "Technical SPM resource-accounting construct, not a statutory housing benefit: PolicyEngine-US 1.767.3 computes min(housing_assistance, max(spm_unit_spm_threshold_housing_portion - hud_ttp, 0)). The housing-assistance and tenant-payment operands are modeled HUD amounts, but the outer cap comes from Census SPM thresholds, tenure housing shares, and geographic adjustment rather than a statutory payment parameter; forcing housing_assistance 30000, the SPM housing portion 17720, and hud_ttp 10000 returns 7720 (probe evidence: scripts/probe_us_ira_2026.py). Validate Section 8 or HAP against hud_hap, or against housing_assistance with take-up pinned, and exclude this SPM post-processing row as technical.",
+      "status": "excluded:technical"
     },
     {
       "id": "us-pe:ssi",
@@ -2580,8 +2580,8 @@
     {
       "id": "us-pe:wic",
       "oracle_policy_name": "wic",
-      "in_scope": true,
-      "exclusion_reason": null,
+      "in_scope": false,
+      "exclusion_reason": "oracle_models_nonstatutory_amount",
       "suite": null,
       "covered": false,
       "comparisons": null,
@@ -2592,8 +2592,8 @@
       "axiom_attributed_open": null,
       "oracle_attributed": null,
       "bridge_artifacts": null,
-      "note": null,
-      "status": "uncovered"
+      "note": "PolicyEngine-US 1.767.3 imputes this monthly Person value from the average food-package parameter gov.usda.wic.value[wic_food_package_str], adjusted with gov.usda.wic.cvb.current, gov.usda.wic.cvb.included_in_value, and gov.usda.wic.cvb.replaces_included_value, then gates it on is_wic_eligible and would_claim_wic (subject to gov.usda.wic.abolish_wic). This is a package-value imputation, not a statutory amount formula; is_wic_eligible is compared separately (rulespec-us PR #1010).",
+      "status": "excluded:oracle_models_nonstatutory_amount"
     },
     {
       "id": "us-pe:workers_compensation",
