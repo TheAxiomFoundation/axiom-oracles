@@ -1,0 +1,18 @@
+schema_version: axiom.campaign_projection_suite_list.v1
+kind: campaign-projection-suite-list
+ci: manual
+description: >-
+  Dashboard suites projected from the pinned state-income-tax Populace
+  campaign. These suites are emitted by
+  scripts/emit_populace_campaign_artifacts.py rather than dispatched through
+  scripts/run_comparison.py, so affected reruns remain manual.
+rulespec_repos:
+- TheAxiomFoundation/rulespec-us
+suites:
+- suite: ct-income-tax-populace
+  report: axiom-policyengine-ct-income-tax-populace.json
+  jurisdiction: CT
+  program: state_income_tax
+  oracle: policyengine
+  campaign_runner: scripts/run_state_tax_populace.py
+  projector: scripts/emit_populace_campaign_artifacts.py

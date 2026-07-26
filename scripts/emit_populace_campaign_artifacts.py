@@ -20,7 +20,10 @@ from __future__ import annotations
 
 import json
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
+
+from axiom_oracles.provenance import build_provenance
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 REPORTS = REPO_ROOT / "reports"
@@ -46,7 +49,12 @@ def latest_campaign_report() -> Path:
 
 
 def project_state(
-    state: str, entry: dict, campaign: dict, source_name: str
+    state: str,
+    entry: dict,
+    campaign: dict,
+    source_name: str,
+    *,
+    generated_at: str | None = None,
 ) -> dict:
     compared = int(entry["compared_count"])
     mismatches = entry.get("mismatches") or []
@@ -78,6 +86,35 @@ def project_state(
         "parent": None,
         "weighted_match_rate": rate,
     }
+    runtime = campaign.get("runtime_provenance") or {}
+    rulespec = runtime.get("rulespec") or {}
+    standard_provenance = build_provenance(
+        generated_by=(
+            "scripts/emit_populace_campaign_artifacts.py"
+            f"::{state.lower()}-income-tax-populace"
+        ),
+        run_kind=campaign.get("run_kind"),
+        generated_at=generated_at or campaign.get("generated_at"),
+        rulespecs=[
+            {
+                "repo": rulespec.get("repository"),
+                "sha": rulespec.get("commit"),
+            }
+        ]
+        if rulespec.get("repository")
+        else None,
+    )
+    standard_provenance.update(
+        {
+            "campaign_report": source_name,
+            "dataset_identity": campaign.get("dataset_identity"),
+            "runtime_provenance": runtime or None,
+            "tolerance": entry.get("tolerance"),
+            "relative_tolerance": entry.get("relative_tolerance"),
+            "max_absolute_difference": entry.get("max_absolute_difference"),
+            "weighted_compared_tax_units": entry.get("weighted_compared_tax_units"),
+        }
+    )
     return {
         "schema_version": "axiom.comparison_report.v2",
         "suite": f"{state.lower()}-income-tax-populace",
@@ -97,17 +134,7 @@ def project_state(
             "match_rate": rate,
             "mismatch_count": mismatch_count,
         },
-        "provenance": {
-            "campaign_report": source_name,
-            "dataset_identity": campaign.get("dataset_identity"),
-            "runtime_provenance": campaign.get("runtime_provenance"),
-            "tolerance": entry.get("tolerance"),
-            "relative_tolerance": entry.get("relative_tolerance"),
-            "max_absolute_difference": entry.get("max_absolute_difference"),
-            "weighted_compared_tax_units": entry.get(
-                "weighted_compared_tax_units"
-            ),
-        },
+        "provenance": standard_provenance,
     }
 
 
@@ -164,9 +191,7 @@ def emit_case_chunks(state: str, entry: dict) -> str | None:
     out_dir.mkdir(parents=True, exist_ok=True)
     for stale in out_dir.glob("chunk-*.json"):
         stale.unlink()
-    chunks = [
-        out_rows[i : i + CHUNK_SIZE] for i in range(0, len(out_rows), CHUNK_SIZE)
-    ]
+    chunks = [out_rows[i : i + CHUNK_SIZE] for i in range(0, len(out_rows), CHUNK_SIZE)]
     for i, chunk in enumerate(chunks):
         (out_dir / f"chunk-{i}.json").write_text(
             json.dumps(chunk, separators=(",", ":"))
@@ -186,9 +211,7 @@ def emit_case_chunks(state: str, entry: dict) -> str | None:
 
 
 def main() -> int:
-    source = (
-        Path(sys.argv[1]) if len(sys.argv) > 1 else latest_campaign_report()
-    )
+    source = Path(sys.argv[1]) if len(sys.argv) > 1 else latest_campaign_report()
     campaign = json.loads(source.read_text())
     states = (campaign.get("comparison") or {}).get("states") or {}
     if not states:
@@ -197,12 +220,21 @@ def main() -> int:
     manifest_path = DASH_DATA / "manifest.json"
     manifest = json.loads(manifest_path.read_text())
     reports = list(manifest.get("reports") or [])
+    emitted_at = campaign.get("generated_at") or datetime.now(timezone.utc).strftime(
+        "%Y-%m-%dT%H:%M:%SZ"
+    )
 
     for state, entry in sorted(states.items()):
         emitted = emit_case_chunks(state, entry)
         if emitted:
             print(emitted)
-        report = project_state(state, entry, campaign, source.name)
+        report = project_state(
+            state,
+            entry,
+            campaign,
+            source.name,
+            generated_at=emitted_at,
+        )
         filename = f"axiom-policyengine-{state.lower()}-income-tax-populace.json"
         (DASH_DATA / filename).write_text(
             json.dumps(report, indent=1, sort_keys=True) + "\n"
@@ -215,7 +247,7 @@ def main() -> int:
         )
 
     manifest["reports"] = reports
-    manifest_path.write_text(json.dumps(manifest, indent=1) + "\n")
+    manifest_path.write_text(json.dumps(manifest, indent=2) + "\n")
     print(f"manifest: {len(reports)} reports")
     return 0
 

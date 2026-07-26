@@ -180,6 +180,15 @@
    },
    {
     "program": "state_income_tax",
+    "jurisdiction": "CT",
+    "status": "executable",
+    "source": "pinned Populace campaign projected as ct-income-tax-populace over the canonical 2026 resident ordinary-tax-before-personal-credit surface",
+    "known_non_tanf_gaps": [
+     "component surface only; final annual liability and personal-credit application remain source-held"
+    ]
+   },
+   {
+    "program": "state_income_tax",
     "jurisdiction": "KY",
     "status": "executable",
     "source": "rulespec-us/us-ky/policies/income_tax/2026_krs_141_020_schedule_before_credits.yaml + axiom-policyengine-ky-income-tax-populace",

@@ -154,8 +154,7 @@ def _fixture_oracle_problems(path: Path, doc: dict) -> list[str]:
         if "oracle" in fixture and str(fixture.get("oracle")).strip().lower() == "none":
             if not str(fixture.get("reason") or "").strip():
                 problems.append(
-                    f"{rel}: fixture {fid!r} has `oracle: none` without a "
-                    "`reason:`"
+                    f"{rel}: fixture {fid!r} has `oracle: none` without a `reason:`"
                 )
             continue
         expected = fixture.get("expected")
@@ -166,6 +165,31 @@ def _fixture_oracle_problems(path: Path, doc: dict) -> list[str]:
                 f"{rel}: fixture {fid!r} declares no `expected:` engine outcome "
                 "(and no `oracle: none` + `reason:`) — it verifies nothing"
             )
+    return problems
+
+
+def _campaign_projection_problems(name: str, config: dict) -> list[str]:
+    """Fail closed on manually projected campaign-suite declarations."""
+
+    problems: list[str] = []
+    repos = config.get("rulespec_repos") or []
+    suites = config.get("suites") or []
+    if not suites:
+        return [f"{name}: campaign projection declares no suites"]
+    for suite in suites:
+        suite_name = suite.get("suite", "<unnamed>")
+        if not suite.get("report"):
+            problems.append(f"{name} suite {suite_name!r} has no report")
+        if not repos and not suite.get("rulespec_repos"):
+            problems.append(f"{name} suite {suite_name!r} has no rulespec repos")
+        if not suite.get("campaign_runner") or not suite.get("projector"):
+            problems.append(
+                f"{name} suite {suite_name!r} must declare its "
+                "campaign runner and projector"
+            )
+        oracle = str(suite.get("oracle") or "").strip().lower()
+        if not oracle or oracle == "none":
+            problems.append(f"{name} suite {suite_name!r} has no oracle")
     return problems
 
 
@@ -189,6 +213,9 @@ def check_oracle_backed() -> list[str]:
                         f"parameter-oracles.yaml suite {suite.get('suite')!r} "
                         "declares no comparisons — nothing is verified"
                     )
+            continue
+        if config.get("kind") == "campaign-projection-suite-list":
+            problems.extend(_campaign_projection_problems(path.name, config))
             continue
         if "name" not in config:
             continue
@@ -320,12 +347,14 @@ _PROGRAM_SUITE_TOKENS = {
     "federal_income_tax": "fiit",
     "medicaid_eligibility_groups": "medicaid",
     "medicaid_chip_bhp_thresholds": "health",
-    "state_income_tax": "state-income-tax",
+    "state_income_tax": "income-tax",
     "nyc_income_tax": "nyc-income-tax",
 }
 
 
-def _suite_matches_program(suite: str, program: str | None, jurisdiction: str | None) -> bool:
+def _suite_matches_program(
+    suite: str, program: str | None, jurisdiction: str | None
+) -> bool:
     """Link a coverage (program, jurisdiction) row to a report suite.
 
     Suites are slugged like ``co-snap-ecps`` / ``ny-tanf-ecps`` / ``fiit-ecps``;
@@ -343,7 +372,10 @@ def _suite_matches_program(suite: str, program: str | None, jurisdiction: str | 
         return False
     # `us` is the national marker, not a slug substring; only a real state
     # jurisdiction must appear in the slug.
-    if juris and juris != "us" and juris not in slug:
+    # State suites use the jurisdiction as their first slug token. Do not use a
+    # raw substring test: ``co`` occurs inside ``income`` and would otherwise
+    # make every income-tax suite look like a Colorado suite.
+    if juris and juris != "us" and slug.split("-", 1)[0] != juris:
         return False
     return bool(token or juris)
 

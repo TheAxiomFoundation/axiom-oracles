@@ -152,6 +152,30 @@ def test_repo_configs_are_all_oracle_backed():
     assert gate.check_oracle_backed() == []
 
 
+def test_campaign_projection_declaration_fails_closed():
+    gate = _load_gate()
+    assert (
+        "declares no suites"
+        in gate._campaign_projection_problems("campaign.yaml", {"suites": []})[0]
+    )
+    problems = gate._campaign_projection_problems(
+        "campaign.yaml",
+        {
+            "rulespec_repos": ["TheAxiomFoundation/rulespec-us"],
+            "suites": [
+                {
+                    "suite": "ct-income-tax-populace",
+                    "report": "ct.json",
+                    "campaign_runner": "run.py",
+                    "projector": "emit.py",
+                    "oracle": "none",
+                }
+            ],
+        },
+    )
+    assert any("has no oracle" in problem for problem in problems)
+
+
 # --- Guard 2: freshness age computation + alarms ----------------------------
 
 
@@ -178,6 +202,13 @@ def test_suite_matches_program_national_marker():
     assert gate._suite_matches_program("co-snap-ecps", "snap", "CO")
     # NEGATIVE: a different state does not match.
     assert not gate._suite_matches_program("co-snap-ecps", "snap", "NY")
+    # NEGATIVE: CO must not match the "co" substring inside "income".
+    assert not gate._suite_matches_program(
+        "ct-income-tax-populace", "state_income_tax", "CO"
+    )
+    assert gate._suite_matches_program(
+        "ct-income-tax-populace", "state_income_tax", "CT"
+    )
 
 
 def test_freshness_check_fails_when_committed_file_missing(monkeypatch, tmp_path):
@@ -238,7 +269,17 @@ def test_build_freshness_stores_no_time_dependent_state(monkeypatch, tmp_path):
     )
     (data_dir / "coverage_overview.json").write_text(
         json.dumps(
-            {"axiom": {"programs": [{"program": "snap", "jurisdiction": "CO", "status": "executable"}]}}
+            {
+                "axiom": {
+                    "programs": [
+                        {
+                            "program": "snap",
+                            "jurisdiction": "CO",
+                            "status": "executable",
+                        }
+                    ]
+                }
+            }
         )
     )
     monkeypatch.setattr(gate, "DASHBOARD_DATA_DIR", data_dir)
@@ -249,9 +290,7 @@ def test_build_freshness_stores_no_time_dependent_state(monkeypatch, tmp_path):
     assert all("stale" not in s and "age_days" not in s for s in fresh["suites"])
     # But the invariant facts ARE present: the executable surface is linked to
     # its matching report suite so the dashboard can derive the alarm.
-    surface = next(
-        s for s in fresh["executable_surfaces"] if s["program"] == "snap"
-    )
+    surface = next(s for s in fresh["executable_surfaces"] if s["program"] == "snap")
     assert "co-snap-ecps" in surface["suites"]
     suite_entry = next(s for s in fresh["suites"] if s["suite"] == "co-snap-ecps")
     assert suite_entry["generated_at"] == old

@@ -313,6 +313,15 @@
       "source": "comparisons/parameter-oracles.yaml"
     },
     {
+      "suite": "ct-income-tax-populace",
+      "name": null,
+      "report": "axiom-policyengine-ct-income-tax-populace.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/state-income-tax-populace.yaml"
+    },
+    {
       "suite": "dc-income-tax-liability",
       "name": "dc-income-tax-liability",
       "report": "axiom-policyengine-taxsim-dc-income-tax-liability.json",

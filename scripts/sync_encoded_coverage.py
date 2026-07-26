@@ -17,6 +17,7 @@ Usage::
     python scripts/sync_encoded_coverage.py            # fetch + rewrite
     python scripts/sync_encoded_coverage.py --no-fetch # offline rerun
 """
+
 from __future__ import annotations
 
 import argparse
@@ -64,7 +65,10 @@ STATE_RULES = {
         (r"^policies/des/faa5/(ca-|two-parent)", ("tanf", None)),
         (r"^policies/des/faa5/transitional-child-care", ("childcare_assistance", None)),
         (r"^policies/des/faa5/", ("snap", None)),
-        (r"^regulations/aac/title-6/chapter-5/article-49/", ("childcare_assistance", None)),
+        (
+            r"^regulations/aac/title-6/chapter-5/article-49/",
+            ("childcare_assistance", None),
+        ),
     ],
     "ca": [
         (r"^(policies/cdss/snap|regulations/mpp/)", ("snap", None)),
@@ -78,11 +82,24 @@ STATE_RULES = {
         (r"^policies/cms/", ("medicaid_chip_bhp_thresholds", None)),
         (r"^statutes/39/", ("state_income_tax", None)),
     ],
+    "ct": [
+        (
+            r"^policies/income_tax/"
+            r"2026_resident_ordinary_tax_before_personal_credit\.yaml$",
+            ("state_income_tax", None),
+        ),
+    ],
     "fl": [
         (r"ess-program-policy-manual/.*fs-tca", ("snap", None)),
         (r"ess-program-policy-manual/.*(cic-rap|tca)", ("tanf", None)),
-        (r"ess-program-policy-manual/.*(mfam|mssi)", ("medicaid_eligibility_groups", None)),
-        (r"^(policies/dcf/ess-program-policy-manual/|regulations/fac/65a-1/)", ("snap", None)),
+        (
+            r"ess-program-policy-manual/.*(mfam|mssi)",
+            ("medicaid_eligibility_groups", None),
+        ),
+        (
+            r"^(policies/dcf/ess-program-policy-manual/|regulations/fac/65a-1/)",
+            ("snap", None),
+        ),
     ],
     "il": [
         (r"^(policies/dhs/csmm/|statutes/320/)", ("state_ssi_supplement", None)),
@@ -282,7 +299,9 @@ def main() -> None:
     COVERAGE_PATH.write_text(json.dumps(data, indent=1) + "\n")
 
     total = sum(b["count"] for b in buckets.values())
-    print(f"classified {total} rule files into {len(buckets)} (family, jurisdiction) buckets")
+    print(
+        f"classified {total} rule files into {len(buckets)} (family, jurisdiction) buckets"
+    )
     for (family, jurisdiction), bucket in sorted(buckets.items()):
         marker = "manual" if (family, jurisdiction) in manual_keys else "generated"
         print(f"  {family:32} {jurisdiction:4} {bucket['count']:5} rules  [{marker}]")

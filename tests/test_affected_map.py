@@ -134,6 +134,32 @@ def test_build_map_is_deterministic_and_check_passes():
     assert committed == first + "\n"
 
 
+def test_campaign_projection_suite_is_manual_and_rulespec_affected():
+    gam = _load("generate_affected_map.py")
+    entries = gam.campaign_projection_suite_entries(
+        {
+            "rulespec_repos": ["TheAxiomFoundation/rulespec-us"],
+            "suites": [
+                {
+                    "suite": "ct-income-tax-populace",
+                    "report": "axiom-policyengine-ct-income-tax-populace.json",
+                }
+            ],
+        },
+        Path("state-income-tax-populace.yaml"),
+    )
+
+    assert entries == [
+        {
+            "suite": "ct-income-tax-populace",
+            "name": None,
+            "report": "axiom-policyengine-ct-income-tax-populace.json",
+            "repos": ["TheAxiomFoundation/rulespec-us"],
+            "source": "comparisons/state-income-tax-populace.yaml",
+        }
+    ]
+
+
 def test_check_detects_drift(tmp_path, monkeypatch, capsys):
     """NEGATIVE: a stale committed map makes --check fail."""
     gam = _load("generate_affected_map.py")
@@ -326,7 +352,9 @@ def test_github_format_emits_output_lines(monkeypatch, capsys):
     present."""
     sel = _load("select_affected_suites.py")
     monkeypatch.setattr(
-        sel.sys, "argv", ["select_affected_suites.py", "--force-all", "--format", "github"]
+        sel.sys,
+        "argv",
+        ["select_affected_suites.py", "--force-all", "--format", "github"],
     )
     assert sel.main() == 0
     out = capsys.readouterr().out.splitlines()
@@ -401,4 +429,7 @@ def test_direct_oracle_pair_suites_carry_no_rulespec_dependency():
     entries = {e["suite"]: e for e in gen.build_map()["suites"]}
     assert entries["taxcalc-fiit-ecps"]["repos"] == []
     # An axiom-sided compare over the same concept space keeps its mapping.
-    assert "TheAxiomFoundation/rulespec-us" in entries["co-state-income-tax-taxsim"]["repos"]
+    assert (
+        "TheAxiomFoundation/rulespec-us"
+        in entries["co-state-income-tax-taxsim"]["repos"]
+    )
