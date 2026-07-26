@@ -376,6 +376,16 @@ def sanity_check(
     help="Validation population source.",
 )
 @click.option(
+    "--case-shard",
+    default=None,
+    help=(
+        "Process only shard K of N (format K/N, zero-based) of the loaded "
+        "cases. Big states OOM this machine in one process; shards run "
+        "sequentially in fresh processes and merge via "
+        "scripts/merge_shard_reports.py."
+    ),
+)
+@click.option(
     "--sample-size",
     type=int,
     default=50,
@@ -534,6 +544,7 @@ def compare(
     axiom_compiled_program: Path | None,
     jurisdiction_fips: str | None,
     include_case_inputs: bool | None,
+    case_shard: str | None,
     comparison_batch_size: int,
     output_path: Path | None,
     json_output: bool,
@@ -599,6 +610,29 @@ def compare(
 
         concept_ids = tuple(mapping.concept_id for mapping in mappings)
         cases = [replace(case, outputs=concept_ids) for case in cases]
+
+        if case_shard:
+            try:
+                shard_index, shard_total = (
+                    int(part) for part in case_shard.split("/", 1)
+                )
+            except ValueError as exc:
+                raise click.ClickException(
+                    f"--case-shard must be K/N, got {case_shard!r}"
+                ) from exc
+            if not (0 <= shard_index < shard_total):
+                raise click.ClickException(
+                    f"--case-shard index out of range: {case_shard}"
+                )
+            cases = [
+                case
+                for position, case in enumerate(cases)
+                if position % shard_total == shard_index
+            ]
+            click.echo(
+                f"Shard {shard_index + 1}/{shard_total}: {len(cases)} cases",
+                err=True,
+            )
 
         # Resolved once: small suites (or an explicit flag) persist full
         # evidence — raw input records AND the axiom engine's complete
