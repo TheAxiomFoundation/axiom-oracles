@@ -223,12 +223,12 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-26T04:06:41Z",
+    "generated_at": "2026-07-26T08:45:46Z",
     "generated_by": "scripts/run_comparison.py::al-income-tax-liability",
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": "9d762d8865125c08eb5fb2e21df959636ec6e355"
+        "sha": "c56a3709161c24a20c2e0b6e81b373444e0bebd4"
       }
     ],
     "run_kind": "affected-rerun",
