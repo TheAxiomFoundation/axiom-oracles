@@ -56,7 +56,11 @@ _REQUIRED_DATASET_FIELDS = ("source", "revision", "sha256", "built_with", "count
 def _require_nonempty_fields(value: object, fields: tuple[str, ...], label: str) -> dict:
     if not isinstance(value, dict):
         raise ValueError(f"campaign report {label} must be an object")
-    missing = [field for field in fields if not str(value.get(field) or "").strip()]
+    missing = [
+        field
+        for field in fields
+        if not isinstance(value.get(field), str) or not value[field].strip()
+    ]
     if missing:
         raise ValueError(
             f"campaign report {label} must carry {', '.join(fields)}; "

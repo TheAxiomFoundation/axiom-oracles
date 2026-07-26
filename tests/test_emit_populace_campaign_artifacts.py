@@ -135,6 +135,37 @@ def test_projector_fails_closed_on_incomplete_runtime_identity(section, field):
         )
 
 
+@pytest.mark.parametrize(
+    ("container", "section", "field"),
+    [
+        ("runtime_provenance", "rulespec", "commit"),
+        ("runtime_provenance", "axiom_engine", "executable_sha256"),
+        ("runtime_provenance", "packages", "policyengine-us"),
+        ("dataset_identity", None, "sha256"),
+    ],
+)
+def test_projector_rejects_non_string_identity(container, section, field):
+    campaign = _campaign()
+    identity = campaign[container]
+    if section is not None:
+        identity = identity[section]
+    identity[field] = True
+
+    with pytest.raises(ValueError, match=field):
+        project_state(
+            "CT",
+            {
+                "compared_count": 1,
+                "mismatch_count": 0,
+                "output": "us-ct:policies/income_tax/example#output",
+                "program": "us-ct:policies/income_tax/example",
+                "policyengine_target": "ct_example",
+            },
+            campaign,
+            "campaign.json",
+        )
+
+
 @pytest.mark.parametrize("field", ["source", "built_with", "country"])
 def test_projector_fails_closed_on_incomplete_dataset_identity(field):
     campaign = _campaign()

@@ -435,6 +435,30 @@ def test_campaign_projection_rejects_runtime_identity_omitted_from_both_artifact
     )
 
 
+def test_campaign_projection_rejects_non_string_runtime_identity_on_both_sides(
+    tmp_path, monkeypatch
+):
+    gate = _load_gate()
+    config, report_path, scripts = _campaign_projection_fixture(
+        gate, tmp_path, monkeypatch
+    )
+    campaign_path = scripts.parent / "reports" / "campaign.json"
+    campaign = json.loads(campaign_path.read_text())
+    report = json.loads(report_path.read_text())
+    campaign["runtime_provenance"]["axiom_engine"]["executable_sha256"] = True
+    report["provenance"]["runtime_provenance"]["axiom_engine"][
+        "executable_sha256"
+    ] = True
+    campaign_path.write_text(json.dumps(campaign))
+    report_path.write_text(json.dumps(report))
+
+    problems = gate._campaign_projection_problems("campaign.yaml", config)
+    assert any(
+        "runtime_provenance.axiom_engine is missing executable_sha256" in p
+        for p in problems
+    )
+
+
 @pytest.mark.parametrize("field", ["source", "built_with", "country"])
 def test_campaign_projection_rejects_dataset_identity_omitted_from_both_artifacts(
     tmp_path, monkeypatch, field
@@ -453,6 +477,25 @@ def test_campaign_projection_rejects_dataset_identity_omitted_from_both_artifact
 
     problems = gate._campaign_projection_problems("campaign.yaml", config)
     assert any(f"dataset_identity is missing {field}" in problem for problem in problems)
+
+
+def test_campaign_projection_rejects_non_string_dataset_identity_on_both_sides(
+    tmp_path, monkeypatch
+):
+    gate = _load_gate()
+    config, report_path, scripts = _campaign_projection_fixture(
+        gate, tmp_path, monkeypatch
+    )
+    campaign_path = scripts.parent / "reports" / "campaign.json"
+    campaign = json.loads(campaign_path.read_text())
+    report = json.loads(report_path.read_text())
+    campaign["dataset_identity"]["sha256"] = True
+    report["provenance"]["dataset_identity"]["sha256"] = True
+    campaign_path.write_text(json.dumps(campaign))
+    report_path.write_text(json.dumps(report))
+
+    problems = gate._campaign_projection_problems("campaign.yaml", config)
+    assert any("dataset_identity is missing sha256" in p for p in problems)
 
 
 @pytest.mark.parametrize(
@@ -607,6 +650,89 @@ def test_campaign_projection_rejects_report_boolean_for_numeric_zero(
 
     problems = gate._campaign_projection_problems("campaign.yaml", config)
     assert any(expected in p and "does not align" in p for p in problems)
+
+
+def test_campaign_projection_rejects_report_boolean_for_case_count_one(
+    tmp_path, monkeypatch
+):
+    gate = _load_gate()
+    config, report_path, scripts = _campaign_projection_fixture(
+        gate, tmp_path, monkeypatch
+    )
+    campaign_path = scripts.parent / "reports" / "campaign.json"
+    campaign = json.loads(campaign_path.read_text())
+    campaign["comparison"]["states"]["CT"]["compared_count"] = 1
+    campaign_path.write_text(json.dumps(campaign))
+
+    report = json.loads(report_path.read_text())
+    report["case_count"] = True
+    report["summary"].update({"comparison_count": 1, "match_count": 1})
+    report["aggregates"][0].update(
+        {
+            "comparison_count": 1,
+            "compared": 1,
+            "match_count": 1,
+            "matched": 1,
+        }
+    )
+    report_path.write_text(json.dumps(report))
+
+    problems = gate._campaign_projection_problems("campaign.yaml", config)
+    assert any("report case_count does not align" in p for p in problems)
+
+
+@pytest.mark.parametrize(
+    ("field", "engine"),
+    [
+        ("program", "axiom"),
+        ("policyengine_target", "policyengine"),
+    ],
+)
+def test_campaign_projection_rejects_boolean_campaign_engine_identifier(
+    tmp_path, monkeypatch, field, engine
+):
+    gate = _load_gate()
+    config, report_path, scripts = _campaign_projection_fixture(
+        gate, tmp_path, monkeypatch
+    )
+    campaign_path = scripts.parent / "reports" / "campaign.json"
+    campaign = json.loads(campaign_path.read_text())
+    campaign["comparison"]["states"]["CT"][field] = True
+    campaign_path.write_text(json.dumps(campaign))
+
+    report = json.loads(report_path.read_text())
+    report["engines"][engine] = 1
+    report_path.write_text(json.dumps(report))
+
+    problems = gate._campaign_projection_problems("campaign.yaml", config)
+    assert any(
+        f"source campaign comparison state is missing {field}" in p for p in problems
+    )
+    expected = "Axiom program" if engine == "axiom" else "oracle target"
+    assert any(f"report {expected} does not align" in p for p in problems)
+
+
+def test_campaign_projection_rejects_boolean_campaign_output_identifier(
+    tmp_path, monkeypatch
+):
+    gate = _load_gate()
+    config, report_path, scripts = _campaign_projection_fixture(
+        gate, tmp_path, monkeypatch
+    )
+    campaign_path = scripts.parent / "reports" / "campaign.json"
+    campaign = json.loads(campaign_path.read_text())
+    campaign["comparison"]["states"]["CT"]["output"] = True
+    campaign_path.write_text(json.dumps(campaign))
+
+    report = json.loads(report_path.read_text())
+    report["aggregates"][0]["concept"] = 1
+    report_path.write_text(json.dumps(report))
+
+    problems = gate._campaign_projection_problems("campaign.yaml", config)
+    assert any(
+        "source campaign comparison state is missing output" in p for p in problems
+    )
+    assert any("report aggregate does not align" in p for p in problems)
 
 
 def test_campaign_projection_rejects_mismatch_count_without_evidence_rows(

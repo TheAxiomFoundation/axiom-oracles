@@ -268,9 +268,16 @@ def _require_campaign_fields(
     if not isinstance(value, dict):
         problems.append(f"{label} must be an object")
         return
-    missing = [field for field in fields if not str(value.get(field) or "").strip()]
+    missing = [
+        field
+        for field in fields
+        if not isinstance(value.get(field), str) or not value[field].strip()
+    ]
     if missing:
-        problems.append(f"{label} is missing {', '.join(missing)}")
+        problems.append(
+            f"{label} is missing {', '.join(missing)} or they are not "
+            "nonempty strings"
+        )
 
 
 def _campaign_identity_problems(label: str, campaign: dict) -> list[str]:
@@ -475,9 +482,11 @@ def _campaign_projection_problems(name: str, config: dict) -> list[str]:
             )
             continue
         for field in ("output", "program", "policyengine_target"):
-            if not str(state_entry.get(field) or "").strip():
+            value = state_entry.get(field)
+            if not isinstance(value, str) or not value.strip():
                 problems.append(
-                    f"{label} source campaign comparison state is missing {field}"
+                    f"{label} source campaign comparison state is missing {field} "
+                    "or it is not a nonempty string"
                 )
         campaign_mismatches = state_entry.get("mismatches")
         if not isinstance(campaign_mismatches, list):
@@ -517,15 +526,19 @@ def _campaign_projection_problems(name: str, config: dict) -> list[str]:
         match_rate = matched / compared * 100
         if report.get("population") != "populace-us":
             problems.append(f"{label} report population is not 'populace-us'")
-        if report.get("case_count") != compared:
+        if not _json_values_exactly_equal(report.get("case_count"), compared):
             problems.append(
                 f"{label} report case_count does not align with source campaign"
             )
-        if engines.get("axiom") != state_entry.get("program"):
+        if not _json_values_exactly_equal(
+            engines.get("axiom"), state_entry.get("program")
+        ):
             problems.append(
                 f"{label} report Axiom program does not align with source campaign"
             )
-        if engines.get(oracle) != state_entry.get("policyengine_target"):
+        if not _json_values_exactly_equal(
+            engines.get(oracle), state_entry.get("policyengine_target")
+        ):
             problems.append(
                 f"{label} report oracle target does not align with source campaign"
             )
