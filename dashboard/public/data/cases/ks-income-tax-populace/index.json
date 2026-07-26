@@ -1,0 +1,15 @@
+{
+ "suite": "ks-income-tax-populace",
+ "count": 989,
+ "total_cases": 989,
+ "chunks": 2,
+ "chunk_size": 500,
+ "engines": {
+  "left": "axiom",
+  "right": "policyengine"
+ },
+ "mismatch_concepts": [
+  "us-ks:policies/income_tax/pilot_liability_pipeline#ks_pit_pilot_income_tax_liability"
+ ],
+ "source": "state-tax-populace-campaign"
+}

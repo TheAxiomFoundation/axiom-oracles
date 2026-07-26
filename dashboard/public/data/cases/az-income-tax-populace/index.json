@@ -1,0 +1,15 @@
+{
+ "suite": "az-income-tax-populace",
+ "count": 1585,
+ "total_cases": 1585,
+ "chunks": 4,
+ "chunk_size": 500,
+ "engines": {
+  "left": "axiom",
+  "right": "policyengine"
+ },
+ "mismatch_concepts": [
+  "us-az:policies/income_tax/pilot_liability_pipeline#az_pit_pilot_income_tax_liability"
+ ],
+ "source": "state-tax-populace-campaign"
+}

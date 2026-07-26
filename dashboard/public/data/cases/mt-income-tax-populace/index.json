@@ -1,0 +1,15 @@
+{
+ "suite": "mt-income-tax-populace",
+ "count": 1171,
+ "total_cases": 1171,
+ "chunks": 3,
+ "chunk_size": 500,
+ "engines": {
+  "left": "axiom",
+  "right": "policyengine"
+ },
+ "mismatch_concepts": [
+  "us-mt:policies/income_tax/pilot_liability_pipeline#mt_pit_pilot_income_tax_liability"
+ ],
+ "source": "state-tax-populace-campaign"
+}

@@ -1,0 +1,15 @@
+{
+ "suite": "de-income-tax-populace",
+ "count": 936,
+ "total_cases": 936,
+ "chunks": 2,
+ "chunk_size": 500,
+ "engines": {
+  "left": "axiom",
+  "right": "policyengine"
+ },
+ "mismatch_concepts": [
+  "us-de:policies/income_tax/pilot_liability_pipeline#de_pit_pilot_income_tax_liability"
+ ],
+ "source": "state-tax-populace-campaign"
+}

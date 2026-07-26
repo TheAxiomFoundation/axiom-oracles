@@ -1,0 +1,15 @@
+{
+ "suite": "al-income-tax-populace",
+ "count": 1632,
+ "total_cases": 1632,
+ "chunks": 4,
+ "chunk_size": 500,
+ "engines": {
+  "left": "axiom",
+  "right": "policyengine"
+ },
+ "mismatch_concepts": [
+  "us-al:policies/income_tax/pilot_liability_pipeline#al_pit_pilot_income_tax_liability"
+ ],
+ "source": "state-tax-populace-campaign"
+}

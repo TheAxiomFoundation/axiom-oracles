@@ -39,7 +39,7 @@ done
 # from its per-tax-unit rows.
 .venv/bin/python scripts/run_state_tax_populace.py \
   --rulespec-root "$HOME/rulespec-us" \
-  --axiom-rules-path "$HOME/axiom-rules-engine/target/release/axiom-rules-engine" \
+  --axiom-rules-path "$HOME/axiom-rules-engine" \
   --output "reports/state-tax-populace-campaign-$(date +%Y-%m-%d).json" \
   || echo "!! populace campaign failed"
 .venv/bin/python scripts/emit_populace_campaign_artifacts.py || echo "!! populace artifacts failed"

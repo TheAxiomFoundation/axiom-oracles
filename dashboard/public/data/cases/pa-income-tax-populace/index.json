@@ -1,0 +1,15 @@
+{
+ "suite": "pa-income-tax-populace",
+ "count": 2457,
+ "total_cases": 2457,
+ "chunks": 5,
+ "chunk_size": 500,
+ "engines": {
+  "left": "axiom",
+  "right": "policyengine"
+ },
+ "mismatch_concepts": [
+  "us-pa:policies/income_tax/pilot_liability_pipeline#pa_pit_pilot_income_tax_liability"
+ ],
+ "source": "state-tax-populace-campaign"
+}
