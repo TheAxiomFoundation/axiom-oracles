@@ -1,0 +1,27 @@
+{
+ "suite": "de-tanf-ecps",
+ "count": 781,
+ "chunks": 2,
+ "input_slots": [
+  "axiom:de-tanf-compiled#input.applicable_tanf_standard_of_need",
+  "axiom:de-tanf-compiled#input.assistance_unit_member_count",
+  "axiom:de-tanf-compiled#input.child_care_expenses",
+  "axiom:de-tanf-compiled#input.gross_income",
+  "axiom:de-tanf-compiled#input.household_has_minor_or_pregnant_member",
+  "axiom:de-tanf-compiled#input.thirty_plus_one_third_disregard_applies",
+  "axiom:de-tanf-compiled#input.total_wage_earner_earnings",
+  "axiom:de-tanf-compiled#input.unearned_income",
+  "axiom:de-tanf-compiled#input.wage_earner_count"
+ ],
+ "output_slots": [
+  "de_tanf_monthly_benefit"
+ ],
+ "chunk_size": 500,
+ "engines": {
+  "left": "axiom",
+  "right": "policyengine"
+ },
+ "mismatch_concepts": [],
+ "source": "axiom-policyengine-de-tanf-ecps-0-2026-07-25.json",
+ "total_cases": 781
+}

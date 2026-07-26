@@ -29,7 +29,9 @@
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
+      "matches": [],
       "metadata": {
+        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 26,
@@ -130,10 +132,10 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "aa1ff025906c7216c053e9b9c4097cc0dfef1811",
+      "axiom_rules_engine_sha": "48797e101c093bb388be718c6f5d8fc9d9f94a7d",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-08T22:16:52Z",
+    "generated_at": "2026-07-25T05:17:27Z",
     "generated_by": "scripts/run_comparison.py::ga-tanf-ecps",
     "oracle": {
       "name": "policyengine",
@@ -143,7 +145,7 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-us-ga",
-        "sha": null
+        "sha": "3ec65873b829041aa2cff6c88349bb166b0f0f83"
       }
     ],
     "run_kind": "manual",

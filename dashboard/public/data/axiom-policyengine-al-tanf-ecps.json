@@ -57,10 +57,10 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "aa1ff025906c7216c053e9b9c4097cc0dfef1811",
+      "axiom_rules_engine_sha": "48797e101c093bb388be718c6f5d8fc9d9f94a7d",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-08T10:49:39Z",
+    "generated_at": "2026-07-25T05:27:20Z",
     "generated_by": "scripts/run_comparison.py::al-tanf-ecps",
     "oracle": {
       "name": "policyengine",
@@ -70,7 +70,7 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-us-al",
-        "sha": null
+        "sha": "9739372ea6b27a1e93a4d902688921672eba2c01"
       }
     ],
     "run_kind": "manual",
