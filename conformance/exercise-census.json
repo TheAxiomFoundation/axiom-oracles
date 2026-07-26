@@ -1787,9 +1787,9 @@
     "co-snap-ecps": {
       "bridge_audited": true,
       "bridged_through": {
-        "child_support_deduction": "projected_child_support_payment feeds the population value through; the exclusion's own qualification logic is not independently exercised here.",
-        "dependent_care_deduction": "snap_populace feeds PolicyEngine's computed deduction in as dependent_care_expenses_paid with reimbursed=0 and necessary=(deduction>0); axiom's max(0, paid - reimbursed) reproduces it by construction. Derivation is covered by the module companion test and the SNAP QC suite, not here.",
-        "medical_deduction": "snap_excess_medical_expense_deduction is read from the population and fed through."
+        "child_support_deduction": "population child-support payment fed through; the exclusion's qualification logic is not independently exercised here.",
+        "dependent_care_deduction": "PE's computed deduction is fed as expenses_paid with reimbursed=0 and necessary=(deduction>0); the receiving formula max(0, paid - reimbursed) reproduces it identically.",
+        "medical_deduction": "PE's computed medical deduction fed through."
       },
       "cases_scanned": 1072,
       "constant_fields": 1,

@@ -56,30 +56,37 @@ OUTPUT_PATH = REPO_ROOT / "conformance" / "exercise-census.json"
 
 SCHEMA = "axiom_oracles.exercise_census.v1"
 
-#: Fields a bridge satisfies by construction on the receiving side. Keyed by
-#: suite name; values name the evidence/input dimension and the mechanism.
-#: Populated as bridges are audited — an empty entry means "not yet audited",
-#: never "nothing bridged".
-BRIDGED_THROUGH: dict[str, dict[str, str]] = {
-    "co-snap-ecps": {
-        "dependent_care_deduction": (
-            "snap_populace feeds PolicyEngine's computed deduction in as "
-            "dependent_care_expenses_paid with reimbursed=0 and "
-            "necessary=(deduction>0); axiom's max(0, paid - reimbursed) "
-            "reproduces it by construction. Derivation is covered by the "
-            "module companion test and the SNAP QC suite, not here."
-        ),
-        "child_support_deduction": (
-            "projected_child_support_payment feeds the population value "
-            "through; the exclusion's own qualification logic is not "
-            "independently exercised here."
-        ),
-        "medical_deduction": (
-            "snap_excess_medical_expense_deduction is read from the "
-            "population and fed through."
-        ),
-    },
-}
+MANIFEST_DIR = REPO_ROOT / "axiom_oracles" / "bridges" / "manifests"
+
+
+def _bridged_through_by_suite() -> dict[str, dict[str, str]]:
+    """Bridged-through dimensions come from the declared bridge manifests.
+
+    The manifest is the experiment design; the census only reports it. A suite
+    with no manifest is unaudited — never "nothing bridged". Historical suite
+    aliases map to the same manifest so committed reports keep their names.
+    """
+    import yaml  # lazy: --markdown/--check on census-only paths stay stdlib
+
+    by_suite: dict[str, dict[str, str]] = {}
+    for path in sorted(MANIFEST_DIR.glob("*.yaml")):
+        manifest = yaml.safe_load(path.read_text())
+        if not isinstance(manifest, dict):
+            continue
+        bridged = {
+            str(b.get("dimension") or (b.get("inputs") or ["?"])[0]): str(
+                b.get("mechanism") or b.get("source") or ""
+            )
+            for b in manifest.get("bindings") or []
+            if b.get("kind") == "bridged"
+        }
+        for name in [manifest.get("suite"), *(manifest.get("aliases") or [])]:
+            if name:
+                by_suite[str(name)] = bridged
+    return by_suite
+
+
+BRIDGED_THROUGH: dict[str, dict[str, str]] = _bridged_through_by_suite()
 
 
 def _iter_suite_reports() -> list[tuple[str, dict]]:
