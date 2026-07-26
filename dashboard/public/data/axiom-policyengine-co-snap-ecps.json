@@ -170,6 +170,10 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -1.7000120000000152,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "whole-dollar-rounding-chain-snap-benefit"
+      },
       "kind": "amount_difference",
       "left": 290.0,
       "parent": null,
@@ -215,17 +219,17 @@
       "counts": {
         "axiom_encoding_gap": 0,
         "bridge_artifact": 0,
-        "explained_residual": 0,
+        "explained_residual": 1,
         "unexplained": 0,
         "upstream_engine_gap": 0
       },
-      "dispositions_file": null,
+      "dispositions_file": "dispositions/co-snap-ecps.yaml",
       "expired_entries": [],
-      "explained_rate": 99.953358,
+      "explained_rate": 100,
       "orphaned_entries": [],
       "raw_match_rate": 99.953358,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 1
+      "unexplained_count": 0
     },
     "error_count": 0,
     "errors_by_engine": {},
