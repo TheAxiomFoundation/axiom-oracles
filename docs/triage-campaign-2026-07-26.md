@@ -30,7 +30,7 @@ already at 1). Pending disk: AZ/FL/NY/CA/NC reruns under the fix.
 | ny/tn-snap-ecps | 354/89 | pending | NY only 5 band (NY non-hheod 1.3); TN non-BBCE — other mechanisms |
 | az/fl/ma-snap-ecps | 597/834/262 | RERUNNING | pre-outputs reports; Phase-1 rerun in flight, then classifier |
 | nc/sc-snap-ecps | 124/206 | RERUNNING/pending | reports purged; rerun (single-process ok), then classifier |
-| co-tax-intersection-taxsim | 1,703 | in progress | NOT selector drift — never triaged. Fingerprints found: taxable_income −400 singles = base std-ded vintage; std-ded +2,050 (single) / +1,650 (per aged spouse) = AGED 65+ additional deduction TAXSIM misses (verify page/sage≥65 per row); itemizer flips (+16,100/−8,050); tax_before_credits/liability = downstream composites. CONFIRMED via pull-one-case: +2,050 row is page=29 (NOT aged) → the increments are the BLINDNESS 63(f) class (wave's taxsim-input-lacks-blindness-column entry — extend its selector; verify diff == Σ member blind increments against axiom input records member blind facts). −400 singles: NOT base vintage (PE=TAXSIM=16,100). Deep-tax rows: e.g.
+| co-tax-intersection-taxsim | 1,703 | 72 verified banked (accounting blocked) | NOT selector drift — never triaged. Fingerprints found: taxable_income −400 singles = base std-ded vintage; std-ded +2,050 (single) / +1,650 (per aged spouse) = AGED 65+ additional deduction TAXSIM misses (verify page/sage≥65 per row); itemizer flips (+16,100/−8,050); tax_before_credits/liability = downstream composites. CONFIRMED via pull-one-case: +2,050 row is page=29 (NOT aged) → the increments are the BLINDNESS 63(f) class (wave's taxsim-input-lacks-blindness-column entry — extend its selector; verify diff == Σ member blind increments against axiom input records member blind facts). −400 singles: NOT base vintage (PE=TAXSIM=16,100). Deep-tax rows: e.g.
 ecps-tax-unit-59063 (ltcg 1.32M): taxable −400.004 (SS-taxability or
 cap-gains flow rounding?) AND tax_before_credits axiom=0 vs 240,718 with
 liability within 206 — cap-gains worksheet routes tax through different
@@ -55,6 +55,16 @@ self-employment in snap_earned_income netted at exactly 0.6 (verified:
 document netting choice), rerun states — this class should vanish and
 raw match rates rise. Same class likely explains axiom-side rows in all
 states (CA 70 axiom-pays + 69 axiom-eligible etc.).
+
+## Accounting limitation found (batch 5)
+
+Dashboard copies truncate to the worst 1,000 mismatches; the disposition
+merge annotates only visible rows, so verified classes on small-delta
+rows (blindness chain 40, cap-gains bucket 32 — entries validate clean
+in dispositions/co-tax-intersection-taxsim.yaml) cannot move
+unexplained_count until either the per-suite cap is lifted for
+2,540-row suites or dispositioned accounting reads the full report.
+Fix next session; the verification itself is done and committed.
 
 ## Key facts established
 
