@@ -332,7 +332,7 @@
       "axiom_rules_engine_sha": "e5e40d40353f8459da4e46a9feae7279c2fecccc",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-25T19:43:10Z",
+    "generated_at": "2026-07-26T04:11:48Z",
     "generated_by": "scripts/run_comparison.py::uk-self-employed-nic-ukmod",
     "oracle": {
       "euromod_country": "UK",
