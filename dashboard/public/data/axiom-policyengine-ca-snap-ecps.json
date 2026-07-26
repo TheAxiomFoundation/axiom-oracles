@@ -39884,12 +39884,37 @@
     }
   ],
   "population": "enhanced-cps",
+  "provenance": {
+    "dataset": {
+      "population": "enhanced-cps",
+      "source": "config"
+    },
+    "engine": {
+      "axiom_rules_engine_sha": "48797e101c093bb388be718c6f5d8fc9d9f94a7d",
+      "axiom_rules_engine_version": "0.1.0"
+    },
+    "generated_at": "2026-07-26T04:30:45Z",
+    "generated_by": "scripts/run_comparison.py::ca-snap-ecps",
+    "oracle": {
+      "name": "policyengine",
+      "policyengine_package": "policyengine==4.18.9",
+      "policyengine_us": "1.752.2"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-us",
+        "sha": "ca2d424fcb85ce8c3a8f4706113331710f114460"
+      }
+    ],
+    "run_kind": "manual",
+    "schema": "axiom_oracles.provenance.v1"
+  },
   "schema_version": "axiom.comparison_report.v2.1",
   "scope": {
     "geoid": "US",
     "type": "country"
   },
-  "suite": "nyc-synthetic",
+  "suite": "ca-snap-ecps",
   "summary": {
     "comparison_count": 14202,
     "dispositioned": {
