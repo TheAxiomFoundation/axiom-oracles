@@ -234,7 +234,7 @@ def test_concurrent_siblings_never_leave_main_stale(origin, tmp_path):
     intermediate = _git(origin, "rev-parse", "main")
     _assert_origin_tip_green(origin, tmp_path)
 
-    result_b = _run_script(job_b, "nc-income-tax-liability")
+    result_b = _run_script(job_b, "mi-income-tax-liability")
     assert result_b.returncode == 0, result_b.stderr
     assert _git(origin, "rev-parse", "main") != intermediate
 
