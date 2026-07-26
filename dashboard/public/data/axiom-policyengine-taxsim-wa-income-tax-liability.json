@@ -199,12 +199,12 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-26T04:12:04Z",
+    "generated_at": "2026-07-26T08:50:42Z",
     "generated_by": "scripts/run_comparison.py::wa-income-tax-liability",
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": "9d762d8865125c08eb5fb2e21df959636ec6e355"
+        "sha": "6b561e985ce9fe933d7bda56f243abb08708d657"
       }
     ],
     "run_kind": "affected-rerun",
