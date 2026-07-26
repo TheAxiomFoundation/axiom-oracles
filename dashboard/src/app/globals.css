@@ -121,16 +121,6 @@
   text-decoration: none;
 }
 
-.brand-eyebrow {
-  font-family: var(--font-mono), "JetBrains Mono", ui-monospace, Menlo,
-    monospace;
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  color: var(--ink-mute);
-  line-height: 1;
-}
-
 .brand-name {
   font-family: Georgia, "Times New Roman", serif;
   font-size: 16px;
