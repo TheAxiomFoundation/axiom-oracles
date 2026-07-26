@@ -78,6 +78,48 @@ mappings:
         - { fact: SELF_EMPLOYMENT_INCOME, scale: 0.6 }
       aggregate: sum_over_people
 
+  # Arizona's composition names the same legal concepts in its state-manual
+  # vocabulary (NA/CA chapters) — the name-drift class. Same projections as
+  # the federal-vocabulary SNAP slots above/below.
+  # Arizona applies its expanded (BBCE, 185% FPL) gross income test
+  # statewide (the state's standing SNAP state option; PE models it via
+  # gov/hhs/tanf/non_cash gross=1.85). A statewide-policy fact, not a
+  # household attribute — same pattern as household_lives_in_application_state.
+  # ...and its companion gate: AZ's broad-based categorical eligibility
+  # "considered" status attaches to essentially every budgetary unit (the
+  # TANF-funded non-cash brochure confers it; PE models the same via
+  # is_tanf_non_cash_eligible defaulting eligible). Statewide-policy fact.
+  - match: { kind: substring, value: considered_for_na_expanded_categorical_eligibility }
+    scope: household
+    source: { kind: constant, value: true }
+
+  - match: { kind: substring, value: expanded_gross_income_test_applies }
+    scope: household
+    source: { kind: constant, value: true }
+
+  - match: { kind: substring, value: gross_countable_earned_income }
+    scope: household
+    source:
+      kind: derived
+      transform: monthly
+      from_facts:
+        - YEARLY_EARNED_INCOME
+        - { fact: SELF_EMPLOYMENT_INCOME, scale: 0.6 }
+      aggregate: sum_over_people
+
+  - match: { kind: substring, value: countable_monthly_unearned_income }
+    scope: household
+    source:
+      kind: derived
+      transform: monthly
+      from_facts:
+        - TANF_BENEFITS
+        - SSI_BENEFITS
+        - SOCIAL_SECURITY_BENEFITS
+        - PENSION_INCOME
+        - UNEMPLOYMENT_INSURANCE_INCOME
+      aggregate: sum_over_people
+
   - match: { kind: substring, value: snap_total_monthly_unearned_income }
     scope: household
     source:

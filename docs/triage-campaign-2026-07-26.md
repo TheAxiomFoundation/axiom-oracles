@@ -6,7 +6,15 @@ characterized. Method: per-row verification against persisted household
 evidence (input/output panels), PE parameter surfaces as oracle ground
 truth, PE-side decomposition where our reports can't decide.
 
-## Ledger (start: 14,479 → **5,244**; batch 3 = SE-fix eliminations + re-verified BBCE)
+## Ledger (start: 14,479 → **4,611**; batch 4 = AZ decomposed + NC harvested)
+
+AZ (597): fully explained — composition bug (snap_eligible binds
+na_budgetary_unit_is_eligible; module not imported → constant-false;
+rulespec-us#1116); one-directional signature verified 597/597. En route,
+three real mapping fixes landed (AZ state-manual vocabulary income slots,
+expanded-test + CE-considered statewide flags) — needed once the
+composition is fixed. NC harvested: 124→99 post-SE-fix, 11 BBCE rows
+dispositioned. NY/FL/CA reruns remain machine-bound (weekly regen).
 
 Fleet under the self-employment fix: AL 79→53, GA 300→250, MA 262→255,
 SC 206→180, TN 89→68 — real eliminations. BBCE dispositions re-verified

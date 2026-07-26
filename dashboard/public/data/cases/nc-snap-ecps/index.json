@@ -2466,6 +2466,38 @@
   "axiom:nc-snap-compiled#input.years_since_lawful_permanent_resident_admission",
   "axiom:nc-snap-compiled#input.youngest_person_living_in_household_age_years"
  ],
+ "output_slots": [
+  "household_gross_income",
+  "maximum_allowable_gross_income_limit",
+  "snap_countable_earned_income",
+  "snap_countable_unearned_income",
+  "snap_eligible_core",
+  "snap_gross_monthly_income",
+  "snap_income_eligible",
+  "snap_total_allowable_shelter_expenses",
+  "us-nc:policies/dhhs/fns/fns-220-categorical-eligibility/page-5#categorically_eligible_due_to_income_limit",
+  "us:policies/usda/snap/fy-2026-cola/deductions#snap_standard_deduction",
+  "us:policies/usda/snap/fy-2026-cola/deductions#snap_standard_deduction_48_states_dc",
+  "us:policies/usda/snap/fy-2026-cola/income-eligibility-standards#snap_gross_income_limit_130_percent_fpl_48_states_dc",
+  "us:policies/usda/snap/fy-2026-cola/income-eligibility-standards#snap_net_income_limit_100_percent_fpl_48_states_dc",
+  "us:policies/usda/snap/fy-2026-cola/maximum-allotments#snap_maximum_allotment",
+  "us:policies/usda/snap/fy-2026-cola/maximum-allotments#snap_one_person_thrifty_food_plan_cost",
+  "us:regulations/7-cfr/273/10#snap_calculated_monthly_allotment_before_minimums",
+  "us:regulations/7-cfr/273/10#snap_earned_income_deduction_for_net_income",
+  "us:regulations/7-cfr/273/10#snap_excess_medical_deduction_for_net_income",
+  "us:regulations/7-cfr/273/10#snap_excess_shelter_cost",
+  "us:regulations/7-cfr/273/10#snap_excess_shelter_deduction_for_net_income",
+  "us:regulations/7-cfr/273/10#snap_homeless_shelter_deduction_for_net_income",
+  "us:regulations/7-cfr/273/10#snap_minimum_benefit",
+  "us:regulations/7-cfr/273/10#snap_monthly_allotment",
+  "us:regulations/7-cfr/273/10#snap_net_income_before_shelter",
+  "us:regulations/7-cfr/273/10#snap_net_monthly_income",
+  "us:regulations/7-cfr/273/10#snap_total_gross_income",
+  "us:regulations/7-cfr/273/9#snap_standard_gross_income_eligible",
+  "us:regulations/7-cfr/273/9#snap_standard_income_eligible",
+  "us:regulations/7-cfr/273/9#snap_standard_net_income_eligible",
+  "us:statutes/7/2012/j#snap_household_has_elderly_or_disabled_member"
+ ],
  "chunk_size": 500,
  "engines": {
   "left": "axiom",
@@ -2475,6 +2507,6 @@
   "us:statutes/7/2014/o#snap_eligible",
   "us:statutes/7/2014/u#snap_benefit"
  ],
- "source": "axiom-policyengine-nc-snap-ecps-0-2026-07-24.json",
+ "source": "axiom-policyengine-nc-snap-ecps-0-2026-07-26.json",
  "total_cases": 1854
 }
