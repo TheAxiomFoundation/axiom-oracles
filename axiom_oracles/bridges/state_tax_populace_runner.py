@@ -1130,6 +1130,7 @@ def compare_ready_state_tax_units(
                 )
 
         mismatches: list[dict[str, Any]] = []
+        case_rows: list[dict[str, Any]] = []
         max_abs_diff = 0.0
         max_relative_diff = 0.0
         weighted_mismatch_tax_units = 0.0
@@ -1164,6 +1165,18 @@ def compare_ready_state_tax_units(
                 mismatches.append(mismatch)
                 all_mismatches.append(mismatch)
                 weighted_mismatch_tax_units += route.weight
+            # Every compared tax unit persists both engines' values so the
+            # dashboard's case explorer can show matched households too,
+            # not only the disagreements.
+            case_rows.append(
+                {
+                    "tax_unit_id": route.tax_unit_id,
+                    "weight": route.weight,
+                    "axiom": round(axiom_value, 2),
+                    "policyengine": round(pe_value, 2),
+                    "matched": matched,
+                }
+            )
 
         comparisons[state] = {
             "program": jurisdiction.program,
@@ -1179,6 +1192,7 @@ def compare_ready_state_tax_units(
             "max_absolute_difference": max_abs_diff,
             "max_relative_difference": max_relative_diff,
             "mismatches": mismatches,
+            "cases": case_rows,
         }
 
     return {

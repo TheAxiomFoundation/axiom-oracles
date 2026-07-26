@@ -96,6 +96,80 @@ def project_state(
     }
 
 
+CASES_ROOT = DASH_DATA / "cases"
+CHUNK_SIZE = 500
+
+
+def emit_case_chunks(state: str, entry: dict) -> str | None:
+    """Project the campaign's per-tax-unit rows into case-explorer chunks.
+
+    Campaign reports produced before the runner persisted rows have no
+    ``cases`` key; those states keep the explorer's no-evidence message
+    until the next campaign run.
+    """
+
+    rows = entry.get("cases") or []
+    if not rows:
+        return None
+    suite = f"{state.lower()}-income-tax-populace"
+    concept = entry.get("output") or "state_income_tax"
+    out_rows = []
+    for row in rows:
+        matched = bool(row.get("matched"))
+        compact = {
+            "id": row.get("tax_unit_id"),
+            "r": 1.0 if matched else 0.0,
+            "h": {},
+            "m": []
+            if matched
+            else [
+                {
+                    "c": concept,
+                    "l": row.get("axiom"),
+                    "x": row.get("policyengine"),
+                    "d": round(
+                        (row.get("axiom") or 0) - (row.get("policyengine") or 0),
+                        2,
+                    ),
+                }
+            ],
+            "v": [
+                {
+                    "c": concept,
+                    "l": row.get("axiom"),
+                    "x": row.get("policyengine"),
+                }
+            ]
+            if matched
+            else [],
+        }
+        out_rows.append(compact)
+    out_rows.sort(key=lambda r: r["r"])
+    out_dir = CASES_ROOT / suite
+    out_dir.mkdir(parents=True, exist_ok=True)
+    for stale in out_dir.glob("chunk-*.json"):
+        stale.unlink()
+    chunks = [
+        out_rows[i : i + CHUNK_SIZE] for i in range(0, len(out_rows), CHUNK_SIZE)
+    ]
+    for i, chunk in enumerate(chunks):
+        (out_dir / f"chunk-{i}.json").write_text(
+            json.dumps(chunk, separators=(",", ":"))
+        )
+    index = {
+        "suite": suite,
+        "count": len(out_rows),
+        "total_cases": len(out_rows),
+        "chunks": len(chunks),
+        "chunk_size": CHUNK_SIZE,
+        "engines": {"left": "axiom", "right": "policyengine"},
+        "mismatch_concepts": [concept],
+        "source": "state-tax-populace-campaign",
+    }
+    (out_dir / "index.json").write_text(json.dumps(index, indent=1) + "\n")
+    return f"{suite}: {len(out_rows)} cases in {len(chunks)} chunks"
+
+
 def main() -> int:
     source = (
         Path(sys.argv[1]) if len(sys.argv) > 1 else latest_campaign_report()
@@ -110,6 +184,9 @@ def main() -> int:
     reports = list(manifest.get("reports") or [])
 
     for state, entry in sorted(states.items()):
+        emitted = emit_case_chunks(state, entry)
+        if emitted:
+            print(emitted)
         report = project_state(state, entry, campaign, source.name)
         filename = f"axiom-policyengine-{state.lower()}-income-tax-populace.json"
         (DASH_DATA / filename).write_text(

@@ -26,10 +26,23 @@ for suite in fiit-ecps co-state-income-tax-ecps co-state-income-tax-taxsim \
              ks-tanf-ecps medicaid-magi-co-ecps \
              al-snap-ecps az-snap-ecps ca-snap-ecps co-snap-ecps \
              fl-snap-ecps ma-snap-ecps nc-snap-ecps ny-snap-ecps \
-             or-snap-ecps sc-snap-ecps tn-snap-ecps ut-snap-ecps; do
+             or-snap-ecps sc-snap-ecps tn-snap-ecps ut-snap-ecps \
+             de-tanf-ecps al-tanf-ecps ga-tanf-ecps \
+             co-snap-qc az-snap-qc ca-snap-qc ga-snap-qc md-snap-qc \
+             ny-snap-qc tx-snap-qc; do
   echo "== $suite"
   .venv/bin/python scripts/run_comparison.py "$suite" --summary || echo "!! $suite failed"
 done
+
+# State-tax Populace campaign: one report covering every ready state,
+# then per-state dashboard reports AND case-explorer chunks projected
+# from its per-tax-unit rows.
+.venv/bin/python scripts/run_state_tax_populace.py \
+  --rulespec-root "$HOME/rulespec-us" \
+  --axiom-rules-path "$HOME/axiom-rules-engine/target/release/axiom-rules-engine" \
+  --output "reports/state-tax-populace-campaign-$(date +%Y-%m-%d).json" \
+  || echo "!! populace campaign failed"
+.venv/bin/python scripts/emit_populace_campaign_artifacts.py || echo "!! populace artifacts failed"
 
 .venv/bin/python scripts/sync_encoded_coverage.py || true
 # Re-emit per-suite case artifacts for the dashboard's case explorer from
