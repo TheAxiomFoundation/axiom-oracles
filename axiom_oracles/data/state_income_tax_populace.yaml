@@ -677,39 +677,25 @@ jurisdictions:
   fips: '21'
   taxsim_state_code: 18
   jurisdiction: us-ky
-  program: us-ky:policies/income_tax/pilot_liability_pipeline
-  output: us-ky:policies/income_tax/pilot_liability_pipeline#ky_pit_pilot_income_tax_liability
+  program: us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits
+  output: us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits#ky_pit_2026_krs_141_020_schedule_before_credits
   policyengine:
-    target: ky_income_tax_before_refundable_credits
-    tolerance: 1.0
-    relative_tolerance: 0.0
-  status: blocked
-  evidence: us-ky/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+    target: ky_income_tax_before_non_refundable_credits_unit
+    tolerance: 0.01
+    relative_tolerance: 0.0000001
+  status: ready
+  evidence: KRS 141.020 applies the tax-year-2026 3.5 percent rate to completed Kentucky net income before allowable credits. The reviewed projection follows PolicyEngine's explicit ky_files_separately branch and selects the corresponding Person-summed separate-return or joint Kentucky taxable-income boundary without using the comparison target as an input. The canonical RuleSpec then applies only the statutory rate and makes no annual-return or post-credit liability claim. The full pinned 2024 US Populace campaign compared all 891 positively weighted Kentucky tax units (weighted population 2,345,188.7461) at 2026 policy, with zero mismatches; the maximum absolute residual was 0.52 dollars and maximum relative residual 8.33037e-08, within the independently pinned 0.01-dollar-or-1e-7 relative tolerance.
   inputs:
-  - slot: us-ky:policies/income_tax/pilot_liability_pipeline#input.ky_pit_pilot_adjusted_gross_income
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ky:policies/income_tax/pilot_liability_pipeline#input.ky_pit_pilot_supplied_excess_rate
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ky:policies/income_tax/pilot_liability_pipeline#input.ky_pit_pilot_supplied_exemption_credit
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ky:policies/income_tax/pilot_liability_pipeline#input.ky_pit_pilot_supplied_first_bracket_rate
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ky:policies/income_tax/pilot_liability_pipeline#input.ky_pit_pilot_supplied_no_tax_threshold
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ky:policies/income_tax/pilot_liability_pipeline#input.ky_pit_pilot_supplied_personal_exemption
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
+  - slot: us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits#input.ky_pit_2026_krs_141_020_completed_net_income
+    source_kind: derived
+    status: ready
+    evidence: PolicyEngine computes the two completed-return Kentucky taxable-income candidates upstream of ky_income_tax_before_non_refundable_credits_unit, and that target explicitly selects between them through ky_files_separately. This reviewed transform follows that same branch at TaxUnit grain and does not derive the boundary from the target tax result.
+    policyengine_variables:
+    - ky_taxable_income_indiv
+    - ky_taxable_income_joint
+    - ky_files_separately
+    policyengine_relationship: upstream
+    policyengine_transform: filing_method_selected_person_summed_taxable_income
   relations: []
 - state: AZ
   fips: '04'

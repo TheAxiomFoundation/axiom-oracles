@@ -174,8 +174,17 @@
     "jurisdiction": "CO",
     "status": "executable",
     "source": "generated Axiom tax oracle bridge + encoded Colorado tax rules",
-    "known_non_tanf_gaps": [
+   "known_non_tanf_gaps": [
      "six unweighted ECPS tax-unit residuals remain for component tracing"
+    ]
+   },
+   {
+    "program": "state_income_tax",
+    "jurisdiction": "KY",
+    "status": "executable",
+    "source": "rulespec-us/us-ky/policies/income_tax/2026_krs_141_020_schedule_before_credits.yaml + axiom-policyengine-ky-income-tax-populace",
+    "known_non_tanf_gaps": [
+     "the certified surface is the KRS 141.020 schedule before allowable credits, not final annual Kentucky income-tax liability"
     ]
    },
    {

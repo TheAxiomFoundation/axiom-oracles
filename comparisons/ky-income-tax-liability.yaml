@@ -1,9 +1,8 @@
-# Kentucky composed income-tax liability — Axiom pipeline vs PolicyEngine and TAXSIM
-# on a modest case grid (single and married filers at incomes that cross the
-# state's brackets). The Axiom side is the composed rulespec-us pipeline
-# us-ky/policies/income_tax/pilot_liability_pipeline, evaluated through the
-# axiom rules engine (its liabilities are the engine-verified companion-test
-# fixtures). Kentucky applies section 141.020 flat (3.5 per cent) to Kentucky taxable income.
+# Kentucky KRS 141.020 schedule before credits — Axiom vs PolicyEngine and
+# TAXSIM on a modest case grid. The bridge derives completed Kentucky net
+# income from PolicyEngine's upstream joint/separate taxable-income candidates,
+# executes the canonical RuleSpec live, and compares its 3.5 percent schedule
+# result to PolicyEngine's unit-level tax before nonrefundable credits.
 #
 # PolicyEngine and TAXSIM both run at the 2026 validation year
 # (policyengine-taxsim 2.30.0 models 2026 law including OBBBA).
@@ -12,12 +11,14 @@
 #   uv run python scripts/run_comparison.py ky-income-tax-liability
 
 name: ky-income-tax-liability
-title: Kentucky income tax liability — Axiom vs PolicyEngine and TAXSIM
+title: Kentucky KRS 141.020 schedule before credits — Axiom vs PolicyEngine and TAXSIM
 description: >-
-  Compares the composed Kentucky income-tax liability pipeline encoded in Axiom
-  RuleSpec (us-ky/policies/income_tax/pilot_liability_pipeline) against
-  PolicyEngine (ky_income_tax_before_refundable_credits) at 2026 and TAXSIM (siitax) at 2026 on a modest grid of
-  single and married filers crossing the state's brackets.
+  Compares the canonical Kentucky KRS 141.020 tax-year-2026 schedule before
+  credits encoded in Axiom RuleSpec
+  (us-ky/policies/income_tax/2026_krs_141_020_schedule_before_credits) against
+  PolicyEngine (ky_income_tax_before_non_refundable_credits_unit) and TAXSIM
+  (siitax) at 2026 on a modest grid of single and married wage earners. This
+  suite does not claim a completed annual return or post-credit liability.
 
 runner:
   type: state-income-tax-liability-grid
@@ -26,7 +27,7 @@ runner:
     period: "2026"
     taxsim_law_year: 2026
     # Links this suite to the rulespec-us monorepo in the affected map
-    # so a change to the composed pipeline triggers a re-run.
+    # so a change to the canonical schedule triggers a re-run.
     rulespec_roots:
       - $HOME/TheAxiomFoundation/rulespec-us
 

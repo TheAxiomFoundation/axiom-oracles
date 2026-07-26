@@ -2380,17 +2380,15 @@ concepts:
           geoid: US
       policyengine: id_income_tax_before_refundable_credits
       taxsim: siitax
-  us-ky:policies/income_tax/pilot_liability_pipeline#ky_pit_pilot_income_tax_liability:
-    description: Kentucky income tax liability (resident wage earner; the section 141.020 flat tax (3.5 per cent) on Kentucky taxable income (Kentucky AGI less the section 141.081 standard deduction))
+  us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits#ky_pit_2026_krs_141_020_schedule_before_credits:
+    description: Kentucky KRS 141.020 tax-year-2026 schedule tax before credits (3.5 percent of completed nonnegative Kentucky net income)
     category: tax
     comparison: amount
-    # Compared against PolicyEngine ky_income_tax_before_refundable_credits, the exact statutory analog of
-    # this core; the pipeline reproduces it to a hundredth of a cent across the
-    # grid (the residual is PolicyEngine's float32 rounding). ky_income_tax nets the refundable/family-size credits, which the 141.020 flat core excludes.
-    # Against TAXSIM 2024 every case diverges by the 2024-to-2026 vintage,
-    # dispositioned in dispositions/ky-income-tax-liability.yaml. The tight
-    # absolute tolerance catches structural bracket errors.
-    tolerance: 1
+    # PolicyEngine's unit-level before-nonrefundable-credit variable is the
+    # direct pre-credit analog. The Axiom grid projects only its completed net
+    # income from PolicyEngine's upstream joint/separate taxable-income
+    # variables and executes the canonical RuleSpec live.
+    tolerance: 0.01
     priority: high
     locales: [US-KY]
     scope:
@@ -2398,11 +2396,11 @@ concepts:
       geoid: US
     targets:
       axiom:
-        name: ky_pit_pilot_income_tax_liability
+        name: ky_pit_2026_krs_141_020_schedule_before_credits
         scope:
           type: country
           geoid: US
-      policyengine: ky_income_tax_before_refundable_credits
+      policyengine: ky_income_tax_before_non_refundable_credits_unit
       taxsim: siitax
 
 

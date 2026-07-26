@@ -125,22 +125,29 @@ EXPECTED_STATE_FIPS = {
     "WV": "54",
 }
 EXPECTED_STATE_CODES = frozenset(EXPECTED_STATE_FIPS)
+EXPECTED_PROGRAM_OVERRIDES = {
+    "KY": "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits",
+}
 EXPECTED_OUTPUT_OVERRIDES = {
+    "KY": (
+        "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits"
+        "#ky_pit_2026_krs_141_020_schedule_before_credits"
+    ),
     "NY": (
         "us-ny:policies/income_tax/pilot_liability_pipeline"
         "#ny_pit_pilot_main_income_tax"
     ),
 }
-EXPECTED_EXPLICIT_INPUT_COUNT = 162
+EXPECTED_EXPLICIT_INPUT_COUNT = 157
 EXPECTED_EXPLICIT_RELATION_COUNT = 2
 EXPECTED_SLOT_INVENTORY_SHA256 = (
-    "16968a1ffe1c4c57db7dda305922b5a716b12c7461403ffb0a59e5abb3d7fd4a"
+    "db839abc67cd6521f3b6da747b89ed65969dea5f2f1ad72e60d9eb7b6eafd026"
 )
 EXPECTED_JURISDICTION_REGISTRY_SHA256 = (
-    "eeef93306ecfd103fd00d370a2eeb67b08b2a54fe1b9a0d09f4b1ba58a644c02"
+    "d38109d180ab4c6ab87ecb049eb80f3a4eb5ed2a971061f470a071925a356b7c"
 )
 EXPECTED_SOURCE_METADATA_SHA256 = (
-    "eda4cec2643c87422ce31bb78954bda117bd41c8b40a681934035137baf5679a"
+    "2cc8843bca97cd7b78177142b0d53df915429d0120741417487f2792915afd09"
 )
 # Exact boundaries admitted only after independent legal and dependency-graph
 # review.  The comparison target itself is forbidden below, so these remain
@@ -401,6 +408,18 @@ ALLOWED_MULTI_SOURCE_DERIVED_PE_BOUNDARIES: frozenset[
             "hi_pit_pilot_capital_gains_worksheet_line_10",
             ("net_capital_gain", "long_term_capital_gains"),
             "tax_unit_net_and_person_sum_to_capital_gains_worksheet_line_10",
+        ),
+        (
+            "KY",
+            "us-ky:policies/income_tax/"
+            "2026_krs_141_020_schedule_before_credits#input."
+            "ky_pit_2026_krs_141_020_completed_net_income",
+            (
+                "ky_taxable_income_indiv",
+                "ky_taxable_income_joint",
+                "ky_files_separately",
+            ),
+            "filing_method_selected_person_summed_taxable_income",
         ),
         (
             "MT",
@@ -1063,8 +1082,9 @@ def _validate_jurisdiction(
         errors.append(
             f"{item.state}: jurisdiction must be us-{item.state.lower()}"
         )
-    expected_program = (
-        f"{item.jurisdiction}:policies/income_tax/pilot_liability_pipeline"
+    expected_program = EXPECTED_PROGRAM_OVERRIDES.get(
+        item.state,
+        f"{item.jurisdiction}:policies/income_tax/pilot_liability_pipeline",
     )
     if item.program != expected_program:
         errors.append(f"{item.state}: unexpected program {item.program!r}")
