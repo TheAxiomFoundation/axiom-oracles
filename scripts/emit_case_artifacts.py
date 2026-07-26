@@ -350,6 +350,16 @@ def emit_suite(suite: str, dashboard_config: dict) -> str:
 
     cases = (full or {}).get("cases") or []
     declared_cases = (full or {}).get("case_count")
+    source_name = src.name if src else None
+    if not cases and dash is not None:
+        # Legacy hand-run suites embed their complete rows in the dashboard
+        # copy itself (nyc-synthetic); treat that as the full source when
+        # the row count matches the declared population.
+        dash_cases = dash.get("cases") or []
+        if dash_cases and len(dash_cases) == (dash.get("case_count") or 0):
+            cases = dash_cases
+            declared_cases = dash.get("case_count")
+            source_name = f"{basename}.json (embedded)"
     full_ok = (
         cases
         and (not declared_cases or len(cases) == declared_cases)
@@ -357,7 +367,7 @@ def emit_suite(suite: str, dashboard_config: dict) -> str:
     )
     if full_ok:
         rows = [compact_case(c, explained) for c in cases]
-        return write_artifacts(suite, rows, meta, src.name, partial=False)
+        return write_artifacts(suite, rows, meta, source_name, partial=False)
 
     # No usable case rows — fall back to a mismatch-only queue, from the
     # annotated dashboard list when complete, else the full report's own.
@@ -382,7 +392,10 @@ def emit_suite(suite: str, dashboard_config: dict) -> str:
 
 
 def dashboard_suites() -> dict[str, dict]:
-    """suite -> {basename} from the comparison configs."""
+    """suite -> {basename} from the comparison configs, plus any manifest
+    report whose suite has no config (legacy hand-run suites like
+    nyc-synthetic) — those emit from the dashboard report's own embedded
+    rows when complete."""
     out = {}
     for path in glob.glob(str(REPO_ROOT / "comparisons" / "*.yaml")):
         text = Path(path).read_text()
@@ -390,6 +403,19 @@ def dashboard_suites() -> dict[str, dict]:
         base = re.search(r'^\s*report_basename:\s*([\w-]+)', text, re.M)
         if suite and base:
             out[suite.group(1)] = {"basename": base.group(1)}
+    manifest = DASHBOARD_DATA / "manifest.json"
+    if manifest.exists():
+        for name in json.loads(manifest.read_text()).get("reports", []):
+            path = DASHBOARD_DATA / name
+            if not path.exists():
+                continue
+            try:
+                report = json.loads(path.read_text())
+            except (OSError, json.JSONDecodeError):
+                continue
+            suite = report.get("suite")
+            if suite and suite not in out:
+                out[suite] = {"basename": name[: -len(".json")]}
     return out
 
 
