@@ -525,6 +525,93 @@ def test_campaign_projection_rejects_semantic_identity_omitted_from_both_artifac
     )
 
 
+@pytest.mark.parametrize(
+    "field",
+    [
+        "tolerance",
+        "relative_tolerance",
+        "max_absolute_difference",
+        "weighted_compared_tax_units",
+    ],
+)
+def test_campaign_projection_rejects_evidence_omitted_from_both_artifacts(
+    tmp_path, monkeypatch, field
+):
+    gate = _load_gate()
+    config, report_path, scripts = _campaign_projection_fixture(
+        gate, tmp_path, monkeypatch
+    )
+    campaign_path = scripts.parent / "reports" / "campaign.json"
+    campaign = json.loads(campaign_path.read_text())
+    report = json.loads(report_path.read_text())
+    campaign["comparison"]["states"]["CT"].pop(field)
+    report["provenance"].pop(field)
+    campaign_path.write_text(json.dumps(campaign))
+    report_path.write_text(json.dumps(report))
+
+    problems = gate._campaign_projection_problems("campaign.yaml", config)
+    assert any(f"source campaign {field} must be a finite" in p for p in problems)
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [
+        ("tolerance", "not-a-number"),
+        ("relative_tolerance", -1.0),
+        ("max_absolute_difference", -1.0),
+        ("weighted_compared_tax_units", 0.0),
+    ],
+)
+def test_campaign_projection_rejects_invalid_aligned_evidence(
+    tmp_path, monkeypatch, field, value
+):
+    gate = _load_gate()
+    config, report_path, scripts = _campaign_projection_fixture(
+        gate, tmp_path, monkeypatch
+    )
+    campaign_path = scripts.parent / "reports" / "campaign.json"
+    campaign = json.loads(campaign_path.read_text())
+    report = json.loads(report_path.read_text())
+    campaign["comparison"]["states"]["CT"][field] = value
+    report["provenance"][field] = value
+    campaign_path.write_text(json.dumps(campaign))
+    report_path.write_text(json.dumps(report))
+
+    problems = gate._campaign_projection_problems("campaign.yaml", config)
+    assert any(f"source campaign {field} must be a finite" in p for p in problems)
+
+
+def test_campaign_projection_rejects_mismatch_count_without_evidence_rows(
+    tmp_path, monkeypatch
+):
+    gate = _load_gate()
+    config, report_path, scripts = _campaign_projection_fixture(
+        gate, tmp_path, monkeypatch
+    )
+    campaign_path = scripts.parent / "reports" / "campaign.json"
+    campaign = json.loads(campaign_path.read_text())
+    campaign["comparison"]["states"]["CT"]["mismatch_count"] = 1
+    campaign_path.write_text(json.dumps(campaign))
+
+    report = json.loads(report_path.read_text())
+    report["summary"].update(
+        {"match_count": 1, "match_rate": 50.0, "mismatch_count": 1}
+    )
+    report["aggregates"][0].update(
+        {
+            "match_count": 1,
+            "matched": 1,
+            "mismatch_count": 1,
+            "match_rate": 50.0,
+            "weighted_match_rate": 50.0,
+        }
+    )
+    report_path.write_text(json.dumps(report))
+
+    problems = gate._campaign_projection_problems("campaign.yaml", config)
+    assert any("mismatch list length does not align" in p for p in problems)
+
+
 def test_campaign_projection_rejects_zero_comparison_even_when_aligned(
     tmp_path, monkeypatch
 ):

@@ -33,6 +33,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -484,6 +485,11 @@ def _campaign_projection_problems(name: str, config: dict) -> list[str]:
                 "between zero and compared_count"
             )
             continue
+        if len(campaign_mismatches) != mismatch_count:
+            problems.append(
+                f"{label} source campaign mismatch list length does not align "
+                "with mismatch_count"
+            )
 
         matched = compared - mismatch_count
         match_rate = matched / compared * 100
@@ -540,12 +546,26 @@ def _campaign_projection_problems(name: str, config: dict) -> list[str]:
                     f"{label} report aggregate does not align with source campaign"
                 )
 
-        for field in (
-            "tolerance",
-            "relative_tolerance",
-            "max_absolute_difference",
-            "weighted_compared_tax_units",
-        ):
+        evidence_constraints = {
+            "tolerance": False,
+            "relative_tolerance": False,
+            "max_absolute_difference": False,
+            "weighted_compared_tax_units": True,
+        }
+        for field, must_be_positive in evidence_constraints.items():
+            value = state_entry.get(field)
+            valid_number = (
+                isinstance(value, int | float)
+                and not isinstance(value, bool)
+                and math.isfinite(value)
+                and (value > 0 if must_be_positive else value >= 0)
+            )
+            if not valid_number:
+                qualifier = "positive" if must_be_positive else "nonnegative"
+                problems.append(
+                    f"{label} source campaign {field} must be a finite "
+                    f"{qualifier} number"
+                )
             if provenance.get(field) != state_entry.get(field):
                 problems.append(
                     f"{label} report provenance {field} does not align with "
