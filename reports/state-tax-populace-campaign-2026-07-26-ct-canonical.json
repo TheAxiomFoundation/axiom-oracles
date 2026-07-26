@@ -1,4 +1,12 @@
 {
+  "generated_at": "2026-07-26T12:41:51Z",
+  "generated_by": "scripts/run_state_tax_populace.py",
+  "run_kind": "manual",
+  "provenance_backfill": {
+    "method": "original_campaign_artifact_birth_time",
+    "evidence": "The original campaign report file birth time and modification time were both 2026-07-26T12:41:51Z before its first commit; scripts/run_state_tax_populace.py writes the report once after the completed campaign. The run was the local, explicitly CT-scoped certification invocation, so run_kind is manual.",
+    "reason": "The historical runner did not yet emit generated_at, generated_by, or run_kind; all three fields are backfilled here so projections preserve the actual campaign-run provenance instead of substituting projection time."
+  },
   "comparison": {
     "compared_count": 951,
     "mismatch_count": 0,

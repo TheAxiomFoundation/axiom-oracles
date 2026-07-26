@@ -12,6 +12,8 @@ import json
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
+import pytest
+
 SCRIPTS = Path(__file__).parents[1] / "scripts"
 
 
@@ -174,6 +176,129 @@ def test_campaign_projection_declaration_fails_closed():
         },
     )
     assert any("has no oracle" in problem for problem in problems)
+
+
+def _campaign_projection_fixture(gate, tmp_path, monkeypatch):
+    root = tmp_path / "repo"
+    data = root / "dashboard" / "public" / "data"
+    reports = root / "reports"
+    scripts = root / "scripts"
+    for directory in (data, reports, scripts):
+        directory.mkdir(parents=True, exist_ok=True)
+    (scripts / "run.py").write_text("# runner\n")
+    (scripts / "emit.py").write_text("# projector\n")
+
+    rulespec = {
+        "repository": "TheAxiomFoundation/rulespec-us",
+        "commit": "1" * 40,
+    }
+    campaign = {
+        "schema_version": "axiom.state_tax_populace_campaign_report.v1",
+        "generated_at": "2026-07-26T12:00:00Z",
+        "generated_by": "scripts/run.py",
+        "run_kind": "manual",
+        "runtime_provenance": {"rulespec": rulespec},
+    }
+    (reports / "campaign.json").write_text(json.dumps(campaign))
+    report = {
+        "schema_version": "axiom.comparison_report.v2",
+        "suite": "ct-income-tax-populace",
+        "engines": {"axiom": "ct-program", "policyengine": "ct_target"},
+        "provenance": {
+            "schema": "axiom_oracles.provenance.v1",
+            "generated_at": campaign["generated_at"],
+            "generated_by": ("scripts/emit.py::ct-income-tax-populace"),
+            "run_kind": campaign["run_kind"],
+            "campaign_report": "campaign.json",
+            "rulespecs": [
+                {
+                    "repo": rulespec["repository"],
+                    "sha": rulespec["commit"],
+                }
+            ],
+            "runtime_provenance": {"rulespec": rulespec},
+        },
+    }
+    report_path = data / "ct.json"
+    report_path.write_text(json.dumps(report))
+
+    monkeypatch.setattr(gate, "REPO_ROOT", root)
+    monkeypatch.setattr(gate, "DASHBOARD_DATA_DIR", data)
+    monkeypatch.setattr(gate, "REPORTS_DIR", reports)
+    config = {
+        "rulespec_repos": ["TheAxiomFoundation/rulespec-us"],
+        "suites": [
+            {
+                "suite": "ct-income-tax-populace",
+                "report": "ct.json",
+                "campaign_runner": "scripts/run.py",
+                "projector": "scripts/emit.py",
+                "oracle": "policyengine",
+            }
+        ],
+    }
+    return config, report_path, scripts
+
+
+def test_campaign_projection_chain_validates_end_to_end(tmp_path, monkeypatch):
+    gate = _load_gate()
+    config, _, _ = _campaign_projection_fixture(gate, tmp_path, monkeypatch)
+    assert gate._campaign_projection_problems("campaign.yaml", config) == []
+
+
+@pytest.mark.parametrize(
+    ("field", "relative"),
+    [
+        ("campaign_runner", "scripts/missing-runner.py"),
+        ("projector", "scripts/missing-projector.py"),
+        ("report", "missing-report.json"),
+    ],
+)
+def test_campaign_projection_rejects_typo_or_deleted_paths(
+    tmp_path, monkeypatch, field, relative
+):
+    gate = _load_gate()
+    config, _, _ = _campaign_projection_fixture(gate, tmp_path, monkeypatch)
+    config["suites"][0][field] = relative
+
+    problems = gate._campaign_projection_problems("campaign.yaml", config)
+    assert any("path does not exist" in problem for problem in problems)
+
+
+def test_campaign_projection_rejects_deleted_report(tmp_path, monkeypatch):
+    gate = _load_gate()
+    config, report_path, _ = _campaign_projection_fixture(gate, tmp_path, monkeypatch)
+    report_path.unlink()
+
+    problems = gate._campaign_projection_problems("campaign.yaml", config)
+    assert any("report path does not exist" in problem for problem in problems)
+
+
+def test_campaign_projection_rejects_report_misalignment(tmp_path, monkeypatch):
+    gate = _load_gate()
+    config, report_path, _ = _campaign_projection_fixture(gate, tmp_path, monkeypatch)
+    report = json.loads(report_path.read_text())
+    report["schema_version"] = "wrong"
+    report["suite"] = "wrong-suite"
+    report["engines"].pop("policyengine")
+    report["provenance"]["schema"] = "wrong"
+    report["provenance"]["generated_by"] = "scripts/wrong.py::wrong-suite"
+    report["provenance"]["generated_at"] = "2026-07-26T12:00:01Z"
+    report["provenance"]["run_kind"] = "weekly"
+    report["provenance"]["rulespecs"][0]["repo"] = "TheAxiomFoundation/rulespec-us-ct"
+    report_path.write_text(json.dumps(report))
+
+    problems = gate._campaign_projection_problems("campaign.yaml", config)
+    joined = "\n".join(problems)
+    assert "report schema" in joined
+    assert "report suite" in joined
+    assert "declared oracle" in joined
+    assert "invalid provenance schema" in joined
+    assert "generated_by does not align with projector" in joined
+    assert "RuleSpec repos" in joined
+    assert "generated_at does not align" in joined
+    assert "run_kind does not align" in joined
+    assert "RuleSpec provenance does not align" in joined
 
 
 # --- Guard 2: freshness age computation + alarms ----------------------------

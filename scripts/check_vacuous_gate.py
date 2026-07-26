@@ -43,9 +43,12 @@ except ImportError:  # pragma: no cover
     sys.stderr.write("PyYAML is required (uv pip install pyyaml).\n")
     sys.exit(2)
 
+from axiom_oracles.provenance import PROVENANCE_SCHEMA_VERSION, RUN_KINDS
+
 REPO_ROOT = Path(__file__).resolve().parent.parent
 COMPARISONS_DIR = REPO_ROOT / "comparisons"
 DASHBOARD_DATA_DIR = REPO_ROOT / "dashboard" / "public" / "data"
+REPORTS_DIR = REPO_ROOT / "reports"
 COVERAGE_OVERVIEW = DASHBOARD_DATA_DIR / "coverage_overview.json"
 AFFECTED_MAP = COMPARISONS_DIR / "affected_map.json"
 FRESHNESS_OUTPUT = DASHBOARD_DATA_DIR / "freshness.json"
@@ -168,8 +171,48 @@ def _fixture_oracle_problems(path: Path, doc: dict) -> list[str]:
     return problems
 
 
+def _declared_file(
+    root: Path,
+    raw: object,
+    *,
+    label: str,
+    problems: list[str],
+) -> Path | None:
+    """Resolve a declared relative file without allowing path escape."""
+
+    if not isinstance(raw, str) or not raw.strip():
+        problems.append(f"{label} path is missing")
+        return None
+    relative = Path(raw)
+    if relative.is_absolute():
+        problems.append(f"{label} path must be repo-relative: {raw!r}")
+        return None
+    candidate = (root / relative).resolve()
+    try:
+        candidate.relative_to(root.resolve())
+    except ValueError:
+        problems.append(f"{label} path escapes its declared root: {raw!r}")
+        return None
+    if not candidate.is_file():
+        problems.append(f"{label} path does not exist: {raw!r}")
+        return None
+    return candidate
+
+
+def _read_json_object(path: Path, *, label: str, problems: list[str]) -> dict | None:
+    try:
+        doc = json.loads(path.read_text())
+    except (OSError, json.JSONDecodeError) as exc:
+        problems.append(f"{label} is not valid JSON: {exc}")
+        return None
+    if not isinstance(doc, dict):
+        problems.append(f"{label} must contain a JSON object")
+        return None
+    return doc
+
+
 def _campaign_projection_problems(name: str, config: dict) -> list[str]:
-    """Fail closed on manually projected campaign-suite declarations."""
+    """Validate declaration, projected report, and source campaign as one chain."""
 
     problems: list[str] = []
     repos = config.get("rulespec_repos") or []
@@ -178,18 +221,132 @@ def _campaign_projection_problems(name: str, config: dict) -> list[str]:
         return [f"{name}: campaign projection declares no suites"]
     for suite in suites:
         suite_name = suite.get("suite", "<unnamed>")
-        if not suite.get("report"):
-            problems.append(f"{name} suite {suite_name!r} has no report")
-        if not repos and not suite.get("rulespec_repos"):
+        label = f"{name} suite {suite_name!r}"
+        declared_repos = suite.get("rulespec_repos") or repos
+        if not declared_repos:
             problems.append(f"{name} suite {suite_name!r} has no rulespec repos")
-        if not suite.get("campaign_runner") or not suite.get("projector"):
-            problems.append(
-                f"{name} suite {suite_name!r} must declare its "
-                "campaign runner and projector"
-            )
         oracle = str(suite.get("oracle") or "").strip().lower()
         if not oracle or oracle == "none":
             problems.append(f"{name} suite {suite_name!r} has no oracle")
+        _declared_file(
+            REPO_ROOT,
+            suite.get("campaign_runner"),
+            label=f"{label} campaign runner",
+            problems=problems,
+        )
+        _declared_file(
+            REPO_ROOT,
+            suite.get("projector"),
+            label=f"{label} projector",
+            problems=problems,
+        )
+        report_path = _declared_file(
+            DASHBOARD_DATA_DIR,
+            suite.get("report"),
+            label=f"{label} report",
+            problems=problems,
+        )
+        if report_path is None:
+            continue
+        report = _read_json_object(
+            report_path, label=f"{label} report", problems=problems
+        )
+        if report is None:
+            continue
+        if report.get("schema_version") != "axiom.comparison_report.v2":
+            problems.append(f"{label} report schema is not axiom.comparison_report.v2")
+        if report.get("suite") != suite_name:
+            problems.append(
+                f"{label} report suite is {report.get('suite')!r}, "
+                f"expected {suite_name!r}"
+            )
+        engines = report.get("engines") or {}
+        if not oracle or not engines.get(oracle):
+            problems.append(f"{label} report does not carry declared oracle {oracle!r}")
+
+        provenance = report.get("provenance") or {}
+        if provenance.get("schema") != PROVENANCE_SCHEMA_VERSION:
+            problems.append(f"{label} report has invalid provenance schema")
+        expected_generated_by = f"{suite.get('projector')}::{suite_name}"
+        if provenance.get("generated_by") != expected_generated_by:
+            problems.append(
+                f"{label} report generated_by does not align with projector"
+            )
+        generated_at = provenance.get("generated_at")
+        try:
+            datetime.strptime(str(generated_at), "%Y-%m-%dT%H:%M:%SZ")
+        except ValueError:
+            problems.append(f"{label} report has invalid provenance generated_at")
+        if provenance.get("run_kind") not in RUN_KINDS:
+            problems.append(f"{label} report has invalid provenance run_kind")
+
+        report_rulespecs = provenance.get("rulespecs") or []
+        report_repos = {
+            item.get("repo")
+            for item in report_rulespecs
+            if isinstance(item, dict) and item.get("repo")
+        }
+        if report_repos != set(declared_repos):
+            problems.append(
+                f"{label} report RuleSpec repos {sorted(report_repos)!r} "
+                f"do not align with declaration {sorted(declared_repos)!r}"
+            )
+        if not report_rulespecs or any(
+            not isinstance(item, dict) or not item.get("sha")
+            for item in report_rulespecs
+        ):
+            problems.append(f"{label} report RuleSpec provenance lacks a SHA")
+
+        campaign_path = _declared_file(
+            REPORTS_DIR,
+            provenance.get("campaign_report"),
+            label=f"{label} source campaign",
+            problems=problems,
+        )
+        if campaign_path is None:
+            continue
+        campaign = _read_json_object(
+            campaign_path, label=f"{label} source campaign", problems=problems
+        )
+        if campaign is None:
+            continue
+        if campaign.get("schema_version") != (
+            "axiom.state_tax_populace_campaign_report.v1"
+        ):
+            problems.append(f"{label} source campaign schema is invalid")
+        if campaign.get("generated_at") != generated_at:
+            problems.append(
+                f"{label} report generated_at does not align with source campaign"
+            )
+        if campaign.get("run_kind") != provenance.get("run_kind"):
+            problems.append(
+                f"{label} report run_kind does not align with source campaign"
+            )
+        if campaign.get("generated_by") != suite.get("campaign_runner"):
+            problems.append(
+                f"{label} source campaign generated_by does not align with runner"
+            )
+
+        campaign_rulespec = (campaign.get("runtime_provenance") or {}).get(
+            "rulespec"
+        ) or {}
+        projected_runtime_rulespec = (provenance.get("runtime_provenance") or {}).get(
+            "rulespec"
+        ) or {}
+        expected_rulespec = {
+            "repo": campaign_rulespec.get("repository"),
+            "sha": campaign_rulespec.get("commit"),
+        }
+        if expected_rulespec not in report_rulespecs:
+            problems.append(
+                f"{label} report RuleSpec provenance does not align with "
+                "source campaign runtime"
+            )
+        if projected_runtime_rulespec != campaign_rulespec:
+            problems.append(
+                f"{label} projected runtime RuleSpec does not align with "
+                "source campaign runtime"
+            )
     return problems
 
 

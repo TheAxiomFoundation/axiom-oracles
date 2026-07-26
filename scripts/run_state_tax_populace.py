@@ -121,6 +121,7 @@ def main(argv: list[str] | None = None) -> int:
     report = {
         "schema_version": "axiom.state_tax_populace_campaign_report.v1",
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "generated_by": "scripts/run_state_tax_populace.py",
         "run_kind": resolve_run_kind(),
         "requested_states": sorted(requested_states),
         "dataset_identity": identity,

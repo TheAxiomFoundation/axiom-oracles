@@ -20,10 +20,10 @@ from __future__ import annotations
 
 import json
 import sys
-from datetime import datetime, timezone
+from datetime import datetime
 from pathlib import Path
 
-from axiom_oracles.provenance import build_provenance
+from axiom_oracles.provenance import RUN_KINDS, build_provenance
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 REPORTS = REPO_ROOT / "reports"
@@ -48,13 +48,45 @@ def latest_campaign_report() -> Path:
     return candidates[-1]
 
 
+def validate_campaign_run_provenance(campaign: dict) -> tuple[str, str, dict]:
+    """Return exact campaign-run provenance or fail before projecting.
+
+    A projection is a view of an existing comparison, not a new oracle run.
+    Its freshness timestamp and run kind must therefore come from the source
+    campaign and may never default to projection time or local environment.
+    """
+
+    generated_at = campaign.get("generated_at")
+    if not isinstance(generated_at, str):
+        raise ValueError("campaign report is missing generated_at")
+    try:
+        datetime.strptime(generated_at, "%Y-%m-%dT%H:%M:%SZ")
+    except ValueError as exc:
+        raise ValueError(
+            "campaign report generated_at must be UTC YYYY-MM-DDTHH:MM:SSZ"
+        ) from exc
+
+    run_kind = campaign.get("run_kind")
+    if run_kind not in RUN_KINDS:
+        raise ValueError(
+            f"campaign report run_kind must be one of {RUN_KINDS}; got {run_kind!r}"
+        )
+
+    runtime = campaign.get("runtime_provenance")
+    rulespec = (runtime or {}).get("rulespec") or {}
+    if not rulespec.get("repository") or not rulespec.get("commit"):
+        raise ValueError(
+            "campaign report runtime_provenance.rulespec must carry "
+            "repository and commit"
+        )
+    return generated_at, run_kind, runtime
+
+
 def project_state(
     state: str,
     entry: dict,
     campaign: dict,
     source_name: str,
-    *,
-    generated_at: str | None = None,
 ) -> dict:
     compared = int(entry["compared_count"])
     mismatches = entry.get("mismatches") or []
@@ -86,15 +118,15 @@ def project_state(
         "parent": None,
         "weighted_match_rate": rate,
     }
-    runtime = campaign.get("runtime_provenance") or {}
+    generated_at, run_kind, runtime = validate_campaign_run_provenance(campaign)
     rulespec = runtime.get("rulespec") or {}
     standard_provenance = build_provenance(
         generated_by=(
             "scripts/emit_populace_campaign_artifacts.py"
             f"::{state.lower()}-income-tax-populace"
         ),
-        run_kind=campaign.get("run_kind"),
-        generated_at=generated_at or campaign.get("generated_at"),
+        run_kind=run_kind,
+        generated_at=generated_at,
         rulespecs=[
             {
                 "repo": rulespec.get("repository"),
@@ -213,6 +245,7 @@ def emit_case_chunks(state: str, entry: dict) -> str | None:
 def main() -> int:
     source = Path(sys.argv[1]) if len(sys.argv) > 1 else latest_campaign_report()
     campaign = json.loads(source.read_text())
+    validate_campaign_run_provenance(campaign)
     states = (campaign.get("comparison") or {}).get("states") or {}
     if not states:
         raise SystemExit(f"{source} carries no per-state comparison block")
@@ -220,9 +253,6 @@ def main() -> int:
     manifest_path = DASH_DATA / "manifest.json"
     manifest = json.loads(manifest_path.read_text())
     reports = list(manifest.get("reports") or [])
-    emitted_at = campaign.get("generated_at") or datetime.now(timezone.utc).strftime(
-        "%Y-%m-%dT%H:%M:%SZ"
-    )
 
     for state, entry in sorted(states.items()):
         emitted = emit_case_chunks(state, entry)
@@ -233,7 +263,6 @@ def main() -> int:
             entry,
             campaign,
             source.name,
-            generated_at=emitted_at,
         )
         filename = f"axiom-policyengine-{state.lower()}-income-tax-populace.json"
         (DASH_DATA / filename).write_text(

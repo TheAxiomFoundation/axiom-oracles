@@ -37,7 +37,7 @@
    "sha256": "16be6338f9d0",
    "source": "pinned"
   },
-  "generated_at": "2026-07-26T17:33:12Z",
+  "generated_at": "2026-07-26T12:41:51Z",
   "generated_by": "scripts/emit_populace_campaign_artifacts.py::ct-income-tax-populace",
   "max_absolute_difference": 0.4592000003904104,
   "relative_tolerance": 1e-07,
