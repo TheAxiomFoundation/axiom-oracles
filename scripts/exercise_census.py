@@ -25,8 +25,10 @@ Reading a row, three states matter per field:
   other's input (e.g. snap_populace feeds PolicyEngine's dependent-care
   deduction in as the expense with ``reimbursed = 0``), so downstream effect is
   tested but the receiving side's own derivation is satisfied by construction.
-  This state is declared by the bridge, not inferable from values — bridges
-  should register such fields in ``BRIDGED_THROUGH`` below as they are audited.
+  This state is declared by the bridge manifest, not inferable from values:
+  ``axiom_oracles/bridges/manifests/<suite>.yaml`` is the source, this script
+  only reports it. A suite with no manifest is unaudited, never "nothing
+  bridged".
 
 v1 scope, stated plainly: most suites commit *stage evidence* (gross income,
 net income, shelter deduction, ...), not raw input records, so this measures
@@ -68,7 +70,15 @@ def _bridged_through_by_suite() -> dict[str, dict[str, str]]:
     with no manifest is unaudited — never "nothing bridged". Historical suite
     aliases map to the same manifest so committed reports keep their names.
     """
-    import yaml  # lazy: --markdown/--check on census-only paths stay stdlib
+    try:
+        import yaml
+    except ModuleNotFoundError:  # pragma: no cover - environment guard
+        sys.exit(
+            "exercise_census needs PyYAML to read bridge manifests. Run under "
+            "the project env (`uv run python scripts/exercise_census.py`) or "
+            "install the package first — bridged-through state must come from "
+            "the manifests, never be silently skipped."
+        )
 
     by_suite: dict[str, dict[str, str]] = {}
     for path in sorted(MANIFEST_DIR.glob("*.yaml")):
