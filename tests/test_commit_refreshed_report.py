@@ -34,11 +34,16 @@ SIBLING_REPORT = (
 #: Everything the script and its regeneration scripts read or write. `docs`
 #: and `reports` (plus the root-level *.md files copied in seed_repo) are
 #: dispositions EVIDENCE sources: schema validation fails on dangling paths.
+#: `certificates` is a DERIVED tree the script regenerates and stages, so it
+#: must be seeded or an "idle" run is not idle — the script would generate the
+#: missing certificate and push it. Any tree added to the script's
+#: derived_paths belongs here too; that coupling is what this comment is for.
 SEED_DIRS = (
     "scripts",
     "axiom_oracles",
     "comparisons",
     "conformance",
+    "certificates",
     "dispositions",
     "docs",
     "reports",

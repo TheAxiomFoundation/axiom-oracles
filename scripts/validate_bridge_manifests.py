@@ -60,23 +60,27 @@ KNOWN_SUITES = _known_suites()
 def _covered_by_resolves(text: str) -> bool:
     """A covered_by entry must point at something that exists.
 
-    A length-and-substring heuristic accepts any sufficiently long string
-    (audit F5 demonstrated "ABCDEFGHIJKL" passing). Require the entry to
-    mention either a repository path that exists or a suite with a committed
-    report — the prose around it may stay free-form.
+    A length heuristic accepts any long string, and a path-SHAPE heuristic
+    accepts ghosts — both were demonstrated ("ABCDEFGHIJKL",
+    "ghost-sibling/no-such/evidence.yaml", "/etc/passwd"). Require the entry
+    to mention a repository path that EXISTS or a suite with a committed
+    report; prose around it may stay free-form.
+
+    Evidence living in a sibling repository cannot be verified from here, so
+    it is deliberately NOT accepted: cite it in the manifest note and point
+    covered_by at something this repository can check.
     """
     if "tbd" in text.lower():
         return False
     for token in text.replace(",", " ").replace("(", " ").replace(")", " ").split():
         candidate = token.strip("'\"`;")
-        if candidate and (REPO_ROOT / candidate).exists():
+        if not candidate or candidate.startswith("/") or ".." in candidate:
+            # Absolute and traversal paths are never evidence in this repo;
+            # `/etc/passwd` passed the previous path-shape heuristic.
+            continue
+        if (REPO_ROOT / candidate).exists():
             return True
         if candidate in KNOWN_SUITES:
-            return True
-        # rulespec-us and sibling repos are not in this checkout; accept a
-        # concrete file reference in one of them (a path-shaped token with a
-        # recognised encoding suffix), which a reviewer can follow.
-        if candidate.endswith((".yaml", ".yml", ".json")) and "/" in candidate:
             return True
     return False
 
@@ -153,15 +157,24 @@ def validate(path: Path, manifest: dict) -> tuple[list[str], list[str]]:
                     "non-empty list of evidence references"
                 )
             else:
-                for ref in covered_by:
-                    text = str(ref)
-                    if not _covered_by_resolves(text):
-                        errors.append(
-                            f"{name}: bridged binding [{index}] covered_by "
-                            f"entry {text!r} resolves to nothing — name a "
-                            "repository path that exists or a suite with a "
-                            "committed report"
-                        )
+                # At least one entry must be checkable HERE. Cross-repository
+                # evidence is real but unverifiable from this checkout, so it
+                # is recorded as visible debt rather than either silently
+                # accepted (the old path-shape heuristic) or discarded.
+                resolvable = [r for r in covered_by if _covered_by_resolves(str(r))]
+                unresolvable = [r for r in covered_by if str(r) not in map(str, resolvable)]
+                if not resolvable:
+                    errors.append(
+                        f"{name}: bridged binding [{index}] has no covered_by "
+                        "entry this repository can check — name a path that "
+                        "exists or a suite with a committed report"
+                    )
+                for ref in unresolvable:
+                    findings.append(
+                        f"{name}: bridged binding [{index}] covered_by entry "
+                        f"{str(ref)[:60]!r} is not verifiable from this "
+                        "repository (cross-repo evidence — audit debt)"
+                    )
             if not binding.get("source") or not binding.get("mechanism"):
                 errors.append(
                     f"{name}: bridged binding [{index}] requires source and "
@@ -226,6 +239,34 @@ def validate(path: Path, manifest: dict) -> tuple[list[str], list[str]]:
     return errors, findings
 
 
+def global_collisions(manifests: dict) -> list[str]:
+    """Suite/alias claims must be unique across ALL manifests.
+
+    Exposed separately so callers deciding whether a manifest is strict-clean
+    (the census's bridge_audited) apply the same rule the CLI does — a
+    per-manifest validate() alone misses collisions by construction.
+    """
+    errors: list[str] = []
+    claimed: dict[str, str] = {}
+    for path, manifest in manifests.items():
+        if not isinstance(manifest, dict):
+            continue
+        aliases = manifest.get("aliases")
+        names = [manifest.get("suite")]
+        if isinstance(aliases, list):
+            names.extend(aliases)
+        for claim in names:
+            if not claim:
+                continue
+            if claim in claimed and claimed[claim] != path.name:
+                errors.append(
+                    f"{path.name}: suite/alias {claim!r} already claimed by "
+                    f"{claimed[claim]} — namespace must be unique"
+                )
+            claimed[str(claim)] = path.name
+    return errors
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--strict", action="store_true")
@@ -236,20 +277,9 @@ def main() -> int:
         print("no bridge manifests found", file=sys.stderr)
         return 1
 
-    all_errors: list[str] = []
+    all_errors: list[str] = global_collisions(manifests)
     all_findings: list[str] = []
-    claimed: dict[str, str] = {}
     for path, manifest in manifests.items():
-        if isinstance(manifest, dict):
-            for claim in [manifest.get("suite"), *(manifest.get("aliases") or [])]:
-                if not claim:
-                    continue
-                if claim in claimed:
-                    all_errors.append(
-                        f"{path.name}: suite/alias {claim!r} already claimed "
-                        f"by {claimed[claim]} — namespace must be unique"
-                    )
-                claimed[str(claim)] = path.name
         errors, findings = validate(path, manifest)
         all_errors.extend(errors)
         all_findings.extend(findings)

@@ -81,9 +81,12 @@ bindings:
       reimbursed=0 and necessary=(deduction>0); the receiving formula
       max(0, paid - reimbursed) reproduces it identically.
     covered_by:
+      - dashboard/public/data/axiom-snapqc-co-snap.json — the co-snap-qc suite
+        exercises this derivation with real sampled expenses from the FY2024
+        administrative sample
       - rulespec-us us-co/regulations/10-ccr-2506-1/4.407.4.test.yaml ($500
-        nonzero cases, reimbursement netting and necessity gate)
-      - co-snap-qc (real sampled expenses from the FY2024 admin sample)
+        nonzero cases, reimbursement netting and necessity gate) — cross-repo,
+        not verifiable from this checkout
     audit: read
   # Reclassified 2026-07-26 (cross-family audit, finding 8): the value is a
   # population fact projected per unit, not a PE-computed derivation — the
@@ -100,8 +103,8 @@ bindings:
     source: policyengine:snap_excess_medical_expense_deduction
     mechanism: PE's computed medical deduction fed through.
     covered_by:
-      - co-snap-qc suite (dashboard/public/data/axiom-snapqc-co-snap.json),
-        real sampled medical expenses from the FY2024 admin sample
+      - dashboard/public/data/axiom-snapqc-co-snap.json — real sampled medical
+        expenses from the FY2024 administrative sample
     audit: read
   - kind: mapped
     group: member relation (ages, citizenship) and categorical-eligibility

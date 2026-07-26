@@ -78,10 +78,15 @@ def _manifest_strict_clean() -> dict[str, bool]:
     )
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
+    manifests = module.load_manifests()
+    collisions = module.global_collisions(manifests)
     clean: dict[str, bool] = {}
-    for path, manifest in module.load_manifests().items():
+    for path, manifest in manifests.items():
         errors, findings = module.validate(path, manifest)
-        ok = not errors and not findings
+        # Global collisions are a property of the SET, so a per-manifest
+        # validate() cannot see them; without this a colliding manifest could
+        # still report audited (round-2 audit finding 5).
+        ok = not errors and not findings and not collisions
         if isinstance(manifest, dict):
             names = [manifest.get("suite")]
             aliases = manifest.get("aliases")
@@ -232,6 +237,10 @@ def _census_suite(suite: str, report: dict, report_path: Path) -> dict:
     # every field of that one inline case as "constant" and drown the signal —
     # but the inline cases must not vanish silently either (finding 7): their
     # count is recorded so eclipse is visible.
+    # Chunks are keyed by suite name, so when two reports claim one suite the
+    # chunks belong to only one of them. Counting them under the other is the
+    # substitution the census must not perform silently (round-2 finding 4);
+    # the contested flag set in build_census() makes the certificate refuse.
     chunk_cases, chunk_manifest = _chunk_cases(suite)
     inline_cases = [c for c in report.get("cases") or [] if isinstance(c, dict)]
     if chunk_cases:

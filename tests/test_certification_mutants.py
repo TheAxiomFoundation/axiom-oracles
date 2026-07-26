@@ -333,3 +333,175 @@ def test_certified_requires_computed_true_premises_not_status_strings():
     cert = certify.build_certificate("us-co/snap", certify.PROGRAMS["us-co/snap"])
     assert cert["certified"]["state"] == "unavailable"
     assert cert["certified"]["value"] is False
+
+
+# ── Round 3: inputs from the second fix-verification ─────────────────────────
+
+
+def test_invalid_counts_are_recorded_not_zeroed():
+    """`error_count: "one"` became "no errors"; negatives cancelled real ones."""
+    name = "zz-r3-junkcounts.json"
+    _mutant(
+        name,
+        {
+            "suite": "victim",
+            "cases": [{"metadata": {"x": 1}}],
+            "errors": [{"message": "boom"}],
+            "summary": {
+                "comparison_count": 1,
+                "match_count": 1,
+                "mismatch_count": 0,
+                "error_count": "one",
+            },
+        },
+    )
+    try:
+        leg, _e, defects = _verdict(name)
+        assert leg["clean"] is False
+        assert any("not a non-negative integer" in d for d in defects)
+        assert any("error" in d for d in defects)
+    finally:
+        (REPO / "dashboard/public/data" / name).unlink()
+
+
+def test_negative_count_cannot_cancel_a_real_error():
+    name = "zz-r3-negcancel.json"
+    _mutant(
+        name,
+        {
+            "suite": "victim",
+            "cases": [{"metadata": {"x": 1}}],
+            "errors": [{"message": "boom"}],
+            "summary": {
+                "comparison_count": 1,
+                "match_count": 1,
+                "mismatch_count": 0,
+                "error_count": -1,
+            },
+        },
+    )
+    try:
+        leg, _e, defects = _verdict(name)
+        assert leg["clean"] is False
+        assert any("negative" in d for d in defects)
+    finally:
+        (REPO / "dashboard/public/data" / name).unlink()
+
+
+def test_junk_case_rows_are_not_evidence():
+    """`cases: [null]` satisfied the non-empty check."""
+    name = "zz-r3-nullcases.json"
+    _mutant(
+        name,
+        {
+            "suite": "victim",
+            "cases": [None],
+            "summary": {
+                "comparison_count": 1,
+                "match_count": 1,
+                "mismatch_count": 0,
+            },
+        },
+    )
+    try:
+        leg, _e, defects = _verdict(name)
+        assert leg["clean"] is False
+        assert any("no per-case evidence" in d for d in defects)
+    finally:
+        (REPO / "dashboard/public/data" / name).unlink()
+
+
+def test_unreadable_dispositions_file_cannot_authorize():
+    """A file with no `suite:` returned None and was accepted."""
+    name = "zz-r3-notadisp.json"
+    _mutant(
+        name,
+        {
+            "suite": "victim",
+            "cases": [{"metadata": {"x": 1}}],
+            "mismatches": [{}],
+            "summary": {
+                "comparison_count": 1,
+                "match_count": 0,
+                "mismatch_count": 1,
+                "dispositioned": {
+                    "dispositions_file": "README.md",
+                    "counts": {"unexplained": 0},
+                    "unexplained_count": 0,
+                },
+            },
+        },
+    )
+    try:
+        leg, _e, defects = _verdict(name)
+        assert leg["clean"] is False
+        assert any("not a readable dispositions document" in d for d in defects)
+    finally:
+        (REPO / "dashboard/public/data" / name).unlink()
+
+
+def test_weighted_mass_must_be_finite_and_nonnegative():
+    certify = _load("certify")
+    for weight, marker in ((float("nan"), "finite"), (-5.0, "negative")):
+        name = f"zz-r3-w{marker}.json"
+        _mutant(
+            name,
+            {
+                "suite": "victim",
+                "cases": [{"metadata": {"x": 1}}],
+                "summary": {
+                    "comparison_count": 1,
+                    "match_count": 1,
+                    "mismatch_count": 0,
+                    "weighted": {"mismatch_weight": weight},
+                },
+            },
+        )
+        try:
+            leg, _e, defects = _verdict(name)
+            assert leg["clean"] is False, marker
+            assert any(marker in d for d in defects), (marker, defects)
+        finally:
+            (REPO / "dashboard/public/data" / name).unlink()
+
+
+def test_certified_cannot_activate_by_flipping_status_alone():
+    """status: computed with an attested emitted mode reproduced state=yes."""
+    import copy
+
+    certify = _load("certify")
+    spec = copy.deepcopy(certify.PROGRAMS["us-co/snap"])
+    spec["attested"]["closed"].update(status="computed", value=True)
+    spec["attested"]["executable"].update(status="computed", value=True)
+    cert = certify.build_certificate("us-co/snap", spec)
+    # Mode must follow the same determination — they can no longer disagree.
+    assert cert["verdicts"]["closed"]["mode"] == "computed"
+    # And with exercised still false, the verdict is a plain no.
+    assert cert["certified"]["state"] == "no"
+
+    spec2 = copy.deepcopy(spec)
+    spec2["attested"]["executable"]["value"] = False
+    assert certify.build_certificate("us-co/snap", spec2)["certified"]["state"] == "no"
+
+
+def test_covered_by_rejects_ghosts_and_absolute_paths():
+    vbm = _load("validate_bridge_manifests")
+    assert vbm._covered_by_resolves("ghost-sibling/no-such/evidence.yaml") is False
+    assert vbm._covered_by_resolves("/etc/passwd") is False
+    assert vbm._covered_by_resolves("../../../etc/passwd") is False
+
+
+def test_contested_reports_are_a_certificate_defect():
+    """nyc-synthetic: two reports claim the suite, sharing one chunk dir."""
+    certify = _load("certify")
+    census = json.loads((REPO / "conformance/exercise-census.json").read_text())
+    assert census["suites"]["nyc-synthetic"].get("contested_reports")
+    defects: list[str] = []
+    _rows, complete = certify._exercise_block(
+        [{"suite": "nyc-synthetic", "oracle_type": "reference", "oracle": "x",
+          "report": "dashboard/public/data/axiom-policyengine.json"}],
+        census,
+        defects,
+    )
+    assert complete is False
+    assert any("claim this suite" in d for d in defects)

@@ -112,7 +112,10 @@
           ],
           "cases": 1072,
           "constant_fields": 1,
+          "contested_reports": [],
           "per_case_evidence_committed": true,
+          "report": "dashboard/public/data/axiom-policyengine-co-snap-ecps.json",
+          "report_sha256": "4ce6eb95a89453a5b7c4b8e5ed7bbf48851ae6749d77587f1f1022a723595be0",
           "varied_fields": 7
         },
         "co-snap-qc": {
@@ -120,7 +123,10 @@
           "bridged_through": [],
           "cases": 856,
           "constant_fields": 0,
+          "contested_reports": [],
           "per_case_evidence_committed": false,
+          "report": "dashboard/public/data/axiom-snapqc-co-snap.json",
+          "report_sha256": "dfb65174abf36e92beadfd8cb78430c85ef18f55d5586bf924b40d6d48bb607c",
           "varied_fields": 0
         }
       },
