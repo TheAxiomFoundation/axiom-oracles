@@ -31473,6 +31473,168 @@ mappings:
     candidate_priority: P4
     rationale: This signed-liability zero is a fail-closed sentinel while the annual Maryland State chain is held and must not be interpreted as zero tax.
 
+  - legal_id: us-mo:policies/dss/snap/1105-000-00/1105-015-00/1105-015-04/1105-015-04-05/block-1#elderly_disabled_individual_minimum_age
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    rationale: "Source-specific intermediate output (rule `elderly_disabled_individual_minimum_age`, grounded against `Missouri SNAP Manual 1105.015.04.05`). Not present in the requested PolicyEngine adapter catalog. Promote to `direct_variable` by adding an adapter entry once a one-to-one PE target is identified."
+
+  - legal_id: us-mo:policies/dss/snap/1105-000-00/1105-015-00/1105-015-04/1105-015-04-05/block-1#other_residents_165_percent_poverty_table_maximum_size
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    rationale: "Source-specific intermediate output (rule `other_residents_165_percent_poverty_table_maximum_size`, grounded against `Missouri SNAP Manual 1105.015.04.05`). Not present in the requested PolicyEngine adapter catalog. Promote to `direct_variable` by adding an adapter entry once a one-to-one PE target is identified."
+
+  - legal_id: us-mo:policies/dss/snap/1105-000-00/1105-015-00/1105-015-04/1105-015-04-05/block-1#snap_gross_income_limit_165_percent_fpl_48_states_dc_table
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    rationale: "Source-specific intermediate output (rule `snap_gross_income_limit_165_percent_fpl_48_states_dc_table`, grounded against `Missouri SNAP Manual 1105.015.04.05`). Not present in the requested PolicyEngine adapter catalog. Promote to `direct_variable` by adding an adapter entry once a one-to-one PE target is identified."
+
+  - legal_id: us-mo:policies/dss/snap/1105-000-00/1105-015-00/1105-015-04/1105-015-04-05/block-1#snap_gross_income_limit_165_percent_fpl_48_states_dc_additional_member
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    rationale: "Source-specific intermediate output (rule `snap_gross_income_limit_165_percent_fpl_48_states_dc_additional_member`, grounded against `Missouri SNAP Manual 1105.015.04.05`). Not present in the requested PolicyEngine adapter catalog. Promote to `direct_variable` by adding an adapter entry once a one-to-one PE target is identified."
+
+  - legal_id: us-mo:policies/dss/snap/1105-000-00/1105-015-00/1105-015-04/1105-015-04-05/block-1#other_residents_165_percent_poverty_maximum_gross_income
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    rationale: "Source-specific intermediate output (rule `other_residents_165_percent_poverty_maximum_gross_income`, grounded against `Missouri SNAP Manual 1105.015.04.05`). Not present in the requested PolicyEngine adapter catalog. Promote to `direct_variable` by adding an adapter entry once a one-to-one PE target is identified."
+
+  - legal_id: us-mo:policies/dss/snap/1105-000-00/1105-015-00/1105-015-04/1105-015-04-05/block-1#other_residents_countable_gross_income_within_165_percent_poverty_limit
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    rationale: "Source-specific intermediate output (rule `other_residents_countable_gross_income_within_165_percent_poverty_limit`, grounded against `Missouri SNAP Manual 1105.015.04.05`). Not present in the requested PolicyEngine adapter catalog. Promote to `direct_variable` by adding an adapter entry once a one-to-one PE target is identified."
+
+  - legal_id: us-mo:policies/dss/snap/1105-000-00/1105-015-00/1105-015-04/1105-015-04-05/block-1#individual_living_alone_purchases_and_prepares_food
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    rationale: "Source-specific intermediate output (rule `individual_living_alone_purchases_and_prepares_food`, grounded against `Missouri SNAP Manual 1105.015.04.05`). Not present in the requested PolicyEngine adapter catalog. Promote to `direct_variable` by adding an adapter entry once a one-to-one PE target is identified."
+
+  - legal_id: us-mo:policies/dss/snap/1105-000-00/1105-015-00/1105-015-04/1105-015-04-05/block-1#individual_living_with_others_purchases_and_prepares_food_separately
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    rationale: "Source-specific intermediate output (rule `individual_living_with_others_purchases_and_prepares_food_separately`, grounded against `Missouri SNAP Manual 1105.015.04.05`). Not present in the requested PolicyEngine adapter catalog. Promote to `direct_variable` by adding an adapter entry once a one-to-one PE target is identified."
+
+  - legal_id: us-mo:policies/dss/snap/1105-000-00/1105-015-00/1105-015-04/1105-015-04-05/block-1#individual_receives_meals_in_fns_authorized_residential_treatment_program
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    rationale: "Source-specific intermediate output (rule `individual_receives_meals_in_fns_authorized_residential_treatment_program`, grounded against `Missouri SNAP Manual 1105.015.04.05`). Not present in the requested PolicyEngine adapter catalog. Promote to `direct_variable` by adding an adapter entry once a one-to-one PE target is identified."
+
+  - legal_id: us-mo:policies/dss/snap/1105-000-00/1105-015-00/1105-015-04/1105-015-04-05/block-1#individual_has_missouri_administrative_disability_evidence
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    rationale: "Source-specific intermediate output (rule `individual_has_missouri_administrative_disability_evidence`, grounded against `Missouri SNAP Manual 1105.015.04.05`). Not present in the requested PolicyEngine adapter catalog. Promote to `direct_variable` by adding an adapter entry once a one-to-one PE target is identified."
+
+  - legal_id: us-mo:policies/dss/snap/1105-000-00/1105-015-00/1105-015-04/1105-015-04-05/block-1#individual_has_qualifying_disability_basis
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    rationale: "Source-specific intermediate output (rule `individual_has_qualifying_disability_basis`, grounded against `7 U.S.C. 2012(m)(3)`). Not present in the requested PolicyEngine adapter catalog. Promote to `direct_variable` by adding an adapter entry once a one-to-one PE target is identified."
+
+  - legal_id: us-mo:policies/dss/snap/1105-000-00/1105-015-00/1105-015-04/1105-015-04-05/block-1#elderly_disabled_individual_living_with_others_meets_separate_status
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    rationale: "Source-specific intermediate output (rule `elderly_disabled_individual_living_with_others_meets_separate_status`, grounded against `Missouri SNAP Manual 1105.015.04.05`). Not present in the requested PolicyEngine adapter catalog. Promote to `direct_variable` by adding an adapter entry once a one-to-one PE target is identified."
+
+  - legal_id: us-mo:policies/dss/snap/1105-000-00/1105-015-00/1105-015-04/1105-015-04-05/block-1#individual_not_barred_by_snap_household_residence_or_meal_compensation
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    rationale: "Source-specific intermediate output (rule `individual_not_barred_by_snap_household_residence_or_meal_compensation`, grounded against `7 U.S.C. 2012(m)(4)-(5)`). Not present in the requested PolicyEngine adapter catalog. Promote to `direct_variable` by adding an adapter entry once a one-to-one PE target is identified."
+
+  - legal_id: us-mo:policies/dss/snap/1105-000-00/1105-015-00/1105-015-04/1105-015-04-05/block-1#individual_meets_snap_food_purchase_and_preparation_status
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    rationale: "Source-specific intermediate output (rule `individual_meets_snap_food_purchase_and_preparation_status`, grounded against `Missouri SNAP Manual 1105.015.04.05`). Not present in the requested PolicyEngine adapter catalog. Promote to `direct_variable` by adding an adapter entry once a one-to-one PE target is identified."
+
+  - legal_id: us-mo:policies/dss/snap/1105-000-00/1105-015-00/1105-015-04/1105-015-04-10/block-1#others_countable_income_poverty_level_limit_ratio
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    rationale: "Source-specific intermediate output (rule `others_countable_income_poverty_level_limit_ratio`, grounded against `IM-56 June 11, 2013, note on countable income of others`). Not present in the requested PolicyEngine adapter catalog. Promote to `direct_variable` by adding an adapter entry once a one-to-one PE target is identified."
+
+  - legal_id: us-mo:policies/dss/snap/1105-000-00/1105-015-00/1105-015-04/1105-015-04-10/block-1#eligibility_group_customarily_purchases_and_prepares_food_together_path
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    rationale: "Source-specific intermediate output (rule `eligibility_group_customarily_purchases_and_prepares_food_together_path`, grounded against `IM-56 June 11, 2013, first eligibility-group path`). Not present in the requested PolicyEngine adapter catalog. Promote to `direct_variable` by adding an adapter entry once a one-to-one PE target is identified."
+
+  - legal_id: us-mo:policies/dss/snap/1105-000-00/1105-015-00/1105-015-04/1105-015-04-10/block-1#eligibility_group_delivered_meals_or_communal_dining_path
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    rationale: "Source-specific intermediate output (rule `eligibility_group_delivered_meals_or_communal_dining_path`, grounded against `IM-56 June 11, 2013, delivered-meals or communal-dining path`). Not present in the requested PolicyEngine adapter catalog. Promote to `direct_variable` by adding an adapter entry once a one-to-one PE target is identified."
+
+  - legal_id: us-mo:policies/dss/snap/1105-000-00/1105-015-00/1105-015-04/1105-015-04-10/block-1#eligibility_group_cohabiting_spouse_path
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    rationale: "Source-specific intermediate output (rule `eligibility_group_cohabiting_spouse_path`, grounded against `IM-56 June 11, 2013, 7 U.S.C. 2012(m)(2), and 7 CFR 273.1(b)(1)(i), cohabiting-spouse path`). Not present in the requested PolicyEngine adapter catalog. Promote to `direct_variable` by adding an adapter entry once a one-to-one PE target is identified."
+
+  - legal_id: us-mo:policies/dss/snap/1105-000-00/1105-015-00/1105-015-04/1105-015-04-10/block-1#eligibility_group_residential_treatment_program_path
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    rationale: "Source-specific intermediate output (rule `eligibility_group_residential_treatment_program_path`, grounded against `IM-56 June 11, 2013, residential treatment program path`). Not present in the requested PolicyEngine adapter catalog. Promote to `direct_variable` by adding an adapter entry once a one-to-one PE target is identified."
+
+  - legal_id: us-mo:policies/dss/snap/1105-000-00/1105-015-00/1105-015-04/1105-015-04-10/block-1#eligibility_group_disabled_age_60_unable_to_purchase_prepare_path_scalar_limit
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    rationale: "Source-specific intermediate output (rule `eligibility_group_disabled_age_60_unable_to_purchase_prepare_path_scalar_limit`, grounded against `IM-56 June 11, 2013, 7 U.S.C. 2012(m)(3), and 7 CFR 273.1(b)(2), disabled age-60 unable-to-purchase-and-prepare path and income note`). Not present in the requested PolicyEngine adapter catalog. Promote to `direct_variable` by adding an adapter entry once a one-to-one PE target is identified."
+
+  - legal_id: us-mo:policies/dss/snap/1105-000-00/1105-015-00/1105-015-04/1105-015-04-10/block-1#eligibility_group_disabled_age_60_unable_to_purchase_prepare_path
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    rationale: "Source-specific intermediate output (rule `eligibility_group_disabled_age_60_unable_to_purchase_prepare_path`, grounded against `IM-56 June 11, 2013, 7 U.S.C. 2012(m)(3), and 7 CFR 273.1(b)(2), disabled age-60 unable-to-purchase-and-prepare path and income note`). Not present in the requested PolicyEngine adapter catalog. Promote to `direct_variable` by adding an adapter entry once a one-to-one PE target is identified."
+
+  - legal_id: us-mo:policies/dss/snap/1105-000-00/1105-015-00/1105-015-04/block-1#person_not_barred_from_eligibility_eu_by_residence
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    rationale: "Source-specific intermediate output (rule `person_not_barred_from_eligibility_eu_by_residence`, grounded against `us-mo/manual/dss/snap/1105-000-00/1105-015-00/1105-015-04/block-1`). Not present in the requested PolicyEngine adapter catalog. Promote to `direct_variable` by adding an adapter entry once a one-to-one PE target is identified."
+
+  - legal_id: us-mo:policies/dss/snap/1105-000-00/1105-015-00/1105-015-04/block-1#fns_authorized_retail_store_owner_or_manager_may_participate_as_part_of_eligibility_eu
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    rationale: "Source-specific intermediate output (rule `fns_authorized_retail_store_owner_or_manager_may_participate_as_part_of_eligibility_eu`, grounded against `us-mo/manual/dss/snap/1105-000-00/1105-015-00/1105-015-04/block-1`). Not present in the requested PolicyEngine adapter catalog. Promote to `direct_variable` by adding an adapter entry once a one-to-one PE target is identified."
+
+  - legal_id: us-mo:policies/dss/snap/1105-000-00/1105-015-00/1105-015-04/block-1#cooperative_buying_club_manager_may_participate_as_part_of_eligibility_eu
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    rationale: "Source-specific intermediate output (rule `cooperative_buying_club_manager_may_participate_as_part_of_eligibility_eu`, grounded against `us-mo/manual/dss/snap/1105-000-00/1105-015-00/1105-015-04/block-1`). Not present in the requested PolicyEngine adapter catalog. Promote to `direct_variable` by adding an adapter entry once a one-to-one PE target is identified."
+
+  - legal_id: us-mo:policies/dss/snap/1105-000-00/1105-015-00/1105-015-04/block-1#commercial_boarding_house_proprietor_may_participate_in_snap
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    rationale: "Source-specific intermediate output (rule `commercial_boarding_house_proprietor_may_participate_in_snap`, grounded against `us-mo/manual/dss/snap/1105-000-00/1105-015-00/1105-015-04/block-1`). Not present in the requested PolicyEngine adapter catalog. Promote to `direct_variable` by adding an adapter entry once a one-to-one PE target is identified."
+
+  - legal_id: us-mo:policies/dss/snap/1105-000-00/1105-015-00/1105-015-04/block-1#commercial_boarding_house_proprietor_considered_separate_from_resident_boarders_for_eligibility
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    rationale: "Source-specific intermediate output (rule `commercial_boarding_house_proprietor_considered_separate_from_resident_boarders_for_eligibility`, grounded against `us-mo/manual/dss/snap/1105-000-00/1105-015-00/1105-015-04/block-1`). Not present in the requested PolicyEngine adapter catalog. Promote to `direct_variable` by adding an adapter entry once a one-to-one PE target is identified."
+
+  - legal_id: us-mo:policies/dss/snap/1105-000-00/1105-015-00/block-1#persons_grouped_together_as_one_snap_household
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    rationale: "Source-specific intermediate output (rule `persons_grouped_together_as_one_snap_household`, grounded against `us-mo/manual/dss/snap/1105-000-00/1105-015-00/block-1`). Not present in the requested PolicyEngine adapter catalog. Promote to `direct_variable` by adding an adapter entry once a one-to-one PE target is identified."
+
 prefixes:
   - legal_id_prefix: us-dc:statutes/4/4-205/49#
     country: us
