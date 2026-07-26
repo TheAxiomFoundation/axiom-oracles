@@ -191,12 +191,15 @@ def _campaign_projection_fixture(gate, tmp_path, monkeypatch):
     rulespec = {
         "repository": "TheAxiomFoundation/rulespec-us",
         "commit": "1" * 40,
+        "working_tree": "clean",
     }
     runtime = {
         "rulespec": rulespec,
         "axiom_engine": {
             "repository": "TheAxiomFoundation/axiom-rules-engine",
             "commit": "2" * 40,
+            "executable_sha256": "4" * 64,
+            "working_tree": "clean",
         },
         "packages": {
             "policyengine": "4.18.9",
@@ -207,6 +210,20 @@ def _campaign_projection_fixture(gate, tmp_path, monkeypatch):
         "source": "pinned",
         "revision": "populace-us-test",
         "sha256": "3" * 12,
+        "built_with": "1.729.0",
+        "country": "us",
+    }
+    state_entry = {
+        "compared_count": 2,
+        "mismatch_count": 0,
+        "mismatches": [],
+        "output": "us-ct:policies/income_tax/example#output",
+        "program": "ct-program",
+        "policyengine_target": "ct_target",
+        "tolerance": 0.01,
+        "relative_tolerance": 1e-7,
+        "max_absolute_difference": 0.0,
+        "weighted_compared_tax_units": 2.0,
     }
     campaign = {
         "schema_version": "axiom.state_tax_populace_campaign_report.v1",
@@ -215,12 +232,35 @@ def _campaign_projection_fixture(gate, tmp_path, monkeypatch):
         "run_kind": "manual",
         "runtime_provenance": runtime,
         "dataset_identity": dataset,
+        "requested_states": ["CT"],
+        "comparison": {"states": {"CT": state_entry}},
     }
     (reports / "campaign.json").write_text(json.dumps(campaign))
     report = {
         "schema_version": "axiom.comparison_report.v2",
         "suite": "ct-income-tax-populace",
+        "case_count": 2,
+        "population": "populace-us",
         "engines": {"axiom": "ct-program", "policyengine": "ct_target"},
+        "aggregates": [
+            {
+                "concept": state_entry["output"],
+                "comparison_count": 2,
+                "compared": 2,
+                "match_count": 2,
+                "matched": 2,
+                "mismatch_count": 0,
+                "match_rate": 100.0,
+                "weighted_match_rate": 100.0,
+            }
+        ],
+        "mismatches": [],
+        "summary": {
+            "comparison_count": 2,
+            "match_count": 2,
+            "match_rate": 100.0,
+            "mismatch_count": 0,
+        },
         "provenance": {
             "schema": "axiom_oracles.provenance.v1",
             "generated_at": campaign["generated_at"],
@@ -235,6 +275,12 @@ def _campaign_projection_fixture(gate, tmp_path, monkeypatch):
             ],
             "runtime_provenance": runtime,
             "dataset_identity": dataset,
+            "tolerance": state_entry["tolerance"],
+            "relative_tolerance": state_entry["relative_tolerance"],
+            "max_absolute_difference": state_entry["max_absolute_difference"],
+            "weighted_compared_tax_units": state_entry[
+                "weighted_compared_tax_units"
+            ],
         },
     }
     report_path = data / "ct.json"
@@ -252,6 +298,8 @@ def _campaign_projection_fixture(gate, tmp_path, monkeypatch):
                 "campaign_runner": "scripts/run.py",
                 "projector": "scripts/emit.py",
                 "oracle": "policyengine",
+                "jurisdiction": "CT",
+                "program": "state_income_tax",
             }
         ],
     }
@@ -352,6 +400,164 @@ def test_campaign_projection_rejects_dataset_revision_mutation(tmp_path, monkeyp
     assert any(
         "dataset_identity does not exactly align" in problem for problem in problems
     )
+
+
+@pytest.mark.parametrize(
+    ("section", "field"),
+    [
+        ("rulespec", "working_tree"),
+        ("axiom_engine", "executable_sha256"),
+        ("axiom_engine", "working_tree"),
+        ("packages", "policyengine"),
+    ],
+)
+def test_campaign_projection_rejects_runtime_identity_omitted_from_both_artifacts(
+    tmp_path, monkeypatch, section, field
+):
+    """Equality cannot hide an identity field omitted on both sides."""
+
+    gate = _load_gate()
+    config, report_path, scripts = _campaign_projection_fixture(
+        gate, tmp_path, monkeypatch
+    )
+    campaign_path = scripts.parent / "reports" / "campaign.json"
+    campaign = json.loads(campaign_path.read_text())
+    report = json.loads(report_path.read_text())
+    campaign["runtime_provenance"][section].pop(field)
+    report["provenance"]["runtime_provenance"][section].pop(field)
+    campaign_path.write_text(json.dumps(campaign))
+    report_path.write_text(json.dumps(report))
+
+    problems = gate._campaign_projection_problems("campaign.yaml", config)
+    assert any(
+        f"runtime_provenance.{section} is missing {field}" in problem
+        for problem in problems
+    )
+
+
+@pytest.mark.parametrize("field", ["source", "built_with", "country"])
+def test_campaign_projection_rejects_dataset_identity_omitted_from_both_artifacts(
+    tmp_path, monkeypatch, field
+):
+    gate = _load_gate()
+    config, report_path, scripts = _campaign_projection_fixture(
+        gate, tmp_path, monkeypatch
+    )
+    campaign_path = scripts.parent / "reports" / "campaign.json"
+    campaign = json.loads(campaign_path.read_text())
+    report = json.loads(report_path.read_text())
+    campaign["dataset_identity"].pop(field)
+    report["provenance"]["dataset_identity"].pop(field)
+    campaign_path.write_text(json.dumps(campaign))
+    report_path.write_text(json.dumps(report))
+
+    problems = gate._campaign_projection_problems("campaign.yaml", config)
+    assert any(f"dataset_identity is missing {field}" in problem for problem in problems)
+
+
+@pytest.mark.parametrize(
+    ("path", "value", "expected"),
+    [
+        (("case_count",), 0, "case_count does not align"),
+        (("engines", "axiom"), "wrong-program", "Axiom program does not align"),
+        (
+            ("engines", "policyengine"),
+            "wrong-target",
+            "oracle target does not align",
+        ),
+        (("summary", "comparison_count"), 0, "summary does not align"),
+        (("aggregates", 0, "concept"), "wrong-output", "aggregate does not align"),
+        (
+            ("mismatches",),
+            [{"tax_unit_id": 1}],
+            "mismatches do not align",
+        ),
+    ],
+)
+def test_campaign_projection_rejects_tampered_semantic_projection(
+    tmp_path, monkeypatch, path, value, expected
+):
+    gate = _load_gate()
+    config, report_path, _ = _campaign_projection_fixture(
+        gate, tmp_path, monkeypatch
+    )
+    report = json.loads(report_path.read_text())
+    target = report
+    for part in path[:-1]:
+        target = target[part]
+    target[path[-1]] = value
+    report_path.write_text(json.dumps(report))
+
+    problems = gate._campaign_projection_problems("campaign.yaml", config)
+    assert any(expected in problem for problem in problems)
+
+
+@pytest.mark.parametrize(
+    ("field", "report_section", "report_field"),
+    [
+        ("program", "engines", "axiom"),
+        ("policyengine_target", "engines", "policyengine"),
+        ("output", "aggregates", "concept"),
+    ],
+)
+def test_campaign_projection_rejects_semantic_identity_omitted_from_both_artifacts(
+    tmp_path, monkeypatch, field, report_section, report_field
+):
+    gate = _load_gate()
+    config, report_path, scripts = _campaign_projection_fixture(
+        gate, tmp_path, monkeypatch
+    )
+    campaign_path = scripts.parent / "reports" / "campaign.json"
+    campaign = json.loads(campaign_path.read_text())
+    campaign["comparison"]["states"]["CT"].pop(field)
+    campaign_path.write_text(json.dumps(campaign))
+
+    report = json.loads(report_path.read_text())
+    if report_section == "aggregates":
+        report[report_section][0].pop(report_field)
+    else:
+        report[report_section].pop(report_field)
+    report_path.write_text(json.dumps(report))
+
+    problems = gate._campaign_projection_problems("campaign.yaml", config)
+    assert any(
+        f"source campaign comparison state is missing {field}" in p for p in problems
+    )
+
+
+def test_campaign_projection_rejects_zero_comparison_even_when_aligned(
+    tmp_path, monkeypatch
+):
+    gate = _load_gate()
+    config, report_path, scripts = _campaign_projection_fixture(
+        gate, tmp_path, monkeypatch
+    )
+    campaign_path = scripts.parent / "reports" / "campaign.json"
+    campaign = json.loads(campaign_path.read_text())
+    state = campaign["comparison"]["states"]["CT"]
+    state["compared_count"] = 0
+    campaign_path.write_text(json.dumps(campaign))
+
+    report = json.loads(report_path.read_text())
+    report["case_count"] = 0
+    report["summary"] = {
+        "comparison_count": 0,
+        "match_count": 0,
+        "match_rate": 100.0,
+        "mismatch_count": 0,
+    }
+    report["aggregates"][0].update(
+        {
+            "comparison_count": 0,
+            "compared": 0,
+            "match_count": 0,
+            "matched": 0,
+        }
+    )
+    report_path.write_text(json.dumps(report))
+
+    problems = gate._campaign_projection_problems("campaign.yaml", config)
+    assert any("compared_count must be a positive integer" in p for p in problems)
 
 
 def test_declared_file_rejects_traversal(tmp_path):

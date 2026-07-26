@@ -7,11 +7,29 @@ def _campaign() -> dict:
     return {
         "generated_at": "2026-07-26T12:00:00Z",
         "run_kind": "manual",
+        "dataset_identity": {
+            "source": "pinned",
+            "revision": "populace-us-test",
+            "sha256": "3" * 12,
+            "built_with": "1.729.0",
+            "country": "us",
+        },
         "runtime_provenance": {
             "rulespec": {
                 "repository": "TheAxiomFoundation/rulespec-us",
                 "commit": "1" * 40,
-            }
+                "working_tree": "clean",
+            },
+            "axiom_engine": {
+                "repository": "TheAxiomFoundation/axiom-rules-engine",
+                "commit": "2" * 40,
+                "executable_sha256": "4" * 64,
+                "working_tree": "clean",
+            },
+            "packages": {
+                "policyengine": "4.18.9",
+                "policyengine-us": "1.752.2",
+            },
         },
     }
 
@@ -76,6 +94,52 @@ def test_projector_fails_closed_on_missing_campaign_run_provenance(missing):
     campaign = _campaign()
     campaign.pop(missing)
     with pytest.raises(ValueError, match=missing):
+        project_state(
+            "CT",
+            {
+                "compared_count": 1,
+                "mismatch_count": 0,
+                "output": "us-ct:policies/income_tax/example#output",
+                "program": "us-ct:policies/income_tax/example",
+                "policyengine_target": "ct_example",
+            },
+            campaign,
+            "campaign.json",
+        )
+
+
+@pytest.mark.parametrize(
+    ("section", "field"),
+    [
+        ("rulespec", "working_tree"),
+        ("axiom_engine", "executable_sha256"),
+        ("axiom_engine", "working_tree"),
+        ("packages", "policyengine-us"),
+    ],
+)
+def test_projector_fails_closed_on_incomplete_runtime_identity(section, field):
+    campaign = _campaign()
+    campaign["runtime_provenance"][section].pop(field)
+    with pytest.raises(ValueError, match=field):
+        project_state(
+            "CT",
+            {
+                "compared_count": 1,
+                "mismatch_count": 0,
+                "output": "us-ct:policies/income_tax/example#output",
+                "program": "us-ct:policies/income_tax/example",
+                "policyengine_target": "ct_example",
+            },
+            campaign,
+            "campaign.json",
+        )
+
+
+@pytest.mark.parametrize("field", ["source", "built_with", "country"])
+def test_projector_fails_closed_on_incomplete_dataset_identity(field):
+    campaign = _campaign()
+    campaign["dataset_identity"].pop(field)
+    with pytest.raises(ValueError, match=field):
         project_state(
             "CT",
             {

@@ -59,6 +59,24 @@ FRESH_MAX_AGE_DAYS = 14
 
 _RUN_COMPARISON = REPO_ROOT / "scripts" / "run_comparison.py"
 
+_REQUIRED_CAMPAIGN_RUNTIME_FIELDS = {
+    "rulespec": ("repository", "commit", "working_tree"),
+    "axiom_engine": (
+        "repository",
+        "commit",
+        "executable_sha256",
+        "working_tree",
+    ),
+    "packages": ("policyengine", "policyengine-us"),
+}
+_REQUIRED_CAMPAIGN_DATASET_FIELDS = (
+    "source",
+    "revision",
+    "sha256",
+    "built_with",
+    "country",
+)
+
 
 def _registered_runner_types() -> set[str]:
     """The keys of run_comparison.py's ``RUNNERS`` table.
@@ -211,6 +229,51 @@ def _read_json_object(path: Path, *, label: str, problems: list[str]) -> dict | 
     return doc
 
 
+def _require_campaign_fields(
+    value: object,
+    fields: tuple[str, ...],
+    *,
+    label: str,
+    problems: list[str],
+) -> None:
+    """Require a complete, nonempty identity object.
+
+    Exact report/campaign equality alone is insufficient: both artifacts could
+    omit the same identity fields and still appear aligned.
+    """
+
+    if not isinstance(value, dict):
+        problems.append(f"{label} must be an object")
+        return
+    missing = [field for field in fields if not str(value.get(field) or "").strip()]
+    if missing:
+        problems.append(f"{label} is missing {', '.join(missing)}")
+
+
+def _campaign_identity_problems(label: str, campaign: dict) -> list[str]:
+    """Validate the complete runtime and dataset identity of one campaign."""
+
+    problems: list[str] = []
+    runtime = campaign.get("runtime_provenance")
+    if not isinstance(runtime, dict):
+        problems.append(f"{label} runtime_provenance must be an object")
+    else:
+        for section, fields in _REQUIRED_CAMPAIGN_RUNTIME_FIELDS.items():
+            _require_campaign_fields(
+                runtime.get(section),
+                fields,
+                label=f"{label} runtime_provenance.{section}",
+                problems=problems,
+            )
+    _require_campaign_fields(
+        campaign.get("dataset_identity"),
+        _REQUIRED_CAMPAIGN_DATASET_FIELDS,
+        label=f"{label} dataset_identity",
+        problems=problems,
+    )
+    return problems
+
+
 def _campaign_projection_problems(name: str, config: dict) -> list[str]:
     """Validate declaration, projected report, and source campaign as one chain."""
 
@@ -326,6 +389,7 @@ def _campaign_projection_problems(name: str, config: dict) -> list[str]:
             problems.append(
                 f"{label} source campaign generated_by does not align with runner"
             )
+        problems.extend(_campaign_identity_problems(f"{label} source campaign", campaign))
 
         campaign_runtime = campaign.get("runtime_provenance")
         projected_runtime = provenance.get("runtime_provenance")
@@ -360,6 +424,133 @@ def _campaign_projection_problems(name: str, config: dict) -> list[str]:
                 f"{label} projected dataset_identity does not exactly align "
                 "with source campaign"
             )
+
+        jurisdiction = str(suite.get("jurisdiction") or "").strip().upper()
+        if not jurisdiction:
+            problems.append(f"{label} declaration has no jurisdiction")
+            continue
+        requested_states = campaign.get("requested_states")
+        if not isinstance(requested_states, list) or jurisdiction not in {
+            str(state).upper() for state in requested_states
+        }:
+            problems.append(
+                f"{label} jurisdiction is not present in source campaign "
+                "requested_states"
+            )
+        campaign_comparison = campaign.get("comparison")
+        campaign_states = {}
+        if isinstance(campaign_comparison, dict):
+            campaign_states = campaign_comparison.get("states") or {}
+        state_entry = (
+            campaign_states.get(jurisdiction)
+            if isinstance(campaign_states, dict)
+            else None
+        )
+        if not isinstance(state_entry, dict):
+            problems.append(
+                f"{label} source campaign has no comparison state for {jurisdiction}"
+            )
+            continue
+        for field in ("output", "program", "policyengine_target"):
+            if not str(state_entry.get(field) or "").strip():
+                problems.append(
+                    f"{label} source campaign comparison state is missing {field}"
+                )
+        campaign_mismatches = state_entry.get("mismatches")
+        if not isinstance(campaign_mismatches, list):
+            problems.append(
+                f"{label} source campaign comparison state mismatches must be a list"
+            )
+            campaign_mismatches = []
+
+        compared = state_entry.get("compared_count")
+        mismatch_count = state_entry.get("mismatch_count")
+        if (
+            not isinstance(compared, int)
+            or isinstance(compared, bool)
+            or compared <= 0
+        ):
+            problems.append(
+                f"{label} source campaign compared_count must be a positive integer"
+            )
+            continue
+        if (
+            not isinstance(mismatch_count, int)
+            or isinstance(mismatch_count, bool)
+            or not 0 <= mismatch_count <= compared
+        ):
+            problems.append(
+                f"{label} source campaign mismatch_count must be an integer "
+                "between zero and compared_count"
+            )
+            continue
+
+        matched = compared - mismatch_count
+        match_rate = matched / compared * 100
+        if report.get("population") != "populace-us":
+            problems.append(f"{label} report population is not 'populace-us'")
+        if report.get("case_count") != compared:
+            problems.append(
+                f"{label} report case_count does not align with source campaign"
+            )
+        if engines.get("axiom") != state_entry.get("program"):
+            problems.append(
+                f"{label} report Axiom program does not align with source campaign"
+            )
+        if engines.get(oracle) != state_entry.get("policyengine_target"):
+            problems.append(
+                f"{label} report oracle target does not align with source campaign"
+            )
+        if report.get("mismatches") != campaign_mismatches:
+            problems.append(
+                f"{label} report mismatches do not align with source campaign"
+            )
+
+        expected_summary = {
+            "comparison_count": compared,
+            "match_count": matched,
+            "match_rate": match_rate,
+            "mismatch_count": mismatch_count,
+        }
+        if report.get("summary") != expected_summary:
+            problems.append(
+                f"{label} report summary does not align with source campaign"
+            )
+
+        aggregates = report.get("aggregates")
+        if not isinstance(aggregates, list) or len(aggregates) != 1:
+            problems.append(f"{label} report must carry exactly one aggregate")
+        else:
+            aggregate = aggregates[0]
+            expected_aggregate_fields = {
+                "concept": state_entry.get("output"),
+                "comparison_count": compared,
+                "compared": compared,
+                "match_count": matched,
+                "matched": matched,
+                "mismatch_count": mismatch_count,
+                "match_rate": match_rate,
+                "weighted_match_rate": match_rate,
+            }
+            if not isinstance(aggregate, dict) or any(
+                aggregate.get(field) != value
+                for field, value in expected_aggregate_fields.items()
+            ):
+                problems.append(
+                    f"{label} report aggregate does not align with source campaign"
+                )
+
+        for field in (
+            "tolerance",
+            "relative_tolerance",
+            "max_absolute_difference",
+            "weighted_compared_tax_units",
+        ):
+            if provenance.get(field) != state_entry.get(field):
+                problems.append(
+                    f"{label} report provenance {field} does not align with "
+                    "source campaign"
+                )
     return problems
 
 

@@ -40,6 +40,30 @@ _DESCRIPTION_BY_OUTPUT = {
     ),
 }
 
+_REQUIRED_RUNTIME_FIELDS = {
+    "rulespec": ("repository", "commit", "working_tree"),
+    "axiom_engine": (
+        "repository",
+        "commit",
+        "executable_sha256",
+        "working_tree",
+    ),
+    "packages": ("policyengine", "policyengine-us"),
+}
+_REQUIRED_DATASET_FIELDS = ("source", "revision", "sha256", "built_with", "country")
+
+
+def _require_nonempty_fields(value: object, fields: tuple[str, ...], label: str) -> dict:
+    if not isinstance(value, dict):
+        raise ValueError(f"campaign report {label} must be an object")
+    missing = [field for field in fields if not str(value.get(field) or "").strip()]
+    if missing:
+        raise ValueError(
+            f"campaign report {label} must carry {', '.join(fields)}; "
+            f"missing {', '.join(missing)}"
+        )
+    return value
+
 
 def latest_campaign_report() -> Path:
     candidates = sorted(REPORTS.glob("state-tax-populace-campaign-*.json"))
@@ -73,12 +97,19 @@ def validate_campaign_run_provenance(campaign: dict) -> tuple[str, str, dict]:
         )
 
     runtime = campaign.get("runtime_provenance")
-    rulespec = (runtime or {}).get("rulespec") or {}
-    if not rulespec.get("repository") or not rulespec.get("commit"):
-        raise ValueError(
-            "campaign report runtime_provenance.rulespec must carry "
-            "repository and commit"
+    if not isinstance(runtime, dict):
+        raise ValueError("campaign report runtime_provenance must be an object")
+    for section, fields in _REQUIRED_RUNTIME_FIELDS.items():
+        _require_nonempty_fields(
+            runtime.get(section),
+            fields,
+            f"runtime_provenance.{section}",
         )
+    _require_nonempty_fields(
+        campaign.get("dataset_identity"),
+        _REQUIRED_DATASET_FIELDS,
+        "dataset_identity",
+    )
     return generated_at, run_kind, runtime
 
 

@@ -149,6 +149,19 @@ def test_ct_ordinary_income_tax_module_classifies_to_reviewed_surface():
     )
 
 
+def test_al_schedule_module_classifies_to_reviewed_surface():
+    assert rv.classify(
+        "us-al/policies/income_tax/"
+        "2026_section_40_18_5_schedule_before_credits.yaml"
+    ) == ("state_income_tax", "AL")
+    assert (
+        rv.classify(
+            "us-al/policies/income_tax/2026_resident_liability_source_hold.yaml"
+        )
+        is None
+    )
+
+
 def test_oracle_status_constants_match_plan_headline():
     # The strict headline counts only 'executable' surfaces (the plan's 14/56);
     # the broader ORACLE_STATUSES set additionally admits parameter/partial runs.
