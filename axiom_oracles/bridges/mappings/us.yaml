@@ -30546,6 +30546,20 @@ mappings:
     candidate_priority: P4
     rationale: *ks_2026_parameter_rationale
 
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_single_additional_standard_deduction_count_ceiling
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: *ks_2026_parameter_rationale
+
+  - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_joint_additional_standard_deduction_count_ceiling
+    country: *ks_2026_country
+    program: *ks_2026_program
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: *ks_2026_parameter_rationale
+
   - legal_id: us-ks:policies/income_tax/2026_full_year_resident_core#ks_pit_2026_single_standard_deduction
     country: *ks_2026_country
     program: *ks_2026_program
