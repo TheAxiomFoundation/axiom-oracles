@@ -1,0 +1,250 @@
+schema: axiom_oracles.dispositions.v1
+suite: ga-snap-ecps
+updated: '2026-07-27'
+entries:
+- id: ga-bbce-gross-band-snap_eligible
+  concept: us:statutes/7/2014/o#snap_eligible
+  kind: eligibility_right_only
+  case_selector:
+    case_ids:
+    - ecps-29773
+    - ecps-29788
+    - ecps-29794
+    - ecps-29810
+    - ecps-29844
+    - ecps-29863
+    - ecps-29864
+    - ecps-29870
+    - ecps-29915
+    - ecps-30013
+    - ecps-30058
+    - ecps-30074
+    - ecps-30087
+    - ecps-30096
+    - ecps-30102
+    - ecps-30105
+    - ecps-30128
+    - ecps-30138
+    - ecps-30175
+    - ecps-30203
+    - ecps-30236
+    - ecps-30237
+    - ecps-30245
+    - ecps-30262
+    - ecps-30264
+    - ecps-30282
+    - ecps-30283
+    - ecps-30415
+    - ecps-30419
+    - ecps-30435
+    - ecps-30439
+    - ecps-30486
+    - ecps-30598
+    - ecps-30622
+    - ecps-30658
+    - ecps-30660
+    - ecps-30671
+    - ecps-30677
+    - ecps-30738
+    - ecps-30811
+    - ecps-30840
+    - ecps-30864
+    - ecps-30873
+    - ecps-30955
+    - ecps-30987
+    - ecps-31031
+    - ecps-31053
+    - ecps-31062
+    - ecps-31072
+    - ecps-31084
+    - ecps-31086
+    - ecps-31101
+    - ecps-31119
+    - ecps-31135
+    - ecps-31144
+    - ecps-31156
+    - ecps-31192
+    - ecps-31309
+    - ecps-31318
+  disposition: axiom_encoding_gap
+  evidence:
+    mechanism: |-
+      Georgia's broad-based categorical eligibility (SNAP state option;
+      PolicyEngine models gross screen x1.3 FPL, x2.0 for elderly/disabled
+      households, at 2026-01 per gov/hhs/tanf/non_cash parameters) is not in
+      the composed us-ga/snap/fy-2026 program, which applies only the standard
+      federal tests. Every selected row is verified per-row against axiom's
+      persisted output surface: household gross income sits inside the band
+      above the federal 130 percent limit the composed program applies and at
+      or below the state's BBCE screen, verified against axiom's own computed
+      gross income and limit. Axiom-side modeling boundary, tracked for
+      encoding in rulespec-us#1098.
+  linked_issue: https://github.com/TheAxiomFoundation/rulespec-us/issues/1098
+  expires_on_source_change: true
+- id: ga-bbce-net-waiver-snap_eligible
+  concept: us:statutes/7/2014/o#snap_eligible
+  kind: eligibility_right_only
+  case_selector:
+    case_ids:
+    - ecps-29791
+    - ecps-29803
+    - ecps-29854
+    - ecps-29936
+    - ecps-29957
+    - ecps-30041
+    - ecps-30091
+    - ecps-30323
+    - ecps-30373
+    - ecps-30405
+    - ecps-30425
+    - ecps-30449
+    - ecps-30454
+    - ecps-30536
+    - ecps-30625
+    - ecps-30665
+    - ecps-30725
+    - ecps-30827
+    - ecps-30841
+    - ecps-30875
+    - ecps-30910
+    - ecps-30974
+    - ecps-31023
+    - ecps-31066
+    - ecps-31071
+    - ecps-31104
+    - ecps-31138
+    - ecps-31145
+    - ecps-31167
+    - ecps-31177
+  disposition: axiom_encoding_gap
+  evidence:
+    mechanism: |-
+      Georgia's broad-based categorical eligibility (SNAP state option;
+      PolicyEngine models gross screen x1.3 FPL, x2.0 for elderly/disabled
+      households, at 2026-01 per gov/hhs/tanf/non_cash parameters) is not in
+      the composed us-ga/snap/fy-2026 program, which applies only the standard
+      federal tests. Every selected row is verified per-row against axiom's
+      persisted output surface: the household passes axiom's gross test and
+      fails only the net-income test, which the state's BBCE waives. Axiom-
+      side modeling boundary, tracked for encoding in rulespec-us#1098.
+  linked_issue: https://github.com/TheAxiomFoundation/rulespec-us/issues/1098
+  expires_on_source_change: true
+- id: ga-bbce-gross-band-snap_benefit
+  concept: us:statutes/7/2014/u#snap_benefit
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-29773
+    - ecps-29788
+    - ecps-29794
+    - ecps-29810
+    - ecps-29844
+    - ecps-29863
+    - ecps-29864
+    - ecps-29870
+    - ecps-29915
+    - ecps-30058
+    - ecps-30074
+    - ecps-30087
+    - ecps-30096
+    - ecps-30102
+    - ecps-30105
+    - ecps-30128
+    - ecps-30138
+    - ecps-30236
+    - ecps-30237
+    - ecps-30245
+    - ecps-30264
+    - ecps-30282
+    - ecps-30283
+    - ecps-30415
+    - ecps-30419
+    - ecps-30435
+    - ecps-30439
+    - ecps-30486
+    - ecps-30598
+    - ecps-30622
+    - ecps-30658
+    - ecps-30660
+    - ecps-30671
+    - ecps-30677
+    - ecps-30738
+    - ecps-30840
+    - ecps-30864
+    - ecps-30873
+    - ecps-30955
+    - ecps-30987
+    - ecps-31031
+    - ecps-31053
+    - ecps-31062
+    - ecps-31072
+    - ecps-31086
+    - ecps-31101
+    - ecps-31119
+    - ecps-31135
+    - ecps-31144
+    - ecps-31156
+    - ecps-31192
+    - ecps-31309
+  disposition: axiom_encoding_gap
+  evidence:
+    mechanism: |-
+      Georgia's broad-based categorical eligibility (SNAP state option;
+      PolicyEngine models gross screen x1.3 FPL, x2.0 for elderly/disabled
+      households, at 2026-01 per gov/hhs/tanf/non_cash parameters) is not in
+      the composed us-ga/snap/fy-2026 program, which applies only the standard
+      federal tests. Every selected row is verified per-row against axiom's
+      persisted output surface: household gross income sits inside the band
+      above the federal 130 percent limit the composed program applies and at
+      or below the state's BBCE screen, verified against axiom's own computed
+      gross income and limit. Axiom-side modeling boundary, tracked for
+      encoding in rulespec-us#1098.
+  linked_issue: https://github.com/TheAxiomFoundation/rulespec-us/issues/1098
+  expires_on_source_change: true
+- id: ga-bbce-net-waiver-snap_benefit
+  concept: us:statutes/7/2014/u#snap_benefit
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-29791
+    - ecps-29803
+    - ecps-29854
+    - ecps-29936
+    - ecps-29957
+    - ecps-30041
+    - ecps-30091
+    - ecps-30323
+    - ecps-30373
+    - ecps-30405
+    - ecps-30425
+    - ecps-30449
+    - ecps-30454
+    - ecps-30536
+    - ecps-30625
+    - ecps-30665
+    - ecps-30725
+    - ecps-30827
+    - ecps-30841
+    - ecps-30910
+    - ecps-30974
+    - ecps-31023
+    - ecps-31066
+    - ecps-31071
+    - ecps-31104
+    - ecps-31138
+    - ecps-31145
+    - ecps-31167
+    - ecps-31177
+  disposition: axiom_encoding_gap
+  evidence:
+    mechanism: |-
+      Georgia's broad-based categorical eligibility (SNAP state option;
+      PolicyEngine models gross screen x1.3 FPL, x2.0 for elderly/disabled
+      households, at 2026-01 per gov/hhs/tanf/non_cash parameters) is not in
+      the composed us-ga/snap/fy-2026 program, which applies only the standard
+      federal tests. Every selected row is verified per-row against axiom's
+      persisted output surface: the household passes axiom's gross test and
+      fails only the net-income test, which the state's BBCE waives. Axiom-
+      side modeling boundary, tracked for encoding in rulespec-us#1098.
+  linked_issue: https://github.com/TheAxiomFoundation/rulespec-us/issues/1098
+  expires_on_source_change: true

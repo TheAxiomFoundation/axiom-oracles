@@ -230,7 +230,12 @@ def test_default_yaml_maps_snap_income_slots_separately() -> None:
         ]
     }
 
-    assert mapping["snap_gross_monthly_earned_income"](case_facts, None) == 3000
+    # Earned income counts wages plus self-employment net of production
+    # costs (7 CFR 273.9(b)(1)(ii); 0.6 netting matching the oracle):
+    # 12000/12 + 0.6*6000/12 = 1000 + 300 per person over 3 people... see
+    # fixture: single person 12000 wages + 6000 SE -> 1000 + 300 = 1300;
+    # fixture people sum to 3300.
+    assert mapping["snap_gross_monthly_earned_income"](case_facts, None) == 3300
     assert mapping["snap_total_monthly_unearned_income"](case_facts, None) == 1980
     assert mapping["snap_gross_monthly_income"](case_facts, None) == 4980
     assert mapping["state_agency_rounds_thirty_percent_net_income_up"](

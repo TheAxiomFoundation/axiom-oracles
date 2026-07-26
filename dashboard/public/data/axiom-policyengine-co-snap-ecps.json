@@ -184,12 +184,22 @@
       "axiom_rules_engine_sha": "48797e101c093bb388be718c6f5d8fc9d9f94a7d",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-24T06:33:17Z",
+    "generated_at": "2026-07-26T07:07:01Z",
     "generated_by": "scripts/run_comparison.py::co-snap-ecps",
     "oracle": {
       "name": "policyengine",
       "policyengine_us": "1.705.1"
     },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-us",
+        "sha": "ca2d424fcb85ce8c3a8f4706113331710f114460"
+      },
+      {
+        "repo": "TheAxiomFoundation/rulespec-us-co",
+        "sha": "8e6369ddaf78127b8399e971e4cfd4c094851394"
+      }
+    ],
     "run_kind": "manual",
     "schema": "axiom_oracles.provenance.v1"
   },

@@ -230,8 +230,8 @@
   "population": "spsd-synthetic-2022",
   "provenance": {
     "attribution": "This analysis is based on Statistics Canada's Social Policy Simulation Database and Model. The assumptions and calculations underlying the simulation results were prepared by the Axiom Foundation and the responsibility for the use and interpretation of these data is entirely that of the author(s).",
-    "generated": "2026-07-23",
-    "generated_at": "2026-07-24T03:38:17Z",
+    "generated": "2026-07-26",
+    "generated_at": "2026-07-26T05:50:24Z",
     "generator": "scripts/generate_ca_federal_tax_spsm.py",
     "licence": "SPSD/M Licence Agreement v34; no Package contents are redistributed with this repository (s.3.1).",
     "oracle": "spsm",
@@ -263,6 +263,22 @@
   "summary": {
     "amt_overwrite_class_count": 8588,
     "comparison_count": 967396,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 8588
+      },
+      "dispositions_file": null,
+      "expired_entries": [],
+      "explained_rate": 99.97,
+      "orphaned_entries": [],
+      "raw_match_rate": 99.09,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 253
+    },
     "match_count": 958555,
     "match_rate": 99.09,
     "mismatch_count": 8841,
