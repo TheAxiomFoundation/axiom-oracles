@@ -230,6 +230,28 @@ def _read_json_object(path: Path, *, label: str, problems: list[str]) -> dict | 
     return doc
 
 
+def _json_values_exactly_equal(left: object, right: object) -> bool:
+    """Compare parsed JSON without Python's bool/int equality coercion."""
+
+    if isinstance(left, bool) or isinstance(right, bool):
+        return type(left) is type(right) and left == right
+    if isinstance(left, int | float) and isinstance(right, int | float):
+        return left == right
+    if type(left) is not type(right):
+        return False
+    if isinstance(left, dict):
+        return left.keys() == right.keys() and all(
+            _json_values_exactly_equal(value, right[key])
+            for key, value in left.items()
+        )
+    if isinstance(left, list):
+        return len(left) == len(right) and all(
+            _json_values_exactly_equal(lvalue, rvalue)
+            for lvalue, rvalue in zip(left, right, strict=True)
+        )
+    return left == right
+
+
 def _require_campaign_fields(
     value: object,
     fields: tuple[str, ...],
@@ -407,7 +429,7 @@ def _campaign_projection_problems(name: str, config: dict) -> list[str]:
         if (
             not isinstance(campaign_runtime, dict)
             or not campaign_runtime
-            or projected_runtime != campaign_runtime
+            or not _json_values_exactly_equal(projected_runtime, campaign_runtime)
         ):
             problems.append(
                 f"{label} projected runtime_provenance does not exactly align "
@@ -419,7 +441,7 @@ def _campaign_projection_problems(name: str, config: dict) -> list[str]:
         if (
             not isinstance(campaign_dataset, dict)
             or not campaign_dataset
-            or projected_dataset != campaign_dataset
+            or not _json_values_exactly_equal(projected_dataset, campaign_dataset)
         ):
             problems.append(
                 f"{label} projected dataset_identity does not exactly align "
@@ -507,7 +529,9 @@ def _campaign_projection_problems(name: str, config: dict) -> list[str]:
             problems.append(
                 f"{label} report oracle target does not align with source campaign"
             )
-        if report.get("mismatches") != campaign_mismatches:
+        if not _json_values_exactly_equal(
+            report.get("mismatches"), campaign_mismatches
+        ):
             problems.append(
                 f"{label} report mismatches do not align with source campaign"
             )
@@ -518,7 +542,7 @@ def _campaign_projection_problems(name: str, config: dict) -> list[str]:
             "match_rate": match_rate,
             "mismatch_count": mismatch_count,
         }
-        if report.get("summary") != expected_summary:
+        if not _json_values_exactly_equal(report.get("summary"), expected_summary):
             problems.append(
                 f"{label} report summary does not align with source campaign"
             )
@@ -539,7 +563,7 @@ def _campaign_projection_problems(name: str, config: dict) -> list[str]:
                 "weighted_match_rate": match_rate,
             }
             if not isinstance(aggregate, dict) or any(
-                aggregate.get(field) != value
+                not _json_values_exactly_equal(aggregate.get(field), value)
                 for field, value in expected_aggregate_fields.items()
             ):
                 problems.append(
@@ -566,7 +590,7 @@ def _campaign_projection_problems(name: str, config: dict) -> list[str]:
                     f"{label} source campaign {field} must be a finite "
                     f"{qualifier} number"
                 )
-            if provenance.get(field) != state_entry.get(field):
+            if not _json_values_exactly_equal(provenance.get(field), value):
                 problems.append(
                     f"{label} report provenance {field} does not align with "
                     "source campaign"

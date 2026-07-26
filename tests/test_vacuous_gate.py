@@ -581,6 +581,34 @@ def test_campaign_projection_rejects_invalid_aligned_evidence(
     assert any(f"source campaign {field} must be a finite" in p for p in problems)
 
 
+@pytest.mark.parametrize(
+    ("path", "expected"),
+    [
+        (("provenance", "max_absolute_difference"), "provenance"),
+        (("summary", "mismatch_count"), "summary"),
+        (("aggregates", 0, "mismatch_count"), "aggregate"),
+    ],
+)
+def test_campaign_projection_rejects_report_boolean_for_numeric_zero(
+    tmp_path, monkeypatch, path, expected
+):
+    """Python's ``False == 0`` must not weaken exact JSON binding."""
+
+    gate = _load_gate()
+    config, report_path, _ = _campaign_projection_fixture(
+        gate, tmp_path, monkeypatch
+    )
+    report = json.loads(report_path.read_text())
+    target = report
+    for part in path[:-1]:
+        target = target[part]
+    target[path[-1]] = False
+    report_path.write_text(json.dumps(report))
+
+    problems = gate._campaign_projection_problems("campaign.yaml", config)
+    assert any(expected in p and "does not align" in p for p in problems)
+
+
 def test_campaign_projection_rejects_mismatch_count_without_evidence_rows(
     tmp_path, monkeypatch
 ):
