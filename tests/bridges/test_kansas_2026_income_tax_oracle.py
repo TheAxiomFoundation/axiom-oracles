@@ -12,7 +12,7 @@ MODULE = "us-ks:policies/income_tax/2026_full_year_resident_core"
 RULESPEC_RELATIVE_PATH = Path(
     "us-ks/policies/income_tax/2026_full_year_resident_core.yaml"
 )
-EXPECTED_OUTPUT_COUNT = 32
+EXPECTED_OUTPUT_COUNT = 34
 EXPECTED_DIRECT_VARIABLES = {
     "ks_pit_2026_standard_deduction": "ks_standard_deduction",
     "ks_pit_2026_candidate_kansas_adjusted_gross_income": "ks_agi",
@@ -114,6 +114,18 @@ def test_kansas_2026_direct_and_not_comparable_boundaries() -> None:
             assert mapping.rationale
 
 
+def test_kansas_2026_candidate_deduction_rationale_matches_election_semantics() -> None:
+    mapping = _module_mappings()["ks_pit_2026_candidate_deduction"]
+
+    assert (
+        mapping.rationale
+        == "Axiom exposes the candidate deduction selected by its explicit "
+        "Kansas itemization election. PolicyEngine exposes standard and "
+        "itemized amounts separately and does not expose this bounded "
+        "election intermediate."
+    )
+
+
 @pytest.mark.parametrize("program", [None, "tax"])
 def test_kansas_2026_core_remains_in_coverage(
     tmp_path: Path,
@@ -133,4 +145,4 @@ def test_kansas_2026_core_remains_in_coverage(
     assert len(items) == EXPECTED_OUTPUT_COUNT
     assert {item["program"] for item in items} == {"tax"}
     assert sum(item["status"] == "comparable" for item in items) == 4
-    assert sum(item["status"] == "known_not_comparable" for item in items) == 28
+    assert sum(item["status"] == "known_not_comparable" for item in items) == 30
