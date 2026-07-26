@@ -327,12 +327,9 @@ def _campaign_projection_problems(name: str, config: dict) -> list[str]:
                 f"{label} source campaign generated_by does not align with runner"
             )
 
-        campaign_rulespec = (campaign.get("runtime_provenance") or {}).get(
-            "rulespec"
-        ) or {}
-        projected_runtime_rulespec = (provenance.get("runtime_provenance") or {}).get(
-            "rulespec"
-        ) or {}
+        campaign_runtime = campaign.get("runtime_provenance")
+        projected_runtime = provenance.get("runtime_provenance")
+        campaign_rulespec = (campaign_runtime or {}).get("rulespec") or {}
         expected_rulespec = {
             "repo": campaign_rulespec.get("repository"),
             "sha": campaign_rulespec.get("commit"),
@@ -342,10 +339,26 @@ def _campaign_projection_problems(name: str, config: dict) -> list[str]:
                 f"{label} report RuleSpec provenance does not align with "
                 "source campaign runtime"
             )
-        if projected_runtime_rulespec != campaign_rulespec:
+        if (
+            not isinstance(campaign_runtime, dict)
+            or not campaign_runtime
+            or projected_runtime != campaign_runtime
+        ):
             problems.append(
-                f"{label} projected runtime RuleSpec does not align with "
-                "source campaign runtime"
+                f"{label} projected runtime_provenance does not exactly align "
+                "with source campaign"
+            )
+
+        campaign_dataset = campaign.get("dataset_identity")
+        projected_dataset = provenance.get("dataset_identity")
+        if (
+            not isinstance(campaign_dataset, dict)
+            or not campaign_dataset
+            or projected_dataset != campaign_dataset
+        ):
+            problems.append(
+                f"{label} projected dataset_identity does not exactly align "
+                "with source campaign"
             )
     return problems
 

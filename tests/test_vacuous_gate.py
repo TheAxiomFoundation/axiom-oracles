@@ -192,12 +192,29 @@ def _campaign_projection_fixture(gate, tmp_path, monkeypatch):
         "repository": "TheAxiomFoundation/rulespec-us",
         "commit": "1" * 40,
     }
+    runtime = {
+        "rulespec": rulespec,
+        "axiom_engine": {
+            "repository": "TheAxiomFoundation/axiom-rules-engine",
+            "commit": "2" * 40,
+        },
+        "packages": {
+            "policyengine": "4.18.9",
+            "policyengine-us": "1.752.2",
+        },
+    }
+    dataset = {
+        "source": "pinned",
+        "revision": "populace-us-test",
+        "sha256": "3" * 12,
+    }
     campaign = {
         "schema_version": "axiom.state_tax_populace_campaign_report.v1",
         "generated_at": "2026-07-26T12:00:00Z",
         "generated_by": "scripts/run.py",
         "run_kind": "manual",
-        "runtime_provenance": {"rulespec": rulespec},
+        "runtime_provenance": runtime,
+        "dataset_identity": dataset,
     }
     (reports / "campaign.json").write_text(json.dumps(campaign))
     report = {
@@ -216,7 +233,8 @@ def _campaign_projection_fixture(gate, tmp_path, monkeypatch):
                     "sha": rulespec["commit"],
                 }
             ],
-            "runtime_provenance": {"rulespec": rulespec},
+            "runtime_provenance": runtime,
+            "dataset_identity": dataset,
         },
     }
     report_path = data / "ct.json"
@@ -299,6 +317,81 @@ def test_campaign_projection_rejects_report_misalignment(tmp_path, monkeypatch):
     assert "generated_at does not align" in joined
     assert "run_kind does not align" in joined
     assert "RuleSpec provenance does not align" in joined
+
+
+@pytest.mark.parametrize(
+    ("section", "key", "value"),
+    [
+        ("axiom_engine", "commit", "4" * 40),
+        ("packages", "policyengine-us", "9.9.9"),
+    ],
+)
+def test_campaign_projection_rejects_runtime_identity_mutation(
+    tmp_path, monkeypatch, section, key, value
+):
+    gate = _load_gate()
+    config, report_path, _ = _campaign_projection_fixture(gate, tmp_path, monkeypatch)
+    report = json.loads(report_path.read_text())
+    report["provenance"]["runtime_provenance"][section][key] = value
+    report_path.write_text(json.dumps(report))
+
+    problems = gate._campaign_projection_problems("campaign.yaml", config)
+    assert any(
+        "runtime_provenance does not exactly align" in problem for problem in problems
+    )
+
+
+def test_campaign_projection_rejects_dataset_revision_mutation(tmp_path, monkeypatch):
+    gate = _load_gate()
+    config, report_path, _ = _campaign_projection_fixture(gate, tmp_path, monkeypatch)
+    report = json.loads(report_path.read_text())
+    report["provenance"]["dataset_identity"]["revision"] = "tampered"
+    report_path.write_text(json.dumps(report))
+
+    problems = gate._campaign_projection_problems("campaign.yaml", config)
+    assert any(
+        "dataset_identity does not exactly align" in problem for problem in problems
+    )
+
+
+def test_declared_file_rejects_traversal(tmp_path):
+    gate = _load_gate()
+    root = tmp_path / "root"
+    root.mkdir()
+    outside = tmp_path / "outside.txt"
+    outside.write_text("outside")
+    problems = []
+
+    assert (
+        gate._declared_file(
+            root,
+            "../outside.txt",
+            label="fixture",
+            problems=problems,
+        )
+        is None
+    )
+    assert any("escapes its declared root" in problem for problem in problems)
+
+
+def test_declared_file_rejects_absolute_path(tmp_path):
+    gate = _load_gate()
+    root = tmp_path / "root"
+    root.mkdir()
+    outside = tmp_path / "outside.txt"
+    outside.write_text("outside")
+    problems = []
+
+    assert (
+        gate._declared_file(
+            root,
+            str(outside),
+            label="fixture",
+            problems=problems,
+        )
+        is None
+    )
+    assert any("must be repo-relative" in problem for problem in problems)
 
 
 # --- Guard 2: freshness age computation + alarms ----------------------------
