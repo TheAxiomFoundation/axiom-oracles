@@ -616,13 +616,15 @@ residual), #229 (small-suite grounding).
 
 ### State
 
-- In progress; scoped verification found a ledger-accuracy blocker.
+- Complete; verdict is `REQUEST-CHANGES`.
+- The Git delta, all requested checks, and PR body pass. The target ledger
+  fails the explicit factual-accuracy requirement.
 - Target under review:
   `41512b26598858d47a306fe71f0df4e7360d9d41`.
 - Review writes are confined to branch
   `review/fed-parity-snap-residual-cleanup-41512b26` in the disposable
   `.git/review-worktrees/snap-residual-cleanup-41512b26` worktree.
-- No remote or GitHub writes are authorized or planned.
+- No remote or GitHub writes were made.
 
 ### Done
 
@@ -672,7 +674,9 @@ residual), #229 (small-suite grounding).
 - Confirmed the PR body’s version, served-artifact
   `656 / 332 / 119 / zero-silent`, and unchanged-registration claims. All five
   named issue targets exist, are open, and describe the claimed mechanisms.
+- Wrote and committed the complete scoped verdict to `REVIEW-REPORT.md` at
+  `b88803d7`.
 
 ### Next
 
-- Write and commit the final confirmation report, then complete this ledger.
+- None.
