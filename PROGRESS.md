@@ -500,10 +500,22 @@ residual), #229 (small-suite grounding).
   `-QudTS5FEzSKZ0Anf7ddx`.
 - Ruff is not installed in the reusable repository virtual environment; the
   attempted module invocation failed before linting and changed no files.
+- Added a read-only semantic `emit_case_artifacts.py --check` mode that uses
+  only committed canonical dashboard reports and served chunks. It checks
+  exact mismatch identities, values, annotations, chunks, counts, engines,
+  total cases, and concepts, and fails closed on incomplete canonical lists.
+- Added six hermetic case-artifact tests, including the exact silent-
+  classification regression and mismatch-only behavior.
+- Ran the new gate against the five currently committed served directories.
+  It independently reproduces the review's 266 wrong annotations, three
+  missing rows, two obsolete rows, and all 138 silent MA/SC categorical
+  classifications; it additionally detects 15 stale mismatch-value rows and
+  stale engine metadata. This failure is expected until the five suites and
+  chunks are regenerated.
 
 ### Next
 
-1. Add a served/canonical case-artifact parity check.
-2. Regenerate all five suites and re-run every candidate evidence test.
-3. Regenerate all derived and served artifacts, run the full `--check` chain,
-   reconcile baseline/current counts, and write the untracked final report.
+1. Regenerate all five suites and re-run every candidate evidence test.
+2. Regenerate all derived and served artifacts, wire the targeted gate into
+   CI, and run the full `--check` chain.
+3. Reconcile baseline/current counts and write the untracked final report.
