@@ -741,8 +741,12 @@ residual), #229 (small-suite grounding).
   PE 1.767.3 also aggregates it in Vermont child-care contributions. There is
   still no generic TaxUnit output, so the classification remains correct and
   no divergence is hidden.
+- Removed the untracked 85 MB local GitNexus scratch index from this disposable
+  worktree. Its best-effort global unregister again hit sandbox `EPERM` on
+  `/Users/maxghenis/.gitnexus/registry.json`; because initial registration had
+  already failed, no global entry for this worktree was created or changed.
+  The worktree is clean after local removal.
 
 ## Next
 
-1. Remove local graph scratch data and commit the final self-contained verdict
-   to `REVIEW-REPORT.md`.
+1. Commit the final self-contained verdict to `REVIEW-REPORT.md`.
