@@ -650,11 +650,43 @@ residual), #229 (small-suite grounding).
   output before it was interrupted after 60 seconds in the network-restricted
   sandbox. The YAML-only blast radius is therefore being established through
   direct registry/coverage call-path inspection.
+- Audited all 14 entries against the cached PolicyEngine-US wheel whose
+  `METADATA` identifies version 1.767.3, the RuleSpec pipeline source, and the
+  companion fixtures. A live 1.767.3 import confirmed `additional_medicare_tax`
+  is TaxUnit/Year/USD, the five exclusion keys are 200k/250k/125k/200k/200k,
+  and the shared rate is 0.009.
+- Found two blocking truthfulness defects:
+  1. `federal_additional_medicare_tax` is over-broad as a `direct_variable`.
+     It is algebraically identical to PE only when the RuleSpec ordinary-case
+     attestation holds. RuleSpec deliberately returns zero when the attestation
+     is false, while PE has no section-1401(c) guard. Replaying the companion
+     false-domain facts directly in PE 1.767.3 produced 1,696.725 rather than
+     RuleSpec's asserted zero; the registry has no conditional-domain field.
+  2. `pipeline_additional_medicare_self_employment_tax_rate` is wrongly marked
+     `not_comparable`. PE exposes the exact 0.009 section-1401(b)(2) quantity at
+     `gov.irs.payroll.medicare.additional.rate`, and this same mapping file
+     already maps the underlying statute output to that parameter.
+- The four threshold comparables are truthful: JOINT 250k, representative
+  SINGLE/other 200k, SEPARATE 125k, and the five-way filing-status selector all
+  match PE's parameter keys and annual USD values. Their PE parameter targets
+  are scalar/entityless; the selected PE variable consumes TaxUnit filing
+  status, so no Person/TaxUnit mismatch is hidden.
+- The other eight `not_comparable` classifications survive adversarial search:
+  PE has no 1401(c) domain judgment, isolated 0.9% wage or self-employment tax
+  legs, half-threshold derivation, self-employment-only base, reduced
+  self-employment threshold, or TaxUnit wage/SE-income surface. The tempting
+  variables are materially different: `self_employment_medicare_tax` is
+  Person-level ordinary 2.9% section-1401(b)(1) tax,
+  `employee_medicare_tax` is Person-level ordinary 1.45% tax, and
+  `payroll_tax_gross_wages` / `taxable_self_employment_income` are Person-level.
+- One nonblocking rationale defect remains: the TaxUnit SE-income entry says PE
+  aggregates `taxable_self_employment_income` only inside
+  `additional_medicare_tax`, but PE 1.767.3 also aggregates it internally in
+  Vermont child-care contributions. No generic TaxUnit output exists, so the
+  classification remains correct.
 
 ## Review next
 
-1. Audit all 14 entries against rulespec-us and PolicyEngine US 1.767.3 source,
-   metadata, and available alternatives.
-2. Reproduce the changed-file gate and confirm companion-test assertions.
-3. Verify YAML parsing, duplicate handling, and baseline failures.
-4. Write and commit the evidence-backed verdict to `REVIEW-REPORT.md`.
+1. Reproduce the changed-file gate and confirm companion-test assertions.
+2. Verify YAML parsing, duplicate handling, and baseline failures.
+3. Write and commit the evidence-backed verdict to `REVIEW-REPORT.md`.
