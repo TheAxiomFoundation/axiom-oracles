@@ -186,7 +186,6 @@
     "axiom-policyengine-ia-income-tax-populace.json",
     "axiom-policyengine-il-income-tax-populace.json",
     "axiom-policyengine-in-income-tax-populace.json",
-    "axiom-policyengine-ks-income-tax-populace.json",
     "axiom-policyengine-la-income-tax-populace.json",
     "axiom-policyengine-mi-income-tax-populace.json",
     "axiom-policyengine-ms-income-tax-populace.json",
@@ -212,6 +211,7 @@
     "axiom-policyengine-us-elderly-disabled-grid.json",
     "axiom-policyengine-us-llc-grid.json",
     "axiom-taxsim-co-tax-intersection-ecps.json",
-    "axiom-policyengine-ky-income-tax-populace.json"
+    "axiom-policyengine-ky-income-tax-populace.json",
+    "axiom-policyengine-ks-income-tax-populace.json"
   ]
 }

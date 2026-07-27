@@ -455,11 +455,22 @@
     ]
    },
    {
+    "program": "state_income_tax",
+    "jurisdiction": "KS",
+    "status": "executable",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143 + pinned Populace campaign projected as ks-income-tax-populace over the canonical 2026 K-40ES joint or all-other-filer schedule before credits",
+    "known_non_tanf_gaps": [
+     "component surface only; caller supplies completed Kansas taxable income",
+     "taxable-income construction, credits, payments, and final Kansas K-40 liability remain out of scope"
+    ],
+    "suite": "ks-income-tax-populace"
+   },
+   {
     "program": "childcare_assistance",
     "jurisdiction": "AZ",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/des/ccap, policies/des/faa5, regulations/aac/title-6 (7 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/des/ccap, policies/des/faa5, regulations/aac/title-6 (7 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -469,7 +480,7 @@
     "jurisdiction": "GA",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/decal/caps (6 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/decal/caps (6 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -479,7 +490,7 @@
     "jurisdiction": "US",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: regulations/42-cfr/457, statutes/42/1397jj (7 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: regulations/42-cfr/457, statutes/42/1397jj (7 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -489,7 +500,7 @@
     "jurisdiction": "US",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: statutes/42/18795, statutes/42/18795.yaml, statutes/42/18795a (4 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: statutes/42/18795, statutes/42/18795.yaml, statutes/42/18795a (4 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -499,7 +510,7 @@
     "jurisdiction": "US",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: regulations/45-cfr/1302 (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: regulations/45-cfr/1302 (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -509,7 +520,7 @@
     "jurisdiction": "US",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: statutes/8/1612, statutes/8/1613.yaml, statutes/8/1641, statutes/8/1641.yaml (4 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: statutes/8/1612, statutes/8/1613.yaml, statutes/8/1641, statutes/8/1641.yaml (4 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -519,7 +530,7 @@
     "jurisdiction": "US",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: regulations/47-cfr/54 (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: regulations/47-cfr/54 (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -529,7 +540,7 @@
     "jurisdiction": "AK",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/alaska-chip-eligibility.yaml, policies/cms/alaska-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/alaska-chip-eligibility.yaml, policies/cms/alaska-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -539,7 +550,7 @@
     "jurisdiction": "AL",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/alabama-chip-eligibility.yaml, policies/cms/alabama-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/alabama-chip-eligibility.yaml, policies/cms/alabama-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -549,7 +560,7 @@
     "jurisdiction": "AR",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/arkansas-chip-eligibility.yaml, policies/cms/arkansas-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/arkansas-chip-eligibility.yaml, policies/cms/arkansas-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -559,7 +570,7 @@
     "jurisdiction": "AZ",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/arizona-chip-eligibility.yaml, policies/cms/arizona-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/arizona-chip-eligibility.yaml, policies/cms/arizona-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -569,7 +580,7 @@
     "jurisdiction": "CA",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/california-chip-eligibility.yaml, policies/cms/california-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/california-chip-eligibility.yaml, policies/cms/california-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -579,7 +590,7 @@
     "jurisdiction": "CT",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/connecticut-chip-eligibility.yaml, policies/cms/connecticut-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/connecticut-chip-eligibility.yaml, policies/cms/connecticut-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -589,7 +600,7 @@
     "jurisdiction": "DC",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/district-of-columbia-chip-eligibility.yaml, policies/cms/district-of-columbia-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/district-of-columbia-chip-eligibility.yaml, policies/cms/district-of-columbia-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -599,7 +610,7 @@
     "jurisdiction": "DE",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/delaware-chip-eligibility.yaml, policies/cms/delaware-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/delaware-chip-eligibility.yaml, policies/cms/delaware-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -609,7 +620,7 @@
     "jurisdiction": "FL",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/florida-chip-eligibility.yaml, policies/cms/florida-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/florida-chip-eligibility.yaml, policies/cms/florida-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -619,7 +630,7 @@
     "jurisdiction": "GA",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/georgia-chip-eligibility.yaml, policies/cms/georgia-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/georgia-chip-eligibility.yaml, policies/cms/georgia-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -629,7 +640,7 @@
     "jurisdiction": "HI",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/hawaii-chip-eligibility.yaml, policies/cms/hawaii-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/hawaii-chip-eligibility.yaml, policies/cms/hawaii-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -639,7 +650,7 @@
     "jurisdiction": "IA",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/iowa-chip-eligibility.yaml, policies/cms/iowa-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/iowa-chip-eligibility.yaml, policies/cms/iowa-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -649,7 +660,7 @@
     "jurisdiction": "ID",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/idaho-chip-eligibility.yaml, policies/cms/idaho-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/idaho-chip-eligibility.yaml, policies/cms/idaho-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -659,7 +670,7 @@
     "jurisdiction": "IL",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/illinois-chip-eligibility.yaml, policies/cms/illinois-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/illinois-chip-eligibility.yaml, policies/cms/illinois-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -669,7 +680,7 @@
     "jurisdiction": "IN",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/indiana-chip-eligibility.yaml, policies/cms/indiana-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/indiana-chip-eligibility.yaml, policies/cms/indiana-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -679,7 +690,7 @@
     "jurisdiction": "KS",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/kansas-chip-eligibility.yaml, policies/cms/kansas-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/kansas-chip-eligibility.yaml, policies/cms/kansas-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -689,7 +700,7 @@
     "jurisdiction": "KY",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/kentucky-chip-eligibility.yaml, policies/cms/kentucky-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/kentucky-chip-eligibility.yaml, policies/cms/kentucky-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -699,7 +710,7 @@
     "jurisdiction": "LA",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/louisiana-chip-eligibility.yaml, policies/cms/louisiana-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/louisiana-chip-eligibility.yaml, policies/cms/louisiana-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -709,7 +720,7 @@
     "jurisdiction": "MA",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/massachusetts-chip-eligibility.yaml, policies/cms/massachusetts-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/massachusetts-chip-eligibility.yaml, policies/cms/massachusetts-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -719,7 +730,7 @@
     "jurisdiction": "MD",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/maryland-chip-eligibility.yaml, policies/cms/maryland-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/maryland-chip-eligibility.yaml, policies/cms/maryland-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -729,7 +740,7 @@
     "jurisdiction": "ME",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/maine-chip-eligibility.yaml, policies/cms/maine-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/maine-chip-eligibility.yaml, policies/cms/maine-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -739,7 +750,7 @@
     "jurisdiction": "MI",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/michigan-chip-eligibility.yaml, policies/cms/michigan-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/michigan-chip-eligibility.yaml, policies/cms/michigan-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -749,7 +760,7 @@
     "jurisdiction": "MN",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/minnesota-chip-eligibility.yaml, policies/cms/minnesota-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/minnesota-chip-eligibility.yaml, policies/cms/minnesota-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -759,7 +770,7 @@
     "jurisdiction": "MO",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/missouri-chip-eligibility.yaml, policies/cms/missouri-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/missouri-chip-eligibility.yaml, policies/cms/missouri-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -769,7 +780,7 @@
     "jurisdiction": "MS",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/mississippi-chip-eligibility.yaml, policies/cms/mississippi-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/mississippi-chip-eligibility.yaml, policies/cms/mississippi-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -779,7 +790,7 @@
     "jurisdiction": "MT",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/montana-chip-eligibility.yaml, policies/cms/montana-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/montana-chip-eligibility.yaml, policies/cms/montana-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -789,7 +800,7 @@
     "jurisdiction": "NC",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/north-carolina-chip-eligibility.yaml, policies/cms/north-carolina-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/north-carolina-chip-eligibility.yaml, policies/cms/north-carolina-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -799,7 +810,7 @@
     "jurisdiction": "ND",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/north-dakota-chip-eligibility.yaml, policies/cms/north-dakota-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/north-dakota-chip-eligibility.yaml, policies/cms/north-dakota-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -809,7 +820,7 @@
     "jurisdiction": "NE",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/nebraska-chip-eligibility.yaml, policies/cms/nebraska-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/nebraska-chip-eligibility.yaml, policies/cms/nebraska-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -819,7 +830,7 @@
     "jurisdiction": "NH",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/new-hampshire-chip-eligibility.yaml, policies/cms/new-hampshire-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/new-hampshire-chip-eligibility.yaml, policies/cms/new-hampshire-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -829,7 +840,7 @@
     "jurisdiction": "NJ",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/new-jersey-chip-eligibility.yaml, policies/cms/new-jersey-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/new-jersey-chip-eligibility.yaml, policies/cms/new-jersey-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -839,7 +850,7 @@
     "jurisdiction": "NM",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/new-mexico-chip-eligibility.yaml, policies/cms/new-mexico-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/new-mexico-chip-eligibility.yaml, policies/cms/new-mexico-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -849,7 +860,7 @@
     "jurisdiction": "NV",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/nevada-chip-eligibility.yaml, policies/cms/nevada-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/nevada-chip-eligibility.yaml, policies/cms/nevada-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -859,7 +870,7 @@
     "jurisdiction": "NY",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/new-york-chip-eligibility.yaml, policies/cms/new-york-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/new-york-chip-eligibility.yaml, policies/cms/new-york-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -869,7 +880,7 @@
     "jurisdiction": "OH",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/ohio-chip-eligibility.yaml, policies/cms/ohio-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/ohio-chip-eligibility.yaml, policies/cms/ohio-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -879,7 +890,7 @@
     "jurisdiction": "OK",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/oklahoma-chip-eligibility.yaml, policies/cms/oklahoma-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/oklahoma-chip-eligibility.yaml, policies/cms/oklahoma-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -889,7 +900,7 @@
     "jurisdiction": "OR",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/oregon-chip-eligibility.yaml, policies/cms/oregon-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/oregon-chip-eligibility.yaml, policies/cms/oregon-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -899,7 +910,7 @@
     "jurisdiction": "PA",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/pennsylvania-chip-eligibility.yaml, policies/cms/pennsylvania-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/pennsylvania-chip-eligibility.yaml, policies/cms/pennsylvania-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -909,7 +920,7 @@
     "jurisdiction": "RI",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/rhode-island-chip-eligibility.yaml, policies/cms/rhode-island-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/rhode-island-chip-eligibility.yaml, policies/cms/rhode-island-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -919,7 +930,7 @@
     "jurisdiction": "SC",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/south-carolina-chip-eligibility.yaml, policies/cms/south-carolina-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/south-carolina-chip-eligibility.yaml, policies/cms/south-carolina-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -929,7 +940,7 @@
     "jurisdiction": "SD",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/south-dakota-chip-eligibility.yaml, policies/cms/south-dakota-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/south-dakota-chip-eligibility.yaml, policies/cms/south-dakota-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -939,7 +950,7 @@
     "jurisdiction": "TN",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/tennessee-chip-eligibility.yaml, policies/cms/tennessee-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/tennessee-chip-eligibility.yaml, policies/cms/tennessee-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -949,7 +960,7 @@
     "jurisdiction": "TX",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/texas-chip-eligibility.yaml, policies/cms/texas-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/texas-chip-eligibility.yaml, policies/cms/texas-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -959,7 +970,7 @@
     "jurisdiction": "UT",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/utah-chip-eligibility.yaml, policies/cms/utah-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/utah-chip-eligibility.yaml, policies/cms/utah-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -969,7 +980,7 @@
     "jurisdiction": "VA",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/virginia-chip-eligibility.yaml, policies/cms/virginia-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/virginia-chip-eligibility.yaml, policies/cms/virginia-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -979,7 +990,7 @@
     "jurisdiction": "VT",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/vermont-chip-eligibility.yaml, policies/cms/vermont-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/vermont-chip-eligibility.yaml, policies/cms/vermont-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -989,7 +1000,7 @@
     "jurisdiction": "WA",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/washington-chip-eligibility.yaml, policies/cms/washington-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/washington-chip-eligibility.yaml, policies/cms/washington-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -999,7 +1010,7 @@
     "jurisdiction": "WI",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/wisconsin-chip-eligibility.yaml, policies/cms/wisconsin-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/wisconsin-chip-eligibility.yaml, policies/cms/wisconsin-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -1009,7 +1020,7 @@
     "jurisdiction": "WV",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/west-virginia-chip-eligibility.yaml, policies/cms/west-virginia-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/west-virginia-chip-eligibility.yaml, policies/cms/west-virginia-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -1019,7 +1030,7 @@
     "jurisdiction": "WY",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/cms/wyoming-chip-eligibility.yaml, policies/cms/wyoming-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/cms/wyoming-chip-eligibility.yaml, policies/cms/wyoming-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -1029,7 +1040,7 @@
     "jurisdiction": "GA",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/dfcs/medicaid (1 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/dfcs/medicaid (1 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -1039,7 +1050,7 @@
     "jurisdiction": "IN",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/fssa/medicaid-policy-manual (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/fssa/medicaid-policy-manual (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -1049,7 +1060,7 @@
     "jurisdiction": "US",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: statutes/42/426, statutes/42/426.yaml (13 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: statutes/42/426, statutes/42/426.yaml (13 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -1059,7 +1070,7 @@
     "jurisdiction": "US",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: statutes/37/556.yaml, statutes/5/5566.yaml (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: statutes/37/556.yaml, statutes/5/5566.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -1069,7 +1080,7 @@
     "jurisdiction": "US",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/ed/fsa, statutes/20/1070a (7 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/ed/fsa, statutes/20/1070a (7 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -1079,7 +1090,7 @@
     "jurisdiction": "AZ",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/des/faa5 (16 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/des/faa5 (16 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -1089,7 +1100,7 @@
     "jurisdiction": "FL",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/dcf/ess-program-policy-manual, regulations/fac/65a-1 (120 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/dcf/ess-program-policy-manual, regulations/fac/65a-1 (120 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -1099,7 +1110,7 @@
     "jurisdiction": "GA",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/dfcs/snap (10 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/dfcs/snap (10 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -1109,7 +1120,7 @@
     "jurisdiction": "IN",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/dfr/snap-tanf-program-policy-manual (7 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/dfr/snap-tanf-program-policy-manual (7 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -1119,7 +1130,7 @@
     "jurisdiction": "MD",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/dhs/fia (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/dhs/fia (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -1129,7 +1140,7 @@
     "jurisdiction": "MO",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: manual/dss/snap, policies/dss/snap (5 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: manual/dss/snap, policies/dss/snap (5 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -1139,7 +1150,7 @@
     "jurisdiction": "UT",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/dws/eligibility-manual (1 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/dws/eligibility-manual (1 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -1149,7 +1160,7 @@
     "jurisdiction": "WY",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/dfs/snap-power-policy-manual (1 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/dfs/snap-power-policy-manual (1 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -1159,7 +1170,7 @@
     "jurisdiction": "US",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/usda/csfp, policies/usda/snap, policies/usda/wic, regulations/7-cfr/246, regulations/7-cfr/247, regulations/7-cfr/273, regulations/7-cfr/275, statut\u2026 (96 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/usda/csfp, policies/usda/snap, policies/usda/wic, regulations/7-cfr/246, regulations/7-cfr/247, regulations/7-cfr/273, regulations/7-cfr/275, statut\u2026 (96 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -1169,7 +1180,7 @@
     "jurisdiction": "AL",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/income_tax/2026_section_40_18_5_schedule_before_credits.yaml (1 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/income_tax/2026_section_40_18_5_schedule_before_credits.yaml (1 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -1179,7 +1190,7 @@
     "jurisdiction": "AK",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/dpa/apa (1 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/dpa/apa (1 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -1189,7 +1200,7 @@
     "jurisdiction": "CA",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: regulations/cdss/eas (7 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: regulations/cdss/eas (7 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -1199,7 +1210,7 @@
     "jurisdiction": "CO",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: regulations/9-ccr-2503-5/3.500.yaml, regulations/9-ccr-2503-5/3.510.yaml, regulations/9-ccr-2503-5/3.520.1.yaml, regulations/9-ccr-2503-5/3.520.2.yaml, regul\u2026 (81 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: regulations/9-ccr-2503-5/3.500.yaml, regulations/9-ccr-2503-5/3.510.yaml, regulations/9-ccr-2503-5/3.520.1.yaml, regulations/9-ccr-2503-5/3.520.2.yaml, regul\u2026 (81 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -1209,7 +1220,7 @@
     "jurisdiction": "IL",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/dhs/csmm, statutes/320/30 (6 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/dhs/csmm, statutes/320/30 (6 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -1219,7 +1230,7 @@
     "jurisdiction": "MI",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/mdhhs/bridges, policies/mdhhs/rft (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/mdhhs/bridges, policies/mdhhs/rft (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -1229,7 +1240,7 @@
     "jurisdiction": "MN",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/dhs/combined-manual (1 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/dhs/combined-manual (1 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -1239,7 +1250,7 @@
     "jurisdiction": "WA",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: regulations/388/388-474 (1 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: regulations/388/388-474 (1 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -1249,7 +1260,7 @@
     "jurisdiction": "AL",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/dhr/tanf (1 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/dhr/tanf (1 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -1259,7 +1270,7 @@
     "jurisdiction": "AZ",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/des/faa5 (16 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/des/faa5 (16 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -1269,7 +1280,7 @@
     "jurisdiction": "KS",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/dcf/keesm (2 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/dcf/keesm (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -1279,7 +1290,7 @@
     "jurisdiction": "MD",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: policies/dhs/fia (1 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: policies/dhs/fia (1 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -1289,7 +1300,7 @@
     "jurisdiction": "ME",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: regulations/dhhs/ofi (1 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: regulations/dhhs/ofi (1 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -1299,7 +1310,7 @@
     "jurisdiction": "WA",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us 2818a7b02852012747f146b9113e275e095075a5: regulations/388/388-450, regulations/388/388-478 (5 rule files)",
+    "source": "rulespec-us a0a3032ca9e25b6d7d6d6b92be3f9609d796d143: regulations/388/388-450, regulations/388/388-478 (5 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]

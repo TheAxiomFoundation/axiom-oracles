@@ -30,6 +30,13 @@ suites:
   oracle: policyengine
   campaign_runner: scripts/run_state_tax_populace.py
   projector: scripts/emit_populace_campaign_artifacts.py
+- suite: ks-income-tax-populace
+  report: axiom-policyengine-ks-income-tax-populace.json
+  jurisdiction: KS
+  program: state_income_tax
+  oracle: policyengine
+  campaign_runner: scripts/run_state_tax_populace.py
+  projector: scripts/emit_populace_campaign_artifacts.py
 - suite: ms-income-tax-populace
   report: axiom-policyengine-ms-income-tax-populace.json
   jurisdiction: MS

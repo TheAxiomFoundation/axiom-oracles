@@ -111,7 +111,14 @@ STATE_RULES = {
     "il": [
         (r"^(policies/dhs/csmm/|statutes/320/)", ("state_ssi_supplement", None)),
     ],
-    "ks": [(r"^policies/dcf/keesm/", ("tanf", None))],
+    "ks": [
+        (r"^policies/dcf/keesm/", ("tanf", None)),
+        (
+            r"^policies/income_tax/"
+            r"2026_k40es_schedule_before_credits\.yaml$",
+            ("state_income_tax", None),
+        ),
+    ],
     "ky": [(r"^policies/income_tax/", ("state_income_tax", None))],
     "mi": [(r"^policies/mdhhs/", ("state_ssi_supplement", None))],
     "mn": [

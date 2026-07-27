@@ -64,6 +64,15 @@ _DESCRIPTION_BY_OUTPUT = {
         "over every routed tax unit in the pinned US Populace"
     ),
     (
+        "us-ks:policies/income_tax/2026_k40es_schedule_before_credits"
+        "#ks_pit_2026_k40es_schedule_before_credits"
+    ): (
+        "Official Kansas tax-year-2026 K-40ES joint or all-other-filer "
+        "schedule before credits, computed from caller-supplied completed "
+        "Kansas taxable income, over every routed tax unit in the pinned US "
+        "Populace"
+    ),
+    (
         "us-ms:policies/income_tax/2026_section_27_7_5_schedule"
         "#ms_pit_2026_section_27_7_5_schedule_tax"
     ): (

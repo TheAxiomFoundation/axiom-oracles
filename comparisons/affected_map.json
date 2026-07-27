@@ -546,6 +546,15 @@
       "source": "comparisons/ks-income-tax-liability.yaml"
     },
     {
+      "suite": "ks-income-tax-populace",
+      "name": null,
+      "report": "axiom-policyengine-ks-income-tax-populace.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/state-income-tax-populace.yaml"
+    },
+    {
       "suite": "ks-tanf-ecps",
       "name": "ks-tanf-ecps",
       "report": "axiom-policyengine-ks-tanf-ecps.json",

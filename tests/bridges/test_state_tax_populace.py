@@ -117,6 +117,29 @@ def test_contract_pins_arkansas_person_aggregation_surface() -> None:
         validate_state_tax_populace_contract(document)
 
 
+def test_contract_pins_kansas_canonical_k40es_surface() -> None:
+    kansas = load_state_tax_populace_contract().by_state()["KS"]
+    module = "us-ks:policies/income_tax/2026_k40es_schedule_before_credits"
+
+    assert kansas.program == module
+    assert kansas.output == (
+        f"{module}#ks_pit_2026_k40es_schedule_before_credits"
+    )
+    assert (
+        kansas.policyengine_target
+        == "ks_k40es_schedule_before_credits_reviewed"
+    )
+    assert (kansas.tolerance, kansas.relative_tolerance) == (0.01, 1e-7)
+    assert [slot.slot for slot in kansas.inputs] == [
+        f"{module}#input.ks_pit_2026_k40es_completed_taxable_income",
+        f"{module}#input.ks_pit_2026_k40es_married_joint_schedule_applies",
+    ]
+    assert [slot.policyengine_variable for slot in kansas.inputs] == [
+        "ks_taxable_income",
+        "tax_unit_is_joint",
+    ]
+
+
 def test_packaged_contract_has_reviewed_ready_states() -> None:
     contract = load_state_tax_populace_contract()
     summary = readiness_summary(contract)

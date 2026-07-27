@@ -49,6 +49,9 @@ DISPOSITION_UNKNOWN_GEOGRAPHY = "excluded_unknown_geography"
 CT_ORDINARY_TAX_DERIVED_TARGET = (
     "ct_resident_ordinary_tax_before_personal_credit_derived"
 )
+KS_K40ES_SCHEDULE_BEFORE_CREDITS_REVIEWED_TARGET = (
+    "ks_k40es_schedule_before_credits_reviewed"
+)
 OH_NONBUSINESS_BEFORE_CREDITS_DERIVED_TARGET = (
     "oh_nonbusiness_income_tax_before_non_refundable_credits_derived"
 )
@@ -601,6 +604,84 @@ def calculate_policyengine_targets(
                 recovered.append(after / (1 - rate))
             targets[state] = dict(
                 zip(tax_unit_ids, recovered, strict=True)
+            )
+            continue
+        if (
+            state == "KS"
+            and jurisdiction.policyengine_target
+            == KS_K40ES_SCHEDULE_BEFORE_CREDITS_REVIEWED_TARGET
+        ):
+            modeled_ids = [
+                _clean_id(value)
+                for value in _array_values(
+                    sim.calculate("tax_unit_id", period=year)
+                )
+            ]
+            taxable_income = _array_values(
+                sim.calculate("ks_taxable_income", period=year)
+            )
+            joint_schedule = _array_values(
+                sim.calculate("tax_unit_is_joint", period=year)
+            )
+            adjusted_gross_income = _array_values(
+                sim.calculate("ks_agi", period=year)
+            )
+            before_credits = _array_values(
+                sim.calculate("ks_income_tax_before_credits", period=year)
+            )
+            cardinalities = (
+                len(modeled_ids),
+                len(taxable_income),
+                len(joint_schedule),
+                len(adjusted_gross_income),
+                len(before_credits),
+            )
+            if any(length != len(tax_unit_ids) for length in cardinalities):
+                raise StateTaxPopulationRoutingError(
+                    "KS: PolicyEngine K-40ES target inputs returned "
+                    f"{', '.join(str(length) for length in cardinalities)} rows "
+                    f"for {len(tax_unit_ids)} tax units"
+                )
+            _reject_duplicate_ids(tax_unit_ids, "KS source tax_unit_id")
+            _reject_duplicate_ids(
+                modeled_ids, "KS PolicyEngine tax_unit_id"
+            )
+            if modeled_ids != tax_unit_ids:
+                raise StateTaxPopulationRoutingError(
+                    "KS: PolicyEngine tax_unit_id order does not match the "
+                    "certified source tax-unit order"
+                )
+            reviewed: list[float] = []
+            for taxable_value, joint_value, agi_value, tax_value in zip(
+                taxable_income,
+                joint_schedule,
+                adjusted_gross_income,
+                before_credits,
+                strict=True,
+            ):
+                taxable = _finite_number(
+                    taxable_value, label="ks_taxable_income"
+                )
+                _strict_boolean(
+                    joint_value, label="tax_unit_is_joint"
+                )
+                _finite_number(agi_value, label="ks_agi")
+                tax = _finite_number(
+                    tax_value, label="ks_income_tax_before_credits"
+                )
+                if taxable < 0 or tax < 0:
+                    raise StateTaxPopulationRoutingError(
+                        "KS: reviewed K-40ES target requires nonnegative "
+                        "taxable income and before-credit tax"
+                    )
+                if taxable > 0 and tax == 0:
+                    raise StateTaxPopulationRoutingError(
+                        "KS: PolicyEngine's separate AGI gate suppressed a "
+                        "positive K-40ES schedule domain"
+                    )
+                reviewed.append(tax)
+            targets[state] = dict(
+                zip(tax_unit_ids, reviewed, strict=True)
             )
             continue
         if (

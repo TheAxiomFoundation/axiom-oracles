@@ -31072,6 +31072,67 @@ mappings:
     candidate_priority: P4
     rationale: Axiom returns a fail-closed zero sentinel while the net-liability source hold remains active; it does not substantively assert complete signed net liability. PolicyEngine exposes no corresponding held Wyoming liability output.
 
+  # The official Kansas K-40ES module is a narrow schedule-before-credits
+  # surface on completed Kansas taxable income. It does not claim the complete
+  # annual-return liability chain or replace the legacy TAXSIM diagnostic.
+  - legal_id: us-ks:policies/income_tax/2026_k40es_schedule_before_credits#ks_pit_2026_k40es_lower_rate
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.ks.tax.income.rates.joint
+    parameter_key_path: [rates, 0]
+    period: year
+    comparison: rate
+    rationale: The official 2026 K-40ES and PolicyEngine's joint and all-other Kansas schedules use the same 5.2 percent lower marginal rate; the joint scale is the canonical exact parameter target.
+
+  - legal_id: us-ks:policies/income_tax/2026_k40es_schedule_before_credits#ks_pit_2026_k40es_upper_rate
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.ks.tax.income.rates.joint
+    parameter_key_path: [rates, 1]
+    period: year
+    comparison: rate
+    rationale: The official 2026 K-40ES and PolicyEngine's joint and all-other Kansas schedules use the same 5.58 percent upper marginal rate; the joint scale is the canonical exact parameter target.
+
+  - legal_id: us-ks:policies/income_tax/2026_k40es_schedule_before_credits#ks_pit_2026_k40es_joint_lower_bracket_ceiling
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_parameter: gov.states.ks.tax.income.rates.joint
+    candidate_priority: P4
+    rationale: RuleSpec stores the official K-40ES last dollar in the joint lower bracket, $46,000. PolicyEngine's marginal scale stores the first dollar of the upper bracket, $46,001, so the two boundary representations intentionally differ by one dollar and are not direct parameter values.
+
+  - legal_id: us-ks:policies/income_tax/2026_k40es_schedule_before_credits#ks_pit_2026_k40es_other_lower_bracket_ceiling
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_parameter: gov.states.ks.tax.income.rates.other
+    candidate_priority: P4
+    rationale: RuleSpec stores the official K-40ES last dollar in the all-other-filer lower bracket, $23,000. PolicyEngine's marginal scale stores the first dollar of the upper bracket, $23,001, so the two boundary representations intentionally differ by one dollar and are not direct parameter values.
+
+  - legal_id: us-ks:policies/income_tax/2026_k40es_schedule_before_credits#ks_pit_2026_k40es_taxable_income_boundary
+    country: us
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: ks_taxable_income
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    rationale: RuleSpec preserves the nonnegative boundary derived from the caller-supplied completed Kansas taxable income before selecting and applying the K-40ES schedule; it does not claim to reconstruct taxable income.
+
+  - legal_id: us-ks:policies/income_tax/2026_k40es_schedule_before_credits#ks_pit_2026_k40es_schedule_before_credits
+    country: us
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: ks_income_tax_before_credits
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Both outputs select the joint or all-other Kansas schedule and apply it to completed Kansas taxable income before credits. The Populace runner fails closed if PolicyEngine's separate adjusted-gross-income gate would suppress an otherwise positive K-40ES schedule domain.
+
   # Kansas's bounded TY2026 resident core has eight amount stages with aligned
   # PolicyEngine variables. Readiness judgments, literal parameters,
   # non-identical ordering intermediates, and fail-closed public sentinels are
@@ -35043,6 +35104,12 @@ prefixes:
     mapping_type: not_comparable
     candidate_priority: P4
     rationale: PolicyEngine-US does not model IN agency policy manuals or state regulations at output granularity; comparable state outputs carry exact mappings which take precedence over this prefix.
+
+  - legal_id_prefix: "us-ks:"
+    country: us
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: PolicyEngine-US does not model every Kansas statute, agency manual, regulation, or source-level output one to one; independently reviewed comparable outputs carry exact mappings which take precedence over this jurisdiction-wide fallback.
 
   - legal_id_prefix: "us-ma:"
     country: us

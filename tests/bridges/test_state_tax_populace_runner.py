@@ -380,6 +380,143 @@ def test_utah_target_rejects_invalid_before_credit_amount(value, message) -> Non
         )
 
 
+def _ks_simulation(
+    *,
+    ids=(1, 2, 3),
+    taxable=(0.0, 23_000.0, 46_001.0),
+    joint=(False, False, True),
+    agi=(0.0, 22_000.0, 45_000.0),
+    tax=(0.0, 1_196.0, 2_392.0558),
+):
+    class FakeSimulation:
+        def __init__(self, dataset):
+            assert dataset == "dataset"
+
+        def calculate(self, variable, period):
+            assert period == 2026
+            return {
+                "tax_unit_id": ids,
+                "ks_taxable_income": taxable,
+                "tax_unit_is_joint": joint,
+                "ks_agi": agi,
+                "ks_income_tax_before_credits": tax,
+            }[variable]
+
+    return FakeSimulation
+
+
+def _ks_targets(
+    microsimulation_factory,
+    *,
+    source_ids=(1, 2, 3),
+) -> dict[str, dict[int, float]]:
+    return calculate_policyengine_targets(
+        dataset="dataset",
+        raw_tax_units=pd.DataFrame({"tax_unit_id": source_ids}),
+        routes=tuple(
+            TaxUnitRoute(index, index, "KS", "20", 1, DISPOSITION_READY)
+            for index in source_ids
+        ),
+        year=2026,
+        microsimulation_factory=microsimulation_factory,
+    )
+
+
+def test_kansas_target_preserves_reviewed_before_credit_values() -> None:
+    assert _ks_targets(_ks_simulation(agi=(0.0, -1.0, 45_000.0))) == {
+        "KS": {1: 0.0, 2: 1_196.0, 3: 2_392.0558}
+    }
+
+
+@pytest.mark.parametrize(
+    ("kwargs", "message"),
+    [
+        (
+            {"ids": (1, 2)},
+            "K-40ES target inputs returned 2, 3, 3, 3, 3 rows",
+        ),
+        (
+            {"taxable": (0.0, 23_000.0)},
+            "K-40ES target inputs returned 3, 2, 3, 3, 3 rows",
+        ),
+        (
+            {"joint": (False, True)},
+            "K-40ES target inputs returned 3, 3, 2, 3, 3 rows",
+        ),
+        (
+            {"agi": (0.0, 22_000.0)},
+            "K-40ES target inputs returned 3, 3, 3, 2, 3 rows",
+        ),
+        (
+            {"tax": (0.0, 1_196.0)},
+            "K-40ES target inputs returned 3, 3, 3, 3, 2 rows",
+        ),
+    ],
+)
+def test_kansas_target_rejects_component_cardinality(kwargs, message) -> None:
+    with pytest.raises(StateTaxPopulationRoutingError, match=message):
+        _ks_targets(_ks_simulation(**kwargs))
+
+
+@pytest.mark.parametrize(
+    ("ids", "message"),
+    [
+        ((2, 1, 3), "order does not match"),
+        ((1, 1, 3), "duplicate KS PolicyEngine tax_unit_id"),
+    ],
+)
+def test_kansas_target_rejects_entity_identity_defects(ids, message) -> None:
+    with pytest.raises(StateTaxPopulationRoutingError, match=message):
+        _ks_targets(_ks_simulation(ids=ids))
+
+
+def test_kansas_target_rejects_duplicate_source_entity_ids() -> None:
+    with pytest.raises(
+        StateTaxPopulationRoutingError,
+        match="duplicate KS source tax_unit_id",
+    ):
+        _ks_targets(
+            _ks_simulation(ids=(1, 1, 3)),
+            source_ids=(1, 1, 3),
+        )
+
+
+def test_kansas_target_requires_strict_joint_boolean() -> None:
+    with pytest.raises(
+        StateTaxPopulationRoutingError,
+        match="tax_unit_is_joint: expected a PolicyEngine boolean",
+    ):
+        _ks_targets(_ks_simulation(joint=(False, 1.0, True)))
+
+
+@pytest.mark.parametrize(
+    ("kwargs", "message"),
+    [
+        ({"taxable": (float("nan"), 23_000.0, 46_001.0)}, "non-finite"),
+        ({"taxable": (-1.0, 23_000.0, 46_001.0)}, "nonnegative"),
+        ({"agi": (0.0, float("inf"), 45_000.0)}, "non-finite"),
+        ({"tax": (0.0, float("inf"), 2_392.0558)}, "non-finite"),
+        ({"tax": (0.0, -1.0, 2_392.0558)}, "nonnegative"),
+    ],
+)
+def test_kansas_target_rejects_invalid_reviewed_values(kwargs, message) -> None:
+    with pytest.raises(StateTaxPopulationRoutingError, match=message):
+        _ks_targets(_ks_simulation(**kwargs))
+
+
+def test_kansas_target_rejects_agi_gate_suppression() -> None:
+    with pytest.raises(
+        StateTaxPopulationRoutingError,
+        match="separate AGI gate suppressed a positive K-40ES schedule domain",
+    ):
+        _ks_targets(
+            _ks_simulation(
+                taxable=(0.0, 1.0, 46_001.0),
+                tax=(0.0, 0.0, 2_392.0558),
+            )
+        )
+
+
 def _oh_simulation(
     *,
     ids=(1, 2, 3),
@@ -737,7 +874,10 @@ def test_reviewed_iowa_and_kansas_projection_types_and_transforms() -> None:
     )
 
     ia_prefix = "us-ia:policies/income_tax/pilot_liability_pipeline#input."
-    ks_prefix = "us-ks:policies/income_tax/pilot_liability_pipeline#input."
+    ks_prefix = (
+        "us-ks:policies/income_tax/"
+        "2026_k40es_schedule_before_credits#input."
+    )
     assert projections["IA"][f"{ia_prefix}ia_pit_pilot_supplied_regular_tax_rate"] == {
         1: 0.038,
         2: 0.038,
@@ -753,7 +893,9 @@ def test_reviewed_iowa_and_kansas_projection_types_and_transforms() -> None:
     assert projections["IA"][
         f"{ia_prefix}ia_pit_pilot_head_or_spouse_age_65_or_older"
     ] == {1: False, 2: True}
-    assert projections["KS"][f"{ks_prefix}ks_pit_pilot_filing_status_joint"] == {
+    assert projections["KS"][
+        f"{ks_prefix}ks_pit_2026_k40es_married_joint_schedule_applies"
+    ] == {
         1: False,
         2: True,
     }
@@ -2128,9 +2270,14 @@ def test_ready_ut_comparison_projects_exact_declared_input(tmp_path) -> None:
 
 
 def test_ready_kansas_comparison_preserves_boolean_input_kind(tmp_path) -> None:
-    prefix = "us-ks:policies/income_tax/pilot_liability_pipeline#input."
-    taxable_slot = f"{prefix}ks_pit_pilot_state_taxable_income"
-    joint_slot = f"{prefix}ks_pit_pilot_filing_status_joint"
+    prefix = (
+        "us-ks:policies/income_tax/"
+        "2026_k40es_schedule_before_credits#input."
+    )
+    taxable_slot = f"{prefix}ks_pit_2026_k40es_completed_taxable_income"
+    joint_slot = (
+        f"{prefix}ks_pit_2026_k40es_married_joint_schedule_applies"
+    )
     routes = (TaxUnitRoute(9, 1, "KS", "20", 3.0, DISPOSITION_READY),)
     calls = []
 
