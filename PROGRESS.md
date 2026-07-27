@@ -706,8 +706,32 @@ residual), #229 (small-suite grounding).
   assertion. Reclassifying it as the exact PE rate parameter will require a
   direct expected output or genuine `tested_by_legal_ids` evidence to satisfy
   the changed-file gate.
+- Completed containment checks. The target commit has one changed path,
+  `axiom_oracles/bridges/mappings/us.yaml`, with 131 additions and zero
+  deletions. All 14 added entries say `country: us` and `program: tax`; no
+  schema, loader, classifier, or other-jurisdiction mapping file differs, and
+  `git diff --check` passes.
+- Parsed the full YAML: 4,399 mapping rows consist of 4,398 `legal_id` rows and
+  one legitimate `legal_id_prefix` row, with zero missing or duplicate IDs.
+  The packaged registry loads, reports zero validation issues, resolves all 14
+  target IDs, and its focused import-surface test passes.
+- Reproduced the NY/OH regression baseline with no stash in a second detached
+  worktree whose `HEAD` is exactly local `origin/main` (`98dfa9e8`). With the PR
+  mapping overlaid, the focused files returned 2 failed / 7 passed: New York's
+  discovered output set has 3 rather than 38 outputs, and Ohio lacks four
+  expected source-hold outputs. After saving the working mapping aside and
+  installing the exact baseline via
+  `git show HEAD:axiom_oracles/bridges/mappings/us.yaml > ...`, the identical
+  two node IDs failed with identical messages; the PR file was then copied back
+  and byte-verified as requested. The helper worktree was subsequently restored
+  clean.
+- The user's stated “4 NY/OH ... failures” is supported as four failure
+  occurrences across the paired PR/baseline runs, not as four distinct failing
+  node IDs: exhaustive focused discovery found two such node IDs. Against the
+  rulespec-us PR worktree they pass because that branch contains the expected
+  NY/OH surfaces; the clean baseline intentionally uses the canonical sibling
+  rulespec checkout at `c3e1c3ad`.
 
 ## Review next
 
-1. Verify YAML parsing, duplicate handling, and baseline failures.
-2. Write and commit the evidence-backed verdict to `REVIEW-REPORT.md`.
+1. Write and commit the evidence-backed verdict to `REVIEW-REPORT.md`.
