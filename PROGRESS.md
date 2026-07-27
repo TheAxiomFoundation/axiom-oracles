@@ -624,6 +624,8 @@ residual), #229 (small-suite grounding).
   clean-`origin/main` NY/OH regression baseline.
 - Constraint: no PR-branch, remote, or GitHub writes. Local review commits only.
 - Final artifact: `REVIEW-REPORT.md`.
+- Review outcome: **complete — REQUEST-CHANGES** for two blocking
+  classification-truthfulness defects.
 
 ## Review done
 
@@ -731,7 +733,11 @@ residual), #229 (small-suite grounding).
   rulespec-us PR worktree they pass because that branch contains the expected
   NY/OH surfaces; the clean baseline intentionally uses the canonical sibling
   rulespec checkout at `c3e1c3ad`.
+- Wrote the self-contained per-entry verdict, evidence digest, required fixes,
+  containment/gate/baseline results, and environment disclosures to
+  `REVIEW-REPORT.md`.
 
 ## Review next
 
-1. Write and commit the evidence-backed verdict to `REVIEW-REPORT.md`.
+- None. Hand off the committed report; re-review after the two blocking
+  mappings and rate-test evidence are corrected.
