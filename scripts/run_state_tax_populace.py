@@ -30,17 +30,46 @@ _UT_INPUT_PREFIX = (
     "us-ut:policies/income_tax/"
     "2026_full_year_resident_before_credit_schedule#input."
 )
+_DC_TAXABLE_INCOME_INPUT = (
+    "us-dc:policies/income_tax/"
+    "2026_section_47_1806_03_schedule_before_credits#input."
+    "dc_pit_2026_section_47_1806_03_completed_joint_method_taxable_income"
+)
 
 
 def _projection_branch_diagnostics(
     projection_inputs: dict,
     routes: tuple,
 ) -> dict[str, dict[str, int]]:
-    """Summarize reviewed Utah branch exercise without exposing microdata."""
+    """Summarize reviewed state branch exercise without exposing microdata."""
 
+    diagnostics: dict[str, dict[str, int]] = {}
+    dc = projection_inputs.get("DC")
+    if isinstance(dc, dict):
+        ready_ids = {
+            route.tax_unit_id
+            for route in routes
+            if route.state == "DC" and route.disposition == DISPOSITION_READY
+        }
+        taxable_values = dc[_DC_TAXABLE_INCOME_INPUT]
+        selected_values = [
+            float(taxable_values[tax_unit_id]) for tax_unit_id in ready_ids
+        ]
+        diagnostics["DC"] = {
+            "compared_tax_unit_count": len(ready_ids),
+            "negative_taxable_income_count": sum(
+                value < 0 for value in selected_values
+            ),
+            "zero_taxable_income_count": sum(
+                value == 0 for value in selected_values
+            ),
+            "positive_taxable_income_count": sum(
+                value > 0 for value in selected_values
+            ),
+        }
     utah = projection_inputs.get("UT")
     if not isinstance(utah, dict):
-        return {}
+        return diagnostics
     ready_ids = {
         route.tax_unit_id
         for route in routes
@@ -61,17 +90,16 @@ def _projection_branch_diagnostics(
             "UT projection diagnostics require strict Boolean exemption values "
             "for every ready TaxUnit"
         )
-    return {
-        "UT": {
-            "compared_tax_unit_count": len(ready_ids),
-            "exempt_count": exempt_count,
-            "nonexempt_count": nonexempt_count,
-            "negative_taxable_income_count": sum(
-                float(taxable_values[tax_unit_id]) < 0
-                for tax_unit_id in ready_ids
-            ),
-        }
+    diagnostics["UT"] = {
+        "compared_tax_unit_count": len(ready_ids),
+        "exempt_count": exempt_count,
+        "nonexempt_count": nonexempt_count,
+        "negative_taxable_income_count": sum(
+            float(taxable_values[tax_unit_id]) < 0
+            for tax_unit_id in ready_ids
+        ),
     }
+    return diagnostics
 
 
 def _parser() -> argparse.ArgumentParser:

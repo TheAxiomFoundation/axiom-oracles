@@ -49,6 +49,9 @@ DISPOSITION_UNKNOWN_GEOGRAPHY = "excluded_unknown_geography"
 CT_ORDINARY_TAX_DERIVED_TARGET = (
     "ct_resident_ordinary_tax_before_personal_credit_derived"
 )
+DC_JOINT_SCHEDULE_BEFORE_CREDITS_TARGET = (
+    "dc_income_tax_before_credits_joint"
+)
 KS_K40ES_SCHEDULE_BEFORE_CREDITS_REVIEWED_TARGET = (
     "ks_k40es_schedule_before_credits_reviewed"
 )
@@ -604,6 +607,73 @@ def calculate_policyengine_targets(
                 recovered.append(after / (1 - rate))
             targets[state] = dict(
                 zip(tax_unit_ids, recovered, strict=True)
+            )
+            continue
+        if state == "DC":
+            if (
+                jurisdiction.policyengine_target
+                != DC_JOINT_SCHEDULE_BEFORE_CREDITS_TARGET
+            ):
+                raise StateTaxPopulationRoutingError(
+                    "DC: reviewed schedule runner requires the exact "
+                    "dc_income_tax_before_credits_joint target"
+                )
+            modeled_ids = [
+                _clean_id(value)
+                for value in _array_values(
+                    sim.calculate("tax_unit_id", period=year)
+                )
+            ]
+            taxable_income = _array_values(
+                sim.calculate("dc_taxable_income_joint", period=year)
+            )
+            before_credits = _array_values(
+                sim.calculate(
+                    DC_JOINT_SCHEDULE_BEFORE_CREDITS_TARGET,
+                    period=year,
+                )
+            )
+            cardinalities = (
+                len(modeled_ids),
+                len(taxable_income),
+                len(before_credits),
+            )
+            if any(length != len(tax_unit_ids) for length in cardinalities):
+                raise StateTaxPopulationRoutingError(
+                    "DC: PolicyEngine joint-method schedule inputs returned "
+                    f"{', '.join(str(length) for length in cardinalities)} rows "
+                    f"for {len(tax_unit_ids)} tax units"
+                )
+            _reject_duplicate_ids(tax_unit_ids, "DC source tax_unit_id")
+            _reject_duplicate_ids(
+                modeled_ids, "DC PolicyEngine tax_unit_id"
+            )
+            if modeled_ids != tax_unit_ids:
+                raise StateTaxPopulationRoutingError(
+                    "DC: PolicyEngine tax_unit_id order does not match the "
+                    "certified source tax-unit order"
+                )
+            reviewed: list[float] = []
+            for taxable_value, tax_value in zip(
+                taxable_income,
+                before_credits,
+                strict=True,
+            ):
+                taxable = _finite_number(
+                    taxable_value, label="dc_taxable_income_joint"
+                )
+                tax = _finite_number(
+                    tax_value,
+                    label=DC_JOINT_SCHEDULE_BEFORE_CREDITS_TARGET,
+                )
+                if tax < 0:
+                    raise StateTaxPopulationRoutingError(
+                        "DC: reviewed joint-method schedule requires "
+                        "nonnegative before-credit tax"
+                    )
+                reviewed.append(tax)
+            targets[state] = dict(
+                zip(tax_unit_ids, reviewed, strict=True)
             )
             continue
         if (

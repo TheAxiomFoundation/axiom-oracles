@@ -55,6 +55,16 @@ _DESCRIPTION_BY_OUTPUT = {
         "personal credit over every routed tax unit in the pinned US Populace"
     ),
     (
+        "us-dc:policies/income_tax/"
+        "2026_section_47_1806_03_schedule_before_credits"
+        "#dc_pit_2026_section_47_1806_03_schedule_before_credits"
+    ): (
+        "District of Columbia section 47-1806.03(a)(11) joint-method "
+        "schedule before credits, computed from caller-supplied completed "
+        "joint-method District taxable income, over every routed tax unit in "
+        "the pinned US Populace"
+    ),
+    (
         "us-ga:policies/income_tax/"
         "2026_annual_tax_before_nonrefundable_credits"
         "#ga_pit_2026_annual_tax_before_nonrefundable_credits"

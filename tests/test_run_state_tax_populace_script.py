@@ -163,3 +163,31 @@ def test_utah_projection_diagnostics_pin_exempt_and_domain_branch_counts() -> No
             "negative_taxable_income_count": 1,
         }
     }
+
+
+def test_dc_projection_diagnostics_pin_taxable_income_floor_branches() -> None:
+    slot = (
+        "us-dc:policies/income_tax/"
+        "2026_section_47_1806_03_schedule_before_credits#input."
+        "dc_pit_2026_section_47_1806_03_completed_joint_method_taxable_income"
+    )
+    routes = (
+        TaxUnitRoute(1, 1, "DC", "11", 1, DISPOSITION_READY),
+        TaxUnitRoute(2, 2, "DC", "11", 1, DISPOSITION_READY),
+        TaxUnitRoute(3, 3, "DC", "11", 1, DISPOSITION_READY),
+        TaxUnitRoute(4, 4, "DC", "11", 1, DISPOSITION_BLOCKED),
+    )
+
+    diagnostics = campaign._projection_branch_diagnostics(
+        {"DC": {slot: {1: -5.0, 2: 0.0, 3: 100.0, 4: -10.0}}},
+        routes,
+    )
+
+    assert diagnostics == {
+        "DC": {
+            "compared_tax_unit_count": 3,
+            "negative_taxable_income_count": 1,
+            "zero_taxable_income_count": 1,
+            "positive_taxable_income_count": 1,
+        }
+    }

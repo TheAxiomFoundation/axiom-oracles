@@ -795,35 +795,40 @@ jurisdictions:
   fips: '11'
   taxsim_state_code: 9
   jurisdiction: us-dc
-  program: us-dc:policies/income_tax/pilot_liability_pipeline
-  output: us-dc:policies/income_tax/pilot_liability_pipeline#dc_pit_pilot_income_tax_liability
+  program: us-dc:policies/income_tax/2026_section_47_1806_03_schedule_before_credits
+  output: us-dc:policies/income_tax/2026_section_47_1806_03_schedule_before_credits#dc_pit_2026_section_47_1806_03_schedule_before_credits
   policyengine:
-    target: dc_income_tax_before_credits
-    tolerance: 1.0
-    relative_tolerance: 0.0
-  status: blocked
-  evidence: us-dc/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+    target: dc_income_tax_before_credits_joint
+    tolerance: 0.01
+    relative_tolerance: 1.0e-07
+  status: ready
+  evidence: >-
+    The canonical bounded section 47-1806.03(a)(11) joint-method schedule was
+    validated at merged RuleSpec commit
+    6b0773d3f7fa6719f208154f3e609e292ab7abe7 over all 1,362 positive-weight
+    routed District tax units (weight 405,037.2357816472). Strict source and
+    PolicyEngine identity, order, cardinality, finite-value, and nonnegative-tax
+    checks admitted all units without suppression. The raw completed taxable-
+    income boundary exercised 271 negative, 3 zero, and 1,088 positive values;
+    RuleSpec and PolicyEngine independently floor that boundary at zero, yielding
+    274 zero and 1,088 positive schedule results. The full run found zero
+    mismatches under the $0.01-or-1e-7 tolerance; maximum absolute and relative
+    differences were $0.7199999988079071 and 5.652543791281644e-8.
   inputs:
-  - slot: us-dc:policies/income_tax/pilot_liability_pipeline#input.dc_pit_pilot_adjusted_gross_income
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-dc:policies/income_tax/pilot_liability_pipeline#input.dc_pit_pilot_supplied_bracket_base
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-dc:policies/income_tax/pilot_liability_pipeline#input.dc_pit_pilot_supplied_bracket_floor
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-dc:policies/income_tax/pilot_liability_pipeline#input.dc_pit_pilot_supplied_marginal_rate
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-dc:policies/income_tax/pilot_liability_pipeline#input.dc_pit_pilot_supplied_taxable_income_subtraction
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
+  - slot: us-dc:policies/income_tax/2026_section_47_1806_03_schedule_before_credits#input.dc_pit_2026_section_47_1806_03_completed_joint_method_taxable_income
+    source_kind: pe_upstream_boundary
+    status: ready
+    evidence: >-
+      D.C. Code section 47-1806.03(a)(11) applies the seven-band schedule to
+      District taxable income. PolicyEngine dc_taxable_income_joint is the
+      direct completed joint-method boundary upstream of the distinct
+      dc_income_tax_before_credits_joint comparison target and is documented as
+      potentially negative. Both the reviewed RuleSpec and PolicyEngine target
+      independently floor this preserved finite boundary at zero before
+      applying the schedule; the projection neither selects the filing method
+      nor feeds the tax result back as an input.
+    policyengine_variable: dc_taxable_income_joint
+    policyengine_relationship: upstream
   relations: []
 - state: HI
   fips: '15'

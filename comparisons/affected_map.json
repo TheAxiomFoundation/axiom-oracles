@@ -340,6 +340,15 @@
       "source": "comparisons/dc-income-tax-liability.yaml"
     },
     {
+      "suite": "dc-income-tax-populace",
+      "name": null,
+      "report": "axiom-policyengine-dc-income-tax-populace.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/state-income-tax-populace.yaml"
+    },
+    {
       "suite": "de-income-tax-liability",
       "name": "de-income-tax-liability",
       "report": "axiom-policyengine-taxsim-de-income-tax-liability.json",
