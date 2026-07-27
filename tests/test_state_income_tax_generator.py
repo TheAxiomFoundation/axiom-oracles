@@ -572,6 +572,31 @@ def test_recent_state_income_tax_oracle_registrations():
     assert "NH" not in generator._STATES
 
 
+def test_kansas_populace_schedule_is_decoupled_from_legacy_taxsim_grid() -> None:
+    generator = _load_generator()
+    canonical_module = (
+        "us-ks:policies/income_tax/2026_k40es_schedule_before_credits"
+    )
+    legacy_module = "us-ks:policies/income_tax/pilot_liability_pipeline"
+
+    assert generator._POPULACE_MODULE["KS"] == canonical_module
+    assert generator._POPULACE_OUTPUT["KS"] == (
+        f"{canonical_module}#ks_pit_2026_k40es_schedule_before_credits"
+    )
+    assert (
+        generator._POPULACE_PE_VAR["KS"]
+        == "ks_k40es_schedule_before_credits_reviewed"
+    )
+    assert generator._POPULACE_TOL["KS"] == (0.01, 1e-7)
+
+    assert generator._MODULE["KS"] == legacy_module
+    assert generator._LIABILITY_OUTPUT["KS"] == (
+        f"{legacy_module}#ks_pit_pilot_income_tax_liability"
+    )
+    assert generator._PE_VAR["KS"] == "ks_income_tax_before_credits"
+    assert generator._TOL["KS"] == (1.0, 0.0)
+
+
 def test_kentucky_registry_uses_canonical_live_schedule_surface() -> None:
     generator = _load_generator()
     module = (

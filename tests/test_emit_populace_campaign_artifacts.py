@@ -12,9 +12,9 @@ from scripts.emit_populace_campaign_artifacts import (
 
 
 DASHBOARD_DATA = Path(__file__).resolve().parents[1] / "dashboard/public/data"
+REPO_ROOT = Path(__file__).resolve().parents[1]
 POPULACE_SUITE_CONFIG = (
-    Path(__file__).resolve().parents[1]
-    / "comparisons/state-income-tax-populace.yaml"
+    REPO_ROOT / "comparisons/state-income-tax-populace.yaml"
 )
 
 
@@ -186,6 +186,123 @@ def test_georgia_dashboard_description_names_narrow_component():
     assert "section 48-7-20 annual tax before nonrefundable credits" in description
     assert "caller-supplied completed Georgia taxable net income" in description
     assert "liability" not in description.lower()
+
+
+def test_kansas_dashboard_description_names_k40es_schedule():
+    output = (
+        "us-ks:policies/income_tax/2026_k40es_schedule_before_credits"
+        "#ks_pit_2026_k40es_schedule_before_credits"
+    )
+    report = project_state(
+        "KS",
+        {
+            "compared_count": 1,
+            "mismatch_count": 0,
+            "output": output,
+            "program": output.split("#", 1)[0],
+            "policyengine_target": (
+                "ks_k40es_schedule_before_credits_reviewed"
+            ),
+        },
+        _campaign(),
+        "campaign.json",
+    )
+
+    description = report["aggregates"][0]["description"]
+    assert "tax-year-2026 K-40ES" in description
+    assert "joint or all-other-filer schedule before credits" in description
+    assert "caller-supplied completed Kansas taxable income" in description
+    assert "liability" not in description.lower()
+
+
+def test_committed_kansas_populace_evidence_is_canonical_and_complete():
+    rulespec_sha = "a0a3032ca9e25b6d7d6d6b92be3f9609d796d143"
+    engine_sha = "ffd8213271947b0189a9dd61a055c1e0e78908a0"
+    executable_sha = (
+        "c7eef635dadca73b51d4012fcc2f12c2f08dd82f9d505ba5228f127779a3a4e2"
+    )
+    concept = (
+        "us-ks:policies/income_tax/2026_k40es_schedule_before_credits"
+        "#ks_pit_2026_k40es_schedule_before_credits"
+    )
+    campaign_path = (
+        REPO_ROOT / "reports/state-tax-populace-ks-campaign-2026-07-27.json"
+    )
+    report_path = (
+        DASHBOARD_DATA / "axiom-policyengine-ks-income-tax-populace.json"
+    )
+    cases_path = DASHBOARD_DATA / "cases/ks-income-tax-populace"
+
+    campaign = json.loads(campaign_path.read_text())
+    state = campaign["comparison"]["states"]["KS"]
+    cases = state["cases"]
+    assert campaign["comparison"]["sample_size_per_state"] == 0
+    assert state["compared_count"] == 989
+    assert state["mismatch_count"] == 0
+    assert state["tolerance"] == 0.01
+    assert state["relative_tolerance"] == 1e-7
+    assert state["output"] == concept
+    assert sum(case["policyengine"] == 0 for case in cases) == 158
+    assert sum(case["policyengine"] > 0 for case in cases) == 831
+    assert all(case["matched"] for case in cases)
+
+    runtime = campaign["runtime_provenance"]
+    assert runtime["rulespec"]["commit"] == rulespec_sha
+    assert runtime["rulespec"]["working_tree"] == "clean"
+    assert runtime["axiom_engine"]["commit"] == engine_sha
+    assert runtime["axiom_engine"]["executable_sha256"] == executable_sha
+    assert runtime["axiom_engine"]["working_tree"] == "clean"
+
+    report = json.loads(report_path.read_text())
+    assert report["suite"] == "ks-income-tax-populace"
+    assert report["case_count"] == 989
+    assert report["summary"] == {
+        "comparison_count": 989,
+        "match_count": 989,
+        "match_rate": 100.0,
+        "mismatch_count": 0,
+    }
+    assert report["aggregates"][0]["concept"] == concept
+    assert report["provenance"]["rulespecs"] == [
+        {
+            "repo": "TheAxiomFoundation/rulespec-us",
+            "sha": rulespec_sha,
+        }
+    ]
+
+    index = json.loads((cases_path / "index.json").read_text())
+    chunks = [
+        json.loads((cases_path / f"chunk-{number}.json").read_text())
+        for number in range(index["chunks"])
+    ]
+    assert index["count"] == index["total_cases"] == 989
+    assert index["chunk_size"] == 500
+    assert [len(chunk) for chunk in chunks] == [500, 489]
+    projected_cases = [case for chunk in chunks for case in chunk]
+    assert len({case["id"] for case in projected_cases}) == 989
+    assert [case["id"] for case in projected_cases] == [
+        case["tax_unit_id"] for case in cases
+    ]
+    assert all(case["r"] == 1.0 for case in projected_cases)
+    for projected, source in zip(projected_cases, cases, strict=True):
+        assert projected["h"] == {}
+        assert projected["m"] == []
+        assert projected["v"] == [
+            {
+                "c": concept,
+                "l": source["axiom"],
+                "x": source["policyengine"],
+            }
+        ]
+
+    manifest = json.loads((DASHBOARD_DATA / "manifest.json").read_text())
+    assert manifest["reports"].count(report_path.name) == 1
+    assert (
+        manifest["reports"].count(
+            "axiom-policyengine-taxsim-ks-income-tax-liability.json"
+        )
+        == 1
+    )
 
 
 def test_mississippi_dashboard_description_names_person_schedule():

@@ -314,12 +314,19 @@ _LIABILITY_OUTPUT["NY"] = (
 # The Populace campaign may validate a narrower source-faithful surface than
 # the legacy six-case grid. Keep these explicit so the grid's historical broad
 # concept and artifacts do not get relabeled.
+_POPULACE_MODULE = {
+    "KS": "us-ks:policies/income_tax/2026_k40es_schedule_before_credits",
+}
 _POPULACE_OUTPUT = {
     "AR": (
         f"{_MODULE['AR']}#"
         "ar_pit_pilot_income_tax_before_non_refundable_credits_indiv"
     ),
     "CT": _LIABILITY_OUTPUT["CT"],
+    "KS": (
+        f"{_POPULACE_MODULE['KS']}#"
+        "ks_pit_2026_k40es_schedule_before_credits"
+    ),
     "MS": _LIABILITY_OUTPUT["MS"],
     "OH": f"{_MODULE['OH']}#oh_pit_pilot_schedule_tax",
     "UT": _LIABILITY_OUTPUT["UT"],
@@ -327,6 +334,7 @@ _POPULACE_OUTPUT = {
 _POPULACE_PE_VAR = {
     "AR": "ar_income_tax_before_non_refundable_credits_indiv",
     "CT": "ct_resident_ordinary_tax_before_personal_credit_derived",
+    "KS": "ks_k40es_schedule_before_credits_reviewed",
     "MS": "ms_income_tax_before_credits_joint",
     "OH": "oh_nonbusiness_income_tax_before_non_refundable_credits_derived",
     "UT": "ut_resident_income_tax_before_credits_derived",
@@ -1064,6 +1072,7 @@ _POPULACE_TOL = {
     "GA": (0.01, 0.0000001),
     "IL": (1.0, 0.0),
     "KY": (0.01, 0.0000001),
+    "KS": (0.01, 0.0000001),
     "MS": (0.01, 0.0000001),
     "LA": (0.01, 0.0000001),
     "MT": (0.01, 0.0000001),
