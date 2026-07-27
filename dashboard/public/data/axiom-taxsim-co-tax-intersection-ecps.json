@@ -38855,6 +38855,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -135.2805993652437,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 186549.12940063476,
       "parent": "us:tax/federal-income-tax#liability",
@@ -38929,6 +38934,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -6171.8658520507815,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 24687.454147949218,
       "parent": "us:tax/federal-income-tax#liability",
@@ -39072,6 +39082,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -676.3916894531285,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 142325.10831054687,
       "parent": "us:tax/federal-income-tax#liability",
@@ -39257,6 +39272,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -1001.0628125000076,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 107378.5171875,
       "parent": "us:tax/federal-income-tax#liability",
@@ -40086,6 +40106,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.84258904647868,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset-intersection",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 16583.20258904648,
       "parent": null,
@@ -41453,6 +41478,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -1127.3270305442784,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 34904.45296945572,
       "parent": "us:tax/federal-income-tax#liability",
@@ -41697,6 +41727,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -639.1319177246041,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 107171.12808227539,
       "parent": "us:tax/federal-income-tax#liability",
@@ -41803,6 +41838,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.84372695922866,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset-intersection",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 23663.97372695923,
       "parent": null,
@@ -42253,6 +42293,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -3381.966024169924,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 55596.19397583008,
       "parent": "us:tax/federal-income-tax#liability",
@@ -42571,6 +42616,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -416.3112890625198,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 166109.7287109375,
       "parent": "us:tax/federal-income-tax#liability",
@@ -42900,6 +42950,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -5.634162788388494,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 55104.14583721161,
       "parent": "us:tax/federal-income-tax#liability",
@@ -43054,6 +43109,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -85.68001838683267,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 121105.62998161317,
       "parent": "us:tax/federal-income-tax#liability",
@@ -43239,6 +43299,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -16909.846266601555,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 72411.04373339844,
       "parent": "us:tax/federal-income-tax#liability",
@@ -43700,6 +43765,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -10596.84230468754,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 313030.6876953125,
       "parent": "us:tax/federal-income-tax#liability",
@@ -43864,6 +43934,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -4509.297341472629,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 108807.04265852737,
       "parent": "us:tax/federal-income-tax#liability",
@@ -44113,6 +44188,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -399.9996740722563,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 437688.99032592773,
       "parent": "us:tax/federal-income-tax#liability",
@@ -44372,6 +44452,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.841589843748807,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset-intersection",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 19138.93158984375,
       "parent": null,
@@ -44425,6 +44510,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.844062200545523,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset-intersection",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 14572.464062200546,
       "parent": null,
@@ -44726,6 +44816,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -620.0290356445312,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 8942.350964355468,
       "parent": "us:tax/federal-income-tax#liability",
@@ -45107,6 +45202,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -2211.8704296874985,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 13489.5095703125,
       "parent": "us:tax/federal-income-tax#liability",
@@ -45203,6 +45303,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 20.703331176751817,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-20-7-filing-status-offset-intersection",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 38279.823331176754,
       "parent": null,
@@ -45816,6 +45921,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.84942382812551,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset-intersection",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 15125.179423828125,
       "parent": null,
@@ -46708,6 +46818,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -994.2962951660156,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 43689.30370483398,
       "parent": "us:tax/federal-income-tax#liability",
@@ -47548,6 +47663,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.843052917480236,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset-intersection",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 14157.98305291748,
       "parent": null,
@@ -48400,6 +48520,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -441.9079428100522,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 129033.88205718994,
       "parent": "us:tax/federal-income-tax#liability",
@@ -48701,6 +48826,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -3663.8012597656343,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 258946.4087402344,
       "parent": "us:tax/federal-income-tax#liability",
@@ -48886,6 +49016,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -180.37591941835126,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 280844.00408058165,
       "parent": "us:tax/federal-income-tax#liability",
@@ -49642,6 +49777,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -399.99788146978244,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 598911.5621185303,
       "parent": "us:tax/federal-income-tax#liability",
@@ -49801,6 +49941,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -1803.7199830627505,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 111229.69001693725,
       "parent": "us:tax/federal-income-tax#liability",
@@ -49960,6 +50105,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -98.73966308592935,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 118723.82033691407,
       "parent": "us:tax/federal-income-tax#liability",
@@ -50172,6 +50322,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 20.70441845703317,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-20-7-filing-status-offset-intersection",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 42507.354418457035,
       "parent": null,
@@ -50442,6 +50597,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -2254.645870971668,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 232667.00412902833,
       "parent": "us:tax/federal-income-tax#liability",
@@ -51240,6 +51400,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.84282714843721,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset-intersection",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 38057.082827148435,
       "parent": null,
@@ -51399,6 +51564,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -8878.798771972659,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 59966.92122802734,
       "parent": "us:tax/federal-income-tax#liability",
@@ -51526,6 +51696,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -166.84503967282944,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 166898.67496032716,
       "parent": "us:tax/federal-income-tax#liability",
@@ -52319,6 +52494,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -2254.6425573730958,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 263025.44744262693,
       "parent": "us:tax/federal-income-tax#liability",
@@ -52747,6 +52927,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -2705.583063694008,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 106696.716936306,
       "parent": "us:tax/federal-income-tax#liability",
@@ -53107,6 +53292,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -1262.6021875000006,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 105101.5578125,
       "parent": "us:tax/federal-income-tax#liability",
@@ -53419,6 +53609,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.84351525751117,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset-intersection",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 20642.55351525751,
       "parent": null,
@@ -53858,6 +54053,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -399.9980932617327,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 258145.89190673828,
       "parent": "us:tax/federal-income-tax#liability",
@@ -54894,6 +55094,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -1210.748500976566,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 133820.31149902343,
       "parent": "us:tax/federal-income-tax#liability",
@@ -55379,6 +55584,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.84392578124971,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset-intersection",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 17274.70392578125,
       "parent": null,
@@ -55427,6 +55637,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -1353.0185859107878,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 279031.1714140892,
       "parent": "us:tax/federal-income-tax#liability",
@@ -55781,6 +55996,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -541.1172705078498,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 308020.02272949216,
       "parent": "us:tax/federal-income-tax#liability",
@@ -55987,6 +56207,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -9088.475432052626,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 207190.06456794738,
       "parent": "us:tax/federal-income-tax#liability",
@@ -56072,6 +56297,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -1127.3244531250093,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 274223.485546875,
       "parent": "us:tax/federal-income-tax#liability",
@@ -57142,20 +57372,20 @@
     "dispositioned": {
       "counts": {
         "axiom_encoding_gap": 298,
-        "bridge_artifact": 32,
+        "bridge_artifact": 159,
         "explained_residual": 426,
         "unexplained": 0,
-        "upstream_engine_gap": 254
+        "upstream_engine_gap": 416
       },
       "dispositions_file": "dispositions/co-tax-intersection-taxsim.yaml",
       "expired_entries": [
         "taxsim-blindness-63f-extension-standard_deduction"
       ],
-      "explained_rate": 84.779351,
+      "explained_rate": 87.185679,
       "orphaned_entries": [],
       "raw_match_rate": 78.850958,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 1530
+      "unexplained_count": 1241
     },
     "error_count": 0,
     "errors_by_engine": [],
