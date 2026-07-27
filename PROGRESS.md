@@ -469,13 +469,37 @@ residual), #229 (small-suite grounding).
 - Created the isolated review worktree directly from that SHA.
 - Read the GitNexus PR-review skill and the branch's worker ledger/report.
 - Captured the exact local comparison base before beginning the audit.
+- Inventoried the three-dot PR diff: exactly 16 paths, all within the five
+  reports/dispositions, US-PE note/detail/freshness outputs, and the two
+  mandated Markdown artifacts; no scripts, CI files, other rows, or state
+  sources changed.
+- Ran all seven requested generated-chain checks successfully: dispositions
+  (83), grids, affected map (162 suites/171 edges), vacuous gate (136
+  configs/212 suites/23 surfaces), scoreboard (4 jurisdictions/3 conformant),
+  ratchet, and burndown (4 series/49 points).
+- Confirmed `us-pe:snap` retains `in_scope: true` and suite
+  `ca-snap-ecps`; only its note changed, and note counts
+  `23/83/71/106/41` match the reports.
+- Found one merge blocker against the specified current `origin/main`.
+  The merge base is `105b7133`; both sides changed
+  `dashboard/public/data/freshness.json`, producing one conflict at the
+  document-level `generated_at`.
+- Found a provenance blocker: all five committed reports declare
+  PolicyEngine Core `3.28.0`, not the claimed `3.30.3`.
+- Confirmed the committed five suite configs resolve through
+  `_resolve_pe_oracle_pins` to PolicyEngine-US `1.752.2` and Core `3.28.0`;
+  none declares the `1.767.3` override stamped into the reports. The reports
+  therefore cannot be regenerated on their declared model version from the
+  committed configuration alone.
+- Confirmed the local GitNexus CLI reports this repository unindexed and the
+  connector exposes no graph-query tools. Because no code symbols changed,
+  review continued with direct generated-artifact and execution-path tracing.
 
 ### Next
 
-- Inventory the complete `origin/main...6846f433` diff and blast containment.
 - Independently reconcile report/disposition counts and all evidence classes.
 - Re-run at least ten TANF counterfactuals, including at least two committed
   failures.
-- Re-run one state suite end-to-end and byte-compare its report.
-- Run the complete generated-chain `--check` parity battery.
+- Attempt one state suite end-to-end; record the committed-pin/runtime failure
+  or byte comparison result.
 - Commit the evidence-backed verdict to `REVIEW-REPORT.md`.
