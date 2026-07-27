@@ -525,6 +525,27 @@ def _evidence_fixture(name: str):
     )
 
 
+def _certification_fixture(name: str):
+    certify = _load("certify")
+    report_path = (
+        EVIDENCE_FIXTURES
+        / name
+        / "dashboard"
+        / "public"
+        / "data"
+        / "report.json"
+    )
+    report = json.loads(report_path.read_text())
+    return certify._suite_verdict(
+        {
+            "suite": report["suite"],
+            "oracle_type": "reference",
+            "oracle": "synthetic",
+            "report": report_path.relative_to(REPO).as_posix(),
+        }
+    )
+
+
 def test_full_and_cardinality_reconciliation_are_stated_honestly():
     full = _evidence_fixture("full_bound")
     assert full.valid is True
@@ -540,6 +561,36 @@ def test_full_and_cardinality_reconciliation_are_stated_honestly():
     assert cardinality.valid is True
     assert cardinality.binding == "bound"
     assert cardinality.reconciliation == "cardinality"
+
+
+def test_certificate_leg_requires_bound_reconciled_execution_evidence():
+    clean, evidence, defects = _certification_fixture("cardinality_bound")
+    assert defects == []
+    assert clean["clean"] is True
+    assert clean["binding"] == "bound"
+    assert clean["reconciliation"] == "cardinality"
+    assert clean["evidence_cases"] == 2
+    assert any(
+        item["claim"] == "case-evidence-index:cardinality-bound"
+        for item in evidence
+    )
+
+    mutants = {
+        "dummy_metadata": ("unbound", "none", "no case id"),
+        "foreign_chunks": ("unbound", "full", "report_path"),
+        "duplicate_case": ("bound", "full", "duplicate case id"),
+        "malformed_row": ("bound", "none", ".m must be an array"),
+        "stale_report_sha": ("unbound", "cardinality", "report_sha256"),
+    }
+    for fixture, (binding, reconciliation, marker) in mutants.items():
+        leg, _evidence, fixture_defects = _certification_fixture(fixture)
+        assert leg["clean"] is False, fixture
+        assert leg["binding"] == binding, fixture
+        assert leg["reconciliation"] == reconciliation, fixture
+        assert any(marker in defect for defect in fixture_defects), (
+            fixture,
+            fixture_defects,
+        )
 
 
 def test_dummy_metadata_cannot_back_asserted_counts():
@@ -587,3 +638,64 @@ def test_index_report_sha_must_match_exact_report_bytes():
         "report_sha256" in defect and "does not match" in defect
         for defect in evidence.binding_defects
     )
+
+
+def test_census_report_path_and_sha_must_match_the_registry():
+    certify = _load("certify")
+    report_path = (
+        EVIDENCE_FIXTURES
+        / "cardinality_bound"
+        / "dashboard"
+        / "public"
+        / "data"
+        / "report.json"
+    )
+    report = report_path.relative_to(REPO).as_posix()
+    report_sha256 = certify.sha256_of(report_path)
+    entry = {
+        "suite": "cardinality-bound",
+        "oracle_type": "reference",
+        "oracle": "synthetic",
+        "report": report,
+    }
+    row = {
+        "cases_scanned": 2,
+        "report": report,
+        "report_sha256": report_sha256,
+        "contested_reports": [],
+        "evidence_fields": {"income": {"distinct": 2, "state": "varied"}},
+        "varied_fields": 1,
+        "constant_fields": 0,
+        "bridged_through": {},
+        "bridge_audited": True,
+        "binding": "bound",
+        "reconciliation": "cardinality",
+    }
+
+    rows, complete = certify._exercise_block(
+        [entry], {"suites": {"cardinality-bound": row}}, []
+    )
+    assert complete is True
+    assert rows["cardinality-bound"]["report_identity_matches_registry"] is True
+
+    for field, value, marker in (
+        (
+            "report",
+            "tests/fixtures/evidence/full_bound/dashboard/public/data/report.json",
+            "census report path",
+        ),
+        ("report_sha256", "0" * 64, "census report_sha256"),
+    ):
+        mutant_row = {**row, field: value}
+        defects: list[str] = []
+        mutant_rows, mutant_complete = certify._exercise_block(
+            [entry],
+            {"suites": {"cardinality-bound": mutant_row}},
+            defects,
+        )
+        assert mutant_complete is False, field
+        assert (
+            mutant_rows["cardinality-bound"]["report_identity_matches_registry"]
+            is False
+        )
+        assert any(marker in defect for defect in defects), (field, defects)

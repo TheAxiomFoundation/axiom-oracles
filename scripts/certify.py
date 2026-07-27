@@ -40,6 +40,11 @@ import sys
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from axiom_oracles.evidence import validate_suite_evidence  # noqa: E402
+
 DATA_DIR = REPO_ROOT / "dashboard" / "public" / "data"
 CENSUS_PATH = REPO_ROOT / "conformance" / "exercise-census.json"
 OUT_DIR = REPO_ROOT / "certificates"
@@ -179,6 +184,13 @@ def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
     """
     defects: list[str] = []
     report_path = REPO_ROOT / entry["report"]
+    execution_evidence = validate_suite_evidence(report_path)
+    defects.extend(execution_evidence.defects)
+    evidence_gate_clean = (
+        execution_evidence.valid
+        and execution_evidence.binding == "bound"
+        and execution_evidence.reconciliation != "none"
+    )
     report = _load(report_path)
     summary = report.get("summary") or {}
 
@@ -224,11 +236,11 @@ def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
     inline_cases = sum(
         1 for c in (report.get("cases") or []) if isinstance(c, dict) and c
     )
-    chunk_dir = REPO_ROOT / "dashboard" / "public" / "data" / "cases" / str(
-        reported_suite or entry["suite"]
-    )
-    chunk_files = sorted(chunk_dir.glob("chunk-*.json")) if chunk_dir.is_dir() else []
-    if comparisons > 0 and not inline_cases and not chunk_files:
+    if (
+        comparisons > 0
+        and not inline_cases
+        and not execution_evidence.chunk_case_count
+    ):
         defects.append(
             f"{entry['suite']}: claims {comparisons} comparisons with no "
             "per-case evidence (no inline cases, no committed chunks)"
@@ -285,6 +297,26 @@ def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
             "sha256": sha256_of(report_path),
         }
     ]
+    if execution_evidence.suite:
+        index_path = (
+            report_path.parent
+            / "cases"
+            / execution_evidence.suite
+            / "index.json"
+        )
+        if index_path.is_file():
+            try:
+                index_artifact = index_path.relative_to(REPO_ROOT).as_posix()
+            except ValueError:
+                index_artifact = index_path.as_posix()
+            evidence.append(
+                {
+                    "claim": f"case-evidence-index:{entry['suite']}",
+                    "mode": "computed",
+                    "artifact": index_artifact,
+                    "sha256": sha256_of(index_path),
+                }
+            )
     disposition_file = dispositioned.get("dispositions_file")
     classified = sum(
         _count(v, f"counts.{k}", defects, entry["suite"]) for k, v in counts.items()
@@ -379,10 +411,11 @@ def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
     # does not carry and no per-case chunks exist, the aggregate cannot be
     # audited from committed evidence.
     stored = len(report.get("mismatches") or [])
-    chunk_dir = REPO_ROOT / "dashboard" / "public" / "data" / "cases" / str(
-        reported_suite or entry["suite"]
-    )
-    if mismatch_count > stored and not chunk_dir.is_dir():
+    if (
+        mismatch_count > stored
+        and not execution_evidence.chunk_case_count
+        and execution_evidence.reconciliation != "full"
+    ):
         defects.append(
             f"{entry['suite']}: {mismatch_count} mismatches claimed, "
             f"{stored} stored, no per-case chunks — aggregate unauditable"
@@ -401,8 +434,16 @@ def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
         "weighted_mismatch_mass": weighted_mismatch or None,
         "unexplained": unexplained,
         "axiom_attributed_open": axiom_open,
+        "binding": execution_evidence.binding,
+        "reconciliation": execution_evidence.reconciliation,
+        "evidence_cases": execution_evidence.case_count,
         "report_defects": defects,
-        "clean": not defects and unexplained == 0 and axiom_open == 0,
+        "clean": (
+            evidence_gate_clean
+            and not defects
+            and unexplained == 0
+            and axiom_open == 0
+        ),
     }
     return leg, evidence, defects
 
@@ -418,6 +459,38 @@ def _exercise_block(
             rows[entry["suite"]] = {"status": "no census row"}
             complete = False
             continue
+
+        expected_report = entry["report"]
+        expected_path = REPO_ROOT / expected_report
+        expected_sha256: str | None
+        if expected_path.is_file():
+            expected_sha256 = sha256_of(expected_path)
+        else:
+            expected_sha256 = None
+            complete = False
+            defects.append(
+                f"{entry['suite']}: registry report {expected_report!r} "
+                "does not exist and cannot be matched to the census"
+            )
+        report_identity_matches = (
+            row.get("report") == expected_report
+            and expected_sha256 is not None
+            and row.get("report_sha256") == expected_sha256
+        )
+        if row.get("report") != expected_report:
+            complete = False
+            defects.append(
+                f"{entry['suite']}: census report path {row.get('report')!r} "
+                f"diverges from registry report {expected_report!r}"
+            )
+        if expected_sha256 is not None and row.get("report_sha256") != expected_sha256:
+            complete = False
+            defects.append(
+                f"{entry['suite']}: census report_sha256 "
+                f"{row.get('report_sha256')!r} diverges from registry report "
+                f"bytes {expected_sha256}"
+            )
+
         has_evidence = bool(row.get("evidence_fields"))
         if not has_evidence:
             complete = False
@@ -437,12 +510,17 @@ def _exercise_block(
             "cases": row.get("cases_scanned"),
             "report": row.get("report"),
             "report_sha256": row.get("report_sha256"),
+            "registry_report": expected_report,
+            "registry_report_sha256": expected_sha256,
+            "report_identity_matches_registry": report_identity_matches,
             "contested_reports": contested,
             "varied_fields": row.get("varied_fields"),
             "constant_fields": row.get("constant_fields"),
             "bridged_through": sorted((row.get("bridged_through") or {}).keys()),
             "bridge_audited": bool(row.get("bridge_audited")),
             "per_case_evidence_committed": has_evidence,
+            "binding": row.get("binding"),
+            "reconciliation": row.get("reconciliation"),
         }
         if not row.get("bridge_audited"):
             complete = False

@@ -55,14 +55,20 @@
 - Tightened cardinality fallback so nonempty compact mismatch evidence without
   matched verdict rows is partial evidence (`none`), never a weaker passing
   cardinality claim. Added a bound synthetic mutant for that shape.
+- Integrated the lightweight path into `exercise_census.py`: its existing
+  chunk read now records exact binding defects and a deliberately capped
+  `cardinality|none` reconciliation per row without aborting on legacy or
+  missing indexes.
+- Integrated strict validation into `certify.py` only for `PROGRAMS` suites.
+  Clean reference legs now require valid, bound, reconciled evidence, and the
+  certificate rejects census report-path or report-SHA divergence from its
+  registry entry.
 - Focused validation check: Ruff passes and
-  `pytest tests/test_certification_mutants.py tests/test_run_comparison.py`
-  reports 62 passed.
+  `pytest tests/ -k certification` reports 34 passed (1,861 deselected);
+  the census-focused tests report 3 passed.
 
 ## Next
 
-- Integrate binding state into the census and strict evidence checks into the
-  certificate.
 - Regenerate derived artifacts and run every required gate.
 - Write the final verification report to the requested review path if the
   workspace permits that external write; otherwise leave an exact in-worktree
