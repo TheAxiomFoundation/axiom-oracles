@@ -9,8 +9,12 @@
   `rulespec-us` `origin/main` and grounded in 7 CFR 246.7(c)-(e).
 - Verification discipline: audit every statute/regulation concept ID, prove zero
   numeric changes byte-for-byte, and run the test suite exactly once.
-- Implementation: applied and locally verified; not yet committed.
-- Test suite: not run.
+- Implementation: committed as `579228c0`.
+- Test suite: frozen after one collected full run: 2,096 passed, 59 skipped,
+  6 failed. The five bridge failures read a detached, stale sibling
+  `rulespec-us` checkout; the dashboard-loader failure is blocked DNS for an
+  uninstalled `esbuild`. No failure concerns WIC or a changed file.
+- Publication: final report in preparation; branch not yet pushed.
 
 ## Done
 
@@ -52,10 +56,29 @@
   or conformance artifact differs from the pre-implementation commit.
 - Confirmed the dashboard overview remains current (215 reports); it does not
   inventory `programs.json`.
+- Committed the implementation as `579228c0`.
+- Attempted the PR #406 `uv run` launcher. It exited before collection because
+  the sandbox cannot write the uv cache; zero tests ran in that attempt.
+- Ran the full suite exactly once with the existing environment:
+  `.venv/bin/python -m pytest tests/ -q`.
+  Frozen result: 2,096 passed, 59 skipped, 6 failed in 647.36 seconds.
+- Diagnosed the frozen failures without rerunning:
+  - five bridge contracts selected the sibling `rulespec-us` checkout at
+    detached `c3e1c3ad`, behind its `origin/main` `ecb057ef`; all five relevant
+    RuleSpec/fixture paths changed between those commits;
+  - the dashboard loader invoked `npx esbuild`, but no local esbuild executable
+    exists and registry DNS is unavailable;
+  - none of the five failing test files, their mapping registries, or the
+    dashboard loader changed on this branch.
+- Preserved the legacy import-planner caveat: default CLI composition still
+  derives imports from canonical labels rather than `targets.axiom`. WIC was
+  already unrunnable through that path because no `42/1786` RuleSpec module
+  exists; the mapped runner output address is now correct. A generic planner
+  refactor is outside this citation-label task.
 
 ## Next
 
-1. Commit the verified implementation.
-2. Run the full pytest suite once; do not run or regenerate comparison suites.
-3. Record the frozen result and write `OUTPUT.md`.
-4. Push and open a draft PR referencing #401.
+1. Commit the frozen verification record and `OUTPUT.md`.
+2. Push the branch.
+3. Open a draft PR referencing #401.
+4. Record the publication URL in both progress files and push that final commit.
