@@ -253,6 +253,12 @@ the expected NY/OH surfaces; that is not the clean canonical baseline.
 - The pending loader correctly rejected the noncanonical worktree name
   `wt-addmed-se`; a temporary canonical `rulespec-us` archive resolved the
   check. Temporary archives and copies created by this review were removed.
+- During the final write-safety audit, the primary repository worktree had
+  concurrently moved from `main` to `z1-wic-citation` and gained commit
+  `24a94978` (`chore: initialize WIC citation progress`), as recorded by its
+  reflog. Its untracked `.gitnexus/` metadata names that WIC commit and was
+  timestamped after the concurrent checkout/commit. The review did not alter or
+  remove those artifacts; both detached review worktrees remained isolated.
 
 ## Required resolution
 

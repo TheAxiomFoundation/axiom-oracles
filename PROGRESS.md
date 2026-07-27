@@ -733,6 +733,10 @@ residual), #229 (small-suite grounding).
   rulespec-us PR worktree they pass because that branch contains the expected
   NY/OH surfaces; the clean baseline intentionally uses the canonical sibling
   rulespec checkout at `c3e1c3ad`.
+- Audited the primary worktree after concurrent activity appeared. Its reflog
+  records a separate `z1-wic-citation` checkout and commit `24a94978`; the
+  untracked `.gitnexus/` metadata names that WIC head and postdates its commit.
+  Preserved those unrelated artifacts without alteration.
 - Wrote the self-contained per-entry verdict, evidence digest, required fixes,
   containment/gate/baseline results, and environment disclosures to
   `REVIEW-REPORT.md`.
