@@ -609,3 +609,31 @@ residual), #229 (small-suite grounding).
 
 - Open the PR from the current branch tip (this docs commit) and land it after
   a final confirmation pass.
+
+---
+
+## Final confirmation ledger — `41512b26`
+
+### State
+
+- In progress; scoped verification only.
+- Target under review:
+  `41512b26598858d47a306fe71f0df4e7360d9d41`.
+- Review writes are confined to branch
+  `review/fed-parity-snap-residual-cleanup-41512b26` in the disposable
+  `.git/review-worktrees/snap-residual-cleanup-41512b26` worktree.
+- No remote or GitHub writes are authorized or planned.
+
+### Done
+
+- Created this disposable review worktree directly from the exact target.
+- Read the round-4 committed ledger and verdict report.
+
+### Next
+
+- Audit the new round-3/4 ledger text against history and both prior review
+  ledgers.
+- Verify the exact delta, repository hygiene, overview, and thirteen-command
+  check battery.
+- Verify PR #407's body claims against the target tree.
+- Write and commit the final confirmation report, then complete this ledger.
