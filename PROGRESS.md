@@ -334,3 +334,33 @@ residual), #229 (small-suite grounding).
 ### Next
 
 - None. Final scope/provenance/count audit passed; see `fix-354-DONE.md`.
+
+---
+
+## Closure universes — charter #374 (2026-07-27)
+
+### State
+
+- Branch: `closure-universes`; starting point `origin/main` at `105b7133`.
+- Goal: add a standalone closure/completeness layer for CO SNAP over the
+  `10 CCR 2506-1`, `7 CFR 273`, and `7 USC chapter 51` roots.
+- Inputs must be pinned from the closure sprint snapshots and resolved by
+  citation path across the inventory, never by snapshot-name filtering.
+- This branch may use only `origin/main`; the parked #372–#379 stack is not a
+  dependency.
+- Delivery: coherent-step commits, CI coverage, push, and an unmerged PR
+  referencing #374.
+
+### Done
+
+- Read the closure sprint design document in full, including the tier-2
+  correction and its citation-path lesson.
+- Confirmed the worktree is clean at the requested base commit.
+- Established this committed progress ledger before implementation.
+
+### Next
+
+- Audit existing conformance generators, ratchets, tests, and CI wiring.
+- Pin the four source snapshots with computed checksums and provenance.
+- Implement and generate the three closure universes and summary.
+- Add mutant tests, wire CI, run validation, push, and open the PR.
