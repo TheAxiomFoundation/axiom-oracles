@@ -413,12 +413,23 @@ residual), #229 (small-suite grounding).
   exhaustive audit confirms that every embedded annotation matches a live
   selector and all 138 rows for the 69 categorical candidates are physically
   unannotated.
+- Kept the `us-pe:snap` registered suite fixed at `ca-snap-ecps` and updated
+  only its note to report final unexplained mismatch rows
+  AL/MA/NC/SC/TN = 23/83/71/106/41.
+- Ran the full requested write chain for UTC 2026-07-27: dispositions, grids,
+  affected map, vacuous-gate freshness, scoreboard plus snapshot, ratchet,
+  and burndown. All seven corresponding `--check` invocations pass.
+- Preserved the ratchet's unrelated inline history comments after its writer
+  reserialized unchanged numeric floors.
 - The sandbox denied `uv` cache initialization under
   `/Users/maxghenis/.cache/uv`; generation used the exact cached PE-US wheel
   read-only through the same comparison CLI and clean temporary dependency
   snapshots.
+- The sandbox also denied a diagnostic `ps` process listing during the long
+  local rerun; bounded runner polling and report timestamps confirmed normal
+  progress, and all five processes exited successfully.
 
 ### Next
 
-- Regenerate the complete derived chain, update the SNAP row note, audit
-  scope, and write `WORKER-REPORT.md`.
+- Classify the remaining unexplained rows, audit final scope, and write
+  `WORKER-REPORT.md`.
