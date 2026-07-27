@@ -653,12 +653,36 @@ residual), #229 (small-suite grounding).
   `/Users/maxghenis/.gitnexus/registry.json`. Queried the local graph directly;
   the untracked `.gitnexus/` artifact will remain outside commits and be
   removed after review.
+- Independently confirmed the live-consumer diagnosis statically and
+  behaviorally. axiom-encode imports `build_policyengine_coverage_report` and
+  `load_policyengine_registry` from `axiom_oracles.bridges`; the registry loads
+  YAML adjacent to its own module under `axiom_oracles/bridges/mappings`.
+  With axiom-encode's legacy mappings present but this PR absent, a 14-output
+  fixture classified all 14 as unmapped; putting this PR worktree first on
+  `PYTHONPATH` changed the same fixture to the expected 5 comparable / 9
+  known-not-comparable split.
+- Fully reproduced the workflow-style changed-file gate against a canonical
+  GHA-shaped archive of RuleSpec head `b42b34c0`, filtering the exact changed
+  pipeline file. The non-vacuous result is 14 matched outputs: 5 comparable,
+  9 known-not-comparable, zero pending/unmapped, and zero untested comparable
+  outputs.
+- Verified the five comparable evidence claims in the pinned companion YAML:
+  the selected threshold has six direct assertions; the separate threshold has
+  one; joint and other use the declared selected-threshold proxy and have
+  genuinely matching $250,000 and $200,000 cases; the newly comparable rate has
+  a direct `0.009` assertion. RuleSpec commit `f9f0f22e3` adds exactly that rate
+  assertion.
+- Rejected two setup attempts rather than counting them as gate evidence: the
+  live `wt-addmed-se` basename failed canonical-checkout validation, and a flat
+  archive layout made the workflow filter select zero rows. The successful run
+  used the required nested `rulespec-us/rulespec-us` layout. The generic
+  axiom-encode venv also lacked `receipt`; the complete venv at commit
+  `dc8ffaa8` ran the final check.
 
 ## Next
 
 1. Establish schema capability and PolicyEngine 1.767.3 evidence.
 2. Audit all fourteen classifications and comparable metadata.
-3. Rerun the RuleSpec changed-file gate and inspect all comparable assertions.
-4. Complete containment, YAML-integrity, and clean-main regression checks.
-5. Remove local graph scratch data and commit the final self-contained verdict
+3. Complete containment, YAML-integrity, and clean-main regression checks.
+4. Remove local graph scratch data and commit the final self-contained verdict
    to `REVIEW-REPORT.md`.
