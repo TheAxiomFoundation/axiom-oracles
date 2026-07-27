@@ -230,8 +230,8 @@
   "population": "spsd-synthetic-2022",
   "provenance": {
     "attribution": "This analysis is based on Statistics Canada's Social Policy Simulation Database and Model. The assumptions and calculations underlying the simulation results were prepared by the Axiom Foundation and the responsibility for the use and interpretation of these data is entirely that of the author(s).",
-    "generated": "2026-07-26",
-    "generated_at": "2026-07-26T05:50:24Z",
+    "generated": "2026-07-27",
+    "generated_at": "2026-07-27T04:12:52Z",
     "generator": "scripts/generate_ca_federal_tax_spsm.py",
     "licence": "SPSD/M Licence Agreement v34; no Package contents are redistributed with this repository (s.3.1).",
     "oracle": "spsm",

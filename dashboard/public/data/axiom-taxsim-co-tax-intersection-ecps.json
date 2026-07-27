@@ -38977,6 +38977,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -6161.002644543285,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-addmed-scope",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1213"
+      },
       "kind": "amount_difference",
       "left": -4926.7326445432855,
       "parent": null,
@@ -39152,6 +39157,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1700.0049999999974,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-addmed-scope",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1213"
+      },
       "kind": "amount_difference",
       "left": 47557.665,
       "parent": null,
@@ -39337,6 +39347,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -1650.0004687500004,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-blindness-63f-extension-taxable_income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 5941.01953125,
       "parent": "us:tax/federal-income-tax#liability",
@@ -39353,6 +39368,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -164.998046875,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-blindness-63f-extension-tax_before_credits",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 594.101953125,
       "parent": "us:tax/federal-income-tax#liability",
@@ -39369,6 +39389,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -69.39514062500001,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-blindness-63f-extension-liability",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 223.404859375,
       "parent": null,
@@ -39771,6 +39796,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -2049.99861328125,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-blindness-63f-extension-taxable_income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 6648.92138671875,
       "parent": "us:tax/federal-income-tax#liability",
@@ -39787,6 +39817,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -204.99786132812494,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-blindness-63f-extension-tax_before_credits",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 664.892138671875,
       "parent": "us:tax/federal-income-tax#liability",
@@ -39803,6 +39838,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -88.59745898437495,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-blindness-63f-extension-liability",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 273.552541015625,
       "parent": null,
@@ -39967,6 +40007,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -3518.1825385284465,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-addmed-scope",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1213"
+      },
       "kind": "amount_difference",
       "left": 67887.28746147155,
       "parent": null,
@@ -40115,6 +40160,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1793.5295323562605,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-addmed-scope",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1213"
+      },
       "kind": "amount_difference",
       "left": 15954.890467643738,
       "parent": null,
@@ -40358,6 +40408,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1366.1796356201157,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-addmed-scope",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1213"
+      },
       "kind": "amount_difference",
       "left": 41033.95036437988,
       "parent": null,
@@ -40791,6 +40846,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1735.5417051506047,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-addmed-scope",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1213"
+      },
       "kind": "amount_difference",
       "left": 13843.538294849395,
       "parent": null,
@@ -40950,6 +41010,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -23.282636718751746,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-addmed-scope",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1213"
+      },
       "kind": "amount_difference",
       "left": 24831.27736328125,
       "parent": null,
@@ -41680,6 +41745,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -681.3818514251616,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-addmed-scope",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1213"
+      },
       "kind": "amount_difference",
       "left": 120361.90814857483,
       "parent": null,
@@ -42316,6 +42386,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1711.2925180458988,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-addmed-scope",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1213"
+      },
       "kind": "amount_difference",
       "left": 47629.0574819541,
       "parent": null,
@@ -43895,6 +43970,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -1650.003437499996,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-blindness-63f-extension-taxable_income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 76267.9765625,
       "parent": "us:tax/federal-income-tax#liability",
@@ -44107,6 +44187,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1435.1185454079605,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-addmed-scope",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1213"
+      },
       "kind": "amount_difference",
       "left": 62999.33145459204,
       "parent": null,
@@ -44229,6 +44314,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -2621.4875097656186,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-addmed-scope",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1213"
+      },
       "kind": "amount_difference",
       "left": 85644.29249023438,
       "parent": null,
@@ -44351,6 +44441,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -24.29112506103411,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-addmed-scope",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1213"
+      },
       "kind": "amount_difference",
       "left": 54621.888874938966,
       "parent": null,
@@ -45642,6 +45737,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -7943.76760986328,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-addmed-scope",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1213"
+      },
       "kind": "amount_difference",
       "left": 52148.06239013672,
       "parent": null,
@@ -45732,6 +45832,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -2176.4689315583455,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-addmed-scope",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1213"
+      },
       "kind": "amount_difference",
       "left": 30086.991068441654,
       "parent": null,
@@ -46145,6 +46250,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -2050.004119140627,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-blindness-63f-extension-taxable_income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 56003.20588085937,
       "parent": "us:tax/federal-income-tax#liability",
@@ -46161,6 +46271,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -451.0047062109379,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-blindness-63f-extension-tax_before_credits",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 7032.705293789062,
       "parent": "us:tax/federal-income-tax#liability",
@@ -46177,6 +46292,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -91.19496155468755,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-blindness-63f-extension-liability",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 1041.5150384453125,
       "parent": null,
@@ -46193,6 +46313,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -3025.8250878906256,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-addmed-scope",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1213"
+      },
       "kind": "amount_difference",
       "left": 35143.284912109375,
       "parent": null,
@@ -47360,6 +47485,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -3408.49152954101,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-addmed-scope",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1213"
+      },
       "kind": "amount_difference",
       "left": 54776.99847045899,
       "parent": null,
@@ -47582,6 +47712,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1882.5577874755836,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-addmed-scope",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1213"
+      },
       "kind": "amount_difference",
       "left": 50052.62221252442,
       "parent": null,
@@ -47910,6 +48045,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -51.47775128729336,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-addmed-scope",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1213"
+      },
       "kind": "amount_difference",
       "left": 24136.432248712706,
       "parent": null,
@@ -48350,6 +48490,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -2049.9966601562483,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-blindness-63f-extension-taxable_income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 53041.17333984375,
       "parent": "us:tax/federal-income-tax#liability",
@@ -48366,6 +48511,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -451.00186523437515,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-blindness-63f-extension-tax_before_credits",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 6381.058134765625,
       "parent": "us:tax/federal-income-tax#liability",
@@ -48382,6 +48532,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -92.9309374999998,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-blindness-63f-extension-liability",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 2086.7490625,
       "parent": null,
@@ -48435,6 +48590,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -4775.4048828125015,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-addmed-scope",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1213"
+      },
       "kind": "amount_difference",
       "left": 39740.1651171875,
       "parent": null,
@@ -49096,6 +49256,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -8990.417694921874,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-addmed-scope",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1213"
+      },
       "kind": "amount_difference",
       "left": -8134.567694921875,
       "parent": null,
@@ -49398,6 +49563,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -1650.00046875,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-blindness-63f-extension-taxable_income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 1977.76953125,
       "parent": "us:tax/federal-income-tax#liability",
@@ -49414,6 +49584,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -165.00304687499997,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-blindness-63f-extension-tax_before_credits",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 197.776953125,
       "parent": "us:tax/federal-income-tax#liability",
@@ -49430,6 +49605,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -69.398140625,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-blindness-63f-extension-liability",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 49.021859375,
       "parent": null,
@@ -51002,6 +51182,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": 1270.0645458984363,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-addmed-scope",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1213"
+      },
       "kind": "amount_difference",
       "left": 236962.38454589844,
       "parent": null,
@@ -51087,6 +51272,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -3430.641659317016,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-addmed-scope",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1213"
+      },
       "kind": "amount_difference",
       "left": 9832.208340682984,
       "parent": null,
@@ -51384,6 +51574,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -31.596828384397668,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-addmed-scope",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1213"
+      },
       "kind": "amount_difference",
       "left": 49595.5031716156,
       "parent": null,
@@ -51580,6 +51775,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1369.7862341308573,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-addmed-scope",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1213"
+      },
       "kind": "amount_difference",
       "left": 20890.31376586914,
       "parent": null,
@@ -51633,6 +51833,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1969.3946972656267,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-addmed-scope",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1213"
+      },
       "kind": "amount_difference",
       "left": 43746.95530273437,
       "parent": null,
@@ -51871,6 +52076,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -68.43165509796381,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-addmed-scope",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1213"
+      },
       "kind": "amount_difference",
       "left": 46144.888344902036,
       "parent": null,
@@ -53051,6 +53261,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -583.6564996337838,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-addmed-scope",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1213"
+      },
       "kind": "amount_difference",
       "left": 73073.85350036621,
       "parent": null,
@@ -53146,6 +53361,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -772.0962526726507,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-addmed-scope",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1213"
+      },
       "kind": "amount_difference",
       "left": 98713.84374732735,
       "parent": null,
@@ -53548,6 +53768,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": 1850.144165344238,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-addmed-scope",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1213"
+      },
       "kind": "amount_difference",
       "left": 54048.78416534424,
       "parent": null,
@@ -54020,6 +54245,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -4201.532275390629,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-addmed-scope",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1213"
+      },
       "kind": "amount_difference",
       "left": 33376.447724609374,
       "parent": null,
@@ -54073,6 +54303,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1702.710139160161,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-addmed-scope",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1213"
+      },
       "kind": "amount_difference",
       "left": 48256.11986083984,
       "parent": null,
@@ -54221,6 +54456,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -6127.0,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-addmed-scope",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1213"
+      },
       "kind": "amount_difference",
       "left": -6127.0,
       "parent": null,
@@ -54554,6 +54794,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -6127.0,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-addmed-scope",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1213"
+      },
       "kind": "amount_difference",
       "left": -6127.0,
       "parent": null,
@@ -55055,6 +55300,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -5428.079541015628,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-addmed-scope",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1213"
+      },
       "kind": "amount_difference",
       "left": 71572.92045898437,
       "parent": null,
@@ -55663,6 +55913,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -99.40671112060227,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-addmed-scope",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1213"
+      },
       "kind": "amount_difference",
       "left": 38123.2732888794,
       "parent": null,
@@ -56262,6 +56517,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -223.50115966796875,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-addmed-scope",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1213"
+      },
       "kind": "amount_difference",
       "left": 39281.60884033203,
       "parent": null,
@@ -56882,18 +57142,20 @@
     "dispositioned": {
       "counts": {
         "axiom_encoding_gap": 298,
-        "bridge_artifact": 0,
-        "explained_residual": 285,
+        "bridge_artifact": 32,
+        "explained_residual": 426,
         "unexplained": 0,
         "upstream_engine_gap": 254
       },
       "dispositions_file": "dispositions/co-tax-intersection-taxsim.yaml",
-      "expired_entries": [],
-      "explained_rate": 83.338884,
+      "expired_entries": [
+        "taxsim-blindness-63f-extension-standard_deduction"
+      ],
+      "explained_rate": 84.779351,
       "orphaned_entries": [],
       "raw_match_rate": 78.850958,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 1703
+      "unexplained_count": 1530
     },
     "error_count": 0,
     "errors_by_engine": [],

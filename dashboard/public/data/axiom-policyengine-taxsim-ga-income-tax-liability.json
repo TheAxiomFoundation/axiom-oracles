@@ -118,7 +118,7 @@
   ],
   "population": "case-grid",
   "provenance": {
-    "generated_at": "2026-07-27T04:30:32Z",
+    "generated_at": "2026-07-27T04:43:09Z",
     "generated_by": "scripts/generate_state_income_tax_liability.py::ga-income-tax-liability",
     "rulespecs": [
       {
