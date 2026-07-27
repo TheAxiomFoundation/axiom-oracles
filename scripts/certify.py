@@ -88,18 +88,19 @@ PROGRAMS: dict[str, dict] = {
                 "value": {
                     "tuple": "engine v0.1.1 x program-artifacts-59a10dab866e",
                     "loads_and_runs": True,
-                    "golden_values_reproduce": False,
-                    "detail": "rc=0, snap_monthly_allotment=478; committed "
-                    "fixture predates the input-naming cutover: SSN inputs "
-                    "default false, eligibility evaluates not_holds, the "
-                    "correctly-gated output returns 0, net income 226 vs "
-                    "certified 226.50 — fixture regeneration pending; the "
-                    "gated binding is the intended contract",
+                    "golden_values_reproduce": True,
+                    "detail": "stranger-path rc=0: snap_eligible=holds, gated "
+                    "snap_allotment=478, snap_net_income=226 (the corrected "
+                    "statutory figure — the prior certified 226.50 was the "
+                    "un-rounded value; 7 CFR 273.10(e)(1)(ii)(A)). Parity "
+                    "local leg PASS; BOM execution.golden_values PASS. "
+                    "Cross-surface still red: the hosted API returns the "
+                    "un-rounded 226.5 (axiom-api#115).",
                 },
-                "source": "TheAxiomFoundation/ops launch-readiness/receipts/"
-                "engine-v0.1.1-receipt-2026-07-26.md",
-                "source_commit": "81ccb7b",
-                "status": "fail_open_item",
+                "source": "TheAxiomFoundation/ops launch-readiness/parity/"
+                "fixtures/GOLDEN-HOUSEHOLD.md (ops#6)",
+                "source_commit": "9f680b7",
+                "status": "attested_pass",
             },
         },
     },
