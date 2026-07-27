@@ -107,3 +107,31 @@ Fix next session; the verification itself is done and committed.
 - Reports pre-2026-07-25 lack axiom_all_outputs; verify with fresh runs.
 - This machine: guard disk ≥2GB; prune superseded reports between runs;
   CA-scale needs --case-shard.
+
+## Batch 11 (intersection: QBID rental convention + state flat-offset enrollment)
+
+Campaign 4,048 → **3,759**. Intersection unexplained 1,530 → 1,241.
+
+- taxsim-qbid-rental-convention-taxable-income (127 rows,
+  bridge_artifact): TAXSIM idtl=2 decomposition shows TI = AGI − std
+  (2026 std correct: 16,100/32,200) with ZERO QBI deduction; axiom
+  follows the PE convention that rental income is QBI. TAXSIM's
+  otherprop column is definitionally non-QBI, so the two engines answer
+  different questions on rental-income units. Per-row verifier
+  recomputes the bridge QBID (otherprop + SE − SECA ALD; phaseout
+  403500/201750 start, 150000/75000 length; H.R.1 §70105 $400 floor
+  gated on QBI ≥ 1000) and matched −diff within $0.05 on 127/188. The
+  81-row flat −400 subset is the floor binding (high-income wage/UBIA
+  phase-out extinguishes the regular deduction; the floor is not
+  wage-limited). 61 TI rows failed the verifier (extra mechanisms) —
+  raw.
+- taxsim-co-flat-{30-8,20-7}-filing-status-offset-intersection (130+32
+  rows, upstream_engine_gap): the sibling suite's triangulated TABOR
+  vintage class re-observed in the intersection lane on IDENTICALLY the
+  same tax-unit ids (162/163 flat rows are members; 1 non-member left
+  raw); deltas within 5¢ of 30.80/20.70.
+- Cascade honesty: tbc (15/115 would verify) and liability (0/123) on
+  QBID cases are multi-mechanism — NOT dispositioned. AMT rows (25)
+  untouched.
+- Remaining intersection 1,241: tbc continuum 468, fed liability ~240,
+  state non-flat ~360, TI fails 61, amt 64, ctc 13, eitc 11, std 2.
