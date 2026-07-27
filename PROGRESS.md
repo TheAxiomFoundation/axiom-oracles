@@ -363,6 +363,8 @@ residual), #229 (small-suite grounding).
   SHA-256 digests in `closure/data/provenance.yaml`.
 - Verified each JSONL directly against its committed corpus provision projection
   at `bf97b17b`, and the file inventory against RuleSpec `1158ba5b`.
+- Documented the all-provision denominator, exact citation-path join, review
+  taxonomy, generated-versus-human fields, and provenance-bound pending ratchet.
 
 ### Next
 
