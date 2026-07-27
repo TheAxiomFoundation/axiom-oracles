@@ -211,7 +211,7 @@ _PE_VAR = {
     "PA": "pa_income_tax_before_forgiveness",
     "MO": "mo_income_tax_before_credits",
     "AR": "ar_income_tax_before_non_refundable_credits_unit",
-    "MS": "ms_income_tax_before_credits_unit",
+    "MS": "ms_income_tax_before_credits_joint",
     # West Virginia's before-non-refundable-credits variable is the exact
     # section 11-21-4J schedule-tax analog for 2026.
     "WV": "wv_income_tax_before_non_refundable_credits",
@@ -276,6 +276,7 @@ _MODULE["GA"] = (
 _MODULE["KY"] = (
     "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits"
 )
+_MODULE["MS"] = "us-ms:policies/income_tax/2026_section_27_7_5_schedule"
 _LIABILITY_OUTPUT = {
     st: f"{_MODULE[st]}#{st.lower()}_pit_pilot_income_tax_liability"
     for st in _TAXSIM_STATE
@@ -293,6 +294,9 @@ _LIABILITY_OUTPUT["GA"] = (
 _LIABILITY_OUTPUT["KY"] = (
     f"{_MODULE['KY']}#ky_pit_2026_krs_141_020_schedule_before_credits"
 )
+_LIABILITY_OUTPUT["MS"] = (
+    f"{_MODULE['MS']}#ms_pit_2026_section_27_7_5_schedule_tax"
+)
 
 _LIABILITY_OUTPUT["NY"] = (
     f"{_MODULE['NY']}#ny_pit_pilot_main_income_tax"
@@ -307,21 +311,24 @@ _POPULACE_OUTPUT = {
         "ar_pit_pilot_income_tax_before_non_refundable_credits_indiv"
     ),
     "CT": _LIABILITY_OUTPUT["CT"],
+    "MS": _LIABILITY_OUTPUT["MS"],
 }
 _POPULACE_PE_VAR = {
     "AR": "ar_income_tax_before_non_refundable_credits_indiv",
     "CT": "ct_resident_ordinary_tax_before_personal_credit_derived",
+    "MS": "ms_income_tax_before_credits_joint",
 }
 _POPULACE_AGGREGATION = {
     "AR": "person_sum_to_tax_unit",
+    "MS": "person_sum_to_tax_unit",
 }
 
 # These comprehensive RuleSpec suites contain boundary/relation cases in
 # addition to the six canonical liability-grid fixtures. For these states only,
 # accept strict ``(single|married|joint)_<income>`` names and skip everything
 # else. Other states retain the legacy AGI/suffix extraction behavior.
-_STRICT_GRID_FIXTURE_STATES = frozenset({"CO", "GA", "MS", "NY"})
-_LIVE_AXIOM_STATES = frozenset({"KY"})
+_STRICT_GRID_FIXTURE_STATES = frozenset({"CO", "GA", "NY"})
+_LIVE_AXIOM_STATES = frozenset({"KY", "MS"})
 
 
 @dataclass
@@ -490,6 +497,28 @@ def _kentucky_policyengine_values(case: Case) -> tuple[float, float]:
     return target, completed_net_income
 
 
+def _mississippi_policyengine_values(
+    case: Case,
+) -> tuple[float, tuple[float, ...]]:
+    """Return the joint/default Person target and its exact upstream values."""
+
+    if case.state != "MS":
+        raise ValueError("Mississippi projection requested for a non-MS case")
+    sim = _policyengine_simulation(case)
+    completed_taxable_income = tuple(
+        float(value)
+        for value in sim.calculate("ms_taxable_income_joint", VALIDATION_YEAR)
+    )
+    target = sum(
+        float(value)
+        for value in sim.calculate(
+            "ms_income_tax_before_credits_joint",
+            VALIDATION_YEAR,
+        )
+    )
+    return target, completed_taxable_income
+
+
 def _kentucky_axiom_liabilities(
     cases: list[Case],
     completed_net_income: dict[str, float],
@@ -558,6 +587,122 @@ def _kentucky_axiom_liabilities(
         )
         for case, result in zip(kentucky_cases, results, strict=True)
     }
+
+
+def _mississippi_axiom_liabilities(
+    cases: list[Case],
+    completed_taxable_income: dict[str, tuple[float, ...]],
+) -> dict[tuple[str, str, int], float]:
+    """Execute the canonical Person schedule over the reviewed joint boundary."""
+
+    import pandas as pd
+
+    from axiom_oracles.bridges.state_tax_populace_runner import (
+        DISPOSITION_READY,
+        TaxUnitRoute,
+        _person_entity_id,
+        _state_request,
+    )
+    from axiom_oracles.bridges.tax_populace import (
+        output_number,
+        run_axiom_program,
+    )
+
+    mississippi_cases = [case for case in cases if case.state == "MS"]
+    if not mississippi_cases:
+        return {}
+    input_slot = (
+        f"{_MODULE['MS']}#input.ms_pit_2026_supplied_taxable_income"
+    )
+    routes = tuple(
+        TaxUnitRoute(
+            case.case_id,
+            case.case_id,
+            "MS",
+            "28",
+            1.0,
+            DISPOSITION_READY,
+        )
+        for case in mississippi_cases
+    )
+    raw_person_rows = []
+    projected_values: dict[str, float] = {}
+    person_ids_by_case: dict[str, list[str]] = {}
+    for case in mississippi_cases:
+        person_ids = []
+        for index, value in enumerate(completed_taxable_income[case.case_id]):
+            person_id = f"{case.case_id}-person-{index}"
+            person_ids.append(person_id)
+            raw_person_rows.append(
+                {
+                    "person_id": person_id,
+                    "person_tax_unit_id": case.case_id,
+                }
+            )
+            projected_values[person_id] = value
+        person_ids_by_case[case.case_id] = person_ids
+    request = _state_request(
+        state="MS",
+        routes=routes,
+        year=VALIDATION_YEAR,
+        output=_LIABILITY_OUTPUT["MS"],
+        projected_inputs={input_slot: projected_values},
+        raw_persons=pd.DataFrame(raw_person_rows),
+        all_tax_unit_ids={case.case_id for case in mississippi_cases},
+        comparison_aggregation="person_sum_to_tax_unit",
+    )
+    program = (
+        RULESPEC_US
+        / "us-ms"
+        / "policies"
+        / "income_tax"
+        / "2026_section_27_7_5_schedule.yaml"
+    )
+    results = run_axiom_program(
+        program=program,
+        request=request,
+        rulespec_root=RULESPEC_US,
+        axiom_rules_path=AXIOM_RULES,
+    )
+    expected_result_count = sum(map(len, person_ids_by_case.values()))
+    if len(results) != expected_result_count:
+        raise RuntimeError(
+            "Mississippi live RuleSpec execution returned "
+            f"{len(results)} results for {expected_result_count} people"
+        )
+    expected_entities = {
+        _person_entity_id(person_id)
+        for person_ids in person_ids_by_case.values()
+        for person_id in person_ids
+    }
+    results_by_entity: dict[str, dict] = {}
+    for result in results:
+        entity_id = result.get("entity_id")
+        if (
+            not isinstance(entity_id, str)
+            or entity_id not in expected_entities
+            or entity_id in results_by_entity
+        ):
+            raise RuntimeError(
+                "Mississippi live RuleSpec execution returned an unexpected "
+                f"or duplicate Person entity_id: {entity_id!r}"
+            )
+        results_by_entity[entity_id] = result
+    missing_entities = expected_entities - results_by_entity.keys()
+    if missing_entities:
+        raise RuntimeError(
+            "Mississippi live RuleSpec execution omitted Person entity_id(s): "
+            + ", ".join(sorted(missing_entities))
+        )
+
+    output: dict[tuple[str, str, int], float] = {}
+    for case in mississippi_cases:
+        total = 0.0
+        for person_id in person_ids_by_case[case.case_id]:
+            result = results_by_entity[_person_entity_id(person_id)]
+            total += output_number(result["outputs"][_LIABILITY_OUTPUT["MS"]])
+        output[(case.state, case.filing, int(case.wages))] = total
+    return output
 
 
 def _taxsim_binary() -> Path | None:
@@ -700,7 +845,7 @@ _TOL = {
     "PA": (1.0, 0.0),
     "MO": (1.0, 0.0),
     "AR": (1.0, 0.0),
-    "MS": (1.0, 0.0),
+    "MS": (0.01, 0.0000001),
     "WV": (1.0, 0.0),
     "VT": (0.01, 0.0000001),
     "WI": (1.0, 0.0),
@@ -722,6 +867,7 @@ _POPULACE_TOL = {
     "GA": (0.01, 0.0000001),
     "IL": (1.0, 0.0),
     "KY": (0.01, 0.0000001),
+    "MS": (0.01, 0.0000001),
     "LA": (0.01, 0.0000001),
     "MT": (0.01, 0.0000001),
     "NM": (0.01, 0.0000001),
@@ -853,7 +999,13 @@ def _build_report(
                 "live canonical KRS 141.020 RuleSpec execution over reviewed "
                 "PolicyEngine upstream completed-net-income projections"
                 if state == "KY"
-                else "engine-verified RuleSpec companion fixtures"
+                else (
+                    "live canonical section 27-7-5 Person schedule execution "
+                    "over reviewed PolicyEngine joint/default completed-taxable-"
+                    "income projections"
+                    if state == "MS"
+                    else "engine-verified RuleSpec companion fixtures"
+                )
             ),
             "note": (
                 "The mismatches array carries TAXSIM law-vintage residuals"
@@ -918,6 +1070,20 @@ def main(argv: list[str] | None = None) -> int:
             },
         )
     )
+    mississippi_values = {
+        case.case_id: _mississippi_policyengine_values(case)
+        for case in cases
+        if case.state == "MS"
+    }
+    axiom.update(
+        _mississippi_axiom_liabilities(
+            cases,
+            {
+                case_id: values[1]
+                for case_id, values in mississippi_values.items()
+            },
+        )
+    )
     # States whose reviewed RuleSpec has migrated its companion tests from the
     # six-case wage grid to boundary fixtures can no longer seed the Axiom
     # side of this report from fixtures. Skip them LOUDLY — the Populace
@@ -945,7 +1111,11 @@ def main(argv: list[str] | None = None) -> int:
         case.case_id: (
             kentucky_values[case.case_id][0]
             if case.state == "KY"
-            else _policyengine_liability(case)
+            else (
+                mississippi_values[case.case_id][0]
+                if case.state == "MS"
+                else _policyengine_liability(case)
+            )
         )
         for case in cases
         if case.state in runnable

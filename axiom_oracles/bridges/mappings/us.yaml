@@ -31793,6 +31793,49 @@ mappings:
     comparison: money
     rationale: Both outputs apply O.C.G.A. section 48-7-20 tax to completed Georgia taxable income before nonrefundable credits. This mapping excludes taxable-income construction, filing mechanics, credits, payments, and final Form 500 liability.
 
+  # Mississippi's canonical TY2026 section 27-7-5 surface applies the enacted
+  # Person-grain schedule to one caller-completed Mississippi taxable-income
+  # amount. It does not select a filing method, construct taxable income,
+  # aggregate an annual return, apply credits, or claim final liability.
+  - legal_id: us-ms:policies/income_tax/2026_section_27_7_5_schedule#ms_pit_2026_zero_tax_ceiling
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.ms.tax.income.rate
+    parameter_key_path: [thresholds, 1]
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same $10,000 zero-tax ceiling in PolicyEngine's Mississippi marginal-rate scale for tax year 2026.
+
+  - legal_id: us-ms:policies/income_tax/2026_section_27_7_5_schedule#ms_pit_2026_rate
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.ms.tax.income.rate
+    parameter_key_path: [rates, 1]
+    period: year
+    comparison: rate
+    rationale: Same four percent marginal rate above $10,000 in PolicyEngine's Mississippi income-tax scale for tax year 2026.
+
+  - legal_id: us-ms:policies/income_tax/2026_section_27_7_5_schedule#ms_pit_2026_schedule_taxable_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom exposes one normalized generic caller-supplied taxable-income boundary. PolicyEngine exposes filing-method-specific joint and separate Person candidates, not a one-to-one generic interface output.
+
+  - legal_id: us-ms:policies/income_tax/2026_section_27_7_5_schedule#ms_pit_2026_section_27_7_5_schedule_tax
+    country: us
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: ms_income_tax_before_credits_joint
+    entity: person
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Both outputs apply the tax-year-2026 section 27-7-5 schedule to one Person's completed nonnegative Mississippi taxable income before credits. The oracle validates PolicyEngine's joint/default Person schedule branch only; this mapping excludes filing-method selection, TaxUnit aggregation, credits, payments, and final liability.
+
   # Idaho's TY2026 full-year-resident module is a source-readiness boundary.
   # Exact P4 mappings prevent federal-boundary diagnostics, source holds, and
   # fail-closed Idaho sentinels from being mistaken for completed state-tax
@@ -34873,6 +34916,12 @@ prefixes:
     mapping_type: not_comparable
     candidate_priority: P4
     rationale: PolicyEngine-US does not model MD agency policy manuals or state regulations at output granularity; comparable state outputs carry exact mappings which take precedence over this prefix.
+
+  - legal_id_prefix: "us-ms:"
+    country: us
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: PolicyEngine-US does not model every MS statute, agency policy manual, or state regulation at output granularity; comparable state outputs carry exact mappings which take precedence over this prefix.
 
   - legal_id_prefix: "us-nc:"
     country: us

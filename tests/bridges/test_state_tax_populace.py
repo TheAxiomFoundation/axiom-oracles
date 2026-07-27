@@ -36,8 +36,8 @@ def test_packaged_contract_has_exact_campaign_inventory() -> None:
 
     assert len(contract.jurisdictions) == 43
     assert set(contract.by_state()) == EXPECTED_STATE_CODES
-    assert sum(len(item.inputs) for item in contract.jurisdictions) == 155
-    assert sum(len(item.relations) for item in contract.jurisdictions) == 2
+    assert sum(len(item.inputs) for item in contract.jurisdictions) == 154
+    assert sum(len(item.relations) for item in contract.jurisdictions) == 1
     assert len({item.program for item in contract.jurisdictions}) == 43
     assert len({item.output for item in contract.jurisdictions}) == 43
     assert len({item.policyengine_target for item in contract.jurisdictions}) == 43
@@ -189,7 +189,7 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
         ),
         "explicit_input_count": EXPECTED_EXPLICIT_INPUT_COUNT,
         "explicit_relation_count": EXPECTED_EXPLICIT_RELATION_COUNT,
-        "blocked_input_count": EXPECTED_EXPLICIT_INPUT_COUNT - 62,
+        "blocked_input_count": EXPECTED_EXPLICIT_INPUT_COUNT - 61,
         "blocked_relation_count": 0,
     }
     assert "NH" not in contract.by_state()
@@ -212,7 +212,7 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
         "KS": ["ks_taxable_income", "tax_unit_is_joint"],
         "LA": ["la_taxable_income"],
         "MI": ["mi_taxable_income"],
-        "MS": ["ms_taxable_income_indiv", "ms_taxable_income_joint"],
+        "MS": ["ms_taxable_income_joint"],
         "NC": ["nc_taxable_income"],
         "NM": ["nm_taxable_income"],
         "OH": ["oh_taxable_income"],
@@ -336,17 +336,18 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
     ]
     assert de.relations[0].source_kind == "raw_populace"
     ms = contract.by_state()["MS"]
+    assert ms.program == (
+        "us-ms:policies/income_tax/2026_section_27_7_5_schedule"
+    )
+    assert ms.output == (
+        f"{ms.program}#ms_pit_2026_section_27_7_5_schedule_tax"
+    )
+    assert ms.policyengine_target == "ms_income_tax_before_credits_joint"
+    assert ms.comparison_aggregation == "person_sum_to_tax_unit"
     assert [item.slot for item in ms.inputs] == [
-        "us-ms:policies/income_tax/pilot_liability_pipeline#input."
-        "ms_pit_pilot_supplied_taxable_income_indiv",
-        "us-ms:policies/income_tax/pilot_liability_pipeline#input."
-        "ms_pit_pilot_supplied_taxable_income_joint",
+        f"{ms.program}#input.ms_pit_2026_supplied_taxable_income"
     ]
-    assert [item.slot for item in ms.relations] == [
-        "us-ms:policies/income_tax/pilot_liability_pipeline#relation."
-        "ms_pit_pilot_person_of_tax_unit"
-    ]
-    assert ms.relations[0].source_kind == "raw_populace"
+    assert ms.relations == ()
     assert contract.by_state()["VT"].relations == ()
     hi = contract.by_state()["HI"]
     assert hi.policyengine_target == "hi_income_tax_before_non_refundable_credits"
@@ -500,7 +501,7 @@ def test_contract_rejects_incomplete_explicit_slot_inventory() -> None:
     jurisdiction, _ = _first_input(document)
     jurisdiction["inputs"].pop()
 
-    with pytest.raises(StateTaxPopulaceContractError, match="exactly 155"):
+    with pytest.raises(StateTaxPopulaceContractError, match="exactly 154"):
         validate_state_tax_populace_contract(document)
 
 

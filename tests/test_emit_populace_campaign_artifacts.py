@@ -88,6 +88,31 @@ def test_georgia_dashboard_description_names_narrow_component():
     assert "liability" not in description.lower()
 
 
+def test_mississippi_dashboard_description_names_person_schedule():
+    output = (
+        "us-ms:policies/income_tax/2026_section_27_7_5_schedule"
+        "#ms_pit_2026_section_27_7_5_schedule_tax"
+    )
+    report = project_state(
+        "MS",
+        {
+            "compared_count": 1,
+            "mismatch_count": 0,
+            "output": output,
+            "program": output.split("#", 1)[0],
+            "policyengine_target": "ms_income_tax_before_credits_joint",
+        },
+        _campaign(),
+        "campaign.json",
+    )
+
+    description = report["aggregates"][0]["description"]
+    assert "section 27-7-5 Person-grain" in description
+    assert "caller-supplied completed Mississippi taxable income" in description
+    assert "only for Populace accounting" in description
+    assert "liability" not in description.lower()
+
+
 def test_projected_report_carries_standard_rulespec_provenance():
     report = project_state(
         "CT",

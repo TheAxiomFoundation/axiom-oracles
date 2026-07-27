@@ -104,12 +104,12 @@ members and unknown tax-unit links, and only then sums the allowlisted Montana
 taxable-income, long-term-gain, and short-term-gain arrays to TaxUnit. The net
 long-term amount is reconstructed as `max(0, min(sum(LTCG), sum(LTCG) +
 sum(STCG)))`; no generic Person-to-TaxUnit transform is exposed.
-Mississippi projects both completed-return taxable-income candidates at Person
-grain after the same fail-closed identity and membership checks. It emits the
-certified raw `(Person, TaxUnit)` relation for every member, independently
-applies section 27-7-5's zero band and rate to both candidate sets, aggregates
-both sets, and selects the separate total only when strictly lower. It never
-uses PolicyEngine's candidate tax amounts or `ms_files_separately` selector.
+Mississippi projects the completed-return joint/default taxable-income boundary
+at Person grain after the same fail-closed identity and membership checks. It
+applies section 27-7-5's zero band and rate to every Person and sums both Axiom
+and PolicyEngine Person results to TaxUnit only for comparison and population
+accounting. It does not reconstruct or consume `ms_files_separately`, choose
+between joint and separate filing methods, or claim final-return liability.
 Hawaii uses the same fail-closed Person identity and membership projector only
 for the source-required sum of `long_term_capital_gains`; taxable income, net
 capital gain, and filing status remain TaxUnit-grain upstream boundaries. The

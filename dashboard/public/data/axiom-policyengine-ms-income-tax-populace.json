@@ -5,8 +5,8 @@
    "comparison": "amount",
    "comparison_count": 1497,
    "components": [],
-   "concept": "us-ms:policies/income_tax/pilot_liability_pipeline#ms_pit_pilot_income_tax_liability",
-   "description": "State income tax liability over every routed tax unit in the pinned US Populace",
+   "concept": "us-ms:policies/income_tax/2026_section_27_7_5_schedule#ms_pit_2026_section_27_7_5_schedule_tax",
+   "description": "Mississippi section 27-7-5 Person-grain calendar-year-2026 schedule tax, computed from caller-supplied completed Mississippi taxable income and summed to tax units only for Populace accounting",
    "match_count": 1497,
    "match_rate": 100.0,
    "matched": 1497,
@@ -21,14 +21,14 @@
  "case_count": 1497,
  "cases": [],
  "engines": {
-  "axiom": "us-ms:policies/income_tax/pilot_liability_pipeline",
-  "policyengine": "ms_income_tax_before_credits_unit"
+  "axiom": "us-ms:policies/income_tax/2026_section_27_7_5_schedule",
+  "policyengine": "ms_income_tax_before_credits_joint"
  },
  "errors": [],
  "mismatches": [],
  "population": "populace-us",
  "provenance": {
-  "campaign_report": "state-tax-populace-campaign-2026-07-25.json",
+  "campaign_report": "state-tax-populace-campaign-2026-07-27-ms-canonical.json",
   "dataset_identity": {
    "built_with": "1.729.0",
    "country": "us",
@@ -37,12 +37,21 @@
    "sha256": "16be6338f9d0",
    "source": "pinned"
   },
+  "generated_at": "2026-07-27T05:49:54Z",
+  "generated_by": "scripts/emit_populace_campaign_artifacts.py::ms-income-tax-populace",
   "max_absolute_difference": 0.40000000037252903,
-  "relative_tolerance": 0.0,
+  "relative_tolerance": 1e-07,
+  "rulespecs": [
+   {
+    "repo": "TheAxiomFoundation/rulespec-us",
+    "sha": "2818a7b02852012747f146b9113e275e095075a5"
+   }
+  ],
+  "run_kind": "manual",
   "runtime_provenance": {
    "axiom_engine": {
-    "commit": "48797e101c093bb388be718c6f5d8fc9d9f94a7d",
-    "executable_sha256": "a181a6f1aedc16ca27f553ef54006a390919b85d7cb1efc435bc65f41aeaeef0",
+    "commit": "ffd8213271947b0189a9dd61a055c1e0e78908a0",
+    "executable_sha256": "c7eef635dadca73b51d4012fcc2f12c2f08dd82f9d505ba5228f127779a3a4e2",
     "repository": "TheAxiomFoundation/axiom-rules-engine",
     "working_tree": "clean"
    },
@@ -51,12 +60,13 @@
     "policyengine-us": "1.752.2"
    },
    "rulespec": {
-    "commit": "ca2d424fcb85ce8c3a8f4706113331710f114460",
+    "commit": "2818a7b02852012747f146b9113e275e095075a5",
     "repository": "TheAxiomFoundation/rulespec-us",
     "working_tree": "clean"
    }
   },
-  "tolerance": 1.0,
+  "schema": "axiom_oracles.provenance.v1",
+  "tolerance": 0.01,
   "weighted_compared_tax_units": 1510460.1098995125
  },
  "schema_version": "axiom.comparison_report.v2",

@@ -701,6 +701,15 @@
       "source": "comparisons/ms-income-tax-liability.yaml"
     },
     {
+      "suite": "ms-income-tax-populace",
+      "name": null,
+      "report": "axiom-policyengine-ms-income-tax-populace.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/state-income-tax-populace.yaml"
+    },
+    {
       "suite": "mt-income-tax-liability",
       "name": "mt-income-tax-liability",
       "report": "axiom-policyengine-taxsim-mt-income-tax-liability.json",
