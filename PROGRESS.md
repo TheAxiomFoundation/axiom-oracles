@@ -81,12 +81,16 @@
   - `pytest tests/ -k "certification or commit_refreshed"`: 51 passed,
     1,854 deselected (including the bot no-op path);
   - Ruff, shell syntax, and `git diff --check`: clean.
+- Wrote and committed the complete verification report as
+  `sol-evidence-validator-2026-07-27-result.md`. The required external copy to
+  `ops/reviews/sol-evidence-validator-2026-07-27/result.md` was attempted and
+  denied by the read-only sandbox (`Operation not permitted`).
 
 ## Next
 
-- Write the final verification report to the requested review path if the
-  workspace permits that external write; otherwise leave an exact in-worktree
-  copy and report the policy constraint.
+- No implementation work remains. A caller with write access to the ops
+  checkout must copy the committed fallback report to the requested output
+  path.
 
 ---
 

@@ -410,7 +410,12 @@ is outside this task's writable roots. The sandbox grants read-only access
 outside the `oracles-evidence` worktree and provides no approval path.
 
 This file is therefore the exact fallback copy inside the authorized worktree.
-An attempted placement at the requested path is expected to be denied; no
-permission boundary will be bypassed. Apart from that filesystem placement,
-the implementation, generated artifacts, commits, and all requested checks
-are complete.
+The placement was attempted and failed exactly as follows:
+
+```text
+cp: /Users/maxghenis/TheAxiomFoundation/ops/reviews/sol-evidence-validator-2026-07-27/result.md: Operation not permitted
+```
+
+No permission boundary was bypassed. The existing external `result.md` remains
+zero bytes. Apart from that filesystem placement, the implementation,
+generated artifacts, commits, and all requested checks are complete.
