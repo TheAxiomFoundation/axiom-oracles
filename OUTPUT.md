@@ -101,4 +101,36 @@ above are the complete expected remainder after combining the two patches.
 
 - Branch: `z1-wic-citation`
 - Implementation commit: `579228c0`
-- Draft PR: pending
+- Verification-report commit: `a3bbe6d5`
+- Remote publication: blocked. `git push -u origin z1-wic-citation` could not
+  resolve `github.com`; the connected GitHub API then declined the requested
+  branch-creation mutation. Neither attempt changed remote state.
+- Draft PR: not created because no remote head branch exists.
+
+Prepared draft PR:
+
+- Title: `Relabel WIC eligibility concept: 42 USC 1786 is not in corpus`
+- Base/head: `main` ← `z1-wic-citation`
+- Body:
+
+  > Addresses the WIC citation portion of #401; it does not close the broader
+  > audit issue.
+  >
+  > Relabels WIC eligibility from the unresolved statute-shaped concept
+  > `us:statutes/42/1786#wic_eligible` to the honest program concept
+  > `us:programs/wic#eligible`. Axiom addressing is kept separate through the
+  > real RuleSpec output
+  > `us:policies/usda/wic/eligibility_pipeline#wic_eligible`; PolicyEngine and
+  > ACCESS NYC targets are unchanged.
+  >
+  > Verification: exact expected byte transforms reproduced all three
+  > production files; no numeric/null comparison value or comparison,
+  > disposition, case, or conformance artifact changed. The focused WIC test
+  > passed. The one frozen full suite run produced 2,096 passed, 59 skipped,
+  > and 6 environmental baseline failures (five from a stale detached sibling
+  > RuleSpec checkout and one from blocked `npx esbuild` DNS). No comparison
+  > suite was run or regenerated.
+  >
+  > The complete post-#406 unresolved remainder is the two 26 USC 3111 leaves
+  > and the three Massachusetts 106 CMR leaves, which remain in their existing
+  > separate work lanes.

@@ -14,7 +14,9 @@
   6 failed. The five bridge failures read a detached, stale sibling
   `rulespec-us` checkout; the dashboard-loader failure is blocked DNS for an
   uninstalled `esbuild`. No failure concerns WIC or a changed file.
-- Publication: final report in preparation; branch not yet pushed.
+- Publication: local branch complete. Normal push is blocked by DNS, and the
+  connected GitHub API declined its branch-creation write, so no remote branch
+  or PR was created.
 
 ## Done
 
@@ -75,10 +77,13 @@
   already unrunnable through that path because no `42/1786` RuleSpec module
   exists; the mapped runner output address is now correct. A generic planner
   refactor is outside this citation-label task.
+- Wrote and committed the final report as `OUTPUT.md`.
+- Tried `git push -u origin z1-wic-citation`; sandbox DNS could not resolve
+  `github.com`.
+- Tried the connected GitHub API fallback; its branch-creation mutation was
+  declined before any remote state changed.
 
 ## Next
 
-1. Commit the frozen verification record and `OUTPUT.md`.
-2. Push the branch.
-3. Open a draft PR referencing #401.
-4. Record the publication URL in both progress files and push that final commit.
+1. From a network-enabled/authorized shell, push `z1-wic-citation`.
+2. Open the prepared draft PR described in `OUTPUT.md`.
