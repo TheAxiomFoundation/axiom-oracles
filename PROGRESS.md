@@ -26,8 +26,9 @@
   - 10 prefixes resolve exactly and 6 payroll prefixes are operationally grounded through exact parent-section rows;
   - `us:statutes/42/1786#wic_eligible` is the sole further non-resolving citation, at `case.py:116` and `concept_mappings.yaml:2143,2149`;
   - confirmed it also remains absent at the current corpus `origin/main`; left it unchanged as required.
+- Committed the relabeling after a final exact-transform audit of all 111 remaining files; no old SNAP statutory IDs remain and no forbidden toolchain, CI, or CODEOWNERS paths were touched.
 
 ## Next
 
-- Commit and publish the axiom-oracles PR.
+- Publish the axiom-oracles branch and PR (shell DNS is currently unavailable; the connector's first Git-data write was cancelled).
 - Recompute the three affected report SHA-256 values in a separate ops worktree, update PR #7's branch, and publish the final report.
