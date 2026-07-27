@@ -90,6 +90,13 @@ ALLOWED_NONSTANDARD_COMPARISON_SURFACES = frozenset(
             "person_sum_to_tax_unit",
         ),
         (
+            "OH",
+            "us-oh:policies/income_tax/pilot_liability_pipeline#"
+            "oh_pit_pilot_schedule_tax",
+            "oh_nonbusiness_income_tax_before_non_refundable_credits_derived",
+            "tax_unit",
+        ),
+        (
             "UT",
             "us-ut:policies/income_tax/"
             "2026_full_year_resident_before_credit_schedule#"
@@ -174,6 +181,10 @@ EXPECTED_OUTPUT_OVERRIDES = {
         "us-ny:policies/income_tax/pilot_liability_pipeline"
         "#ny_pit_pilot_main_income_tax"
     ),
+    "OH": (
+        "us-oh:policies/income_tax/pilot_liability_pipeline"
+        "#oh_pit_pilot_schedule_tax"
+    ),
     "UT": (
         "us-ut:policies/income_tax/"
         "2026_full_year_resident_before_credit_schedule#"
@@ -203,7 +214,7 @@ EXPECTED_SLOT_INVENTORY_SHA256 = (
     "3e25d5f842a235d3449f468d5be52549a1c8803a9b67eac10d34abbb2e89f2dc"
 )
 EXPECTED_JURISDICTION_REGISTRY_SHA256 = (
-    "83e004d99f22eec89b2247558d4a19da37cfa3bdc243fd2cdc3f2853b53875de"
+    "964cb32ae17641eef0a724fefe61dcbefcd31877d71cfe6c3160c8a01b5fd346"
 )
 EXPECTED_SOURCE_METADATA_SHA256 = (
     "07633bb09703eccc897a8f21beb2d13068423ef592029ec2fa68eb5a7f9e8c48"

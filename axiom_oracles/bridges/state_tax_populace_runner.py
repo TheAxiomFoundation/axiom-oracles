@@ -49,6 +49,9 @@ DISPOSITION_UNKNOWN_GEOGRAPHY = "excluded_unknown_geography"
 CT_ORDINARY_TAX_DERIVED_TARGET = (
     "ct_resident_ordinary_tax_before_personal_credit_derived"
 )
+OH_NONBUSINESS_BEFORE_CREDITS_DERIVED_TARGET = (
+    "oh_nonbusiness_income_tax_before_non_refundable_credits_derived"
+)
 UT_RESIDENT_BEFORE_CREDITS_DERIVED_TARGET = (
     "ut_resident_income_tax_before_credits_derived"
 )
@@ -598,6 +601,89 @@ def calculate_policyengine_targets(
                 recovered.append(after / (1 - rate))
             targets[state] = dict(
                 zip(tax_unit_ids, recovered, strict=True)
+            )
+            continue
+        if (
+            state == "OH"
+            and jurisdiction.policyengine_target
+            == OH_NONBUSINESS_BEFORE_CREDITS_DERIVED_TARGET
+        ):
+            modeled_ids = [
+                _clean_id(value)
+                for value in _array_values(
+                    sim.calculate("tax_unit_id", period=year)
+                )
+            ]
+            taxable_income = _array_values(
+                sim.calculate("oh_taxable_income", period=year)
+            )
+            before_credits = _array_values(
+                sim.calculate(
+                    "oh_income_tax_before_non_refundable_credits",
+                    period=year,
+                )
+            )
+            if not (
+                len(modeled_ids)
+                == len(taxable_income)
+                == len(before_credits)
+                == len(tax_unit_ids)
+            ):
+                raise StateTaxPopulationRoutingError(
+                    "OH: PolicyEngine threshold-corrected target inputs returned "
+                    f"{len(modeled_ids)}, {len(taxable_income)}, and "
+                    f"{len(before_credits)} rows for {len(tax_unit_ids)} tax units"
+                )
+            _reject_duplicate_ids(tax_unit_ids, "OH source tax_unit_id")
+            _reject_duplicate_ids(modeled_ids, "OH PolicyEngine tax_unit_id")
+            if modeled_ids != tax_unit_ids:
+                raise StateTaxPopulationRoutingError(
+                    "OH: PolicyEngine tax_unit_id order does not match the "
+                    "certified source tax-unit order"
+                )
+            try:
+                threshold_value = (
+                    sim.tax_benefit_system.parameters(year)
+                    .gov.states.oh.tax.income.agi_threshold
+                )
+            except (AttributeError, KeyError) as exc:
+                raise StateTaxPopulationRoutingError(
+                    "OH: PolicyEngine does not expose the reviewed Ohio "
+                    "no-tax threshold parameter"
+                ) from exc
+            threshold = _finite_number(
+                threshold_value,
+                label="gov.states.oh.tax.income.agi_threshold",
+            )
+            if threshold < 0:
+                raise StateTaxPopulationRoutingError(
+                    "OH: gov.states.oh.tax.income.agi_threshold must be "
+                    "nonnegative"
+                )
+            derived: list[float] = []
+            for taxable_value, tax_value in zip(
+                taxable_income, before_credits, strict=True
+            ):
+                taxable = _finite_number(
+                    taxable_value, label="oh_taxable_income"
+                )
+                tax = _finite_number(
+                    tax_value,
+                    label="oh_income_tax_before_non_refundable_credits",
+                )
+                if taxable < 0 or tax < 0:
+                    raise StateTaxPopulationRoutingError(
+                        "OH: threshold-corrected target requires nonnegative "
+                        "taxable income and before-credit tax"
+                    )
+                # Ohio Rev. Code section 5747.02(A)(3)(c) imposes no tax when
+                # the nonbusiness-income balance is equal to or below this
+                # threshold. PolicyEngine-US 1.752.2 uses a strict comparison
+                # in oh_income_tax_exempt, so gate its otherwise published
+                # schedule result with the authoritative parameter boundary.
+                derived.append(0.0 if taxable <= threshold else tax)
+            targets[state] = dict(
+                zip(tax_unit_ids, derived, strict=True)
             )
             continue
         if (

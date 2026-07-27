@@ -147,6 +147,12 @@ STATE_RULES = {
         (r"^policies/tax/", ("state_income_tax", None)),
         (r"^statutes/NYC", ("nyc_income_tax", "NYC")),
     ],
+    "oh": [
+        (
+            r"^policies/income_tax/pilot_liability_pipeline\.yaml$",
+            ("state_income_tax", None),
+        ),
+    ],
     "or": [(r"^policies/odhs/", ("snap", None))],
     "sc": [(r"^(policies/dss/snap|regulations/114/)", ("snap", None))],
     "tn": [

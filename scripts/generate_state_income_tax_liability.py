@@ -321,12 +321,14 @@ _POPULACE_OUTPUT = {
     ),
     "CT": _LIABILITY_OUTPUT["CT"],
     "MS": _LIABILITY_OUTPUT["MS"],
+    "OH": f"{_MODULE['OH']}#oh_pit_pilot_schedule_tax",
     "UT": _LIABILITY_OUTPUT["UT"],
 }
 _POPULACE_PE_VAR = {
     "AR": "ar_income_tax_before_non_refundable_credits_indiv",
     "CT": "ct_resident_ordinary_tax_before_personal_credit_derived",
     "MS": "ms_income_tax_before_credits_joint",
+    "OH": "oh_nonbusiness_income_tax_before_non_refundable_credits_derived",
     "UT": "ut_resident_income_tax_before_credits_derived",
 }
 _POPULACE_AGGREGATION = {

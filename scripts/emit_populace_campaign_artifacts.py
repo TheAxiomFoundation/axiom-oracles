@@ -72,6 +72,15 @@ _DESCRIPTION_BY_OUTPUT = {
         "income and summed to tax units only for Populace accounting"
     ),
     (
+        "us-oh:policies/income_tax/pilot_liability_pipeline"
+        "#oh_pit_pilot_schedule_tax"
+    ): (
+        "Ohio Revised Code section 5747.02(A)(3)(c) tax-year-2026 "
+        "nonbusiness-income schedule before nonrefundable credits, computed "
+        "from caller-supplied completed Ohio taxable nonbusiness income, over "
+        "every routed tax unit in the pinned US Populace"
+    ),
+    (
         "us-ut:policies/income_tax/"
         "2026_full_year_resident_before_credit_schedule"
         "#ut_pit_2026_resident_income_tax_before_credits"

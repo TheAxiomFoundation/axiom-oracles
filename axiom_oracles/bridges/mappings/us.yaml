@@ -31836,6 +31836,72 @@ mappings:
     comparison: money
     rationale: Both outputs apply the tax-year-2026 section 27-7-5 schedule to one Person's completed nonnegative Mississippi taxable income before credits. The oracle validates PolicyEngine's joint/default Person schedule branch only; this mapping excludes filing-method selection, TaxUnit aggregation, credits, payments, and final liability.
 
+  # Ohio's bounded TY2026 nonbusiness-income module accepts one completed
+  # Ohio taxable-income boundary and applies only section 5747.02(A)(3)(c)'s
+  # schedule before credits. PolicyEngine-US 1.752.2 incorrectly treats the
+  # $26,050 equality point as taxable, so the comparable schedule records
+  # explicitly restore the statute's inclusive no-tax gate.
+  - legal_id: us-oh:policies/income_tax/pilot_liability_pipeline#oh_pit_pilot_nonbusiness_taxable_income_construction_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Judgment records that Ohio adjusted-gross-income, business-income separation, and exemption construction remain outside the bounded completed-income schedule. PolicyEngine exposes no equivalent source-readiness hold.
+
+  - legal_id: us-oh:policies/income_tax/pilot_liability_pipeline#oh_pit_pilot_business_income_and_excess_exemption_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Judgment records that the separate Ohio business-income tax and excess-exemption allocation remain outside the bounded nonbusiness schedule. PolicyEngine exposes no equivalent source-readiness hold.
+
+  - legal_id: us-oh:policies/income_tax/pilot_liability_pipeline#oh_pit_pilot_credit_surface_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Judgment records that the complete Ohio credit inventory, limitations, and ordering remain outside the bounded schedule. PolicyEngine exposes no equivalent source-readiness hold.
+
+  - legal_id: us-oh:policies/income_tax/pilot_liability_pipeline#oh_pit_pilot_final_return_ordering_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Judgment records that final Ohio IT 1040 ordering and liability remain outside the bounded schedule. PolicyEngine exposes no equivalent source-readiness hold.
+
+  - legal_id: us-oh:policies/income_tax/pilot_liability_pipeline#oh_pit_pilot_taxable_income
+    country: us
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: oh_taxable_income
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Both values are the completed nonnegative Ohio taxable-income boundary used by the nonbusiness-income schedule; this mapping does not claim to construct that amount from return components.
+
+  - legal_id: us-oh:policies/income_tax/pilot_liability_pipeline#oh_pit_pilot_schedule_tax
+    country: us
+    program: tax
+    mapping_type: derived_expression
+    expression: oh_income_tax_before_non_refundable_credits * (oh_taxable_income > 26050)
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    rationale: PolicyEngine's published before-credit schedule is preserved above the authoritative 2026 Ohio no-tax threshold and set to zero at or below $26,050, correcting PolicyEngine-US 1.752.2's strict-inequality defect to match section 5747.02(A)(3)(c). The campaign runner reads the threshold from PolicyEngine's own statutory parameter and validates exact TaxUnit identity before applying this gate.
+
+  - legal_id: us-oh:policies/income_tax/pilot_liability_pipeline#oh_pit_pilot_income_tax_liability
+    country: us
+    program: tax
+    mapping_type: derived_expression
+    expression: oh_income_tax_before_non_refundable_credits * (oh_taxable_income > 26050)
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Within this bounded module this legacy-named output is exactly the nonbusiness-income schedule before nonrefundable credits, not final Ohio IT 1040 liability. The derived oracle preserves PolicyEngine's schedule above the statutory threshold while correcting its equality defect.
+
   # Utah's canonical TY2026 full-year-resident surface applies section
   # 59-10-104's rate to completed Utah taxable income, but must also honor the
   # separate section 59-10-104.1 exemption. PolicyEngine publishes those two
@@ -35025,6 +35091,12 @@ prefixes:
     mapping_type: not_comparable
     candidate_priority: P4
     rationale: PolicyEngine-US does not model NY agency policy manuals or state regulations at output granularity; comparable state outputs carry exact mappings which take precedence over this prefix.
+
+  - legal_id_prefix: "us-oh:"
+    country: us
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: PolicyEngine-US does not model every Ohio statute, agency policy manual, or state regulation at output granularity; comparable state outputs carry exact mappings which take precedence over this prefix.
 
   - legal_id_prefix: "us-ok:"
     country: us
