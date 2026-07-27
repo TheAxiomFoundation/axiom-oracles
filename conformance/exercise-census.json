@@ -2431,9 +2431,9 @@
         }
       },
       "evidence_source": "chunks",
-      "inline_cases_not_counted": 1,
+      "inline_cases_not_counted": 0,
       "report": "dashboard/public/data/axiom-policyengine-co-snap-ecps.json",
-      "report_sha256": "4ce6eb95a89453a5b7c4b8e5ed7bbf48851ae6749d77587f1f1022a723595be0",
+      "report_sha256": "696efc8883e20afcc80ec69345b46ab88127f50f4a104757c6bc0a903a268a90",
       "varied_fields": 7,
       "verdict_concepts": {
         "us:statutes/7/2014/o#snap_eligible": {
@@ -2462,9 +2462,9 @@
       "constant_fields": 0,
       "evidence_fields": {},
       "evidence_source": "chunks",
-      "inline_cases_not_counted": 856,
+      "inline_cases_not_counted": 0,
       "report": "dashboard/public/data/axiom-snapqc-co-snap.json",
-      "report_sha256": "dfb65174abf36e92beadfd8cb78430c85ef18f55d5586bf924b40d6d48bb607c",
+      "report_sha256": "1557af0077ac0a38c63c5318441c9354b30aceedd8d25fb9cff8fd3bb150517d",
       "varied_fields": 0,
       "verdict_concepts": {}
     },

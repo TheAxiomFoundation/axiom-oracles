@@ -43,18 +43,27 @@
   uncontested foreign chunks, duplicate IDs, malformed rows, stale report
   hashes, and positive full/cardinality controls. Replaced the NYC-dependent
   contested mutant with a synthetic census fixture.
-- Core validation check: Ruff passes and
-  `pytest tests/test_certification_mutants.py` reports 29 passed.
+- Migrated the two Colorado dashboard reports to chunk-authoritative case
+  storage, wrote exact v1 indexes, and verified `co-snap-ecps` as
+  `bound/full` (1,072 case rows, 2,144 verdicts) and `co-snap-qc` as
+  `bound/cardinality` (856 case rows).
+- Preserved that contract across refreshes: the report slimmer clears
+  versioned inline mirrors, the artifact emitter preserves an existing
+  versioned corpus when a skip run has no full rows, and the bot/regeneration
+  paths rebuild and check indexes. The dashboard loader accepts both v1 chunk
+  descriptors and unmigrated legacy integer indexes.
+- Tightened cardinality fallback so nonempty compact mismatch evidence without
+  matched verdict rows is partial evidence (`none`), never a weaker passing
+  cardinality claim. Added a bound synthetic mutant for that shape.
+- Focused validation check: Ruff passes and
+  `pytest tests/test_certification_mutants.py tests/test_run_comparison.py`
+  reports 62 passed.
 
 ## Next
 
-- Migrate the two Colorado report views away from duplicated inline rows and
-  keep their producer behavior stable for future refreshes.
-- Generate bound indexes for `co-snap-ecps` and `co-snap-qc`.
 - Integrate binding state into the census and strict evidence checks into the
   certificate.
-- Add synthetic mutants, regenerate derived artifacts, and run every required
-  gate.
+- Regenerate derived artifacts and run every required gate.
 - Write the final verification report to the requested review path if the
   workspace permits that external write; otherwise leave an exact in-worktree
   copy and report the policy constraint.

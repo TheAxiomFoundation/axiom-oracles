@@ -3964,36 +3964,82 @@ def _csv_scalar(value: object) -> object:
 # mismatching cases (and cap both lists) once a report crosses the threshold.
 _DASHBOARD_MAX_MISMATCHES = 1000
 _DASHBOARD_MAX_CASE_ROWS = 1000
+_CHUNK_INDEX_SCHEMA_VERSION = "axiom_oracles.chunk_index.v1"
+
+
+def _uses_versioned_case_chunks(report: dict) -> bool:
+    """Whether this suite has migrated its case corpus to bound chunks.
+
+    The existing index binds the previous report bytes while a refresh is
+    being produced, so this checks the storage contract rather than its stale
+    hash. ``generate_chunk_indexes.py`` rebinds the new report immediately
+    afterward and refuses the refresh if the chunks no longer reconcile.
+    """
+
+    suite = report.get("suite")
+    if not isinstance(suite, str) or not suite:
+        return False
+    index_path = DASHBOARD_DATA_DIR / "cases" / suite / "index.json"
+    try:
+        index = json.loads(index_path.read_text())
+    except (OSError, json.JSONDecodeError):
+        return False
+    return (
+        isinstance(index, dict)
+        and index.get("schema_version") == _CHUNK_INDEX_SCHEMA_VERSION
+    )
 
 
 def _slim_report_for_dashboard(report: dict) -> dict:
     mismatches = report.get("mismatches") or []
     cases = report.get("cases") or []
-    if (
+    within_inline_limits = (
         len(mismatches) <= _DASHBOARD_MAX_MISMATCHES
         and len(cases) <= _DASHBOARD_MAX_CASE_ROWS
-    ):
-        return report
-    slim = dict(report)
-    kept_mismatches = mismatches[:_DASHBOARD_MAX_MISMATCHES]
-    kept_ids = {m.get("case_id") for m in kept_mismatches}
-    slim["mismatches"] = kept_mismatches
-    slim["cases"] = [
-        case for case in cases if case.get("case_id") in kept_ids
-    ][:_DASHBOARD_MAX_CASE_ROWS]
-    slim["dashboard_truncation"] = {
-        "total_mismatches": len(mismatches),
-        "shown_mismatches": len(kept_mismatches),
-        "total_case_rows": len(cases),
-        "shown_case_rows": len(slim["cases"]),
-    }
+    )
+    if within_inline_limits:
+        slim = report
+    else:
+        slim = dict(report)
+        kept_mismatches = mismatches[:_DASHBOARD_MAX_MISMATCHES]
+        kept_ids = {m.get("case_id") for m in kept_mismatches}
+        slim["mismatches"] = kept_mismatches
+        slim["cases"] = [
+            case for case in cases if case.get("case_id") in kept_ids
+        ][:_DASHBOARD_MAX_CASE_ROWS]
+        slim["dashboard_truncation"] = {
+            "total_mismatches": len(mismatches),
+            "shown_mismatches": len(kept_mismatches),
+            "total_case_rows": len(cases),
+            "shown_case_rows": len(slim["cases"]),
+        }
+    if _uses_versioned_case_chunks(report) and cases:
+        # A case ID may exist in exactly one evidence source. Once a suite has
+        # a versioned chunk contract, the report remains the aggregate view
+        # and chunks are the sole per-case corpus.
+        slim = dict(slim)
+        slim["cases"] = []
+        truncation = dict(slim.get("dashboard_truncation") or {})
+        truncation.update(
+            {
+                "total_mismatches": len(mismatches),
+                "shown_mismatches": len(slim.get("mismatches") or []),
+                "total_case_rows": len(cases),
+                "shown_case_rows": 0,
+            }
+        )
+        slim["dashboard_truncation"] = truncation
     # When a dispositioned report is trimmed, record how many example mismatch
     # rows survive so scripts/apply_dispositions.py --check recognizes it as a
     # premerged-slim report (v2.1) and keeps the full-run summary.dispositioned
     # block instead of re-merging dispositions against the truncated examples
     # (which would undercount classified rows). See dispositions._is_premerged_...
     summary = report.get("summary")
-    if isinstance(summary, dict) and isinstance(summary.get("dispositioned"), dict):
+    if (
+        not within_inline_limits
+        and isinstance(summary, dict)
+        and isinstance(summary.get("dispositioned"), dict)
+    ):
         slim["summary"] = dict(summary)
         slim["summary"]["stored_mismatch_example_count"] = len(kept_mismatches)
     return slim

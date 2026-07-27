@@ -872,6 +872,38 @@ def test_tax_ecps_dashboard_adapter_keeps_identity_when_all_cases_match():
     assert slim["dataset_identity"] == identity
 
 
+def test_versioned_chunk_storage_removes_inline_case_mirrors(monkeypatch, tmp_path):
+    run_comparison = load_run_comparison_module()
+    monkeypatch.setattr(run_comparison, "DASHBOARD_DATA_DIR", tmp_path)
+    suite_dir = tmp_path / "cases" / "bound-suite"
+    suite_dir.mkdir(parents=True)
+    (suite_dir / "index.json").write_text(
+        json.dumps({"schema_version": "axiom_oracles.chunk_index.v1"})
+    )
+    report = {
+        "suite": "bound-suite",
+        "case_count": 1,
+        "mismatches": [],
+        "cases": [{"case_id": "mirrored", "matched": True}],
+        "summary": {
+            "comparison_count": 1,
+            "match_count": 1,
+            "mismatch_count": 0,
+        },
+    }
+
+    slim = run_comparison._slim_report_for_dashboard(report)
+
+    assert slim["cases"] == []
+    assert slim["dashboard_truncation"] == {
+        "total_mismatches": 0,
+        "shown_mismatches": 0,
+        "total_case_rows": 1,
+        "shown_case_rows": 0,
+    }
+    assert report["cases"], "slimming must not mutate the full report"
+
+
 def test_dataset_label_from_identity_falls_back_without_revision():
     run_comparison = load_run_comparison_module()
 

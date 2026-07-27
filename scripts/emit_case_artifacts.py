@@ -43,6 +43,7 @@ DASHBOARD_DATA = REPO_ROOT / "dashboard" / "public" / "data"
 OUT_ROOT = DASHBOARD_DATA / "cases"
 CHUNK_SIZE = 500
 MAX_CASES = 25_000  # keep artifacts static-site friendly
+CHUNK_INDEX_SCHEMA_VERSION = "axiom_oracles.chunk_index.v1"
 
 
 def latest_full_report(basename: str) -> Path | None:
@@ -60,6 +61,20 @@ def dashboard_report(basename: str) -> dict | None:
     if not path.exists():
         return None
     return json.loads(path.read_text())
+
+
+def has_versioned_chunks(suite: str) -> bool:
+    """Whether an existing chunk corpus is report-bound and must be preserved."""
+
+    path = OUT_ROOT / suite / "index.json"
+    try:
+        payload = json.loads(path.read_text())
+    except (OSError, json.JSONDecodeError):
+        return False
+    return (
+        isinstance(payload, dict)
+        and payload.get("schema_version") == CHUNK_INDEX_SCHEMA_VERSION
+    )
 
 
 def mismatches_complete(report: dict | None) -> bool:
@@ -368,6 +383,14 @@ def emit_suite(suite: str, dashboard_config: dict) -> str:
     if full_ok:
         rows = [compact_case(c, explained) for c in cases]
         return write_artifacts(suite, rows, meta, source_name, partial=False)
+
+    # Once a report has moved inline cases into a versioned chunk corpus, a
+    # skip/re-emit run may intentionally carry no inline rows. Do not replace
+    # that complete corpus with an empty mismatch-only projection; the binding
+    # generator that runs next will either rebind the unchanged chunks or fail
+    # if the refreshed report no longer reconciles.
+    if has_versioned_chunks(suite):
+        return f"preserve {suite}: versioned chunks (no full case rows in this run)"
 
     # No usable case rows — fall back to a mismatch-only queue, from the
     # annotated dashboard list when complete, else the full report's own.

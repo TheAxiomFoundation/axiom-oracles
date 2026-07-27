@@ -21,10 +21,16 @@ import json
 from pathlib import Path
 import sys
 
-from axiom_oracles.evidence import build_chunk_index, validate_suite_evidence
-
-
 REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from axiom_oracles.evidence import (  # noqa: E402
+    build_chunk_index,
+    validate_suite_evidence,
+)
+
+
 DEFAULT_REPORTS = (
     "dashboard/public/data/axiom-policyengine-co-snap-ecps.json",
     "dashboard/public/data/axiom-snapqc-co-snap.json",
@@ -56,7 +62,10 @@ def strip_inline_mirrors(report_path: Path) -> bool:
     inline_ids = [_case_id(row, "case_id") for row in inline]
     if any(case_id is None for case_id in inline_ids):
         raise ValueError(f"{report_path}: inline mirror has a malformed case id")
+    if len(set(inline_ids)) != len(inline_ids):
+        raise ValueError(f"{report_path}: inline cases contain duplicate IDs")
     chunk_ids: set[str] = set()
+    chunk_count = 0
     chunk_dir = report_path.parent / "cases" / suite
     for chunk_path in sorted(chunk_dir.glob("chunk-*.json")):
         payload = json.loads(chunk_path.read_text())
@@ -66,18 +75,43 @@ def strip_inline_mirrors(report_path: Path) -> bool:
             case_id = _case_id(row, "id")
             if case_id is None:
                 raise ValueError(f"{chunk_path}: chunk has a malformed case id")
+            if case_id in chunk_ids:
+                raise ValueError(f"{chunk_path}: chunks contain duplicate ID {case_id}")
             chunk_ids.add(case_id)
+            chunk_count += 1
+    if report.get("case_count") != chunk_count:
+        raise ValueError(
+            f"{report_path}: report case_count {report.get('case_count')!r} "
+            f"does not match {chunk_count} chunk IDs"
+        )
     missing = sorted(set(inline_ids) - chunk_ids)
     if missing:
         raise ValueError(
             f"{report_path}: inline cases are not all chunk mirrors; "
             f"missing IDs include {missing[:5]}"
         )
+    truncation = report.get("dashboard_truncation")
+    if set(inline_ids) != chunk_ids and not (
+        isinstance(truncation, dict)
+        and truncation.get("shown_case_rows") == len(inline_ids)
+        and truncation.get("total_case_rows") == chunk_count
+    ):
+        raise ValueError(
+            f"{report_path}: a partial inline subset lacks matching "
+            "dashboard_truncation cardinalities"
+        )
 
     report["cases"] = []
-    truncation = report.get("dashboard_truncation")
     if isinstance(truncation, dict):
         truncation["shown_case_rows"] = 0
+    else:
+        mismatches = report.get("mismatches") or []
+        report["dashboard_truncation"] = {
+            "total_mismatches": len(mismatches),
+            "shown_mismatches": len(mismatches),
+            "total_case_rows": chunk_count,
+            "shown_case_rows": 0,
+        }
     report_path.write_text(json.dumps(report, indent=2, sort_keys=True))
     return True
 

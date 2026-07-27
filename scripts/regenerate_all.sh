@@ -48,6 +48,9 @@ done
 # Re-emit per-suite case artifacts for the dashboard's case explorer from
 # the fresh full reports (auto-discovers suites from comparisons/*.yaml).
 .venv/bin/python scripts/emit_case_artifacts.py || echo "!! case artifacts failed"
+# Rebind certified chunk corpora to the exact refreshed aggregate reports.
+# This is fail-closed: an inconsistent report/chunk pair must not be committed.
+.venv/bin/python scripts/generate_chunk_indexes.py
 # Ship each disposition's prose explanation (evidence.mechanism) so the
 # dashboard can say WHY a class is dispositioned, not just that it is.
 .venv/bin/python scripts/emit_disposition_artifacts.py || echo "!! disposition artifacts failed"
