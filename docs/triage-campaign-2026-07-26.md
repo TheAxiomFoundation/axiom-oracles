@@ -202,3 +202,25 @@ Campaign 3,324 → **3,169**. Intersection 806 → 651.
   (deltas never equal) — next target, needs per-case decomposition.
 - Remaining intersection 651: pairs 268, amt-involved ~80, TI 57,
   singles/misc rest.
+
+## Batch 15 (surtax-scope liability class + tail forensics)
+
+Campaign 3,169 → **3,155**. Intersection 651 → 637.
+
+- taxsim-fiitax-surtax-scope-liability (14, bridge_artifact): axiom's
+  liability bucket = 26 USC 6401 chapter-1 tax; TAXSIM fiitax folds in
+  NIIT (ch. 2A) + additional Medicare (ch. 2). liab_diff ==
+  -(niit+addmed) within $0.60 on every selected row, idtl=2 verified.
+- Fingerprints found but NOT yet bankable (next leads):
+  * +67.40 per filer (134.80 MFJ) on age-60+/senior rows — 8 cases,
+    driver unidentified (not Sch R phase-in, not SS worksheet — one row
+    has gssi=0).
+  * −148.1x flat remainder on ultra-high-income rows (12) after surtax
+    removal — suspiciously 0.37 × 400.4 but no QBI gate present.
+  * fed-liability-only rows (24): thousands-scale with tbc matched —
+    likely an uncompared credit (PTC-like) on the axiom side; needs
+    axiom-side credit chain dump.
+  * [amt,liability] ultra-rich (12): surtax composite holds to ~1e-4
+    relative but residual hundreds — AMT interaction detail.
+- Remaining intersection 637; next big blocks are these forensic tails
+  plus TI 57 and amt 41.

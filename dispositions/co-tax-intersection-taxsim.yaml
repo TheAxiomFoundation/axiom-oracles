@@ -2360,3 +2360,50 @@ entries:
       tolerance: 0.05
   linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
   expires_on_source_change: true
+- id: taxsim-fiitax-surtax-scope-liability
+  concept: us:tax/federal-income-tax#liability
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-135563
+    - ecps-tax-unit-136109
+    - ecps-tax-unit-154974
+    - ecps-tax-unit-155907
+    - ecps-tax-unit-156493
+    - ecps-tax-unit-158040
+    - ecps-tax-unit-159099
+    - ecps-tax-unit-159780
+    - ecps-tax-unit-161318
+    - ecps-tax-unit-164214
+    - ecps-tax-unit-58558
+    - ecps-tax-unit-58805
+    - ecps-tax-unit-59148
+    - ecps-tax-unit-59163
+  disposition: bridge_artifact
+  evidence:
+    mechanism: 'Concept-scope bridge artifact on the liability mapping: axiom''s
+
+      federal liability bucket is 26 USC 6401 chapter-1 income tax, while
+
+      TAXSIM''s fiitax additionally folds in the chapter-2A net investment
+
+      income tax and the chapter-2 additional Medicare tax. On every
+
+      selected row the liability difference equals exactly
+
+      -(TAXSIM niit + TAXSIM addmed) from the idtl=2 decomposition run on
+
+      the same input rows (remainder <= $0.60), i.e. the engines agree on
+
+      chapter-1 tax and differ only in which surtaxes the mapped bucket
+
+      carries.'
+    arithmetic:
+    - expression: 940.66 + 0.0
+      equals: 940.66
+      tolerance: 0.6
+    - expression: 2140.97 + 0.0
+      equals: 2140.97
+      tolerance: 0.6
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
+  expires_on_source_change: true
