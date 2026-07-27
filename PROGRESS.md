@@ -462,7 +462,7 @@ residual), #229 (small-suite grounding).
 - Required outputs: genuinely pinned five-suite regeneration; fresh evidence
   for #9157, #397, #9158/#399; exact served/canonical annotation parity;
   regenerated freshness after merging main; full generated-chain parity; and
-  an untracked final worker report.
+  a final worker report kept outside the branch (campaign ops directory).
 
 ### Done
 
@@ -574,10 +574,19 @@ residual), #229 (small-suite grounding).
   four source-hold rules absent from both available RuleSpec-US checkouts;
   a focused rerun reproduces 1 failure / 3 passes. No SNAP-scoped test failed.
 - Reconciled the version-labeled `origin/main` baseline against the corrected
-  five-report result and wrote the requested defensive final audit to the
-  intentionally untracked `REPAIR-ROUND2-REPORT.md`, including dispositions,
-  TANF pass/fail evidence, served parity, chain results, and sandbox failures.
+  five-report result and wrote the defensive final audit (dispositions, TANF
+  pass/fail evidence, served parity, chain results, sandbox failures) outside
+  the branch, at
+  `~/TheAxiomFoundation/ops/fed-parity-campaign/snapclean-repair2-REPORT.md`.
+- Round-2 review at `72718c96` (ledger
+  `.git/review-worktrees/snap-residual-cleanup-72718c96`, report `09e88efd`)
+  confirmed the version and served-data repairs but blocked on the
+  browser-served overview still bundling the pre-repair reports and on a
+  stale committed worker report. Both were fixed on top: the served overview
+  was regenerated from the repaired reports (214 bundles; 656 rows;
+  unexplained 23/83/71/106/41; US 1.767.3 / Core 3.30.3) and the stale report
+  was removed from the branch.
 
 ### Next
 
-- None.
+- Round-3 confirmation of the served-overview regeneration, then open the PR.
