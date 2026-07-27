@@ -523,7 +523,12 @@ def _reason_category(
     if reason in FIXED_EXCLUSION_REASONS:
         return reason
     if reason.startswith(OPERATIONALIZED_PREFIX):
-        path = reason.removeprefix(OPERATIONALIZED_PREFIX)
+        # `operationalized_by: <path>` is written by humans in YAML, where a
+        # space after the colon is the natural form. Strip the separator here
+        # so spacing cannot decide whether a gate passes; the extracted path is
+        # still required to be trim-clean, relative, non-test and present in
+        # the pinned tree, so no safety property is relaxed.
+        path = reason.removeprefix(OPERATIONALIZED_PREFIX).strip()
         if _validate_named_path(
             path,
             field="operationalized_by path",
@@ -627,6 +632,22 @@ def _validate_provision_rows(
                     errors.append(
                         f"{row_label}: pending rows must not carry `{contradictory}`"
                     )
+            # `partial_coverage` records that a module file exists for this
+            # provision but does not compute its substantive content. It is the
+            # one way a row stays pending despite a successful join, so it must
+            # say WHAT is missing — an empty or hand-wavy marker would let the
+            # count be lowered by assertion.
+            if "partial_coverage" in row and not _nonempty_string(
+                row.get("partial_coverage")
+            ):
+                errors.append(
+                    f"{row_label}: `partial_coverage` must state which outputs "
+                    "the joined module declares it does not compute"
+                )
+            if "join_found_module" in row and "partial_coverage" not in row:
+                errors.append(
+                    f"{row_label}: `join_found_module` requires `partial_coverage`"
+                )
     return validated
 
 
@@ -1053,7 +1074,28 @@ def _merge_provisions(
 
         committed = committed_by_citation.get(citation)
         if committed is not None:
-            if committed.get("status") == "excluded":
+            if committed.get("status") == "pending" and _nonempty_string(
+                committed.get("partial_coverage")
+            ):
+                # A citation-path join proves a module FILE exists for this
+                # provision. It cannot prove the module computes the
+                # provision's substantive content — and seven 7 CFR 273
+                # modules carry machine-readable `deferred_outputs` blocks
+                # declaring outputs they do not compute. Counting those as
+                # encoded is the overstatement closure exists to prevent, so a
+                # reviewed `partial_coverage` note holds the row at pending and
+                # survives regeneration. The generated join result is kept
+                # alongside it, so the disagreement stays visible rather than
+                # being silently resolved in either direction.
+                row = {
+                    "citation": citation,
+                    "heading": source["heading"],
+                    "status": "pending",
+                    "partial_coverage": committed.get("partial_coverage"),
+                }
+                if candidate in tree_paths and _is_module_path(candidate):
+                    row["join_found_module"] = candidate
+            elif committed.get("status") == "excluded":
                 row = {
                     "citation": citation,
                     "heading": source["heading"],
@@ -1100,13 +1142,32 @@ def _build_universe(
     pending_max = current_pending
 
     if baseline is not None and baseline.pins_sha256 == current_pins:
-        if current_pending > baseline.pending_max:
+        # The ratchet protects against work silently regressing. A
+        # `partial_coverage` row is the opposite: a disclosure that a joined
+        # module does not compute the provision, each one carrying a written
+        # statement of what is missing. Forbidding disclosure-driven rises
+        # would make recording a stub costlier than leaving it counted as
+        # encoded — an incentive pointing exactly the wrong way. So a rise is
+        # permitted only to the extent it is accounted for by disclosures, and
+        # any excess is still a regression.
+        disclosed = sum(1 for row in provisions if row.get("partial_coverage"))
+        rise = current_pending - baseline.pending_max
+        if rise > 0 and rise > disclosed:
             errors.append(
                 f"closure[{config.root}] pending RATCHET regressed from "
                 f"{baseline.pending_max} to {current_pending} while content "
-                "pins are unchanged; pending may only fall"
+                f"pins are unchanged; only {disclosed} of the {rise} added "
+                "pending row(s) carry `partial_coverage`, and pending may "
+                "otherwise only fall"
             )
-        pending_max = min(baseline.pending_max, current_pending)
+        elif rise > 0:
+            print(
+                f"closure[{config.root}] pending rose {baseline.pending_max} -> "
+                f"{current_pending}, accounted for by {disclosed} disclosed "
+                "partial-coverage row(s): a joined module does not compute its "
+                "provision. This is a correction, not a regression."
+            )
+        pending_max = min(baseline.pending_max, current_pending) if rise <= 0 else current_pending
 
     return {
         "schema": UNIVERSE_SCHEMA,

@@ -1,0 +1,410 @@
+rows:
+  - citation: "us/regulation/7/273"
+    heading: "CERTIFICATION OF ELIGIBLE HOUSEHOLDS"
+    status: excluded
+    reason: container_heading
+    basis: >-
+      The part node has a null body and supplies only the heading
+      "CERTIFICATION OF ELIGIBLE HOUSEHOLDS"; its subparts and sections carry
+      the operative provisions.
+
+  - citation: "us/regulation/7/273/subpart-A"
+    heading: "Subpart A - General Rules"
+    status: excluded
+    reason: container_heading
+    basis: >-
+      The source body is null; "Subpart A - General Rules" is only a container
+      heading, while §§ 273.1 and 273.2 carry its operative content.
+
+  - citation: "us/regulation/7/273/1"
+    heading: "Household concept"
+    status: pending
+    note: >-
+      No us/regulations/7-cfr/273/1.yaml exists in the pinned tree. The section
+      determines who must "be included in the same household," separate-household
+      status, categorical exclusions, and striker eligibility and budgeting.
+      The encoding in flight on rulespec-us#1135 is outside the pinned tree.
+
+  - citation: "us/regulation/7/273/2"
+    heading: "Office operations and application processing"
+    status: pending
+    note: >-
+      Only us/regulations/7-cfr/273/2/j.yaml exists, and it encodes a subset of
+      regular categorical eligibility in paragraph (j). Paragraphs (a)-(i) and
+      (k)-(o), plus substantial parts of (j), remain uncovered, including
+      household-cooperation ineligibility, expedited-service eligibility, and
+      benefit-effective-date rules.
+
+  - citation: "us/regulation/7/273/subpart-B"
+    heading: "Subpart B - Residency and Citizenship"
+    status: excluded
+    reason: container_heading
+    basis: >-
+      The source body is null; "Subpart B - Residency and Citizenship" is only a
+      container heading, while §§ 273.3 and 273.4 carry its operative content.
+
+  - citation: "us/regulation/7/273/3"
+    heading: "Residency"
+    status: encoded
+    encoded_by: ["us/regulations/7-cfr/273/3.yaml"]
+    note: >-
+      The pinned section module covers the provision's point-in-time residency
+      and duplicate-participation rules, including the battered-shelter
+      exception; paragraph (b)'s remainder governs intrastate case processing.
+
+  - citation: "us/regulation/7/273/4"
+    heading: "Citizenship and alien status"
+    status: pending
+    note: >-
+      us/regulations/7-cfr/273/4.yaml encodes citizenship and alien-status
+      eligibility, but its declared deferred output leaves § 273.4(c)
+      sponsored-alien income and resource deeming unencoded. Paragraph (c)
+      directly changes household income, resources, eligibility, and benefit
+      level.
+
+  - citation: "us/regulation/7/273/subpart-C"
+    heading: "Subpart C - Education and Employment"
+    status: excluded
+    reason: container_heading
+    basis: >-
+      The source body is null; "Subpart C - Education and Employment" is only a
+      container heading, while §§ 273.5 through 273.7 carry its operative
+      content.
+
+  - citation: "us/regulation/7/273/5"
+    heading: "Students"
+    status: pending
+    note: >-
+      us/regulations/7-cfr/273/5.yaml encodes student status, exemptions, and
+      enrollment timing, but declares § 273.5(d)'s income and resource treatment
+      deferred to § 273.11(d). No us/regulations/7-cfr/273/11/d.yaml exists in
+      the pinned tree.
+
+  - citation: "us/regulation/7/273/6"
+    heading: "Social security numbers"
+    status: encoded
+    encoded_by: ["us/regulations/7-cfr/273/6.yaml"]
+    note: >-
+      The pinned section module covers SSN-based individual eligibility, good
+      cause, and ending disqualification. The remaining provisions concern SSN
+      acquisition, verification, and agency data use; the cross-referenced
+      budgeting treatment is carried by § 273.11(c).
+
+  - citation: "us/regulation/7/273/7"
+    heading: "Work provisions"
+    status: pending
+    note: >-
+      us/regulations/7-cfr/273/7.yaml encodes general work requirements and
+      exemptions, but its declared deferrals include substantive
+      disqualification and reentry rules in paragraphs (f)-(g), voluntary-quit
+      eligibility in (j), and optional employment and workfare programs in (k)
+      and (m).
+
+  - citation: "us/regulation/7/273/subpart-D"
+    heading: "Subpart D - Eligibility and Benefit Levels"
+    status: excluded
+    reason: container_heading
+    basis: >-
+      The source body is null; "Subpart D - Eligibility and Benefit Levels" is
+      only a container heading, while its child sections carry the operative
+      eligibility and benefit-level rules.
+
+  - citation: "us/regulation/7/273/8"
+    heading: "Resource eligibility standards"
+    status: pending
+    note: >-
+      us/regulations/7-cfr/273/8.yaml encodes the categorical exception and
+      top-level resource limit, but expressly defers jointly owned resources,
+      resource exclusions, vehicle valuation, and transfer-of-resources
+      disqualification in paragraphs (d), (e), (f), and (h).
+
+  - citation: "us/regulation/7/273/9"
+    heading: "Income and deductions"
+    status: pending
+    note: >-
+      us/regulations/7-cfr/273/9.yaml and
+      us/regulations/7-cfr/273/9/d/6/iii.yaml encode income-standard tests and
+      selected shelter and utility rules, but the section module expressly
+      defers paragraph (b)'s earned and unearned income inclusions and paragraph
+      (c)'s extensive exclusions; much of paragraph (d)'s deduction composition
+      is also uncovered.
+
+  - citation: "us/regulation/7/273/10"
+    heading: "Determining household eligibility and benefit levels"
+    status: pending
+    note: >-
+      us/regulations/7-cfr/273/10.yaml encodes the paragraph (e)(1) net-income
+      sequence and core paragraph (e)(2)(ii) allotment formula, but expressly
+      defers paragraphs (a), (c), and (d), among others. Those paragraphs include
+      substantive initial-month proration, prospective-income budgeting, and
+      deductible-expense timing and averaging.
+
+  - citation: "us/regulation/7/273/11"
+    heading: "Action on households with special circumstances"
+    status: pending
+    note: >-
+      Only us/regulations/7-cfr/273/11/c.yaml exists. It encodes paragraphs
+      (c)(1)-(2), expressly defers (c)(3), and does not cover (c)(4); nothing
+      covers paragraphs (a)-(b) or (d)-(s), including self-employment income
+      calculation and multiple eligibility and disqualification rules.
+
+  - citation: "us/regulation/7/273/subpart-E"
+    heading: "Subpart E - Continuing Participation"
+    status: excluded
+    reason: container_heading
+    basis: >-
+      The source body is null; "Subpart E - Continuing Participation" is only a
+      container heading, while §§ 273.12 through 273.14 carry its operative
+      content.
+
+  - citation: "us/regulation/7/273/12"
+    heading: "Reporting requirements"
+    status: pending
+    note: >-
+      This section mixes reporting procedure with substantive benefit rules. It
+      directs action on changes affecting "eligibility or allotment," prescribes
+      effective dates for increases and decreases, permits a month of temporary
+      ineligibility, and lets a State defer some deduction changes; no pinned
+      module exists.
+
+  - citation: "us/regulation/7/273/13"
+    heading: "Notice of adverse action"
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: >-
+      The section governs when advance notice must precede an independently
+      determined reduction or termination and requires the notice to explain
+      "the proposed action" and the hearing right. It does not calculate
+      eligibility or an allotment.
+
+  - citation: "us/regulation/7/273/14"
+    heading: "Recertification"
+    status: pending
+    note: >-
+      Although chiefly procedural, the section is mixed: participation cannot
+      continue after certification expires without a new determination, and
+      paragraph (e) makes the first new-period amount full or prorated depending
+      on filing and completion timing. No pinned module covers that benefit
+      effect.
+
+  - citation: "us/regulation/7/273/subpart-F"
+    heading: "Subpart F - Disqualification and Claims"
+    status: excluded
+    reason: container_heading
+    basis: >-
+      The source body is null; "Subpart F - Disqualification and Claims" is only
+      a container heading, while §§ 273.15 through 273.18 carry its operative
+      content.
+
+  - citation: "us/regulation/7/273/15"
+    heading: "Fair hearings"
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: >-
+      The section establishes hearing access, deadlines, records, hearing rights,
+      and implementation of decisions for a household "aggrieved by any action"
+      of the agency. It reviews underlying eligibility or allotment decisions
+      rather than supplying their computation.
+
+  - citation: "us/regulation/7/273/16"
+    heading: "Disqualification for intentional Program violation"
+    status: pending
+    note: >-
+      The section mixes hearing and notice procedures with substantive
+      ineligibility periods: twelve months for a first intentional violation,
+      twenty-four months for a second, permanent ineligibility for a third, and
+      additional special penalties. No pinned module exists.
+
+  - citation: "us/regulation/7/273/17"
+    heading: "Restoration of lost benefits"
+    status: pending
+    note: >-
+      This section mixes corrective procedure with an unencoded household-level
+      amount computation. For each affected month the agency determines the
+      allotment due and restores the difference between the "actual and correct
+      allotments," issuing it "in addition to" a current allotment.
+
+  - citation: "us/regulation/7/273/18"
+    heading: "Claims against households"
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: >-
+      This is post-determination debt calculation and collection: a claim covers
+      benefits already "overpaid" or "trafficked" and is collected through
+      repayment, allotment reduction, offsets, or Treasury referral. It does not
+      alter the underlying point-in-time eligibility or correct allotment.
+
+  - citation: "us/regulation/7/273/subpart-G"
+    heading: "Subpart G - Program Alternatives"
+    status: excluded
+    reason: container_heading
+    basis: >-
+      The source body is null; "Subpart G - Program Alternatives" is only a
+      container heading, while its child sections carry the operative program
+      rules.
+
+  - citation: "us/regulation/7/273/20"
+    heading: "SSI cash-out"
+    status: pending
+    note: >-
+      No pinned module exists. This California-only rule is substantive: SSI
+      receipt makes an individual ineligible, while paragraph (c) excludes that
+      recipient's income and resources from the household's eligibility and
+      benefit-level determination. The taxonomy has no jurisdiction-
+      inapplicability reason.
+
+  - citation: "us/regulation/7/273/21"
+    heading: "Monthly Reporting and Retrospective Budgeting (MRRB)"
+    status: pending
+    note: >-
+      No pinned module exists. Although MRRB is a State option and includes
+      reporting and notice procedures, it "replaces the prospective budgeting
+      system" and prescribes budget-month composition, income, deductions,
+      eligibility, and allotment calculations.
+
+  - citation: "us/regulation/7/273/23"
+    heading: "Simplified application and standardized benefit projects"
+    status: pending
+    note: >-
+      No pinned module exists. For participating projects, the section makes
+      households categorically resource eligible, substitutes other-program
+      income definitions, permits standardized deductions and allotments, and
+      constrains benefit reductions. Those are substantive despite project
+      option-dependence.
+
+  - citation: "us/regulation/7/273/24"
+    heading: "Time limit for able-bodied adults"
+    status: pending
+    note: >-
+      us/regulations/7-cfr/273/24.yaml encodes §§ 273.24(a)-(f), but explicitly
+      defers paragraph (g)'s discretionary-exemption allocation. Its formula does
+      not represent whether a covered individual receives a State discretionary
+      exemption from the time limit or the associated allocation and adjustment
+      rules, so coverage is partial.
+
+  - citation: "us/regulation/7/273/25"
+    heading: "Simplified SNAP"
+    status: pending
+    note: >-
+      No pinned module exists. Although S-SNAP is optional, the section limits
+      mixed-TANF household benefit reductions, requires regular SNAP processing
+      for households not yet receiving TANF, and requires multiple shelter-cost
+      standards; these affect household eligibility and benefit amounts.
+
+  - citation: "us/regulation/7/273/subpart-H"
+    heading: "Subpart H - The Transitional Benefits Alternative"
+    status: excluded
+    reason: container_heading
+    basis: >-
+      The source body is null; "Subpart H - The Transitional Benefits
+      Alternative" is only a container heading, while §§ 273.26 through 273.32
+      carry its operative content.
+
+  - citation: "us/regulation/7/273/26"
+    heading: "General eligibility guidelines"
+    status: pending
+    note: >-
+      No pinned module exists. The optional alternative defines which departing
+      TANF, MOE, or SFCA households may receive transitional benefits and lists
+      mandatory and optional household exclusions, directly changing who is
+      eligible.
+
+  - citation: "us/regulation/7/273/27"
+    heading: "General administrative guidelines"
+    status: pending
+    note: >-
+      No pinned module exists. Despite its heading, the section freezes the
+      allotment for up to five months and recalculates it by removing TANF, MOE,
+      or SFCA income, with optional income and annual-rule adjustments; this is a
+      substantive benefit method.
+
+  - citation: "us/regulation/7/273/28"
+    heading: "Application for SNAP recertification"
+    status: pending
+    note: >-
+      No pinned module exists. The section mixes application procedure with
+      point-in-time benefit rules: it can continue transitional benefits, require
+      a full month's allotment after agency delay, permit continuation instead of
+      a lower regular benefit, and require a supplement when regular benefits are
+      higher.
+
+  - citation: "us/regulation/7/273/29"
+    heading: "Transitional notice requirements"
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: >-
+      The section only prescribes statements that a transitional notice "must
+      ... include," such as transition length, the recertification option, and
+      explanations of benefit changes. It does not itself determine eligibility
+      or calculate an allotment.
+
+  - citation: "us/regulation/7/273/30"
+    heading: "Transitional benefit alternative change reporting requirements"
+    status: pending
+    note: >-
+      No pinned module exists. The section governs when reported changes take
+      effect and requires the agency to change a transitional benefit when a
+      member joins another household, removing income, resources, and deductible
+      expenses attributable to that member.
+
+  - citation: "us/regulation/7/273/31"
+    heading: "Closing the transitional period"
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: >-
+      The section routes final-month case processing through a request for
+      contact under § 273.12 or recertification under § 273.14 and prescribes
+      associated certification-period and notice steps. It supplies no
+      independent eligibility criterion or benefit calculation.
+
+  - citation: "us/regulation/7/273/32"
+    heading: "Households that return to TANF, MOE, or SFCA program during the transitional period"
+    status: pending
+    note: >-
+      No pinned module exists. Returning to cash assistance triggers a
+      redetermination of continued SNAP eligibility and benefits using the
+      cash-assistance application rather than continued frozen transitional
+      treatment, creating a point-in-time household effect.
+
+findings:
+  - >-
+    Input integrity checks found exactly 39 unique citation paths in source
+    order: one part, eight subparts, and thirty sections. Only the nine
+    part/subpart nodes have null bodies; every section has substantive source
+    text, with no duplicate citations or missing headings.
+  - >-
+    The pinned tree contains section-level modules for §§ 273.3-273.10 and
+    273.24, subsection modules for §§ 273.2(j) and 273.11(c), and the nested
+    § 273.9(d)(6)(iii) module. After content review, only §§ 273.3 and 273.6
+    support full encoded status; the other section-level modules declare or
+    reveal substantive gaps and therefore remain pending under rule 2.
+  - >-
+    The strongest partial-module gaps are sponsored-alien deeming in
+    § 273.4(c), ineligible-student income/resource treatment in § 273.5(d),
+    work disqualification and reentry in § 273.7, resource construction in
+    § 273.8, income inclusion/exclusion in § 273.9, prospective budgeting and
+    proration in § 273.10, and discretionary ABAWD exemptions in § 273.24.
+  - >-
+    Section 273.1 remains pending as of the pinned tree because its household
+    composition, special-population, and striker rules are substantive.
+    rulespec-us#1135 is in flight but cannot count toward this snapshot.
+  - >-
+    Sections 273.12, 273.14, and 273.17 are mixed provisions, not pure
+    procedure: respectively they control change-driven benefit timing and
+    deduction treatment, full-versus-prorated recertification allotments, and
+    calculation of restored benefits.
+  - >-
+    Section 273.20 applies expressly to California SSI recipients and changes
+    individual eligibility plus household income/resource treatment. Because
+    the taxonomy has no jurisdiction-inapplicability exclusion and the source
+    does not establish Colorado operation, it remains pending.
+  - >-
+    Section 273.21 cannot be excluded as reporting procedure because MRRB
+    replaces prospective budgeting and dictates retrospective eligibility and
+    allotment computation.
+  - >-
+    The programs in §§ 273.23 and 273.25-273.32 are State options. Their
+    federal content was classified without inferring whether Colorado operates
+    them: substantive eligibility and benefit rules remain pending, while the
+    pure notice and final-month routing rules in §§ 273.29 and 273.31 are
+    procedural exclusions.

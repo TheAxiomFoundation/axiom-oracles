@@ -504,3 +504,103 @@ def test_citation_drift_fails(tmp_path, capsys):
     error = capsys.readouterr().err.lower()
     assert "citation drift" in error
     assert "4.999" in error
+
+
+def test_operationalized_by_tolerates_yaml_spacing_but_not_unsafe_paths(
+    tmp_path, capsys
+):
+    """`operationalized_by: <path>` is the natural YAML form and must pass.
+
+    The parse strips the separator so spacing cannot decide a verdict, but the
+    extracted path is still held to every safety property. Both halves are
+    asserted: the spaced form of a module that exists is accepted, and a spaced
+    form naming a traversal path is still rejected.
+    """
+    module, closure_dir = _generate_baseline(tmp_path)
+    path, document = _load_universe(closure_dir, STATE_UNIVERSE)
+    row = document["provisions"][0]
+    row["status"] = "excluded"
+    row.pop("encoded_by", None)
+    row["reason"] = "operationalized_by: us/regulations/7-cfr/273/1.yaml"
+    row["basis"] = "Spaced YAML form naming a module present in the pinned tree."
+    _write_universe(path, document)
+    assert module.main(["--generate", "--closure-dir", str(closure_dir)]) == 0
+    assert module.main(["--check", "--closure-dir", str(closure_dir)]) == 0
+    capsys.readouterr()
+
+    _, document = _load_universe(closure_dir, STATE_UNIVERSE)
+    row = document["provisions"][0]
+    row["reason"] = "operationalized_by: ../../etc/passwd.yaml"
+    _write_universe(path, document)
+    assert module.main(["--check", "--closure-dir", str(closure_dir)]) == 1
+    assert "operationalized_by" in capsys.readouterr().err.lower()
+
+
+def test_partial_coverage_survives_regeneration_and_requires_a_statement(
+    tmp_path, capsys
+):
+    """A joined module that defers its substantive content stays pending.
+
+    A citation-path join proves a module file exists; it cannot prove the
+    module computes the provision. Seven 7 CFR 273 modules declare
+    `deferred_outputs` naming what they do not compute, so a plain status edit
+    is not enough — regeneration would re-upgrade the row from the join and
+    silently restore the overstatement. The marker must survive, and it must
+    say what is missing.
+    """
+    module, closure_dir = _generate_baseline(tmp_path)
+    path, document = _load_universe(closure_dir, STATE_UNIVERSE)
+    row = document["provisions"][0]
+    row["status"] = "encoded"
+    row["encoded_by"] = ["us/regulations/7-cfr/273/1.yaml"]
+    _write_universe(path, document)
+    assert module.main(["--generate", "--closure-dir", str(closure_dir)]) == 0
+
+    _, document = _load_universe(closure_dir, STATE_UNIVERSE)
+    row = document["provisions"][0]
+    row["status"] = "pending"
+    row.pop("encoded_by")
+    row["partial_coverage"] = "Module defers paragraphs (b) and (c) via deferred_outputs."
+    _write_universe(path, document)
+    assert module.main(["--generate", "--closure-dir", str(closure_dir)]) == 0
+
+    _, regenerated = _load_universe(closure_dir, STATE_UNIVERSE)
+    assert regenerated["provisions"][0]["status"] == "pending"
+    assert "partial_coverage" in regenerated["provisions"][0]
+    assert module.main(["--check", "--closure-dir", str(closure_dir)]) == 0
+    capsys.readouterr()
+
+    _, document = _load_universe(closure_dir, STATE_UNIVERSE)
+    document["provisions"][0]["partial_coverage"] = "   "
+    _write_universe(path, document)
+    assert module.main(["--check", "--closure-dir", str(closure_dir)]) == 1
+    assert "partial_coverage" in capsys.readouterr().err.lower()
+
+
+def test_disclosure_is_what_distinguishes_a_correction_from_a_regression(
+    tmp_path, capsys
+):
+    """Same pending rise, opposite verdicts, decided only by disclosure.
+
+    `test_pending_regression_fails_when_provenance_is_unchanged` already proves
+    a bare rise is blocked at a tightened baseline. This asserts the other arm
+    at the same baseline: the identical rise is ACCEPTED when the row states
+    which outputs the joined module does not compute. If both arms ever agree,
+    the allowance has either become a hole or stopped working.
+    """
+    module, closure_dir = _generate_baseline(tmp_path)
+    path, document = _tighten_state_pending_to_zero(module, closure_dir)
+    assert document["ratchet"]["pending_max"] == 0
+    row = document["provisions"][0]
+    row["status"] = "pending"
+    row.pop("reason")
+    row.pop("basis")
+    row["partial_coverage"] = (
+        "The joined module declares deferred_outputs for paragraphs (b) and "
+        "(c); the join proves the file exists, not that it computes them."
+    )
+    _write_universe(path, document)
+
+    assert module.main(["--generate", "--closure-dir", str(closure_dir)]) == 0
+    assert module.main(["--check", "--closure-dir", str(closure_dir)]) == 0
+    capsys.readouterr()
