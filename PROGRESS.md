@@ -20,14 +20,28 @@
   round-4 findings before implementation.
 - Confirmed the required implementation and mutant boundaries verbatim from
   the review.
+- Implemented canonical `full` reconciliation: per-case verdict values now
+  reproduce report tolerance semantics, per-concept aggregates, the exact
+  mismatch list, unique/non-overlapping concepts, and disposition markers and
+  counts.
+- Required `full` evidence for reference conformance while retaining
+  cardinality as an honest reality-leg strength.
+- Closed the two promoted PARTIAL items: derived certificate mode wins over a
+  registry `mode`, and disposition accounting requires a valid nonempty
+  dispositions document for the same suite.
+- Added and passed the expanded 52-case certification mutant suite, including
+  foreign values, disposition drift, duplicate/overlapping concepts,
+  reference cardinality, later-malformed chunks, mode precedence, and
+  same-suite non-disposition artifacts.
+- Confirmed the strengthened validator isolates the live ECPS defect exactly:
+  `ecps-spm-50970` lacks the report's `explained_residual` compact marker.
 
 ## Next
 
-- Inspect the validator, certification, artifact producer/migration,
-  disposition authorization, and existing mutant harness.
-- Implement and commit semantic full reconciliation and reference-full gating.
-- Implement and commit authoritative regeneration/QC signal preservation.
-- Implement and commit skip, mode-precedence, and disposition-document fixes.
+- Regenerate both Colorado migrated compact corpora from their immutable
+  pre-migration source, project dispositions, and rebuild exact v1 bindings.
+- Preserve future QC `matched: false` signals and skipped inline-v1 corpora,
+  with dedicated mutants.
 - Run all named gates, reconcile generated artifacts honestly, and commit the
   final report plus completed progress state.
 

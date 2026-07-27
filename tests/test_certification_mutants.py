@@ -6,6 +6,7 @@ are the demonstrations, kept green forever. Grow this catalogue whenever a gate
 gains a rule — a rule without a mutant here is not yet a rule.
 """
 
+import copy
 import importlib.util
 import json
 from pathlib import Path
@@ -157,7 +158,11 @@ def test_mislabeled_report_is_a_defect():
         json.dumps(
             {
                 "suite": "someone-else",
-                "summary": {"comparison_count": 5, "match_count": 5, "mismatch_count": 0},
+                "summary": {
+                    "comparison_count": 5,
+                    "match_count": 5,
+                    "mismatch_count": 0,
+                },
             }
         )
     )
@@ -409,7 +414,9 @@ def test_scalar_aliases_are_rejected():
             "program": "p",
             "population": {},
             "oracle": {},
-            "bindings": [{"kind": "constant", "group": "g", "reason": "r", "audit": "read"}],
+            "bindings": [
+                {"kind": "constant", "group": "g", "reason": "r", "audit": "read"}
+            ],
         },
     )
     assert any("must be a list" in e for e in errors)
@@ -425,7 +432,9 @@ def test_self_asserted_completeness_is_rejected():
             "program": "p",
             "population": {},
             "oracle": {},
-            "bindings": [{"kind": "constant", "group": "g", "reason": "r", "audit": "read"}],
+            "bindings": [
+                {"kind": "constant", "group": "g", "reason": "r", "audit": "read"}
+            ],
             "completeness": {"status": "verified"},
         },
     )
@@ -436,7 +445,10 @@ def test_covered_by_must_resolve_to_something_real():
     vbm = _load("validate_bridge_manifests")
     assert vbm._covered_by_resolves("ABCDEFGHIJKL") is False
     assert vbm._covered_by_resolves("see the other suite, TBD") is False
-    assert vbm._covered_by_resolves("dashboard/public/data/axiom-snapqc-co-snap.json") is True
+    assert (
+        vbm._covered_by_resolves("dashboard/public/data/axiom-snapqc-co-snap.json")
+        is True
+    )
 
 
 def test_certified_requires_computed_true_premises_not_status_strings():
@@ -551,6 +563,54 @@ def test_unreadable_dispositions_file_cannot_authorize():
         (REPO / "dashboard/public/data" / name).unlink()
 
 
+def test_same_suite_empty_dispositions_document_cannot_authorize(tmp_path):
+    """A matching suite declaration is not disposition evidence by itself."""
+    suffix = tmp_path.name.replace("-", "_")
+    report_name = f"zz-r5-empty-disp-{suffix}.json"
+    artifact_name = f"zz-r5-empty-disp-{suffix}.yaml"
+    report_path = REPO / "dashboard/public/data" / report_name
+    artifact_path = REPO / "dashboard/public/data" / artifact_name
+    try:
+        artifact_path.write_text(
+            json.dumps(
+                {
+                    "schema": "axiom_oracles.dispositions.v1",
+                    "suite": "victim",
+                    "entries": [],
+                }
+            )
+        )
+        _mutant(
+            report_name,
+            {
+                "suite": "victim",
+                "cases": [{"metadata": {"x": 1}}],
+                "mismatches": [{}],
+                "summary": {
+                    "comparison_count": 1,
+                    "match_count": 0,
+                    "mismatch_count": 1,
+                    "dispositioned": {
+                        "dispositions_file": artifact_path.relative_to(REPO).as_posix(),
+                        "counts": {"upstream_engine_gap": 1},
+                        "unexplained_count": 0,
+                    },
+                },
+            },
+        )
+
+        leg, _evidence, defects = _verdict(report_name)
+
+        assert leg["clean"] is False
+        assert any(
+            "not a readable dispositions document" in defect for defect in defects
+        ), defects
+        assert leg["unexplained"] == 1
+    finally:
+        report_path.unlink(missing_ok=True)
+        artifact_path.unlink(missing_ok=True)
+
+
 def test_weighted_mass_must_be_finite_and_nonnegative():
     for weight, marker in ((float("nan"), "finite"), (-5.0, "negative")):
         name = f"zz-r3-w{marker}.json"
@@ -594,6 +654,34 @@ def test_certified_cannot_activate_by_flipping_status_alone():
     assert certify.build_certificate("us-co/snap", spec2)["certified"]["state"] == "no"
 
 
+@pytest.mark.parametrize("premise", ("closed", "executable"))
+@pytest.mark.parametrize(
+    ("status", "registry_mode", "derived_mode"),
+    (
+        pytest.param("prototype", "computed", "attested", id="attested-wins"),
+        pytest.param("computed", "attested", "computed", id="computed-wins"),
+    ),
+)
+def test_registry_mode_cannot_override_derived_emitted_mode(
+    premise,
+    status,
+    registry_mode,
+    derived_mode,
+):
+    import copy
+
+    certify = _load("certify")
+    spec = copy.deepcopy(certify.PROGRAMS["us-co/snap"])
+    spec["attested"][premise].update(
+        status=status,
+        mode=registry_mode,
+    )
+
+    certificate = certify.build_certificate("us-co/snap", spec)
+
+    assert certificate["verdicts"][premise]["mode"] == derived_mode
+
+
 def test_covered_by_rejects_ghosts_and_absolute_paths():
     vbm = _load("validate_bridge_manifests")
     assert vbm._covered_by_resolves("ghost-sibling/no-such/evidence.yaml") is False
@@ -633,25 +721,48 @@ def _evidence_fixture(name: str):
     )
 
 
-def _certification_fixture(name: str):
+def _certification_fixture(name: str, oracle_type: str = "reference"):
     certify = _load("certify")
     report_path = (
-        EVIDENCE_FIXTURES
-        / name
-        / "dashboard"
-        / "public"
-        / "data"
-        / "report.json"
+        EVIDENCE_FIXTURES / name / "dashboard" / "public" / "data" / "report.json"
     )
     report = json.loads(report_path.read_text())
     return certify._suite_verdict(
         {
             "suite": report["suite"],
-            "oracle_type": "reference",
+            "oracle_type": oracle_type,
             "oracle": "synthetic",
             "report": report_path.relative_to(REPO).as_posix(),
         }
     )
+
+
+def _copied_evidence_fixture(tmp_path: Path, name: str = "full_bound"):
+    fixture = tmp_path / name.replace("_", "-")
+    shutil.copytree(EVIDENCE_FIXTURES / name, fixture)
+    report_path = fixture / "dashboard" / "public" / "data" / "report.json"
+    report = json.loads(report_path.read_text())
+    suite_dir = fixture / "dashboard" / "public" / "data" / "cases" / report["suite"]
+    return report_path, suite_dir
+
+
+def _refresh_fixture_binding(report_path: Path, suite_dir: Path) -> None:
+    """Rebind a synthetic mutant after deliberately changing its content."""
+
+    index_path = suite_dir / "index.json"
+    index = json.loads(index_path.read_text())
+    index["report_path"], index["report_sha256"] = report_identity(report_path)
+    total = 0
+    for descriptor in index["chunks"]:
+        chunk_path = suite_dir / descriptor["name"]
+        payload = json.loads(chunk_path.read_text())
+        rows = payload if isinstance(payload, list) else payload["cases"]
+        descriptor["sha256"] = sha256_path(chunk_path)
+        descriptor["cases"] = len(rows)
+        total += len(rows)
+    index["count"] = total
+    index["chunk_count"] = len(index["chunks"])
+    index_path.write_text(json.dumps(index, indent=2) + "\n")
 
 
 def test_full_and_cardinality_reconciliation_are_stated_honestly():
@@ -671,18 +782,29 @@ def test_full_and_cardinality_reconciliation_are_stated_honestly():
     assert cardinality.reconciliation == "cardinality"
 
 
-def test_certificate_leg_requires_bound_reconciled_execution_evidence():
-    clean, evidence, defects = _certification_fixture("cardinality_bound")
-    assert defects == []
-    assert clean["clean"] is True
-    assert clean["binding"] == "bound"
-    assert clean["reconciliation"] == "cardinality"
-    assert clean["evidence_cases"] == 2
+def test_reference_leg_requires_full_semantic_reconciliation():
+    reference, evidence, defects = _certification_fixture("cardinality_bound")
+    assert reference["clean"] is False
+    assert reference["binding"] == "bound"
+    assert reference["reconciliation"] == "cardinality"
+    assert reference["evidence_cases"] == 2
     assert any(
-        item["claim"] == "case-evidence-index:cardinality-bound"
-        for item in evidence
+        "reference oracle requires full semantic reconciliation" in defect
+        for defect in defects
+    )
+    assert any(
+        item["claim"] == "case-evidence-index:cardinality-bound" for item in evidence
     )
 
+    reality, _evidence, reality_defects = _certification_fixture(
+        "cardinality_bound", oracle_type="reality"
+    )
+    assert reality_defects == []
+    assert reality["clean"] is True
+    assert reality["reconciliation"] == "cardinality"
+
+
+def test_certificate_leg_requires_bound_reconciled_execution_evidence():
     mutants = {
         "dummy_metadata": ("unbound", "none", "no case id"),
         "foreign_chunks": ("unbound", "full", "report_path"),
@@ -699,6 +821,138 @@ def test_certificate_leg_requires_bound_reconciled_execution_evidence():
             fixture,
             fixture_defects,
         )
+
+
+def test_same_id_foreign_values_do_not_semantically_bind(tmp_path):
+    report_path, suite_dir = _copied_evidence_fixture(tmp_path)
+    chunk_path = suite_dir / "chunk-0.json"
+    chunk = json.loads(chunk_path.read_text())
+    chunk[1]["m"][0].update(l=1000, x=1200, d=-200)
+    chunk_path.write_text(json.dumps(chunk, separators=(",", ":")))
+    _refresh_fixture_binding(report_path, suite_dir)
+
+    evidence = validate_suite_evidence(report_path)
+    assert evidence.binding == "bound"
+    assert evidence.reconciliation == "full"
+    assert evidence.valid is False
+    assert any(
+        "report mismatch" in defect and "value" in defect
+        for defect in evidence.content_defects
+    )
+
+
+@pytest.mark.parametrize(
+    ("report_kind", "chunk_kind"),
+    [
+        pytest.param("explained_residual", None, id="report-only"),
+        pytest.param(None, "explained_residual", id="chunk-only"),
+        pytest.param(
+            "upstream_engine_gap",
+            "explained_residual",
+            id="different-kind",
+        ),
+    ],
+)
+def test_report_and_chunk_disposition_markers_must_agree(
+    tmp_path, report_kind, chunk_kind
+):
+    report_path, suite_dir = _copied_evidence_fixture(tmp_path)
+    report = json.loads(report_path.read_text())
+    mismatch = report["mismatches"][0]
+    if report_kind is not None:
+        mismatch["disposition"] = {
+            "id": "synthetic-disposition",
+            "disposition": report_kind,
+        }
+        report["summary"]["dispositioned"] = {
+            "counts": {report_kind: 1},
+            "unexplained_count": 0,
+        }
+    report_path.write_text(json.dumps(report, indent=2) + "\n")
+
+    chunk_path = suite_dir / "chunk-0.json"
+    chunk = json.loads(chunk_path.read_text())
+    compact_mismatch = chunk[1]["m"][0]
+    if chunk_kind is not None:
+        compact_mismatch["e"] = chunk_kind
+    chunk_path.write_text(json.dumps(chunk, separators=(",", ":")))
+    _refresh_fixture_binding(report_path, suite_dir)
+
+    evidence = validate_suite_evidence(report_path)
+    assert evidence.binding == "bound"
+    assert evidence.reconciliation == "full"
+    assert evidence.valid is False
+    assert any(
+        "disposition" in defect and "does not match" in defect
+        for defect in evidence.content_defects
+    )
+
+
+@pytest.mark.parametrize(
+    ("mutation", "marker"),
+    [
+        pytest.param("duplicate-match", "repeats concept", id="duplicate-match"),
+        pytest.param(
+            "duplicate-mismatch",
+            "repeats concept",
+            id="duplicate-mismatch",
+        ),
+        pytest.param(
+            "match-mismatch-overlap",
+            "appears in both",
+            id="match-mismatch-overlap",
+        ),
+    ],
+)
+def test_duplicate_and_overlapping_case_concepts_are_rejected(
+    tmp_path, mutation, marker
+):
+    report_path, suite_dir = _copied_evidence_fixture(tmp_path)
+    chunk_path = suite_dir / "chunk-0.json"
+    chunk = json.loads(chunk_path.read_text())
+    if mutation == "duplicate-match":
+        chunk[0]["v"].append(copy.deepcopy(chunk[0]["v"][0]))
+    elif mutation == "duplicate-mismatch":
+        chunk[1]["m"].append(copy.deepcopy(chunk[1]["m"][0]))
+    else:
+        chunk[1]["v"].append(copy.deepcopy(chunk[1]["m"][0]))
+    chunk_path.write_text(json.dumps(chunk, separators=(",", ":")))
+    _refresh_fixture_binding(report_path, suite_dir)
+
+    evidence = validate_suite_evidence(report_path)
+    assert evidence.binding == "bound"
+    assert evidence.valid is False
+    assert evidence.reconciliation != "cardinality"
+    assert any(marker in defect for defect in evidence.content_defects)
+
+
+def test_later_malformed_chunk_is_not_hidden_by_an_earlier_valid_chunk(
+    tmp_path,
+):
+    report_path, suite_dir = _copied_evidence_fixture(tmp_path)
+    _refresh_fixture_binding(report_path, suite_dir)
+    malformed_path = suite_dir / "chunk-1.json"
+    malformed_path.write_text("{not-json")
+
+    index_path = suite_dir / "index.json"
+    index = json.loads(index_path.read_text())
+    index["chunk_count"] = 2
+    index["chunks"].append(
+        {
+            "name": malformed_path.name,
+            "sha256": sha256_path(malformed_path),
+            "cases": 0,
+        }
+    )
+    index_path.write_text(json.dumps(index, indent=2) + "\n")
+
+    evidence = validate_suite_evidence(report_path)
+    assert evidence.binding == "bound"
+    assert evidence.valid is False
+    assert any(
+        "chunk-1.json is not valid JSON" in defect
+        for defect in evidence.content_defects
+    )
 
 
 def test_dummy_metadata_cannot_back_asserted_counts():
@@ -752,14 +1006,7 @@ def test_compact_concept_and_input_names_must_be_strings(tmp_path):
     fixture = tmp_path / "invalid-nested-name"
     shutil.copytree(EVIDENCE_FIXTURES / "full_bound", fixture)
     report_path = fixture / "dashboard" / "public" / "data" / "report.json"
-    suite_dir = (
-        fixture
-        / "dashboard"
-        / "public"
-        / "data"
-        / "cases"
-        / "full-bound"
-    )
+    suite_dir = fixture / "dashboard" / "public" / "data" / "cases" / "full-bound"
     chunk_path = suite_dir / "chunk-0.json"
     index_path = suite_dir / "index.json"
     chunk = json.loads(chunk_path.read_text())
@@ -774,8 +1021,7 @@ def test_compact_concept_and_input_names_must_be_strings(tmp_path):
     assert evidence.binding == "bound"
     assert evidence.valid is False
     assert any(
-        ".c must be a non-empty string" in defect
-        for defect in evidence.content_defects
+        ".c must be a non-empty string" in defect for defect in evidence.content_defects
     )
 
 

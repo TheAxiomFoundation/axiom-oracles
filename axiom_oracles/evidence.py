@@ -20,6 +20,7 @@ Reconciliation has three honest strengths:
 
 from __future__ import annotations
 
+from collections import Counter
 from dataclasses import dataclass
 import hashlib
 import json
@@ -131,6 +132,28 @@ class EvidenceReport:
         return self.valid
 
 
+@dataclass(frozen=True)
+class _Verdict:
+    """Canonical semantic projection of one stored comparison verdict."""
+
+    case_id: str | None
+    concept: str
+    left: object
+    right: object
+    outcome: Literal["match", "mismatch"]
+    disposition: str | None
+    location: str
+
+
+@dataclass(frozen=True)
+class _ConceptRule:
+    """The report-declared comparison and tolerance semantics for a concept."""
+
+    comparison: str
+    tolerance: float
+    relative_tolerance: float
+
+
 def sha256_path(path: Path) -> str:
     """Return the SHA-256 of the exact bytes at ``path``."""
 
@@ -207,8 +230,7 @@ def _case_id(
         defects.append(
             _defect(
                 suite,
-                f"{location} case id must be a non-empty string or integer "
-                f"({value!r})",
+                f"{location} case id must be a non-empty string or integer ({value!r})",
             )
         )
         return None
@@ -237,17 +259,13 @@ def _record_list(
         return None
     value = row[field]
     if not isinstance(value, list):
-        defects.append(
-            _defect(suite, f"{location}.{field} must be an array")
-        )
+        defects.append(_defect(suite, f"{location}.{field} must be an array"))
         return None
     valid: list[dict] = []
     for index, record in enumerate(value):
         record_location = f"{location}.{field}[{index}]"
         if not isinstance(record, dict):
-            defects.append(
-                _defect(suite, f"{record_location} must be an object")
-            )
+            defects.append(_defect(suite, f"{record_location} must be an object"))
             continue
         missing = [key for key in required_keys if key not in record]
         if missing:
@@ -272,15 +290,120 @@ def _record_list(
     return valid
 
 
+def _case_verdicts(
+    *,
+    case_id: str | None,
+    matches: list[dict] | None,
+    mismatches: list[dict] | None,
+    compact: bool,
+    location: str,
+    defects: list[str],
+    suite: str | None,
+) -> tuple[_Verdict, ...]:
+    """Return canonical verdicts and reject ambiguous per-case concepts."""
+
+    concept_key = "c" if compact else "concept"
+    left_key = "l" if compact else "left"
+    right_key = "x" if compact else "right"
+    match_field = "v" if compact else "matches"
+    mismatch_field = "m" if compact else "mismatches"
+
+    def indexed(
+        records: list[dict] | None,
+        *,
+        field: str,
+    ) -> dict[str, tuple[dict, int]]:
+        out: dict[str, tuple[dict, int]] = {}
+        for index, record in enumerate(records or []):
+            concept = record.get(concept_key)
+            if not isinstance(concept, str) or not concept:
+                # _record_list records the precise malformed-name defect.
+                continue
+            if concept in out:
+                defects.append(
+                    _defect(
+                        suite,
+                        f"{location}.{field} repeats concept {concept!r}",
+                    )
+                )
+                continue
+            out[concept] = (record, index)
+        return out
+
+    matches_by_concept = indexed(matches, field=match_field)
+    mismatches_by_concept = indexed(mismatches, field=mismatch_field)
+    for concept in sorted(set(matches_by_concept) & set(mismatches_by_concept)):
+        defects.append(
+            _defect(
+                suite,
+                f"{location} concept {concept!r} appears in both "
+                f".{match_field} and .{mismatch_field}",
+            )
+        )
+
+    verdicts: list[_Verdict] = []
+    for outcome, field, records in (
+        ("match", match_field, matches_by_concept),
+        ("mismatch", mismatch_field, mismatches_by_concept),
+    ):
+        for concept, (record, index) in records.items():
+            marker: str | None = None
+            if outcome == "mismatch":
+                raw_marker = record.get("e") if compact else record.get("disposition")
+                if raw_marker is not None:
+                    if compact:
+                        if isinstance(raw_marker, str) and raw_marker:
+                            marker = raw_marker
+                        else:
+                            defects.append(
+                                _defect(
+                                    suite,
+                                    f"{location}.{field}[{index}].e must be a "
+                                    "non-empty string",
+                                )
+                            )
+                    elif (
+                        isinstance(raw_marker, dict)
+                        and isinstance(raw_marker.get("disposition"), str)
+                        and raw_marker["disposition"]
+                    ):
+                        marker = raw_marker["disposition"]
+                    else:
+                        defects.append(
+                            _defect(
+                                suite,
+                                f"{location}.{field}[{index}].disposition must "
+                                "name a disposition",
+                            )
+                        )
+            verdicts.append(
+                _Verdict(
+                    case_id=case_id,
+                    concept=concept,
+                    left=record.get(left_key),
+                    right=record.get(right_key),
+                    outcome=outcome,
+                    disposition=marker,
+                    location=f"{location}.{field}[{index}]",
+                )
+            )
+    return tuple(verdicts)
+
+
 def _validate_compact_case(
     row: object,
     location: str,
     defects: list[str],
     suite: str | None,
-) -> tuple[str | None, tuple[int, int] | None, bool]:
+) -> tuple[
+    str | None,
+    tuple[int, int] | None,
+    bool,
+    tuple[_Verdict, ...],
+]:
     if not isinstance(row, dict):
         defects.append(_defect(suite, f"{location} must be an object"))
-        return None, None, False
+        return None, None, False, ()
 
     identity = _case_id(
         row,
@@ -340,7 +463,16 @@ def _validate_compact_case(
         else None
     )
     explicit_verdict = "v" in row or bool(mismatches)
-    return identity, outcomes, explicit_verdict
+    semantic_verdicts = _case_verdicts(
+        case_id=identity,
+        matches=verdicts,
+        mismatches=mismatches,
+        compact=True,
+        location=location,
+        defects=defects,
+        suite=suite,
+    )
+    return identity, outcomes, explicit_verdict, semantic_verdicts
 
 
 def _validate_inline_case(
@@ -348,10 +480,15 @@ def _validate_inline_case(
     location: str,
     defects: list[str],
     suite: str | None,
-) -> tuple[str | None, tuple[int, int] | None, bool]:
+) -> tuple[
+    str | None,
+    tuple[int, int] | None,
+    bool,
+    tuple[_Verdict, ...],
+]:
     if not isinstance(row, dict):
         defects.append(_defect(suite, f"{location} must be an object"))
-        return None, None, False
+        return None, None, False, ()
     if "id" in row and "case_id" not in row:
         return _validate_compact_case(row, location, defects, suite)
 
@@ -366,11 +503,11 @@ def _validate_inline_case(
     if match_key:
         matched = row[match_key]
         if not isinstance(matched, bool):
-            defects.append(
-                _defect(suite, f"{location}.{match_key} must be a boolean")
-            )
-            return identity, None, True
-        return identity, (1, 0) if matched else (0, 1), True
+            defects.append(_defect(suite, f"{location}.{match_key} must be a boolean"))
+            return identity, None, True, ()
+        # A case-level boolean carries no concept or values and therefore
+        # cannot support canonical full semantic reconciliation.
+        return identity, (1, 0) if matched else (0, 1), True, ()
 
     mismatches = _record_list(
         row,
@@ -392,8 +529,546 @@ def _validate_inline_case(
     )
     if "matches" in row and "mismatches" in row:
         if matches is not None and mismatches is not None:
-            return identity, (len(matches), len(mismatches)), True
-    return identity, None, "matches" in row
+            semantic_verdicts = _case_verdicts(
+                case_id=identity,
+                matches=matches,
+                mismatches=mismatches,
+                compact=False,
+                location=location,
+                defects=defects,
+                suite=suite,
+            )
+            return (
+                identity,
+                (len(matches), len(mismatches)),
+                True,
+                semantic_verdicts,
+            )
+    return identity, None, "matches" in row, ()
+
+
+def _strict_nonnegative_int(
+    container: dict,
+    field: str,
+    *,
+    location: str,
+    defects: list[str],
+    suite: str | None,
+    required: bool = True,
+) -> int | None:
+    if field not in container:
+        if required:
+            defects.append(_defect(suite, f"{location}.{field} is missing"))
+        return None
+    value = container[field]
+    if isinstance(value, bool) or not isinstance(value, int) or value < 0:
+        defects.append(
+            _defect(
+                suite,
+                f"{location}.{field} is not a non-negative integer ({value!r})",
+            )
+        )
+        return None
+    return value
+
+
+def _strict_tolerance(
+    row: dict,
+    field: str,
+    *,
+    location: str,
+    defects: list[str],
+    suite: str | None,
+) -> float | None:
+    if field not in row:
+        defects.append(_defect(suite, f"{location}.{field} is missing"))
+        return None
+    value = row[field]
+    if (
+        isinstance(value, bool)
+        or not isinstance(value, (int, float))
+        or not math.isfinite(float(value))
+        or value < 0
+    ):
+        defects.append(
+            _defect(
+                suite,
+                f"{location}.{field} must be a finite non-negative number ({value!r})",
+            )
+        )
+        return None
+    return float(value)
+
+
+def _concept_rules(
+    report: dict,
+    defects: list[str],
+    suite: str | None,
+) -> dict[str, _ConceptRule]:
+    raw = report.get("concepts")
+    if not isinstance(raw, list):
+        defects.append(
+            _defect(
+                suite,
+                "report concepts must be an array for full reconciliation",
+            )
+        )
+        return {}
+    rules: dict[str, _ConceptRule] = {}
+    for index, row in enumerate(raw):
+        location = f"report concepts[{index}]"
+        if not isinstance(row, dict):
+            defects.append(_defect(suite, f"{location} must be an object"))
+            continue
+        concept = row.get("id")
+        if not isinstance(concept, str) or not concept:
+            defects.append(_defect(suite, f"{location}.id must be a non-empty string"))
+            continue
+        if concept in rules:
+            defects.append(_defect(suite, f"report concepts repeats {concept!r}"))
+            continue
+        comparison = row.get("comparison")
+        if not isinstance(comparison, str) or not comparison:
+            defects.append(
+                _defect(
+                    suite,
+                    f"{location}.comparison must be a non-empty string",
+                )
+            )
+            continue
+        tolerance = _strict_tolerance(
+            row,
+            "tolerance",
+            location=location,
+            defects=defects,
+            suite=suite,
+        )
+        relative_tolerance = _strict_tolerance(
+            row,
+            "relative_tolerance",
+            location=location,
+            defects=defects,
+            suite=suite,
+        )
+        if tolerance is not None and relative_tolerance is not None:
+            rules[concept] = _ConceptRule(
+                comparison=comparison,
+                tolerance=tolerance,
+                relative_tolerance=relative_tolerance,
+            )
+    return rules
+
+
+def _as_finite_number(value: object) -> float | None:
+    if value is None:
+        return None
+    try:
+        number = float(value)
+    except (TypeError, ValueError):
+        return None
+    return number if math.isfinite(number) else None
+
+
+def _verdict_is_match(
+    left: object,
+    right: object,
+    rule: _ConceptRule,
+) -> bool:
+    if left is None or right is None:
+        return False
+    if rule.comparison == "amount":
+        left_number = _as_finite_number(left)
+        right_number = _as_finite_number(right)
+        return (
+            left_number is not None
+            and right_number is not None
+            and math.isclose(
+                left_number,
+                right_number,
+                rel_tol=rule.relative_tolerance,
+                abs_tol=rule.tolerance,
+            )
+        )
+    return bool(left) == bool(right)
+
+
+def _projected_value_matches(
+    chunk_value: object,
+    report_value: object,
+    rule: _ConceptRule,
+) -> bool:
+    """Compare two copies of one side using the report's tolerance semantics."""
+
+    if rule.comparison == "amount":
+        chunk_number = _as_finite_number(chunk_value)
+        report_number = _as_finite_number(report_value)
+        return (
+            chunk_number is not None
+            and report_number is not None
+            and math.isclose(
+                chunk_number,
+                report_number,
+                rel_tol=rule.relative_tolerance,
+                abs_tol=rule.tolerance,
+            )
+        )
+    return type(chunk_value) is type(report_value) and chunk_value == report_value
+
+
+def _aggregate_verdicts(
+    report: dict,
+    verdicts: tuple[_Verdict, ...],
+    defects: list[str],
+    suite: str | None,
+) -> None:
+    raw = report.get("aggregates")
+    if not isinstance(raw, list):
+        defects.append(
+            _defect(
+                suite,
+                "report aggregates must be an array for full reconciliation",
+            )
+        )
+        return
+
+    declared: dict[str, tuple[int, int]] = {}
+    for index, row in enumerate(raw):
+        location = f"report aggregates[{index}]"
+        if not isinstance(row, dict):
+            defects.append(_defect(suite, f"{location} must be an object"))
+            continue
+        concept = row.get("concept")
+        if not isinstance(concept, str) or not concept:
+            defects.append(
+                _defect(
+                    suite,
+                    f"{location}.concept must be a non-empty string",
+                )
+            )
+            continue
+        if concept in declared:
+            defects.append(
+                _defect(suite, f"report aggregates repeats concept {concept!r}")
+            )
+            continue
+        comparisons = _strict_nonnegative_int(
+            row,
+            "comparison_count",
+            location=location,
+            defects=defects,
+            suite=suite,
+        )
+        mismatches = _strict_nonnegative_int(
+            row,
+            "mismatch_count",
+            location=location,
+            defects=defects,
+            suite=suite,
+        )
+        if comparisons is None or mismatches is None:
+            continue
+        if mismatches > comparisons:
+            defects.append(
+                _defect(
+                    suite,
+                    f"{location}.mismatch_count {mismatches} exceeds "
+                    f"comparison_count {comparisons}",
+                )
+            )
+            continue
+        matches = comparisons - mismatches
+        for field, expected in (
+            ("compared", comparisons),
+            ("match_count", matches),
+            ("matched", matches),
+        ):
+            if field not in row:
+                continue
+            value = _strict_nonnegative_int(
+                row,
+                field,
+                location=location,
+                defects=defects,
+                suite=suite,
+                required=False,
+            )
+            if value is not None and value != expected:
+                defects.append(
+                    _defect(
+                        suite,
+                        f"{location}.{field} {value} does not match derived "
+                        f"verdict count {expected}",
+                    )
+                )
+        declared[concept] = (matches, mismatches)
+
+    actual: dict[str, list[int]] = {}
+    for verdict in verdicts:
+        counts = actual.setdefault(verdict.concept, [0, 0])
+        counts[0 if verdict.outcome == "match" else 1] += 1
+    missing = sorted(set(declared) - set(actual))
+    unexpected = sorted(set(actual) - set(declared))
+    if missing:
+        defects.append(
+            _defect(
+                suite,
+                f"report aggregate concepts have no stored verdicts {missing}",
+            )
+        )
+    if unexpected:
+        defects.append(
+            _defect(
+                suite,
+                f"stored verdict concepts have no report aggregate {unexpected}",
+            )
+        )
+    for concept in sorted(set(declared) & set(actual)):
+        expected_matches, expected_mismatches = declared[concept]
+        actual_matches, actual_mismatches = actual[concept]
+        if (expected_matches, expected_mismatches) != (
+            actual_matches,
+            actual_mismatches,
+        ):
+            defects.append(
+                _defect(
+                    suite,
+                    f"report aggregate {concept!r} declares "
+                    f"{expected_matches} matches/{expected_mismatches} "
+                    "mismatches but stored verdicts contain "
+                    f"{actual_matches}/{actual_mismatches}",
+                )
+            )
+
+
+def _report_disposition(
+    row: dict,
+    *,
+    location: str,
+    defects: list[str],
+    suite: str | None,
+) -> str | None:
+    raw = row.get("disposition")
+    if raw is None:
+        return None
+    if (
+        isinstance(raw, dict)
+        and isinstance(raw.get("disposition"), str)
+        and raw["disposition"]
+    ):
+        return raw["disposition"]
+    defects.append(
+        _defect(
+            suite,
+            f"{location}.disposition must be an object naming a disposition",
+        )
+    )
+    return None
+
+
+def _reconcile_disposition_counts(
+    report: dict,
+    markers: list[str | None],
+    defects: list[str],
+    suite: str | None,
+) -> None:
+    summary = report.get("summary")
+    if not isinstance(summary, dict):
+        return
+    dispositioned = summary.get("dispositioned")
+    if dispositioned is None:
+        return
+    if not isinstance(dispositioned, dict):
+        # The report-shape validator records this elsewhere in certification.
+        return
+    counts = dispositioned.get("counts")
+    if not isinstance(counts, dict):
+        defects.append(
+            _defect(
+                suite,
+                "summary.dispositioned.counts must be an object for full "
+                "reconciliation",
+            )
+        )
+        return
+    actual = Counter(marker or "unexplained" for marker in markers)
+    for kind in sorted(set(counts) | set(actual)):
+        declared = _strict_nonnegative_int(
+            counts,
+            kind,
+            location="summary.dispositioned.counts",
+            defects=defects,
+            suite=suite,
+            required=False,
+        )
+        if declared is None:
+            declared = 0
+        observed = actual.get(kind, 0)
+        if declared != observed:
+            defects.append(
+                _defect(
+                    suite,
+                    f"summary.dispositioned.counts.{kind} {declared} does not "
+                    f"match {observed} report mismatch disposition marker(s)",
+                )
+            )
+
+
+def _reconcile_report_mismatches(
+    report: dict,
+    verdicts: tuple[_Verdict, ...],
+    rules: dict[str, _ConceptRule],
+    defects: list[str],
+    suite: str | None,
+) -> None:
+    raw = report.get("mismatches")
+    if not isinstance(raw, list):
+        defects.append(
+            _defect(
+                suite,
+                "report mismatches must be an array for full reconciliation",
+            )
+        )
+        return
+
+    stored: dict[tuple[str, str], _Verdict] = {}
+    for verdict in verdicts:
+        if verdict.outcome != "mismatch" or verdict.case_id is None:
+            continue
+        stored[(verdict.case_id, verdict.concept)] = verdict
+
+    reported: dict[tuple[str, str], tuple[dict, str | None, str]] = {}
+    markers: list[str | None] = []
+    for index, row in enumerate(raw):
+        location = f"report mismatches[{index}]"
+        if not isinstance(row, dict):
+            defects.append(_defect(suite, f"{location} must be an object"))
+            continue
+        case_id = _case_id(
+            row,
+            compact=False,
+            location=location,
+            defects=defects,
+            suite=suite,
+        )
+        concept = row.get("concept")
+        if not isinstance(concept, str) or not concept:
+            defects.append(
+                _defect(
+                    suite,
+                    f"{location}.concept must be a non-empty string",
+                )
+            )
+            continue
+        if "left" not in row or "right" not in row:
+            defects.append(
+                _defect(suite, f"{location} must carry left and right values")
+            )
+            continue
+        if case_id is None:
+            continue
+        key = (case_id, concept)
+        if key in reported:
+            defects.append(
+                _defect(
+                    suite,
+                    f"report mismatches repeats case/concept {key!r}",
+                )
+            )
+            continue
+        marker = _report_disposition(
+            row,
+            location=location,
+            defects=defects,
+            suite=suite,
+        )
+        reported[key] = (row, marker, location)
+        markers.append(marker)
+
+    missing = sorted(set(reported) - set(stored))
+    unexpected = sorted(set(stored) - set(reported))
+    if missing:
+        defects.append(
+            _defect(
+                suite,
+                f"report mismatch rows have no stored mismatch verdict {missing}",
+            )
+        )
+    if unexpected:
+        defects.append(
+            _defect(
+                suite,
+                f"stored mismatch verdicts have no report mismatch row {unexpected}",
+            )
+        )
+
+    for key in sorted(set(reported) & set(stored)):
+        report_row, report_marker, location = reported[key]
+        stored_verdict = stored[key]
+        rule = rules.get(key[1])
+        if rule is not None:
+            for side, chunk_value, report_value in (
+                ("left", stored_verdict.left, report_row["left"]),
+                ("right", stored_verdict.right, report_row["right"]),
+            ):
+                if not _projected_value_matches(
+                    chunk_value,
+                    report_value,
+                    rule,
+                ):
+                    defects.append(
+                        _defect(
+                            suite,
+                            f"{stored_verdict.location} {side} value "
+                            f"{chunk_value!r} does not reconcile with "
+                            f"{location}.{side} {report_value!r} under report "
+                            "tolerance semantics",
+                        )
+                    )
+        if stored_verdict.disposition != report_marker:
+            defects.append(
+                _defect(
+                    suite,
+                    f"{stored_verdict.location} disposition marker "
+                    f"{stored_verdict.disposition!r} does not match "
+                    f"{location} marker {report_marker!r}",
+                )
+            )
+    _reconcile_disposition_counts(report, markers, defects, suite)
+
+
+def _reconcile_full_semantics(
+    report: dict,
+    verdicts: tuple[_Verdict, ...],
+    defects: list[str],
+    suite: str | None,
+) -> None:
+    """Reconcile every canonical verdict with report semantics and aggregates."""
+
+    rules = _concept_rules(report, defects, suite)
+    for verdict in verdicts:
+        rule = rules.get(verdict.concept)
+        if rule is None:
+            defects.append(
+                _defect(
+                    suite,
+                    f"{verdict.location} concept {verdict.concept!r} has no "
+                    "report concept definition",
+                )
+            )
+            continue
+        observed_match = _verdict_is_match(verdict.left, verdict.right, rule)
+        expected_match = verdict.outcome == "match"
+        if observed_match != expected_match:
+            defects.append(
+                _defect(
+                    suite,
+                    f"{verdict.location} values {verdict.left!r}/"
+                    f"{verdict.right!r} do not satisfy the report's "
+                    f"{verdict.outcome} tolerance semantics",
+                )
+            )
+    _aggregate_verdicts(report, verdicts, defects, suite)
+    _reconcile_report_mismatches(report, verdicts, rules, defects, suite)
 
 
 def _chunk_rows(
@@ -415,9 +1090,7 @@ def _chunk_rows(
     try:
         payload = strict_json_loads(raw)
     except (UnicodeDecodeError, json.JSONDecodeError, ValueError) as exc:
-        defects.append(
-            _defect(suite, f"{path.name} is not valid JSON ({exc})")
-        )
+        defects.append(_defect(suite, f"{path.name} is not valid JSON ({exc})"))
         return [], EvidenceChunk(path.name, digest, 0)
     if isinstance(payload, list):
         rows = payload
@@ -454,13 +1127,9 @@ def _validate_chunk_index(
     try:
         payload = strict_json_loads(index_path.read_text())
     except (OSError, UnicodeDecodeError, json.JSONDecodeError, ValueError) as exc:
-        return "unbound", [
-            _defect(suite, f"chunk index is not valid JSON ({exc})")
-        ]
+        return "unbound", [_defect(suite, f"chunk index is not valid JSON ({exc})")]
     if not isinstance(payload, dict):
-        return "unbound", [
-            _defect(suite, "chunk index must be an object")
-        ]
+        return "unbound", [_defect(suite, "chunk index must be an object")]
     if payload.get("schema_version") != CHUNK_INDEX_SCHEMA_VERSION:
         defects.append(
             _defect(
@@ -502,9 +1171,7 @@ def _validate_chunk_index(
 
     indexed_chunks = payload.get("chunks")
     if not isinstance(indexed_chunks, list):
-        defects.append(
-            _defect(suite, "chunk index chunks must be an array")
-        )
+        defects.append(_defect(suite, "chunk index chunks must be an array"))
         return "unbound", defects
 
     declared: dict[str, tuple[str, int]] = {}
@@ -525,9 +1192,7 @@ def _validate_chunk_index(
             defects.append(_defect(suite, f"{location}.name is invalid"))
             continue
         if name in declared:
-            defects.append(
-                _defect(suite, f"chunk index repeats {name!r}")
-            )
+            defects.append(_defect(suite, f"chunk index repeats {name!r}"))
             continue
         if not isinstance(digest, str) or not _SHA256.fullmatch(digest):
             defects.append(_defect(suite, f"{location}.sha256 is invalid"))
@@ -543,9 +1208,7 @@ def _validate_chunk_index(
     missing = sorted(set(declared) - set(actual))
     unexpected = sorted(set(actual) - set(declared))
     if missing:
-        defects.append(
-            _defect(suite, f"chunk index names missing files {missing}")
-        )
+        defects.append(_defect(suite, f"chunk index names missing files {missing}"))
     if unexpected:
         defects.append(
             _defect(suite, f"chunk index omits committed chunks {unexpected}")
@@ -691,9 +1354,7 @@ def validate_suite_evidence(report_path: str | Path) -> EvidenceReport:
         summary, "comparison_count", content_defects, suite
     )
     match_count = _strict_count(summary, "match_count", content_defects, suite)
-    mismatch_count = _strict_count(
-        summary, "mismatch_count", content_defects, suite
-    )
+    mismatch_count = _strict_count(summary, "mismatch_count", content_defects, suite)
     if (
         comparison_count is not None
         and match_count is not None
@@ -723,18 +1384,20 @@ def validate_suite_evidence(report_path: str | Path) -> EvidenceReport:
         rows, chunk = _chunk_rows(chunk_path, content_defects, suite)
         chunks.append(chunk)
         chunk_rows.extend(
-            (row, f"{chunk_path.name} row {index}")
-            for index, row in enumerate(rows)
+            (row, f"{chunk_path.name} row {index}") for index, row in enumerate(rows)
         )
 
     seen: dict[str, str] = {}
     outcomes: list[tuple[int, int] | None] = []
     explicit_verdicts: list[bool] = []
+    semantic_verdicts: list[_Verdict] = []
+    canonical_projections: list[bool] = []
 
     def record(
         case_identity: str | None,
         outcome: tuple[int, int] | None,
         explicit_verdict: bool,
+        verdicts: tuple[_Verdict, ...],
         location: str,
     ) -> None:
         if case_identity is not None:
@@ -751,18 +1414,22 @@ def validate_suite_evidence(report_path: str | Path) -> EvidenceReport:
                 seen[case_identity] = location
         outcomes.append(outcome)
         explicit_verdicts.append(explicit_verdict)
+        semantic_verdicts.extend(verdicts)
+        canonical_projections.append(
+            outcome is not None and (bool(verdicts) or sum(outcome) == 0)
+        )
 
     for index, row in enumerate(raw_inline):
         location = f"report cases[{index}]"
-        case_identity, outcome, explicit_verdict = _validate_inline_case(
+        case_identity, outcome, explicit_verdict, verdicts = _validate_inline_case(
             row, location, content_defects, suite
         )
-        record(case_identity, outcome, explicit_verdict, location)
+        record(case_identity, outcome, explicit_verdict, verdicts, location)
     for row, location in chunk_rows:
-        case_identity, outcome, explicit_verdict = _validate_compact_case(
+        case_identity, outcome, explicit_verdict, verdicts = _validate_compact_case(
             row, location, content_defects, suite
         )
-        record(case_identity, outcome, explicit_verdict, location)
+        record(case_identity, outcome, explicit_verdict, verdicts, location)
 
     inline_case_count = len(raw_inline)
     chunk_case_count = len(chunk_rows)
@@ -790,7 +1457,11 @@ def validate_suite_evidence(report_path: str | Path) -> EvidenceReport:
         )
 
     reconciliation: Reconciliation = "none"
-    if parsed_case_count and all(outcome is not None for outcome in outcomes):
+    if (
+        parsed_case_count
+        and all(outcome is not None for outcome in outcomes)
+        and all(canonical_projections)
+    ):
         reconciliation = "full"
         actual_matches = sum(outcome[0] for outcome in outcomes if outcome)
         actual_mismatches = sum(outcome[1] for outcome in outcomes if outcome)
@@ -808,11 +1479,13 @@ def validate_suite_evidence(report_path: str | Path) -> EvidenceReport:
                         f"per-case verdicts {actual}",
                     )
                 )
-    elif (
-        chunk_case_count
-        and not inline_case_count
-        and not any(explicit_verdicts)
-    ):
+        _reconcile_full_semantics(
+            report,
+            tuple(semantic_verdicts),
+            content_defects,
+            suite,
+        )
+    elif chunk_case_count and not inline_case_count and not any(explicit_verdicts):
         reconciliation = "cardinality"
         if comparison_count is not None and comparison_count != chunk_case_count:
             content_defects.append(

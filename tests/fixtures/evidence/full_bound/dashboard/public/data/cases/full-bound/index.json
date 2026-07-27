@@ -1,7 +1,7 @@
 {
   "schema_version": "axiom_oracles.chunk_index.v1",
   "report_path": "tests/fixtures/evidence/full_bound/dashboard/public/data/report.json",
-  "report_sha256": "0abf0ba4335fc177bcf55c0f5e38f98f0a7281e5a64288aaaef0a470c3f3c4fa",
+  "report_sha256": "4dfd803df7434dcbc3911c7d0c9bacdae7c2a1d870ba763b73396fd7d51c4170",
   "suite": "full-bound",
   "count": 2,
   "chunk_count": 1,
