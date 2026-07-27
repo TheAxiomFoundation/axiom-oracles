@@ -361,6 +361,8 @@ residual), #229 (small-suite grounding).
 - Copied the four requested snapshots byte-for-byte into `closure/data/`.
 - Recorded reproducible extraction descriptions, full source refs, and verified
   SHA-256 digests in `closure/data/provenance.yaml`.
+- Verified each JSONL directly against its committed corpus provision projection
+  at `bf97b17b`, and the file inventory against RuleSpec `1158ba5b`.
 
 ### Next
 
