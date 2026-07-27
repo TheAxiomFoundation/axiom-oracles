@@ -72,10 +72,18 @@
   instead of exceptions or false cardinality passes.
 - Focused validation check: Ruff passes and
   the combined validator/census/producer suite reports 76 passed.
+- Canonical final gates pass:
+  - `generate_chunk_indexes.py --check`: ECPS `bound/full`, QC
+    `bound/cardinality`;
+  - `exercise_census.py --check`: up to date;
+  - `certify.py --check`: up to date;
+  - `validate_bridge_manifests.py`: 0 errors, four pre-existing findings;
+  - `pytest tests/ -k "certification or commit_refreshed"`: 51 passed,
+    1,854 deselected (including the bot no-op path);
+  - Ruff, shell syntax, and `git diff --check`: clean.
 
 ## Next
 
-- Regenerate derived artifacts and run every required gate.
 - Write the final verification report to the requested review path if the
   workspace permits that external write; otherwise leave an exact in-worktree
   copy and report the policy constraint.
