@@ -588,7 +588,7 @@ residual), #229 (small-suite grounding).
 
 ### State
 
-- Evidence complete; verdict will be `REQUEST-CHANGES`.
+- Complete; verdict is `REQUEST-CHANGES`.
 - The repaired overview and all generated-chain checks pass, but the target
   does not meet the requested delta-containment and accurate-ledger
   conditions.
@@ -632,7 +632,9 @@ residual), #229 (small-suite grounding).
   The target commit contains no code-symbol change, so exact Git diffs and
   generator checks provide the relevant execution evidence.
 - Confirmed no remote or GitHub write was made.
+- Wrote the complete evidence digest and required changes to
+  `REVIEW-REPORT.md`.
 
 ### Next
 
-- Write and commit `REVIEW-REPORT.md`, then mark this ledger complete.
+- None.
