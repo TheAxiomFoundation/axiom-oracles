@@ -2,12 +2,14 @@
 # (policyengine-taxsim 2.30.0 models 2026 law including OBBBA).
 
 name: ga-income-tax-liability
-title: Georgia income tax liability — Axiom vs PolicyEngine and TAXSIM
+title: Georgia section 48-7-20 tax before nonrefundable credits — Axiom vs PolicyEngine and TAXSIM
 description: >-
-  Compares the composed Georgia income-tax liability pipeline encoded in Axiom
-  RuleSpec (us-ga/policies/income_tax/pilot_liability_pipeline) against
-  PolicyEngine (ga_income_tax_before_non_refundable_credits) at 2026 and
-  TAXSIM (siitax) at 2026 on a modest grid of single and married filers.
+  Compares the canonical Georgia 2026 annual section 48-7-20
+  tax-before-nonrefundable-credits surface, using explicitly supplied completed
+  Georgia taxable net income, against PolicyEngine
+  (ga_income_tax_before_non_refundable_credits) at 2026 and TAXSIM (siitax) at
+  2026 on the historical modest grid. RuleSpec itself does not construct the
+  grid's filing status, standard deduction, or taxable-income boundary.
 
 runner:
   type: state-income-tax-liability-grid

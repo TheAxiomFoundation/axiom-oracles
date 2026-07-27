@@ -38,6 +38,15 @@ _DESCRIPTION_BY_OUTPUT = {
         "Connecticut resident ordinary section 12-700 tax before the "
         "personal credit over every routed tax unit in the pinned US Populace"
     ),
+    (
+        "us-ga:policies/income_tax/"
+        "2026_annual_tax_before_nonrefundable_credits"
+        "#ga_pit_2026_annual_tax_before_nonrefundable_credits"
+    ): (
+        "Georgia section 48-7-20 annual tax before nonrefundable credits, "
+        "computed from caller-supplied completed Georgia taxable net income, "
+        "over every routed tax unit in the pinned US Populace"
+    ),
 }
 
 _REQUIRED_RUNTIME_FIELDS = {

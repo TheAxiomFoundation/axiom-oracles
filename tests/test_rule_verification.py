@@ -149,6 +149,19 @@ def test_ct_ordinary_income_tax_module_classifies_to_reviewed_surface():
     )
 
 
+def test_ga_annual_tax_component_classifies_to_reviewed_surface():
+    assert rv.classify(
+        "us-ga/policies/income_tax/"
+        "2026_annual_tax_before_nonrefundable_credits.yaml"
+    ) == ("state_income_tax", "GA")
+    assert (
+        rv.classify(
+            "us-ga/policies/income_tax/2026_resident_liability_source_hold.yaml"
+        )
+        is None
+    )
+
+
 def test_al_schedule_module_classifies_to_reviewed_surface():
     assert rv.classify(
         "us-al/policies/income_tax/"

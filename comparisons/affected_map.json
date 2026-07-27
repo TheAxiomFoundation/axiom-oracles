@@ -410,6 +410,15 @@
       "source": "comparisons/ga-income-tax-liability.yaml"
     },
     {
+      "suite": "ga-income-tax-populace",
+      "name": null,
+      "report": "axiom-policyengine-ga-income-tax-populace.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/state-income-tax-populace.yaml"
+    },
+    {
       "suite": "ga-snap-ecps",
       "name": "ga-snap-ecps",
       "report": "axiom-policyengine-ga-snap-ecps.json",

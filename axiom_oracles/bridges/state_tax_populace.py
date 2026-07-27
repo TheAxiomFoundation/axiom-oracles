@@ -143,6 +143,10 @@ EXPECTED_OUTPUT_OVERRIDES = {
         "2026_resident_ordinary_tax_before_personal_credit#"
         "ct_pit_2026_resident_ordinary_tax_before_personal_credit"
     ),
+    "GA": (
+        "us-ga:policies/income_tax/2026_annual_tax_before_nonrefundable_credits"
+        "#ga_pit_2026_annual_tax_before_nonrefundable_credits"
+    ),
     "KY": (
         "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits"
         "#ky_pit_2026_krs_141_020_schedule_before_credits"
@@ -161,18 +165,19 @@ EXPECTED_PROGRAM_OVERRIDES = {
         "us-ct:policies/income_tax/"
         "2026_resident_ordinary_tax_before_personal_credit"
     ),
+    "GA": "us-ga:policies/income_tax/2026_annual_tax_before_nonrefundable_credits",
     "KY": "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits",
 }
 EXPECTED_EXPLICIT_INPUT_COUNT = 155
 EXPECTED_EXPLICIT_RELATION_COUNT = 2
 EXPECTED_SLOT_INVENTORY_SHA256 = (
-    "4f31d23afa8bd3c1c7dbfd732da46c2bb1cdbe75983f505394dc869c0b1aa4e2"
+    "c10676656a70b051db16e9f9e161d9cf11ef180c93b25341f18bbb0db6c1a769"
 )
 EXPECTED_JURISDICTION_REGISTRY_SHA256 = (
-    "b20f427b2ebf234a9162aaff60d624c7310065a4a031c1c6278392853e59db04"
+    "585d5fa794f45e1fe5b432b7b6507543ac170d7a025203a009021e77e8b0f721"
 )
 EXPECTED_SOURCE_METADATA_SHA256 = (
-    "fb9af30e7909867adaf82d451ca17743ba4fee7eab5e9c677635fa6a4f989fe7"
+    "2f8ce11fe227b27a41c04db91019a7fcb14790d4313a94c8c06ce389a3af0ee5"
 )
 # Exact boundaries admitted only after independent legal and dependency-graph
 # review.  The comparison target itself is forbidden below, so these remain
@@ -232,8 +237,9 @@ ALLOWED_PE_UPSTREAM_BOUNDARIES: frozenset[tuple[str, str, str]] = frozenset(
         ),
         (
             "GA",
-            "us-ga:policies/income_tax/pilot_liability_pipeline#input."
-            "ga_pit_pilot_state_taxable_income",
+            "us-ga:policies/income_tax/"
+            "2026_annual_tax_before_nonrefundable_credits#input."
+            "ga_pit_2026_completed_georgia_taxable_net_income",
             "ga_taxable_income",
         ),
         (

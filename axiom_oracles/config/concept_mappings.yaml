@@ -2569,17 +2569,14 @@ concepts:
           geoid: US
       policyengine: az_income_tax
       taxsim: siitax
-  us-ga:policies/income_tax/pilot_liability_pipeline#ga_pit_pilot_income_tax_liability:
-    description: Georgia individual income tax liability (resident wage earner; the O.C.G.A. 48-7-20 flat 4.99 per cent tax on Georgia taxable net income = AGI less the section 48-7-27 standard deduction)
+  us-ga:policies/income_tax/2026_annual_tax_before_nonrefundable_credits#ga_pit_2026_annual_tax_before_nonrefundable_credits:
+    description: Georgia tax-year-2026 annual O.C.G.A. 48-7-20 tax before nonrefundable credits (the flat 4.99 per cent rate on caller-completed Georgia taxable net income)
     category: tax
     comparison: amount
     # Compared against PolicyEngine ga_income_tax_before_non_refundable_credits,
-    # the exact 48-7-20 flat-tax analog (equals the final ga_income_tax on this
-    # childless grid — no 48-7-29 / low-income / CDCC credits active); the
-    # pipeline reproduces it to the cent across the grid. Against TAXSIM 2024
-    # every case diverges by the 5.39-to-4.99 rate step-down plus the HB463
-    # standard-deduction vintage, dispositioned in
-    # dispositions/ga-income-tax-liability.yaml.
+    # with PolicyEngine ga_taxable_income projected only as the distinct direct
+    # upstream completed-taxable-net-income boundary. RuleSpec applies no
+    # filing-status, deduction, exemption, exclusion, or credit construction.
     tolerance: 1
     priority: high
     locales: [US-GA]
@@ -2588,12 +2585,11 @@ concepts:
       geoid: US
     targets:
       axiom:
-        name: ga_pit_pilot_income_tax_liability
+        name: ga_pit_2026_annual_tax_before_nonrefundable_credits
         scope:
           type: country
           geoid: US
       policyengine: ga_income_tax_before_non_refundable_credits
-      taxsim: siitax
   us-mi:policies/income_tax/pilot_liability_pipeline#mi_pit_pilot_income_tax_liability:
     description: Michigan individual income tax liability (resident wage earner; the MCL 206.51(1) flat 4.25 per cent tax on Michigan taxable income = AGI less the section 206.30 personal exemptions)
     category: tax
