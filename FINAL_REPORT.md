@@ -14,11 +14,11 @@ was merged.
 
 Before committing the already-applied change, I independently enumerated all
 112 affected tracked files. For each file I read its committed pre-change blob,
-performed exactly these two byte substitutions in memory, and compared the
-result byte-for-byte with the working file:
+performed exactly the two requested byte substitutions in memory, and compared
+the result byte-for-byte with the working file:
 
-- `us:statutes/7/2014/u#snap_benefit` → `us:programs/snap#benefit`
-- `us:statutes/7/2014/o#snap_eligible` → `us:programs/snap#eligible`
+- the 7 USC 2014(u) SNAP-benefit label → `us:programs/snap#benefit`
+- the 7 USC 2014(o) SNAP-eligibility label → `us:programs/snap#eligible`
 
 All 112 comparisons matched. As a separate check, I normalized both the old
 and new IDs to common sentinels and compared the complete before/after bytes;
