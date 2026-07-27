@@ -342,6 +342,7 @@ residual), #229 (small-suite grounding).
 ### State
 
 - Branch: `fed-parity/snap-residual-cleanup`; starting HEAD `105b7133`.
+- Status: complete.
 - Scope: regenerate only `al/ma/nc/sc/tn-snap-ecps` on
   `policyengine-us==1.767.3`, then classify only evidence-backed residuals.
 - Current committed unexplained rows: AL 43, MA 49, NC 88, SC 54, TN 68
@@ -428,8 +429,17 @@ residual), #229 (small-suite grounding).
 - The sandbox also denied a diagnostic `ps` process listing during the long
   local rerun; bounded runner polling and report timestamps confirmed normal
   progress, and all five processes exited successfully.
+- Wrote `WORKER-REPORT.md` with the before/after table, engine provenance,
+  class counts, exact TANF pass/fail evidence summary, zero-result
+  minimum-benefit screen, exhaustive remaining-residual classification, and
+  copy-ready tracked-candidate PR text.
+- Final scope audit found no state conformance row owned by another lane and
+  no file outside the requested SNAP reports/dispositions, US-PE row note,
+  generated detail/freshness data, and mandated Markdown deliverables.
+- Targeted validation passes: 168 tests passed and 3 skipped across
+  `test_dispositions.py`, `test_conformance.py`, and
+  `test_vacuous_gate.py`.
 
 ### Next
 
-- Classify the remaining unexplained rows, audit final scope, and write
-  `WORKER-REPORT.md`.
+- None.
