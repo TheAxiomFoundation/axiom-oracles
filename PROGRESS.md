@@ -334,3 +334,48 @@ residual), #229 (small-suite grounding).
 ### Next
 
 - None. Final scope/provenance/count audit passed; see `fix-354-DONE.md`.
+
+---
+
+## SNAP residual integration — 2026-07-27
+
+### State
+
+- Branch: `fed-parity/snap-residual-cleanup`; starting HEAD `105b7133`.
+- Scope: regenerate only `al/ma/nc/sc/tn-snap-ecps` on
+  `policyengine-us==1.767.3`, then classify only evidence-backed residuals.
+- Current committed unexplained rows: AL 43, MA 49, NC 88, SC 54, TN 68
+  (302 total).
+- Required disposition classes:
+  - lone-minor PolicyEngine defect, linked to
+    `policyengine-us#9157`;
+  - endogenous-TANF bridge artifacts only after exact-household live
+    counterfactuals, linked to `axiom-oracles#397`;
+  - minimum-allotment rounding plus annual/12 artifacts only when exact
+    arithmetic and shared eligibility are proven, linked to
+    `policyengine-us#9158` and `axiom-oracles#399`.
+- The 69 MA/SC categorical-only candidates remain unexplained pending
+  state-law validation and will be tracked in the final PR-body text.
+- Constraints: no runner month-averaging fix, no generation in CI, no push,
+  and no GitHub writes.
+
+### Done
+
+- Read all three class reports and the staged teen disposition file in full.
+- Confirmed the worktree is clean and on the requested branch.
+- Located the five suite configs and their report-producing path:
+  `scripts/run_comparison.py` with runner type `axiom-oracles-compare`.
+- Confirmed all five current reports still declare PolicyEngine-US 1.752.2
+  and must be regenerated on the requested 1.767.3 wheel.
+- Confirmed GitNexus MCP tools are unavailable for this worktree; direct
+  configuration and source tracing is the fallback.
+
+### Next
+
+- Resolve the cached 1.767.3 runtime and dependency/repository pins used by
+  the report machinery.
+- Capture the baseline report/disposition inventory and regenerate all five
+  suites.
+- Run per-case TANF and minimum-allotment arithmetic evidence passes.
+- Apply class dispositions in coherent commits, regenerate the complete
+  derived chain, audit scope, and write `WORKER-REPORT.md`.
