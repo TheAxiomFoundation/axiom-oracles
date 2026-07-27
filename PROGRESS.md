@@ -590,10 +590,10 @@ residual), #229 (small-suite grounding).
 - Round-3 review at `1fe6bbba` (ledger
   `.git/review-worktrees/snap-residual-cleanup-1fe6bbba`, report `800e4b63`)
   confirmed the served overview but blocked on two branch-hygiene defects: the
-  repair audit `REPAIR-ROUND2-REPORT.md` had been committed to the branch by an
-  over-broad `git add`, and this ledger described it as untracked while naming
-  `72718c96` as final. Both were fixed on top: the report was removed from the
-  branch (it lives at
+  repair audit `REPAIR-ROUND2-REPORT.md` was present in the branch diff even
+  though it was meant to stay outside the branch, and this ledger described
+  that report as untracked. Both were fixed on top: the report was removed
+  from the branch (it lives at
   `~/TheAxiomFoundation/ops/fed-parity-campaign/snapclean-repair2-REPORT.md`)
   and this section was rewritten.
 - Round-4 review at `6fca6d19` (ledger
