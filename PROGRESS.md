@@ -609,3 +609,36 @@ residual), #229 (small-suite grounding).
 
 - Open the PR from the current branch tip (this docs commit) and land it after
   a final confirmation pass.
+
+---
+
+# REVIEW PROGRESS — round-2 blind review of axiom-oracles PR #409
+
+## State
+
+- Review target: `1c912ab1a0cab60d9b7080ec71ff0a9d0ffe6717`
+  (`fed-parity/addmed-mappings`), initially checked out detached at the exact
+  requested head in this disposable worktree.
+- Review scope: re-review the two corrected Additional Medicare Tax mappings,
+  spot-check the other twelve entries, fully rerun the changed-file gate and
+  containment checks, and reproduce the clean-`origin/main` NY/OH baseline.
+- Constraints: no PR-branch, remote, GitHub, or shared-stash writes. Local
+  review-ledger and report commits only.
+- Final artifact: `REVIEW-REPORT.md`.
+- Review outcome: in progress; no verdict yet.
+
+## Done
+
+- Read the GitNexus PR-review workflow.
+- Created this disposable review worktree and independently verified that its
+  initial HEAD was the exact requested SHA.
+- Established this review ledger before substantive inspection or testing.
+
+## Next
+
+1. Establish the exact diff, consumer call path, schema capability, and
+   PolicyEngine 1.767.3 evidence.
+2. Audit all fourteen classifications and comparable metadata.
+3. Rerun the RuleSpec changed-file gate and inspect all comparable assertions.
+4. Complete containment, YAML-integrity, and clean-main regression checks.
+5. Commit the final self-contained verdict to `REVIEW-REPORT.md`.
