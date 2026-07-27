@@ -643,10 +643,23 @@ residual), #229 (small-suite grounding).
   `1fe6bbba` added `REPAIR-ROUND2-REPORT.md`, but neither history nor the
   committed round-3/4 evidence establishes that an “over-broad `git add`”
   caused the addition.
+- Confirmed whitespace is clean for `origin/main..41512b26`,
+  `6fca6d19..41512b26`, and the review worktree.
+- Confirmed neither `REPAIR-ROUND2-REPORT.md` nor `WORKER-REPORT.md` appears
+  in `origin/main..41512b26` or the target tree.
+- Ran the complete thirteen-command generated-chain battery successfully:
+  83 disposition files; served cases 5 suites / 656 rows / 332 annotated /
+  zero silent; served dispositions 5 suites / 119 entries / exact YAML
+  parity; current grids and boundary suggestions; affected map 163 suites /
+  172 edges; vacuous/freshness 136 configs / 213 suites / 24 surfaces;
+  dashboard overview 214 reports; conformance universe and composition
+  checks; scoreboard 4 jurisdictions / 3 conformant; ratchet no regression;
+  and burn-down 4 series / 49 points.
+- Confirmed the review worktree was clean before and after the read-only
+  battery. All battery inputs and executables are byte-identical to the exact
+  target; the review branch differs only by this appended ledger.
 
 ### Next
 
-- Verify the exact delta, repository hygiene, overview, and thirteen-command
-  check battery.
 - Verify PR #407's body claims against the target tree.
 - Write and commit the final confirmation report, then complete this ledger.
