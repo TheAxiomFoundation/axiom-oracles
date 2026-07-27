@@ -684,9 +684,30 @@ residual), #229 (small-suite grounding).
   `additional_medicare_tax`, but PE 1.767.3 also aggregates it internally in
   Vermont child-care contributions. No generic TaxUnit output exists, so the
   classification remains correct.
+- Reproduced the current changed-file gate non-vacuously against an exact
+  archive of rulespec-us branch head `191e6c5a` under a canonical
+  `rulespec-us` checkout name, with this review target first on `PYTHONPATH`.
+  Filtering the exact changed pipeline file matched all 14 outputs and returned
+  5 comparable, 9 known-not-comparable, zero pending/unmapped, zero untested
+  comparable, and zero workflow-status failures.
+- Verified the five current comparables' companion evidence rather than trusting
+  the gate bit: combined tax has 19 direct assertions, selected threshold six,
+  and separate threshold one. Joint and other have no literal assertions under
+  their own IDs; their declared `tested_by_legal_ids` proxy points to the
+  selected threshold, whose cases genuinely select JOINT/status 1 at 250k and
+  other/status 0 and 3 at 200k. Surviving-spouse/status 4 is not exercised in
+  this companion file.
+- The rulespec checkout still declares all 14 target IDs in
+  `oracle-coverage-pending.yaml`; once upstream mappings are loaded these appear
+  as stale declarations, not pending statuses. The requested changed-file gate
+  checks the final statuses and passes; declaration cleanup belongs to the
+  downstream rulespec branch after truthful mappings land.
+- Confirmed the newly exposed rate blocker also lacks a direct companion
+  assertion. Reclassifying it as the exact PE rate parameter will require a
+  direct expected output or genuine `tested_by_legal_ids` evidence to satisfy
+  the changed-file gate.
 
 ## Review next
 
-1. Reproduce the changed-file gate and confirm companion-test assertions.
-2. Verify YAML parsing, duplicate handling, and baseline failures.
-3. Write and commit the evidence-backed verdict to `REVIEW-REPORT.md`.
+1. Verify YAML parsing, duplicate handling, and baseline failures.
+2. Write and commit the evidence-backed verdict to `REVIEW-REPORT.md`.
