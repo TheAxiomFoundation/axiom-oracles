@@ -4,6 +4,9 @@
 
 - Branch: `evidence-validator`; starting HEAD
   `627c08df3bf47b2bac1e4c5dc084e84d3a1c7f37`.
+- Outcome: category-(a) implementation and integration are complete; every
+  requested gate is green. The final ops-path copy is sandbox-blocked, so the
+  authorized in-repository fallback report is ready to commit.
 - Scope: implement only the round-5 category-(a) blocker and its integration:
   aggregate value reconciliation, dashboard-semantic row validation,
   migrated-corpus replay verification, `origin/main` merge, regeneration, and
@@ -107,12 +110,20 @@
   expected for the upstream state-tax-populace campaign. The requested
   downstream evidence, regeneration, mutant, and no-op gates cover the
   category-(a) changes.
+- Committed the verified upstream integration and regenerated artifacts as
+  `37058619`. Removed the untracked 84 MiB local graph index created for impact
+  analysis; the worktree was clean afterward.
+- Wrote the complete round-6 result to the in-repository fallback
+  `sol-evidence-round6-2026-07-27-result.md`.
+- Attempted the required copy to
+  `/Users/maxghenis/TheAxiomFoundation/ops/reviews/sol-evidence-round6-2026-07-27/result.md`;
+  the sandbox returned `Operation not permitted`. The committed repository
+  report is therefore the directed fallback.
 
 ## Next
 
-- Commit the verified integration merge, write and commit the round-6 report,
-  remove the temporary local graph index, and attempt the requested external
-  output copy.
+- Commit the final progress/report state and verify the branch is clean for
+  handoff. No implementation work remains.
 
 ---
 
