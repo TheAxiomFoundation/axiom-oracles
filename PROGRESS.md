@@ -21,10 +21,13 @@
   - the Ohio RuleSpec output-set failure and dashboard `npx esbuild` network failure are pre-existing;
   - the refreshed-report no-op test passed on `origin/main`, proving its branch failure was rename-caused.
 - Traced the rename-caused failure to 13 stale `overview.json` source-byte counts: the new IDs are nine bytes shorter. Regenerated only the dashboard overview (no comparison execution), changing only those integrity byte counts beyond the ID substitutions, and verified the targeted no-op test now passes.
+- Reran the full requested pytest command after the fix: 1,997 passed, 59 skipped, and 2 failed. Both remaining failures reproduce on `origin/main`: stale local Ohio RuleSpec outputs and unavailable npm networking for `npx esbuild`.
+- Audited all 26 statutory/regulatory occurrences (22 IDs, 17 provision prefixes) in `case.py` and `concept_mappings.yaml` against both report-pinned corpus commits:
+  - 10 prefixes resolve exactly and 6 payroll prefixes are operationally grounded through exact parent-section rows;
+  - `us:statutes/42/1786#wic_eligible` is the sole further non-resolving citation, at `case.py:116` and `concept_mappings.yaml:2143,2149`;
+  - confirmed it also remains absent at the current corpus `origin/main`; left it unchanged as required.
 
 ## Next
 
-- Rerun the requested full pytest suite after the overview byte-index fix.
-- Audit statutory and regulatory concept IDs in `case.py` and `concept_mappings.yaml` against the corpus.
 - Commit and publish the axiom-oracles PR.
 - Recompute the three affected report SHA-256 values in a separate ops worktree, update PR #7's branch, and publish the final report.
