@@ -38786,6 +38786,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 3616.309033203125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 4280.309033203125,
       "parent": "us:tax/federal-income-tax#liability",
@@ -38823,6 +38828,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -3041.7972583007822,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -8472.327258300782,
       "parent": null,
@@ -39050,6 +39060,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 61.273654912800794,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -3582.446345087199,
       "parent": null,
@@ -39156,6 +39171,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -74.9477613220215,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 3970.3322386779787,
       "parent": null,
@@ -39235,6 +39255,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 671.1752500000002,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 12431.10525,
       "parent": null,
@@ -39467,6 +39492,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 124.38715844726565,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -141.78284155273437,
       "parent": null,
@@ -39525,6 +39555,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -349.8615000000002,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 1954.6485,
       "parent": null,
@@ -39652,6 +39687,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -70.02374381205072,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 3440.5862561879494,
       "parent": null,
@@ -39742,6 +39782,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 29.924566478515544,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 1389.6445664785156,
       "parent": null,
@@ -39758,6 +39803,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 31.247360600952334,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 1803.3273606009523,
       "parent": null,
@@ -39937,6 +39987,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -69.88075017853407,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 59583.98924982147,
       "parent": null,
@@ -40011,6 +40066,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 166.98526592397755,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -201.78473407602243,
       "parent": null,
@@ -40169,6 +40229,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 240.05740624999999,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -224.27259375,
       "parent": null,
@@ -40364,6 +40429,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 632.5587143554687,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 719.2287143554687,
       "parent": null,
@@ -40417,6 +40487,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 413.77556738281237,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 1037.7455673828124,
       "parent": null,
@@ -40670,6 +40745,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -2170.444184375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -1283.934184375,
       "parent": null,
@@ -40728,6 +40808,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -488.90517773437494,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 157.774822265625,
       "parent": null,
@@ -40744,6 +40829,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 24.380012695312416,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 1742.0600126953125,
       "parent": null,
@@ -40950,6 +41040,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 162.60925431583837,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -180.01074568416163,
       "parent": null,
@@ -41003,6 +41098,11 @@
       "concept": "us:tax/federal-income-tax#ctc",
       "description": "Child Tax Credit value",
       "difference": 4009.01,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-ctc-machinery-absent-refundable-arm",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 4400.0,
       "parent": "us:tax/federal-income-tax#liability",
@@ -41019,6 +41119,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -818.5043964252473,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -5331.2643964252475,
       "parent": null,
@@ -41156,6 +41261,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -238.57956429244376,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 349.30043570755623,
       "parent": null,
@@ -41256,6 +41366,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -691.4725963867188,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -2609.502596386719,
       "parent": null,
@@ -41388,6 +41503,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 1100.3961523437501,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 12696.09615234375,
       "parent": null,
@@ -41531,6 +41651,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 1116.079796875,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 2141.129796875,
       "parent": null,
@@ -41637,6 +41762,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 933.1724194793696,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 9130.59241947937,
       "parent": null,
@@ -41653,6 +41783,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 27.932916534042363,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 393.80291653404237,
       "parent": null,
@@ -41922,6 +42057,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -938.474272265625,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -1124.134272265625,
       "parent": null,
@@ -42017,6 +42157,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 103.19530517578124,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -120.59469482421875,
       "parent": null,
@@ -42033,6 +42178,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 123.29569592285156,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -140.69430407714844,
       "parent": null,
@@ -42134,6 +42284,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 85.72409301757811,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -103.12590698242188,
       "parent": null,
@@ -42187,6 +42342,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 1380.4361867919924,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 12238.956186791993,
       "parent": null,
@@ -42240,6 +42400,11 @@
       "concept": "us:tax/federal-income-tax#ctc",
       "description": "Child Tax Credit value",
       "difference": 3461.299375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-ctc-machinery-absent-refundable-arm",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 3888.909375,
       "parent": "us:tax/federal-income-tax#liability",
@@ -42256,6 +42421,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -3467.9129968750003,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -7495.152996875,
       "parent": null,
@@ -42367,6 +42537,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 81.3194678955078,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -98.7205321044922,
       "parent": null,
@@ -42415,6 +42590,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 197.97379075665276,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 3746.6137907566526,
       "parent": null,
@@ -42494,6 +42674,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 671.191649169923,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 12444.251649169923,
       "parent": null,
@@ -42584,6 +42769,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 20.6,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -42833,6 +43023,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 112.41935638427736,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -129.82064361572264,
       "parent": null,
@@ -43024,6 +43219,11 @@
       "concept": "us:tax/federal-income-tax#ctc",
       "description": "Child Tax Credit value",
       "difference": 2194.62,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-ctc-machinery-absent-refundable-arm",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 2200.0,
       "parent": "us:tax/federal-income-tax#liability",
@@ -43040,6 +43240,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -494.45731539680946,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -1912.0973153968096,
       "parent": null,
@@ -43262,6 +43467,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 82.99224999999979,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 2552.14225,
       "parent": null,
@@ -43733,6 +43943,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -657.1106632051101,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 3915.09933679489,
       "parent": null,
@@ -43860,6 +44075,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 345.5499999999993,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -11438.75,
       "parent": null,
@@ -43897,6 +44117,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -102.56641038088281,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 397.6735896191172,
       "parent": null,
@@ -43987,6 +44212,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 20.29838012695312,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 70.62838012695312,
       "parent": null,
@@ -44119,6 +44349,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 22.510445129394533,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -39.90955487060547,
       "parent": null,
@@ -44325,6 +44560,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 513.7682619785119,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 12628.558261978513,
       "parent": null,
@@ -44378,6 +44618,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 38.02170434570312,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -55.41829565429688,
       "parent": null,
@@ -44473,6 +44718,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 24.73074098968482,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 3635.570740989685,
       "parent": null,
@@ -44589,6 +44839,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -18.94196191406263,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 11185.858038085937,
       "parent": null,
@@ -44663,6 +44918,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -25.538057246355947,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 3365.251942753644,
       "parent": null,
@@ -44742,6 +45002,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 506.16045290527336,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -1142.5595470947267,
       "parent": null,
@@ -44911,6 +45176,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -49.222787062282805,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 184.2772129377172,
       "parent": null,
@@ -44927,6 +45197,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -117.051328125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 379.708671875,
       "parent": null,
@@ -44985,6 +45260,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 67.87628964042659,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 526.1762896404266,
       "parent": null,
@@ -45107,6 +45387,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 167.60000000000002,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -185.0,
       "parent": null,
@@ -45165,6 +45450,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 131.05848596191404,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -148.46151403808594,
       "parent": null,
@@ -45403,6 +45693,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -146.74519316198712,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 5117.9048068380125,
       "parent": null,
@@ -45657,6 +45952,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 238.5115490234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 1681.9515490234376,
       "parent": null,
@@ -45694,6 +45994,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 109.85452899169923,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -127.25547100830079,
       "parent": null,
@@ -45826,6 +46131,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 1112.7603551483155,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 1297.0103551483155,
       "parent": null,
@@ -46021,6 +46331,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -248.7047343097165,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 8775.235265690284,
       "parent": null,
@@ -46095,6 +46410,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 446.9968815919,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 403.9068815919,
       "parent": null,
@@ -46217,6 +46537,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 29.39142726562477,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 2906.521427265625,
       "parent": null,
@@ -46233,6 +46558,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 35.21225268554687,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -70.00774731445313,
       "parent": null,
@@ -46286,6 +46616,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 336.0033482055664,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 428.5033482055664,
       "parent": null,
@@ -46302,6 +46637,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 151.02999999999975,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -4947.5,
       "parent": null,
@@ -46586,6 +46926,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -57.38493847656218,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -3906.7249384765623,
       "parent": null,
@@ -46665,6 +47010,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -672.5615472015381,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -2487.361547201538,
       "parent": null,
@@ -46781,6 +47131,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -3574.2118232421876,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -3107.9818232421876,
       "parent": null,
@@ -47114,6 +47469,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 161.57298183483658,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -178.97701816516343,
       "parent": null,
@@ -47188,6 +47548,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 3529.1958941769726,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 4193.195894176973,
       "parent": "us:tax/federal-income-tax#liability",
@@ -47246,6 +47611,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -5186.098973544244,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -5559.298973544243,
       "parent": null,
@@ -47283,6 +47653,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -123.85733258611253,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 817.1226674138875,
       "parent": null,
@@ -47299,6 +47674,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 167.60000000000002,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -185.0,
       "parent": null,
@@ -47431,6 +47811,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 638.5442854003907,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 2342.8042854003907,
       "parent": null,
@@ -47747,6 +48132,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -109.46037441406224,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -3329.6703744140623,
       "parent": null,
@@ -47800,6 +48190,11 @@
       "concept": "us:tax/federal-income-tax#ctc",
       "description": "Child Tax Credit value",
       "difference": 3679.0451171874997,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-ctc-machinery-absent-refundable-arm",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 4544.8951171875,
       "parent": "us:tax/federal-income-tax#liability",
@@ -47816,6 +48211,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -4909.541038157463,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -8344.991038157463,
       "parent": null,
@@ -47890,6 +48290,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 211.32999999999993,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -6965.75,
       "parent": null,
@@ -48038,6 +48443,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 295.74732812499997,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 892.957328125,
       "parent": null,
@@ -48054,6 +48464,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 61.65043090820312,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -65.86956909179688,
       "parent": null,
@@ -48070,6 +48485,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 98.19900329589845,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -115.60099670410156,
       "parent": null,
@@ -48149,6 +48569,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 861.558023828125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -1879.811976171875,
       "parent": null,
@@ -48223,6 +48648,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 809.6413459827754,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 5826.781345982776,
       "parent": null,
@@ -48313,6 +48743,11 @@
       "concept": "us:tax/federal-income-tax#ctc",
       "description": "Child Tax Credit value",
       "difference": 2172.71,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-ctc-machinery-absent-refundable-arm",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 2200.0,
       "parent": "us:tax/federal-income-tax#liability",
@@ -48329,6 +48764,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -891.351607910156,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -3209.671607910156,
       "parent": null,
@@ -49127,6 +49567,11 @@
       "concept": "us:tax/federal-income-tax#ctc",
       "description": "Child Tax Credit value",
       "difference": 3421.69,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-ctc-machinery-absent-refundable-arm",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 4900.0,
       "parent": "us:tax/federal-income-tax#liability",
@@ -49143,6 +49588,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -614.3309265625003,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -4993.1109265625,
       "parent": null,
@@ -49222,6 +49672,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -2879.0110796875,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -2086.0910796875,
       "parent": null,
@@ -49296,6 +49751,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -124.04476746484374,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 1969.4152325351563,
       "parent": null,
@@ -49470,6 +49930,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 1167.5184605468748,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -6495.901539453125,
       "parent": null,
@@ -49571,6 +50036,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 4181.35,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 4427.0,
       "parent": "us:tax/federal-income-tax#liability",
@@ -49608,6 +50078,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -3268.3059375000003,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -3411.7359375,
       "parent": null,
@@ -49624,6 +50099,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 558.3316271875001,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 2883.8016271875,
       "parent": null,
@@ -49640,6 +50120,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -132.2686796874999,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 524.5213203125,
       "parent": null,
@@ -49904,6 +50389,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -679.9392633666993,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 306.3807366333008,
       "parent": null,
@@ -49994,6 +50484,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 456.0923217714844,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 5575.002321771484,
       "parent": null,
@@ -50068,6 +50563,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 18.557465560913442,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 2468.5274655609132,
       "parent": null,
@@ -50221,6 +50721,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 691.4109912109375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 892.1409912109375,
       "parent": "us:tax/federal-income-tax#liability",
@@ -50258,6 +50763,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -45.55524780273436,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -2715.7852478027344,
       "parent": null,
@@ -50380,6 +50890,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 133.93100542755133,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 946.9910054275513,
       "parent": null,
@@ -50417,6 +50932,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 932.7993437500008,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 7830.73934375,
       "parent": null,
@@ -50528,6 +51048,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 6333.184375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 6997.184375,
       "parent": "us:tax/federal-income-tax#liability",
@@ -50771,6 +51296,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 25.844152343750466,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 9356.40415234375,
       "parent": null,
@@ -50866,6 +51396,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.975874999999974,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 599.995875,
       "parent": null,
@@ -51014,6 +51549,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 4181.35,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 4427.0,
       "parent": "us:tax/federal-income-tax#liability",
@@ -51051,6 +51591,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -2846.02125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -5373.73125,
       "parent": null,
@@ -51088,6 +51633,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -99.55886556280939,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 1853.3511344371907,
       "parent": null,
@@ -51125,6 +51675,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -266.47070526579387,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 1053.2692947342061,
       "parent": null,
@@ -51310,6 +51865,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 22.597873046875065,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 2191.037873046875,
       "parent": null,
@@ -51326,6 +51886,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 85.33645434570312,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -102.73354565429688,
       "parent": null,
@@ -51421,6 +51986,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 66.1010962524414,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -83.4989037475586,
       "parent": null,
@@ -51638,6 +52208,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 103.47672265624999,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -120.87327734375,
       "parent": null,
@@ -51807,6 +52382,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 671.1433292808524,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 12407.153329280853,
       "parent": null,
@@ -51918,6 +52498,11 @@
       "concept": "us:tax/federal-income-tax#ctc",
       "description": "Child Tax Credit value",
       "difference": 3331.31947265625,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-ctc-machinery-absent-refundable-arm",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 3498.95947265625,
       "parent": "us:tax/federal-income-tax#liability",
@@ -51934,6 +52519,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -2383.3054047851565,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -12275.665404785157,
       "parent": null,
@@ -52108,6 +52698,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 302.1849404296877,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -1437.7050595703124,
       "parent": null,
@@ -52177,6 +52772,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -150.83748341406226,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 3975.8525165859373,
       "parent": null,
@@ -52235,6 +52835,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 1051.3377763271333,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 2380.937776327133,
       "parent": null,
@@ -52351,6 +52956,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -1001.5215080566406,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 1024.4384919433594,
       "parent": null,
@@ -52367,6 +52977,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 33.53110899353027,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -50.928891006469726,
       "parent": null,
@@ -52441,6 +53056,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 306.7733125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 2509.0933125,
       "parent": null,
@@ -52631,6 +53251,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 843.2847074707033,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -3012.6752925292967,
       "parent": null,
@@ -52710,6 +53335,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -1515.524375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -7988.184375,
       "parent": null,
@@ -52847,6 +53477,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 879.6779998047596,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -2199.7620001952405,
       "parent": null,
@@ -52895,6 +53530,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 184.607984594727,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 3403.0979845947268,
       "parent": null,
@@ -53043,6 +53683,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -57.43441029184487,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 7956.835589708156,
       "parent": null,
@@ -53117,6 +53762,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 156.29163439941408,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -173.68836560058594,
       "parent": null,
@@ -53435,6 +54085,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -264.91570322265625,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 621.5942967773437,
       "parent": null,
@@ -53630,6 +54285,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 75.51999999999998,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -2473.75,
       "parent": null,
@@ -53688,6 +54348,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 63.90116088867187,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -73.29883911132812,
       "parent": null,
@@ -54021,6 +54686,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -111.61959680175823,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 12239.610403198241,
       "parent": null,
@@ -54138,6 +54808,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.943392977294934,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 4075.6433929772948,
       "parent": null,
@@ -54212,6 +54887,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -1002.0600558853148,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 913.0499441146851,
       "parent": null,
@@ -54270,6 +54950,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -1823.4298316486356,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -1118.0098316486358,
       "parent": null,
@@ -54318,6 +55003,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 290.450282991791,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 8793.85028299179,
       "parent": null,
@@ -54392,6 +55082,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -4469.8,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -4511.0,
       "parent": null,
@@ -54429,6 +55124,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 108.30057958984375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -143.09942041015626,
       "parent": null,
@@ -54566,6 +55266,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 671.4219744873044,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 12650.821974487304,
       "parent": null,
@@ -54640,6 +55345,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -374.75830775009626,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 2446.9716922499038,
       "parent": null,
@@ -54719,6 +55429,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -893.5859375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -3411.7359375,
       "parent": null,
@@ -54883,6 +55598,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 39.30917031249999,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -379.7608296875,
       "parent": null,
@@ -54957,6 +55677,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 377.89608480634456,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 1159.1560848063446,
       "parent": null,
@@ -55057,6 +55782,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -893.5859375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -3411.7359375,
       "parent": null,
@@ -55210,6 +55940,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -1454.1463125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 42.9036875,
       "parent": null,
@@ -55394,6 +56129,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 861.558023828125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -1879.811976171875,
       "parent": null,
@@ -55489,6 +56229,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 642.19440625,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 667.93440625,
       "parent": null,
@@ -55605,6 +56350,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 110.6956304321289,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -128.0943695678711,
       "parent": null,
@@ -55948,6 +56698,11 @@
       "concept": "us:tax/federal-income-tax#ctc",
       "description": "Child Tax Credit value",
       "difference": 3746.76,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-ctc-machinery-absent-refundable-arm",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 4900.0,
       "parent": "us:tax/federal-income-tax#liability",
@@ -55964,6 +56719,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -1183.6348134765626,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -4485.7748134765625,
       "parent": null,
@@ -56117,6 +56877,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -114.98644691162099,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -835.306446911621,
       "parent": null,
@@ -56434,6 +57199,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 65.07783944702169,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 2528.8878394470216,
       "parent": null,
@@ -56450,6 +57220,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 133.33108483886718,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -150.72891516113282,
       "parent": null,
@@ -56466,6 +57241,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 167.60000000000002,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -185.0,
       "parent": null,
@@ -56482,6 +57262,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 24.149124999999913,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 1713.169125,
       "parent": null,
@@ -56540,6 +57325,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 35.99333593749998,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 1807.7533359375,
       "parent": null,
@@ -56556,6 +57346,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 50.13199807739258,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -67.52800192260742,
       "parent": null,
@@ -56572,6 +57367,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 95.63718823242186,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -113.03281176757812,
       "parent": null,
@@ -56826,6 +57626,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -184.51858976982192,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 725.4714102301781,
       "parent": null,
@@ -56911,6 +57716,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 75.13915881347657,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -92.54084118652344,
       "parent": null,
@@ -57165,6 +57975,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 169.2,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -204.0,
       "parent": null,
@@ -57266,6 +58081,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 77.11999999999989,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -2492.75,
       "parent": null,
@@ -57282,6 +58102,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 143.28177587890622,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-refundable-credit-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -160.67822412109376,
       "parent": null,
@@ -57375,17 +58200,17 @@
         "bridge_artifact": 159,
         "explained_residual": 426,
         "unexplained": 0,
-        "upstream_engine_gap": 416
+        "upstream_engine_gap": 687
       },
       "dispositions_file": "dispositions/co-tax-intersection-taxsim.yaml",
       "expired_entries": [
         "taxsim-blindness-63f-extension-standard_deduction"
       ],
-      "explained_rate": 87.185679,
+      "explained_rate": 89.442132,
       "orphaned_entries": [],
       "raw_match_rate": 78.850958,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 1241
+      "unexplained_count": 970
     },
     "error_count": 0,
     "errors_by_engine": [],

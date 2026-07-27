@@ -135,3 +135,25 @@ Campaign 4,048 → **3,759**. Intersection unexplained 1,530 → 1,241.
   untouched.
 - Remaining intersection 1,241: tbc continuum 468, fed liability ~240,
   state non-flat ~360, TI fails 61, amt 64, ctc 13, eitc 11, std 2.
+
+## Batch 12 (intersection: CO refundable-credit triangulation + federal credit fingerprints)
+
+Campaign 3,759 → **3,488**. Intersection 1,241 → 970.
+
+- taxsim-co-refundable-credit-vintage (251, upstream_engine_gap):
+  triangulated against the COMPLETE 31-row axiom-vs-PE CO mismatch set
+  (1,201 units; 4 contaminated ids left raw). TAXSIM idtl=2 state
+  decomposition run on all 255 (scratchpad/state_only_taxsim.csv):
+  divergence lives in sctc/srebate columns; net siitax goes negative on
+  refundable-credit households.
+- taxsim-2026-eitc-childless-schedule-applied (9): TAXSIM sits exactly
+  on the 2026 CHILDLESS curve (7.65% phase-in to the cent, 664 max,
+  phase-out solving to statutory 10,860 on independent incomes) for
+  units WITH children; axiom sits on the with-children curve (45%×9,512
+  and 40%×17,493 exact). 2 ambiguous rows raw.
+- taxsim-2026-ctc-machinery-absent-refundable-arm (11): axiom equals
+  statutory 2026 exactly (2,200/child + 500 ODC, or ACTC 15% cap —
+  four rows match 0.15×(earned−2,500) to the cent); TAXSIM pre-TCJA
+  vintage. 2 no-match rows raw.
+- Remaining intersection 970: tbc continuum ~468, fed liability ~240,
+  amt 64, TI verifier-fails 61, state raw 111ish, misc.
