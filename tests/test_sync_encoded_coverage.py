@@ -150,6 +150,48 @@ def test_illinois_before_credit_surface_is_executable_and_suite_backed() -> None
     ]
 
 
+def test_indiana_agi_tax_is_classified() -> None:
+    assert classify(
+        "us-in/policies/income_tax/pilot_liability_pipeline.yaml"
+    ) == ("state_income_tax", "IN")
+
+
+def test_indiana_agi_tax_surface_is_executable_and_suite_backed() -> None:
+    coverage = json.loads(
+        (
+            REPO_ROOT / "dashboard/public/data/coverage_overview.json"
+        ).read_text()
+    )
+    matches = [
+        entry
+        for entry in coverage["axiom"]["programs"]
+        if entry.get("program") == "state_income_tax"
+        and entry.get("jurisdiction") == "IN"
+    ]
+
+    assert matches == [
+        {
+            "program": "state_income_tax",
+            "jurisdiction": "IN",
+            "status": "executable",
+            "source": (
+                "rulespec-us "
+                "ecb057ef35ab47fb055213b42459c42ae63485ef + pinned "
+                "Populace campaign projected as in-income-tax-populace over "
+                "the canonical bounded TY2026 adjusted-gross-income tax "
+                "before credits and county tax"
+            ),
+            "known_non_tanf_gaps": [
+                "bounded AGI-tax surface only; caller supplies completed "
+                "Indiana adjusted gross income",
+                "adjusted-gross-income construction, county tax, credits, "
+                "payments, and final annual liability remain out of scope",
+            ],
+            "suite": "in-income-tax-populace",
+        }
+    ]
+
+
 def test_new_york_main_income_tax_surface_is_executable_and_suite_backed() -> None:
     coverage = json.loads(
         (

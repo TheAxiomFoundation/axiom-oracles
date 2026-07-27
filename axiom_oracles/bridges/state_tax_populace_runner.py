@@ -77,6 +77,17 @@ IL_REVIEWED_INPUTS = {
 }
 MN_BASIC_TAX_RAW_TARGET = "mn_basic_tax"
 MN_BASIC_TAX_PRECISION_STABLE_TARGET = "mn_basic_tax_precision_stable"
+IN_AGI_TAX_TARGET = "in_agi_tax"
+IN_AGI_TAX_PROGRAM = "us-in:policies/income_tax/pilot_liability_pipeline"
+IN_AGI_TAX_OUTPUT = (
+    f"{IN_AGI_TAX_PROGRAM}#in_pit_pilot_income_tax_liability"
+)
+IN_AGI_TAX_INPUT = (
+    f"{IN_AGI_TAX_PROGRAM}#input."
+    "in_pit_pilot_indiana_adjusted_gross_income"
+)
+IN_AGI_TAX_UPSTREAM = "in_agi"
+IN_AGI_TAX_2026_RATE = 0.0295
 OH_NONBUSINESS_BEFORE_CREDITS_DERIVED_TARGET = (
     "oh_nonbusiness_income_tax_before_non_refundable_credits_derived"
 )
@@ -799,6 +810,9 @@ def calculate_policyengine_targets(
     targets: dict[str, dict[int | str, float]] = {}
     for state in sorted(selected_states):
         jurisdiction = resolved_contract.by_state()[state]
+        if state == "IN":
+            _validate_indiana_runtime_contract(jurisdiction)
+            _validate_indiana_policyengine_runtime(sim=sim, year=year)
         if state == "IL":
             _validate_illinois_runtime_contract(jurisdiction)
         if (
@@ -1125,6 +1139,63 @@ def calculate_policyengine_targets(
                 zip(tax_unit_ids, reviewed, strict=True)
             )
             continue
+        if state == "IN":
+            modeled_ids = [
+                _clean_id(value)
+                for value in _array_values(
+                    sim.calculate("tax_unit_id", period=year)
+                )
+            ]
+            agi_values = _array_values(
+                sim.calculate(IN_AGI_TAX_UPSTREAM, period=year)
+            )
+            tax_values = _array_values(
+                sim.calculate(IN_AGI_TAX_TARGET, period=year)
+            )
+            cardinalities = (
+                len(modeled_ids),
+                len(agi_values),
+                len(tax_values),
+            )
+            if any(length != len(tax_unit_ids) for length in cardinalities):
+                raise StateTaxPopulationRoutingError(
+                    "IN: PolicyEngine AGI-tax target inputs returned "
+                    f"{', '.join(str(length) for length in cardinalities)} rows "
+                    f"for {len(tax_unit_ids)} tax units"
+                )
+            _reject_duplicate_ids(tax_unit_ids, "IN source tax_unit_id")
+            _reject_duplicate_ids(
+                modeled_ids, "IN PolicyEngine tax_unit_id"
+            )
+            if modeled_ids != tax_unit_ids:
+                raise StateTaxPopulationRoutingError(
+                    "IN: PolicyEngine tax_unit_id order does not match the "
+                    "certified source tax-unit order"
+                )
+            reviewed: list[float] = []
+            for agi_value, tax_value in zip(
+                agi_values, tax_values, strict=True
+            ):
+                agi = _finite_number(agi_value, label=IN_AGI_TAX_UPSTREAM)
+                tax = _finite_number(tax_value, label=IN_AGI_TAX_TARGET)
+                if tax < 0:
+                    raise StateTaxPopulationRoutingError(
+                        "IN: in_agi_tax must be nonnegative"
+                    )
+                if agi <= 0 and tax != 0:
+                    raise StateTaxPopulationRoutingError(
+                        "IN: nonpositive in_agi must produce exactly zero "
+                        "in_agi_tax"
+                    )
+                if agi > 0 and tax <= 0:
+                    raise StateTaxPopulationRoutingError(
+                        "IN: positive in_agi must produce positive in_agi_tax"
+                    )
+                reviewed.append(tax)
+            targets[state] = dict(
+                zip(tax_unit_ids, reviewed, strict=True)
+            )
+            continue
         if (
             state == "OH"
             and jurisdiction.policyengine_target
@@ -1386,6 +1457,9 @@ def calculate_policyengine_projection_inputs(
     projections: dict[str, dict[str, dict[int | str, float | bool]]] = {}
     for state in sorted(selected_states):
         jurisdiction = resolved_contract.by_state()[state]
+        if state == "IN":
+            _validate_indiana_runtime_contract(jurisdiction)
+            _validate_indiana_policyengine_runtime(sim=sim, year=year)
         if state == "IL":
             _validate_illinois_runtime_contract(jurisdiction)
             for variable in IL_REVIEWED_INPUTS.values():
@@ -1394,7 +1468,7 @@ def calculate_policyengine_projection_inputs(
                     state="IL",
                     variable=variable,
                 )
-        if state in {"IL", "NY"}:
+        if state in {"IL", "IN", "NY"}:
             modeled_ids = [
                 _clean_id(value)
                 for value in _array_values(
@@ -2357,6 +2431,175 @@ def _validate_illinois_runtime_contract(jurisdiction: Any) -> None:
             "completed taxable-income and investment-credit-recapture "
             "upstream boundaries and no relations"
         )
+
+
+def _validate_indiana_runtime_contract(jurisdiction: Any) -> None:
+    """Fail closed if the canonical Indiana AGI-tax contract drifts."""
+
+    if jurisdiction.policyengine_target != IN_AGI_TAX_TARGET:
+        raise StateTaxPopulationRoutingError(
+            "IN: reviewed AGI-tax runner requires the exact in_agi_tax target"
+        )
+    if (
+        jurisdiction.program != IN_AGI_TAX_PROGRAM
+        or jurisdiction.output != IN_AGI_TAX_OUTPUT
+    ):
+        raise StateTaxPopulationRoutingError(
+            "IN: reviewed AGI-tax runner requires the exact canonical "
+            "RuleSpec program and output"
+        )
+    actual_inputs = {
+        slot.slot: (
+            slot.source_kind,
+            slot.status,
+            slot.policyengine_variable,
+            slot.policyengine_variables,
+            slot.policyengine_relationship,
+            slot.policyengine_transform,
+            slot.constant_value,
+        )
+        for slot in jurisdiction.inputs
+    }
+    expected_inputs = {
+        IN_AGI_TAX_INPUT: (
+            "pe_upstream_boundary",
+            "ready",
+            IN_AGI_TAX_UPSTREAM,
+            (),
+            "upstream",
+            None,
+            None,
+        )
+    }
+    if actual_inputs != expected_inputs or jurisdiction.relations:
+        raise StateTaxPopulationRoutingError(
+            "IN: reviewed AGI-tax runner requires exactly the completed "
+            "Indiana adjusted-gross-income upstream boundary and no relations"
+        )
+
+
+def _validate_indiana_policyengine_runtime(*, sim: Any, year: int) -> None:
+    """Prove the active PolicyEngine target retains its reviewed 2026 shape."""
+
+    for variable in (IN_AGI_TAX_TARGET, IN_AGI_TAX_UPSTREAM):
+        _require_policyengine_tax_unit_year_money_variable(
+            sim,
+            state="IN",
+            variable=variable,
+        )
+    try:
+        target_definition = sim.tax_benefit_system.variables[
+            IN_AGI_TAX_TARGET
+        ]
+        upstream_definition = sim.tax_benefit_system.variables[
+            IN_AGI_TAX_UPSTREAM
+        ]
+        formula = target_definition.get_formula(year)
+        rate_value = (
+            sim.tax_benefit_system.parameters(year)
+            .gov.states["in"].tax.income.agi_rate
+        )
+    except (AttributeError, KeyError, TypeError) as exc:
+        raise StateTaxPopulationRoutingError(
+            "IN: active 2026 in_agi_tax formula, dependency, or rate schema "
+            "drifted"
+        ) from exc
+    if formula is None or getattr(upstream_definition, "formulas", None):
+        raise StateTaxPopulationRoutingError(
+            "IN: active 2026 in_agi_tax formula must depend on the reviewed "
+            "formula-free in_agi upstream boundary"
+        )
+    rate = _finite_number(
+        rate_value,
+        label="gov.states.in.tax.income.agi_rate",
+    )
+    if rate != IN_AGI_TAX_2026_RATE:
+        raise StateTaxPopulationRoutingError(
+            "IN: active 2026 Indiana AGI-tax rate must be exactly 0.0295; "
+            f"got {rate!r}"
+        )
+
+    class FormulaParameters:
+        def __init__(self) -> None:
+            self.accesses: list[str] = []
+            self.calls: list[int] = []
+
+        def __call__(self, period: int) -> FormulaParameters:
+            self.calls.append(period)
+            return self
+
+        @property
+        def gov(self) -> FormulaParameters:
+            self.accesses.append("gov")
+            return self
+
+        @property
+        def states(self) -> FormulaParameters:
+            self.accesses.append("states")
+            return self
+
+        def __getitem__(self, key: str) -> FormulaParameters:
+            self.accesses.append(f"states[{key}]")
+            if key != "in":
+                raise KeyError(key)
+            return self
+
+        @property
+        def tax(self) -> FormulaParameters:
+            self.accesses.append("tax")
+            return self
+
+        @property
+        def income(self) -> FormulaParameters:
+            self.accesses.append("income")
+            return self
+
+        @property
+        def agi_rate(self) -> float:
+            self.accesses.append("agi_rate")
+            return rate
+
+    for agi, expected in (
+        (-100.0, 0.0),
+        (100.0, 100.0 * IN_AGI_TAX_2026_RATE),
+    ):
+        tax_unit_calls: list[tuple[str, int]] = []
+
+        def tax_unit(variable: str, period: int) -> float:
+            tax_unit_calls.append((variable, period))
+            if variable != IN_AGI_TAX_UPSTREAM:
+                raise KeyError(variable)
+            return agi
+
+        parameters = FormulaParameters()
+        try:
+            result = _finite_number(
+                formula(tax_unit, year, parameters),
+                label="IN active in_agi_tax formula probe",
+            )
+        except (AttributeError, KeyError, TypeError) as exc:
+            raise StateTaxPopulationRoutingError(
+                "IN: active 2026 in_agi_tax formula dependency path drifted"
+            ) from exc
+        if (
+            result != expected
+            or tax_unit_calls != [(IN_AGI_TAX_UPSTREAM, year)]
+            or parameters.calls != [year]
+            or parameters.accesses
+            != [
+                "gov",
+                "states",
+                "states[in]",
+                "tax",
+                "income",
+                "agi_rate",
+            ]
+        ):
+            raise StateTaxPopulationRoutingError(
+                "IN: active 2026 in_agi_tax formula must read exactly in_agi "
+                "and gov.states.in.tax.income.agi_rate and apply the "
+                "nonnegative floor"
+            )
 
 
 def _require_policyengine_tax_unit_year_money_variable(

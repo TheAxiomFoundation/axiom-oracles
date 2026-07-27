@@ -49,6 +49,10 @@ _IL_TAXABLE_INCOME_INPUT = (
 _IL_RECAPTURE_INPUT = (
     f"{_IL_INPUT_PREFIX}il_pit_pilot_recapture_of_investment_credit"
 )
+_IN_AGI_INPUT = (
+    "us-in:policies/income_tax/pilot_liability_pipeline#input."
+    "in_pit_pilot_indiana_adjusted_gross_income"
+)
 _NY_INPUT_PREFIX = (
     "us-ny:policies/income_tax/pilot_liability_pipeline#input."
 )
@@ -67,6 +71,7 @@ _NY_HEAD_OF_HOUSEHOLD_INPUT = (
 def _projection_branch_diagnostics(
     projection_inputs: dict,
     routes: tuple,
+    policyengine_targets: dict | None = None,
 ) -> dict[str, dict[str, int]]:
     """Summarize reviewed state branch exercise without exposing microdata."""
 
@@ -141,6 +146,40 @@ def _projection_branch_diagnostics(
             "positive_taxable_income_count": sum(value > 0 for value in taxable),
             "zero_recapture_count": sum(value == 0 for value in recapture),
             "positive_recapture_count": sum(value > 0 for value in recapture),
+        }
+    indiana = projection_inputs.get("IN")
+    if isinstance(indiana, dict):
+        ready_ids = {
+            route.tax_unit_id
+            for route in routes
+            if route.state == "IN" and route.disposition == DISPOSITION_READY
+        }
+        agi_values = indiana[_IN_AGI_INPUT]
+        target_values = (
+            (policyengine_targets or {}).get("IN")
+            if isinstance(policyengine_targets, dict)
+            else None
+        )
+        if not isinstance(target_values, dict):
+            raise ValueError(
+                "IN projection diagnostics require the reviewed in_agi_tax "
+                "target values"
+            )
+        missing_agi = sorted(ready_ids - set(agi_values), key=str)
+        missing_targets = sorted(ready_ids - set(target_values), key=str)
+        if missing_agi or missing_targets:
+            raise ValueError(
+                "IN projection diagnostics require AGI and output values for "
+                "every ready TaxUnit"
+            )
+        agi = [float(agi_values[item]) for item in ready_ids]
+        outputs = [float(target_values[item]) for item in ready_ids]
+        diagnostics["IN"] = {
+            "compared_tax_unit_count": len(ready_ids),
+            "nonpositive_agi_count": sum(value <= 0 for value in agi),
+            "positive_agi_count": sum(value > 0 for value in agi),
+            "zero_output_count": sum(value == 0 for value in outputs),
+            "positive_output_count": sum(value > 0 for value in outputs),
         }
     new_york = projection_inputs.get("NY")
     if isinstance(new_york, dict):
@@ -322,6 +361,7 @@ def main(argv: list[str] | None = None) -> int:
         "projection_diagnostics": _projection_branch_diagnostics(
             projection_inputs,
             tuple(comparison_routes),
+            targets,
         ),
         "routing": population_routing_report(
             routes,

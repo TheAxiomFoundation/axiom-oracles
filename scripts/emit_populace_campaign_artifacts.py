@@ -103,6 +103,17 @@ _DESCRIPTION_BY_OUTPUT = {
         "liability"
     ),
     (
+        "us-in:policies/income_tax/pilot_liability_pipeline"
+        "#in_pit_pilot_income_tax_liability"
+    ): (
+        "Indiana adjusted-gross-income tax before credits and excluding county "
+        "tax, computed by applying the tax-year-2026 2.95 percent state rate "
+        "to caller-supplied completed Indiana adjusted gross income over every "
+        "routed tax unit in the pinned US Populace; this bounded suite excludes "
+        "adjusted-gross-income construction, county tax, credits, payments, "
+        "and final annual liability"
+    ),
+    (
         "us-ms:policies/income_tax/2026_section_27_7_5_schedule"
         "#ms_pit_2026_section_27_7_5_schedule_tax"
     ): (

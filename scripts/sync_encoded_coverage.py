@@ -126,6 +126,12 @@ STATE_RULES = {
             ("state_income_tax", None),
         ),
     ],
+    "in": [
+        (
+            r"^policies/income_tax/pilot_liability_pipeline\.yaml$",
+            ("state_income_tax", None),
+        ),
+    ],
     "ks": [
         (r"^policies/dcf/keesm/", ("tanf", None)),
         (
