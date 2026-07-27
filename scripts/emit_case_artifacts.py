@@ -162,6 +162,21 @@ def compact_case(case: dict, explained: dict) -> dict:
         if kind:
             row["e"] = kind
         mismatches.append(row)
+    if case.get("matched") is False and not mismatches:
+        # SNAP-QC case rows carry a headline boolean and first divergent stage
+        # rather than comparator-style value rows. Preserve that negative
+        # verdict as an explicit compact mismatch even when the producer has
+        # no case-local values; otherwise the household explorer labels the
+        # row "engines agree."
+        stage = case.get("stage")
+        mismatches.append(
+            {
+                "c": stage if isinstance(stage, str) and stage else "mismatch",
+                "l": None,
+                "x": None,
+                "d": None,
+            }
+        )
     earned = hs.get("yearly_earned_income_per_person")
     row = {
         "id": case.get("case_id"),

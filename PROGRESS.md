@@ -35,15 +35,27 @@
   same-suite non-disposition artifacts.
 - Confirmed the strengthened validator isolates the live ECPS defect exactly:
   `ecps-spm-50970` lacks the report's `explained_residual` compact marker.
+- Added an auditable regeneration path pinned to the migration parent
+  `6c4f17bfe6dc8224ee8251401fe0247b1117a25b`; it replays both migrated
+  Colorado corpora, projects report dispositions bidirectionally, validates
+  the complete projection, and rebuilds exact v1 bindings.
+- Regenerated both migration-touched suites through that path. ECPS now
+  validates `bound/full` over 1,072 cases and `ecps-spm-50970` carries
+  `e: explained_residual`; QC validates `bound/cardinality` over 856 cases
+  and remained byte-identical.
+- Preserved future QC `matched: false` rows as explicit compact mismatches and
+  made every skipped versioned corpus immutable, including inline-only v1.
+- Added six regeneration-path tests plus the QC-mismatch and inline-v1 skip
+  mutants. The combined mutant, regeneration, and comparison test set passes
+  all 95 tests.
+- Verified `dashboard/src/components/Households.jsx` consumes `m.e` both when
+  counting unexplained mismatches and when rendering mismatch dispositions.
 
 ## Next
 
-- Regenerate both Colorado migrated compact corpora from their immutable
-  pre-migration source, project dispositions, and rebuild exact v1 bindings.
-- Preserve future QC `matched: false` signals and skipped inline-v1 corpora,
-  with dedicated mutants.
-- Run all named gates, reconcile generated artifacts honestly, and commit the
-  final report plus completed progress state.
+- Regenerate census/certificate outputs from the honest bound evidence, then
+  run every named gate and any directly affected dashboard checks.
+- Commit the final result report and completed progress state.
 
 ---
 

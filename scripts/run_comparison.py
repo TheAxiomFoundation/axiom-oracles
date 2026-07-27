@@ -4222,15 +4222,12 @@ def _write_dashboard_report(
 
     report = _merge_dispositions(report)
     versioned_case_chunks = _uses_versioned_case_chunks(report)
-    if (
-        preserve_existing_versioned
-        and versioned_case_chunks
-        and not report.get("cases")
-    ):
+    if preserve_existing_versioned and versioned_case_chunks:
         # A skip-capable runner copied the committed dashboard view and did
-        # not execute. Rewriting provenance would change the report SHA without
-        # producing fresh cases; preserve the entire already-bound evidence
-        # set so the generic generator cannot bless a no-execution refresh.
+        # not execute. Inline-only v1 corpora can legitimately carry cases, so
+        # their presence is not proof of a fresh run. Rewriting provenance or
+        # chunks would create a new binding without execution; preserve the
+        # entire already-bound evidence set for every versioned skip.
         print(
             f"Preserved dashboard report and bound chunks for skipped {report['suite']}"
         )

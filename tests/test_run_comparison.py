@@ -932,6 +932,22 @@ def test_dashboard_writer_refreshes_versioned_chunks_before_slimming(
         "suite": "bound-suite",
         "case_count": 1,
         "engines": {"left": "axiom", "right": "oracle"},
+        "concepts": [
+            {
+                "id": "benefit",
+                "comparison": "amount",
+                "tolerance": 0,
+                "relative_tolerance": 0,
+            }
+        ],
+        "aggregates": [
+            {
+                "concept": "benefit",
+                "comparison_count": 1,
+                "match_count": 1,
+                "mismatch_count": 0,
+            }
+        ],
         "mismatches": [],
         "cases": [
             {

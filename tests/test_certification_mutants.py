@@ -955,6 +955,85 @@ def test_later_malformed_chunk_is_not_hidden_by_an_earlier_valid_chunk(
     )
 
 
+def test_qc_mismatch_signal_survives_compaction():
+    """A future QC mismatch must not become an empty agreeing compact row."""
+
+    from scripts.emit_case_artifacts import compact_case
+
+    compact = compact_case(
+        {
+            "case_id": "qc-mismatch",
+            "matched": False,
+            "stage": "benefit",
+        },
+        {},
+    )
+
+    assert compact["m"] == [{"c": "benefit", "l": None, "x": None, "d": None}]
+    assert "v" not in compact
+
+
+def test_skipped_inline_v1_corpus_is_preserved(monkeypatch, tmp_path):
+    """A skipped inline-only v1 report cannot be rebound without execution."""
+
+    run_comparison = _load("run_comparison")
+    monkeypatch.setattr(run_comparison, "DASHBOARD_DATA_DIR", tmp_path)
+    suite = "inline-v1"
+    report_path = tmp_path / "report.json"
+    suite_dir = tmp_path / "cases" / suite
+    suite_dir.mkdir(parents=True)
+    index_path = suite_dir / "index.json"
+    report = {
+        "schema_version": "axiom.comparison_report.v2",
+        "suite": suite,
+        "case_count": 1,
+        "concepts": [
+            {
+                "id": "benefit",
+                "comparison": "amount",
+                "tolerance": 0,
+                "relative_tolerance": 0,
+            }
+        ],
+        "aggregates": [
+            {
+                "concept": "benefit",
+                "comparison_count": 1,
+                "match_count": 1,
+                "mismatch_count": 0,
+            }
+        ],
+        "mismatches": [],
+        "summary": {
+            "comparison_count": 1,
+            "match_count": 1,
+            "mismatch_count": 0,
+        },
+        "cases": [
+            {
+                "case_id": "inline-1",
+                "matches": [{"concept": "benefit", "left": 1, "right": 1}],
+                "mismatches": [],
+            }
+        ],
+    }
+    report_path.write_text(json.dumps(report, indent=2) + "\n")
+    index_path.write_text(json.dumps(build_chunk_index(report_path), indent=2) + "\n")
+    before = (report_path.read_bytes(), index_path.read_bytes())
+    assert validate_suite_evidence(report_path).valid is True
+
+    skipped_copy = copy.deepcopy(report)
+    skipped_copy["provenance"] = {"generated_at": "future skip"}
+    run_comparison._write_dashboard_report(
+        skipped_copy,
+        report_path.name,
+        preserve_existing_versioned=True,
+    )
+
+    assert (report_path.read_bytes(), index_path.read_bytes()) == before
+    assert validate_suite_evidence(report_path).valid is True
+
+
 def test_dummy_metadata_cannot_back_asserted_counts():
     evidence = _evidence_fixture("dummy_metadata")
     assert evidence.valid is False
