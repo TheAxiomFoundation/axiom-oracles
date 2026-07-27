@@ -719,6 +719,15 @@
       "source": "comparisons/mn-income-tax-liability.yaml"
     },
     {
+      "suite": "mn-income-tax-populace",
+      "name": null,
+      "report": "axiom-policyengine-mn-income-tax-populace.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/state-income-tax-populace.yaml"
+    },
+    {
       "suite": "mn-tanf-ecps",
       "name": "mn-tanf-ecps",
       "report": "axiom-policyengine-mn-tanf-ecps.json",

@@ -321,6 +321,7 @@ _POPULACE_MODULE = {
         "2026_section_47_1806_03_schedule_before_credits"
     ),
     "KS": "us-ks:policies/income_tax/2026_k40es_schedule_before_credits",
+    "MN": _MODULE["MN"],
 }
 _POPULACE_OUTPUT = {
     "AR": (
@@ -341,6 +342,7 @@ _POPULACE_OUTPUT = {
         "ks_pit_2026_k40es_schedule_before_credits"
     ),
     "MS": _LIABILITY_OUTPUT["MS"],
+    "MN": f"{_POPULACE_MODULE['MN']}#mn_pit_pilot_schedule_tax",
     "OH": f"{_MODULE['OH']}#oh_pit_pilot_schedule_tax",
     "UT": _LIABILITY_OUTPUT["UT"],
 }
@@ -351,6 +353,7 @@ _POPULACE_PE_VAR = {
     "DC": "dc_income_tax_before_credits_joint",
     "KS": "ks_k40es_schedule_before_credits_reviewed",
     "MS": "ms_income_tax_before_credits_joint",
+    "MN": "mn_basic_tax_precision_stable",
     "OH": "oh_nonbusiness_income_tax_before_non_refundable_credits_derived",
     "UT": "ut_resident_income_tax_before_credits_derived",
 }
@@ -1091,6 +1094,7 @@ _POPULACE_TOL = {
     "KY": (0.01, 0.0000001),
     "KS": (0.01, 0.0000001),
     "MS": (0.01, 0.0000001),
+    "MN": (1.0, 0.0),
     "LA": (0.01, 0.0000001),
     "MT": (0.01, 0.0000001),
     "NM": (0.01, 0.0000001),

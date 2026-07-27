@@ -651,6 +651,32 @@ def test_california_populace_bhst_is_decoupled_from_legacy_taxsim_grid() -> None
     assert "CA" in generator._STATES
 
 
+def test_minnesota_populace_schedule_is_decoupled_from_legacy_grid() -> None:
+    generator = _load_generator()
+    module = "us-mn:policies/income_tax/pilot_liability_pipeline"
+
+    assert generator._POPULACE_MODULE["MN"] == module
+    assert generator._POPULACE_OUTPUT["MN"] == (
+        f"{module}#mn_pit_pilot_schedule_tax"
+    )
+    assert (
+        generator._POPULACE_PE_VAR["MN"]
+        == "mn_basic_tax_precision_stable"
+    )
+    assert generator._POPULACE_TOL["MN"] == (1.0, 0.0)
+
+    assert generator._MODULE["MN"] == module
+    assert generator._LIABILITY_OUTPUT["MN"] == (
+        f"{module}#mn_pit_pilot_income_tax_liability"
+    )
+    assert (
+        generator._PE_VAR["MN"]
+        == "mn_income_tax_before_refundable_credits"
+    )
+    assert generator._TOL["MN"] == (1.0, 0.0)
+    assert "MN" in generator._STATES
+
+
 def test_kentucky_registry_uses_canonical_live_schedule_surface() -> None:
     generator = _load_generator()
     module = (

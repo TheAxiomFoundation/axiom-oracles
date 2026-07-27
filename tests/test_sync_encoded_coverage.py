@@ -55,6 +55,48 @@ def test_california_bhst_surface_is_executable_and_suite_backed() -> None:
     ]
 
 
+def test_minnesota_schedule_pilot_is_classified() -> None:
+    assert classify(
+        "us-mn/policies/income_tax/pilot_liability_pipeline.yaml"
+    ) == ("state_income_tax", "MN")
+
+
+def test_minnesota_schedule_surface_is_executable_and_suite_backed() -> None:
+    coverage = json.loads(
+        (
+            REPO_ROOT / "dashboard/public/data/coverage_overview.json"
+        ).read_text()
+    )
+    matches = [
+        entry
+        for entry in coverage["axiom"]["programs"]
+        if entry.get("program") == "state_income_tax"
+        and entry.get("jurisdiction") == "MN"
+    ]
+
+    assert matches == [
+        {
+            "program": "state_income_tax",
+            "jurisdiction": "MN",
+            "status": "executable",
+            "source": (
+                "rulespec-us "
+                "453f8fab7c6bd83f0e0efe604377d4ef85b7db72 + pinned "
+                "Populace campaign projected as mn-income-tax-populace over "
+                "the tax-year-2026 continuous section 290.06 schedule"
+            ),
+            "known_non_tanf_gaps": [
+                "schedule surface only; caller supplies completed Minnesota "
+                "taxable net income and filing-status classifiers",
+                "taxable-income construction, tax-table rounding, alternative "
+                "minimum tax, net investment income tax, credits, payments, "
+                "and final Minnesota liability remain out of scope",
+            ],
+            "suite": "mn-income-tax-populace",
+        }
+    ]
+
+
 def test_new_york_main_income_tax_schedule_is_classified() -> None:
     assert classify(
         "us-ny/policies/income_tax/pilot_liability_pipeline.yaml"

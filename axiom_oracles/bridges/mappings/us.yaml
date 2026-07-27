@@ -33101,6 +33101,20 @@ mappings:
     candidate_priority: P4
     rationale: This estimated-tax worksheet total combines RuleSpec's bounded rate-schedule branch with Behavioral Health Services Tax. PolicyEngine exposes broader California income-tax totals with different tax-table, credit, and liability scope, so only the BHST component is directly comparable.
 
+  # Minnesota's tax-year-2026 pilot exposes a source-faithful continuous
+  # section 290.06 rate schedule. The exact mapping deliberately does not
+  # promote the pilot's historical broad-liability concept.
+  - legal_id: us-mn:policies/income_tax/pilot_liability_pipeline#mn_pit_pilot_schedule_tax
+    country: us
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: mn_basic_tax
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Both outputs apply Minnesota's four-rate individual schedule to completed Minnesota taxable income selected by filing status. The final official tax-year-2026 RuleSpec thresholds are $10 to $30 above PolicyEngine-US 1.752.2's thresholds, producing only a reviewed sub-dollar residual under the preserved $1 absolute tolerance. This narrow mapping makes no claim about taxable-income construction, tax-table rounding, alternative minimum tax, net investment income tax, credits, payments, or final liability.
+
   # New York Tax Law section 601's bounded TY2026 main resident schedule.
   # These exact records cover every output in the canonical RuleSpec module
   # and take precedence over the jurisdiction-wide fallback below. They do not
@@ -35814,6 +35828,12 @@ prefixes:
     mapping_type: not_comparable
     candidate_priority: P4
     rationale: PolicyEngine-US does not model MD agency policy manuals or state regulations at output granularity; comparable state outputs carry exact mappings which take precedence over this prefix.
+
+  - legal_id_prefix: "us-mn:"
+    country: us
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: PolicyEngine-US does not model every Minnesota statute, agency policy manual, or state regulation at output granularity; independently reviewed comparable outputs carry exact mappings which take precedence over this jurisdiction-wide fallback.
 
   - legal_id_prefix: "us-ms:"
     country: us

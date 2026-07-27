@@ -502,6 +502,17 @@
     "suite": "ks-income-tax-populace"
    },
    {
+    "program": "state_income_tax",
+    "jurisdiction": "MN",
+    "status": "executable",
+    "source": "rulespec-us 453f8fab7c6bd83f0e0efe604377d4ef85b7db72 + pinned Populace campaign projected as mn-income-tax-populace over the tax-year-2026 continuous section 290.06 schedule",
+    "known_non_tanf_gaps": [
+     "schedule surface only; caller supplies completed Minnesota taxable net income and filing-status classifiers",
+     "taxable-income construction, tax-table rounding, alternative minimum tax, net investment income tax, credits, payments, and final Minnesota liability remain out of scope"
+    ],
+    "suite": "mn-income-tax-populace"
+   },
+   {
     "program": "childcare_assistance",
     "jurisdiction": "AZ",
     "status": "coverageOnly",
