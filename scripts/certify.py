@@ -191,7 +191,15 @@ def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
         and execution_evidence.binding == "bound"
         and execution_evidence.reconciliation != "none"
     )
-    report = _load(report_path)
+    try:
+        loaded_report = _load(report_path)
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError):
+        # The validator already records the precise parse/read defect. Keep
+        # computing a defective leg so the certificate surfaces that finding
+        # instead of crashing before it can report it.
+        report = {}
+    else:
+        report = loaded_report if isinstance(loaded_report, dict) else {}
     summary = report.get("summary") or {}
 
     # Report identity: the artifact must claim the suite it is cited for.
@@ -289,14 +297,16 @@ def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
     #            unvalidated, so the leg is defective until migrated.
     dispositioned = summary.get("dispositioned") or {}
     counts = dispositioned.get("counts") or {}
-    evidence: list[dict] = [
-        {
-            "claim": f"suite:{entry['suite']}",
-            "mode": "computed",
-            "artifact": entry["report"],
-            "sha256": sha256_of(report_path),
-        }
-    ]
+    evidence: list[dict] = []
+    if execution_evidence.report_sha256 is not None:
+        evidence.append(
+            {
+                "claim": f"suite:{entry['suite']}",
+                "mode": "computed",
+                "artifact": entry["report"],
+                "sha256": execution_evidence.report_sha256,
+            }
+        )
     if execution_evidence.suite:
         index_path = (
             report_path.parent

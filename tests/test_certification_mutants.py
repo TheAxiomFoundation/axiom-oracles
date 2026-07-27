@@ -42,6 +42,33 @@ def test_zero_work_report_is_a_defect(tmp_path, monkeypatch):
         mutant.unlink()
 
 
+def test_missing_or_malformed_report_surfaces_a_leg_defect():
+    certify = _load("certify")
+    missing = "dashboard/public/data/zz-test-missing-report.json"
+    malformed_path = REPO / "dashboard/public/data/zz-test-malformed-report.json"
+    malformed_path.write_text("{not-json")
+    try:
+        for report, marker in (
+            (missing, "does not exist"),
+            (
+                malformed_path.relative_to(REPO).as_posix(),
+                "is not valid JSON",
+            ),
+        ):
+            leg, _evidence, defects = certify._suite_verdict(
+                {
+                    "suite": "victim",
+                    "oracle_type": "reference",
+                    "oracle": "synthetic",
+                    "report": report,
+                }
+            )
+            assert leg["clean"] is False
+            assert any(marker in defect for defect in defects), defects
+    finally:
+        malformed_path.unlink()
+
+
 def test_mislabeled_report_is_a_defect():
     certify = _load("certify")
     mutant = REPO / "dashboard/public/data/zz-test-mutant2.json"
