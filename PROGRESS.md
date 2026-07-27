@@ -33,10 +33,21 @@
   The new indexes therefore require a loader compatibility change and the two
   bound reports must move to chunk-authoritative case storage before strict
   cross-source ID uniqueness can hold.
+- Implemented the importable validator and index builder in
+  `axiom_oracles/evidence.py`: strict report counts, compact/inline row shapes,
+  every-chunk parsing, global ID uniqueness, exact/full versus cardinality
+  reconciliation, and versioned report/path/SHA/chunk binding.
+- Added `scripts/generate_chunk_indexes.py`, including deterministic `--check`
+  behavior and an explicit one-time inline-mirror migration mode.
+- Added committed synthetic evidence fixtures and mutants for dummy metadata,
+  uncontested foreign chunks, duplicate IDs, malformed rows, stale report
+  hashes, and positive full/cardinality controls. Replaced the NYC-dependent
+  contested mutant with a synthetic census fixture.
+- Core validation check: Ruff passes and
+  `pytest tests/test_certification_mutants.py` reports 29 passed.
 
 ## Next
 
-- Implement and test `axiom_oracles/evidence.py` plus chunk-index generation.
 - Migrate the two Colorado report views away from duplicated inline rows and
   keep their producer behavior stable for future refreshes.
 - Generate bound indexes for `co-snap-ecps` and `co-snap-qc`.

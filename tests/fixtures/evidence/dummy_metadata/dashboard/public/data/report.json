@@ -1,0 +1,17 @@
+{
+  "schema_version": "axiom.comparison_report.v2",
+  "suite": "dummy-metadata",
+  "case_count": 1,
+  "summary": {
+    "comparison_count": 1000000,
+    "match_count": 1000000,
+    "mismatch_count": 0
+  },
+  "cases": [
+    {
+      "metadata": {
+        "dummy": 0
+      }
+    }
+  ]
+}

@@ -10,7 +10,10 @@ import importlib.util
 import json
 from pathlib import Path
 
+from axiom_oracles.evidence import validate_suite_evidence
+
 REPO = Path(__file__).resolve().parent.parent
+EVIDENCE_FIXTURES = REPO / "tests" / "fixtures" / "evidence"
 
 
 def _load(name: str):
@@ -441,7 +444,6 @@ def test_unreadable_dispositions_file_cannot_authorize():
 
 
 def test_weighted_mass_must_be_finite_and_nonnegative():
-    certify = _load("certify")
     for weight, marker in ((float("nan"), "finite"), (-5.0, "negative")):
         name = f"zz-r3-w{marker}.json"
         _mutant(
@@ -492,16 +494,89 @@ def test_covered_by_rejects_ghosts_and_absolute_paths():
 
 
 def test_contested_reports_are_a_certificate_defect():
-    """nyc-synthetic: two reports claim the suite, sharing one chunk dir."""
+    """A durable synthetic contest blocks regardless of live NYC cleanup."""
     certify = _load("certify")
-    census = json.loads((REPO / "conformance/exercise-census.json").read_text())
-    assert census["suites"]["nyc-synthetic"].get("contested_reports")
+    census = json.loads(
+        (EVIDENCE_FIXTURES / "contested_reports" / "census.json").read_text()
+    )
     defects: list[str] = []
     _rows, complete = certify._exercise_block(
-        [{"suite": "nyc-synthetic", "oracle_type": "reference", "oracle": "x",
-          "report": "dashboard/public/data/axiom-policyengine.json"}],
+        [
+            {
+                "suite": "synthetic-contested",
+                "oracle_type": "reference",
+                "oracle": "x",
+                "report": "tests/fixtures/evidence/contested_reports/report-b.json",
+            }
+        ],
         census,
         defects,
     )
     assert complete is False
     assert any("claim this suite" in d for d in defects)
+
+
+# ── #378: strict execution-evidence boundary ─────────────────────────────────
+
+
+def _evidence_fixture(name: str):
+    return validate_suite_evidence(
+        EVIDENCE_FIXTURES / name / "dashboard" / "public" / "data" / "report.json"
+    )
+
+
+def test_full_and_cardinality_reconciliation_are_stated_honestly():
+    full = _evidence_fixture("full_bound")
+    assert full.valid is True
+    assert full.binding == "bound"
+    assert full.reconciliation == "full"
+    assert (full.comparison_count, full.match_count, full.mismatch_count) == (
+        3,
+        2,
+        1,
+    )
+
+    cardinality = _evidence_fixture("cardinality_bound")
+    assert cardinality.valid is True
+    assert cardinality.binding == "bound"
+    assert cardinality.reconciliation == "cardinality"
+
+
+def test_dummy_metadata_cannot_back_asserted_counts():
+    evidence = _evidence_fixture("dummy_metadata")
+    assert evidence.valid is False
+    assert evidence.reconciliation == "none"
+    assert any("no case id" in defect for defect in evidence.defects)
+    assert any("do not support" in defect for defect in evidence.defects)
+
+
+def test_uncontested_report_cannot_inherit_foreign_chunks():
+    evidence = _evidence_fixture("foreign_chunks")
+    assert evidence.content_valid is True
+    assert evidence.binding == "unbound"
+    assert any("report_path" in defect for defect in evidence.binding_defects)
+    assert any("report_sha256" in defect for defect in evidence.binding_defects)
+
+
+def test_duplicate_case_id_is_a_defect_even_with_a_valid_index():
+    evidence = _evidence_fixture("duplicate_case")
+    assert evidence.binding == "bound"
+    assert evidence.valid is False
+    assert any("duplicate case id" in defect for defect in evidence.defects)
+
+
+def test_malformed_chunk_row_is_a_defect():
+    evidence = _evidence_fixture("malformed_row")
+    assert evidence.binding == "bound"
+    assert evidence.reconciliation == "none"
+    assert any(".m must be an array" in defect for defect in evidence.defects)
+
+
+def test_index_report_sha_must_match_exact_report_bytes():
+    evidence = _evidence_fixture("stale_report_sha")
+    assert evidence.content_valid is True
+    assert evidence.binding == "unbound"
+    assert any(
+        "report_sha256" in defect and "does not match" in defect
+        for defect in evidence.binding_defects
+    )
