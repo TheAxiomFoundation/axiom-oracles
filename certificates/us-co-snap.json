@@ -13,7 +13,7 @@
       "artifact": "conformance/exercise-census.json",
       "claim": "exercise census",
       "mode": "computed",
-      "sha256": "6dd136be355e12175f5660c1abad6be8b7657f8fc67da5ec2c508a7a0ebecc99"
+      "sha256": "d79eee35e116112286bf0cb352bd2d9f2ab4d7ad46a5cc458ec92a32e8729f3a"
     },
     {
       "artifact": "dashboard/public/data/axiom-policyengine-co-snap-ecps.json",
@@ -25,7 +25,7 @@
       "artifact": "dashboard/public/data/cases/co-snap-ecps/index.json",
       "claim": "case-evidence-index:co-snap-ecps",
       "mode": "computed",
-      "sha256": "6efcc71bdff470574043f69d2e42303722a5f3a299957804ef9cf3bec428c33e"
+      "sha256": "7177c6ad5cd371bdcb39fe924484f4f3f3cd092e3099c4796362ab1827bd71c5"
     },
     {
       "artifact": "dispositions/co-snap-ecps.yaml",

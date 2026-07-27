@@ -50,11 +50,17 @@
   all 95 tests.
 - Verified `dashboard/src/components/Households.jsx` consumes `m.e` both when
   counting unexplained mismatches and when rendering mismatch dispositions.
+- Regenerated the exercise census and `us-co/snap` certificate from the new
+  chunk identity. The reference leg is honestly `bound/full`, clean, and has
+  one explained mismatch with zero unexplained; the reality leg remains
+  `bound/cardinality`. `conformant` remains true, while the pre-existing
+  exercise blocker keeps the overall certificate unavailable.
+- Confirmed both `exercise_census.py --check` and `certify.py --check` are
+  up to date after regeneration.
 
 ## Next
 
-- Regenerate census/certificate outputs from the honest bound evidence, then
-  run every named gate and any directly affected dashboard checks.
+- Run every remaining named gate and any directly affected dashboard checks.
 - Commit the final result report and completed progress state.
 
 ---
