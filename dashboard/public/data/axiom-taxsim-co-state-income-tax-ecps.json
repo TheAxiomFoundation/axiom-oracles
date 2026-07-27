@@ -46383,6 +46383,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.84258904647868,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 16583.20258904648,
       "parent": null,
@@ -46687,6 +46692,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.84372695922866,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 23663.97372695923,
       "parent": null,
@@ -47199,6 +47209,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.841589843748807,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 19138.93158984375,
       "parent": null,
@@ -47231,6 +47246,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.844062200545523,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 14572.464062200546,
       "parent": null,
@@ -47391,6 +47411,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 20.703331176751817,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-20-7-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 38279.823331176754,
       "parent": null,
@@ -47487,6 +47512,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.84942382812551,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 15125.179423828125,
       "parent": null,
@@ -47775,6 +47805,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.843052917480236,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 14157.98305291748,
       "parent": null,
@@ -48255,6 +48290,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 20.70441845703317,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-20-7-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 42507.354418457035,
       "parent": null,
@@ -48447,6 +48487,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.84282714843721,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 38057.082827148435,
       "parent": null,
@@ -48847,6 +48892,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.84351525751117,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 20642.55351525751,
       "parent": null,
@@ -49215,6 +49265,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.84392578124971,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 17274.70392578125,
       "parent": null,
@@ -49583,6 +49638,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.846166015624476,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 22254.136166015625,
       "parent": null,
@@ -49807,6 +49867,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.846824218750044,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 16048.18682421875,
       "parent": null,
@@ -49935,6 +50000,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.843183593749927,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 16321.87318359375,
       "parent": null,
@@ -49951,6 +50021,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 20.704042724602914,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-20-7-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 46590.36404272461,
       "parent": null,
@@ -50063,6 +50138,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.842592552180577,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 38444.072592552184,
       "parent": null,
@@ -50079,6 +50159,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.84967187499933,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 19178.249671875,
       "parent": null,
@@ -50207,6 +50292,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 20.702819427489885,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-20-7-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 34785.94281942749,
       "parent": null,
@@ -50303,6 +50393,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.828474259098584,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 20853.178474259097,
       "parent": null,
@@ -50431,6 +50526,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 20.70204980467679,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-20-7-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 172999.58204980468,
       "parent": null,
@@ -50495,6 +50595,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 20.70775162744394,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-20-7-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 28432.777751627444,
       "parent": null,
@@ -50607,6 +50712,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.847615234371915,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 56193.63761523437,
       "parent": null,
@@ -50639,6 +50749,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.83490960540803,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 15210.084909605408,
       "parent": null,
@@ -50719,6 +50834,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.845078124999418,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 16084.425078125,
       "parent": null,
@@ -50735,6 +50855,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.849804687499272,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 17048.1398046875,
       "parent": null,
@@ -50847,6 +50972,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.84357572937006,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 14121.25357572937,
       "parent": null,
@@ -50975,6 +51105,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.842624999997497,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 20559.402625,
       "parent": null,
@@ -51007,6 +51142,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.841814781188077,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 16195.461814781189,
       "parent": null,
@@ -51295,6 +51435,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.845000000001164,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 18945.275,
       "parent": null,
@@ -51615,6 +51760,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.842632812500597,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 14201.1526328125,
       "parent": null,
@@ -51727,6 +51877,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 20.703546876087785,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-20-7-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 10927861.983546875,
       "parent": null,
@@ -51743,6 +51898,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.844859374687076,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 6759288.214859375,
       "parent": null,
@@ -51759,6 +51919,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.847949340939522,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 6580064.697949341,
       "parent": null,
@@ -51855,6 +52020,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.84486871334957,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 283581.7448687134,
       "parent": null,
@@ -51887,6 +52057,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.842164082452655,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 8586748.012164082,
       "parent": null,
@@ -51903,6 +52078,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.842888671904802,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 7013636.982888672,
       "parent": null,
@@ -51919,6 +52099,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.841499999980442,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 526210.6215,
       "parent": null,
@@ -51935,6 +52120,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.84137500077486,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 6178860.191375,
       "parent": null,
@@ -51967,6 +52157,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 20.70840373216197,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-20-7-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 3594480.478403732,
       "parent": null,
@@ -51999,6 +52194,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.843484374694526,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 7002079.883484375,
       "parent": null,
@@ -52015,6 +52215,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 20.701218749862164,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-20-7-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 4029898.30121875,
       "parent": null,
@@ -52031,6 +52236,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.847968856804073,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 6536615.507968857,
       "parent": null,
@@ -52047,6 +52257,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.842502612620592,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 5979014.702502613,
       "parent": null,
@@ -52111,6 +52326,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.843246093951166,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 4535654.143246094,
       "parent": null,
@@ -52127,6 +52347,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.84956639073789,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 5413527.509566391,
       "parent": null,
@@ -52143,6 +52368,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.847062499960884,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 1812767.8570625,
       "parent": null,
@@ -52175,6 +52405,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.846419287845492,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 5309066.246419288,
       "parent": null,
@@ -52191,6 +52426,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.845312499906868,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 1954728.5853125,
       "parent": null,
@@ -52207,6 +52447,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.84628125000745,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 4672222.61628125,
       "parent": null,
@@ -52223,6 +52468,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.84565229807049,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 4894227.045652298,
       "parent": null,
@@ -52239,6 +52489,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 20.7083452148363,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-20-7-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 4696164.998345215,
       "parent": null,
@@ -52271,6 +52526,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 20.70056652830681,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-20-7-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 223560.37056652832,
       "parent": null,
@@ -52287,6 +52547,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.8486328125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 2513542.2386328126,
       "parent": null,
@@ -52303,6 +52568,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.845757813192904,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 4422413.525757813,
       "parent": null,
@@ -52319,6 +52589,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.848516926635057,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 3822675.5785169266,
       "parent": null,
@@ -52351,6 +52626,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 20.70066015655175,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-20-7-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 3910042.5206601564,
       "parent": null,
@@ -52383,6 +52663,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 20.70619934098795,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-20-7-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 3976146.506199341,
       "parent": null,
@@ -52399,6 +52684,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.84437866182998,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 3383673.334378662,
       "parent": null,
@@ -52431,6 +52721,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.842304687481374,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 4057757.4223046876,
       "parent": null,
@@ -52447,6 +52742,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.848343749996275,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 3639132.09834375,
       "parent": null,
@@ -52479,6 +52779,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.843306640628725,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 3102810.8233066406,
       "parent": null,
@@ -52495,6 +52800,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.847374633791333,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 50248.43737463379,
       "parent": null,
@@ -52511,6 +52821,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.84972045896575,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 768701.009720459,
       "parent": null,
@@ -52543,6 +52858,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.840749023016542,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 3015682.560749023,
       "parent": null,
@@ -52607,6 +52927,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.841656250180677,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 1634715.99165625,
       "parent": null,
@@ -52623,6 +52948,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 20.700562255922705,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-20-7-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 2506416.410562256,
       "parent": null,
@@ -52639,6 +52969,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.843744140584022,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 3295571.0537441405,
       "parent": null,
@@ -52671,6 +53006,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.84329101582989,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 3233962.0132910158,
       "parent": null,
@@ -52687,6 +53027,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.84985672472976,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 551193.0098567248,
       "parent": null,
@@ -52703,6 +53048,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.842203124891967,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 2334950.902203125,
       "parent": null,
@@ -52735,6 +53085,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 20.70248437486589,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-20-7-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 2617467.922484375,
       "parent": null,
@@ -52767,6 +53122,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.84338281257078,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 2770078.2133828127,
       "parent": null,
@@ -52783,6 +53143,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.84096874995157,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 521826.30096875,
       "parent": null,
@@ -52799,6 +53164,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.84775000018999,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 2628305.32775,
       "parent": null,
@@ -52815,6 +53185,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 20.703562499955297,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-20-7-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 3039073.8735625,
       "parent": null,
@@ -52831,6 +53206,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 20.708546874811873,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-20-7-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 1364649.038546875,
       "parent": null,
@@ -52847,6 +53227,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.84224999975413,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 2940291.17225,
       "parent": null,
@@ -52879,6 +53264,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.84750781254843,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 2293683.3975078124,
       "parent": null,
@@ -52911,6 +53301,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.840749999973923,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 2273688.68075,
       "parent": null,
@@ -52927,6 +53322,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.84665625030175,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 2247608.43665625,
       "parent": null,
@@ -52943,6 +53343,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.843124023638666,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 2555669.3931240235,
       "parent": null,
@@ -52959,6 +53364,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 20.706625000108033,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-20-7-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 2163890.016625,
       "parent": null,
@@ -52975,6 +53385,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.845272144302726,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 2468986.0752721443,
       "parent": null,
@@ -52991,6 +53406,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.840954426676035,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 2142225.810954427,
       "parent": null,
@@ -53007,6 +53427,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.845267090015113,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 2612713.63526709,
       "parent": null,
@@ -53023,6 +53448,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.846226581837982,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 2532426.3562265816,
       "parent": null,
@@ -53055,6 +53485,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.848312499991152,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 508040.7383125,
       "parent": null,
@@ -53071,6 +53506,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.84569531213492,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 2579897.8156953123,
       "parent": null,
@@ -53087,6 +53527,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.844553466886282,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 2368451.574553467,
       "parent": null,
@@ -53103,6 +53548,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.847249999991618,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 554851.35725,
       "parent": null,
@@ -53119,6 +53569,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.841851562494412,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 61777.5018515625,
       "parent": null,
@@ -53151,6 +53606,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.840374999999767,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 228573.090375,
       "parent": null,
@@ -53183,6 +53643,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 20.70306249987334,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-20-7-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 2558994.3230625,
       "parent": null,
@@ -53199,6 +53664,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.848695281893015,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 2328816.808695282,
       "parent": null,
@@ -53215,6 +53685,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.841781249735504,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 2453771.33178125,
       "parent": null,
@@ -53231,6 +53706,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.84170442679897,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 2306012.1617044266,
       "parent": null,
@@ -53263,6 +53743,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.843787109013647,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 2410681.773787109,
       "parent": null,
@@ -53279,6 +53764,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.847960937491735,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 77373.0579609375,
       "parent": null,
@@ -53295,6 +53785,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 20.70410058600828,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-20-7-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 1745904.204100586,
       "parent": null,
@@ -53311,6 +53806,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.844218750018626,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 2014641.86421875,
       "parent": null,
@@ -53327,6 +53827,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.844308593776077,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 824025.9943085938,
       "parent": null,
@@ -53343,6 +53848,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.844434570055455,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 2337836.17443457,
       "parent": null,
@@ -53359,6 +53869,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.8420000000624,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 547954.712,
       "parent": null,
@@ -53375,6 +53890,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 20.706250000279397,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-20-7-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 2252000.35625,
       "parent": null,
@@ -53391,6 +53911,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.84326574706938,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 118587.69326574708,
       "parent": null,
@@ -53407,6 +53932,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.848656249931082,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 1973067.70865625,
       "parent": null,
@@ -53423,6 +53953,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 20.701470703119412,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-20-7-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 1645669.2514707032,
       "parent": null,
@@ -53439,6 +53974,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 20.702171874931082,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-20-7-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 2040787.192171875,
       "parent": null,
@@ -53455,6 +53995,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.849953124998137,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 1424428.159953125,
       "parent": null,
@@ -53471,6 +54016,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 20.703125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-20-7-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 745474.463125,
       "parent": null,
@@ -53503,6 +54053,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.84952661115676,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 1596764.4495266112,
       "parent": null,
@@ -53535,6 +54090,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.844176025362685,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 1553421.1341760254,
       "parent": null,
@@ -53551,6 +54111,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.84387500025332,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 2157335.183875,
       "parent": null,
@@ -53567,6 +54132,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.841800129739568,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 1947199.6318001298,
       "parent": null,
@@ -53583,6 +54153,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.846407470759004,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 1738249.2664074707,
       "parent": null,
@@ -53599,6 +54174,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.84426562488079,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 2170984.794265625,
       "parent": null,
@@ -53631,6 +54211,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.84899999992922,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 2066895.399,
       "parent": null,
@@ -53647,6 +54232,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.841296875150874,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 1176586.731296875,
       "parent": null,
@@ -53679,6 +54269,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.84820996108465,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 1260986.498209961,
       "parent": null,
@@ -53727,6 +54322,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.844687255797908,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 915646.9746872558,
       "parent": null,
@@ -53743,6 +54343,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.846654968336225,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 1809251.5966549683,
       "parent": null,
@@ -53775,6 +54380,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.84341406240128,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 1415789.4434140625,
       "parent": null,
@@ -53791,6 +54401,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.849937500199303,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 1416472.2499375,
       "parent": null,
@@ -53807,6 +54422,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.84823242179118,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 1617776.458232422,
       "parent": null,
@@ -53823,6 +54443,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.843726562568918,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 1595530.1137265626,
       "parent": null,
@@ -53839,6 +54464,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 20.705907569732517,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-20-7-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 1504389.2959075698,
       "parent": null,
@@ -53871,6 +54501,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.846472656121477,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 1549155.3964726562,
       "parent": null,
@@ -53887,6 +54522,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.8472255859524,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 1261618.817225586,
       "parent": null,
@@ -53919,6 +54559,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.84452605061233,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 1494570.2745260505,
       "parent": null,
@@ -53935,6 +54580,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.843828124925494,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 1446434.073828125,
       "parent": null,
@@ -53951,6 +54601,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.846563476487063,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 895005.2465634765,
       "parent": null,
@@ -53967,6 +54622,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.845151855435688,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 362238.18515185546,
       "parent": null,
@@ -53999,6 +54659,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.845298176747747,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 153606.25529817675,
       "parent": null,
@@ -54015,6 +54680,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 20.703593750018626,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-20-7-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 599006.23359375,
       "parent": null,
@@ -54031,6 +54701,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 20.704015624942258,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-20-7-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 1411728.944015625,
       "parent": null,
@@ -54047,6 +54722,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.848921875003725,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 1630021.018921875,
       "parent": null,
@@ -54079,6 +54759,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 20.70424999995157,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-20-7-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 1182130.65425,
       "parent": null,
@@ -54095,6 +54780,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.842656249878928,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 1388890.64265625,
       "parent": null,
@@ -54111,6 +54801,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.84570703119971,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 1440302.1157070312,
       "parent": null,
@@ -54127,6 +54822,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.84982617176138,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 1161434.3498261718,
       "parent": null,
@@ -54143,6 +54843,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.846125000040047,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 402999.576125,
       "parent": null,
@@ -54175,6 +54880,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.84432942676358,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 160228.23432942678,
       "parent": null,
@@ -54191,6 +54901,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 20.70450585935032,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-20-7-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 167708.87450585936,
       "parent": null,
@@ -54207,6 +54922,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.843492187559605,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 1334959.4934921875,
       "parent": null,
@@ -54255,6 +54975,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.84518749988638,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 1091618.4651875,
       "parent": null,
@@ -54287,6 +55012,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.84533593757078,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 747234.2953359375,
       "parent": null,
@@ -54303,6 +55033,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.845888923620805,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 1246271.5658889236,
       "parent": null,
@@ -54319,6 +55054,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.844449706957676,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 876683.394449707,
       "parent": null,
@@ -54335,6 +55075,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.844125000061467,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 1218928.624125,
       "parent": null,
@@ -54351,6 +55096,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 20.699289062526077,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-20-7-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 584286.8292890625,
       "parent": null,
@@ -54367,6 +55117,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 20.705890625016764,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-20-7-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 1198525.245890625,
       "parent": null,
@@ -54383,6 +55138,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.84840497589903,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 507393.6384049759,
       "parent": null,
@@ -54399,6 +55159,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.84601692680735,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 530904.0460169268,
       "parent": null,
@@ -54415,6 +55180,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 20.70590478515078,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-20-7-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 105366.67590478515,
       "parent": null,
@@ -54431,6 +55201,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.847999999998137,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 1052565.368,
       "parent": null,
@@ -54447,6 +55222,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.845359008788364,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 65051.28535900879,
       "parent": null,
@@ -54463,6 +55243,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.848562500003027,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 190185.3185625,
       "parent": null,
@@ -54479,6 +55264,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.842596191447228,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 1093987.0125961914,
       "parent": null,
@@ -54495,6 +55285,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.846047851722687,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 1325882.7260478516,
       "parent": null,
@@ -54527,6 +55322,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.843437500065193,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 736653.3134375,
       "parent": null,
@@ -54559,6 +55359,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.84175000002142,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 414834.00175,
       "parent": null,
@@ -54607,6 +55412,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 30.833867988549173,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-co-flat-30-8-filing-status-offset",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "kind": "amount_difference",
       "left": 827625.3338679885,
       "parent": null,
@@ -54625,10 +55435,10 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "0c39023e0d0b82aee9ec561f37a1b73547b66d86",
+      "axiom_rules_engine_sha": "e19f1b7573c74512f20a6b71a0c55dbbf333d41b",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-21T15:15:37Z",
+    "generated_at": "2026-07-07T03:55:53Z",
     "generated_by": "scripts/run_comparison.py::co-state-income-tax-taxsim",
     "oracle": {
       "name": "taxsim",
@@ -54652,15 +55462,15 @@
         "bridge_artifact": 0,
         "explained_residual": 0,
         "unexplained": 0,
-        "upstream_engine_gap": 0
+        "upstream_engine_gap": 162
       },
-      "dispositions_file": null,
+      "dispositions_file": "dispositions/co-state-income-tax-taxsim.yaml",
       "expired_entries": [],
-      "explained_rate": 55.870108,
+      "explained_rate": 69.358868,
       "orphaned_entries": [],
       "raw_match_rate": 55.870108,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 530
+      "unexplained_count": 368
     },
     "error_count": 0,
     "errors_by_engine": [],
