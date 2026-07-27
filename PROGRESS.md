@@ -1,3 +1,37 @@
+# PROGRESS — execution-evidence validator (#378)
+
+## State
+
+- Branch: `evidence-validator`, based on `bridge-manifests`; starting HEAD
+  `2778fa1764cc01f0cf10ad64ac89933df16b489a`.
+- Scope: add importable suite-evidence validation, versioned report/chunk
+  binding indexes, census/certificate integration, and durable synthetic
+  certification mutants.
+- Constraint: full chunk parsing is limited to certificate `PROGRAMS`; the
+  census-wide path must remain cardinality-level and fast.
+
+## Done
+
+- Verified the worktree is clean and checked out on `evidence-validator`.
+- Started parallel, read-only review of issue #378, PR #368, prior verification
+  history, and the current census/certificate architecture.
+
+## Next
+
+- Map report and chunk shapes and define the evidence validator's explicit
+  reconciliation/binding contracts.
+- Implement and test `axiom_oracles/evidence.py` plus chunk-index generation.
+- Generate bound indexes for `co-snap-ecps` and `co-snap-qc`.
+- Integrate binding state into the census and strict evidence checks into the
+  certificate.
+- Add synthetic mutants, regenerate derived artifacts, and run every required
+  gate.
+- Write the final verification report to the requested review path if the
+  workspace permits that external write; otherwise leave an exact in-worktree
+  copy and report the policy constraint.
+
+---
+
 # PROGRESS — us-pe reconciliation (drive `unexplained_total` 23,138 → 0)
 
 Predecessor: **#224** stood up the us-pe conformance universe (measurement only,
