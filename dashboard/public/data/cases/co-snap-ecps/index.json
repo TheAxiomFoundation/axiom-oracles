@@ -8,7 +8,7 @@
   "right": "policyengine"
  },
  "mismatch_concepts": [
-  "us:statutes/7/2014/u#snap_benefit"
+  "us:programs/snap#benefit"
  ],
  "source": "axiom-policyengine-co-snap-ecps-0-2026-07-26.json",
  "total_cases": 1072

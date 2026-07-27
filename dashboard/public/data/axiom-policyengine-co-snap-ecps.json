@@ -7,7 +7,7 @@
       "comparison_count": 1072,
       "comparison_weight": 1072,
       "components": [],
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "left_weighted_sum": 37933.0,
       "match_count": 1071,
@@ -31,7 +31,7 @@
       "comparison_count": 1072,
       "comparison_weight": 1072,
       "components": [],
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "left_positive_rate": 17.350746268656717,
       "left_positive_weight": 186,
@@ -61,7 +61,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -111,7 +111,7 @@
       "mismatches": [
         {
           "case_id": "ecps-spm-50970",
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -1.7000120000000152,
           "kind": "amount_difference",
@@ -132,7 +132,7 @@
       "comparison": "amount",
       "components": [],
       "description": "SNAP benefit amount",
-      "id": "us:statutes/7/2014/u#snap_benefit",
+      "id": "us:programs/snap#benefit",
       "parent": null,
       "priority": "high",
       "relative_tolerance": 0,
@@ -143,7 +143,7 @@
       "comparison": "eligibility",
       "components": [],
       "description": "SNAP eligibility",
-      "id": "us:statutes/7/2014/o#snap_eligible",
+      "id": "us:programs/snap#eligible",
       "parent": null,
       "priority": "high",
       "relative_tolerance": 0,
@@ -167,7 +167,7 @@
   "mismatches": [
     {
       "case_id": "ecps-spm-50970",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -1.7000120000000152,
       "disposition": {
@@ -238,7 +238,7 @@
     "mismatches_by_concept": [
       {
         "count": 1,
-        "value": "us:statutes/7/2014/u#snap_benefit"
+        "value": "us:programs/snap#benefit"
       }
     ],
     "mismatches_by_kind": [

@@ -16,8 +16,8 @@ runner:
     left: axiom
     right: policyengine
     concepts:
-      - us:statutes/7/2014/o#snap_eligible
-      - us:statutes/7/2014/u#snap_benefit
+      - us:programs/snap#eligible
+      - us:programs/snap#benefit
     sample_size: 0
     period: 2026-01
     population: enhanced-cps

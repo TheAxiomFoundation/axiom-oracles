@@ -3706,8 +3706,8 @@ def _adapt_snap_ecps_csv_to_v2(rows: list[dict], runner: dict) -> dict:
     jurisdiction = str(params.get("jurisdiction", "us-co"))
     state_code = str(params.get("state") or jurisdiction.rsplit("-", 1)[-1]).upper()
     tolerance = float(params.get("tolerance", 1.5))
-    amount_concept_id = "us:statutes/7/2014/u#snap_benefit"
-    eligibility_concept_id = "us:statutes/7/2014/o#snap_eligible"
+    amount_concept_id = "us:programs/snap#benefit"
+    eligibility_concept_id = "us:programs/snap#eligible"
     compared = len(rows)
     amount_mismatching_rows = [row for row in rows if not _csv_bool(row.get("match"))]
     eligibility_mismatching_rows = [

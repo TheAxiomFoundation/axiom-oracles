@@ -25,7 +25,7 @@
 # pass all False-expected ones; the suite stays robust against either
 # silent-degenerate mode only as long as both directions are covered.
 
-concept: us:statutes/7/2014/o#snap_eligible
+concept: us:programs/snap#eligible
 period: 2026-01
 
 fixtures:

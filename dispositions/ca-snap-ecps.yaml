@@ -3,7 +3,7 @@ suite: ca-snap-ecps
 updated: '2026-07-26'
 entries:
 - id: ca-bbce-asset-waiver-snap_eligible
-  concept: us:statutes/7/2014/o#snap_eligible
+  concept: us:programs/snap#eligible
   kind: eligibility_right_only
   case_selector:
     case_ids:
@@ -48,7 +48,7 @@ entries:
   linked_issue: https://github.com/TheAxiomFoundation/rulespec-us/issues/1098
   expires_on_source_change: true
 - id: ca-bbce-gross-band-snap_eligible
-  concept: us:statutes/7/2014/o#snap_eligible
+  concept: us:programs/snap#eligible
   kind: eligibility_right_only
   case_selector:
     case_ids:
@@ -180,7 +180,7 @@ entries:
   linked_issue: https://github.com/TheAxiomFoundation/rulespec-us/issues/1098
   expires_on_source_change: true
 - id: ca-bbce-asset-waiver-snap_benefit
-  concept: us:statutes/7/2014/u#snap_benefit
+  concept: us:programs/snap#benefit
   kind: amount_difference
   case_selector:
     case_ids:
@@ -206,7 +206,7 @@ entries:
   linked_issue: https://github.com/TheAxiomFoundation/rulespec-us/issues/1098
   expires_on_source_change: true
 - id: ca-bbce-gross-band-snap_benefit
-  concept: us:statutes/7/2014/u#snap_benefit
+  concept: us:programs/snap#benefit
   kind: amount_difference
   case_selector:
     case_ids:

@@ -3,7 +3,7 @@ suite: co-snap-ecps
 updated: '2026-07-26'
 entries:
 - id: whole-dollar-rounding-chain-snap-benefit
-  concept: us:statutes/7/2014/u#snap_benefit
+  concept: us:programs/snap#benefit
   case_id: ecps-spm-50970
   kind: amount_difference
   disposition: explained_residual

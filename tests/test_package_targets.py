@@ -30,7 +30,7 @@ def test_unknown_engines_do_not_get_implicit_concept_targets() -> None:
         for mapping in comparable_mappings("taxsim", "policyengine")
     }
 
-    assert "us:statutes/7/2014/o#snap_eligible" not in concept_ids
+    assert "us:programs/snap#eligible" not in concept_ids
     assert "us:tax/federal-income-tax#liability" in concept_ids
     assert "us:tax/state-income-tax#liability" in concept_ids
 
@@ -56,7 +56,7 @@ def test_prd_defaults_to_mapped_policyengine_intersection() -> None:
         for mapping in comparable_mappings("prd", "policyengine")
     }
 
-    assert concept_ids == {"us:statutes/7/2014/u#snap_benefit"}
+    assert concept_ids == {"us:programs/snap#benefit"}
 
 
 def test_cli_builds_package_target_runners() -> None:

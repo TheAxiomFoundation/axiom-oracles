@@ -174,8 +174,8 @@ The CO encoder-backed dashboard comparison is clean. The generic
 `axiom-programs/us-co/snap/fy-2026.yaml` wrapper now compiles and has a
 source-backed generic adapter path for:
 
-- `us:statutes/7/2014/u#snap_benefit`
-- `us:statutes/7/2014/o#snap_eligible`
+- `us:programs/snap#benefit`
+- `us:programs/snap#eligible`
 
 What changed:
 

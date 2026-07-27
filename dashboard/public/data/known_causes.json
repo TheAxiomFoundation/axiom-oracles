@@ -27,7 +27,7 @@
    "suite": "be-worker-pit"
   },
   {
-   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "concept": "us:programs/snap#benefit",
    "description": "65 of 896 MA households differ on benefit amount. Two causes: PolicyEngine imputes MA TAFDC/TANF into SNAP unearned income while Axiom projects only observed ECPS income facts, and PE pays households through a categorical/BBCE path whose TANF-service and authorization facts are not yet available to Axiom's projection. Utilities are not a driver: the FY 2026 heating/cooling SUA is encoded at $914/month and matches PE in every traced residual.",
    "drivers": [
     {
@@ -54,7 +54,7 @@
    "suite": "ma-snap-ecps"
   },
   {
-   "concept": "us:statutes/7/2014/o#snap_eligible",
+   "concept": "us:programs/snap#eligible",
    "description": "39 households are PE-eligible but Axiom-ineligible. The 106 CMR 365.180(A) categorical rollup is encoded and composed, but the traced cases still resolve categorical outputs to false because TANF-service, EAEDC/TAFDC authorization, and gross categorical income-standard facts are missing or source-unresolved in the ECPS projection.",
    "fix_owner": "rulespec-us-ma",
    "kind": "eligibility_right_only",
@@ -62,7 +62,7 @@
    "suite": "ma-snap-ecps"
   },
   {
-   "concept": "us:statutes/7/2014/o#snap_eligible",
+   "concept": "us:programs/snap#eligible",
    "description": "3 households are Axiom-eligible but PE-ineligible. The inspected case is a disabled one-person household at about 210.6% FPG gross / 95.2% FPG net: Axiom passes the federal elderly/disabled net-income path while PE rejects under its MA gross/categorical treatment.",
    "fix_owner": "rulespec-us-ma",
    "kind": "eligibility_left_only",
@@ -70,7 +70,7 @@
    "suite": "ma-snap-ecps"
   },
   {
-   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "concept": "us:programs/snap#benefit",
    "description": "24 of 704 AL households differ on benefit amount. 21 are PE-imputed Alabama TANF counted in SNAP unearned income that Axiom does not project; the rest are one threshold/disqualification edge, one environment-sensitive minimum-benefit case, and one $7.78 residual just over the $7 tolerance.",
    "drivers": [
     {
@@ -96,7 +96,7 @@
    "suite": "al-snap-ecps"
   },
   {
-   "concept": "us:statutes/7/2014/o#snap_eligible",
+   "concept": "us:programs/snap#eligible",
    "description": "3 households are Axiom-eligible but PE-ineligible, all with household weight 0. Two are TANF interactions where PE-imputed AL TANF pushes net income just over 100% FPG (ecps-51544 at 106.1%, ecps-52446 at 103.5%); ecps-51708 has no TANF and PE net income near 41% FPG, a PE disqualification or categorical-source edge.",
    "fix_owner": "rulespec-us-al",
    "kind": "eligibility_left_only",
@@ -104,7 +104,7 @@
    "suite": "al-snap-ecps"
   },
   {
-   "concept": "us:statutes/7/2014/o#snap_eligible",
+   "concept": "us:programs/snap#eligible",
    "description": "1 household is PE-eligible with a positive minimum benefit while Axiom fails the standard net-income gate. The same case returns PE-ineligible/$0 in the local environment, so this is an income/categorical eligibility edge plus a PE-environment reproducibility issue, not a broken minimum-benefit formula.",
    "fix_owner": "investigation",
    "kind": "eligibility_right_only",
@@ -112,7 +112,7 @@
    "suite": "al-snap-ecps"
   },
   {
-   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "concept": "us:programs/snap#benefit",
    "description": "31 of 852 TN households differ on benefit amount. 30 are Axiom-greater-than-PE with positive PE-imputed Families First/TANF in SNAP unearned income that Axiom does not project. The single PE-greater case (ecps-50388) has no TANF and is an untraced amount edge. The encoded TN utility allowance table is not the driver: PE applies zero SNAP utility allowance in every mismatch case.",
    "drivers": [
     {
@@ -138,7 +138,7 @@
    "suite": "tn-snap-ecps"
   },
   {
-   "concept": "us:statutes/7/2014/o#snap_eligible",
+   "concept": "us:programs/snap#eligible",
    "description": "5 households are Axiom-eligible but PE-ineligible, all with positive PE-imputed Families First and PE net income between 103.6% and 108.2% FPG. Axiom passes standard income because it does not project Families First into SNAP unearned income. Only ecps-49447 is weighted.",
    "fix_owner": "rulespec-us-tn",
    "kind": "eligibility_left_only",
@@ -146,7 +146,7 @@
    "suite": "tn-snap-ecps"
   },
   {
-   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "concept": "us:programs/snap#benefit",
    "description": "61 of 758 SC households differ on benefit amount. The large weighted residuals are PE-imputed `sc_tanf` counted in SNAP unearned income that Axiom does not project. Most of the rest are minimum-benefit cases where PE is eligible at about $23.97/month while Axiom fails the standard net-income and categorical gates. Shelter/utility math is not the driver: traced cases show PE utility allowance and excess-shelter deduction both zero.",
    "drivers": [
     {
@@ -172,7 +172,7 @@
    "suite": "sc-snap-ecps"
   },
   {
-   "concept": "us:statutes/7/2014/o#snap_eligible",
+   "concept": "us:programs/snap#eligible",
    "description": "29 households are PE-eligible but Axiom-ineligible. The SC source ties expanded categorical eligibility to Family Independence Information and Referral Services with income at or below 130% FPL; PE appears to allow these cases through a broader gross-FPG categorical path (traced PE gross FPG ratios run 1.13 to 1.95). Wiring the broader path into Axiom would be synthetic unless encoder/source review establishes it.",
    "fix_owner": "rulespec-us-sc",
    "kind": "eligibility_right_only",
@@ -180,7 +180,7 @@
    "suite": "sc-snap-ecps"
   },
   {
-   "concept": "us:statutes/7/2014/o#snap_eligible",
+   "concept": "us:programs/snap#eligible",
    "description": "6 households are Axiom-eligible but PE-ineligible, all with household weight 0. PE adds imputed SC TANF to SNAP unearned income and denies (e.g. ecps-40402 at 104.2% FPG net, ecps-40659 at 116.0% FPG net); Axiom uses only observed ECPS income facts and passes.",
    "fix_owner": "program-coverage",
    "kind": "eligibility_left_only",
@@ -188,7 +188,7 @@
    "suite": "sc-snap-ecps"
   },
   {
-   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "concept": "us:programs/snap#benefit",
    "description": "40 of 1,366 NC households differ on benefit amount. 31 are within $12 and 34 within $25. Only 2 exceed $100, and both are the cross-state TANF pattern: PE adds imputed `nc_tanf` to SNAP unearned income on top of observed SSI, while Axiom has no TANF fact to project. The earlier large non-TANF residuals were eliminated by projecting the case shelter fact into PE `housing_cost` (79 residuals before the projection fix, 40 after).",
    "drivers": [
     {
@@ -206,7 +206,7 @@
    "suite": "nc-snap-ecps"
   },
   {
-   "concept": "us:statutes/7/2014/o#snap_eligible",
+   "concept": "us:programs/snap#eligible",
    "description": "12 households are PE-eligible but Axiom-ineligible; 11 have household weight 0. All traced cases are near-threshold categorical-income cases where Axiom applies the FY 2026 SNAP monthly 100% FPL table times the encoded 2.00 multiplier while PE uses an annual FPG ratio. The one weighted case, ecps-39817, has Axiom gross income $7,256.55/month against a $7,192/month Axiom threshold while PE computes an annual FPG ratio of 1.963 and accepts. Resolving it requires an encoder/source decision about which FPG table controls NC's 200% limit.",
    "fix_owner": "rulespec-us-nc",
    "kind": "eligibility_right_only",
@@ -605,7 +605,7 @@
    "suite": "ca-tanf-ecps"
   },
   {
-   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "concept": "us:programs/snap#benefit",
    "description": "Blocked: no compose spec in rulespec-us programs/ and no axiom-encode snap-harness jurisdiction config exists for this state, so the suite cannot regenerate against the restructured corpus. Report shows the last good run. Owner: encoder team (add the state compose spec or harness config).",
    "fix_owner": "axiom-encode",
    "kind": "stale_run",
@@ -614,7 +614,7 @@
    "suite": "az-snap-ecps"
   },
   {
-   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "concept": "us:programs/snap#benefit",
    "description": "Blocked: no compose spec in rulespec-us programs/ and no axiom-encode snap-harness jurisdiction config exists for this state, so the suite cannot regenerate against the restructured corpus. Report shows the last good run. Owner: encoder team (add the state compose spec or harness config).",
    "fix_owner": "axiom-encode",
    "kind": "stale_run",
@@ -623,7 +623,7 @@
    "suite": "or-snap-ecps"
   },
   {
-   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "concept": "us:programs/snap#benefit",
    "description": "Blocked: no compose spec in rulespec-us programs/ and no axiom-encode snap-harness jurisdiction config exists for this state, so the suite cannot regenerate against the restructured corpus. Report shows the last good run. Owner: encoder team (add the state compose spec or harness config).",
    "fix_owner": "axiom-encode",
    "kind": "stale_run",
@@ -632,7 +632,7 @@
    "suite": "ut-snap-ecps"
   },
   {
-   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "concept": "us:programs/snap#benefit",
    "description": "No SNAP compose spec exists at rulespec-us programs/us-fl/snap/ \u2014 Florida was never migrated into the monorepo (the archived axiom-programs had no FL spec either). Suite config points at the monorepo path for when a spec lands; until then it cannot compose. Owner: encoder team.",
    "fix_owner": "axiom-encode",
    "kind": "stale_run",
@@ -640,7 +640,7 @@
    "suite": "fl-snap-ecps"
   },
   {
-   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "concept": "us:programs/snap#benefit",
    "description": "Blocked by an upstream entity mismatch after the 7 CFR 273.9 restructure: the axiom-encode SNAP harness composes the NY state tree, where us-ny:regulations/18-nycrr/387/12/f/3/v/a#snap_standard_utility_allowance binds to the federal us:statutes/.../273/9#snap_standard_utility_allowance_state_option but their derived entities differ, so compile fails. Report shows the last good run. Owner: encoder team (reconcile the NY SUA entity with the federal state-option hook).",
    "fix_owner": "axiom-encode",
    "kind": "stale_run",

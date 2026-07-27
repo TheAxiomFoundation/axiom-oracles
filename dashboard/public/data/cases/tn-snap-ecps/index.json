@@ -1182,8 +1182,8 @@
   "right": "policyengine"
  },
  "mismatch_concepts": [
-  "us:statutes/7/2014/o#snap_eligible",
-  "us:statutes/7/2014/u#snap_benefit"
+  "us:programs/snap#eligible",
+  "us:programs/snap#benefit"
  ],
  "source": "axiom-policyengine-tn-snap-ecps-0-2026-07-26.json",
  "total_cases": 1427

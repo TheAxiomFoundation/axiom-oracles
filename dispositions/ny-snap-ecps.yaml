@@ -3,7 +3,7 @@ suite: ny-snap-ecps
 updated: '2026-07-26'
 entries:
 - id: ny-bbce-gross-band-snap_eligible
-  concept: us:statutes/7/2014/o#snap_eligible
+  concept: us:programs/snap#eligible
   kind: eligibility_right_only
   case_selector:
     case_ids:

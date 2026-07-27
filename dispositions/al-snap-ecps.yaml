@@ -3,7 +3,7 @@ suite: al-snap-ecps
 updated: '2026-07-27'
 entries:
 - id: al-bbce-gross-band-snap_eligible
-  concept: us:statutes/7/2014/o#snap_eligible
+  concept: us:programs/snap#eligible
   kind: eligibility_right_only
   case_selector:
     case_ids:
@@ -24,7 +24,7 @@ entries:
   linked_issue: https://github.com/TheAxiomFoundation/rulespec-us/issues/1098
   expires_on_source_change: true
 - id: al-bbce-net-waiver-snap_eligible
-  concept: us:statutes/7/2014/o#snap_eligible
+  concept: us:programs/snap#eligible
   kind: eligibility_right_only
   case_selector:
     case_ids:
@@ -47,7 +47,7 @@ entries:
   linked_issue: https://github.com/TheAxiomFoundation/rulespec-us/issues/1098
   expires_on_source_change: true
 - id: al-bbce-net-waiver-snap_benefit
-  concept: us:statutes/7/2014/u#snap_benefit
+  concept: us:programs/snap#benefit
   kind: amount_difference
   case_selector:
     case_ids:

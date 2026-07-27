@@ -1649,7 +1649,7 @@ concepts:
           type: country
           geoid: UK
 
-  us:statutes/7/2014/u#snap_benefit:
+  us:programs/snap#benefit:
     description: SNAP benefit amount
     category: food
     comparison: amount
@@ -2095,7 +2095,7 @@ concepts:
       axiom: ssi_annual_benefit
       policyengine: ssi
 
-  us:statutes/7/2014/o#snap_eligible:
+  us:programs/snap#eligible:
     description: SNAP eligibility
     category: food
     comparison: eligibility

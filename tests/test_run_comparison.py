@@ -133,8 +133,8 @@ def test_axiom_oracles_runner_composes_declared_program(monkeypatch, tmp_path):
                 "left": "axiom",
                 "right": "policyengine",
                 "concepts": [
-                    "us:statutes/7/2014/o#snap_eligible",
-                    "us:statutes/7/2014/u#snap_benefit",
+                    "us:programs/snap#eligible",
+                    "us:programs/snap#benefit",
                 ],
                 "sample_size": 0,
                 "period": "2026-01",
@@ -258,8 +258,8 @@ def test_snap_ecps_runner_writes_v2_report_from_csv(monkeypatch, tmp_path):
     assert matched["match_rate"] == 100.0
     assert not matched["mismatches"]
     assert {m["concept"] for m in matched["matches"]} == {
-        "us:statutes/7/2014/u#snap_benefit",
-        "us:statutes/7/2014/o#snap_eligible",
+        "us:programs/snap#benefit",
+        "us:programs/snap#eligible",
     }
     mismatched = by_id["ecps-spm-102"]
     assert len(mismatched["mismatches"]) == 2

@@ -489,10 +489,10 @@ the same concept can point at an Axiom legal output, a PolicyEngine variable, or
 an ACCESS NYC program code:
 
 ```yaml
-us:statutes/7/2014/o#snap_eligible:
+us:programs/snap#eligible:
   comparison: eligibility
   targets:
-    axiom: us:statutes/7/2014/o#snap_eligible
+    axiom: us:programs/snap#eligible
     policyengine: is_snap_eligible
     accessnyc:
       code: S2R007

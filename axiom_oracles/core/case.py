@@ -103,8 +103,8 @@ class Concepts:
     CHILDCARE_EXPENSES = "axiom:tax/household#childcare_expenses"
 
     # Program outputs
-    SNAP_BENEFIT = "us:statutes/7/2014/u#snap_benefit"
-    SNAP_ELIGIBLE = "us:statutes/7/2014/o#snap_eligible"
+    SNAP_BENEFIT = "us:programs/snap#benefit"
+    SNAP_ELIGIBLE = "us:programs/snap#eligible"
     FEDERAL_INCOME_TAX = "us:tax/federal-income-tax#liability"
     STATE_INCOME_TAX = "us:tax/state-income-tax#liability"
     MEDICAID_ELIGIBLE = "us:programs/medicaid#eligible"

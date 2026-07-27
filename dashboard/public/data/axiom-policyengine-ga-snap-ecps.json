@@ -6,7 +6,7 @@
       "comparison_count": 1897,
       "comparison_weight": 5138603.901064,
       "components": [],
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "left_weighted_sum": 434912493.330374,
       "match_rate": 91.881919,
@@ -27,7 +27,7 @@
       "comparison_count": 1897,
       "comparison_weight": 5138603.901064,
       "components": [],
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "left_positive_rate": 14.084661,
       "left_positive_weight": 723754.929489,
@@ -80,7 +80,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -91,7 +91,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -112,7 +112,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -151,7 +151,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -8.079508463541686,
           "kind": "amount_difference",
@@ -197,7 +197,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -208,7 +208,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -254,7 +254,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -265,7 +265,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -313,7 +313,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -324,7 +324,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -372,7 +372,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -24.38976542154948,
           "kind": "amount_difference",
@@ -383,7 +383,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -404,7 +404,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -443,7 +443,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -7.679524739583371,
           "kind": "amount_difference",
@@ -489,7 +489,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -500,7 +500,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -521,7 +521,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -556,7 +556,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -187.22412109375,
           "kind": "amount_difference",
@@ -577,7 +577,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -620,7 +620,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": 25.046061197916742,
           "kind": "amount_difference",
@@ -641,7 +641,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -680,7 +680,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -8.0794677734375,
           "kind": "amount_difference",
@@ -701,7 +701,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -736,7 +736,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": 16.52579752604163,
           "kind": "amount_difference",
@@ -782,7 +782,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -793,7 +793,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -839,7 +839,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -850,7 +850,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -898,7 +898,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -909,7 +909,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -957,7 +957,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -968,7 +968,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -989,7 +989,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -1026,7 +1026,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -7.045328776041686,
           "kind": "amount_difference",
@@ -1072,7 +1072,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -299.66998291015625,
           "kind": "amount_difference",
@@ -1083,7 +1083,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -1129,7 +1129,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -1140,7 +1140,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -1186,7 +1186,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -168.26998901367188,
           "kind": "amount_difference",
@@ -1197,7 +1197,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -1218,7 +1218,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -1249,7 +1249,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -136.66998291015625,
           "kind": "amount_difference",
@@ -1270,7 +1270,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -1303,7 +1303,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": 66.065185546875,
           "kind": "amount_difference",
@@ -1324,7 +1324,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -1364,7 +1364,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -136.20458984375,
           "kind": "amount_difference",
@@ -1385,7 +1385,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -1416,7 +1416,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -11.79498291015625,
           "kind": "amount_difference",
@@ -1462,7 +1462,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -1473,7 +1473,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -1494,7 +1494,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -1539,7 +1539,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -11.750569661458371,
           "kind": "amount_difference",
@@ -1585,7 +1585,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -1596,7 +1596,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -1644,7 +1644,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -1655,7 +1655,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -1676,7 +1676,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -1713,7 +1713,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": 83.75480143229163,
           "kind": "amount_difference",
@@ -1734,7 +1734,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -1765,7 +1765,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -153.66998291015625,
           "kind": "amount_difference",
@@ -1786,7 +1786,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -1827,7 +1827,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -34.313313802083314,
           "kind": "amount_difference",
@@ -1848,7 +1848,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -1889,7 +1889,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -120.21329752604169,
           "kind": "amount_difference",
@@ -1910,7 +1910,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -1947,7 +1947,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -7.045328776041686,
           "kind": "amount_difference",
@@ -1968,7 +1968,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "left": 0.0,
           "right": 6.09359868367513
         }
@@ -1999,7 +1999,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -2020,7 +2020,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -2057,7 +2057,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": 26.15462239583337,
           "kind": "amount_difference",
@@ -2103,7 +2103,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -2114,7 +2114,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -2160,7 +2160,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -2171,7 +2171,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -2192,7 +2192,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -2229,7 +2229,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": 42.65462239583337,
           "kind": "amount_difference",
@@ -2250,7 +2250,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -2281,7 +2281,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -243.66998291015625,
           "kind": "amount_difference",
@@ -2329,7 +2329,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -2340,7 +2340,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -2386,7 +2386,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -2397,7 +2397,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -2443,7 +2443,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -2454,7 +2454,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -2500,7 +2500,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -2511,7 +2511,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -2557,7 +2557,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -2568,7 +2568,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -2616,7 +2616,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -2627,7 +2627,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -2648,7 +2648,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -2683,7 +2683,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -41.62418619791663,
           "kind": "amount_difference",
@@ -2731,7 +2731,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -2742,7 +2742,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -2788,7 +2788,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -2799,7 +2799,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -2820,7 +2820,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -2859,7 +2859,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -7.979410807291629,
           "kind": "amount_difference",
@@ -2905,7 +2905,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": 24.0,
           "kind": "amount_difference",
@@ -2916,7 +2916,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_left_only",
@@ -2937,7 +2937,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "left": 0.0,
           "right": 6.09359868367513
         }
@@ -2970,7 +2970,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -2991,7 +2991,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -3023,7 +3023,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": 36.45501708984375,
           "kind": "amount_difference",
@@ -3044,7 +3044,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "left": 0.0,
           "right": 0.0
         }
@@ -3079,7 +3079,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -3100,7 +3100,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -3131,7 +3131,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -8.094985961914062,
           "kind": "amount_difference",
@@ -3177,7 +3177,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -3188,7 +3188,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -3234,7 +3234,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -3245,7 +3245,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -3291,7 +3291,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -3302,7 +3302,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -3323,7 +3323,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "left": 0.0,
           "right": 6.09359868367513
         }
@@ -3354,7 +3354,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -3400,7 +3400,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -3411,7 +3411,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -3457,7 +3457,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -3468,7 +3468,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -3514,7 +3514,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -3525,7 +3525,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -3571,7 +3571,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -3582,7 +3582,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -3603,7 +3603,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -3640,7 +3640,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": 26.15462239583337,
           "kind": "amount_difference",
@@ -3661,7 +3661,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -3692,7 +3692,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.995035807291686,
           "kind": "amount_difference",
@@ -3738,7 +3738,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -3749,7 +3749,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -3770,7 +3770,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -3809,7 +3809,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": 93.42041015625,
           "kind": "amount_difference",
@@ -3855,7 +3855,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -3866,7 +3866,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -3912,7 +3912,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -3923,7 +3923,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -3969,7 +3969,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -3980,7 +3980,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -4026,7 +4026,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -4037,7 +4037,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -4083,7 +4083,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -4094,7 +4094,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -4140,7 +4140,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -4151,7 +4151,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -4172,7 +4172,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -4207,7 +4207,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": 62.725830078125,
           "kind": "amount_difference",
@@ -4253,7 +4253,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -4264,7 +4264,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -4285,7 +4285,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -4316,7 +4316,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -99.49503580729169,
           "kind": "amount_difference",
@@ -4362,7 +4362,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -4373,7 +4373,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -4394,7 +4394,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -4427,7 +4427,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -228.709716796875,
           "kind": "amount_difference",
@@ -4473,7 +4473,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -4484,7 +4484,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -4534,7 +4534,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -64.37409973144531,
           "kind": "amount_difference",
@@ -4545,7 +4545,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -4566,7 +4566,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -4607,7 +4607,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -25.96337890625,
           "kind": "amount_difference",
@@ -4628,7 +4628,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -4669,7 +4669,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -9.48828125,
           "kind": "amount_difference",
@@ -4690,7 +4690,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -4721,7 +4721,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -182.66998291015625,
           "kind": "amount_difference",
@@ -4767,7 +4767,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -4778,7 +4778,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -4799,7 +4799,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -4834,7 +4834,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": 199.32591756184894,
           "kind": "amount_difference",
@@ -4880,7 +4880,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -4891,7 +4891,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -4937,7 +4937,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -4948,7 +4948,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -4994,7 +4994,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -5005,7 +5005,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -5051,7 +5051,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -5062,7 +5062,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -5110,7 +5110,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -25.589762369791668,
           "kind": "amount_difference",
@@ -5121,7 +5121,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -5167,7 +5167,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -5178,7 +5178,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -5224,7 +5224,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -5235,7 +5235,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -5281,7 +5281,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -5292,7 +5292,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -5340,7 +5340,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -5351,7 +5351,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -5372,7 +5372,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -5403,7 +5403,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -20.394978841145814,
           "kind": "amount_difference",
@@ -5424,7 +5424,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -5459,7 +5459,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -229.87406412760419,
           "kind": "amount_difference",
@@ -5480,7 +5480,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -5519,7 +5519,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -7.879557291666686,
           "kind": "amount_difference",
@@ -5540,7 +5540,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "left": 0.0,
           "right": 6.09359868367513
         }
@@ -5571,7 +5571,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -5619,7 +5619,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -5630,7 +5630,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -5651,7 +5651,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -5688,7 +5688,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -7.14532470703125,
           "kind": "amount_difference",
@@ -5736,7 +5736,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -5747,7 +5747,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -5795,7 +5795,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -5806,7 +5806,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -5827,7 +5827,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -5858,7 +5858,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -53.89499918619792,
           "kind": "amount_difference",
@@ -5904,7 +5904,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -5915,7 +5915,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -5967,7 +5967,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -58.020355224609375,
           "kind": "amount_difference",
@@ -5978,7 +5978,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -6024,7 +6024,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -6035,7 +6035,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -6056,7 +6056,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "left": 0.0,
           "right": 6.09359868367513
         }
@@ -6089,7 +6089,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -6110,7 +6110,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -6149,7 +6149,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -7.579508463541629,
           "kind": "amount_difference",
@@ -6170,7 +6170,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -6205,7 +6205,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -47.52412923177087,
           "kind": "amount_difference",
@@ -6226,7 +6226,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -6261,7 +6261,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -154.62410481770831,
           "kind": "amount_difference",
@@ -6313,7 +6313,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -225.1953328450521,
           "kind": "amount_difference",
@@ -6324,7 +6324,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -6345,7 +6345,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -6380,7 +6380,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": 32.725830078125,
           "kind": "amount_difference",
@@ -6401,7 +6401,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -6434,7 +6434,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": 11.040201822916629,
           "kind": "amount_difference",
@@ -6482,7 +6482,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -6493,7 +6493,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -6541,7 +6541,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -6552,7 +6552,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -6573,7 +6573,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -6614,7 +6614,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -8.98828125,
           "kind": "amount_difference",
@@ -6660,7 +6660,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -6671,7 +6671,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -6692,7 +6692,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -6727,7 +6727,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": 16.52579752604163,
           "kind": "amount_difference",
@@ -6748,7 +6748,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -6779,7 +6779,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -25.594991048177093,
           "kind": "amount_difference",
@@ -6800,7 +6800,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -6831,7 +6831,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -129.49498494466147,
           "kind": "amount_difference",
@@ -6877,7 +6877,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -6888,7 +6888,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -6934,7 +6934,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -6945,7 +6945,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -6991,7 +6991,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -7002,7 +7002,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -7048,7 +7048,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -7059,7 +7059,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -7107,7 +7107,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -7118,7 +7118,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -7164,7 +7164,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -7175,7 +7175,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -7221,7 +7221,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -7232,7 +7232,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -7253,7 +7253,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "left": 0.0,
           "right": 6.09359868367513
         }
@@ -7284,7 +7284,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -7330,7 +7330,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -7341,7 +7341,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -7387,7 +7387,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -7398,7 +7398,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -7419,7 +7419,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -7456,7 +7456,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -133.57023111979163,
           "kind": "amount_difference",
@@ -7502,7 +7502,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -7513,7 +7513,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -7534,7 +7534,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -7575,7 +7575,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": 65.31160481770826,
           "kind": "amount_difference",
@@ -7596,7 +7596,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -7635,7 +7635,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": 105.5205078125,
           "kind": "amount_difference",
@@ -7681,7 +7681,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -7692,7 +7692,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -7713,7 +7713,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -7744,7 +7744,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -114.66998291015625,
           "kind": "amount_difference",
@@ -7792,7 +7792,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -7803,7 +7803,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -7849,7 +7849,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -7860,7 +7860,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -7908,7 +7908,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -7919,7 +7919,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -7967,7 +7967,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -7978,7 +7978,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -8026,7 +8026,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -8037,7 +8037,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -8083,7 +8083,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -8094,7 +8094,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -8148,7 +8148,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -238.47945149739584,
           "kind": "amount_difference",
@@ -8159,7 +8159,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -8180,7 +8180,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -8211,7 +8211,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -107.66998291015625,
           "kind": "amount_difference",
@@ -8257,7 +8257,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -8268,7 +8268,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -8289,7 +8289,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -8328,7 +8328,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -7.604532877604186,
           "kind": "amount_difference",
@@ -8349,7 +8349,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -8390,7 +8390,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -8.98828125,
           "kind": "amount_difference",
@@ -8411,7 +8411,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -8452,7 +8452,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": 13.711832682291742,
           "kind": "amount_difference",
@@ -8473,7 +8473,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -8512,7 +8512,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -8.104532877604186,
           "kind": "amount_difference",
@@ -8533,7 +8533,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -8572,7 +8572,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -7.479410807291629,
           "kind": "amount_difference",
@@ -8593,7 +8593,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -8632,7 +8632,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": 28.0205078125,
           "kind": "amount_difference",
@@ -8684,7 +8684,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -60.79534912109375,
           "kind": "amount_difference",
@@ -8695,7 +8695,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -8716,7 +8716,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -8749,7 +8749,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -85.059814453125,
           "kind": "amount_difference",
@@ -8770,7 +8770,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -8807,7 +8807,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -231.42032877604163,
           "kind": "amount_difference",
@@ -8828,7 +8828,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -8859,7 +8859,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -35.66998291015625,
           "kind": "amount_difference",
@@ -8905,7 +8905,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -23.973597208658855,
           "kind": "amount_difference",
@@ -8916,7 +8916,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -8937,7 +8937,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "left": 0.0,
           "right": 6.09359868367513
         }
@@ -8968,7 +8968,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_right_only",
@@ -8989,7 +8989,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -9022,7 +9022,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": 505.8152389526367,
           "kind": "amount_difference",
@@ -9043,7 +9043,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -9076,7 +9076,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -181.059814453125,
           "kind": "amount_difference",
@@ -9124,7 +9124,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": 115.0,
           "kind": "amount_difference",
@@ -9135,7 +9135,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_left_only",
@@ -9156,7 +9156,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -9189,7 +9189,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -228.93479410807294,
           "kind": "amount_difference",
@@ -9210,7 +9210,7 @@
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "left": true,
           "right": true
         }
@@ -9243,7 +9243,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": -154.18473307291669,
           "kind": "amount_difference",
@@ -9291,7 +9291,7 @@
       },
       "mismatches": [
         {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "concept": "us:programs/snap#benefit",
           "description": "SNAP benefit amount",
           "difference": 546.0,
           "kind": "amount_difference",
@@ -9302,7 +9302,7 @@
           "tolerance": 7
         },
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "concept": "us:programs/snap#eligible",
           "description": "SNAP eligibility",
           "difference": null,
           "kind": "eligibility_left_only",
@@ -9323,7 +9323,7 @@
       "comparison": "amount",
       "components": [],
       "description": "SNAP benefit amount",
-      "id": "us:statutes/7/2014/u#snap_benefit",
+      "id": "us:programs/snap#benefit",
       "parent": null,
       "priority": "high",
       "relative_tolerance": 0,
@@ -9334,7 +9334,7 @@
       "comparison": "eligibility",
       "components": [],
       "description": "SNAP eligibility",
-      "id": "us:statutes/7/2014/o#snap_eligible",
+      "id": "us:programs/snap#eligible",
       "parent": null,
       "priority": "high",
       "relative_tolerance": 0,
@@ -9357,7 +9357,7 @@
     {
       "ages": null,
       "case_id": "ecps-29773",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -9378,7 +9378,7 @@
     {
       "ages": null,
       "case_id": "ecps-29773",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -9399,7 +9399,7 @@
     {
       "ages": null,
       "case_id": "ecps-29774",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -8.079508463541686,
       "kind": "amount_difference",
@@ -9415,7 +9415,7 @@
     {
       "ages": null,
       "case_id": "ecps-29788",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -9436,7 +9436,7 @@
     {
       "ages": null,
       "case_id": "ecps-29788",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -9457,7 +9457,7 @@
     {
       "ages": null,
       "case_id": "ecps-29791",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -9478,7 +9478,7 @@
     {
       "ages": null,
       "case_id": "ecps-29791",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -9499,7 +9499,7 @@
     {
       "ages": null,
       "case_id": "ecps-29794",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -9520,7 +9520,7 @@
     {
       "ages": null,
       "case_id": "ecps-29794",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -9541,7 +9541,7 @@
     {
       "ages": null,
       "case_id": "ecps-29803",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -24.38976542154948,
       "disposition": {
@@ -9562,7 +9562,7 @@
     {
       "ages": null,
       "case_id": "ecps-29803",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -9583,7 +9583,7 @@
     {
       "ages": null,
       "case_id": "ecps-29804",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -7.679524739583371,
       "kind": "amount_difference",
@@ -9599,7 +9599,7 @@
     {
       "ages": null,
       "case_id": "ecps-29810",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -9620,7 +9620,7 @@
     {
       "ages": null,
       "case_id": "ecps-29810",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -9641,7 +9641,7 @@
     {
       "ages": null,
       "case_id": "ecps-29815",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -187.22412109375,
       "kind": "amount_difference",
@@ -9657,7 +9657,7 @@
     {
       "ages": null,
       "case_id": "ecps-29825",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": 25.046061197916742,
       "kind": "amount_difference",
@@ -9673,7 +9673,7 @@
     {
       "ages": null,
       "case_id": "ecps-29842",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -8.0794677734375,
       "kind": "amount_difference",
@@ -9689,7 +9689,7 @@
     {
       "ages": null,
       "case_id": "ecps-29843",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": 16.52579752604163,
       "kind": "amount_difference",
@@ -9705,7 +9705,7 @@
     {
       "ages": null,
       "case_id": "ecps-29844",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -9726,7 +9726,7 @@
     {
       "ages": null,
       "case_id": "ecps-29844",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -9747,7 +9747,7 @@
     {
       "ages": null,
       "case_id": "ecps-29854",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -9768,7 +9768,7 @@
     {
       "ages": null,
       "case_id": "ecps-29854",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -9789,7 +9789,7 @@
     {
       "ages": null,
       "case_id": "ecps-29863",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -9810,7 +9810,7 @@
     {
       "ages": null,
       "case_id": "ecps-29863",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -9831,7 +9831,7 @@
     {
       "ages": null,
       "case_id": "ecps-29864",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -9852,7 +9852,7 @@
     {
       "ages": null,
       "case_id": "ecps-29864",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -9873,7 +9873,7 @@
     {
       "ages": null,
       "case_id": "ecps-29865",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -7.045328776041686,
       "kind": "amount_difference",
@@ -9889,7 +9889,7 @@
     {
       "ages": null,
       "case_id": "ecps-29868",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -299.66998291015625,
       "kind": "amount_difference",
@@ -9905,7 +9905,7 @@
     {
       "ages": null,
       "case_id": "ecps-29868",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "kind": "eligibility_right_only",
@@ -9921,7 +9921,7 @@
     {
       "ages": null,
       "case_id": "ecps-29870",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -9942,7 +9942,7 @@
     {
       "ages": null,
       "case_id": "ecps-29870",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -9963,7 +9963,7 @@
     {
       "ages": null,
       "case_id": "ecps-29875",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -168.26998901367188,
       "kind": "amount_difference",
@@ -9979,7 +9979,7 @@
     {
       "ages": null,
       "case_id": "ecps-29875",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "kind": "eligibility_right_only",
@@ -9995,7 +9995,7 @@
     {
       "ages": null,
       "case_id": "ecps-29878",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -136.66998291015625,
       "kind": "amount_difference",
@@ -10011,7 +10011,7 @@
     {
       "ages": null,
       "case_id": "ecps-29884",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": 66.065185546875,
       "kind": "amount_difference",
@@ -10027,7 +10027,7 @@
     {
       "ages": null,
       "case_id": "ecps-29900",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -136.20458984375,
       "kind": "amount_difference",
@@ -10043,7 +10043,7 @@
     {
       "ages": null,
       "case_id": "ecps-29907",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -11.79498291015625,
       "kind": "amount_difference",
@@ -10059,7 +10059,7 @@
     {
       "ages": null,
       "case_id": "ecps-29915",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -10080,7 +10080,7 @@
     {
       "ages": null,
       "case_id": "ecps-29915",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -10101,7 +10101,7 @@
     {
       "ages": null,
       "case_id": "ecps-29921",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -11.750569661458371,
       "kind": "amount_difference",
@@ -10117,7 +10117,7 @@
     {
       "ages": null,
       "case_id": "ecps-29936",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -10138,7 +10138,7 @@
     {
       "ages": null,
       "case_id": "ecps-29936",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -10159,7 +10159,7 @@
     {
       "ages": null,
       "case_id": "ecps-29957",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -10180,7 +10180,7 @@
     {
       "ages": null,
       "case_id": "ecps-29957",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -10201,7 +10201,7 @@
     {
       "ages": null,
       "case_id": "ecps-29966",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": 83.75480143229163,
       "kind": "amount_difference",
@@ -10217,7 +10217,7 @@
     {
       "ages": null,
       "case_id": "ecps-29968",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -153.66998291015625,
       "kind": "amount_difference",
@@ -10233,7 +10233,7 @@
     {
       "ages": null,
       "case_id": "ecps-30001",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -34.313313802083314,
       "kind": "amount_difference",
@@ -10249,7 +10249,7 @@
     {
       "ages": null,
       "case_id": "ecps-30005",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -120.21329752604169,
       "kind": "amount_difference",
@@ -10265,7 +10265,7 @@
     {
       "ages": null,
       "case_id": "ecps-30006",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -7.045328776041686,
       "kind": "amount_difference",
@@ -10281,7 +10281,7 @@
     {
       "ages": null,
       "case_id": "ecps-30013",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -10302,7 +10302,7 @@
     {
       "ages": null,
       "case_id": "ecps-30021",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": 26.15462239583337,
       "kind": "amount_difference",
@@ -10318,7 +10318,7 @@
     {
       "ages": null,
       "case_id": "ecps-30041",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -10339,7 +10339,7 @@
     {
       "ages": null,
       "case_id": "ecps-30041",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -10360,7 +10360,7 @@
     {
       "ages": null,
       "case_id": "ecps-30058",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -10381,7 +10381,7 @@
     {
       "ages": null,
       "case_id": "ecps-30058",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -10402,7 +10402,7 @@
     {
       "ages": null,
       "case_id": "ecps-30062",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": 42.65462239583337,
       "kind": "amount_difference",
@@ -10418,7 +10418,7 @@
     {
       "ages": null,
       "case_id": "ecps-30064",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -243.66998291015625,
       "kind": "amount_difference",
@@ -10434,7 +10434,7 @@
     {
       "ages": null,
       "case_id": "ecps-30074",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -10455,7 +10455,7 @@
     {
       "ages": null,
       "case_id": "ecps-30074",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -10476,7 +10476,7 @@
     {
       "ages": null,
       "case_id": "ecps-30087",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -10497,7 +10497,7 @@
     {
       "ages": null,
       "case_id": "ecps-30087",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -10518,7 +10518,7 @@
     {
       "ages": null,
       "case_id": "ecps-30091",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -10539,7 +10539,7 @@
     {
       "ages": null,
       "case_id": "ecps-30091",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -10560,7 +10560,7 @@
     {
       "ages": null,
       "case_id": "ecps-30096",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -10581,7 +10581,7 @@
     {
       "ages": null,
       "case_id": "ecps-30096",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -10602,7 +10602,7 @@
     {
       "ages": null,
       "case_id": "ecps-30102",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -10623,7 +10623,7 @@
     {
       "ages": null,
       "case_id": "ecps-30102",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -10644,7 +10644,7 @@
     {
       "ages": null,
       "case_id": "ecps-30105",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -10665,7 +10665,7 @@
     {
       "ages": null,
       "case_id": "ecps-30105",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -10686,7 +10686,7 @@
     {
       "ages": null,
       "case_id": "ecps-30122",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -41.62418619791663,
       "kind": "amount_difference",
@@ -10702,7 +10702,7 @@
     {
       "ages": null,
       "case_id": "ecps-30128",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -10723,7 +10723,7 @@
     {
       "ages": null,
       "case_id": "ecps-30128",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -10744,7 +10744,7 @@
     {
       "ages": null,
       "case_id": "ecps-30138",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -10765,7 +10765,7 @@
     {
       "ages": null,
       "case_id": "ecps-30138",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -10786,7 +10786,7 @@
     {
       "ages": null,
       "case_id": "ecps-30154",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -7.979410807291629,
       "kind": "amount_difference",
@@ -10802,7 +10802,7 @@
     {
       "ages": null,
       "case_id": "ecps-30160",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": 24.0,
       "kind": "amount_difference",
@@ -10818,7 +10818,7 @@
     {
       "ages": null,
       "case_id": "ecps-30160",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "kind": "eligibility_left_only",
@@ -10834,7 +10834,7 @@
     {
       "ages": null,
       "case_id": "ecps-30175",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -10855,7 +10855,7 @@
     {
       "ages": null,
       "case_id": "ecps-30188",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": 36.45501708984375,
       "kind": "amount_difference",
@@ -10871,7 +10871,7 @@
     {
       "ages": null,
       "case_id": "ecps-30203",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -10892,7 +10892,7 @@
     {
       "ages": null,
       "case_id": "ecps-30219",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -8.094985961914062,
       "kind": "amount_difference",
@@ -10908,7 +10908,7 @@
     {
       "ages": null,
       "case_id": "ecps-30236",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -10929,7 +10929,7 @@
     {
       "ages": null,
       "case_id": "ecps-30236",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -10950,7 +10950,7 @@
     {
       "ages": null,
       "case_id": "ecps-30237",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -10971,7 +10971,7 @@
     {
       "ages": null,
       "case_id": "ecps-30237",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -10992,7 +10992,7 @@
     {
       "ages": null,
       "case_id": "ecps-30245",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -11013,7 +11013,7 @@
     {
       "ages": null,
       "case_id": "ecps-30245",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -11034,7 +11034,7 @@
     {
       "ages": null,
       "case_id": "ecps-30262",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -11055,7 +11055,7 @@
     {
       "ages": null,
       "case_id": "ecps-30264",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -11076,7 +11076,7 @@
     {
       "ages": null,
       "case_id": "ecps-30264",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -11097,7 +11097,7 @@
     {
       "ages": null,
       "case_id": "ecps-30282",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -11118,7 +11118,7 @@
     {
       "ages": null,
       "case_id": "ecps-30282",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -11139,7 +11139,7 @@
     {
       "ages": null,
       "case_id": "ecps-30283",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -11160,7 +11160,7 @@
     {
       "ages": null,
       "case_id": "ecps-30283",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -11181,7 +11181,7 @@
     {
       "ages": null,
       "case_id": "ecps-30323",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -11202,7 +11202,7 @@
     {
       "ages": null,
       "case_id": "ecps-30323",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -11223,7 +11223,7 @@
     {
       "ages": null,
       "case_id": "ecps-30368",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": 26.15462239583337,
       "kind": "amount_difference",
@@ -11239,7 +11239,7 @@
     {
       "ages": null,
       "case_id": "ecps-30372",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.995035807291686,
       "kind": "amount_difference",
@@ -11255,7 +11255,7 @@
     {
       "ages": null,
       "case_id": "ecps-30373",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -11276,7 +11276,7 @@
     {
       "ages": null,
       "case_id": "ecps-30373",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -11297,7 +11297,7 @@
     {
       "ages": null,
       "case_id": "ecps-30397",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": 93.42041015625,
       "kind": "amount_difference",
@@ -11313,7 +11313,7 @@
     {
       "ages": null,
       "case_id": "ecps-30405",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -11334,7 +11334,7 @@
     {
       "ages": null,
       "case_id": "ecps-30405",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -11355,7 +11355,7 @@
     {
       "ages": null,
       "case_id": "ecps-30415",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -11376,7 +11376,7 @@
     {
       "ages": null,
       "case_id": "ecps-30415",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -11397,7 +11397,7 @@
     {
       "ages": null,
       "case_id": "ecps-30419",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -11418,7 +11418,7 @@
     {
       "ages": null,
       "case_id": "ecps-30419",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -11439,7 +11439,7 @@
     {
       "ages": null,
       "case_id": "ecps-30425",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -11460,7 +11460,7 @@
     {
       "ages": null,
       "case_id": "ecps-30425",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -11481,7 +11481,7 @@
     {
       "ages": null,
       "case_id": "ecps-30435",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -11502,7 +11502,7 @@
     {
       "ages": null,
       "case_id": "ecps-30435",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -11523,7 +11523,7 @@
     {
       "ages": null,
       "case_id": "ecps-30439",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -11544,7 +11544,7 @@
     {
       "ages": null,
       "case_id": "ecps-30439",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -11565,7 +11565,7 @@
     {
       "ages": null,
       "case_id": "ecps-30443",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": 62.725830078125,
       "kind": "amount_difference",
@@ -11581,7 +11581,7 @@
     {
       "ages": null,
       "case_id": "ecps-30449",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -11602,7 +11602,7 @@
     {
       "ages": null,
       "case_id": "ecps-30449",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -11623,7 +11623,7 @@
     {
       "ages": null,
       "case_id": "ecps-30450",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -99.49503580729169,
       "kind": "amount_difference",
@@ -11639,7 +11639,7 @@
     {
       "ages": null,
       "case_id": "ecps-30454",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -11660,7 +11660,7 @@
     {
       "ages": null,
       "case_id": "ecps-30454",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -11681,7 +11681,7 @@
     {
       "ages": null,
       "case_id": "ecps-30465",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -228.709716796875,
       "kind": "amount_difference",
@@ -11697,7 +11697,7 @@
     {
       "ages": null,
       "case_id": "ecps-30486",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -11718,7 +11718,7 @@
     {
       "ages": null,
       "case_id": "ecps-30486",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -11739,7 +11739,7 @@
     {
       "ages": null,
       "case_id": "ecps-30536",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -64.37409973144531,
       "disposition": {
@@ -11760,7 +11760,7 @@
     {
       "ages": null,
       "case_id": "ecps-30536",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -11781,7 +11781,7 @@
     {
       "ages": null,
       "case_id": "ecps-30537",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -25.96337890625,
       "kind": "amount_difference",
@@ -11797,7 +11797,7 @@
     {
       "ages": null,
       "case_id": "ecps-30565",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -9.48828125,
       "kind": "amount_difference",
@@ -11813,7 +11813,7 @@
     {
       "ages": null,
       "case_id": "ecps-30588",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -182.66998291015625,
       "kind": "amount_difference",
@@ -11829,7 +11829,7 @@
     {
       "ages": null,
       "case_id": "ecps-30598",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -11850,7 +11850,7 @@
     {
       "ages": null,
       "case_id": "ecps-30598",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -11871,7 +11871,7 @@
     {
       "ages": null,
       "case_id": "ecps-30605",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": 199.32591756184894,
       "disposition": {
@@ -11892,7 +11892,7 @@
     {
       "ages": null,
       "case_id": "ecps-30622",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -11913,7 +11913,7 @@
     {
       "ages": null,
       "case_id": "ecps-30622",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -11934,7 +11934,7 @@
     {
       "ages": null,
       "case_id": "ecps-30625",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -11955,7 +11955,7 @@
     {
       "ages": null,
       "case_id": "ecps-30625",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -11976,7 +11976,7 @@
     {
       "ages": null,
       "case_id": "ecps-30658",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -11997,7 +11997,7 @@
     {
       "ages": null,
       "case_id": "ecps-30658",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -12018,7 +12018,7 @@
     {
       "ages": null,
       "case_id": "ecps-30660",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -12039,7 +12039,7 @@
     {
       "ages": null,
       "case_id": "ecps-30660",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -12060,7 +12060,7 @@
     {
       "ages": null,
       "case_id": "ecps-30665",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -25.589762369791668,
       "disposition": {
@@ -12081,7 +12081,7 @@
     {
       "ages": null,
       "case_id": "ecps-30665",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -12102,7 +12102,7 @@
     {
       "ages": null,
       "case_id": "ecps-30671",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -12123,7 +12123,7 @@
     {
       "ages": null,
       "case_id": "ecps-30671",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -12144,7 +12144,7 @@
     {
       "ages": null,
       "case_id": "ecps-30677",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -12165,7 +12165,7 @@
     {
       "ages": null,
       "case_id": "ecps-30677",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -12186,7 +12186,7 @@
     {
       "ages": null,
       "case_id": "ecps-30725",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -12207,7 +12207,7 @@
     {
       "ages": null,
       "case_id": "ecps-30725",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -12228,7 +12228,7 @@
     {
       "ages": null,
       "case_id": "ecps-30738",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -12249,7 +12249,7 @@
     {
       "ages": null,
       "case_id": "ecps-30738",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -12270,7 +12270,7 @@
     {
       "ages": null,
       "case_id": "ecps-30743",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -20.394978841145814,
       "kind": "amount_difference",
@@ -12286,7 +12286,7 @@
     {
       "ages": null,
       "case_id": "ecps-30779",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -229.87406412760419,
       "kind": "amount_difference",
@@ -12302,7 +12302,7 @@
     {
       "ages": null,
       "case_id": "ecps-30794",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -7.879557291666686,
       "kind": "amount_difference",
@@ -12318,7 +12318,7 @@
     {
       "ages": null,
       "case_id": "ecps-30811",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -12339,7 +12339,7 @@
     {
       "ages": null,
       "case_id": "ecps-30827",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -12360,7 +12360,7 @@
     {
       "ages": null,
       "case_id": "ecps-30827",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -12381,7 +12381,7 @@
     {
       "ages": null,
       "case_id": "ecps-30832",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -7.14532470703125,
       "kind": "amount_difference",
@@ -12397,7 +12397,7 @@
     {
       "ages": null,
       "case_id": "ecps-30840",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -12418,7 +12418,7 @@
     {
       "ages": null,
       "case_id": "ecps-30840",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -12439,7 +12439,7 @@
     {
       "ages": null,
       "case_id": "ecps-30841",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -12460,7 +12460,7 @@
     {
       "ages": null,
       "case_id": "ecps-30841",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -12481,7 +12481,7 @@
     {
       "ages": null,
       "case_id": "ecps-30843",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -53.89499918619792,
       "kind": "amount_difference",
@@ -12497,7 +12497,7 @@
     {
       "ages": null,
       "case_id": "ecps-30864",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -12518,7 +12518,7 @@
     {
       "ages": null,
       "case_id": "ecps-30864",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -12539,7 +12539,7 @@
     {
       "ages": null,
       "case_id": "ecps-30869",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -58.020355224609375,
       "kind": "amount_difference",
@@ -12555,7 +12555,7 @@
     {
       "ages": null,
       "case_id": "ecps-30869",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "kind": "eligibility_right_only",
@@ -12571,7 +12571,7 @@
     {
       "ages": null,
       "case_id": "ecps-30873",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -12592,7 +12592,7 @@
     {
       "ages": null,
       "case_id": "ecps-30873",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -12613,7 +12613,7 @@
     {
       "ages": null,
       "case_id": "ecps-30875",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -12634,7 +12634,7 @@
     {
       "ages": null,
       "case_id": "ecps-30885",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -7.579508463541629,
       "kind": "amount_difference",
@@ -12650,7 +12650,7 @@
     {
       "ages": null,
       "case_id": "ecps-30895",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -47.52412923177087,
       "kind": "amount_difference",
@@ -12666,7 +12666,7 @@
     {
       "ages": null,
       "case_id": "ecps-30896",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -154.62410481770831,
       "kind": "amount_difference",
@@ -12682,7 +12682,7 @@
     {
       "ages": null,
       "case_id": "ecps-30910",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -225.1953328450521,
       "disposition": {
@@ -12703,7 +12703,7 @@
     {
       "ages": null,
       "case_id": "ecps-30910",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -12724,7 +12724,7 @@
     {
       "ages": null,
       "case_id": "ecps-30932",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": 32.725830078125,
       "kind": "amount_difference",
@@ -12740,7 +12740,7 @@
     {
       "ages": null,
       "case_id": "ecps-30941",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": 11.040201822916629,
       "kind": "amount_difference",
@@ -12756,7 +12756,7 @@
     {
       "ages": null,
       "case_id": "ecps-30955",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -12777,7 +12777,7 @@
     {
       "ages": null,
       "case_id": "ecps-30955",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -12798,7 +12798,7 @@
     {
       "ages": null,
       "case_id": "ecps-30974",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -12819,7 +12819,7 @@
     {
       "ages": null,
       "case_id": "ecps-30974",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -12840,7 +12840,7 @@
     {
       "ages": null,
       "case_id": "ecps-30985",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -8.98828125,
       "kind": "amount_difference",
@@ -12856,7 +12856,7 @@
     {
       "ages": null,
       "case_id": "ecps-30987",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -12877,7 +12877,7 @@
     {
       "ages": null,
       "case_id": "ecps-30987",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -12898,7 +12898,7 @@
     {
       "ages": null,
       "case_id": "ecps-30988",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": 16.52579752604163,
       "kind": "amount_difference",
@@ -12914,7 +12914,7 @@
     {
       "ages": null,
       "case_id": "ecps-31013",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -25.594991048177093,
       "kind": "amount_difference",
@@ -12930,7 +12930,7 @@
     {
       "ages": null,
       "case_id": "ecps-31017",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -129.49498494466147,
       "kind": "amount_difference",
@@ -12946,7 +12946,7 @@
     {
       "ages": null,
       "case_id": "ecps-31023",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -12967,7 +12967,7 @@
     {
       "ages": null,
       "case_id": "ecps-31023",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -12988,7 +12988,7 @@
     {
       "ages": null,
       "case_id": "ecps-31031",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -13009,7 +13009,7 @@
     {
       "ages": null,
       "case_id": "ecps-31031",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -13030,7 +13030,7 @@
     {
       "ages": null,
       "case_id": "ecps-31053",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -13051,7 +13051,7 @@
     {
       "ages": null,
       "case_id": "ecps-31053",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -13072,7 +13072,7 @@
     {
       "ages": null,
       "case_id": "ecps-31062",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -13093,7 +13093,7 @@
     {
       "ages": null,
       "case_id": "ecps-31062",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -13114,7 +13114,7 @@
     {
       "ages": null,
       "case_id": "ecps-31066",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -13135,7 +13135,7 @@
     {
       "ages": null,
       "case_id": "ecps-31066",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -13156,7 +13156,7 @@
     {
       "ages": null,
       "case_id": "ecps-31071",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -13177,7 +13177,7 @@
     {
       "ages": null,
       "case_id": "ecps-31071",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -13198,7 +13198,7 @@
     {
       "ages": null,
       "case_id": "ecps-31072",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -13219,7 +13219,7 @@
     {
       "ages": null,
       "case_id": "ecps-31072",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -13240,7 +13240,7 @@
     {
       "ages": null,
       "case_id": "ecps-31084",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -13261,7 +13261,7 @@
     {
       "ages": null,
       "case_id": "ecps-31086",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -13282,7 +13282,7 @@
     {
       "ages": null,
       "case_id": "ecps-31086",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -13303,7 +13303,7 @@
     {
       "ages": null,
       "case_id": "ecps-31101",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -13324,7 +13324,7 @@
     {
       "ages": null,
       "case_id": "ecps-31101",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -13345,7 +13345,7 @@
     {
       "ages": null,
       "case_id": "ecps-31102",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -133.57023111979163,
       "kind": "amount_difference",
@@ -13361,7 +13361,7 @@
     {
       "ages": null,
       "case_id": "ecps-31104",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -13382,7 +13382,7 @@
     {
       "ages": null,
       "case_id": "ecps-31104",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -13403,7 +13403,7 @@
     {
       "ages": null,
       "case_id": "ecps-31112",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": 65.31160481770826,
       "kind": "amount_difference",
@@ -13419,7 +13419,7 @@
     {
       "ages": null,
       "case_id": "ecps-31114",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": 105.5205078125,
       "kind": "amount_difference",
@@ -13435,7 +13435,7 @@
     {
       "ages": null,
       "case_id": "ecps-31119",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -13456,7 +13456,7 @@
     {
       "ages": null,
       "case_id": "ecps-31119",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -13477,7 +13477,7 @@
     {
       "ages": null,
       "case_id": "ecps-31127",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -114.66998291015625,
       "kind": "amount_difference",
@@ -13493,7 +13493,7 @@
     {
       "ages": null,
       "case_id": "ecps-31135",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -13514,7 +13514,7 @@
     {
       "ages": null,
       "case_id": "ecps-31135",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -13535,7 +13535,7 @@
     {
       "ages": null,
       "case_id": "ecps-31138",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -13556,7 +13556,7 @@
     {
       "ages": null,
       "case_id": "ecps-31138",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -13577,7 +13577,7 @@
     {
       "ages": null,
       "case_id": "ecps-31144",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -13598,7 +13598,7 @@
     {
       "ages": null,
       "case_id": "ecps-31144",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -13619,7 +13619,7 @@
     {
       "ages": null,
       "case_id": "ecps-31145",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -13640,7 +13640,7 @@
     {
       "ages": null,
       "case_id": "ecps-31145",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -13661,7 +13661,7 @@
     {
       "ages": null,
       "case_id": "ecps-31156",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -13682,7 +13682,7 @@
     {
       "ages": null,
       "case_id": "ecps-31156",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -13703,7 +13703,7 @@
     {
       "ages": null,
       "case_id": "ecps-31167",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -13724,7 +13724,7 @@
     {
       "ages": null,
       "case_id": "ecps-31167",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -13745,7 +13745,7 @@
     {
       "ages": null,
       "case_id": "ecps-31177",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -238.47945149739584,
       "disposition": {
@@ -13766,7 +13766,7 @@
     {
       "ages": null,
       "case_id": "ecps-31177",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -13787,7 +13787,7 @@
     {
       "ages": null,
       "case_id": "ecps-31181",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -107.66998291015625,
       "kind": "amount_difference",
@@ -13803,7 +13803,7 @@
     {
       "ages": null,
       "case_id": "ecps-31192",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -13824,7 +13824,7 @@
     {
       "ages": null,
       "case_id": "ecps-31192",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -13845,7 +13845,7 @@
     {
       "ages": null,
       "case_id": "ecps-31209",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -7.604532877604186,
       "kind": "amount_difference",
@@ -13861,7 +13861,7 @@
     {
       "ages": null,
       "case_id": "ecps-31211",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -8.98828125,
       "kind": "amount_difference",
@@ -13877,7 +13877,7 @@
     {
       "ages": null,
       "case_id": "ecps-31214",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": 13.711832682291742,
       "kind": "amount_difference",
@@ -13893,7 +13893,7 @@
     {
       "ages": null,
       "case_id": "ecps-31219",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -8.104532877604186,
       "kind": "amount_difference",
@@ -13909,7 +13909,7 @@
     {
       "ages": null,
       "case_id": "ecps-31262",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -7.479410807291629,
       "kind": "amount_difference",
@@ -13925,7 +13925,7 @@
     {
       "ages": null,
       "case_id": "ecps-31285",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": 28.0205078125,
       "kind": "amount_difference",
@@ -13941,7 +13941,7 @@
     {
       "ages": null,
       "case_id": "ecps-31289",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -60.79534912109375,
       "kind": "amount_difference",
@@ -13957,7 +13957,7 @@
     {
       "ages": null,
       "case_id": "ecps-31289",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "kind": "eligibility_right_only",
@@ -13973,7 +13973,7 @@
     {
       "ages": null,
       "case_id": "ecps-31296",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -85.059814453125,
       "kind": "amount_difference",
@@ -13989,7 +13989,7 @@
     {
       "ages": null,
       "case_id": "ecps-31306",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -231.42032877604163,
       "kind": "amount_difference",
@@ -14005,7 +14005,7 @@
     {
       "ages": null,
       "case_id": "ecps-31307",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -35.66998291015625,
       "kind": "amount_difference",
@@ -14021,7 +14021,7 @@
     {
       "ages": null,
       "case_id": "ecps-31309",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
       "disposition": {
@@ -14042,7 +14042,7 @@
     {
       "ages": null,
       "case_id": "ecps-31309",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -14063,7 +14063,7 @@
     {
       "ages": null,
       "case_id": "ecps-31318",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "disposition": {
@@ -14084,7 +14084,7 @@
     {
       "ages": null,
       "case_id": "ecps-65250",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": 505.8152389526367,
       "kind": "amount_difference",
@@ -14100,7 +14100,7 @@
     {
       "ages": null,
       "case_id": "ecps-67847",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -181.059814453125,
       "kind": "amount_difference",
@@ -14116,7 +14116,7 @@
     {
       "ages": null,
       "case_id": "ecps-70509",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": 115.0,
       "kind": "amount_difference",
@@ -14132,7 +14132,7 @@
     {
       "ages": null,
       "case_id": "ecps-70509",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "kind": "eligibility_left_only",
@@ -14148,7 +14148,7 @@
     {
       "ages": null,
       "case_id": "ecps-71017",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -228.93479410807294,
       "kind": "amount_difference",
@@ -14164,7 +14164,7 @@
     {
       "ages": null,
       "case_id": "ecps-71437",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": -154.18473307291669,
       "kind": "amount_difference",
@@ -14180,7 +14180,7 @@
     {
       "ages": null,
       "case_id": "ecps-74879",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "concept": "us:programs/snap#benefit",
       "description": "SNAP benefit amount",
       "difference": 546.0,
       "kind": "amount_difference",
@@ -14196,7 +14196,7 @@
     {
       "ages": null,
       "case_id": "ecps-74879",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "concept": "us:programs/snap#eligible",
       "description": "SNAP eligibility",
       "difference": null,
       "kind": "eligibility_left_only",
@@ -14267,11 +14267,11 @@
     "mismatches_by_concept": [
       {
         "count": 154,
-        "value": "us:statutes/7/2014/u#snap_benefit"
+        "value": "us:programs/snap#benefit"
       },
       {
         "count": 96,
-        "value": "us:statutes/7/2014/o#snap_eligible"
+        "value": "us:programs/snap#eligible"
       }
     ],
     "mismatches_by_kind": [

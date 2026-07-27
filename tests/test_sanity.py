@@ -28,7 +28,7 @@ def fixtures_yaml(tmp_path: Path) -> Path:
     path = tmp_path / "test.fixtures.yaml"
     path.write_text(
         """
-concept: us:statutes/7/2014/o#snap_eligible
+concept: us:programs/snap#eligible
 period: 2026-01
 fixtures:
   - id: ineligible-high-income
@@ -62,7 +62,7 @@ fixtures:
 
 def test_load_fixtures_parses_concept_period_and_entries(fixtures_yaml: Path) -> None:
     concept, period, fixtures = load_fixtures(fixtures_yaml)
-    assert concept == "us:statutes/7/2014/o#snap_eligible"
+    assert concept == "us:programs/snap#eligible"
     assert period == "2026-01"
     assert [f.id for f in fixtures] == ["ineligible-high-income", "eligible-low-income"]
     assert fixtures[0].expected == {"axiom": False, "policyengine": False}
@@ -74,7 +74,7 @@ def test_fixture_to_case_emits_person_entities_with_concept_keys(
     _, _, fixtures = load_fixtures(fixtures_yaml)
     case = fixture_to_case(
         fixtures[0],
-        concept="us:statutes/7/2014/o#snap_eligible",
+        concept="us:programs/snap#eligible",
         period="2026-01",
     )
     assert case.case_id == "sanity-ineligible-high-income"
@@ -94,7 +94,7 @@ def test_fixture_to_case_sets_scope_for_jurisdiction_filter(
     _, _, fixtures = load_fixtures(fixtures_yaml)
     case = fixture_to_case(
         fixtures[0],
-        concept="us:statutes/7/2014/o#snap_eligible",
+        concept="us:programs/snap#eligible",
         period="2026-01",
     )
     assert case.scope is not None
