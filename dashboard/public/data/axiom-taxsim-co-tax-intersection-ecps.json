@@ -39337,6 +39337,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -1650.0004687500004,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-blindness-63f-extension-taxable_income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 5941.01953125,
       "parent": "us:tax/federal-income-tax#liability",
@@ -39353,6 +39358,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -164.998046875,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-blindness-63f-extension-tax_before_credits",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 594.101953125,
       "parent": "us:tax/federal-income-tax#liability",
@@ -39369,6 +39379,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -69.39514062500001,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-blindness-63f-extension-liability",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 223.404859375,
       "parent": null,
@@ -39771,6 +39786,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -2049.99861328125,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-blindness-63f-extension-taxable_income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 6648.92138671875,
       "parent": "us:tax/federal-income-tax#liability",
@@ -39787,6 +39807,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -204.99786132812494,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-blindness-63f-extension-tax_before_credits",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 664.892138671875,
       "parent": "us:tax/federal-income-tax#liability",
@@ -39803,6 +39828,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -88.59745898437495,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-blindness-63f-extension-liability",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 273.552541015625,
       "parent": null,
@@ -43895,6 +43925,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -1650.003437499996,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-blindness-63f-extension-taxable_income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 76267.9765625,
       "parent": "us:tax/federal-income-tax#liability",
@@ -46145,6 +46180,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -2050.004119140627,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-blindness-63f-extension-taxable_income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 56003.20588085937,
       "parent": "us:tax/federal-income-tax#liability",
@@ -46161,6 +46201,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -451.0047062109379,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-blindness-63f-extension-tax_before_credits",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 7032.705293789062,
       "parent": "us:tax/federal-income-tax#liability",
@@ -46177,6 +46222,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -91.19496155468755,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-blindness-63f-extension-liability",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 1041.5150384453125,
       "parent": null,
@@ -48350,6 +48400,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -2049.9966601562483,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-blindness-63f-extension-taxable_income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 53041.17333984375,
       "parent": "us:tax/federal-income-tax#liability",
@@ -48366,6 +48421,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -451.00186523437515,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-blindness-63f-extension-tax_before_credits",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 6381.058134765625,
       "parent": "us:tax/federal-income-tax#liability",
@@ -48382,6 +48442,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -92.9309374999998,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-blindness-63f-extension-liability",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 2086.7490625,
       "parent": null,
@@ -49398,6 +49463,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -1650.00046875,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-blindness-63f-extension-taxable_income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 1977.76953125,
       "parent": "us:tax/federal-income-tax#liability",
@@ -49414,6 +49484,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -165.00304687499997,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-blindness-63f-extension-tax_before_credits",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 197.776953125,
       "parent": "us:tax/federal-income-tax#liability",
@@ -49430,6 +49505,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -69.398140625,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-blindness-63f-extension-liability",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 49.021859375,
       "parent": null,
@@ -56882,18 +56962,20 @@
     "dispositioned": {
       "counts": {
         "axiom_encoding_gap": 298,
-        "bridge_artifact": 0,
-        "explained_residual": 285,
+        "bridge_artifact": 32,
+        "explained_residual": 306,
         "unexplained": 0,
         "upstream_engine_gap": 254
       },
       "dispositions_file": "dispositions/co-tax-intersection-taxsim.yaml",
-      "expired_entries": [],
-      "explained_rate": 83.338884,
+      "expired_entries": [
+        "taxsim-blindness-63f-extension-standard_deduction"
+      ],
+      "explained_rate": 83.780183,
       "orphaned_entries": [],
       "raw_match_rate": 78.850958,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 1703
+      "unexplained_count": 1650
     },
     "error_count": 0,
     "errors_by_engine": [],
