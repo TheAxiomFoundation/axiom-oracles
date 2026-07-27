@@ -837,6 +837,15 @@
       "source": "comparisons/oh-income-tax-liability.yaml"
     },
     {
+      "suite": "oh-income-tax-populace",
+      "name": null,
+      "report": "axiom-policyengine-oh-income-tax-populace.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/state-income-tax-populace.yaml"
+    },
+    {
       "suite": "ok-income-tax-liability",
       "name": "ok-income-tax-liability",
       "report": "axiom-policyengine-taxsim-ok-income-tax-liability.json",

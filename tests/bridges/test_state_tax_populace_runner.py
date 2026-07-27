@@ -380,6 +380,128 @@ def test_utah_target_rejects_invalid_before_credit_amount(value, message) -> Non
         )
 
 
+def _oh_simulation(
+    *,
+    ids=(1, 2, 3),
+    taxable=(26_049.0, 26_050.0, 26_051.0),
+    tax=(0.0, 332.0020446777344, 332.029541015625),
+    threshold=26_050.0,
+):
+    class FakeSimulation:
+        def __init__(self, dataset):
+            assert dataset == "dataset"
+            self.tax_benefit_system = SimpleNamespace(
+                parameters=lambda period: SimpleNamespace(
+                    gov=SimpleNamespace(
+                        states=SimpleNamespace(
+                            oh=SimpleNamespace(
+                                tax=SimpleNamespace(
+                                    income=SimpleNamespace(
+                                        agi_threshold=threshold
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+
+        def calculate(self, variable, period):
+            assert period == 2026
+            return {
+                "tax_unit_id": ids,
+                "oh_taxable_income": taxable,
+                "oh_income_tax_before_non_refundable_credits": tax,
+            }[variable]
+
+    return FakeSimulation
+
+
+def _oh_targets(microsimulation_factory) -> dict[str, dict[int, float]]:
+    return calculate_policyengine_targets(
+        dataset="dataset",
+        raw_tax_units=pd.DataFrame({"tax_unit_id": [1, 2, 3]}),
+        routes=tuple(
+            TaxUnitRoute(index, index, "OH", "39", 1, DISPOSITION_READY)
+            for index in range(1, 4)
+        ),
+        year=2026,
+        microsimulation_factory=microsimulation_factory,
+    )
+
+
+def test_ohio_target_honors_inclusive_no_tax_threshold() -> None:
+    assert _oh_targets(_oh_simulation()) == {
+        "OH": {1: 0.0, 2: 0.0, 3: 332.029541015625}
+    }
+
+
+@pytest.mark.parametrize(
+    ("kwargs", "message"),
+    [
+        (
+            {"ids": (1, 2)},
+            "threshold-corrected target inputs returned 2, 3, and 3 rows",
+        ),
+        (
+            {"taxable": (26_049.0, 26_050.0)},
+            "threshold-corrected target inputs returned 3, 2, and 3 rows",
+        ),
+        (
+            {"tax": (0.0, 332.0)},
+            "threshold-corrected target inputs returned 3, 3, and 2 rows",
+        ),
+    ],
+)
+def test_ohio_target_rejects_component_cardinality(kwargs, message) -> None:
+    with pytest.raises(StateTaxPopulationRoutingError, match=message):
+        _oh_targets(_oh_simulation(**kwargs))
+
+
+@pytest.mark.parametrize(
+    ("ids", "message"),
+    [
+        ((2, 1, 3), "order does not match"),
+        ((1, 1, 3), "duplicate OH PolicyEngine tax_unit_id"),
+    ],
+)
+def test_ohio_target_rejects_entity_identity_defects(ids, message) -> None:
+    with pytest.raises(StateTaxPopulationRoutingError, match=message):
+        _oh_targets(_oh_simulation(ids=ids))
+
+
+def test_ohio_target_rejects_duplicate_source_entity_ids() -> None:
+    with pytest.raises(
+        StateTaxPopulationRoutingError,
+        match="duplicate OH source tax_unit_id",
+    ):
+        calculate_policyengine_targets(
+            dataset="dataset",
+            raw_tax_units=pd.DataFrame({"tax_unit_id": [1, 1, 3]}),
+            routes=(
+                TaxUnitRoute(1, 1, "OH", "39", 1, DISPOSITION_READY),
+            ),
+            year=2026,
+            microsimulation_factory=_oh_simulation(ids=(1, 1, 3)),
+        )
+
+
+@pytest.mark.parametrize(
+    ("kwargs", "message"),
+    [
+        ({"taxable": (float("nan"), 26_050.0, 26_051.0)}, "non-finite"),
+        ({"taxable": (-1.0, 26_050.0, 26_051.0)}, "nonnegative"),
+        ({"tax": (0.0, float("inf"), 332.03)}, "non-finite"),
+        ({"tax": (0.0, -1.0, 332.03)}, "nonnegative"),
+        ({"threshold": float("nan")}, "non-finite"),
+        ({"threshold": -1.0}, "must be nonnegative"),
+    ],
+)
+def test_ohio_target_rejects_invalid_derived_values(kwargs, message) -> None:
+    with pytest.raises(StateTaxPopulationRoutingError, match=message):
+        _oh_targets(_oh_simulation(**kwargs))
+
+
 def test_connecticut_target_recovers_policyengine_pre_credit_total_exactly() -> None:
     calls = []
 

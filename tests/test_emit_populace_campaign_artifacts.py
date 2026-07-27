@@ -213,6 +213,33 @@ def test_mississippi_dashboard_description_names_person_schedule():
     assert "liability" not in description.lower()
 
 
+def test_ohio_dashboard_description_names_bounded_schedule():
+    output = (
+        "us-oh:policies/income_tax/pilot_liability_pipeline"
+        "#oh_pit_pilot_schedule_tax"
+    )
+    report = project_state(
+        "OH",
+        {
+            "compared_count": 1,
+            "mismatch_count": 0,
+            "output": output,
+            "program": output.split("#", 1)[0],
+            "policyengine_target": (
+                "oh_nonbusiness_income_tax_before_non_refundable_credits_derived"
+            ),
+        },
+        _campaign(),
+        "campaign.json",
+    )
+
+    description = report["aggregates"][0]["description"]
+    assert "section 5747.02(A)(3)(c)" in description
+    assert "nonbusiness-income schedule before nonrefundable credits" in description
+    assert "caller-supplied completed Ohio taxable nonbusiness income" in description
+    assert "liability" not in description.lower()
+
+
 def test_utah_projection_carries_branch_exercise_diagnostics():
     output = (
         "us-ut:policies/income_tax/"
