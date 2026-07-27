@@ -494,12 +494,43 @@ residual), #229 (small-suite grounding).
 - Confirmed the local GitNexus CLI reports this repository unindexed and the
   connector exposes no graph-query tools. Because no code symbols changed,
   review continued with direct generated-artifact and execution-path tracing.
+- Reconciled the canonical reports and selectors independently. The lone-minor
+  class is exactly 12 households/24 rows and matches PolicyEngine-US #9157;
+  the 95 TANF selectors equal the preserved 95-pass set, all 26 failures are
+  unannotated, and no case is assigned to multiple classes/issues.
+- Reproduced the worker's before/after totals from the data:
+  655 to 656 raw rows, 302/275 to 324/239 unexplained rows/households. The
+  categorical rollback is exactly MA 27/54 and SC 42/84, reconciling the
+  `+34/+52` changes including new, bridge-classified SC `ecps-29277`.
+- Confirmed the minimum-benefit criterion yields zero qualifiers. Found a
+  worker-report accuracy defect: its purportedly exhaustive six-row screen
+  omits MA `ecps-2303` (`$24` versus `$100.1699930826823`, eligibility
+  true/true), which also fails the criterion.
+- Found a dashboard integrity blocker. None of the five browser-facing
+  `dashboard/public/data/cases/{state}-snap-ecps` artifact directories was
+  regenerated. Relative to the canonical reports they contain 266 wrong
+  annotations, omit three current mismatch rows, and retain two obsolete
+  rows. All 138 returned MA/SC categorical rows still carry
+  `e: "axiom_encoding_gap"` and most new #9157/#397 annotations are missing.
+- Audited all 119 current disposition entries: every entry has a
+  `linked_issue`, but 14 retained BBCE entries lack `evidence.sources`; eight
+  of those entries were modified here. Their common RuleSpec-US #1098 link is
+  California-specific and does not track the AL/MA/NC/SC mechanisms, so the
+  literal “linked issue + source” claim is not satisfied.
+- Re-ran ten live TANF counterfactuals across AL/MA/NC/SC/TN on
+  PolicyEngine `4.18.9`, US `1.767.3`, Core `3.30.3`. All ten baselines matched
+  the committed Core `3.28.0` report values bit-for-bit; eight passed after
+  neutralization and the two sampled committed failures (NC `ecps-28066`,
+  TN `ecps-36247`) remained just outside the strict `$7` tolerance and
+  unannotated. Artifact SHA-256:
+  `3ee4052975145fdfae4118f85659738ede38e256bba09f5e28e707eb283cc5ad`.
+- Attempted the requested end-to-end state rerun. The exact committed
+  `uv run` path was blocked from initializing `/Users/maxghenis/.cache/uv`;
+  an offline copy-on-write cache attempt was stopped after two minutes and
+  remained incomplete. Since the committed configs also select US `1.752.2`
+  rather than the stamped `1.767.3`, no honest byte comparison was possible.
+  The permitted fallback was completed via all seven chain `--check` gates.
 
 ### Next
 
-- Independently reconcile report/disposition counts and all evidence classes.
-- Re-run at least ten TANF counterfactuals, including at least two committed
-  failures.
-- Attempt one state suite end-to-end; record the committed-pin/runtime failure
-  or byte comparison result.
 - Commit the evidence-backed verdict to `REVIEW-REPORT.md`.
