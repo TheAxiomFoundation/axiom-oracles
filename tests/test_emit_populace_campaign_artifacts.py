@@ -1,6 +1,21 @@
-import pytest
+import json
+from pathlib import Path
 
-from scripts.emit_populace_campaign_artifacts import project_state
+import pytest
+import yaml
+
+from scripts.emit_populace_campaign_artifacts import (
+    RETIRED_MANIFEST_REPORTS,
+    reconcile_manifest_reports,
+    project_state,
+)
+
+
+DASHBOARD_DATA = Path(__file__).resolve().parents[1] / "dashboard/public/data"
+POPULACE_SUITE_CONFIG = (
+    Path(__file__).resolve().parents[1]
+    / "comparisons/state-income-tax-populace.yaml"
+)
 
 
 def _campaign() -> dict:
@@ -32,6 +47,91 @@ def _campaign() -> dict:
             },
         },
     }
+
+
+def test_manifest_reconciliation_retires_only_alabama_taxsim_ghost(tmp_path):
+    published = tmp_path / "published.json"
+    published.write_text("{}\n")
+    (retired_report,) = RETIRED_MANIFEST_REPORTS
+
+    assert reconcile_manifest_reports(
+        ["published.json", retired_report],
+        data_dir=tmp_path,
+        required_reports=frozenset({"published.json"}),
+    ) == ["published.json"]
+
+
+def test_manifest_reconciliation_rejects_missing_required_populace_report(
+    tmp_path,
+):
+    required = "axiom-policyengine-al-income-tax-populace.json"
+
+    with pytest.raises(
+        ValueError,
+        match="missing required configured Populace report",
+    ):
+        reconcile_manifest_reports(
+            [],
+            data_dir=tmp_path,
+            required_reports=frozenset({required}),
+        )
+
+
+def test_manifest_reconciliation_rejects_unpublished_nonretired_report(
+    tmp_path,
+):
+    missing = "axiom-policyengine-ct-income-tax-populace.json"
+
+    with pytest.raises(ValueError, match="unpublished dashboard report"):
+        reconcile_manifest_reports([missing], data_dir=tmp_path)
+
+
+def test_every_dashboard_manifest_target_exists():
+    manifest = json.loads((DASHBOARD_DATA / "manifest.json").read_text())
+    missing = [
+        name
+        for name in manifest["reports"]
+        if not (DASHBOARD_DATA / name).is_file()
+    ]
+
+    assert missing == []
+
+
+def test_configured_populace_reports_are_published_and_manifested():
+    manifest = json.loads((DASHBOARD_DATA / "manifest.json").read_text())
+    config = yaml.safe_load(POPULACE_SUITE_CONFIG.read_text())
+    required = {suite["report"] for suite in config["suites"]}
+
+    assert required <= set(manifest["reports"])
+    assert all((DASHBOARD_DATA / name).is_file() for name in required)
+
+
+def test_alabama_dashboard_description_names_narrow_schedule():
+    output = (
+        "us-al:policies/income_tax/"
+        "2026_section_40_18_5_schedule_before_credits"
+        "#al_pit_2026_section_40_18_5_schedule_before_credits"
+    )
+    report = project_state(
+        "AL",
+        {
+            "compared_count": 1,
+            "mismatch_count": 0,
+            "output": output,
+            "program": output.split("#", 1)[0],
+            "policyengine_target": (
+                "al_income_tax_before_non_refundable_credits"
+            ),
+        },
+        _campaign(),
+        "campaign.json",
+    )
+
+    description = report["aggregates"][0]["description"]
+    assert "section 40-18-5 schedule before credits" in description
+    assert "caller-supplied completed Alabama taxable income" in description
+    assert "joint-or-surviving-spouse schedule classifier" in description
+    assert "liability" not in description.lower()
 
 
 def test_connecticut_dashboard_description_names_narrow_component():

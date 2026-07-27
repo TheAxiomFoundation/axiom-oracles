@@ -22,6 +22,15 @@
       "source": "comparisons/parameter-oracles.yaml"
     },
     {
+      "suite": "al-income-tax-populace",
+      "name": null,
+      "report": "axiom-policyengine-al-income-tax-populace.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/state-income-tax-populace.yaml"
+    },
+    {
       "suite": "al-snap-ecps",
       "name": "al-snap-ecps",
       "report": "axiom-policyengine-al-snap-ecps.json",
