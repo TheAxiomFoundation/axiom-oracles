@@ -23,7 +23,7 @@ already at 1). Pending disk: AZ/FL/NY/CA/NC reruns under the fix.
 
 | Block | Was | Now | Mechanism / next step |
 |---|---|---|---|
-| ca-federal-schedule-tax-spsm | 8,841 | **253** | AMT-overwrite class accounted (dispositioned block emitted by generator; regenerated + determinism reconfirmed 99.09%) |
+| ca-federal-schedule-tax-spsm | 8,841 | **97** | AMT-overwrite class accounted (dispositioned block emitted by generator; regenerated + determinism reconfirmed 99.09%) |
 | ca-snap-ecps | 684 | 441 merged (#364) | CORRECTION pending: PE keeps CA net test (net_applies=True) — replace merged classes with corrected 210 gross-band + 33 asset-waiver; the old net-fail arm rows return to raw/deduction-divergence |
 | ga-snap-ecps | 300 | pending write | VERIFIED: 111 hheod-gross-band + 59 net-waiver (GA net_applies False) = 170; write dispositions |
 | al-snap-ecps | 79 | pending | 9 net-waiver + 1 band verified; 61 other-direction |
@@ -55,6 +55,18 @@ self-employment in snap_earned_income netted at exactly 0.6 (verified:
 document netting choice), rerun states — this class should vanish and
 raw match rates rise. Same class likely explains axiom-side rows in all
 states (CA 70 axiom-pays + 69 axiom-eligible etc.).
+
+## Batch 9 (SPSM close-out)
+
+Parser cell-overflow bug found and fixed: 8-digit values (an \$11.6M
+filer) overflowed the extract's 8-char cells leftward; fixed-cell
+slicing split them and manufactured 140 "mismatches" over perfect
+agreement (schedule(11,600,140)=3,802,819 == SPSM to the dollar).
+Digit-aware backoff parsing; +30 taxfilers recovered. Pension-splitting
+class: 16 rows verified per-row against actual household pension income
+(bounded by min(own eligible pension, 50% cap)); 85 consistency-fits
+REJECTED by the strict bound (different mechanism, raw). SPSM final:
+967,426 compared, 8,589 AMT + 16 splitting explained, 97 raw (0.010%).
 
 ## Accounting limitation found (batch 5)
 
