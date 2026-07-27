@@ -38,9 +38,17 @@ def _load_runner():
     return module
 
 
-def test_every_live_federal_grid_pins_canonical_rulespec_snapshot():
-    upstream_sha = "3373e8411f7e141fd50879e3de964386f606f7f6"
-    upstream_tree = "7e00f195ea81ff9aa21c58d53151e937d974a016"
+def test_every_live_federal_grid_pins_a_reviewed_rulespec_snapshot():
+    default_snapshot = (
+        "3373e8411f7e141fd50879e3de964386f606f7f6",
+        "7e00f195ea81ff9aa21c58d53151e937d974a016",
+    )
+    snapshots = {
+        "us-employee-medicare-grid.yaml": (
+            "3b7f2384d2f322d8ade4d093de35d2bd1aeb3927",
+            "6031843ea7892d281dcffc4e06e169701d76f9a5",
+        ),
+    }
     federal_configs = []
     for path in sorted((REPO_ROOT / "comparisons").glob("*.yaml")):
         config = yaml.safe_load(path.read_text())
@@ -49,13 +57,15 @@ def test_every_live_federal_grid_pins_canonical_rulespec_snapshot():
             continue
         federal_configs.append(path.name)
         parameters = runner["parameters"]
-        assert parameters["rulespec_upstream_sha"] == upstream_sha, path
-        assert parameters["rulespec_upstream_tree"] == upstream_tree, path
+        expected_sha, expected_tree = snapshots.get(path.name, default_snapshot)
+        assert parameters["rulespec_upstream_sha"] == expected_sha, path
+        assert parameters["rulespec_upstream_tree"] == expected_tree, path
 
     assert federal_configs == [
         "us-aca-ptc-grid.yaml",
         "us-additional-medicare-grid.yaml",
         "us-elderly-disabled-grid.yaml",
+        "us-employee-medicare-grid.yaml",
         "us-llc-grid.yaml",
         "us-niit-grid.yaml",
         "us-qbid-grid.yaml",
@@ -63,13 +73,14 @@ def test_every_live_federal_grid_pins_canonical_rulespec_snapshot():
     ]
 
 
-def test_all_eight_contract_grids_are_explicit_and_independent():
+def test_all_nine_contract_grids_are_explicit_and_independent():
     generator = _load_generator()
 
     assert set(generator.POLICIES) == {
         "aca_ptc",
         "additional_medicare_tax",
         "elderly_disabled_credit",
+        "employee_medicare_tax",
         "lifetime_learning_credit",
         "net_investment_income_tax",
         "qualified_business_income_deduction",
@@ -89,6 +100,13 @@ def test_all_eight_contract_grids_are_explicit_and_independent():
             "amt-joint-300k",
             "amt-mfs-150k",
             "amt-joint-450k",
+        ],
+        "employee_medicare_tax": [
+            "no_wages_no_hospital_insurance_wage_tax",
+            "hospital_insurance_wage_tax_is_one_point_four_five_percent_of_wages",
+            "medicare_wages_exactly_at_2026_oasdi_wage_base",
+            "medicare_wages_continue_one_dollar_above_2026_oasdi_wage_base",
+            "medicare_wages_continue_well_above_2026_oasdi_wage_base",
         ],
         "self_employment_tax": [
             "seca-under-floor",
@@ -185,6 +203,9 @@ def test_policyengine_bindings_match_the_reviewed_output_boundaries():
     assert generator.POLICIES["additional_medicare_tax"].pe_output_variables == (
         "additional_medicare_tax",
     )
+    assert generator.POLICIES["employee_medicare_tax"].pe_output_variables == (
+        "employee_medicare_tax",
+    )
     assert generator.POLICIES["self_employment_tax"].pe_output_variables == (
         "self_employment_tax",
     )
@@ -243,6 +264,18 @@ def test_payroll_and_niit_inputs_are_derived_from_contract_facts():
     mfs = generator._payroll_situation(payroll_cases["amt-mfs-150k"])
     assert mfs["people"]["head"]["is_separated"][2026] is True
     assert mfs["people"]["head"]["employment_income"][2026] == 150_000
+
+    medicare_cases = {
+        case.case_id: case for case in generator.POLICIES["employee_medicare_tax"].cases
+    }
+    above_oasdi_base = generator._employee_medicare_situation(
+        medicare_cases["medicare_wages_continue_one_dollar_above_2026_oasdi_wage_base"]
+    )
+    head = above_oasdi_base["people"]["head"]
+    assert head["payroll_tax_gross_wages"][2026] == 184_501
+    assert "employment_income" not in head
+    assert "fica_pre_tax_contributions" not in head
+    assert list(above_oasdi_base["people"]) == ["head"]
 
     seca_cases = {
         case.case_id: case for case in generator.POLICIES["self_employment_tax"].cases
@@ -470,6 +503,67 @@ def test_additional_medicare_fixture_enforces_wage_only_person_boundary():
             case,
             stale_flat_fixture,
         )
+
+
+def test_employee_medicare_fixture_has_one_completed_wage_input(monkeypatch):
+    generator = _load_generator()
+    case = next(
+        case
+        for case in generator.POLICIES["employee_medicare_tax"].cases
+        if case.case_id
+        == "medicare_wages_continue_one_dollar_above_2026_oasdi_wage_base"
+    )
+    wage_input = "us:statutes/26/3101/b/1#input.wages"
+    generator._validate_employee_medicare_fixture(
+        case,
+        {wage_input: 184_501},
+    )
+
+    with pytest.raises(ValueError, match="must declare only"):
+        generator._validate_employee_medicare_fixture(
+            case,
+            {
+                wage_input: 184_501,
+                "us:statutes/26/3101/a#input.wages": 184_501,
+            },
+        )
+
+    captured = {}
+
+    def capture_values(label, actual, expected):
+        captured.update(label=label, actual=actual, expected=expected)
+
+    monkeypatch.setattr(generator, "_verify_parameter_values", capture_values)
+
+    class Rate:
+        employee = 0.0145
+
+    class Medicare:
+        rate = Rate()
+
+    class Payroll:
+        medicare = Medicare()
+
+    class Irs:
+        payroll = Payroll()
+
+    class Gov:
+        irs = Irs()
+
+    class Parameters:
+        gov = Gov()
+
+    class TaxBenefitSystem:
+        def parameters(self, instant):
+            assert instant == "2026-01-01"
+            return Parameters()
+
+    generator._verify_employee_medicare_pe_parameters(TaxBenefitSystem())
+    assert captured == {
+        "label": "us-employee-medicare-grid",
+        "actual": {"rate.employee": 0.0145},
+        "expected": {"rate.employee": 0.0145},
+    }
 
 
 def test_axiom_fixture_is_resolved_only_from_supplied_roots(tmp_path):

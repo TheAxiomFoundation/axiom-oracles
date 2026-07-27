@@ -1,0 +1,61 @@
+# Federal employee Medicare wage tax — Axiom vs PolicyEngine-US, tax year 2026.
+#
+# Axiom boundary: the section 3101(b)(1) node applies its statutory 1.45%
+# employee rate directly to one Person's completed Medicare wages. The supplied
+# `wages` fact is the W-2 Box 5 / Medicare-wages surface; no OASDI contribution
+# and benefit base applies to this node.
+# Code: rulespec-us@3b7f2384d2f322d8ade4d093de35d2bd1aeb3927
+# us/statutes/26/3101/b/1.yaml; us/statutes/26/3101/b/1.test.yaml.
+#
+# PolicyEngine binding decision: compare the Person-grain
+# `employee_medicare_tax` directly. PE-US multiplies
+# `gov.irs.payroll.medicare.rate.employee` by `payroll_tax_gross_wages`.
+# This grid supplies `payroll_tax_gross_wages` directly from the same completed
+# W-2 Box 5 fact and verifies that the 2026 employee rate is exactly 0.0145.
+# The one adult, age 40, Texas household/tax-unit scaffolding is held constant
+# and is immaterial to the Person formula. There are no other modeled inputs,
+# deductions, thresholds, filing-status effects, or wage caps.
+# Code: policyengine-us@49d19b239a593dbac8920ac6fd80cfe33372343a
+# policyengine_us/variables/gov/irs/tax/payroll/medicare/
+# employee_medicare_tax.py:4-14;
+# policyengine_us/parameters/gov/irs/payroll/medicare/rate/employee.yaml.
+#
+# The five-case grid binds zero and ordinary wages, both sides of the 2026
+# $184,500 OASDI wage-base seam, and wages well above that seam. The seam is a
+# diagnostic for accidental OASDI-cap wiring: Medicare must keep increasing.
+#
+# The exact suite stack is PolicyEngine 4.18.9, PE-US 1.767.3 and core 3.30.3.
+#
+# Run locally:
+#   uv run python scripts/run_comparison.py us-employee-medicare-grid --summary
+
+name: us-employee-medicare-grid
+title: Federal employee Medicare wage tax — Axiom vs PolicyEngine
+description: >-
+  Compares the section 3101(b)(1) employee Medicare wage tax to PolicyEngine-US
+  on five one-Person W-2 Box 5 cases, including the OASDI wage-base seam where
+  Medicare continues uncapped.
+
+runner:
+  type: federal-tax-liability-grid
+  parameters:
+    policy: employee_medicare_tax
+    period: "2026"
+    concept: >-
+      us:statutes/26/3101/b/1#hospital_insurance_wage_tax
+    python: "3.13"
+    policyengine_version: "4.18.9"
+    policyengine_us_version: "1.767.3"
+    policyengine_core_version: "3.30.3"
+    rulespec_remote: https://github.com/TheAxiomFoundation/rulespec-us.git
+    rulespec_roots:
+      - /private/tmp/oracle-rerun/rulespec-us
+    rulespec_upstream_sha: 3b7f2384d2f322d8ade4d093de35d2bd1aeb3927
+    rulespec_upstream_tree: 6031843ea7892d281dcffc4e06e169701d76f9a5
+
+artifacts:
+  report_basename: axiom-policyengine-us-employee-medicare-grid
+
+dashboard:
+  filename: axiom-policyengine-us-employee-medicare-grid.json
+  suite: us-employee-medicare-grid

@@ -119,6 +119,38 @@ _ADDITIONAL_MEDICARE_CASES = (
 )
 
 
+# Section 3101(b)(1) is a one-input, flat-rate Person rule.  The middle pair
+# straddles the 2026 OASDI contribution and benefit base: Medicare wages have
+# no corresponding cap, so the output must continue increasing above $184,500.
+_EMPLOYEE_MEDICARE_CASES = (
+    _case(
+        "no_wages_no_hospital_insurance_wage_tax",
+        "single",
+        wages=0,
+    ),
+    _case(
+        "hospital_insurance_wage_tax_is_one_point_four_five_percent_of_wages",
+        "single",
+        wages=100_000,
+    ),
+    _case(
+        "medicare_wages_exactly_at_2026_oasdi_wage_base",
+        "single",
+        wages=184_500,
+    ),
+    _case(
+        "medicare_wages_continue_one_dollar_above_2026_oasdi_wage_base",
+        "single",
+        wages=184_501,
+    ),
+    _case(
+        "medicare_wages_continue_well_above_2026_oasdi_wage_base",
+        "single",
+        wages=300_000,
+    ),
+)
+
+
 # GRID-CONTRACT P2.
 _SELF_EMPLOYMENT_CASES = (
     _case(
@@ -779,6 +811,14 @@ def _payroll_situation(case: FederalCase) -> dict[str, Any]:
     return _tax_situation(case, primary_inputs=primary, spouse_inputs=spouse)
 
 
+def _employee_medicare_situation(case: FederalCase) -> dict[str, Any]:
+    """Supply the completed W-2 Box 5 fact directly at the PE formula boundary."""
+    return _tax_situation(
+        case,
+        primary_inputs={"payroll_tax_gross_wages": case.inputs["wages"]},
+    )
+
+
 def _niit_situation(case: FederalCase) -> dict[str, Any]:
     inputs = case.inputs
     primary = {
@@ -1089,6 +1129,25 @@ def _validate_additional_medicare_fixture(
         suite="us-additional-medicare-grid",
         case=case,
         actual=actual,
+    )
+
+
+def _validate_employee_medicare_fixture(
+    case: FederalCase,
+    actual: Mapping[str, Any],
+) -> None:
+    wage_input = "us:statutes/26/3101/b/1#input.wages"
+    if set(actual) != {wage_input}:
+        raise ValueError(
+            f"us-employee-medicare-grid: fixture case {case.case_id!r} "
+            f"must declare only the completed wage input {wage_input!r}; "
+            f"received {sorted(actual)}"
+        )
+    _require_fixture_values(
+        suite="us-employee-medicare-grid",
+        case_id=case.case_id,
+        actual=actual,
+        expected={wage_input: case.inputs["wages"]},
     )
 
 
@@ -1636,6 +1695,15 @@ def _verify_llc_pe_parameters(tax_benefit_system: Any) -> None:
     )
 
 
+def _verify_employee_medicare_pe_parameters(tax_benefit_system: Any) -> None:
+    p = tax_benefit_system.parameters("2026-01-01").gov.irs.payroll.medicare
+    _verify_parameter_values(
+        "us-employee-medicare-grid",
+        {"rate.employee": p.rate.employee},
+        {"rate.employee": 0.0145},
+    )
+
+
 # The RuleSpec paths and output names below are completed by the companion
 # RuleSpec lanes.  Keeping them in this one registry makes each run select and
 # read only one fixture; a missing companion cannot prevent another policy from
@@ -1767,6 +1835,24 @@ POLICIES: dict[str, PolicyConfig] = {
         cases=_ADDITIONAL_MEDICARE_CASES,
         pe_situation=_payroll_situation,
         fixture_input_validator=_validate_additional_medicare_fixture,
+    ),
+    "employee_medicare_tax": PolicyConfig(
+        key="employee_medicare_tax",
+        suite="us-employee-medicare-grid",
+        title="Employee Medicare wage tax",
+        axiom_module_ref="us:statutes/26/3101/b/1",
+        fixture_path=Path("us/statutes/26/3101/b/1.test.yaml"),
+        axiom_output="us:statutes/26/3101/b/1#hospital_insurance_wage_tax",
+        pe_output_variables=("employee_medicare_tax",),
+        pe_boundary=(
+            "One Person's section 3101(b)(1) employee Medicare tax on "
+            "completed W-2 Box 5 / payroll-tax gross wages, with no wage cap"
+        ),
+        cases=_EMPLOYEE_MEDICARE_CASES,
+        pe_situation=_employee_medicare_situation,
+        fixture_input_validator=_validate_employee_medicare_fixture,
+        pe_diagnostic_variables=("payroll_tax_gross_wages",),
+        pe_parameter_validator=_verify_employee_medicare_pe_parameters,
     ),
     "self_employment_tax": PolicyConfig(
         key="self_employment_tax",
