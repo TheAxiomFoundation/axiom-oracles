@@ -8,7 +8,7 @@
       "components": [],
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
-      "left_weighted_sum": 363174358.834649,
+      "left_weighted_sum": 363170747.282403,
       "match_rate": 96.075683,
       "match_weight": 3408040.029369,
       "mismatch_count": 56,
@@ -17,8 +17,8 @@
       "missing_left_count": 0,
       "missing_right_count": 0,
       "parent": null,
-      "right_weighted_sum": 318936622.950047,
-      "weighted_difference": 44237735.884602,
+      "right_weighted_sum": 318936804.48439,
+      "weighted_difference": 44233942.798013,
       "weighted_match_rate": 89.281004
     },
     {
@@ -61,7 +61,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 3096,
@@ -119,7 +119,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 3096,
@@ -177,7 +177,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 3706,
@@ -237,7 +237,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 2486,
@@ -287,7 +287,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1876,
@@ -352,7 +352,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1876,
@@ -406,7 +406,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 2486,
@@ -462,7 +462,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 2486,
@@ -512,7 +512,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1266,
@@ -575,7 +575,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1266,
@@ -627,7 +627,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 4316,
@@ -689,7 +689,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 2486,
@@ -745,7 +745,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1876,
@@ -799,7 +799,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1876,
@@ -847,7 +847,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1266,
@@ -910,7 +910,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1876,
@@ -964,7 +964,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 2486,
@@ -1020,7 +1020,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 2486,
@@ -1076,7 +1076,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 3706,
@@ -1136,7 +1136,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1876,
@@ -1190,7 +1190,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 3096,
@@ -1248,7 +1248,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1876,
@@ -1302,7 +1302,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 2486,
@@ -1358,7 +1358,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 3096,
@@ -1416,7 +1416,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 2486,
@@ -1472,7 +1472,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1266,
@@ -1524,7 +1524,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 5536,
@@ -1590,7 +1590,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 4316,
@@ -1652,7 +1652,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 3096,
@@ -1710,7 +1710,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1266,
@@ -1762,7 +1762,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 2486,
@@ -1812,7 +1812,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1876,
@@ -1877,7 +1877,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1266,
@@ -1929,7 +1929,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 3706,
@@ -1989,7 +1989,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1876,
@@ -2043,7 +2043,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 2486,
@@ -2099,7 +2099,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 3096,
@@ -2158,7 +2158,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 2486,
@@ -2214,7 +2214,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 3096,
@@ -2273,7 +2273,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 3706,
@@ -2333,7 +2333,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 2486,
@@ -2389,7 +2389,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 2486,
@@ -2445,7 +2445,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1266,
@@ -2497,7 +2497,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 3096,
@@ -2530,9 +2530,9 @@
         {
           "concept": "us:statutes/7/2014/u#snap_benefit",
           "description": "SNAP benefit amount",
-          "difference": 166.75472005208337,
+          "difference": 165.75472005208337,
           "kind": "amount_difference",
-          "left": 939.0,
+          "left": 938.0,
           "parent": null,
           "relative_tolerance": 0,
           "right": 772.2452799479166,
@@ -2555,7 +2555,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1266,
@@ -2601,7 +2601,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1876,
@@ -2666,7 +2666,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 3706,
@@ -2726,7 +2726,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 6146,
@@ -2788,7 +2788,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1876,
@@ -2817,12 +2817,12 @@
         {
           "concept": "us:statutes/7/2014/u#snap_benefit",
           "description": "SNAP benefit amount",
-          "difference": -166.4847615559896,
+          "difference": -7.259765625,
           "kind": "amount_difference",
           "left": 0.0,
           "parent": null,
           "relative_tolerance": 0,
-          "right": 166.4847615559896,
+          "right": 7.259765625,
           "tolerance": 7
         },
         {
@@ -2853,7 +2853,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 5536,
@@ -2919,7 +2919,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1876,
@@ -2967,7 +2967,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 4316,
@@ -3040,7 +3040,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 4926,
@@ -3104,7 +3104,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1876,
@@ -3158,7 +3158,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 2486,
@@ -3214,7 +3214,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 3706,
@@ -3274,7 +3274,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1266,
@@ -3321,7 +3321,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1876,
@@ -3380,7 +3380,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 35,
+        "axiom_all_outputs_count": 43,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1876,
@@ -3465,7 +3465,13 @@
   },
   "engines": {
     "left": "axiom",
-    "right": "policyengine"
+    "right": "policyengine",
+    "versions": {
+      "axiom_rules_engine": "0.1.0",
+      "policyengine": "4.18.9",
+      "policyengine_core": "3.30.3",
+      "policyengine_us": "1.767.3"
+    }
   },
   "errors": [],
   "locales": [],
@@ -3476,6 +3482,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 102.35465494791663,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-35254",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 667.0,
       "parent": null,
@@ -3492,6 +3503,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 124.45463053385413,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-35266",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 732.0,
       "parent": null,
@@ -3572,6 +3588,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 71.66520182291666,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-35320",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 280.0,
       "parent": null,
@@ -3588,6 +3609,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 69.22587076822919,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-35324",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 457.0,
       "parent": null,
@@ -3604,6 +3630,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 110.42586263020831,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-35347",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 497.0,
       "parent": null,
@@ -3620,6 +3651,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -299.66998291015625,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "pe-lone-minor-child-earnings-benefit",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-us/issues/9157"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -3636,6 +3672,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "pe-lone-minor-child-earnings-eligibility",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-us/issues/9157"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -3700,6 +3741,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 99.06522623697919,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-35590",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 479.0,
       "parent": null,
@@ -3716,6 +3762,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 98.34023030598956,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-35596",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 411.0,
       "parent": null,
@@ -3732,6 +3783,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -299.66998291015625,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "pe-lone-minor-child-earnings-benefit",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-us/issues/9157"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -3748,6 +3804,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "pe-lone-minor-child-earnings-eligibility",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-us/issues/9157"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -3764,6 +3825,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 98.26521809895831,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-35643",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 465.0,
       "parent": null,
@@ -3796,6 +3862,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 48.62589518229163,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-35661",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 785.0,
       "parent": null,
@@ -3844,6 +3915,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 58.5546875,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-35708",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 994.0,
       "parent": null,
@@ -3876,6 +3952,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 110.725830078125,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-35789",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 716.0,
       "parent": null,
@@ -4004,6 +4085,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 50.325887044270814,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-35974",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 460.0,
       "parent": null,
@@ -4052,6 +4138,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 8.45501708984375,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-36024",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 298.0,
       "parent": null,
@@ -4084,6 +4175,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 71.66520182291666,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-36069",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 280.0,
       "parent": null,
@@ -4100,6 +4196,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 110.725830078125,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-36071",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 527.0,
       "parent": null,
@@ -4132,6 +4233,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 48.62589518229163,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-36102",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 785.0,
       "parent": null,
@@ -4148,6 +4254,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 118.35465494791663,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-36129",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 680.0,
       "parent": null,
@@ -4180,6 +4291,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 111.00081380208331,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-36188",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 607.0,
       "parent": null,
@@ -4227,9 +4343,9 @@
       "case_id": "ecps-36247",
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
-      "difference": 166.75472005208337,
+      "difference": 165.75472005208337,
       "kind": "amount_difference",
-      "left": 939.0,
+      "left": 938.0,
       "parent": null,
       "pregnant_head": null,
       "relative_tolerance": 0,
@@ -4292,6 +4408,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 39.195556640625,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-36258",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 1183.0,
       "parent": null,
@@ -4323,13 +4444,13 @@
       "case_id": "ecps-36308",
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
-      "difference": -166.4847615559896,
+      "difference": -7.259765625,
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
       "pregnant_head": null,
       "relative_tolerance": 0,
-      "right": 166.4847615559896,
+      "right": 7.259765625,
       "scenario": null,
       "tolerance": 7,
       "yearly_earned_income": null
@@ -4372,6 +4493,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 131.11519368489581,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-36346",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 546.0,
       "parent": null,
@@ -4452,6 +4578,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 110.52591959635413,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-36403",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 624.0,
       "parent": null,
@@ -4468,6 +4599,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 55.92041015625,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-36407",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 1183.0,
       "parent": null,
@@ -4484,6 +4620,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 8.45501708984375,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-36436",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 298.0,
       "parent": null,
@@ -4569,12 +4710,13 @@
       "axiom_rules_engine_sha": "48797e101c093bb388be718c6f5d8fc9d9f94a7d",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-26T06:59:32Z",
+    "generated_at": "2026-07-27T19:32:34Z",
     "generated_by": "scripts/run_comparison.py::tn-snap-ecps",
     "oracle": {
       "name": "policyengine",
+      "policyengine_core": "3.30.3",
       "policyengine_package": "policyengine==4.18.9",
-      "policyengine_us": "1.752.2"
+      "policyengine_us": "1.767.3"
     },
     "rulespecs": [
       {
@@ -4596,18 +4738,18 @@
     "dispositioned": {
       "counts": {
         "axiom_encoding_gap": 0,
-        "bridge_artifact": 0,
+        "bridge_artifact": 23,
         "explained_residual": 0,
         "unexplained": 0,
-        "upstream_engine_gap": 0
+        "upstream_engine_gap": 4
       },
-      "dispositions_file": null,
+      "dispositions_file": "dispositions/tn-snap-ecps.yaml",
       "expired_entries": [],
-      "explained_rate": 97.617379,
+      "explained_rate": 98.56342,
       "orphaned_entries": [],
       "raw_match_rate": 97.617379,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 68
+      "unexplained_count": 41
     },
     "error_count": 0,
     "errors_by_engine": [],

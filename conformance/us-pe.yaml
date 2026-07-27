@@ -1147,9 +1147,10 @@ policies:
     suite: ca-snap-ecps
     note: SNAP is one national PE-US variable (snap). Covered by ca-snap-ecps, the largest of 11 state-scoped
       SNAP suites validating the same snap surface vs PE-2026 (CA/AZ/CO/NY/OR/UT match to the cent; AL/MA/NC/SC/TN
-      carry residuals 79/404/118/206/89 not yet dispositioned). The row registers the canonical largest-population
-      suite; the other ten corroborate and their residuals are tracked for disposition — the scoreboard
-      scores one suite per row, not silently dropped.
+      regenerated on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3 retain
+      23/83/71/106/41 unexplained mismatch rows after evidence-backed dispositions). The row registers
+      the canonical largest-population suite; the other ten corroborate and their residuals remain tracked —
+      the scoreboard scores one suite per row, not silently dropped.
   - id: us-pe:social_security
     oracle_policy_name: social_security
     oracle_policy_type: rules

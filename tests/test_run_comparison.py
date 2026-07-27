@@ -1080,6 +1080,24 @@ COMPARISONS_DIR = REPO_ROOT / "comparisons"
 DASHBOARD_DATA_DIR = REPO_ROOT / "dashboard" / "public" / "data"
 
 
+@pytest.mark.parametrize("state", ["al", "ma", "nc", "sc", "tn"])
+def test_snap_residual_suites_pin_reviewed_policyengine_stack(state):
+    config = yaml.safe_load(
+        (COMPARISONS_DIR / f"{state}-snap-ecps.yaml").read_text()
+    )
+    params = config["runner"]["parameters"]
+    run_comparison = load_run_comparison_module()
+
+    assert params["sample_size"] == 0
+    assert params["period"] == "2026-01"
+    assert params["python"] == "3.13"
+    assert run_comparison._resolve_pe_oracle_pins(params) == (
+        "policyengine==4.18.9",
+        "policyengine-us==1.767.3",
+        "policyengine-core==3.30.3",
+    )
+
+
 def _euromod_be_registry_configs() -> list[dict]:
     configs: list[dict] = []
     for path in sorted(COMPARISONS_DIR.glob("*.yaml")):

@@ -28,7 +28,6 @@ entries:
   kind: eligibility_right_only
   case_selector:
     case_ids:
-    - ecps-36459
     - ecps-36948
     - ecps-37102
     - ecps-37190
@@ -51,7 +50,6 @@ entries:
   kind: amount_difference
   case_selector:
     case_ids:
-    - ecps-36459
     - ecps-37102
     - ecps-37190
     - ecps-37546
@@ -68,3 +66,444 @@ entries:
       side modeling boundary, tracked for encoding in rulespec-us#1098.
   linked_issue: https://github.com/TheAxiomFoundation/rulespec-us/issues/1098
   expires_on_source_change: true
+- id: pe-lone-minor-child-earnings-benefit
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_selector:
+    case_ids:
+    - ecps-36459
+    - ecps-36559
+    - ecps-37623
+    - ecps-37651
+  kind: amount_difference
+  disposition: upstream_engine_gap
+  linked_issue: https://github.com/PolicyEngine/policyengine-us/issues/9157
+  evidence: &pe_lone_minor_evidence
+    upstream_url: https://github.com/PolicyEngine/policyengine-us/issues/9157
+    mechanism: >-
+      Reverified on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3, and
+      PolicyEngine-Core 3.30.3. The exact-household signature and explicit
+      K-12 counterfactual reproduce the mechanism:
+      PolicyEngine excludes all earnings of an imputed K-12 member age 17
+      or younger without requiring the co-resident-parent or parental-control
+      condition in 7 CFR 273.9(c)(7). The sole minor is a valid household
+      under 273.1(a)(1), but wages count under 273.9(b)(1)(i), so Axiom
+      correctly fails the income gate and returns zero benefit.
+    sources:
+    - dashboard/public/data/axiom-policyengine-al-snap-ecps.json
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.1(a)(1)
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(b)(1)(i)
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(c)(7)
+  expires_on_source_change: true
+- id: pe-lone-minor-child-earnings-eligibility
+  concept: us:statutes/7/2014/o#snap_eligible
+  case_selector:
+    case_ids:
+    - ecps-36459
+    - ecps-36559
+    - ecps-37623
+    - ecps-37651
+  kind: eligibility_right_only
+  disposition: upstream_engine_gap
+  linked_issue: https://github.com/PolicyEngine/policyengine-us/issues/9157
+  evidence: *pe_lone_minor_evidence
+  expires_on_source_change: true
+- id: tanf-zero-counterfactual-36567
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-36567
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+  evidence:
+    upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+    mechanism: >-
+      Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3,
+      and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 785.0 versus PE
+      749.274169921875. PE reports monthly al_tanf 344.0 and aggregate TANF 344.0. Forcing
+      both to zero leaves SNAP eligibility true and produces PE SNAP 789.399169921875; its
+      absolute delta from Axiom is 4.399169921875, within the suite tolerance 7.0. This
+      exact counterfactual isolates endogenous TANF transport as the mismatch mechanism.
+    arithmetic:
+    - expression: "789.399169921875 - 785.0"
+      equals: 4.399169921875
+      tolerance: 1.0e-09
+    sources:
+    - dashboard/public/data/axiom-policyengine-al-snap-ecps.json
+    - https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(b)(2)(i)
+  expires_on_source_change: true
+  pinned:
+    left: 785.0
+    right: 749.274169921875
+    difference: 35.725830078125
+- id: tanf-zero-counterfactual-36718
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-36718
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+  evidence:
+    upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+    mechanism: >-
+      Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3,
+      and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 785.0 versus PE
+      756.4742024739584. PE reports monthly al_tanf 268.24611409505206 and aggregate TANF
+      268.24611409505206. Forcing both to zero leaves SNAP eligibility true and produces
+      PE SNAP 789.399169921875; its absolute delta from Axiom is 4.399169921875, within
+      the suite tolerance 7.0. This exact counterfactual isolates endogenous TANF
+      transport as the mismatch mechanism.
+    arithmetic:
+    - expression: "789.399169921875 - 785.0"
+      equals: 4.399169921875
+      tolerance: 1.0e-09
+    sources:
+    - dashboard/public/data/axiom-policyengine-al-snap-ecps.json
+    - https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(b)(2)(i)
+  expires_on_source_change: true
+  pinned:
+    left: 785.0
+    right: 756.4742024739584
+    difference: 28.52579752604163
+- id: tanf-zero-counterfactual-36777
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-36777
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+  evidence:
+    upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+    mechanism: >-
+      Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3,
+      and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 785.0 versus PE
+      749.274169921875. PE reports monthly al_tanf 328.65183512369794 and aggregate TANF
+      328.65183512369794. Forcing both to zero leaves SNAP eligibility true and produces
+      PE SNAP 789.399169921875; its absolute delta from Axiom is 4.399169921875, within
+      the suite tolerance 7.0. This exact counterfactual isolates endogenous TANF
+      transport as the mismatch mechanism.
+    arithmetic:
+    - expression: "789.399169921875 - 785.0"
+      equals: 4.399169921875
+      tolerance: 1.0e-09
+    sources:
+    - dashboard/public/data/axiom-policyengine-al-snap-ecps.json
+    - https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(b)(2)(i)
+  expires_on_source_change: true
+  pinned:
+    left: 785.0
+    right: 749.274169921875
+    difference: 35.725830078125
+- id: tanf-zero-counterfactual-36807
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-36807
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+  evidence:
+    upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+    mechanism: >-
+      Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3,
+      and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 298.0 versus PE
+      283.54498291015625. PE reports monthly al_tanf 264.0 and aggregate TANF 264.0.
+      Forcing both to zero leaves SNAP eligibility true and produces PE SNAP
+      299.66998291015625; its absolute delta from Axiom is 1.66998291015625, within the
+      suite tolerance 7.0. This exact counterfactual isolates endogenous TANF transport as
+      the mismatch mechanism.
+    arithmetic:
+    - expression: "299.66998291015625 - 298.0"
+      equals: 1.66998291015625
+      tolerance: 1.0e-09
+    sources:
+    - dashboard/public/data/axiom-policyengine-al-snap-ecps.json
+    - https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(b)(2)(i)
+  expires_on_source_change: true
+  pinned:
+    left: 298.0
+    right: 283.54498291015625
+    difference: 14.45501708984375
+- id: tanf-zero-counterfactual-36833
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-36833
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+  evidence:
+    upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+    mechanism: >-
+      Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3,
+      and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 546.0 versus PE
+      520.934814453125. PE reports monthly al_tanf 303.90407307942706 and aggregate TANF
+      303.90407307942706. Forcing both to zero leaves SNAP eligibility true and produces
+      PE SNAP 549.059814453125; its absolute delta from Axiom is 3.059814453125, within
+      the suite tolerance 7.0. This exact counterfactual isolates endogenous TANF
+      transport as the mismatch mechanism.
+    arithmetic:
+    - expression: "549.059814453125 - 546.0"
+      equals: 3.059814453125
+      tolerance: 1.0e-09
+    sources:
+    - dashboard/public/data/axiom-policyengine-al-snap-ecps.json
+    - https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(b)(2)(i)
+  expires_on_source_change: true
+  pinned:
+    left: 546.0
+    right: 520.934814453125
+    difference: 25.065185546875
+- id: tanf-zero-counterfactual-37075
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-37075
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+  evidence:
+    upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+    mechanism: >-
+      Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3,
+      and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 298.0 versus PE
+      283.54498291015625. PE reports monthly al_tanf 264.0 and aggregate TANF 264.0.
+      Forcing both to zero leaves SNAP eligibility true and produces PE SNAP
+      299.66998291015625; its absolute delta from Axiom is 1.66998291015625, within the
+      suite tolerance 7.0. This exact counterfactual isolates endogenous TANF transport as
+      the mismatch mechanism.
+    arithmetic:
+    - expression: "299.66998291015625 - 298.0"
+      equals: 1.66998291015625
+      tolerance: 1.0e-09
+    sources:
+    - dashboard/public/data/axiom-policyengine-al-snap-ecps.json
+    - https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(b)(2)(i)
+  expires_on_source_change: true
+  pinned:
+    left: 298.0
+    right: 283.54498291015625
+    difference: 14.45501708984375
+- id: tanf-zero-counterfactual-37092
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-37092
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+  evidence:
+    upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+    mechanism: >-
+      Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3,
+      and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 785.0 versus PE
+      749.274169921875. PE reports monthly al_tanf 344.0 and aggregate TANF 344.0. Forcing
+      both to zero leaves SNAP eligibility true and produces PE SNAP 789.399169921875; its
+      absolute delta from Axiom is 4.399169921875, within the suite tolerance 7.0. This
+      exact counterfactual isolates endogenous TANF transport as the mismatch mechanism.
+    arithmetic:
+    - expression: "789.399169921875 - 785.0"
+      equals: 4.399169921875
+      tolerance: 1.0e-09
+    sources:
+    - dashboard/public/data/axiom-policyengine-al-snap-ecps.json
+    - https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(b)(2)(i)
+  expires_on_source_change: true
+  pinned:
+    left: 785.0
+    right: 749.274169921875
+    difference: 35.725830078125
+- id: tanf-zero-counterfactual-37103
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-37103
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+  evidence:
+    upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+    mechanism: >-
+      Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3,
+      and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 522.0 versus PE
+      510.3597412109375. PE reports monthly al_tanf 53.390533447265625 and aggregate TANF
+      53.390533447265625. Forcing both to zero leaves SNAP eligibility true and produces
+      PE SNAP 526.3347574869791; its absolute delta from Axiom is 4.334757486979129,
+      within the suite tolerance 7.0. This exact counterfactual isolates endogenous TANF
+      transport as the mismatch mechanism.
+    arithmetic:
+    - expression: "526.3347574869791 - 522.0"
+      equals: 4.334757486979129
+      tolerance: 1.0e-09
+    sources:
+    - dashboard/public/data/axiom-policyengine-al-snap-ecps.json
+    - https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(b)(2)(i)
+  expires_on_source_change: true
+  pinned:
+    left: 522.0
+    right: 510.3597412109375
+    difference: 11.6402587890625
+- id: tanf-zero-counterfactual-37188
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-37188
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+  evidence:
+    upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+    mechanism: >-
+      Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3,
+      and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 546.0 versus PE
+      530.6847737630209. PE reports monthly al_tanf 304.0 and aggregate TANF 304.0.
+      Forcing both to zero leaves SNAP eligibility true and produces PE SNAP
+      549.059814453125; its absolute delta from Axiom is 3.059814453125, within the suite
+      tolerance 7.0. This exact counterfactual isolates endogenous TANF transport as the
+      mismatch mechanism.
+    arithmetic:
+    - expression: "549.059814453125 - 546.0"
+      equals: 3.059814453125
+      tolerance: 1.0e-09
+    sources:
+    - dashboard/public/data/axiom-policyengine-al-snap-ecps.json
+    - https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(b)(2)(i)
+  expires_on_source_change: true
+  pinned:
+    left: 546.0
+    right: 530.6847737630209
+    difference: 15.315226236979129
+- id: tanf-zero-counterfactual-37222
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-37222
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+  evidence:
+    upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+    mechanism: >-
+      Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3,
+      and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 785.0 versus PE
+      749.274169921875. PE reports monthly al_tanf 344.0 and aggregate TANF 344.0. Forcing
+      both to zero leaves SNAP eligibility true and produces PE SNAP 789.399169921875; its
+      absolute delta from Axiom is 4.399169921875, within the suite tolerance 7.0. This
+      exact counterfactual isolates endogenous TANF transport as the mismatch mechanism.
+    arithmetic:
+    - expression: "789.399169921875 - 785.0"
+      equals: 4.399169921875
+      tolerance: 1.0e-09
+    sources:
+    - dashboard/public/data/axiom-policyengine-al-snap-ecps.json
+    - https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(b)(2)(i)
+  expires_on_source_change: true
+  pinned:
+    left: 785.0
+    right: 749.274169921875
+    difference: 35.725830078125
+- id: tanf-zero-counterfactual-37292
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-37292
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+  evidence:
+    upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+    mechanism: >-
+      Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3,
+      and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 994.0 versus PE
+      949.2451985677084. PE reports monthly al_tanf 392.0 and aggregate TANF 392.0.
+      Forcing both to zero leaves SNAP eligibility true and produces PE SNAP 999.5703125;
+      its absolute delta from Axiom is 5.5703125, within the suite tolerance 7.0. This
+      exact counterfactual isolates endogenous TANF transport as the mismatch mechanism.
+    arithmetic:
+    - expression: "999.5703125 - 994.0"
+      equals: 5.5703125
+      tolerance: 1.0e-09
+    sources:
+    - dashboard/public/data/axiom-policyengine-al-snap-ecps.json
+    - https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(b)(2)(i)
+  expires_on_source_change: true
+  pinned:
+    left: 994.0
+    right: 949.2451985677084
+    difference: 44.75480143229163
+- id: tanf-zero-counterfactual-37643
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-37643
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+  evidence:
+    upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+    mechanism: >-
+      Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3,
+      and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 785.0 versus PE
+      762.024169921875. PE reports monthly al_tanf 344.0 and aggregate TANF 344.0. Forcing
+      both to zero leaves SNAP eligibility true and produces PE SNAP 789.399169921875; its
+      absolute delta from Axiom is 4.399169921875, within the suite tolerance 7.0. This
+      exact counterfactual isolates endogenous TANF transport as the mismatch mechanism.
+    arithmetic:
+    - expression: "789.399169921875 - 785.0"
+      equals: 4.399169921875
+      tolerance: 1.0e-09
+    sources:
+    - dashboard/public/data/axiom-policyengine-al-snap-ecps.json
+    - https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(b)(2)(i)
+  expires_on_source_change: true
+  pinned:
+    left: 785.0
+    right: 762.024169921875
+    difference: 22.975830078125
+- id: tanf-zero-counterfactual-37669
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-37669
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+  evidence:
+    upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+    mechanism: >-
+      Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3,
+      and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 994.0 versus PE
+      949.2451985677084. PE reports monthly al_tanf 392.0 and aggregate TANF 392.0.
+      Forcing both to zero leaves SNAP eligibility true and produces PE SNAP 999.5703125;
+      its absolute delta from Axiom is 5.5703125, within the suite tolerance 7.0. This
+      exact counterfactual isolates endogenous TANF transport as the mismatch mechanism.
+    arithmetic:
+    - expression: "999.5703125 - 994.0"
+      equals: 5.5703125
+      tolerance: 1.0e-09
+    sources:
+    - dashboard/public/data/axiom-policyengine-al-snap-ecps.json
+    - https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(b)(2)(i)
+  expires_on_source_change: true
+  pinned:
+    left: 994.0
+    right: 949.2451985677084
+    difference: 44.75480143229163
+- id: tanf-zero-counterfactual-37706
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-37706
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+  evidence:
+    upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+    mechanism: >-
+      Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3,
+      and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 298.0 versus PE
+      283.54498291015625. PE reports monthly al_tanf 264.0 and aggregate TANF 264.0.
+      Forcing both to zero leaves SNAP eligibility true and produces PE SNAP
+      299.66998291015625; its absolute delta from Axiom is 1.66998291015625, within the
+      suite tolerance 7.0. This exact counterfactual isolates endogenous TANF transport as
+      the mismatch mechanism.
+    arithmetic:
+    - expression: "299.66998291015625 - 298.0"
+      equals: 1.66998291015625
+      tolerance: 1.0e-09
+    sources:
+    - dashboard/public/data/axiom-policyengine-al-snap-ecps.json
+    - https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(b)(2)(i)
+  expires_on_source_change: true
+  pinned:
+    left: 298.0
+    right: 283.54498291015625
+    difference: 14.45501708984375
