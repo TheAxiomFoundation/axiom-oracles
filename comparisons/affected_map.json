@@ -211,6 +211,15 @@
       "source": "comparisons/ca-income-tax-liability.yaml"
     },
     {
+      "suite": "ca-income-tax-populace",
+      "name": null,
+      "report": "axiom-policyengine-ca-income-tax-populace.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/state-income-tax-populace.yaml"
+    },
+    {
       "suite": "ca-snap-ecps",
       "name": "ca-snap-ecps",
       "report": "axiom-policyengine-ca-snap-ecps.json",

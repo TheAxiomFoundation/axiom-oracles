@@ -55,6 +55,15 @@ _DESCRIPTION_BY_OUTPUT = {
         "personal credit over every routed tax unit in the pinned US Populace"
     ),
     (
+        "us-ca:policies/income_tax/pilot_liability_pipeline"
+        "#ca_pit_pilot_behavioral_health_services_tax"
+    ): (
+        "California Behavioral Health Services Tax, computed as 1 percent of "
+        "caller-supplied completed California taxable income above $1 million, "
+        "over every routed tax unit in the pinned US Populace; this component "
+        "suite does not claim broad California income-tax liability"
+    ),
+    (
         "us-dc:policies/income_tax/"
         "2026_section_47_1806_03_schedule_before_credits"
         "#dc_pit_2026_section_47_1806_03_schedule_before_credits"

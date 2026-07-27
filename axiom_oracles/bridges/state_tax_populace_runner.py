@@ -572,6 +572,56 @@ def calculate_policyengine_targets(
     for state in sorted(selected_states):
         jurisdiction = resolved_contract.by_state()[state]
         if (
+            state == "CA"
+            and jurisdiction.policyengine_target
+            == "ca_mental_health_services_tax"
+        ):
+            modeled_ids = [
+                _clean_id(value)
+                for value in _array_values(
+                    sim.calculate("tax_unit_id", period=year)
+                )
+            ]
+            values = _array_values(
+                sim.calculate(
+                    jurisdiction.policyengine_target,
+                    period=year,
+                )
+            )
+            if (
+                len(modeled_ids) != len(tax_unit_ids)
+                or len(values) != len(tax_unit_ids)
+            ):
+                raise StateTaxPopulationRoutingError(
+                    "CA: PolicyEngine Behavioral Health Services Tax target "
+                    f"returned {len(modeled_ids)} IDs and {len(values)} values "
+                    f"for {len(tax_unit_ids)} tax units"
+                )
+            _reject_duplicate_ids(tax_unit_ids, "CA source tax_unit_id")
+            _reject_duplicate_ids(
+                modeled_ids, "CA PolicyEngine tax_unit_id"
+            )
+            if modeled_ids != tax_unit_ids:
+                raise StateTaxPopulationRoutingError(
+                    "CA: PolicyEngine tax_unit_id order does not match the "
+                    "certified source tax-unit order"
+                )
+            reviewed = [
+                _finite_number(
+                    value,
+                    label=jurisdiction.policyengine_target,
+                )
+                for value in values
+            ]
+            if any(value < 0 for value in reviewed):
+                raise StateTaxPopulationRoutingError(
+                    "CA: ca_mental_health_services_tax must be nonnegative"
+                )
+            targets[state] = dict(
+                zip(tax_unit_ids, reviewed, strict=True)
+            )
+            continue
+        if (
             state == "CT"
             and jurisdiction.policyengine_target == CT_ORDINARY_TAX_DERIVED_TARGET
         ):

@@ -27,74 +27,35 @@ jurisdictions:
   taxsim_state_code: 5
   jurisdiction: us-ca
   program: us-ca:policies/income_tax/pilot_liability_pipeline
-  output: us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_income_tax_liability
+  output: us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_behavioral_health_services_tax
   policyengine:
-    target: ca_income_tax_before_refundable_credits
-    tolerance: 5.0
-    relative_tolerance: 0.02
-  status: blocked
-  evidence: us-ca/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+    target: ca_mental_health_services_tax
+    tolerance: 0.01
+    relative_tolerance: 0.0000001
+  status: ready
+  evidence: >-
+    The official 2026 Form 540-ES worksheet and California Revenue and
+    Taxation Code sections 17041 and 17043 impose a 1 percent Behavioral
+    Health Services Tax on completed California taxable income above
+    $1,000,000. The reviewed RuleSpec subgraph preserves caller-supplied
+    completed taxable income and computes only that additional tax. Independent
+    formula and full certified-Populace probes covered all 8,883 positive-weight
+    routed California TaxUnits; all values matched PolicyEngine within one cent
+    or 1e-7 relative error. This readiness does not promote the pilot's separate
+    rate-schedule branch or broad California liability.
   inputs:
-  - slot: us-ca:policies/income_tax/pilot_liability_pipeline#input.ca_pit_pilot_adjusted_gross_income
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ca:policies/income_tax/pilot_liability_pipeline#input.ca_pit_pilot_supplied_bracket_floor_1
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ca:policies/income_tax/pilot_liability_pipeline#input.ca_pit_pilot_supplied_bracket_floor_2
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ca:policies/income_tax/pilot_liability_pipeline#input.ca_pit_pilot_supplied_bracket_floor_3
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ca:policies/income_tax/pilot_liability_pipeline#input.ca_pit_pilot_supplied_bracket_floor_4
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ca:policies/income_tax/pilot_liability_pipeline#input.ca_pit_pilot_supplied_bracket_floor_5
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ca:policies/income_tax/pilot_liability_pipeline#input.ca_pit_pilot_supplied_bracket_floor_6
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ca:policies/income_tax/pilot_liability_pipeline#input.ca_pit_pilot_supplied_bracket_rate_1
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ca:policies/income_tax/pilot_liability_pipeline#input.ca_pit_pilot_supplied_bracket_rate_2
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ca:policies/income_tax/pilot_liability_pipeline#input.ca_pit_pilot_supplied_bracket_rate_3
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ca:policies/income_tax/pilot_liability_pipeline#input.ca_pit_pilot_supplied_bracket_rate_4
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ca:policies/income_tax/pilot_liability_pipeline#input.ca_pit_pilot_supplied_bracket_rate_5
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ca:policies/income_tax/pilot_liability_pipeline#input.ca_pit_pilot_supplied_bracket_rate_6
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ca:policies/income_tax/pilot_liability_pipeline#input.ca_pit_pilot_supplied_personal_exemption_credit
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ca:policies/income_tax/pilot_liability_pipeline#input.ca_pit_pilot_supplied_standard_deduction
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
+  - slot: us-ca:policies/income_tax/pilot_liability_pipeline#input.ca_pit_pilot_supplied_completed_taxable_income
+    source_kind: pe_upstream_boundary
+    status: ready
+    evidence: >-
+      The Form 540-ES worksheet imposes Behavioral Health Services Tax on
+      completed California taxable income. PolicyEngine ca_taxable_income is a
+      direct upstream dependency of the distinct
+      ca_mental_health_services_tax target, and the reviewed RuleSpec preserves
+      that completed amount without reconstructing California AGI, deductions,
+      residency, allocation, credits, or broad liability.
+    policyengine_variable: ca_taxable_income
+    policyengine_relationship: upstream
   relations: []
 - state: NY
   fips: '36'

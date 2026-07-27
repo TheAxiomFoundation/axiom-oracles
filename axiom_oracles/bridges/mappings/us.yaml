@@ -32878,6 +32878,229 @@ mappings:
     rationale: Missouri SNAP Manual 1115.035.25 state-specific utility, shelter, or household intermediate output. PolicyEngine exposes generic SNAP outcomes and parameters, not this Missouri administrative intermediate as a one-to-one oracle variable. Keep not_comparable until an exact PolicyEngine adapter target is identified.
 
 
+
+  # California's TY2026 pilot contains one independently comparable subgraph:
+  # the 1 percent Behavioral Health Services Tax on completed California
+  # taxable income above $1 million. These records deliberately do not promote
+  # the pilot's separate rate-schedule branch or broad liability surface.
+  - legal_id: us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_rate_schedule_threshold
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec's $100,000 threshold selects the official California rate-schedule branch instead of the tax table. PolicyEngine exposes completed California income-tax results, not this source-specific routing threshold as a one-to-one parameter or variable.
+
+  - legal_id: us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_schedule_x_upper
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec stores the Schedule X finite upper bounds as a selector-indexed private table. PolicyEngine's marginal scale does not expose a one-to-one output with that internal representation.
+
+  - legal_id: us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_schedule_x_floor
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec stores the Schedule X excess-over floors as a selector-indexed private table. PolicyEngine's marginal scale does not expose a one-to-one output with that cumulative-schedule representation.
+
+  - legal_id: us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_schedule_x_base
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec preserves the published Schedule X cumulative base amounts. PolicyEngine computes tax through a marginal scale and exposes no matching cumulative-base table output.
+
+  - legal_id: us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_schedule_x_rate
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec stores the Schedule X rates in one selector-indexed private table. PolicyEngine's filing-status-specific marginal scale is not a one-to-one output with this table identity.
+
+  - legal_id: us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_schedule_y_upper
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec stores the Schedule Y finite upper bounds as a selector-indexed private table. PolicyEngine's marginal scale does not expose a one-to-one output with that internal representation.
+
+  - legal_id: us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_schedule_y_floor
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec stores the Schedule Y excess-over floors as a selector-indexed private table. PolicyEngine's marginal scale does not expose a one-to-one output with that cumulative-schedule representation.
+
+  - legal_id: us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_schedule_y_base
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec preserves the published Schedule Y cumulative base amounts. PolicyEngine computes tax through a marginal scale and exposes no matching cumulative-base table output.
+
+  - legal_id: us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_schedule_y_rate
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec stores the Schedule Y rates in one selector-indexed private table. PolicyEngine's filing-status-specific marginal scale is not a one-to-one output with this table identity.
+
+  - legal_id: us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_schedule_z_upper
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec stores the Schedule Z finite upper bounds as a selector-indexed private table. PolicyEngine's marginal scale does not expose a one-to-one output with that internal representation.
+
+  - legal_id: us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_schedule_z_floor
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec stores the Schedule Z excess-over floors as a selector-indexed private table. PolicyEngine's marginal scale does not expose a one-to-one output with that cumulative-schedule representation.
+
+  - legal_id: us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_schedule_z_base
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec preserves the published Schedule Z cumulative base amounts. PolicyEngine computes tax through a marginal scale and exposes no matching cumulative-base table output.
+
+  - legal_id: us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_schedule_z_rate
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec stores the Schedule Z rates in one selector-indexed private table. PolicyEngine's filing-status-specific marginal scale is not a one-to-one output with this table identity.
+
+  - legal_id: us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_behavioral_health_services_tax_threshold
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.ca.tax.income.mental_health_services
+    parameter_key_path: [thresholds, 1]
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Both sources set the additional California tax threshold at $1 million of completed California taxable income. The second threshold in PolicyEngine's marginal scale is the first dollar at which the 1 percent rate applies.
+
+  - legal_id: us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_behavioral_health_services_tax_rate
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.ca.tax.income.mental_health_services
+    parameter_key_path: [rates, 1]
+    period: year
+    comparison: rate
+    rationale: Both sources apply a 1 percent additional California tax rate to completed California taxable income above $1 million.
+
+  - legal_id: us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_completed_taxable_income
+    country: us
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: ca_taxable_income
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    rationale: RuleSpec preserves the nonnegative boundary derived from caller-supplied completed California taxable income. It does not construct taxable income, and the campaign supplies the distinct upstream PolicyEngine ca_taxable_income value directly.
+
+  - legal_id: us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_rate_schedule_applicable
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Boolean selects the official greater-than-$100,000 rate-schedule branch instead of the tax table. PolicyEngine does not expose that source-specific applicability judgment as a one-to-one variable.
+
+  - legal_id: us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_schedule_x_bracket
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This private integer selects RuleSpec's internal Schedule X tables. PolicyEngine publishes computed tax but no one-to-one bracket-selector variable.
+
+  - legal_id: us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_schedule_y_bracket
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This private integer selects RuleSpec's internal Schedule Y tables. PolicyEngine publishes computed tax but no one-to-one bracket-selector variable.
+
+  - legal_id: us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_schedule_z_bracket
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This private integer selects RuleSpec's internal Schedule Z tables. PolicyEngine publishes computed tax but no one-to-one bracket-selector variable.
+
+  - legal_id: us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_schedule_x_top_bracket_base
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This internal Schedule X top-bracket base is derived from RuleSpec's published cumulative schedule representation. PolicyEngine exposes no one-to-one variable with that representation.
+
+  - legal_id: us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_schedule_y_top_bracket_base
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This internal Schedule Y top-bracket base is derived from RuleSpec's published cumulative schedule representation. PolicyEngine exposes no one-to-one variable with that representation.
+
+  - legal_id: us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_schedule_z_top_bracket_base
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This internal Schedule Z top-bracket base is derived from RuleSpec's published cumulative schedule representation. PolicyEngine exposes no one-to-one variable with that representation.
+
+  - legal_id: us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_schedule_x_tax
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This branch-specific Schedule X amount is a non-applicable zero sentinel for other filing classifications and for the tax-table domain. PolicyEngine's broader California schedule variables do not have the same one-to-one branch contract.
+
+  - legal_id: us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_schedule_y_tax
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This branch-specific Schedule Y amount is a non-applicable zero sentinel for other filing classifications and for the tax-table domain. PolicyEngine's broader California schedule variables do not have the same one-to-one branch contract.
+
+  - legal_id: us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_schedule_z_tax
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This branch-specific Schedule Z amount is a non-applicable zero sentinel for other filing classifications and for the tax-table domain. PolicyEngine's broader California schedule variables do not have the same one-to-one branch contract.
+
+  - legal_id: us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_estimated_tax_rate_schedule_amount
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This output is only the Form 540-ES greater-than-$100,000 rate-schedule branch and returns a non-applicable zero sentinel in the tax-table domain. PolicyEngine does not expose that bounded estimated-tax worksheet branch one to one.
+
+  - legal_id: us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_behavioral_health_services_tax
+    country: us
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: ca_mental_health_services_tax
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Both outputs impose the 1 percent additional California tax on the portion of completed California taxable income above $1 million. This exact subgraph comparison makes no claim about the separate rate-schedule branch or full California liability.
+
+  - legal_id: us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_estimated_tax_schedule_branch_total
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This estimated-tax worksheet total combines RuleSpec's bounded rate-schedule branch with Behavioral Health Services Tax. PolicyEngine exposes broader California income-tax totals with different tax-table, credit, and liability scope, so only the BHST component is directly comparable.
+
 prefixes:
   - legal_id_prefix: us-dc:statutes/4/4-205/49#
     country: us
@@ -35094,6 +35317,7 @@ prefixes:
   # PolicyEngine-US except where an exact mapping above says otherwise;
   # exact entries take precedence over these jurisdiction-wide prefixes.
   # Added for the country-monorepo consolidation (rulespec-us#395).
+
   - legal_id_prefix: "us-al:"
     country: us
     mapping_type: not_comparable
