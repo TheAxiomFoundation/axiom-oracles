@@ -357,10 +357,12 @@ residual), #229 (small-suite grounding).
   correction and its citation-path lesson.
 - Confirmed the worktree is clean at the requested base commit.
 - Established this committed progress ledger before implementation.
+- Audited the conformance generator/ratchet, negative-test, and CI conventions.
+- Copied the four requested snapshots byte-for-byte into `closure/data/`.
+- Recorded reproducible extraction descriptions, full source refs, and verified
+  SHA-256 digests in `closure/data/provenance.yaml`.
 
 ### Next
 
-- Audit existing conformance generators, ratchets, tests, and CI wiring.
-- Pin the four source snapshots with computed checksums and provenance.
 - Implement and generate the three closure universes and summary.
 - Add mutant tests, wire CI, run validation, push, and open the PR.
