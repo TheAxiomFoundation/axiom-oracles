@@ -16,10 +16,15 @@
   - normalizing the old and new IDs to common sentinels makes every before/after file byte-identical;
   - result: zero other byte changes, so no committed numeric value moved.
 - Counted 8,024 removed and 8,024 added physical lines. Those lines contain 63,826 literal ID substitutions (32,560 benefit and 31,266 eligibility) because many case-report JSON files are minified.
+- Ran the requested full pytest command from an offline writable mirror of the machine's existing `uv` cache: 1,996 passed, 59 skipped, and 3 failed.
+- Reproduced the three failures against `origin/main`:
+  - the Ohio RuleSpec output-set failure and dashboard `npx esbuild` network failure are pre-existing;
+  - the refreshed-report no-op test passed on `origin/main`, proving its branch failure was rename-caused.
+- Traced the rename-caused failure to 13 stale `overview.json` source-byte counts: the new IDs are nine bytes shorter. Regenerated only the dashboard overview (no comparison execution), changing only those integrity byte counts beyond the ID substitutions, and verified the targeted no-op test now passes.
 
 ## Next
 
-- Run the requested pytest suite and distinguish rename-caused failures from unrelated failures.
+- Rerun the requested full pytest suite after the overview byte-index fix.
 - Audit statutory and regulatory concept IDs in `case.py` and `concept_mappings.yaml` against the corpus.
 - Commit and publish the axiom-oracles PR.
 - Recompute the three affected report SHA-256 values in a separate ops worktree, update PR #7's branch, and publish the final report.
