@@ -13,13 +13,19 @@
       "artifact": "conformance/exercise-census.json",
       "claim": "exercise census",
       "mode": "computed",
-      "sha256": "4ee47ed1628e4dc6599f8dde7a41bc00344cc053fa4c39a7a25105384d6959b8"
+      "sha256": "6dd136be355e12175f5660c1abad6be8b7657f8fc67da5ec2c508a7a0ebecc99"
     },
     {
       "artifact": "dashboard/public/data/axiom-policyengine-co-snap-ecps.json",
       "claim": "suite:co-snap-ecps",
       "mode": "computed",
       "sha256": "696efc8883e20afcc80ec69345b46ab88127f50f4a104757c6bc0a903a268a90"
+    },
+    {
+      "artifact": "dashboard/public/data/cases/co-snap-ecps/index.json",
+      "claim": "case-evidence-index:co-snap-ecps",
+      "mode": "computed",
+      "sha256": "6efcc71bdff470574043f69d2e42303722a5f3a299957804ef9cf3bec428c33e"
     },
     {
       "artifact": "dispositions/co-snap-ecps.yaml",
@@ -32,6 +38,12 @@
       "claim": "suite:co-snap-qc",
       "mode": "computed",
       "sha256": "1557af0077ac0a38c63c5318441c9354b30aceedd8d25fb9cff8fd3bb150517d"
+    },
+    {
+      "artifact": "dashboard/public/data/cases/co-snap-qc/index.json",
+      "claim": "case-evidence-index:co-snap-qc",
+      "mode": "computed",
+      "sha256": "7b3a5b967562a22bc610f20e7cfd8a836fdbc1f55ecc563f6a451889c7865ae0"
     }
   ],
   "period": "2026-01",
@@ -59,13 +71,16 @@
       "reality_legs": [
         {
           "axiom_attributed_open": 0,
+          "binding": "bound",
           "clean": true,
           "comparisons": 856,
+          "evidence_cases": 856,
           "matches": 856,
           "mismatches": 0,
           "note": "reality-oracle disagreements are leads, not defects",
           "oracle": "USDA SNAP QC FY2024 administrative sample (rulespec overlay, per-patch citations in report provenance)",
           "oracle_type": "reality",
+          "reconciliation": "cardinality",
           "report_defects": [],
           "suite": "co-snap-qc",
           "unexplained": 0,
@@ -75,12 +90,15 @@
       "reference_legs": [
         {
           "axiom_attributed_open": 0,
+          "binding": "bound",
           "clean": true,
           "comparisons": 2144,
+          "evidence_cases": 1072,
           "matches": 2143,
           "mismatches": 1,
           "oracle": "policyengine-us 1.705.1 over the populace population",
           "oracle_type": "reference",
+          "reconciliation": "full",
           "report_defects": [],
           "suite": "co-snap-ecps",
           "unexplained": 0,
@@ -105,6 +123,7 @@
       "mode": "computed",
       "suites": {
         "co-snap-ecps": {
+          "binding": "bound",
           "bridge_audited": false,
           "bridged_through": [
             "dependent_care_deduction",
@@ -114,18 +133,27 @@
           "constant_fields": 1,
           "contested_reports": [],
           "per_case_evidence_committed": true,
+          "reconciliation": "none",
+          "registry_report": "dashboard/public/data/axiom-policyengine-co-snap-ecps.json",
+          "registry_report_sha256": "696efc8883e20afcc80ec69345b46ab88127f50f4a104757c6bc0a903a268a90",
           "report": "dashboard/public/data/axiom-policyengine-co-snap-ecps.json",
+          "report_identity_matches_registry": true,
           "report_sha256": "696efc8883e20afcc80ec69345b46ab88127f50f4a104757c6bc0a903a268a90",
           "varied_fields": 7
         },
         "co-snap-qc": {
+          "binding": "bound",
           "bridge_audited": false,
           "bridged_through": [],
           "cases": 856,
           "constant_fields": 0,
           "contested_reports": [],
           "per_case_evidence_committed": false,
+          "reconciliation": "cardinality",
+          "registry_report": "dashboard/public/data/axiom-snapqc-co-snap.json",
+          "registry_report_sha256": "1557af0077ac0a38c63c5318441c9354b30aceedd8d25fb9cff8fd3bb150517d",
           "report": "dashboard/public/data/axiom-snapqc-co-snap.json",
+          "report_identity_matches_registry": true,
           "report_sha256": "1557af0077ac0a38c63c5318441c9354b30aceedd8d25fb9cff8fd3bb150517d",
           "varied_fields": 0
         }
