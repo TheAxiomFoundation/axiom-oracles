@@ -939,7 +939,12 @@ def _history_ratchet_baseline(
     ).as_posix()
     try:
         commits_result = _run_git(
-            repo_root, "rev-list", "HEAD", "--", universe_relative
+            repo_root,
+            "rev-list",
+            "--full-history",
+            "HEAD",
+            "--",
+            universe_relative,
         )
     except (OSError, subprocess.TimeoutExpired) as exc:
         errors.append(f"closure[{config.root}] could not inspect Git history: {exc}")

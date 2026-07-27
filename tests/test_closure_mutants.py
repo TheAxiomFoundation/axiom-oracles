@@ -182,6 +182,14 @@ def _write_universe(path: Path, document: dict) -> None:
     path.write_text(yaml.safe_dump(document, sort_keys=False))
 
 
+def _git(repo: Path, *args: str) -> subprocess.CompletedProcess:
+    return subprocess.run(
+        ["git", "-C", str(repo), *args],
+        check=True,
+        capture_output=True,
+    )
+
+
 def _update_snapshot_hash(closure_dir: Path, filename: str) -> None:
     """Refresh one tmpdir provenance digest after a deliberate pin mutation."""
 
@@ -196,17 +204,10 @@ def _commit_closure_baseline(closure_dir: Path) -> None:
     """Commit a tmpdir baseline so coordinated edits face immutable history."""
 
     repo = closure_dir.parent
-
-    def git(*args: str) -> None:
-        subprocess.run(
-            ["git", "-C", str(repo), *args],
-            check=True,
-            capture_output=True,
-        )
-
-    git("init", "-q", "-b", "main")
-    git("add", "closure")
-    git(
+    _git(repo, "init", "-q", "-b", "main")
+    _git(repo, "add", "closure")
+    _git(
+        repo,
         "-c",
         "user.name=closure-test",
         "-c",
@@ -389,6 +390,49 @@ def test_pending_regression_cannot_forge_a_pin_reset(tmp_path, capsys):
     summary_path.write_text(json.dumps(summary, indent=2) + "\n")
 
     assert module.main(["--generate", "--closure-dir", str(closure_dir)]) == 1
+    error = capsys.readouterr().err.lower()
+    assert "state-10-ccr-2506-1" in error
+    assert "ratchet" in error
+    assert "regressed" in error
+
+
+def test_pending_regression_cannot_hide_in_simplified_merge_history(tmp_path, capsys):
+    module, closure_dir = _generate_baseline(tmp_path)
+    _commit_closure_baseline(closure_dir)
+    repo = closure_dir.parent
+    _git(repo, "branch", "stale")
+
+    _tighten_state_pending_to_zero(module, closure_dir)
+    _git(repo, "add", "closure")
+    _git(
+        repo,
+        "-c",
+        "user.name=closure-test",
+        "-c",
+        "user.email=closure-test@example.invalid",
+        "commit",
+        "-q",
+        "-m",
+        "tighten pending floor",
+    )
+
+    _git(repo, "checkout", "-q", "stale")
+    _git(
+        repo,
+        "-c",
+        "user.name=closure-test",
+        "-c",
+        "user.email=closure-test@example.invalid",
+        "merge",
+        "-q",
+        "-s",
+        "ours",
+        "main",
+        "-m",
+        "retain stale universe across merge",
+    )
+
+    assert module.main(["--check", "--closure-dir", str(closure_dir)]) == 1
     error = capsys.readouterr().err.lower()
     assert "state-10-ccr-2506-1" in error
     assert "ratchet" in error
