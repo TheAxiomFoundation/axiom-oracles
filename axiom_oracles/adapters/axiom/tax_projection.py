@@ -3741,8 +3741,12 @@ def _person_input_records(people: list[Entity]) -> list[dict[str, Any]]:
             "oracle_person_age": age,
             "oracle_person_is_qualifying_child_dependent": is_dependent and age < 19,
             "oracle_person_is_tax_unit_dependent": is_dependent,
-            "person_dividend_income": _number(
-                person.fact(Concepts.DIVIDEND_INCOME, 0)
+            # Qualified dividends are a subset of total dividends and some
+            # ECPS rows carry only the qualified leaf; AGI must include them
+            # either way (mirrors _sum_dividends).
+            "person_dividend_income": max(
+                _number(person.fact(Concepts.DIVIDEND_INCOME, 0)),
+                _number(person.fact(Concepts.QUALIFIED_DIVIDEND_INCOME, 0)),
             ),
             "person_long_term_capital_gains": _number(
                 person.fact(Concepts.LONG_TERM_CAPITAL_GAINS, 0)
