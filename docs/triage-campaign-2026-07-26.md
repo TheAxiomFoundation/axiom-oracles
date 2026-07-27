@@ -186,3 +186,19 @@ Campaign 3,488 → **3,324**. Intersection unexplained 970 → 806 (fresh
   because the fix converted those rows to MATCHES.
 - Remaining 806: tbc ~370, fed liability ~300 (heavily SECA/FICA-
   correlated), amt 41, TI 66, state ~110, eitc/ctc/std tails.
+
+## Batch 14 (tbc bucket-routing extension, post-dividend-fix)
+
+Campaign 3,324 → **3,169**. Intersection 806 → 651.
+
+- capgains-worksheet-bucket-routing-tbc-postdividendfix (155,
+  bridge_artifact): the tbc-only signature — final liability agrees
+  within $15 on every row (no liability mismatch exists) with
+  ctc/eitc/cdcc/amt all compared and matched; TAXSIM idtl=2 rerun on
+  all 155 confirms axiom's tbc bucket + the preferential-rate worksheet
+  component reconstructs TAXSIM v28 exactly (22,381.42 + 5,449.08 =
+  27,830.50 = fiitax). 9 small tolerance-band tbc-only rows left raw.
+- The 134 [liability+tbc] pair cases are genuinely multi-mechanism
+  (deltas never equal) — next target, needs per-case decomposition.
+- Remaining intersection 651: pairs 268, amt-involved ~80, TI 57,
+  singles/misc rest.
