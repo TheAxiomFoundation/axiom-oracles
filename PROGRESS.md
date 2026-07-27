@@ -385,6 +385,11 @@ residual), #229 (small-suite grounding).
   evidence-backed lone-minor class; because its two rows were already
   classified, the teen class reduces unexplained rows by 22.
 - Unexplained rows after the teen class: AL 37, MA 47, NC 82, SC 51, TN 64.
+- Removed the 69 categorical-only MA/SC households from pre-existing BBCE
+  selectors, as required: 27 MA and 42 SC households (138 mismatch rows) are
+  again unexplained pending state-law validation.
+- Unexplained rows after restoring those tracked candidates: AL 37, MA 101,
+  NC 82, SC 135, TN 64.
 - The sandbox denied `uv` cache initialization under
   `/Users/maxghenis/.cache/uv`; generation used the exact cached PE-US wheel
   read-only through the same comparison CLI and clean temporary dependency
@@ -394,8 +399,7 @@ residual), #229 (small-suite grounding).
 
 - Complete the cross-state per-case TANF counterfactual and preserve only
   within-tolerance passes.
-- Apply the surviving teen selectors, remove the 69 categorical-only
-  candidates from conflicting legacy BBCE selectors, and verify that no
-  minimum-allotment row qualifies.
+- Apply the 95 within-tolerance TANF passes and retain all 26 failures.
+- Verify that no minimum-allotment row qualifies.
 - Apply class dispositions in coherent commits, regenerate the complete
   derived chain, audit scope, and write `WORKER-REPORT.md`.

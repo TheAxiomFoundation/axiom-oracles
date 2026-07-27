@@ -7,65 +7,26 @@ entries:
   kind: eligibility_right_only
   case_selector:
     case_ids:
-    - ecps-28671
     - ecps-28700
-    - ecps-28714
-    - ecps-28745
-    - ecps-28756
-    - ecps-28757
-    - ecps-28764
     - ecps-28785
-    - ecps-28798
-    - ecps-28815
-    - ecps-28833
-    - ecps-28836
-    - ecps-28837
     - ecps-28866
-    - ecps-28903
-    - ecps-28909
     - ecps-28913
     - ecps-28928
-    - ecps-28943
-    - ecps-28961
-    - ecps-29026
     - ecps-29054
-    - ecps-29055
-    - ecps-29067
-    - ecps-29074
-    - ecps-29107
     - ecps-29143
     - ecps-29228
-    - ecps-29249
     - ecps-29255
-    - ecps-29267
     - ecps-29293
     - ecps-29304
-    - ecps-29330
     - ecps-29333
-    - ecps-29346
-    - ecps-29347
     - ecps-29348
-    - ecps-29354
-    - ecps-29365
-    - ecps-29370
-    - ecps-29404
-    - ecps-29406
     - ecps-29413
     - ecps-29426
     - ecps-29428
-    - ecps-29429
     - ecps-29475
     - ecps-29498
-    - ecps-29502
-    - ecps-29514
-    - ecps-29526
-    - ecps-29534
-    - ecps-29561
     - ecps-29568
     - ecps-29604
-    - ecps-29611
-    - ecps-29640
-    - ecps-29695
   disposition: axiom_encoding_gap
   evidence:
     mechanism: |-
@@ -120,10 +81,7 @@ entries:
   kind: eligibility_right_only
   case_selector:
     case_ids:
-    - ecps-28748
-    - ecps-28852
     - ecps-28994
-    - ecps-29147
     - ecps-29544
   disposition: axiom_encoding_gap
   evidence:
@@ -143,63 +101,24 @@ entries:
   kind: amount_difference
   case_selector:
     case_ids:
-    - ecps-28671
     - ecps-28700
-    - ecps-28714
-    - ecps-28745
-    - ecps-28756
-    - ecps-28757
-    - ecps-28764
     - ecps-28785
-    - ecps-28798
-    - ecps-28815
-    - ecps-28833
-    - ecps-28836
-    - ecps-28837
     - ecps-28866
-    - ecps-28903
-    - ecps-28909
     - ecps-28913
     - ecps-28928
-    - ecps-28943
-    - ecps-28961
-    - ecps-29026
-    - ecps-29055
-    - ecps-29067
-    - ecps-29074
-    - ecps-29107
     - ecps-29143
     - ecps-29228
-    - ecps-29249
     - ecps-29255
-    - ecps-29267
     - ecps-29293
     - ecps-29304
-    - ecps-29330
     - ecps-29333
-    - ecps-29346
-    - ecps-29347
     - ecps-29348
-    - ecps-29354
-    - ecps-29365
-    - ecps-29370
-    - ecps-29404
-    - ecps-29406
     - ecps-29413
     - ecps-29426
-    - ecps-29429
     - ecps-29475
     - ecps-29498
-    - ecps-29502
-    - ecps-29514
-    - ecps-29526
-    - ecps-29534
-    - ecps-29561
     - ecps-29568
     - ecps-29604
-    - ecps-29611
-    - ecps-29640
-    - ecps-29695
   disposition: axiom_encoding_gap
   evidence:
     mechanism: |-
@@ -220,10 +139,7 @@ entries:
   kind: amount_difference
   case_selector:
     case_ids:
-    - ecps-28748
-    - ecps-28852
     - ecps-28994
-    - ecps-29147
     - ecps-29544
   disposition: axiom_encoding_gap
   evidence:

@@ -10212,7 +10212,7 @@
     "comparison_count": 2566,
     "dispositioned": {
       "counts": {
-        "axiom_encoding_gap": 126,
+        "axiom_encoding_gap": 42,
         "bridge_artifact": 0,
         "explained_residual": 0,
         "unexplained": 0,
@@ -10224,7 +10224,7 @@
       "orphaned_entries": [],
       "raw_match_rate": 92.94622,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 51
+      "unexplained_count": 135
     },
     "error_count": 0,
     "errors_by_engine": [],
