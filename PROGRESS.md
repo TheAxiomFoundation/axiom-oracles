@@ -479,11 +479,24 @@ residual), #229 (small-suite grounding).
   `scripts/check_vacuous_gate.py` in write mode. The regenerated freshness
   register contains 213 suites and 24 executable surfaces; no side's
   `generated_at` value was hand-picked.
+- Added explicit Python 3.13, PolicyEngine 4.18.9, PolicyEngine-US 1.767.3,
+  and PolicyEngine Core 3.30.3 pins to all five SNAP configs.
+- Extended comparison provenance stamping so the resolved Core pin is recorded
+  and each regenerated report's `engines.versions` block is populated from the
+  same resolved pins that construct the subprocess.
+- Added regression tests covering all five config resolutions and report
+  engine-version stamping; 61 targeted runner/provenance tests pass.
+- Verified the sandbox-safe read-only package overlay imports PolicyEngine
+  4.18.9 / US 1.767.3 / Core 3.30.3 / SPM Calculator 0.3.1 from the existing
+  Python 3.13.9 environment. Core 3.30.3 resolves from cached archive
+  `UtYsCpOUGlMyeZqOH4zzz`; US 1.767.3 resolves from
+  `-QudTS5FEzSKZ0Anf7ddx`.
+- Ruff is not installed in the reusable repository virtual environment; the
+  attempted module invocation failed before linting and changed no files.
 
 ### Next
 
-1. Trace the runner's oracle resolution and compact case-data generator; add
-   reproducible 1.767.3/3.30.3 pins and a served/canonical parity check.
+1. Add a served/canonical case-artifact parity check.
 2. Regenerate all five suites and re-run every candidate evidence test.
 3. Regenerate all derived and served artifacts, run the full `--check` chain,
    reconcile baseline/current counts, and write the untracked final report.

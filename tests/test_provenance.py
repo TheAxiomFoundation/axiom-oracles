@@ -161,6 +161,37 @@ def test_stamp_report_provenance_writes_block(tmp_path):
     assert written["provenance"] == block
 
 
+def test_stamp_report_provenance_records_resolved_engine_versions(tmp_path):
+    run_comparison = _load_run_comparison()
+    report = tmp_path / "r.json"
+    report.write_text(
+        json.dumps(
+            {
+                "suite": "al-snap-ecps",
+                "engines": {"left": "axiom", "right": "policyengine"},
+            }
+        )
+    )
+    block = {
+        "engine": {"axiom_rules_engine_version": "0.1.0"},
+        "oracle": {
+            "policyengine_package": "policyengine==4.18.9",
+            "policyengine_us": "1.767.3",
+            "policyengine_core": "3.30.3",
+        },
+    }
+
+    run_comparison._stamp_report_provenance(report, block)
+
+    written = json.loads(report.read_text())
+    assert written["engines"]["versions"] == {
+        "axiom_rules_engine": "0.1.0",
+        "policyengine": "4.18.9",
+        "policyengine_core": "3.30.3",
+        "policyengine_us": "1.767.3",
+    }
+
+
 def test_stamp_preserves_sorted_format_and_newline(tmp_path):
     """A dashboard-style sorted+newline report stays sorted with its newline."""
     run_comparison = _load_run_comparison()

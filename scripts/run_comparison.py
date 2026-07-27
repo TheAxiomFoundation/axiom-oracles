@@ -863,6 +863,7 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
             "name": params.get("right", "policyengine"),
             "policyengine_package": pins[0],
             "policyengine_us": pins[1].split("==", 1)[-1],
+            "policyengine_core": pins[2].split("==", 1)[-1],
         }
         # Pin the Tax-Calculator engine version when it is a participant, so a
         # taxcalc-vs-policyengine report records both engine stacks it compared
@@ -970,6 +971,29 @@ def _stamp_report_provenance(output: Path, provenance: dict) -> None:
     if not isinstance(data, dict):
         return
     data["provenance"] = provenance
+    engines = data.get("engines")
+    if isinstance(engines, dict):
+        versions = dict(engines.get("versions") or {})
+        engine = provenance.get("engine") or {}
+        oracle = provenance.get("oracle") or {}
+        axiom_version = engine.get("axiom_rules_engine_version")
+        policyengine_pin = oracle.get("policyengine_package")
+        if axiom_version:
+            versions["axiom_rules_engine"] = str(axiom_version)
+        if (
+            isinstance(policyengine_pin, str)
+            and policyengine_pin.startswith("policyengine==")
+        ):
+            versions["policyengine"] = policyengine_pin.split("==", 1)[1]
+        for provenance_key, version_key in (
+            ("policyengine_core", "policyengine_core"),
+            ("policyengine_us", "policyengine_us"),
+        ):
+            value = oracle.get(provenance_key)
+            if value:
+                versions[version_key] = str(value)
+        if versions:
+            engines["versions"] = versions
     trailing = "\n" if original_text.endswith("\n") else ""
     for sort_keys in (True, False):
         for indent in (2, 1):
