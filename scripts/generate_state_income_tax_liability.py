@@ -31,6 +31,9 @@ policyengine-taxsim installed):
 from __future__ import annotations
 
 import argparse
+from importlib.metadata import PackageNotFoundError, distribution
+import math
+import platform
 import sys
 import warnings
 from dataclasses import dataclass
@@ -143,10 +146,9 @@ _PE_VAR = {
     # bracket-tax analog; on the childless grid it equals the final va_income_tax
     # (no VA credits).
     "VA": "va_income_tax_before_non_refundable_credits",
-    # Utah's before-credits variable is the pure 59-10-104 flat tax; the
-    # before-non-refundable variable nets the phased-out 59-10-1018 taxpayer
-    # credit that this flat core excludes.
-    "UT": "ut_income_tax_before_credits",
+    # Synthetic name used in reports. Runtime calculation combines the pure
+    # section 59-10-104 amount with the section 59-10-104.1 exemption.
+    "UT": "ut_resident_income_tax_before_credits_derived",
     # Alabama's canonical section 40-18-5 surface maps only to the schedule
     # before nonrefundable credits; it does not claim final annual liability.
     # Kentucky's canonical KRS 141.020 schedule also applies before every
@@ -277,6 +279,10 @@ _MODULE["KY"] = (
     "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits"
 )
 _MODULE["MS"] = "us-ms:policies/income_tax/2026_section_27_7_5_schedule"
+_MODULE["UT"] = (
+    "us-ut:policies/income_tax/"
+    "2026_full_year_resident_before_credit_schedule"
+)
 _LIABILITY_OUTPUT = {
     st: f"{_MODULE[st]}#{st.lower()}_pit_pilot_income_tax_liability"
     for st in _TAXSIM_STATE
@@ -297,6 +303,9 @@ _LIABILITY_OUTPUT["KY"] = (
 _LIABILITY_OUTPUT["MS"] = (
     f"{_MODULE['MS']}#ms_pit_2026_section_27_7_5_schedule_tax"
 )
+_LIABILITY_OUTPUT["UT"] = (
+    f"{_MODULE['UT']}#ut_pit_2026_resident_income_tax_before_credits"
+)
 
 _LIABILITY_OUTPUT["NY"] = (
     f"{_MODULE['NY']}#ny_pit_pilot_main_income_tax"
@@ -312,11 +321,13 @@ _POPULACE_OUTPUT = {
     ),
     "CT": _LIABILITY_OUTPUT["CT"],
     "MS": _LIABILITY_OUTPUT["MS"],
+    "UT": _LIABILITY_OUTPUT["UT"],
 }
 _POPULACE_PE_VAR = {
     "AR": "ar_income_tax_before_non_refundable_credits_indiv",
     "CT": "ct_resident_ordinary_tax_before_personal_credit_derived",
     "MS": "ms_income_tax_before_credits_joint",
+    "UT": "ut_resident_income_tax_before_credits_derived",
 }
 _POPULACE_AGGREGATION = {
     "AR": "person_sum_to_tax_unit",
@@ -328,7 +339,7 @@ _POPULACE_AGGREGATION = {
 # accept strict ``(single|married|joint)_<income>`` names and skip everything
 # else. Other states retain the legacy AGI/suffix extraction behavior.
 _STRICT_GRID_FIXTURE_STATES = frozenset({"CO", "GA", "NY"})
-_LIVE_AXIOM_STATES = frozenset({"KY", "MS"})
+_LIVE_AXIOM_STATES = frozenset({"KY", "MS", "UT"})
 
 
 @dataclass
@@ -463,8 +474,68 @@ def _policyengine_simulation(case: Case):
 
 
 def _policyengine_liability(case: Case) -> float:
+    if case.state == "UT":
+        return _utah_policyengine_values(case)[0]
     sim = _policyengine_simulation(case)
     return float(sim.calculate(_PE_VAR[case.state], VALIDATION_YEAR)[0])
+
+
+def _exact_one_policyengine_value(sim, variable: str):
+    result = sim.calculate(variable, VALIDATION_YEAR)
+    raw = result.values if hasattr(result, "values") else result
+    try:
+        values = list(raw)
+    except TypeError as exc:
+        raise RuntimeError(
+            f"Utah {variable} must return exactly one value; got a scalar"
+        ) from exc
+    if len(values) != 1:
+        raise RuntimeError(
+            f"Utah {variable} must return exactly one value; got {len(values)}"
+        )
+    value = values[0]
+    return value.item() if hasattr(value, "item") else value
+
+
+def _finite_utah_number(sim, variable: str) -> float:
+    value = _exact_one_policyengine_value(sim, variable)
+    if isinstance(value, bool):
+        raise RuntimeError(f"Utah {variable} did not return a finite numeric value")
+    try:
+        number = float(value)
+    except (TypeError, ValueError) as exc:
+        raise RuntimeError(
+            f"Utah {variable} did not return a finite numeric value"
+        ) from exc
+    if not math.isfinite(number):
+        raise RuntimeError(f"Utah {variable} did not return a finite numeric value")
+    return number
+
+
+def _utah_policyengine_values(case: Case) -> tuple[float, float, bool]:
+    """Return the derived target and its two reviewed upstream boundaries."""
+
+    if case.state != "UT":
+        raise ValueError("Utah projection requested for a non-Utah case")
+    sim = _policyengine_simulation(case)
+    taxable_income = _finite_utah_number(sim, "ut_taxable_income")
+    before_credits = _finite_utah_number(
+        sim, "ut_income_tax_before_credits"
+    )
+    if before_credits < 0:
+        raise RuntimeError(
+            "Utah ut_income_tax_before_credits must be nonnegative"
+        )
+    exempt_value = _exact_one_policyengine_value(sim, "ut_income_tax_exempt")
+    if not isinstance(exempt_value, bool):
+        raise RuntimeError(
+            "Utah ut_income_tax_exempt did not return a strict Boolean"
+        )
+    return (
+        0.0 if exempt_value else before_credits,
+        taxable_income,
+        exempt_value,
+    )
 
 
 def _kentucky_policyengine_values(case: Case) -> tuple[float, float]:
@@ -705,6 +776,120 @@ def _mississippi_axiom_liabilities(
     return output
 
 
+def _utah_axiom_liabilities(
+    cases: list[Case],
+    policyengine_values: dict[str, tuple[float, float, bool]],
+) -> dict[tuple[str, str, int], float]:
+    """Execute the canonical Utah surface over exact reviewed projections."""
+
+    from axiom_oracles.bridges.state_tax_populace_runner import (
+        DISPOSITION_READY,
+        TaxUnitRoute,
+        _state_request,
+        _tax_unit_entity_id,
+    )
+    from axiom_oracles.bridges.tax_populace import (
+        output_number,
+        run_axiom_program,
+    )
+
+    utah_cases = [case for case in cases if case.state == "UT"]
+    if not utah_cases:
+        return {}
+    prefix = f"{_MODULE['UT']}#input."
+    slots = {
+        "taxable": f"{prefix}ut_pit_2026_state_taxable_income",
+        "resident": f"{prefix}ut_pit_2026_is_full_year_utah_resident_return",
+        "aligned": (
+            f"{prefix}ut_pit_2026_federal_and_utah_filing_units_are_aligned"
+        ),
+        "exempt": (
+            f"{prefix}ut_pit_2026_is_exempt_under_section_59_10_104_1"
+        ),
+    }
+    routes = tuple(
+        TaxUnitRoute(
+            case.case_id,
+            case.case_id,
+            "UT",
+            "49",
+            1.0,
+            DISPOSITION_READY,
+        )
+        for case in utah_cases
+    )
+    request = _state_request(
+        state="UT",
+        routes=routes,
+        year=VALIDATION_YEAR,
+        output=_LIABILITY_OUTPUT["UT"],
+        projected_inputs={
+            slots["taxable"]: {
+                case.case_id: policyengine_values[case.case_id][1]
+                for case in utah_cases
+            },
+            slots["resident"]: {
+                case.case_id: True for case in utah_cases
+            },
+            slots["aligned"]: {
+                case.case_id: True for case in utah_cases
+            },
+            slots["exempt"]: {
+                case.case_id: policyengine_values[case.case_id][2]
+                for case in utah_cases
+            },
+        },
+    )
+    program = (
+        RULESPEC_US
+        / "us-ut"
+        / "policies"
+        / "income_tax"
+        / "2026_full_year_resident_before_credit_schedule.yaml"
+    )
+    results = run_axiom_program(
+        program=program,
+        request=request,
+        rulespec_root=RULESPEC_US,
+        axiom_rules_path=AXIOM_RULES,
+    )
+    if len(results) != len(utah_cases):
+        raise RuntimeError(
+            "Utah live RuleSpec execution returned "
+            f"{len(results)} results for {len(utah_cases)} cases"
+        )
+    expected_entities = {
+        _tax_unit_entity_id(case.case_id) for case in utah_cases
+    }
+    results_by_entity: dict[str, dict] = {}
+    for result in results:
+        entity_id = result.get("entity_id")
+        if (
+            not isinstance(entity_id, str)
+            or entity_id not in expected_entities
+            or entity_id in results_by_entity
+        ):
+            raise RuntimeError(
+                "Utah live RuleSpec execution returned an unexpected or "
+                f"duplicate TaxUnit entity_id: {entity_id!r}"
+            )
+        results_by_entity[entity_id] = result
+    missing_entities = expected_entities - results_by_entity.keys()
+    if missing_entities:
+        raise RuntimeError(
+            "Utah live RuleSpec execution omitted TaxUnit entity_id(s): "
+            + ", ".join(sorted(missing_entities))
+        )
+    return {
+        (case.state, case.filing, int(case.wages)): output_number(
+            results_by_entity[_tax_unit_entity_id(case.case_id)]["outputs"][
+                _LIABILITY_OUTPUT["UT"]
+            ]
+        )
+        for case in utah_cases
+    }
+
+
 def _taxsim_binary() -> Path | None:
     """Resolve the pinned TAXSIM binary explicitly.
 
@@ -714,8 +899,6 @@ def _taxsim_binary() -> Path | None:
     committed data. Fall back to the repo venv's share/, where the vetted
     binary from the pinned wheel lives.
     """
-    import platform
-
     exe = {
         "darwin": "taxsimtest-osx.exe",
         "linux": "taxsimtest-linux.exe",
@@ -724,6 +907,18 @@ def _taxsim_binary() -> Path | None:
     if exe is None:
         return None
     tail = Path("share") / "policyengine_taxsim" / "taxsimtest" / exe
+    try:
+        installed = distribution("policyengine-taxsim")
+    except PackageNotFoundError:
+        installed = None
+    if installed is not None:
+        for packaged_path in installed.files or ():
+            if str(packaged_path).endswith(
+                f"share/policyengine_taxsim/taxsimtest/{exe}"
+            ):
+                candidate = Path(installed.locate_file(packaged_path)).resolve()
+                if candidate.exists():
+                    return candidate
     for root in (Path(sys.prefix), REPO_ROOT / ".venv"):
         candidate = root / tail
         if candidate.exists():
@@ -874,6 +1069,7 @@ _POPULACE_TOL = {
     "OH": (0.01, 0.0000001),
     "OK": (0.01, 0.0000001),
     "SC": (0.01, 0.0000001),
+    "UT": (0.01, 0.0000001),
     "VA": (0.01, 0.0000001),
     "WV": (0.01, 0.0000001),
 }
@@ -1084,6 +1280,12 @@ def main(argv: list[str] | None = None) -> int:
             },
         )
     )
+    utah_values = {
+        case.case_id: _utah_policyengine_values(case)
+        for case in cases
+        if case.state == "UT"
+    }
+    axiom.update(_utah_axiom_liabilities(cases, utah_values))
     # States whose reviewed RuleSpec has migrated its companion tests from the
     # six-case wage grid to boundary fixtures can no longer seed the Axiom
     # side of this report from fixtures. Skip them LOUDLY — the Populace
@@ -1114,7 +1316,11 @@ def main(argv: list[str] | None = None) -> int:
             else (
                 mississippi_values[case.case_id][0]
                 if case.state == "MS"
-                else _policyengine_liability(case)
+                else (
+                    utah_values[case.case_id][0]
+                    if case.state == "UT"
+                    else _policyengine_liability(case)
+                )
             )
         )
         for case in cases

@@ -19,7 +19,7 @@ def test_contract_check_reports_readiness(capsys) -> None:
     assert "43 jurisdictions" in output
     assert "29 ready" in output
     assert "14 blocked" in output
-    assert "154 explicit inputs" in output
+    assert "157 explicit inputs" in output
     assert "1 explicit relations" in output
 
 

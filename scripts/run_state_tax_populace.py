@@ -15,6 +15,7 @@ from axiom_oracles.bridges.state_tax_populace import (
     load_state_tax_populace_contract,
 )
 from axiom_oracles.bridges.state_tax_populace_runner import (
+    DISPOSITION_READY,
     NO_BROAD_PIT_FIPS,
     calculate_policyengine_targets,
     calculate_policyengine_projection_inputs,
@@ -24,6 +25,53 @@ from axiom_oracles.bridges.state_tax_populace_runner import (
     runtime_provenance,
     validate_campaign_dataset_identity,
 )
+
+_UT_INPUT_PREFIX = (
+    "us-ut:policies/income_tax/"
+    "2026_full_year_resident_before_credit_schedule#input."
+)
+
+
+def _projection_branch_diagnostics(
+    projection_inputs: dict,
+    routes: tuple,
+) -> dict[str, dict[str, int]]:
+    """Summarize reviewed Utah branch exercise without exposing microdata."""
+
+    utah = projection_inputs.get("UT")
+    if not isinstance(utah, dict):
+        return {}
+    ready_ids = {
+        route.tax_unit_id
+        for route in routes
+        if route.state == "UT" and route.disposition == DISPOSITION_READY
+    }
+    exempt_values = utah[
+        f"{_UT_INPUT_PREFIX}ut_pit_2026_is_exempt_under_section_59_10_104_1"
+    ]
+    taxable_values = utah[
+        f"{_UT_INPUT_PREFIX}ut_pit_2026_state_taxable_income"
+    ]
+    exempt_count = sum(exempt_values[tax_unit_id] is True for tax_unit_id in ready_ids)
+    nonexempt_count = sum(
+        exempt_values[tax_unit_id] is False for tax_unit_id in ready_ids
+    )
+    if exempt_count + nonexempt_count != len(ready_ids):
+        raise ValueError(
+            "UT projection diagnostics require strict Boolean exemption values "
+            "for every ready TaxUnit"
+        )
+    return {
+        "UT": {
+            "compared_tax_unit_count": len(ready_ids),
+            "exempt_count": exempt_count,
+            "nonexempt_count": nonexempt_count,
+            "negative_taxable_income_count": sum(
+                float(taxable_values[tax_unit_id]) < 0
+                for tax_unit_id in ready_ids
+            ),
+        }
+    }
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -128,6 +176,10 @@ def main(argv: list[str] | None = None) -> int:
         "runtime_provenance": runtime_provenance(
             rulespec_root=args.rulespec_root.resolve(),
             axiom_rules_path=args.axiom_rules_path.resolve(),
+        ),
+        "projection_diagnostics": _projection_branch_diagnostics(
+            projection_inputs,
+            tuple(comparison_routes),
         ),
         "routing": population_routing_report(
             routes,

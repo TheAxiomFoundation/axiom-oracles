@@ -1411,3 +1411,86 @@ def test_completion_never_applies_to_skip_capable_lanes(monkeypatch, tmp_path):
     )
     for entry in block.get("rulespecs", []):
         assert entry.get("sha") is None
+
+
+def test_state_income_tax_grid_generation_fails_closed(monkeypatch, tmp_path):
+    run_comparison = load_run_comparison_module()
+    output = tmp_path / "ut.json"
+    committed = (
+        tmp_path
+        / "dashboard"
+        / "public"
+        / "data"
+        / "axiom-policyengine-taxsim-ut-income-tax-liability.json"
+    )
+    committed.parent.mkdir(parents=True)
+    committed.write_text('{"stale": true}\n')
+    monkeypatch.setattr(run_comparison, "REPO_ROOT", tmp_path)
+    rulespec = tmp_path / "rulespec-us"
+    engine = tmp_path / "axiom-rules-engine"
+    rulespec.mkdir()
+    engine.mkdir()
+    monkeypatch.setattr(
+        run_comparison,
+        "_resolve_state_income_tax_grid_repos",
+        lambda: (rulespec, engine),
+    )
+
+    def unavailable(*_args, **_kwargs):
+        raise subprocess.CalledProcessError(1, ["generator"])
+
+    monkeypatch.setattr(run_comparison.subprocess, "run", unavailable)
+
+    with pytest.raises(subprocess.CalledProcessError):
+        run_comparison._run_state_income_tax_liability_grid(
+            {"parameters": {"state": "UT"}},
+            output,
+        )
+
+    assert not output.exists()
+
+
+def test_state_income_tax_grid_exposes_actual_repos_to_provenance(
+    monkeypatch, tmp_path
+):
+    run_comparison = load_run_comparison_module()
+    rulespec = tmp_path / "rulespec-us"
+    engine = tmp_path / "axiom-rules-engine"
+    rulespec.mkdir()
+    engine.mkdir()
+    monkeypatch.setattr(run_comparison, "REPO_ROOT", tmp_path)
+    monkeypatch.setattr(
+        run_comparison,
+        "_resolve_state_income_tax_grid_repos",
+        lambda: (rulespec, engine),
+    )
+    source = (
+        tmp_path
+        / "dashboard"
+        / "public"
+        / "data"
+        / "axiom-policyengine-taxsim-ut-income-tax-liability.json"
+    )
+    source.parent.mkdir(parents=True)
+    source.write_text('{"fresh": true}\n')
+    calls = []
+
+    def generated(cmd, *, check, cwd, env):
+        calls.append((cmd, check, cwd, env))
+        return subprocess.CompletedProcess(cmd, 0)
+
+    monkeypatch.setattr(run_comparison.subprocess, "run", generated)
+    runner = {"parameters": {"state": "UT"}}
+    output = tmp_path / "out.json"
+
+    run_comparison._run_state_income_tax_liability_grid(runner, output)
+
+    assert runner["parameters"]["rulespec_roots"] == [str(rulespec)]
+    assert runner["parameters"]["axiom_rules_repo"] == str(engine)
+    cmd, check, cwd, env = calls[0]
+    assert check is True
+    assert cwd == tmp_path
+    assert cmd[-2:] == ["--state", "UT"]
+    assert env["RULESPEC_US_REPO"] == str(rulespec)
+    assert env["AXIOM_RULES_REPO"] == str(engine)
+    assert json.loads(output.read_text()) == {"fresh": True}

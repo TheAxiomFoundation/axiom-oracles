@@ -23,6 +23,37 @@ from axiom_oracles.bridges.state_tax_populace_runner import (
     validate_campaign_dataset_identity,
 )
 
+_UT_PREFIX = (
+    "us-ut:policies/income_tax/"
+    "2026_full_year_resident_before_credit_schedule#input."
+)
+_UT_TAXABLE_SLOT = f"{_UT_PREFIX}ut_pit_2026_state_taxable_income"
+_UT_RESIDENT_SLOT = (
+    f"{_UT_PREFIX}ut_pit_2026_is_full_year_utah_resident_return"
+)
+_UT_ALIGNED_SLOT = (
+    f"{_UT_PREFIX}ut_pit_2026_federal_and_utah_filing_units_are_aligned"
+)
+_UT_EXEMPT_SLOT = (
+    f"{_UT_PREFIX}ut_pit_2026_is_exempt_under_section_59_10_104_1"
+)
+
+
+def _ut_inputs(
+    taxable: dict,
+    *,
+    resident: dict | None = None,
+    aligned: dict | None = None,
+    exempt: dict | None = None,
+) -> dict:
+    ids = taxable.keys()
+    return {
+        _UT_TAXABLE_SLOT: taxable,
+        _UT_RESIDENT_SLOT: resident or {item: True for item in ids},
+        _UT_ALIGNED_SLOT: aligned or {item: True for item in ids},
+        _UT_EXEMPT_SLOT: exempt or {item: False for item in ids},
+    }
+
 
 def _frames():
     tax_units = pd.DataFrame(
@@ -196,10 +227,6 @@ def test_report_accounts_for_all_51_jurisdictions_and_every_unit() -> None:
 
 
 def test_ready_comparison_runs_one_compiled_state_batch(tmp_path) -> None:
-    slot = (
-        "us-ut:policies/income_tax/pilot_liability_pipeline#input."
-        "ut_pit_pilot_state_taxable_income"
-    )
     routes = (
         TaxUnitRoute(2, 1, "UT", "49", 2.5, DISPOSITION_READY),
         TaxUnitRoute(5, 2, "UT", "49", 3.5, DISPOSITION_READY),
@@ -222,7 +249,7 @@ def test_ready_comparison_runs_one_compiled_state_batch(tmp_path) -> None:
         routes=routes,
         policyengine_targets={"UT": {2: 0.0, 5: 0.0}},
         policyengine_projection_inputs={
-            "UT": {slot: {2: 0.0, 5: 0.0}}
+            "UT": _ut_inputs({2: 0.0, 5: 0.0})
         },
         year=2026,
         rulespec_root=tmp_path / "rulespec-us",
@@ -246,7 +273,9 @@ def test_policyengine_target_calculation_is_limited_to_ready_states() -> None:
 
         def calculate(self, variable, period):
             self.calls.append((variable, period))
-            return [0, 0]
+            if variable == "ut_income_tax_exempt":
+                return [False, True]
+            return [100, 200]
 
     routes = (
         TaxUnitRoute(1, 1, "UT", "49", 1, DISPOSITION_READY),
@@ -262,7 +291,93 @@ def test_policyengine_target_calculation_is_limited_to_ready_states() -> None:
         microsimulation_factory=FakeSimulation,
     )
 
-    assert targets == {"UT": {1: 0.0, 2: 0.0}}
+    assert targets == {"UT": {1: 100.0, 2: 0.0}}
+
+
+def test_utah_target_rejects_non_boolean_exemption() -> None:
+    class FakeSimulation:
+        def __init__(self, dataset):
+            assert dataset == "dataset"
+
+        def calculate(self, variable, period):
+            return (
+                [100.0]
+                if variable == "ut_income_tax_before_credits"
+                else [1.0]
+            )
+
+    routes = (TaxUnitRoute(1, 1, "UT", "49", 1, DISPOSITION_READY),)
+    raw_tax_units = pd.DataFrame({"tax_unit_id": [1]})
+    with pytest.raises(
+        StateTaxPopulationRoutingError,
+        match="ut_income_tax_exempt: expected a PolicyEngine boolean",
+    ):
+        calculate_policyengine_targets(
+            dataset="dataset",
+            raw_tax_units=raw_tax_units,
+            routes=routes,
+            year=2026,
+            microsimulation_factory=FakeSimulation,
+        )
+
+
+def test_utah_target_rejects_mismatched_component_cardinality() -> None:
+    class FakeSimulation:
+        def __init__(self, dataset):
+            assert dataset == "dataset"
+
+        def calculate(self, variable, period):
+            return (
+                [100.0, 200.0]
+                if variable == "ut_income_tax_before_credits"
+                else [False]
+            )
+
+    routes = (TaxUnitRoute(1, 1, "UT", "49", 1, DISPOSITION_READY),)
+    raw_tax_units = pd.DataFrame({"tax_unit_id": [1, 2]})
+    with pytest.raises(
+        StateTaxPopulationRoutingError,
+        match="UT: PolicyEngine exemption-aware target inputs returned 2 and 1",
+    ):
+        calculate_policyengine_targets(
+            dataset="dataset",
+            raw_tax_units=raw_tax_units,
+            routes=routes,
+            year=2026,
+            microsimulation_factory=FakeSimulation,
+        )
+
+
+@pytest.mark.parametrize(
+    ("value", "message"),
+    [
+        (float("nan"), "returned non-finite"),
+        (float("inf"), "returned non-finite"),
+        (-0.01, "must be nonnegative"),
+    ],
+)
+def test_utah_target_rejects_invalid_before_credit_amount(value, message) -> None:
+    class FakeSimulation:
+        def __init__(self, dataset):
+            assert dataset == "dataset"
+
+        def calculate(self, variable, period):
+            return (
+                [value]
+                if variable == "ut_income_tax_before_credits"
+                else [False]
+            )
+
+    routes = (TaxUnitRoute(1, 1, "UT", "49", 1, DISPOSITION_READY),)
+    raw_tax_units = pd.DataFrame({"tax_unit_id": [1]})
+    with pytest.raises(StateTaxPopulationRoutingError, match=message):
+        calculate_policyengine_targets(
+            dataset="dataset",
+            raw_tax_units=raw_tax_units,
+            routes=routes,
+            year=2026,
+            microsimulation_factory=FakeSimulation,
+        )
 
 
 def test_connecticut_target_recovers_policyengine_pre_credit_total_exactly() -> None:
@@ -434,7 +549,11 @@ def test_policyengine_projection_calculation_uses_only_reviewed_boundaries() -> 
 
         def calculate(self, variable, period):
             calls.append((variable, period))
-            return [-100, 25000]
+            values = {
+                "ut_taxable_income": [-100, 25000],
+                "ut_income_tax_exempt": [False, True],
+            }
+            return values[variable]
 
     routes = (
         TaxUnitRoute(1, 1, "UT", "49", 1, DISPOSITION_READY),
@@ -450,12 +569,18 @@ def test_policyengine_projection_calculation_uses_only_reviewed_boundaries() -> 
         microsimulation_factory=FakeSimulation,
     )
 
-    slot = (
-        "us-ut:policies/income_tax/pilot_liability_pipeline#input."
-        "ut_pit_pilot_state_taxable_income"
-    )
-    assert calls == [("ut_taxable_income", 2026)]
-    assert projections == {"UT": {slot: {1: -100.0, 2: 25000.0}}}
+    assert calls == [
+        ("ut_taxable_income", 2026),
+        ("ut_income_tax_exempt", 2026),
+    ]
+    assert projections == {
+        "UT": _ut_inputs(
+            {1: -100.0, 2: 25000.0},
+            resident={1: True, 2: False},
+            aligned={1: True, 2: False},
+            exempt={1: False, 2: True},
+        )
+    }
 
 
 def test_reviewed_iowa_and_kansas_projection_types_and_transforms() -> None:
@@ -1834,10 +1959,6 @@ def test_virginia_boolean_projection_rejects_non_binary_values(value) -> None:
 
 
 def test_ready_ut_comparison_projects_exact_declared_input(tmp_path) -> None:
-    slot = (
-        "us-ut:policies/income_tax/pilot_liability_pipeline#input."
-        "ut_pit_pilot_state_taxable_income"
-    )
     routes = (TaxUnitRoute(9, 1, "UT", "49", 3.0, DISPOSITION_READY),)
     calls = []
 
@@ -1855,7 +1976,7 @@ def test_ready_ut_comparison_projects_exact_declared_input(tmp_path) -> None:
     report = compare_ready_state_tax_units(
         routes=routes,
         policyengine_targets={"UT": {9: 445.0}},
-        policyengine_projection_inputs={"UT": {slot: {9: 10000.0}}},
+        policyengine_projection_inputs={"UT": _ut_inputs({9: 10000.0})},
         year=2026,
         rulespec_root=tmp_path / "rulespec-us",
         axiom_rules_path=tmp_path / "axiom-rules",
@@ -1863,19 +1984,25 @@ def test_ready_ut_comparison_projects_exact_declared_input(tmp_path) -> None:
     )
 
     assert report["mismatch_count"] == 0
-    assert calls[0]["request"]["dataset"]["inputs"] == [
-        {
-            "name": slot,
-            "entity": "Entity",
-            "entity_id": "state-tax-unit-9",
-            "interval": {
-                "period_kind": "tax_year",
-                "start": "2026-01-01",
-                "end": "2026-12-31",
-            },
-            "value": {"kind": "decimal", "value": "10000.0"},
-        }
-    ]
+    inputs = calls[0]["request"]["dataset"]["inputs"]
+    assert {item["name"] for item in inputs} == {
+        _UT_TAXABLE_SLOT,
+        _UT_RESIDENT_SLOT,
+        _UT_ALIGNED_SLOT,
+        _UT_EXEMPT_SLOT,
+    }
+    assert next(item for item in inputs if item["name"] == _UT_TAXABLE_SLOT)[
+        "value"
+    ] == {"kind": "decimal", "value": "10000.0"}
+    assert all(
+        next(item for item in inputs if item["name"] == slot)["value"]
+        == {"kind": "bool", "value": expected}
+        for slot, expected in {
+            _UT_RESIDENT_SLOT: True,
+            _UT_ALIGNED_SLOT: True,
+            _UT_EXEMPT_SLOT: False,
+        }.items()
+    )
 
 
 def test_ready_kansas_comparison_preserves_boolean_input_kind(tmp_path) -> None:
@@ -1934,10 +2061,6 @@ def test_ready_ut_comparison_rejects_missing_projection_input(tmp_path) -> None:
 
 
 def test_ready_ut_comparison_rejects_extra_projection_input(tmp_path) -> None:
-    slot = (
-        "us-ut:policies/income_tax/pilot_liability_pipeline#input."
-        "ut_pit_pilot_state_taxable_income"
-    )
     routes = (TaxUnitRoute(9, 1, "UT", "49", 3.0, DISPOSITION_READY),)
 
     with pytest.raises(
@@ -1948,7 +2071,10 @@ def test_ready_ut_comparison_rejects_extra_projection_input(tmp_path) -> None:
             routes=routes,
             policyengine_targets={"UT": {9: 445.0}},
             policyengine_projection_inputs={
-                "UT": {slot: {9: 10_000.0}, f"{slot}_unexpected": {9: 0.0}}
+                "UT": {
+                    **_ut_inputs({9: 10_000.0}),
+                    f"{_UT_TAXABLE_SLOT}_unexpected": {9: 0.0},
+                }
             },
             year=2026,
             rulespec_root=tmp_path / "rulespec-us",
@@ -1958,10 +2084,6 @@ def test_ready_ut_comparison_rejects_extra_projection_input(tmp_path) -> None:
 
 
 def test_ready_comparison_attributes_axiom_failures_to_state(tmp_path) -> None:
-    slot = (
-        "us-ut:policies/income_tax/pilot_liability_pipeline#input."
-        "ut_pit_pilot_state_taxable_income"
-    )
     routes = (TaxUnitRoute(9, 1, "UT", "49", 3.0, DISPOSITION_READY),)
 
     with pytest.raises(
@@ -1971,7 +2093,7 @@ def test_ready_comparison_attributes_axiom_failures_to_state(tmp_path) -> None:
         compare_ready_state_tax_units(
             routes=routes,
             policyengine_targets={"UT": {9: 445.0}},
-            policyengine_projection_inputs={"UT": {slot: {9: 10_000.0}}},
+            policyengine_projection_inputs={"UT": _ut_inputs({9: 10_000.0})},
             year=2026,
             rulespec_root=tmp_path / "rulespec-us",
             axiom_rules_path=tmp_path / "axiom-rules-engine",

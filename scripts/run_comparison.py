@@ -2104,23 +2104,72 @@ def _run_gettsim_synthetic_compare(runner: dict, output: Path) -> None:
     output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
 
 
+def _resolve_state_income_tax_grid_repos() -> tuple[Path, Path]:
+    """Resolve and verify the exact clean repos used by the state grid."""
+
+    rulespec_root = Path(
+        os.environ.get("RULESPEC_US_REPO", REPO_ROOT.parent / "rulespec-us")
+    ).expanduser().resolve()
+    axiom_rules_repo = Path(
+        os.environ.get(
+            "AXIOM_RULES_REPO", REPO_ROOT.parent / "axiom-rules-engine"
+        )
+    ).expanduser().resolve()
+    for label, repo in (
+        ("rulespec-us", rulespec_root),
+        ("axiom-rules-engine", axiom_rules_repo),
+    ):
+        if not repo.is_dir():
+            raise SystemExit(f"state income-tax grid {label} repo not found: {repo}")
+        try:
+            status = subprocess.run(
+                ["git", "-C", str(repo), "status", "--porcelain"],
+                check=True,
+                capture_output=True,
+                text=True,
+            ).stdout
+        except (OSError, subprocess.CalledProcessError) as exc:
+            raise SystemExit(
+                f"cannot verify state income-tax grid {label} repo {repo}: {exc}"
+            ) from exc
+        if status.strip():
+            raise SystemExit(
+                f"state income-tax grid {label} repo has working-tree changes: "
+                f"{repo}"
+            )
+    binary = (
+        axiom_rules_repo / "target" / "release" / "axiom-rules-engine"
+    )
+    if not binary.is_file():
+        raise SystemExit(
+            "state income-tax grid axiom-rules-engine binary not found: "
+            f"{binary}"
+        )
+    return rulespec_root, axiom_rules_repo
+
+
 def _run_state_income_tax_liability_grid(runner: dict, output: Path) -> None:
     """Composed state income-tax liability grid: pipeline vs PolicyEngine + TAXSIM.
 
     Delegates to scripts/generate_state_income_tax_liability.py, which runs the
     modest case grid through the rulespec-us composed liability pipeline (engine-
     verified fixtures), PolicyEngine at the 2026 validation year, and the pinned
-    TAXSIM binary at its latest 2024 law year, then writes one v2 report per
+    TAXSIM binary at the configured 2026 law year, then writes one v2 report per
     state. The generator is state-agnostic; this runner copies the state's report
     to the requested ``output`` path so the standard provenance/dashboard
-    plumbing applies. On a runner without PolicyEngine or the TAXSIM binary the
-    committed dashboard report is reused.
+    plumbing applies. Generation fails closed when any required engine is
+    unavailable; committed numerical reports are never silently reused.
     """
     params = runner["parameters"]
+    rulespec_root, axiom_rules_repo = _resolve_state_income_tax_grid_repos()
+    # The config object is shared with the outer provenance stamper. Record the
+    # exact paths that actually execute, so a successful grid can never replace
+    # generator provenance with a null RuleSpec SHA or empty engine block.
+    params["rulespec_roots"] = [str(rulespec_root)]
+    params["axiom_rules_repo"] = str(axiom_rules_repo)
     state = str(params["state"]).lower()
     generator = REPO_ROOT / "scripts" / "generate_state_income_tax_liability.py"
     basename = f"axiom-policyengine-taxsim-{state}-income-tax-liability"
-    committed = REPO_ROOT / "dashboard" / "public" / "data" / f"{basename}.json"
     cmd = [
         "uv",
         "run",
@@ -2138,13 +2187,13 @@ def _run_state_income_tax_liability_grid(runner: dict, output: Path) -> None:
         "policyengine-taxsim==2.30.0",
         "python",
         str(generator),
+        "--state",
+        state.upper(),
     ]
-    try:
-        subprocess.run(cmd, check=True, cwd=REPO_ROOT)
-    except (subprocess.CalledProcessError, FileNotFoundError) as exc:
-        if not committed.exists():
-            raise
-        print(f"State grid generation unavailable ({exc}); reusing {committed}.")
+    env = os.environ.copy()
+    env["RULESPEC_US_REPO"] = str(rulespec_root)
+    env["AXIOM_RULES_REPO"] = str(axiom_rules_repo)
+    subprocess.run(cmd, check=True, cwd=REPO_ROOT, env=env)
     source = REPO_ROOT / "dashboard" / "public" / "data" / f"{basename}.json"
     output.write_text(source.read_text())
 

@@ -31836,6 +31836,79 @@ mappings:
     comparison: money
     rationale: Both outputs apply the tax-year-2026 section 27-7-5 schedule to one Person's completed nonnegative Mississippi taxable income before credits. The oracle validates PolicyEngine's joint/default Person schedule branch only; this mapping excludes filing-method selection, TaxUnit aggregation, credits, payments, and final liability.
 
+  # Utah's canonical TY2026 full-year-resident surface applies section
+  # 59-10-104's rate to completed Utah taxable income, but must also honor the
+  # separate section 59-10-104.1 exemption. PolicyEngine publishes those two
+  # components separately, so the schedule comparison is explicitly derived.
+  - legal_id: us-ut:policies/income_tax/2026_full_year_resident_before_credit_schedule#ut_pit_2026_input_domain_is_valid
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom validates the caller's nonnegative-income, aligned-filing-unit, full-year-resident interface contract. PolicyEngine exposes no one-to-one Judgment for that complete contract.
+
+  - legal_id: us-ut:policies/income_tax/2026_full_year_resident_before_credit_schedule#ut_pit_2026_before_credit_schedule_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This applicability Judgment combines Axiom's explicit interface guards with the section 59-10-104.1 exemption. PolicyEngine exposes the exemption but not the complete guarded predicate.
+
+  - legal_id: us-ut:policies/income_tax/2026_full_year_resident_before_credit_schedule#ut_pit_2026_income_tax_rate
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.states.ut.tax.income.rate
+    period: year
+    comparison: rate
+    rationale: Same 4.45 percent Utah individual-income-tax rate for tax year 2026.
+
+  - legal_id: us-ut:policies/income_tax/2026_full_year_resident_before_credit_schedule#ut_pit_2026_resident_state_taxable_income_boundary
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom exposes a fail-closed normalization of caller-supplied completed Utah taxable income. PolicyEngine's ut_taxable_income is the upstream input, not a one-to-one output with the same interface guards.
+
+  - legal_id: us-ut:policies/income_tax/2026_full_year_resident_before_credit_schedule#ut_pit_2026_resident_income_tax_before_credits
+    country: us
+    program: tax
+    mapping_type: derived_expression
+    expression: ut_income_tax_before_credits * (1 - ut_income_tax_exempt)
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    rationale: PolicyEngine publishes section 59-10-104 tax before credits and the section 59-10-104.1 exemption separately. Multiplying by one minus the Boolean exemption reproduces the canonical exemption-aware schedule output without claiming the taxpayer credit or final liability.
+
+  - legal_id: us-ut:policies/income_tax/2026_full_year_resident_before_credit_schedule#ut_pit_2026_taxpayer_credit_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that the section 59-10-1018 taxpayer credit is intentionally outside the canonical schedule surface.
+
+  - legal_id: us-ut:policies/income_tax/2026_full_year_resident_before_credit_schedule#ut_pit_2026_final_resident_liability_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This source-readiness hold records that downstream credits, payments, and final resident liability are intentionally outside the canonical schedule surface.
+
+  - legal_id: us-ut:policies/income_tax/2026_full_year_resident_before_credit_schedule#ut_pit_2026_taxpayer_tax_credit
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is an explicit fail-closed source-hold sentinel, not a computed taxpayer-credit result.
+
+  - legal_id: us-ut:policies/income_tax/2026_full_year_resident_before_credit_schedule#ut_pit_2026_final_resident_income_tax_liability_before_payments
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This zero is an explicit fail-closed source-hold sentinel, not computed final Utah liability.
+
   # Idaho's TY2026 full-year-resident module is a source-readiness boundary.
   # Exact P4 mappings prevent federal-boundary diagnostics, source holds, and
   # fail-closed Idaho sentinels from being mistaken for completed state-tax
@@ -34922,6 +34995,12 @@ prefixes:
     mapping_type: not_comparable
     candidate_priority: P4
     rationale: PolicyEngine-US does not model every MS statute, agency policy manual, or state regulation at output granularity; comparable state outputs carry exact mappings which take precedence over this prefix.
+
+  - legal_id_prefix: "us-ut:"
+    country: us
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: PolicyEngine-US does not model every Utah statute, agency policy manual, or state regulation at output granularity; comparable state outputs carry exact mappings which take precedence over this prefix.
 
   - legal_id_prefix: "us-nc:"
     country: us

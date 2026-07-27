@@ -1359,6 +1359,15 @@
       "source": "comparisons/ut-income-tax-liability.yaml"
     },
     {
+      "suite": "ut-income-tax-populace",
+      "name": null,
+      "report": "axiom-policyengine-ut-income-tax-populace.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/state-income-tax-populace.yaml"
+    },
+    {
       "suite": "ut-snap-ecps",
       "name": null,
       "report": "axiom-policyengine-ut-snap-ecps.json",

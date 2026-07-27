@@ -49,11 +49,28 @@ DISPOSITION_UNKNOWN_GEOGRAPHY = "excluded_unknown_geography"
 CT_ORDINARY_TAX_DERIVED_TARGET = (
     "ct_resident_ordinary_tax_before_personal_credit_derived"
 )
-_CT_FULL_YEAR_RESIDENT_INPUT = (
-    "us-ct:policies/income_tax/"
-    "2026_resident_ordinary_tax_before_personal_credit#input."
-    "ct_pit_2026_is_full_year_connecticut_resident_return"
+UT_RESIDENT_BEFORE_CREDITS_DERIVED_TARGET = (
+    "ut_resident_income_tax_before_credits_derived"
 )
+_REVIEWED_ROUTE_BOOLEAN_INPUTS_BY_STATE = {
+    "CT": frozenset(
+        {
+            "us-ct:policies/income_tax/"
+            "2026_resident_ordinary_tax_before_personal_credit#input."
+            "ct_pit_2026_is_full_year_connecticut_resident_return",
+        }
+    ),
+    "UT": frozenset(
+        {
+            "us-ut:policies/income_tax/"
+            "2026_full_year_resident_before_credit_schedule#input."
+            "ut_pit_2026_is_full_year_utah_resident_return",
+            "us-ut:policies/income_tax/"
+            "2026_full_year_resident_before_credit_schedule#input."
+            "ut_pit_2026_federal_and_utah_filing_units_are_aligned",
+        }
+    ),
+}
 
 _REVIEWED_PERSON_SUM_VARIABLES_BY_STATE = {
     "DE": frozenset({"de_taxable_income_joint"}),
@@ -583,6 +600,42 @@ def calculate_policyengine_targets(
                 zip(tax_unit_ids, recovered, strict=True)
             )
             continue
+        if (
+            state == "UT"
+            and jurisdiction.policyengine_target
+            == UT_RESIDENT_BEFORE_CREDITS_DERIVED_TARGET
+        ):
+            before_credits = _array_values(
+                sim.calculate("ut_income_tax_before_credits", period=year)
+            )
+            exemptions = _array_values(
+                sim.calculate("ut_income_tax_exempt", period=year)
+            )
+            if len(before_credits) != len(tax_unit_ids) or len(exemptions) != len(
+                tax_unit_ids
+            ):
+                raise StateTaxPopulationRoutingError(
+                    "UT: PolicyEngine exemption-aware target inputs returned "
+                    f"{len(before_credits)} and {len(exemptions)} rows for "
+                    f"{len(tax_unit_ids)} tax units"
+                )
+            derived: list[float] = []
+            for tax_value, exemption_value in zip(
+                before_credits, exemptions, strict=True
+            ):
+                tax = _finite_number(
+                    tax_value, label="ut_income_tax_before_credits"
+                )
+                if tax < 0:
+                    raise StateTaxPopulationRoutingError(
+                        "UT: ut_income_tax_before_credits must be nonnegative"
+                    )
+                exempt = _strict_boolean(
+                    exemption_value, label="ut_income_tax_exempt"
+                )
+                derived.append(0.0 if exempt else tax)
+            targets[state] = dict(zip(tax_unit_ids, derived, strict=True))
+            continue
         comparison_aggregation = getattr(
             jurisdiction,
             "comparison_aggregation",
@@ -820,19 +873,22 @@ def calculate_policyengine_projection_inputs(
                 }
                 continue
             if slot.source_kind == "raw_populace":
-                if state != "CT" or slot.slot != _CT_FULL_YEAR_RESIDENT_INPUT:
+                reviewed_slots = _REVIEWED_ROUTE_BOOLEAN_INPUTS_BY_STATE.get(
+                    state, frozenset()
+                )
+                if slot.slot not in reviewed_slots:
                     raise StateTaxPopulationRoutingError(
                         f"{state}: runtime projector does not support raw "
                         f"Populace source for {slot.slot}"
                     )
-                ready_ct_ids = {
+                ready_state_ids = {
                     route.tax_unit_id
                     for route in route_rows
-                    if route.state == "CT"
+                    if route.state == state
                     and route.disposition == DISPOSITION_READY
                 }
                 state_inputs[slot.slot] = {
-                    tax_unit_id: tax_unit_id in ready_ct_ids
+                    tax_unit_id: tax_unit_id in ready_state_ids
                     for tax_unit_id in tax_unit_ids
                 }
                 continue

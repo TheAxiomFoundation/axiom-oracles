@@ -113,6 +113,44 @@ def test_mississippi_dashboard_description_names_person_schedule():
     assert "liability" not in description.lower()
 
 
+def test_utah_projection_carries_branch_exercise_diagnostics():
+    output = (
+        "us-ut:policies/income_tax/"
+        "2026_full_year_resident_before_credit_schedule"
+        "#ut_pit_2026_resident_income_tax_before_credits"
+    )
+    campaign = _campaign()
+    campaign["projection_diagnostics"] = {
+        "UT": {
+            "compared_tax_unit_count": 1251,
+            "exempt_count": 196,
+            "nonexempt_count": 1055,
+            "negative_taxable_income_count": 12,
+        }
+    }
+    report = project_state(
+        "UT",
+        {
+            "compared_count": 1251,
+            "mismatch_count": 0,
+            "output": output,
+            "program": output.split("#", 1)[0],
+            "policyengine_target": (
+                "ut_resident_income_tax_before_credits_derived"
+            ),
+        },
+        campaign,
+        "campaign.json",
+    )
+
+    assert report["provenance"]["branch_diagnostics"] == {
+        "compared_tax_unit_count": 1251,
+        "exempt_count": 196,
+        "nonexempt_count": 1055,
+        "negative_taxable_income_count": 12,
+    }
+
+
 def test_projected_report_carries_standard_rulespec_provenance():
     report = project_state(
         "CT",

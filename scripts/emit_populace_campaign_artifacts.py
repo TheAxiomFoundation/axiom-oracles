@@ -55,6 +55,15 @@ _DESCRIPTION_BY_OUTPUT = {
         "tax, computed from caller-supplied completed Mississippi taxable "
         "income and summed to tax units only for Populace accounting"
     ),
+    (
+        "us-ut:policies/income_tax/"
+        "2026_full_year_resident_before_credit_schedule"
+        "#ut_pit_2026_resident_income_tax_before_credits"
+    ): (
+        "Utah section 59-10-104 full-year-resident tax before credits, "
+        "including the section 59-10-104.1 exemption gate, over every routed "
+        "tax unit in the pinned US Populace"
+    ),
 }
 
 _REQUIRED_RUNTIME_FIELDS = {
@@ -197,6 +206,9 @@ def project_state(
             "relative_tolerance": entry.get("relative_tolerance"),
             "max_absolute_difference": entry.get("max_absolute_difference"),
             "weighted_compared_tax_units": entry.get("weighted_compared_tax_units"),
+            "branch_diagnostics": (
+                campaign.get("projection_diagnostics", {}).get(state)
+            ),
         }
     )
     return {

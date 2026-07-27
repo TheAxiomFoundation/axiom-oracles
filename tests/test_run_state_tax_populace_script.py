@@ -126,3 +126,40 @@ def test_repeatable_state_filter_preserves_national_routing_report(
     assert calls["projections"] == expected_filtered
     assert calls["comparison"] == expected_filtered
     assert calls["known_tax_unit_ids"] == {1, 2, 3}
+
+
+def test_utah_projection_diagnostics_pin_exempt_and_domain_branch_counts() -> None:
+    prefix = (
+        "us-ut:policies/income_tax/"
+        "2026_full_year_resident_before_credit_schedule#input."
+    )
+    routes = (
+        TaxUnitRoute(1, 1, "UT", "49", 1, DISPOSITION_READY),
+        TaxUnitRoute(2, 2, "UT", "49", 1, DISPOSITION_READY),
+        TaxUnitRoute(3, 3, "UT", "49", 1, DISPOSITION_BLOCKED),
+    )
+    diagnostics = campaign._projection_branch_diagnostics(
+        {
+            "UT": {
+                f"{prefix}ut_pit_2026_state_taxable_income": {
+                    1: -5.0,
+                    2: 100.0,
+                    3: -10.0,
+                },
+                (
+                    f"{prefix}"
+                    "ut_pit_2026_is_exempt_under_section_59_10_104_1"
+                ): {1: True, 2: False, 3: True},
+            }
+        },
+        routes,
+    )
+
+    assert diagnostics == {
+        "UT": {
+            "compared_tax_unit_count": 2,
+            "exempt_count": 1,
+            "nonexempt_count": 1,
+            "negative_taxable_income_count": 1,
+        }
+    }

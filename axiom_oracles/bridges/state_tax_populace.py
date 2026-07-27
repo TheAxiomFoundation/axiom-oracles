@@ -89,6 +89,14 @@ ALLOWED_NONSTANDARD_COMPARISON_SURFACES = frozenset(
             "ms_income_tax_before_credits_joint",
             "person_sum_to_tax_unit",
         ),
+        (
+            "UT",
+            "us-ut:policies/income_tax/"
+            "2026_full_year_resident_before_credit_schedule#"
+            "ut_pit_2026_resident_income_tax_before_credits",
+            "ut_resident_income_tax_before_credits_derived",
+            "tax_unit",
+        ),
     }
 )
 
@@ -166,6 +174,11 @@ EXPECTED_OUTPUT_OVERRIDES = {
         "us-ny:policies/income_tax/pilot_liability_pipeline"
         "#ny_pit_pilot_main_income_tax"
     ),
+    "UT": (
+        "us-ut:policies/income_tax/"
+        "2026_full_year_resident_before_credit_schedule#"
+        "ut_pit_2026_resident_income_tax_before_credits"
+    ),
 }
 EXPECTED_PROGRAM_OVERRIDES = {
     "AL": (
@@ -179,17 +192,21 @@ EXPECTED_PROGRAM_OVERRIDES = {
     "GA": "us-ga:policies/income_tax/2026_annual_tax_before_nonrefundable_credits",
     "KY": "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits",
     "MS": "us-ms:policies/income_tax/2026_section_27_7_5_schedule",
+    "UT": (
+        "us-ut:policies/income_tax/"
+        "2026_full_year_resident_before_credit_schedule"
+    ),
 }
-EXPECTED_EXPLICIT_INPUT_COUNT = 154
+EXPECTED_EXPLICIT_INPUT_COUNT = 157
 EXPECTED_EXPLICIT_RELATION_COUNT = 1
 EXPECTED_SLOT_INVENTORY_SHA256 = (
-    "80d23c92eb51b2d77bd56167664f241a9cb54a59c98c525a0ea98fb1f71d97c9"
+    "3e25d5f842a235d3449f468d5be52549a1c8803a9b67eac10d34abbb2e89f2dc"
 )
 EXPECTED_JURISDICTION_REGISTRY_SHA256 = (
-    "66b11b3117433c5c968fd6705f110eaf41dffb95a8d24cd0e6da8c0858b60d06"
+    "83e004d99f22eec89b2247558d4a19da37cfa3bdc243fd2cdc3f2853b53875de"
 )
 EXPECTED_SOURCE_METADATA_SHA256 = (
-    "925d597216279fe6e7869d8c40e58f4a45ac2465ef2d8c2d5e4c582d53cef743"
+    "07633bb09703eccc897a8f21beb2d13068423ef592029ec2fa68eb5a7f9e8c48"
 )
 # Exact boundaries admitted only after independent legal and dependency-graph
 # review.  The comparison target itself is forbidden below, so these remain
@@ -376,9 +393,17 @@ ALLOWED_PE_UPSTREAM_BOUNDARIES: frozenset[tuple[str, str, str]] = frozenset(
         ),
         (
             "UT",
-            "us-ut:policies/income_tax/pilot_liability_pipeline#input."
-            "ut_pit_pilot_state_taxable_income",
+            "us-ut:policies/income_tax/"
+            "2026_full_year_resident_before_credit_schedule#input."
+            "ut_pit_2026_state_taxable_income",
             "ut_taxable_income",
+        ),
+        (
+            "UT",
+            "us-ut:policies/income_tax/"
+            "2026_full_year_resident_before_credit_schedule#input."
+            "ut_pit_2026_is_exempt_under_section_59_10_104_1",
+            "ut_income_tax_exempt",
         ),
         (
             "VA",
@@ -597,13 +622,28 @@ ALLOWED_DERIVED_PE_BOUNDARIES: frozenset[tuple[str, str, str, str]] = frozenset(
     }
 )
 
-ALLOWED_ROUTE_RESIDENCY_INPUTS: frozenset[tuple[str, str]] = frozenset(
+# Exact Boolean inputs established by the certified campaign route/model
+# structure. Each is asserted only for positively weighted TaxUnits routed to
+# the named state; the runtime projector fails closed for every other slot.
+ALLOWED_ROUTE_BOOLEAN_INPUTS: frozenset[tuple[str, str]] = frozenset(
     {
         (
             "CT",
             "us-ct:policies/income_tax/"
             "2026_resident_ordinary_tax_before_personal_credit#input."
             "ct_pit_2026_is_full_year_connecticut_resident_return",
+        ),
+        (
+            "UT",
+            "us-ut:policies/income_tax/"
+            "2026_full_year_resident_before_credit_schedule#input."
+            "ut_pit_2026_is_full_year_utah_resident_return",
+        ),
+        (
+            "UT",
+            "us-ut:policies/income_tax/"
+            "2026_full_year_resident_before_credit_schedule#input."
+            "ut_pit_2026_federal_and_utah_filing_units_are_aligned",
         ),
     }
 )
@@ -1297,10 +1337,10 @@ def _validate_slot(
         if "#input." in slot.slot and (
             jurisdiction.state,
             slot.slot,
-        ) not in ALLOWED_ROUTE_RESIDENCY_INPUTS:
+        ) not in ALLOWED_ROUTE_BOOLEAN_INPUTS:
             errors.append(
                 f"{label}: raw Populace source is not in the independently "
-                "reviewed route-residency allowlist"
+                "reviewed route/model Boolean allowlist"
             )
         if (
             slot.policyengine_variable

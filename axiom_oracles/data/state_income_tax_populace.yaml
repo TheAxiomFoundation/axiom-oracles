@@ -222,20 +222,44 @@ jurisdictions:
   fips: '49'
   taxsim_state_code: 45
   jurisdiction: us-ut
-  program: us-ut:policies/income_tax/pilot_liability_pipeline
-  output: us-ut:policies/income_tax/pilot_liability_pipeline#ut_pit_pilot_income_tax_liability
+  program: us-ut:policies/income_tax/2026_full_year_resident_before_credit_schedule
+  output: us-ut:policies/income_tax/2026_full_year_resident_before_credit_schedule#ut_pit_2026_resident_income_tax_before_credits
   policyengine:
-    target: ut_income_tax_before_credits
-    tolerance: 1.0
-    relative_tolerance: 0.0
+    target: ut_resident_income_tax_before_credits_derived
+    tolerance: 0.01
+    relative_tolerance: 0.0000001
   status: ready
-  evidence: RuleSpec accepts one completed-return Utah taxable-income boundary and imports the statutory 4.45% rate. Independent RuleSpec review and a full certified-Populace probe confirmed the boundary is upstream of ut_income_tax_before_credits for all 1,251 positive-weight routed Utah tax units, with no differences above the $1 tolerance.
+  evidence: >-
+    The canonical RuleSpec surface applies Utah Code section 59-10-104's 2026
+    4.45 percent rate to completed nonnegative Utah taxable income for aligned
+    full-year-resident returns, and returns zero when the upstream section
+    59-10-104.1 exemption applies. PolicyEngine publishes the same pre-credit
+    schedule amount and exemption predicate separately, so the runner derives
+    the exact comparison target as ut_income_tax_before_credits when not exempt
+    and zero when exempt. This scope does not claim the taxpayer credit, final
+    liability, payments, or refund. The prior pilot run is not reused as
+    canonical evidence; a fresh pinned-Populace run is required before a
+    canonical parity artifact is published.
   inputs:
-  - slot: us-ut:policies/income_tax/pilot_liability_pipeline#input.ut_pit_pilot_state_taxable_income
+  - slot: us-ut:policies/income_tax/2026_full_year_resident_before_credit_schedule#input.ut_pit_2026_state_taxable_income
     source_kind: pe_upstream_boundary
     status: ready
-    evidence: Utah Code 59-10-104 imposes tax on state taxable income, and the reviewed RuleSpec module declares that completed-return amount as its sole upstream boundary. PolicyEngine ut_taxable_income is a direct upstream dependency of the distinct comparison target ut_income_tax_before_credits; rulespec-us#955 and the full-Populace probe reviewed this exact relationship.
+    evidence: Utah Code section 59-10-104 applies the rate to completed-return Utah taxable income. PolicyEngine ut_taxable_income is a direct upstream dependency of its separately published pre-credit schedule amount.
     policyengine_variable: ut_taxable_income
+    policyengine_relationship: upstream
+  - slot: us-ut:policies/income_tax/2026_full_year_resident_before_credit_schedule#input.ut_pit_2026_is_full_year_utah_resident_return
+    source_kind: raw_populace
+    status: ready
+    evidence: The certified campaign explicitly routes household state 49 as Utah full-year residence. This exact campaign assumption is projected from the reviewed route and is not inferred from a PolicyEngine tax result.
+  - slot: us-ut:policies/income_tax/2026_full_year_resident_before_credit_schedule#input.ut_pit_2026_federal_and_utah_filing_units_are_aligned
+    source_kind: raw_populace
+    status: ready
+    evidence: The campaign sends one unchanged PolicyEngine TaxUnit to the federal and Utah annual-return surfaces. Alignment is therefore an explicit property of this reviewed route/model construction, asserted only for ready Utah TaxUnits and never synthesized from a target value or a generic Boolean default.
+  - slot: us-ut:policies/income_tax/2026_full_year_resident_before_credit_schedule#input.ut_pit_2026_is_exempt_under_section_59_10_104_1
+    source_kind: pe_upstream_boundary
+    status: ready
+    evidence: PolicyEngine ut_income_tax_exempt directly models the section 59-10-104.1 exemption predicate and is upstream of the derived exemption-aware comparison target.
+    policyengine_variable: ut_income_tax_exempt
     policyengine_relationship: upstream
   relations: []
 - state: VA
