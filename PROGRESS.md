@@ -475,13 +475,15 @@ residual), #229 (small-suite grounding).
   worker at
   `/Users/maxghenis/.cache/uv/wheels-v6/pypi/policyengine-us/1.767.3-py3-none-any`.
 - Confirmed local `origin/main` is the same `9b889a27` target used by review.
+- Merged local `origin/main` and resolved its sole conflict by running
+  `scripts/check_vacuous_gate.py` in write mode. The regenerated freshness
+  register contains 213 suites and 24 executable surfaces; no side's
+  `generated_at` value was hand-picked.
 
 ### Next
 
-1. Merge local `origin/main`, resolve by regenerating `freshness.json`, and
-   commit the integration step.
-2. Trace the runner's oracle resolution and compact case-data generator; add
+1. Trace the runner's oracle resolution and compact case-data generator; add
    reproducible 1.767.3/3.30.3 pins and a served/canonical parity check.
-3. Regenerate all five suites and re-run every candidate evidence test.
-4. Regenerate all derived and served artifacts, run the full `--check` chain,
+2. Regenerate all five suites and re-run every candidate evidence test.
+3. Regenerate all derived and served artifacts, run the full `--check` chain,
    reconcile baseline/current counts, and write the untracked final report.

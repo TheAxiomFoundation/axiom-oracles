@@ -140,20 +140,44 @@ def test_contract_pins_kansas_canonical_k40es_surface() -> None:
     ]
 
 
+def test_contract_pins_dc_canonical_joint_method_schedule() -> None:
+    district = load_state_tax_populace_contract().by_state()["DC"]
+    module = (
+        "us-dc:policies/income_tax/"
+        "2026_section_47_1806_03_schedule_before_credits"
+    )
+
+    assert district.program == module
+    assert district.output == (
+        f"{module}#dc_pit_2026_section_47_1806_03_schedule_before_credits"
+    )
+    assert district.policyengine_target == "dc_income_tax_before_credits_joint"
+    assert district.policyengine_target != "dc_income_tax_before_credits"
+    assert (district.tolerance, district.relative_tolerance) == (0.01, 1e-7)
+    assert [slot.slot for slot in district.inputs] == [
+        f"{module}#input."
+        "dc_pit_2026_section_47_1806_03_completed_joint_method_taxable_income"
+    ]
+    assert [slot.policyengine_variable for slot in district.inputs] == [
+        "dc_taxable_income_joint"
+    ]
+
+
 def test_packaged_contract_has_reviewed_ready_states() -> None:
     contract = load_state_tax_populace_contract()
     summary = readiness_summary(contract)
 
     assert summary == {
         "jurisdiction_count": 43,
-        "ready_count": 29,
-        "blocked_count": 14,
+        "ready_count": 30,
+        "blocked_count": 13,
         "ready_states": [
             "AL",
             "AR",
             "AZ",
             "CO",
             "CT",
+            "DC",
             "DE",
             "GA",
             "HI",
@@ -187,6 +211,7 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
                 "AR",
                 "CO",
                 "CT",
+                "DC",
                 "DE",
                 "GA",
                 "HI",
@@ -215,7 +240,7 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
         ),
         "explicit_input_count": EXPECTED_EXPLICIT_INPUT_COUNT,
         "explicit_relation_count": EXPECTED_EXPLICIT_RELATION_COUNT,
-        "blocked_input_count": EXPECTED_EXPLICIT_INPUT_COUNT - 64,
+        "blocked_input_count": EXPECTED_EXPLICIT_INPUT_COUNT - 65,
         "blocked_relation_count": 0,
     }
     assert "NH" not in contract.by_state()
@@ -225,6 +250,7 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
         "AR": ["ar_taxable_income_indiv"],
             "CT": ["ct_taxable_income", "ct_agi"],
         "CO": ["co_taxable_income"],
+        "DC": ["dc_taxable_income_joint"],
         "DE": ["de_taxable_income_indv", "de_files_separately"],
         "GA": ["ga_taxable_income"],
         "HI": ["hi_taxable_income"],

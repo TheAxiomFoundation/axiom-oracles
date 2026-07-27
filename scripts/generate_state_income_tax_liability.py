@@ -315,6 +315,10 @@ _LIABILITY_OUTPUT["NY"] = (
 # the legacy six-case grid. Keep these explicit so the grid's historical broad
 # concept and artifacts do not get relabeled.
 _POPULACE_MODULE = {
+    "DC": (
+        "us-dc:policies/income_tax/"
+        "2026_section_47_1806_03_schedule_before_credits"
+    ),
     "KS": "us-ks:policies/income_tax/2026_k40es_schedule_before_credits",
 }
 _POPULACE_OUTPUT = {
@@ -323,6 +327,10 @@ _POPULACE_OUTPUT = {
         "ar_pit_pilot_income_tax_before_non_refundable_credits_indiv"
     ),
     "CT": _LIABILITY_OUTPUT["CT"],
+    "DC": (
+        f"{_POPULACE_MODULE['DC']}#"
+        "dc_pit_2026_section_47_1806_03_schedule_before_credits"
+    ),
     "KS": (
         f"{_POPULACE_MODULE['KS']}#"
         "ks_pit_2026_k40es_schedule_before_credits"
@@ -334,6 +342,7 @@ _POPULACE_OUTPUT = {
 _POPULACE_PE_VAR = {
     "AR": "ar_income_tax_before_non_refundable_credits_indiv",
     "CT": "ct_resident_ordinary_tax_before_personal_credit_derived",
+    "DC": "dc_income_tax_before_credits_joint",
     "KS": "ks_k40es_schedule_before_credits_reviewed",
     "MS": "ms_income_tax_before_credits_joint",
     "OH": "oh_nonbusiness_income_tax_before_non_refundable_credits_derived",
@@ -1069,6 +1078,7 @@ _POPULACE_TOL = {
     "AR": (0.01, 0.0000001),
     "AZ": (0.01, 0.0000001),
     "CO": (0.01, 0.0000001),
+    "DC": (0.01, 0.0000001),
     "GA": (0.01, 0.0000001),
     "IL": (1.0, 0.0),
     "KY": (0.01, 0.0000001),

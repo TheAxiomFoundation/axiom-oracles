@@ -83,6 +83,14 @@ ALLOWED_NONSTANDARD_COMPARISON_SURFACES = frozenset(
             "tax_unit",
         ),
         (
+            "DC",
+            "us-dc:policies/income_tax/"
+            "2026_section_47_1806_03_schedule_before_credits#"
+            "dc_pit_2026_section_47_1806_03_schedule_before_credits",
+            "dc_income_tax_before_credits_joint",
+            "tax_unit",
+        ),
+        (
             "KS",
             "us-ks:policies/income_tax/"
             "2026_k40es_schedule_before_credits#"
@@ -173,6 +181,11 @@ EXPECTED_OUTPUT_OVERRIDES = {
         "2026_resident_ordinary_tax_before_personal_credit#"
         "ct_pit_2026_resident_ordinary_tax_before_personal_credit"
     ),
+    "DC": (
+        "us-dc:policies/income_tax/"
+        "2026_section_47_1806_03_schedule_before_credits#"
+        "dc_pit_2026_section_47_1806_03_schedule_before_credits"
+    ),
     "GA": (
         "us-ga:policies/income_tax/2026_annual_tax_before_nonrefundable_credits"
         "#ga_pit_2026_annual_tax_before_nonrefundable_credits"
@@ -212,6 +225,10 @@ EXPECTED_PROGRAM_OVERRIDES = {
         "us-ct:policies/income_tax/"
         "2026_resident_ordinary_tax_before_personal_credit"
     ),
+    "DC": (
+        "us-dc:policies/income_tax/"
+        "2026_section_47_1806_03_schedule_before_credits"
+    ),
     "GA": "us-ga:policies/income_tax/2026_annual_tax_before_nonrefundable_credits",
     "KY": "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits",
     "KS": "us-ks:policies/income_tax/2026_k40es_schedule_before_credits",
@@ -221,16 +238,16 @@ EXPECTED_PROGRAM_OVERRIDES = {
         "2026_full_year_resident_before_credit_schedule"
     ),
 }
-EXPECTED_EXPLICIT_INPUT_COUNT = 157
+EXPECTED_EXPLICIT_INPUT_COUNT = 153
 EXPECTED_EXPLICIT_RELATION_COUNT = 1
 EXPECTED_SLOT_INVENTORY_SHA256 = (
-    "431b12da5ea7099f51e232f71f9faa8ef9fba4844fdc6ee74533bb14624f0927"
+    "d5412090e726084a852d2bfce4dbe8e85082719deb94f7fc247906e2a521248a"
 )
 EXPECTED_JURISDICTION_REGISTRY_SHA256 = (
-    "2527eaa5abead8e57ea81c2a953530d0def6aee63262d9ee7c1b10f80a92ec71"
+    "510507c16016ef679064fd937e57329b1b9bc538f87039c2baa28af59c85c442"
 )
 EXPECTED_SOURCE_METADATA_SHA256 = (
-    "fec11cfdf0744cb46bf166570a116c1b1c323ec4242f0feb068761aca0a36918"
+    "ac1f4177f9a325bdd3fde5b16d710d79b127c518484b364e798a71554578dc97"
 )
 # Exact boundaries admitted only after independent legal and dependency-graph
 # review.  The comparison target itself is forbidden below, so these remain
@@ -281,6 +298,13 @@ ALLOWED_PE_UPSTREAM_BOUNDARIES: frozenset[tuple[str, str, str]] = frozenset(
             "us-de:policies/income_tax/pilot_liability_pipeline#input."
             "de_pit_pilot_supplied_separate_taxable_income",
             "de_taxable_income_indv",
+        ),
+        (
+            "DC",
+            "us-dc:policies/income_tax/"
+            "2026_section_47_1806_03_schedule_before_credits#input."
+            "dc_pit_2026_section_47_1806_03_completed_joint_method_taxable_income",
+            "dc_taxable_income_joint",
         ),
         (
             "DE",

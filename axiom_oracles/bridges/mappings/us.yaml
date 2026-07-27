@@ -29865,6 +29865,67 @@ mappings:
     candidate_priority: P4
     rationale: Axiom's signed net-liability output is deliberately zero while the annual deduction, exemption, and credit chain remains source held; it must not be interpreted as zero District tax. PolicyEngine dc_income_tax is a completed modeled liability.
 
+  # The canonical section 47-1806.03(a)(11) module is a narrow joint-method
+  # schedule-before-credits surface on completed District taxable income. It
+  # neither chooses between joint and separate-return methods nor replaces the
+  # legacy broad-liability/TAXSIM diagnostic.
+  - legal_id: us-dc:policies/income_tax/2026_section_47_1806_03_schedule_before_credits#dc_pit_2026_section_47_1806_03_bracket_upper
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec stores the six finite upper bounds as one selector-indexed private table. PolicyEngine exposes its District schedule through a marginal-rate parameter scale, not a one-to-one variable or table with this internal representation.
+
+  - legal_id: us-dc:policies/income_tax/2026_section_47_1806_03_schedule_before_credits#dc_pit_2026_section_47_1806_03_bracket_floor
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec stores the seven excess-over floors as one selector-indexed private table. PolicyEngine's marginal-rate scale does not expose a one-to-one output with this cumulative-schedule representation.
+
+  - legal_id: us-dc:policies/income_tax/2026_section_47_1806_03_schedule_before_credits#dc_pit_2026_section_47_1806_03_bracket_base
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec preserves the seven statutory cumulative base amounts as a private table. PolicyEngine computes the schedule through its marginal scale and exposes no matching cumulative-base table output.
+
+  - legal_id: us-dc:policies/income_tax/2026_section_47_1806_03_schedule_before_credits#dc_pit_2026_section_47_1806_03_bracket_rate
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec stores all seven marginal rates in one selector-indexed private table. PolicyEngine's parameter scale is not a one-to-one output with the same internal table identity, so the completed schedule is compared instead.
+
+  - legal_id: us-dc:policies/income_tax/2026_section_47_1806_03_schedule_before_credits#dc_pit_2026_section_47_1806_03_taxable_income_boundary
+    country: us
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: dc_taxable_income_joint
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Both values represent the completed joint-method District taxable-income boundary consumed by the section 47-1806.03(a)(11) schedule. PolicyEngine labels this boundary as potentially negative, and both its exact joint-method target and the RuleSpec independently floor it at zero before applying the schedule. The runner preserves finite negative values rather than rewriting them; this mapping does not claim to construct taxable income or select the filing method.
+
+  - legal_id: us-dc:policies/income_tax/2026_section_47_1806_03_schedule_before_credits#dc_pit_2026_section_47_1806_03_bracket_selector
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes its private integer selector only to index the four internal schedule tables. PolicyEngine publishes the computed joint-method tax but no one-to-one bracket-selector variable.
+
+  - legal_id: us-dc:policies/income_tax/2026_section_47_1806_03_schedule_before_credits#dc_pit_2026_section_47_1806_03_schedule_before_credits
+    country: us
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: dc_income_tax_before_credits_joint
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Both outputs apply the post-2021 seven-band District schedule to completed joint-method District taxable income before credits. The exact joint-method target intentionally excludes PolicyEngine's broader filing-method selector dc_income_tax_before_credits.
+
   # South Carolina's 2026 resident core has a mixed oracle surface.  Keep
   # every executable output exact here: otherwise the broad us-sc fallback
   # below falsely reports the whole module as one undifferentiated agency-
@@ -35068,6 +35129,12 @@ prefixes:
     mapping_type: not_comparable
     candidate_priority: P4
     rationale: PolicyEngine-US does not model CT agency policy manuals or state regulations at output granularity; comparable state outputs carry exact mappings which take precedence over this prefix.
+
+  - legal_id_prefix: "us-dc:"
+    country: us
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: PolicyEngine-US does not model every District statute, agency manual, regulation, or source-level output one to one; independently reviewed comparable outputs carry exact mappings which take precedence over this jurisdiction-wide fallback.
 
   - legal_id_prefix: "us-de:"
     country: us
