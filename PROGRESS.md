@@ -616,7 +616,7 @@ residual), #229 (small-suite grounding).
 
 ### State
 
-- In progress; scoped verification only.
+- In progress; scoped verification found a ledger-accuracy blocker.
 - Target under review:
   `41512b26598858d47a306fe71f0df4e7360d9d41`.
 - Review writes are confined to branch
@@ -628,11 +628,24 @@ residual), #229 (small-suite grounding).
 
 - Created this disposable review worktree directly from the exact target.
 - Read the round-4 committed ledger and verdict report.
+- Confirmed `41512b26` is exactly one commit above `6fca6d19`, and its
+  direct delta is `M PROGRESS.md` only.
+- Audited every claim added by `41512b26` against branch history and the
+  committed round-3/4 ledgers and reports.
+- Confirmed the round-3/4 identities, outcomes, requested fixes, external
+  report location and byte identity, round-4 check results, and final
+  confirmation state.
+- Found one false attribution in the new round-3 paragraph: at `1fe6bbba`,
+  `PROGRESS.md` described the repair report as intentionally untracked but
+  never named `72718c96`; the repair report itself, not the ledger, called
+  that SHA final/current.
+- Found one unverifiable causal claim in the same paragraph: Git proves that
+  `1fe6bbba` added `REPAIR-ROUND2-REPORT.md`, but neither history nor the
+  committed round-3/4 evidence establishes that an “over-broad `git add`”
+  caused the addition.
 
 ### Next
 
-- Audit the new round-3/4 ledger text against history and both prior review
-  ledgers.
 - Verify the exact delta, repository hygiene, overview, and thirteen-command
   check battery.
 - Verify PR #407's body claims against the target tree.
