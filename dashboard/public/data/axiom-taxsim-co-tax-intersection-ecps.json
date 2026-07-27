@@ -42272,6 +42272,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -940.6602079773002,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-fiitax-surtax-scope-liability",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 37117.1697920227,
       "parent": null,
@@ -45834,6 +45839,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -2140.9722656250015,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-fiitax-surtax-scope-liability",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 42809.277734375,
       "parent": null,
@@ -53102,6 +53112,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1347.393828124994,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-fiitax-surtax-scope-liability",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 35229.696171875,
       "parent": null,
@@ -57329,6 +57344,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -264.7902862548799,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-fiitax-surtax-scope-liability",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 44003.95971374512,
       "parent": null,
@@ -59670,7 +59690,7 @@
     "dispositioned": {
       "counts": {
         "axiom_encoding_gap": 298,
-        "bridge_artifact": 314,
+        "bridge_artifact": 328,
         "explained_residual": 351,
         "unexplained": 0,
         "upstream_engine_gap": 686
@@ -59679,11 +59699,11 @@
       "expired_entries": [
         "taxsim-blindness-63f-extension-standard_deduction"
       ],
-      "explained_rate": 92.098251,
+      "explained_rate": 92.214821,
       "orphaned_entries": [],
       "raw_match_rate": 80.849292,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 651
+      "unexplained_count": 637
     },
     "error_count": 0,
     "errors_by_engine": [],
