@@ -4,6 +4,7 @@ from pathlib import Path
 import pytest
 import yaml
 
+import scripts.emit_populace_campaign_artifacts as emitter
 from scripts.emit_populace_campaign_artifacts import (
     RETIRED_MANIFEST_REPORTS,
     reconcile_manifest_reports,
@@ -188,6 +189,72 @@ def test_georgia_dashboard_description_names_narrow_component():
     assert "liability" not in description.lower()
 
 
+def test_dc_dashboard_description_names_joint_method_schedule():
+    output = (
+        "us-dc:policies/income_tax/"
+        "2026_section_47_1806_03_schedule_before_credits"
+        "#dc_pit_2026_section_47_1806_03_schedule_before_credits"
+    )
+    report = project_state(
+        "DC",
+        {
+            "compared_count": 1,
+            "mismatch_count": 0,
+            "output": output,
+            "program": output.split("#", 1)[0],
+            "policyengine_target": "dc_income_tax_before_credits_joint",
+        },
+        _campaign(),
+        "campaign.json",
+    )
+
+    description = report["aggregates"][0]["description"]
+    assert "section 47-1806.03(a)(11)" in description
+    assert "joint-method schedule before credits" in description
+    assert "caller-supplied completed joint-method District taxable income" in (
+        description
+    )
+    assert "liability" not in description.lower()
+
+
+def test_dc_case_emitter_preserves_all_1362_routed_units(
+    tmp_path,
+    monkeypatch,
+):
+    output = (
+        "us-dc:policies/income_tax/"
+        "2026_section_47_1806_03_schedule_before_credits"
+        "#dc_pit_2026_section_47_1806_03_schedule_before_credits"
+    )
+    cases = [
+        {
+            "tax_unit_id": tax_unit_id,
+            "axiom": float(tax_unit_id),
+            "policyengine": float(tax_unit_id),
+            "matched": True,
+        }
+        for tax_unit_id in range(1, 1_363)
+    ]
+    monkeypatch.setattr(emitter, "CASES_ROOT", tmp_path)
+
+    assert emitter.emit_case_chunks(
+        "DC",
+        {"output": output, "cases": cases},
+    ) == "dc-income-tax-populace: 1362 cases in 3 chunks"
+
+    suite_root = tmp_path / "dc-income-tax-populace"
+    index = json.loads((suite_root / "index.json").read_text())
+    chunks = [
+        json.loads((suite_root / f"chunk-{number}.json").read_text())
+        for number in range(index["chunks"])
+    ]
+    assert index["count"] == index["total_cases"] == 1_362
+    assert [len(chunk) for chunk in chunks] == [500, 500, 362]
+    projected = [case for chunk in chunks for case in chunk]
+    assert [case["id"] for case in projected] == list(range(1, 1_363))
+    assert all(case["r"] == 1.0 for case in projected)
+
+
 def test_kansas_dashboard_description_names_k40es_schedule():
     output = (
         "us-ks:policies/income_tax/2026_k40es_schedule_before_credits"
@@ -300,6 +367,111 @@ def test_committed_kansas_populace_evidence_is_canonical_and_complete():
     assert (
         manifest["reports"].count(
             "axiom-policyengine-taxsim-ks-income-tax-liability.json"
+        )
+        == 1
+    )
+
+
+def test_committed_dc_populace_evidence_is_canonical_and_complete():
+    rulespec_sha = "6b0773d3f7fa6719f208154f3e609e292ab7abe7"
+    engine_sha = "ffd8213271947b0189a9dd61a055c1e0e78908a0"
+    executable_sha = (
+        "c7eef635dadca73b51d4012fcc2f12c2f08dd82f9d505ba5228f127779a3a4e2"
+    )
+    concept = (
+        "us-dc:policies/income_tax/"
+        "2026_section_47_1806_03_schedule_before_credits"
+        "#dc_pit_2026_section_47_1806_03_schedule_before_credits"
+    )
+    campaign_path = (
+        REPO_ROOT / "reports/state-tax-populace-dc-campaign-2026-07-27.json"
+    )
+    report_path = (
+        DASHBOARD_DATA / "axiom-policyengine-dc-income-tax-populace.json"
+    )
+    cases_path = DASHBOARD_DATA / "cases/dc-income-tax-populace"
+
+    campaign = json.loads(campaign_path.read_text())
+    state = campaign["comparison"]["states"]["DC"]
+    cases = state["cases"]
+    assert campaign["comparison"]["sample_size_per_state"] == 0
+    assert campaign["projection_diagnostics"]["DC"] == {
+        "compared_tax_unit_count": 1_362,
+        "negative_taxable_income_count": 271,
+        "positive_taxable_income_count": 1_088,
+        "zero_taxable_income_count": 3,
+    }
+    assert state["compared_count"] == 1_362
+    assert state["mismatch_count"] == 0
+    assert state["tolerance"] == 0.01
+    assert state["relative_tolerance"] == 1e-7
+    assert state["output"] == concept
+    assert state["policyengine_target"] == "dc_income_tax_before_credits_joint"
+    assert sum(case["policyengine"] == 0 for case in cases) == 274
+    assert sum(case["policyengine"] > 0 for case in cases) == 1_088
+    assert all(case["matched"] for case in cases)
+
+    runtime = campaign["runtime_provenance"]
+    assert runtime["rulespec"]["commit"] == rulespec_sha
+    assert runtime["rulespec"]["working_tree"] == "clean"
+    assert runtime["axiom_engine"]["commit"] == engine_sha
+    assert runtime["axiom_engine"]["executable_sha256"] == executable_sha
+    assert runtime["axiom_engine"]["working_tree"] == "clean"
+    assert runtime["packages"] == {
+        "policyengine": "4.18.9",
+        "policyengine-us": "1.752.2",
+    }
+
+    report = json.loads(report_path.read_text())
+    assert report["suite"] == "dc-income-tax-populace"
+    assert report["case_count"] == 1_362
+    assert report["summary"] == {
+        "comparison_count": 1_362,
+        "match_count": 1_362,
+        "match_rate": 100.0,
+        "mismatch_count": 0,
+    }
+    assert report["aggregates"][0]["concept"] == concept
+    assert report["provenance"]["branch_diagnostics"] == (
+        campaign["projection_diagnostics"]["DC"]
+    )
+    assert report["provenance"]["rulespecs"] == [
+        {
+            "repo": "TheAxiomFoundation/rulespec-us",
+            "sha": rulespec_sha,
+        }
+    ]
+
+    index = json.loads((cases_path / "index.json").read_text())
+    chunks = [
+        json.loads((cases_path / f"chunk-{number}.json").read_text())
+        for number in range(index["chunks"])
+    ]
+    assert index["count"] == index["total_cases"] == 1_362
+    assert index["chunk_size"] == 500
+    assert [len(chunk) for chunk in chunks] == [500, 500, 362]
+    projected_cases = [case for chunk in chunks for case in chunk]
+    assert len({case["id"] for case in projected_cases}) == 1_362
+    assert [case["id"] for case in projected_cases] == [
+        case["tax_unit_id"] for case in cases
+    ]
+    assert all(case["r"] == 1.0 for case in projected_cases)
+    for projected, source in zip(projected_cases, cases, strict=True):
+        assert projected["h"] == {}
+        assert projected["m"] == []
+        assert projected["v"] == [
+            {
+                "c": concept,
+                "l": source["axiom"],
+                "x": source["policyengine"],
+            }
+        ]
+
+    manifest = json.loads((DASHBOARD_DATA / "manifest.json").read_text())
+    assert manifest["reports"].count(report_path.name) == 1
+    assert (
+        manifest["reports"].count(
+            "axiom-policyengine-taxsim-dc-income-tax-liability.json"
         )
         == 1
     )

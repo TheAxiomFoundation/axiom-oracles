@@ -380,6 +380,190 @@ def test_utah_target_rejects_invalid_before_credit_amount(value, message) -> Non
         )
 
 
+def _dc_simulation(
+    *,
+    ids=(1, 2, 3),
+    taxable=(0.0, 10_000.0, 1_000_001.0),
+    tax=(0.0, 400.0, 91_525.1075),
+):
+    calls = []
+
+    class FakeSimulation:
+        def __init__(self, dataset):
+            assert dataset == "dataset"
+
+        def calculate(self, variable, period):
+            assert period == 2026
+            self.calls.append((variable, period))
+            return {
+                "tax_unit_id": ids,
+                "dc_taxable_income_joint": taxable,
+                "dc_income_tax_before_credits_joint": tax,
+            }[variable]
+
+    FakeSimulation.calls = calls
+    return FakeSimulation
+
+
+def _dc_targets(
+    microsimulation_factory,
+    *,
+    source_ids=(1, 2, 3),
+    route_ids=None,
+) -> dict[str, dict[int, float]]:
+    selected_route_ids = source_ids if route_ids is None else route_ids
+    return calculate_policyengine_targets(
+        dataset="dataset",
+        raw_tax_units=pd.DataFrame({"tax_unit_id": source_ids}),
+        routes=tuple(
+            TaxUnitRoute(index, index, "DC", "11", 1, DISPOSITION_READY)
+            for index in selected_route_ids
+        ),
+        year=2026,
+        microsimulation_factory=microsimulation_factory,
+    )
+
+
+def test_dc_target_preserves_exact_joint_method_values_only() -> None:
+    simulation = _dc_simulation()
+
+    assert _dc_targets(simulation) == {
+        "DC": {1: 0.0, 2: 400.0, 3: 91_525.1075}
+    }
+    assert simulation.calls == [
+        ("tax_unit_id", 2026),
+        ("dc_taxable_income_joint", 2026),
+        ("dc_income_tax_before_credits_joint", 2026),
+    ]
+    assert all(
+        variable != "dc_income_tax_before_credits"
+        for variable, _ in simulation.calls
+    )
+
+
+def test_dc_target_preserves_all_1362_routed_tax_units() -> None:
+    ids = tuple(range(1, 1_363))
+    taxable = tuple(float(index * 100) for index in ids)
+    tax = tuple(value * 0.04 for value in taxable)
+
+    targets = _dc_targets(
+        _dc_simulation(ids=ids, taxable=taxable, tax=tax),
+        source_ids=ids,
+    )
+
+    assert len(targets["DC"]) == 1_362
+    assert tuple(targets["DC"]) == ids
+    assert targets["DC"][1] == 4.0
+    assert targets["DC"][1_362] == 5_448.0
+
+
+def test_dc_target_accepts_negative_boundary_that_both_schedules_floor() -> None:
+    simulation = _dc_simulation(
+        taxable=(-500.0, 10_000.0, 1_000_001.0),
+        tax=(0.0, 400.0, 91_525.1075),
+    )
+
+    assert _dc_targets(simulation) == {
+        "DC": {1: 0.0, 2: 400.0, 3: 91_525.1075}
+    }
+
+
+@pytest.mark.parametrize(
+    ("kwargs", "message"),
+    [
+        (
+            {"ids": (1, 2)},
+            "joint-method schedule inputs returned 2, 3, 3 rows",
+        ),
+        (
+            {"taxable": (0.0, 10_000.0)},
+            "joint-method schedule inputs returned 3, 2, 3 rows",
+        ),
+        (
+            {"tax": (0.0, 400.0)},
+            "joint-method schedule inputs returned 3, 3, 2 rows",
+        ),
+    ],
+)
+def test_dc_target_rejects_component_cardinality(kwargs, message) -> None:
+    with pytest.raises(StateTaxPopulationRoutingError, match=message):
+        _dc_targets(_dc_simulation(**kwargs))
+
+
+@pytest.mark.parametrize(
+    ("ids", "message"),
+    [
+        ((2, 1, 3), "order does not match"),
+        ((1, 1, 3), "duplicate DC PolicyEngine tax_unit_id"),
+    ],
+)
+def test_dc_target_rejects_entity_identity_defects(ids, message) -> None:
+    with pytest.raises(StateTaxPopulationRoutingError, match=message):
+        _dc_targets(_dc_simulation(ids=ids))
+
+
+def test_dc_target_rejects_duplicate_source_entity_ids() -> None:
+    with pytest.raises(
+        StateTaxPopulationRoutingError,
+        match="duplicate DC source tax_unit_id",
+    ):
+        _dc_targets(
+            _dc_simulation(ids=(1, 1, 3)),
+            source_ids=(1, 1, 3),
+        )
+
+
+@pytest.mark.parametrize(
+    ("kwargs", "message"),
+    [
+        (
+            {"taxable": (float("nan"), 10_000.0, 1_000_001.0)},
+            "non-finite",
+        ),
+        ({"tax": (0.0, float("inf"), 91_525.1075)}, "non-finite"),
+        ({"tax": (0.0, -1.0, 91_525.1075)}, "nonnegative"),
+    ],
+)
+def test_dc_target_rejects_invalid_reviewed_values(kwargs, message) -> None:
+    with pytest.raises(StateTaxPopulationRoutingError, match=message):
+        _dc_targets(_dc_simulation(**kwargs))
+
+
+def test_dc_target_rejects_broad_filing_method_target(monkeypatch) -> None:
+    drifted_contract = SimpleNamespace(
+        validation_year=2026,
+        by_state=lambda: {
+            "DC": SimpleNamespace(
+                policyengine_target="dc_income_tax_before_credits",
+            )
+        },
+    )
+    monkeypatch.setattr(
+        state_tax_runner,
+        "validate_state_tax_populace_contract",
+        lambda _contract: drifted_contract,
+    )
+
+    with pytest.raises(
+        StateTaxPopulationRoutingError,
+        match="requires the exact dc_income_tax_before_credits_joint target",
+    ):
+        calculate_policyengine_targets(
+            dataset="dataset",
+            raw_tax_units=pd.DataFrame({"tax_unit_id": [1]}),
+            routes=(
+                TaxUnitRoute(1, 1, "DC", "11", 1, DISPOSITION_READY),
+            ),
+            year=2026,
+            contract=drifted_contract,
+            microsimulation_factory=_dc_simulation(
+                ids=(1,),
+                taxable=(0.0,),
+                tax=(0.0,),
+            ),
+        )
+
+
 def _ks_simulation(
     *,
     ids=(1, 2, 3),
@@ -840,6 +1024,39 @@ def test_policyengine_projection_calculation_uses_only_reviewed_boundaries() -> 
             exempt={1: False, 2: True},
         )
     }
+
+
+def test_reviewed_dc_projection_uses_only_joint_method_taxable_income() -> None:
+    calls = []
+
+    class FakeSimulation:
+        def __init__(self, dataset):
+            assert dataset == "dataset"
+
+        def calculate(self, variable, period):
+            calls.append((variable, period))
+            assert variable == "dc_taxable_income_joint"
+            return [0.0, 50_000.0]
+
+    routes = (
+        TaxUnitRoute(1, 1, "DC", "11", 1, DISPOSITION_READY),
+        TaxUnitRoute(2, 2, "CA", "06", 1, DISPOSITION_BLOCKED),
+    )
+    projections = calculate_policyengine_projection_inputs(
+        dataset="dataset",
+        raw_tax_units=pd.DataFrame({"tax_unit_id": [1, 2]}),
+        routes=routes,
+        year=2026,
+        microsimulation_factory=FakeSimulation,
+    )
+    slot = (
+        "us-dc:policies/income_tax/"
+        "2026_section_47_1806_03_schedule_before_credits#input."
+        "dc_pit_2026_section_47_1806_03_completed_joint_method_taxable_income"
+    )
+
+    assert calls == [("dc_taxable_income_joint", 2026)]
+    assert projections == {"DC": {slot: {1: 0.0, 2: 50_000.0}}}
 
 
 def test_reviewed_iowa_and_kansas_projection_types_and_transforms() -> None:

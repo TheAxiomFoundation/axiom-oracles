@@ -212,6 +212,7 @@
     "axiom-policyengine-us-llc-grid.json",
     "axiom-taxsim-co-tax-intersection-ecps.json",
     "axiom-policyengine-ky-income-tax-populace.json",
-    "axiom-policyengine-ks-income-tax-populace.json"
+    "axiom-policyengine-ks-income-tax-populace.json",
+    "axiom-policyengine-dc-income-tax-populace.json"
   ]
 }

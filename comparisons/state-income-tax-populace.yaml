@@ -23,6 +23,13 @@ suites:
   oracle: policyengine
   campaign_runner: scripts/run_state_tax_populace.py
   projector: scripts/emit_populace_campaign_artifacts.py
+- suite: dc-income-tax-populace
+  report: axiom-policyengine-dc-income-tax-populace.json
+  jurisdiction: DC
+  program: state_income_tax
+  oracle: policyengine
+  campaign_runner: scripts/run_state_tax_populace.py
+  projector: scripts/emit_populace_campaign_artifacts.py
 - suite: ga-income-tax-populace
   report: axiom-policyengine-ga-income-tax-populace.json
   jurisdiction: GA

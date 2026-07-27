@@ -597,6 +597,34 @@ def test_kansas_populace_schedule_is_decoupled_from_legacy_taxsim_grid() -> None
     assert generator._TOL["KS"] == (1.0, 0.0)
 
 
+def test_dc_populace_schedule_is_decoupled_from_legacy_taxsim_grid() -> None:
+    generator = _load_generator()
+    canonical_module = (
+        "us-dc:policies/income_tax/"
+        "2026_section_47_1806_03_schedule_before_credits"
+    )
+    legacy_module = "us-dc:policies/income_tax/pilot_liability_pipeline"
+
+    assert generator._POPULACE_MODULE["DC"] == canonical_module
+    assert generator._POPULACE_OUTPUT["DC"] == (
+        f"{canonical_module}#"
+        "dc_pit_2026_section_47_1806_03_schedule_before_credits"
+    )
+    assert (
+        generator._POPULACE_PE_VAR["DC"]
+        == "dc_income_tax_before_credits_joint"
+    )
+    assert generator._POPULACE_TOL["DC"] == (0.01, 1e-7)
+
+    assert generator._MODULE["DC"] == legacy_module
+    assert generator._LIABILITY_OUTPUT["DC"] == (
+        f"{legacy_module}#dc_pit_pilot_income_tax_liability"
+    )
+    assert generator._PE_VAR["DC"] == "dc_income_tax_before_credits"
+    assert generator._TOL["DC"] == (1.0, 0.0)
+    assert "DC" in generator._STATES
+
+
 def test_kentucky_registry_uses_canonical_live_schedule_surface() -> None:
     generator = _load_generator()
     module = (
