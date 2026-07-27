@@ -157,3 +157,32 @@ Campaign 3,759 → **3,488**. Intersection 1,241 → 970.
   vintage. 2 no-match rows raw.
 - Remaining intersection 970: tbc continuum ~468, fed liability ~240,
   amt 64, TI verifier-fails 61, state raw 111ish, misc.
+
+## Batch 13 (dividend-qualification pair of projection bugs — FIXED, suite rerun)
+
+Campaign 3,488 → **3,324**. Intersection unexplained 970 → 806 (fresh
+2026-07-27 report under both fixes; raw mismatches 2,540 → 2,300).
+
+- Bug 1 (TAXSIM projection): total DIVIDEND_INCOME was mapped into
+  TAXSIM's dividends column, which is qualified-only — over-preferential
+  on the TAXSIM leg. Caught by the tbc ratio fingerprint: diff/dividends
+  clustered exactly on bracket differentials (0.12=12%−0%, 0.07=22%−15%,
+  0.09=24%−15%). Fix: qualified leaf → dividends, non-qualified
+  remainder → otherprop. Regression tests added.
+- Bug 2 (axiom bridge, MASKED by bug 1): person_dividend_income bound
+  DIVIDEND_INCOME only, so qualified-only ECPS rows (qual leaf > zero
+  total leaf) never entered axiom AGI while still hitting the
+  preferential worksheet. Surfaced as 238 new TI mismatches after fix 1
+  broke the shared blind spot. Fix: AGI leaf takes max(total, qualified)
+  per person, mirroring _sum_dividends.
+- Suite-stamp trap AGAIN (3rd occurrence): registry rerun stamped
+  reports/-side suite as nyc-synthetic because parameters.suite was
+  missing (dashboard.suite alone only fixes the dashboard copy). ROOT
+  FIX: parameters.suite added to comparisons/co-tax-intersection-
+  taxsim.yaml; report patched; add parameters.suite to any suite you
+  rerun directly.
+- All 17 disposition entries survived the rerun (no orphans); QBID 127
+  and state classes intact; explained_residual coverage fell 426 → 351
+  because the fix converted those rows to MATCHES.
+- Remaining 806: tbc ~370, fed liability ~300 (heavily SECA/FICA-
+  correlated), amt 41, TI 66, state ~110, eitc/ctc/std tails.
