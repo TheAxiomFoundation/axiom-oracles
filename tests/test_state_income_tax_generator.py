@@ -119,73 +119,111 @@ def test_axiom_liabilities_ignores_non_grid_boundary_fixtures(
     }
 
 
-def test_axiom_liabilities_extracts_only_mississippi_canonical_grid(tmp_path):
+def test_mississippi_canonical_schedule_uses_live_person_execution():
     generator = _load_generator()
-    output = (
-        "us-ms:policies/income_tax/pilot_liability_pipeline"
-        "#ms_pit_pilot_income_tax_liability"
-    )
-    fixture_path = (
-        tmp_path
-        / "us-ms"
-        / "policies"
-        / "income_tax"
-        / "pilot_liability_pipeline.test.yaml"
-    )
-    fixture_path.parent.mkdir(parents=True)
+    module = "us-ms:policies/income_tax/2026_section_27_7_5_schedule"
 
-    boundary_cases = [
+    assert "MS" in generator._TAXSIM_STATE
+    assert "MS" in generator._POPULACE_STATES
+    assert "MS" in generator._STATES
+    assert "MS" in generator._LIVE_AXIOM_STATES
+    assert generator._MODULE["MS"] == module
+    assert generator._LIABILITY_OUTPUT["MS"] == (
+        f"{module}#ms_pit_2026_section_27_7_5_schedule_tax"
+    )
+    assert generator._POPULACE_OUTPUT["MS"] == generator._LIABILITY_OUTPUT["MS"]
+    assert generator._PE_VAR["MS"] == "ms_income_tax_before_credits_joint"
+    assert generator._POPULACE_PE_VAR["MS"] == "ms_income_tax_before_credits_joint"
+    assert generator._POPULACE_AGGREGATION["MS"] == "person_sum_to_tax_unit"
+    assert generator._TOL["MS"] == (0.01, 1e-7)
+    assert generator._POPULACE_TOL["MS"] == (0.01, 1e-7)
+    assert generator._parse_args(["--state", "MS"]).state == "MS"
+
+
+def test_mississippi_live_grid_maps_reordered_results_by_person_id(
+    monkeypatch, tmp_path
+):
+    generator = _load_generator()
+    tax_populace = __import__(
+        "axiom_oracles.bridges.tax_populace",
+        fromlist=["run_axiom_program"],
+    )
+    output = generator._LIABILITY_OUTPUT["MS"]
+
+    monkeypatch.setattr(generator, "RULESPEC_US", tmp_path)
+    monkeypatch.setattr(generator, "AXIOM_RULES", tmp_path)
+    monkeypatch.setattr(
+        tax_populace,
+        "run_axiom_program",
+        lambda **_kwargs: [
+            {
+                "entity_id": "state-tax-person-ms-married-60000-person-0",
+                "outputs": {
+                    output: {"value": {"value": "900"}},
+                },
+            },
+            {
+                "entity_id": "state-tax-person-ms-single-30000-person-1",
+                "outputs": {
+                    output: {"value": {"value": "200"}},
+                },
+            },
+            {
+                "entity_id": "state-tax-person-ms-single-30000-person-0",
+                "outputs": {
+                    output: {"value": {"value": "100"}},
+                },
+            },
+        ],
+    )
+    cases = [
+        generator.Case("ms-single-30000", "MS", "single", 30_000.0),
+        generator.Case("ms-married-60000", "MS", "married", 60_000.0),
+    ]
+
+    assert generator._mississippi_axiom_liabilities(
+        cases,
         {
-            "name": name,
-            "input": {},
-            "output": {output: index},
-        }
-        for index, name in enumerate(
-            [
-                "individual_candidate_negative_income_normalizes_to_zero",
-                "joint_candidate_negative_income_normalizes_to_zero",
-                "individual_candidate_one_dollar_below_zero_tax_ceiling",
-                "joint_candidate_at_zero_tax_ceiling",
-                "individual_candidate_one_dollar_above_zero_tax_ceiling",
-                "joint_candidate_above_zero_tax_ceiling",
-                "relation_aggregates_both_candidate_sets",
-                "strict_lower_separate_total_selects_separate_branch",
-                "lower_joint_total_selects_joint_branch",
-                "equal_totals_choose_joint_branch",
-            ]
-        )
-    ]
-    grid_values = {
-        "single_30000": 468,
-        "single_60000": 1668,
-        "single_150000": 5268,
-        "joint_60000": 1336,
-        "joint_120000": 3736,
-        "joint_300000": 10936,
+            "ms-single-30000": (12_500.0, 17_500.0),
+            "ms-married-60000": (32_500.0,),
+        },
+    ) == {
+        ("MS", "single", 30_000): 300.0,
+        ("MS", "married", 60_000): 900.0,
     }
-    grid_cases = [
-        {"name": name, "input": {}, "output": {output: value}}
-        for name, value in grid_values.items()
-    ]
-    fixture_path.write_text(json.dumps(boundary_cases + grid_cases))
 
-    generator.RULESPEC_US = tmp_path
-    generator._STATES = ("MS",)
 
-    assert generator._STRICT_GRID_FIXTURE_STATES == frozenset(
-        {"CO", "GA", "MS", "NY"}
+def test_mississippi_live_grid_rejects_wrong_person_id(monkeypatch, tmp_path):
+    generator = _load_generator()
+    tax_populace = __import__(
+        "axiom_oracles.bridges.tax_populace",
+        fromlist=["run_axiom_program"],
     )
-    assert generator._axiom_liabilities() == {
-        ("MS", "single", 30_000): 468.0,
-        ("MS", "single", 60_000): 1668.0,
-        ("MS", "single", 150_000): 5268.0,
-        ("MS", "married", 60_000): 1336.0,
-        ("MS", "married", 120_000): 3736.0,
-        ("MS", "married", 300_000): 10936.0,
-    }
+    output = generator._LIABILITY_OUTPUT["MS"]
+
+    monkeypatch.setattr(generator, "RULESPEC_US", tmp_path)
+    monkeypatch.setattr(generator, "AXIOM_RULES", tmp_path)
+    monkeypatch.setattr(
+        tax_populace,
+        "run_axiom_program",
+        lambda **_kwargs: [
+            {
+                "entity_id": "state-tax-person-unexpected",
+                "outputs": {
+                    output: {"value": {"value": "100"}},
+                },
+            }
+        ],
+    )
+
+    with pytest.raises(RuntimeError, match="unexpected or duplicate Person"):
+        generator._mississippi_axiom_liabilities(
+            [generator.Case("ms-single-30000", "MS", "single", 30_000.0)],
+            {"ms-single-30000": (12_500.0,)},
+        )
 
 
-@pytest.mark.parametrize("state", ["CO", "MS", "NY"])
+@pytest.mark.parametrize("state", ["CO", "NY"])
 def test_strict_grid_states_ignore_noncanonical_agi_fixture(tmp_path, state):
     generator = _load_generator()
     output = generator._LIABILITY_OUTPUT[state]
@@ -250,7 +288,6 @@ def test_recent_state_income_tax_oracle_registrations():
         "PA": (39, "pa_income_tax_before_forgiveness", (1.0, 0.0)),
         "MO": (26, "mo_income_tax_before_credits", (1.0, 0.0)),
         "AR": (4, "ar_income_tax_before_non_refundable_credits_unit", (1.0, 0.0)),
-        "MS": (25, "ms_income_tax_before_credits_unit", (1.0, 0.0)),
         "WV": (49, "wv_income_tax_before_non_refundable_credits", (1.0, 0.0)),
         "VT": (46, "vt_income_tax_before_non_refundable_credits", (0.01, 1e-7)),
         "CO": (6, "co_income_tax_before_non_refundable_credits", (1.0, 0.0)),

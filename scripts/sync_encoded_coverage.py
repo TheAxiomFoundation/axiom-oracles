@@ -118,6 +118,13 @@ STATE_RULES = {
         (r"^policies/dhs/combined-manual/0020", ("state_ssi_supplement", None)),
         (r"^policies/dhs/combined-manual/0022", ("tanf", None)),
     ],
+    "ms": [
+        (
+            r"^policies/income_tax/"
+            r"2026_section_27_7_5_schedule\.yaml$",
+            ("state_income_tax", None),
+        ),
+    ],
     "ga": [
         (r"^policies/cms/", ("medicaid_chip_bhp_thresholds", None)),
         (r"^policies/decal/caps/", ("childcare_assistance", None)),

@@ -1458,7 +1458,7 @@
       "axiom_attributed_open": null,
       "oracle_attributed": null,
       "bridge_artifacts": null,
-      "note": "Broad final ms_income_tax remains uncovered. The ms-income-tax-liability artifact and state-tax Populace campaign validate only the narrower section 27-7-5 schedule-before-credits surface against PolicyEngine ms_income_tax_before_credits_unit; they do not encode or validate every credit needed for final Mississippi liability.",
+      "note": "Broad final ms_income_tax remains uncovered. The ms-income-tax-liability artifact and state-tax Populace campaign validate only the narrower Person-grain section 27-7-5 schedule-before-credits surface against PolicyEngine ms_income_tax_before_credits_joint, summed to TaxUnit only for comparison. They do not choose a filing method or encode every credit needed for final Mississippi liability.",
       "status": "uncovered"
     },
     {

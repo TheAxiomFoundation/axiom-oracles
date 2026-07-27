@@ -1328,59 +1328,43 @@ jurisdictions:
   fips: '28'
   taxsim_state_code: 25
   jurisdiction: us-ms
-  program: us-ms:policies/income_tax/pilot_liability_pipeline
-  output: us-ms:policies/income_tax/pilot_liability_pipeline#ms_pit_pilot_income_tax_liability
+  program: us-ms:policies/income_tax/2026_section_27_7_5_schedule
+  output: us-ms:policies/income_tax/2026_section_27_7_5_schedule#ms_pit_2026_section_27_7_5_schedule_tax
   policyengine:
-    target: ms_income_tax_before_credits_unit
-    tolerance: 1.0
-    relative_tolerance: 0.0
+    target: ms_income_tax_before_credits_joint
+    tolerance: 0.01
+    relative_tolerance: 0.0000001
+    aggregation: person_sum_to_tax_unit
   status: ready
   evidence: >-
-    Mississippi Code section 27-7-5(1) provides the complete calendar-year
-    2026 schedule before credits: no tax through $10,000 and 4 percent above
-    that amount. The reviewed RuleSpec applies the schedule independently to
-    both completed-return taxable-income candidates for every related Person,
-    aggregates both candidate taxes through the certified Person-to-TaxUnit
-    relation, and selects the separate total only when it is strictly lower,
-    with ties selecting the joint total. A full certified-Populace run covered
-    all 1,497 positive-weight routed Mississippi TaxUnits with zero differences
-    outside the declared $1 tolerance and a $0.4000000004 maximum absolute
-    residual.
+    Mississippi Code section 27-7-5(1) supplies the complete calendar-year-2026
+    rate schedule: zero tax through $10,000 and four percent above that amount.
+    The canonical RuleSpec accepts one completed Mississippi taxable-income
+    amount for one Person and applies only that schedule. The campaign sums the
+    Person results to TaxUnit solely for comparison and population accounting;
+    the RuleSpec does not select a filing method, construct taxable income,
+    apply credits, or claim annual or final liability. The canonical 2026-07-27
+    full-Populace
+    run compared all 1,497 positive-weight Mississippi tax units (weighted
+    1,510,460.1098995125), with zero failures under the $0.01-or-1e-7
+    tolerance; its maximum absolute and relative differences were
+    $0.40000000037252903 and 5.656191248635265e-8.
   inputs:
-  - slot: us-ms:policies/income_tax/pilot_liability_pipeline#input.ms_pit_pilot_supplied_taxable_income_indiv
+  - slot: us-ms:policies/income_tax/2026_section_27_7_5_schedule#input.ms_pit_2026_supplied_taxable_income
     source_kind: pe_upstream_boundary
     status: ready
     evidence: >-
-      Section 27-7-5 applies its schedule to completed-return taxable income.
-      PolicyEngine ms_taxable_income_indiv is the Person-grain separate-return
-      candidate directly upstream of the distinct
-      ms_income_tax_before_credits_unit target. The reviewed RuleSpec clamps
-      the supplied amount to zero and independently computes its schedule tax;
-      it does not consume PolicyEngine's candidate tax or filing selector.
-    policyengine_variable: ms_taxable_income_indiv
-    policyengine_relationship: upstream
-  - slot: us-ms:policies/income_tax/pilot_liability_pipeline#input.ms_pit_pilot_supplied_taxable_income_joint
-    source_kind: pe_upstream_boundary
-    status: ready
-    evidence: >-
-      PolicyEngine ms_taxable_income_joint is the Person-grain joint-return
-      completed-taxable-income candidate directly upstream of the distinct
-      target. The reviewed RuleSpec independently applies section 27-7-5 to
-      this candidate and reconstructs the target's strict lower-tax comparison,
-      so no target, candidate-tax output, or ms_files_separately result is used
-      as an input.
+      Section 27-7-5 applies its schedule to taxable income. PolicyEngine
+      ms_taxable_income_joint is the Person-grain joint/default completed-
+      taxable-income boundary directly upstream of the distinct
+      ms_income_tax_before_credits_joint target. This is a reviewed projection
+      into the generic RuleSpec input, not a claim that RuleSpec selects a filing
+      method. RuleSpec independently floors
+      that supplied boundary at zero and applies the enacted schedule; it does
+      not consume PolicyEngine's tax result or filing selector.
     policyengine_variable: ms_taxable_income_joint
     policyengine_relationship: upstream
-  relations:
-  - slot: us-ms:policies/income_tax/pilot_liability_pipeline#relation.ms_pit_pilot_person_of_tax_unit
-    source_kind: raw_populace
-    status: ready
-    evidence: >-
-      The relation includes every Person in each selected TaxUnit using the
-      certified raw person_tax_unit_id column after exact Person identity,
-      order, cardinality, and TaxUnit-link validation. The reviewed RuleSpec
-      declares (Person, TaxUnit), which is also the tuple order required by the
-      pinned engine's current sum_where lowering.
+  relations: []
 - state: WV
   fips: '54'
   taxsim_state_code: 49

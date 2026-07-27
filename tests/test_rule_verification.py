@@ -175,6 +175,18 @@ def test_al_schedule_module_classifies_to_reviewed_surface():
     )
 
 
+def test_ms_schedule_module_classifies_to_reviewed_surface():
+    assert rv.classify(
+        "us-ms/policies/income_tax/2026_section_27_7_5_schedule.yaml"
+    ) == ("state_income_tax", "MS")
+    assert (
+        rv.classify(
+            "us-ms/policies/income_tax/pilot_liability_pipeline.yaml"
+        )
+        is None
+    )
+
+
 def test_oracle_status_constants_match_plan_headline():
     # The strict headline counts only 'executable' surfaces (the plan's 14/56);
     # the broader ORACLE_STATUSES set additionally admits parameter/partial runs.

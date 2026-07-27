@@ -73,6 +73,7 @@ _REVIEWED_PERSON_SUM_VARIABLES_BY_STATE = {
 # sources, and therefore remain separate from the upstream-boundary allowlist.
 _REVIEWED_PERSON_TARGETS_BY_STATE = {
     "AR": frozenset({"ar_income_tax_before_non_refundable_credits_indiv"}),
+    "MS": frozenset({"ms_income_tax_before_credits_joint"}),
 }
 
 # Exact categorical facts used to establish that a legally distinct branch is
@@ -119,10 +120,8 @@ _REVIEWED_PERSON_INPUT_SLOTS_BY_STATE = {
     ),
     "MS": frozenset(
         {
-            "us-ms:policies/income_tax/pilot_liability_pipeline#input."
-            "ms_pit_pilot_supplied_taxable_income_indiv",
-            "us-ms:policies/income_tax/pilot_liability_pipeline#input."
-            "ms_pit_pilot_supplied_taxable_income_joint",
+            "us-ms:policies/income_tax/2026_section_27_7_5_schedule#input."
+            "ms_pit_2026_supplied_taxable_income",
         }
     ),
 }
@@ -140,17 +139,9 @@ _REVIEWED_PERSON_TAX_UNIT_RELATIONS_BY_STATE = {
         "us-de:policies/income_tax/pilot_liability_pipeline#relation."
         "de_pit_pilot_taxpayer_of_tax_unit": ("Person", "TaxUnit"),
     },
-    "MS": {
-        "us-ms:policies/income_tax/pilot_liability_pipeline#relation."
-        "ms_pit_pilot_person_of_tax_unit": ("Person", "TaxUnit"),
-    },
 }
 
-# Mississippi's source-backed schedule applies to every related Person's two
-# completed-return taxable-income candidates. Unlike the staged DE/DC modules,
-# it has no filer-role inclusion predicate: zero/nonfiling Person candidates
-# remain exact zero inputs and relation membership is the certified raw link.
-_REVIEWED_ALL_PERSON_RELATION_STATES = frozenset({"MS"})
+_REVIEWED_ALL_PERSON_RELATION_STATES = frozenset()
 
 # Exact upstream PolicyEngine Person roles used to identify filers for the
 # staged DE/DC separate-return candidates. Raw Person-to-TaxUnit links remain

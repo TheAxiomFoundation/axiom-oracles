@@ -82,6 +82,13 @@ ALLOWED_NONSTANDARD_COMPARISON_SURFACES = frozenset(
             "ct_resident_ordinary_tax_before_personal_credit_derived",
             "tax_unit",
         ),
+        (
+            "MS",
+            "us-ms:policies/income_tax/2026_section_27_7_5_schedule#"
+            "ms_pit_2026_section_27_7_5_schedule_tax",
+            "ms_income_tax_before_credits_joint",
+            "person_sum_to_tax_unit",
+        ),
     }
 )
 
@@ -151,6 +158,10 @@ EXPECTED_OUTPUT_OVERRIDES = {
         "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits"
         "#ky_pit_2026_krs_141_020_schedule_before_credits"
     ),
+    "MS": (
+        "us-ms:policies/income_tax/2026_section_27_7_5_schedule"
+        "#ms_pit_2026_section_27_7_5_schedule_tax"
+    ),
     "NY": (
         "us-ny:policies/income_tax/pilot_liability_pipeline"
         "#ny_pit_pilot_main_income_tax"
@@ -167,17 +178,18 @@ EXPECTED_PROGRAM_OVERRIDES = {
     ),
     "GA": "us-ga:policies/income_tax/2026_annual_tax_before_nonrefundable_credits",
     "KY": "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits",
+    "MS": "us-ms:policies/income_tax/2026_section_27_7_5_schedule",
 }
-EXPECTED_EXPLICIT_INPUT_COUNT = 155
-EXPECTED_EXPLICIT_RELATION_COUNT = 2
+EXPECTED_EXPLICIT_INPUT_COUNT = 154
+EXPECTED_EXPLICIT_RELATION_COUNT = 1
 EXPECTED_SLOT_INVENTORY_SHA256 = (
-    "c10676656a70b051db16e9f9e161d9cf11ef180c93b25341f18bbb0db6c1a769"
+    "80d23c92eb51b2d77bd56167664f241a9cb54a59c98c525a0ea98fb1f71d97c9"
 )
 EXPECTED_JURISDICTION_REGISTRY_SHA256 = (
-    "585d5fa794f45e1fe5b432b7b6507543ac170d7a025203a009021e77e8b0f721"
+    "66b11b3117433c5c968fd6705f110eaf41dffb95a8d24cd0e6da8c0858b60d06"
 )
 EXPECTED_SOURCE_METADATA_SHA256 = (
-    "2f8ce11fe227b27a41c04db91019a7fcb14790d4313a94c8c06ce389a3af0ee5"
+    "925d597216279fe6e7869d8c40e58f4a45ac2465ef2d8c2d5e4c582d53cef743"
 )
 # Exact boundaries admitted only after independent legal and dependency-graph
 # review.  The comparison target itself is forbidden below, so these remain
@@ -310,14 +322,8 @@ ALLOWED_PE_UPSTREAM_BOUNDARIES: frozenset[tuple[str, str, str]] = frozenset(
         ),
         (
             "MS",
-            "us-ms:policies/income_tax/pilot_liability_pipeline#input."
-            "ms_pit_pilot_supplied_taxable_income_indiv",
-            "ms_taxable_income_indiv",
-        ),
-        (
-            "MS",
-            "us-ms:policies/income_tax/pilot_liability_pipeline#input."
-            "ms_pit_pilot_supplied_taxable_income_joint",
+            "us-ms:policies/income_tax/2026_section_27_7_5_schedule#input."
+            "ms_pit_2026_supplied_taxable_income",
             "ms_taxable_income_joint",
         ),
         (

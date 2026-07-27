@@ -2971,20 +2971,19 @@ concepts:
         name: ar_pit_pilot_income_tax_before_non_refundable_credits_indiv
         scope: {type: country, geoid: US}
       policyengine: ar_income_tax_before_non_refundable_credits_indiv
-  us-ms:policies/income_tax/pilot_liability_pipeline#ms_pit_pilot_income_tax_liability:
-    description: Mississippi section 27-7-5 schedule tax before credits, after the lower separate-or-joint candidate comparison
+  us-ms:policies/income_tax/2026_section_27_7_5_schedule#ms_pit_2026_section_27_7_5_schedule_tax:
+    description: Mississippi tax-year-2026 section 27-7-5 Person-grain schedule tax on caller-completed taxable income
     category: tax
     comparison: amount
-    tolerance: 1
+    tolerance: 0.01
     priority: high
     locales: [US-MS]
     scope: {type: country, geoid: US}
     targets:
       axiom:
-        name: ms_pit_pilot_income_tax_liability
+        name: ms_pit_2026_section_27_7_5_schedule_tax
         scope: {type: country, geoid: US}
-      policyengine: ms_income_tax_before_credits_unit
-      taxsim: siitax
+      policyengine: ms_income_tax_before_credits_joint
   us-wv:policies/income_tax/pilot_liability_pipeline#wv_pit_pilot_income_tax_liability:
     description: West Virginia individual income tax liability (2026 section 11-21-4J ordinary resident wage-earner core)
     category: tax

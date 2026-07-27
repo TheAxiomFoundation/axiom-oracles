@@ -47,6 +47,14 @@ _DESCRIPTION_BY_OUTPUT = {
         "computed from caller-supplied completed Georgia taxable net income, "
         "over every routed tax unit in the pinned US Populace"
     ),
+    (
+        "us-ms:policies/income_tax/2026_section_27_7_5_schedule"
+        "#ms_pit_2026_section_27_7_5_schedule_tax"
+    ): (
+        "Mississippi section 27-7-5 Person-grain calendar-year-2026 schedule "
+        "tax, computed from caller-supplied completed Mississippi taxable "
+        "income and summed to tax units only for Populace accounting"
+    ),
 }
 
 _REQUIRED_RUNTIME_FIELDS = {

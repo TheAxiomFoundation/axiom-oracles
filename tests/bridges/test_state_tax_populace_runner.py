@@ -1379,23 +1379,16 @@ def test_delaware_person_projection_preserves_person_grain(monkeypatch) -> None:
     }
 
 
-def test_mississippi_two_candidate_projection_preserves_person_grain(
+def test_mississippi_canonical_schedule_projection_preserves_person_grain(
     monkeypatch,
 ) -> None:
-    prefix = "us-ms:policies/income_tax/pilot_liability_pipeline#input."
-    individual_slot = f"{prefix}ms_pit_pilot_supplied_taxable_income_indiv"
-    joint_slot = f"{prefix}ms_pit_pilot_supplied_taxable_income_joint"
+    slot = (
+        "us-ms:policies/income_tax/2026_section_27_7_5_schedule#input."
+        "ms_pit_2026_supplied_taxable_income"
+    )
     inputs = (
         SimpleNamespace(
-            slot=individual_slot,
-            source_kind="pe_upstream_boundary",
-            policyengine_variable="ms_taxable_income_indiv",
-            policyengine_variables=(),
-            policyengine_transform=None,
-            constant_value=None,
-        ),
-        SimpleNamespace(
-            slot=joint_slot,
+            slot=slot,
             source_kind="pe_upstream_boundary",
             policyengine_variable="ms_taxable_income_joint",
             policyengine_variables=(),
@@ -1421,8 +1414,7 @@ def test_mississippi_two_candidate_projection_preserves_person_grain(
             return {
                 "person_id": [11, 12, 21],
                 "tax_unit_id": [1, 1, 2],
-                "ms_taxable_income_indiv": [30_000.0, 20_000.0, 40_000.0],
-                "ms_taxable_income_joint": [60_000.0, 0.0, 40_000.0],
+                "ms_taxable_income_joint": [30_000.0, 20_000.0, 40_000.0],
             }[variable]
 
     projections = calculate_policyengine_projection_inputs(
@@ -1445,17 +1437,14 @@ def test_mississippi_two_candidate_projection_preserves_person_grain(
 
     assert projections == {
         "MS": {
-            individual_slot: {11: 30_000.0, 12: 20_000.0, 21: 40_000.0},
-            joint_slot: {11: 60_000.0, 12: 0.0, 21: 40_000.0},
+            slot: {11: 30_000.0, 12: 20_000.0, 21: 40_000.0},
         }
     }
 
 
-def test_mississippi_request_emits_all_person_candidates_and_raw_relation() -> None:
-    prefix = "us-ms:policies/income_tax/pilot_liability_pipeline"
-    individual_slot = f"{prefix}#input.ms_pit_pilot_supplied_taxable_income_indiv"
-    joint_slot = f"{prefix}#input.ms_pit_pilot_supplied_taxable_income_joint"
-    relation = f"{prefix}#relation.ms_pit_pilot_person_of_tax_unit"
+def test_mississippi_request_emits_canonical_person_schedule_without_relation() -> None:
+    prefix = "us-ms:policies/income_tax/2026_section_27_7_5_schedule"
+    slot = f"{prefix}#input.ms_pit_2026_supplied_taxable_income"
     interval = {
         "period_kind": "tax_year",
         "start": "2026-01-01",
@@ -1466,12 +1455,10 @@ def test_mississippi_request_emits_all_person_candidates_and_raw_relation() -> N
         state="MS",
         routes=(TaxUnitRoute(1, 1, "MS", "28", 1, DISPOSITION_READY),),
         year=2026,
-        output=f"{prefix}#ms_pit_pilot_income_tax_liability",
+        output=f"{prefix}#ms_pit_2026_section_27_7_5_schedule_tax",
         projected_inputs={
-            individual_slot: {11: 30_000.0, 12: 20_000.0, 21: 40_000.0},
-            joint_slot: {11: 60_000.0, 12: 0.0, 21: 40_000.0},
+            slot: {11: 30_000.0, 12: 20_000.0, 21: 40_000.0},
         },
-        declared_relations=(relation,),
         raw_persons=pd.DataFrame(
             {
                 "person_id": [11, 12, 21],
@@ -1479,50 +1466,26 @@ def test_mississippi_request_emits_all_person_candidates_and_raw_relation() -> N
             }
         ),
         all_tax_unit_ids={1, 2},
+        comparison_aggregation="person_sum_to_tax_unit",
     )
 
     assert request["dataset"]["inputs"] == [
         {
-            "name": individual_slot,
+            "name": slot,
             "entity": "Entity",
             "entity_id": "state-tax-person-11",
             "interval": interval,
             "value": {"kind": "decimal", "value": "30000.0"},
         },
         {
-            "name": joint_slot,
-            "entity": "Entity",
-            "entity_id": "state-tax-person-11",
-            "interval": interval,
-            "value": {"kind": "decimal", "value": "60000.0"},
-        },
-        {
-            "name": individual_slot,
+            "name": slot,
             "entity": "Entity",
             "entity_id": "state-tax-person-12",
             "interval": interval,
             "value": {"kind": "decimal", "value": "20000.0"},
         },
-        {
-            "name": joint_slot,
-            "entity": "Entity",
-            "entity_id": "state-tax-person-12",
-            "interval": interval,
-            "value": {"kind": "decimal", "value": "0.0"},
-        },
     ]
-    assert request["dataset"]["relations"] == [
-        {
-            "name": relation,
-            "tuple": ["state-tax-person-11", "state-tax-unit-1"],
-            "interval": interval,
-        },
-        {
-            "name": relation,
-            "tuple": ["state-tax-person-12", "state-tax-unit-1"],
-            "interval": interval,
-        },
-    ]
+    assert request["dataset"]["relations"] == []
 
 
 def test_delaware_filer_inclusion_rejects_ambiguous_policyengine_roles() -> None:
