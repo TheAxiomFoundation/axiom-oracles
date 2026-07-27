@@ -224,3 +224,14 @@ Campaign 3,169 → **3,155**. Intersection 651 → 637.
     relative but residual hundreds — AMT interaction detail.
 - Remaining intersection 637; next big blocks are these forensic tails
   plus TI 57 and amt 41.
+
+## Batch 16 (state suite mirror of the refundable-credit class)
+
+Campaign 3,155 → **2,794**. co-state-income-tax-taxsim 368 → **7**
+(99.42% explained).
+
+- taxsim-co-refundable-credit-vintage mirrored into the state suite:
+  361/368 remaining rows triangulate clean against the complete 31-row
+  axiom-vs-PE mismatch set (same concept, same 1,201-unit population);
+  7 contaminated ids stay raw. Same TAXSIM sctc/srebate decomposition
+  evidence as the intersection-suite class.
