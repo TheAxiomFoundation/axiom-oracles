@@ -750,7 +750,7 @@
       "axiom_rules_engine_sha": "68d65229632e371b96d8eb25c704c1977a2b7ed3",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-27T10:15:02Z",
+    "generated_at": "2026-07-27T15:21:49Z",
     "generated_by": "scripts/run_comparison.py::dk-child-youth-benefit-euromod",
     "oracle": {
       "euromod_country": "DK",
