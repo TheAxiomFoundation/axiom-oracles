@@ -1,3 +1,38 @@
+# PROGRESS — round-6 value-level evidence reconciliation
+
+## State
+
+- Branch: `evidence-validator`; starting HEAD
+  `627c08df3bf47b2bac1e4c5dc084e84d3a1c7f37`.
+- Scope: implement only the round-5 category-(a) blocker and its integration:
+  aggregate value reconciliation, dashboard-semantic row validation,
+  migrated-corpus replay verification, `origin/main` merge, regeneration, and
+  the requested gates. Category-(b) QC publication and root unattended
+  regeneration remain trunk follow-ups.
+- Source:
+  `/Users/maxghenis/TheAxiomFoundation/ops/reviews/sol-fixverify5-2026-07-27/findings.md`.
+- Constraint: commit every coherent step locally and do not push. Generated
+  merge conflicts must be resolved through regeneration, never by hand.
+- Output: the requested ops result path is outside the writable sandbox; if
+  the final copy is denied, commit the report in this repository as directed.
+- Baseline: worktree is clean at the cached remote branch tip. Cached
+  `origin/main` is `0b3f5a70af0ea63728b269e7d6e7657ddbd3bb41`;
+  the branch is 102 main commits behind and 32 branch commits ahead.
+
+## Done
+
+- Read the complete round-5 verification finding and isolated its sole
+  category-(a) blocker from the explicitly excluded category-(b) follow-ups.
+- Confirmed the starting branch, worktree, remote refs, divergence, and output
+  sandbox constraint.
+
+## Next
+
+- Analyze `_aggregate_verdicts`, its callers, the live report aggregate schema,
+  row semantics, and the existing mutant/regeneration test boundaries.
+
+---
+
 # PROGRESS — round-5 semantic evidence reconciliation
 
 ## State
