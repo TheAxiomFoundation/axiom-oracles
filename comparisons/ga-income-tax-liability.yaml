@@ -2,7 +2,7 @@
 # (policyengine-taxsim 2.30.0 models 2026 law including OBBBA).
 
 name: ga-income-tax-liability
-title: Georgia income tax liability — Axiom vs PolicyEngine and TAXSIM
+title: Georgia section 48-7-20 tax before nonrefundable credits — Axiom vs PolicyEngine and TAXSIM
 description: >-
   Compares the canonical Georgia 2026 annual section 48-7-20
   tax-before-nonrefundable-credits surface, using explicitly supplied completed

@@ -143,6 +143,10 @@ def test_campaign_projection_suite_is_manual_and_rulespec_affected():
                 {
                     "suite": "ct-income-tax-populace",
                     "report": "axiom-policyengine-ct-income-tax-populace.json",
+                },
+                {
+                    "suite": "ga-income-tax-populace",
+                    "report": "axiom-policyengine-ga-income-tax-populace.json",
                 }
             ],
         },
@@ -156,7 +160,14 @@ def test_campaign_projection_suite_is_manual_and_rulespec_affected():
             "report": "axiom-policyengine-ct-income-tax-populace.json",
             "repos": ["TheAxiomFoundation/rulespec-us"],
             "source": "comparisons/state-income-tax-populace.yaml",
-        }
+        },
+        {
+            "suite": "ga-income-tax-populace",
+            "name": None,
+            "report": "axiom-policyengine-ga-income-tax-populace.json",
+            "repos": ["TheAxiomFoundation/rulespec-us"],
+            "source": "comparisons/state-income-tax-populace.yaml",
+        },
     ]
 
 

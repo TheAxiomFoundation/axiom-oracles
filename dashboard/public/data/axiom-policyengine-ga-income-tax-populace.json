@@ -6,7 +6,7 @@
    "comparison_count": 2187,
    "components": [],
    "concept": "us-ga:policies/income_tax/2026_annual_tax_before_nonrefundable_credits#ga_pit_2026_annual_tax_before_nonrefundable_credits",
-   "description": "State income tax liability over every routed tax unit in the pinned US Populace",
+   "description": "Georgia section 48-7-20 annual tax before nonrefundable credits, computed from caller-supplied completed Georgia taxable net income, over every routed tax unit in the pinned US Populace",
    "match_count": 2187,
    "match_rate": 100.0,
    "matched": 2187,

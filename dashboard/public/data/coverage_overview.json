@@ -189,6 +189,17 @@
    },
    {
     "program": "state_income_tax",
+    "jurisdiction": "GA",
+    "status": "executable",
+    "source": "pinned Populace campaign projected as ga-income-tax-populace over the canonical 2026 section 48-7-20 annual-tax-before-nonrefundable-credits surface",
+    "known_non_tanf_gaps": [
+     "component surface only; caller supplies completed Georgia taxable net income",
+     "nonrefundable credits, payments, and final Form 500 liability remain out of scope"
+    ],
+    "suite": "ga-income-tax-populace"
+   },
+   {
+    "program": "state_income_tax",
     "jurisdiction": "KY",
     "status": "executable",
     "source": "rulespec-us/us-ky/policies/income_tax/2026_krs_141_020_schedule_before_credits.yaml + axiom-policyengine-ky-income-tax-populace",
@@ -400,6 +411,26 @@
      "TX budgetary/recognizable needs parameters verified (4/4); household-level suite pending (thin manual slice)"
     ],
     "suite": "tx-tanf-parameters"
+   },
+   {
+    "program": "canada_family_benefits",
+    "jurisdiction": "CAN",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-ca origin/main: policies/cra/benefits-2026, policies/esdc/benefits-2026 (3 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "canada_personal_income_tax",
+    "jurisdiction": "CAN",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-ca origin/main: policies/cra/t1-2025, policies/cra/t4127-2026, policies/cra/tax-rates-2026, policies/cra/td1-2026, policies/revenu-quebec/source-deductions-2026, policies/re\u2026 (100 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
    },
    {
     "program": "childcare_assistance",
