@@ -573,7 +573,11 @@ residual), #229 (small-suite grounding).
   failure is the unchanged `origin/main` Ohio exact-output contract expecting
   four source-hold rules absent from both available RuleSpec-US checkouts;
   a focused rerun reproduces 1 failure / 3 passes. No SNAP-scoped test failed.
+- Reconciled the version-labeled `origin/main` baseline against the corrected
+  five-report result and wrote the requested defensive final audit to the
+  intentionally untracked `REPAIR-ROUND2-REPORT.md`, including dispositions,
+  TANF pass/fail evidence, served parity, chain results, and sandbox failures.
 
 ### Next
 
-1. Reconcile baseline/current counts and write the untracked final report.
+- None.
