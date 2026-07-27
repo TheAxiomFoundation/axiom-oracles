@@ -390,6 +390,19 @@ residual), #229 (small-suite grounding).
   again unexplained pending state-law validation.
 - Unexplained rows after restoring those tracked candidates: AL 37, MA 101,
   NC 82, SC 135, TN 64.
+- Replayed 121 exact benefit-only households in live PolicyEngine-US 1.767.3
+  simulations, first reproducing the regenerated baseline and then forcing
+  both the state TANF component and aggregate `tanf` to zero. The state
+  pass/fail counts are AL 14/2, MA 18/5, NC 11/2, SC 29/9, and TN 23/8
+  (95/26 overall).
+- Applied `bridge_artifact` only to the 95 counterfactual passes. Every entry
+  is linked to `axiom-oracles#397`, contains the exact Axiom, baseline PE,
+  TANF, zero-TANF, eligibility, and tolerance evidence, and pins the live
+  mismatch values so the disposition expires on an engine change.
+- Retained every counterfactual failure as unexplained, including strict
+  near-misses NC `ecps-28066` ($7.045) and TN `ecps-36247` ($7.195).
+- Unexplained rows after the TANF class: AL 23, MA 83, NC 71, SC 106, TN 41
+  (324 total).
 - The sandbox denied `uv` cache initialization under
   `/Users/maxghenis/.cache/uv`; generation used the exact cached PE-US wheel
   read-only through the same comparison CLI and clean temporary dependency
@@ -397,9 +410,6 @@ residual), #229 (small-suite grounding).
 
 ### Next
 
-- Complete the cross-state per-case TANF counterfactual and preserve only
-  within-tolerance passes.
-- Apply the 95 within-tolerance TANF passes and retain all 26 failures.
 - Verify that no minimum-allotment row qualifies.
-- Apply class dispositions in coherent commits, regenerate the complete
-  derived chain, audit scope, and write `WORKER-REPORT.md`.
+- Regenerate the complete derived chain, update the SNAP row note, audit
+  scope, and write `WORKER-REPORT.md`.

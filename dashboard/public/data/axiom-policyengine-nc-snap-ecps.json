@@ -5514,6 +5514,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 14.220540364583258,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-27158",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 1183.0,
       "parent": null,
@@ -5567,6 +5572,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 19.825927734375,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-27171",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 785.0,
       "parent": null,
@@ -6061,6 +6071,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 26.3402099609375,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-27628",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 546.0,
       "parent": null,
@@ -6178,6 +6193,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 14.125895182291629,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-27735",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 785.0,
       "parent": null,
@@ -6231,6 +6251,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 14.125895182291629,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-27798",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 785.0,
       "parent": null,
@@ -6300,6 +6325,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 16.25480143229163,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-27877",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 994.0,
       "parent": null,
@@ -6364,6 +6394,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 14.125895182291629,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-27957",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 785.0,
       "parent": null,
@@ -6619,6 +6654,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 14.125895182291629,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-28096",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 785.0,
       "parent": null,
@@ -6667,6 +6707,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 16.25480143229163,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-28181",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 994.0,
       "parent": null,
@@ -6715,6 +6760,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 14.125895182291629,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-28292",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 785.0,
       "parent": null,
@@ -7061,6 +7111,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 21.115234375,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-28646",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 544.0,
       "parent": null,
@@ -7173,18 +7228,18 @@
     "dispositioned": {
       "counts": {
         "axiom_encoding_gap": 11,
-        "bridge_artifact": 0,
+        "bridge_artifact": 11,
         "explained_residual": 0,
         "unexplained": 0,
         "upstream_engine_gap": 6
       },
       "dispositions_file": "dispositions/nc-snap-ecps.yaml",
       "expired_entries": [],
-      "explained_rate": 97.491909,
+      "explained_rate": 97.788565,
       "orphaned_entries": [],
       "raw_match_rate": 97.330097,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 82
+      "unexplained_count": 71
     },
     "error_count": 0,
     "errors_by_engine": [],
