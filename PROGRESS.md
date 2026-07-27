@@ -382,7 +382,29 @@ residual), #229 (small-suite grounding).
   provenance can reset the unchanged-pin ratchet. All eight tests pass.
 - Wired `scripts/closure_universe.py --check` into the existing CI test job
   directly after conformance-universe validation.
+- Replaced the mutable two-copy ratchet trust with a full-Git-history floor:
+  for unchanged content pins, the checker takes the lowest pending count from
+  every committed ancestor version of each universe. CI now fetches full
+  history, and shallow checkouts fail instead of weakening the guarantee.
+- Corrected pin-refresh behavior so an ordinary exact-path encoding re-derives
+  to `pending` when that module disappears under a new RuleSpec pin, while an
+  actually corrected `encoded_by` overlay still survives regeneration.
+- Expanded the hermetic mutant suite to 14 passing tests, including coordinated
+  two-copy ceiling tampering, forged pin resets, stale merge-parent history,
+  module removal under a new pin, corrected-overlay round trips, and the tier-2
+  descendant-only join lesson.
+- Independent adversarial re-audit found no remaining ratchet blocker after the
+  full-history fix. A deliberately shallow clone fails with the documented
+  full-history diagnostic.
+- Final validation passes: deterministic generation is clean; closure
+  `--check` reports 3 roots / 1,156 provisions / 855 pending /
+  `closed=false`; Ruff and compilation pass; all 14 closure tests pass; and a
+  fresh isolated-clone full suite reports 1,984 passed / 62 skipped with three
+  existing pandas warnings.
+- Recorded a third, count-neutral source defect: the supplied RuleSpec inventory
+  has three default-Git C-quoted Unicode paths for `1437c–1`. They are outside
+  the declared roots; future coverage of that root needs unquoted extraction.
 
 ### Next
 
-- Run focused and full validation, push, and open the PR.
+- Push, open the requested unmerged PR referencing #374, and confirm remote CI.
