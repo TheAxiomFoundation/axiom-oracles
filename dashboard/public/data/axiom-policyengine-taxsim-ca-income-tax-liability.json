@@ -115,6 +115,11 @@
       "case_id": "ca-single-30000",
       "concept": "us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_income_tax_liability",
       "difference": 41.00175341179943,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "ca-uprating-vintage-flat-deltas",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "engines": [
         "axiom",
         "taxsim"
@@ -129,6 +134,11 @@
       "case_id": "ca-married-60000",
       "concept": "us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_income_tax_liability",
       "difference": 10.723506823598882,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "ca-uprating-vintage-flat-deltas",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "engines": [
         "axiom",
         "taxsim"
@@ -143,12 +153,12 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-26T19:42:51Z",
+    "generated_at": "2026-07-27T04:12:25Z",
     "generated_by": "scripts/run_comparison.py::ca-income-tax-liability",
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": "44aeb361553ab0cf25d1de2a759acc759707c3ce"
+        "sha": "cd11c24d6536f0f8aa866650ea0987117df72cbc"
       }
     ],
     "run_kind": "affected-rerun",
@@ -164,17 +174,17 @@
       "counts": {
         "axiom_encoding_gap": 0,
         "bridge_artifact": 0,
-        "explained_residual": 0,
+        "explained_residual": 2,
         "unexplained": 0,
         "upstream_engine_gap": 0
       },
-      "dispositions_file": null,
+      "dispositions_file": "dispositions/ca-income-tax-liability.yaml",
       "expired_entries": [],
-      "explained_rate": 83.333333,
+      "explained_rate": 100,
       "orphaned_entries": [],
       "raw_match_rate": 83.333333,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 2
+      "unexplained_count": 0
     },
     "match_count": 10,
     "mismatch_count": 2,

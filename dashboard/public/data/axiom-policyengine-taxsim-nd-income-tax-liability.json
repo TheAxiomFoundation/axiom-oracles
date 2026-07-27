@@ -115,6 +115,11 @@
       "case_id": "nd-single-150000",
       "concept": "us-nd:policies/income_tax/pilot_liability_pipeline#nd_pit_pilot_income_tax_liability",
       "difference": 6.617500000000064,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "nd-uprating-vintage-flat-deltas",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "engines": [
         "axiom",
         "taxsim"
@@ -147,6 +152,11 @@
       "case_id": "nd-married-120000",
       "concept": "us-nd:policies/income_tax/pilot_liability_pipeline#nd_pit_pilot_income_tax_liability",
       "difference": 12.150000000000006,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "nd-uprating-vintage-flat-deltas",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "engines": [
         "axiom",
         "taxsim"
@@ -179,6 +189,11 @@
       "case_id": "nd-married-300000",
       "concept": "us-nd:policies/income_tax/pilot_liability_pipeline#nd_pit_pilot_income_tax_liability",
       "difference": 12.150000000000091,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "nd-uprating-vintage-flat-deltas",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "engines": [
         "axiom",
         "taxsim"
@@ -211,12 +226,12 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-26T19:42:52Z",
+    "generated_at": "2026-07-27T04:12:24Z",
     "generated_by": "scripts/run_comparison.py::nd-income-tax-liability",
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": "44aeb361553ab0cf25d1de2a759acc759707c3ce"
+        "sha": "cd11c24d6536f0f8aa866650ea0987117df72cbc"
       }
     ],
     "run_kind": "affected-rerun",
@@ -232,17 +247,17 @@
       "counts": {
         "axiom_encoding_gap": 0,
         "bridge_artifact": 0,
-        "explained_residual": 0,
+        "explained_residual": 2,
         "unexplained": 0,
         "upstream_engine_gap": 3
       },
       "dispositions_file": "dispositions/nd-income-tax-liability.yaml",
       "expired_entries": [],
-      "explained_rate": 75,
+      "explained_rate": 91.666667,
       "orphaned_entries": [],
       "raw_match_rate": 50,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 3
+      "unexplained_count": 1
     },
     "match_count": 6,
     "mismatch_count": 6,

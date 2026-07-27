@@ -1,10 +1,10 @@
 # Execution-evidence validator — result
 
-Issue: TheAxiomFoundation/axiom-oracles#378  
-Branch: `evidence-validator` (based on `bridge-manifests`)  
-Starting commit: `2778fa1764cc01f0cf10ad64ac89933df16b489a`  
+Issue: TheAxiomFoundation/axiom-oracles#378
+Branch: `evidence-validator` (based on `bridge-manifests`)
+Starting commit: `2778fa1764cc01f0cf10ad64ac89933df16b489a`
 Implementation commit before this report:
-`1dfdda507fb3fd63e0c6aec6e512972cd246240d`  
+`1dfdda507fb3fd63e0c6aec6e512972cd246240d`
 Date: 2026-07-27
 
 ## Result

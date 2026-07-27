@@ -80,12 +80,39 @@
 - An independent post-fix review found no remaining category-(a) correctness
   issue after adding fail-closed unit-weight evidence and partial-row `r`
   checks.
+- Attempted to refresh `origin/main`; the sandbox network could not resolve
+  GitHub. The cached tip is still the verifier-pinned
+  `0b3f5a70af0ea63728b269e7d6e7657ddbd3bb41`, fetched shortly before this
+  round, so integration is explicitly pinned to that reviewed snapshot.
+- Merged cached `origin/main`. Its sole conflict was the generated
+  `dashboard/public/data/overview.json`; resolved it only by rerunning
+  `scripts/generate_dashboard_overview.py`.
+- Replayed the migrated ECPS/QC compact corpora after the merge, then
+  regenerated the exercise census and `us-co/snap` certificate so report and
+  index SHA changes from main are rebound rather than hand-edited.
+- Removed the cumulative diff's four trailing-space defects from the earlier
+  execution-validator report.
+- Completed every requested post-merge gate:
+  migrated replay `--check` verifies ECPS `bound/full` over 1,072 cases and
+  QC `bound/cardinality` over 856; chunk-index validation reports both lanes
+  OK; exercise census and certificates are up to date; the full certification
+  mutant suite passes 62 tests; and the bot's second-run no-op test passes.
+- Supplemental integration checks also pass: the regenerated overview binds
+  all 213 reports, the bridge manifest validator has zero errors (and retains
+  its four disclosed audit-debt findings), the 103-test focused semantic
+  suite passes, Ruff passes, compileall passes, and the staged diff has no
+  whitespace errors.
+- The pre-commit graph audit classifies the 138-file staged integration merge
+  as HIGH impact (413 indexed symbols, 11 affected execution processes), as
+  expected for the upstream state-tax-populace campaign. The requested
+  downstream evidence, regeneration, mutant, and no-op gates cover the
+  category-(a) changes.
 
 ## Next
 
-- Commit the semantic closure, merge current `origin/main`, resolve generated
-  conflicts only by regeneration, fix the four cumulative trailing spaces,
-  and run the complete requested gate set.
+- Commit the verified integration merge, write and commit the round-6 report,
+  remove the temporary local graph index, and attempt the requested external
+  output copy.
 
 ---
 

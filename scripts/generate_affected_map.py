@@ -232,6 +232,32 @@ def parameter_suite_entries(config: dict) -> list[dict]:
     return entries
 
 
+def campaign_projection_suite_entries(config: dict, source: Path) -> list[dict]:
+    """Derive affected-map rows for manually projected campaign reports.
+
+    Campaign runners emit one source-of-record report which a projector turns
+    into dashboard suites. They are real oracle comparisons, but they are not
+    dispatchable through ``run_comparison.py``. Their declarative suite list
+    therefore supplies exact report and RuleSpec provenance while keeping
+    ``name`` null so the affected-rerun matrix does not invent a runner.
+    """
+
+    inherited_repos = config.get("rulespec_repos") or []
+    entries: list[dict] = []
+    for suite in config.get("suites") or []:
+        repos = suite.get("rulespec_repos") or inherited_repos
+        entries.append(
+            {
+                "suite": suite["suite"],
+                "name": None,
+                "report": suite["report"],
+                "repos": sorted(_slug(str(repo)) for repo in repos),
+                "source": f"comparisons/{source.name}",
+            }
+        )
+    return entries
+
+
 def build_map() -> dict:
     entries: list[dict] = []
     for path in sorted(COMPARISONS_DIR.glob("*.yaml")):
@@ -244,6 +270,9 @@ def build_map() -> dict:
         # it fans out to one entry per suite it declares.
         if config.get("kind") == "parameter-suite-list":
             entries.extend(parameter_suite_entries(config))
+            continue
+        if config.get("kind") == "campaign-projection-suite-list":
+            entries.extend(campaign_projection_suite_entries(config, path))
             continue
         if "name" not in config:
             # Defensive: any other non-registry file is skipped, not crashed
@@ -323,10 +352,7 @@ def main() -> int:
         return 0
 
     OUTPUT_PATH.write_text(serialized)
-    print(
-        f"Wrote {_rel(OUTPUT_PATH)}: "
-        f"{len(generated['suites'])} suites"
-    )
+    print(f"Wrote {_rel(OUTPUT_PATH)}: {len(generated['suites'])} suites")
     return 0
 
 

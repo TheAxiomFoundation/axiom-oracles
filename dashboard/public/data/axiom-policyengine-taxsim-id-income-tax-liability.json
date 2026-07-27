@@ -115,6 +115,11 @@
       "case_id": "id-single-30000",
       "concept": "us-id:policies/income_tax/pilot_liability_pipeline#id_pit_pilot_income_tax_liability",
       "difference": 151.21999999999997,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "id-uprating-vintage-flat-deltas",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "engines": [
         "axiom",
         "taxsim"
@@ -129,6 +134,11 @@
       "case_id": "id-single-60000",
       "concept": "us-id:policies/income_tax/pilot_liability_pipeline#id_pit_pilot_income_tax_liability",
       "difference": 151.22000000000003,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "id-uprating-vintage-flat-deltas",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "engines": [
         "axiom",
         "taxsim"
@@ -143,6 +153,11 @@
       "case_id": "id-single-150000",
       "concept": "us-id:policies/income_tax/pilot_liability_pipeline#id_pit_pilot_income_tax_liability",
       "difference": 151.21999999999935,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "id-uprating-vintage-flat-deltas",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "engines": [
         "axiom",
         "taxsim"
@@ -157,6 +172,11 @@
       "case_id": "id-married-60000",
       "concept": "us-id:policies/income_tax/pilot_liability_pipeline#id_pit_pilot_income_tax_liability",
       "difference": 312.75,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "id-uprating-vintage-flat-deltas",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "engines": [
         "axiom",
         "taxsim"
@@ -171,6 +191,11 @@
       "case_id": "id-married-120000",
       "concept": "us-id:policies/income_tax/pilot_liability_pipeline#id_pit_pilot_income_tax_liability",
       "difference": 312.75,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "id-uprating-vintage-flat-deltas",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "engines": [
         "axiom",
         "taxsim"
@@ -185,6 +210,11 @@
       "case_id": "id-married-300000",
       "concept": "us-id:policies/income_tax/pilot_liability_pipeline#id_pit_pilot_income_tax_liability",
       "difference": 312.75,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "id-uprating-vintage-flat-deltas",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "engines": [
         "axiom",
         "taxsim"
@@ -199,12 +229,12 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-26T19:43:27Z",
+    "generated_at": "2026-07-27T04:12:15Z",
     "generated_by": "scripts/run_comparison.py::id-income-tax-liability",
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": "44aeb361553ab0cf25d1de2a759acc759707c3ce"
+        "sha": "cd11c24d6536f0f8aa866650ea0987117df72cbc"
       }
     ],
     "run_kind": "affected-rerun",
@@ -220,17 +250,17 @@
       "counts": {
         "axiom_encoding_gap": 0,
         "bridge_artifact": 0,
-        "explained_residual": 0,
+        "explained_residual": 6,
         "unexplained": 0,
         "upstream_engine_gap": 0
       },
-      "dispositions_file": null,
+      "dispositions_file": "dispositions/id-income-tax-liability.yaml",
       "expired_entries": [],
-      "explained_rate": 50,
+      "explained_rate": 100,
       "orphaned_entries": [],
       "raw_match_rate": 50,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 6
+      "unexplained_count": 0
     },
     "match_count": 6,
     "mismatch_count": 6,

@@ -5,6 +5,7 @@ These cover the pure join logic — grounding classification, manifest-path
 resolution, surface (oracle) indexing — plus a consistency check that the
 committed artifacts recompute correctly.
 """
+
 from __future__ import annotations
 
 import importlib.util
@@ -133,6 +134,32 @@ def test_surface_index_prefers_oracle_status_over_coverage_only():
     # executable beats coverageOnly for the same (family, jurisdiction)
     assert surfaces[("snap", "CO")]["status"] == "executable"
     assert surfaces[("tanf", "TX")]["status"] == "coverageOnly"
+
+
+def test_ct_ordinary_income_tax_module_classifies_to_reviewed_surface():
+    assert rv.classify(
+        "us-ct/policies/income_tax/"
+        "2026_resident_ordinary_tax_before_personal_credit.yaml"
+    ) == ("state_income_tax", "CT")
+    assert (
+        rv.classify(
+            "us-ct/policies/income_tax/2026_resident_liability_source_hold.yaml"
+        )
+        is None
+    )
+
+
+def test_al_schedule_module_classifies_to_reviewed_surface():
+    assert rv.classify(
+        "us-al/policies/income_tax/"
+        "2026_section_40_18_5_schedule_before_credits.yaml"
+    ) == ("state_income_tax", "AL")
+    assert (
+        rv.classify(
+            "us-al/policies/income_tax/2026_resident_liability_source_hold.yaml"
+        )
+        is None
+    )
 
 
 def test_oracle_status_constants_match_plan_headline():
