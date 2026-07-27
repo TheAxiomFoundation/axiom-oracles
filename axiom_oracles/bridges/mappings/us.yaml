@@ -8074,13 +8074,10 @@ mappings:
   - legal_id: us:policies/income_tax/additional_medicare_tax_pipeline#federal_additional_medicare_tax
     country: us
     program: tax
-    mapping_type: direct_variable
+    mapping_type: not_comparable
     policyengine_variable: additional_medicare_tax
-    entity: tax_unit
-    period: year
-    unit: USD
-    comparison: money
-    rationale: Same combined additional Medicare tax over wages and taxable self-employment income in the pipeline's ordinary no-section-1401(c)-exemption domain.
+    candidate_priority: P1
+    rationale: Equivalence to PolicyEngine's additional_medicare_tax holds only inside this pipeline's ordinary domain; the RuleSpec output falls to zero when the section 1401(c) international-agreement domain judgment fails, and PolicyEngine has no corresponding guard, so an unconditional comparison diverges (a false-domain companion case returns $0 in RuleSpec against $1,696.725 in PE). Restore a comparable mapping once the mapping schema can carry the domain precondition, or once the pipeline exposes a domain-unconditional combined output.
 
   - legal_id: us:policies/income_tax/additional_medicare_tax_pipeline#federal_additional_medicare_wage_tax
     country: us
@@ -8144,8 +8141,11 @@ mappings:
   - legal_id: us:policies/income_tax/additional_medicare_tax_pipeline#pipeline_additional_medicare_self_employment_tax_rate
     country: us
     program: tax
-    mapping_type: not_comparable
-    rationale: PolicyEngine stores the shared statutory 0.9 percent rate at gov.irs.payroll.medicare.additional.rate, but does not expose this pipeline-local self-employment-leg rate helper as a distinct oracle output.
+    mapping_type: parameter_value
+    policyengine_parameter: gov.irs.payroll.medicare.additional.rate
+    period: year
+    comparison: rate
+    rationale: Same statutory 0.9 percent additional Medicare rate as the imported section 1401(b)(2) rate, stored in PE as parameter data (its own reference cites 26 USC 1401).
 
   - legal_id: us:policies/income_tax/additional_medicare_tax_pipeline#pipeline_additional_medicare_self_employment_threshold
     country: us
