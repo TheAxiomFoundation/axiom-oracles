@@ -28,6 +28,7 @@ import argparse
 import hashlib
 import json
 import re
+import subprocess
 import sys
 from collections import Counter
 from collections.abc import Mapping, Sequence
@@ -542,8 +543,10 @@ def _reason_category(
 def _validate_provision_rows(
     rows: object,
     *,
+    config: RootConfig,
     label: str,
     tree_paths: set[str],
+    allow_generated_path_drift: bool,
     errors: list[str],
 ) -> list[dict[str, Any]]:
     """Validate row shape and status-specific invariants, accumulating errors."""
@@ -563,14 +566,15 @@ def _validate_provision_rows(
         validated.append(row)
 
         citation = row.get("citation")
+        citation_text: str | None = None
         if not _nonempty_string(citation):
             errors.append(f"{row_label}: missing non-empty `citation`")
         else:
-            citation = str(citation)
-            row_label = f"{label} provision {citation!r}"
-            if citation in seen:
+            citation_text = str(citation)
+            row_label = f"{label} provision {citation_text!r}"
+            if citation_text in seen:
                 errors.append(f"{row_label}: duplicate citation")
-            seen.add(citation)
+            seen.add(citation_text)
 
         if "heading" not in row or not isinstance(row.get("heading"), str):
             errors.append(f"{row_label}: `heading` must be a string")
@@ -585,10 +589,20 @@ def _validate_provision_rows(
             continue
 
         if status == "encoded":
+            validation_tree = tree_paths
+            encoded_by = row.get("encoded_by")
+            if citation_text is not None and allow_generated_path_drift:
+                candidate = _module_candidate(config, citation_text)
+                # A prior machine-generated exact join may disappear after a
+                # legitimate RuleSpec pin update. Admit that one stale shape
+                # while reading the old artifact so generation can re-derive
+                # it as pending. A corrected path remains fully validated.
+                if encoded_by == [candidate] and _is_module_path(candidate):
+                    validation_tree = tree_paths | {candidate}
             _validate_encoded_by(
-                row.get("encoded_by"),
+                encoded_by,
                 label=row_label,
-                tree_paths=tree_paths,
+                tree_paths=validation_tree,
                 errors=errors,
             )
             for contradictory in ("reason", "basis"):
@@ -623,6 +637,7 @@ def _validate_universe(
     path: Path,
     tree_paths: set[str],
     allow_missing_pins: bool,
+    allow_generated_path_drift: bool,
     errors: list[str],
 ) -> list[dict[str, Any]]:
     label = _display(path)
@@ -690,8 +705,10 @@ def _validate_universe(
 
     return _validate_provision_rows(
         document.get("provisions"),
+        config=config,
         label=label,
         tree_paths=tree_paths,
+        allow_generated_path_drift=allow_generated_path_drift,
         errors=errors,
     )
 
@@ -856,6 +873,150 @@ def _ratchet_baseline(
     )
 
 
+def _run_git(repo: Path, *args: str) -> subprocess.CompletedProcess[bytes]:
+    """Run a bounded, non-interactive Git query for ratchet history."""
+
+    return subprocess.run(
+        ["git", "-C", str(repo), *args],
+        check=False,
+        capture_output=True,
+        timeout=15,
+    )
+
+
+def _history_ratchet_baseline(
+    closure_dir: Path,
+    config: RootConfig,
+    *,
+    current_pins: str,
+    errors: list[str],
+) -> RatchetBaseline | None:
+    """Derive the immutable pending floor from committed Git ancestors.
+
+    Artifact metadata alone cannot prove monotonicity because a coordinated
+    edit can raise every duplicated ceiling. In a repository checkout, inspect
+    every committed version of this universe and take the lowest pending count
+    carrying the current content-pin fingerprint. CI fetches full history so a
+    pull request cannot erase the baseline already present on its base branch.
+
+    Tmpdir callers without a Git repository retain the cross-bound artifact
+    baseline; mutant tests that exercise coordinated edits initialize a local
+    repository explicitly.
+    """
+
+    try:
+        root_result = _run_git(closure_dir, "rev-parse", "--show-toplevel")
+    except (OSError, subprocess.TimeoutExpired):
+        return None
+    if root_result.returncode != 0:
+        return None
+
+    try:
+        repo_root = Path(root_result.stdout.decode("utf-8").strip()).resolve()
+        relative_closure = closure_dir.resolve().relative_to(repo_root)
+    except (UnicodeError, ValueError):
+        return None
+
+    try:
+        shallow_result = _run_git(repo_root, "rev-parse", "--is-shallow-repository")
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        errors.append(f"closure[{config.root}] could not inspect Git history: {exc}")
+        return None
+    if shallow_result.returncode != 0:
+        errors.append(
+            f"closure[{config.root}] could not determine whether Git history is shallow"
+        )
+        return None
+    if shallow_result.stdout.strip() == b"true":
+        errors.append(
+            f"closure[{config.root}] cannot enforce the pending ratchet from a "
+            "shallow Git checkout; fetch full history"
+        )
+        return None
+
+    universe_relative = (
+        relative_closure / "universes" / "us-co-snap" / f"{config.root}.yaml"
+    ).as_posix()
+    try:
+        commits_result = _run_git(
+            repo_root, "rev-list", "HEAD", "--", universe_relative
+        )
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        errors.append(f"closure[{config.root}] could not inspect Git history: {exc}")
+        return None
+    if commits_result.returncode != 0:
+        errors.append(
+            f"closure[{config.root}] could not enumerate prior universe versions"
+        )
+        return None
+
+    pending_floor: int | None = None
+    for commit in commits_result.stdout.decode("ascii").splitlines():
+        try:
+            artifact_result = _run_git(
+                repo_root, "show", f"{commit}:{universe_relative}"
+            )
+        except (OSError, subprocess.TimeoutExpired):
+            continue
+        if artifact_result.returncode != 0:
+            continue
+        try:
+            historical = yaml.safe_load(artifact_result.stdout.decode("utf-8")) or {}
+        except (UnicodeError, yaml.YAMLError):
+            continue
+        if not isinstance(historical, Mapping):
+            continue
+        if (
+            historical.get("schema") != UNIVERSE_SCHEMA
+            or historical.get("program") != PROGRAM
+            or historical.get("root") != config.root
+        ):
+            continue
+        provenance = historical.get("provenance")
+        if not isinstance(provenance, Mapping):
+            continue
+        if _pins_sha256(provenance) != current_pins:
+            continue
+        rows = historical.get("provisions")
+        if not isinstance(rows, list) or any(
+            not isinstance(row, Mapping) or row.get("status") not in STATUSES
+            for row in rows
+        ):
+            continue
+        pending = sum(row.get("status") == "pending" for row in rows)
+        pending_floor = (
+            pending if pending_floor is None else min(pending_floor, pending)
+        )
+
+    if pending_floor is None:
+        return None
+    return RatchetBaseline(
+        pins_sha256=current_pins,
+        pending_max=pending_floor,
+    )
+
+
+def _strictest_ratchet_baseline(
+    artifact: RatchetBaseline | None,
+    history: RatchetBaseline | None,
+    *,
+    current_pins: str,
+) -> RatchetBaseline | None:
+    """Combine mutable artifact metadata with the ancestor-derived floor."""
+
+    matching = [
+        baseline
+        for baseline in (artifact, history)
+        if baseline is not None and baseline.pins_sha256 == current_pins
+    ]
+    if matching:
+        return RatchetBaseline(
+            pins_sha256=current_pins,
+            pending_max=min(baseline.pending_max for baseline in matching),
+        )
+    return artifact
+
+
 def _merge_provisions(
     config: RootConfig,
     source_rows: list[dict[str, str]],
@@ -895,7 +1056,9 @@ def _merge_provisions(
                     "reason": committed.get("reason"),
                     "basis": committed.get("basis"),
                 }
-            elif committed.get("status") == "encoded":
+            elif committed.get("status") == "encoded" and committed.get(
+                "encoded_by"
+            ) != [candidate]:
                 row = {
                     "citation": citation,
                     "heading": source["heading"],
@@ -1101,6 +1264,7 @@ def build_artifacts(
                 path=output_path,
                 tree_paths=tree_paths,
                 allow_missing_pins=True,
+                allow_generated_path_drift=True,
                 errors=errors,
             )
             if check_citation_drift:
@@ -1117,12 +1281,24 @@ def build_artifacts(
             )
 
         current_provenance = _generated_provenance(config, snapshots)
-        baseline = _ratchet_baseline(
+        current_pins = _pins_sha256(current_provenance)
+        artifact_baseline = _ratchet_baseline(
             config,
             committed=committed,
             summary_row=summary_rows.get(config.root),
-            current_pins=_pins_sha256(current_provenance),
+            current_pins=current_pins,
             errors=errors,
+        )
+        history_baseline = _history_ratchet_baseline(
+            closure_dir,
+            config,
+            current_pins=current_pins,
+            errors=errors,
+        )
+        baseline = _strictest_ratchet_baseline(
+            artifact_baseline,
+            history_baseline,
+            current_pins=current_pins,
         )
         universe = _build_universe(
             config,
@@ -1139,6 +1315,7 @@ def build_artifacts(
             path=output_path,
             tree_paths=tree_paths,
             allow_missing_pins=False,
+            allow_generated_path_drift=False,
             errors=errors,
         )
         universes[config.root] = universe

@@ -59,15 +59,24 @@ An optional `note` is preserved. Allowed exclusion reasons are:
 The last form names the existing RuleSpec module that fully realizes the
 provision. Partial coverage remains `pending`.
 
+An `encoded_by` list equal to the mechanical citation-path candidate is a
+generated fact, not a review override. That distinction lets a new RuleSpec pin
+demote the row back to `pending` if the module disappears. A corrected list
+points somewhere else in the pinned tree and survives regeneration.
+
 ## Pending ratchet
 
 Each universe records `ratchet.pending_max` against its generated provenance
 header. Its content-pin fingerprint and ceiling are duplicated in `summary.json`;
-the two prior copies must agree before regeneration can write either one. With
-unchanged source and RuleSpec content pins, regeneration may only lower that
-ceiling. Changing either pin starts a new baseline because the denominator or
-encoding inventory may have changed. `summary.json` reports the live counts;
-`closed` is true only when every root has zero pending rows.
+the two prior copies must agree before regeneration can write either one. The
+gate also derives an immutable floor from every committed ancestor universe
+with the same content pins; coordinated edits to both current copies therefore
+cannot raise the floor. CI checks out full Git history for this comparison, and
+the gate rejects shallow repository checkouts. With unchanged source and
+RuleSpec content pins, regeneration may only lower the ceiling. Changing either
+pin starts a new baseline because the denominator or encoding inventory may
+have changed. `summary.json` reports the live counts; `closed` is true only when
+every root has zero pending rows.
 
 This file-path join is evidence of repository coverage, not proof that every
 legal subrule is faithfully implemented. A later node/citation join can replace
@@ -83,3 +92,7 @@ the v1 shim without changing the universe or ratchet discipline.
   contains `4.901`–`.905`; both are bodyless container headings. A heuristic
   requiring child citations to begin with the parent plus a dot incorrectly
   reports them as childless. The exact closure join does not use that heuristic.
+- The pinned RuleSpec inventory contains three default-Git C-quoted paths for
+  `1437c–1` rather than literal Unicode paths. They are outside these three
+  roots and do not affect the counts. A future universe covering that root
+  should pin a NUL-delimited/unquoted inventory.

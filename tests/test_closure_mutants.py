@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 import importlib.util
 import json
+import subprocess
 import sys
 from pathlib import Path
 
@@ -181,6 +182,42 @@ def _write_universe(path: Path, document: dict) -> None:
     path.write_text(yaml.safe_dump(document, sort_keys=False))
 
 
+def _update_snapshot_hash(closure_dir: Path, filename: str) -> None:
+    """Refresh one tmpdir provenance digest after a deliberate pin mutation."""
+
+    path = closure_dir / "data" / "provenance.yaml"
+    provenance = yaml.safe_load(path.read_text())
+    snapshot = next(row for row in provenance["snapshots"] if row["file"] == filename)
+    snapshot["sha256"] = _sha256(closure_dir / "data" / filename)
+    path.write_text(yaml.safe_dump(provenance, sort_keys=False))
+
+
+def _commit_closure_baseline(closure_dir: Path) -> None:
+    """Commit a tmpdir baseline so coordinated edits face immutable history."""
+
+    repo = closure_dir.parent
+
+    def git(*args: str) -> None:
+        subprocess.run(
+            ["git", "-C", str(repo), *args],
+            check=True,
+            capture_output=True,
+        )
+
+    git("init", "-q", "-b", "main")
+    git("add", "closure")
+    git(
+        "-c",
+        "user.name=closure-test",
+        "-c",
+        "user.email=closure-test@example.invalid",
+        "commit",
+        "-q",
+        "-m",
+        "closure baseline",
+    )
+
+
 def _tighten_state_pending_to_zero(module, closure_dir: Path) -> tuple[Path, dict]:
     """Replace the one pending state row with a reviewed exclusion and tighten."""
     path, document = _load_universe(closure_dir, STATE_UNIVERSE)
@@ -294,6 +331,123 @@ def test_pending_regression_cannot_reset_via_universe_provenance(tmp_path, capsy
     assert "state-10-ccr-2506-1" in error
     assert "ratchet" in error
     assert "provenance" in error or "pins" in error
+
+
+def test_pending_regression_cannot_raise_both_committed_ceilings(tmp_path, capsys):
+    module, closure_dir = _generate_baseline(tmp_path)
+    path, document = _tighten_state_pending_to_zero(module, closure_dir)
+    _commit_closure_baseline(closure_dir)
+
+    row = document["provisions"][0]
+    row["status"] = "pending"
+    row.pop("reason")
+    row.pop("basis")
+    document["ratchet"]["pending_max"] = 1
+    _write_universe(path, document)
+
+    summary_path = closure_dir / "summary.json"
+    summary = json.loads(summary_path.read_text())
+    state = next(
+        root for root in summary["roots"] if root["root"] == "state-10-ccr-2506-1"
+    )
+    state["by_status"] = {"encoded": 0, "excluded": 0, "pending": 1}
+    state["pending_max"] = 1
+    summary_path.write_text(json.dumps(summary, indent=2) + "\n")
+
+    assert module.main(["--generate", "--closure-dir", str(closure_dir)]) == 1
+    error = capsys.readouterr().err.lower()
+    assert "state-10-ccr-2506-1" in error
+    assert "ratchet" in error
+    assert "regressed" in error
+
+
+def test_pending_regression_cannot_forge_a_pin_reset(tmp_path, capsys):
+    module, closure_dir = _generate_baseline(tmp_path)
+    path, document = _tighten_state_pending_to_zero(module, closure_dir)
+    _commit_closure_baseline(closure_dir)
+
+    row = document["provisions"][0]
+    row["status"] = "pending"
+    row.pop("reason")
+    row.pop("basis")
+    document["provenance"]["source_sha256"] = "1" * 64
+    forged_pins = module._pins_sha256(document["provenance"])
+    document["ratchet"] = {
+        "pins_sha256": forged_pins,
+        "pending_max": 1,
+    }
+    _write_universe(path, document)
+
+    summary_path = closure_dir / "summary.json"
+    summary = json.loads(summary_path.read_text())
+    state = next(
+        root for root in summary["roots"] if root["root"] == "state-10-ccr-2506-1"
+    )
+    state["by_status"] = {"encoded": 0, "excluded": 0, "pending": 1}
+    state["pins_sha256"] = forged_pins
+    state["pending_max"] = 1
+    summary_path.write_text(json.dumps(summary, indent=2) + "\n")
+
+    assert module.main(["--generate", "--closure-dir", str(closure_dir)]) == 1
+    error = capsys.readouterr().err.lower()
+    assert "state-10-ccr-2506-1" in error
+    assert "ratchet" in error
+    assert "regressed" in error
+
+
+def test_pin_update_rederives_an_ordinary_encoded_row(tmp_path, capsys):
+    module, closure_dir = _generate_baseline(tmp_path)
+    tree_path = closure_dir / "data" / "rulespec-us-files.txt"
+    tree_path.write_text("us/statutes/7/2011.yaml\n")
+    _update_snapshot_hash(closure_dir, "rulespec-us-files.txt")
+
+    assert module.main(["--generate", "--closure-dir", str(closure_dir)]) == 0
+    _, document = _load_universe(closure_dir, CFR_UNIVERSE)
+    assert document["provisions"][0]["status"] == "pending"
+    assert "encoded_by" not in document["provisions"][0]
+    assert module.main(["--check", "--closure-dir", str(closure_dir)]) == 0
+    capsys.readouterr()
+
+
+def test_corrected_encoded_by_survives_regeneration(tmp_path, capsys):
+    module, closure_dir = _generate_baseline(tmp_path)
+    path, document = _load_universe(closure_dir, STATE_UNIVERSE)
+    corrected_path = "us/regulations/7-cfr/273/1.yaml"
+    document["provisions"][0]["status"] = "encoded"
+    document["provisions"][0]["encoded_by"] = [corrected_path]
+    _write_universe(path, document)
+
+    assert module.main(["--generate", "--closure-dir", str(closure_dir)]) == 0
+    _, regenerated = _load_universe(closure_dir, STATE_UNIVERSE)
+    assert regenerated["provisions"][0]["status"] == "encoded"
+    assert regenerated["provisions"][0]["encoded_by"] == [corrected_path]
+    assert module.main(["--check", "--closure-dir", str(closure_dir)]) == 0
+    capsys.readouterr()
+
+
+def test_descendant_module_does_not_encode_its_parent(tmp_path, capsys):
+    module, closure_dir = _generate_baseline(tmp_path)
+    data_dir = closure_dir / "data"
+    _write_jsonl(
+        data_dir / "cfr-273.jsonl",
+        _provision(
+            "us/regulation/7/273/2",
+            "7 CFR 273.2",
+            version="2026-07-15-title-7-part-273",
+        ),
+    )
+    (data_dir / "rulespec-us-files.txt").write_text(
+        "us/regulations/7-cfr/273/2/j.yaml\nus/statutes/7/2011.yaml\n"
+    )
+    _update_snapshot_hash(closure_dir, "cfr-273.jsonl")
+    _update_snapshot_hash(closure_dir, "rulespec-us-files.txt")
+
+    assert module.main(["--generate", "--closure-dir", str(closure_dir)]) == 0
+    _, document = _load_universe(closure_dir, CFR_UNIVERSE)
+    assert document["provisions"][0]["citation"].endswith("/273/2")
+    assert document["provisions"][0]["status"] == "pending"
+    assert module.main(["--check", "--closure-dir", str(closure_dir)]) == 0
+    capsys.readouterr()
 
 
 def test_citation_drift_fails(tmp_path, capsys):
