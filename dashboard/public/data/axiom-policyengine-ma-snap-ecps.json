@@ -9320,11 +9320,6 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -9341,11 +9336,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -9362,11 +9352,6 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -9383,11 +9368,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -9509,11 +9489,6 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -9530,11 +9505,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -9746,11 +9716,6 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -9767,11 +9732,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -10161,11 +10121,6 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -10182,11 +10137,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -10203,11 +10153,6 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -10224,11 +10169,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -10371,11 +10311,6 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -10392,11 +10327,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -10597,11 +10527,6 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -10618,11 +10543,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -10655,11 +10575,6 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -10676,11 +10591,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -10781,11 +10691,6 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -10802,11 +10707,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -11212,11 +11112,6 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -11233,11 +11128,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -11506,11 +11396,6 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -11527,11 +11412,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -11732,11 +11612,6 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -11753,11 +11628,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -11853,11 +11723,6 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -11874,11 +11739,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -12016,11 +11876,6 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -12037,11 +11892,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -12437,11 +12287,6 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -12458,11 +12303,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -12621,11 +12461,6 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -12642,11 +12477,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -12973,11 +12803,6 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -12994,11 +12819,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -13036,11 +12856,6 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -13057,11 +12872,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -13236,11 +13046,6 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -13257,11 +13062,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -13362,11 +13162,6 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -13383,11 +13178,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -13404,11 +13194,6 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -13425,11 +13210,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -13672,11 +13452,6 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -13693,11 +13468,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -14072,11 +13842,6 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -14093,11 +13858,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -14114,11 +13874,6 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -14135,11 +13890,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -14335,11 +14085,6 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -14356,11 +14101,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -14440,11 +14180,6 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.973597208658855,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -14461,11 +14196,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ma-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -14535,7 +14265,7 @@
       "axiom_rules_engine_sha": "48797e101c093bb388be718c6f5d8fc9d9f94a7d",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-27T17:18:47Z",
+    "generated_at": "2026-07-27T18:02:13Z",
     "generated_by": "scripts/run_comparison.py::ma-snap-ecps",
     "oracle": {
       "name": "policyengine",

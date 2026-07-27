@@ -403,6 +403,16 @@ residual), #229 (small-suite grounding).
   near-misses NC `ecps-28066` ($7.045) and TN `ecps-36247` ($7.195).
 - Unexplained rows after the TANF class: AL 23, MA 83, NC 71, SC 106, TN 41
   (324 total).
+- Verified that the minimum-allotment class has zero qualifying residuals.
+  No above-tolerance shared-eligibility row reproduces the exact
+  $24/$23.84/$23.9736 rounding-plus-annual/12 pattern, so no #9158/#399
+  disposition was added.
+- Reran all five suites against the final selector files to clear stale
+  row-level annotations left by the additive disposition merger after
+  categorical selectors were removed. Raw results are unchanged, and an
+  exhaustive audit confirms that every embedded annotation matches a live
+  selector and all 138 rows for the 69 categorical candidates are physically
+  unannotated.
 - The sandbox denied `uv` cache initialization under
   `/Users/maxghenis/.cache/uv`; generation used the exact cached PE-US wheel
   read-only through the same comparison CLI and clean temporary dependency
@@ -410,6 +420,5 @@ residual), #229 (small-suite grounding).
 
 ### Next
 
-- Verify that no minimum-allotment row qualifies.
 - Regenerate the complete derived chain, update the SNAP row note, audit
   scope, and write `WORKER-REPORT.md`.
