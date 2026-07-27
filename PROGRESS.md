@@ -633,12 +633,28 @@ residual), #229 (small-suite grounding).
   ledger before substantive review work.
 - Restored the pre-existing implementation ledger verbatim after the initial
   review-ledger bootstrap exposed the filename collision.
+- Established containment at the commit boundary: target `36bfd1a1` is one
+  commit over local `origin/main` (`98dfa9e8`), with 131 added lines in only
+  `axiom_oracles/bridges/mappings/us.yaml`; both commit and merge-base diffs
+  pass `git diff --check`.
+- Independently confirmed the consumer diagnosis. `build_policyengine_coverage_report`
+  calls `load_policyengine_registry`, whose package-relative mapping directory is
+  this repository's `axiom_oracles/bridges/mappings`; both axiom-encode's CLI and
+  classifier import those bridge functions. No source loader references
+  axiom-encode's legacy `src/axiom_encode/oracles/policyengine/mappings`.
+  A runtime import with this worktree first on `PYTHONPATH` loaded all 14 target
+  entries from the bridge registry and returned zero registry validation issues.
+- Located axiom-encode commit `dc8ffaa8`, which placed the earlier equivalent
+  entries in that unconsumed legacy file, corroborating the stated failure mode.
+- GitNexus MCP graph tools were unavailable and the CLI fallback produced no
+  output before it was interrupted after 60 seconds in the network-restricted
+  sandbox. The YAML-only blast radius is therefore being established through
+  direct registry/coverage call-path inspection.
 
 ## Review next
 
-1. Establish the exact diff and live classifier/consumer path.
-2. Audit all 14 entries against rulespec-us and PolicyEngine US 1.767.3 source,
+1. Audit all 14 entries against rulespec-us and PolicyEngine US 1.767.3 source,
    metadata, and available alternatives.
-3. Reproduce the changed-file gate and confirm companion-test assertions.
-4. Verify containment, YAML parsing, duplicate handling, and baseline failures.
-5. Write and commit the evidence-backed verdict to `REVIEW-REPORT.md`.
+2. Reproduce the changed-file gate and confirm companion-test assertions.
+3. Verify YAML parsing, duplicate handling, and baseline failures.
+4. Write and commit the evidence-backed verdict to `REVIEW-REPORT.md`.
