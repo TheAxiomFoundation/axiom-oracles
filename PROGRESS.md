@@ -704,10 +704,45 @@ residual), #229 (small-suite grounding).
   sandbox denied uv cache initialization under
   `/Users/maxghenis/.cache/uv/sdists-v9/.git`. The existing project interpreter
   completed the same check successfully.
+- Audited the mapping schema and proved that it has no executable condition,
+  precondition, domain, predicate, or row-filter field. `PolicyEngineMapping`
+  has only the fixed comparison fields, `_mapping_from_payload` drops unknown
+  keys, and comparability does not inspect any guard. `derived_expression`
+  cannot restrict comparison to a RuleSpec domain. Therefore the guarded
+  combined output's new `not_comparable` classification is the correct safe
+  call, not a missed conditional mapping; its exact PE candidate is properly
+  retained at P1 with an accurate restoration condition.
+- Loaded the cached wheel whose metadata identifies PolicyEngine-US 1.767.3.
+  The exact runtime confirms `additional_medicare_tax` is TaxUnit/Year/USD;
+  `payroll_tax_gross_wages`, `taxable_self_employment_income`,
+  `self_employment_medicare_tax`, and `employee_medicare_tax` are
+  Person/Year/USD. The PE rate is 0.009 and the exclusion keys are
+  SINGLE/JOINT/SEPARATE/HEAD_OF_HOUSEHOLD/SURVIVING_SPOUSE =
+  200k/250k/125k/200k/200k.
+- Replayed the companion false-domain facts in the exact 1.767.3 simulation:
+  $250,000 wages plus $138,525 taxable self-employment income under SINGLE
+  produces `1696.7249755859375` (statutory $1,696.725) in PE, while RuleSpec
+  deliberately asserts zero. This independently verifies the P1 candidate is
+  conditional rather than directly comparable.
+- Confirmed the corrected rate maps the same entityless, dimensionless 0.009
+  section-1401(b)(2) legal quantity to
+  `gov.irs.payroll.medicare.additional.rate`; `period: year` and
+  `comparison: rate` are correct, with no entity or currency unit to mismatch.
+- Spot-checked the other twelve mappings against the full PE Medicare,
+  self-employment, and wage inventories. The four threshold parameter mappings
+  remain exact, and the nine total not-comparable rows have no one-to-one PE
+  surfaces. In particular, ordinary `self_employment_medicare_tax` is the
+  Person-level 2.9% section-1401(b)(1) tax, while
+  `payroll_tax_gross_wages` and `taxable_self_employment_income` are
+  Person-level components rather than the Axiom TaxUnit outputs.
+- One prior nonblocking rationale precision issue remains: the ordinary-case
+  TaxUnit self-employment-income row says PE aggregates
+  `taxable_self_employment_income` “only” inside `additional_medicare_tax`, but
+  PE 1.767.3 also aggregates it in Vermont child-care contributions. There is
+  still no generic TaxUnit output, so the classification remains correct and
+  no divergence is hidden.
 
 ## Next
 
-1. Establish schema capability and PolicyEngine 1.767.3 evidence.
-2. Audit all fourteen classifications and comparable metadata.
-3. Remove local graph scratch data and commit the final self-contained verdict
+1. Remove local graph scratch data and commit the final self-contained verdict
    to `REVIEW-REPORT.md`.
