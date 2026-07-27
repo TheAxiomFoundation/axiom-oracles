@@ -1,3 +1,38 @@
+# PROGRESS — round-5 semantic evidence reconciliation
+
+## State
+
+- Branch: `evidence-validator`; starting HEAD `651d5966c061cc2a9793a382595810355e1478af`.
+- Scope: implement only the round-4 review's Required closure plus the two
+  explicitly promoted PARTIAL items: derived-mode precedence and strict
+  disposition-document authorization.
+- Source: `/Users/maxghenis/TheAxiomFoundation/ops/reviews/sol-fixverify4-2026-07-27/findings.md`.
+- Constraint: commit every coherent step locally; do not push. The requested
+  ops result path is outside the writable sandbox, so use a committed in-repo
+  fallback report if the external write is denied.
+- Baseline: worktree was clean and matched cached `origin/evidence-validator`.
+  Fetching current `origin/main` was blocked by DNS; cached `origin/main` is
+  `abe2520193439467d5fd1ada46476fc7f05d0611`.
+
+## Done
+
+- Inspected the checkout, branch, worktrees, remotes, cached base, and the full
+  round-4 findings before implementation.
+- Confirmed the required implementation and mutant boundaries verbatim from
+  the review.
+
+## Next
+
+- Inspect the validator, certification, artifact producer/migration,
+  disposition authorization, and existing mutant harness.
+- Implement and commit semantic full reconciliation and reference-full gating.
+- Implement and commit authoritative regeneration/QC signal preservation.
+- Implement and commit skip, mode-precedence, and disposition-document fixes.
+- Run all named gates, reconcile generated artifacts honestly, and commit the
+  final report plus completed progress state.
+
+---
+
 # PROGRESS — execution-evidence validator (#378)
 
 ## State
