@@ -47,6 +47,26 @@ def test_summary_counts_both_pairwise_legs_regardless_of_pe_match_status():
         assert summary["match_count"] + summary["mismatch_count"] == 4
 
 
+def test_taxsim_binary_resolves_the_installed_distribution_data(monkeypatch, tmp_path):
+    generator = _load_generator()
+    executable = tmp_path / "share/policyengine_taxsim/taxsimtest/taxsimtest-osx.exe"
+    executable.parent.mkdir(parents=True)
+    executable.write_text("pinned")
+
+    class Installed:
+        files = [
+            Path("../../../share/policyengine_taxsim/taxsimtest/taxsimtest-osx.exe")
+        ]
+
+        def locate_file(self, _path):
+            return executable
+
+    monkeypatch.setattr(generator.platform, "system", lambda: "Darwin")
+    monkeypatch.setattr(generator, "distribution", lambda _name: Installed())
+
+    assert generator._taxsim_binary() == executable.resolve()
+
+
 @pytest.mark.parametrize(
     ("state", "output", "grid_values"),
     [
@@ -220,6 +240,236 @@ def test_mississippi_live_grid_rejects_wrong_person_id(monkeypatch, tmp_path):
         generator._mississippi_axiom_liabilities(
             [generator.Case("ms-single-30000", "MS", "single", 30_000.0)],
             {"ms-single-30000": (12_500.0,)},
+        )
+
+
+@pytest.mark.parametrize(
+    ("variable", "values"),
+    [
+        ("ut_taxable_income", []),
+        ("ut_taxable_income", [1.0, 2.0]),
+        ("ut_income_tax_before_credits", []),
+        ("ut_income_tax_before_credits", [1.0, 2.0]),
+        ("ut_income_tax_exempt", []),
+        ("ut_income_tax_exempt", [False, True]),
+    ],
+)
+def test_utah_policyengine_values_require_exact_one_result(
+    monkeypatch, variable, values
+):
+    generator = _load_generator()
+    results = {
+        "ut_taxable_income": [-10.0],
+        "ut_income_tax_before_credits": [0.0],
+        "ut_income_tax_exempt": [False],
+    }
+    results[variable] = values
+
+    class Simulation:
+        def calculate(self, requested, period):
+            assert period == 2026
+            return results[requested]
+
+    monkeypatch.setattr(
+        generator, "_policyengine_simulation", lambda _case: Simulation()
+    )
+    with pytest.raises(
+        RuntimeError,
+        match=rf"Utah {variable} must return exactly one value; got {len(values)}",
+    ):
+        generator._utah_policyengine_values(
+            generator.Case("ut-single-30000", "UT", "single", 30_000.0)
+        )
+
+
+@pytest.mark.parametrize(
+    ("variable", "value"),
+    [
+        ("ut_taxable_income", float("nan")),
+        ("ut_taxable_income", float("inf")),
+        ("ut_income_tax_before_credits", float("nan")),
+        ("ut_income_tax_before_credits", float("inf")),
+    ],
+)
+def test_utah_policyengine_values_require_finite_numbers(
+    monkeypatch, variable, value
+):
+    generator = _load_generator()
+    results = {
+        "ut_taxable_income": [10.0],
+        "ut_income_tax_before_credits": [0.445],
+        "ut_income_tax_exempt": [False],
+    }
+    results[variable] = [value]
+
+    class Simulation:
+        def calculate(self, requested, period):
+            assert period == 2026
+            return results[requested]
+
+    monkeypatch.setattr(
+        generator, "_policyengine_simulation", lambda _case: Simulation()
+    )
+    with pytest.raises(
+        RuntimeError,
+        match=rf"Utah {variable} did not return a finite numeric value",
+    ):
+        generator._utah_policyengine_values(
+            generator.Case("ut-single-30000", "UT", "single", 30_000.0)
+        )
+
+
+def test_utah_policyengine_values_reject_negative_before_credit_tax(monkeypatch):
+    generator = _load_generator()
+
+    class Simulation:
+        def calculate(self, variable, period):
+            assert period == 2026
+            return {
+                "ut_taxable_income": [-10.0],
+                "ut_income_tax_before_credits": [-0.01],
+                "ut_income_tax_exempt": [False],
+            }[variable]
+
+    monkeypatch.setattr(
+        generator, "_policyengine_simulation", lambda _case: Simulation()
+    )
+    with pytest.raises(
+        RuntimeError,
+        match="Utah ut_income_tax_before_credits must be nonnegative",
+    ):
+        generator._utah_policyengine_values(
+            generator.Case("ut-single-30000", "UT", "single", 30_000.0)
+        )
+
+
+def test_utah_policyengine_values_reject_non_boolean_exemption(monkeypatch):
+    generator = _load_generator()
+
+    class Simulation:
+        def calculate(self, variable, period):
+            assert period == 2026
+            return {
+                "ut_taxable_income": [-10.0],
+                "ut_income_tax_before_credits": [0.0],
+                "ut_income_tax_exempt": [1.0],
+            }[variable]
+
+    monkeypatch.setattr(
+        generator, "_policyengine_simulation", lambda _case: Simulation()
+    )
+    with pytest.raises(
+        RuntimeError,
+        match="Utah ut_income_tax_exempt did not return a strict Boolean",
+    ):
+        generator._utah_policyengine_values(
+            generator.Case("ut-single-30000", "UT", "single", 30_000.0)
+        )
+
+
+def test_utah_policyengine_values_preserve_negative_taxable_boundary(monkeypatch):
+    generator = _load_generator()
+
+    class Simulation:
+        def calculate(self, variable, period):
+            assert period == 2026
+            return {
+                "ut_taxable_income": [-10.0],
+                "ut_income_tax_before_credits": [0.0],
+                "ut_income_tax_exempt": [False],
+            }[variable]
+
+    monkeypatch.setattr(
+        generator, "_policyengine_simulation", lambda _case: Simulation()
+    )
+    assert generator._utah_policyengine_values(
+        generator.Case("ut-single-30000", "UT", "single", 30_000.0)
+    ) == (0.0, -10.0, False)
+
+
+def test_utah_live_grid_matches_reordered_results_by_exact_tax_unit_id(
+    monkeypatch, tmp_path
+):
+    generator = _load_generator()
+    tax_populace = __import__(
+        "axiom_oracles.bridges.tax_populace",
+        fromlist=["run_axiom_program"],
+    )
+    output = generator._LIABILITY_OUTPUT["UT"]
+    monkeypatch.setattr(generator, "RULESPEC_US", tmp_path)
+    monkeypatch.setattr(generator, "AXIOM_RULES", tmp_path)
+    monkeypatch.setattr(
+        tax_populace,
+        "run_axiom_program",
+        lambda **_kwargs: [
+            {
+                "entity_id": "state-tax-unit-ut-married-60000",
+                "outputs": {output: {"value": {"value": "2200"}}},
+            },
+            {
+                "entity_id": "state-tax-unit-ut-single-30000",
+                "outputs": {output: {"value": {"value": "1100"}}},
+            },
+        ],
+    )
+    cases = [
+        generator.Case("ut-single-30000", "UT", "single", 30_000.0),
+        generator.Case("ut-married-60000", "UT", "married", 60_000.0),
+    ]
+
+    assert generator._utah_axiom_liabilities(
+        cases,
+        {
+            "ut-single-30000": (1100.0, 25_000.0, False),
+            "ut-married-60000": (2200.0, 50_000.0, False),
+        },
+    ) == {
+        ("UT", "single", 30_000): 1100.0,
+        ("UT", "married", 60_000): 2200.0,
+    }
+
+
+@pytest.mark.parametrize(
+    "entity_ids",
+    [
+        ["state-tax-unit-ut-single-30000", "state-tax-unit-ut-single-30000"],
+        ["state-tax-unit-ut-single-30000", "state-tax-unit-unexpected"],
+    ],
+)
+def test_utah_live_grid_rejects_duplicate_or_unexpected_tax_unit_id(
+    monkeypatch, tmp_path, entity_ids
+):
+    generator = _load_generator()
+    tax_populace = __import__(
+        "axiom_oracles.bridges.tax_populace",
+        fromlist=["run_axiom_program"],
+    )
+    output = generator._LIABILITY_OUTPUT["UT"]
+    monkeypatch.setattr(generator, "RULESPEC_US", tmp_path)
+    monkeypatch.setattr(generator, "AXIOM_RULES", tmp_path)
+    monkeypatch.setattr(
+        tax_populace,
+        "run_axiom_program",
+        lambda **_kwargs: [
+            {
+                "entity_id": entity_id,
+                "outputs": {output: {"value": {"value": "1100"}}},
+            }
+            for entity_id in entity_ids
+        ],
+    )
+    cases = [
+        generator.Case("ut-single-30000", "UT", "single", 30_000.0),
+        generator.Case("ut-married-60000", "UT", "married", 60_000.0),
+    ]
+
+    with pytest.raises(RuntimeError, match="unexpected or duplicate TaxUnit"):
+        generator._utah_axiom_liabilities(
+            cases,
+            {
+                "ut-single-30000": (1100.0, 25_000.0, False),
+                "ut-married-60000": (2200.0, 50_000.0, False),
+            },
         )
 
 

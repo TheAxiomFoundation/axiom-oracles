@@ -36,7 +36,10 @@ def test_packaged_contract_has_exact_campaign_inventory() -> None:
 
     assert len(contract.jurisdictions) == 43
     assert set(contract.by_state()) == EXPECTED_STATE_CODES
-    assert sum(len(item.inputs) for item in contract.jurisdictions) == 154
+    assert (
+        sum(len(item.inputs) for item in contract.jurisdictions)
+        == EXPECTED_EXPLICIT_INPUT_COUNT
+    )
     assert sum(len(item.relations) for item in contract.jurisdictions) == 1
     assert len({item.program for item in contract.jurisdictions}) == 43
     assert len({item.output for item in contract.jurisdictions}) == 43
@@ -189,7 +192,7 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
         ),
         "explicit_input_count": EXPECTED_EXPLICIT_INPUT_COUNT,
         "explicit_relation_count": EXPECTED_EXPLICIT_RELATION_COUNT,
-        "blocked_input_count": EXPECTED_EXPLICIT_INPUT_COUNT - 61,
+        "blocked_input_count": EXPECTED_EXPLICIT_INPUT_COUNT - 64,
         "blocked_relation_count": 0,
     }
     assert "NH" not in contract.by_state()
@@ -219,7 +222,7 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
         "OK": ["ok_taxable_income"],
         "PA": ["pa_adjusted_taxable_income"],
         "SC": ["sc_taxable_income"],
-        "UT": ["ut_taxable_income"],
+        "UT": ["ut_taxable_income", "ut_income_tax_exempt"],
         "VA": ["va_taxable_income"],
         "VT": ["vt_normal_income_tax", "adjusted_gross_income"],
         "WV": ["wv_taxable_income"],
@@ -501,7 +504,10 @@ def test_contract_rejects_incomplete_explicit_slot_inventory() -> None:
     jurisdiction, _ = _first_input(document)
     jurisdiction["inputs"].pop()
 
-    with pytest.raises(StateTaxPopulaceContractError, match="exactly 154"):
+    with pytest.raises(
+        StateTaxPopulaceContractError,
+        match=f"exactly {EXPECTED_EXPLICIT_INPUT_COUNT}",
+    ):
         validate_state_tax_populace_contract(document)
 
 
