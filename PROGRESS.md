@@ -63,9 +63,15 @@
   Clean reference legs now require valid, bound, reconciled evidence, and the
   certificate rejects census report-path or report-SHA divergence from its
   registry entry.
+- Closed the refresh-time substitution path: `run_comparison.py` now emits
+  fresh compact chunks and a validated v1 index before slimming a versioned
+  report. The generic generator refuses changed identities on an existing v1
+  corpus, while skip/re-emit runs preserve the prior bound set byte-for-byte.
+- Hardened the defect boundary for unreadable/malformed nested report shapes
+  and non-standard/non-finite JSON. These inputs now produce leg/row defects
+  instead of exceptions or false cardinality passes.
 - Focused validation check: Ruff passes and
-  `pytest tests/ -k certification` reports 34 passed (1,861 deselected);
-  the census-focused tests report 3 passed.
+  the combined validator/census/producer suite reports 76 passed.
 
 ## Next
 

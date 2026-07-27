@@ -600,7 +600,13 @@ def main() -> int:
             suite=suite,
         )
         adapted["provenance"] = provenance
-        _write_dashboard_report(adapted, dashboard_target)
+        _write_dashboard_report(
+            adapted,
+            dashboard_target,
+            preserve_existing_versioned=bool(
+                config["runner"].get("_reemitted_report")
+            ),
+        )
 
     if args.summary:
         _print_summary(output)
@@ -3972,8 +3978,9 @@ def _uses_versioned_case_chunks(report: dict) -> bool:
 
     The existing index binds the previous report bytes while a refresh is
     being produced, so this checks the storage contract rather than its stale
-    hash. ``generate_chunk_indexes.py`` rebinds the new report immediately
-    afterward and refuses the refresh if the chunks no longer reconcile.
+    hash. This producer refreshes the chunks from its still-full case corpus
+    and binds the new report itself; the generic generator then verifies that
+    identity idempotently.
     """
 
     suite = report.get("suite")
@@ -3990,7 +3997,143 @@ def _uses_versioned_case_chunks(report: dict) -> bool:
     )
 
 
-def _slim_report_for_dashboard(report: dict) -> dict:
+def _refresh_versioned_case_chunks(report: dict) -> dict | None:
+    """Write fresh compact chunks while the producer still holds full cases.
+
+    A generic index generator cannot prove that changed aggregate report bytes
+    and changed chunks came from the same execution once inline mirrors are
+    gone. The comparison producer can: this function runs before slimming and
+    returns refreshed display metadata for the new bound index.
+    """
+
+    suite = report.get("suite")
+    if (
+        not isinstance(suite, str)
+        or not suite
+        or suite in {".", ".."}
+        or Path(suite).name != suite
+        or "\\" in suite
+    ):
+        raise ValueError("versioned evidence suite must be a safe path component")
+    raw_cases = report.get("cases")
+    if raw_cases in (None, []):
+        return None
+    if not isinstance(raw_cases, list) or not all(
+        isinstance(case, dict) for case in raw_cases
+    ):
+        raise ValueError("versioned evidence cases must be an array of objects")
+    declared = report.get("case_count")
+    if (
+        isinstance(declared, bool)
+        or not isinstance(declared, int)
+        or declared != len(raw_cases)
+    ):
+        raise ValueError(
+            "versioned evidence case_count must equal the full case corpus "
+            f"({declared!r} != {len(raw_cases)})"
+        )
+
+    from scripts.emit_case_artifacts import (
+        CHUNK_SIZE,
+        MAX_CASES,
+        compact_case,
+        explained_lookup,
+    )
+
+    if len(raw_cases) > MAX_CASES:
+        raise ValueError(
+            f"versioned evidence has {len(raw_cases)} cases, over cap {MAX_CASES}"
+        )
+    explained = explained_lookup(report)
+    rows = [compact_case(case, explained) for case in raw_cases]
+    input_slots = sorted(
+        {
+            record.get("name")
+            for row in rows
+            for record in row.get("_all_input_names", [])
+            if record.get("name")
+        }
+    )
+    output_slots = sorted(
+        {name for row in rows for name in row.get("_all_output_names", [])}
+    )
+    for row in rows:
+        row.pop("_all_input_names", None)
+        row.pop("_all_output_names", None)
+
+    out_dir = DASHBOARD_DATA_DIR / "cases" / suite
+    out_dir.mkdir(parents=True, exist_ok=True)
+    chunks = [rows[i : i + CHUNK_SIZE] for i in range(0, len(rows), CHUNK_SIZE)]
+    expected_names = set()
+    for index, chunk in enumerate(chunks):
+        name = f"chunk-{index}.json"
+        expected_names.add(name)
+        (out_dir / name).write_text(json.dumps(chunk, separators=(",", ":")))
+    for stale in out_dir.glob("chunk-*.json"):
+        if stale.name not in expected_names:
+            stale.unlink()
+
+    mismatch_concepts = sorted(
+        {
+            mismatch["c"]
+            for row in rows
+            for mismatch in row["m"]
+            if mismatch.get("c")
+        }
+    )
+    return {
+        "chunk_size": CHUNK_SIZE,
+        "engines": report.get("engines"),
+        "input_slots": input_slots,
+        "mismatch_concepts": mismatch_concepts,
+        "output_slots": output_slots,
+        "source": "run_comparison.py full case corpus",
+        "total_cases": len(rows),
+    }
+
+
+def _write_refreshed_chunk_index(report_path: Path, metadata: dict) -> None:
+    """Bind producer-refreshed chunks to the exact dashboard report bytes."""
+
+    from axiom_oracles.evidence import (
+        build_chunk_index,
+        validate_suite_evidence,
+    )
+
+    candidate = build_chunk_index(report_path)
+    chunk_count = candidate.pop("chunk_count")
+    chunks = candidate.pop("chunks")
+    for optional in ("input_slots", "output_slots"):
+        candidate.pop(optional, None)
+        if metadata[optional]:
+            candidate[optional] = metadata[optional]
+    candidate.update(
+        {
+            key: value
+            for key, value in metadata.items()
+            if key not in {"input_slots", "output_slots"}
+        }
+    )
+    # Keep the descriptor tail in the same canonical order produced by
+    # build_chunk_index; --check compares deterministic rendered bytes.
+    candidate["chunk_count"] = chunk_count
+    candidate["chunks"] = chunks
+    suite = candidate["suite"]
+    index_path = report_path.parent / "cases" / suite / "index.json"
+    index_path.write_text(json.dumps(candidate, indent=2) + "\n")
+    evidence = validate_suite_evidence(report_path)
+    if not evidence.valid:
+        details = "\n".join(f"- {defect}" for defect in evidence.defects)
+        raise ValueError(
+            f"producer-refreshed evidence did not validate for {suite}:\n{details}"
+        )
+
+
+def _slim_report_for_dashboard(
+    report: dict,
+    *,
+    versioned_case_chunks: bool | None = None,
+) -> dict:
     mismatches = report.get("mismatches") or []
     cases = report.get("cases") or []
     within_inline_limits = (
@@ -4013,7 +4156,9 @@ def _slim_report_for_dashboard(report: dict) -> dict:
             "total_case_rows": len(cases),
             "shown_case_rows": len(slim["cases"]),
         }
-    if _uses_versioned_case_chunks(report) and cases:
+    if versioned_case_chunks is None:
+        versioned_case_chunks = _uses_versioned_case_chunks(report)
+    if versioned_case_chunks and cases:
         # A case ID may exist in exactly one evidence source. Once a suite has
         # a versioned chunk contract, the report remains the aggregate view
         # and chunks are the sole per-case corpus.
@@ -4066,15 +4211,42 @@ def _merge_dispositions(report: dict) -> dict:
     )
 
 
-def _write_dashboard_report(report: dict, filename: str) -> None:
+def _write_dashboard_report(
+    report: dict,
+    filename: str,
+    *,
+    preserve_existing_versioned: bool = False,
+) -> None:
     DASHBOARD_DATA_DIR.mkdir(parents=True, exist_ok=True)
     from axiom_oracles.comparison.report import strip_heavy_case_metadata
 
     report = _merge_dispositions(report)
+    versioned_case_chunks = _uses_versioned_case_chunks(report)
+    if (
+        preserve_existing_versioned
+        and versioned_case_chunks
+        and not report.get("cases")
+    ):
+        # A skip-capable runner copied the committed dashboard view and did
+        # not execute. Rewriting provenance would change the report SHA without
+        # producing fresh cases; preserve the entire already-bound evidence
+        # set so the generic generator cannot bless a no-execution refresh.
+        print(
+            f"Preserved dashboard report and bound chunks for skipped {report['suite']}"
+        )
+        return
+    refreshed_chunk_metadata = (
+        _refresh_versioned_case_chunks(report) if versioned_case_chunks else None
+    )
     target = DASHBOARD_DATA_DIR / filename
-    slim = _slim_report_for_dashboard(strip_heavy_case_metadata(report))
+    slim = _slim_report_for_dashboard(
+        strip_heavy_case_metadata(report),
+        versioned_case_chunks=versioned_case_chunks,
+    )
     truncation = slim.get("dashboard_truncation")
     target.write_text(json.dumps(slim, indent=2, sort_keys=True))
+    if refreshed_chunk_metadata is not None:
+        _write_refreshed_chunk_index(target, refreshed_chunk_metadata)
     print(f"Wrote dashboard report: {target}")
     if truncation:
         print(

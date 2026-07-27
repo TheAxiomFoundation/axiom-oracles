@@ -85,6 +85,13 @@ that the stored shape cannot support either claim. This report/chunk binding is
 separate from execution attestation, which identifies engines and output
 surfaces.
 
+For a migrated suite, the comparison producer writes fresh chunks while it
+still holds the full case corpus, then binds the slim report to those exact
+bytes. The generic index generator may create the initial v1 index or verify an
+idempotent one; it refuses to rebind changed v1 report/chunk identities because
+aggregate counts alone cannot prove that replacement chunks came from the same
+execution.
+
 ## Universe facts are generated, not hand-invented
 
 The policy list and each policy's output variables come from parsing the

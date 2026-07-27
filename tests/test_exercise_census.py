@@ -115,3 +115,27 @@ def test_unbound_or_nonreconciling_chunks_do_not_block_census(tmp_path, monkeypa
     )
     assert row["reconciliation"] == "none"
     assert row["cases_scanned"] == 2
+
+
+def test_unsafe_suite_name_cannot_escape_the_case_root(tmp_path, monkeypatch):
+    census = _load_census()
+    data_dir = tmp_path / "data"
+    report_path = data_dir / "report.json"
+    report = {
+        "suite": "../outside",
+        "summary": {
+            "comparison_count": 1,
+            "match_count": 1,
+            "mismatch_count": 0,
+        },
+        "cases": [],
+    }
+    _write_json(report_path, report)
+    monkeypatch.setattr(census, "REPO_ROOT", tmp_path)
+    monkeypatch.setattr(census, "CASES_DIR", data_dir / "cases")
+
+    row = census._census_suite("../outside", report, report_path)
+
+    assert row["cases_scanned"] == 0
+    assert row["binding"] == "unbound"
+    assert any("safe path component" in defect for defect in row["binding_defects"])

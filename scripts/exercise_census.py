@@ -66,7 +66,12 @@ OUTPUT_PATH = REPO_ROOT / "conformance" / "exercise-census.json"
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from axiom_oracles.evidence import EvidenceChunk, validate_chunk_binding  # noqa: E402
+from axiom_oracles.evidence import (  # noqa: E402
+    EvidenceChunk,
+    is_safe_suite_name,
+    strict_json_loads,
+    validate_chunk_binding,
+)
 
 SCHEMA = "axiom_oracles.exercise_census.v1"
 
@@ -151,11 +156,15 @@ def _iter_suite_reports() -> list[tuple[str, dict, Path]]:
     reports = []
     for path in sorted(DATA_DIR.glob("*.json")):
         try:
-            payload = json.loads(path.read_text())
-        except (OSError, json.JSONDecodeError):
+            payload = strict_json_loads(path.read_text())
+        except (OSError, UnicodeDecodeError, ValueError):
             continue
-        if isinstance(payload, dict) and payload.get("suite"):
-            reports.append((str(payload["suite"]), payload, path))
+        if (
+            isinstance(payload, dict)
+            and isinstance(payload.get("suite"), str)
+            and payload["suite"]
+        ):
+            reports.append((payload["suite"], payload, path))
     return reports
 
 
@@ -204,16 +213,18 @@ def _chunk_cases(
     cases: list[dict] = []
     manifest: list[dict] = []
     descriptors: list[EvidenceChunk] = []
+    if not is_safe_suite_name(suite):
+        return cases, manifest, ()
     suite_dir = CASES_DIR / suite
     if not suite_dir.is_dir():
         return cases, manifest, ()
     for chunk in sorted(suite_dir.glob("chunk-*.json")):
         try:
             raw = chunk.read_bytes()
-            payload = json.loads(raw)
+            payload = strict_json_loads(raw)
         except OSError:
             continue
-        except (UnicodeDecodeError, json.JSONDecodeError):
+        except (UnicodeDecodeError, ValueError):
             rows = []
         else:
             if isinstance(payload, list):

@@ -227,11 +227,13 @@ def compact_case(case: dict, explained: dict) -> dict:
         if synth:
             row["i"] = synth
     matches = case.get("matches")
-    if matches:
+    if isinstance(matches, list):
         row["v"] = [
             {"c": m.get("concept"), "l": m.get("left"), "x": m.get("right")}
             for m in matches
         ]
+    elif "matches" in case:
+        raise ValueError("full-evidence case matches must be an array")
     return row
 
 
@@ -386,9 +388,9 @@ def emit_suite(suite: str, dashboard_config: dict) -> str:
 
     # Once a report has moved inline cases into a versioned chunk corpus, a
     # skip/re-emit run may intentionally carry no inline rows. Do not replace
-    # that complete corpus with an empty mismatch-only projection; the binding
-    # generator that runs next will either rebind the unchanged chunks or fail
-    # if the refreshed report no longer reconciles.
+    # that complete corpus with an empty mismatch-only projection. The binding
+    # generator that runs next permits an idempotent index only and fails if a
+    # changed report lacks producer-refreshed chunks.
     if has_versioned_chunks(suite):
         return f"preserve {suite}: versioned chunks (no full case rows in this run)"
 

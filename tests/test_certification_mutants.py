@@ -9,8 +9,17 @@ gains a rule — a rule without a mutant here is not yet a rule.
 import importlib.util
 import json
 from pathlib import Path
+import shutil
 
-from axiom_oracles.evidence import validate_suite_evidence
+import pytest
+
+from axiom_oracles.evidence import (
+    build_chunk_index,
+    report_identity,
+    sha256_path,
+    strict_json_loads,
+    validate_suite_evidence,
+)
 
 REPO = Path(__file__).resolve().parent.parent
 EVIDENCE_FIXTURES = REPO / "tests" / "fixtures" / "evidence"
@@ -67,6 +76,78 @@ def test_missing_or_malformed_report_surfaces_a_leg_defect():
             assert any(marker in defect for defect in defects), defects
     finally:
         malformed_path.unlink()
+
+
+def test_malformed_nested_report_shapes_surface_leg_defects():
+    certify = _load("certify")
+    mutant_path = REPO / "dashboard/public/data/zz-test-malformed-shapes.json"
+    base_summary = {
+        "comparison_count": 0,
+        "match_count": 0,
+        "mismatch_count": 0,
+    }
+    mutants = (
+        (
+            {"suite": []},
+            "report suite must be a non-empty, safe path component",
+        ),
+        ({"summary": []}, "report summary must be an object"),
+        (
+            {"summary": {**base_summary, "errors_by_engine": []}},
+            "errors_by_engine must be an object",
+        ),
+        ({"summary": base_summary, "errors": 1}, "errors must be an array"),
+        (
+            {"summary": {**base_summary, "weighted": []}},
+            "weighted must be an object",
+        ),
+        (
+            {"summary": {**base_summary, "dispositioned": []}},
+            "dispositioned must be an object",
+        ),
+        (
+            {
+                "summary": {
+                    **base_summary,
+                    "dispositioned": {"counts": []},
+                }
+            },
+            "dispositioned.counts must be an object",
+        ),
+        (
+            {
+                "summary": {
+                    **base_summary,
+                    "dispositioned": {"dispositions_file": {"invalid": True}},
+                }
+            },
+            "dispositions_file must be a repository-relative string",
+        ),
+        ({"summary": base_summary, "cases": {}}, "report cases must be an array"),
+        ({"summary": base_summary, "mismatches": 1}, "mismatches must be an array"),
+    )
+    try:
+        for updates, marker in mutants:
+            report = {
+                "suite": "victim",
+                "case_count": 0,
+                "summary": base_summary,
+                "cases": [],
+                **updates,
+            }
+            mutant_path.write_text(json.dumps(report))
+            leg, _evidence, defects = certify._suite_verdict(
+                {
+                    "suite": "victim",
+                    "oracle_type": "reference",
+                    "oracle": "synthetic",
+                    "report": mutant_path.relative_to(REPO).as_posix(),
+                }
+            )
+            assert leg["clean"] is False
+            assert any(marker in defect for defect in defects), (marker, defects)
+    finally:
+        mutant_path.unlink()
 
 
 def test_mislabeled_report_is_a_defect():
@@ -657,6 +738,53 @@ def test_partial_verdict_cannot_fall_back_to_cardinality():
     assert any("do not support" in defect for defect in evidence.defects)
 
 
+def test_nonstandard_nonfinite_json_is_malformed_evidence():
+    evidence = _evidence_fixture("nonfinite_row")
+    assert evidence.binding == "bound"
+    assert evidence.reconciliation == "none"
+    assert any(
+        "not valid JSON" in defect and "NaN" in defect
+        for defect in evidence.content_defects
+    )
+
+
+def test_compact_concept_and_input_names_must_be_strings(tmp_path):
+    fixture = tmp_path / "invalid-nested-name"
+    shutil.copytree(EVIDENCE_FIXTURES / "full_bound", fixture)
+    report_path = fixture / "dashboard" / "public" / "data" / "report.json"
+    suite_dir = (
+        fixture
+        / "dashboard"
+        / "public"
+        / "data"
+        / "cases"
+        / "full-bound"
+    )
+    chunk_path = suite_dir / "chunk-0.json"
+    index_path = suite_dir / "index.json"
+    chunk = json.loads(chunk_path.read_text())
+    chunk[0]["v"][0]["c"] = []
+    chunk_path.write_text(json.dumps(chunk, separators=(",", ":")))
+    index = json.loads(index_path.read_text())
+    index["report_path"], index["report_sha256"] = report_identity(report_path)
+    index["chunks"][0]["sha256"] = sha256_path(chunk_path)
+    index_path.write_text(json.dumps(index, indent=2) + "\n")
+
+    evidence = validate_suite_evidence(report_path)
+    assert evidence.binding == "bound"
+    assert evidence.valid is False
+    assert any(
+        ".c must be a non-empty string" in defect
+        for defect in evidence.content_defects
+    )
+
+
+def test_json_parser_rejects_constants_and_overflowed_floats():
+    for raw in ('{"value": NaN}', '{"value": 1e999}'):
+        with pytest.raises(ValueError):
+            strict_json_loads(raw)
+
+
 def test_index_report_sha_must_match_exact_report_bytes():
     evidence = _evidence_fixture("stale_report_sha")
     assert evidence.content_valid is True
@@ -665,6 +793,31 @@ def test_index_report_sha_must_match_exact_report_bytes():
         "report_sha256" in defect and "does not match" in defect
         for defect in evidence.binding_defects
     )
+
+
+def test_generator_refuses_to_rebind_changed_versioned_evidence(tmp_path):
+    fixture = tmp_path / "cardinality-bound"
+    shutil.copytree(EVIDENCE_FIXTURES / "cardinality_bound", fixture)
+    report_path = fixture / "dashboard" / "public" / "data" / "report.json"
+    index_path = (
+        fixture
+        / "dashboard"
+        / "public"
+        / "data"
+        / "cases"
+        / "cardinality-bound"
+        / "index.json"
+    )
+    index_path.write_text(json.dumps(build_chunk_index(report_path), indent=2) + "\n")
+    assert validate_suite_evidence(report_path).valid is True
+
+    report = json.loads(report_path.read_text())
+    report["provenance"] = {"mutant": "new report, old chunks"}
+    report_path.write_text(json.dumps(report, indent=2) + "\n")
+
+    generator = _load("generate_chunk_indexes")
+    with pytest.raises(ValueError, match="refusing to rebind"):
+        generator.generate(report_path, check=False, strip_inline=False)
 
 
 def test_census_report_path_and_sha_must_match_the_registry():

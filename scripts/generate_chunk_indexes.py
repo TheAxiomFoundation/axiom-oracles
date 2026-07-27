@@ -12,6 +12,11 @@ The default set is the two chunk-backed legs currently named by
 ``cases`` only when every inline case ID is already present in the chunks.
 Strict evidence validation then treats chunks as the sole case corpus and can
 enforce global ID uniqueness without silently deduplicating two sources.
+
+After migration, the execution producer owns identity changes: this generic
+generator permits only an idempotent v1 write. It refuses to bind changed
+report or chunk bytes because summary reconciliation cannot prove that a
+replacement chunk corpus came from the same execution.
 """
 
 from __future__ import annotations
@@ -27,6 +32,7 @@ if str(REPO_ROOT) not in sys.path:
 
 from axiom_oracles.evidence import (  # noqa: E402
     build_chunk_index,
+    strict_json_loads,
     validate_suite_evidence,
 )
 
@@ -49,7 +55,7 @@ def _case_id(row: object, key: str) -> str | None:
 def strip_inline_mirrors(report_path: Path) -> bool:
     """Remove inline rows only when chunks already carry every one of them."""
 
-    report = json.loads(report_path.read_text())
+    report = strict_json_loads(report_path.read_text())
     if not isinstance(report, dict):
         raise ValueError(f"{report_path}: report must be an object")
     suite = report.get("suite")
@@ -68,7 +74,7 @@ def strip_inline_mirrors(report_path: Path) -> bool:
     chunk_count = 0
     chunk_dir = report_path.parent / "cases" / suite
     for chunk_path in sorted(chunk_dir.glob("chunk-*.json")):
-        payload = json.loads(chunk_path.read_text())
+        payload = strict_json_loads(chunk_path.read_text())
         if not isinstance(payload, list):
             raise ValueError(f"{chunk_path}: expected a compact case array")
         for row in payload:
@@ -120,6 +126,43 @@ def _render(payload: dict) -> str:
     return json.dumps(payload, indent=2) + "\n"
 
 
+def _refuse_implicit_versioned_rebind(
+    index_path: Path,
+    candidate: dict,
+    *,
+    migration_verified: bool,
+) -> None:
+    """Keep the generic generator from blessing unproven replacement evidence.
+
+    Once an index is versioned, only the producer that still holds the full
+    execution case corpus may change its report or chunk identities. The
+    generator can create an initial v1 index from legacy evidence and can
+    repeat an idempotent write, but it cannot prove that changed chunks belong
+    to a changed aggregate report after inline mirrors have been removed.
+    """
+
+    if not index_path.is_file():
+        return
+    existing = strict_json_loads(index_path.read_text())
+    if (
+        not isinstance(existing, dict)
+        or existing.get("schema_version") != candidate["schema_version"]
+        or migration_verified
+    ):
+        return
+    identity_changed = (
+        existing.get("report_path") != candidate["report_path"]
+        or existing.get("report_sha256") != candidate["report_sha256"]
+        or existing.get("chunks") != candidate["chunks"]
+    )
+    if identity_changed:
+        raise ValueError(
+            f"{index_path}: refusing to rebind an existing versioned corpus "
+            "to changed report/chunk identities; refresh chunks from the "
+            "producer's full case corpus"
+        )
+
+
 def generate(
     report_path: Path,
     *,
@@ -136,6 +179,11 @@ def generate(
     candidate = build_chunk_index(report_path)
     suite = candidate["suite"]
     index_path = report_path.parent / "cases" / suite / "index.json"
+    _refuse_implicit_versioned_rebind(
+        index_path,
+        candidate,
+        migration_verified=stripped,
+    )
     expected = _render(candidate)
     if check:
         actual = index_path.read_text() if index_path.is_file() else None

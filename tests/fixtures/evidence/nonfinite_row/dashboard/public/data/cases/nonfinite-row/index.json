@@ -1,0 +1,15 @@
+{
+  "schema_version": "axiom_oracles.chunk_index.v1",
+  "report_path": "tests/fixtures/evidence/nonfinite_row/dashboard/public/data/report.json",
+  "report_sha256": "c76e93fe3af7b3c150c5a37c1ebe1b5f22c74aaa9c11a210d81808230402cc51",
+  "suite": "nonfinite-row",
+  "count": 0,
+  "chunk_count": 1,
+  "chunks": [
+    {
+      "name": "chunk-0.json",
+      "sha256": "e76a020e0756dab956ba51ed814ce56bd9b6afd9e86413faad25a46d0a75023e",
+      "cases": 0
+    }
+  ]
+}

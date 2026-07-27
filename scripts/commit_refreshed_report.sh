@@ -95,10 +95,11 @@ regenerate_derived() {
   # dispositions schema problem (nothing was written) — not derivation lag —
   # so under `set -e` the refresh aborts loudly with nothing pushed.
   "$PYTHON" scripts/apply_dispositions.py
-  # Certified per-case chunks must be rebound after dispositions or a report
-  # refresh changes the exact report bytes. The generator also reconciles the
-  # chunks before it will write an index, so stale/foreign chunks abort rather
-  # than inheriting a new report identity.
+  # Certified per-case chunks are refreshed and bound by run_comparison while
+  # it still holds the full case corpus. Here the generator validates that
+  # identity (or performs an initial legacy migration); it refuses to rebind
+  # changed report/chunk identities, so stale/foreign chunks cannot inherit a
+  # new report.
   "$PYTHON" scripts/generate_chunk_indexes.py
   # Freshness register. Write mode exits 1 when a registry config has a schema
   # problem but STILL writes freshness.json — that is a content alarm for

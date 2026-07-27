@@ -23,6 +23,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 import hashlib
 import json
+import math
 from pathlib import Path
 import re
 from typing import Literal
@@ -35,6 +36,39 @@ Binding = Literal["bound", "unbound"]
 Reconciliation = Literal["full", "cardinality", "none"]
 
 _SHA256 = re.compile(r"^[0-9a-f]{64}$")
+
+
+def _reject_json_constant(value: str) -> None:
+    raise ValueError(f"non-standard JSON numeric constant {value!r}")
+
+
+def _finite_json_float(value: str) -> float:
+    parsed = float(value)
+    if not math.isfinite(parsed):
+        raise ValueError(f"non-finite JSON number {value!r}")
+    return parsed
+
+
+def strict_json_loads(raw: str | bytes) -> object:
+    """Parse standards-compliant JSON and reject every non-finite number."""
+
+    return json.loads(
+        raw,
+        parse_constant=_reject_json_constant,
+        parse_float=_finite_json_float,
+    )
+
+
+def is_safe_suite_name(value: object) -> bool:
+    """Whether ``value`` is one non-traversing case-directory component."""
+
+    return (
+        isinstance(value, str)
+        and bool(value)
+        and value not in {".", ".."}
+        and Path(value).name == value
+        and "\\" not in value
+    )
 
 
 @dataclass(frozen=True)
@@ -120,7 +154,15 @@ def report_identity(report_path: str | Path) -> tuple[str, str | None]:
     # Synthetic fixtures outside the checkout still need an unambiguous exact
     # identity. Production indexes are always repository-relative.
     display = _display_path(path)
-    return display, sha256_path(path) if path.is_file() else None
+    if not path.is_file():
+        digest = None
+    else:
+        try:
+            digest = sha256_path(path)
+        except OSError:
+            # The caller's parse/read path records the actionable defect.
+            digest = None
+    return display, digest
 
 
 def _defect(suite: str | None, message: str) -> str:
@@ -217,11 +259,12 @@ def _record_list(
             )
             continue
         name_key = required_keys[0]
-        if record.get(name_key) in (None, ""):
+        name = record.get(name_key)
+        if not isinstance(name, str) or not name:
             defects.append(
                 _defect(
                     suite,
-                    f"{record_location}.{name_key} must be non-empty",
+                    f"{record_location}.{name_key} must be a non-empty string",
                 )
             )
             continue
@@ -358,11 +401,20 @@ def _chunk_rows(
     defects: list[str],
     suite: str | None,
 ) -> tuple[list[object], EvidenceChunk]:
-    raw = path.read_bytes()
+    try:
+        raw = path.read_bytes()
+    except OSError as exc:
+        defects.append(
+            _defect(
+                suite,
+                f"{path.name} cannot be read ({exc.strerror or type(exc).__name__})",
+            )
+        )
+        return [], EvidenceChunk(path.name, "", 0)
     digest = hashlib.sha256(raw).hexdigest()
     try:
-        payload = json.loads(raw)
-    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        payload = strict_json_loads(raw)
+    except (UnicodeDecodeError, json.JSONDecodeError, ValueError) as exc:
         defects.append(
             _defect(suite, f"{path.name} is not valid JSON ({exc})")
         )
@@ -400,8 +452,8 @@ def _validate_chunk_index(
             )
         ]
     try:
-        payload = json.loads(index_path.read_text())
-    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
+        payload = strict_json_loads(index_path.read_text())
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError, ValueError) as exc:
         return "unbound", [
             _defect(suite, f"chunk index is not valid JSON ({exc})")
         ]
@@ -519,22 +571,42 @@ def _validate_chunk_index(
             )
 
     chunk_count = payload.get("chunk_count")
-    if chunk_count is not None and chunk_count != len(chunks):
-        defects.append(
-            _defect(
-                suite,
-                f"chunk index chunk_count {chunk_count!r} != {len(chunks)}",
+    if chunk_count is not None:
+        if (
+            isinstance(chunk_count, bool)
+            or not isinstance(chunk_count, int)
+            or chunk_count < 0
+        ):
+            defects.append(
+                _defect(
+                    suite,
+                    "chunk index chunk_count is not a non-negative integer",
+                )
             )
-        )
+        elif chunk_count != len(chunks):
+            defects.append(
+                _defect(
+                    suite,
+                    f"chunk index chunk_count {chunk_count!r} != {len(chunks)}",
+                )
+            )
     count = payload.get("count")
     actual_count = sum(chunk.cases for chunk in chunks)
-    if count is not None and count != actual_count:
-        defects.append(
-            _defect(
-                suite,
-                f"chunk index count {count!r} != {actual_count}",
+    if count is not None:
+        if isinstance(count, bool) or not isinstance(count, int) or count < 0:
+            defects.append(
+                _defect(
+                    suite,
+                    "chunk index count is not a non-negative integer",
+                )
             )
-        )
+        elif count != actual_count:
+            defects.append(
+                _defect(
+                    suite,
+                    f"chunk index count {count!r} != {actual_count}",
+                )
+            )
     return ("unbound", defects) if defects else ("bound", [])
 
 
@@ -555,10 +627,18 @@ def validate_chunk_binding(
     identity, digest = report_identity(path)
     if suite is None and path.is_file():
         try:
-            payload = json.loads(path.read_text())
-            suite = str(payload.get("suite")) if isinstance(payload, dict) else None
-        except (OSError, UnicodeDecodeError, json.JSONDecodeError):
+            payload = strict_json_loads(path.read_text())
+            suite = payload.get("suite") if isinstance(payload, dict) else None
+        except (OSError, UnicodeDecodeError, json.JSONDecodeError, ValueError):
             suite = None
+    if not is_safe_suite_name(suite):
+        return "unbound", (
+            _defect(
+                suite if isinstance(suite, str) else None,
+                "report suite must be a non-empty, safe path component; "
+                "report/chunk evidence binding is unbound",
+            ),
+        )
     index_path = path.parent / "cases" / str(suite) / "index.json"
     binding, defects = _validate_chunk_index(
         index_path=index_path,
@@ -582,8 +662,8 @@ def validate_suite_evidence(report_path: str | Path) -> EvidenceReport:
         content_defects.append(_defect(None, f"report {identity!r} does not exist"))
     else:
         try:
-            payload = json.loads(path.read_text())
-        except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
+            payload = strict_json_loads(path.read_text())
+        except (OSError, UnicodeDecodeError, json.JSONDecodeError, ValueError) as exc:
             content_defects.append(
                 _defect(None, f"report {identity!r} is not valid JSON ({exc})")
             )
@@ -593,13 +673,7 @@ def validate_suite_evidence(report_path: str | Path) -> EvidenceReport:
             else:
                 report = payload
                 raw_suite = report.get("suite")
-                if (
-                    not isinstance(raw_suite, str)
-                    or not raw_suite
-                    or raw_suite in {".", ".."}
-                    or Path(raw_suite).name != raw_suite
-                    or "\\" in raw_suite
-                ):
+                if not is_safe_suite_name(raw_suite):
                     content_defects.append(
                         _defect(
                             None,
@@ -806,8 +880,8 @@ def build_chunk_index(report_path: str | Path) -> dict:
     legacy: dict = {}
     if index_path.is_file():
         try:
-            payload = json.loads(index_path.read_text())
-        except (OSError, UnicodeDecodeError, json.JSONDecodeError):
+            payload = strict_json_loads(index_path.read_text())
+        except (OSError, UnicodeDecodeError, json.JSONDecodeError, ValueError):
             payload = {}
         if isinstance(payload, dict):
             legacy = {
