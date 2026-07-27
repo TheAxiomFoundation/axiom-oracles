@@ -1,5 +1,109 @@
 {
   "case_count": 6,
+  "cases": [
+    {
+      "axiom": 932.956240234375,
+      "axiom_vs_policyengine": {
+        "difference": 2.441406195430318e-06,
+        "match": true
+      },
+      "axiom_vs_taxsim": {
+        "difference": -132.32375976562503,
+        "match": false
+      },
+      "case_id": "ky-single-30000",
+      "concept": "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits#ky_pit_2026_krs_141_020_schedule_before_credits",
+      "employment_income": 30000.0,
+      "filing_status": "single",
+      "policyengine": 932.9562377929688,
+      "taxsim": 1065.28
+    },
+    {
+      "axiom": 1982.956171875,
+      "axiom_vs_policyengine": {
+        "difference": -4.882812390860636e-06,
+        "match": true
+      },
+      "axiom_vs_taxsim": {
+        "difference": -282.3238281250001,
+        "match": false
+      },
+      "case_id": "ky-single-60000",
+      "concept": "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits#ky_pit_2026_krs_141_020_schedule_before_credits",
+      "employment_income": 60000.0,
+      "filing_status": "single",
+      "policyengine": 1982.9561767578125,
+      "taxsim": 2265.28
+    },
+    {
+      "axiom": 5132.956171875,
+      "axiom_vs_policyengine": {
+        "difference": 0.00011718750010913936,
+        "match": true
+      },
+      "axiom_vs_taxsim": {
+        "difference": -732.3238281249996,
+        "match": false
+      },
+      "case_id": "ky-single-150000",
+      "concept": "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits#ky_pit_2026_krs_141_020_schedule_before_credits",
+      "employment_income": 150000.0,
+      "filing_status": "single",
+      "policyengine": 5132.9560546875,
+      "taxsim": 5865.28
+    },
+    {
+      "axiom": 1982.956171875,
+      "axiom_vs_policyengine": {
+        "difference": -4.882812390860636e-06,
+        "match": true
+      },
+      "axiom_vs_taxsim": {
+        "difference": -282.3238281250001,
+        "match": false
+      },
+      "case_id": "ky-married-60000",
+      "concept": "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits#ky_pit_2026_krs_141_020_schedule_before_credits",
+      "employment_income": 60000.0,
+      "filing_status": "married",
+      "policyengine": 1982.9561767578125,
+      "taxsim": 2265.28
+    },
+    {
+      "axiom": 4082.956171875,
+      "axiom_vs_policyengine": {
+        "difference": -0.00012695312489086064,
+        "match": true
+      },
+      "axiom_vs_taxsim": {
+        "difference": -582.3238281249996,
+        "match": false
+      },
+      "case_id": "ky-married-120000",
+      "concept": "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits#ky_pit_2026_krs_141_020_schedule_before_credits",
+      "employment_income": 120000.0,
+      "filing_status": "married",
+      "policyengine": 4082.956298828125,
+      "taxsim": 4665.28
+    },
+    {
+      "axiom": 10382.95671875,
+      "axiom_vs_policyengine": {
+        "difference": -0.0003125000002910383,
+        "match": true
+      },
+      "axiom_vs_taxsim": {
+        "difference": -1482.323281250001,
+        "match": false
+      },
+      "case_id": "ky-married-300000",
+      "concept": "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits#ky_pit_2026_krs_141_020_schedule_before_credits",
+      "employment_income": 300000.0,
+      "filing_status": "married",
+      "policyengine": 10382.95703125,
+      "taxsim": 11865.28
+    }
+  ],
   "concept": "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits#ky_pit_2026_krs_141_020_schedule_before_credits",
   "engines": {
     "axiom": "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits",
@@ -118,15 +222,16 @@
   ],
   "population": "case-grid",
   "provenance": {
-    "generated_at": "2026-07-26T16:37:52Z",
-    "generated_by": "scripts/generate_state_income_tax_liability.py::ky-income-tax-liability",
+    "engine": {},
+    "generated_at": "2026-07-27T04:13:58Z",
+    "generated_by": "scripts/run_comparison.py::ky-income-tax-liability",
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": "4d10a73d4ad2f8b812549187766b3dc76d638f80"
+        "sha": "cd11c24d6536f0f8aa866650ea0987117df72cbc"
       }
     ],
-    "run_kind": "manual",
+    "run_kind": "affected-rerun",
     "schema": "axiom_oracles.provenance.v1"
   },
   "schema_version": "axiom.comparison_report.v2.1",
@@ -161,109 +266,5 @@
     "absolute": 0.01,
     "relative": 1e-07
   },
-  "validation_year": 2026,
-  "cases": [
-    {
-      "axiom": 932.956240234375,
-      "axiom_vs_policyengine": {
-        "difference": 2.441406195430318e-06,
-        "match": true
-      },
-      "axiom_vs_taxsim": {
-        "difference": -132.32375976562503,
-        "match": false
-      },
-      "case_id": "ky-single-30000",
-      "concept": "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits#ky_pit_2026_krs_141_020_schedule_before_credits",
-      "employment_income": 30000.0,
-      "filing_status": "single",
-      "policyengine": 932.9562377929688,
-      "taxsim": 1065.28
-    },
-    {
-      "axiom": 1982.956171875,
-      "axiom_vs_policyengine": {
-        "difference": -4.882812390860636e-06,
-        "match": true
-      },
-      "axiom_vs_taxsim": {
-        "difference": -282.3238281250001,
-        "match": false
-      },
-      "case_id": "ky-single-60000",
-      "concept": "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits#ky_pit_2026_krs_141_020_schedule_before_credits",
-      "employment_income": 60000.0,
-      "filing_status": "single",
-      "policyengine": 1982.9561767578125,
-      "taxsim": 2265.28
-    },
-    {
-      "axiom": 5132.956171875,
-      "axiom_vs_policyengine": {
-        "difference": 0.00011718750010913936,
-        "match": true
-      },
-      "axiom_vs_taxsim": {
-        "difference": -732.3238281249996,
-        "match": false
-      },
-      "case_id": "ky-single-150000",
-      "concept": "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits#ky_pit_2026_krs_141_020_schedule_before_credits",
-      "employment_income": 150000.0,
-      "filing_status": "single",
-      "policyengine": 5132.9560546875,
-      "taxsim": 5865.28
-    },
-    {
-      "axiom": 1982.956171875,
-      "axiom_vs_policyengine": {
-        "difference": -4.882812390860636e-06,
-        "match": true
-      },
-      "axiom_vs_taxsim": {
-        "difference": -282.3238281250001,
-        "match": false
-      },
-      "case_id": "ky-married-60000",
-      "concept": "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits#ky_pit_2026_krs_141_020_schedule_before_credits",
-      "employment_income": 60000.0,
-      "filing_status": "married",
-      "policyengine": 1982.9561767578125,
-      "taxsim": 2265.28
-    },
-    {
-      "axiom": 4082.956171875,
-      "axiom_vs_policyengine": {
-        "difference": -0.00012695312489086064,
-        "match": true
-      },
-      "axiom_vs_taxsim": {
-        "difference": -582.3238281249996,
-        "match": false
-      },
-      "case_id": "ky-married-120000",
-      "concept": "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits#ky_pit_2026_krs_141_020_schedule_before_credits",
-      "employment_income": 120000.0,
-      "filing_status": "married",
-      "policyengine": 4082.956298828125,
-      "taxsim": 4665.28
-    },
-    {
-      "axiom": 10382.95671875,
-      "axiom_vs_policyengine": {
-        "difference": -0.0003125000002910383,
-        "match": true
-      },
-      "axiom_vs_taxsim": {
-        "difference": -1482.323281250001,
-        "match": false
-      },
-      "case_id": "ky-married-300000",
-      "concept": "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits#ky_pit_2026_krs_141_020_schedule_before_credits",
-      "employment_income": 300000.0,
-      "filing_status": "married",
-      "policyengine": 10382.95703125,
-      "taxsim": 11865.28
-    }
-  ]
+  "validation_year": 2026
 }
