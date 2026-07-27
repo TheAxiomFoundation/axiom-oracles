@@ -443,3 +443,45 @@ residual), #229 (small-suite grounding).
 ### Next
 
 - None.
+
+---
+
+## SNAP residual integration — repair round 2 — 2026-07-27
+
+### State
+
+- Branch: `fed-parity/snap-residual-cleanup`; starting HEAD
+  `6846f433dbf126249997c92cea7a3ac3c153fe13`.
+- Local `origin/main`: `9b889a27432e84804938bd3b374b4f5f7466792e`.
+- Audit posture: defensive correctness and completeness. No prior disposition,
+  engine label, generated annotation, or count will be retained unless it is
+  reproduced on PolicyEngine-US 1.767.3 / PolicyEngine Core 3.30.3.
+- Review read in full:
+  `.git/review-worktrees/snap-residual-cleanup-6846f433/REVIEW-REPORT.md`
+  at review commit `d4460852f3f5791f851175a393f4feed44159f14`.
+- Required outputs: genuinely pinned five-suite regeneration; fresh evidence
+  for #9157, #397, #9158/#399; exact served/canonical annotation parity;
+  regenerated freshness after merging main; full generated-chain parity; and
+  an untracked final worker report.
+
+### Done
+
+- Confirmed the worktree was clean at the requested starting HEAD.
+- Confirmed the reviewer found committed config resolution falling back to
+  PolicyEngine-US 1.752.2 / Core 3.28.0 while report labels claimed 1.767.3.
+- Confirmed the reviewer found 266 stale served annotations, including all 138
+  returned categorical rows, plus three missing and two obsolete served rows.
+- Located the cached PolicyEngine-US 1.767.3 wheel recorded by the Tennessee
+  worker at
+  `/Users/maxghenis/.cache/uv/wheels-v6/pypi/policyengine-us/1.767.3-py3-none-any`.
+- Confirmed local `origin/main` is the same `9b889a27` target used by review.
+
+### Next
+
+1. Merge local `origin/main`, resolve by regenerating `freshness.json`, and
+   commit the integration step.
+2. Trace the runner's oracle resolution and compact case-data generator; add
+   reproducible 1.767.3/3.30.3 pins and a served/canonical parity check.
+3. Regenerate all five suites and re-run every candidate evidence test.
+4. Regenerate all derived and served artifacts, run the full `--check` chain,
+   reconcile baseline/current counts, and write the untracked final report.
