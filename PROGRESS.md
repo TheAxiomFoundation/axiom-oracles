@@ -678,11 +678,36 @@ residual), #229 (small-suite grounding).
   used the required nested `rulespec-us/rulespec-us` layout. The generic
   axiom-encode venv also lacked `receipt`; the complete venv at commit
   `dc8ffaa8` ran the final check.
+- Completed containment at the full PR boundary. The two-commit diff from
+  `98dfa9e8` to `1c912ab1` modifies only
+  `axiom_oracles/bridges/mappings/us.yaml` (+131/-0); all fourteen added rows
+  are US/tax entries, with no schema, loader, classifier, other mapping file,
+  or other-jurisdiction row changed. Both `git diff --check` and the focused
+  packaged-registry test pass.
+- Parsed the complete YAML with a duplicate-key-rejecting loader: 4,399 rows
+  comprise 4,398 exact `legal_id` rows and one legitimate
+  `legal_id_prefix` (`us-ny:regulations/18-nycrr/387/14/a/1#`), with zero
+  missing/double identities and zero duplicate legal IDs. The target slice is
+  exactly five `parameter_value` plus nine `not_comparable` rows.
+- Reproduced the requested no-stash NY/OH regression protocol in the clean
+  detached helper at `origin/main` `98dfa9e8`. The PR overlay returned 2 failed
+  / 7 passed; after copying it aside and installing the exact HEAD file with
+  `git show HEAD:axiom_oracles/bridges/mappings/us.yaml > ...`, the same command
+  returned the same 2 failed / 7 passed and identical messages. The failures
+  are NY's 3-versus-38 output set and OH's four missing source-hold outputs.
+  Thus the requested four failures are four occurrences over the paired runs,
+  not four distinct node IDs.
+- Copied the PR mapping back and byte-verified it, then restored the helper's
+  exact HEAD mapping and removed temporary copies. The helper finished clean;
+  no stash, branch, ref, remote, GitHub, or primary-worktree write occurred.
+- The first strict-YAML attempt through `uv run --frozen` failed because the
+  sandbox denied uv cache initialization under
+  `/Users/maxghenis/.cache/uv/sdists-v9/.git`. The existing project interpreter
+  completed the same check successfully.
 
 ## Next
 
 1. Establish schema capability and PolicyEngine 1.767.3 evidence.
 2. Audit all fourteen classifications and comparable metadata.
-3. Complete containment, YAML-integrity, and clean-main regression checks.
-4. Remove local graph scratch data and commit the final self-contained verdict
+3. Remove local graph scratch data and commit the final self-contained verdict
    to `REVIEW-REPORT.md`.
