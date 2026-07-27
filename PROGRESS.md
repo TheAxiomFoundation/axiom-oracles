@@ -9,6 +9,7 @@
   `rulespec-us` `origin/main` and grounded in 7 CFR 246.7(c)-(e).
 - Verification discipline: audit every statute/regulation concept ID, prove zero
   numeric changes byte-for-byte, and run the test suite exactly once.
+- Implementation: applied and locally verified; not yet committed.
 - Test suite: not run.
 
 ## Done
@@ -34,12 +35,27 @@
   comparison, runner, and report flows. The graph reports broad critical reach
   for changing `ProgramMapping` itself; this task changes one data row only, so
   the contained risk is label selection plus three engine target lookups.
+- Relabeled `Concepts.WIC_ELIGIBLE` and the mapping key to
+  `us:programs/wic#eligible`.
+- Repointed `targets.axiom` to the exact current RuleSpec composition output;
+  PolicyEngine and ACCESS NYC targets are byte-identical to the baseline.
+- Migrated the WIC row in `dashboard/public/data/programs.json`. An isolated
+  run of `sync_programs.py` against the sole `rulespec-us` WIC module reproduced
+  the committed row exactly: encoded, with one federal coverage path.
+- Added a focused regression test pinning the public label and all three engine
+  addresses. Targeted result: 1 passed, 46 deselected.
+- Completed two independent no-number checks:
+  - exact declared transforms of the three production files reproduced every
+    working-tree byte (sha256 `728d74d…`, `7b143530…`, `d7ba510c…`);
+  - all non-WIC dashboard rows and all non-address WIC fields are equal.
+- Confirmed byte-for-byte that no comparison report, case chunk, disposition,
+  or conformance artifact differs from the pre-implementation commit.
+- Confirmed the dashboard overview remains current (215 reports); it does not
+  inventory `programs.json`.
 
 ## Next
 
-1. Implement the WIC label/address split and migrate its dashboard metadata.
-2. Add a focused regression test for the public ID and Axiom target.
-3. Prove the implementation is exactly the declared byte transformation and
-   that every comparison/conformance numeric artifact is byte-identical.
-4. Run the full pytest suite once; do not run or regenerate comparison suites.
-5. Write `OUTPUT.md`, push, and open a draft PR referencing #401.
+1. Commit the verified implementation.
+2. Run the full pytest suite once; do not run or regenerate comparison suites.
+3. Record the frozen result and write `OUTPUT.md`.
+4. Push and open a draft PR referencing #401.
