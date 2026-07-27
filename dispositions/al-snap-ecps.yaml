@@ -28,7 +28,6 @@ entries:
   kind: eligibility_right_only
   case_selector:
     case_ids:
-    - ecps-36459
     - ecps-36948
     - ecps-37102
     - ecps-37190
@@ -51,7 +50,6 @@ entries:
   kind: amount_difference
   case_selector:
     case_ids:
-    - ecps-36459
     - ecps-37102
     - ecps-37190
     - ecps-37546
@@ -67,4 +65,42 @@ entries:
       fails only the net-income test, which the state's BBCE waives. Axiom-
       side modeling boundary, tracked for encoding in rulespec-us#1098.
   linked_issue: https://github.com/TheAxiomFoundation/rulespec-us/issues/1098
+  expires_on_source_change: true
+- id: pe-lone-minor-child-earnings-benefit
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_selector:
+    case_ids:
+    - ecps-36459
+    - ecps-36559
+    - ecps-37623
+    - ecps-37651
+  kind: amount_difference
+  disposition: upstream_engine_gap
+  linked_issue: https://github.com/PolicyEngine/policyengine-us/issues/9157
+  evidence: &pe_lone_minor_evidence
+    upstream_url: https://github.com/PolicyEngine/policyengine-us/issues/9157
+    mechanism: >-
+      PolicyEngine excludes all earnings of an imputed K-12 member age 17
+      or younger without requiring the co-resident-parent or parental-control
+      condition in 7 CFR 273.9(c)(7). The sole minor is a valid household
+      under 273.1(a)(1), but wages count under 273.9(b)(1)(i), so Axiom
+      correctly fails the income gate and returns zero benefit.
+    sources:
+    - dashboard/public/data/axiom-policyengine-al-snap-ecps.json
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.1(a)(1)
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(b)(1)(i)
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(c)(7)
+  expires_on_source_change: true
+- id: pe-lone-minor-child-earnings-eligibility
+  concept: us:statutes/7/2014/o#snap_eligible
+  case_selector:
+    case_ids:
+    - ecps-36459
+    - ecps-36559
+    - ecps-37623
+    - ecps-37651
+  kind: eligibility_right_only
+  disposition: upstream_engine_gap
+  linked_issue: https://github.com/PolicyEngine/policyengine-us/issues/9157
+  evidence: *pe_lone_minor_evidence
   expires_on_source_change: true

@@ -379,6 +379,12 @@ residual), #229 (small-suite grounding).
   SC gained one benefit mismatch (`ecps-29277`); the other state totals are
   unchanged.
 - `apply_dispositions.py --check` passes on the regenerated reports.
+- Applied all 10 staged lone-minor entries: 12 households and 24 mismatch rows
+  remain present and are now linked to PolicyEngine-US issue #9157.
+- Reclassified AL `ecps-36459` from the pre-existing BBCE entries to the
+  evidence-backed lone-minor class; because its two rows were already
+  classified, the teen class reduces unexplained rows by 22.
+- Unexplained rows after the teen class: AL 37, MA 47, NC 82, SC 51, TN 64.
 - The sandbox denied `uv` cache initialization under
   `/Users/maxghenis/.cache/uv`; generation used the exact cached PE-US wheel
   read-only through the same comparison CLI and clean temporary dependency
@@ -386,7 +392,6 @@ residual), #229 (small-suite grounding).
 
 ### Next
 
-- Commit the five-report regeneration as an isolated logical step.
 - Complete the cross-state per-case TANF counterfactual and preserve only
   within-tolerance passes.
 - Apply the surviving teen selectors, remove the 69 categorical-only

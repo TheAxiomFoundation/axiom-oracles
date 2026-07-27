@@ -3626,6 +3626,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -299.66998291015625,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "pe-lone-minor-child-earnings-benefit",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-us/issues/9157"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -3642,6 +3647,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "pe-lone-minor-child-earnings-eligibility",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-us/issues/9157"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -3738,6 +3748,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -299.66998291015625,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "pe-lone-minor-child-earnings-benefit",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-us/issues/9157"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -3754,6 +3769,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "pe-lone-minor-child-earnings-eligibility",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-us/issues/9157"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -4605,15 +4625,15 @@
         "bridge_artifact": 0,
         "explained_residual": 0,
         "unexplained": 0,
-        "upstream_engine_gap": 0
+        "upstream_engine_gap": 4
       },
-      "dispositions_file": null,
+      "dispositions_file": "dispositions/tn-snap-ecps.yaml",
       "expired_entries": [],
-      "explained_rate": 97.617379,
+      "explained_rate": 97.757533,
       "orphaned_entries": [],
       "raw_match_rate": 97.617379,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 68
+      "unexplained_count": 64
     },
     "error_count": 0,
     "errors_by_engine": [],
