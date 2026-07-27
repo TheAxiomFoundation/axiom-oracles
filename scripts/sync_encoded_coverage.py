@@ -121,6 +121,10 @@ STATE_RULES = {
     ],
     "il": [
         (r"^(policies/dhs/csmm/|statutes/320/)", ("state_ssi_supplement", None)),
+        (
+            r"^policies/income_tax/pilot_liability_pipeline\.yaml$",
+            ("state_income_tax", None),
+        ),
     ],
     "ks": [
         (r"^policies/dcf/keesm/", ("tanf", None)),

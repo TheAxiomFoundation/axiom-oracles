@@ -218,7 +218,19 @@
      "component surface only; caller supplies completed Georgia taxable net income",
      "nonrefundable credits, payments, and final Form 500 liability remain out of scope"
     ],
-    "suite": "ga-income-tax-populace"
+   "suite": "ga-income-tax-populace"
+   },
+   {
+    "program": "state_income_tax",
+    "jurisdiction": "IL",
+    "status": "executable",
+    "source": "rulespec-us 453f8fab7c6bd83f0e0efe604377d4ef85b7db72 + pinned Populace campaign projected as il-income-tax-populace over the canonical bounded TY2026 annual tax before nonrefundable credits",
+    "known_non_tanf_gaps": [
+     "bounded before-nonrefundable-credit surface only; caller supplies completed Illinois taxable income and completed investment-credit recapture",
+     "taxable-income construction, credit computation, payments, and final annual liability remain out of scope",
+     "the pinned Populace exercises zero recapture for all 2,332 routed Illinois tax units; the positive-recapture branch is covered by the canonical RuleSpec fixture, not population evidence"
+    ],
+    "suite": "il-income-tax-populace"
    },
    {
     "program": "state_income_tax",

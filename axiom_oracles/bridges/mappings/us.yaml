@@ -33475,6 +33475,32 @@ mappings:
     candidate_priority: P4
     rationale: Axiom exposes the complete statutory rate table as one RuleSpec output; PolicyEngine's registry supports scalar scale-cell comparison but has no one-to-one whole-table oracle target.
 
+  # Illinois's bounded TY2026 annual tax before nonrefundable credits.
+  # The canonical module accepts completed Illinois taxable income and
+  # investment-credit recapture boundaries; it does not reconstruct either
+  # upstream chain or claim credits, payments, or final annual liability.
+  - legal_id: us-il:policies/income_tax/pilot_liability_pipeline#il_pit_pilot_taxable_income
+    country: us
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: il_taxable_income
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    rationale: RuleSpec preserves the completed Illinois taxable-income boundary after a nonnegative floor; PolicyEngine exposes the same completed TaxUnit boundary as il_taxable_income.
+
+  - legal_id: us-il:policies/income_tax/pilot_liability_pipeline#il_pit_pilot_income_tax_liability
+    country: us
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: il_income_tax_before_non_refundable_credits
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Both outputs apply the 4.95 percent tax to completed Illinois taxable income and add completed investment-credit recapture before nonrefundable credits; this mapping excludes taxable-income construction, credit computation, payments, and final annual liability.
+
 
 prefixes:
   - legal_id_prefix: us-dc:statutes/4/4-205/49#

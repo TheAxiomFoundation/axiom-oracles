@@ -537,6 +537,15 @@
       "source": "comparisons/il-income-tax-liability.yaml"
     },
     {
+      "suite": "il-income-tax-populace",
+      "name": null,
+      "report": "axiom-policyengine-il-income-tax-populace.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/state-income-tax-populace.yaml"
+    },
+    {
       "suite": "in-income-tax-liability",
       "name": "in-income-tax-liability",
       "report": "axiom-policyengine-taxsim-in-income-tax-liability.json",
