@@ -33620,6 +33620,20 @@ mappings:
     candidate_priority: P4
     rationale: Axiom exposes the complete statutory rate table as one RuleSpec output; PolicyEngine's registry supports scalar scale-cell comparison but has no one-to-one whole-table oracle target.
 
+  # Indiana's bounded TY2026 adjusted-gross-income tax before credits and
+  # county tax. The completed-return AGI remains a caller boundary, so only
+  # the RuleSpec output is mapped directly.
+  - legal_id: us-in:policies/income_tax/pilot_liability_pipeline#in_pit_pilot_income_tax_liability
+    country: us
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: in_agi_tax
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Both outputs apply Indiana's tax-year-2026 2.95 percent state rate to completed Indiana adjusted gross income with a zero floor, before credits and excluding the separate county tax.
+
   # Illinois's bounded TY2026 annual tax before nonrefundable credits.
   # The canonical module accepts completed Illinois taxable income and
   # investment-credit recapture boundaries; it does not reconstruct either

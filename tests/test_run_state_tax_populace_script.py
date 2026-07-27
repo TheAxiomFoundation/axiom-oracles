@@ -312,6 +312,63 @@ def test_illinois_projection_diagnostics_pin_completed_boundaries() -> None:
     }
 
 
+def test_indiana_projection_diagnostics_pin_agi_and_output_branches() -> None:
+    slot = (
+        "us-in:policies/income_tax/pilot_liability_pipeline#input."
+        "in_pit_pilot_indiana_adjusted_gross_income"
+    )
+    routes = (
+        TaxUnitRoute(1, 1, "IN", "18", 1, DISPOSITION_READY),
+        TaxUnitRoute(2, 2, "IN", "18", 1, DISPOSITION_READY),
+        TaxUnitRoute(3, 3, "IN", "18", 1, DISPOSITION_READY),
+        TaxUnitRoute(4, 4, "IN", "18", 1, DISPOSITION_BLOCKED),
+    )
+
+    diagnostics = campaign._projection_branch_diagnostics(
+        {
+            "IN": {
+                slot: {
+                    1: -100.0,
+                    2: 0.0,
+                    3: 10_000.0,
+                    4: 20_000.0,
+                }
+            }
+        },
+        routes,
+        {
+            "IN": {
+                1: 0.0,
+                2: 0.0,
+                3: 295.0,
+                4: 590.0,
+            }
+        },
+    )
+
+    assert diagnostics == {
+        "IN": {
+            "compared_tax_unit_count": 3,
+            "nonpositive_agi_count": 2,
+            "positive_agi_count": 1,
+            "zero_output_count": 2,
+            "positive_output_count": 1,
+        }
+    }
+
+
+def test_indiana_projection_diagnostics_require_exact_target_inventory() -> None:
+    slot = (
+        "us-in:policies/income_tax/pilot_liability_pipeline#input."
+        "in_pit_pilot_indiana_adjusted_gross_income"
+    )
+    with pytest.raises(ValueError, match="target values"):
+        campaign._projection_branch_diagnostics(
+            {"IN": {slot: {1: 100.0}}},
+            (TaxUnitRoute(1, 1, "IN", "18", 1, DISPOSITION_READY),),
+        )
+
+
 @pytest.mark.parametrize(
     ("taxable", "recapture", "message"),
     [

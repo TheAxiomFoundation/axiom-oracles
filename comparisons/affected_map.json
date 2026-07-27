@@ -555,6 +555,15 @@
       "source": "comparisons/in-income-tax-liability.yaml"
     },
     {
+      "suite": "in-income-tax-populace",
+      "name": null,
+      "report": "axiom-policyengine-in-income-tax-populace.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/state-income-tax-populace.yaml"
+    },
+    {
       "suite": "irs-adjustment-parameters",
       "name": null,
       "report": "axiom-policyengine-irs-adjustment-parameters.json",
