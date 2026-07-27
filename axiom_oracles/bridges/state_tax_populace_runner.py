@@ -55,6 +55,25 @@ DC_JOINT_SCHEDULE_BEFORE_CREDITS_TARGET = (
 KS_K40ES_SCHEDULE_BEFORE_CREDITS_REVIEWED_TARGET = (
     "ks_k40es_schedule_before_credits_reviewed"
 )
+IL_INCOME_TAX_BEFORE_NONREFUNDABLE_CREDITS_TARGET = (
+    "il_income_tax_before_non_refundable_credits"
+)
+IL_ANNUAL_BEFORE_CREDIT_PROGRAM = (
+    "us-il:policies/income_tax/pilot_liability_pipeline"
+)
+IL_ANNUAL_BEFORE_CREDIT_OUTPUT = (
+    f"{IL_ANNUAL_BEFORE_CREDIT_PROGRAM}#il_pit_pilot_income_tax_liability"
+)
+IL_REVIEWED_INPUTS = {
+    (
+        f"{IL_ANNUAL_BEFORE_CREDIT_PROGRAM}#input."
+        "il_pit_pilot_state_taxable_income"
+    ): "il_taxable_income",
+    (
+        f"{IL_ANNUAL_BEFORE_CREDIT_PROGRAM}#input."
+        "il_pit_pilot_recapture_of_investment_credit"
+    ): "recapture_of_investment_credit",
+}
 OH_NONBUSINESS_BEFORE_CREDITS_DERIVED_TARGET = (
     "oh_nonbusiness_income_tax_before_non_refundable_credits_derived"
 )
@@ -572,6 +591,8 @@ def calculate_policyengine_targets(
     targets: dict[str, dict[int | str, float]] = {}
     for state in sorted(selected_states):
         jurisdiction = resolved_contract.by_state()[state]
+        if state == "IL":
+            _validate_illinois_runtime_contract(jurisdiction)
         if (
             state == "CA"
             and jurisdiction.policyengine_target
@@ -801,6 +822,58 @@ def calculate_policyengine_targets(
                         "positive K-40ES schedule domain"
                     )
                 reviewed.append(tax)
+            targets[state] = dict(
+                zip(tax_unit_ids, reviewed, strict=True)
+            )
+            continue
+        if state == "IL":
+            _require_policyengine_tax_unit_year_money_variable(
+                sim,
+                state="IL",
+                variable=IL_INCOME_TAX_BEFORE_NONREFUNDABLE_CREDITS_TARGET,
+            )
+            modeled_ids = [
+                _clean_id(value)
+                for value in _array_values(
+                    sim.calculate("tax_unit_id", period=year)
+                )
+            ]
+            values = _array_values(
+                sim.calculate(
+                    IL_INCOME_TAX_BEFORE_NONREFUNDABLE_CREDITS_TARGET,
+                    period=year,
+                )
+            )
+            if (
+                len(modeled_ids) != len(tax_unit_ids)
+                or len(values) != len(tax_unit_ids)
+            ):
+                raise StateTaxPopulationRoutingError(
+                    "IL: PolicyEngine annual-before-credit target returned "
+                    f"{len(modeled_ids)} IDs and {len(values)} values for "
+                    f"{len(tax_unit_ids)} tax units"
+                )
+            _reject_duplicate_ids(tax_unit_ids, "IL source tax_unit_id")
+            _reject_duplicate_ids(
+                modeled_ids, "IL PolicyEngine tax_unit_id"
+            )
+            if modeled_ids != tax_unit_ids:
+                raise StateTaxPopulationRoutingError(
+                    "IL: PolicyEngine tax_unit_id order does not match the "
+                    "certified source tax-unit order"
+                )
+            reviewed = [
+                _finite_number(
+                    value,
+                    label=IL_INCOME_TAX_BEFORE_NONREFUNDABLE_CREDITS_TARGET,
+                )
+                for value in values
+            ]
+            if any(value < 0 for value in reviewed):
+                raise StateTaxPopulationRoutingError(
+                    "IL: il_income_tax_before_non_refundable_credits must be "
+                    "nonnegative"
+                )
             targets[state] = dict(
                 zip(tax_unit_ids, reviewed, strict=True)
             )
@@ -1066,7 +1139,15 @@ def calculate_policyengine_projection_inputs(
     projections: dict[str, dict[str, dict[int | str, float | bool]]] = {}
     for state in sorted(selected_states):
         jurisdiction = resolved_contract.by_state()[state]
-        if state == "NY":
+        if state == "IL":
+            _validate_illinois_runtime_contract(jurisdiction)
+            for variable in IL_REVIEWED_INPUTS.values():
+                _require_policyengine_tax_unit_year_money_variable(
+                    sim,
+                    state="IL",
+                    variable=variable,
+                )
+        if state in {"IL", "NY"}:
             modeled_ids = [
                 _clean_id(value)
                 for value in _array_values(
@@ -1075,15 +1156,16 @@ def calculate_policyengine_projection_inputs(
             ]
             if len(modeled_ids) != len(tax_unit_ids):
                 raise StateTaxPopulationRoutingError(
-                    "NY: PolicyEngine projection identity returned "
+                    f"{state}: PolicyEngine projection identity returned "
                     f"{len(modeled_ids)} IDs for {len(tax_unit_ids)} tax units"
                 )
             _reject_duplicate_ids(
-                modeled_ids, "NY PolicyEngine projection tax_unit_id"
+                modeled_ids,
+                f"{state} PolicyEngine projection tax_unit_id",
             )
             if modeled_ids != tax_unit_ids:
                 raise StateTaxPopulationRoutingError(
-                    "NY: PolicyEngine projection tax_unit_id order does not "
+                    f"{state}: PolicyEngine projection tax_unit_id order does not "
                     "match the certified source tax-unit order"
                 )
         _validate_runtime_relations(
@@ -1359,6 +1441,14 @@ def calculate_policyengine_projection_inputs(
                     projected = [
                         _projection_scalar(value, label=variable) for value in values
                     ]
+                if (
+                    state == "IL"
+                    and variable in IL_REVIEWED_INPUTS.values()
+                    and any(value < 0 for value in projected)
+                ):
+                    raise StateTaxPopulationRoutingError(
+                        f"IL: reviewed boundary {variable!r} must be nonnegative"
+                    )
             state_inputs[slot.slot] = dict(
                 zip(tax_unit_ids, projected, strict=True)
             )
@@ -1981,6 +2071,79 @@ def _finite_number(value: Any, *, label: str) -> float:
             f"{label} returned non-finite value {number!r}"
         )
     return number
+
+
+def _validate_illinois_runtime_contract(jurisdiction: Any) -> None:
+    """Fail closed if the bounded Illinois annual-before-credit contract drifts."""
+
+    if (
+        jurisdiction.policyengine_target
+        != IL_INCOME_TAX_BEFORE_NONREFUNDABLE_CREDITS_TARGET
+    ):
+        raise StateTaxPopulationRoutingError(
+            "IL: reviewed annual-before-credit runner requires the exact "
+            "il_income_tax_before_non_refundable_credits target"
+        )
+    if (
+        jurisdiction.program != IL_ANNUAL_BEFORE_CREDIT_PROGRAM
+        or jurisdiction.output != IL_ANNUAL_BEFORE_CREDIT_OUTPUT
+    ):
+        raise StateTaxPopulationRoutingError(
+            "IL: reviewed annual-before-credit runner requires the exact "
+            "canonical RuleSpec program and output"
+        )
+    actual_inputs = {
+        slot.slot: (
+            slot.policyengine_variable,
+            slot.source_kind,
+            slot.policyengine_relationship,
+        )
+        for slot in jurisdiction.inputs
+    }
+    expected_inputs = {
+        slot: (variable, "pe_upstream_boundary", "upstream")
+        for slot, variable in IL_REVIEWED_INPUTS.items()
+    }
+    if actual_inputs != expected_inputs or jurisdiction.relations:
+        raise StateTaxPopulationRoutingError(
+            "IL: reviewed annual-before-credit runner requires exactly the "
+            "completed taxable-income and investment-credit-recapture "
+            "upstream boundaries and no relations"
+        )
+
+
+def _require_policyengine_tax_unit_year_money_variable(
+    sim: Any,
+    *,
+    state: str,
+    variable: str,
+) -> None:
+    """Require the reviewed PolicyEngine variable's exact accounting schema."""
+
+    try:
+        definition = sim.tax_benefit_system.variables[variable]
+    except (AttributeError, KeyError, TypeError) as exc:
+        raise StateTaxPopulationRoutingError(
+            f"{state}: PolicyEngine variable {variable!r} is missing reviewed "
+            "schema metadata"
+        ) from exc
+    entity = getattr(getattr(definition, "entity", None), "key", None)
+    period = str(getattr(definition, "definition_period", "")).lower()
+    value_type = getattr(definition, "value_type", None)
+    unit = getattr(definition, "unit", None)
+    if (
+        entity != "tax_unit"
+        or period != "year"
+        or value_type is not float
+        or unit != "currency-USD"
+    ):
+        value_type_name = getattr(value_type, "__name__", repr(value_type))
+        raise StateTaxPopulationRoutingError(
+            f"{state}: PolicyEngine variable {variable!r} must use the reviewed "
+            "TaxUnit/year/currency-USD float schema; got "
+            f"entity={entity!r}, period={period!r}, "
+            f"value_type={value_type_name!r}, unit={unit!r}"
+        )
 
 
 def _projection_scalar(value: Any, *, label: str) -> float | bool:

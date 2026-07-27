@@ -272,6 +272,75 @@ def test_new_york_projection_diagnostics_pin_schedule_branches() -> None:
     }
 
 
+def test_illinois_projection_diagnostics_pin_completed_boundaries() -> None:
+    prefix = "us-il:policies/income_tax/pilot_liability_pipeline#input."
+    routes = (
+        TaxUnitRoute(1, 1, "IL", "17", 1, DISPOSITION_READY),
+        TaxUnitRoute(2, 2, "IL", "17", 1, DISPOSITION_READY),
+        TaxUnitRoute(3, 3, "IL", "17", 1, DISPOSITION_READY),
+        TaxUnitRoute(4, 4, "IL", "17", 1, DISPOSITION_BLOCKED),
+    )
+
+    diagnostics = campaign._projection_branch_diagnostics(
+        {
+            "IL": {
+                f"{prefix}il_pit_pilot_state_taxable_income": {
+                    1: 0.0,
+                    2: 100.0,
+                    3: 200.0,
+                    4: 300.0,
+                },
+                f"{prefix}il_pit_pilot_recapture_of_investment_credit": {
+                    1: 0.0,
+                    2: 0.0,
+                    3: 25.0,
+                    4: 50.0,
+                },
+            }
+        },
+        routes,
+    )
+
+    assert diagnostics == {
+        "IL": {
+            "compared_tax_unit_count": 3,
+            "zero_taxable_income_count": 1,
+            "positive_taxable_income_count": 2,
+            "zero_recapture_count": 2,
+            "positive_recapture_count": 1,
+        }
+    }
+
+
+@pytest.mark.parametrize(
+    ("taxable", "recapture", "message"),
+    [
+        (-1.0, 0.0, "nonnegative completed taxable income"),
+        (0.0, -1.0, "nonnegative completed investment-credit recapture"),
+    ],
+)
+def test_illinois_projection_diagnostics_reject_negative_boundaries(
+    taxable,
+    recapture,
+    message,
+) -> None:
+    prefix = "us-il:policies/income_tax/pilot_liability_pipeline#input."
+    with pytest.raises(ValueError, match=message):
+        campaign._projection_branch_diagnostics(
+            {
+                "IL": {
+                    f"{prefix}il_pit_pilot_state_taxable_income": {
+                        1: taxable
+                    },
+                    f"{prefix}il_pit_pilot_recapture_of_investment_credit": {
+                        1: recapture
+                    },
+                }
+            },
+            (TaxUnitRoute(1, 1, "IL", "17", 1, DISPOSITION_READY),),
+        )
+
+
 @pytest.mark.parametrize(
     ("joint", "head", "message"),
     [

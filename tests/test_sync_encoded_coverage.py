@@ -61,6 +61,53 @@ def test_new_york_main_income_tax_schedule_is_classified() -> None:
     ) == ("state_income_tax", "NY")
 
 
+def test_illinois_annual_before_credit_tax_is_classified() -> None:
+    assert classify(
+        "us-il/policies/income_tax/pilot_liability_pipeline.yaml"
+    ) == ("state_income_tax", "IL")
+
+
+def test_illinois_before_credit_surface_is_executable_and_suite_backed() -> None:
+    coverage = json.loads(
+        (
+            REPO_ROOT / "dashboard/public/data/coverage_overview.json"
+        ).read_text()
+    )
+    matches = [
+        entry
+        for entry in coverage["axiom"]["programs"]
+        if entry.get("program") == "state_income_tax"
+        and entry.get("jurisdiction") == "IL"
+    ]
+
+    assert matches == [
+        {
+            "program": "state_income_tax",
+            "jurisdiction": "IL",
+            "status": "executable",
+            "source": (
+                "rulespec-us "
+                "453f8fab7c6bd83f0e0efe604377d4ef85b7db72 + pinned "
+                "Populace campaign projected as il-income-tax-populace over "
+                "the canonical bounded TY2026 annual tax before "
+                "nonrefundable credits"
+            ),
+            "known_non_tanf_gaps": [
+                "bounded before-nonrefundable-credit surface only; caller "
+                "supplies completed Illinois taxable income and completed "
+                "investment-credit recapture",
+                "taxable-income construction, credit computation, payments, "
+                "and final annual liability remain out of scope",
+                "the pinned Populace exercises zero recapture for all 2,332 "
+                "routed Illinois tax units; the positive-recapture branch is "
+                "covered by the canonical RuleSpec fixture, not population "
+                "evidence",
+            ],
+            "suite": "il-income-tax-populace",
+        }
+    ]
+
+
 def test_new_york_main_income_tax_surface_is_executable_and_suite_backed() -> None:
     coverage = json.loads(
         (

@@ -644,6 +644,208 @@ def test_new_york_target_rejects_broad_liability_contract_drift(
         )
 
 
+def _reviewed_money_schema(*variables: str):
+    return SimpleNamespace(
+        variables={
+            variable: SimpleNamespace(
+                entity=SimpleNamespace(key="tax_unit"),
+                definition_period="year",
+                value_type=float,
+                unit="currency-USD",
+            )
+            for variable in variables
+        }
+    )
+
+
+def _il_simulation(
+    *,
+    ids=(1, 2, 3),
+    tax=(0.0, 1_000.0, 250_000.0),
+    schema=None,
+):
+    calls = []
+
+    class FakeSimulation:
+        def __init__(self, dataset):
+            assert dataset == "dataset"
+            self.tax_benefit_system = schema or _reviewed_money_schema(
+                "il_income_tax_before_non_refundable_credits"
+            )
+
+        def calculate(self, variable, period):
+            assert period == 2026
+            self.calls.append((variable, period))
+            return {
+                "tax_unit_id": ids,
+                "il_income_tax_before_non_refundable_credits": tax,
+            }[variable]
+
+    FakeSimulation.calls = calls
+    return FakeSimulation
+
+
+def _il_targets(
+    microsimulation_factory,
+    *,
+    source_ids=(1, 2, 3),
+) -> dict[str, dict[int, float]]:
+    return calculate_policyengine_targets(
+        dataset="dataset",
+        raw_tax_units=pd.DataFrame({"tax_unit_id": source_ids}),
+        routes=tuple(
+            TaxUnitRoute(index, index, "IL", "17", 1, DISPOSITION_READY)
+            for index in source_ids
+        ),
+        year=2026,
+        microsimulation_factory=microsimulation_factory,
+    )
+
+
+def test_illinois_target_preserves_only_exact_before_credit_values() -> None:
+    simulation = _il_simulation()
+
+    assert _il_targets(simulation) == {
+        "IL": {1: 0.0, 2: 1_000.0, 3: 250_000.0}
+    }
+    assert simulation.calls == [
+        ("tax_unit_id", 2026),
+        ("il_income_tax_before_non_refundable_credits", 2026),
+    ]
+    assert all(
+        variable not in {"il_income_tax", "il_tax_before_refundable_credits"}
+        for variable, _ in simulation.calls
+    )
+
+
+def test_illinois_target_preserves_all_2332_routed_tax_units() -> None:
+    ids = tuple(range(1, 2_333))
+    tax = tuple(0.0 if index <= 500 else float(index) for index in ids)
+
+    targets = _il_targets(
+        _il_simulation(ids=ids, tax=tax),
+        source_ids=ids,
+    )
+
+    assert len(targets["IL"]) == 2_332
+    assert tuple(targets["IL"]) == ids
+    assert sum(value == 0 for value in targets["IL"].values()) == 500
+    assert sum(value > 0 for value in targets["IL"].values()) == 1_832
+
+
+@pytest.mark.parametrize(
+    ("ids", "tax", "message"),
+    [
+        ((1, 2), (0.0, 1_000.0, 250_000.0), "returned 2 IDs and 3 values"),
+        ((1, 2, 3), (0.0, 1_000.0), "returned 3 IDs and 2 values"),
+        ((2, 1, 3), (0.0, 1_000.0, 250_000.0), "order does not match"),
+        (
+            (1, 1, 3),
+            (0.0, 1_000.0, 250_000.0),
+            "duplicate IL PolicyEngine",
+        ),
+    ],
+)
+def test_illinois_target_rejects_identity_and_cardinality_defects(
+    ids,
+    tax,
+    message,
+) -> None:
+    with pytest.raises(StateTaxPopulationRoutingError, match=message):
+        _il_targets(_il_simulation(ids=ids, tax=tax))
+
+
+def test_illinois_target_rejects_duplicate_source_entity_ids() -> None:
+    with pytest.raises(
+        StateTaxPopulationRoutingError,
+        match="duplicate IL source tax_unit_id",
+    ):
+        _il_targets(
+            _il_simulation(ids=(1, 1, 3)),
+            source_ids=(1, 1, 3),
+        )
+
+
+@pytest.mark.parametrize(
+    ("value", "message"),
+    [
+        (float("nan"), "non-finite"),
+        (float("inf"), "non-finite"),
+        (-0.01, "must be nonnegative"),
+    ],
+)
+def test_illinois_target_rejects_invalid_before_credit_amount(
+    value,
+    message,
+) -> None:
+    with pytest.raises(StateTaxPopulationRoutingError, match=message):
+        _il_targets(_il_simulation(tax=(0.0, value, 250_000.0)))
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [
+        ("entity", SimpleNamespace(key="person")),
+        ("definition_period", "month"),
+        ("value_type", int),
+        ("unit", "USD"),
+    ],
+)
+def test_illinois_target_rejects_schema_drift(field, value) -> None:
+    definition = SimpleNamespace(
+        entity=SimpleNamespace(key="tax_unit"),
+        definition_period="year",
+        value_type=float,
+        unit="currency-USD",
+    )
+    setattr(definition, field, value)
+    schema = SimpleNamespace(
+        variables={
+            "il_income_tax_before_non_refundable_credits": definition
+        }
+    )
+
+    with pytest.raises(
+        StateTaxPopulationRoutingError,
+        match="TaxUnit/year/currency-USD float schema",
+    ):
+        _il_targets(_il_simulation(schema=schema))
+
+
+def test_illinois_target_rejects_broader_contract_drift(monkeypatch) -> None:
+    drifted_contract = SimpleNamespace(
+        validation_year=2026,
+        by_state=lambda: {
+            "IL": SimpleNamespace(
+                policyengine_target="il_income_tax",
+            )
+        },
+    )
+    monkeypatch.setattr(
+        state_tax_runner,
+        "validate_state_tax_populace_contract",
+        lambda _contract: drifted_contract,
+    )
+
+    with pytest.raises(
+        StateTaxPopulationRoutingError,
+        match="requires the exact il_income_tax_before_non_refundable_credits",
+    ):
+        calculate_policyengine_targets(
+            dataset="dataset",
+            raw_tax_units=pd.DataFrame({"tax_unit_id": [1]}),
+            routes=(
+                TaxUnitRoute(1, 1, "IL", "17", 1, DISPOSITION_READY),
+            ),
+            year=2026,
+            contract=drifted_contract,
+            microsimulation_factory=_il_simulation(
+                ids=(1,),
+                tax=(0.0,),
+            ),
+        )
+
+
 def _dc_simulation(
     *,
     ids=(1, 2, 3),
@@ -1681,6 +1883,117 @@ def test_reviewed_new_york_projection_rejects_identity_defects(
             ),
             year=2026,
             microsimulation_factory=FakeSimulation,
+        )
+
+
+def _il_projection_simulation(
+    *,
+    ids=(1, 2, 3),
+    taxable=(0.0, 20_000.0, 100_000.0),
+    recapture=(0.0, 0.0, 125.0),
+    schema=None,
+):
+    calls = []
+
+    class FakeSimulation:
+        def __init__(self, dataset):
+            assert dataset == "dataset"
+            self.tax_benefit_system = schema or _reviewed_money_schema(
+                "il_taxable_income",
+                "recapture_of_investment_credit",
+            )
+
+        def calculate(self, variable, period):
+            calls.append((variable, period))
+            assert period == 2026
+            return {
+                "tax_unit_id": ids,
+                "il_taxable_income": taxable,
+                "recapture_of_investment_credit": recapture,
+            }[variable]
+
+    FakeSimulation.calls = calls
+    return FakeSimulation
+
+
+def _il_projection(
+    microsimulation_factory,
+    *,
+    source_ids=(1, 2, 3),
+):
+    return calculate_policyengine_projection_inputs(
+        dataset="dataset",
+        raw_tax_units=pd.DataFrame({"tax_unit_id": source_ids}),
+        routes=tuple(
+            TaxUnitRoute(index, index, "IL", "17", 1, DISPOSITION_READY)
+            for index in source_ids
+        ),
+        year=2026,
+        microsimulation_factory=microsimulation_factory,
+    )["IL"]
+
+
+def test_reviewed_illinois_projection_uses_only_completed_boundaries() -> None:
+    simulation = _il_projection_simulation()
+
+    projection = _il_projection(simulation)
+
+    prefix = "us-il:policies/income_tax/pilot_liability_pipeline#input."
+    assert projection[f"{prefix}il_pit_pilot_state_taxable_income"] == {
+        1: 0.0,
+        2: 20_000.0,
+        3: 100_000.0,
+    }
+    assert projection[
+        f"{prefix}il_pit_pilot_recapture_of_investment_credit"
+    ] == {
+        1: 0.0,
+        2: 0.0,
+        3: 125.0,
+    }
+    assert simulation.calls == [
+        ("tax_unit_id", 2026),
+        ("il_taxable_income", 2026),
+        ("recapture_of_investment_credit", 2026),
+    ]
+
+
+@pytest.mark.parametrize(
+    ("modeled_ids", "message"),
+    [
+        ([1, 2], "returned 2 IDs for 3 tax units"),
+        ([2, 1, 3], "order does not match"),
+        ([1, 1, 3], "duplicate IL PolicyEngine projection"),
+    ],
+)
+def test_reviewed_illinois_projection_rejects_identity_defects(
+    modeled_ids,
+    message,
+) -> None:
+    with pytest.raises(StateTaxPopulationRoutingError, match=message):
+        _il_projection(_il_projection_simulation(ids=modeled_ids))
+
+
+@pytest.mark.parametrize(
+    ("taxable", "recapture", "message"),
+    [
+        ((0.0, float("nan"), 100_000.0), (0.0, 0.0, 125.0), "non-finite"),
+        ((0.0, float("inf"), 100_000.0), (0.0, 0.0, 125.0), "non-finite"),
+        ((0.0, -0.01, 100_000.0), (0.0, 0.0, 125.0), "must be nonnegative"),
+        ((0.0, 20_000.0, 100_000.0), (0.0, -0.01, 125.0), "must be nonnegative"),
+    ],
+)
+def test_reviewed_illinois_projection_rejects_invalid_boundaries(
+    taxable,
+    recapture,
+    message,
+) -> None:
+    with pytest.raises(StateTaxPopulationRoutingError, match=message):
+        _il_projection(
+            _il_projection_simulation(
+                taxable=taxable,
+                recapture=recapture,
+            )
         )
 
 

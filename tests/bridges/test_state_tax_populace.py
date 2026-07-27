@@ -405,6 +405,26 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
     ]
     assert "supplemental tax" in ny.evidence
     assert "rounded cumulative bases" in ny.evidence
+    il = contract.by_state()["IL"]
+    assert il.program == "us-il:policies/income_tax/pilot_liability_pipeline"
+    assert il.output == f"{il.program}#il_pit_pilot_income_tax_liability"
+    assert il.policyengine_target == (
+        "il_income_tax_before_non_refundable_credits"
+    )
+    assert (il.tolerance, il.relative_tolerance) == (1.0, 0.0)
+    assert [item.policyengine_variable for item in il.inputs] == [
+        "il_taxable_income",
+        "recapture_of_investment_credit",
+    ]
+    assert all(
+        item.source_kind == "pe_upstream_boundary" for item in il.inputs
+    )
+    assert "4.95% rate" in il.evidence
+    assert "2,332 positive-weight" in il.evidence
+    assert "all 2,332 positive-weight routed Illinois TaxUnits" in il.evidence
+    assert "Every population row had zero recapture" in il.evidence
+    assert "positive_taxable_income_with_recapture fixture" in il.evidence
+    assert "rather than synthesized population input" in il.inputs[1].evidence
     de = contract.by_state()["DE"]
     assert de.policyengine_target == (
         "de_income_tax_before_non_refundable_credits_unit"

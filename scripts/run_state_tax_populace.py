@@ -40,6 +40,15 @@ _CA_TAXABLE_INCOME_INPUT = (
     "ca_pit_pilot_supplied_completed_taxable_income"
 )
 _CA_BHST_THRESHOLD = 1_000_000.0
+_IL_INPUT_PREFIX = (
+    "us-il:policies/income_tax/pilot_liability_pipeline#input."
+)
+_IL_TAXABLE_INCOME_INPUT = (
+    f"{_IL_INPUT_PREFIX}il_pit_pilot_state_taxable_income"
+)
+_IL_RECAPTURE_INPUT = (
+    f"{_IL_INPUT_PREFIX}il_pit_pilot_recapture_of_investment_credit"
+)
 _NY_INPUT_PREFIX = (
     "us-ny:policies/income_tax/pilot_liability_pipeline#input."
 )
@@ -104,6 +113,34 @@ def _projection_branch_diagnostics(
             "positive_taxable_income_count": sum(
                 value > 0 for value in selected_values
             ),
+        }
+    illinois = projection_inputs.get("IL")
+    if isinstance(illinois, dict):
+        ready_ids = {
+            route.tax_unit_id
+            for route in routes
+            if route.state == "IL" and route.disposition == DISPOSITION_READY
+        }
+        taxable_values = illinois[_IL_TAXABLE_INCOME_INPUT]
+        recapture_values = illinois[_IL_RECAPTURE_INPUT]
+        taxable = [float(taxable_values[item]) for item in ready_ids]
+        recapture = [float(recapture_values[item]) for item in ready_ids]
+        if any(value < 0 for value in taxable):
+            raise ValueError(
+                "IL projection diagnostics require nonnegative completed "
+                "taxable income"
+            )
+        if any(value < 0 for value in recapture):
+            raise ValueError(
+                "IL projection diagnostics require nonnegative completed "
+                "investment-credit recapture"
+            )
+        diagnostics["IL"] = {
+            "compared_tax_unit_count": len(ready_ids),
+            "zero_taxable_income_count": sum(value == 0 for value in taxable),
+            "positive_taxable_income_count": sum(value > 0 for value in taxable),
+            "zero_recapture_count": sum(value == 0 for value in recapture),
+            "positive_recapture_count": sum(value > 0 for value in recapture),
         }
     new_york = projection_inputs.get("NY")
     if isinstance(new_york, dict):

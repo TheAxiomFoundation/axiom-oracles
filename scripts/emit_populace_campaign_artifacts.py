@@ -92,6 +92,17 @@ _DESCRIPTION_BY_OUTPUT = {
         "Populace"
     ),
     (
+        "us-il:policies/income_tax/pilot_liability_pipeline"
+        "#il_pit_pilot_income_tax_liability"
+    ): (
+        "Illinois annual individual income tax before nonrefundable credits, "
+        "computed from caller-supplied completed Illinois taxable income and "
+        "completed investment-credit recapture over every routed tax unit in "
+        "the pinned US Populace; this bounded suite excludes taxable-income "
+        "construction, credit computation, payments, and final annual "
+        "liability"
+    ),
+    (
         "us-ms:policies/income_tax/2026_section_27_7_5_schedule"
         "#ms_pit_2026_section_27_7_5_schedule_tax"
     ): (
