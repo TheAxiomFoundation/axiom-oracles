@@ -35,6 +35,11 @@ _DC_TAXABLE_INCOME_INPUT = (
     "2026_section_47_1806_03_schedule_before_credits#input."
     "dc_pit_2026_section_47_1806_03_completed_joint_method_taxable_income"
 )
+_CA_TAXABLE_INCOME_INPUT = (
+    "us-ca:policies/income_tax/pilot_liability_pipeline#input."
+    "ca_pit_pilot_supplied_completed_taxable_income"
+)
+_CA_BHST_THRESHOLD = 1_000_000.0
 
 
 def _projection_branch_diagnostics(
@@ -44,6 +49,26 @@ def _projection_branch_diagnostics(
     """Summarize reviewed state branch exercise without exposing microdata."""
 
     diagnostics: dict[str, dict[str, int]] = {}
+    california = projection_inputs.get("CA")
+    if isinstance(california, dict):
+        ready_ids = {
+            route.tax_unit_id
+            for route in routes
+            if route.state == "CA" and route.disposition == DISPOSITION_READY
+        }
+        taxable_values = california[_CA_TAXABLE_INCOME_INPUT]
+        selected_values = [
+            float(taxable_values[tax_unit_id]) for tax_unit_id in ready_ids
+        ]
+        diagnostics["CA"] = {
+            "compared_tax_unit_count": len(ready_ids),
+            "zero_behavioral_health_services_tax_count": sum(
+                value <= _CA_BHST_THRESHOLD for value in selected_values
+            ),
+            "positive_behavioral_health_services_tax_count": sum(
+                value > _CA_BHST_THRESHOLD for value in selected_values
+            ),
+        }
     dc = projection_inputs.get("DC")
     if isinstance(dc, dict):
         ready_ids = {

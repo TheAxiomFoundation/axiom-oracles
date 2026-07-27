@@ -165,6 +165,41 @@ def test_utah_projection_diagnostics_pin_exempt_and_domain_branch_counts() -> No
     }
 
 
+def test_california_projection_diagnostics_pin_bhst_branches() -> None:
+    slot = (
+        "us-ca:policies/income_tax/pilot_liability_pipeline#input."
+        "ca_pit_pilot_supplied_completed_taxable_income"
+    )
+    routes = (
+        TaxUnitRoute(1, 1, "CA", "06", 1, DISPOSITION_READY),
+        TaxUnitRoute(2, 2, "CA", "06", 1, DISPOSITION_READY),
+        TaxUnitRoute(3, 3, "CA", "06", 1, DISPOSITION_READY),
+        TaxUnitRoute(4, 4, "CA", "06", 1, DISPOSITION_BLOCKED),
+    )
+
+    diagnostics = campaign._projection_branch_diagnostics(
+        {
+            "CA": {
+                slot: {
+                    1: -5.0,
+                    2: 1_000_000.0,
+                    3: 1_000_001.0,
+                    4: 2_000_000.0,
+                }
+            }
+        },
+        routes,
+    )
+
+    assert diagnostics == {
+        "CA": {
+            "compared_tax_unit_count": 3,
+            "zero_behavioral_health_services_tax_count": 2,
+            "positive_behavioral_health_services_tax_count": 1,
+        }
+    }
+
+
 def test_dc_projection_diagnostics_pin_taxable_income_floor_branches() -> None:
     slot = (
         "us-dc:policies/income_tax/"

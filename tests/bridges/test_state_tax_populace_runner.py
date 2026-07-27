@@ -91,7 +91,7 @@ def test_routes_every_tax_unit_after_person_household_geography_join() -> None:
     assert by_id[10].state == "IL"
     assert by_id[10].weight == 2.5
     assert by_id[10].disposition == DISPOSITION_READY
-    assert by_id[20].disposition == DISPOSITION_BLOCKED
+    assert by_id[20].disposition == DISPOSITION_READY
     assert by_id[30].disposition == DISPOSITION_NO_BROAD_PIT
     assert by_id[40].disposition == DISPOSITION_NONPOSITIVE_WEIGHT
 
@@ -204,22 +204,19 @@ def test_report_accounts_for_all_51_jurisdictions_and_every_unit() -> None:
     }
     assert report["tax_unit_count"] == 4
     assert report["positive_weight_count"] == 3
-    assert report["selected_ready_count"] == 1
-    assert report["eligible_ready_count"] == 1
-    assert report["excluded_count"] == 3
-    assert report["weighted_eligible_ready_tax_units"] == 2.5
-    assert report["weighted_excluded_tax_units"] == 7
+    assert report["selected_ready_count"] == 2
+    assert report["eligible_ready_count"] == 2
+    assert report["excluded_count"] == 2
+    assert report["weighted_eligible_ready_tax_units"] == 5.5
+    assert report["weighted_excluded_tax_units"] == 4
     assert report["weighted_dispositions"] == {
-        DISPOSITION_READY: 2.5,
-        DISPOSITION_BLOCKED: 3,
+        DISPOSITION_READY: 5.5,
         DISPOSITION_NO_BROAD_PIT: 4,
         DISPOSITION_NONPOSITIVE_WEIGHT: 0,
     }
     assert report["errored_count"] == 0
     assert report["states"]["IL"]["selected_count"] == 1
-    assert report["states"]["CA"]["dispositions"] == {
-        DISPOSITION_BLOCKED: 1
-    }
+    assert report["states"]["CA"]["dispositions"] == {DISPOSITION_READY: 1}
     assert report["states"]["TX"]["dispositions"] == {
         DISPOSITION_NO_BROAD_PIT: 1
     }
@@ -378,6 +375,119 @@ def test_utah_target_rejects_invalid_before_credit_amount(value, message) -> Non
             year=2026,
             microsimulation_factory=FakeSimulation,
         )
+
+
+def _ca_simulation(
+    *,
+    ids=(1, 2, 3),
+    tax=(0.0, 0.01, 10_000.0),
+):
+    calls = []
+
+    class FakeSimulation:
+        def __init__(self, dataset):
+            assert dataset == "dataset"
+
+        def calculate(self, variable, period):
+            assert period == 2026
+            self.calls.append((variable, period))
+            return {
+                "tax_unit_id": ids,
+                "ca_mental_health_services_tax": tax,
+            }[variable]
+
+    FakeSimulation.calls = calls
+    return FakeSimulation
+
+
+def _ca_targets(
+    microsimulation_factory,
+    *,
+    source_ids=(1, 2, 3),
+) -> dict[str, dict[int, float]]:
+    return calculate_policyengine_targets(
+        dataset="dataset",
+        raw_tax_units=pd.DataFrame({"tax_unit_id": source_ids}),
+        routes=tuple(
+            TaxUnitRoute(index, index, "CA", "06", 1, DISPOSITION_READY)
+            for index in source_ids
+        ),
+        year=2026,
+        microsimulation_factory=microsimulation_factory,
+    )
+
+
+def test_california_target_preserves_direct_bhst_values_only() -> None:
+    simulation = _ca_simulation()
+
+    assert _ca_targets(simulation) == {
+        "CA": {1: 0.0, 2: 0.01, 3: 10_000.0}
+    }
+    assert simulation.calls == [
+        ("tax_unit_id", 2026),
+        ("ca_mental_health_services_tax", 2026),
+    ]
+    assert all(
+        variable != "ca_income_tax_before_refundable_credits"
+        for variable, _ in simulation.calls
+    )
+
+
+def test_california_target_preserves_all_8883_routed_tax_units() -> None:
+    ids = tuple(range(1, 8_884))
+    tax = tuple(0.0 if index <= 7_677 else float(index) for index in ids)
+
+    targets = _ca_targets(
+        _ca_simulation(ids=ids, tax=tax),
+        source_ids=ids,
+    )
+
+    assert len(targets["CA"]) == 8_883
+    assert tuple(targets["CA"]) == ids
+    assert sum(value == 0 for value in targets["CA"].values()) == 7_677
+    assert sum(value > 0 for value in targets["CA"].values()) == 1_206
+
+
+@pytest.mark.parametrize(
+    ("ids", "tax", "message"),
+    [
+        ((1, 2), (0.0, 0.01, 10_000.0), "returned 2 IDs and 3 values"),
+        ((1, 2, 3), (0.0, 0.01), "returned 3 IDs and 2 values"),
+        ((2, 1, 3), (0.0, 0.01, 10_000.0), "order does not match"),
+        ((1, 1, 3), (0.0, 0.01, 10_000.0), "duplicate CA PolicyEngine"),
+    ],
+)
+def test_california_target_rejects_entity_identity_and_cardinality_defects(
+    ids,
+    tax,
+    message,
+) -> None:
+    with pytest.raises(StateTaxPopulationRoutingError, match=message):
+        _ca_targets(_ca_simulation(ids=ids, tax=tax))
+
+
+def test_california_target_rejects_duplicate_source_entity_ids() -> None:
+    with pytest.raises(
+        StateTaxPopulationRoutingError,
+        match="duplicate CA source tax_unit_id",
+    ):
+        _ca_targets(
+            _ca_simulation(ids=(1, 1, 3)),
+            source_ids=(1, 1, 3),
+        )
+
+
+@pytest.mark.parametrize(
+    ("value", "message"),
+    [
+        (float("nan"), "non-finite"),
+        (float("inf"), "non-finite"),
+        (-0.01, "must be nonnegative"),
+    ],
+)
+def test_california_target_rejects_invalid_bhst_amount(value, message) -> None:
+    with pytest.raises(StateTaxPopulationRoutingError, match=message):
+        _ca_targets(_ca_simulation(tax=(0.0, value, 10_000.0)))
 
 
 def _dc_simulation(

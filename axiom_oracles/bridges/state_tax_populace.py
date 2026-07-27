@@ -83,6 +83,13 @@ ALLOWED_NONSTANDARD_COMPARISON_SURFACES = frozenset(
             "tax_unit",
         ),
         (
+            "CA",
+            "us-ca:policies/income_tax/pilot_liability_pipeline#"
+            "ca_pit_pilot_behavioral_health_services_tax",
+            "ca_mental_health_services_tax",
+            "tax_unit",
+        ),
+        (
             "DC",
             "us-dc:policies/income_tax/"
             "2026_section_47_1806_03_schedule_before_credits#"
@@ -176,6 +183,10 @@ EXPECTED_OUTPUT_OVERRIDES = {
         "us-al:policies/income_tax/2026_section_40_18_5_schedule_before_credits"
         "#al_pit_2026_section_40_18_5_schedule_before_credits"
     ),
+    "CA": (
+        "us-ca:policies/income_tax/pilot_liability_pipeline#"
+        "ca_pit_pilot_behavioral_health_services_tax"
+    ),
     "CT": (
         "us-ct:policies/income_tax/"
         "2026_resident_ordinary_tax_before_personal_credit#"
@@ -238,16 +249,16 @@ EXPECTED_PROGRAM_OVERRIDES = {
         "2026_full_year_resident_before_credit_schedule"
     ),
 }
-EXPECTED_EXPLICIT_INPUT_COUNT = 153
+EXPECTED_EXPLICIT_INPUT_COUNT = 139
 EXPECTED_EXPLICIT_RELATION_COUNT = 1
 EXPECTED_SLOT_INVENTORY_SHA256 = (
-    "d5412090e726084a852d2bfce4dbe8e85082719deb94f7fc247906e2a521248a"
+    "57a4acfc80e96018303a4d50745f42eba8bbde510b0162b372f7b33e4fd66f99"
 )
 EXPECTED_JURISDICTION_REGISTRY_SHA256 = (
-    "510507c16016ef679064fd937e57329b1b9bc538f87039c2baa28af59c85c442"
+    "c80d58d6f962cba4785f1606e309c2c275df84d92da4967729a8a621e27f7071"
 )
 EXPECTED_SOURCE_METADATA_SHA256 = (
-    "ac1f4177f9a325bdd3fde5b16d710d79b127c518484b364e798a71554578dc97"
+    "cb46052237cc26df354d5f740f21d0166572baee70e4c3d081c9181baff1fb40"
 )
 # Exact boundaries admitted only after independent legal and dependency-graph
 # review.  The comparison target itself is forbidden below, so these remain
@@ -272,6 +283,12 @@ ALLOWED_PE_UPSTREAM_BOUNDARIES: frozenset[tuple[str, str, str]] = frozenset(
             "us-az:policies/income_tax/pilot_liability_pipeline#input."
             "az_pit_pilot_state_taxable_income",
             "az_taxable_income",
+        ),
+        (
+            "CA",
+            "us-ca:policies/income_tax/pilot_liability_pipeline#input."
+            "ca_pit_pilot_supplied_completed_taxable_income",
+            "ca_taxable_income",
         ),
         (
             "CT",

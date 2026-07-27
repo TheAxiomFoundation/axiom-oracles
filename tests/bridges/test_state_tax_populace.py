@@ -27,8 +27,17 @@ def _state(document: dict, state: str) -> dict:
 
 
 def _first_input(document: dict) -> tuple[dict, dict]:
-    jurisdiction = next(item for item in document["jurisdictions"] if item["inputs"])
-    return jurisdiction, jurisdiction["inputs"][0]
+    jurisdiction = next(
+        item
+        for item in document["jurisdictions"]
+        if any(slot["source_kind"] == "blocked" for slot in item["inputs"])
+    )
+    slot = next(
+        slot
+        for slot in jurisdiction["inputs"]
+        if slot["source_kind"] == "blocked"
+    )
+    return jurisdiction, slot
 
 
 def test_packaged_contract_has_exact_campaign_inventory() -> None:
@@ -140,6 +149,31 @@ def test_contract_pins_kansas_canonical_k40es_surface() -> None:
     ]
 
 
+def test_contract_pins_california_bhst_component_surface() -> None:
+    california = load_state_tax_populace_contract().by_state()["CA"]
+    module = "us-ca:policies/income_tax/pilot_liability_pipeline"
+
+    assert california.program == module
+    assert california.output == (
+        f"{module}#ca_pit_pilot_behavioral_health_services_tax"
+    )
+    assert california.policyengine_target == "ca_mental_health_services_tax"
+    assert (
+        california.policyengine_target
+        != "ca_income_tax_before_refundable_credits"
+    )
+    assert (california.tolerance, california.relative_tolerance) == (
+        0.01,
+        1e-7,
+    )
+    assert [slot.slot for slot in california.inputs] == [
+        f"{module}#input.ca_pit_pilot_supplied_completed_taxable_income"
+    ]
+    assert [slot.policyengine_variable for slot in california.inputs] == [
+        "ca_taxable_income"
+    ]
+
+
 def test_contract_pins_dc_canonical_joint_method_schedule() -> None:
     district = load_state_tax_populace_contract().by_state()["DC"]
     module = (
@@ -169,12 +203,13 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
 
     assert summary == {
         "jurisdiction_count": 43,
-        "ready_count": 30,
-        "blocked_count": 13,
+        "ready_count": 31,
+        "blocked_count": 12,
         "ready_states": [
             "AL",
             "AR",
             "AZ",
+            "CA",
             "CO",
             "CT",
             "DC",
@@ -209,6 +244,7 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
                 "AL",
                 "AZ",
                 "AR",
+                "CA",
                 "CO",
                 "CT",
                 "DC",
@@ -240,7 +276,7 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
         ),
         "explicit_input_count": EXPECTED_EXPLICIT_INPUT_COUNT,
         "explicit_relation_count": EXPECTED_EXPLICIT_RELATION_COUNT,
-        "blocked_input_count": EXPECTED_EXPLICIT_INPUT_COUNT - 65,
+        "blocked_input_count": EXPECTED_EXPLICIT_INPUT_COUNT - 66,
         "blocked_relation_count": 0,
     }
     assert "NH" not in contract.by_state()
@@ -248,7 +284,8 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
         "AL": ["al_taxable_income"],
         "AZ": ["az_taxable_income"],
         "AR": ["ar_taxable_income_indiv"],
-            "CT": ["ct_taxable_income", "ct_agi"],
+        "CA": ["ca_taxable_income"],
+        "CT": ["ct_taxable_income", "ct_agi"],
         "CO": ["co_taxable_income"],
         "DC": ["dc_taxable_income_joint"],
         "DE": ["de_taxable_income_indv", "de_files_separately"],
@@ -745,7 +782,8 @@ def test_contract_rejects_unknown_source_kind_and_inconsistent_status() -> None:
 
 def test_contract_rejects_declared_readiness_that_ignores_blocked_slots() -> None:
     document = _document()
-    _state(document, "CA")["status"] = "ready"
+    jurisdiction, _ = _first_input(document)
+    jurisdiction["status"] = "ready"
 
     with pytest.raises(StateTaxPopulaceContractError, match="slot-derived status"):
         validate_state_tax_populace_contract(document)
