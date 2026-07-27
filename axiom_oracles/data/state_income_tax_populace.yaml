@@ -711,8 +711,8 @@ jurisdictions:
   fips: '13'
   taxsim_state_code: 11
   jurisdiction: us-ga
-  program: us-ga:policies/income_tax/pilot_liability_pipeline
-  output: us-ga:policies/income_tax/pilot_liability_pipeline#ga_pit_pilot_income_tax_liability
+  program: us-ga:policies/income_tax/2026_annual_tax_before_nonrefundable_credits
+  output: us-ga:policies/income_tax/2026_annual_tax_before_nonrefundable_credits#ga_pit_2026_annual_tax_before_nonrefundable_credits
   policyengine:
     target: ga_income_tax_before_non_refundable_credits
     tolerance: 0.01
@@ -720,10 +720,10 @@ jurisdictions:
   status: ready
   evidence: RuleSpec accepts one completed-return Georgia taxable-income boundary and imports the statutory 4.99% rate. Independent RuleSpec review and a full certified-Populace probe confirmed the boundary is upstream of ga_income_tax_before_non_refundable_credits for all 2,187 positive-weight routed Georgia tax units, with zero mismatches at $0.01 absolute or 1e-7 relative tolerance.
   inputs:
-  - slot: us-ga:policies/income_tax/pilot_liability_pipeline#input.ga_pit_pilot_state_taxable_income
+  - slot: us-ga:policies/income_tax/2026_annual_tax_before_nonrefundable_credits#input.ga_pit_2026_completed_georgia_taxable_net_income
     source_kind: pe_upstream_boundary
     status: ready
-    evidence: O.C.G.A. 48-7-20 imposes tax on Georgia taxable net income, and the reviewed RuleSpec module declares that completed-return amount as its sole upstream boundary. PolicyEngine ga_taxable_income is a direct upstream dependency of the distinct comparison target ga_income_tax_before_non_refundable_credits; rulespec-us#957 and the full-Populace probe reviewed this exact relationship.
+    evidence: O.C.G.A. 48-7-20 imposes tax on Georgia taxable net income, and the reviewed canonical RuleSpec module declares that caller-completed annual amount as its sole upstream boundary. The RuleSpec does not construct a standard deduction or any other taxable-income component. PolicyEngine ga_taxable_income is a direct upstream dependency of the distinct comparison target ga_income_tax_before_non_refundable_credits; rulespec-us#1123 and the full-Populace probe review this exact relationship.
     policyengine_variable: ga_taxable_income
     policyengine_relationship: upstream
   relations: []

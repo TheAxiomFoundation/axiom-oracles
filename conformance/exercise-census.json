@@ -3023,10 +3023,10 @@
         }
       },
       "evidence_source": "chunks",
-      "inline_cases_not_counted": 359,
+      "inline_cases_not_counted": 369,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-taxsim-co-tax-intersection-ecps.json",
-      "report_sha256": "d7549bb624461ca12fa4be313eccb93535d45cb276725e894df0454c1771beab",
+      "report_sha256": "42f2c786ff4cda04e61f74774d6834691592ffa2e38b54954bf64f1023609a09",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -3741,7 +3741,7 @@
         {
           "cases": 6,
           "chunk": "dashboard/public/data/cases/ga-income-tax-liability/chunk-0.json",
-          "sha256": "ea58c1ef4508dc8475b3300bf4abc31220586c22b36032b49be7632a8753a2b4"
+          "sha256": "c5c0ca15032820eb8e7619b5e2318ad4d9a482c3affa750976f6ea9fcdb6e3be"
         }
       ],
       "constant_fields": 0,
@@ -3750,7 +3750,7 @@
       "inline_cases_not_counted": 6,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-policyengine-taxsim-ga-income-tax-liability.json",
-      "report_sha256": "4262fae0a7760b83d21e0c0a0926aa9c52a9f804005eb4a3784e8d8593543b02",
+      "report_sha256": "e1cd99fce1af3d274b82005cf6e0018b32f0299ee66126a25c99276508c8d9d0",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -3767,27 +3767,27 @@
         {
           "cases": 500,
           "chunk": "dashboard/public/data/cases/ga-income-tax-populace/chunk-0.json",
-          "sha256": "b8a44c1b44b8fb5193e3ef9ed23ec497eca1288656a1d2dc2edb2263af4bbbee"
+          "sha256": "be799cdd5b725044192bb87d204cc0b1bfe66a90283e6105ea55130309721ba1"
         },
         {
           "cases": 500,
           "chunk": "dashboard/public/data/cases/ga-income-tax-populace/chunk-1.json",
-          "sha256": "6f9a93c9d7cb469d18e04aec11ab3ecc59694eeac269b24ebadadfb1da420e34"
+          "sha256": "e8a143a711af8edcad89234b7e12e989e5bbe2511344609a0afcf6b72801b27c"
         },
         {
           "cases": 500,
           "chunk": "dashboard/public/data/cases/ga-income-tax-populace/chunk-2.json",
-          "sha256": "965b3026f6d06d90e662d99eec8d23186635de072a33cd94560db02e692c1a6e"
+          "sha256": "a776ed03d2937b2df480a11327184e35bf1e71dc6248addb61f4ca3142ff9757"
         },
         {
           "cases": 500,
           "chunk": "dashboard/public/data/cases/ga-income-tax-populace/chunk-3.json",
-          "sha256": "41110f8a3b99a3c87c6818b6da4d19500c320e555fbfc9d8ae1209d9b965edaf"
+          "sha256": "b8ec85bed958f55e48c435190750a18c6fbfc8f4e78cceb89b4aeab96b597876"
         },
         {
           "cases": 187,
           "chunk": "dashboard/public/data/cases/ga-income-tax-populace/chunk-4.json",
-          "sha256": "19ea5306e3c9a8aed41d87ecb78a9f966f1d381793d66f07d9ba1ad834a2eac6"
+          "sha256": "713f22f2821915c547f7fe086f8bb9f1f06ab35fbf8138f834518c190d86b5ab"
         }
       ],
       "constant_fields": 0,
@@ -3796,10 +3796,10 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "cardinality",
       "report": "dashboard/public/data/axiom-policyengine-ga-income-tax-populace.json",
-      "report_sha256": "f920498a2393fcdefe0cda6f5eb26ffa8c1f5e234c914cd648e48f42b376e871",
+      "report_sha256": "a92818038d472fcbb0c10bf12e3a4d218bf98ce55c58d68a4d771bb2f5a03369",
       "varied_fields": 0,
       "verdict_concepts": {
-        "us-ga:policies/income_tax/pilot_liability_pipeline#ga_pit_pilot_income_tax_liability": {
+        "us-ga:policies/income_tax/2026_annual_tax_before_nonrefundable_credits#ga_pit_2026_annual_tax_before_nonrefundable_credits": {
           "distinct_left_values": 1551
         }
       }

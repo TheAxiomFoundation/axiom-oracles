@@ -51,6 +51,7 @@ runner:
     # filter, so a small national sample can leave zero Colorado units.
     sample_size: 0
     period: "2026"
+    suite: co-tax-intersection-taxsim
     concepts:
       - us:tax/federal-income-tax#liability
       - us:tax/federal-income-tax#standard_deduction

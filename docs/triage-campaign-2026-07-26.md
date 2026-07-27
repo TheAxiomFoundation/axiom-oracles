@@ -107,3 +107,82 @@ Fix next session; the verification itself is done and committed.
 - Reports pre-2026-07-25 lack axiom_all_outputs; verify with fresh runs.
 - This machine: guard disk ≥2GB; prune superseded reports between runs;
   CA-scale needs --case-shard.
+
+## Batch 11 (intersection: QBID rental convention + state flat-offset enrollment)
+
+Campaign 4,048 → **3,759**. Intersection unexplained 1,530 → 1,241.
+
+- taxsim-qbid-rental-convention-taxable-income (127 rows,
+  bridge_artifact): TAXSIM idtl=2 decomposition shows TI = AGI − std
+  (2026 std correct: 16,100/32,200) with ZERO QBI deduction; axiom
+  follows the PE convention that rental income is QBI. TAXSIM's
+  otherprop column is definitionally non-QBI, so the two engines answer
+  different questions on rental-income units. Per-row verifier
+  recomputes the bridge QBID (otherprop + SE − SECA ALD; phaseout
+  403500/201750 start, 150000/75000 length; H.R.1 §70105 $400 floor
+  gated on QBI ≥ 1000) and matched −diff within $0.05 on 127/188. The
+  81-row flat −400 subset is the floor binding (high-income wage/UBIA
+  phase-out extinguishes the regular deduction; the floor is not
+  wage-limited). 61 TI rows failed the verifier (extra mechanisms) —
+  raw.
+- taxsim-co-flat-{30-8,20-7}-filing-status-offset-intersection (130+32
+  rows, upstream_engine_gap): the sibling suite's triangulated TABOR
+  vintage class re-observed in the intersection lane on IDENTICALLY the
+  same tax-unit ids (162/163 flat rows are members; 1 non-member left
+  raw); deltas within 5¢ of 30.80/20.70.
+- Cascade honesty: tbc (15/115 would verify) and liability (0/123) on
+  QBID cases are multi-mechanism — NOT dispositioned. AMT rows (25)
+  untouched.
+- Remaining intersection 1,241: tbc continuum 468, fed liability ~240,
+  state non-flat ~360, TI fails 61, amt 64, ctc 13, eitc 11, std 2.
+
+## Batch 12 (intersection: CO refundable-credit triangulation + federal credit fingerprints)
+
+Campaign 3,759 → **3,488**. Intersection 1,241 → 970.
+
+- taxsim-co-refundable-credit-vintage (251, upstream_engine_gap):
+  triangulated against the COMPLETE 31-row axiom-vs-PE CO mismatch set
+  (1,201 units; 4 contaminated ids left raw). TAXSIM idtl=2 state
+  decomposition run on all 255 (scratchpad/state_only_taxsim.csv):
+  divergence lives in sctc/srebate columns; net siitax goes negative on
+  refundable-credit households.
+- taxsim-2026-eitc-childless-schedule-applied (9): TAXSIM sits exactly
+  on the 2026 CHILDLESS curve (7.65% phase-in to the cent, 664 max,
+  phase-out solving to statutory 10,860 on independent incomes) for
+  units WITH children; axiom sits on the with-children curve (45%×9,512
+  and 40%×17,493 exact). 2 ambiguous rows raw.
+- taxsim-2026-ctc-machinery-absent-refundable-arm (11): axiom equals
+  statutory 2026 exactly (2,200/child + 500 ODC, or ACTC 15% cap —
+  four rows match 0.15×(earned−2,500) to the cent); TAXSIM pre-TCJA
+  vintage. 2 no-match rows raw.
+- Remaining intersection 970: tbc continuum ~468, fed liability ~240,
+  amt 64, TI verifier-fails 61, state raw 111ish, misc.
+
+## Batch 13 (dividend-qualification pair of projection bugs — FIXED, suite rerun)
+
+Campaign 3,488 → **3,324**. Intersection unexplained 970 → 806 (fresh
+2026-07-27 report under both fixes; raw mismatches 2,540 → 2,300).
+
+- Bug 1 (TAXSIM projection): total DIVIDEND_INCOME was mapped into
+  TAXSIM's dividends column, which is qualified-only — over-preferential
+  on the TAXSIM leg. Caught by the tbc ratio fingerprint: diff/dividends
+  clustered exactly on bracket differentials (0.12=12%−0%, 0.07=22%−15%,
+  0.09=24%−15%). Fix: qualified leaf → dividends, non-qualified
+  remainder → otherprop. Regression tests added.
+- Bug 2 (axiom bridge, MASKED by bug 1): person_dividend_income bound
+  DIVIDEND_INCOME only, so qualified-only ECPS rows (qual leaf > zero
+  total leaf) never entered axiom AGI while still hitting the
+  preferential worksheet. Surfaced as 238 new TI mismatches after fix 1
+  broke the shared blind spot. Fix: AGI leaf takes max(total, qualified)
+  per person, mirroring _sum_dividends.
+- Suite-stamp trap AGAIN (3rd occurrence): registry rerun stamped
+  reports/-side suite as nyc-synthetic because parameters.suite was
+  missing (dashboard.suite alone only fixes the dashboard copy). ROOT
+  FIX: parameters.suite added to comparisons/co-tax-intersection-
+  taxsim.yaml; report patched; add parameters.suite to any suite you
+  rerun directly.
+- All 17 disposition entries survived the rerun (no orphans); QBID 127
+  and state classes intact; explained_residual coverage fell 426 → 351
+  because the fix converted those rows to MATCHES.
+- Remaining 806: tbc ~370, fed liability ~300 (heavily SECA/FICA-
+  correlated), amt 41, TI 66, state ~110, eitc/ctc/std tails.

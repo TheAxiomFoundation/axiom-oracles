@@ -232,6 +232,18 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
         ]
         assert [item.policyengine_variable for item in inputs] == variables
         assert all(item.source_kind == "pe_upstream_boundary" for item in inputs)
+    ga = contract.by_state()["GA"]
+    assert ga.program == (
+        "us-ga:policies/income_tax/"
+        "2026_annual_tax_before_nonrefundable_credits"
+    )
+    assert ga.output == (
+        f"{ga.program}#ga_pit_2026_annual_tax_before_nonrefundable_credits"
+    )
+    assert [item.slot for item in ga.inputs] == [
+        f"{ga.program}#input.ga_pit_2026_completed_georgia_taxable_net_income"
+    ]
+    assert ga.policyengine_target == "ga_income_tax_before_non_refundable_credits"
     ky_input = contract.by_state()["KY"].inputs[0]
     assert ky_input.source_kind == "derived"
     assert list(ky_input.policyengine_variables) == [

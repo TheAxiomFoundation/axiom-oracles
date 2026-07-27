@@ -172,7 +172,9 @@ def test_axiom_liabilities_extracts_only_mississippi_canonical_grid(tmp_path):
     generator.RULESPEC_US = tmp_path
     generator._STATES = ("MS",)
 
-    assert generator._STRICT_GRID_FIXTURE_STATES == frozenset({"CO", "MS", "NY"})
+    assert generator._STRICT_GRID_FIXTURE_STATES == frozenset(
+        {"CO", "GA", "MS", "NY"}
+    )
     assert generator._axiom_liabilities() == {
         ("MS", "single", 30_000): 468.0,
         ("MS", "single", 60_000): 1668.0,
@@ -311,6 +313,53 @@ def test_arkansas_legacy_grid_is_explicitly_decoupled() -> None:
         == "ar_income_tax_before_non_refundable_credits_indiv"
     )
     assert generator._POPULACE_AGGREGATION["AR"] == "person_sum_to_tax_unit"
+
+
+def test_georgia_uses_canonical_annual_before_credit_surface(
+    tmp_path: Path,
+) -> None:
+    generator = _load_generator()
+
+    assert generator._MODULE["GA"] == (
+        "us-ga:policies/income_tax/"
+        "2026_annual_tax_before_nonrefundable_credits"
+    )
+    assert generator._LIABILITY_OUTPUT["GA"] == (
+        f"{generator._MODULE['GA']}"
+        "#ga_pit_2026_annual_tax_before_nonrefundable_credits"
+    )
+    assert (
+        generator._PE_VAR["GA"]
+        == "ga_income_tax_before_non_refundable_credits"
+    )
+    assert "GA" in generator._STRICT_GRID_FIXTURE_STATES
+    assert generator._parse_args(["--state", "GA"]).state == "GA"
+
+    fixture_path = (
+        tmp_path
+        / "us-ga"
+        / "policies"
+        / "income_tax"
+        / "2026_annual_tax_before_nonrefundable_credits.test.yaml"
+    )
+    fixture_path.parent.mkdir(parents=True)
+    fixture_path.write_text(
+        json.dumps(
+            [
+                {
+                    "name": "single_30000",
+                    "input": {},
+                    "output": {
+                        generator._LIABILITY_OUTPUT["GA"]: 748.5,
+                    },
+                }
+            ]
+        )
+    )
+    generator.RULESPEC_US = tmp_path
+    assert generator._axiom_liabilities(("GA",)) == {
+        ("GA", "single", 30_000): 748.5
+    }
 
 
 def test_connecticut_canonical_component_retires_the_legacy_grid() -> None:
