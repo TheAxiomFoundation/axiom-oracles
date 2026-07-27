@@ -443,3 +443,39 @@ residual), #229 (small-suite grounding).
 ### Next
 
 - None.
+
+---
+
+## Blind review — 2026-07-27
+
+### State
+
+- Review worktree:
+  `.git/review-worktrees/snap-residual-cleanup-6846f433`.
+- Immutable branch target under review:
+  `6846f433dbf126249997c92cea7a3ac3c153fe13`.
+- Comparison base: local `origin/main` at
+  `9b889a27432e84804938bd3b374b4f5f7466792e`.
+- Review ledger branch:
+  `review/fed-parity-snap-residual-cleanup-6846f433`.
+- No remote or GitHub writes are authorized.
+- No explicit output path was supplied by the environment; the final committed
+  review artifact will be `REVIEW-REPORT.md` in this disposable worktree.
+
+### Done
+
+- Confirmed the requested target SHA exists locally and is the head of
+  `fed-parity/snap-residual-cleanup`.
+- Created the isolated review worktree directly from that SHA.
+- Read the GitNexus PR-review skill and the branch's worker ledger/report.
+- Captured the exact local comparison base before beginning the audit.
+
+### Next
+
+- Inventory the complete `origin/main...6846f433` diff and blast containment.
+- Independently reconcile report/disposition counts and all evidence classes.
+- Re-run at least ten TANF counterfactuals, including at least two committed
+  failures.
+- Re-run one state suite end-to-end and byte-compare its report.
+- Run the complete generated-chain `--check` parity battery.
+- Commit the evidence-backed verdict to `REVIEW-REPORT.md`.
