@@ -512,10 +512,35 @@ residual), #229 (small-suite grounding).
   classifications; it additionally detects 15 stale mismatch-value rows and
   stale engine metadata. This failure is expected until the five suites and
   chunks are regenerated.
+- Regenerated all five suites from clean Axiom and RuleSpec-US snapshots with
+  the exact cached runtime: PolicyEngine 4.18.9, PolicyEngine-US 1.767.3, and
+  PolicyEngine Core 3.30.3. The fresh raw mismatch-row counts are AL 53,
+  MA 255, NC 99, SC 181, and TN 68 (656 total). Each canonical report records
+  the imported runtime versions in its `engines` block.
+- Reverified the lone-minor #9157 signature on every regenerated case and
+  reran the explicit K-12 counterfactual on Core 3.30.3. The class remains
+  exactly 12 households / 24 mismatch rows: AL 4/8, MA 1/2, NC 3/6, SC 2/4,
+  and TN 2/4.
+- Reran every fresh benefit-only candidate for the TANF bridge on the corrected
+  runtime. Of 240 benefit-only candidates, 121 had endogenous TANF; all 121
+  reproduced their report baselines, remained eligible before and after, had
+  state-component TANF equal aggregate TANF, and zeroed both counterfactual
+  fields. Exact tolerance results remain AL 14/2, MA 18/5, NC 11/2, SC 29/9,
+  and TN 23/8: 95 passes and 26 failures. The authoritative evidence artifact
+  SHA-256 is
+  `0251315e09222289f11e21efc89c5421b84459acaa23bcd1f615828dadcb0b00`.
+  Its 95 pass IDs and all per-case numeric fields exactly match the selectors
+  and structured evidence; the evidence engine label is updated from Core
+  3.28.0 to the freshly used Core 3.30.3.
+- Re-screened the minimum-benefit #9158/#399 class. Seven shared-eligibility
+  near-minimum rows were considered, including the previously omitted MA
+  `ecps-2303`; none has the required $24 versus $23.84/$23.973597 pairing, so
+  the qualifying and disposition counts remain zero.
 
 ### Next
 
-1. Regenerate all five suites and re-run every candidate evidence test.
-2. Regenerate all derived and served artifacts, wire the targeted gate into
-   CI, and run the full `--check` chain.
+1. Apply the refreshed disposition evidence to the canonical reports and
+   regenerate the served case/disposition artifacts.
+2. Wire the targeted served-parity gate into CI and run the full write/check
+   generated chain.
 3. Reconcile baseline/current counts and write the untracked final report.

@@ -3469,7 +3469,7 @@
     "versions": {
       "axiom_rules_engine": "0.1.0",
       "policyengine": "4.18.9",
-      "policyengine_core": "3.28.0",
+      "policyengine_core": "3.30.3",
       "policyengine_us": "1.767.3"
     }
   },
@@ -4710,10 +4710,11 @@
       "axiom_rules_engine_sha": "48797e101c093bb388be718c6f5d8fc9d9f94a7d",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-27T18:23:02Z",
+    "generated_at": "2026-07-27T19:32:34Z",
     "generated_by": "scripts/run_comparison.py::tn-snap-ecps",
     "oracle": {
       "name": "policyengine",
+      "policyengine_core": "3.30.3",
       "policyengine_package": "policyengine==4.18.9",
       "policyengine_us": "1.767.3"
     },

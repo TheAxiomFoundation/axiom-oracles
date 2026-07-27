@@ -54,6 +54,9 @@ entries:
   evidence: &pe_lone_minor_evidence
     upstream_url: https://github.com/PolicyEngine/policyengine-us/issues/9157
     mechanism: >-
+      Reverified on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3, and
+      PolicyEngine-Core 3.30.3. The exact-household signature and explicit
+      K-12 counterfactual reproduce the mechanism:
       PolicyEngine excludes all earnings of an imputed K-12 member age 17
       or younger without requiring the co-resident-parent or parental-control
       condition in 7 CFR 273.9(c)(7). The sole minor is a valid household
@@ -106,7 +109,7 @@ entries:
     upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
     mechanism: >-
       Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3,
-      and PolicyEngine-Core 3.28.0: the regenerated baseline is Axiom 546.0 versus PE
+      and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 546.0 versus PE
       504.7347819010417. PE reports monthly sc_tanf 358.618896484375 and aggregate TANF
       358.618896484375. Forcing both to zero leaves SNAP eligibility true and produces PE
       SNAP 549.059814453125; its absolute delta from Axiom is 3.059814453125, within the
@@ -135,7 +138,7 @@ entries:
     upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
     mechanism: >-
       Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3,
-      and PolicyEngine-Core 3.28.0: the regenerated baseline is Axiom 546.0 versus PE
+      and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 546.0 versus PE
       504.434814453125. PE reports monthly sc_tanf 358.2307535807292 and aggregate TANF
       358.2307535807292. Forcing both to zero leaves SNAP eligibility true and produces PE
       SNAP 549.059814453125; its absolute delta from Axiom is 3.059814453125, within the
@@ -164,7 +167,7 @@ entries:
     upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
     mechanism: >-
       Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3,
-      and PolicyEngine-Core 3.28.0: the regenerated baseline is Axiom 499.0 versus PE
+      and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 499.0 versus PE
       395.2347819010417. PE reports monthly sc_tanf 358.618896484375 and aggregate TANF
       358.618896484375. Forcing both to zero leaves SNAP eligibility true and produces PE
       SNAP 502.934814453125; its absolute delta from Axiom is 3.934814453125, within the
@@ -193,7 +196,7 @@ entries:
     upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
     mechanism: >-
       Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3,
-      and PolicyEngine-Core 3.28.0: the regenerated baseline is Axiom 785.0 versus PE
+      and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 785.0 versus PE
       691.0740559895834. PE reports monthly sc_tanf 371.93994140625 and aggregate TANF
       371.93994140625. Forcing both to zero leaves SNAP eligibility true and produces PE
       SNAP 789.399169921875; its absolute delta from Axiom is 4.399169921875, within the
@@ -222,7 +225,7 @@ entries:
     upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
     mechanism: >-
       Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3,
-      and PolicyEngine-Core 3.28.0: the regenerated baseline is Axiom 615.0 versus PE
+      and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 615.0 versus PE
       484.9740804036458. PE reports monthly sc_tanf 451.7102457682292 and aggregate TANF
       451.7102457682292. Forcing both to zero leaves SNAP eligibility true and produces PE
       SNAP 620.4991455078125; its absolute delta from Axiom is 5.4991455078125, within the
@@ -251,7 +254,7 @@ entries:
     upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
     mechanism: >-
       Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3,
-      and PolicyEngine-Core 3.28.0: the regenerated baseline is Axiom 298.0 versus PE
+      and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 298.0 versus PE
       283.2449544270833. PE reports monthly sc_tanf 265.13946533203125 and aggregate TANF
       265.13946533203125. Forcing both to zero leaves SNAP eligibility true and produces
       PE SNAP 299.66998291015625; its absolute delta from Axiom is 1.66998291015625,
@@ -280,7 +283,7 @@ entries:
     upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
     mechanism: >-
       Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3,
-      and PolicyEngine-Core 3.28.0: the regenerated baseline is Axiom 477.0 versus PE
+      and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 477.0 versus PE
       420.7347819010417. PE reports monthly sc_tanf 201.43196614583334 and aggregate TANF
       201.43196614583334. Forcing both to zero leaves SNAP eligibility true and produces
       PE SNAP 481.2596842447917; its absolute delta from Axiom is 4.259684244791686,
@@ -309,7 +312,7 @@ entries:
     upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
     mechanism: >-
       Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3,
-      and PolicyEngine-Core 3.28.0: the regenerated baseline is Axiom 585.0 versus PE
+      and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 585.0 versus PE
       577.245361328125. PE reports monthly sc_tanf 47.03759765625 and aggregate TANF
       47.03759765625. Forcing both to zero leaves SNAP eligibility true and produces PE
       SNAP 591.3453776041666; its absolute delta from Axiom is 6.345377604166629, within
@@ -338,7 +341,7 @@ entries:
     upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
     mechanism: >-
       Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3,
-      and PolicyEngine-Core 3.28.0: the regenerated baseline is Axiom 420.0 versus PE
+      and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 420.0 versus PE
       406.6741129557292. PE reports monthly sc_tanf 62.76403299967448 and aggregate TANF
       62.76403299967448. Forcing both to zero leaves SNAP eligibility true and produces PE
       SNAP 425.5741373697917; its absolute delta from Axiom is 5.574137369791686, within
@@ -367,7 +370,7 @@ entries:
     upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
     mechanism: >-
       Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3,
-      and PolicyEngine-Core 3.28.0: the regenerated baseline is Axiom 279.0 versus PE
+      and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 279.0 versus PE
       175.8597615559896. PE reports monthly sc_tanf 356.6783040364583 and aggregate TANF
       356.6783040364583. Forcing both to zero leaves SNAP eligibility true and produces PE
       SNAP 282.7347819010417; its absolute delta from Axiom is 3.7347819010416856, within
@@ -396,7 +399,7 @@ entries:
     upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
     mechanism: >-
       Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3,
-      and PolicyEngine-Core 3.28.0: the regenerated baseline is Axiom 546.0 versus PE
+      and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 546.0 versus PE
       504.7347819010417. PE reports monthly sc_tanf 358.618896484375 and aggregate TANF
       358.618896484375. Forcing both to zero leaves SNAP eligibility true and produces PE
       SNAP 549.059814453125; its absolute delta from Axiom is 3.059814453125, within the
@@ -425,7 +428,7 @@ entries:
     upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
     mechanism: >-
       Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3,
-      and PolicyEngine-Core 3.28.0: the regenerated baseline is Axiom 143.0 versus PE
+      and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 143.0 versus PE
       12.474075317382812. PE reports monthly sc_tanf 452.098388671875 and aggregate TANF
       452.098388671875. Forcing both to zero leaves SNAP eligibility true and produces PE
       SNAP 148.0741170247396; its absolute delta from Axiom is 5.074117024739593, within
@@ -454,7 +457,7 @@ entries:
     upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
     mechanism: >-
       Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3,
-      and PolicyEngine-Core 3.28.0: the regenerated baseline is Axiom 597.0 versus PE
+      and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 597.0 versus PE
       564.1741129557291. PE reports monthly sc_tanf 127.91945393880208 and aggregate TANF
       127.91945393880208. Forcing both to zero leaves SNAP eligibility true and produces
       PE SNAP 602.5740966796875; its absolute delta from Axiom is 5.5740966796875, within
@@ -483,7 +486,7 @@ entries:
     upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
     mechanism: >-
       Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3,
-      and PolicyEngine-Core 3.28.0: the regenerated baseline is Axiom 785.0 versus PE
+      and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 785.0 versus PE
       716.8741048177084. PE reports monthly sc_tanf 452.098388671875 and aggregate TANF
       452.098388671875. Forcing both to zero leaves SNAP eligibility true and produces PE
       SNAP 789.399169921875; its absolute delta from Axiom is 4.399169921875, within the
@@ -512,7 +515,7 @@ entries:
     upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
     mechanism: >-
       Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3,
-      and PolicyEngine-Core 3.28.0: the regenerated baseline is Axiom 753.0 versus PE
+      and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 753.0 versus PE
       719.1241861979166. PE reports monthly sc_tanf 89.58359781901042 and aggregate TANF
       89.58359781901042. Forcing both to zero leaves SNAP eligibility true and produces PE
       SNAP 759.3241373697916; its absolute delta from Axiom is 6.324137369791629, within
@@ -541,7 +544,7 @@ entries:
     upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
     mechanism: >-
       Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3,
-      and PolicyEngine-Core 3.28.0: the regenerated baseline is Axiom 495.0 versus PE
+      and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 495.0 versus PE
       364.8991292317708. PE reports monthly sc_tanf 452.098388671875 and aggregate TANF
       452.098388671875. Forcing both to zero leaves SNAP eligibility true and produces PE
       SNAP 500.5741373697917; its absolute delta from Axiom is 5.574137369791686, within
@@ -570,7 +573,7 @@ entries:
     upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
     mechanism: >-
       Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3,
-      and PolicyEngine-Core 3.28.0: the regenerated baseline is Axiom 994.0 versus PE
+      and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 994.0 versus PE
       903.3453776041666. PE reports monthly sc_tanf 545.577880859375 and aggregate TANF
       545.577880859375. Forcing both to zero leaves SNAP eligibility true and produces PE
       SNAP 999.5703125; its absolute delta from Axiom is 5.5703125, within the suite
@@ -599,7 +602,7 @@ entries:
     upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
     mechanism: >-
       Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3,
-      and PolicyEngine-Core 3.28.0: the regenerated baseline is Axiom 785.0 versus PE
+      and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 785.0 versus PE
       716.8741048177084. PE reports monthly sc_tanf 452.098388671875 and aggregate TANF
       452.098388671875. Forcing both to zero leaves SNAP eligibility true and produces PE
       SNAP 789.399169921875; its absolute delta from Axiom is 4.399169921875, within the
@@ -628,7 +631,7 @@ entries:
     upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
     mechanism: >-
       Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3,
-      and PolicyEngine-Core 3.28.0: the regenerated baseline is Axiom 785.0 versus PE
+      and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 785.0 versus PE
       716.8741048177084. PE reports monthly sc_tanf 452.098388671875 and aggregate TANF
       452.098388671875. Forcing both to zero leaves SNAP eligibility true and produces PE
       SNAP 789.399169921875; its absolute delta from Axiom is 4.399169921875, within the
@@ -657,7 +660,7 @@ entries:
     upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
     mechanism: >-
       Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3,
-      and PolicyEngine-Core 3.28.0: the regenerated baseline is Axiom 745.0 versus PE
+      and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 745.0 versus PE
       649.6741129557291. PE reports monthly sc_tanf 335.1993408203125 and aggregate TANF
       335.1993408203125. Forcing both to zero leaves SNAP eligibility true and produces PE
       SNAP 750.174072265625; its absolute delta from Axiom is 5.174072265625, within the
@@ -686,7 +689,7 @@ entries:
     upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
     mechanism: >-
       Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3,
-      and PolicyEngine-Core 3.28.0: the regenerated baseline is Axiom 298.0 versus PE
+      and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 298.0 versus PE
       228.34501139322916. PE reports monthly sc_tanf 265.13946533203125 and aggregate TANF
       265.13946533203125. Forcing both to zero leaves SNAP eligibility true and produces
       PE SNAP 299.66998291015625; its absolute delta from Axiom is 1.66998291015625,
@@ -715,7 +718,7 @@ entries:
     upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
     mechanism: >-
       Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3,
-      and PolicyEngine-Core 3.28.0: the regenerated baseline is Axiom 546.0 versus PE
+      and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 546.0 versus PE
       504.7347819010417. PE reports monthly sc_tanf 358.618896484375 and aggregate TANF
       358.618896484375. Forcing both to zero leaves SNAP eligibility true and produces PE
       SNAP 549.059814453125; its absolute delta from Axiom is 3.059814453125, within the
@@ -744,7 +747,7 @@ entries:
     upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
     mechanism: >-
       Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3,
-      and PolicyEngine-Core 3.28.0: the regenerated baseline is Axiom 645.0 versus PE
+      and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 645.0 versus PE
       632.4453125. PE reports monthly sc_tanf 63.92009989420573 and aggregate TANF
       63.92009989420573. Forcing both to zero leaves SNAP eligibility true and produces PE
       SNAP 651.6453450520834; its absolute delta from Axiom is 6.645345052083371, within
@@ -773,7 +776,7 @@ entries:
     upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
     mechanism: >-
       Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3,
-      and PolicyEngine-Core 3.28.0: the regenerated baseline is Axiom 798.0 versus PE
+      and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 798.0 versus PE
       743.4453125. PE reports monthly sc_tanf 203.92342122395834 and aggregate TANF
       203.92342122395834. Forcing both to zero leaves SNAP eligibility true and produces
       PE SNAP 804.6454264322916; its absolute delta from Axiom is 6.645426432291629,
@@ -802,7 +805,7 @@ entries:
     upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
     mechanism: >-
       Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3,
-      and PolicyEngine-Core 3.28.0: the regenerated baseline is Axiom 785.0 versus PE
+      and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 785.0 versus PE
       753.6241861979166. PE reports monthly sc_tanf 452.098388671875 and aggregate TANF
       452.098388671875. Forcing both to zero leaves SNAP eligibility true and produces PE
       SNAP 789.399169921875; its absolute delta from Axiom is 4.399169921875, within the
@@ -831,7 +834,7 @@ entries:
     upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
     mechanism: >-
       Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3,
-      and PolicyEngine-Core 3.28.0: the regenerated baseline is Axiom 477.0 versus PE
+      and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 477.0 versus PE
       419.084716796875. PE reports monthly sc_tanf 139.8016153971354 and aggregate TANF
       139.8016153971354. Forcing both to zero leaves SNAP eligibility true and produces PE
       SNAP 482.084716796875; its absolute delta from Axiom is 5.084716796875, within the
@@ -860,7 +863,7 @@ entries:
     upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
     mechanism: >-
       Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3,
-      and PolicyEngine-Core 3.28.0: the regenerated baseline is Axiom 592.0 versus PE
+      and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 592.0 versus PE
       583.5453694661459. PE reports monthly sc_tanf 48.97650146484375 and aggregate TANF
       48.97650146484375. Forcing both to zero leaves SNAP eligibility true and produces PE
       SNAP 598.245361328125; its absolute delta from Axiom is 6.245361328125, within the
@@ -889,7 +892,7 @@ entries:
     upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
     mechanism: >-
       Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3,
-      and PolicyEngine-Core 3.28.0: the regenerated baseline is Axiom 362.0 versus PE
+      and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 362.0 versus PE
       351.6597900390625. PE reports monthly sc_tanf 49.79987589518229 and aggregate TANF
       49.79987589518229. Forcing both to zero leaves SNAP eligibility true and produces PE
       SNAP 366.4347737630208; its absolute delta from Axiom is 4.434773763020814, within
@@ -918,7 +921,7 @@ entries:
     upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
     mechanism: >-
       Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3,
-      and PolicyEngine-Core 3.28.0: the regenerated baseline is Axiom 298.0 versus PE
+      and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 298.0 versus PE
       281.6700032552083. PE reports monthly sc_tanf 261.18060302734375 and aggregate TANF
       261.18060302734375. Forcing both to zero leaves SNAP eligibility true and produces
       PE SNAP 299.66998291015625; its absolute delta from Axiom is 1.66998291015625,
