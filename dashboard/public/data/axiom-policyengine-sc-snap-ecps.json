@@ -8,18 +8,18 @@
       "components": [],
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
-      "left_weighted_sum": 85016281.078689,
-      "match_rate": 91.426345,
-      "match_weight": 2340051.362345,
-      "mismatch_count": 110,
-      "mismatch_weight": 208831.224237,
+      "left_weighted_sum": 84979493.686512,
+      "match_rate": 91.348402,
+      "match_weight": 2340051.280825,
+      "mismatch_count": 111,
+      "mismatch_weight": 208831.305757,
       "missing_both_count": 0,
       "missing_left_count": 0,
       "missing_right_count": 0,
       "parent": null,
-      "right_weighted_sum": 89929217.2572,
-      "weighted_difference": -4912936.178511,
-      "weighted_match_rate": 91.80695
+      "right_weighted_sum": 89893093.06415,
+      "weighted_difference": -4913599.377639,
+      "weighted_match_rate": 91.806947
     },
     {
       "category": "food",
@@ -55,10 +55,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -118,10 +118,10 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 5063,
+        "axiom_input_records_count": 5079,
         "axiom_relations_count": 6,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -166,10 +166,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 5063,
+        "axiom_input_records_count": 5079,
         "axiom_relations_count": 6,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -225,10 +225,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 5063,
+        "axiom_input_records_count": 5079,
         "axiom_relations_count": 6,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -290,10 +290,10 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 11791,
+        "axiom_input_records_count": 11831,
         "axiom_relations_count": 18,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -346,10 +346,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -409,10 +409,10 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -461,10 +461,10 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 5063,
+        "axiom_input_records_count": 5079,
         "axiom_relations_count": 6,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -515,10 +515,10 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 5063,
+        "axiom_input_records_count": 5079,
         "axiom_relations_count": 6,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -563,10 +563,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -620,10 +620,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -677,10 +677,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -734,10 +734,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -797,10 +797,10 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 6745,
+        "axiom_input_records_count": 6767,
         "axiom_relations_count": 9,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -847,10 +847,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -910,10 +910,10 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 10109,
+        "axiom_input_records_count": 10143,
         "axiom_relations_count": 15,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -964,10 +964,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 5063,
+        "axiom_input_records_count": 5079,
         "axiom_relations_count": 6,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -1023,10 +1023,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -1080,10 +1080,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -1143,10 +1143,10 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 6745,
+        "axiom_input_records_count": 6767,
         "axiom_relations_count": 9,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -1199,10 +1199,10 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -1246,10 +1246,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -1303,10 +1303,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -1360,10 +1360,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -1417,10 +1417,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -1474,10 +1474,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 5063,
+        "axiom_input_records_count": 5079,
         "axiom_relations_count": 6,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -1533,10 +1533,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -1590,10 +1590,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -1647,10 +1647,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 5063,
+        "axiom_input_records_count": 5079,
         "axiom_relations_count": 6,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -1712,10 +1712,10 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 5063,
+        "axiom_input_records_count": 5079,
         "axiom_relations_count": 6,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -1760,10 +1760,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 5063,
+        "axiom_input_records_count": 5079,
         "axiom_relations_count": 6,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -1819,10 +1819,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -1882,10 +1882,10 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 8427,
+        "axiom_input_records_count": 8455,
         "axiom_relations_count": 12,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -1934,10 +1934,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -1991,10 +1991,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 5063,
+        "axiom_input_records_count": 5079,
         "axiom_relations_count": 6,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -2056,10 +2056,10 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 5063,
+        "axiom_input_records_count": 5079,
         "axiom_relations_count": 6,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -2110,10 +2110,10 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 6745,
+        "axiom_input_records_count": 6767,
         "axiom_relations_count": 9,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -2160,10 +2160,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -2223,10 +2223,10 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 11791,
+        "axiom_input_records_count": 11831,
         "axiom_relations_count": 18,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -2285,10 +2285,10 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 5063,
+        "axiom_input_records_count": 5079,
         "axiom_relations_count": 6,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -2339,10 +2339,10 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 5063,
+        "axiom_input_records_count": 5079,
         "axiom_relations_count": 6,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -2393,10 +2393,10 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 6745,
+        "axiom_input_records_count": 6767,
         "axiom_relations_count": 9,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -2443,10 +2443,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -2500,10 +2500,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -2557,10 +2557,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -2620,10 +2620,10 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 10109,
+        "axiom_input_records_count": 10143,
         "axiom_relations_count": 15,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -2674,10 +2674,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -2731,10 +2731,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 11791,
+        "axiom_input_records_count": 11831,
         "axiom_relations_count": 18,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -2798,10 +2798,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 5063,
+        "axiom_input_records_count": 5079,
         "axiom_relations_count": 6,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -2857,10 +2857,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -2920,10 +2920,10 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 10109,
+        "axiom_input_records_count": 10143,
         "axiom_relations_count": 15,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -2980,10 +2980,10 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 6745,
+        "axiom_input_records_count": 6767,
         "axiom_relations_count": 9,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -3030,10 +3030,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 5063,
+        "axiom_input_records_count": 5079,
         "axiom_relations_count": 6,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -3095,10 +3095,10 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 6745,
+        "axiom_input_records_count": 6767,
         "axiom_relations_count": 9,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -3145,10 +3145,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -3202,10 +3202,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -3259,10 +3259,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -3322,10 +3322,10 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 8427,
+        "axiom_input_records_count": 8455,
         "axiom_relations_count": 12,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -3368,16 +3368,72 @@
       "right_errors": []
     },
     {
+      "case_id": "ecps-29277",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
+      "metadata": {
+        "axiom_all_outputs_count": 38,
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 6767,
+        "axiom_relations_count": 9,
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_summary": {
+          "ages": [
+            63,
+            43,
+            11
+          ],
+          "household_size": 3,
+          "yearly_earned_income_per_person": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "household_weight": 0.081519715487957,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "45045",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "description": "SNAP benefit amount",
+          "difference": 68.12589518229163,
+          "kind": "amount_difference",
+          "left": 785.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 716.8741048177084,
+          "tolerance": 7
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
       "case_id": "ecps-29280",
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -3431,10 +3487,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 5063,
+        "axiom_input_records_count": 5079,
         "axiom_relations_count": 6,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -3496,10 +3552,10 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 10109,
+        "axiom_input_records_count": 10143,
         "axiom_relations_count": 15,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -3550,10 +3606,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 5063,
+        "axiom_input_records_count": 5079,
         "axiom_relations_count": 6,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -3609,10 +3665,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -3672,10 +3728,10 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 6745,
+        "axiom_input_records_count": 6767,
         "axiom_relations_count": 9,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -3703,12 +3759,12 @@
         {
           "concept": "us:statutes/7/2014/u#snap_benefit",
           "description": "SNAP benefit amount",
-          "difference": 34.27596028645837,
+          "difference": 33.87581380208337,
           "kind": "amount_difference",
-          "left": 775.0,
+          "left": 753.0,
           "parent": null,
           "relative_tolerance": 0,
-          "right": 740.7240397135416,
+          "right": 719.1241861979166,
           "tolerance": 7
         }
       ],
@@ -3722,10 +3778,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 5063,
+        "axiom_input_records_count": 5079,
         "axiom_relations_count": 6,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -3787,10 +3843,10 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 6745,
+        "axiom_input_records_count": 6767,
         "axiom_relations_count": 9,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -3837,10 +3893,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -3894,10 +3950,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -3951,10 +4007,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 5063,
+        "axiom_input_records_count": 5079,
         "axiom_relations_count": 6,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -4010,10 +4066,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -4073,10 +4129,10 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 8427,
+        "axiom_input_records_count": 8455,
         "axiom_relations_count": 12,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -4131,10 +4187,10 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 6745,
+        "axiom_input_records_count": 6767,
         "axiom_relations_count": 9,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -4181,10 +4237,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -4238,10 +4294,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -4301,10 +4357,10 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 6745,
+        "axiom_input_records_count": 6767,
         "axiom_relations_count": 9,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -4357,10 +4413,10 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 10109,
+        "axiom_input_records_count": 10143,
         "axiom_relations_count": 15,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -4411,10 +4467,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -4468,10 +4524,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -4525,10 +4581,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 5063,
+        "axiom_input_records_count": 5079,
         "axiom_relations_count": 6,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -4584,10 +4640,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -4647,10 +4703,10 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 5063,
+        "axiom_input_records_count": 5079,
         "axiom_relations_count": 6,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -4695,10 +4751,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -4758,10 +4814,10 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 6745,
+        "axiom_input_records_count": 6767,
         "axiom_relations_count": 9,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -4814,10 +4870,10 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 10109,
+        "axiom_input_records_count": 10143,
         "axiom_relations_count": 15,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -4868,10 +4924,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 5063,
+        "axiom_input_records_count": 5079,
         "axiom_relations_count": 6,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -4933,10 +4989,10 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -4979,10 +5035,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 5063,
+        "axiom_input_records_count": 5079,
         "axiom_relations_count": 6,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -5038,10 +5094,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -5095,10 +5151,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -5152,10 +5208,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -5209,10 +5265,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -5272,10 +5328,10 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 5063,
+        "axiom_input_records_count": 5079,
         "axiom_relations_count": 6,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -5320,10 +5376,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 5063,
+        "axiom_input_records_count": 5079,
         "axiom_relations_count": 6,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -5379,10 +5435,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -5436,10 +5492,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 5063,
+        "axiom_input_records_count": 5079,
         "axiom_relations_count": 6,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -5495,10 +5551,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 5063,
+        "axiom_input_records_count": 5079,
         "axiom_relations_count": 6,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -5554,10 +5610,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -5617,10 +5673,10 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 11791,
+        "axiom_input_records_count": 11831,
         "axiom_relations_count": 18,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -5673,10 +5729,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -5730,10 +5786,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 6745,
+        "axiom_input_records_count": 6767,
         "axiom_relations_count": 9,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -5791,10 +5847,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -5854,10 +5910,10 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 8427,
+        "axiom_input_records_count": 8455,
         "axiom_relations_count": 12,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -5912,10 +5968,10 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 8427,
+        "axiom_input_records_count": 8455,
         "axiom_relations_count": 12,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -5964,10 +6020,10 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -6027,10 +6083,10 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 13473,
+        "axiom_input_records_count": 13519,
         "axiom_relations_count": 21,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -6091,10 +6147,10 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 6745,
+        "axiom_input_records_count": 6767,
         "axiom_relations_count": 9,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -6147,10 +6203,10 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 5063,
+        "axiom_input_records_count": 5079,
         "axiom_relations_count": 6,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -6176,12 +6232,12 @@
         {
           "concept": "us:statutes/7/2014/u#snap_benefit",
           "description": "SNAP benefit amount",
-          "difference": 58.415283203125,
+          "difference": 57.915283203125,
           "kind": "amount_difference",
-          "left": 482.0,
+          "left": 477.0,
           "parent": null,
           "relative_tolerance": 0,
-          "right": 423.584716796875,
+          "right": 419.084716796875,
           "tolerance": 7
         }
       ],
@@ -6201,10 +6257,10 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 6745,
+        "axiom_input_records_count": 6767,
         "axiom_relations_count": 9,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -6257,10 +6313,10 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 8427,
+        "axiom_input_records_count": 8455,
         "axiom_relations_count": 12,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -6315,10 +6371,10 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 5063,
+        "axiom_input_records_count": 5079,
         "axiom_relations_count": 6,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -6369,10 +6425,10 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 8427,
+        "axiom_input_records_count": 8455,
         "axiom_relations_count": 12,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -6427,10 +6483,10 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 11791,
+        "axiom_input_records_count": 11831,
         "axiom_relations_count": 18,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -6489,10 +6545,10 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 30,
+        "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3381,
+        "axiom_input_records_count": 3391,
         "axiom_relations_count": 3,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
@@ -6555,14 +6611,20 @@
     }
   ],
   "dashboard_truncation": {
-    "shown_case_rows": 113,
-    "shown_mismatches": 180,
+    "shown_case_rows": 114,
+    "shown_mismatches": 181,
     "total_case_rows": 1283,
-    "total_mismatches": 180
+    "total_mismatches": 181
   },
   "engines": {
     "left": "axiom",
-    "right": "policyengine"
+    "right": "policyengine",
+    "versions": {
+      "axiom_rules_engine": "0.1.0",
+      "policyengine": "4.18.9",
+      "policyengine_core": "3.28.0",
+      "policyengine_us": "1.767.3"
+    }
   },
   "errors": [],
   "locales": [],
@@ -8418,6 +8480,22 @@
     },
     {
       "ages": null,
+      "case_id": "ecps-29277",
+      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "description": "SNAP benefit amount",
+      "difference": 68.12589518229163,
+      "kind": "amount_difference",
+      "left": 785.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 716.8741048177084,
+      "scenario": null,
+      "tolerance": 7,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
       "case_id": "ecps-29280",
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
@@ -8595,13 +8673,13 @@
       "case_id": "ecps-29332",
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
-      "difference": 34.27596028645837,
+      "difference": 33.87581380208337,
       "kind": "amount_difference",
-      "left": 775.0,
+      "left": 753.0,
       "parent": null,
       "pregnant_head": null,
       "relative_tolerance": 0,
-      "right": 740.7240397135416,
+      "right": 719.1241861979166,
       "scenario": null,
       "tolerance": 7,
       "yearly_earned_income": null
@@ -9970,13 +10048,13 @@
       "case_id": "ecps-29717",
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
-      "difference": 58.415283203125,
+      "difference": 57.915283203125,
       "kind": "amount_difference",
-      "left": 482.0,
+      "left": 477.0,
       "parent": null,
       "pregnant_head": null,
       "relative_tolerance": 0,
-      "right": 423.584716796875,
+      "right": 419.084716796875,
       "scenario": null,
       "tolerance": 7,
       "yearly_earned_income": null
@@ -10088,12 +10166,12 @@
       "axiom_rules_engine_sha": "48797e101c093bb388be718c6f5d8fc9d9f94a7d",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-26T07:04:30Z",
+    "generated_at": "2026-07-27T17:31:33Z",
     "generated_by": "scripts/run_comparison.py::sc-snap-ecps",
     "oracle": {
       "name": "policyengine",
       "policyengine_package": "policyengine==4.18.9",
-      "policyengine_us": "1.752.2"
+      "policyengine_us": "1.767.3"
     },
     "rulespecs": [
       {
@@ -10122,19 +10200,19 @@
       },
       "dispositions_file": "dispositions/sc-snap-ecps.yaml",
       "expired_entries": [],
-      "explained_rate": 92.985191,
+      "explained_rate": 92.94622,
       "orphaned_entries": [],
-      "raw_match_rate": 92.985191,
+      "raw_match_rate": 92.94622,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 54
+      "unexplained_count": 55
     },
     "error_count": 0,
     "errors_by_engine": [],
-    "match_count": 2386,
-    "mismatch_count": 180,
+    "match_count": 2385,
+    "mismatch_count": 181,
     "mismatches_by_concept": [
       {
-        "count": 110,
+        "count": 111,
         "value": "us:statutes/7/2014/u#snap_benefit"
       },
       {
@@ -10144,7 +10222,7 @@
     ],
     "mismatches_by_kind": [
       {
-        "count": 110,
+        "count": 111,
         "value": "amount_difference"
       },
       {
@@ -10154,16 +10232,16 @@
     ],
     "mismatches_by_scenario": [
       {
-        "count": 180,
+        "count": 181,
         "value": null
       }
     ],
-    "stored_mismatch_example_count": 180,
+    "stored_mismatch_example_count": 181,
     "weighted": {
       "comparison_weight": 5097765.173164,
-      "match_rate": 88.590692,
-      "match_weight": 4516145.434087,
-      "mismatch_weight": 581619.739077
+      "match_rate": 88.59069,
+      "match_weight": 4516145.352567,
+      "mismatch_weight": 581619.820597
     }
   }
 }

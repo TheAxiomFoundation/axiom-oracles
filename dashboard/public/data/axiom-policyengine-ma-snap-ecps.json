@@ -8,18 +8,18 @@
       "components": [],
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
-      "left_weighted_sum": 232956655.366856,
+      "left_weighted_sum": 226059101.02774,
       "match_rate": 91.544118,
-      "match_weight": 3180630.960642,
+      "match_weight": 3180318.314727,
       "mismatch_count": 138,
-      "mismatch_weight": 372693.316033,
+      "mismatch_weight": 373005.961948,
       "missing_both_count": 0,
       "missing_left_count": 0,
       "missing_right_count": 0,
       "parent": null,
-      "right_weighted_sum": 238333116.166256,
-      "weighted_difference": -5376460.7994,
-      "weighted_match_rate": 89.511418
+      "right_weighted_sum": 231486139.42591,
+      "weighted_difference": -5427038.39817,
+      "weighted_match_rate": 89.50262
     },
     {
       "category": "food",
@@ -55,7 +55,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -112,7 +112,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -169,7 +169,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1101,
@@ -228,7 +228,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1453,
@@ -295,7 +295,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1453,
@@ -346,7 +346,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -409,7 +409,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1453,
@@ -465,7 +465,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1453,
@@ -521,7 +521,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1453,
@@ -571,7 +571,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1101,
@@ -636,7 +636,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -688,7 +688,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -740,7 +740,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1805,
@@ -792,7 +792,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -849,7 +849,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -906,7 +906,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1101,
@@ -966,7 +966,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1805,
@@ -1035,7 +1035,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 2157,
@@ -1090,7 +1090,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -1147,7 +1147,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 2509,
@@ -1214,7 +1214,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1101,
@@ -1273,7 +1273,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1101,
@@ -1332,7 +1332,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1805,
@@ -1395,7 +1395,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -1459,7 +1459,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1805,
@@ -1511,7 +1511,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -1568,7 +1568,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -1631,7 +1631,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 2157,
@@ -1691,7 +1691,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1805,
@@ -1743,7 +1743,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1101,
@@ -1802,7 +1802,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -1859,7 +1859,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -1916,7 +1916,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -1973,7 +1973,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -2030,7 +2030,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1101,
@@ -2089,7 +2089,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1101,
@@ -2142,13 +2142,65 @@
       "right_errors": []
     },
     {
+      "case_id": "ecps-2303",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
+      "metadata": {
+        "axiom_all_outputs_count": 39,
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 749,
+        "axiom_relations_count": 2,
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_summary": {
+          "ages": [
+            80
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "household_weight": 312.8240051269531,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "25015",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "description": "SNAP benefit amount",
+          "difference": -76.1699930826823,
+          "kind": "amount_difference",
+          "left": 24.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 100.1699930826823,
+          "tolerance": 7
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
       "case_id": "ecps-2305",
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -2211,7 +2263,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1101,
@@ -2259,7 +2311,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -2316,7 +2368,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1101,
@@ -2375,7 +2427,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -2432,7 +2484,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -2489,7 +2541,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1453,
@@ -2556,7 +2608,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1453,
@@ -2606,7 +2658,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -2663,7 +2715,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1101,
@@ -2728,7 +2780,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1453,
@@ -2784,7 +2836,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1805,
@@ -2842,7 +2894,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1453,
@@ -2898,7 +2950,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1453,
@@ -2954,7 +3006,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1453,
@@ -3010,7 +3062,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1453,
@@ -3066,7 +3118,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 2157,
@@ -3120,7 +3172,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1101,
@@ -3179,7 +3231,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -3242,7 +3294,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1101,
@@ -3290,7 +3342,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -3347,7 +3399,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -3404,7 +3456,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -3461,7 +3513,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -3518,7 +3570,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -3575,7 +3627,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1101,
@@ -3640,7 +3692,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1101,
@@ -3694,7 +3746,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1805,
@@ -3746,7 +3798,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -3803,7 +3855,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1101,
@@ -3862,7 +3914,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -3919,7 +3971,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -3976,7 +4028,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1101,
@@ -4041,7 +4093,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1101,
@@ -4089,7 +4141,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -4146,7 +4198,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -4209,7 +4261,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1453,
@@ -4265,7 +4317,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1101,
@@ -4294,12 +4346,12 @@
         {
           "concept": "us:statutes/7/2014/u#snap_benefit",
           "description": "SNAP benefit amount",
-          "difference": 246.1152140299479,
+          "difference": 245.06522623697916,
           "kind": "amount_difference",
           "left": 454.0,
           "parent": null,
           "relative_tolerance": 0,
-          "right": 207.8847859700521,
+          "right": 208.93477376302084,
           "tolerance": 7
         }
       ],
@@ -4313,7 +4365,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -4376,7 +4428,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -4422,7 +4474,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -4479,7 +4531,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -4542,7 +4594,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1453,
@@ -4592,7 +4644,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -4649,7 +4701,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1805,
@@ -4712,7 +4764,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1453,
@@ -4743,12 +4795,12 @@
         {
           "concept": "us:statutes/7/2014/u#snap_benefit",
           "description": "SNAP benefit amount",
-          "difference": -359.8740641276042,
+          "difference": -350.4241129557292,
           "kind": "amount_difference",
           "left": 0.0,
           "parent": null,
           "relative_tolerance": 0,
-          "right": 359.8740641276042,
+          "right": 350.4241129557292,
           "tolerance": 7
         },
         {
@@ -4779,7 +4831,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 2509,
@@ -4841,7 +4893,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1453,
@@ -4897,7 +4949,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1453,
@@ -4928,9 +4980,9 @@
         {
           "concept": "us:statutes/7/2014/u#snap_benefit",
           "description": "SNAP benefit amount",
-          "difference": 100.65083821614581,
+          "difference": 99.65083821614581,
           "kind": "amount_difference",
-          "left": 553.0,
+          "left": 552.0,
           "parent": null,
           "relative_tolerance": 0,
           "right": 452.3491617838542,
@@ -4953,7 +5005,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1805,
@@ -5011,7 +5063,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1453,
@@ -5062,7 +5114,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1101,
@@ -5121,7 +5173,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1101,
@@ -5180,7 +5232,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1101,
@@ -5245,7 +5297,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1453,
@@ -5301,7 +5353,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 2157,
@@ -5355,7 +5407,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -5412,7 +5464,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -5475,7 +5527,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -5521,7 +5573,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1101,
@@ -5580,7 +5632,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -5637,7 +5689,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -5694,7 +5746,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -5751,7 +5803,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -5808,7 +5860,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -5865,7 +5917,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -5928,7 +5980,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1101,
@@ -5982,7 +6034,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -6009,12 +6061,12 @@
         {
           "concept": "us:statutes/7/2014/u#snap_benefit",
           "description": "SNAP benefit amount",
-          "difference": -78.39497884114584,
+          "difference": -78.89498901367188,
           "kind": "amount_difference",
-          "left": 121.0,
+          "left": 83.0,
           "parent": null,
           "relative_tolerance": 0,
-          "right": 199.39497884114584,
+          "right": 161.89498901367188,
           "tolerance": 7
         }
       ],
@@ -6028,7 +6080,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1101,
@@ -6093,7 +6145,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 2157,
@@ -6153,7 +6205,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1453,
@@ -6203,7 +6255,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -6254,58 +6306,6 @@
       "right_errors": []
     },
     {
-      "case_id": "ecps-2930",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 50.0,
-      "matches": [
-        {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
-          "left": true,
-          "right": true
-        }
-      ],
-      "metadata": {
-        "axiom_all_outputs_count": 31,
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 749,
-        "axiom_relations_count": 2,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            78
-          ],
-          "household_size": 1,
-          "yearly_earned_income_per_person": [
-            0.0
-          ],
-          "yearly_earned_income_total": 0.0
-        },
-        "household_weight": 0.17809006571769714,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "25005",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [
-        {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
-          "description": "SNAP benefit amount",
-          "difference": -78.29496256510416,
-          "kind": "amount_difference",
-          "left": 140.0,
-          "parent": null,
-          "relative_tolerance": 0,
-          "right": 218.29496256510416,
-          "tolerance": 7
-        }
-      ],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
       "case_id": "ecps-2936",
       "left_engine": "axiom",
       "left_errors": [],
@@ -6318,7 +6318,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1805,
@@ -6370,7 +6370,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -6433,7 +6433,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1453,
@@ -6483,7 +6483,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -6540,7 +6540,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -6597,7 +6597,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -6660,7 +6660,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1101,
@@ -6714,7 +6714,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1453,
@@ -6770,7 +6770,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1101,
@@ -6824,7 +6824,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1805,
@@ -6876,7 +6876,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -6933,7 +6933,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1101,
@@ -6962,12 +6962,12 @@
         {
           "concept": "us:statutes/7/2014/u#snap_benefit",
           "description": "SNAP benefit amount",
-          "difference": -210.1347859700521,
+          "difference": -210.05977376302084,
           "kind": "amount_difference",
           "left": 0.0,
           "parent": null,
           "relative_tolerance": 0,
-          "right": 210.1347859700521,
+          "right": 210.05977376302084,
           "tolerance": 7
         },
         {
@@ -6998,7 +6998,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1453,
@@ -7054,7 +7054,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1101,
@@ -7102,7 +7102,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -7159,7 +7159,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -7216,7 +7216,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1101,
@@ -7281,7 +7281,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1805,
@@ -7333,7 +7333,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -7396,7 +7396,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1101,
@@ -7444,7 +7444,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1101,
@@ -7503,7 +7503,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -7566,7 +7566,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1101,
@@ -7614,7 +7614,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -7677,7 +7677,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1453,
@@ -7727,7 +7727,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -7790,7 +7790,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1101,
@@ -7838,7 +7838,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1101,
@@ -7903,7 +7903,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1453,
@@ -7959,7 +7959,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -8005,7 +8005,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -8062,7 +8062,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -8125,7 +8125,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1805,
@@ -8183,7 +8183,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1101,
@@ -8231,7 +8231,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -8294,7 +8294,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1453,
@@ -8350,7 +8350,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 3565,
@@ -8412,7 +8412,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -8469,7 +8469,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -8526,7 +8526,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1101,
@@ -8591,7 +8591,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -8643,7 +8643,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1805,
@@ -8701,7 +8701,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1805,
@@ -8759,7 +8759,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 2509,
@@ -8815,7 +8815,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1101,
@@ -8880,7 +8880,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1805,
@@ -8933,7 +8933,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -8990,7 +8990,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -9053,7 +9053,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1453,
@@ -9103,7 +9103,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 749,
@@ -9166,7 +9166,7 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1805,
@@ -9218,7 +9218,7 @@
       "match_rate": 0.0,
       "matches": [],
       "metadata": {
-        "axiom_all_outputs_count": 31,
+        "axiom_all_outputs_count": 39,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 1101,
@@ -9303,7 +9303,13 @@
   },
   "engines": {
     "left": "axiom",
-    "right": "policyengine"
+    "right": "policyengine",
+    "versions": {
+      "axiom_rules_engine": "0.1.0",
+      "policyengine": "4.18.9",
+      "policyengine_core": "3.28.0",
+      "policyengine_us": "1.767.3"
+    }
   },
   "errors": [],
   "locales": [],
@@ -10541,6 +10547,22 @@
     },
     {
       "ages": null,
+      "case_id": "ecps-2303",
+      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "description": "SNAP benefit amount",
+      "difference": -76.1699930826823,
+      "kind": "amount_difference",
+      "left": 24.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 100.1699930826823,
+      "scenario": null,
+      "tolerance": 7,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
       "case_id": "ecps-2305",
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
@@ -11759,13 +11781,13 @@
       "case_id": "ecps-2711",
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
-      "difference": 246.1152140299479,
+      "difference": 245.06522623697916,
       "kind": "amount_difference",
       "left": 454.0,
       "parent": null,
       "pregnant_head": null,
       "relative_tolerance": 0,
-      "right": 207.8847859700521,
+      "right": 208.93477376302084,
       "scenario": null,
       "tolerance": 7,
       "yearly_earned_income": null
@@ -12022,7 +12044,7 @@
       "case_id": "ecps-2765",
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
-      "difference": -359.8740641276042,
+      "difference": -350.4241129557292,
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "ma-bbce-gross-band-snap_benefit",
@@ -12033,7 +12055,7 @@
       "parent": null,
       "pregnant_head": null,
       "relative_tolerance": 0,
-      "right": 359.8740641276042,
+      "right": 350.4241129557292,
       "scenario": null,
       "tolerance": 7,
       "yearly_earned_income": null
@@ -12096,9 +12118,9 @@
       "case_id": "ecps-2797",
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
-      "difference": 100.65083821614581,
+      "difference": 99.65083821614581,
       "kind": "amount_difference",
-      "left": 553.0,
+      "left": 552.0,
       "parent": null,
       "pregnant_head": null,
       "relative_tolerance": 0,
@@ -12727,13 +12749,13 @@
       "case_id": "ecps-2909",
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
-      "difference": -78.39497884114584,
+      "difference": -78.89498901367188,
       "kind": "amount_difference",
-      "left": 121.0,
+      "left": 83.0,
       "parent": null,
       "pregnant_head": null,
       "relative_tolerance": 0,
-      "right": 199.39497884114584,
+      "right": 161.89498901367188,
       "scenario": null,
       "tolerance": 7,
       "yearly_earned_income": null
@@ -12862,22 +12884,6 @@
       "right": true,
       "scenario": null,
       "tolerance": 0,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
-      "case_id": "ecps-2930",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
-      "description": "SNAP benefit amount",
-      "difference": -78.29496256510416,
-      "kind": "amount_difference",
-      "left": 140.0,
-      "parent": null,
-      "pregnant_head": null,
-      "relative_tolerance": 0,
-      "right": 218.29496256510416,
-      "scenario": null,
-      "tolerance": 7,
       "yearly_earned_income": null
     },
     {
@@ -13201,7 +13207,7 @@
       "case_id": "ecps-3013",
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
-      "difference": -210.1347859700521,
+      "difference": -210.05977376302084,
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "ma-bbce-gross-band-snap_benefit",
@@ -13212,7 +13218,7 @@
       "parent": null,
       "pregnant_head": null,
       "relative_tolerance": 0,
-      "right": 210.1347859700521,
+      "right": 210.05977376302084,
       "scenario": null,
       "tolerance": 7,
       "yearly_earned_income": null
@@ -14429,12 +14435,12 @@
       "axiom_rules_engine_sha": "48797e101c093bb388be718c6f5d8fc9d9f94a7d",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-26T06:55:17Z",
+    "generated_at": "2026-07-27T17:18:47Z",
     "generated_by": "scripts/run_comparison.py::ma-snap-ecps",
     "oracle": {
       "name": "policyengine",
       "policyengine_package": "policyengine==4.18.9",
-      "policyengine_us": "1.752.2"
+      "policyengine_us": "1.767.3"
     },
     "rulespecs": [
       {
@@ -14506,9 +14512,9 @@
     "stored_mismatch_example_count": 255,
     "weighted": {
       "comparison_weight": 7106648.553349,
-      "match_rate": 92.116904,
-      "match_weight": 6546424.641624,
-      "mismatch_weight": 560223.911725
+      "match_rate": 92.112505,
+      "match_weight": 6546111.995709,
+      "mismatch_weight": 560536.55764
     }
   }
 }

@@ -369,13 +369,28 @@ residual), #229 (small-suite grounding).
   and must be regenerated on the requested 1.767.3 wheel.
 - Confirmed GitNexus MCP tools are unavailable for this worktree; direct
   configuration and source tracing is the fallback.
+- Regenerated all five full suites through `scripts/run_comparison.py` and the
+  general `axiom-oracles-compare` runner on the cached, offline stack:
+  PolicyEngine 4.18.9, PolicyEngine-US 1.767.3, PolicyEngine Core 3.28.0,
+  Axiom rules engine 0.1.0 at `48797e1`, and RuleSpec-US at `ca2d424`.
+- Recorded all four engine versions additively under each report's `engines`
+  block while retaining the schema-required `left`/`right` engine names.
+- Raw mismatch rows after regeneration: AL 53, MA 255, NC 99, SC 181, TN 68.
+  SC gained one benefit mismatch (`ecps-29277`); the other state totals are
+  unchanged.
+- `apply_dispositions.py --check` passes on the regenerated reports.
+- The sandbox denied `uv` cache initialization under
+  `/Users/maxghenis/.cache/uv`; generation used the exact cached PE-US wheel
+  read-only through the same comparison CLI and clean temporary dependency
+  snapshots.
 
 ### Next
 
-- Resolve the cached 1.767.3 runtime and dependency/repository pins used by
-  the report machinery.
-- Capture the baseline report/disposition inventory and regenerate all five
-  suites.
-- Run per-case TANF and minimum-allotment arithmetic evidence passes.
+- Commit the five-report regeneration as an isolated logical step.
+- Complete the cross-state per-case TANF counterfactual and preserve only
+  within-tolerance passes.
+- Apply the surviving teen selectors, remove the 69 categorical-only
+  candidates from conflicting legacy BBCE selectors, and verify that no
+  minimum-allotment row qualifies.
 - Apply class dispositions in coherent commits, regenerate the complete
   derived chain, audit scope, and write `WORKER-REPORT.md`.
