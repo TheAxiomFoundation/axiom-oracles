@@ -54,6 +54,12 @@ FIXED_EXCLUSION_REASONS: tuple[str, ...] = (
 )
 OPERATIONALIZED_PREFIX = "operationalized_by:"
 _SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
+_PIN_IDENTITY_FIELDS: tuple[str, ...] = (
+    "source_file",
+    "source_sha256",
+    "rulespec_file",
+    "rulespec_sha256",
+)
 
 
 @dataclass(frozen=True)
@@ -64,6 +70,14 @@ class RootConfig:
     source_file: str
     citation_root: str
     module_root: str
+
+
+@dataclass(frozen=True)
+class RatchetBaseline:
+    """Cross-bound pending ceiling from the prior universe and summary."""
+
+    pins_sha256: str
+    pending_max: int
 
 
 ROOTS: tuple[RootConfig, ...] = (
@@ -117,6 +131,25 @@ def _nonempty_string(value: object) -> bool:
 
 def _sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def _pins_sha256(provenance: Mapping[str, Any]) -> str:
+    """Fingerprint only the pinned content identity, not descriptive prose.
+
+    Repositories and refs remain canonical generated provenance fields, so a
+    stale edit still fails byte-level checking. They are deliberately excluded
+    here: changing a URL/ref label while the pinned bytes are identical must
+    never reset the pending ratchet.
+    """
+
+    identity = {field: provenance.get(field) for field in _PIN_IDENTITY_FIELDS}
+    encoded = json.dumps(
+        identity,
+        sort_keys=True,
+        separators=(",", ":"),
+        ensure_ascii=False,
+    ).encode()
+    return hashlib.sha256(encoded).hexdigest()
 
 
 def _safe_data_path(data_dir: Path, filename: str) -> Path | None:
@@ -283,6 +316,126 @@ def _load_universe(path: Path, errors: list[str]) -> dict[str, Any] | None:
         errors.append(f"{_display(path)} must contain a YAML mapping")
         return None
     return dict(document)
+
+
+def _load_summary(path: Path, errors: list[str]) -> dict[str, Any] | None:
+    if not path.is_file():
+        return None
+    try:
+        document = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        errors.append(f"{_display(path)} could not be read: {exc}")
+        return None
+    if not isinstance(document, Mapping):
+        errors.append(f"{_display(path)} must contain a JSON object")
+        return None
+    return dict(document)
+
+
+def _validate_summary_baseline(
+    document: dict[str, Any],
+    *,
+    path: Path,
+    allow_missing_pins: bool,
+    errors: list[str],
+) -> dict[str, dict[str, Any]]:
+    """Validate the committed summary copy of each root's ratchet baseline."""
+
+    label = _display(path)
+    if document.get("schema") != SUMMARY_SCHEMA:
+        errors.append(
+            f"{label}: expected schema {SUMMARY_SCHEMA!r}, "
+            f"got {document.get('schema')!r}"
+        )
+    if document.get("program") != PROGRAM:
+        errors.append(
+            f"{label}: expected program {PROGRAM!r}, got {document.get('program')!r}"
+        )
+    raw_roots = document.get("roots")
+    if not isinstance(raw_roots, list):
+        errors.append(f"{label}: `roots` must be a list")
+        return {}
+
+    by_root: dict[str, dict[str, Any]] = {}
+    for index, raw in enumerate(raw_roots):
+        row_label = f"{label} roots[{index}]"
+        if not isinstance(raw, Mapping):
+            errors.append(f"{row_label} must be a mapping")
+            continue
+        row = dict(raw)
+        root = row.get("root")
+        if not _nonempty_string(root):
+            errors.append(f"{row_label} requires a non-empty `root`")
+            continue
+        root = str(root)
+        row_label = f"{label} root {root!r}"
+        if root in by_root:
+            errors.append(f"{row_label}: duplicate root")
+            continue
+        by_root[root] = row
+
+        pending_max = row.get("pending_max")
+        if (
+            isinstance(pending_max, bool)
+            or not isinstance(pending_max, int)
+            or pending_max < 0
+        ):
+            errors.append(f"{row_label}: `pending_max` must be a non-negative integer")
+
+        pins = row.get("pins_sha256")
+        if pins is None and allow_missing_pins:
+            pass
+        elif not isinstance(pins, str) or not _SHA256_RE.fullmatch(pins):
+            errors.append(f"{row_label}: `pins_sha256` must be lowercase 64-hex")
+
+        total = row.get("total")
+        if isinstance(total, bool) or not isinstance(total, int) or total < 0:
+            errors.append(f"{row_label}: `total` must be a non-negative integer")
+        by_status = row.get("by_status")
+        if not isinstance(by_status, Mapping):
+            errors.append(f"{row_label}: `by_status` must be a mapping")
+        else:
+            status_total = 0
+            for status in STATUSES:
+                count = by_status.get(status)
+                if isinstance(count, bool) or not isinstance(count, int) or count < 0:
+                    errors.append(
+                        f"{row_label}: by_status[{status!r}] must be a "
+                        "non-negative integer"
+                    )
+                else:
+                    status_total += count
+            if isinstance(total, int) and not isinstance(total, bool):
+                if status_total != total:
+                    errors.append(
+                        f"{row_label}: status counts total {status_total}, "
+                        f"not declared total {total}"
+                    )
+        by_reason = row.get("by_reason")
+        if not isinstance(by_reason, Mapping):
+            errors.append(f"{row_label}: `by_reason` must be a mapping")
+        else:
+            for reason, count in by_reason.items():
+                if not _nonempty_string(reason) or (
+                    isinstance(count, bool) or not isinstance(count, int) or count < 0
+                ):
+                    errors.append(
+                        f"{row_label}: reason counts require non-empty keys "
+                        "and non-negative integer values"
+                    )
+
+    expected = {config.root for config in ROOTS}
+    missing = sorted(expected - by_root.keys())
+    extra = sorted(by_root.keys() - expected)
+    if missing:
+        errors.append(
+            f"{label}: ratchet summary is missing roots {_format_values(missing)}"
+        )
+    if extra:
+        errors.append(
+            f"{label}: ratchet summary has unexpected roots {_format_values(extra)}"
+        )
+    return by_root
 
 
 def _is_module_path(path: str) -> bool:
@@ -469,6 +622,7 @@ def _validate_universe(
     config: RootConfig,
     path: Path,
     tree_paths: set[str],
+    allow_missing_pins: bool,
     errors: list[str],
 ) -> list[dict[str, Any]]:
     label = _display(path)
@@ -512,6 +666,18 @@ def _validate_universe(
     if not isinstance(ratchet, Mapping):
         errors.append(f"{label}: `ratchet` must be a mapping")
     else:
+        pins = ratchet.get("pins_sha256")
+        if pins is None and allow_missing_pins:
+            pass
+        elif not isinstance(pins, str) or not _SHA256_RE.fullmatch(pins):
+            errors.append(f"{label}: ratchet `pins_sha256` must be lowercase 64-hex")
+        elif isinstance(provenance, Mapping):
+            provenance_pins = _pins_sha256(provenance)
+            if pins != provenance_pins:
+                errors.append(
+                    f"{label}: ratchet `pins_sha256` does not match the "
+                    "content-identity fingerprint of its provenance"
+                )
         pending_max = ratchet.get("pending_max")
         if (
             isinstance(pending_max, bool)
@@ -588,6 +754,108 @@ def _generated_provenance(
     }
 
 
+def _ratchet_baseline(
+    config: RootConfig,
+    *,
+    committed: Mapping[str, Any] | None,
+    summary_row: Mapping[str, Any] | None,
+    current_pins: str,
+    errors: list[str],
+) -> RatchetBaseline | None:
+    """Cross-check the two prior ratchet copies before either can authorize.
+
+    The v1 artifacts initially committed before ``pins_sha256`` are admitted
+    once, but only when both ceilings agree and the old universe's content
+    identity still equals the current pinned content. A partial migration or a
+    pin change must first be reviewed from a fully cross-bound baseline.
+    """
+
+    if committed is None and summary_row is None:
+        return None
+    if committed is None:
+        errors.append(
+            f"closure[{config.root}] ratchet baseline exists in summary but "
+            "the universe side is missing"
+        )
+        return None
+    if summary_row is None:
+        errors.append(
+            f"closure[{config.root}] ratchet baseline exists in the universe "
+            "but its summary side is missing"
+        )
+        return None
+
+    ratchet = committed.get("ratchet")
+    if not isinstance(ratchet, Mapping):
+        return None
+    universe_max = ratchet.get("pending_max")
+    summary_max = summary_row.get("pending_max")
+    valid_universe_max = (
+        not isinstance(universe_max, bool)
+        and isinstance(universe_max, int)
+        and universe_max >= 0
+    )
+    valid_summary_max = (
+        not isinstance(summary_max, bool)
+        and isinstance(summary_max, int)
+        and summary_max >= 0
+    )
+    if not valid_universe_max or not valid_summary_max:
+        return None
+    if universe_max != summary_max:
+        errors.append(
+            f"closure[{config.root}] ratchet baseline disagrees with summary: "
+            f"universe pending_max={universe_max}, "
+            f"summary pending_max={summary_max}"
+        )
+        return None
+
+    universe_pins = ratchet.get("pins_sha256")
+    summary_pins = summary_row.get("pins_sha256")
+    if universe_pins is None and summary_pins is None:
+        provenance = committed.get("provenance")
+        if not isinstance(provenance, Mapping):
+            return None
+        migrated_pins = _pins_sha256(provenance)
+        if migrated_pins != current_pins:
+            errors.append(
+                f"closure[{config.root}] cannot migrate the v1 ratchet: the "
+                "existing universe provenance pins do not match the current "
+                "pinned content"
+            )
+            return None
+        return RatchetBaseline(
+            pins_sha256=migrated_pins,
+            pending_max=universe_max,
+        )
+
+    if universe_pins is None or summary_pins is None:
+        missing_side = "universe" if universe_pins is None else "summary"
+        errors.append(
+            f"closure[{config.root}] ratchet `pins_sha256` is missing from the "
+            f"{missing_side} baseline copy; universe and summary must both "
+            "carry it"
+        )
+        return None
+    if (
+        not isinstance(universe_pins, str)
+        or not _SHA256_RE.fullmatch(universe_pins)
+        or not isinstance(summary_pins, str)
+        or not _SHA256_RE.fullmatch(summary_pins)
+    ):
+        return None
+    if universe_pins != summary_pins:
+        errors.append(
+            f"closure[{config.root}] ratchet pin fingerprint disagrees with "
+            f"summary: universe={universe_pins}, summary={summary_pins}"
+        )
+        return None
+    return RatchetBaseline(
+        pins_sha256=universe_pins,
+        pending_max=universe_max,
+    )
+
+
 def _merge_provisions(
     config: RootConfig,
     source_rows: list[dict[str, str]],
@@ -653,39 +921,34 @@ def _build_universe(
     source_rows: list[dict[str, str]],
     tree_paths: set[str],
     snapshots: Mapping[str, Mapping[str, Any]],
-    committed: dict[str, Any] | None,
     committed_rows: list[dict[str, Any]],
+    baseline: RatchetBaseline | None,
     errors: list[str],
 ) -> dict[str, Any]:
     provenance = _generated_provenance(config, snapshots)
+    current_pins = _pins_sha256(provenance)
     provisions = _merge_provisions(config, source_rows, tree_paths, committed_rows)
     current_pending = sum(1 for row in provisions if row.get("status") == "pending")
     pending_max = current_pending
 
-    if committed is not None and committed.get("provenance") == provenance:
-        ratchet = committed.get("ratchet")
-        old_pending_max = (
-            ratchet.get("pending_max") if isinstance(ratchet, Mapping) else None
-        )
-        if (
-            not isinstance(old_pending_max, bool)
-            and isinstance(old_pending_max, int)
-            and old_pending_max >= 0
-        ):
-            if current_pending > old_pending_max:
-                errors.append(
-                    f"closure[{config.root}] pending RATCHET regressed from "
-                    f"{old_pending_max} to {current_pending} while provenance "
-                    "pins are unchanged; pending may only fall"
-                )
-            pending_max = min(old_pending_max, current_pending)
+    if baseline is not None and baseline.pins_sha256 == current_pins:
+        if current_pending > baseline.pending_max:
+            errors.append(
+                f"closure[{config.root}] pending RATCHET regressed from "
+                f"{baseline.pending_max} to {current_pending} while content "
+                "pins are unchanged; pending may only fall"
+            )
+        pending_max = min(baseline.pending_max, current_pending)
 
     return {
         "schema": UNIVERSE_SCHEMA,
         "program": PROGRAM,
         "root": config.root,
         "provenance": provenance,
-        "ratchet": {"pending_max": pending_max},
+        "ratchet": {
+            "pins_sha256": current_pins,
+            "pending_max": pending_max,
+        },
         "provisions": provisions,
     }
 
@@ -742,7 +1005,9 @@ def _summary_document(
             )
             if category:
                 reason_counts[category] += 1
-        pending_max = (universe.get("ratchet") or {}).get("pending_max")
+        ratchet = universe.get("ratchet") or {}
+        pins_sha256 = ratchet.get("pins_sha256")
+        pending_max = ratchet.get("pending_max")
         roots.append(
             {
                 "root": root,
@@ -751,6 +1016,7 @@ def _summary_document(
                 "by_reason": {
                     reason: reason_counts[reason] for reason in sorted(reason_counts)
                 },
+                "pins_sha256": pins_sha256,
                 "pending_max": pending_max,
             }
         )
@@ -776,7 +1042,40 @@ def build_artifacts(
     closure_dir = Path(closure_dir)
     data_dir = closure_dir / "data"
     universe_dir = closure_dir / "universes" / "us-co-snap"
+    summary_path = closure_dir / "summary.json"
     errors: list[str] = []
+
+    universe_paths = {
+        config.root: universe_dir / f"{config.root}.yaml" for config in ROOTS
+    }
+    present_universes = {
+        root for root, path in universe_paths.items() if path.is_file()
+    }
+    summary_exists = summary_path.is_file()
+    any_artifact_exists = bool(present_universes) or summary_exists
+    if any_artifact_exists:
+        if not summary_exists:
+            errors.append(
+                "closure ratchet baseline is missing summary.json while "
+                "universe artifacts exist"
+            )
+        for root in sorted(universe_paths.keys() - present_universes):
+            errors.append(
+                f"closure[{root}] ratchet baseline is present in summary but "
+                "the universe artifact is missing"
+            )
+
+    committed_summary = _load_summary(summary_path, errors) if summary_exists else None
+    summary_rows = (
+        _validate_summary_baseline(
+            committed_summary,
+            path=summary_path,
+            allow_missing_pins=True,
+            errors=errors,
+        )
+        if committed_summary is not None
+        else {}
+    )
 
     snapshots = _load_provenance(data_dir, errors)
     if any(
@@ -792,7 +1091,7 @@ def build_artifacts(
     universes: dict[str, dict[str, Any]] = {}
     for config in ROOTS:
         source_rows = _load_source_rows(config, data_dir, errors)
-        output_path = universe_dir / f"{config.root}.yaml"
+        output_path = universe_paths[config.root]
         committed = _load_universe(output_path, errors)
         committed_rows: list[dict[str, Any]] = []
         if committed is not None:
@@ -801,6 +1100,7 @@ def build_artifacts(
                 config=config,
                 path=output_path,
                 tree_paths=tree_paths,
+                allow_missing_pins=True,
                 errors=errors,
             )
             if check_citation_drift:
@@ -816,13 +1116,21 @@ def build_artifacts(
                 "`uv run scripts/closure_universe.py --generate`"
             )
 
+        current_provenance = _generated_provenance(config, snapshots)
+        baseline = _ratchet_baseline(
+            config,
+            committed=committed,
+            summary_row=summary_rows.get(config.root),
+            current_pins=_pins_sha256(current_provenance),
+            errors=errors,
+        )
         universe = _build_universe(
             config,
             source_rows=source_rows,
             tree_paths=tree_paths,
             snapshots=snapshots,
-            committed=committed,
             committed_rows=committed_rows,
+            baseline=baseline,
             errors=errors,
         )
         _validate_universe(
@@ -830,11 +1138,18 @@ def build_artifacts(
             config=config,
             path=output_path,
             tree_paths=tree_paths,
+            allow_missing_pins=False,
             errors=errors,
         )
         universes[config.root] = universe
 
     summary = _summary_document(universes, tree_paths=tree_paths, errors=errors)
+    _validate_summary_baseline(
+        summary,
+        path=summary_path,
+        allow_missing_pins=False,
+        errors=errors,
+    )
     return universes, summary, errors
 
 

@@ -15,6 +15,7 @@ provenance:
   rulespec_ref: origin/main@1158ba5b248c3cbbfe1768357f03ca43c8b3618e
   rulespec_sha256: 7b54fb97d15ab5e1dc5905ee6d2931f3143941720e7534a77dced02cbf3b2768
 ratchet:
+  pins_sha256: 2289e476f50a34413233bce156e3130e5e50081ac90d1a99a8efc4372ecd2c71
   pending_max: 30
 provisions:
   - citation: us/regulation/7/273

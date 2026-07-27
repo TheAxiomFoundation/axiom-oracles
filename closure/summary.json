@@ -11,6 +11,7 @@
         "pending": 9
       },
       "by_reason": {},
+      "pins_sha256": "74b2a711428ec4d616cf3ebd34a3f9b3c94fa8bc25edade6e1ef4786de8923f8",
       "pending_max": 9
     },
     {
@@ -22,6 +23,7 @@
         "pending": 30
       },
       "by_reason": {},
+      "pins_sha256": "2289e476f50a34413233bce156e3130e5e50081ac90d1a99a8efc4372ecd2c71",
       "pending_max": 30
     },
     {
@@ -33,6 +35,7 @@
         "pending": 816
       },
       "by_reason": {},
+      "pins_sha256": "a17d59b35eb848dcaa0aa8bfbdccfd315c1b3349e0273b3098e787158e0e43a1",
       "pending_max": 816
     }
   ],

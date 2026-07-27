@@ -62,9 +62,11 @@ provision. Partial coverage remains `pending`.
 ## Pending ratchet
 
 Each universe records `ratchet.pending_max` against its generated provenance
-header. With unchanged source and RuleSpec pins, regeneration may only lower
-that ceiling. Changing either pin starts a new baseline because the denominator
-or encoding inventory may have changed. `summary.json` reports the live counts;
+header. Its content-pin fingerprint and ceiling are duplicated in `summary.json`;
+the two prior copies must agree before regeneration can write either one. With
+unchanged source and RuleSpec content pins, regeneration may only lower that
+ceiling. Changing either pin starts a new baseline because the denominator or
+encoding inventory may have changed. `summary.json` reports the live counts;
 `closed` is true only when every root has zero pending rows.
 
 This file-path join is evidence of repository coverage, not proof that every
