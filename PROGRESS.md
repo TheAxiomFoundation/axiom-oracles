@@ -587,6 +587,25 @@ residual), #229 (small-suite grounding).
   unexplained 23/83/71/106/41; US 1.767.3 / Core 3.30.3) and the stale report
   was removed from the branch.
 
+- Round-3 review at `1fe6bbba` (ledger
+  `.git/review-worktrees/snap-residual-cleanup-1fe6bbba`, report `800e4b63`)
+  confirmed the served overview but blocked on two branch-hygiene defects: the
+  repair audit `REPAIR-ROUND2-REPORT.md` had been committed to the branch by an
+  over-broad `git add`, and this ledger described it as untracked while naming
+  `72718c96` as final. Both were fixed on top: the report was removed from the
+  branch (it lives at
+  `~/TheAxiomFoundation/ops/fed-parity-campaign/snapclean-repair2-REPORT.md`)
+  and this section was rewritten.
+- Round-4 review at `6fca6d19` (ledger
+  `.git/review-worktrees/snap-residual-cleanup-6fca6d19`, report `9ed26ef7`)
+  confirmed prohibited report paths absent, clean whitespace, the served
+  overview, and all thirteen chain checks; it asked for this ledger to record
+  the completed round-3 outcome, which this entry does. Its remaining note —
+  that the preceding commit both edited this file and deleted the stray report
+  — describes the intended fix, not a defect: removing the stray report was
+  the round-3 requirement.
+
 ### Next
 
-- Round-3 confirmation of the served-overview regeneration, then open the PR.
+- Open the PR from the current branch tip (this docs commit) and land it after
+  a final confirmation pass.
