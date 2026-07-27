@@ -1,0 +1,154 @@
+# axiom_oracles.closure.universe.v1 — generated facts + committed review classifications.
+# citation, heading, and baseline encoded/pending status come from the pinned
+# closure data. Excluded reason/basis, corrected encoded_by paths, and notes
+# are human-reviewed overlays preserved by scripts/closure_universe.py.
+schema: axiom_oracles.closure.universe.v1
+program: us-co/snap
+root: us-7-cfr-273
+provenance:
+  source_file: cfr-273.jsonl
+  source_repo: https://github.com/TheAxiomFoundation/axiom-corpus.git
+  source_ref: origin/main@bf97b17baebfdf12601f7c23697524bf5adcdaed
+  source_sha256: 57dd752844884c36999ff701c1057406a026b57be44d144dc484fdfbed56b9c9
+  rulespec_file: rulespec-us-files.txt
+  rulespec_repo: https://github.com/TheAxiomFoundation/rulespec-us.git
+  rulespec_ref: origin/main@1158ba5b248c3cbbfe1768357f03ca43c8b3618e
+  rulespec_sha256: 7b54fb97d15ab5e1dc5905ee6d2931f3143941720e7534a77dced02cbf3b2768
+ratchet:
+  pending_max: 30
+provisions:
+  - citation: us/regulation/7/273
+    heading: CERTIFICATION OF ELIGIBLE HOUSEHOLDS
+    status: pending
+  - citation: us/regulation/7/273/1
+    heading: Household concept
+    status: pending
+  - citation: us/regulation/7/273/10
+    heading: Determining household eligibility and benefit levels
+    status: encoded
+    encoded_by:
+      - us/regulations/7-cfr/273/10.yaml
+  - citation: us/regulation/7/273/11
+    heading: Action on households with special circumstances
+    status: pending
+  - citation: us/regulation/7/273/12
+    heading: Reporting requirements
+    status: pending
+  - citation: us/regulation/7/273/13
+    heading: Notice of adverse action
+    status: pending
+  - citation: us/regulation/7/273/14
+    heading: Recertification
+    status: pending
+  - citation: us/regulation/7/273/15
+    heading: Fair hearings
+    status: pending
+  - citation: us/regulation/7/273/16
+    heading: Disqualification for intentional Program violation
+    status: pending
+  - citation: us/regulation/7/273/17
+    heading: Restoration of lost benefits
+    status: pending
+  - citation: us/regulation/7/273/18
+    heading: Claims against households
+    status: pending
+  - citation: us/regulation/7/273/2
+    heading: Office operations and application processing
+    status: pending
+  - citation: us/regulation/7/273/20
+    heading: SSI cash-out
+    status: pending
+  - citation: us/regulation/7/273/21
+    heading: Monthly Reporting and Retrospective Budgeting (MRRB)
+    status: pending
+  - citation: us/regulation/7/273/23
+    heading: Simplified application and standardized benefit projects
+    status: pending
+  - citation: us/regulation/7/273/24
+    heading: Time limit for able-bodied adults
+    status: encoded
+    encoded_by:
+      - us/regulations/7-cfr/273/24.yaml
+  - citation: us/regulation/7/273/25
+    heading: Simplified SNAP
+    status: pending
+  - citation: us/regulation/7/273/26
+    heading: General eligibility guidelines
+    status: pending
+  - citation: us/regulation/7/273/27
+    heading: General administrative guidelines
+    status: pending
+  - citation: us/regulation/7/273/28
+    heading: Application for SNAP recertification
+    status: pending
+  - citation: us/regulation/7/273/29
+    heading: Transitional notice requirements
+    status: pending
+  - citation: us/regulation/7/273/3
+    heading: Residency
+    status: encoded
+    encoded_by:
+      - us/regulations/7-cfr/273/3.yaml
+  - citation: us/regulation/7/273/30
+    heading: Transitional benefit alternative change reporting requirements
+    status: pending
+  - citation: us/regulation/7/273/31
+    heading: Closing the transitional period
+    status: pending
+  - citation: us/regulation/7/273/32
+    heading: Households that return to TANF, MOE, or SFCA program during the transitional period
+    status: pending
+  - citation: us/regulation/7/273/4
+    heading: Citizenship and alien status
+    status: encoded
+    encoded_by:
+      - us/regulations/7-cfr/273/4.yaml
+  - citation: us/regulation/7/273/5
+    heading: Students
+    status: encoded
+    encoded_by:
+      - us/regulations/7-cfr/273/5.yaml
+  - citation: us/regulation/7/273/6
+    heading: Social security numbers
+    status: encoded
+    encoded_by:
+      - us/regulations/7-cfr/273/6.yaml
+  - citation: us/regulation/7/273/7
+    heading: Work provisions
+    status: encoded
+    encoded_by:
+      - us/regulations/7-cfr/273/7.yaml
+  - citation: us/regulation/7/273/8
+    heading: Resource eligibility standards
+    status: encoded
+    encoded_by:
+      - us/regulations/7-cfr/273/8.yaml
+  - citation: us/regulation/7/273/9
+    heading: Income and deductions
+    status: encoded
+    encoded_by:
+      - us/regulations/7-cfr/273/9.yaml
+  - citation: us/regulation/7/273/subpart-A
+    heading: Subpart A - General Rules
+    status: pending
+  - citation: us/regulation/7/273/subpart-B
+    heading: Subpart B - Residency and Citizenship
+    status: pending
+  - citation: us/regulation/7/273/subpart-C
+    heading: Subpart C - Education and Employment
+    status: pending
+  - citation: us/regulation/7/273/subpart-D
+    heading: Subpart D - Eligibility and Benefit Levels
+    status: pending
+  - citation: us/regulation/7/273/subpart-E
+    heading: Subpart E - Continuing Participation
+    status: pending
+  - citation: us/regulation/7/273/subpart-F
+    heading: Subpart F - Disqualification and Claims
+    status: pending
+  - citation: us/regulation/7/273/subpart-G
+    heading: Subpart G - Program Alternatives
+    status: pending
+  - citation: us/regulation/7/273/subpart-H
+    heading: Subpart H - The Transitional Benefits Alternative
+    status: pending

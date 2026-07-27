@@ -1,0 +1,2540 @@
+# axiom_oracles.closure.universe.v1 — generated facts + committed review classifications.
+# citation, heading, and baseline encoded/pending status come from the pinned
+# closure data. Excluded reason/basis, corrected encoded_by paths, and notes
+# are human-reviewed overlays preserved by scripts/closure_universe.py.
+schema: axiom_oracles.closure.universe.v1
+program: us-co/snap
+root: us-7-usc-51
+provenance:
+  source_file: usc-51.jsonl
+  source_repo: https://github.com/TheAxiomFoundation/axiom-corpus.git
+  source_ref: origin/main@bf97b17baebfdf12601f7c23697524bf5adcdaed
+  source_sha256: 8e47350b82ff737a75195fad710f07b97a7d10c86be749a6c3aff9e928add686
+  rulespec_file: rulespec-us-files.txt
+  rulespec_repo: https://github.com/TheAxiomFoundation/rulespec-us.git
+  rulespec_ref: origin/main@1158ba5b248c3cbbfe1768357f03ca43c8b3618e
+  rulespec_sha256: 7b54fb97d15ab5e1dc5905ee6d2931f3143941720e7534a77dced02cbf3b2768
+ratchet:
+  pending_max: 816
+provisions:
+  - citation: us/statute/7
+    heading: AGRICULTURE
+    status: pending
+  - citation: us/statute/7/2011
+    heading: Congressional declaration of policy
+    status: pending
+  - citation: us/statute/7/2012
+    heading: Definitions
+    status: pending
+  - citation: us/statute/7/2012/a
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2012/b
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2012/c
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2012/d
+    heading: Benefit .—
+    status: pending
+  - citation: us/statute/7/2012/d/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2012/d/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2012/e
+    heading: Benefit Issuer .—
+    status: pending
+  - citation: us/statute/7/2012/f
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2012/g
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2012/h
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2012/i
+    heading: EBT Card .—
+    status: pending
+  - citation: us/statute/7/2012/j
+    heading: ''
+    status: encoded
+    encoded_by:
+      - us/statutes/7/2012/j.yaml
+  - citation: us/statute/7/2012/j/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2012/j/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2012/j/3
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2012/j/4
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2012/j/5
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2012/j/6
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2012/j/7
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2012/k
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2012/l
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2012/l/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2012/l/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2012/m
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2012/m/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2012/m/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2012/m/3
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2012/m/4
+    heading: ''
+    status: encoded
+    encoded_by:
+      - us/statutes/7/2012/m/4.yaml
+  - citation: us/statute/7/2012/m/5
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2012/n
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2012/o
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2012/o/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2012/o/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2012/o/3
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2012/o/4
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2012/o/5
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2012/p
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2012/q
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2012/q/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2012/q/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2012/r
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2012/s
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2012/t
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2012/u
+    heading: Thrifty Food Plan
+    status: pending
+  - citation: us/statute/7/2012/u/1
+    heading: In general The term “thrifty food plan” means the diet required to feed a family of 4 persons
+      consisting of a man and a woman ages 20 through 50, a child ages 6 through 8, and a child ages 9
+      through 11 using the items and quantities of food described in the report of the Department of Agriculture
+      entitled “Thrifty Food Plan, 2021”, and each successor report updated pursuant to this subsection,
+      subject to the conditions that—
+    status: pending
+  - citation: us/statute/7/2012/u/2
+    heading: Household adjustments .—
+    status: pending
+  - citation: us/statute/7/2012/u/3
+    heading: Allowable cost adjustments .—
+    status: pending
+  - citation: us/statute/7/2012/u/4
+    heading: Re-evaluation of market baskets
+    status: pending
+  - citation: us/statute/7/2012/v
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2012a
+    heading: Publicly operated community health centers
+    status: pending
+  - citation: us/statute/7/2013
+    heading: Establishment of supplemental nutrition assistance program
+    status: pending
+  - citation: us/statute/7/2013/a
+    heading: Program
+    status: pending
+  - citation: us/statute/7/2013/a/1
+    heading: Establishment
+    status: pending
+  - citation: us/statute/7/2013/a/2
+    heading: State quality control incentive
+    status: pending
+  - citation: us/statute/7/2013/a/3
+    heading: Maximum Federal payment
+    status: pending
+  - citation: us/statute/7/2013/b
+    heading: Food distribution program on Indian reservations
+    status: pending
+  - citation: us/statute/7/2013/b/1
+    heading: In general
+    status: pending
+  - citation: us/statute/7/2013/b/2
+    heading: Administration
+    status: pending
+  - citation: us/statute/7/2013/b/3
+    heading: Disqualified participants
+    status: pending
+  - citation: us/statute/7/2013/b/4
+    heading: Administrative costs
+    status: pending
+  - citation: us/statute/7/2013/b/5
+    heading: Bison meat
+    status: pending
+  - citation: us/statute/7/2013/b/6
+    heading: Traditional and locally- and regionally-grown food fund
+    status: pending
+  - citation: us/statute/7/2013/b/7
+    heading: Availability of funds
+    status: pending
+  - citation: us/statute/7/2013/c
+    heading: Regulations; transmittal of copy of regulations to Congressional committees prior to issuance
+    status: pending
+  - citation: us/statute/7/2014
+    heading: Eligible households
+    status: pending
+  - citation: us/statute/7/2014/a
+    heading: Income and other financial resources as substantial limiting factors in obtaining more nutritious
+      diet; recipients under Social Security Act
+    status: encoded
+    encoded_by:
+      - us/statutes/7/2014/a.yaml
+  - citation: us/statute/7/2014/b
+    heading: Eligibility standards
+    status: pending
+  - citation: us/statute/7/2014/c
+    heading: Gross income standard
+    status: encoded
+    encoded_by:
+      - us/statutes/7/2014/c.yaml
+  - citation: us/statute/7/2014/c/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2014/c/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2014/d
+    heading: Exclusions from income
+    status: encoded
+    encoded_by:
+      - us/statutes/7/2014/d.yaml
+  - citation: us/statute/7/2014/d/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2014/d/10
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2014/d/11
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2014/d/12
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2014/d/13
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2014/d/14
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2014/d/15
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2014/d/16
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2014/d/17
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2014/d/18
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2014/d/19
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2014/d/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2014/d/3
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2014/d/4
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2014/d/5
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2014/d/6
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2014/d/7
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2014/d/8
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2014/d/9
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2014/e
+    heading: Deductions from income
+    status: pending
+  - citation: us/statute/7/2014/e/1
+    heading: Standard deduction
+    status: pending
+  - citation: us/statute/7/2014/e/2
+    heading: Earned income deduction
+    status: encoded
+    encoded_by:
+      - us/statutes/7/2014/e/2.yaml
+  - citation: us/statute/7/2014/e/3
+    heading: Dependent care deduction
+    status: pending
+  - citation: us/statute/7/2014/e/4
+    heading: Deduction for child support payments
+    status: pending
+  - citation: us/statute/7/2014/e/5
+    heading: Excess medical expense deduction
+    status: pending
+  - citation: us/statute/7/2014/e/6
+    heading: Excess shelter expense deduction
+    status: pending
+  - citation: us/statute/7/2014/f
+    heading: Calculation of household income; prospective or retrospective accounting basis; consistency
+    status: pending
+  - citation: us/statute/7/2014/f/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2014/f/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2014/f/3
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2014/f/4
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2014/g
+    heading: Allowable financial resources
+    status: encoded
+    encoded_by:
+      - us/statutes/7/2014/g.yaml
+  - citation: us/statute/7/2014/g/1
+    heading: Total amount.—
+    status: pending
+  - citation: us/statute/7/2014/g/2
+    heading: Included assets.—
+    status: pending
+  - citation: us/statute/7/2014/g/3
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2014/g/4
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2014/g/5
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2014/g/6
+    heading: Exclusion of types of financial resources not considered under certain other federal programs.—
+    status: pending
+  - citation: us/statute/7/2014/g/7
+    heading: Exclusion of retirement accounts from allowable financial resources.—
+    status: pending
+  - citation: us/statute/7/2014/g/8
+    heading: Exclusion of education accounts from allowable financial resources.—
+    status: pending
+  - citation: us/statute/7/2014/h
+    heading: Temporary emergency standards of eligibility; Disaster Task Force; direct assistance to State
+      and local officials
+    status: pending
+  - citation: us/statute/7/2014/h/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2014/h/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2014/h/3
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2014/i
+    heading: Attribution of income and resources to sponsored aliens; coverage, computations, etc.
+    status: pending
+  - citation: us/statute/7/2014/i/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2014/i/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2014/j
+    heading: Resource exemption for otherwise exempt households
+    status: pending
+  - citation: us/statute/7/2014/k
+    heading: Assistance to third parties included; educational benefits; exceptions
+    status: pending
+  - citation: us/statute/7/2014/k/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2014/k/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2014/k/3
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2014/k/4
+    heading: Third party energy assistance payments.—
+    status: pending
+  - citation: us/statute/7/2014/l
+    heading: Earnings to participants of on-the-job training programs; exception
+    status: pending
+  - citation: us/statute/7/2014/m
+    heading: Simplified calculation of income for the self-employed
+    status: pending
+  - citation: us/statute/7/2014/m/1
+    heading: In general
+    status: pending
+  - citation: us/statute/7/2014/m/2
+    heading: Inclusive of all types of income or limited types of income
+    status: pending
+  - citation: us/statute/7/2014/m/3
+    heading: Differences for different types of income
+    status: pending
+  - citation: us/statute/7/2014/n
+    heading: State options to simplify determination of child support payments
+    status: pending
+  - citation: us/statute/7/2014a
+    heading: Notice of change in State of residence of certified household
+    status: pending
+  - citation: us/statute/7/2015
+    heading: Eligibility disqualifications
+    status: pending
+  - citation: us/statute/7/2015/a
+    heading: Additional specific conditions rendering individuals ineligible
+    status: pending
+  - citation: us/statute/7/2015/b
+    heading: Fraud and misrepresentation; disqualification penalties; ineligibility period; applicable
+      procedures
+    status: pending
+  - citation: us/statute/7/2015/b/1
+    heading: ''
+    status: encoded
+    encoded_by:
+      - us/statutes/7/2015/b/1.yaml
+  - citation: us/statute/7/2015/b/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2015/b/3
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2015/b/4
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2015/c
+    heading: Refusal to provide necessary information
+    status: pending
+  - citation: us/statute/7/2015/c/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2015/c/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2015/c/3
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2015/c/4
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2015/c/5
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2015/d
+    heading: Conditions of participation
+    status: pending
+  - citation: us/statute/7/2015/d/1
+    heading: Work requirements .—
+    status: pending
+  - citation: us/statute/7/2015/d/2
+    heading: ''
+    status: encoded
+    encoded_by:
+      - us/statutes/7/2015/d/2.yaml
+  - citation: us/statute/7/2015/d/3
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2015/d/4
+    heading: Employment and training.—
+    status: pending
+  - citation: us/statute/7/2015/e
+    heading: Students
+    status: encoded
+    encoded_by:
+      - us/statutes/7/2015/e.yaml
+  - citation: us/statute/7/2015/e/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2015/e/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2015/e/3
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2015/e/4
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2015/e/5
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2015/e/6
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2015/e/7
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2015/e/8
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2015/f
+    heading: Aliens
+    status: pending
+  - citation: us/statute/7/2015/f/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2015/f/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2015/g
+    heading: Residents of States which provide State supplementary payments
+    status: pending
+  - citation: us/statute/7/2015/h
+    heading: Transfer of assets to qualify
+    status: pending
+  - citation: us/statute/7/2015/i
+    heading: Comparable treatment for disqualification
+    status: pending
+  - citation: us/statute/7/2015/i/1
+    heading: In general
+    status: pending
+  - citation: us/statute/7/2015/i/2
+    heading: Rules and procedures
+    status: pending
+  - citation: us/statute/7/2015/i/3
+    heading: Application after disqualification period
+    status: pending
+  - citation: us/statute/7/2015/j
+    heading: Disqualification for receipt of multiple benefits
+    status: pending
+  - citation: us/statute/7/2015/k
+    heading: Disqualification of fleeing felons
+    status: pending
+  - citation: us/statute/7/2015/k/1
+    heading: In general
+    status: pending
+  - citation: us/statute/7/2015/k/2
+    heading: Procedures
+    status: pending
+  - citation: us/statute/7/2015/l
+    heading: Custodial parent’s cooperation with child support agencies
+    status: pending
+  - citation: us/statute/7/2015/l/1
+    heading: In general
+    status: pending
+  - citation: us/statute/7/2015/l/2
+    heading: Good cause for noncooperation
+    status: pending
+  - citation: us/statute/7/2015/l/3
+    heading: Fees
+    status: pending
+  - citation: us/statute/7/2015/m
+    heading: Noncustodial parent’s cooperation with child support agencies
+    status: pending
+  - citation: us/statute/7/2015/m/1
+    heading: In general
+    status: pending
+  - citation: us/statute/7/2015/m/2
+    heading: Refusal to cooperate
+    status: pending
+  - citation: us/statute/7/2015/m/3
+    heading: Fees
+    status: pending
+  - citation: us/statute/7/2015/m/4
+    heading: Privacy
+    status: pending
+  - citation: us/statute/7/2015/n
+    heading: Disqualification for child support arrears
+    status: pending
+  - citation: us/statute/7/2015/n/1
+    heading: In general
+    status: pending
+  - citation: us/statute/7/2015/n/2
+    heading: Exceptions
+    status: pending
+  - citation: us/statute/7/2015/o
+    heading: Work requirement
+    status: pending
+  - citation: us/statute/7/2015/o/1
+    heading: “Work program” defined
+    status: pending
+  - citation: us/statute/7/2015/o/2
+    heading: Work requirement
+    status: pending
+  - citation: us/statute/7/2015/o/3
+    heading: Exceptions
+    status: pending
+  - citation: us/statute/7/2015/o/4
+    heading: Waiver
+    status: pending
+  - citation: us/statute/7/2015/o/5
+    heading: Subsequent eligibility
+    status: pending
+  - citation: us/statute/7/2015/o/6
+    heading: Exemptions
+    status: pending
+  - citation: us/statute/7/2015/o/7
+    heading: Exemption for noncontiguous States
+    status: pending
+  - citation: us/statute/7/2015/o/8
+    heading: Other program rules
+    status: pending
+  - citation: us/statute/7/2015/p
+    heading: Disqualification for obtaining cash by destroying food and collecting deposits
+    status: pending
+  - citation: us/statute/7/2015/q
+    heading: Disqualification for sale of food purchased with supplemental nutrition assistance program
+      benefits
+    status: pending
+  - citation: us/statute/7/2015/r
+    heading: Disqualification for certain convicted felons
+    status: pending
+  - citation: us/statute/7/2015/r/1
+    heading: In general
+    status: pending
+  - citation: us/statute/7/2015/r/2
+    heading: Effects on assistance and benefits for others
+    status: pending
+  - citation: us/statute/7/2015/r/3
+    heading: Enforcement
+    status: pending
+  - citation: us/statute/7/2015/s
+    heading: Ineligibility for benefits due to receipt of substantial lottery or gambling winnings
+    status: pending
+  - citation: us/statute/7/2015/s/1
+    heading: In general
+    status: pending
+  - citation: us/statute/7/2015/s/2
+    heading: Duration of ineligibility
+    status: pending
+  - citation: us/statute/7/2015/s/3
+    heading: Agreements
+    status: pending
+  - citation: us/statute/7/2016
+    heading: Issuance and use of program benefits
+    status: pending
+  - citation: us/statute/7/2016/a
+    heading: In general
+    status: pending
+  - citation: us/statute/7/2016/b
+    heading: Use
+    status: pending
+  - citation: us/statute/7/2016/c
+    heading: Design
+    status: pending
+  - citation: us/statute/7/2016/c/1
+    heading: In general
+    status: pending
+  - citation: us/statute/7/2016/c/2
+    heading: Prohibition
+    status: pending
+  - citation: us/statute/7/2016/d
+    heading: Delivery and control procedures
+    status: pending
+  - citation: us/statute/7/2016/e
+    heading: State issuance liability
+    status: pending
+  - citation: us/statute/7/2016/f
+    heading: Alternative benefit delivery
+    status: pending
+  - citation: us/statute/7/2016/f/1
+    heading: In general
+    status: pending
+  - citation: us/statute/7/2016/f/2
+    heading: Imposition of costs
+    status: pending
+  - citation: us/statute/7/2016/f/3
+    heading: Devaluation and termination of issuance of paper coupons
+    status: pending
+  - citation: us/statute/7/2016/f/4
+    heading: Termination of manual vouchers
+    status: pending
+  - citation: us/statute/7/2016/f/5
+    heading: Unique identification number required
+    status: pending
+  - citation: us/statute/7/2016/g
+    heading: Staggered issuance procedures
+    status: pending
+  - citation: us/statute/7/2016/g/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2016/g/2
+    heading: Requirements.—
+    status: pending
+  - citation: us/statute/7/2016/h
+    heading: Electronic benefit transfers
+    status: pending
+  - citation: us/statute/7/2016/h/1
+    heading: In general.—
+    status: pending
+  - citation: us/statute/7/2016/h/10
+    heading: Federal law not applicable .—
+    status: pending
+  - citation: us/statute/7/2016/h/11
+    heading: Application of anti-tying restrictions to electronic benefit transfer systems.—
+    status: pending
+  - citation: us/statute/7/2016/h/12
+    heading: Recovering electronic benefits.—
+    status: pending
+  - citation: us/statute/7/2016/h/13
+    heading: Fees.—
+    status: pending
+  - citation: us/statute/7/2016/h/14
+    heading: Mobile technologies.—
+    status: pending
+  - citation: us/statute/7/2016/h/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2016/h/3
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2016/h/4
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2016/h/5
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2016/h/6
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2016/h/7
+    heading: Replacement of benefits .—
+    status: pending
+  - citation: us/statute/7/2016/h/8
+    heading: Replacement of cards .—
+    status: pending
+  - citation: us/statute/7/2016/h/9
+    heading: Optional photographic identification.—
+    status: pending
+  - citation: us/statute/7/2016/i
+    heading: State option to issue benefits to certain individuals made ineligible by welfare reform
+    status: pending
+  - citation: us/statute/7/2016/i/1
+    heading: In general
+    status: pending
+  - citation: us/statute/7/2016/i/2
+    heading: State payments to Secretary
+    status: pending
+  - citation: us/statute/7/2016/i/3
+    heading: Reporting
+    status: pending
+  - citation: us/statute/7/2016/i/4
+    heading: Plan
+    status: pending
+  - citation: us/statute/7/2016/i/5
+    heading: Violations
+    status: pending
+  - citation: us/statute/7/2016/i/6
+    heading: Ineligibility for administrative reimbursement
+    status: pending
+  - citation: us/statute/7/2016/i/7
+    heading: Exclusion from enhanced payment accuracy systems
+    status: pending
+  - citation: us/statute/7/2016/j
+    heading: Interoperability and portability of electronic benefit transfer transactions
+    status: pending
+  - citation: us/statute/7/2016/j/1
+    heading: Definitions
+    status: pending
+  - citation: us/statute/7/2016/j/2
+    heading: Requirement
+    status: pending
+  - citation: us/statute/7/2016/j/3
+    heading: Cost
+    status: pending
+  - citation: us/statute/7/2016/j/4
+    heading: Standards
+    status: pending
+  - citation: us/statute/7/2016/j/5
+    heading: Exemptions
+    status: pending
+  - citation: us/statute/7/2016/j/6
+    heading: Funding
+    status: pending
+  - citation: us/statute/7/2016/k
+    heading: Acceptance of program benefits through online transactions
+    status: pending
+  - citation: us/statute/7/2016/k/1
+    heading: In general
+    status: pending
+  - citation: us/statute/7/2016/k/2
+    heading: Requirements to accept benefits
+    status: pending
+  - citation: us/statute/7/2016/k/3
+    heading: State agency action
+    status: pending
+  - citation: us/statute/7/2016/k/4
+    heading: Demonstration project on acceptance of benefits through on-line transactions
+    status: pending
+  - citation: us/statute/7/2016a
+    heading: EBT benefit fraud prevention
+    status: pending
+  - citation: us/statute/7/2016a/a
+    heading: Guidance; rulemaking
+    status: pending
+  - citation: us/statute/7/2016a/a/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2016a/a/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2016a/a/3
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2016a/a/4
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2016a/a/5
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2016a/b
+    heading: Replacement of benefits
+    status: pending
+  - citation: us/statute/7/2016a/b/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2016a/b/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2016a/b/3
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2016a/b/4
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2016a/c
+    heading: Definitions
+    status: pending
+  - citation: us/statute/7/2016a/d
+    heading: Rescission
+    status: pending
+  - citation: us/statute/7/2016a/e
+    heading: Comptroller General
+    status: pending
+  - citation: us/statute/7/2016a/e/1
+    heading: In general
+    status: pending
+  - citation: us/statute/7/2016a/e/2
+    heading: Contents
+    status: pending
+  - citation: us/statute/7/2017
+    heading: Value of allotment
+    status: pending
+  - citation: us/statute/7/2017/a
+    heading: Calculation
+    status: encoded
+    encoded_by:
+      - us/statutes/7/2017/a.yaml
+  - citation: us/statute/7/2017/b
+    heading: Benefits not deemed income or resources for certain purposes
+    status: pending
+  - citation: us/statute/7/2017/c
+    heading: First month benefits prorated
+    status: pending
+  - citation: us/statute/7/2017/c/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2017/c/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2017/c/3
+    heading: Optional combined allotment for expedited households .—
+    status: pending
+  - citation: us/statute/7/2017/d
+    heading: Reduction of public assistance benefits
+    status: pending
+  - citation: us/statute/7/2017/d/1
+    heading: In general
+    status: pending
+  - citation: us/statute/7/2017/d/2
+    heading: Rules and procedures
+    status: pending
+  - citation: us/statute/7/2017/e
+    heading: Allotments for households residing in centers
+    status: pending
+  - citation: us/statute/7/2017/e/1
+    heading: In general
+    status: pending
+  - citation: us/statute/7/2017/e/2
+    heading: Direct payment
+    status: pending
+  - citation: us/statute/7/2017/f
+    heading: Alternative procedures for residents of certain group facilities
+    status: pending
+  - citation: us/statute/7/2017/f/1
+    heading: In general
+    status: pending
+  - citation: us/statute/7/2017/f/2
+    heading: Pilot projects
+    status: pending
+  - citation: us/statute/7/2017/f/3
+    heading: Authorization of implementation in all States
+    status: pending
+  - citation: us/statute/7/2018
+    heading: Approval of retail food stores and wholesale food concerns
+    status: pending
+  - citation: us/statute/7/2018/a
+    heading: Authorization to accept and redeem benefits
+    status: pending
+  - citation: us/statute/7/2018/a/1
+    heading: Applications.—
+    status: pending
+  - citation: us/statute/7/2018/a/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2018/a/3
+    heading: Authorization periods .—
+    status: pending
+  - citation: us/statute/7/2018/a/4
+    heading: Electronic benefit transfer equipment and service providers .—
+    status: pending
+  - citation: us/statute/7/2018/b
+    heading: Effective and efficient operation of program; effect of disqualification; posting of bond
+    status: pending
+  - citation: us/statute/7/2018/b/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2018/b/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2018/c
+    heading: Information submitted by applicants; safeguards; disclosure to and use by State agencies
+    status: pending
+  - citation: us/statute/7/2018/d
+    heading: Hearing upon failure of applicant to receive approval; waiting period for new application
+    status: pending
+  - citation: us/statute/7/2018/e
+    heading: Reporting of abuses by public
+    status: pending
+  - citation: us/statute/7/2018/f
+    heading: Limitation on participation of house-to-house trade routes
+    status: pending
+  - citation: us/statute/7/2018/g
+    heading: EBT service requirement
+    status: pending
+  - citation: us/statute/7/2018/h
+    heading: Private establishments
+    status: pending
+  - citation: us/statute/7/2018/h/1
+    heading: In general
+    status: pending
+  - citation: us/statute/7/2018/h/2
+    heading: Existing contracts
+    status: pending
+  - citation: us/statute/7/2018/h/3
+    heading: Report to Congress
+    status: pending
+  - citation: us/statute/7/2018/i
+    heading: Review of program operations
+    status: pending
+  - citation: us/statute/7/2018/i/1
+    heading: Review by the Secretary
+    status: pending
+  - citation: us/statute/7/2018/i/2
+    heading: Limitation
+    status: pending
+  - citation: us/statute/7/2018/j
+    heading: Incentives
+    status: pending
+  - citation: us/statute/7/2018/j/1
+    heading: Definition of eligible incentive food
+    status: pending
+  - citation: us/statute/7/2018/j/2
+    heading: Guidance
+    status: pending
+  - citation: us/statute/7/2018/j/3
+    heading: No limitation on benefits
+    status: pending
+  - citation: us/statute/7/2018/j/4
+    heading: Effect
+    status: pending
+  - citation: us/statute/7/2018/j/5
+    heading: Report
+    status: pending
+  - citation: us/statute/7/2019
+    heading: Redemption of program benefits
+    status: pending
+  - citation: us/statute/7/2020
+    heading: Administration
+    status: pending
+  - citation: us/statute/7/2020/a
+    heading: State responsibility
+    status: pending
+  - citation: us/statute/7/2020/a/1
+    heading: In general
+    status: pending
+  - citation: us/statute/7/2020/a/2
+    heading: Local administration
+    status: pending
+  - citation: us/statute/7/2020/a/3
+    heading: Records
+    status: pending
+  - citation: us/statute/7/2020/a/4
+    heading: Review of major changes in program design
+    status: pending
+  - citation: us/statute/7/2020/b
+    heading: Correction of improper denials and under­issuances
+    status: pending
+  - citation: us/statute/7/2020/c
+    heading: Civil rights compliance
+    status: pending
+  - citation: us/statute/7/2020/c/1
+    heading: In general
+    status: pending
+  - citation: us/statute/7/2020/c/2
+    heading: Relation to other laws
+    status: pending
+  - citation: us/statute/7/2020/d
+    heading: Plan of operation by State agency; approval by Secretary; Indians
+    status: pending
+  - citation: us/statute/7/2020/e
+    heading: Requisites of State plan of operation
+    status: pending
+  - citation: us/statute/7/2020/e/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2020/e/10
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2020/e/11
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2020/e/12
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2020/e/13
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2020/e/14
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2020/e/15
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2020/e/16
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2020/e/17
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2020/e/18
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2020/e/19
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2020/e/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2020/e/20
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2020/e/21
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2020/e/22
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2020/e/23
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2020/e/24
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2020/e/25
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2020/e/26
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2020/e/3
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2020/e/4
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2020/e/5
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2020/e/6
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2020/e/7
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2020/e/8
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2020/e/9
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2020/f
+    heading: Repealed. Pub. L. 111–296, title II, § 241(b)(2) , Dec. 13, 2010 , 124 Stat. 3236
+    status: pending
+  - citation: us/statute/7/2020/g
+    heading: State noncompliance; correction of failures
+    status: pending
+  - citation: us/statute/7/2020/h
+    heading: Deposit by State to cover fraudulently or negligently issued benefits
+    status: pending
+  - citation: us/statute/7/2020/i
+    heading: Application and denial procedures
+    status: pending
+  - citation: us/statute/7/2020/i/1
+    heading: Application procedures
+    status: pending
+  - citation: us/statute/7/2020/i/2
+    heading: Denial and termination
+    status: pending
+  - citation: us/statute/7/2020/j
+    heading: Notice of availability of benefits and applications; revision of memorandum of understanding
+    status: pending
+  - citation: us/statute/7/2020/j/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2020/j/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2020/k
+    heading: Use of post offices
+    status: pending
+  - citation: us/statute/7/2020/l
+    heading: Special financial audit review of high participation States
+    status: pending
+  - citation: us/statute/7/2020/m
+    heading: Alaskan fee agents; use and services
+    status: pending
+  - citation: us/statute/7/2020/n
+    heading: Verification by State agencies
+    status: pending
+  - citation: us/statute/7/2020/o
+    heading: Data processing systems; model plan; comprehensive automation and computerization; State
+      plans; evaluation and report to Congress; corrective measures by State; time for implementation
+    status: pending
+  - citation: us/statute/7/2020/o/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2020/o/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2020/o/3
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2020/o/4
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2020/o/5
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2020/p
+    heading: State verification option
+    status: pending
+  - citation: us/statute/7/2020/q
+    heading: Denial of benefits for prisoners
+    status: pending
+  - citation: us/statute/7/2020/r
+    heading: Denial of benefits for deceased individuals
+    status: pending
+  - citation: us/statute/7/2020/r/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2020/r/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2020/s
+    heading: Transitional benefits option
+    status: pending
+  - citation: us/statute/7/2020/s/1
+    heading: In general
+    status: pending
+  - citation: us/statute/7/2020/s/2
+    heading: Transitional benefits period
+    status: pending
+  - citation: us/statute/7/2020/s/3
+    heading: Amount of benefits
+    status: pending
+  - citation: us/statute/7/2020/s/4
+    heading: Determination of future eligibility
+    status: pending
+  - citation: us/statute/7/2020/s/5
+    heading: Limitation
+    status: pending
+  - citation: us/statute/7/2020/s/6
+    heading: Applications for recertification
+    status: pending
+  - citation: us/statute/7/2020/t
+    heading: Grants for simplified application and eligibility determination systems and improved access
+      to benefits
+    status: pending
+  - citation: us/statute/7/2020/t/1
+    heading: In general
+    status: pending
+  - citation: us/statute/7/2020/t/2
+    heading: Types of projects
+    status: pending
+  - citation: us/statute/7/2020/t/3
+    heading: Limitation
+    status: pending
+  - citation: us/statute/7/2020/t/4
+    heading: Eligible entities
+    status: pending
+  - citation: us/statute/7/2020/t/5
+    heading: Selection of eligible entities
+    status: pending
+  - citation: us/statute/7/2020/u
+    heading: Agreement for direct certification and cooperation
+    status: pending
+  - citation: us/statute/7/2020/u/1
+    heading: In general
+    status: pending
+  - citation: us/statute/7/2020/u/2
+    heading: Contents
+    status: pending
+  - citation: us/statute/7/2020/v
+    heading: Data exchange standards for improved interoperability
+    status: pending
+  - citation: us/statute/7/2020/v/1
+    heading: Designation
+    status: pending
+  - citation: us/statute/7/2020/v/2
+    heading: Requirements
+    status: pending
+  - citation: us/statute/7/2020/v/3
+    heading: Rules of construction
+    status: pending
+  - citation: us/statute/7/2020/w
+    heading: Advice regarding employment and training services
+    status: pending
+  - citation: us/statute/7/2020/x
+    heading: National Accuracy Clearinghouse
+    status: pending
+  - citation: us/statute/7/2020/x/1
+    heading: Definition of indication of multiple issuance
+    status: pending
+  - citation: us/statute/7/2020/x/2
+    heading: Establishment
+    status: pending
+  - citation: us/statute/7/2020/x/3
+    heading: Issuance of interim final regulations
+    status: pending
+  - citation: us/statute/7/2020/x/4
+    heading: Timing
+    status: pending
+  - citation: us/statute/7/2021
+    heading: Civil penalties and disqualification of retail food stores and wholesale food concerns
+    status: pending
+  - citation: us/statute/7/2021/a
+    heading: Disqualification
+    status: pending
+  - citation: us/statute/7/2021/a/1
+    heading: In general
+    status: pending
+  - citation: us/statute/7/2021/a/2
+    heading: Regulations
+    status: pending
+  - citation: us/statute/7/2021/b
+    heading: Period of disqualification
+    status: pending
+  - citation: us/statute/7/2021/b/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2021/b/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2021/b/3
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2021/b/4
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2021/c
+    heading: Civil penalty and review of disqualification and penalty determinations
+    status: pending
+  - citation: us/statute/7/2021/c/1
+    heading: Civil penalty
+    status: pending
+  - citation: us/statute/7/2021/c/2
+    heading: Review
+    status: pending
+  - citation: us/statute/7/2021/d
+    heading: Conditions of authorization
+    status: pending
+  - citation: us/statute/7/2021/d/1
+    heading: In general
+    status: pending
+  - citation: us/statute/7/2021/d/2
+    heading: Collateral
+    status: pending
+  - citation: us/statute/7/2021/d/3
+    heading: Bond requirements
+    status: pending
+  - citation: us/statute/7/2021/d/4
+    heading: Forfeiture
+    status: pending
+  - citation: us/statute/7/2021/d/5
+    heading: Hearing
+    status: pending
+  - citation: us/statute/7/2021/e
+    heading: Transfer of ownership; penalty in lieu of disqualification period; fines for acceptance of
+      loose coupons; judicial action to recover penalty or fine
+    status: pending
+  - citation: us/statute/7/2021/e/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2021/e/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2021/e/3
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2021/f
+    heading: Fines for unauthorized acceptance
+    status: pending
+  - citation: us/statute/7/2021/g
+    heading: Disqualification of retailers who are disqualified under WIC program
+    status: pending
+  - citation: us/statute/7/2021/g/1
+    heading: In general
+    status: pending
+  - citation: us/statute/7/2021/g/2
+    heading: Terms
+    status: pending
+  - citation: us/statute/7/2021/h
+    heading: Flagrant violations
+    status: pending
+  - citation: us/statute/7/2021/h/1
+    heading: In general
+    status: pending
+  - citation: us/statute/7/2021/h/2
+    heading: Requirements
+    status: pending
+  - citation: us/statute/7/2021/h/3
+    heading: No liability for interest
+    status: pending
+  - citation: us/statute/7/2021/i
+    heading: Pilot projects to improve Federal-State cooperation in identifying and reducing fraud in
+      the supplemental nutrition assistance program
+    status: pending
+  - citation: us/statute/7/2021/i/1
+    heading: Pilot projects required
+    status: pending
+  - citation: us/statute/7/2021/i/2
+    heading: Selection criteria
+    status: pending
+  - citation: us/statute/7/2021/i/3
+    heading: Evaluation
+    status: pending
+  - citation: us/statute/7/2021/i/4
+    heading: Report to Congress
+    status: pending
+  - citation: us/statute/7/2021/i/5
+    heading: Funding
+    status: pending
+  - citation: us/statute/7/2022
+    heading: Disposition of claims
+    status: pending
+  - citation: us/statute/7/2022/a
+    heading: General authority of the Secretary
+    status: pending
+  - citation: us/statute/7/2022/a/1
+    heading: Determination of claims
+    status: pending
+  - citation: us/statute/7/2022/a/2
+    heading: Claims established under quality control system
+    status: pending
+  - citation: us/statute/7/2022/a/3
+    heading: Computation of interest
+    status: pending
+  - citation: us/statute/7/2022/a/4
+    heading: Joint and several liability of household members
+    status: pending
+  - citation: us/statute/7/2022/b
+    heading: Collection of overissuances
+    status: pending
+  - citation: us/statute/7/2022/b/1
+    heading: In general
+    status: pending
+  - citation: us/statute/7/2022/b/2
+    heading: Cost effectiveness
+    status: pending
+  - citation: us/statute/7/2022/b/3
+    heading: Maximum reduction absent fraud
+    status: pending
+  - citation: us/statute/7/2022/b/4
+    heading: Procedures
+    status: pending
+  - citation: us/statute/7/2022/b/5
+    heading: Overissuances caused by systemic State errors
+    status: pending
+  - citation: us/statute/7/2022/c
+    heading: Intercept of unemployment benefits
+    status: pending
+  - citation: us/statute/7/2022/c/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2022/c/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2022/c/3
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2022/d
+    heading: Recovery of overissuance of benefits
+    status: pending
+  - citation: us/statute/7/2023
+    heading: Administrative and judicial review; restoration of rights
+    status: pending
+  - citation: us/statute/7/2023/a
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2023/a/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2023/a/10
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2023/a/11
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2023/a/12
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2023/a/13
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2023/a/14
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2023/a/15
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2023/a/16
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2023/a/17
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2023/a/18
+    heading: Suspension of stores pending review .—
+    status: pending
+  - citation: us/statute/7/2023/a/2
+    heading: Delivery of notices .—
+    status: pending
+  - citation: us/statute/7/2023/a/3
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2023/a/4
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2023/a/5
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2023/a/6
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2023/a/7
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2023/a/8
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2023/a/9
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2023/b
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2024
+    heading: Violations and enforcement
+    status: pending
+  - citation: us/statute/7/2024/a
+    heading: In general
+    status: pending
+  - citation: us/statute/7/2024/b
+    heading: Unauthorized use, transfer, acquisition, alteration, or possession of benefits
+    status: pending
+  - citation: us/statute/7/2024/b/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2024/b/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2024/c
+    heading: Presentation for payment or redemption of benefits that have been illegally received, transferred,
+      or used
+    status: pending
+  - citation: us/statute/7/2024/d
+    heading: Benefits as obligations of the United States
+    status: pending
+  - citation: us/statute/7/2024/e
+    heading: Forfeiture of property involved in illegal benefit transactions
+    status: pending
+  - citation: us/statute/7/2024/f
+    heading: Criminal forfeiture
+    status: pending
+  - citation: us/statute/7/2024/f/1
+    heading: In general
+    status: pending
+  - citation: us/statute/7/2024/f/2
+    heading: Property subject to forfeiture
+    status: pending
+  - citation: us/statute/7/2024/f/3
+    heading: Interest of owner
+    status: pending
+  - citation: us/statute/7/2024/f/4
+    heading: Proceeds
+    status: pending
+  - citation: us/statute/7/2025
+    heading: Administrative cost-sharing and quality control
+    status: pending
+  - citation: us/statute/7/2025/a
+    heading: Administrative costs
+    status: pending
+  - citation: us/statute/7/2025/b
+    heading: Work supplementation or support program
+    status: pending
+  - citation: us/statute/7/2025/b/1
+    heading: “Work supplementation or support program” defined
+    status: pending
+  - citation: us/statute/7/2025/b/2
+    heading: Program
+    status: pending
+  - citation: us/statute/7/2025/b/3
+    heading: Procedure
+    status: pending
+  - citation: us/statute/7/2025/b/4
+    heading: Other work requirements
+    status: pending
+  - citation: us/statute/7/2025/b/5
+    heading: Length of participation
+    status: pending
+  - citation: us/statute/7/2025/b/6
+    heading: Displacement
+    status: pending
+  - citation: us/statute/7/2025/c
+    heading: Quality control system
+    status: pending
+  - citation: us/statute/7/2025/c/1
+    heading: In general
+    status: pending
+  - citation: us/statute/7/2025/c/2
+    heading: Error rate definitions
+    status: pending
+  - citation: us/statute/7/2025/c/3
+    heading: Exclusions
+    status: pending
+  - citation: us/statute/7/2025/c/4
+    heading: Reporting requirements
+    status: pending
+  - citation: us/statute/7/2025/c/5
+    heading: Procedures
+    status: pending
+  - citation: us/statute/7/2025/c/6
+    heading: National performance measure for payment error rates
+    status: pending
+  - citation: us/statute/7/2025/c/7
+    heading: Administrative and judicial review
+    status: pending
+  - citation: us/statute/7/2025/c/8
+    heading: Criteria for payment by a State agency
+    status: pending
+  - citation: us/statute/7/2025/c/9
+    heading: “Good cause” defined
+    status: pending
+  - citation: us/statute/7/2025/d
+    heading: State performance indicators
+    status: pending
+  - citation: us/statute/7/2025/d/1
+    heading: Fiscal years 2003 and 2004
+    status: pending
+  - citation: us/statute/7/2025/d/2
+    heading: Fiscal years 2005 through 2017
+    status: pending
+  - citation: us/statute/7/2025/d/3
+    heading: Prohibition on receipt of performance bonus payments
+    status: pending
+  - citation: us/statute/7/2025/d/4
+    heading: Payments not subject to judicial review
+    status: pending
+  - citation: us/statute/7/2025/d/5
+    heading: Use of performance bonus payments
+    status: pending
+  - citation: us/statute/7/2025/d/6
+    heading: Fiscal year 2018 and fiscal years thereafter
+    status: pending
+  - citation: us/statute/7/2025/e
+    heading: Use of social security account numbers; access to information
+    status: pending
+  - citation: us/statute/7/2025/f
+    heading: Payment of certain legal fees
+    status: pending
+  - citation: us/statute/7/2025/g
+    heading: Cost sharing for computerization
+    status: pending
+  - citation: us/statute/7/2025/g/1
+    heading: In general
+    status: pending
+  - citation: us/statute/7/2025/g/2
+    heading: Limitation
+    status: pending
+  - citation: us/statute/7/2025/h
+    heading: Funding of employment and training programs
+    status: pending
+  - citation: us/statute/7/2025/h/1
+    heading: In general.—
+    status: pending
+  - citation: us/statute/7/2025/h/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2025/h/3
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2025/h/4
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2025/h/5
+    heading: Monitoring.—
+    status: pending
+  - citation: us/statute/7/2025/i
+    heading: Geographical error-prone profiles
+    status: pending
+  - citation: us/statute/7/2025/i/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2025/i/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2025/j
+    heading: Training materials regarding certification of farming households
+    status: pending
+  - citation: us/statute/7/2025/k
+    heading: Reductions in payments for administrative costs
+    status: pending
+  - citation: us/statute/7/2025/k/1
+    heading: Definitions
+    status: pending
+  - citation: us/statute/7/2025/k/2
+    heading: Determinations of amounts attributable to benefiting programs
+    status: pending
+  - citation: us/statute/7/2025/k/3
+    heading: Reduction in payment
+    status: pending
+  - citation: us/statute/7/2025/k/4
+    heading: Appeal of determinations
+    status: pending
+  - citation: us/statute/7/2025/k/5
+    heading: Allocation of administrative costs
+    status: pending
+  - citation: us/statute/7/2026
+    heading: Research, demonstration, and evaluations
+    status: pending
+  - citation: us/statute/7/2026/a
+    heading: Contracts or grants; issuance of aggregate allotments
+    status: pending
+  - citation: us/statute/7/2026/a/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2026/a/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2026/b
+    heading: Pilot projects
+    status: pending
+  - citation: us/statute/7/2026/b/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2026/b/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2026/c
+    heading: Evaluation measures; pilot programs for nutritional monitoring
+    status: pending
+  - citation: us/statute/7/2026/d
+    heading: Employment initiatives program
+    status: pending
+  - citation: us/statute/7/2026/d/1
+    heading: Election to participate
+    status: pending
+  - citation: us/statute/7/2026/d/2
+    heading: Procedure
+    status: pending
+  - citation: us/statute/7/2026/d/3
+    heading: Eligibility
+    status: pending
+  - citation: us/statute/7/2026/d/4
+    heading: Evaluation
+    status: pending
+  - citation: us/statute/7/2026/e
+    heading: Study and report to Congressional committees of effect of reduction of benefits
+    status: pending
+  - citation: us/statute/7/2026/f
+    heading: Demonstration projects for development and use of intelligent benefit cards to pay benefits
+    status: pending
+  - citation: us/statute/7/2026/g
+    heading: Study of effectiveness of employment and training programs
+    status: pending
+  - citation: us/statute/7/2026/g/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2026/g/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2026/h
+    heading: Demonstration projects for vehicle exclusion limits
+    status: pending
+  - citation: us/statute/7/2026/h/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2026/h/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2026/i
+    heading: Testing resource accumulation
+    status: pending
+  - citation: us/statute/7/2026/j
+    heading: Demonstration projects directed at benefit trafficking
+    status: pending
+  - citation: us/statute/7/2026/k
+    heading: Pilot projects to evaluate health and nutrition promotion in the supplemental nutrition assistance
+      program
+    status: pending
+  - citation: us/statute/7/2026/k/1
+    heading: In general
+    status: pending
+  - citation: us/statute/7/2026/k/2
+    heading: Grants
+    status: pending
+  - citation: us/statute/7/2026/k/3
+    heading: Projects
+    status: pending
+  - citation: us/statute/7/2026/k/4
+    heading: Evaluation and reporting
+    status: pending
+  - citation: us/statute/7/2026/k/5
+    heading: Funding
+    status: pending
+  - citation: us/statute/7/2026/l
+    heading: Cooperation with program research and evaluation
+    status: pending
+  - citation: us/statute/7/2026/l/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2026/l/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2026/m
+    heading: Evaluation of child support enforcement cooperation requirements
+    status: pending
+  - citation: us/statute/7/2026/m/1
+    heading: In general
+    status: pending
+  - citation: us/statute/7/2026/m/2
+    heading: Evaluation
+    status: pending
+  - citation: us/statute/7/2026/m/3
+    heading: State agency cooperation
+    status: pending
+  - citation: us/statute/7/2026/m/4
+    heading: Report
+    status: pending
+  - citation: us/statute/7/2026/n
+    heading: Longitudinal data for research
+    status: pending
+  - citation: us/statute/7/2026/n/1
+    heading: In general
+    status: pending
+  - citation: us/statute/7/2026/n/2
+    heading: Purpose
+    status: pending
+  - citation: us/statute/7/2026/n/3
+    heading: Requirements for databases
+    status: pending
+  - citation: us/statute/7/2026/n/4
+    heading: Included data
+    status: pending
+  - citation: us/statute/7/2026/n/5
+    heading: Approval
+    status: pending
+  - citation: us/statute/7/2026/n/6
+    heading: Grants
+    status: pending
+  - citation: us/statute/7/2026/n/7
+    heading: Report
+    status: pending
+  - citation: us/statute/7/2026/n/8
+    heading: Effect
+    status: pending
+  - citation: us/statute/7/2026/n/9
+    heading: Funding
+    status: pending
+  - citation: us/statute/7/2026a
+    heading: Healthy fluid milk incentives projects
+    status: pending
+  - citation: us/statute/7/2026a/a
+    heading: Definition of fluid milk
+    status: pending
+  - citation: us/statute/7/2026a/a/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2026a/a/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2026a/a/3
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2026a/a/4
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2026a/b
+    heading: Projects
+    status: pending
+  - citation: us/statute/7/2026a/c
+    heading: Grants or cooperative agreements
+    status: pending
+  - citation: us/statute/7/2026a/c/1
+    heading: In general
+    status: pending
+  - citation: us/statute/7/2026a/c/2
+    heading: Application
+    status: pending
+  - citation: us/statute/7/2026a/c/3
+    heading: Selection criteria
+    status: pending
+  - citation: us/statute/7/2026a/c/4
+    heading: Use of funds
+    status: pending
+  - citation: us/statute/7/2026a/d
+    heading: Evaluation and reporting
+    status: pending
+  - citation: us/statute/7/2026a/d/1
+    heading: Evaluation
+    status: pending
+  - citation: us/statute/7/2026a/d/2
+    heading: Reporting
+    status: pending
+  - citation: us/statute/7/2026a/d/3
+    heading: Public dissemination
+    status: pending
+  - citation: us/statute/7/2026a/e
+    heading: Funding
+    status: pending
+  - citation: us/statute/7/2026a/e/1
+    heading: Authorization of appropriations
+    status: pending
+  - citation: us/statute/7/2026a/e/2
+    heading: Appropriations in advance
+    status: pending
+  - citation: us/statute/7/2027
+    heading: Appropriations and allotments
+    status: pending
+  - citation: us/statute/7/2027/a
+    heading: Authorization of allotments; monthly reports of expenditures to Congressional committees;
+      restriction on use of funds; nutrition education improvements
+    status: pending
+  - citation: us/statute/7/2027/a/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2027/a/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2027/a/3
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2027/b
+    heading: Limitation of value of allotments; reduction of allotments
+    status: pending
+  - citation: us/statute/7/2027/c
+    heading: Manner of reducing allotments
+    status: pending
+  - citation: us/statute/7/2027/d
+    heading: Requisite action by Secretary to reduce allotments; statement to Congressional committees
+    status: pending
+  - citation: us/statute/7/2027/e
+    heading: Disposition of funds collected pursuant to claims
+    status: pending
+  - citation: us/statute/7/2027/f
+    heading: Transfer of funds
+    status: pending
+  - citation: us/statute/7/2027/g
+    heading: Ban on recruitment and promotion activities
+    status: pending
+  - citation: us/statute/7/2027/g/1
+    heading: In general
+    status: pending
+  - citation: us/statute/7/2027/g/2
+    heading: Limitation
+    status: pending
+  - citation: us/statute/7/2027/h
+    heading: Ban on recruitment by entities that receive funds
+    status: pending
+  - citation: us/statute/7/2028
+    heading: Consolidated block grants for Puerto Rico and American Samoa
+    status: pending
+  - citation: us/statute/7/2028/a
+    heading: Payments to governmental entities
+    status: pending
+  - citation: us/statute/7/2028/a/1
+    heading: Definition of governmental entity
+    status: pending
+  - citation: us/statute/7/2028/a/2
+    heading: Block grants
+    status: pending
+  - citation: us/statute/7/2028/a/3
+    heading: Time and manner of payments to Commonwealth of Puerto Rico
+    status: pending
+  - citation: us/statute/7/2028/b
+    heading: Plan for provision of assistance; approval; noncompliance
+    status: pending
+  - citation: us/statute/7/2028/b/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2028/b/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2028/c
+    heading: Review; technical assistance
+    status: pending
+  - citation: us/statute/7/2028/c/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2028/c/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2028/d
+    heading: Penalty for violations
+    status: pending
+  - citation: us/statute/7/2028/e
+    heading: Review, report, and regulation of cash nutrition assistance program benefits provided in
+      Puerto Rico
+    status: pending
+  - citation: us/statute/7/2028/e/1
+    heading: Review
+    status: pending
+  - citation: us/statute/7/2028/e/2
+    heading: Report
+    status: pending
+  - citation: us/statute/7/2028/e/3
+    heading: Regulation
+    status: pending
+  - citation: us/statute/7/2028/e/4
+    heading: Funding
+    status: pending
+  - citation: us/statute/7/2029
+    heading: Workfare
+    status: pending
+  - citation: us/statute/7/2029/a
+    heading: Program plan; guidelines; compliance
+    status: pending
+  - citation: us/statute/7/2029/a/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2029/a/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2029/b
+    heading: Exempt household members
+    status: pending
+  - citation: us/statute/7/2029/b/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2029/b/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2029/b/3
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2029/b/4
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2029/b/5
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2029/b/6
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2029/c
+    heading: Valuation or duration of work
+    status: pending
+  - citation: us/statute/7/2029/d
+    heading: Nature, conditions, and costs of work
+    status: pending
+  - citation: us/statute/7/2029/d/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2029/d/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2029/d/3
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2029/e
+    heading: Job search period
+    status: pending
+  - citation: us/statute/7/2029/f
+    heading: Disqualification
+    status: pending
+  - citation: us/statute/7/2029/g
+    heading: Payment of administrative expenses
+    status: pending
+  - citation: us/statute/7/2029/g/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2029/g/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2029/g/3
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2030
+    heading: Repealed. Pub. L. 110–234, title IV, § 4115(b)(14) , May 22, 2008 , 122 Stat. 1108 , and
+      Pub. L. 110–246, § 4(a) , title IV, § 4115(b)(14), June 18, 2008 , 122 Stat. 1664 , 1870
+    status: pending
+  - citation: us/statute/7/2031
+    heading: Minnesota Family Investment Project
+    status: pending
+  - citation: us/statute/7/2031/a
+    heading: In general
+    status: pending
+  - citation: us/statute/7/2031/a/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2031/a/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2031/b
+    heading: Required terms and conditions of Project
+    status: pending
+  - citation: us/statute/7/2031/b/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2031/b/10
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2031/b/11
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2031/b/12
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2031/b/13
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2031/b/14
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2031/b/15
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2031/b/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2031/b/3
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2031/b/4
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2031/b/5
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2031/b/6
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2031/b/7
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2031/b/8
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2031/b/9
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2031/c
+    heading: Additional terms and conditions of Project
+    status: pending
+  - citation: us/statute/7/2031/c/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2031/c/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2031/c/3
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2031/d
+    heading: Funding
+    status: pending
+  - citation: us/statute/7/2031/d/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2031/d/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2031/d/3
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2031/e
+    heading: Waiver
+    status: pending
+  - citation: us/statute/7/2031/f
+    heading: Project audits
+    status: pending
+  - citation: us/statute/7/2031/f/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2031/f/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2031/g
+    heading: Construction
+    status: pending
+  - citation: us/statute/7/2031/g/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2031/g/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2031/h
+    heading: Quality control
+    status: pending
+  - citation: us/statute/7/2031/i
+    heading: Evaluation
+    status: pending
+  - citation: us/statute/7/2031/i/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2031/i/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2031/j
+    heading: Definitions
+    status: pending
+  - citation: us/statute/7/2031/j/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2031/j/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2031/j/3
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2031/j/4
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2032
+    heading: Automated data processing and information retrieval systems
+    status: pending
+  - citation: us/statute/7/2032/a
+    heading: Standards and procedures for reviews
+    status: pending
+  - citation: us/statute/7/2032/a/1
+    heading: Initial reviews
+    status: pending
+  - citation: us/statute/7/2032/a/2
+    heading: Operational reviews
+    status: pending
+  - citation: us/statute/7/2032/b
+    heading: Standards for approval of systems
+    status: pending
+  - citation: us/statute/7/2032/b/1
+    heading: In general
+    status: pending
+  - citation: us/statute/7/2032/b/2
+    heading: Implementation
+    status: pending
+  - citation: us/statute/7/2032/b/3
+    heading: Periodic compliance reviews
+    status: pending
+  - citation: us/statute/7/2032/c
+    heading: Report
+    status: pending
+  - citation: us/statute/7/2033
+    heading: Repealed. Pub. L. 107–171, title IV, § 4124(b) , May 13, 2002 , 116 Stat. 326
+    status: pending
+  - citation: us/statute/7/2034
+    heading: Assistance for community food projects
+    status: pending
+  - citation: us/statute/7/2034/a
+    heading: Definitions
+    status: pending
+  - citation: us/statute/7/2034/a/1
+    heading: Community food project
+    status: pending
+  - citation: us/statute/7/2034/a/2
+    heading: Gleaner
+    status: pending
+  - citation: us/statute/7/2034/a/3
+    heading: Hunger-free communities goal
+    status: pending
+  - citation: us/statute/7/2034/b
+    heading: Authority to provide assistance
+    status: pending
+  - citation: us/statute/7/2034/b/1
+    heading: In general
+    status: pending
+  - citation: us/statute/7/2034/b/2
+    heading: Limitation on grants
+    status: pending
+  - citation: us/statute/7/2034/c
+    heading: Eligible entities
+    status: pending
+  - citation: us/statute/7/2034/c/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2034/c/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2034/c/3
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2034/c/4
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2034/d
+    heading: Preference for certain projects
+    status: pending
+  - citation: us/statute/7/2034/d/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2034/d/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2034/d/3
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2034/d/4
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2034/d/5
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2034/e
+    heading: Matching funds requirements
+    status: pending
+  - citation: us/statute/7/2034/e/1
+    heading: Requirements
+    status: pending
+  - citation: us/statute/7/2034/e/2
+    heading: Calculation
+    status: pending
+  - citation: us/statute/7/2034/e/3
+    heading: Sources
+    status: pending
+  - citation: us/statute/7/2034/f
+    heading: Term of grant
+    status: pending
+  - citation: us/statute/7/2034/f/1
+    heading: Single grant
+    status: pending
+  - citation: us/statute/7/2034/f/2
+    heading: Term
+    status: pending
+  - citation: us/statute/7/2034/g
+    heading: Technical assistance and related information
+    status: pending
+  - citation: us/statute/7/2034/g/1
+    heading: Technical assistance
+    status: pending
+  - citation: us/statute/7/2034/g/2
+    heading: Sharing information
+    status: pending
+  - citation: us/statute/7/2034/h
+    heading: Reports to Congress
+    status: pending
+  - citation: us/statute/7/2034/h/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2034/h/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2034/h/3
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2035
+    heading: Simplified supplemental nutrition assistance program
+    status: pending
+  - citation: us/statute/7/2035/a
+    heading: “Federal costs” defined
+    status: pending
+  - citation: us/statute/7/2035/b
+    heading: Election
+    status: pending
+  - citation: us/statute/7/2035/c
+    heading: Operation of Program
+    status: pending
+  - citation: us/statute/7/2035/c/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2035/c/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2035/c/3
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2035/c/4
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2035/d
+    heading: Approval of Program
+    status: pending
+  - citation: us/statute/7/2035/d/1
+    heading: State plan
+    status: pending
+  - citation: us/statute/7/2035/d/2
+    heading: Approval of plan
+    status: pending
+  - citation: us/statute/7/2035/e
+    heading: Increased Federal costs
+    status: pending
+  - citation: us/statute/7/2035/e/1
+    heading: Determination
+    status: pending
+  - citation: us/statute/7/2035/e/2
+    heading: Notification
+    status: pending
+  - citation: us/statute/7/2035/e/3
+    heading: Enforcement
+    status: pending
+  - citation: us/statute/7/2035/f
+    heading: Rules and procedures
+    status: pending
+  - citation: us/statute/7/2035/f/1
+    heading: In general
+    status: pending
+  - citation: us/statute/7/2035/f/2
+    heading: Standardized deductions
+    status: pending
+  - citation: us/statute/7/2035/f/3
+    heading: Requirements
+    status: pending
+  - citation: us/statute/7/2035/f/4
+    heading: Limitation on eligibility
+    status: pending
+  - citation: us/statute/7/2036
+    heading: Availability of commodities for emergency food assistance program
+    status: pending
+  - citation: us/statute/7/2036/a
+    heading: Purchase of commodities
+    status: pending
+  - citation: us/statute/7/2036/a/1
+    heading: In general
+    status: pending
+  - citation: us/statute/7/2036/a/2
+    heading: Amounts
+    status: pending
+  - citation: us/statute/7/2036/a/3
+    heading: Funds availability
+    status: pending
+  - citation: us/statute/7/2036/b
+    heading: Basis for commodity purchases
+    status: pending
+  - citation: us/statute/7/2036/b/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2036/b/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2036/b/3
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2036a
+    heading: Nutrition education and obesity prevention grant program
+    status: pending
+  - citation: us/statute/7/2036a/a
+    heading: Definition of eligible individual
+    status: pending
+  - citation: us/statute/7/2036a/a/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2036a/a/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2036a/a/3
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2036a/b
+    heading: Programs
+    status: pending
+  - citation: us/statute/7/2036a/c
+    heading: Delivery of nutrition education and obesity prevention services
+    status: pending
+  - citation: us/statute/7/2036a/c/1
+    heading: In general
+    status: pending
+  - citation: us/statute/7/2036a/c/2
+    heading: Nutrition education State plans
+    status: pending
+  - citation: us/statute/7/2036a/c/3
+    heading: Use of funds
+    status: pending
+  - citation: us/statute/7/2036a/c/4
+    heading: Notification
+    status: pending
+  - citation: us/statute/7/2036a/c/5
+    heading: Coordination
+    status: pending
+  - citation: us/statute/7/2036a/c/6
+    heading: Information clearinghouse
+    status: pending
+  - citation: us/statute/7/2036a/c/7
+    heading: Technical assistance
+    status: pending
+  - citation: us/statute/7/2036a/c/8
+    heading: Annual State report
+    status: pending
+  - citation: us/statute/7/2036a/c/9
+    heading: Annual Federal report
+    status: pending
+  - citation: us/statute/7/2036a/d
+    heading: Funding
+    status: pending
+  - citation: us/statute/7/2036a/d/1
+    heading: In general
+    status: pending
+  - citation: us/statute/7/2036a/d/2
+    heading: Allocation
+    status: pending
+  - citation: us/statute/7/2036a/d/3
+    heading: Limitation on Federal financial participation
+    status: pending
+  - citation: us/statute/7/2036a/e
+    heading: Implementation
+    status: pending
+  - citation: us/statute/7/2036b
+    heading: Retail food store and recipient trafficking
+    status: pending
+  - citation: us/statute/7/2036b/a
+    heading: Purpose
+    status: pending
+  - citation: us/statute/7/2036b/b
+    heading: Use of funds
+    status: pending
+  - citation: us/statute/7/2036b/b/1
+    heading: In general
+    status: pending
+  - citation: us/statute/7/2036b/b/2
+    heading: Information technologies
+    status: pending
+  - citation: us/statute/7/2036b/c
+    heading: Funding
+    status: pending
+  - citation: us/statute/7/2036b/c/1
+    heading: Authorization of appropriations
+    status: pending
+  - citation: us/statute/7/2036b/c/2
+    heading: Mandatory funding
+    status: pending
+  - citation: us/statute/7/2036c
+    heading: Annual State report on verification of SNAP participation
+    status: pending
+  - citation: us/statute/7/2036c/a
+    heading: Annual report
+    status: pending
+  - citation: us/statute/7/2036c/a/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2036c/a/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2036c/b
+    heading: Penalty for noncompliance
+    status: pending
+  - citation: us/statute/7/2036c/c
+    heading: Report of pilot program to test prevention of duplicate participation
+    status: pending
+  - citation: us/statute/7/2036d
+    heading: Pilot projects to encourage the use of public-private partnerships committed to addressing
+      food insecurity
+    status: pending
+  - citation: us/statute/7/2036d/a
+    heading: In general
+    status: pending
+  - citation: us/statute/7/2036d/b
+    heading: Definitions
+    status: pending
+  - citation: us/statute/7/2036d/b/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2036d/b/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2036d/c
+    heading: Project requirements
+    status: pending
+  - citation: us/statute/7/2036d/c/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2036d/c/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2036d/d
+    heading: Evaluation
+    status: pending
+  - citation: us/statute/7/2036d/d/1
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2036d/d/2
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2036d/d/3
+    heading: ''
+    status: pending
+  - citation: us/statute/7/2036d/e
+    heading: Funding
+    status: pending
+  - citation: us/statute/7/2036d/e/1
+    heading: Authorization of appropriations
+    status: pending
+  - citation: us/statute/7/2036d/e/2
+    heading: Appropriation in advance
+    status: pending

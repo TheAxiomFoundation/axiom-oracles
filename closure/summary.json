@@ -1,0 +1,40 @@
+{
+  "schema": "axiom_oracles.closure.summary.v1",
+  "program": "us-co/snap",
+  "roots": [
+    {
+      "root": "state-10-ccr-2506-1",
+      "total": 290,
+      "by_status": {
+        "encoded": 281,
+        "excluded": 0,
+        "pending": 9
+      },
+      "by_reason": {},
+      "pending_max": 9
+    },
+    {
+      "root": "us-7-cfr-273",
+      "total": 39,
+      "by_status": {
+        "encoded": 9,
+        "excluded": 0,
+        "pending": 30
+      },
+      "by_reason": {},
+      "pending_max": 30
+    },
+    {
+      "root": "us-7-usc-51",
+      "total": 827,
+      "by_status": {
+        "encoded": 11,
+        "excluded": 0,
+        "pending": 816
+      },
+      "by_reason": {},
+      "pending_max": 816
+    }
+  ],
+  "closed": false
+}

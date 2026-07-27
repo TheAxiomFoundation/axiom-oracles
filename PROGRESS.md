@@ -365,8 +365,15 @@ residual), #229 (small-suite grounding).
   at `bf97b17b`, and the file inventory against RuleSpec `1158ba5b`.
 - Documented the all-provision denominator, exact citation-path join, review
   taxonomy, generated-versus-human fields, and provenance-bound pending ratchet.
+- Implemented `scripts/closure_universe.py` with deterministic `--generate` and
+  read-only `--check` modes, human-review overlay preservation, path/taxonomy
+  validation, citation drift detection, and the pending-only-falls ratchet.
+- Generated all 1,156 provision rows and `closure/summary.json`: Colorado
+  281 encoded / 9 pending; CFR 9 / 30; USC 11 / 816; `closed=false`.
+- Independently reproduced all three exact-join counts outside the generator.
+- Recorded the missing USC headings and flattened Colorado child hierarchy;
+  source review confirms `4.802.6` and `4.900` are containers, not reserved.
 
 ### Next
 
-- Implement and generate the three closure universes and summary.
 - Add mutant tests, wire CI, run validation, push, and open the PR.

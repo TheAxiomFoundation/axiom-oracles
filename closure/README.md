@@ -70,3 +70,14 @@ or encoding inventory may have changed. `summary.json` reports the live counts;
 This file-path join is evidence of repository coverage, not proof that every
 legal subrule is faithfully implemented. A later node/citation join can replace
 the v1 shim without changing the universe or ratchet discipline.
+
+## Known pinned-data shape defects
+
+- The chapter 51 projection has no `heading` field on 287 subsection/paragraph
+  rows. The universe keeps the required field as an empty string rather than
+  inventing a heading.
+- The Colorado projection flattens every section directly under the document
+  node. In the source PDF, `4.802.6` contains `4.802.61`–`.63` and `4.900`
+  contains `4.901`–`.905`; both are bodyless container headings. A heuristic
+  requiring child citations to begin with the parent plus a dot incorrectly
+  reports them as childless. The exact closure join does not use that heuristic.
