@@ -14,6 +14,7 @@ import hashlib
 from importlib.metadata import PackageNotFoundError, version
 import math
 from pathlib import Path
+import struct
 import subprocess
 from typing import Any, Callable, Iterable, Mapping
 from urllib.parse import urlparse
@@ -74,6 +75,8 @@ IL_REVIEWED_INPUTS = {
         "il_pit_pilot_recapture_of_investment_credit"
     ): "recapture_of_investment_credit",
 }
+MN_BASIC_TAX_RAW_TARGET = "mn_basic_tax"
+MN_BASIC_TAX_PRECISION_STABLE_TARGET = "mn_basic_tax_precision_stable"
 OH_NONBUSINESS_BEFORE_CREDITS_DERIVED_TARGET = (
     "oh_nonbusiness_income_tax_before_non_refundable_credits_derived"
 )
@@ -506,6 +509,211 @@ def runtime_provenance(*, rulespec_root: Path, axiom_rules_path: Path) -> dict[s
     }
 
 
+def _mn_basic_tax_parameter_scales(
+    *,
+    sim: Any,
+    year: int,
+) -> dict[str, tuple[tuple[float, ...], tuple[float, ...]]]:
+    """Read the exact active scales used by PolicyEngine's mn_basic_tax."""
+
+    tax_benefit_system = getattr(sim, "tax_benefit_system", None)
+    variables = getattr(tax_benefit_system, "variables", None)
+    variable = (
+        variables.get(MN_BASIC_TAX_RAW_TARGET)
+        if isinstance(variables, Mapping)
+        else None
+    )
+    if (
+        variable is None
+        or getattr(variable, "name", None) != MN_BASIC_TAX_RAW_TARGET
+        or getattr(getattr(variable, "entity", None), "key", None) != "tax_unit"
+        or str(getattr(variable, "definition_period", "")) != "year"
+        or getattr(variable, "value_type", None) is not float
+        or not getattr(variable, "formulas", None)
+    ):
+        raise StateTaxPopulationRoutingError(
+            "MN: mn_basic_tax class metadata or active formula schema drifted"
+        )
+
+    try:
+        rates_node = (
+            tax_benefit_system.parameters(year)
+            .gov.states.mn.tax.income.rates
+        )
+    except (AttributeError, KeyError, TypeError) as exc:
+        raise StateTaxPopulationRoutingError(
+            "MN: mn_basic_tax active marginal-rate parameter path is unavailable"
+        ) from exc
+
+    scale_names = {
+        "SINGLE": "single",
+        "SEPARATE": "separate",
+        "JOINT": "joint",
+        "SURVIVING_SPOUSE": "surviving_spouse",
+        "HEAD_OF_HOUSEHOLD": "head_of_household",
+    }
+    scales: dict[str, tuple[tuple[float, ...], tuple[float, ...]]] = {}
+    for status, scale_name in scale_names.items():
+        scale = getattr(rates_node, scale_name, None)
+        try:
+            thresholds = tuple(float(value) for value in scale.thresholds)
+            rates = tuple(float(value) for value in scale.rates)
+        except (AttributeError, TypeError, ValueError) as exc:
+            raise StateTaxPopulationRoutingError(
+                f"MN: mn_basic_tax {scale_name} marginal-rate scale is unavailable"
+            ) from exc
+        if (
+            len(thresholds) != 4
+            or len(rates) != 4
+            or thresholds[0] != 0
+            or any(not math.isfinite(value) for value in (*thresholds, *rates))
+            or any(
+                upper <= lower
+                for lower, upper in zip(
+                    thresholds,
+                    thresholds[1:],
+                    strict=False,
+                )
+            )
+            or any(rate < 0 for rate in rates)
+        ):
+            raise StateTaxPopulationRoutingError(
+                f"MN: mn_basic_tax {scale_name} marginal-rate scale schema drifted"
+            )
+        scales[status] = (thresholds, rates)
+    return scales
+
+
+def _mn_scale_tax(
+    taxable_income: float,
+    *,
+    thresholds: tuple[float, ...],
+    rates: tuple[float, ...],
+) -> float:
+    taxable = max(0.0, taxable_income)
+    result = 0.0
+    for index, (threshold, rate) in enumerate(
+        zip(thresholds, rates, strict=True)
+    ):
+        if index + 1 == len(thresholds):
+            width = max(0.0, taxable - threshold)
+        else:
+            width = min(
+                max(0.0, taxable - threshold),
+                thresholds[index + 1] - threshold,
+            )
+        result += width * rate
+    return result
+
+
+def _precision_stable_mn_basic_tax(
+    *,
+    sim: Any,
+    year: int,
+    expected_count: int,
+) -> list[float]:
+    """Recover mn_basic_tax in float64 and prove equivalence to its raw output.
+
+    PolicyEngine stores money variables as binary32. At the extreme synthetic
+    values present in Populace, one-half binary32 ULP can exceed the campaign's
+    $1 structural tolerance. This projection reads only mn_basic_tax's own
+    active PolicyEngine class, upstreams, and marginal scales. It fails closed
+    unless the published raw output is the correctly rounded binary32 result.
+    """
+
+    raw_values = _array_values(
+        sim.calculate(MN_BASIC_TAX_RAW_TARGET, period=year)
+    )
+    taxable_values = _array_values(
+        sim.calculate("mn_taxable_income", period=year)
+    )
+    filing_status_result = sim.calculate("filing_status", period=year)
+    expected_statuses = {
+        "SINGLE",
+        "SEPARATE",
+        "JOINT",
+        "SURVIVING_SPOUSE",
+        "HEAD_OF_HOUSEHOLD",
+    }
+    possible_values = getattr(filing_status_result, "possible_values", None)
+    if possible_values is not None and {
+        member.name for member in possible_values
+    } != expected_statuses:
+        raise StateTaxPopulationRoutingError(
+            "MN: filing_status enum schema drifted"
+        )
+    filing_status_values = (
+        list(filing_status_result.decode_to_str())
+        if callable(getattr(filing_status_result, "decode_to_str", None))
+        else _array_values(filing_status_result)
+    )
+    cardinalities = (
+        len(raw_values),
+        len(taxable_values),
+        len(filing_status_values),
+    )
+    if any(length != expected_count for length in cardinalities):
+        raise StateTaxPopulationRoutingError(
+            "MN: precision-stable basic-tax inputs returned "
+            f"{', '.join(str(length) for length in cardinalities)} rows for "
+            f"{expected_count} tax units"
+        )
+
+    scales = _mn_basic_tax_parameter_scales(sim=sim, year=year)
+    recovered_values: list[float] = []
+    for raw_value, taxable_value, status_value in zip(
+        raw_values,
+        taxable_values,
+        filing_status_values,
+        strict=True,
+    ):
+        raw = _finite_number(raw_value, label=MN_BASIC_TAX_RAW_TARGET)
+        taxable = _finite_number(taxable_value, label="mn_taxable_income")
+        status = str(status_value)
+        if status not in scales:
+            raise StateTaxPopulationRoutingError(
+                "MN: filing_status returned an unsupported value "
+                f"{status!r} for mn_basic_tax"
+            )
+        if raw < 0:
+            raise StateTaxPopulationRoutingError(
+                "MN: mn_basic_tax must be nonnegative"
+            )
+        thresholds, rates = scales[status]
+        recovered = _mn_scale_tax(
+            taxable,
+            thresholds=thresholds,
+            rates=rates,
+        )
+        if not math.isfinite(recovered) or recovered < 0:
+            raise StateTaxPopulationRoutingError(
+                "MN: recovered mn_basic_tax must be finite and nonnegative"
+            )
+
+        try:
+            correctly_rounded_binary32 = struct.unpack(
+                ">f",
+                struct.pack(">f", recovered),
+            )[0]
+        except (OverflowError, struct.error) as exc:
+            raise StateTaxPopulationRoutingError(
+                "MN: recovered mn_basic_tax cannot be represented as finite "
+                "IEEE-754 binary32"
+            ) from exc
+        if not math.isfinite(correctly_rounded_binary32):
+            raise StateTaxPopulationRoutingError(
+                "MN: recovered mn_basic_tax cannot be represented as finite "
+                "IEEE-754 binary32"
+            )
+        if raw != correctly_rounded_binary32:
+            raise StateTaxPopulationRoutingError(
+                "MN: raw mn_basic_tax does not equal the correctly rounded "
+                "IEEE-754 binary32 result"
+            )
+        recovered_values.append(recovered)
+    return recovered_values
+
+
 def validate_campaign_dataset_identity(
     identity: Mapping[str, Any],
     *,
@@ -639,6 +847,45 @@ def calculate_policyengine_targets(
                 raise StateTaxPopulationRoutingError(
                     "CA: ca_mental_health_services_tax must be nonnegative"
                 )
+            targets[state] = dict(
+                zip(tax_unit_ids, reviewed, strict=True)
+            )
+            continue
+        if state == "MN":
+            if (
+                jurisdiction.policyengine_target
+                != MN_BASIC_TAX_PRECISION_STABLE_TARGET
+            ):
+                raise StateTaxPopulationRoutingError(
+                    "MN: reviewed 2026 schedule runner requires the exact "
+                    "mn_basic_tax_precision_stable target"
+                )
+            modeled_ids = [
+                _clean_id(value)
+                for value in _array_values(
+                    sim.calculate("tax_unit_id", period=year)
+                )
+            ]
+            if len(modeled_ids) != len(tax_unit_ids):
+                raise StateTaxPopulationRoutingError(
+                    "MN: PolicyEngine basic-tax target returned "
+                    f"{len(modeled_ids)} IDs for "
+                    f"{len(tax_unit_ids)} tax units"
+                )
+            _reject_duplicate_ids(tax_unit_ids, "MN source tax_unit_id")
+            _reject_duplicate_ids(
+                modeled_ids, "MN PolicyEngine tax_unit_id"
+            )
+            if modeled_ids != tax_unit_ids:
+                raise StateTaxPopulationRoutingError(
+                    "MN: PolicyEngine tax_unit_id order does not match the "
+                    "certified source tax-unit order"
+                )
+            reviewed = _precision_stable_mn_basic_tax(
+                sim=sim,
+                year=year,
+                expected_count=len(tax_unit_ids),
+            )
             targets[state] = dict(
                 zip(tax_unit_ids, reviewed, strict=True)
             )

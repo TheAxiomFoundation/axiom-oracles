@@ -174,6 +174,44 @@ def test_contract_pins_california_bhst_component_surface() -> None:
     ]
 
 
+def test_contract_pins_minnesota_2026_schedule_surface() -> None:
+    minnesota = load_state_tax_populace_contract().by_state()["MN"]
+    module = "us-mn:policies/income_tax/pilot_liability_pipeline"
+
+    assert minnesota.program == module
+    assert minnesota.output == f"{module}#mn_pit_pilot_schedule_tax"
+    assert minnesota.policyengine_target == "mn_basic_tax_precision_stable"
+    assert (
+        minnesota.policyengine_target
+        not in {"mn_basic_tax", "mn_income_tax_before_refundable_credits"}
+    )
+    assert (minnesota.tolerance, minnesota.relative_tolerance) == (1.0, 0.0)
+    assert [slot.slot for slot in minnesota.inputs] == [
+        f"{module}#input.mn_pit_pilot_state_taxable_income",
+        f"{module}#input.mn_pit_pilot_filing_status_joint_or_surviving_spouse",
+        f"{module}#input.mn_pit_pilot_filing_status_separate",
+        f"{module}#input.mn_pit_pilot_filing_status_head_of_household",
+    ]
+    assert [slot.source_kind for slot in minnesota.inputs] == [
+        "pe_upstream_boundary",
+        "derived",
+        "derived",
+        "derived",
+    ]
+    assert [slot.policyengine_variable for slot in minnesota.inputs] == [
+        "mn_taxable_income",
+        "filing_status",
+        "filing_status",
+        "filing_status",
+    ]
+    assert [slot.policyengine_transform for slot in minnesota.inputs] == [
+        None,
+        "filing_status_joint_or_surviving_spouse",
+        "filing_status_is_separate",
+        "filing_status_is_head_of_household",
+    ]
+
+
 def test_contract_pins_dc_canonical_joint_method_schedule() -> None:
     district = load_state_tax_populace_contract().by_state()["DC"]
     module = (
@@ -203,8 +241,8 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
 
     assert summary == {
         "jurisdiction_count": 43,
-        "ready_count": 31,
-        "blocked_count": 12,
+        "ready_count": 32,
+        "blocked_count": 11,
         "ready_states": [
             "AL",
             "AR",
@@ -223,6 +261,7 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
             "KY",
             "LA",
             "MI",
+            "MN",
             "MS",
             "MT",
             "NC",
@@ -258,6 +297,7 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
                 "KY",
                 "LA",
                 "MI",
+                "MN",
                 "MS",
                 "MT",
                 "NC",
@@ -276,7 +316,7 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
         ),
         "explicit_input_count": EXPECTED_EXPLICIT_INPUT_COUNT,
         "explicit_relation_count": EXPECTED_EXPLICIT_RELATION_COUNT,
-        "blocked_input_count": EXPECTED_EXPLICIT_INPUT_COUNT - 66,
+        "blocked_input_count": EXPECTED_EXPLICIT_INPUT_COUNT - 70,
         "blocked_relation_count": 0,
     }
     assert "NH" not in contract.by_state()
@@ -301,6 +341,7 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
         "KS": ["ks_taxable_income", "tax_unit_is_joint"],
         "LA": ["la_taxable_income"],
         "MI": ["mi_taxable_income"],
+        "MN": ["mn_taxable_income"],
         "MS": ["ms_taxable_income_joint"],
         "NC": ["nc_taxable_income"],
         "NM": ["nm_taxable_income"],

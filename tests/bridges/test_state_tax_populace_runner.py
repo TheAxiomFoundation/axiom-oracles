@@ -846,6 +846,246 @@ def test_illinois_target_rejects_broader_contract_drift(monkeypatch) -> None:
         )
 
 
+def _mn_simulation(
+    *,
+    ids=(1, 2, 3),
+    tax=(0.0, 1_100.0, 7_400.0),
+    taxable_income=(0.0, 20_000.0, 100_000.0),
+    filing_status=("SINGLE", "JOINT", "HEAD_OF_HOUSEHOLD"),
+    scale_thresholds=(0.0, 10_000.0, 20_000.0, 30_000.0),
+    scale_rates=(0.05, 0.06, 0.07, 0.08),
+    variable_name="mn_basic_tax",
+    variable_entity="tax_unit",
+    variable_period="year",
+    variable_value_type=float,
+):
+    calls = []
+
+    scale = SimpleNamespace(
+        thresholds=scale_thresholds,
+        rates=scale_rates,
+    )
+    rates_node = SimpleNamespace(
+        single=scale,
+        separate=scale,
+        joint=scale,
+        surviving_spouse=scale,
+        head_of_household=scale,
+    )
+    variable = SimpleNamespace(
+        name=variable_name,
+        entity=SimpleNamespace(key=variable_entity),
+        definition_period=variable_period,
+        value_type=variable_value_type,
+        formulas={"0001-01-01": object()},
+    )
+
+    class FakeSimulation:
+        def __init__(self, dataset):
+            assert dataset == "dataset"
+            self.tax_benefit_system = SimpleNamespace(
+                variables={"mn_basic_tax": variable},
+                parameters=lambda year: SimpleNamespace(
+                    gov=SimpleNamespace(
+                        states=SimpleNamespace(
+                            mn=SimpleNamespace(
+                                tax=SimpleNamespace(
+                                    income=SimpleNamespace(rates=rates_node)
+                                )
+                            )
+                        )
+                    )
+                ),
+            )
+
+        def calculate(self, variable, period):
+            assert period == 2026
+            calls.append((variable, period))
+            return {
+                "tax_unit_id": ids,
+                "mn_basic_tax": tax,
+                "mn_taxable_income": taxable_income,
+                "filing_status": filing_status,
+            }[variable]
+
+    FakeSimulation.calls = calls
+    return FakeSimulation
+
+
+def _mn_targets(
+    microsimulation_factory,
+    *,
+    source_ids=(1, 2, 3),
+) -> dict[str, dict[int, float]]:
+    return calculate_policyengine_targets(
+        dataset="dataset",
+        raw_tax_units=pd.DataFrame({"tax_unit_id": source_ids}),
+        routes=tuple(
+            TaxUnitRoute(index, index, "MN", "27", 1, DISPOSITION_READY)
+            for index in source_ids
+        ),
+        year=2026,
+        microsimulation_factory=microsimulation_factory,
+    )
+
+
+def test_minnesota_target_preserves_exact_basic_tax_values_only() -> None:
+    simulation = _mn_simulation()
+
+    assert _mn_targets(simulation) == {
+        "MN": {1: 0.0, 2: 1_100.0, 3: 7_400.0}
+    }
+    assert simulation.calls == [
+        ("tax_unit_id", 2026),
+        ("mn_basic_tax", 2026),
+        ("mn_taxable_income", 2026),
+        ("filing_status", 2026),
+    ]
+    assert all(
+        variable != "mn_income_tax_before_refundable_credits"
+        for variable, _ in simulation.calls
+    )
+
+
+@pytest.mark.parametrize(
+    ("ids", "tax", "message"),
+    [
+        ((1, 2), (0.0, 1_100.0, 7_400.0), "returned 2 IDs"),
+        (
+            (2, 1, 3),
+            (0.0, 1_100.0, 7_400.0),
+            "order does not match",
+        ),
+        (
+            (1, 1, 3),
+            (0.0, 1_100.0, 7_400.0),
+            "duplicate MN PolicyEngine",
+        ),
+    ],
+)
+def test_minnesota_target_rejects_entity_identity_and_cardinality_defects(
+    ids,
+    tax,
+    message,
+) -> None:
+    with pytest.raises(StateTaxPopulationRoutingError, match=message):
+        _mn_targets(_mn_simulation(ids=ids, tax=tax))
+
+
+def test_minnesota_target_rejects_duplicate_source_entity_ids() -> None:
+    with pytest.raises(
+        StateTaxPopulationRoutingError,
+        match="duplicate MN source tax_unit_id",
+    ):
+        _mn_targets(
+            _mn_simulation(ids=(1, 1, 3)),
+            source_ids=(1, 1, 3),
+        )
+
+
+@pytest.mark.parametrize(
+    ("value", "message"),
+    [
+        (float("nan"), "non-finite"),
+        (float("inf"), "non-finite"),
+        (-0.01, "must be nonnegative"),
+    ],
+)
+def test_minnesota_target_rejects_invalid_basic_tax(value, message) -> None:
+    with pytest.raises(StateTaxPopulationRoutingError, match=message):
+        _mn_targets(_mn_simulation(tax=(0.0, value, 7_400.0)))
+
+
+@pytest.mark.parametrize(
+    ("kwargs", "message"),
+    [
+        (
+            {"taxable_income": (0.0, float("nan"), 100_000.0)},
+            "mn_taxable_income.*non-finite",
+        ),
+        (
+            {"filing_status": ("SINGLE", "UNKNOWN", "JOINT")},
+            "unsupported value",
+        ),
+        (
+            {"scale_thresholds": (0.0, 10_000.0, 20_000.0)},
+            "scale schema drifted",
+        ),
+        (
+            {"scale_rates": (0.05, 0.06, float("nan"), 0.08)},
+            "scale schema drifted",
+        ),
+        (
+            {"variable_entity": "person"},
+            "class metadata or active formula schema drifted",
+        ),
+    ],
+)
+def test_minnesota_precision_stable_target_fails_closed_on_schema_and_input_drift(
+    kwargs,
+    message,
+) -> None:
+    with pytest.raises(StateTaxPopulationRoutingError, match=message):
+        _mn_targets(_mn_simulation(**kwargs))
+
+
+def test_minnesota_precision_stable_target_requires_exact_binary32_roundtrip() -> None:
+    with pytest.raises(
+        StateTaxPopulationRoutingError,
+        match="does not equal the correctly rounded IEEE-754 binary32 result",
+    ):
+        _mn_targets(_mn_simulation(tax=(0.0, 1_100.1, 7_400.0)))
+
+
+def test_minnesota_precision_stable_target_rejects_lower_binade_neighbor() -> None:
+    with pytest.raises(
+        StateTaxPopulationRoutingError,
+        match="does not equal the correctly rounded IEEE-754 binary32 result",
+    ):
+        _mn_targets(
+            _mn_simulation(
+                tax=(0.0, 1.0, float(2**24 - 1)),
+                taxable_income=(0.0, 1.0, float(2**24)),
+                scale_rates=(1.0, 1.0, 1.0, 1.0),
+            )
+        )
+
+
+@pytest.mark.parametrize(
+    ("recovered", "raw"),
+    [
+        (float(2**24), float(2**24)),
+        (float(2**24 + 1), float(2**24)),
+        (float(2**24 - 1), float(2**24 - 1)),
+    ],
+)
+def test_minnesota_precision_stable_target_accepts_exact_binary32_roundtrip(
+    recovered,
+    raw,
+) -> None:
+    assert _mn_targets(
+        _mn_simulation(
+            tax=(0.0, 1.0, raw),
+            taxable_income=(0.0, 1.0, recovered),
+            scale_rates=(1.0, 1.0, 1.0, 1.0),
+        )
+    ) == {"MN": {1: 0.0, 2: 1.0, 3: recovered}}
+
+
+def test_minnesota_precision_stable_target_rejects_binary32_overflow() -> None:
+    with pytest.raises(
+        StateTaxPopulationRoutingError,
+        match="cannot be represented as finite IEEE-754 binary32",
+    ):
+        _mn_targets(
+            _mn_simulation(
+                tax=(0.0, 1.0, 3.4e38),
+                taxable_income=(0.0, 1.0, 3.5e38),
+                scale_rates=(1.0, 1.0, 1.0, 1.0),
+            )
+        )
+
+
 def _dc_simulation(
     *,
     ids=(1, 2, 3),
@@ -1995,6 +2235,68 @@ def test_reviewed_illinois_projection_rejects_invalid_boundaries(
                 recapture=recapture,
             )
         )
+
+
+def test_reviewed_minnesota_projection_covers_all_filing_statuses() -> None:
+    calls = []
+    values = {
+        "mn_taxable_income": [10_000, 20_000, 30_000, 40_000, 50_000],
+        "filing_status": [
+            "SINGLE",
+            "JOINT",
+            "SEPARATE",
+            "HEAD_OF_HOUSEHOLD",
+            "SURVIVING_SPOUSE",
+        ],
+    }
+
+    class FakeSimulation:
+        def __init__(self, dataset):
+            assert dataset == "dataset"
+
+        def calculate(self, variable, period):
+            calls.append((variable, period))
+            assert period == 2026
+            return values[variable]
+
+    projections = calculate_policyengine_projection_inputs(
+        dataset="dataset",
+        raw_tax_units=pd.DataFrame({"tax_unit_id": [1, 2, 3, 4, 5]}),
+        routes=tuple(
+            TaxUnitRoute(index, index, "MN", "27", 1, DISPOSITION_READY)
+            for index in range(1, 6)
+        ),
+        year=2026,
+        microsimulation_factory=FakeSimulation,
+    )["MN"]
+
+    prefix = "us-mn:policies/income_tax/pilot_liability_pipeline#input."
+    assert projections[f"{prefix}mn_pit_pilot_state_taxable_income"] == {
+        1: 10_000.0,
+        2: 20_000.0,
+        3: 30_000.0,
+        4: 40_000.0,
+        5: 50_000.0,
+    }
+    assert projections[
+        f"{prefix}mn_pit_pilot_filing_status_joint_or_surviving_spouse"
+    ] == {1: False, 2: True, 3: False, 4: False, 5: True}
+    assert projections[f"{prefix}mn_pit_pilot_filing_status_separate"] == {
+        1: False,
+        2: False,
+        3: True,
+        4: False,
+        5: False,
+    }
+    assert projections[
+        f"{prefix}mn_pit_pilot_filing_status_head_of_household"
+    ] == {1: False, 2: False, 3: False, 4: True, 5: False}
+    assert calls == [
+        ("mn_taxable_income", 2026),
+        ("filing_status", 2026),
+        ("filing_status", 2026),
+        ("filing_status", 2026),
+    ]
 
 
 def test_reviewed_colorado_projection_uses_completed_taxable_income() -> None:

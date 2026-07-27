@@ -111,6 +111,17 @@ _DESCRIPTION_BY_OUTPUT = {
         "income and summed to tax units only for Populace accounting"
     ),
     (
+        "us-mn:policies/income_tax/pilot_liability_pipeline"
+        "#mn_pit_pilot_schedule_tax"
+    ): (
+        "Minnesota tax-year-2026 continuous graduated schedule under section "
+        "290.06, computed from caller-supplied completed Minnesota taxable net "
+        "income and reviewed filing-status classifiers over every routed tax "
+        "unit in the pinned US Populace; this schedule suite does not claim "
+        "tax-table rounding, alternative minimum tax, net investment income "
+        "tax, credits, payments, or final Minnesota liability"
+    ),
+    (
         "us-ny:policies/income_tax/pilot_liability_pipeline"
         "#ny_pit_pilot_main_income_tax"
     ): (

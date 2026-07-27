@@ -113,6 +113,13 @@ ALLOWED_NONSTANDARD_COMPARISON_SURFACES = frozenset(
             "person_sum_to_tax_unit",
         ),
         (
+            "MN",
+            "us-mn:policies/income_tax/pilot_liability_pipeline#"
+            "mn_pit_pilot_schedule_tax",
+            "mn_basic_tax_precision_stable",
+            "tax_unit",
+        ),
+        (
             "OH",
             "us-oh:policies/income_tax/pilot_liability_pipeline#"
             "oh_pit_pilot_schedule_tax",
@@ -213,6 +220,10 @@ EXPECTED_OUTPUT_OVERRIDES = {
         "us-ms:policies/income_tax/2026_section_27_7_5_schedule"
         "#ms_pit_2026_section_27_7_5_schedule_tax"
     ),
+    "MN": (
+        "us-mn:policies/income_tax/pilot_liability_pipeline"
+        "#mn_pit_pilot_schedule_tax"
+    ),
     "NY": (
         "us-ny:policies/income_tax/pilot_liability_pipeline"
         "#ny_pit_pilot_main_income_tax"
@@ -249,16 +260,16 @@ EXPECTED_PROGRAM_OVERRIDES = {
         "2026_full_year_resident_before_credit_schedule"
     ),
 }
-EXPECTED_EXPLICIT_INPUT_COUNT = 139
+EXPECTED_EXPLICIT_INPUT_COUNT = 137
 EXPECTED_EXPLICIT_RELATION_COUNT = 1
 EXPECTED_SLOT_INVENTORY_SHA256 = (
-    "57a4acfc80e96018303a4d50745f42eba8bbde510b0162b372f7b33e4fd66f99"
+    "23ea0ae38fa875de683bab3eacaf03d9c2e21a55f49d044a17ff97b62f047f5c"
 )
 EXPECTED_JURISDICTION_REGISTRY_SHA256 = (
-    "c80d58d6f962cba4785f1606e309c2c275df84d92da4967729a8a621e27f7071"
+    "f8b225f91487f42ec3a571e3a983103d33e67fa1327046004a24bfae35588f45"
 )
 EXPECTED_SOURCE_METADATA_SHA256 = (
-    "fa1cb6740cf089b27ce93c5431bb4a6de1e80aa81ba2a4098bf49466c9393d8d"
+    "31d6758d81ec00c0a36c144f43dba7257c3bcaac2bed0e42361c5658e92b3cfa"
 )
 # Exact boundaries admitted only after independent legal and dependency-graph
 # review.  The comparison target itself is forbidden below, so these remain
@@ -303,6 +314,12 @@ ALLOWED_PE_UPSTREAM_BOUNDARIES: frozenset[tuple[str, str, str]] = frozenset(
             "2026_resident_ordinary_tax_before_personal_credit#input."
             "ct_pit_2026_connecticut_adjusted_gross_income",
             "ct_agi",
+        ),
+        (
+            "MN",
+            "us-mn:policies/income_tax/pilot_liability_pipeline#input."
+            "mn_pit_pilot_state_taxable_income",
+            "mn_taxable_income",
         ),
         (
             "CO",
@@ -585,6 +602,27 @@ ALLOWED_DERIVED_PE_BOUNDARIES: frozenset[tuple[str, str, str, str]] = frozenset(
             "ct_pit_2026_ordinary_tax_filing_status_joint_or_surviving_spouse",
             "filing_status",
             "filing_status_joint_or_surviving_spouse",
+        ),
+        (
+            "MN",
+            "us-mn:policies/income_tax/pilot_liability_pipeline#input."
+            "mn_pit_pilot_filing_status_joint_or_surviving_spouse",
+            "filing_status",
+            "filing_status_joint_or_surviving_spouse",
+        ),
+        (
+            "MN",
+            "us-mn:policies/income_tax/pilot_liability_pipeline#input."
+            "mn_pit_pilot_filing_status_separate",
+            "filing_status",
+            "filing_status_is_separate",
+        ),
+        (
+            "MN",
+            "us-mn:policies/income_tax/pilot_liability_pipeline#input."
+            "mn_pit_pilot_filing_status_head_of_household",
+            "filing_status",
+            "filing_status_is_head_of_household",
         ),
         (
             "CT",
