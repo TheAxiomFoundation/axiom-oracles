@@ -446,6 +446,34 @@ residual), #229 (small-suite grounding).
 
 ---
 
+## Round-3 confirmation ledger — `1fe6bbba`
+
+### State
+
+- In progress: scoped confirmation of the two round-2 blockers and the
+  one-commit cleanup at exact target
+  `1fe6bbba90dbf320ed154d77eff7b22ead26731a`.
+- Review writes are confined to branch
+  `review/fed-parity-snap-residual-cleanup-1fe6bbba` in the disposable
+  `.git/review-worktrees/snap-residual-cleanup-1fe6bbba` worktree.
+
+### Done
+
+- Created the disposable review worktree directly from the requested target.
+- Confirmed the target's parent is round-2 head
+  `72718c962ce06385be4858b770af6d55b43bc3fa`.
+- Confirmed no remote or GitHub write is required or authorized.
+
+### Next
+
+- Verify the exact one-commit delta and PR-diff ledger/report state.
+- Check the regenerated overview's five repaired report summaries and
+  provenance.
+- Run `git diff --check` and the complete generated-chain `--check` battery.
+- Record the evidence and final verdict in `REVIEW-REPORT.md`.
+
+---
+
 ## SNAP residual integration — repair round 2 — 2026-07-27
 
 ### State
