@@ -81,6 +81,10 @@ STATE_RULES = {
         (r"^(policies/cdss/snap|regulations/mpp/)", ("snap", None)),
         (r"^policies/cdss/calworks/", ("tanf", None)),
         (r"^regulations/cdss/eas/49/", ("state_ssi_supplement", None)),
+        (
+            r"^policies/income_tax/pilot_liability_pipeline\.yaml$",
+            ("state_income_tax", None),
+        ),
     ],
     "co": [
         (r"^(policies/cdhs/snap|regulations/10-ccr-2506-1/)", ("snap", None)),
@@ -117,6 +121,10 @@ STATE_RULES = {
     ],
     "il": [
         (r"^(policies/dhs/csmm/|statutes/320/)", ("state_ssi_supplement", None)),
+        (
+            r"^policies/income_tax/pilot_liability_pipeline\.yaml$",
+            ("state_income_tax", None),
+        ),
     ],
     "ks": [
         (r"^policies/dcf/keesm/", ("tanf", None)),
@@ -158,6 +166,10 @@ STATE_RULES = {
     "ny": [
         (r"^(policies/otda/snap|regulations/18-nycrr/387)", ("snap", None)),
         (r"^(policies/otda/tanf|regulations/18-nycrr/385)", ("tanf", None)),
+        (
+            r"^policies/income_tax/pilot_liability_pipeline\.yaml$",
+            ("state_income_tax", None),
+        ),
         (r"^policies/tax/", ("state_income_tax", None)),
         (r"^statutes/NYC", ("nyc_income_tax", "NYC")),
     ],

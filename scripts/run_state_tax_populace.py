@@ -35,6 +35,33 @@ _DC_TAXABLE_INCOME_INPUT = (
     "2026_section_47_1806_03_schedule_before_credits#input."
     "dc_pit_2026_section_47_1806_03_completed_joint_method_taxable_income"
 )
+_CA_TAXABLE_INCOME_INPUT = (
+    "us-ca:policies/income_tax/pilot_liability_pipeline#input."
+    "ca_pit_pilot_supplied_completed_taxable_income"
+)
+_CA_BHST_THRESHOLD = 1_000_000.0
+_IL_INPUT_PREFIX = (
+    "us-il:policies/income_tax/pilot_liability_pipeline#input."
+)
+_IL_TAXABLE_INCOME_INPUT = (
+    f"{_IL_INPUT_PREFIX}il_pit_pilot_state_taxable_income"
+)
+_IL_RECAPTURE_INPUT = (
+    f"{_IL_INPUT_PREFIX}il_pit_pilot_recapture_of_investment_credit"
+)
+_NY_INPUT_PREFIX = (
+    "us-ny:policies/income_tax/pilot_liability_pipeline#input."
+)
+_NY_TAXABLE_INCOME_INPUT = (
+    f"{_NY_INPUT_PREFIX}ny_pit_pilot_state_taxable_income"
+)
+_NY_JOINT_OR_SURVIVING_INPUT = (
+    f"{_NY_INPUT_PREFIX}"
+    "ny_pit_pilot_filing_status_joint_or_surviving_spouse"
+)
+_NY_HEAD_OF_HOUSEHOLD_INPUT = (
+    f"{_NY_INPUT_PREFIX}ny_pit_pilot_filing_status_head_of_household"
+)
 
 
 def _projection_branch_diagnostics(
@@ -44,6 +71,26 @@ def _projection_branch_diagnostics(
     """Summarize reviewed state branch exercise without exposing microdata."""
 
     diagnostics: dict[str, dict[str, int]] = {}
+    california = projection_inputs.get("CA")
+    if isinstance(california, dict):
+        ready_ids = {
+            route.tax_unit_id
+            for route in routes
+            if route.state == "CA" and route.disposition == DISPOSITION_READY
+        }
+        taxable_values = california[_CA_TAXABLE_INCOME_INPUT]
+        selected_values = [
+            float(taxable_values[tax_unit_id]) for tax_unit_id in ready_ids
+        ]
+        diagnostics["CA"] = {
+            "compared_tax_unit_count": len(ready_ids),
+            "zero_behavioral_health_services_tax_count": sum(
+                value <= _CA_BHST_THRESHOLD for value in selected_values
+            ),
+            "positive_behavioral_health_services_tax_count": sum(
+                value > _CA_BHST_THRESHOLD for value in selected_values
+            ),
+        }
     dc = projection_inputs.get("DC")
     if isinstance(dc, dict):
         ready_ids = {
@@ -66,6 +113,73 @@ def _projection_branch_diagnostics(
             "positive_taxable_income_count": sum(
                 value > 0 for value in selected_values
             ),
+        }
+    illinois = projection_inputs.get("IL")
+    if isinstance(illinois, dict):
+        ready_ids = {
+            route.tax_unit_id
+            for route in routes
+            if route.state == "IL" and route.disposition == DISPOSITION_READY
+        }
+        taxable_values = illinois[_IL_TAXABLE_INCOME_INPUT]
+        recapture_values = illinois[_IL_RECAPTURE_INPUT]
+        taxable = [float(taxable_values[item]) for item in ready_ids]
+        recapture = [float(recapture_values[item]) for item in ready_ids]
+        if any(value < 0 for value in taxable):
+            raise ValueError(
+                "IL projection diagnostics require nonnegative completed "
+                "taxable income"
+            )
+        if any(value < 0 for value in recapture):
+            raise ValueError(
+                "IL projection diagnostics require nonnegative completed "
+                "investment-credit recapture"
+            )
+        diagnostics["IL"] = {
+            "compared_tax_unit_count": len(ready_ids),
+            "zero_taxable_income_count": sum(value == 0 for value in taxable),
+            "positive_taxable_income_count": sum(value > 0 for value in taxable),
+            "zero_recapture_count": sum(value == 0 for value in recapture),
+            "positive_recapture_count": sum(value > 0 for value in recapture),
+        }
+    new_york = projection_inputs.get("NY")
+    if isinstance(new_york, dict):
+        ready_ids = {
+            route.tax_unit_id
+            for route in routes
+            if route.state == "NY" and route.disposition == DISPOSITION_READY
+        }
+        taxable_values = new_york[_NY_TAXABLE_INCOME_INPUT]
+        joint_values = new_york[_NY_JOINT_OR_SURVIVING_INPUT]
+        head_values = new_york[_NY_HEAD_OF_HOUSEHOLD_INPUT]
+        taxable = [float(taxable_values[item]) for item in ready_ids]
+        joint_or_surviving_count = 0
+        head_of_household_count = 0
+        single_or_separate_count = 0
+        for tax_unit_id in ready_ids:
+            joint = joint_values[tax_unit_id]
+            head = head_values[tax_unit_id]
+            if type(joint) is not bool or type(head) is not bool:
+                raise ValueError(
+                    "NY projection diagnostics require strict Boolean filing "
+                    "status values for every ready TaxUnit"
+                )
+            if joint and head:
+                raise ValueError(
+                    "NY projection diagnostics require mutually exclusive "
+                    "filing-status schedule values"
+                )
+            joint_or_surviving_count += joint
+            head_of_household_count += head
+            single_or_separate_count += not joint and not head
+        diagnostics["NY"] = {
+            "compared_tax_unit_count": len(ready_ids),
+            "negative_taxable_income_count": sum(value < 0 for value in taxable),
+            "zero_taxable_income_count": sum(value == 0 for value in taxable),
+            "positive_taxable_income_count": sum(value > 0 for value in taxable),
+            "joint_or_surviving_count": joint_or_surviving_count,
+            "head_of_household_count": head_of_household_count,
+            "single_or_separate_count": single_or_separate_count,
         }
     utah = projection_inputs.get("UT")
     if not isinstance(utah, dict):

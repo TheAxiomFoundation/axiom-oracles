@@ -55,6 +55,15 @@ _DESCRIPTION_BY_OUTPUT = {
         "personal credit over every routed tax unit in the pinned US Populace"
     ),
     (
+        "us-ca:policies/income_tax/pilot_liability_pipeline"
+        "#ca_pit_pilot_behavioral_health_services_tax"
+    ): (
+        "California Behavioral Health Services Tax, computed as 1 percent of "
+        "caller-supplied completed California taxable income above $1 million, "
+        "over every routed tax unit in the pinned US Populace; this component "
+        "suite does not claim broad California income-tax liability"
+    ),
+    (
         "us-dc:policies/income_tax/"
         "2026_section_47_1806_03_schedule_before_credits"
         "#dc_pit_2026_section_47_1806_03_schedule_before_credits"
@@ -83,12 +92,34 @@ _DESCRIPTION_BY_OUTPUT = {
         "Populace"
     ),
     (
+        "us-il:policies/income_tax/pilot_liability_pipeline"
+        "#il_pit_pilot_income_tax_liability"
+    ): (
+        "Illinois annual individual income tax before nonrefundable credits, "
+        "computed from caller-supplied completed Illinois taxable income and "
+        "completed investment-credit recapture over every routed tax unit in "
+        "the pinned US Populace; this bounded suite excludes taxable-income "
+        "construction, credit computation, payments, and final annual "
+        "liability"
+    ),
+    (
         "us-ms:policies/income_tax/2026_section_27_7_5_schedule"
         "#ms_pit_2026_section_27_7_5_schedule_tax"
     ): (
         "Mississippi section 27-7-5 Person-grain calendar-year-2026 schedule "
         "tax, computed from caller-supplied completed Mississippi taxable "
         "income and summed to tax units only for Populace accounting"
+    ),
+    (
+        "us-ny:policies/income_tax/pilot_liability_pipeline"
+        "#ny_pit_pilot_main_income_tax"
+    ): (
+        "New York Tax Law section 601 main resident individual-income-tax "
+        "schedule, computed from caller-supplied completed New York taxable "
+        "income and strict filing-status schedule classifiers over every "
+        "routed tax unit in the pinned US Populace; this bounded suite "
+        "excludes section 601(d-5) supplemental tax, credits, local taxes, "
+        "payments, and final liability"
     ),
     (
         "us-oh:policies/income_tax/pilot_liability_pipeline"

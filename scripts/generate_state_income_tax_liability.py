@@ -315,6 +315,7 @@ _LIABILITY_OUTPUT["NY"] = (
 # the legacy six-case grid. Keep these explicit so the grid's historical broad
 # concept and artifacts do not get relabeled.
 _POPULACE_MODULE = {
+    "CA": _MODULE["CA"],
     "DC": (
         "us-dc:policies/income_tax/"
         "2026_section_47_1806_03_schedule_before_credits"
@@ -325,6 +326,10 @@ _POPULACE_OUTPUT = {
     "AR": (
         f"{_MODULE['AR']}#"
         "ar_pit_pilot_income_tax_before_non_refundable_credits_indiv"
+    ),
+    "CA": (
+        f"{_POPULACE_MODULE['CA']}#"
+        "ca_pit_pilot_behavioral_health_services_tax"
     ),
     "CT": _LIABILITY_OUTPUT["CT"],
     "DC": (
@@ -341,6 +346,7 @@ _POPULACE_OUTPUT = {
 }
 _POPULACE_PE_VAR = {
     "AR": "ar_income_tax_before_non_refundable_credits_indiv",
+    "CA": "ca_mental_health_services_tax",
     "CT": "ct_resident_ordinary_tax_before_personal_credit_derived",
     "DC": "dc_income_tax_before_credits_joint",
     "KS": "ks_k40es_schedule_before_credits_reviewed",
@@ -1077,6 +1083,7 @@ _POPULACE_TOL = {
     "AL": (0.01, 0.0000001),
     "AR": (0.01, 0.0000001),
     "AZ": (0.01, 0.0000001),
+    "CA": (0.01, 0.0000001),
     "CO": (0.01, 0.0000001),
     "DC": (0.01, 0.0000001),
     "GA": (0.01, 0.0000001),

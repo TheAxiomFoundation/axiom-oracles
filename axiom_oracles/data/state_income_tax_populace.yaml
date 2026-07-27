@@ -27,74 +27,35 @@ jurisdictions:
   taxsim_state_code: 5
   jurisdiction: us-ca
   program: us-ca:policies/income_tax/pilot_liability_pipeline
-  output: us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_income_tax_liability
+  output: us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_behavioral_health_services_tax
   policyengine:
-    target: ca_income_tax_before_refundable_credits
-    tolerance: 5.0
-    relative_tolerance: 0.02
-  status: blocked
-  evidence: us-ca/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+    target: ca_mental_health_services_tax
+    tolerance: 0.01
+    relative_tolerance: 0.0000001
+  status: ready
+  evidence: >-
+    The official 2026 Form 540-ES worksheet and California Revenue and
+    Taxation Code sections 17041 and 17043 impose a 1 percent Behavioral
+    Health Services Tax on completed California taxable income above
+    $1,000,000. The reviewed RuleSpec subgraph preserves caller-supplied
+    completed taxable income and computes only that additional tax. Independent
+    formula and full certified-Populace probes covered all 8,883 positive-weight
+    routed California TaxUnits; all values matched PolicyEngine within one cent
+    or 1e-7 relative error. This readiness does not promote the pilot's separate
+    rate-schedule branch or broad California liability.
   inputs:
-  - slot: us-ca:policies/income_tax/pilot_liability_pipeline#input.ca_pit_pilot_adjusted_gross_income
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ca:policies/income_tax/pilot_liability_pipeline#input.ca_pit_pilot_supplied_bracket_floor_1
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ca:policies/income_tax/pilot_liability_pipeline#input.ca_pit_pilot_supplied_bracket_floor_2
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ca:policies/income_tax/pilot_liability_pipeline#input.ca_pit_pilot_supplied_bracket_floor_3
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ca:policies/income_tax/pilot_liability_pipeline#input.ca_pit_pilot_supplied_bracket_floor_4
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ca:policies/income_tax/pilot_liability_pipeline#input.ca_pit_pilot_supplied_bracket_floor_5
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ca:policies/income_tax/pilot_liability_pipeline#input.ca_pit_pilot_supplied_bracket_floor_6
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ca:policies/income_tax/pilot_liability_pipeline#input.ca_pit_pilot_supplied_bracket_rate_1
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ca:policies/income_tax/pilot_liability_pipeline#input.ca_pit_pilot_supplied_bracket_rate_2
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ca:policies/income_tax/pilot_liability_pipeline#input.ca_pit_pilot_supplied_bracket_rate_3
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ca:policies/income_tax/pilot_liability_pipeline#input.ca_pit_pilot_supplied_bracket_rate_4
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ca:policies/income_tax/pilot_liability_pipeline#input.ca_pit_pilot_supplied_bracket_rate_5
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ca:policies/income_tax/pilot_liability_pipeline#input.ca_pit_pilot_supplied_bracket_rate_6
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ca:policies/income_tax/pilot_liability_pipeline#input.ca_pit_pilot_supplied_personal_exemption_credit
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ca:policies/income_tax/pilot_liability_pipeline#input.ca_pit_pilot_supplied_standard_deduction
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
+  - slot: us-ca:policies/income_tax/pilot_liability_pipeline#input.ca_pit_pilot_supplied_completed_taxable_income
+    source_kind: pe_upstream_boundary
+    status: ready
+    evidence: >-
+      The Form 540-ES worksheet imposes Behavioral Health Services Tax on
+      completed California taxable income. PolicyEngine ca_taxable_income is a
+      direct upstream dependency of the distinct
+      ca_mental_health_services_tax target, and the reviewed RuleSpec preserves
+      that completed amount without reconstructing California AGI, deductions,
+      residency, allocation, credits, or broad liability.
+    policyengine_variable: ca_taxable_income
+    policyengine_relationship: upstream
   relations: []
 - state: NY
   fips: '36'
@@ -141,7 +102,18 @@ jurisdictions:
     tolerance: 1.0
     relative_tolerance: 0.0
   status: ready
-  evidence: RuleSpec accepts completed-return Illinois taxable income and investment-credit recapture boundaries and imports the statutory 4.95% rate. Independent RuleSpec review and a full certified-Populace probe confirmed both boundaries are upstream of il_income_tax_before_non_refundable_credits for all 2,332 positive-weight routed Illinois tax units, with no differences above the $1 tolerance.
+  evidence: >-
+    RuleSpec accepts completed-return Illinois taxable income and
+    investment-credit recapture boundaries and imports the statutory 4.95%
+    rate. Independent RuleSpec review and the fresh
+    reports/state-tax-populace-il-campaign-2026-07-27.json full
+    certified-Populace run covered all 2,332 positive-weight routed Illinois
+    TaxUnits: 219 had zero taxable income, 2,113 had positive taxable income,
+    and all matched PolicyEngine within the existing $1 tolerance, with maximum
+    absolute difference $0.504000001. Every population row had zero recapture,
+    so positive recapture is not claimed as population evidence; the canonical
+    RuleSpec positive_taxable_income_with_recapture fixture separately covers
+    that branch.
   inputs:
   - slot: us-il:policies/income_tax/pilot_liability_pipeline#input.il_pit_pilot_state_taxable_income
     source_kind: pe_upstream_boundary
@@ -152,7 +124,17 @@ jurisdictions:
   - slot: us-il:policies/income_tax/pilot_liability_pipeline#input.il_pit_pilot_recapture_of_investment_credit
     source_kind: pe_upstream_boundary
     status: ready
-    evidence: 35 ILCS 5/201 requires applicable investment-credit recapture to increase the tax, and the reviewed RuleSpec module declares the completed-return recapture amount as an upstream boundary. PolicyEngine recapture_of_investment_credit is a direct upstream dependency of the distinct comparison target il_income_tax_before_non_refundable_credits; rulespec-us#958 and the full-Populace probe reviewed this exact relationship.
+    evidence: >-
+      35 ILCS 5/201 requires applicable investment-credit recapture to increase
+      the tax, and the reviewed RuleSpec module declares the completed-return
+      recapture amount as an upstream boundary. PolicyEngine
+      recapture_of_investment_credit is a direct upstream dependency of the
+      distinct comparison target
+      il_income_tax_before_non_refundable_credits. The fresh full-Populace run
+      confirmed exact projection of that upstream boundary but observed zero
+      recapture for all 2,332 routed TaxUnits; the canonical
+      positive_taxable_income_with_recapture fixture, rather than synthesized
+      population input, covers the positive branch.
     policyengine_variable: recapture_of_investment_credit
     policyengine_relationship: upstream
   relations: []

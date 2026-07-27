@@ -165,6 +165,41 @@ def test_utah_projection_diagnostics_pin_exempt_and_domain_branch_counts() -> No
     }
 
 
+def test_california_projection_diagnostics_pin_bhst_branches() -> None:
+    slot = (
+        "us-ca:policies/income_tax/pilot_liability_pipeline#input."
+        "ca_pit_pilot_supplied_completed_taxable_income"
+    )
+    routes = (
+        TaxUnitRoute(1, 1, "CA", "06", 1, DISPOSITION_READY),
+        TaxUnitRoute(2, 2, "CA", "06", 1, DISPOSITION_READY),
+        TaxUnitRoute(3, 3, "CA", "06", 1, DISPOSITION_READY),
+        TaxUnitRoute(4, 4, "CA", "06", 1, DISPOSITION_BLOCKED),
+    )
+
+    diagnostics = campaign._projection_branch_diagnostics(
+        {
+            "CA": {
+                slot: {
+                    1: -5.0,
+                    2: 1_000_000.0,
+                    3: 1_000_001.0,
+                    4: 2_000_000.0,
+                }
+            }
+        },
+        routes,
+    )
+
+    assert diagnostics == {
+        "CA": {
+            "compared_tax_unit_count": 3,
+            "zero_behavioral_health_services_tax_count": 2,
+            "positive_behavioral_health_services_tax_count": 1,
+        }
+    }
+
+
 def test_dc_projection_diagnostics_pin_taxable_income_floor_branches() -> None:
     slot = (
         "us-dc:policies/income_tax/"
@@ -191,3 +226,148 @@ def test_dc_projection_diagnostics_pin_taxable_income_floor_branches() -> None:
             "positive_taxable_income_count": 1,
         }
     }
+
+
+def test_new_york_projection_diagnostics_pin_schedule_branches() -> None:
+    prefix = "us-ny:policies/income_tax/pilot_liability_pipeline#input."
+    routes = (
+        TaxUnitRoute(1, 1, "NY", "36", 1, DISPOSITION_READY),
+        TaxUnitRoute(2, 2, "NY", "36", 1, DISPOSITION_READY),
+        TaxUnitRoute(3, 3, "NY", "36", 1, DISPOSITION_READY),
+        TaxUnitRoute(4, 4, "NY", "36", 1, DISPOSITION_BLOCKED),
+    )
+
+    diagnostics = campaign._projection_branch_diagnostics(
+        {
+            "NY": {
+                f"{prefix}ny_pit_pilot_state_taxable_income": {
+                    1: -1.0,
+                    2: 0.0,
+                    3: 100.0,
+                    4: 200.0,
+                },
+                (
+                    f"{prefix}"
+                    "ny_pit_pilot_filing_status_joint_or_surviving_spouse"
+                ): {1: True, 2: False, 3: False, 4: True},
+                (
+                    f"{prefix}"
+                    "ny_pit_pilot_filing_status_head_of_household"
+                ): {1: False, 2: True, 3: False, 4: False},
+            }
+        },
+        routes,
+    )
+
+    assert diagnostics == {
+        "NY": {
+            "compared_tax_unit_count": 3,
+            "negative_taxable_income_count": 1,
+            "zero_taxable_income_count": 1,
+            "positive_taxable_income_count": 1,
+            "joint_or_surviving_count": 1,
+            "head_of_household_count": 1,
+            "single_or_separate_count": 1,
+        }
+    }
+
+
+def test_illinois_projection_diagnostics_pin_completed_boundaries() -> None:
+    prefix = "us-il:policies/income_tax/pilot_liability_pipeline#input."
+    routes = (
+        TaxUnitRoute(1, 1, "IL", "17", 1, DISPOSITION_READY),
+        TaxUnitRoute(2, 2, "IL", "17", 1, DISPOSITION_READY),
+        TaxUnitRoute(3, 3, "IL", "17", 1, DISPOSITION_READY),
+        TaxUnitRoute(4, 4, "IL", "17", 1, DISPOSITION_BLOCKED),
+    )
+
+    diagnostics = campaign._projection_branch_diagnostics(
+        {
+            "IL": {
+                f"{prefix}il_pit_pilot_state_taxable_income": {
+                    1: 0.0,
+                    2: 100.0,
+                    3: 200.0,
+                    4: 300.0,
+                },
+                f"{prefix}il_pit_pilot_recapture_of_investment_credit": {
+                    1: 0.0,
+                    2: 0.0,
+                    3: 25.0,
+                    4: 50.0,
+                },
+            }
+        },
+        routes,
+    )
+
+    assert diagnostics == {
+        "IL": {
+            "compared_tax_unit_count": 3,
+            "zero_taxable_income_count": 1,
+            "positive_taxable_income_count": 2,
+            "zero_recapture_count": 2,
+            "positive_recapture_count": 1,
+        }
+    }
+
+
+@pytest.mark.parametrize(
+    ("taxable", "recapture", "message"),
+    [
+        (-1.0, 0.0, "nonnegative completed taxable income"),
+        (0.0, -1.0, "nonnegative completed investment-credit recapture"),
+    ],
+)
+def test_illinois_projection_diagnostics_reject_negative_boundaries(
+    taxable,
+    recapture,
+    message,
+) -> None:
+    prefix = "us-il:policies/income_tax/pilot_liability_pipeline#input."
+    with pytest.raises(ValueError, match=message):
+        campaign._projection_branch_diagnostics(
+            {
+                "IL": {
+                    f"{prefix}il_pit_pilot_state_taxable_income": {
+                        1: taxable
+                    },
+                    f"{prefix}il_pit_pilot_recapture_of_investment_credit": {
+                        1: recapture
+                    },
+                }
+            },
+            (TaxUnitRoute(1, 1, "IL", "17", 1, DISPOSITION_READY),),
+        )
+
+
+@pytest.mark.parametrize(
+    ("joint", "head", "message"),
+    [
+        (1, False, "strict Boolean"),
+        (True, True, "mutually exclusive"),
+    ],
+)
+def test_new_york_projection_diagnostics_reject_invalid_schedule_values(
+    joint,
+    head,
+    message,
+) -> None:
+    prefix = "us-ny:policies/income_tax/pilot_liability_pipeline#input."
+    with pytest.raises(ValueError, match=message):
+        campaign._projection_branch_diagnostics(
+            {
+                "NY": {
+                    f"{prefix}ny_pit_pilot_state_taxable_income": {1: 1.0},
+                    (
+                        f"{prefix}"
+                        "ny_pit_pilot_filing_status_joint_or_surviving_spouse"
+                    ): {1: joint},
+                    (
+                        f"{prefix}"
+                        "ny_pit_pilot_filing_status_head_of_household"
+                    ): {1: head},
+                }
+            },
+            (TaxUnitRoute(1, 1, "NY", "36", 1, DISPOSITION_READY),),
+        )
