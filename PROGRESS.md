@@ -658,8 +658,21 @@ residual), #229 (small-suite grounding).
 - Confirmed the review worktree was clean before and after the read-only
   battery. All battery inputs and executables are byte-identical to the exact
   target; the review branch differs only by this appended ledger.
+- Retrieved PR #407 with a read-only GitHub query and confirmed its remote
+  head is exactly `41512b26`.
+- Recomputed every before/after row and household count in the PR body:
+  `302 / 275` before and `324 / 239` after, with all five state cells exact.
+- Confirmed the body’s disposition claims: lone-minor 12 households / 24
+  rows linked to PolicyEngine-US #9157; TANF 95 of 121 passes with all 26
+  failures unexplained and linked to axiom-oracles #397; and zero of seven
+  minimum-benefit qualifiers, including MA `ecps-2303`, with #9158/#399.
+- Confirmed all 69 categorical households / 138 rows were returned from BBCE
+  classifications to physically unannotated canonical and served rows, and
+  axiom-oracles #403 tracks that exact set.
+- Confirmed the PR body’s version, served-artifact
+  `656 / 332 / 119 / zero-silent`, and unchanged-registration claims. All five
+  named issue targets exist, are open, and describe the claimed mechanisms.
 
 ### Next
 
-- Verify PR #407's body claims against the target tree.
 - Write and commit the final confirmation report, then complete this ledger.
