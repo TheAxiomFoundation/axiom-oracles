@@ -60,6 +60,9 @@ jobs:
         # universes stand alone); enforces determinism when they are present.
         run: uv run scripts/generate_conformance_universe.py --all --check
 
+      - name: Validate closure universes (pinned inventories + pending ratchet)
+        run: uv run scripts/closure_universe.py --check
+
       - name: Validate conformance program compositions (drift vs suites)
         # Derived from the committed suites (no external checkout needed), so
         # this always bites: a covered suite whose runnable-program composition

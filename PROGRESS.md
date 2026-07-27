@@ -380,7 +380,9 @@ residual), #229 (small-suite grounding).
   fingerprint and pending ceiling in each universe and `summary.json`; two
   additional mutants prove neither a raised local ceiling nor edited universe
   provenance can reset the unchanged-pin ratchet. All eight tests pass.
+- Wired `scripts/closure_universe.py --check` into the existing CI test job
+  directly after conformance-universe validation.
 
 ### Next
 
-- Wire CI, run focused and full validation, push, and open the PR.
+- Run focused and full validation, push, and open the PR.
