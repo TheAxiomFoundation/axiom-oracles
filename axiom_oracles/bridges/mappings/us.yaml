@@ -8057,6 +8057,137 @@ mappings:
     mapping_type: not_comparable
     rationale: New York initial-month proration and final allotment outputs; PolicyEngine SNAP does not expose New York legal proration outputs.
 
+  - legal_id: us:policies/income_tax/additional_medicare_tax_pipeline#additional_medicare_tax_pipeline_self_employment_domain_is_valid
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    rationale: This RuleSpec judgment attests that section 1401(c) does not exempt any self-employment income under an international social-security agreement; PolicyEngine does not expose that ordinary-case domain judgment.
+
+  - legal_id: us:policies/income_tax/additional_medicare_tax_pipeline#federal_additional_medicare_self_employment_tax
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: additional_medicare_tax
+    candidate_priority: P4
+    rationale: This output isolates the section 1401(b)(2) self-employment leg after coordinating its threshold with wages; PolicyEngine exposes only the combined additional_medicare_tax over wages and taxable self-employment income, not a separate self-employment leg.
+
+  - legal_id: us:policies/income_tax/additional_medicare_tax_pipeline#federal_additional_medicare_tax
+    country: us
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: additional_medicare_tax
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same combined additional Medicare tax over wages and taxable self-employment income in the pipeline's ordinary no-section-1401(c)-exemption domain.
+
+  - legal_id: us:policies/income_tax/additional_medicare_tax_pipeline#federal_additional_medicare_wage_tax
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: additional_medicare_tax
+    candidate_priority: P4
+    rationale: This output isolates the imported section 3101(b)(2) wage leg; PolicyEngine exposes only the combined additional_medicare_tax over wages and taxable self-employment income, not a separate wage leg.
+
+  - legal_id: us:policies/income_tax/additional_medicare_tax_pipeline#pipeline_additional_medicare_self_employment_joint_threshold
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.irs.payroll.medicare.additional.exclusion
+    parameter_key: JOINT
+    period: year
+    unit: USD
+    comparison: money
+    tested_by_legal_ids:
+      - us:policies/income_tax/additional_medicare_tax_pipeline#pipeline_additional_medicare_self_employment_threshold
+    rationale: Same statutory joint-return additional Medicare threshold, stored in PolicyEngine as the JOINT exclusion parameter.
+
+  - legal_id: us:policies/income_tax/additional_medicare_tax_pipeline#pipeline_additional_medicare_self_employment_other_threshold
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.irs.payroll.medicare.additional.exclusion
+    parameter_key: SINGLE
+    period: year
+    unit: USD
+    comparison: money
+    tested_by_legal_ids:
+      - us:policies/income_tax/additional_medicare_tax_pipeline#pipeline_additional_medicare_self_employment_threshold
+    rationale: Same statutory additional Medicare threshold for any other filing status; PolicyEngine's SINGLE exclusion stores the common $200,000 amount.
+
+  - legal_id: us:policies/income_tax/additional_medicare_tax_pipeline#pipeline_additional_medicare_self_employment_separate_threshold
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.irs.payroll.medicare.additional.exclusion
+    parameter_key: SEPARATE
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same statutory married-filing-separately additional Medicare threshold, stored in PolicyEngine as the SEPARATE exclusion parameter.
+
+  - legal_id: us:policies/income_tax/additional_medicare_tax_pipeline#pipeline_additional_medicare_self_employment_separate_threshold_fraction
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    rationale: This pipeline helper exposes the statutory one-half derivation of the separate-return threshold; PolicyEngine stores the resulting SEPARATE exclusion amount, not the fraction.
+
+  - legal_id: us:policies/income_tax/additional_medicare_tax_pipeline#pipeline_additional_medicare_self_employment_tax_base
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: additional_medicare_tax
+    candidate_priority: P4
+    rationale: This output is the self-employment-only excess base after the filing-status threshold is reduced by wages; PolicyEngine computes a combined wage-and-self-employment base inside additional_medicare_tax and does not expose this intermediate.
+
+  - legal_id: us:policies/income_tax/additional_medicare_tax_pipeline#pipeline_additional_medicare_self_employment_tax_rate
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    rationale: PolicyEngine stores the shared statutory 0.9 percent rate at gov.irs.payroll.medicare.additional.rate, but does not expose this pipeline-local self-employment-leg rate helper as a distinct oracle output.
+
+  - legal_id: us:policies/income_tax/additional_medicare_tax_pipeline#pipeline_additional_medicare_self_employment_threshold
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.irs.payroll.medicare.additional.exclusion
+    parameter_key_input: filing_status
+    parameter_key_map:
+      0: SINGLE
+      1: JOINT
+      2: SEPARATE
+      3: HEAD_OF_HOUSEHOLD
+      4: SURVIVING_SPOUSE
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Same filing-status-selected additional Medicare threshold, stored in PolicyEngine as the filing-status-keyed exclusion parameter.
+
+  - legal_id: us:policies/income_tax/additional_medicare_tax_pipeline#pipeline_federal_self_employment_income_for_additional_medicare_tax_ordinary_case
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: taxable_self_employment_income
+    candidate_priority: P4
+    rationale: This RuleSpec output is a tax-unit aggregate imported from the self-employment pipeline for the ordinary section 1401(c) case; PolicyEngine exposes taxable_self_employment_income at Person and aggregates it only inside additional_medicare_tax, not as this tax-unit output.
+
+  - legal_id: us:policies/income_tax/additional_medicare_tax_pipeline#pipeline_reduced_additional_medicare_self_employment_threshold
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: additional_medicare_tax
+    candidate_priority: P4
+    rationale: 26 CFR 1.1401-1(d)(2)(i) reduces the self-employment threshold by wages taken into account; PolicyEngine's additional_medicare_tax applies the single filing-status exclusion once to combined wages plus taxable self-employment income and never forms a reduced self-employment threshold, so there is no PE surface for this coordination step.
+
+  - legal_id: us:policies/income_tax/additional_medicare_tax_pipeline#wages_taken_into_account_for_additional_medicare_tax
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: payroll_tax_gross_wages
+    candidate_priority: P4
+    rationale: Axiom exposes the tax-unit wages taken into account under 26 CFR 1.1401-1(d)(2)(i) for the threshold reduction; PolicyEngine consumes payroll_tax_gross_wages as a person-level input element inside additional_medicare_tax and exposes no Additional-Medicare-specific wage surface at the tax-unit boundary.
+
   - legal_id: us:statutes/26/1401#additional_medicare_self_employment_joint_threshold
     country: us
     program: tax
