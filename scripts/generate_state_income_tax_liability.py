@@ -7,19 +7,15 @@ comparison report plus the per-case residuals. Most states use wage-income cases
 that cross their brackets; Washington uses a dedicated long-term-capital-gains
 grid for its RCW 82.87 tax.
 
-* **axiom** — the composed liability pipeline in rulespec-us
-  (``us-XX/policies/income_tax/pilot_liability_pipeline``), evaluated through
-  the axiom rules engine. The engine-computed liabilities are read from the
-  committed ``.test.yaml`` fixtures, which ``axiom-encode test`` verifies equal
-  the engine output to full decimal precision, so they are the engine's values
-  rather than an independent re-implementation.
+* **axiom** — the registered RuleSpec surface, evaluated through the axiom rules
+  engine. Most legacy state grids read engine-verified values from committed
+  ``.test.yaml`` fixtures. Kentucky executes its canonical KRS 141.020 RuleSpec
+  live over reviewed upstream completed-net-income inputs.
 * **policyengine** — the configured per-state PolicyEngine liability target in
   ``_PE_VAR``, computed live at the 2026 tax year.
-* **taxsim** — the pinned TAXSIM binary's ``siitax``. The pinned binary is a
-  1960-2024 federal/state calculator (it abandons law year 2026), so the TAXSIM
-  leg is run at 2024, its latest available law year; the 2024-to-2026 bracket
-  and exemption indexation vintage is recorded in the dispositions rather than
-  absorbed by tolerance.
+* **taxsim** — the pinned policyengine-taxsim binary's ``siitax``, run at 2026.
+  Any target-scope or model-vintage residual is recorded in dispositions rather
+  than absorbed by tolerance.
 
 Nothing here invents a value: the axiom side is the engine fixture, the
 PolicyEngine side is a live calculation, and the TAXSIM side is the pinned
@@ -35,6 +31,7 @@ import sys
 import warnings
 from dataclasses import dataclass
 from datetime import date, datetime, timezone
+import os
 from pathlib import Path
 import re
 
@@ -47,7 +44,12 @@ from axiom_oracles.provenance import build_provenance, rulespec_provenance
 warnings.filterwarnings("ignore")
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-RULESPEC_US = REPO_ROOT.parent / "rulespec-us"
+RULESPEC_US = Path(
+    os.environ.get("RULESPEC_US_REPO", REPO_ROOT.parent / "rulespec-us")
+).resolve()
+AXIOM_RULES = Path(
+    os.environ.get("AXIOM_RULES_REPO", REPO_ROOT.parent / "axiom-rules-engine")
+).resolve()
 REPORTS = REPO_ROOT / "reports"
 DASH_PUBLIC = REPO_ROOT / "dashboard" / "public" / "data"
 
@@ -141,35 +143,32 @@ _PE_VAR = {
     # before-non-refundable variable nets the phased-out 59-10-1018 taxpayer
     # credit that this flat core excludes.
     "UT": "ut_income_tax_before_credits",
-    # Alabama, Idaho, and Kentucky use the before-refundable-credits variable,
-    # the exact statutory analog of each core. Alabama's final al_income_tax
-    # equals it on this grid (no refundable credits); Idaho's final id_income_tax
-    # additionally nets the refundable grocery credit that the 63-3024 core
-    # excludes; Kentucky's final ky_income_tax nets the refundable/family-size
-    # credits that the 141.020 flat core excludes.
+    # Alabama's canonical section 40-18-5 surface maps only to the schedule
+    # before nonrefundable credits; it does not claim final annual liability.
+    # Kentucky's canonical KRS 141.020 schedule also applies before every
+    # allowable credit, so its exact PolicyEngine analog is the unit-level tax
+    # before nonrefundable credits. Idaho retains its reviewed target.
     "AL": "al_income_tax_before_non_refundable_credits",
     "ID": "id_income_tax_before_refundable_credits",
-    "KY": "ky_income_tax_before_refundable_credits",
+    "KY": "ky_income_tax_before_non_refundable_credits_unit",
     # Nebraska's before-credits variable is the pure 77-2715.03 four-bracket
     # progressive tax on Nebraska taxable income (AGI less the 77-2716.01 standard
     # deduction). The before-refundable variable nets the 77-2716.01 personal
     # exemption credit (a post-tax nonrefundable credit) that this core excludes.
     "NE": "ne_income_tax_before_credits",
-    # Maine, Minnesota, and Connecticut use a before-refundable-credits variable
-    # as the exact statutory analog of each composed pipeline. Delaware instead
+    # Maine and Minnesota use a before-refundable-credits variable as the exact
+    # statutory analog of each composed pipeline. Delaware instead
     # targets the unit-level tax before nonrefundable credits because its promoted
     # RuleSpec encodes the section 1102 schedule and branch selection, not credits.
     # Delaware's later variables net nonrefundable credits and refundable EITC;
     # Maine and Minnesota net their refundable credits in the final variable;
-    # Connecticut's target excludes refundable EITC while subtracting the ordered
-    # property-tax and stillborn nonrefundable credits encoded by RuleSpec.
     # Maryland uses the state-only before-credits target: county tax is separate,
     # and the before-refundable target additionally subtracts nonrefundable credits.
     "DE": "de_income_tax_before_non_refundable_credits_unit",
     "MD": "md_income_tax_before_credits",
     "ME": "me_income_tax_before_refundable_credits",
     "MN": "mn_income_tax_before_refundable_credits",
-    "CT": "ct_income_tax_before_refundable_credits",
+    "CT": "ct_resident_ordinary_tax_before_personal_credit_derived",
     # Arizona levies a single flat rate (43-1011) on Arizona taxable income (AGI
     # less the 43-1041 standard deduction). az_income_tax equals
     # az_income_tax_before_refundable_credits on this childless grid (no refundable
@@ -236,9 +235,18 @@ _POPULACE_STATES = tuple(_TAXSIM_STATE)
 # concept. Keep the reason explicit and independently testable while the
 # Populace campaign validates the narrow component truthfully.
 _GRID_EXCLUDED_STATES = {
+    "AL": (
+        "canonical RuleSpec exposes only the section 40-18-5 schedule on "
+        "completed taxable income; no broad annual-liability or TAXSIM surface"
+    ),
     "AR": (
         "reviewed RuleSpec exposes only the Person-grain Act 2 schedule "
         "component; no broad liability output or six-case grid fixtures"
+    ),
+    "CT": (
+        "canonical RuleSpec exposes the full-year-resident ordinary section "
+        "12-700 component with a 98-fixture boundary suite; no broad liability "
+        "output or legacy six-case grid fixtures"
     ),
 }
 
@@ -250,10 +258,31 @@ _MODULE = {
     st: f"us-{st.lower()}:policies/income_tax/pilot_liability_pipeline"
     for st in _TAXSIM_STATE
 }
+_MODULE["AL"] = (
+    "us-al:policies/income_tax/"
+    "2026_section_40_18_5_schedule_before_credits"
+)
+_MODULE["CT"] = (
+    "us-ct:policies/income_tax/"
+    "2026_resident_ordinary_tax_before_personal_credit"
+)
+_MODULE["KY"] = (
+    "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits"
+)
 _LIABILITY_OUTPUT = {
     st: f"{_MODULE[st]}#{st.lower()}_pit_pilot_income_tax_liability"
     for st in _TAXSIM_STATE
 }
+_LIABILITY_OUTPUT["AL"] = (
+    f"{_MODULE['AL']}#"
+    "al_pit_2026_section_40_18_5_schedule_before_credits"
+)
+_LIABILITY_OUTPUT["CT"] = (
+    f"{_MODULE['CT']}#ct_pit_2026_resident_ordinary_tax_before_personal_credit"
+)
+_LIABILITY_OUTPUT["KY"] = (
+    f"{_MODULE['KY']}#ky_pit_2026_krs_141_020_schedule_before_credits"
+)
 
 _LIABILITY_OUTPUT["NY"] = (
     f"{_MODULE['NY']}#ny_pit_pilot_main_income_tax"
@@ -267,9 +296,11 @@ _POPULACE_OUTPUT = {
         f"{_MODULE['AR']}#"
         "ar_pit_pilot_income_tax_before_non_refundable_credits_indiv"
     ),
+    "CT": _LIABILITY_OUTPUT["CT"],
 }
 _POPULACE_PE_VAR = {
     "AR": "ar_income_tax_before_non_refundable_credits_indiv",
+    "CT": "ct_resident_ordinary_tax_before_personal_credit_derived",
 }
 _POPULACE_AGGREGATION = {
     "AR": "person_sum_to_tax_unit",
@@ -280,6 +311,7 @@ _POPULACE_AGGREGATION = {
 # accept strict ``(single|married|joint)_<income>`` names and skip everything
 # else. Other states retain the legacy AGI/suffix extraction behavior.
 _STRICT_GRID_FIXTURE_STATES = frozenset({"CO", "MS", "NY"})
+_LIVE_AXIOM_STATES = frozenset({"KY"})
 
 
 @dataclass
@@ -332,6 +364,8 @@ def _axiom_liabilities() -> dict[tuple[str, str, int], float]:
 
     out: dict[tuple[str, str, int], float] = {}
     for state in _STATES:
+        if state in _LIVE_AXIOM_STATES:
+            continue
         test_file = (
             RULESPEC_US
             / f"us-{state.lower()}"
@@ -389,7 +423,7 @@ def _axiom_liabilities() -> dict[tuple[str, str, int], float]:
     return out
 
 
-def _policyengine_liability(case: Case) -> float:
+def _policyengine_simulation(case: Case):
     from policyengine_us import Simulation
 
     year = VALIDATION_YEAR
@@ -410,8 +444,112 @@ def _policyengine_liability(case: Case) -> float:
         "spm_units": {"s": {"members": members}},
         "households": {"h": {"members": members, "state_code": {year: case.state}}},
     }
-    sim = Simulation(situation=situation)
-    return float(sim.calculate(_PE_VAR[case.state], year)[0])
+    return Simulation(situation=situation)
+
+
+def _policyengine_liability(case: Case) -> float:
+    sim = _policyengine_simulation(case)
+    return float(sim.calculate(_PE_VAR[case.state], VALIDATION_YEAR)[0])
+
+
+def _kentucky_policyengine_values(case: Case) -> tuple[float, float]:
+    """Return the direct target and its reviewed completed-net-income boundary."""
+
+    if case.state != "KY":
+        raise ValueError("Kentucky projection requested for a non-Kentucky case")
+    sim = _policyengine_simulation(case)
+    separate = sum(
+        float(value)
+        for value in sim.calculate("ky_taxable_income_indiv", VALIDATION_YEAR)
+    )
+    joint = sum(
+        float(value)
+        for value in sim.calculate("ky_taxable_income_joint", VALIDATION_YEAR)
+    )
+    filing_separately = bool(
+        sim.calculate("ky_files_separately", VALIDATION_YEAR)[0]
+    )
+    completed_net_income = max(
+        0.0,
+        separate if filing_separately else joint,
+    )
+    target = float(
+        sim.calculate(
+            "ky_income_tax_before_non_refundable_credits_unit",
+            VALIDATION_YEAR,
+        )[0]
+    )
+    return target, completed_net_income
+
+
+def _kentucky_axiom_liabilities(
+    cases: list[Case],
+    completed_net_income: dict[str, float],
+) -> dict[tuple[str, str, int], float]:
+    """Execute the canonical Kentucky RuleSpec over reviewed upstream inputs."""
+
+    from axiom_oracles.bridges.state_tax_populace_runner import (
+        DISPOSITION_READY,
+        TaxUnitRoute,
+        _state_request,
+    )
+    from axiom_oracles.bridges.tax_populace import (
+        output_number,
+        run_axiom_program,
+    )
+
+    kentucky_cases = [case for case in cases if case.state == "KY"]
+    input_slot = (
+        f"{_MODULE['KY']}#input."
+        "ky_pit_2026_krs_141_020_completed_net_income"
+    )
+    routes = tuple(
+        TaxUnitRoute(
+            case.case_id,
+            case.case_id,
+            "KY",
+            "21",
+            1.0,
+            DISPOSITION_READY,
+        )
+        for case in kentucky_cases
+    )
+    request = _state_request(
+        state="KY",
+        routes=routes,
+        year=VALIDATION_YEAR,
+        output=_LIABILITY_OUTPUT["KY"],
+        projected_inputs={
+            input_slot: {
+                case.case_id: completed_net_income[case.case_id]
+                for case in kentucky_cases
+            }
+        },
+    )
+    program = (
+        RULESPEC_US
+        / "us-ky"
+        / "policies"
+        / "income_tax"
+        / "2026_krs_141_020_schedule_before_credits.yaml"
+    )
+    results = run_axiom_program(
+        program=program,
+        request=request,
+        rulespec_root=RULESPEC_US,
+        axiom_rules_path=AXIOM_RULES,
+    )
+    if len(results) != len(kentucky_cases):
+        raise RuntimeError(
+            "Kentucky live RuleSpec execution returned "
+            f"{len(results)} results for {len(kentucky_cases)} cases"
+        )
+    return {
+        (case.state, case.filing, int(case.wages)): output_number(
+            result["outputs"][_LIABILITY_OUTPUT["KY"]]
+        )
+        for case, result in zip(kentucky_cases, results, strict=True)
+    }
 
 
 def _taxsim_binary() -> Path | None:
@@ -498,13 +636,13 @@ _TOL = {
     "VA": (1.0, 0.0),
     # Utah is a single flat rate on the taxable base; exact match.
     "UT": (1.0, 0.0),
-    # Alabama, Idaho, and Kentucky each reproduce PolicyEngine to a hundredth of
-    # a cent (the residual is PolicyEngine's float32 rounding); a $1 absolute
-    # band catches any structural bracket error without absorbing the
-    # 2024-to-2026 rate/deduction vintage carried by the TAXSIM leg.
+    # Alabama and Idaho retain a $1 legacy-grid band. Kentucky executes the
+    # canonical decimal RuleSpec live from PolicyEngine's reviewed upstream
+    # taxable-income candidates, so a cent-or-1e-7 tolerance admits only the
+    # upstream engine's float residual.
     "AL": (1.0, 0.0),
     "ID": (1.0, 0.0),
-    "KY": (1.0, 0.0),
+    "KY": (0.01, 0.0000001),
     # Nebraska reproduces PolicyEngine to the cent (the residual is PolicyEngine's
     # float32 rounding, under a tenth of a cent); a $1 band catches structural
     # bracket errors without absorbing the TAXSIM rate-compression and indexation
@@ -575,6 +713,7 @@ _POPULACE_TOL = {
     "CO": (0.01, 0.0000001),
     "GA": (0.01, 0.0000001),
     "IL": (1.0, 0.0),
+    "KY": (0.01, 0.0000001),
     "LA": (0.01, 0.0000001),
     "MT": (0.01, 0.0000001),
     "NM": (0.01, 0.0000001),
@@ -702,7 +841,12 @@ def _build_report(
         "provenance": {
             "generated": date.today().isoformat(),
             "generator": "scripts/generate_state_income_tax_liability.py",
-            "axiom_source": "engine-verified pilot_liability_pipeline.test.yaml fixtures",
+            "axiom_source": (
+                "live canonical KRS 141.020 RuleSpec execution over reviewed "
+                "PolicyEngine upstream completed-net-income projections"
+                if state == "KY"
+                else "engine-verified pilot_liability_pipeline.test.yaml fixtures"
+            ),
             "note": (
                 "The mismatches array carries TAXSIM law-vintage residuals"
                 " and any source-grounded Axiom-versus-PolicyEngine residuals;"
@@ -738,6 +882,20 @@ def _finalize_report(
 def main() -> int:
     cases = _grid()
     axiom = _axiom_liabilities()
+    kentucky_values = {
+        case.case_id: _kentucky_policyengine_values(case)
+        for case in cases
+        if case.state == "KY"
+    }
+    axiom.update(
+        _kentucky_axiom_liabilities(
+            cases,
+            {
+                case_id: values[1]
+                for case_id, values in kentucky_values.items()
+            },
+        )
+    )
     # States whose reviewed RuleSpec has migrated its companion tests from the
     # six-case wage grid to boundary fixtures can no longer seed the Axiom
     # side of this report from fixtures. Skip them LOUDLY — the Populace
@@ -762,7 +920,11 @@ def main() -> int:
         else:
             runnable.append(state)
     pe = {
-        case.case_id: _policyengine_liability(case)
+        case.case_id: (
+            kentucky_values[case.case_id][0]
+            if case.state == "KY"
+            else _policyengine_liability(case)
+        )
         for case in cases
         if case.state in runnable
     }

@@ -224,49 +224,19 @@ def test_strict_grid_states_ignore_noncanonical_agi_fixture(tmp_path, state):
     }
 
 
-def test_axiom_liabilities_preserves_adjusted_gross_income_mapping(tmp_path):
+def test_alabama_is_excluded_from_legacy_grid_and_uses_canonical_module():
     generator = _load_generator()
-    output = (
-        "us-al:policies/income_tax/pilot_liability_pipeline"
-        "#al_pit_pilot_income_tax_liability"
+    assert "AL" not in generator._STATES
+    assert "AL" in generator._POPULACE_STATES
+    assert generator._MODULE["AL"] == (
+        "us-al:policies/income_tax/"
+        "2026_section_40_18_5_schedule_before_credits"
     )
-    fixture_path = (
-        tmp_path
-        / "us-al"
-        / "policies"
-        / "income_tax"
-        / "pilot_liability_pipeline.test.yaml"
+    assert generator._LIABILITY_OUTPUT["AL"] == (
+        generator._MODULE["AL"]
+        + "#al_pit_2026_section_40_18_5_schedule_before_credits"
     )
-    fixture_path.parent.mkdir(parents=True)
-    fixture_path.write_text(
-        json.dumps(
-            [
-                {
-                    "name": "single_standard_grid_case",
-                    "input": {
-                        "us-al:example#al_adjusted_gross_income": 30_000
-                    },
-                    "output": {output: 1_000},
-                },
-                {
-                    "name": "married_standard_grid_case",
-                    "input": {
-                        "us-al:example#al_adjusted_gross_income": 60_000
-                    },
-                    "output": {output: 2_000},
-                },
-            ]
-        )
-    )
-
-    generator.RULESPEC_US = tmp_path
-    generator._STATES = ("AL",)
-    generator._LIABILITY_OUTPUT["AL"] = output
-
-    assert generator._axiom_liabilities() == {
-        ("AL", "single", 30_000): 1_000.0,
-        ("AL", "married", 60_000): 2_000.0,
-    }
+    assert "annual-liability" in generator._GRID_EXCLUDED_STATES["AL"]
 
 
 def test_recent_state_income_tax_oracle_registrations():
@@ -307,6 +277,26 @@ def test_recent_state_income_tax_oracle_registrations():
     assert "NH" not in generator._STATES
 
 
+def test_kentucky_registry_uses_canonical_live_schedule_surface() -> None:
+    generator = _load_generator()
+    module = (
+        "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits"
+    )
+
+    assert generator._MODULE["KY"] == module
+    assert generator._LIABILITY_OUTPUT["KY"] == (
+        f"{module}#ky_pit_2026_krs_141_020_schedule_before_credits"
+    )
+    assert (
+        generator._PE_VAR["KY"]
+        == "ky_income_tax_before_non_refundable_credits_unit"
+    )
+    assert generator._TOL["KY"] == (0.01, 1e-7)
+    assert generator._POPULACE_TOL["KY"] == (0.01, 1e-7)
+    assert "KY" in generator._LIVE_AXIOM_STATES
+    assert "KY" in generator._STATES
+
+
 def test_arkansas_legacy_grid_is_explicitly_decoupled() -> None:
     generator = _load_generator()
 
@@ -321,6 +311,25 @@ def test_arkansas_legacy_grid_is_explicitly_decoupled() -> None:
         == "ar_income_tax_before_non_refundable_credits_indiv"
     )
     assert generator._POPULACE_AGGREGATION["AR"] == "person_sum_to_tax_unit"
+
+
+def test_connecticut_canonical_component_retires_the_legacy_grid() -> None:
+    generator = _load_generator()
+
+    assert "CT" in generator._TAXSIM_STATE
+    assert "CT" in generator._POPULACE_STATES
+    assert "CT" not in generator._STATES
+    assert "98-fixture" in generator._GRID_EXCLUDED_STATES["CT"]
+    assert generator._MODULE["CT"].endswith(
+        "/2026_resident_ordinary_tax_before_personal_credit"
+    )
+    assert generator._LIABILITY_OUTPUT["CT"].endswith(
+        "#ct_pit_2026_resident_ordinary_tax_before_personal_credit"
+    )
+    assert (
+        generator._POPULACE_PE_VAR["CT"]
+        == "ct_resident_ordinary_tax_before_personal_credit_derived"
+    )
 
 
 def test_finalize_report_adds_v21_dispositions_and_provenance():

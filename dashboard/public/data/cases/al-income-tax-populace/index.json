@@ -9,7 +9,7 @@
   "right": "policyengine"
  },
  "mismatch_concepts": [
-  "us-al:policies/income_tax/pilot_liability_pipeline#al_pit_pilot_income_tax_liability"
+  "us-al:policies/income_tax/2026_section_40_18_5_schedule_before_credits#al_pit_2026_section_40_18_5_schedule_before_credits"
  ],
  "source": "state-tax-populace-campaign"
 }

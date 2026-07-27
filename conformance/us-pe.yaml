@@ -67,11 +67,11 @@ policies:
     output_vars:
       - al_income_tax
     in_scope: true
-    suite: al-income-tax-liability
-    note: Covered by al-income-tax-liability. The grid and certified full-Populace campaign compare al_income_tax_before_non_refundable_credits;
-      all 1,632 positive-weight routed Alabama tax units also have exact equality with final al_income_tax
-      in PolicyEngine-US 1.752.2. Both downstream aggregates, al_non_refundable_credits and al_refundable_credits,
-      are structurally empty in that pinned 2026 model, and the schedule target is nonnegative.
+    suite: null
+    note: The al-income-tax-populace evidence compares only the canonical section
+      40-18-5 schedule-before-credits output to al_income_tax_before_non_refundable_credits
+      after validated projection of completed al_taxable_income and schedule
+      status. It does not prove final annual al_income_tax.
   - id: us-pe:al_tanf
     oracle_policy_name: al_tanf
     oracle_policy_type: rules
@@ -236,9 +236,11 @@ policies:
       - ct_income_tax
     in_scope: true
     suite: null
-    note: The ct-income-tax-liability grid and full-Populace campaign validate only ct_income_tax_before_refundable_credits.
-      Final ct_income_tax additionally subtracts refundable ct_eitc; 90 of 951 routed units differ from
-      the narrow target.
+    note: The ct-income-tax-populace campaign validates only the canonical full-year-resident
+      ordinary section 12-700 tax before the personal credit, recovered exactly from
+      ct_income_tax_after_personal_credits and ct_personal_credit_rate. It does not claim
+      the personal credit, alternative minimum tax, property-tax or stillborn credits,
+      refundable ct_eitc, payments, refunds, or final ct_income_tax.
   - id: us-pe:ct_tfa
     oracle_policy_name: ct_tfa
     oracle_policy_type: rules
@@ -600,9 +602,9 @@ policies:
       - ky_income_tax
     in_scope: true
     suite: null
-    note: The ky-income-tax-liability suite is a six-case childless wage-earner grid against ky_income_tax_before_refundable_credits.
-      Its slice assumes the family-size and other credits are inactive and does not cover refundable credits,
-      so it does not establish final ky_income_tax.
+    note: The ky-income-tax-liability suite validates the narrow KRS 141.020 schedule before credits against
+      ky_income_tax_before_non_refundable_credits_unit. It does not encode or establish final ky_income_tax
+      because upstream annual-return construction and all credits remain outside this surface.
   - id: us-pe:ky_ktap
     oracle_policy_name: ky_ktap
     oracle_policy_type: rules

@@ -46,9 +46,19 @@ DISPOSITION_NO_BROAD_PIT = "not_applicable_no_broad_pit"
 DISPOSITION_NONPOSITIVE_WEIGHT = "excluded_nonpositive_weight"
 DISPOSITION_UNKNOWN_GEOGRAPHY = "excluded_unknown_geography"
 
+CT_ORDINARY_TAX_DERIVED_TARGET = (
+    "ct_resident_ordinary_tax_before_personal_credit_derived"
+)
+_CT_FULL_YEAR_RESIDENT_INPUT = (
+    "us-ct:policies/income_tax/"
+    "2026_resident_ordinary_tax_before_personal_credit#input."
+    "ct_pit_2026_is_full_year_connecticut_resident_return"
+)
+
 _REVIEWED_PERSON_SUM_VARIABLES_BY_STATE = {
     "DE": frozenset({"de_taxable_income_joint"}),
     "HI": frozenset({"long_term_capital_gains"}),
+    "KY": frozenset({"ky_taxable_income_indiv", "ky_taxable_income_joint"}),
     "MT": frozenset(
         {
             "long_term_capital_gains",
@@ -544,6 +554,44 @@ def calculate_policyengine_targets(
     targets: dict[str, dict[int | str, float]] = {}
     for state in sorted(selected_states):
         jurisdiction = resolved_contract.by_state()[state]
+        if (
+            state == "CT"
+            and jurisdiction.policyengine_target == CT_ORDINARY_TAX_DERIVED_TARGET
+        ):
+            after_credit = _array_values(
+                sim.calculate("ct_income_tax_after_personal_credits", period=year)
+            )
+            credit_rate = _array_values(
+                sim.calculate("ct_personal_credit_rate", period=year)
+            )
+            if len(after_credit) != len(tax_unit_ids) or len(credit_rate) != len(
+                tax_unit_ids
+            ):
+                raise StateTaxPopulationRoutingError(
+                    "CT: PolicyEngine ordinary-tax recovery inputs returned "
+                    f"{len(after_credit)} and {len(credit_rate)} rows for "
+                    f"{len(tax_unit_ids)} tax units"
+                )
+            recovered: list[float] = []
+            for after_value, rate_value in zip(
+                after_credit, credit_rate, strict=True
+            ):
+                after = _finite_number(
+                    after_value, label="ct_income_tax_after_personal_credits"
+                )
+                rate = _finite_number(
+                    rate_value, label="ct_personal_credit_rate"
+                )
+                if after < 0 or not 0 <= rate < 1:
+                    raise StateTaxPopulationRoutingError(
+                        "CT: ordinary-tax recovery requires nonnegative "
+                        "after-credit tax and a personal-credit rate in [0, 1)"
+                    )
+                recovered.append(after / (1 - rate))
+            targets[state] = dict(
+                zip(tax_unit_ids, recovered, strict=True)
+            )
+            continue
         comparison_aggregation = getattr(
             jurisdiction,
             "comparison_aggregation",
@@ -688,6 +736,13 @@ def calculate_policyengine_projection_inputs(
             variable
             for slot in jurisdiction.inputs
             if slot.policyengine_transform
+            == "filing_method_selected_person_summed_taxable_income"
+            for variable in slot.policyengine_variables[:2]
+        )
+        person_variables.update(
+            variable
+            for slot in jurisdiction.inputs
+            if slot.policyengine_transform
             == "tax_unit_net_and_person_sum_to_capital_gains_worksheet_line_10"
             for variable in slot.policyengine_variables[1:]
         )
@@ -773,6 +828,23 @@ def calculate_policyengine_projection_inputs(
                     tax_unit_id: slot.constant_value for tax_unit_id in tax_unit_ids
                 }
                 continue
+            if slot.source_kind == "raw_populace":
+                if state != "CT" or slot.slot != _CT_FULL_YEAR_RESIDENT_INPUT:
+                    raise StateTaxPopulationRoutingError(
+                        f"{state}: runtime projector does not support raw "
+                        f"Populace source for {slot.slot}"
+                    )
+                ready_ct_ids = {
+                    route.tax_unit_id
+                    for route in route_rows
+                    if route.state == "CT"
+                    and route.disposition == DISPOSITION_READY
+                }
+                state_inputs[slot.slot] = {
+                    tax_unit_id: tax_unit_id in ready_ct_ids
+                    for tax_unit_id in tax_unit_ids
+                }
+                continue
             source_variables = slot.policyengine_variables or (
                 (slot.policyengine_variable,) if slot.policyengine_variable else ()
             )
@@ -785,6 +857,41 @@ def calculate_policyengine_projection_inputs(
                 )
             if slot.policyengine_transform == "person_sum_to_tax_unit":
                 projected = person_sums[source_variables[0]]
+            elif (
+                slot.policyengine_transform
+                == "filing_method_selected_person_summed_taxable_income"
+            ):
+                if len(source_variables) != 3:
+                    raise StateTaxPopulationRoutingError(
+                        f"{state}: completed Kentucky net-income transform "
+                        "requires separate-return and joint taxable-income sums "
+                        "plus the filing-method branch"
+                    )
+                separate_values, joint_values = (
+                    person_sums[variable] for variable in source_variables[:2]
+                )
+                filing_separately_values = _array_values(
+                    sim.calculate(source_variables[2], period=year)
+                )
+                if len(filing_separately_values) != len(tax_unit_ids):
+                    raise StateTaxPopulationRoutingError(
+                        f"{state}: PolicyEngine boundary {source_variables[2]!r} "
+                        f"returned {len(filing_separately_values)} rows for "
+                        f"{len(tax_unit_ids)} tax units"
+                    )
+                projected = [
+                    _apply_projection_transform(
+                        (separate_value, joint_value, filing_separately),
+                        transform=slot.policyengine_transform,
+                        label=slot.slot,
+                    )
+                    for separate_value, joint_value, filing_separately in zip(
+                        separate_values,
+                        joint_values,
+                        filing_separately_values,
+                        strict=True,
+                    )
+                ]
             elif (
                 slot.policyengine_transform
                 == "person_sums_to_net_long_term_capital_gain"
@@ -1514,6 +1621,25 @@ def _apply_projection_transform(
         long_term = _finite_number(value[0], label=f"{label}:long_term")
         short_term = _finite_number(value[1], label=f"{label}:short_term")
         return max(0.0, min(long_term, long_term + short_term))
+    if transform == "filing_method_selected_person_summed_taxable_income":
+        if not isinstance(value, tuple) or len(value) != 3:
+            raise StateTaxPopulationRoutingError(
+                f"{label}: completed Kentucky net-income transform requires exact "
+                "(separate-return, joint) Person sums and filing-method branch"
+            )
+        separate = _finite_number(value[0], label=f"{label}:separate_return")
+        joint = _finite_number(value[1], label=f"{label}:joint")
+        filing_separately = _projection_scalar(
+            value[2], label=f"{label}:filing_separately"
+        )
+        if not isinstance(filing_separately, bool):
+            if filing_separately not in {0.0, 1.0}:
+                raise StateTaxPopulationRoutingError(
+                    f"{label}: filing-method branch must be boolean; "
+                    f"got {filing_separately}"
+                )
+            filing_separately = bool(filing_separately)
+        return max(0.0, separate if filing_separately else joint)
     if (
         transform
         == "tax_unit_net_and_person_sum_to_capital_gains_worksheet_line_10"
@@ -1532,6 +1658,7 @@ def _apply_projection_transform(
         # completed-return line-10 boundary's fail-closed nonnegative domain.
         return max(0.0, min(net_gain, long_term))
     if transform in {
+        "filing_status_is_single",
         "filing_status_is_separate",
         "filing_status_joint_or_surviving_spouse",
         "filing_status_joint_surviving_spouse_or_head",
@@ -1550,6 +1677,8 @@ def _apply_projection_transform(
             )
         if transform == "filing_status_joint_or_surviving_spouse":
             return value in {"JOINT", "SURVIVING_SPOUSE"}
+        if transform == "filing_status_is_single":
+            return value == "SINGLE"
         if transform == "filing_status_is_separate":
             return value == "SEPARATE"
         if transform == "filing_status_is_head_of_household":

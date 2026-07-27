@@ -153,7 +153,6 @@
     "axiom-policyengine-ia-income-tax-parameters.json",
     "axiom-policyengine-ga-snap-ecps.json",
     "axiom-policyengine-taxsim-ne-income-tax-liability.json",
-    "axiom-policyengine-taxsim-ct-income-tax-liability.json",
     "axiom-policyengine-taxsim-dc-income-tax-liability.json",
     "axiom-policyengine-taxsim-hi-income-tax-liability.json",
     "axiom-policyengine-taxsim-ia-income-tax-liability.json",
@@ -213,6 +212,7 @@
     "axiom-policyengine-us-additional-medicare-grid.json",
     "axiom-policyengine-us-elderly-disabled-grid.json",
     "axiom-policyengine-us-llc-grid.json",
-    "axiom-taxsim-co-tax-intersection-ecps.json"
+    "axiom-taxsim-co-tax-intersection-ecps.json",
+    "axiom-policyengine-ky-income-tax-populace.json"
   ]
 }

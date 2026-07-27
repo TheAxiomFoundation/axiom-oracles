@@ -13,6 +13,9 @@ RULESPEC_RELATIVE_PATH = Path(
     "us-ky/policies/income_tax/2026_full_year_resident_source_hold.yaml"
 )
 EXPECTED_OUTPUT_COUNT = 15
+SCHEDULE_MODULE = (
+    "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits"
+)
 
 
 def _module_mappings():
@@ -94,6 +97,40 @@ def test_kentucky_2026_bounded_outputs_use_exact_tax_classifications() -> None:
         assert mapping.mapping_type == "not_comparable", output_name
         assert mapping.candidate_priority == "P4", output_name
         assert mapping.rationale
+
+
+def test_kentucky_2026_schedule_has_exact_three_record_registry() -> None:
+    registry = load_policyengine_registry()
+    rate = registry.mapping_for_legal_id(
+        f"{SCHEDULE_MODULE}#ky_pit_2026_krs_141_020_rate",
+        country="us",
+    )
+    boundary = registry.mapping_for_legal_id(
+        f"{SCHEDULE_MODULE}#ky_pit_2026_krs_141_020_net_income_boundary",
+        country="us",
+    )
+    schedule = registry.mapping_for_legal_id(
+        f"{SCHEDULE_MODULE}#ky_pit_2026_krs_141_020_schedule_before_credits",
+        country="us",
+    )
+
+    assert rate is not None
+    assert rate.mapping_type == "parameter_value"
+    assert rate.policyengine_parameter == "gov.states.ky.tax.income.rate"
+    assert rate.comparison == "rate"
+
+    assert boundary is not None
+    assert boundary.mapping_type == "not_comparable"
+    assert boundary.candidate_priority == "P4"
+
+    assert schedule is not None
+    assert schedule.mapping_type == "direct_variable"
+    assert (
+        schedule.policyengine_variable
+        == "ky_income_tax_before_non_refundable_credits_unit"
+    )
+    assert schedule.entity == "tax_unit"
+    assert schedule.comparison == "money"
 
 
 @pytest.mark.parametrize("program", [None, "tax"])

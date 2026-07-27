@@ -354,10 +354,10 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "e5e40d40353f8459da4e46a9feae7279c2fecccc",
+      "axiom_rules_engine_sha": "68d65229632e371b96d8eb25c704c1977a2b7ed3",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-26T14:12:48Z",
+    "generated_at": "2026-07-27T04:14:47Z",
     "generated_by": "scripts/run_comparison.py::uk-worker-pit-ukmod",
     "oracle": {
       "euromod_country": "UK",

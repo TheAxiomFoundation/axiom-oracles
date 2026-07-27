@@ -2333,16 +2333,12 @@ concepts:
       policyengine: ut_income_tax_before_credits
       taxsim: siitax
 
-  us-al:policies/income_tax/pilot_liability_pipeline#al_pit_pilot_income_tax_liability:
-    description: Alabama income tax liability (resident wage earner; the section 40-18-5 graduated tax (2/4/5 per cent) on Alabama taxable income (Alabama AGI less the section 40-18-15 deductions and the section 40-18-19 exemptions))
+  us-al:policies/income_tax/2026_section_40_18_5_schedule_before_credits#al_pit_2026_section_40_18_5_schedule_before_credits:
+    description: Alabama Code section 40-18-5 graduated schedule tax on completed Alabama taxable income, before nonrefundable credits
     category: tax
     comparison: amount
-    # Compared against PolicyEngine al_income_tax_before_non_refundable_credits,
-    # the exact section 40-18-5 schedule-tax analog before credits.
-    # Against TAXSIM 2024 every case diverges by the 2024-to-2026 vintage,
-    # dispositioned in dispositions/al-income-tax-liability.yaml. The tight
-    # absolute tolerance catches structural bracket errors.
-    tolerance: 1
+    tolerance: 0.01
+    relative_tolerance: 0.0000001
     priority: high
     locales: [US-AL]
     scope:
@@ -2350,12 +2346,11 @@ concepts:
       geoid: US
     targets:
       axiom:
-        name: al_pit_pilot_income_tax_liability
+        name: al_pit_2026_section_40_18_5_schedule_before_credits
         scope:
           type: country
           geoid: US
       policyengine: al_income_tax_before_non_refundable_credits
-      taxsim: siitax
   us-id:policies/income_tax/pilot_liability_pipeline#id_pit_pilot_income_tax_liability:
     description: Idaho income tax liability (resident wage earner; the section 63-3024 tax (5.3 per cent) on Idaho taxable income above the indexed filing-status no-tax threshold)
     category: tax
@@ -2380,17 +2375,15 @@ concepts:
           geoid: US
       policyengine: id_income_tax_before_refundable_credits
       taxsim: siitax
-  us-ky:policies/income_tax/pilot_liability_pipeline#ky_pit_pilot_income_tax_liability:
-    description: Kentucky income tax liability (resident wage earner; the section 141.020 flat tax (3.5 per cent) on Kentucky taxable income (Kentucky AGI less the section 141.081 standard deduction))
+  us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits#ky_pit_2026_krs_141_020_schedule_before_credits:
+    description: Kentucky KRS 141.020 tax-year-2026 schedule tax before credits (3.5 percent of completed nonnegative Kentucky net income)
     category: tax
     comparison: amount
-    # Compared against PolicyEngine ky_income_tax_before_refundable_credits, the exact statutory analog of
-    # this core; the pipeline reproduces it to a hundredth of a cent across the
-    # grid (the residual is PolicyEngine's float32 rounding). ky_income_tax nets the refundable/family-size credits, which the 141.020 flat core excludes.
-    # Against TAXSIM 2024 every case diverges by the 2024-to-2026 vintage,
-    # dispositioned in dispositions/ky-income-tax-liability.yaml. The tight
-    # absolute tolerance catches structural bracket errors.
-    tolerance: 1
+    # PolicyEngine's unit-level before-nonrefundable-credit variable is the
+    # direct pre-credit analog. The Axiom grid projects only its completed net
+    # income from PolicyEngine's upstream joint/separate taxable-income
+    # variables and executes the canonical RuleSpec live.
+    tolerance: 0.01
     priority: high
     locales: [US-KY]
     scope:
@@ -2398,11 +2391,11 @@ concepts:
       geoid: US
     targets:
       axiom:
-        name: ky_pit_pilot_income_tax_liability
+        name: ky_pit_2026_krs_141_020_schedule_before_credits
         scope:
           type: country
           geoid: US
-      policyengine: ky_income_tax_before_refundable_credits
+      policyengine: ky_income_tax_before_non_refundable_credits_unit
       taxsim: siitax
 
 
@@ -2525,29 +2518,6 @@ concepts:
           type: country
           geoid: US
       policyengine: mn_income_tax_before_refundable_credits
-      taxsim: siitax
-  us-ct:policies/income_tax/pilot_liability_pipeline#ct_pit_pilot_income_tax_liability:
-    description: Connecticut income tax liability before refundable credits (complete section 12-700 schedules, phaseout and recapture, personal credit, AMT, and ordered property-tax/stillborn nonrefundable credits)
-    category: tax
-    comparison: amount
-    # Compared against PolicyEngine ct_income_tax_before_refundable_credits, the
-    # exact analog of the complete encoded schedule, phaseout/recapture, personal
-    # credit, AMT, and ordered nonrefundable-credit pipeline. Against TAXSIM 2024,
-    # differences from the 2024-to-2026 indexation and credit scope are
-    # dispositioned rather than absorbed into the national contract tolerance.
-    tolerance: 1
-    priority: high
-    locales: [US-CT]
-    scope:
-      type: country
-      geoid: US
-    targets:
-      axiom:
-        name: ct_pit_pilot_income_tax_liability
-        scope:
-          type: country
-          geoid: US
-      policyengine: ct_income_tax_before_refundable_credits
       taxsim: siitax
   us-co:policies/income_tax/pilot_liability_pipeline#co_pit_pilot_income_tax_liability:
     description: Colorado C.R.S. section 39-22-104(1.7)(c) individual-income base tax before section 39-22-627 temporary rate adjustments and all credits
