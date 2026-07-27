@@ -1014,6 +1014,7 @@ def test_compact_full_evidence_preserves_explicit_zero_matches():
     )
 
     assert all_mismatch["v"] == []
+    assert all_mismatch["m"][0]["d"] == 1
     assert "v" not in verdict_free
 
 

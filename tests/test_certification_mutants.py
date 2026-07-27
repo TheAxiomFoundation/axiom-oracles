@@ -827,7 +827,7 @@ def test_same_id_foreign_values_do_not_semantically_bind(tmp_path):
     report_path, suite_dir = _copied_evidence_fixture(tmp_path)
     chunk_path = suite_dir / "chunk-0.json"
     chunk = json.loads(chunk_path.read_text())
-    chunk[1]["m"][0].update(l=1000, x=1200, d=-200)
+    chunk[1]["m"][0].update(l=1000, x=1200, d=200)
     chunk_path.write_text(json.dumps(chunk, separators=(",", ":")))
     _refresh_fixture_binding(report_path, suite_dir)
 
@@ -837,6 +837,149 @@ def test_same_id_foreign_values_do_not_semantically_bind(tmp_path):
     assert evidence.valid is False
     assert any(
         "report mismatch" in defect and "value" in defect
+        for defect in evidence.content_defects
+    )
+
+
+def test_matched_amount_values_must_reconcile_with_aggregate_sums(tmp_path):
+    """A same-outcome 0→999 substitution must move and violate both sums."""
+
+    report_path, suite_dir = _copied_evidence_fixture(tmp_path)
+    chunk_path = suite_dir / "chunk-0.json"
+    chunk = json.loads(chunk_path.read_text())
+    verdict = next(
+        row
+        for row in chunk[0]["v"]
+        if row["c"] == "benefit"
+    )
+    verdict.update(l=999, x=999)
+    chunk_path.write_text(json.dumps(chunk, separators=(",", ":")))
+    _refresh_fixture_binding(report_path, suite_dir)
+
+    evidence = validate_suite_evidence(report_path)
+    assert evidence.binding == "bound"
+    assert evidence.reconciliation == "full"
+    assert evidence.valid is False
+    for field in ("left_weighted_sum", "right_weighted_sum"):
+        assert any(field in defect for defect in evidence.content_defects)
+
+
+def test_matched_eligibility_values_must_reconcile_with_positive_weights(
+    tmp_path,
+):
+    report_path, suite_dir = _copied_evidence_fixture(tmp_path)
+    chunk_path = suite_dir / "chunk-0.json"
+    chunk = json.loads(chunk_path.read_text())
+    verdict = next(
+        row
+        for row in chunk[0]["v"]
+        if row["c"] == "eligibility"
+    )
+    verdict.update(l=True, x=True)
+    chunk_path.write_text(json.dumps(chunk, separators=(",", ":")))
+    _refresh_fixture_binding(report_path, suite_dir)
+
+    evidence = validate_suite_evidence(report_path)
+    assert evidence.binding == "bound"
+    assert evidence.reconciliation == "full"
+    assert evidence.valid is False
+    for field in ("left_positive_weight", "right_positive_weight"):
+        assert any(field in defect for defect in evidence.content_defects)
+
+
+def test_aggregate_values_require_reproducible_unit_weight(tmp_path):
+    report_path, suite_dir = _copied_evidence_fixture(tmp_path)
+    report = json.loads(report_path.read_text())
+    aggregate = next(
+        row
+        for row in report["aggregates"]
+        if row["concept"] == "benefit"
+    )
+    del aggregate["comparison_weight"]
+    report_path.write_text(json.dumps(report, indent=2) + "\n")
+    _refresh_fixture_binding(report_path, suite_dir)
+
+    evidence = validate_suite_evidence(report_path)
+    assert evidence.binding == "bound"
+    assert evidence.reconciliation == "full"
+    assert evidence.valid is False
+    assert any(
+        "comparison_weight is required" in defect
+        for defect in evidence.content_defects
+    )
+
+
+@pytest.mark.parametrize(
+    ("mutation", "marker"),
+    [
+        pytest.param("d", ".d", id="d-drift"),
+        pytest.param("r", ".r", id="r-drift"),
+    ],
+)
+def test_dashboard_semantic_fields_must_match_stored_verdicts(
+    tmp_path,
+    mutation,
+    marker,
+):
+    report_path, suite_dir = _copied_evidence_fixture(tmp_path)
+    chunk_path = suite_dir / "chunk-0.json"
+    chunk = json.loads(chunk_path.read_text())
+    if mutation == "d":
+        chunk[1]["m"][0]["d"] = 1_000_000_000
+    else:
+        chunk[1]["r"] = 100
+    chunk_path.write_text(json.dumps(chunk, separators=(",", ":")))
+    _refresh_fixture_binding(report_path, suite_dir)
+
+    evidence = validate_suite_evidence(report_path)
+    assert evidence.binding == "bound"
+    assert evidence.reconciliation == "full"
+    assert evidence.valid is False
+    assert any(
+        marker in defect and "representation tolerance" in defect
+        for defect in evidence.content_defects
+    )
+
+
+@pytest.mark.parametrize("rate", [-1, 101])
+def test_dashboard_match_rate_is_bounded_even_without_full_verdicts(
+    tmp_path,
+    rate,
+):
+    report_path, suite_dir = _copied_evidence_fixture(
+        tmp_path,
+        "cardinality_bound",
+    )
+    chunk_path = suite_dir / "chunk-0.json"
+    chunk = json.loads(chunk_path.read_text())
+    chunk[0]["r"] = rate
+    chunk_path.write_text(json.dumps(chunk, separators=(",", ":")))
+    _refresh_fixture_binding(report_path, suite_dir)
+
+    evidence = validate_suite_evidence(report_path)
+    assert evidence.binding == "bound"
+    assert evidence.reconciliation == "cardinality"
+    assert evidence.valid is False
+    assert any(
+        ".r must be between 0 and 100" in defect
+        for defect in evidence.content_defects
+    )
+
+
+def test_partial_mismatch_row_cannot_claim_full_agreement(tmp_path):
+    report_path, suite_dir = _copied_evidence_fixture(tmp_path)
+    chunk_path = suite_dir / "chunk-0.json"
+    chunk = json.loads(chunk_path.read_text())
+    del chunk[1]["v"]
+    chunk[1]["r"] = 100
+    chunk_path.write_text(json.dumps(chunk, separators=(",", ":")))
+    _refresh_fixture_binding(report_path, suite_dir)
+
+    evidence = validate_suite_evidence(report_path)
+    assert evidence.binding == "bound"
+    assert evidence.valid is False
+    assert any(
+        ".r cannot claim 100 percent agreement" in defect
         for defect in evidence.content_defects
     )
 

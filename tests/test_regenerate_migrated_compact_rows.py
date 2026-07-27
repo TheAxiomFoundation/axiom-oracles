@@ -42,6 +42,9 @@ def _full_report(disposition: str | None) -> dict:
                 "concept": CONCEPT,
                 "comparison_count": 1,
                 "mismatch_count": 1,
+                "comparison_weight": 1,
+                "left_weighted_sum": 10,
+                "right_weighted_sum": 20,
             }
         ],
         "mismatches": [mismatch],
@@ -62,7 +65,7 @@ def _full_chunks(marker: str | None) -> list[tuple[str, list[dict]]]:
         "c": CONCEPT,
         "l": 10,
         "x": 20,
-        "d": -10,
+        "d": 10,
     }
     if marker is not None:
         mismatch["e"] = marker
@@ -94,9 +97,12 @@ def test_project_dispositions_reconciles_markers_bidirectionally(
 ):
     report = _full_report(report_marker)
     source = _full_chunks(source_marker)
+    source[0][1][0]["m"][0]["d"] = -10
 
     projected = project_dispositions(report, source)
     projected_mismatch = projected[0][1][0]["m"][0]
+    assert projected_mismatch["d"] == 10
+    assert source[0][1][0]["m"][0]["d"] == -10
     if report_marker is None:
         assert "e" not in projected_mismatch
         assert source[0][1][0]["m"][0]["e"] == source_marker

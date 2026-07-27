@@ -21,7 +21,7 @@ cases aren't listed.
 Row shape (kept deliberately small):
     {"id": case_id, "r": match_rate,
      "h": {"n": household_size, "e": earned_income, "a": ages},
-     "m": [{"c": concept, "l": left, "x": right, "d": difference,
+     "m": [{"c": concept, "l": left, "x": right, "d": right_minus_left,
             "e": disposition_kind_if_explained}, ...]}
 
 Usage:
@@ -38,6 +38,11 @@ import sys
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from axiom_oracles.evidence import dashboard_delta  # noqa: E402
+
 REPORTS = REPO_ROOT / "reports"
 DASHBOARD_DATA = REPO_ROOT / "dashboard" / "public" / "data"
 OUT_ROOT = DASHBOARD_DATA / "cases"
@@ -156,7 +161,7 @@ def compact_case(case: dict, explained: dict) -> dict:
             "c": m.get("concept"),
             "l": m.get("left"),
             "x": m.get("right"),
-            "d": m.get("difference"),
+            "d": dashboard_delta(m.get("left"), m.get("right")),
         }
         kind = explained.get((case.get("case_id"), m.get("concept")))
         if kind:
@@ -299,7 +304,7 @@ def mismatch_only_rows(report: dict, explained: dict) -> list[dict]:
             "c": m["concept"],
             "l": m["left"],
             "x": m["right"],
-            "d": m["difference"],
+            "d": dashboard_delta(m["left"], m["right"]),
         }
         kind = explained.get((m["case_id"], m["concept"]))
         if kind:

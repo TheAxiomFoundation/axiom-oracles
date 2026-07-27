@@ -27,6 +27,7 @@ if str(REPO_ROOT) not in sys.path:
 
 from axiom_oracles.evidence import (  # noqa: E402
     build_chunk_index,
+    dashboard_delta,
     is_safe_suite_name,
     strict_json_loads,
     validate_suite_evidence,
@@ -150,7 +151,7 @@ def project_dispositions(
     report: dict,
     chunks: list[tuple[str, list[dict]]],
 ) -> list[tuple[str, list[dict]]]:
-    """Project report markers bidirectionally onto a complete source corpus."""
+    """Project report markers and canonical deltas onto a source corpus."""
 
     report_markers = _report_markers(report)
     projected: list[tuple[str, list[dict]]] = []
@@ -212,6 +213,14 @@ def project_dispositions(
                     mismatch.pop("e", None)
                 else:
                     mismatch["e"] = marker
+                # Historical chunks used the report's left-minus-right
+                # diagnostic. The dashboard contract is right minus left, so
+                # derive it from the bound values instead of trusting either
+                # source convention.
+                mismatch["d"] = dashboard_delta(
+                    mismatch.get("l"),
+                    mismatch.get("x"),
+                )
                 projected_mismatches.append(mismatch)
             row["m"] = projected_mismatches
             projected_rows.append(row)

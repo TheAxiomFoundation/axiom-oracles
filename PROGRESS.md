@@ -45,12 +45,47 @@
   which must be resolved by running its generator.
 - Located the cumulative diff's four trailing-space lines in
   `sol-evidence-validator-2026-07-27-result.md`.
+- Implemented aggregate value reconciliation across every matched and
+  mismatched verdict: amount left/right sums and eligibility left/right
+  positive weights must reproduce the report within six-decimal/IEEE
+  representation tolerance, never the looser concept tolerance.
+- Made weighted value claims fail closed unless the aggregate carries a unit
+  `comparison_weight` reproducible by the unweighted compact verdicts.
+- Bound compact dashboard semantics: numeric mismatch `d` must be `x - l`,
+  nonnumeric deltas must be null, and `r` must equal the verdict-derived match
+  rate whenever `v` makes the row outcomes complete. Every numeric `r` is
+  bounded to 0–100, and a partial row with a stored mismatch cannot claim
+  `r = 100`; QC cardinality rows with absent `v` and null `r` remain valid.
+- Changed fresh dashboard emission and trusted historical replay to derive
+  `d` from `l`/`x`; replay never trusts the historical sign convention.
+- Added durable killed mutants for matched amount `0/0 -> 999/999`, matched
+  eligibility `false/false -> true/true`, missing unit-weight evidence,
+  isolated `d` drift, and isolated `r` drift. Strengthened the shared full
+  fixture into a positive aggregate-value and row-semantics control.
+- Confirmed the tightened live validator initially failed for exactly the
+  disclosed `ecps-spm-50970` delta-sign defect; no aggregate value drift
+  surfaced.
+- Replayed the migrated ECPS and QC corpora from immutable source
+  `6c4f17bfe6dc8224ee8251401fe0247b1117a25b`. The staged replay now checks
+  37,933.0/37,996.938652 amount sums and 186/186 eligibility positives against
+  the report before writing. ECPS validates `bound/full` over 1,072 cases; QC
+  remains `bound/cardinality` over 856 cases.
+- Regenerated the ECPS binding, census, and `us-co/snap` certificate. The
+  certificate remains honest: its reference leg is clean `bound/full` with
+  2,143 matches, one explained mismatch, and zero unexplained; its reality leg
+  remains clean `bound/cardinality`.
+- Focused implementation gates pass: 103 mutant/regeneration/comparison tests,
+  Ruff, compileall, replay `--check`, chunk-index validation, census/certificate
+  freshness, and diff whitespace.
+- An independent post-fix review found no remaining category-(a) correctness
+  issue after adding fail-closed unit-weight evidence and partial-row `r`
+  checks.
 
 ## Next
 
-- Implement value-level aggregate reconciliation and compact `d`/`r`
-  validation, normalize generated/replayed dashboard deltas, and add the three
-  required killed mutants.
+- Commit the semantic closure, merge current `origin/main`, resolve generated
+  conflicts only by regeneration, fix the four cumulative trailing spaces,
+  and run the complete requested gate set.
 
 ---
 

@@ -9,7 +9,8 @@ Reconciliation has three honest strengths:
 
 ``full``
     Every stored case carries explicit match/mismatch verdict rows, so all
-    three summary counts are recomputed exactly.
+    summary counts, report aggregate values, and dashboard row semantics are
+    recomputed from the stored projection.
 ``cardinality``
     The chunks carry well-formed cases but no per-case verdicts.  Only
     ``comparison_count == number of cases`` plus summary conservation can be
@@ -37,6 +38,7 @@ Binding = Literal["bound", "unbound"]
 Reconciliation = Literal["full", "cardinality", "none"]
 
 _SHA256 = re.compile(r"^[0-9a-f]{64}$")
+_REPRESENTATION_ABS_TOLERANCE = 1e-6
 
 
 def _reject_json_constant(value: str) -> None:
@@ -58,6 +60,41 @@ def strict_json_loads(raw: str | bytes) -> object:
         parse_constant=_reject_json_constant,
         parse_float=_finite_json_float,
     )
+
+
+def _finite_native_number(value: object) -> int | float | None:
+    """Return a finite JSON-native number without treating booleans as numbers."""
+
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        return None
+    try:
+        return value if math.isfinite(value) else None
+    except OverflowError:
+        return None
+
+
+def dashboard_delta(left: object, right: object) -> int | float | None:
+    """Return the compact dashboard delta (right minus left), when numeric."""
+
+    left_number = _finite_native_number(left)
+    right_number = _finite_native_number(right)
+    if left_number is None or right_number is None:
+        return None
+    difference = right_number - left_number
+    return _finite_native_number(difference)
+
+
+def _representation_matches(left: int | float, right: int | float) -> bool:
+    """Compare derived JSON numbers at six-decimal/IEEE representation precision."""
+
+    left_float = float(left)
+    right_float = float(right)
+    tolerance = max(
+        _REPRESENTATION_ABS_TOLERANCE,
+        4 * math.ulp(left_float),
+        4 * math.ulp(right_float),
+    )
+    return abs(left_float - right_float) <= tolerance
 
 
 def is_safe_suite_name(value: object) -> bool:
@@ -390,6 +427,49 @@ def _case_verdicts(
     return tuple(verdicts)
 
 
+def _validate_compact_delta(
+    mismatch: dict,
+    *,
+    location: str,
+    defects: list[str],
+    suite: str | None,
+) -> None:
+    """Validate the dashboard-rendered delta against its stored side values."""
+
+    if "d" not in mismatch:
+        defects.append(_defect(suite, f"{location}.d is missing"))
+        return
+    expected = dashboard_delta(mismatch.get("l"), mismatch.get("x"))
+    declared = mismatch["d"]
+    if expected is None:
+        if declared is not None:
+            defects.append(
+                _defect(
+                    suite,
+                    f"{location}.d must be null when l/x are not finite numbers",
+                )
+            )
+        return
+    declared_number = _finite_native_number(declared)
+    if declared_number is None:
+        defects.append(
+            _defect(
+                suite,
+                f"{location}.d must be a finite number equal to x - l "
+                f"({expected!r})",
+            )
+        )
+        return
+    if not _representation_matches(declared_number, expected):
+        defects.append(
+            _defect(
+                suite,
+                f"{location}.d {declared!r} does not equal x - l "
+                f"{expected!r} within representation tolerance",
+            )
+        )
+
+
 def _validate_compact_case(
     row: object,
     location: str,
@@ -415,11 +495,17 @@ def _validate_compact_case(
     for field in ("r", "h", "m"):
         if field not in row:
             defects.append(_defect(suite, f"{location}.{field} is missing"))
-    rate = row.get("r")
-    if rate is not None and (
-        isinstance(rate, bool) or not isinstance(rate, (int, float))
+    raw_rate = row.get("r")
+    rate = _finite_native_number(raw_rate)
+    if raw_rate is not None and rate is None:
+        defects.append(
+            _defect(suite, f"{location}.r must be a finite number or null")
+        )
+    elif rate is not None and (
+        (rate < 0 and not _representation_matches(rate, 0))
+        or (rate > 100 and not _representation_matches(rate, 100))
     ):
-        defects.append(_defect(suite, f"{location}.r must be numeric or null"))
+        defects.append(_defect(suite, f"{location}.r must be between 0 and 100"))
     household = row.get("h")
     if not isinstance(household, dict):
         defects.append(_defect(suite, f"{location}.h must be an object"))
@@ -451,6 +537,16 @@ def _validate_compact_case(
         defects=defects,
         suite=suite,
     )
+    raw_mismatches = row.get("m")
+    if isinstance(raw_mismatches, list):
+        for index, mismatch in enumerate(raw_mismatches):
+            if isinstance(mismatch, dict):
+                _validate_compact_delta(
+                    mismatch,
+                    location=f"{location}.m[{index}]",
+                    defects=defects,
+                    suite=suite,
+                )
     # ``v`` explicitly stores matched comparisons; a non-empty ``m`` stores
     # explicit mismatch evidence. An absent ``v`` cannot mean zero matches
     # generally (SNAP-QC omits all verdict values), so that row supports full
@@ -462,6 +558,35 @@ def _validate_compact_case(
         if verdicts is not None and mismatches is not None
         else None
     )
+    if outcomes is not None:
+        matches, mismatch_count = outcomes
+        total = matches + mismatch_count
+        expected_rate = 100.0 if total == 0 else 100.0 * matches / total
+        if raw_rate is None:
+            defects.append(
+                _defect(
+                    suite,
+                    f"{location}.r must equal the stored verdict match rate "
+                    f"{expected_rate!r}",
+                )
+            )
+        elif rate is not None and not _representation_matches(rate, expected_rate):
+            defects.append(
+                _defect(
+                    suite,
+                    f"{location}.r {raw_rate!r} does not equal the stored "
+                    f"verdict match rate {expected_rate!r} within "
+                    "representation tolerance",
+                )
+            )
+    elif mismatches and rate is not None and _representation_matches(rate, 100):
+        defects.append(
+            _defect(
+                suite,
+                f"{location}.r cannot claim 100 percent agreement while the "
+                "row stores a mismatch verdict",
+            )
+        )
     explicit_verdict = "v" in row or bool(mismatches)
     semantic_verdicts = _case_verdicts(
         case_id=identity,
@@ -664,7 +789,7 @@ def _as_finite_number(value: object) -> float | None:
         return None
     try:
         number = float(value)
-    except (TypeError, ValueError):
+    except (OverflowError, TypeError, ValueError):
         return None
     return number if math.isfinite(number) else None
 
@@ -718,6 +843,7 @@ def _projected_value_matches(
 def _aggregate_verdicts(
     report: dict,
     verdicts: tuple[_Verdict, ...],
+    rules: dict[str, _ConceptRule],
     defects: list[str],
     suite: str | None,
 ) -> None:
@@ -731,7 +857,7 @@ def _aggregate_verdicts(
         )
         return
 
-    declared: dict[str, tuple[int, int]] = {}
+    declared: dict[str, tuple[int, int, dict, str]] = {}
     for index, row in enumerate(raw):
         location = f"report aggregates[{index}]"
         if not isinstance(row, dict):
@@ -800,12 +926,11 @@ def _aggregate_verdicts(
                         f"verdict count {expected}",
                     )
                 )
-        declared[concept] = (matches, mismatches)
+        declared[concept] = (matches, mismatches, row, location)
 
-    actual: dict[str, list[int]] = {}
+    actual: dict[str, list[_Verdict]] = {}
     for verdict in verdicts:
-        counts = actual.setdefault(verdict.concept, [0, 0])
-        counts[0 if verdict.outcome == "match" else 1] += 1
+        actual.setdefault(verdict.concept, []).append(verdict)
     missing = sorted(set(declared) - set(actual))
     unexpected = sorted(set(actual) - set(declared))
     if missing:
@@ -823,8 +948,12 @@ def _aggregate_verdicts(
             )
         )
     for concept in sorted(set(declared) & set(actual)):
-        expected_matches, expected_mismatches = declared[concept]
-        actual_matches, actual_mismatches = actual[concept]
+        expected_matches, expected_mismatches, row, location = declared[concept]
+        concept_verdicts = actual[concept]
+        actual_matches = sum(
+            verdict.outcome == "match" for verdict in concept_verdicts
+        )
+        actual_mismatches = len(concept_verdicts) - actual_matches
         if (expected_matches, expected_mismatches) != (
             actual_matches,
             actual_mismatches,
@@ -838,6 +967,94 @@ def _aggregate_verdicts(
                     f"{actual_matches}/{actual_mismatches}",
                 )
             )
+        rule = rules.get(concept)
+        if rule is None:
+            continue
+
+        value_fields = (
+            ("left_weighted_sum", "right_weighted_sum")
+            if rule.comparison == "amount"
+            else ("left_positive_weight", "right_positive_weight")
+        )
+        carries_values = any(field in row for field in value_fields)
+        if carries_values:
+            if "comparison_weight" not in row:
+                defects.append(
+                    _defect(
+                        suite,
+                        f"{location}.comparison_weight is required to reconcile "
+                        "aggregate value fields",
+                    )
+                )
+            else:
+                comparison_weight = _finite_native_number(row["comparison_weight"])
+                if comparison_weight is None:
+                    defects.append(
+                        _defect(
+                            suite,
+                            f"{location}.comparison_weight must be a finite number",
+                        )
+                    )
+                elif not _representation_matches(
+                    comparison_weight,
+                    len(concept_verdicts),
+                ):
+                    defects.append(
+                        _defect(
+                            suite,
+                            f"{location}.comparison_weight "
+                            f"{row['comparison_weight']!r} cannot be reproduced "
+                            "by unweighted stored verdicts "
+                            f"({len(concept_verdicts)})",
+                        )
+                    )
+
+        for field, side in zip(value_fields, ("left", "right"), strict=True):
+            if field not in row:
+                continue
+            declared_value = _finite_native_number(row[field])
+            if declared_value is None:
+                defects.append(
+                    _defect(
+                        suite,
+                        f"{location}.{field} must be a finite number",
+                    )
+                )
+                continue
+            if rule.comparison == "amount":
+                values: list[float] = []
+                complete = True
+                for verdict in concept_verdicts:
+                    raw_value = getattr(verdict, side)
+                    if raw_value is None:
+                        continue
+                    number = _as_finite_number(raw_value)
+                    if number is None:
+                        defects.append(
+                            _defect(
+                                suite,
+                                f"{verdict.location} {side} value "
+                                f"{raw_value!r} cannot contribute to {field}",
+                            )
+                        )
+                        complete = False
+                    else:
+                        values.append(number)
+                if not complete:
+                    continue
+                actual_value: int | float = math.fsum(values)
+            else:
+                actual_value = sum(
+                    bool(getattr(verdict, side)) for verdict in concept_verdicts
+                )
+            if not _representation_matches(declared_value, actual_value):
+                defects.append(
+                    _defect(
+                        suite,
+                        f"{location}.{field} {row[field]!r} does not match "
+                        f"{actual_value!r} recomputed from stored verdict values",
+                    )
+                )
 
 
 def _report_disposition(
@@ -1067,7 +1284,7 @@ def _reconcile_full_semantics(
                     f"{verdict.outcome} tolerance semantics",
                 )
             )
-    _aggregate_verdicts(report, verdicts, defects, suite)
+    _aggregate_verdicts(report, verdicts, rules, defects, suite)
     _reconcile_report_mismatches(report, verdicts, rules, defects, suite)
 
 

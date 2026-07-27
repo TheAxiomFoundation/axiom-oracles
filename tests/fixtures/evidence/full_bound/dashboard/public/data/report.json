@@ -25,14 +25,20 @@
     {
       "concept": "eligibility",
       "comparison_count": 1,
+      "comparison_weight": 1,
       "match_count": 1,
-      "mismatch_count": 0
+      "mismatch_count": 0,
+      "left_positive_weight": 0,
+      "right_positive_weight": 0
     },
     {
       "concept": "benefit",
       "comparison_count": 2,
+      "comparison_weight": 2,
       "match_count": 1,
-      "mismatch_count": 1
+      "mismatch_count": 1,
+      "left_weighted_sum": 10,
+      "right_weighted_sum": 20
     }
   ],
   "mismatches": [
