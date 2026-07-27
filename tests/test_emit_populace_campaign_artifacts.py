@@ -63,6 +63,31 @@ def test_connecticut_dashboard_description_names_narrow_component():
     )
 
 
+def test_georgia_dashboard_description_names_narrow_component():
+    output = (
+        "us-ga:policies/income_tax/"
+        "2026_annual_tax_before_nonrefundable_credits"
+        "#ga_pit_2026_annual_tax_before_nonrefundable_credits"
+    )
+    report = project_state(
+        "GA",
+        {
+            "compared_count": 1,
+            "mismatch_count": 0,
+            "output": output,
+            "program": output.split("#", 1)[0],
+            "policyengine_target": "ga_income_tax_before_non_refundable_credits",
+        },
+        _campaign(),
+        "campaign.json",
+    )
+
+    description = report["aggregates"][0]["description"]
+    assert "section 48-7-20 annual tax before nonrefundable credits" in description
+    assert "caller-supplied completed Georgia taxable net income" in description
+    assert "liability" not in description.lower()
+
+
 def test_projected_report_carries_standard_rulespec_provenance():
     report = project_state(
         "CT",

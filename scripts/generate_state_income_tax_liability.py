@@ -9,8 +9,9 @@ grid for its RCW 82.87 tax.
 
 * **axiom** — the registered RuleSpec surface, evaluated through the axiom rules
   engine. Most legacy state grids read engine-verified values from committed
-  ``.test.yaml`` fixtures. Kentucky executes its canonical KRS 141.020 RuleSpec
-  live over reviewed upstream completed-net-income inputs.
+  ``.test.yaml`` fixtures. Canonical bounded surfaces such as Georgia accept
+  reviewed completed-income inputs rather than constructing an annual return.
+  Kentucky executes its canonical KRS 141.020 RuleSpec live.
 * **policyengine** — the configured per-state PolicyEngine liability target in
   ``_PE_VAR``, computed live at the 2026 tax year.
 * **taxsim** — the pinned policyengine-taxsim binary's ``siitax``, run at 2026.
@@ -23,10 +24,13 @@ binary's output. Run with the axiom-oracles environment (PolicyEngine and
 policyengine-taxsim installed):
 
     uv run --python 3.14 python scripts/generate_state_income_tax_liability.py
+    uv run --python 3.14 python scripts/generate_state_income_tax_liability.py \
+        --state GA
 """
 
 from __future__ import annotations
 
+import argparse
 import sys
 import warnings
 from dataclasses import dataclass
@@ -174,10 +178,10 @@ _PE_VAR = {
     # az_income_tax_before_refundable_credits on this childless grid (no refundable
     # credits active), so the final variable is the pipeline's exact target.
     "AZ": "az_income_tax_before_non_refundable_credits",
-    # Georgia's before-non-refundable-credits variable is the exact 48-7-20
-    # flat-tax analog (AGI less the 48-7-27 standard deduction); the childless
-    # grid activates none of the 48-7-29 / low-income / CDCC credits, so it
-    # equals the final ga_income_tax here.
+    # Georgia's target is the direct section 48-7-20 annual-tax analog. The
+    # canonical RuleSpec accepts completed Georgia taxable net income from the
+    # distinct upstream ga_taxable_income variable and applies only the 4.99
+    # percent rate; it does not construct deductions or other return inputs.
     "GA": "ga_income_tax_before_non_refundable_credits",
     # Michigan's before-non-refundable-credits variable is the exact MCL 206.51
     # flat-tax analog (AGI less the 206.30 personal exemptions); the grid
@@ -266,6 +270,9 @@ _MODULE["CT"] = (
     "us-ct:policies/income_tax/"
     "2026_resident_ordinary_tax_before_personal_credit"
 )
+_MODULE["GA"] = (
+    "us-ga:policies/income_tax/2026_annual_tax_before_nonrefundable_credits"
+)
 _MODULE["KY"] = (
     "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits"
 )
@@ -279,6 +286,9 @@ _LIABILITY_OUTPUT["AL"] = (
 )
 _LIABILITY_OUTPUT["CT"] = (
     f"{_MODULE['CT']}#ct_pit_2026_resident_ordinary_tax_before_personal_credit"
+)
+_LIABILITY_OUTPUT["GA"] = (
+    f"{_MODULE['GA']}#ga_pit_2026_annual_tax_before_nonrefundable_credits"
 )
 _LIABILITY_OUTPUT["KY"] = (
     f"{_MODULE['KY']}#ky_pit_2026_krs_141_020_schedule_before_credits"
@@ -310,7 +320,7 @@ _POPULACE_AGGREGATION = {
 # addition to the six canonical liability-grid fixtures. For these states only,
 # accept strict ``(single|married|joint)_<income>`` names and skip everything
 # else. Other states retain the legacy AGI/suffix extraction behavior.
-_STRICT_GRID_FIXTURE_STATES = frozenset({"CO", "MS", "NY"})
+_STRICT_GRID_FIXTURE_STATES = frozenset({"CO", "GA", "MS", "NY"})
 _LIVE_AXIOM_STATES = frozenset({"KY"})
 
 
@@ -325,13 +335,13 @@ class Case:
 # Modest grid: single and married filers at incomes crossing common liability
 # thresholds. Washington substitutes a long-term-capital-gains grid because its
 # individual-tax surface is the RCW 82.87 capital-gains excise tax.
-def _grid() -> list[Case]:
+def _grid(states: tuple[str, ...] | None = None) -> list[Case]:
     cases: list[Case] = []
     plan = {
         "single": [30000, 60000, 150000],
         "married": [60000, 120000, 300000],
     }
-    for state in _STATES:
+    for state in _STATES if states is None else states:
         state_plan = plan
         if state == "WA":
             state_plan = {
@@ -351,28 +361,26 @@ def _grid() -> list[Case]:
     return cases
 
 
-def _axiom_liabilities() -> dict[tuple[str, str, int], float]:
+def _axiom_liabilities(
+    states: tuple[str, ...] | None = None,
+) -> dict[tuple[str, str, int], float]:
     """Read the engine-verified pipeline liabilities from the test fixtures.
 
     ``axiom-encode test`` proves these equal the axiom rules-engine output to
     full decimal precision, so they are the engine's liabilities. The fixture
-    inputs are the pipeline's supplied AGI/base-income (which equals wages for
-    the ordinary wage earner this slice models), filing status, and the
-    supplied 2026 indexed schedule.
+    inputs may be a pipeline's AGI/base-income or a canonical surface's
+    completed taxable-income boundary. For strict-grid states, the fixture name
+    preserves the historical wage-grid label; it does not make RuleSpec derive
+    that upstream boundary.
     """
     import yaml
 
     out: dict[tuple[str, str, int], float] = {}
-    for state in _STATES:
+    for state in _STATES if states is None else states:
         if state in _LIVE_AXIOM_STATES:
             continue
-        test_file = (
-            RULESPEC_US
-            / f"us-{state.lower()}"
-            / "policies"
-            / "income_tax"
-            / "pilot_liability_pipeline.test.yaml"
-        )
+        jurisdiction, module_path = _MODULE[state].split(":", 1)
+        test_file = RULESPEC_US / jurisdiction / f"{module_path}.test.yaml"
         doc = yaml.safe_load(test_file.read_text())
         liab_key = _LIABILITY_OUTPUT[state]
         for case in doc:
@@ -845,7 +853,7 @@ def _build_report(
                 "live canonical KRS 141.020 RuleSpec execution over reviewed "
                 "PolicyEngine upstream completed-net-income projections"
                 if state == "KY"
-                else "engine-verified pilot_liability_pipeline.test.yaml fixtures"
+                else "engine-verified RuleSpec companion fixtures"
             ),
             "note": (
                 "The mismatches array carries TAXSIM law-vintage residuals"
@@ -879,9 +887,23 @@ def _finalize_report(
     return finalized
 
 
-def main() -> int:
-    cases = _grid()
-    axiom = _axiom_liabilities()
+def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Generate state income-tax comparison reports."
+    )
+    parser.add_argument(
+        "--state",
+        choices=_STATES,
+        help="Regenerate only the selected state instead of every grid state.",
+    )
+    return parser.parse_args(argv)
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = _parse_args(argv)
+    selected_states = (args.state,) if args.state else _STATES
+    cases = _grid(selected_states)
+    axiom = _axiom_liabilities(selected_states)
     kentucky_values = {
         case.case_id: _kentucky_policyengine_values(case)
         for case in cases
@@ -903,7 +925,7 @@ def main() -> int:
     # instead of aborting the whole run, which used to silently freeze every
     # state's committed grid data.
     runnable = []
-    for state in _STATES:
+    for state in selected_states:
         missing = [
             (filing, wages)
             for case in cases

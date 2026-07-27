@@ -4,14 +4,11 @@
  "chunks": 1,
  "chunk_size": 500,
  "engines": {
-  "axiom": "us-ga:policies/income_tax/pilot_liability_pipeline",
+  "axiom": "us-ga:policies/income_tax/2026_annual_tax_before_nonrefundable_credits",
   "policyengine": "ga_income_tax_before_non_refundable_credits",
   "taxsim": "siitax"
  },
- "mismatch_concepts": [
-  "us-ga:policies/income_tax/pilot_liability_pipeline#ga_pit_pilot_income_tax_liability"
- ],
- "source": "axiom-policyengine-taxsim-ga-income-tax-liability.json",
- "total_cases": 6,
- "partial": "mismatch-only"
+ "mismatch_concepts": [],
+ "source": "axiom-policyengine-taxsim-ga-income-tax-liability.json (embedded)",
+ "total_cases": 6
 }

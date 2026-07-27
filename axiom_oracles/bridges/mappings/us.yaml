@@ -31771,6 +31771,28 @@ mappings:
     comparison: money
     rationale: Both outputs apply Kentucky's annual income-tax rate to completed nonnegative Kentucky net or taxable income before subtracting any allowable nonrefundable or refundable credits.
 
+  # Georgia's canonical TY2026 section 48-7-20 surface accepts completed
+  # Georgia taxable net income and applies only the annual 4.99 percent rate.
+  # It does not construct taxable income, credits, payments, filing mechanics,
+  # or final Form 500 liability.
+  - legal_id: us-ga:policies/income_tax/2026_annual_tax_before_nonrefundable_credits#ga_pit_2026_annual_input_is_nonnegative
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom validates the caller-supplied completed Georgia taxable-net-income boundary. PolicyEngine exposes no one-to-one validation Judgment for this interface contract.
+
+  - legal_id: us-ga:policies/income_tax/2026_annual_tax_before_nonrefundable_credits#ga_pit_2026_annual_tax_before_nonrefundable_credits
+    country: us
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: ga_income_tax_before_non_refundable_credits
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Both outputs apply O.C.G.A. section 48-7-20 tax to completed Georgia taxable income before nonrefundable credits. This mapping excludes taxable-income construction, filing mechanics, credits, payments, and final Form 500 liability.
+
   # Idaho's TY2026 full-year-resident module is a source-readiness boundary.
   # Exact P4 mappings prevent federal-boundary diagnostics, source holds, and
   # fail-closed Idaho sentinels from being mistaken for completed state-tax

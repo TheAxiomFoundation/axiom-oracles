@@ -121,6 +121,11 @@ STATE_RULES = {
     "ga": [
         (r"^policies/cms/", ("medicaid_chip_bhp_thresholds", None)),
         (r"^policies/decal/caps/", ("childcare_assistance", None)),
+        (
+            r"^policies/income_tax/"
+            r"2026_annual_tax_before_nonrefundable_credits\.yaml$",
+            ("state_income_tax", None),
+        ),
     ],
     "id": [(r"^regulations/idapa/16/03/04/", ("snap", None))],
     "ma": [(r"^(policies/dta/snap|regulations/106-cmr/)", ("snap", None))],
