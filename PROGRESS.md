@@ -25,11 +25,32 @@
   category-(a) blocker from the explicitly excluded category-(b) follow-ups.
 - Confirmed the starting branch, worktree, remote refs, divergence, and output
   sandbox constraint.
+- Indexed the checkout locally for impact analysis. `_aggregate_verdicts` and
+  compact-row validation are HIGH-risk boundaries because validation,
+  regeneration, index generation, certification, and refreshed-report
+  publication all depend on them; those downstream paths are in the gate set.
+- Confirmed the live ECPS aggregate values independently: amount sums are
+  37,933.0 left and 37,996.938652 right, and eligibility-positive counts are
+  186 left and 186 right. The report agrees exactly.
+- Found an honest pre-regeneration row-semantic defect: live
+  `ecps-spm-50970` stores `d = l - x = -1.700012...`, while the round-6 spec
+  requires `d = x - l = +1.700012...`. The derived compact delta must be
+  normalized during trusted replay; report aggregate values will not be tuned.
+- Located the existing synthetic full-evidence fixture, rebind helper,
+  migrated replay validator, and exact insertion points for the matched-value,
+  isolated-`d`, and isolated-`r` killed mutants.
+- Confirmed cached `origin/main` matches the verifier's exact 102-commit
+  divergence and was fetched shortly before this round. A merge simulation
+  predicts one generated conflict, `dashboard/public/data/overview.json`,
+  which must be resolved by running its generator.
+- Located the cumulative diff's four trailing-space lines in
+  `sol-evidence-validator-2026-07-27-result.md`.
 
 ## Next
 
-- Analyze `_aggregate_verdicts`, its callers, the live report aggregate schema,
-  row semantics, and the existing mutant/regeneration test boundaries.
+- Implement value-level aggregate reconciliation and compact `d`/`r`
+  validation, normalize generated/replayed dashboard deltas, and add the three
+  required killed mutants.
 
 ---
 
