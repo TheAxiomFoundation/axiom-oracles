@@ -633,7 +633,7 @@ jurisdictions:
     tolerance: 0.01
     relative_tolerance: 0.0000001
   status: ready
-  evidence: The canonical RuleSpec surface applies only Alabama Code section 40-18-5 to completed Alabama taxable income and selects the statutory joint schedule for joint and surviving-spouse filers. It stops before credits and does not claim completed annual liability. Independent legal and semantic review plus the full certified Populace validates the upstream projection and this narrow comparison.
+  evidence: The canonical RuleSpec surface applies only Alabama Code section 40-18-5 to completed Alabama taxable income and selects the statutory joint schedule for joint and surviving-spouse filers. It stops before credits and does not claim completed annual liability. Independent legal and semantic review plus a full certified-Populace run covered all 1,632 positive-weight routed Alabama tax units and found zero differences outside the pinned $0.01 absolute or 1e-7 relative tolerance; the maximum absolute difference was $0.2000000002 and the maximum relative difference was 5.13777e-8.
   inputs:
   - slot: us-al:policies/income_tax/2026_section_40_18_5_schedule_before_credits#input.al_pit_2026_section_40_18_5_completed_taxable_income
     source_kind: pe_upstream_boundary

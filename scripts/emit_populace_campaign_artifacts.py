@@ -23,13 +23,29 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
+import yaml
+
 from axiom_oracles.provenance import RUN_KINDS, build_provenance
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 REPORTS = REPO_ROOT / "reports"
 DASH_DATA = REPO_ROOT / "dashboard" / "public" / "data"
+POPULACE_SUITE_CONFIG = REPO_ROOT / "comparisons/state-income-tax-populace.yaml"
+RETIRED_MANIFEST_REPORTS = frozenset(
+    {"axiom-policyengine-taxsim-al-income-tax-liability.json"}
+)
 
 _DESCRIPTION_BY_OUTPUT = {
+    (
+        "us-al:policies/income_tax/"
+        "2026_section_40_18_5_schedule_before_credits"
+        "#al_pit_2026_section_40_18_5_schedule_before_credits"
+    ): (
+        "Alabama Code section 40-18-5 schedule before credits, computed from "
+        "caller-supplied completed Alabama taxable income and the reviewed "
+        "joint-or-surviving-spouse schedule classifier, over every routed tax "
+        "unit in the pinned US Populace"
+    ),
     (
         "us-ct:policies/income_tax/"
         "2026_resident_ordinary_tax_before_personal_credit"
@@ -238,6 +254,58 @@ CASES_ROOT = DASH_DATA / "cases"
 CHUNK_SIZE = 500
 
 
+def configured_populace_reports(
+    config_path: Path = POPULACE_SUITE_CONFIG,
+) -> frozenset[str]:
+    """Return every dashboard report required by the Populace suite registry."""
+
+    config = yaml.safe_load(config_path.read_text()) or {}
+    suites = config.get("suites") or []
+    reports = {
+        suite.get("report")
+        for suite in suites
+        if isinstance(suite, dict) and isinstance(suite.get("report"), str)
+    }
+    if len(reports) != len(suites):
+        raise ValueError(
+            "Populace suite registry must declare one unique report per suite"
+        )
+    return frozenset(reports)
+
+
+def reconcile_manifest_reports(
+    reports: list[str],
+    *,
+    data_dir: Path = DASH_DATA,
+    required_reports: frozenset[str] = frozenset(),
+) -> list[str]:
+    """Retire reviewed ghosts and fail closed on every other missing report.
+
+    The manifest is a load list, not a registry of intended future reports.
+    A report may be removed only through the explicit retirement allowlist.
+    Missing configured reports or missing files are publication failures.
+    """
+
+    reconciled = [
+        name for name in reports if name not in RETIRED_MANIFEST_REPORTS
+    ]
+    missing_required_entries = sorted(required_reports - set(reconciled))
+    if missing_required_entries:
+        raise ValueError(
+            "manifest is missing required configured Populace report(s): "
+            + ", ".join(missing_required_entries)
+        )
+    missing_files = sorted(
+        name for name in reconciled if not (data_dir / name).is_file()
+    )
+    if missing_files:
+        raise ValueError(
+            "manifest references unpublished dashboard report(s): "
+            + ", ".join(missing_files)
+        )
+    return reconciled
+
+
 def emit_case_chunks(state: str, entry: dict) -> str | None:
     """Project the campaign's per-tax-unit rows into case-explorer chunks.
 
@@ -339,9 +407,12 @@ def main() -> int:
             f"{report['summary']['comparison_count']} -> {filename}"
         )
 
-    manifest["reports"] = reports
+    manifest["reports"] = reconcile_manifest_reports(
+        reports,
+        required_reports=configured_populace_reports(),
+    )
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n")
-    print(f"manifest: {len(reports)} reports")
+    print(f"manifest: {len(manifest['reports'])} reports")
     return 0
 
 

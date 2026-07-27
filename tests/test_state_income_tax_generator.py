@@ -516,6 +516,10 @@ def test_strict_grid_states_ignore_noncanonical_agi_fixture(tmp_path, state):
 
 def test_alabama_is_excluded_from_legacy_grid_and_uses_canonical_module():
     generator = _load_generator()
+    dashboard_data = Path(__file__).parents[1] / "dashboard/public/data"
+    manifest = json.loads((dashboard_data / "manifest.json").read_text())
+    legacy_report = "axiom-policyengine-taxsim-al-income-tax-liability.json"
+
     assert "AL" not in generator._STATES
     assert "AL" in generator._POPULACE_STATES
     assert generator._MODULE["AL"] == (
@@ -527,6 +531,8 @@ def test_alabama_is_excluded_from_legacy_grid_and_uses_canonical_module():
         + "#al_pit_2026_section_40_18_5_schedule_before_credits"
     )
     assert "annual-liability" in generator._GRID_EXCLUDED_STATES["AL"]
+    assert legacy_report not in manifest["reports"]
+    assert not (dashboard_data / legacy_report).exists()
 
 
 def test_recent_state_income_tax_oracle_registrations():
