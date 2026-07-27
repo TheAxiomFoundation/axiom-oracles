@@ -115,6 +115,11 @@
       "case_id": "ca-single-30000",
       "concept": "us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_income_tax_liability",
       "difference": 41.00175341179943,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "ca-uprating-vintage-flat-deltas",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "engines": [
         "axiom",
         "taxsim"
@@ -129,6 +134,11 @@
       "case_id": "ca-married-60000",
       "concept": "us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_income_tax_liability",
       "difference": 10.723506823598882,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "ca-uprating-vintage-flat-deltas",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
       "engines": [
         "axiom",
         "taxsim"
@@ -164,17 +174,17 @@
       "counts": {
         "axiom_encoding_gap": 0,
         "bridge_artifact": 0,
-        "explained_residual": 0,
+        "explained_residual": 2,
         "unexplained": 0,
         "upstream_engine_gap": 0
       },
-      "dispositions_file": null,
+      "dispositions_file": "dispositions/ca-income-tax-liability.yaml",
       "expired_entries": [],
-      "explained_rate": 83.333333,
+      "explained_rate": 100,
       "orphaned_entries": [],
       "raw_match_rate": 83.333333,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 2
+      "unexplained_count": 0
     },
     "match_count": 10,
     "mismatch_count": 2,
