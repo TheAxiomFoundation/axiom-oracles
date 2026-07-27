@@ -552,9 +552,20 @@ residual), #229 (small-suite grounding).
 - Updated the `us-pe:snap` note to bind its unchanged
   `23/83/71/106/41` unexplained-row counts to the actually regenerated
   PolicyEngine 4.18.9 / US 1.767.3 / Core 3.30.3 runtime.
+- Reran the complete generated write chain in the required order:
+  dispositions, grids, affected map, vacuous/freshness gate, dated scoreboard
+  snapshot, ratchet, and burn-down. Post-merge freshness now carries the five
+  fresh report timestamps and was generated from the merged tree rather than
+  conflict-picked.
+- Reran every chain member in `--check` mode with scoreboard snapshot date
+  `2026-07-27`: 83 disposition files consistent; grids current; affected map
+  163 suites / 172 edges; vacuous gate 136 oracle-backed configs, 213 suites,
+  and 24 executable surfaces; scoreboard 4 jurisdictions / 3 conformant;
+  ratchet 4 jurisdictions / no regression; burn-down 4 series / 49 points.
+  Served-case and served-disposition checks also pass at zero silent
+  classifications and exact 119-entry YAML parity.
 
 ### Next
 
-1. Run and commit the full write/check generated chain, including regenerated
-   post-merge freshness.
+1. Run the final targeted/full test and clean-tree audit.
 2. Reconcile baseline/current counts and write the untracked final report.
