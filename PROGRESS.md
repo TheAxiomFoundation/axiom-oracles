@@ -536,11 +536,25 @@ residual), #229 (small-suite grounding).
   near-minimum rows were considered, including the previously omitted MA
   `ecps-2303`; none has the required $24 versus $23.84/$23.973597 pairing, so
   the qualifying and disposition counts remain zero.
+- Applied the refreshed YAML evidence to the five canonical reports and
+  regenerated all five case-explorer directories from the fresh full reports:
+  7,640 household cases, 656 mismatch rows, and 332 annotated rows. The
+  semantic checker reports zero wrong/missing/obsolete rows and zero silent
+  classifications. All 69 requested MA/SC categorical households (138 rows)
+  remain physically unannotated in both canonical and served data.
+- Generated the five previously missing served disposition-explanation JSON
+  files (119 entries total). Extended their emitter with named-suite and exact
+  read-only `--check` modes, fail-closed source validation, and four hermetic
+  tests.
+- Added a targeted CI step that checks both compact case data and disposition
+  explanations for AL/MA/NC/SC/TN immediately after canonical disposition
+  validation. The focused served-artifact suite passes 10 tests.
+- Updated the `us-pe:snap` note to bind its unchanged
+  `23/83/71/106/41` unexplained-row counts to the actually regenerated
+  PolicyEngine 4.18.9 / US 1.767.3 / Core 3.30.3 runtime.
 
 ### Next
 
-1. Apply the refreshed disposition evidence to the canonical reports and
-   regenerate the served case/disposition artifacts.
-2. Wire the targeted served-parity gate into CI and run the full write/check
-   generated chain.
-3. Reconcile baseline/current counts and write the untracked final report.
+1. Run and commit the full write/check generated chain, including regenerated
+   post-merge freshness.
+2. Reconcile baseline/current counts and write the untracked final report.
