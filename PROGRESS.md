@@ -482,10 +482,17 @@ residual), #229 (small-suite grounding).
 - Added explicit Python 3.13, PolicyEngine 4.18.9, PolicyEngine-US 1.767.3,
   and PolicyEngine Core 3.30.3 pins to all five SNAP configs.
 - Extended comparison provenance stamping so the resolved Core pin is recorded
-  and each regenerated report's `engines.versions` block is populated from the
-  same resolved pins that construct the subprocess.
-- Added regression tests covering all five config resolutions and report
-  engine-version stamping; 61 targeted runner/provenance tests pass.
+  in provenance.
+- Corrected the initial engine-version stamping design after defensive review:
+  the isolated comparison subprocess now records its actually imported
+  PolicyEngine/US/Core distributions, and publication fails closed if those
+  runtime versions differ from the config-resolved pins. Config values are not
+  trusted as runtime evidence.
+- Updated the sanity-fixture path to honor each suite's Python and all three
+  PolicyEngine pin overrides instead of silently using global defaults.
+- Added regression tests covering all five config resolutions, actual report
+  engine-version stamping, and rejection of mismatched runtime evidence; 62
+  targeted runner/provenance tests pass.
 - Verified the sandbox-safe read-only package overlay imports PolicyEngine
   4.18.9 / US 1.767.3 / Core 3.30.3 / SPM Calculator 0.3.1 from the existing
   Python 3.13.9 environment. Core 3.30.3 resolves from cached archive

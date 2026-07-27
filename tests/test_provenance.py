@@ -7,6 +7,8 @@ import json
 import subprocess
 from pathlib import Path
 
+import pytest
+
 from axiom_oracles.provenance import (
     PROVENANCE_SCHEMA_VERSION,
     RUN_KINDS,
@@ -168,7 +170,15 @@ def test_stamp_report_provenance_records_resolved_engine_versions(tmp_path):
         json.dumps(
             {
                 "suite": "al-snap-ecps",
-                "engines": {"left": "axiom", "right": "policyengine"},
+                "engines": {
+                    "left": "axiom",
+                    "right": "policyengine",
+                    "versions": {
+                        "policyengine": "4.18.9",
+                        "policyengine_core": "3.30.3",
+                        "policyengine_us": "1.767.3",
+                    },
+                },
             }
         )
     )
@@ -181,7 +191,9 @@ def test_stamp_report_provenance_records_resolved_engine_versions(tmp_path):
         },
     }
 
-    run_comparison._stamp_report_provenance(report, block)
+    run_comparison._stamp_report_provenance(
+        report, block, require_engine_versions=True
+    )
 
     written = json.loads(report.read_text())
     assert written["engines"]["versions"] == {
@@ -190,6 +202,38 @@ def test_stamp_report_provenance_records_resolved_engine_versions(tmp_path):
         "policyengine_core": "3.30.3",
         "policyengine_us": "1.767.3",
     }
+
+
+def test_stamp_report_provenance_rejects_runtime_engine_mismatch(tmp_path):
+    run_comparison = _load_run_comparison()
+    report = tmp_path / "r.json"
+    report.write_text(
+        json.dumps(
+            {
+                "engines": {
+                    "left": "axiom",
+                    "right": "policyengine",
+                    "versions": {
+                        "policyengine": "4.18.9",
+                        "policyengine_core": "3.28.0",
+                        "policyengine_us": "1.767.3",
+                    },
+                }
+            }
+        )
+    )
+    block = {
+        "oracle": {
+            "policyengine_package": "policyengine==4.18.9",
+            "policyengine_us": "1.767.3",
+            "policyengine_core": "3.30.3",
+        }
+    }
+
+    with pytest.raises(SystemExit, match="runtime engine versions"):
+        run_comparison._stamp_report_provenance(
+            report, block, require_engine_versions=True
+        )
 
 
 def test_stamp_preserves_sorted_format_and_newline(tmp_path):
@@ -243,6 +287,7 @@ def test_build_run_provenance_threads_rulespecs_and_oracle(tmp_path, monkeypatch
     block = run_comparison._build_run_provenance(config, "axiom-oracles-compare", output)
     assert block["schema"] == PROVENANCE_SCHEMA_VERSION
     assert block["oracle"]["name"] == "policyengine"
+    assert block["oracle"]["policyengine_core"] == "3.28.0"
     assert block["rulespecs"] == [
         {"repo": "TheAxiomFoundation/rulespec-us", "sha": None}
     ]
