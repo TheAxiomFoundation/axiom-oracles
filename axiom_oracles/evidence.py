@@ -103,16 +103,23 @@ def sha256_path(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def _display_path(path: Path) -> str:
+    """Render checkout paths deterministically and external fixtures exactly."""
+
+    resolved = path.resolve()
+    try:
+        return resolved.relative_to(REPO_ROOT.resolve()).as_posix()
+    except ValueError:
+        return resolved.as_posix()
+
+
 def report_identity(report_path: str | Path) -> tuple[str, str | None]:
     """Return the canonical path string and byte identity used by indexes."""
 
     path = Path(report_path).resolve()
-    try:
-        display = path.relative_to(REPO_ROOT.resolve()).as_posix()
-    except ValueError:
-        # Synthetic fixtures outside the checkout still need an unambiguous
-        # exact identity. Production indexes are always repository-relative.
-        display = path.as_posix()
+    # Synthetic fixtures outside the checkout still need an unambiguous exact
+    # identity. Production indexes are always repository-relative.
+    display = _display_path(path)
     return display, sha256_path(path) if path.is_file() else None
 
 
@@ -278,16 +285,19 @@ def _validate_compact_case(
         defects=defects,
         suite=suite,
     )
-    # ``v`` explicitly stores matched comparisons; ``m`` stores mismatches.
-    # An absent ``v`` cannot mean zero matches generally (SNAP-QC omits all
-    # verdict values), so that row supports full reconciliation only when v is
-    # present.  Cardinality may still be possible for the suite as a whole.
+    # ``v`` explicitly stores matched comparisons; a non-empty ``m`` stores
+    # explicit mismatch evidence. An absent ``v`` cannot mean zero matches
+    # generally (SNAP-QC omits all verdict values), so that row supports full
+    # reconciliation only when ``v`` is present. Cardinality is available only
+    # when every row omits ``v`` *and* has an empty ``m``; otherwise partial
+    # verdict evidence must not be laundered into a weaker passing claim.
     outcomes = (
         (len(verdicts), len(mismatches or []))
         if verdicts is not None and mismatches is not None
         else None
     )
-    return identity, outcomes, "v" in row
+    explicit_verdict = "v" in row or bool(mismatches)
+    return identity, outcomes, explicit_verdict
 
 
 def _validate_inline_case(
@@ -385,7 +395,7 @@ def _validate_chunk_index(
         return "unbound", [
             _defect(
                 suite,
-                f"chunk index {index_path.as_posix()} is missing; "
+                f"chunk index {_display_path(index_path)} is missing; "
                 "report/chunk evidence binding is unbound",
             )
         ]
@@ -583,9 +593,18 @@ def validate_suite_evidence(report_path: str | Path) -> EvidenceReport:
             else:
                 report = payload
                 raw_suite = report.get("suite")
-                if not isinstance(raw_suite, str) or not raw_suite:
+                if (
+                    not isinstance(raw_suite, str)
+                    or not raw_suite
+                    or raw_suite in {".", ".."}
+                    or Path(raw_suite).name != raw_suite
+                    or "\\" in raw_suite
+                ):
                     content_defects.append(
-                        _defect(None, "report suite must be a non-empty string")
+                        _defect(
+                            None,
+                            "report suite must be a non-empty, safe path component",
+                        )
                     )
                 else:
                     suite = raw_suite

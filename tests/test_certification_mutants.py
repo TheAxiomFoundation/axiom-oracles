@@ -572,6 +572,13 @@ def test_malformed_chunk_row_is_a_defect():
     assert any(".m must be an array" in defect for defect in evidence.defects)
 
 
+def test_partial_verdict_cannot_fall_back_to_cardinality():
+    evidence = _evidence_fixture("partial_verdict")
+    assert evidence.binding == "bound"
+    assert evidence.reconciliation == "none"
+    assert any("do not support" in defect for defect in evidence.defects)
+
+
 def test_index_report_sha_must_match_exact_report_bytes():
     evidence = _evidence_fixture("stale_report_sha")
     assert evidence.content_valid is True
