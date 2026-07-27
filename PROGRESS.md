@@ -57,11 +57,22 @@
   exercise blocker keeps the overall certificate unavailable.
 - Confirmed both `exercise_census.py --check` and `certify.py --check` are
   up to date after regeneration.
+- Final gates pass: migrated-corpus and chunk-index checks, disposition
+  consistency, census/certificate freshness, bridge validation (zero errors
+  and four pre-existing conservative findings), all 54 certification mutants,
+  41 regeneration/comparison tests, the bot no-op test, Ruff, and diff checks.
+- An independent final scope/correctness review found no actionable defect,
+  missing required mutant, scope creep, or dishonest certificate state.
+- Wrote the full result to
+  `sol-evidence-round5-2026-07-27-result.md`. Copying it to the requested ops
+  path was denied by the read-only sandbox (`Operation not permitted`), so the
+  committed in-repository report is the authorized fallback.
 
 ## Next
 
-- Run every remaining named gate and any directly affected dashboard checks.
-- Commit the final result report and completed progress state.
+- No implementation work remains. A caller with write access to the ops
+  checkout may copy the committed fallback report to the requested output
+  path.
 
 ---
 
