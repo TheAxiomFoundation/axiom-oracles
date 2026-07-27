@@ -100,6 +100,17 @@ _DESCRIPTION_BY_OUTPUT = {
         "income and summed to tax units only for Populace accounting"
     ),
     (
+        "us-ny:policies/income_tax/pilot_liability_pipeline"
+        "#ny_pit_pilot_main_income_tax"
+    ): (
+        "New York Tax Law section 601 main resident individual-income-tax "
+        "schedule, computed from caller-supplied completed New York taxable "
+        "income and strict filing-status schedule classifiers over every "
+        "routed tax unit in the pinned US Populace; this bounded suite "
+        "excludes section 601(d-5) supplemental tax, credits, local taxes, "
+        "payments, and final liability"
+    ),
+    (
         "us-oh:policies/income_tax/pilot_liability_pipeline"
         "#oh_pit_pilot_schedule_tax"
     ): (

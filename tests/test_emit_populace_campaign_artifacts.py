@@ -628,6 +628,145 @@ def test_mississippi_dashboard_description_names_person_schedule():
     assert "liability" not in description.lower()
 
 
+def test_new_york_dashboard_description_names_bounded_main_schedule():
+    output = (
+        "us-ny:policies/income_tax/pilot_liability_pipeline"
+        "#ny_pit_pilot_main_income_tax"
+    )
+    report = project_state(
+        "NY",
+        {
+            "compared_count": 1,
+            "mismatch_count": 0,
+            "output": output,
+            "program": output.split("#", 1)[0],
+            "policyengine_target": "ny_main_income_tax",
+        },
+        _campaign(),
+        "campaign.json",
+    )
+
+    description = report["aggregates"][0]["description"]
+    assert "section 601 main resident" in description
+    assert "caller-supplied completed New York taxable income" in description
+    assert "strict filing-status schedule classifiers" in description
+    assert "excludes section 601(d-5) supplemental tax" in description
+    assert "local taxes" in description
+    assert "final liability" in description
+
+
+def test_committed_new_york_main_schedule_evidence_is_canonical_and_complete():
+    rulespec_sha = "5d8f3469682d8058a1396745812f614ed0f79200"
+    engine_sha = "68d65229632e371b96d8eb25c704c1977a2b7ed3"
+    executable_sha = (
+        "2e881f18dda64ae801d318a16c61525f50d094d83f5de71d330098696da9dd42"
+    )
+    concept = (
+        "us-ny:policies/income_tax/pilot_liability_pipeline"
+        "#ny_pit_pilot_main_income_tax"
+    )
+    campaign_path = (
+        REPO_ROOT / "reports/state-tax-populace-ny-campaign-2026-07-27.json"
+    )
+    report_path = (
+        DASHBOARD_DATA / "axiom-policyengine-ny-income-tax-populace.json"
+    )
+    cases_path = DASHBOARD_DATA / "cases/ny-income-tax-populace"
+
+    campaign = json.loads(campaign_path.read_text())
+    state = campaign["comparison"]["states"]["NY"]
+    cases = state["cases"]
+    assert campaign["requested_states"] == ["NY"]
+    assert campaign["routing"]["tax_unit_count"] == 87_519
+    assert campaign["routing"]["states"]["NY"]["selected_count"] == 3_741
+    assert campaign["comparison"]["sample_size_per_state"] == 0
+    assert campaign["projection_diagnostics"]["NY"] == {
+        "compared_tax_unit_count": 3_741,
+        "head_of_household_count": 217,
+        "joint_or_surviving_count": 1_543,
+        "negative_taxable_income_count": 0,
+        "positive_taxable_income_count": 3_222,
+        "single_or_separate_count": 1_981,
+        "zero_taxable_income_count": 519,
+    }
+    assert state["compared_count"] == 3_741
+    assert state["mismatch_count"] == 0
+    assert state["max_absolute_difference"] == 2.119999997317791
+    assert state["tolerance"] == 2.25
+    assert state["relative_tolerance"] == 1e-7
+    assert state["output"] == concept
+    assert state["policyengine_target"] == "ny_main_income_tax"
+    assert len({case["tax_unit_id"] for case in cases}) == 3_741
+    assert [case["tax_unit_id"] for case in cases] == sorted(
+        case["tax_unit_id"] for case in cases
+    )
+    assert all(case["matched"] for case in cases)
+
+    runtime = campaign["runtime_provenance"]
+    assert runtime["rulespec"]["commit"] == rulespec_sha
+    assert runtime["rulespec"]["working_tree"] == "clean"
+    assert runtime["axiom_engine"]["commit"] == engine_sha
+    assert runtime["axiom_engine"]["executable_sha256"] == executable_sha
+    assert runtime["axiom_engine"]["working_tree"] == "clean"
+    assert runtime["packages"] == {
+        "policyengine": "4.18.9",
+        "policyengine-us": "1.752.2",
+    }
+    assert campaign["dataset_identity"]["revision"] == (
+        "populace-us-2024-f0af251-703bd81a565c-20260620T201958Z"
+    )
+    assert campaign["dataset_identity"]["sha256"] == "16be6338f9d0"
+
+    report = json.loads(report_path.read_text())
+    assert report["suite"] == "ny-income-tax-populace"
+    assert report["case_count"] == 3_741
+    assert report["summary"] == {
+        "comparison_count": 3_741,
+        "match_count": 3_741,
+        "match_rate": 100.0,
+        "mismatch_count": 0,
+    }
+    assert report["engines"]["policyengine"] == "ny_main_income_tax"
+    assert report["aggregates"][0]["concept"] == concept
+    assert "section 601 main resident" in report["aggregates"][0]["description"]
+    assert "excludes section 601(d-5) supplemental tax" in (
+        report["aggregates"][0]["description"]
+    )
+    assert report["provenance"]["campaign_report"] == campaign_path.name
+    assert report["provenance"]["branch_diagnostics"] == (
+        campaign["projection_diagnostics"]["NY"]
+    )
+    assert report["provenance"]["rulespecs"] == [
+        {
+            "repo": "TheAxiomFoundation/rulespec-us",
+            "sha": rulespec_sha,
+        }
+    ]
+
+    index = json.loads((cases_path / "index.json").read_text())
+    chunks = [
+        json.loads((cases_path / f"chunk-{number}.json").read_text())
+        for number in range(index["chunks"])
+    ]
+    assert index["count"] == index["total_cases"] == 3_741
+    assert index["chunk_size"] == 500
+    assert [len(chunk) for chunk in chunks] == [500] * 7 + [241]
+    projected_cases = [case for chunk in chunks for case in chunk]
+    assert [case["id"] for case in projected_cases] == [
+        case["tax_unit_id"] for case in cases
+    ]
+    assert all(case["r"] == 1.0 for case in projected_cases)
+
+    manifest = json.loads((DASHBOARD_DATA / "manifest.json").read_text())
+    assert manifest["reports"].count(report_path.name) == 1
+    assert (
+        manifest["reports"].count(
+            "axiom-policyengine-taxsim-ny-income-tax-liability.json"
+        )
+        == 1
+    )
+
+
 def test_ohio_dashboard_description_names_bounded_schedule():
     output = (
         "us-oh:policies/income_tax/pilot_liability_pipeline"

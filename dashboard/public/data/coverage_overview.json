@@ -388,11 +388,13 @@
    {
     "program": "state_income_tax",
     "jurisdiction": "NY",
-    "status": "coverageOnly",
-    "source": "rulespec-us-ny/policies/tax/it-201-instructions + it-216-instructions",
+    "status": "executable",
+    "source": "rulespec-us 5d8f3469682d8058a1396745812f614ed0f79200 + pinned Populace campaign projected as ny-income-tax-populace over the canonical TY2026 Tax Law section 601 main resident schedule",
     "known_non_tanf_gaps": [
-     "used by the NYC income tax diagnostic; no NY state income tax verification suite yet"
-    ]
+     "bounded main-schedule surface only; caller supplies completed New York taxable income and strict filing-status schedule classifiers",
+     "section 601(d-5) supplemental tax, taxable-income construction, credits, local taxes, payments, and final liability remain out of scope"
+    ],
+    "suite": "ny-income-tax-populace"
    },
    {
     "program": "ssi",

@@ -162,6 +162,10 @@ STATE_RULES = {
     "ny": [
         (r"^(policies/otda/snap|regulations/18-nycrr/387)", ("snap", None)),
         (r"^(policies/otda/tanf|regulations/18-nycrr/385)", ("tanf", None)),
+        (
+            r"^policies/income_tax/pilot_liability_pipeline\.yaml$",
+            ("state_income_tax", None),
+        ),
         (r"^policies/tax/", ("state_income_tax", None)),
         (r"^statutes/NYC", ("nyc_income_tax", "NYC")),
     ],

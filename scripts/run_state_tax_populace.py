@@ -40,6 +40,19 @@ _CA_TAXABLE_INCOME_INPUT = (
     "ca_pit_pilot_supplied_completed_taxable_income"
 )
 _CA_BHST_THRESHOLD = 1_000_000.0
+_NY_INPUT_PREFIX = (
+    "us-ny:policies/income_tax/pilot_liability_pipeline#input."
+)
+_NY_TAXABLE_INCOME_INPUT = (
+    f"{_NY_INPUT_PREFIX}ny_pit_pilot_state_taxable_income"
+)
+_NY_JOINT_OR_SURVIVING_INPUT = (
+    f"{_NY_INPUT_PREFIX}"
+    "ny_pit_pilot_filing_status_joint_or_surviving_spouse"
+)
+_NY_HEAD_OF_HOUSEHOLD_INPUT = (
+    f"{_NY_INPUT_PREFIX}ny_pit_pilot_filing_status_head_of_household"
+)
 
 
 def _projection_branch_diagnostics(
@@ -91,6 +104,45 @@ def _projection_branch_diagnostics(
             "positive_taxable_income_count": sum(
                 value > 0 for value in selected_values
             ),
+        }
+    new_york = projection_inputs.get("NY")
+    if isinstance(new_york, dict):
+        ready_ids = {
+            route.tax_unit_id
+            for route in routes
+            if route.state == "NY" and route.disposition == DISPOSITION_READY
+        }
+        taxable_values = new_york[_NY_TAXABLE_INCOME_INPUT]
+        joint_values = new_york[_NY_JOINT_OR_SURVIVING_INPUT]
+        head_values = new_york[_NY_HEAD_OF_HOUSEHOLD_INPUT]
+        taxable = [float(taxable_values[item]) for item in ready_ids]
+        joint_or_surviving_count = 0
+        head_of_household_count = 0
+        single_or_separate_count = 0
+        for tax_unit_id in ready_ids:
+            joint = joint_values[tax_unit_id]
+            head = head_values[tax_unit_id]
+            if type(joint) is not bool or type(head) is not bool:
+                raise ValueError(
+                    "NY projection diagnostics require strict Boolean filing "
+                    "status values for every ready TaxUnit"
+                )
+            if joint and head:
+                raise ValueError(
+                    "NY projection diagnostics require mutually exclusive "
+                    "filing-status schedule values"
+                )
+            joint_or_surviving_count += joint
+            head_of_household_count += head
+            single_or_separate_count += not joint and not head
+        diagnostics["NY"] = {
+            "compared_tax_unit_count": len(ready_ids),
+            "negative_taxable_income_count": sum(value < 0 for value in taxable),
+            "zero_taxable_income_count": sum(value == 0 for value in taxable),
+            "positive_taxable_income_count": sum(value > 0 for value in taxable),
+            "joint_or_surviving_count": joint_or_surviving_count,
+            "head_of_household_count": head_of_household_count,
+            "single_or_separate_count": single_or_separate_count,
         }
     utah = projection_inputs.get("UT")
     if not isinstance(utah, dict):

@@ -490,6 +490,160 @@ def test_california_target_rejects_invalid_bhst_amount(value, message) -> None:
         _ca_targets(_ca_simulation(tax=(0.0, value, 10_000.0)))
 
 
+def _ny_simulation(
+    *,
+    ids=(1, 2, 3),
+    tax=(0.0, 1_000.0, 250_000.0),
+):
+    calls = []
+
+    class FakeSimulation:
+        def __init__(self, dataset):
+            assert dataset == "dataset"
+
+        def calculate(self, variable, period):
+            assert period == 2026
+            self.calls.append((variable, period))
+            return {
+                "tax_unit_id": ids,
+                "ny_main_income_tax": tax,
+            }[variable]
+
+    FakeSimulation.calls = calls
+    return FakeSimulation
+
+
+def _ny_targets(
+    microsimulation_factory,
+    *,
+    source_ids=(1, 2, 3),
+) -> dict[str, dict[int, float]]:
+    return calculate_policyengine_targets(
+        dataset="dataset",
+        raw_tax_units=pd.DataFrame({"tax_unit_id": source_ids}),
+        routes=tuple(
+            TaxUnitRoute(index, index, "NY", "36", 1, DISPOSITION_READY)
+            for index in source_ids
+        ),
+        year=2026,
+        microsimulation_factory=microsimulation_factory,
+    )
+
+
+def test_new_york_target_preserves_only_exact_main_schedule_values() -> None:
+    simulation = _ny_simulation()
+
+    assert _ny_targets(simulation) == {
+        "NY": {1: 0.0, 2: 1_000.0, 3: 250_000.0}
+    }
+    assert simulation.calls == [
+        ("tax_unit_id", 2026),
+        ("ny_main_income_tax", 2026),
+    ]
+    assert all(
+        variable not in {"ny_income_tax", "ny_state_income_tax"}
+        for variable, _ in simulation.calls
+    )
+
+
+def test_new_york_target_preserves_all_3741_routed_tax_units() -> None:
+    ids = tuple(range(1, 3_742))
+    tax = tuple(0.0 if index <= 1_000 else float(index) for index in ids)
+
+    targets = _ny_targets(
+        _ny_simulation(ids=ids, tax=tax),
+        source_ids=ids,
+    )
+
+    assert len(targets["NY"]) == 3_741
+    assert tuple(targets["NY"]) == ids
+    assert sum(value == 0 for value in targets["NY"].values()) == 1_000
+    assert sum(value > 0 for value in targets["NY"].values()) == 2_741
+
+
+@pytest.mark.parametrize(
+    ("ids", "tax", "message"),
+    [
+        ((1, 2), (0.0, 1_000.0, 250_000.0), "returned 2 IDs and 3 values"),
+        ((1, 2, 3), (0.0, 1_000.0), "returned 3 IDs and 2 values"),
+        ((2, 1, 3), (0.0, 1_000.0, 250_000.0), "order does not match"),
+        (
+            (1, 1, 3),
+            (0.0, 1_000.0, 250_000.0),
+            "duplicate NY PolicyEngine",
+        ),
+    ],
+)
+def test_new_york_target_rejects_entity_identity_and_cardinality_defects(
+    ids,
+    tax,
+    message,
+) -> None:
+    with pytest.raises(StateTaxPopulationRoutingError, match=message):
+        _ny_targets(_ny_simulation(ids=ids, tax=tax))
+
+
+def test_new_york_target_rejects_duplicate_source_entity_ids() -> None:
+    with pytest.raises(
+        StateTaxPopulationRoutingError,
+        match="duplicate NY source tax_unit_id",
+    ):
+        _ny_targets(
+            _ny_simulation(ids=(1, 1, 3)),
+            source_ids=(1, 1, 3),
+        )
+
+
+@pytest.mark.parametrize(
+    ("value", "message"),
+    [
+        (float("nan"), "non-finite"),
+        (float("inf"), "non-finite"),
+        (-0.01, "must be nonnegative"),
+    ],
+)
+def test_new_york_target_rejects_invalid_main_schedule_amount(
+    value,
+    message,
+) -> None:
+    with pytest.raises(StateTaxPopulationRoutingError, match=message):
+        _ny_targets(_ny_simulation(tax=(0.0, value, 250_000.0)))
+
+
+def test_new_york_target_rejects_broad_liability_contract_drift(
+    monkeypatch,
+) -> None:
+    drifted_contract = SimpleNamespace(
+        validation_year=2026,
+        by_state=lambda: {
+            "NY": SimpleNamespace(policyengine_target="ny_income_tax")
+        },
+    )
+    monkeypatch.setattr(
+        state_tax_runner,
+        "validate_state_tax_populace_contract",
+        lambda _contract: drifted_contract,
+    )
+
+    with pytest.raises(
+        StateTaxPopulationRoutingError,
+        match="requires the exact ny_main_income_tax target",
+    ):
+        calculate_policyengine_targets(
+            dataset="dataset",
+            raw_tax_units=pd.DataFrame({"tax_unit_id": [1]}),
+            routes=(
+                TaxUnitRoute(1, 1, "NY", "36", 1, DISPOSITION_READY),
+            ),
+            year=2026,
+            contract=drifted_contract,
+            microsimulation_factory=_ny_simulation(
+                ids=(1,),
+                tax=(0.0,),
+            ),
+        )
+
+
 def _dc_simulation(
     *,
     ids=(1, 2, 3),
@@ -1434,6 +1588,7 @@ def test_reviewed_connecticut_projection_covers_all_filing_statuses() -> None:
 def test_reviewed_new_york_projection_covers_all_filing_statuses() -> None:
     calls = []
     values = {
+        "tax_unit_id": [1, 2, 3, 4, 5],
         "ny_taxable_income": [10_000, 20_000, 30_000, 40_000, 50_000],
         "filing_status": [
             "SINGLE",
@@ -1483,10 +1638,50 @@ def test_reviewed_new_york_projection_covers_all_filing_statuses() -> None:
         5: False,
     }
     assert calls == [
+        ("tax_unit_id", 2026),
         ("ny_taxable_income", 2026),
         ("filing_status", 2026),
         ("filing_status", 2026),
     ]
+
+
+@pytest.mark.parametrize(
+    ("modeled_ids", "message"),
+    [
+        ([1, 2], "returned 2 IDs for 3 tax units"),
+        ([2, 1, 3], "order does not match"),
+        ([1, 1, 3], "duplicate NY PolicyEngine projection"),
+    ],
+)
+def test_reviewed_new_york_projection_rejects_identity_defects(
+    modeled_ids,
+    message,
+) -> None:
+    values = {
+        "tax_unit_id": modeled_ids,
+        "ny_taxable_income": [10_000, 20_000, 30_000],
+        "filing_status": ["SINGLE", "JOINT", "HEAD_OF_HOUSEHOLD"],
+    }
+
+    class FakeSimulation:
+        def __init__(self, dataset):
+            assert dataset == "dataset"
+
+        def calculate(self, variable, period):
+            assert period == 2026
+            return values[variable]
+
+    with pytest.raises(StateTaxPopulationRoutingError, match=message):
+        calculate_policyengine_projection_inputs(
+            dataset="dataset",
+            raw_tax_units=pd.DataFrame({"tax_unit_id": [1, 2, 3]}),
+            routes=tuple(
+                TaxUnitRoute(index, index, "NY", "36", 1, DISPOSITION_READY)
+                for index in range(1, 4)
+            ),
+            year=2026,
+            microsimulation_factory=FakeSimulation,
+        )
 
 
 def test_reviewed_colorado_projection_uses_completed_taxable_income() -> None:
