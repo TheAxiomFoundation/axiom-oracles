@@ -658,7 +658,6 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
         "al_income_tax": "al_income_tax_before_non_refundable_credits",
         "az_income_tax": "az_income_tax_before_non_refundable_credits",
         "ca_income_tax": "ca_income_tax_before_refundable_credits",
-        "ct_income_tax": "ct_income_tax_before_refundable_credits",
         "dc_income_tax": "dc_income_tax_before_credits",
         "de_income_tax": "de_income_tax_before_non_refundable_credits_unit",
         "ga_income_tax": "ga_income_tax_before_non_refundable_credits",
@@ -699,10 +698,18 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
         assert row.in_scope is True, final_variable
         assert row.suite is None, final_variable
         assert compared_surface in row.note, final_variable
+    ct_income_tax = by_name["ct_income_tax"]
+    assert ct_income_tax.in_scope is True
+    assert ct_income_tax.suite is None
+    assert "ordinary section 12-700 tax before the personal credit" in (
+        ct_income_tax.note
+    )
+    assert "final ct_income_tax" in ct_income_tax.note
     # North Carolina is the reviewed 2026 exception whose narrower target
     # is provably identical to the generated final variable over every
-    # positive-weight routed Populace tax unit. Alabama deliberately is not
-    # promoted from its schedule-before-credits comparison to final liability.
+    # positive-weight routed Populace tax unit. Alabama and Connecticut
+    # deliberately are not promoted from their narrower component comparisons
+    # to final liability.
     final_equivalent_state_targets = {
         "nc_income_tax": ("nc_income_tax_before_credits", "2,169"),
     }

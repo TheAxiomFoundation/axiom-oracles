@@ -5,8 +5,10 @@ from __future__ import annotations
 
 import argparse
 import json
+from datetime import datetime, timezone
 from pathlib import Path
 
+from axiom_oracles.provenance import resolve_run_kind
 from axiom_oracles.bridges.population import load_populace_dataset, population_table
 from axiom_oracles.bridges.state_tax_populace import (
     StateTaxPopulaceContract,
@@ -49,20 +51,15 @@ def _requested_states(
     not_applicable = sorted(requested & set(NO_BROAD_PIT_FIPS))
     if not_applicable:
         raise SystemExit(
-            "requested state(s) have no broad current PIT: "
-            + ", ".join(not_applicable)
+            "requested state(s) have no broad current PIT: " + ", ".join(not_applicable)
         )
-    unknown = sorted(
-        requested - set(contract.by_state()) - set(NO_BROAD_PIT_FIPS)
-    )
+    unknown = sorted(requested - set(contract.by_state()) - set(NO_BROAD_PIT_FIPS))
     if unknown:
         raise SystemExit(
             "unknown campaign state abbreviation(s): " + ", ".join(unknown)
         )
     blocked = sorted(
-        state
-        for state in requested
-        if contract.by_state()[state].status != "ready"
+        state for state in requested if contract.by_state()[state].status != "ready"
     )
     if blocked:
         raise SystemExit(
@@ -123,6 +120,9 @@ def main(argv: list[str] | None = None) -> int:
     )
     report = {
         "schema_version": "axiom.state_tax_populace_campaign_report.v1",
+        "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "generated_by": "scripts/run_state_tax_populace.py",
+        "run_kind": resolve_run_kind(),
         "requested_states": sorted(requested_states),
         "dataset_identity": identity,
         "runtime_provenance": runtime_provenance(

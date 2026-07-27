@@ -20,11 +20,53 @@ from __future__ import annotations
 
 import json
 import sys
+from datetime import datetime
 from pathlib import Path
+
+from axiom_oracles.provenance import RUN_KINDS, build_provenance
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 REPORTS = REPO_ROOT / "reports"
 DASH_DATA = REPO_ROOT / "dashboard" / "public" / "data"
+
+_DESCRIPTION_BY_OUTPUT = {
+    (
+        "us-ct:policies/income_tax/"
+        "2026_resident_ordinary_tax_before_personal_credit"
+        "#ct_pit_2026_resident_ordinary_tax_before_personal_credit"
+    ): (
+        "Connecticut resident ordinary section 12-700 tax before the "
+        "personal credit over every routed tax unit in the pinned US Populace"
+    ),
+}
+
+_REQUIRED_RUNTIME_FIELDS = {
+    "rulespec": ("repository", "commit", "working_tree"),
+    "axiom_engine": (
+        "repository",
+        "commit",
+        "executable_sha256",
+        "working_tree",
+    ),
+    "packages": ("policyengine", "policyengine-us"),
+}
+_REQUIRED_DATASET_FIELDS = ("source", "revision", "sha256", "built_with", "country")
+
+
+def _require_nonempty_fields(value: object, fields: tuple[str, ...], label: str) -> dict:
+    if not isinstance(value, dict):
+        raise ValueError(f"campaign report {label} must be an object")
+    missing = [
+        field
+        for field in fields
+        if not isinstance(value.get(field), str) or not value[field].strip()
+    ]
+    if missing:
+        raise ValueError(
+            f"campaign report {label} must carry {', '.join(fields)}; "
+            f"missing {', '.join(missing)}"
+        )
+    return value
 
 
 def latest_campaign_report() -> Path:
@@ -34,8 +76,52 @@ def latest_campaign_report() -> Path:
     return candidates[-1]
 
 
+def validate_campaign_run_provenance(campaign: dict) -> tuple[str, str, dict]:
+    """Return exact campaign-run provenance or fail before projecting.
+
+    A projection is a view of an existing comparison, not a new oracle run.
+    Its freshness timestamp and run kind must therefore come from the source
+    campaign and may never default to projection time or local environment.
+    """
+
+    generated_at = campaign.get("generated_at")
+    if not isinstance(generated_at, str):
+        raise ValueError("campaign report is missing generated_at")
+    try:
+        datetime.strptime(generated_at, "%Y-%m-%dT%H:%M:%SZ")
+    except ValueError as exc:
+        raise ValueError(
+            "campaign report generated_at must be UTC YYYY-MM-DDTHH:MM:SSZ"
+        ) from exc
+
+    run_kind = campaign.get("run_kind")
+    if run_kind not in RUN_KINDS:
+        raise ValueError(
+            f"campaign report run_kind must be one of {RUN_KINDS}; got {run_kind!r}"
+        )
+
+    runtime = campaign.get("runtime_provenance")
+    if not isinstance(runtime, dict):
+        raise ValueError("campaign report runtime_provenance must be an object")
+    for section, fields in _REQUIRED_RUNTIME_FIELDS.items():
+        _require_nonempty_fields(
+            runtime.get(section),
+            fields,
+            f"runtime_provenance.{section}",
+        )
+    _require_nonempty_fields(
+        campaign.get("dataset_identity"),
+        _REQUIRED_DATASET_FIELDS,
+        "dataset_identity",
+    )
+    return generated_at, run_kind, runtime
+
+
 def project_state(
-    state: str, entry: dict, campaign: dict, source_name: str
+    state: str,
+    entry: dict,
+    campaign: dict,
+    source_name: str,
 ) -> dict:
     compared = int(entry["compared_count"])
     mismatches = entry.get("mismatches") or []
@@ -43,15 +129,13 @@ def project_state(
     matched = compared - mismatch_count
     rate = (matched / compared * 100) if compared else 100.0
     concept = entry["output"]
-    description = (
-        "State income tax liability over every routed tax unit in the "
-        "pinned US Populace"
+    description = _DESCRIPTION_BY_OUTPUT.get(
+        concept,
+        (
+            "State income tax liability over every routed tax unit in the "
+            "pinned US Populace"
+        ),
     )
-    if state == "AL":
-        description = (
-            "Alabama Code section 40-18-5 schedule before nonrefundable "
-            "credits over every routed tax unit in the pinned US Populace"
-        )
     aggregate = {
         "comparison": "amount",
         "comparison_count": compared,
@@ -69,6 +153,35 @@ def project_state(
         "parent": None,
         "weighted_match_rate": rate,
     }
+    generated_at, run_kind, runtime = validate_campaign_run_provenance(campaign)
+    rulespec = runtime.get("rulespec") or {}
+    standard_provenance = build_provenance(
+        generated_by=(
+            "scripts/emit_populace_campaign_artifacts.py"
+            f"::{state.lower()}-income-tax-populace"
+        ),
+        run_kind=run_kind,
+        generated_at=generated_at,
+        rulespecs=[
+            {
+                "repo": rulespec.get("repository"),
+                "sha": rulespec.get("commit"),
+            }
+        ]
+        if rulespec.get("repository")
+        else None,
+    )
+    standard_provenance.update(
+        {
+            "campaign_report": source_name,
+            "dataset_identity": campaign.get("dataset_identity"),
+            "runtime_provenance": runtime or None,
+            "tolerance": entry.get("tolerance"),
+            "relative_tolerance": entry.get("relative_tolerance"),
+            "max_absolute_difference": entry.get("max_absolute_difference"),
+            "weighted_compared_tax_units": entry.get("weighted_compared_tax_units"),
+        }
+    )
     return {
         "schema_version": "axiom.comparison_report.v2",
         "suite": f"{state.lower()}-income-tax-populace",
@@ -88,17 +201,7 @@ def project_state(
             "match_rate": rate,
             "mismatch_count": mismatch_count,
         },
-        "provenance": {
-            "campaign_report": source_name,
-            "dataset_identity": campaign.get("dataset_identity"),
-            "runtime_provenance": campaign.get("runtime_provenance"),
-            "tolerance": entry.get("tolerance"),
-            "relative_tolerance": entry.get("relative_tolerance"),
-            "max_absolute_difference": entry.get("max_absolute_difference"),
-            "weighted_compared_tax_units": entry.get(
-                "weighted_compared_tax_units"
-            ),
-        },
+        "provenance": standard_provenance,
     }
 
 
@@ -155,9 +258,7 @@ def emit_case_chunks(state: str, entry: dict) -> str | None:
     out_dir.mkdir(parents=True, exist_ok=True)
     for stale in out_dir.glob("chunk-*.json"):
         stale.unlink()
-    chunks = [
-        out_rows[i : i + CHUNK_SIZE] for i in range(0, len(out_rows), CHUNK_SIZE)
-    ]
+    chunks = [out_rows[i : i + CHUNK_SIZE] for i in range(0, len(out_rows), CHUNK_SIZE)]
     for i, chunk in enumerate(chunks):
         (out_dir / f"chunk-{i}.json").write_text(
             json.dumps(chunk, separators=(",", ":"))
@@ -177,10 +278,9 @@ def emit_case_chunks(state: str, entry: dict) -> str | None:
 
 
 def main() -> int:
-    source = (
-        Path(sys.argv[1]) if len(sys.argv) > 1 else latest_campaign_report()
-    )
+    source = Path(sys.argv[1]) if len(sys.argv) > 1 else latest_campaign_report()
     campaign = json.loads(source.read_text())
+    validate_campaign_run_provenance(campaign)
     states = (campaign.get("comparison") or {}).get("states") or {}
     if not states:
         raise SystemExit(f"{source} carries no per-state comparison block")
@@ -193,7 +293,12 @@ def main() -> int:
         emitted = emit_case_chunks(state, entry)
         if emitted:
             print(emitted)
-        report = project_state(state, entry, campaign, source.name)
+        report = project_state(
+            state,
+            entry,
+            campaign,
+            source.name,
+        )
         filename = f"axiom-policyengine-{state.lower()}-income-tax-populace.json"
         (DASH_DATA / filename).write_text(
             json.dumps(report, indent=1, sort_keys=True) + "\n"
@@ -206,7 +311,7 @@ def main() -> int:
         )
 
     manifest["reports"] = reports
-    manifest_path.write_text(json.dumps(manifest, indent=1) + "\n")
+    manifest_path.write_text(json.dumps(manifest, indent=2) + "\n")
     print(f"manifest: {len(reports)} reports")
     return 0
 
