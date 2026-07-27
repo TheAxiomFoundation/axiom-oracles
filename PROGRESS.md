@@ -13,14 +13,32 @@
 ## Done
 
 - Verified the worktree is clean and checked out on `evidence-validator`.
-- Started parallel, read-only review of issue #378, PR #368, prior verification
-  history, and the current census/certificate architecture.
+- Read issue #378, PR #368, every requested verification-history record, and
+  the current census/certificate/chunk producer paths.
+- Confirmed the blocker: arbitrary inline mappings and filename-only chunks
+  can pass certification; chunks are neither parsed nor bound to the cited
+  report; the census identity is not checked against the certificate registry.
+- Aligned with PR #368 without taking its scope: this component uses its
+  `schema_version`, `case_count`, and `comparison_count` vocabulary, while
+  leaving engine/oracle/output-surface attestation to that PR. Here,
+  `binding: bound|unbound` means only report-to-chunk identity.
+- Established reconciliation semantics from the live Colorado shapes:
+  `co-snap-ecps` supports `full` because compact `v` rows reproduce 2,143
+  matches and compact `m` rows reproduce one mismatch; `co-snap-qc` supports
+  only `cardinality` because 856 chunk rows reproduce the comparison
+  cardinality but omit per-row verdict values.
+- Found two migration constraints: all 114 existing chunk indexes use the
+  legacy integer `chunks` field expected by the dashboard loader, and both
+  Colorado reports mirror inline case IDs already present in their chunks.
+  The new indexes therefore require a loader compatibility change and the two
+  bound reports must move to chunk-authoritative case storage before strict
+  cross-source ID uniqueness can hold.
 
 ## Next
 
-- Map report and chunk shapes and define the evidence validator's explicit
-  reconciliation/binding contracts.
 - Implement and test `axiom_oracles/evidence.py` plus chunk-index generation.
+- Migrate the two Colorado report views away from duplicated inline rows and
+  keep their producer behavior stable for future refreshes.
 - Generate bound indexes for `co-snap-ecps` and `co-snap-qc`.
 - Integrate binding state into the census and strict evidence checks into the
   certificate.
