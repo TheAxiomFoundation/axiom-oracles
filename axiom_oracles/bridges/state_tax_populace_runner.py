@@ -58,6 +58,7 @@ KS_K40ES_SCHEDULE_BEFORE_CREDITS_REVIEWED_TARGET = (
 OH_NONBUSINESS_BEFORE_CREDITS_DERIVED_TARGET = (
     "oh_nonbusiness_income_tax_before_non_refundable_credits_derived"
 )
+NY_MAIN_INCOME_TAX_TARGET = "ny_main_income_tax"
 UT_RESIDENT_BEFORE_CREDITS_DERIVED_TARGET = (
     "ut_resident_income_tax_before_credits_derived"
 )
@@ -887,6 +888,51 @@ def calculate_policyengine_targets(
                 zip(tax_unit_ids, derived, strict=True)
             )
             continue
+        if state == "NY":
+            if jurisdiction.policyengine_target != NY_MAIN_INCOME_TAX_TARGET:
+                raise StateTaxPopulationRoutingError(
+                    "NY: reviewed section 601 main-schedule runner requires "
+                    "the exact ny_main_income_tax target"
+                )
+            modeled_ids = [
+                _clean_id(value)
+                for value in _array_values(
+                    sim.calculate("tax_unit_id", period=year)
+                )
+            ]
+            values = _array_values(
+                sim.calculate(NY_MAIN_INCOME_TAX_TARGET, period=year)
+            )
+            if (
+                len(modeled_ids) != len(tax_unit_ids)
+                or len(values) != len(tax_unit_ids)
+            ):
+                raise StateTaxPopulationRoutingError(
+                    "NY: PolicyEngine section 601 main-schedule target "
+                    f"returned {len(modeled_ids)} IDs and {len(values)} values "
+                    f"for {len(tax_unit_ids)} tax units"
+                )
+            _reject_duplicate_ids(tax_unit_ids, "NY source tax_unit_id")
+            _reject_duplicate_ids(
+                modeled_ids, "NY PolicyEngine tax_unit_id"
+            )
+            if modeled_ids != tax_unit_ids:
+                raise StateTaxPopulationRoutingError(
+                    "NY: PolicyEngine tax_unit_id order does not match the "
+                    "certified source tax-unit order"
+                )
+            reviewed = [
+                _finite_number(value, label=NY_MAIN_INCOME_TAX_TARGET)
+                for value in values
+            ]
+            if any(value < 0 for value in reviewed):
+                raise StateTaxPopulationRoutingError(
+                    "NY: ny_main_income_tax must be nonnegative"
+                )
+            targets[state] = dict(
+                zip(tax_unit_ids, reviewed, strict=True)
+            )
+            continue
         if (
             state == "UT"
             and jurisdiction.policyengine_target
@@ -1020,6 +1066,26 @@ def calculate_policyengine_projection_inputs(
     projections: dict[str, dict[str, dict[int | str, float | bool]]] = {}
     for state in sorted(selected_states):
         jurisdiction = resolved_contract.by_state()[state]
+        if state == "NY":
+            modeled_ids = [
+                _clean_id(value)
+                for value in _array_values(
+                    sim.calculate("tax_unit_id", period=year)
+                )
+            ]
+            if len(modeled_ids) != len(tax_unit_ids):
+                raise StateTaxPopulationRoutingError(
+                    "NY: PolicyEngine projection identity returned "
+                    f"{len(modeled_ids)} IDs for {len(tax_unit_ids)} tax units"
+                )
+            _reject_duplicate_ids(
+                modeled_ids, "NY PolicyEngine projection tax_unit_id"
+            )
+            if modeled_ids != tax_unit_ids:
+                raise StateTaxPopulationRoutingError(
+                    "NY: PolicyEngine projection tax_unit_id order does not "
+                    "match the certified source tax-unit order"
+                )
         _validate_runtime_relations(
             state=state,
             relations=jurisdiction.relations,

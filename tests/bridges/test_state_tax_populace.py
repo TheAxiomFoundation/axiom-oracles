@@ -388,6 +388,23 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
         "filing_status_is_head_of_household",
         "filing_status_joint_or_surviving_spouse",
     ]
+    ny = contract.by_state()["NY"]
+    assert ny.program == "us-ny:policies/income_tax/pilot_liability_pipeline"
+    assert ny.output == f"{ny.program}#ny_pit_pilot_main_income_tax"
+    assert ny.policyengine_target == "ny_main_income_tax"
+    assert (ny.tolerance, ny.relative_tolerance) == (2.25, 1e-7)
+    assert [item.policyengine_variable for item in ny.inputs] == [
+        "ny_taxable_income",
+        "filing_status",
+        "filing_status",
+    ]
+    assert [item.policyengine_transform for item in ny.inputs] == [
+        None,
+        "filing_status_joint_or_surviving_spouse",
+        "filing_status_is_head_of_household",
+    ]
+    assert "supplemental tax" in ny.evidence
+    assert "rounded cumulative bases" in ny.evidence
     de = contract.by_state()["DE"]
     assert de.policyengine_target == (
         "de_income_tax_before_non_refundable_credits_unit"

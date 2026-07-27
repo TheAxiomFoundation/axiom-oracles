@@ -818,6 +818,15 @@
       "source": "comparisons/ny-income-tax-liability.yaml"
     },
     {
+      "suite": "ny-income-tax-populace",
+      "name": null,
+      "report": "axiom-policyengine-ny-income-tax-populace.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/state-income-tax-populace.yaml"
+    },
+    {
       "suite": "ny-snap-ecps",
       "name": "ny-snap-ecps",
       "report": "axiom-policyengine-ny-snap-ecps.json",
