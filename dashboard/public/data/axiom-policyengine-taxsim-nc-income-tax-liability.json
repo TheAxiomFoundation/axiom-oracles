@@ -223,12 +223,12 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-26T08:47:41Z",
+    "generated_at": "2026-07-27T04:12:13Z",
     "generated_by": "scripts/run_comparison.py::nc-income-tax-liability",
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": "c56a3709161c24a20c2e0b6e81b373444e0bebd4"
+        "sha": "cd11c24d6536f0f8aa866650ea0987117df72cbc"
       }
     ],
     "run_kind": "affected-rerun",
