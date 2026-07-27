@@ -6,7 +6,7 @@
   `627c08df3bf47b2bac1e4c5dc084e84d3a1c7f37`.
 - Outcome: category-(a) implementation and integration are complete; every
   requested gate is green. The final ops-path copy is sandbox-blocked, so the
-  authorized in-repository fallback report is ready to commit.
+  authorized in-repository fallback report is committed as `fabdf29f`.
 - Scope: implement only the round-5 category-(a) blocker and its integration:
   aggregate value reconciliation, dashboard-semantic row validation,
   migrated-corpus replay verification, `origin/main` merge, regeneration, and
@@ -119,11 +119,14 @@
   `/Users/maxghenis/TheAxiomFoundation/ops/reviews/sol-evidence-round6-2026-07-27/result.md`;
   the sandbox returned `Operation not permitted`. The committed repository
   report is therefore the directed fallback.
+- Repeated the exact required gates from clean committed HEAD: replay,
+  validator, census, certificate, all 62 certification mutants, the bot no-op
+  test, and the cumulative whitespace check all pass.
 
 ## Next
 
-- Commit the final progress/report state and verify the branch is clean for
-  handoff. No implementation work remains.
+- None. Verify the final bookkeeping commit leaves a clean worktree and hand
+  off; no implementation work remains.
 
 ---
 

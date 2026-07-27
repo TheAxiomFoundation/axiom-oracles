@@ -144,6 +144,7 @@ validator, regeneration, mutant, freshness, and bot gates above all passed.
 - `5cb6ec00` — commit reconciliation analysis and live baselines;
 - `35414909` — bind aggregate values and dashboard row semantics;
 - `37058619` — merge cached `origin/main` and regenerate evidence.
+- `fabdf29f` — commit this round-6 result and the delivery fallback.
 
 All commits are local. Nothing was pushed.
 
