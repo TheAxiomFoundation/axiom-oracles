@@ -446,34 +446,6 @@ residual), #229 (small-suite grounding).
 
 ---
 
-## Round-3 confirmation ledger — `1fe6bbba`
-
-### State
-
-- In progress: scoped confirmation of the two round-2 blockers and the
-  one-commit cleanup at exact target
-  `1fe6bbba90dbf320ed154d77eff7b22ead26731a`.
-- Review writes are confined to branch
-  `review/fed-parity-snap-residual-cleanup-1fe6bbba` in the disposable
-  `.git/review-worktrees/snap-residual-cleanup-1fe6bbba` worktree.
-
-### Done
-
-- Created the disposable review worktree directly from the requested target.
-- Confirmed the target's parent is round-2 head
-  `72718c962ce06385be4858b770af6d55b43bc3fa`.
-- Confirmed no remote or GitHub write is required or authorized.
-
-### Next
-
-- Verify the exact one-commit delta and PR-diff ledger/report state.
-- Check the regenerated overview's five repaired report summaries and
-  provenance.
-- Run `git diff --check` and the complete generated-chain `--check` battery.
-- Record the evidence and final verdict in `REVIEW-REPORT.md`.
-
----
-
 ## SNAP residual integration — repair round 2 — 2026-07-27
 
 ### State
@@ -609,3 +581,58 @@ residual), #229 (small-suite grounding).
 ### Next
 
 - None.
+
+---
+
+## Round-3 confirmation ledger — `1fe6bbba`
+
+### State
+
+- Evidence complete; verdict will be `REQUEST-CHANGES`.
+- The repaired overview and all generated-chain checks pass, but the target
+  does not meet the requested delta-containment and accurate-ledger
+  conditions.
+- Review writes remain confined to branch
+  `review/fed-parity-snap-residual-cleanup-1fe6bbba` in the disposable
+  `.git/review-worktrees/snap-residual-cleanup-1fe6bbba` worktree.
+
+### Done
+
+- Created the disposable review worktree directly from exact target
+  `1fe6bbba90dbf320ed154d77eff7b22ead26731a` and confirmed its parent is
+  round-2 head `72718c962ce06385be4858b770af6d55b43bc3fa`.
+- Confirmed `generate_dashboard_overview.py --check` exits 0 with 214 reports.
+  Exactly the five AL/MA/NC/SC/TN SNAP objects and source sizes changed; their
+  53/255/99/181/68 rows total 656, unexplained counts are
+  23/83/71/106/41, and all record PolicyEngine-US 1.767.3 / Core 3.30.3.
+- Confirmed `WORKER-REPORT.md` is absent from both endpoint trees and the
+  `origin/main..1fe6bbba` net PR diff.
+- Confirmed `git diff --check` exits 0 for both the net PR diff and
+  `72718c96..1fe6bbba`.
+- Ran all 13 generated-chain `--check` commands successfully: dispositions,
+  served cases, served explanations, grids, boundary suggestions, affected
+  map, vacuous/freshness, overview, conformance universes, conformance
+  compositions, dated scoreboard, ratchet, and burn-down.
+- Confirmed the target is exactly one commit above round 2, but its exact
+  three-path delta is `A REPAIR-ROUND2-REPORT.md`,
+  `D WORKER-REPORT.md`, and `M dashboard/public/data/overview.json`.
+  The added 266-line report is outside the stated overview-regeneration plus
+  report-removal delta and is not a detected rename.
+- Confirmed the target retains the round-2 `PROGRESS.md` blob unchanged. Its
+  substantive repaired row/version facts are accurate, but lines 462-465 and
+  576-579 require and describe an intentionally untracked final report; that
+  became false when `1fe6bbba` tracked `REPAIR-ROUND2-REPORT.md`. The ledger
+  also does not record the overview regeneration or stale-report removal.
+- Confirmed the newly tracked repair report itself says `72718c96` is the
+  final/current tracked head and says it is intentionally untracked (lines
+  7-15 and 28-31), contradicting its state at `1fe6bbba`.
+- The GitNexus PR-review index was unavailable. A local no-embeddings analysis
+  parsed the repository but sandbox-denied registry creation under
+  `~/.gitnexus`; its transient cache was moved out of the review worktree.
+  The target commit contains no code-symbol change, so exact Git diffs and
+  generator checks provide the relevant execution evidence.
+- Confirmed no remote or GitHub write was made.
+
+### Next
+
+- Write and commit `REVIEW-REPORT.md`, then mark this ledger complete.
