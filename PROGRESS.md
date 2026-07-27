@@ -530,7 +530,10 @@ residual), #229 (small-suite grounding).
   remained incomplete. Since the committed configs also select US `1.752.2`
   rather than the stamped `1.767.3`, no honest byte comparison was possible.
   The permitted fallback was completed via all seven chain `--check` gates.
+- Wrote the evidence-backed final verdict to `REVIEW-REPORT.md`:
+  request changes for stale served case artifacts, false/non-reproducible
+  provenance, and the current-main freshness conflict.
 
 ### Next
 
-- Commit the evidence-backed verdict to `REVIEW-REPORT.md`.
+- None.
