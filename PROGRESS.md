@@ -633,12 +633,32 @@ residual), #229 (small-suite grounding).
 - Created this disposable review worktree and independently verified that its
   initial HEAD was the exact requested SHA.
 - Established this review ledger before substantive inspection or testing.
+- Established the immutable review boundary: `1c912ab1` is two commits over
+  local `origin/main`/merge-base `98dfa9e8`; the complete PR diff is 131 added
+  lines in only `axiom_oracles/bridges/mappings/us.yaml`, and `git diff
+  --check` passes.
+- Inspected the round-2 correction commit independently: it changes only the
+  two mappings identified in round 1, replacing the guarded combined output's
+  `direct_variable` metadata with `not_comparable`/P1/restoration prose and
+  replacing the rate's `not_comparable` entry with an annual PE parameter-rate
+  mapping.
+- Built a local GitNexus graph for this disposable checkout (1,375 files,
+  8,109 nodes, 20,981 edges, 300 processes). The graph traces packaged mapping
+  loads into coverage, candidate, cloud-queue, and US-Populace consumers; it
+  finds 54 direct / 164 total upstream dependants of the shared registry loader
+  and 32 direct callers of the coverage builder. This PR changes data rows,
+  not either broadly shared function.
+- The GitNexus analysis itself completed and produced a usable local graph, but
+  its attempt to register the checkout globally failed with sandbox `EPERM` on
+  `/Users/maxghenis/.gitnexus/registry.json`. Queried the local graph directly;
+  the untracked `.gitnexus/` artifact will remain outside commits and be
+  removed after review.
 
 ## Next
 
-1. Establish the exact diff, consumer call path, schema capability, and
-   PolicyEngine 1.767.3 evidence.
+1. Establish schema capability and PolicyEngine 1.767.3 evidence.
 2. Audit all fourteen classifications and comparable metadata.
 3. Rerun the RuleSpec changed-file gate and inspect all comparable assertions.
 4. Complete containment, YAML-integrity, and clean-main regression checks.
-5. Commit the final self-contained verdict to `REVIEW-REPORT.md`.
+5. Remove local graph scratch data and commit the final self-contained verdict
+   to `REVIEW-REPORT.md`.
