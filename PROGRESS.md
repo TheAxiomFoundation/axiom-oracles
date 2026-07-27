@@ -564,8 +564,16 @@ residual), #229 (small-suite grounding).
   ratchet 4 jurisdictions / no regression; burn-down 4 series / 49 points.
   Served-case and served-disposition checks also pass at zero silent
   classifications and exact 119-entry YAML parity.
+- Final scope validation passes: 364 tests passed and 3 skipped across
+  dispositions, provenance/runner, both served emitters, case grids, affected
+  map, conformance, and vacuous-gate coverage. Ruff passes all seven Python
+  files changed relative to `origin/main`.
+- A broad repository test run reached 1,282 passed / 26 skipped at 62 percent
+  before its slow integration tail was interrupted after 6m27s. Its sole
+  failure is the unchanged `origin/main` Ohio exact-output contract expecting
+  four source-hold rules absent from both available RuleSpec-US checkouts;
+  a focused rerun reproduces 1 failure / 3 passes. No SNAP-scoped test failed.
 
 ### Next
 
-1. Run the final targeted/full test and clean-tree audit.
-2. Reconcile baseline/current counts and write the untracked final report.
+1. Reconcile baseline/current counts and write the untracked final report.
