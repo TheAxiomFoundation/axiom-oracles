@@ -1,0 +1,308 @@
+"""Hermetic negative tests for the closure-universe CI gate."""
+
+from __future__ import annotations
+
+import hashlib
+import importlib.util
+import json
+import sys
+from pathlib import Path
+
+import yaml
+
+REPO_ROOT = Path(__file__).parents[1]
+SCRIPT = REPO_ROOT / "scripts" / "closure_universe.py"
+
+CORPUS_REPO = "https://github.com/TheAxiomFoundation/axiom-corpus.git"
+CORPUS_REF = "origin/main@bf97b17baebfdf12601f7c23697524bf5adcdaed"
+RULESPEC_REPO = "https://github.com/TheAxiomFoundation/rulespec-us.git"
+RULESPEC_REF = "origin/main@1158ba5b248c3cbbfe1768357f03ca43c8b3618e"
+
+STATE_UNIVERSE = "state-10-ccr-2506-1.yaml"
+CFR_UNIVERSE = "us-7-cfr-273.yaml"
+
+
+def _load_script():
+    spec = importlib.util.spec_from_file_location("closure_universe", SCRIPT)
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+def _sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def _write_jsonl(path: Path, row: dict) -> None:
+    path.write_text(json.dumps(row, sort_keys=True) + "\n")
+
+
+def _provision(
+    citation: str,
+    heading: str,
+    *,
+    kind: str = "section",
+    version: str,
+) -> dict:
+    return {
+        "body": f"Test body for {heading}.",
+        "citation_label": heading,
+        "citation_path": citation,
+        "document_class": "regulation" if "regulation" in citation else "statute",
+        "heading": heading,
+        "id": hashlib.sha256(citation.encode()).hexdigest(),
+        "jurisdiction": citation.split("/", 1)[0],
+        "kind": kind,
+        "language": "en",
+        "level": 2,
+        "version": version,
+    }
+
+
+def _snapshot_entry(
+    data_dir: Path,
+    filename: str,
+    *,
+    source_repo: str,
+    source_ref: str,
+    source_path: str,
+) -> dict:
+    return {
+        "file": filename,
+        "source_repo": source_repo,
+        "source_ref": source_ref,
+        "source_path": source_path,
+        "sha256": _sha256(data_dir / filename),
+        "extraction": "Hermetic one-row test snapshot.",
+    }
+
+
+def _write_inputs(tmp_path: Path) -> Path:
+    """Create one valid provision per configured root and a pinned file tree."""
+    closure_dir = tmp_path / "closure"
+    data_dir = closure_dir / "data"
+    data_dir.mkdir(parents=True)
+
+    _write_jsonl(
+        data_dir / "cfr-273.jsonl",
+        _provision(
+            "us/regulation/7/273/1",
+            "7 CFR 273.1",
+            version="2026-07-15-title-7-part-273",
+        ),
+    )
+    _write_jsonl(
+        data_dir / "usc-51.jsonl",
+        _provision(
+            "us/statute/7/2011",
+            "7 U.S.C. 2011",
+            version="2026-07-21-snap-chapter-51-title-7-title-7",
+        ),
+    )
+    _write_jsonl(
+        data_dir / "co-provisions.jsonl",
+        _provision(
+            "us-co/regulation/10-ccr-2506-1/4.100",
+            "10 CCR 2506-1 4.100",
+            version="2026-07-16-10-ccr-2506-1",
+        ),
+    )
+
+    # Federal rows resolve exactly to modules. The Colorado row intentionally
+    # has no module so the baseline has one pending provision for ratchet tests.
+    (data_dir / "rulespec-us-files.txt").write_text(
+        "us/regulations/7-cfr/273/1.yaml\nus/statutes/7/2011.yaml\n"
+    )
+
+    provenance = {
+        "schema": "axiom_oracles.closure.provenance.v1",
+        "as_of": "2026-07-27",
+        "snapshots": [
+            _snapshot_entry(
+                data_dir,
+                "cfr-273.jsonl",
+                source_repo=CORPUS_REPO,
+                source_ref=CORPUS_REF,
+                source_path=(
+                    "data/corpus/provisions/us/regulation/"
+                    "2026-07-15-title-7-part-273.jsonl"
+                ),
+            ),
+            _snapshot_entry(
+                data_dir,
+                "usc-51.jsonl",
+                source_repo=CORPUS_REPO,
+                source_ref=CORPUS_REF,
+                source_path=(
+                    "data/corpus/provisions/us/statute/"
+                    "2026-07-21-snap-chapter-51-title-7-title-7.jsonl"
+                ),
+            ),
+            _snapshot_entry(
+                data_dir,
+                "co-provisions.jsonl",
+                source_repo=CORPUS_REPO,
+                source_ref=CORPUS_REF,
+                source_path=(
+                    "data/corpus/provisions/us-co/regulation/"
+                    "2026-07-16-10-ccr-2506-1.jsonl"
+                ),
+            ),
+            _snapshot_entry(
+                data_dir,
+                "rulespec-us-files.txt",
+                source_repo=RULESPEC_REPO,
+                source_ref=RULESPEC_REF,
+                source_path=".",
+            ),
+        ],
+    }
+    (data_dir / "provenance.yaml").write_text(
+        yaml.safe_dump(provenance, sort_keys=False)
+    )
+    return closure_dir
+
+
+def _generate_baseline(tmp_path: Path):
+    module = _load_script()
+    closure_dir = _write_inputs(tmp_path)
+    assert module.main(["--generate", "--closure-dir", str(closure_dir)]) == 0
+    return module, closure_dir
+
+
+def _load_universe(closure_dir: Path, filename: str) -> tuple[Path, dict]:
+    path = closure_dir / "universes" / "us-co-snap" / filename
+    return path, yaml.safe_load(path.read_text())
+
+
+def _write_universe(path: Path, document: dict) -> None:
+    path.write_text(yaml.safe_dump(document, sort_keys=False))
+
+
+def _tighten_state_pending_to_zero(module, closure_dir: Path) -> tuple[Path, dict]:
+    """Replace the one pending state row with a reviewed exclusion and tighten."""
+    path, document = _load_universe(closure_dir, STATE_UNIVERSE)
+    row = document["provisions"][0]
+    assert row["status"] == "pending"
+    assert document["ratchet"]["pending_max"] == 1
+    row["status"] = "excluded"
+    row["reason"] = "container_heading"
+    row["basis"] = "This test row is a bodyless heading container."
+    _write_universe(path, document)
+    assert module.main(["--generate", "--closure-dir", str(closure_dir)]) == 0
+    return _load_universe(closure_dir, STATE_UNIVERSE)
+
+
+def test_generated_baseline_passes_check(tmp_path, capsys):
+    module, closure_dir = _generate_baseline(tmp_path)
+
+    assert module.main(["--check", "--closure-dir", str(closure_dir)]) == 0
+    assert "closure" in capsys.readouterr().out.lower()
+
+
+def test_excluded_without_basis_fails(tmp_path, capsys):
+    module, closure_dir = _generate_baseline(tmp_path)
+    path, document = _load_universe(closure_dir, STATE_UNIVERSE)
+    row = document["provisions"][0]
+    row["status"] = "excluded"
+    row["reason"] = "container_heading"
+    row.pop("basis", None)
+    _write_universe(path, document)
+
+    assert module.main(["--check", "--closure-dir", str(closure_dir)]) == 1
+    error = capsys.readouterr().err.lower()
+    assert "4.100" in error
+    assert "basis" in error
+
+
+def test_ghost_encoded_by_fails(tmp_path, capsys):
+    module, closure_dir = _generate_baseline(tmp_path)
+    path, document = _load_universe(closure_dir, CFR_UNIVERSE)
+    row = document["provisions"][0]
+    row["encoded_by"] = ["us/regulations/7-cfr/273/ghost.yaml"]
+    _write_universe(path, document)
+
+    assert module.main(["--check", "--closure-dir", str(closure_dir)]) == 1
+    error = capsys.readouterr().err.lower()
+    assert "ghost.yaml" in error
+    assert "pinned tree" in error
+
+
+def test_taxonomy_violating_reason_fails(tmp_path, capsys):
+    module, closure_dir = _generate_baseline(tmp_path)
+    path, document = _load_universe(closure_dir, STATE_UNIVERSE)
+    row = document["provisions"][0]
+    row["status"] = "excluded"
+    row["reason"] = "procedural"
+    row["basis"] = "The test provision is procedural."
+    _write_universe(path, document)
+
+    assert module.main(["--check", "--closure-dir", str(closure_dir)]) == 1
+    error = capsys.readouterr().err.lower()
+    assert "procedural" in error
+    assert "taxonomy" in error
+
+
+def test_pending_regression_fails_when_provenance_is_unchanged(tmp_path, capsys):
+    module, closure_dir = _generate_baseline(tmp_path)
+    path, document = _tighten_state_pending_to_zero(module, closure_dir)
+    assert document["ratchet"]["pending_max"] == 0
+    row = document["provisions"][0]
+    row["status"] = "pending"
+    row.pop("reason")
+    row.pop("basis")
+    _write_universe(path, document)
+
+    assert module.main(["--check", "--closure-dir", str(closure_dir)]) == 1
+    error = capsys.readouterr().err.lower()
+    assert "state-10-ccr-2506-1" in error
+    assert "pending" in error
+    assert "ratchet" in error
+
+
+def test_pending_regression_cannot_raise_only_universe_ceiling(tmp_path, capsys):
+    module, closure_dir = _generate_baseline(tmp_path)
+    path, document = _tighten_state_pending_to_zero(module, closure_dir)
+    row = document["provisions"][0]
+    row["status"] = "pending"
+    row.pop("reason")
+    row.pop("basis")
+    document["ratchet"]["pending_max"] = 1
+    _write_universe(path, document)
+
+    assert module.main(["--generate", "--closure-dir", str(closure_dir)]) == 1
+    error = capsys.readouterr().err.lower()
+    assert "state-10-ccr-2506-1" in error
+    assert "ratchet" in error
+    assert "summary" in error
+
+
+def test_pending_regression_cannot_reset_via_universe_provenance(tmp_path, capsys):
+    module, closure_dir = _generate_baseline(tmp_path)
+    path, document = _tighten_state_pending_to_zero(module, closure_dir)
+    row = document["provisions"][0]
+    row["status"] = "pending"
+    row.pop("reason")
+    row.pop("basis")
+    document["provenance"]["source_repo"] = "https://example.invalid/tampered.git"
+    _write_universe(path, document)
+
+    assert module.main(["--generate", "--closure-dir", str(closure_dir)]) == 1
+    error = capsys.readouterr().err.lower()
+    assert "state-10-ccr-2506-1" in error
+    assert "ratchet" in error
+    assert "provenance" in error or "pins" in error
+
+
+def test_citation_drift_fails(tmp_path, capsys):
+    module, closure_dir = _generate_baseline(tmp_path)
+    path, document = _load_universe(closure_dir, STATE_UNIVERSE)
+    document["provisions"][0]["citation"] = "us-co/regulation/10-ccr-2506-1/4.999"
+    _write_universe(path, document)
+
+    assert module.main(["--check", "--closure-dir", str(closure_dir)]) == 1
+    error = capsys.readouterr().err.lower()
+    assert "citation drift" in error
+    assert "4.999" in error

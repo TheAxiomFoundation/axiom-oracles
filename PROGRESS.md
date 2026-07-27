@@ -373,7 +373,14 @@ residual), #229 (small-suite grounding).
 - Independently reproduced all three exact-join counts outside the generator.
 - Recorded the missing USC headings and flattened Colorado child hierarchy;
   source review confirms `4.802.6` and `4.900` are containers, not reserved.
+- Added a hermetic tmpdir mutant suite proving the gate rejects missing basis,
+  ghost module paths, invalid taxonomy, pending regression, and citation drift;
+  the positive control and all five requested mutants pass.
+- Closed an adversarial ratchet bypass by cross-binding the content-pin
+  fingerprint and pending ceiling in each universe and `summary.json`; two
+  additional mutants prove neither a raised local ceiling nor edited universe
+  provenance can reset the unchanged-pin ratchet. All eight tests pass.
 
 ### Next
 
-- Add mutant tests, wire CI, run validation, push, and open the PR.
+- Wire CI, run focused and full validation, push, and open the PR.
