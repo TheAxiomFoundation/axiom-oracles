@@ -28946,8 +28946,8 @@
       "difference": 634.0,
       "disposition": {
         "disposition": "bridge_artifact",
-        "id": "ca-362-self-employment-forward-ecps-56920-benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+        "id": "ca-362-period-self-employment-tanf-ecps-56920-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
       },
       "kind": "amount_difference",
       "left": 634.0,
@@ -28967,8 +28967,8 @@
       "difference": null,
       "disposition": {
         "disposition": "bridge_artifact",
-        "id": "ca-362-self-employment-forward-ecps-56920-eligibility",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+        "id": "ca-362-period-self-employment-tanf-ecps-56920-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
       },
       "kind": "eligibility_left_only",
       "left": true,
@@ -29977,7 +29977,7 @@
       "difference": 627.0,
       "disposition": {
         "disposition": "bridge_artifact",
-        "id": "ca-362-self-employment-forward-ecps-58520-benefit",
+        "id": "ca-362-period-self-employment-ecps-58520-benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
       },
       "kind": "amount_difference",
@@ -29998,7 +29998,7 @@
       "difference": null,
       "disposition": {
         "disposition": "bridge_artifact",
-        "id": "ca-362-self-employment-forward-ecps-58520-eligibility",
+        "id": "ca-362-period-self-employment-ecps-58520-eligibility",
         "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
       },
       "kind": "eligibility_left_only",
@@ -30098,8 +30098,8 @@
       "difference": 785.0,
       "disposition": {
         "disposition": "bridge_artifact",
-        "id": "ca-362-self-employment-forward-ecps-58612-benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+        "id": "ca-362-self-employment-tanf-ecps-58612-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
       },
       "kind": "amount_difference",
       "left": 785.0,
@@ -30119,8 +30119,8 @@
       "difference": null,
       "disposition": {
         "disposition": "bridge_artifact",
-        "id": "ca-362-self-employment-forward-ecps-58612-eligibility",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+        "id": "ca-362-self-employment-tanf-ecps-58612-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
       },
       "kind": "eligibility_left_only",
       "left": true,
@@ -30515,8 +30515,8 @@
       "difference": 946.0,
       "disposition": {
         "disposition": "bridge_artifact",
-        "id": "ca-362-self-employment-forward-ecps-59120-benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+        "id": "ca-362-period-self-employment-tanf-ecps-59120-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
       },
       "kind": "amount_difference",
       "left": 946.0,
@@ -30536,8 +30536,8 @@
       "difference": null,
       "disposition": {
         "disposition": "bridge_artifact",
-        "id": "ca-362-self-employment-forward-ecps-59120-eligibility",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+        "id": "ca-362-period-self-employment-tanf-ecps-59120-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
       },
       "kind": "eligibility_left_only",
       "left": true,
@@ -33448,8 +33448,8 @@
       "difference": 447.0,
       "disposition": {
         "disposition": "bridge_artifact",
-        "id": "ca-362-self-employment-forward-ecps-59009-benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+        "id": "ca-362-self-employment-tanf-ecps-59009-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
       },
       "kind": "amount_difference",
       "left": 447.0,
@@ -33469,8 +33469,8 @@
       "difference": null,
       "disposition": {
         "disposition": "bridge_artifact",
-        "id": "ca-362-self-employment-forward-ecps-59009-eligibility",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+        "id": "ca-362-self-employment-tanf-ecps-59009-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
       },
       "kind": "eligibility_left_only",
       "left": true,
@@ -33784,8 +33784,8 @@
       "difference": 770.0,
       "disposition": {
         "disposition": "bridge_artifact",
-        "id": "ca-362-self-employment-forward-ecps-59593-benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+        "id": "ca-362-period-self-employment-tanf-ecps-59593-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
       },
       "kind": "amount_difference",
       "left": 770.0,
@@ -33805,8 +33805,8 @@
       "difference": null,
       "disposition": {
         "disposition": "bridge_artifact",
-        "id": "ca-362-self-employment-forward-ecps-59593-eligibility",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+        "id": "ca-362-period-self-employment-tanf-ecps-59593-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
       },
       "kind": "eligibility_left_only",
       "left": true,
@@ -34068,7 +34068,7 @@
       "difference": 413.0,
       "disposition": {
         "disposition": "bridge_artifact",
-        "id": "ca-362-self-employment-forward-ecps-60109-benefit",
+        "id": "ca-362-period-self-employment-ecps-60109-benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
       },
       "kind": "amount_difference",
@@ -34089,7 +34089,7 @@
       "difference": null,
       "disposition": {
         "disposition": "bridge_artifact",
-        "id": "ca-362-self-employment-forward-ecps-60109-eligibility",
+        "id": "ca-362-period-self-employment-ecps-60109-eligibility",
         "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
       },
       "kind": "eligibility_left_only",
@@ -36436,7 +36436,7 @@
       "difference": 526.0,
       "disposition": {
         "disposition": "bridge_artifact",
-        "id": "ca-362-self-employment-forward-ecps-58098-benefit",
+        "id": "ca-362-period-self-employment-ecps-58098-benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
       },
       "kind": "amount_difference",
@@ -36457,7 +36457,7 @@
       "difference": null,
       "disposition": {
         "disposition": "bridge_artifact",
-        "id": "ca-362-self-employment-forward-ecps-58098-eligibility",
+        "id": "ca-362-period-self-employment-ecps-58098-eligibility",
         "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
       },
       "kind": "eligibility_left_only",
@@ -36604,8 +36604,8 @@
       "difference": 1355.0,
       "disposition": {
         "disposition": "bridge_artifact",
-        "id": "ca-362-self-employment-forward-ecps-58210-benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+        "id": "ca-362-period-self-employment-tanf-ecps-58210-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
       },
       "kind": "amount_difference",
       "left": 1355.0,
@@ -36625,8 +36625,8 @@
       "difference": null,
       "disposition": {
         "disposition": "bridge_artifact",
-        "id": "ca-362-self-employment-forward-ecps-58210-eligibility",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+        "id": "ca-362-period-self-employment-tanf-ecps-58210-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
       },
       "kind": "eligibility_left_only",
       "left": true,
@@ -37009,8 +37009,8 @@
       "difference": 613.0,
       "disposition": {
         "disposition": "bridge_artifact",
-        "id": "ca-362-self-employment-forward-ecps-59014-benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+        "id": "ca-362-self-employment-tanf-ecps-59014-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
       },
       "kind": "amount_difference",
       "left": 613.0,
@@ -37030,8 +37030,8 @@
       "difference": null,
       "disposition": {
         "disposition": "bridge_artifact",
-        "id": "ca-362-self-employment-forward-ecps-59014-eligibility",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+        "id": "ca-362-self-employment-tanf-ecps-59014-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
       },
       "kind": "eligibility_left_only",
       "left": true,
@@ -37070,11 +37070,6 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 148.0,
-      "disposition": {
-        "disposition": "bridge_artifact",
-        "id": "ca-362-self-employment-forward-ecps-59082-benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
-      },
       "kind": "amount_difference",
       "left": 148.0,
       "parent": null,
@@ -37091,11 +37086,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "bridge_artifact",
-        "id": "ca-362-self-employment-forward-ecps-59082-eligibility",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
-      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -37524,7 +37514,7 @@
       "difference": 404.0,
       "disposition": {
         "disposition": "bridge_artifact",
-        "id": "ca-362-self-employment-forward-ecps-59982-benefit",
+        "id": "ca-362-period-self-employment-ecps-59982-benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
       },
       "kind": "amount_difference",
@@ -37545,7 +37535,7 @@
       "difference": null,
       "disposition": {
         "disposition": "bridge_artifact",
-        "id": "ca-362-self-employment-forward-ecps-59982-eligibility",
+        "id": "ca-362-period-self-employment-ecps-59982-eligibility",
         "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
       },
       "kind": "eligibility_left_only",
@@ -38948,11 +38938,6 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 454.0,
-      "disposition": {
-        "disposition": "bridge_artifact",
-        "id": "ca-362-self-employment-forward-ecps-62506-benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
-      },
       "kind": "amount_difference",
       "left": 454.0,
       "parent": null,
@@ -38969,11 +38954,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "bridge_artifact",
-        "id": "ca-362-self-employment-forward-ecps-62506-eligibility",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
-      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -39534,8 +39514,8 @@
       "difference": 1183.0,
       "disposition": {
         "disposition": "bridge_artifact",
-        "id": "ca-362-self-employment-forward-ecps-57511-benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+        "id": "ca-362-self-employment-tanf-ecps-57511-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
       },
       "kind": "amount_difference",
       "left": 1183.0,
@@ -39555,8 +39535,8 @@
       "difference": null,
       "disposition": {
         "disposition": "bridge_artifact",
-        "id": "ca-362-self-employment-forward-ecps-57511-eligibility",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+        "id": "ca-362-self-employment-tanf-ecps-57511-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
       },
       "kind": "eligibility_left_only",
       "left": true,
@@ -39865,8 +39845,8 @@
       "difference": 801.0,
       "disposition": {
         "disposition": "bridge_artifact",
-        "id": "ca-362-self-employment-forward-ecps-58027-benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+        "id": "ca-362-self-employment-tanf-ecps-58027-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
       },
       "kind": "amount_difference",
       "left": 801.0,
@@ -39886,8 +39866,8 @@
       "difference": null,
       "disposition": {
         "disposition": "bridge_artifact",
-        "id": "ca-362-self-employment-forward-ecps-58027-eligibility",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+        "id": "ca-362-self-employment-tanf-ecps-58027-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
       },
       "kind": "eligibility_left_only",
       "left": true,
@@ -40391,8 +40371,8 @@
       "difference": 546.0,
       "disposition": {
         "disposition": "bridge_artifact",
-        "id": "ca-362-self-employment-forward-ecps-58771-benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+        "id": "ca-362-self-employment-tanf-ecps-58771-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
       },
       "kind": "amount_difference",
       "left": 546.0,
@@ -40412,8 +40392,8 @@
       "difference": null,
       "disposition": {
         "disposition": "bridge_artifact",
-        "id": "ca-362-self-employment-forward-ecps-58771-eligibility",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+        "id": "ca-362-self-employment-tanf-ecps-58771-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
       },
       "kind": "eligibility_left_only",
       "left": true,
@@ -41432,7 +41412,7 @@
       "difference": 979.0,
       "disposition": {
         "disposition": "bridge_artifact",
-        "id": "ca-362-self-employment-forward-ecps-60323-benefit",
+        "id": "ca-362-period-self-employment-ecps-60323-benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
       },
       "kind": "amount_difference",
@@ -41453,7 +41433,7 @@
       "difference": null,
       "disposition": {
         "disposition": "bridge_artifact",
-        "id": "ca-362-self-employment-forward-ecps-60323-eligibility",
+        "id": "ca-362-period-self-employment-ecps-60323-eligibility",
         "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
       },
       "kind": "eligibility_left_only",
@@ -42241,8 +42221,8 @@
       "difference": 785.0,
       "disposition": {
         "disposition": "bridge_artifact",
-        "id": "ca-362-self-employment-forward-ecps-61411-benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+        "id": "ca-362-self-employment-tanf-ecps-61411-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
       },
       "kind": "amount_difference",
       "left": 785.0,
@@ -42262,8 +42242,8 @@
       "difference": null,
       "disposition": {
         "disposition": "bridge_artifact",
-        "id": "ca-362-self-employment-forward-ecps-61411-eligibility",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+        "id": "ca-362-self-employment-tanf-ecps-61411-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
       },
       "kind": "eligibility_left_only",
       "left": true,
@@ -42860,18 +42840,18 @@
     "dispositioned": {
       "counts": {
         "axiom_encoding_gap": 243,
-        "bridge_artifact": 325,
+        "bridge_artifact": 321,
         "explained_residual": 0,
         "unexplained": 0,
         "upstream_engine_gap": 20
       },
       "dispositions_file": "dispositions/ca-snap-ecps.yaml",
       "expired_entries": [],
-      "explained_rate": 97.613012,
+      "explained_rate": 97.584847,
       "orphaned_entries": [],
       "raw_match_rate": 95.183777,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 96
+      "unexplained_count": 100
     },
     "error_count": 0,
     "errors_by_engine": [],

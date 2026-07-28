@@ -307,38 +307,38 @@
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
   },
   {
-   "id": "ca-362-self-employment-forward-ecps-56920-eligibility",
+   "id": "ca-362-period-self-employment-tanf-ecps-56920-eligibility",
    "concept": "us:statutes/7/2014/o#snap_eligible",
    "kind": "eligibility_left_only",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household Axiom-side counterfactual. The committed bridge gave Axiom monthly earned income 1913.29 from wages alone while live PE-US 1.767.3 carries annual self-employment income 75153.6640625. Applying the landed 4b4e34c1 projection (60 percent of gross self-employment) makes Axiom net income 4314.16, above its net limit 2680.0 by 1634.1599999999999. Corrected Axiom eligibility and benefit are therefore false/$0, exactly the pinned PolicyEngine result.",
+   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 75153.6640625 while Axiom earned input 1913.29 monthly equals PE wages/12; neutralizing self-employment induces PE annual TANF 9109.94140625 (CA TANF 9109.94140625); after removing TANF, PE annual SNAP unearned income 2.30224609375 aligns with Axiom annual unearned income 2.2800000000000002. The joint intervention january_zero_self_employment_and_tanf explicitly zeroes both self-employment and that induced TANF, which Axiom's bridge does not transport; the report uses the calendar-year monthly average although the suite requests January 2026. Counterfactual january_zero_self_employment_and_tanf keeps eligibility at True and gives SNAP 635.199951171875 versus Axiom 634.0 (delta 1.199951171875), within the $7 suite tolerance.",
    "cases": [
     "ecps-56920"
    ],
    "arithmetic": [
     {
-     "expression": "4314.16 - 2680.0",
-     "equals": 1634.1599999999999
+     "expression": "635.199951171875 - 634.0",
+     "equals": 1.199951171875
     }
    ],
-   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
   },
   {
-   "id": "ca-362-self-employment-forward-ecps-56920-benefit",
+   "id": "ca-362-period-self-employment-tanf-ecps-56920-benefit",
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household Axiom-side counterfactual. The committed bridge gave Axiom monthly earned income 1913.29 from wages alone while live PE-US 1.767.3 carries annual self-employment income 75153.6640625. Applying the landed 4b4e34c1 projection (60 percent of gross self-employment) makes Axiom net income 4314.16, above its net limit 2680.0 by 1634.1599999999999. Corrected Axiom eligibility and benefit are therefore false/$0, exactly the pinned PolicyEngine result.",
+   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 75153.6640625 while Axiom earned input 1913.29 monthly equals PE wages/12; neutralizing self-employment induces PE annual TANF 9109.94140625 (CA TANF 9109.94140625); after removing TANF, PE annual SNAP unearned income 2.30224609375 aligns with Axiom annual unearned income 2.2800000000000002. The joint intervention january_zero_self_employment_and_tanf explicitly zeroes both self-employment and that induced TANF, which Axiom's bridge does not transport; the report uses the calendar-year monthly average although the suite requests January 2026. Counterfactual january_zero_self_employment_and_tanf keeps eligibility at True and gives SNAP 635.199951171875 versus Axiom 634.0 (delta 1.199951171875), within the $7 suite tolerance.",
    "cases": [
     "ecps-56920"
    ],
    "arithmetic": [
     {
-     "expression": "4314.16 - 2680.0",
-     "equals": 1634.1599999999999
+     "expression": "635.199951171875 - 634.0",
+     "equals": 1.199951171875
     }
    ],
-   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
   },
   {
    "id": "ca-362-self-employment-ecps-56950-benefit",
@@ -787,7 +787,7 @@
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 56139.0390625 while Axiom earned input 0 monthly equals PE wages/12; PE's state/aggregate TANF is omitted from Axiom unearned income (baseline annual TANF 0.0). Counterfactual annual_zero_self_employment_and_tanf keeps eligibility at True and gives SNAP 999.5703125 versus Axiom 994.0 (delta 5.5703125), within the $7 suite tolerance.",
+   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 56139.0390625 while Axiom earned input 0 monthly equals PE wages/12; neutralizing self-employment induces PE annual TANF 16152.0 (CA TANF 16152.0); after removing TANF, PE annual SNAP unearned income 0.0 aligns with Axiom annual unearned income 0.0. The joint intervention annual_zero_self_employment_and_tanf explicitly zeroes both self-employment and that induced TANF, which Axiom's bridge does not transport. Counterfactual annual_zero_self_employment_and_tanf keeps eligibility at True and gives SNAP 999.5703125 versus Axiom 994.0 (delta 5.5703125), within the $7 suite tolerance.",
    "cases": [
     "ecps-57302"
    ],
@@ -872,7 +872,7 @@
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 40081.41796875 while Axiom earned input 0 monthly equals PE wages/12; PE's state/aggregate TANF is omitted from Axiom unearned income (baseline annual TANF 0.0). Counterfactual annual_zero_self_employment_and_tanf keeps eligibility at True and gives SNAP 549.059814453125 versus Axiom 546.0 (delta 3.059814453125), within the $7 suite tolerance.",
+   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 40081.41796875 while Axiom earned input 0 monthly equals PE wages/12; neutralizing self-employment induces PE annual TANF 11160.0 (CA TANF 11160.0); after removing TANF, PE annual SNAP unearned income 0.0 aligns with Axiom annual unearned income 0.0. The joint intervention annual_zero_self_employment_and_tanf explicitly zeroes both self-employment and that induced TANF, which Axiom's bridge does not transport. Counterfactual annual_zero_self_employment_and_tanf keeps eligibility at True and gives SNAP 549.059814453125 versus Axiom 546.0 (delta 3.059814453125), within the $7 suite tolerance.",
    "cases": [
     "ecps-57341"
    ],
@@ -1042,7 +1042,7 @@
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 55112.953125 while Axiom earned input 0 monthly equals PE wages/12; PE's state/aggregate TANF is omitted from Axiom unearned income (baseline annual TANF 0.0). Counterfactual annual_zero_self_employment_and_tanf keeps eligibility at True and gives SNAP 789.399169921875 versus Axiom 785.0 (delta 4.399169921875), within the $7 suite tolerance.",
+   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 55112.953125 while Axiom earned input 0 monthly equals PE wages/12; neutralizing self-employment induces PE annual TANF 14017.93359375 (CA TANF 14017.93359375); after removing TANF, PE annual SNAP unearned income 82.06640625 aligns with Axiom annual unearned income 82.08. The joint intervention annual_zero_self_employment_and_tanf explicitly zeroes both self-employment and that induced TANF, which Axiom's bridge does not transport. Counterfactual annual_zero_self_employment_and_tanf keeps eligibility at True and gives SNAP 789.399169921875 versus Axiom 785.0 (delta 4.399169921875), within the $7 suite tolerance.",
    "cases": [
     "ecps-57491"
    ],
@@ -1055,38 +1055,38 @@
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
   },
   {
-   "id": "ca-362-self-employment-forward-ecps-57511-eligibility",
+   "id": "ca-362-self-employment-tanf-ecps-57511-eligibility",
    "concept": "us:statutes/7/2014/o#snap_eligible",
    "kind": "eligibility_left_only",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household Axiom-side counterfactual. The committed bridge gave Axiom monthly earned income 0 from wages alone while live PE-US 1.767.3 carries annual self-employment income 114593.6640625. Applying the landed 4b4e34c1 projection (60 percent of gross self-employment) makes Axiom gross income 5830.12, above its gross limit 4079.0 by 1751.12. Corrected Axiom eligibility and benefit are therefore false/$0, exactly the pinned PolicyEngine result.",
+   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 114593.6640625 while Axiom earned input 0 monthly equals PE wages/12; neutralizing self-employment induces PE annual TANF 19908.0 (CA TANF 19908.0); after removing TANF, PE annual SNAP unearned income 1205.2421875 aligns with Axiom annual unearned income 1205.28. The joint intervention annual_zero_self_employment_and_tanf explicitly zeroes both self-employment and that induced TANF, which Axiom's bridge does not transport. Counterfactual annual_zero_self_employment_and_tanf keeps eligibility at True and gives SNAP 1189.62939453125 versus Axiom 1183.0 (delta 6.62939453125), within the $7 suite tolerance.",
    "cases": [
     "ecps-57511"
    ],
    "arithmetic": [
     {
-     "expression": "5830.12 - 4079.0",
-     "equals": 1751.12
+     "expression": "1189.62939453125 - 1183.0",
+     "equals": 6.62939453125
     }
    ],
-   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
   },
   {
-   "id": "ca-362-self-employment-forward-ecps-57511-benefit",
+   "id": "ca-362-self-employment-tanf-ecps-57511-benefit",
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household Axiom-side counterfactual. The committed bridge gave Axiom monthly earned income 0 from wages alone while live PE-US 1.767.3 carries annual self-employment income 114593.6640625. Applying the landed 4b4e34c1 projection (60 percent of gross self-employment) makes Axiom gross income 5830.12, above its gross limit 4079.0 by 1751.12. Corrected Axiom eligibility and benefit are therefore false/$0, exactly the pinned PolicyEngine result.",
+   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 114593.6640625 while Axiom earned input 0 monthly equals PE wages/12; neutralizing self-employment induces PE annual TANF 19908.0 (CA TANF 19908.0); after removing TANF, PE annual SNAP unearned income 1205.2421875 aligns with Axiom annual unearned income 1205.28. The joint intervention annual_zero_self_employment_and_tanf explicitly zeroes both self-employment and that induced TANF, which Axiom's bridge does not transport. Counterfactual annual_zero_self_employment_and_tanf keeps eligibility at True and gives SNAP 1189.62939453125 versus Axiom 1183.0 (delta 6.62939453125), within the $7 suite tolerance.",
    "cases": [
     "ecps-57511"
    ],
    "arithmetic": [
     {
-     "expression": "5830.12 - 4079.0",
-     "equals": 1751.12
+     "expression": "1189.62939453125 - 1183.0",
+     "equals": 6.62939453125
     }
    ],
-   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
   },
   {
    "id": "ca-362-self-employment-tanf-ecps-57529-benefit",
@@ -1565,38 +1565,38 @@
    "linked_issue": "https://github.com/PolicyEngine/policyengine-us/issues/9157"
   },
   {
-   "id": "ca-362-self-employment-forward-ecps-58027-eligibility",
+   "id": "ca-362-self-employment-tanf-ecps-58027-eligibility",
    "concept": "us:statutes/7/2014/o#snap_eligible",
    "kind": "eligibility_left_only",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household Axiom-side counterfactual. The committed bridge gave Axiom monthly earned income 1366.64 from wages alone while live PE-US 1.767.3 carries annual self-employment income 100203.546875. Applying the landed 4b4e34c1 projection (60 percent of gross self-employment) makes Axiom gross income 6376.82, above its gross limit 3483.0 by 2893.8199999999997. Corrected Axiom eligibility and benefit are therefore false/$0, exactly the pinned PolicyEngine result.",
+   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 100203.546875 while Axiom earned input 1366.64 monthly equals PE wages/12; neutralizing self-employment induces PE annual TANF 11552.1748046875 (CA TANF 11552.1748046875); after removing TANF, PE annual SNAP unearned income 0.0009765625 aligns with Axiom annual unearned income 0.0. The joint intervention annual_zero_self_employment_and_tanf explicitly zeroes both self-employment and that induced TANF, which Axiom's bridge does not transport. Counterfactual annual_zero_self_employment_and_tanf keeps eligibility at True and gives SNAP 807.5703125 versus Axiom 801.0 (delta 6.5703125), within the $7 suite tolerance.",
    "cases": [
     "ecps-58027"
    ],
    "arithmetic": [
     {
-     "expression": "6376.82 - 3483.0",
-     "equals": 2893.8199999999997
+     "expression": "807.5703125 - 801.0",
+     "equals": 6.5703125
     }
    ],
-   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
   },
   {
-   "id": "ca-362-self-employment-forward-ecps-58027-benefit",
+   "id": "ca-362-self-employment-tanf-ecps-58027-benefit",
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household Axiom-side counterfactual. The committed bridge gave Axiom monthly earned income 1366.64 from wages alone while live PE-US 1.767.3 carries annual self-employment income 100203.546875. Applying the landed 4b4e34c1 projection (60 percent of gross self-employment) makes Axiom gross income 6376.82, above its gross limit 3483.0 by 2893.8199999999997. Corrected Axiom eligibility and benefit are therefore false/$0, exactly the pinned PolicyEngine result.",
+   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 100203.546875 while Axiom earned input 1366.64 monthly equals PE wages/12; neutralizing self-employment induces PE annual TANF 11552.1748046875 (CA TANF 11552.1748046875); after removing TANF, PE annual SNAP unearned income 0.0009765625 aligns with Axiom annual unearned income 0.0. The joint intervention annual_zero_self_employment_and_tanf explicitly zeroes both self-employment and that induced TANF, which Axiom's bridge does not transport. Counterfactual annual_zero_self_employment_and_tanf keeps eligibility at True and gives SNAP 807.5703125 versus Axiom 801.0 (delta 6.5703125), within the $7 suite tolerance.",
    "cases": [
     "ecps-58027"
    ],
    "arithmetic": [
     {
-     "expression": "6376.82 - 3483.0",
-     "equals": 2893.8199999999997
+     "expression": "807.5703125 - 801.0",
+     "equals": 6.5703125
     }
    ],
-   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
   },
   {
    "id": "ca-362-period-ecps-58054-benefit",
@@ -1684,35 +1684,35 @@
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/pull/416"
   },
   {
-   "id": "ca-362-self-employment-forward-ecps-58098-eligibility",
+   "id": "ca-362-period-self-employment-ecps-58098-eligibility",
    "concept": "us:statutes/7/2014/o#snap_eligible",
    "kind": "eligibility_left_only",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household Axiom-side counterfactual. The committed bridge gave Axiom monthly earned income 4099.91 from wages alone while live PE-US 1.767.3 carries annual self-employment income 30061.064453125. Applying the landed 4b4e34c1 projection (60 percent of gross self-employment) makes Axiom net income 4183.96, above its net limit 3596.0 by 587.96. Corrected Axiom eligibility and benefit are therefore false/$0, exactly the pinned PolicyEngine result.",
+   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 30061.064453125 while Axiom earned input 4099.91 monthly equals PE wages/12; the report uses the calendar-year monthly average although the suite requests January 2026. Counterfactual january_zero_self_employment keeps eligibility at True and gives SNAP 526.9999389648438 versus Axiom 526.0 (delta 0.99993896484375), within the $7 suite tolerance.",
    "cases": [
     "ecps-58098"
    ],
    "arithmetic": [
     {
-     "expression": "4183.96 - 3596.0",
-     "equals": 587.96
+     "expression": "526.9999389648438 - 526.0",
+     "equals": 0.99993896484375
     }
    ],
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
   },
   {
-   "id": "ca-362-self-employment-forward-ecps-58098-benefit",
+   "id": "ca-362-period-self-employment-ecps-58098-benefit",
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household Axiom-side counterfactual. The committed bridge gave Axiom monthly earned income 4099.91 from wages alone while live PE-US 1.767.3 carries annual self-employment income 30061.064453125. Applying the landed 4b4e34c1 projection (60 percent of gross self-employment) makes Axiom net income 4183.96, above its net limit 3596.0 by 587.96. Corrected Axiom eligibility and benefit are therefore false/$0, exactly the pinned PolicyEngine result.",
+   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 30061.064453125 while Axiom earned input 4099.91 monthly equals PE wages/12; the report uses the calendar-year monthly average although the suite requests January 2026. Counterfactual january_zero_self_employment keeps eligibility at True and gives SNAP 526.9999389648438 versus Axiom 526.0 (delta 0.99993896484375), within the $7 suite tolerance.",
    "cases": [
     "ecps-58098"
    ],
    "arithmetic": [
     {
-     "expression": "4183.96 - 3596.0",
-     "equals": 587.96
+     "expression": "526.9999389648438 - 526.0",
+     "equals": 0.99993896484375
     }
    ],
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
@@ -1905,38 +1905,38 @@
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
   },
   {
-   "id": "ca-362-self-employment-forward-ecps-58210-eligibility",
+   "id": "ca-362-period-self-employment-tanf-ecps-58210-eligibility",
    "concept": "us:statutes/7/2014/o#snap_eligible",
    "kind": "eligibility_left_only",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household Axiom-side counterfactual. The committed bridge gave Axiom monthly earned income 792.65 from wages alone while live PE-US 1.767.3 carries annual self-employment income 617935.25. Applying the landed 4b4e34c1 projection (60 percent of gross self-employment) makes Axiom gross income 31941.69, above its gross limit 4675.0 by 27266.69. Corrected Axiom eligibility and benefit are therefore false/$0, exactly the pinned PolicyEngine result.",
+   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 617935.25 while Axiom earned input 792.65 monthly equals PE wages/12; neutralizing self-employment induces PE annual TANF 22824.0 (CA TANF 22824.0); after removing TANF, PE annual SNAP unearned income 3027.3720703125 aligns with Axiom annual unearned income 3027.36. The joint intervention january_zero_self_employment_and_tanf explicitly zeroes both self-employment and that induced TANF, which Axiom's bridge does not transport; the report uses the calendar-year monthly average although the suite requests January 2026. Counterfactual january_zero_self_employment_and_tanf keeps eligibility at True and gives SNAP 1355.5999755859375 versus Axiom 1355.0 (delta 0.5999755859375), within the $7 suite tolerance.",
    "cases": [
     "ecps-58210"
    ],
    "arithmetic": [
     {
-     "expression": "31941.69 - 4675.0",
-     "equals": 27266.69
+     "expression": "1355.5999755859375 - 1355.0",
+     "equals": 0.5999755859375
     }
    ],
-   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
   },
   {
-   "id": "ca-362-self-employment-forward-ecps-58210-benefit",
+   "id": "ca-362-period-self-employment-tanf-ecps-58210-benefit",
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household Axiom-side counterfactual. The committed bridge gave Axiom monthly earned income 792.65 from wages alone while live PE-US 1.767.3 carries annual self-employment income 617935.25. Applying the landed 4b4e34c1 projection (60 percent of gross self-employment) makes Axiom gross income 31941.69, above its gross limit 4675.0 by 27266.69. Corrected Axiom eligibility and benefit are therefore false/$0, exactly the pinned PolicyEngine result.",
+   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 617935.25 while Axiom earned input 792.65 monthly equals PE wages/12; neutralizing self-employment induces PE annual TANF 22824.0 (CA TANF 22824.0); after removing TANF, PE annual SNAP unearned income 3027.3720703125 aligns with Axiom annual unearned income 3027.36. The joint intervention january_zero_self_employment_and_tanf explicitly zeroes both self-employment and that induced TANF, which Axiom's bridge does not transport; the report uses the calendar-year monthly average although the suite requests January 2026. Counterfactual january_zero_self_employment_and_tanf keeps eligibility at True and gives SNAP 1355.5999755859375 versus Axiom 1355.0 (delta 0.5999755859375), within the $7 suite tolerance.",
    "cases": [
     "ecps-58210"
    ],
    "arithmetic": [
     {
-     "expression": "31941.69 - 4675.0",
-     "equals": 27266.69
+     "expression": "1355.5999755859375 - 1355.0",
+     "equals": 0.5999755859375
     }
    ],
-   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
   },
   {
    "id": "ca-362-tanf-ecps-58233-benefit",
@@ -2232,7 +2232,7 @@
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 30061.064453125 while Axiom earned input 637.76 monthly equals PE wages/12; PE's state/aggregate TANF is omitted from Axiom unearned income (baseline annual TANF 0.0). Counterfactual annual_zero_self_employment_and_tanf keeps eligibility at True and gives SNAP 1189.62939453125 versus Axiom 1183.0 (delta 6.62939453125), within the $7 suite tolerance.",
+   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 30061.064453125 while Axiom earned input 637.76 monthly equals PE wages/12; neutralizing self-employment induces PE annual TANF 19681.4140625 (CA TANF 19681.4140625); after removing TANF, PE annual SNAP unearned income 0.0 aligns with Axiom annual unearned income 0.0. The joint intervention annual_zero_self_employment_and_tanf explicitly zeroes both self-employment and that induced TANF, which Axiom's bridge does not transport. Counterfactual annual_zero_self_employment_and_tanf keeps eligibility at True and gives SNAP 1189.62939453125 versus Axiom 1183.0 (delta 6.62939453125), within the $7 suite tolerance.",
    "cases": [
     "ecps-58475"
    ],
@@ -2262,35 +2262,35 @@
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/pull/416"
   },
   {
-   "id": "ca-362-self-employment-forward-ecps-58520-eligibility",
+   "id": "ca-362-period-self-employment-ecps-58520-eligibility",
    "concept": "us:statutes/7/2014/o#snap_eligible",
    "kind": "eligibility_left_only",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household Axiom-side counterfactual. The committed bridge gave Axiom monthly earned income 2733.28 from wages alone while live PE-US 1.767.3 carries annual self-employment income 75152.6640625. Applying the landed 4b4e34c1 projection (60 percent of gross self-employment) makes Axiom gross income 6490.91, above its gross limit 3483.0 by 3007.91. Corrected Axiom eligibility and benefit are therefore false/$0, exactly the pinned PolicyEngine result.",
+   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 75152.6640625 while Axiom earned input 2733.28 monthly equals PE wages/12; the report uses the calendar-year monthly average although the suite requests January 2026. Counterfactual january_zero_self_employment keeps eligibility at True and gives SNAP 628.2999877929688 versus Axiom 627.0 (delta 1.29998779296875), within the $7 suite tolerance.",
    "cases": [
     "ecps-58520"
    ],
    "arithmetic": [
     {
-     "expression": "6490.91 - 3483.0",
-     "equals": 3007.91
+     "expression": "628.2999877929688 - 627.0",
+     "equals": 1.29998779296875
     }
    ],
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
   },
   {
-   "id": "ca-362-self-employment-forward-ecps-58520-benefit",
+   "id": "ca-362-period-self-employment-ecps-58520-benefit",
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household Axiom-side counterfactual. The committed bridge gave Axiom monthly earned income 2733.28 from wages alone while live PE-US 1.767.3 carries annual self-employment income 75152.6640625. Applying the landed 4b4e34c1 projection (60 percent of gross self-employment) makes Axiom gross income 6490.91, above its gross limit 3483.0 by 3007.91. Corrected Axiom eligibility and benefit are therefore false/$0, exactly the pinned PolicyEngine result.",
+   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 75152.6640625 while Axiom earned input 2733.28 monthly equals PE wages/12; the report uses the calendar-year monthly average although the suite requests January 2026. Counterfactual january_zero_self_employment keeps eligibility at True and gives SNAP 628.2999877929688 versus Axiom 627.0 (delta 1.29998779296875), within the $7 suite tolerance.",
    "cases": [
     "ecps-58520"
    ],
    "arithmetic": [
     {
-     "expression": "6490.91 - 3483.0",
-     "equals": 3007.91
+     "expression": "628.2999877929688 - 627.0",
+     "equals": 1.29998779296875
     }
    ],
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
@@ -2330,38 +2330,38 @@
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
   },
   {
-   "id": "ca-362-self-employment-forward-ecps-58612-eligibility",
+   "id": "ca-362-self-employment-tanf-ecps-58612-eligibility",
    "concept": "us:statutes/7/2014/o#snap_eligible",
    "kind": "eligibility_left_only",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household Axiom-side counterfactual. The committed bridge gave Axiom monthly earned income 0 from wages alone while live PE-US 1.767.3 carries annual self-employment income 85358.390625. Applying the landed 4b4e34c1 projection (60 percent of gross self-employment) makes Axiom gross income 4267.92, above its gross limit 2888.0 by 1379.92. Corrected Axiom eligibility and benefit are therefore false/$0, exactly the pinned PolicyEngine result.",
+   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 85358.390625 while Axiom earned input 0 monthly equals PE wages/12; neutralizing self-employment induces PE annual TANF 13380.0 (CA TANF 13380.0); after removing TANF, PE annual SNAP unearned income 0.0 aligns with Axiom annual unearned income 0.0. The joint intervention annual_zero_self_employment_and_tanf explicitly zeroes both self-employment and that induced TANF, which Axiom's bridge does not transport. Counterfactual annual_zero_self_employment_and_tanf keeps eligibility at True and gives SNAP 789.399169921875 versus Axiom 785.0 (delta 4.399169921875), within the $7 suite tolerance.",
    "cases": [
     "ecps-58612"
    ],
    "arithmetic": [
     {
-     "expression": "4267.92 - 2888.0",
-     "equals": 1379.92
+     "expression": "789.399169921875 - 785.0",
+     "equals": 4.399169921875
     }
    ],
-   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
   },
   {
-   "id": "ca-362-self-employment-forward-ecps-58612-benefit",
+   "id": "ca-362-self-employment-tanf-ecps-58612-benefit",
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household Axiom-side counterfactual. The committed bridge gave Axiom monthly earned income 0 from wages alone while live PE-US 1.767.3 carries annual self-employment income 85358.390625. Applying the landed 4b4e34c1 projection (60 percent of gross self-employment) makes Axiom gross income 4267.92, above its gross limit 2888.0 by 1379.92. Corrected Axiom eligibility and benefit are therefore false/$0, exactly the pinned PolicyEngine result.",
+   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 85358.390625 while Axiom earned input 0 monthly equals PE wages/12; neutralizing self-employment induces PE annual TANF 13380.0 (CA TANF 13380.0); after removing TANF, PE annual SNAP unearned income 0.0 aligns with Axiom annual unearned income 0.0. The joint intervention annual_zero_self_employment_and_tanf explicitly zeroes both self-employment and that induced TANF, which Axiom's bridge does not transport. Counterfactual annual_zero_self_employment_and_tanf keeps eligibility at True and gives SNAP 789.399169921875 versus Axiom 785.0 (delta 4.399169921875), within the $7 suite tolerance.",
    "cases": [
     "ecps-58612"
    ],
    "arithmetic": [
     {
-     "expression": "4267.92 - 2888.0",
-     "equals": 1379.92
+     "expression": "789.399169921875 - 785.0",
+     "equals": 4.399169921875
     }
    ],
-   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
   },
   {
    "id": "ca-362-tanf-ecps-58663-benefit",
@@ -2466,38 +2466,38 @@
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
   },
   {
-   "id": "ca-362-self-employment-forward-ecps-58771-eligibility",
+   "id": "ca-362-self-employment-tanf-ecps-58771-eligibility",
    "concept": "us:statutes/7/2014/o#snap_eligible",
    "kind": "eligibility_left_only",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household Axiom-side counterfactual. The committed bridge gave Axiom monthly earned income 0 from wages alone while live PE-US 1.767.3 carries annual self-employment income 65878.8203125. Applying the landed 4b4e34c1 projection (60 percent of gross self-employment) makes Axiom gross income 3293.94, above its gross limit 2292.0 by 1001.94. Corrected Axiom eligibility and benefit are therefore false/$0, exactly the pinned PolicyEngine result.",
+   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 65878.8203125 while Axiom earned input 0 monthly equals PE wages/12; neutralizing self-employment induces PE annual TANF 11160.0 (CA TANF 11160.0); after removing TANF, PE annual SNAP unearned income 0.0 aligns with Axiom annual unearned income 0.0. The joint intervention annual_zero_self_employment_and_tanf explicitly zeroes both self-employment and that induced TANF, which Axiom's bridge does not transport. Counterfactual annual_zero_self_employment_and_tanf keeps eligibility at True and gives SNAP 549.059814453125 versus Axiom 546.0 (delta 3.059814453125), within the $7 suite tolerance.",
    "cases": [
     "ecps-58771"
    ],
    "arithmetic": [
     {
-     "expression": "3293.94 - 2292.0",
-     "equals": 1001.94
+     "expression": "549.059814453125 - 546.0",
+     "equals": 3.059814453125
     }
    ],
-   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
   },
   {
-   "id": "ca-362-self-employment-forward-ecps-58771-benefit",
+   "id": "ca-362-self-employment-tanf-ecps-58771-benefit",
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household Axiom-side counterfactual. The committed bridge gave Axiom monthly earned income 0 from wages alone while live PE-US 1.767.3 carries annual self-employment income 65878.8203125. Applying the landed 4b4e34c1 projection (60 percent of gross self-employment) makes Axiom gross income 3293.94, above its gross limit 2292.0 by 1001.94. Corrected Axiom eligibility and benefit are therefore false/$0, exactly the pinned PolicyEngine result.",
+   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 65878.8203125 while Axiom earned input 0 monthly equals PE wages/12; neutralizing self-employment induces PE annual TANF 11160.0 (CA TANF 11160.0); after removing TANF, PE annual SNAP unearned income 0.0 aligns with Axiom annual unearned income 0.0. The joint intervention annual_zero_self_employment_and_tanf explicitly zeroes both self-employment and that induced TANF, which Axiom's bridge does not transport. Counterfactual annual_zero_self_employment_and_tanf keeps eligibility at True and gives SNAP 549.059814453125 versus Axiom 546.0 (delta 3.059814453125), within the $7 suite tolerance.",
    "cases": [
     "ecps-58771"
    ],
    "arithmetic": [
     {
-     "expression": "3293.94 - 2292.0",
-     "equals": 1001.94
+     "expression": "549.059814453125 - 546.0",
+     "equals": 3.059814453125
     }
    ],
-   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
   },
   {
    "id": "ca-362-period-tanf-ecps-58833-benefit",
@@ -2521,7 +2521,7 @@
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 35171.4453125 while Axiom earned input 1007.83 monthly equals PE wages/12; PE's state/aggregate TANF is omitted from Axiom unearned income (baseline annual TANF 0.0). Counterfactual annual_zero_self_employment_and_tanf keeps eligibility at True and gives SNAP 936.7953287760416 versus Axiom 930.0 (delta 6.795328776041629), within the $7 suite tolerance.",
+   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 35171.4453125 while Axiom earned input 1007.83 monthly equals PE wages/12; neutralizing self-employment induces PE annual TANF 14545.013671875 (CA TANF 14545.013671875); after removing TANF, PE annual SNAP unearned income -0.001953125 aligns with Axiom annual unearned income 0.0. The joint intervention annual_zero_self_employment_and_tanf explicitly zeroes both self-employment and that induced TANF, which Axiom's bridge does not transport. Counterfactual annual_zero_self_employment_and_tanf keeps eligibility at True and gives SNAP 936.7953287760416 versus Axiom 930.0 (delta 6.795328776041629), within the $7 suite tolerance.",
    "cases": [
     "ecps-58835"
    ],
@@ -2653,38 +2653,38 @@
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
   },
   {
-   "id": "ca-362-self-employment-forward-ecps-59009-eligibility",
+   "id": "ca-362-self-employment-tanf-ecps-59009-eligibility",
    "concept": "us:statutes/7/2014/o#snap_eligible",
    "kind": "eligibility_left_only",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household Axiom-side counterfactual. The committed bridge gave Axiom monthly earned income 1749.3 from wages alone while live PE-US 1.767.3 carries annual self-employment income 30061.064453125. Applying the landed 4b4e34c1 projection (60 percent of gross self-employment) makes Axiom gross income 3252.35, above its gross limit 2888.0 by 364.3499999999999. Corrected Axiom eligibility and benefit are therefore false/$0, exactly the pinned PolicyEngine result.",
+   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 30061.064453125 while Axiom earned input 1749.3 monthly equals PE wages/12; neutralizing self-employment induces PE annual TANF 7204.22265625 (CA TANF 7204.22265625); after removing TANF, PE annual SNAP unearned income 0.00048828125 aligns with Axiom annual unearned income 0.0. The joint intervention annual_zero_self_employment_and_tanf explicitly zeroes both self-employment and that induced TANF, which Axiom's bridge does not transport. Counterfactual annual_zero_self_employment_and_tanf keeps eligibility at True and gives SNAP 453.3241373697917 versus Axiom 447.0 (delta 6.324137369791686), within the $7 suite tolerance.",
    "cases": [
     "ecps-59009"
    ],
    "arithmetic": [
     {
-     "expression": "3252.35 - 2888.0",
-     "equals": 364.3499999999999
+     "expression": "453.3241373697917 - 447.0",
+     "equals": 6.324137369791686
     }
    ],
-   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
   },
   {
-   "id": "ca-362-self-employment-forward-ecps-59009-benefit",
+   "id": "ca-362-self-employment-tanf-ecps-59009-benefit",
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household Axiom-side counterfactual. The committed bridge gave Axiom monthly earned income 1749.3 from wages alone while live PE-US 1.767.3 carries annual self-employment income 30061.064453125. Applying the landed 4b4e34c1 projection (60 percent of gross self-employment) makes Axiom gross income 3252.35, above its gross limit 2888.0 by 364.3499999999999. Corrected Axiom eligibility and benefit are therefore false/$0, exactly the pinned PolicyEngine result.",
+   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 30061.064453125 while Axiom earned input 1749.3 monthly equals PE wages/12; neutralizing self-employment induces PE annual TANF 7204.22265625 (CA TANF 7204.22265625); after removing TANF, PE annual SNAP unearned income 0.00048828125 aligns with Axiom annual unearned income 0.0. The joint intervention annual_zero_self_employment_and_tanf explicitly zeroes both self-employment and that induced TANF, which Axiom's bridge does not transport. Counterfactual annual_zero_self_employment_and_tanf keeps eligibility at True and gives SNAP 453.3241373697917 versus Axiom 447.0 (delta 6.324137369791686), within the $7 suite tolerance.",
    "cases": [
     "ecps-59009"
    ],
    "arithmetic": [
     {
-     "expression": "3252.35 - 2888.0",
-     "equals": 364.3499999999999
+     "expression": "453.3241373697917 - 447.0",
+     "equals": 6.324137369791686
     }
    ],
-   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
   },
   {
    "id": "ca-362-tanf-ecps-59012-benefit",
@@ -2704,38 +2704,38 @@
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
   },
   {
-   "id": "ca-362-self-employment-forward-ecps-59014-eligibility",
+   "id": "ca-362-self-employment-tanf-ecps-59014-eligibility",
    "concept": "us:statutes/7/2014/o#snap_eligible",
    "kind": "eligibility_left_only",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household Axiom-side counterfactual. The committed bridge gave Axiom monthly earned income 0 from wages alone while live PE-US 1.767.3 carries annual self-employment income 80162.8359375. Applying the landed 4b4e34c1 projection (60 percent of gross self-employment) makes Axiom net income 4495.14, above its net limit 2680.0 by 1815.1400000000003. Corrected Axiom eligibility and benefit are therefore false/$0, exactly the pinned PolicyEngine result.",
+   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 80162.8359375 while Axiom earned input 0 monthly equals PE wages/12; neutralizing self-employment induces PE annual TANF 17976.0 (CA TANF 17976.0); after removing TANF, PE annual SNAP unearned income 18132.0 aligns with Axiom annual unearned income 18132.0. The joint intervention annual_zero_self_employment_and_tanf explicitly zeroes both self-employment and that induced TANF, which Axiom's bridge does not transport. Counterfactual annual_zero_self_employment_and_tanf keeps eligibility at True and gives SNAP 619.4703369140625 versus Axiom 613.0 (delta 6.4703369140625), within the $7 suite tolerance.",
    "cases": [
     "ecps-59014"
    ],
    "arithmetic": [
     {
-     "expression": "4495.14 - 2680.0",
-     "equals": 1815.1400000000003
+     "expression": "619.4703369140625 - 613.0",
+     "equals": 6.4703369140625
     }
    ],
-   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
   },
   {
-   "id": "ca-362-self-employment-forward-ecps-59014-benefit",
+   "id": "ca-362-self-employment-tanf-ecps-59014-benefit",
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household Axiom-side counterfactual. The committed bridge gave Axiom monthly earned income 0 from wages alone while live PE-US 1.767.3 carries annual self-employment income 80162.8359375. Applying the landed 4b4e34c1 projection (60 percent of gross self-employment) makes Axiom net income 4495.14, above its net limit 2680.0 by 1815.1400000000003. Corrected Axiom eligibility and benefit are therefore false/$0, exactly the pinned PolicyEngine result.",
+   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 80162.8359375 while Axiom earned input 0 monthly equals PE wages/12; neutralizing self-employment induces PE annual TANF 17976.0 (CA TANF 17976.0); after removing TANF, PE annual SNAP unearned income 18132.0 aligns with Axiom annual unearned income 18132.0. The joint intervention annual_zero_self_employment_and_tanf explicitly zeroes both self-employment and that induced TANF, which Axiom's bridge does not transport. Counterfactual annual_zero_self_employment_and_tanf keeps eligibility at True and gives SNAP 619.4703369140625 versus Axiom 613.0 (delta 6.4703369140625), within the $7 suite tolerance.",
    "cases": [
     "ecps-59014"
    ],
    "arithmetic": [
     {
-     "expression": "4495.14 - 2680.0",
-     "equals": 1815.1400000000003
+     "expression": "619.4703369140625 - 613.0",
+     "equals": 6.4703369140625
     }
    ],
-   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
   },
   {
    "id": "ca-362-self-employment-ecps-59016-benefit",
@@ -2806,40 +2806,6 @@
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
   },
   {
-   "id": "ca-362-self-employment-forward-ecps-59082-eligibility",
-   "concept": "us:statutes/7/2014/o#snap_eligible",
-   "kind": "eligibility_left_only",
-   "disposition": "bridge_artifact",
-   "mechanism": "Exact-household Axiom-side counterfactual. The committed bridge gave Axiom monthly earned income 4588.43 from wages alone while live PE-US 1.767.3 carries annual self-employment income 237271.984375. Applying the landed 4b4e34c1 projection (60 percent of gross self-employment) makes Axiom net income 12962.619999999999, above its net limit 1763.0 by 11199.619999999999. Corrected Axiom eligibility and benefit are therefore false/$0, exactly the pinned PolicyEngine result.",
-   "cases": [
-    "ecps-59082"
-   ],
-   "arithmetic": [
-    {
-     "expression": "12962.619999999999 - 1763.0",
-     "equals": 11199.619999999999
-    }
-   ],
-   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
-  },
-  {
-   "id": "ca-362-self-employment-forward-ecps-59082-benefit",
-   "concept": "us:statutes/7/2014/u#snap_benefit",
-   "kind": "amount_difference",
-   "disposition": "bridge_artifact",
-   "mechanism": "Exact-household Axiom-side counterfactual. The committed bridge gave Axiom monthly earned income 4588.43 from wages alone while live PE-US 1.767.3 carries annual self-employment income 237271.984375. Applying the landed 4b4e34c1 projection (60 percent of gross self-employment) makes Axiom net income 12962.619999999999, above its net limit 1763.0 by 11199.619999999999. Corrected Axiom eligibility and benefit are therefore false/$0, exactly the pinned PolicyEngine result.",
-   "cases": [
-    "ecps-59082"
-   ],
-   "arithmetic": [
-    {
-     "expression": "12962.619999999999 - 1763.0",
-     "equals": 11199.619999999999
-    }
-   ],
-   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
-  },
-  {
    "id": "ca-362-period-ecps-59102-benefit",
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
@@ -2874,38 +2840,38 @@
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
   },
   {
-   "id": "ca-362-self-employment-forward-ecps-59120-eligibility",
+   "id": "ca-362-period-self-employment-tanf-ecps-59120-eligibility",
    "concept": "us:statutes/7/2014/o#snap_eligible",
    "kind": "eligibility_left_only",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household Axiom-side counterfactual. The committed bridge gave Axiom monthly earned income 1257.31 from wages alone while live PE-US 1.767.3 carries annual self-employment income 76355.10668945312. Applying the landed 4b4e34c1 projection (60 percent of gross self-employment) makes Axiom net income 3877.0699999999997, above its net limit 2680.0 by 1197.0699999999997. Corrected Axiom eligibility and benefit are therefore false/$0, exactly the pinned PolicyEngine result.",
+   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 76355.10668945312 while Axiom earned input 1257.31 monthly equals PE wages/12; neutralizing self-employment induces PE annual TANF 11728.1455078125 (CA TANF 11728.1455078125); after removing TANF, PE annual SNAP unearned income 480.0146484375 aligns with Axiom annual unearned income 480.0. The joint intervention january_zero_self_employment_and_tanf explicitly zeroes both self-employment and that induced TANF, which Axiom's bridge does not transport; the report uses the calendar-year monthly average although the suite requests January 2026. Counterfactual january_zero_self_employment_and_tanf keeps eligibility at True and gives SNAP 946.9000244140625 versus Axiom 946.0 (delta 0.9000244140625), within the $7 suite tolerance.",
    "cases": [
     "ecps-59120"
    ],
    "arithmetic": [
     {
-     "expression": "3877.0699999999997 - 2680.0",
-     "equals": 1197.0699999999997
+     "expression": "946.9000244140625 - 946.0",
+     "equals": 0.9000244140625
     }
    ],
-   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
   },
   {
-   "id": "ca-362-self-employment-forward-ecps-59120-benefit",
+   "id": "ca-362-period-self-employment-tanf-ecps-59120-benefit",
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household Axiom-side counterfactual. The committed bridge gave Axiom monthly earned income 1257.31 from wages alone while live PE-US 1.767.3 carries annual self-employment income 76355.10668945312. Applying the landed 4b4e34c1 projection (60 percent of gross self-employment) makes Axiom net income 3877.0699999999997, above its net limit 2680.0 by 1197.0699999999997. Corrected Axiom eligibility and benefit are therefore false/$0, exactly the pinned PolicyEngine result.",
+   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 76355.10668945312 while Axiom earned input 1257.31 monthly equals PE wages/12; neutralizing self-employment induces PE annual TANF 11728.1455078125 (CA TANF 11728.1455078125); after removing TANF, PE annual SNAP unearned income 480.0146484375 aligns with Axiom annual unearned income 480.0. The joint intervention january_zero_self_employment_and_tanf explicitly zeroes both self-employment and that induced TANF, which Axiom's bridge does not transport; the report uses the calendar-year monthly average although the suite requests January 2026. Counterfactual january_zero_self_employment_and_tanf keeps eligibility at True and gives SNAP 946.9000244140625 versus Axiom 946.0 (delta 0.9000244140625), within the $7 suite tolerance.",
    "cases": [
     "ecps-59120"
    ],
    "arithmetic": [
     {
-     "expression": "3877.0699999999997 - 2680.0",
-     "equals": 1197.0699999999997
+     "expression": "946.9000244140625 - 946.0",
+     "equals": 0.9000244140625
     }
    ],
-   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
   },
   {
    "id": "ca-362-self-employment-forward-ecps-59123-eligibility",
@@ -3048,7 +3014,7 @@
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 27070.873046875 while Axiom earned input 1041.75 monthly equals PE wages/12; PE's state/aggregate TANF is omitted from Axiom unearned income (baseline annual TANF 0.0); the report uses the calendar-year monthly average although the suite requests January 2026. Counterfactual january_zero_self_employment_and_tanf keeps eligibility at True and gives SNAP 1124.5 versus Axiom 1124.0 (delta 0.5), within the $7 suite tolerance.",
+   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 27070.873046875 while Axiom earned input 1041.75 monthly equals PE wages/12; neutralizing self-employment induces PE annual TANF 17257.490234375 (CA TANF 17257.490234375); after removing TANF, PE annual SNAP unearned income -0.00048828125 aligns with Axiom annual unearned income 0.0. The joint intervention january_zero_self_employment_and_tanf explicitly zeroes both self-employment and that induced TANF, which Axiom's bridge does not transport; the report uses the calendar-year monthly average although the suite requests January 2026. Counterfactual january_zero_self_employment_and_tanf keeps eligibility at True and gives SNAP 1124.5 versus Axiom 1124.0 (delta 0.5), within the $7 suite tolerance.",
    "cases": [
     "ecps-59258"
    ],
@@ -3354,7 +3320,7 @@
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 34495.0703125 while Axiom earned input 425.27 monthly equals PE wages/12; PE's state/aggregate TANF is omitted from Axiom unearned income (baseline annual TANF 0.0). Counterfactual annual_zero_self_employment_and_tanf keeps eligibility at True and gives SNAP 549.059814453125 versus Axiom 546.0 (delta 3.059814453125), within the $7 suite tolerance.",
+   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 34495.0703125 while Axiom earned input 425.27 monthly equals PE wages/12; neutralizing self-employment induces PE annual TANF 10608.0 (CA TANF 10608.0); after removing TANF, PE annual SNAP unearned income 0.0 aligns with Axiom annual unearned income 0.0. The joint intervention annual_zero_self_employment_and_tanf explicitly zeroes both self-employment and that induced TANF, which Axiom's bridge does not transport. Counterfactual annual_zero_self_employment_and_tanf keeps eligibility at True and gives SNAP 549.059814453125 versus Axiom 546.0 (delta 3.059814453125), within the $7 suite tolerance.",
    "cases": [
     "ecps-59502"
    ],
@@ -3384,38 +3350,38 @@
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
   },
   {
-   "id": "ca-362-self-employment-forward-ecps-59593-eligibility",
+   "id": "ca-362-period-self-employment-tanf-ecps-59593-eligibility",
    "concept": "us:statutes/7/2014/o#snap_eligible",
    "kind": "eligibility_left_only",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household Axiom-side counterfactual. The committed bridge gave Axiom monthly earned income 2043.02 from wages alone while live PE-US 1.767.3 carries annual self-employment income 77790.9609375. Applying the landed 4b4e34c1 projection (60 percent of gross self-employment) makes Axiom gross income 5932.57, above its gross limit 4079.0 by 1853.5699999999997. Corrected Axiom eligibility and benefit are therefore false/$0, exactly the pinned PolicyEngine result.",
+   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 77790.9609375 while Axiom earned input 2043.02 monthly equals PE wages/12; neutralizing self-employment induces PE annual TANF 11249.9052734375 (CA TANF 11249.9052734375); after removing TANF, PE annual SNAP unearned income 0.000244140625 aligns with Axiom annual unearned income 0.0. The joint intervention january_zero_self_employment_and_tanf explicitly zeroes both self-employment and that induced TANF, which Axiom's bridge does not transport; the report uses the calendar-year monthly average although the suite requests January 2026. Counterfactual january_zero_self_employment_and_tanf keeps eligibility at True and gives SNAP 771.0999755859375 versus Axiom 770.0 (delta 1.0999755859375), within the $7 suite tolerance.",
    "cases": [
     "ecps-59593"
    ],
    "arithmetic": [
     {
-     "expression": "5932.57 - 4079.0",
-     "equals": 1853.5699999999997
+     "expression": "771.0999755859375 - 770.0",
+     "equals": 1.0999755859375
     }
    ],
-   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
   },
   {
-   "id": "ca-362-self-employment-forward-ecps-59593-benefit",
+   "id": "ca-362-period-self-employment-tanf-ecps-59593-benefit",
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household Axiom-side counterfactual. The committed bridge gave Axiom monthly earned income 2043.02 from wages alone while live PE-US 1.767.3 carries annual self-employment income 77790.9609375. Applying the landed 4b4e34c1 projection (60 percent of gross self-employment) makes Axiom gross income 5932.57, above its gross limit 4079.0 by 1853.5699999999997. Corrected Axiom eligibility and benefit are therefore false/$0, exactly the pinned PolicyEngine result.",
+   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 77790.9609375 while Axiom earned input 2043.02 monthly equals PE wages/12; neutralizing self-employment induces PE annual TANF 11249.9052734375 (CA TANF 11249.9052734375); after removing TANF, PE annual SNAP unearned income 0.000244140625 aligns with Axiom annual unearned income 0.0. The joint intervention january_zero_self_employment_and_tanf explicitly zeroes both self-employment and that induced TANF, which Axiom's bridge does not transport; the report uses the calendar-year monthly average although the suite requests January 2026. Counterfactual january_zero_self_employment_and_tanf keeps eligibility at True and gives SNAP 771.0999755859375 versus Axiom 770.0 (delta 1.0999755859375), within the $7 suite tolerance.",
    "cases": [
     "ecps-59593"
    ],
    "arithmetic": [
     {
-     "expression": "5932.57 - 4079.0",
-     "equals": 1853.5699999999997
+     "expression": "771.0999755859375 - 770.0",
+     "equals": 1.0999755859375
     }
    ],
-   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
   },
   {
    "id": "ca-362-tanf-ecps-59607-eligibility",
@@ -3439,7 +3405,7 @@
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 38036.08984375 while Axiom earned input 200.8 monthly equals PE wages/12; PE's state/aggregate TANF is omitted from Axiom unearned income (baseline annual TANF 0.0); the report uses the calendar-year monthly average although the suite requests January 2026. Counterfactual january_zero_self_employment_and_tanf keeps eligibility at True and gives SNAP 1421.0 versus Axiom 1421.0 (delta 0.0), within the $7 suite tolerance.",
+   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 38036.08984375 while Axiom earned input 200.8 monthly equals PE wages/12; neutralizing self-employment induces PE annual TANF 22824.0 (CA TANF 22824.0); after removing TANF, PE annual SNAP unearned income 0.0 aligns with Axiom annual unearned income 0.0. The joint intervention january_zero_self_employment_and_tanf explicitly zeroes both self-employment and that induced TANF, which Axiom's bridge does not transport; the report uses the calendar-year monthly average although the suite requests January 2026. Counterfactual january_zero_self_employment_and_tanf keeps eligibility at True and gives SNAP 1421.0 versus Axiom 1421.0 (delta 0.0), within the $7 suite tolerance.",
    "cases": [
     "ecps-59608"
    ],
@@ -3724,35 +3690,35 @@
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
   },
   {
-   "id": "ca-362-self-employment-forward-ecps-59982-eligibility",
+   "id": "ca-362-period-self-employment-ecps-59982-eligibility",
    "concept": "us:statutes/7/2014/o#snap_eligible",
    "kind": "eligibility_left_only",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household Axiom-side counterfactual. The committed bridge gave Axiom monthly earned income 2733.28 from wages alone while live PE-US 1.767.3 carries annual self-employment income 55111.953125. Applying the landed 4b4e34c1 projection (60 percent of gross self-employment) makes Axiom gross income 5488.88, above its gross limit 3483.0 by 2005.88. Corrected Axiom eligibility and benefit are therefore false/$0, exactly the pinned PolicyEngine result.",
+   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 55111.953125 while Axiom earned input 2733.28 monthly equals PE wages/12; the report uses the calendar-year monthly average although the suite requests January 2026. Counterfactual january_zero_self_employment keeps eligibility at True and gives SNAP 405.0999755859375 versus Axiom 404.0 (delta 1.0999755859375), within the $7 suite tolerance.",
    "cases": [
     "ecps-59982"
    ],
    "arithmetic": [
     {
-     "expression": "5488.88 - 3483.0",
-     "equals": 2005.88
+     "expression": "405.0999755859375 - 404.0",
+     "equals": 1.0999755859375
     }
    ],
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
   },
   {
-   "id": "ca-362-self-employment-forward-ecps-59982-benefit",
+   "id": "ca-362-period-self-employment-ecps-59982-benefit",
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household Axiom-side counterfactual. The committed bridge gave Axiom monthly earned income 2733.28 from wages alone while live PE-US 1.767.3 carries annual self-employment income 55111.953125. Applying the landed 4b4e34c1 projection (60 percent of gross self-employment) makes Axiom gross income 5488.88, above its gross limit 3483.0 by 2005.88. Corrected Axiom eligibility and benefit are therefore false/$0, exactly the pinned PolicyEngine result.",
+   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 55111.953125 while Axiom earned input 2733.28 monthly equals PE wages/12; the report uses the calendar-year monthly average although the suite requests January 2026. Counterfactual january_zero_self_employment keeps eligibility at True and gives SNAP 405.0999755859375 versus Axiom 404.0 (delta 1.0999755859375), within the $7 suite tolerance.",
    "cases": [
     "ecps-59982"
    ],
    "arithmetic": [
     {
-     "expression": "5488.88 - 3483.0",
-     "equals": 2005.88
+     "expression": "405.0999755859375 - 404.0",
+     "equals": 1.0999755859375
     }
    ],
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
@@ -3877,35 +3843,35 @@
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
   },
   {
-   "id": "ca-362-self-employment-forward-ecps-60109-eligibility",
+   "id": "ca-362-period-self-employment-ecps-60109-eligibility",
    "concept": "us:statutes/7/2014/o#snap_eligible",
    "kind": "eligibility_left_only",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household Axiom-side counterfactual. The committed bridge gave Axiom monthly earned income 4555.46 from wages alone while live PE-US 1.767.3 carries annual self-employment income 30061.064453125. Applying the landed 4b4e34c1 projection (60 percent of gross self-employment) makes Axiom gross income 6072.8, above its gross limit 4675.0 by 1397.8000000000002. Corrected Axiom eligibility and benefit are therefore false/$0, exactly the pinned PolicyEngine result.",
+   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 30061.064453125 while Axiom earned input 4555.46 monthly equals PE wages/12; the report uses the calendar-year monthly average although the suite requests January 2026. Counterfactual january_zero_self_employment keeps eligibility at True and gives SNAP 413.29998779296875 versus Axiom 413.0 (delta 0.29998779296875), within the $7 suite tolerance.",
    "cases": [
     "ecps-60109"
    ],
    "arithmetic": [
     {
-     "expression": "6072.8 - 4675.0",
-     "equals": 1397.8000000000002
+     "expression": "413.29998779296875 - 413.0",
+     "equals": 0.29998779296875
     }
    ],
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
   },
   {
-   "id": "ca-362-self-employment-forward-ecps-60109-benefit",
+   "id": "ca-362-period-self-employment-ecps-60109-benefit",
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household Axiom-side counterfactual. The committed bridge gave Axiom monthly earned income 4555.46 from wages alone while live PE-US 1.767.3 carries annual self-employment income 30061.064453125. Applying the landed 4b4e34c1 projection (60 percent of gross self-employment) makes Axiom gross income 6072.8, above its gross limit 4675.0 by 1397.8000000000002. Corrected Axiom eligibility and benefit are therefore false/$0, exactly the pinned PolicyEngine result.",
+   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 30061.064453125 while Axiom earned input 4555.46 monthly equals PE wages/12; the report uses the calendar-year monthly average although the suite requests January 2026. Counterfactual january_zero_self_employment keeps eligibility at True and gives SNAP 413.29998779296875 versus Axiom 413.0 (delta 0.29998779296875), within the $7 suite tolerance.",
    "cases": [
     "ecps-60109"
    ],
    "arithmetic": [
     {
-     "expression": "6072.8 - 4675.0",
-     "equals": 1397.8000000000002
+     "expression": "413.29998779296875 - 413.0",
+     "equals": 0.29998779296875
     }
    ],
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
@@ -4064,35 +4030,35 @@
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
   },
   {
-   "id": "ca-362-self-employment-forward-ecps-60323-eligibility",
+   "id": "ca-362-period-self-employment-ecps-60323-eligibility",
    "concept": "us:statutes/7/2014/o#snap_eligible",
    "kind": "eligibility_left_only",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household Axiom-side counterfactual. The committed bridge gave Axiom monthly earned income 1249.74 from wages alone while live PE-US 1.767.3 carries annual self-employment income 128511.0546875. Applying the landed 4b4e34c1 projection (60 percent of gross self-employment) makes Axiom gross income 7689.68, above its gross limit 3483.0 by 4206.68. Corrected Axiom eligibility and benefit are therefore false/$0, exactly the pinned PolicyEngine result.",
+   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 128511.0546875 while Axiom earned input 1249.74 monthly equals PE wages/12; the report uses the calendar-year monthly average although the suite requests January 2026. Counterfactual january_zero_self_employment keeps eligibility at True and gives SNAP 979.9000244140625 versus Axiom 979.0 (delta 0.9000244140625), within the $7 suite tolerance.",
    "cases": [
     "ecps-60323"
    ],
    "arithmetic": [
     {
-     "expression": "7689.68 - 3483.0",
-     "equals": 4206.68
+     "expression": "979.9000244140625 - 979.0",
+     "equals": 0.9000244140625
     }
    ],
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
   },
   {
-   "id": "ca-362-self-employment-forward-ecps-60323-benefit",
+   "id": "ca-362-period-self-employment-ecps-60323-benefit",
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household Axiom-side counterfactual. The committed bridge gave Axiom monthly earned income 1249.74 from wages alone while live PE-US 1.767.3 carries annual self-employment income 128511.0546875. Applying the landed 4b4e34c1 projection (60 percent of gross self-employment) makes Axiom gross income 7689.68, above its gross limit 3483.0 by 4206.68. Corrected Axiom eligibility and benefit are therefore false/$0, exactly the pinned PolicyEngine result.",
+   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 128511.0546875 while Axiom earned input 1249.74 monthly equals PE wages/12; the report uses the calendar-year monthly average although the suite requests January 2026. Counterfactual january_zero_self_employment keeps eligibility at True and gives SNAP 979.9000244140625 versus Axiom 979.0 (delta 0.9000244140625), within the $7 suite tolerance.",
    "cases": [
     "ecps-60323"
    ],
    "arithmetic": [
     {
-     "expression": "7689.68 - 3483.0",
-     "equals": 4206.68
+     "expression": "979.9000244140625 - 979.0",
+     "equals": 0.9000244140625
     }
    ],
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
@@ -4306,7 +4272,7 @@
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 44089.5625 while Axiom earned input 0 monthly equals PE wages/12; PE's state/aggregate TANF is omitted from Axiom unearned income (baseline annual TANF 0.0). Counterfactual annual_zero_self_employment_and_tanf keeps eligibility at True and gives SNAP 549.059814453125 versus Axiom 546.0 (delta 3.059814453125), within the $7 suite tolerance.",
+   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 44089.5625 while Axiom earned input 0 monthly equals PE wages/12; neutralizing self-employment induces PE annual TANF 11160.0 (CA TANF 11160.0); after removing TANF, PE annual SNAP unearned income 0.0 aligns with Axiom annual unearned income 0.0. The joint intervention annual_zero_self_employment_and_tanf explicitly zeroes both self-employment and that induced TANF, which Axiom's bridge does not transport. Counterfactual annual_zero_self_employment_and_tanf keeps eligibility at True and gives SNAP 549.059814453125 versus Axiom 546.0 (delta 3.059814453125), within the $7 suite tolerance.",
    "cases": [
     "ecps-60441"
    ],
@@ -4918,7 +4884,7 @@
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 50101.7734375 while Axiom earned input 0 monthly equals PE wages/12; PE's state/aggregate TANF is omitted from Axiom unearned income (baseline annual TANF 0.0). Counterfactual annual_zero_self_employment_and_tanf keeps eligibility at True and gives SNAP 789.399169921875 versus Axiom 785.0 (delta 4.399169921875), within the $7 suite tolerance.",
+   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 50101.7734375 while Axiom earned input 0 monthly equals PE wages/12; neutralizing self-employment induces PE annual TANF 14100.0 (CA TANF 14100.0); after removing TANF, PE annual SNAP unearned income 0.0 aligns with Axiom annual unearned income 0.0. The joint intervention annual_zero_self_employment_and_tanf explicitly zeroes both self-employment and that induced TANF, which Axiom's bridge does not transport. Counterfactual annual_zero_self_employment_and_tanf keeps eligibility at True and gives SNAP 789.399169921875 versus Axiom 785.0 (delta 4.399169921875), within the $7 suite tolerance.",
    "cases": [
     "ecps-61018"
    ],
@@ -5054,7 +5020,7 @@
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 58168.16015625 while Axiom earned input 594.49 monthly equals PE wages/12; PE's state/aggregate TANF is omitted from Axiom unearned income (baseline annual TANF 0.0). Counterfactual annual_zero_self_employment_and_tanf keeps eligibility at True and gives SNAP 1189.62939453125 versus Axiom 1183.0 (delta 6.62939453125), within the $7 suite tolerance.",
+   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 58168.16015625 while Axiom earned input 594.49 monthly equals PE wages/12; neutralizing self-employment induces PE annual TANF 19908.0 (CA TANF 19908.0); after removing TANF, PE annual SNAP unearned income 0.0 aligns with Axiom annual unearned income 0.0. The joint intervention annual_zero_self_employment_and_tanf explicitly zeroes both self-employment and that induced TANF, which Axiom's bridge does not transport. Counterfactual annual_zero_self_employment_and_tanf keeps eligibility at True and gives SNAP 1189.62939453125 versus Axiom 1183.0 (delta 6.62939453125), within the $7 suite tolerance.",
    "cases": [
     "ecps-61315"
    ],
@@ -5152,38 +5118,38 @@
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
   },
   {
-   "id": "ca-362-self-employment-forward-ecps-61411-eligibility",
+   "id": "ca-362-self-employment-tanf-ecps-61411-eligibility",
    "concept": "us:statutes/7/2014/o#snap_eligible",
    "kind": "eligibility_left_only",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household Axiom-side counterfactual. The committed bridge gave Axiom monthly earned income 0 from wages alone while live PE-US 1.767.3 carries annual self-employment income 64390.80078125. Applying the landed 4b4e34c1 projection (60 percent of gross self-employment) makes Axiom gross income 3219.54, above its gross limit 2888.0 by 331.53999999999996. Corrected Axiom eligibility and benefit are therefore false/$0, exactly the pinned PolicyEngine result.",
+   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 64390.80078125 while Axiom earned input 0 monthly equals PE wages/12; neutralizing self-employment induces PE annual TANF 13380.0 (CA TANF 13380.0); after removing TANF, PE annual SNAP unearned income 0.0 aligns with Axiom annual unearned income 0.0. The joint intervention annual_zero_self_employment_and_tanf explicitly zeroes both self-employment and that induced TANF, which Axiom's bridge does not transport. Counterfactual annual_zero_self_employment_and_tanf keeps eligibility at True and gives SNAP 789.399169921875 versus Axiom 785.0 (delta 4.399169921875), within the $7 suite tolerance.",
    "cases": [
     "ecps-61411"
    ],
    "arithmetic": [
     {
-     "expression": "3219.54 - 2888.0",
-     "equals": 331.53999999999996
+     "expression": "789.399169921875 - 785.0",
+     "equals": 4.399169921875
     }
    ],
-   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
   },
   {
-   "id": "ca-362-self-employment-forward-ecps-61411-benefit",
+   "id": "ca-362-self-employment-tanf-ecps-61411-benefit",
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household Axiom-side counterfactual. The committed bridge gave Axiom monthly earned income 0 from wages alone while live PE-US 1.767.3 carries annual self-employment income 64390.80078125. Applying the landed 4b4e34c1 projection (60 percent of gross self-employment) makes Axiom gross income 3219.54, above its gross limit 2888.0 by 331.53999999999996. Corrected Axiom eligibility and benefit are therefore false/$0, exactly the pinned PolicyEngine result.",
+   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 64390.80078125 while Axiom earned input 0 monthly equals PE wages/12; neutralizing self-employment induces PE annual TANF 13380.0 (CA TANF 13380.0); after removing TANF, PE annual SNAP unearned income 0.0 aligns with Axiom annual unearned income 0.0. The joint intervention annual_zero_self_employment_and_tanf explicitly zeroes both self-employment and that induced TANF, which Axiom's bridge does not transport. Counterfactual annual_zero_self_employment_and_tanf keeps eligibility at True and gives SNAP 789.399169921875 versus Axiom 785.0 (delta 4.399169921875), within the $7 suite tolerance.",
    "cases": [
     "ecps-61411"
    ],
    "arithmetic": [
     {
-     "expression": "3219.54 - 2888.0",
-     "equals": 331.53999999999996
+     "expression": "789.399169921875 - 785.0",
+     "equals": 4.399169921875
     }
    ],
-   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
   },
   {
    "id": "ca-362-period-tanf-ecps-61433-benefit",
@@ -5666,7 +5632,7 @@
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 36930.01953125 while Axiom earned input 0 monthly equals PE wages/12; PE's state/aggregate TANF is omitted from Axiom unearned income (baseline annual TANF 0.0). Counterfactual annual_zero_self_employment_and_tanf keeps eligibility at True and gives SNAP 999.5703125 versus Axiom 994.0 (delta 5.5703125), within the $7 suite tolerance.",
+   "mechanism": "Exact-household live bridge counterfactual on PE 4.18.9 / PE-US 1.767.3 / Core 3.30.3. The live annual bridge reproduces the pinned PE amount exactly. PE carries annual self-employment 36930.01953125 while Axiom earned input 0 monthly equals PE wages/12; neutralizing self-employment induces PE annual TANF 16992.0 (CA TANF 16992.0); after removing TANF, PE annual SNAP unearned income 0.0 aligns with Axiom annual unearned income 0.0. The joint intervention annual_zero_self_employment_and_tanf explicitly zeroes both self-employment and that induced TANF, which Axiom's bridge does not transport. Counterfactual annual_zero_self_employment_and_tanf keeps eligibility at True and gives SNAP 999.5703125 versus Axiom 994.0 (delta 5.5703125), within the $7 suite tolerance.",
    "cases": [
     "ecps-62072"
    ],
@@ -5844,40 +5810,6 @@
     {
      "expression": "354.0 - 354.8999938964844",
      "equals": -0.899993896484375
-    }
-   ],
-   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
-  },
-  {
-   "id": "ca-362-self-employment-forward-ecps-62506-eligibility",
-   "concept": "us:statutes/7/2014/o#snap_eligible",
-   "kind": "eligibility_left_only",
-   "disposition": "bridge_artifact",
-   "mechanism": "Exact-household Axiom-side counterfactual. The committed bridge gave Axiom monthly earned income 3787.23 from wages alone while live PE-US 1.767.3 carries annual self-employment income 30031.00390625. Applying the landed 4b4e34c1 projection (60 percent of gross self-employment) makes Axiom net income 3602.4799999999996, above its net limit 2680.0 by 922.4799999999996. Corrected Axiom eligibility and benefit are therefore false/$0, exactly the pinned PolicyEngine result.",
-   "cases": [
-    "ecps-62506"
-   ],
-   "arithmetic": [
-    {
-     "expression": "3602.4799999999996 - 2680.0",
-     "equals": 922.4799999999996
-    }
-   ],
-   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
-  },
-  {
-   "id": "ca-362-self-employment-forward-ecps-62506-benefit",
-   "concept": "us:statutes/7/2014/u#snap_benefit",
-   "kind": "amount_difference",
-   "disposition": "bridge_artifact",
-   "mechanism": "Exact-household Axiom-side counterfactual. The committed bridge gave Axiom monthly earned income 3787.23 from wages alone while live PE-US 1.767.3 carries annual self-employment income 30031.00390625. Applying the landed 4b4e34c1 projection (60 percent of gross self-employment) makes Axiom net income 3602.4799999999996, above its net limit 2680.0 by 922.4799999999996. Corrected Axiom eligibility and benefit are therefore false/$0, exactly the pinned PolicyEngine result.",
-   "cases": [
-    "ecps-62506"
-   ],
-   "arithmetic": [
-    {
-     "expression": "3602.4799999999996 - 2680.0",
-     "equals": 922.4799999999996
     }
    ],
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"

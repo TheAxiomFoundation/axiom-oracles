@@ -834,11 +834,22 @@ residual), #229 (small-suite grounding).
   requirements, base-YAML byte drift, and a byte-identical rebuild of the
   corrected document. The replay/disposition suite now passes 30/30, and the
   full builder `--check` succeeds from the explicit Git base.
+- Applied the corrected CA document and regenerated both served CA surfaces.
+  The canonical report and the complete 7,101-case explorer now agree on all
+  684 mismatch rows: 584 annotated and 100 unexplained, with no missing or
+  extra annotation. The served disposition artifact has all 345 raw YAML
+  entries.
+- Verified the case overlay changed only annotations in chunks 0 through 13;
+  `chunk-14.json` and `index.json` remain byte-identical.
+- The global join also surfaced four unrelated reports containing stale
+  annotations no longer selected by their current disposition documents. Those
+  command-generated changes were restored exactly while the scope and complete
+  check-chain consequence are audited.
 
 ### Next
 
-1. Apply the corrected disposition set and regenerate every canonical and
-   served artifact.
+1. Reconcile the four pre-existing non-CA stale annotations required by the
+   corrected idempotent join behavior.
 2. Refresh scoreboard, burn-down, history, and report text.
 3. Run the complete repository `--check` chain and focused tests; record exact
    commands and results in the final untracked worker report.
