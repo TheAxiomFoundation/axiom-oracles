@@ -626,10 +626,15 @@ residual), #229 (small-suite grounding).
 - The reviewed merge commit's second parent is the locally cached
   `origin/main` object `43631d24c8e161ca1af36368a2b5abaa73c3a910`.
 - Live `git fetch origin main` failed because the sandbox could not resolve
-  `github.com`; remote freshness remains to be corroborated if another
-  available read-only channel permits it.
+  `github.com`. A parallel read-only `gh pr view` succeeded later and
+  corroborated the exact head, passing `test` and `gettsim-live` checks, and
+  the current GitHub merge state `DIRTY` / `CONFLICTING`; the live endpoint is
+  intermittent in this sandbox and the primary agent's repeat query failed.
 - Review-only artifacts may be committed on this throwaway branch. No source,
   PR-branch, remote, or GitHub writes are permitted.
+- Current review verdict is `REQUEST-CHANGES`: both gridded legal outputs fail
+  the requested comparable-only invariant, and both suites have required
+  domain-coverage gaps.
 
 ### Done
 
@@ -638,13 +643,39 @@ residual), #229 (small-suite grounding).
 - Loaded the PolicyEngine review, calculation, US-domain, and healthcare
   guidance.
 - Created this isolated worktree directly from the claimed PR head.
+- Saved the full diff and compact review context in `/tmp` for independent
+  reviewers.
+- Verified the retained IRS Notice 2025-67 ceilings and 26 USC 25B's inclusive
+  “not over” rule, separate $2,000 cap per eligible individual, and section
+  911/931/933 add-back in subsection (e).
+- Compiled the exact RuleSpec pin and directly executed all 25 saver cases.
+  The review helper `review-artifacts/recompute_savers.py` independently
+  recomputes the statute, executes Axiom, and evaluates live PolicyEngine
+  4.18.9 / US 1.767.3 / Core 3.30.3. All Axiom values equal the independent
+  statutory calculation; every one of the 11 live PE deltas equals its
+  disposition.
+- Confirmed the joint $5,000 + $5,000 case separately caps each contribution
+  at $2,000 and yields a $2,000 credit, and confirmed the section 911 case has
+  Axiom modified AGI $24,251 and credit $400.
+- Found that the saver suite lacks a below-boundary probe for each of the nine
+  requested tier boundaries; it contains exact and one-dollar-above cases
+  only.
+- Found two incorrect references to the add-back as section 25B(d)(3);
+  current law and the correct RuleSpec implementation place it in section
+  25B(e).
+- Queried the bridge registry directly. The saver pipeline output is unmapped
+  (its statute-level counterpart is `not_comparable`), while the exact
+  combined Additional Medicare output is explicitly `not_comparable`.
+- Regenerated the 18-case Additional Medicare grid with the exact pinned PE
+  stack and independently recomputed every result. All 18 match, but the suite
+  lacks required below/exact coordinated-threshold coverage for joint and MFS
+  cases and lacks SE-only above-threshold probes for MFS and the $200,000
+  category.
 
 ### Next
 
-- Save the PR context/diff handoff files required by the review workflow.
-- Recompute all 11 Saver's Credit boundary divergences in both engines and
-  validate the statutory arithmetic against the retained corpus.
-- Audit suite-domain coverage, bridge comparability, generation provenance,
-  row containment, scoreboard invariants, chain checks, tests, and Ruff.
-- Consolidate the evidence into the required full report, short summary, and
-  final output file; commit each coherent ledger/report step.
+- Finish the chain, full-test, containment, and hygiene audit.
+- Consolidate all findings and evidence into the required full report, short
+  summary, and tracked final output file.
+- Commit the final ledger/report step without touching the PR branch or any
+  remote.
