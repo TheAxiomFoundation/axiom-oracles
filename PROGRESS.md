@@ -94,12 +94,16 @@
   the cached isolated runtime.
 - Ran the focused test suite:
   `303 passed, 2 skipped in 53.58s`.
+- Wrote the complete `VERDICT: REQUEST-CHANGES` evidence report to
+  `REVIEW-REPORT.md`, including all 28 sampled counterfactuals and all ten
+  PolicyEngine minimal repros.
 
 ## Next
 
-1. Write and commit `REVIEW-REPORT.md` with the blocking findings and complete
-   evidence tables.
-2. Leave the detached review worktree and target branch untouched pending
+1. Await a revised branch that removes or strengthens the failed dispositions,
+   makes the evidence machinery replayable, corrects the 77-row drift account,
+   and regenerates served case artifacts.
+2. Leave the detached review worktree and target branch untouched pending that
    revision.
 
 ---
