@@ -714,10 +714,13 @@ residual), #229 (small-suite grounding).
   detail/scoreboard mirrors and 2026-07-28 US-PE history changed. The CA SNAP
   scoreboard row now carries 96 unexplained, 243 Axiom-attributed, 20
   oracle-attributed, and 325 bridge rows.
+- The conformance ratchet remained current with no invariant regression.
+  Regenerated the burn-down; only the US-PE 2026-07-28 point changed, from 441
+  to 96 unexplained (gap 778 to 433).
 
 ### Next
 
-- Regenerate the ratchet, burn-down, and overview; audit that no other suite
-  file changed, then run all chain members in `--check` mode.
+- Regenerate the overview, audit that no other suite file changed, then run all
+  chain members in `--check` mode.
 - Complete the untracked worker report with the 441-to-96 result, class-level
   evidence, unresolved attempts, and draft issue text.
