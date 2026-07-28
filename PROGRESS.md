@@ -8,7 +8,8 @@
 - Local PR refs (`fix/pe-runner-requested-month` and
   `origin/fix/pe-runner-requested-month`) both resolve to the requested head.
 - Live GitHub/fetch verification is sandbox-blocked by DNS resolution failures.
-- Review status: setup in progress; verdict not yet determined.
+- Review status: correctness audit in progress; one blocking fail-closed defect
+  reproduced.
 
 ## Done
 
@@ -17,12 +18,23 @@
   without checking out or modifying the PR branch.
 - Compared the local PR head with the locally cached `origin/main`; merge base is
   `a62340d2f1e2873b43404478835de5577e685736`.
+- Confirmed the healthy path uses a native `policyengine_us.Simulation` and
+  calculates the exact requested period instead of performing arithmetic.
+- Reproduced on PolicyEngine-US 1.767.3:
+  - `snap_min_allotment`: January `23.84000015258789`, October
+    `24.3743953704834`; direct native and runner values match exactly.
+  - `al_tanf` January: direct native and runner both `304.0`.
+  - `ssi` January: direct native and runner both `994.0`.
+  - `income_tax` (YEAR-defined): `3820.0` for both `2026` and `2026-01`.
+  - `is_snap_eligible` remains the boolean `True` for `2026-01`.
+- Reproduced a blocking fallback defect: when wrapper, native-system, and source
+  period discovery cannot identify a non-SNAP monthly variable, `al_tanf` and
+  `ssi` are omitted from requested-month candidates and their annual values are
+  returned unchanged. The four-name SNAP allowlist masks this only for SNAP.
+- Confirmed no executable annual-divide-by-12 path remains in the runner.
 
 ## Next
 
-- Audit requested-month execution, period/type invariants, fallback reachability,
-  and fail-closed behavior.
-- Independently reproduce SNAP, TANF, and SSI monthly values on PE-US 1.767.3.
 - Enumerate every committed month-period suite and compare it with the PR's
   affected-suite list.
 - Run tests and Ruff on the PR head and on a clean local-main worktree for
