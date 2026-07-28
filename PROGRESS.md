@@ -641,12 +641,16 @@ residual), #229 (small-suite grounding).
 - Attempted the required `git fetch origin main`; sandbox DNS blocked access
   to `github.com`. No ref or worktree state changed. All subsequent merge
   work will use the exact local `origin/main` SHA recorded above.
+- Merged local `origin/main` at `86be7721`. The only conflicts were the
+  generated `freshness.json` and `overview.json` artifacts; both were rebuilt
+  from the merged source/report set rather than choosing either conflict side.
+- Verified the merge-resolution generators in read-only mode:
+  vacuous gate reports 136 oracle-backed configs, 215 suites, and 34 executable
+  surfaces; dashboard overview reports 216 bundled reports.
 
 ### Next
 
-- Commit this initial round-2 ledger.
-- Merge the current local `origin/main`, resolving generated artifacts by
-  regeneration.
+- Commit the resolved `origin/main` merge and regenerated artifacts.
 - Verify PolicyEngine-US 1.767.3 variable existence, entity, period, and legal
   quantity for every Saver's Credit pipeline output.
 - Add honest mappings and a comparable-only grid invariant; remove every
