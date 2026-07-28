@@ -31,14 +31,60 @@
   three-closure / 74-persistent diagnostic split.
 - Confirmed the verbatim replay left the target branch worktree unchanged
   except for its pre-existing untracked `WORKER-REPORT.md`.
+- Ran a second fresh live trace in the detached worktree on PolicyEngine
+  4.18.9 / PolicyEngine-US 1.767.3 / Core 3.30.3. It independently reproduced
+  the same 361-household / 441-row trace and SHA-256
+  `c46af9b87c8f5ad01f1909bc45e80e00b4c4a50e5b802ea4ccbe194b5954b568`;
+  its builder `--check` also passed.
+- Used reviewer seed `20260728`, distinct from round 1. Both removed cases
+  (`ecps-59082`, `ecps-62506`) failed all six annual/January SE, TANF, and
+  joint probes and are absent from YAML, canonical, explorer, and served
+  disposition annotations.
+- Sampled five of the 16 re-documented cases: `ecps-57511`, `ecps-58210`,
+  `ecps-58771`, `ecps-59120`, and `ecps-60323`. All five close within $7 and
+  independently prove every stated mechanism; the three sampled period cases
+  fail their corresponding annual intervention before January closes them,
+  and every sampled induced-TANF case passes both TANF source alignments.
+- Sampled five additional bridge cases from 216 eligible current cases after
+  excluding every round-1 sample and all 16 challenged cases:
+  `ecps-57788`, `ecps-59827`, `ecps-60519`, `ecps-60935`, and `ecps-61816`.
+  All five live counterfactuals pass.
+- Spot-checked persistent diagnostic rows `ecps-60310`, `ecps-58756`, and
+  `ecps-58656`; direct-January PE remains respectively $546.900024,
+  $347.900024, and $232.700012 below Axiom, with matching eligibility and no
+  annotation on any surface. Spot-checked genuine closure `ecps-59207`:
+  direct-January PE is $843.50 versus Axiom $843, and the unannotated
+  diagnostic note is accurate.
+- Proved exact conservation and disjointness: 321 bridge + 20 upstream + 100
+  unexplained = the pinned original 441 rows; adding 243 unchanged BBCE rows
+  gives all 684 mismatches. No issue-362 annotation lies outside the original
+  441-row set, and raw mismatch identities and values are unchanged.
+- Reconciled the full explorer: 7,101 unique cases, 684 canonical mismatch
+  identities and values, 584 annotations, 100 unexplained, and zero missing,
+  obsolete, value-drifted, annotation-drifted, or silent rows. The four BBCE
+  selectors, 243 expansions, and annotation objects are unchanged.
+- Confirmed containment across 32 paths: 17 CA artifacts, seven shared
+  generated consequences, seven directly supporting implementation/test
+  files, and `PROGRESS.md`; no other suite report or disposition changed.
+- Ran the complete 13-command published generated-data `--check` battery.
+  Every command exited zero, including exact CA case parity and 345-entry
+  served-YAML parity. Focused replay/disposition/case-emitter tests report
+  39 passed; Ruff, in-memory compilation, and both diff whitespace checks
+  pass.
+- GitNexus reports this review worktree unindexed and its local wrapper did
+  not complete; repository-native diff, source, test, and generated-chain
+  inspection supplied the review evidence.
+- Recorded one non-regressive scope note in the shared disposition join:
+  eight pre-existing non-CA annotations with retained IDs but stale selectors
+  remain visually annotated even though current summary counts treat them as
+  unexplained. The four affected reports are byte-identical to both the merge
+  base and round-1 target, no CA row is affected, and correcting those
+  unrelated report/case surfaces would exceed this review's explicit
+  containment. This should be tracked separately.
 
 ## Next
 
-1. Run the requested live counterfactual samples with a seed other than
-   `362441`.
-2. Audit drift notes, conservation, explorer parity, BBCE preservation,
-   containment, and the complete `--check` battery.
-3. Commit `REVIEW-REPORT.md` and finalize this ledger with an approve or
+1. Commit `REVIEW-REPORT.md` and finalize this ledger with an approve or
    request-changes verdict.
 
 ---
