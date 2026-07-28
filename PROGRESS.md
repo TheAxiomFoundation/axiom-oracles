@@ -9,8 +9,7 @@
 - Scope: assess the metadata-less carve-out, re-run the forced-unavailable
   probe and stub-engine contract test, spot-check healthy real-PE values, and
   verify the exact delta and repository gates.
-- Review status: semantic/delta review complete with no blocking finding;
-  runtime and repository gates are in progress.
+- Review status: all scoped checks and gates complete; verdict is `APPROVE`.
 - Final report: `REVIEW-REPORT.md`.
 - Remote/GitHub writes: prohibited; none attempted.
 
@@ -65,16 +64,25 @@
   - `snap_min_allotment` at `2026-10`: `24.3743953704834`
   - ancillary round-2 invariants also remained unchanged (`al_tanf=304.0`,
     `ssi=994.0`, `income_tax=3820.0`, boolean eligibility `True`).
-- Re-ran `tests/test_case_schema.py` in the PE-less unit environment:
-  `47 passed`. The annual-variable/month-request stub contract recorded exactly
-  one call, `(("income_tax",), 2026)`.
-- Ruff 0.15.0 passes repository-wide.
+- Re-ran `tests/test_case_schema.py` both in the installed-PE environment and in
+  a fresh process that blocked every `policyengine_us` import to reproduce base
+  CI's absent-extra condition: `47 passed` in each. The annual-variable/month-
+  request stub contract recorded exactly one call, `(("income_tax",), 2026)`.
+- Ruff 0.15.12 (the exact `uv.lock` pin) passes repository-wide:
+  `All checks passed!`.
+- Full repository pytest completed in 547.51 seconds: `2253 passed, 68 skipped,
+  1 failed, 104 warnings`. The sole failure is the known sandboxed
+  `tests/test_dashboard_loader.py::test_loader_equivalence` `npx esbuild`
+  `ENOTFOUND`; there is no new failure.
+- Explicitly re-ran the other five known clean-main failing node IDs. All five
+  skipped because the external `rulespec-us` checkout is unavailable in this
+  sandbox, so the current full-suite failure set is a strict subset of the six
+  known failures.
+- Wrote the scoped final report with an `APPROVE` verdict.
 
 ## Next
 
-- Complete the running full repository pytest and reconcile its failures with
-  the six known clean-main failures.
-- Write and commit `REVIEW-REPORT.md` with the final verdict.
+- None; deliver the committed report and verdict.
 
 ---
 
