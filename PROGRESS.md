@@ -39,6 +39,13 @@
 - Confirmed the batch path dereferences `pe.us.model` before normalization and
   the exact-month path imports `policyengine_us.Simulation`; neither can produce
   a genuine month comparison with both metadata sources absent.
+- Verified the absent-package boundary in a fresh subprocess by hiding
+  `policyengine_us` from discovery. A normal official `policyengine` import set
+  `pe.us` to `None`, and the runner loader rejected it before calculation.
+- Also reproduced the comparison harness's explicit-US import under the same
+  absence: the resulting module had neither `model` nor `calculate_household`;
+  a month request returned no value and an engine error, never reaching the
+  metadata-less normalization pass-through with a genuine PE result.
 - Assessed the counterargument: an externally injected/custom model-less engine
   could hide monthly semantics and receive the pass-through. No supported
   repository construction, suite, install, or execution path can create that
