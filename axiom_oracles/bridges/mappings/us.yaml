@@ -33634,6 +33634,21 @@ mappings:
     comparison: money
     rationale: Both outputs apply Indiana's tax-year-2026 2.95 percent state rate to completed Indiana adjusted gross income with a zero floor, before credits and excluding the separate county tax.
 
+  # South Carolina's bounded TY2026 individual income tax before
+  # nonrefundable credits. The completed-return taxable-income input remains a
+  # caller boundary; promotion is limited to the enacted 2026 schedule and a
+  # runtime-proved nonnegative population domain.
+  - legal_id: us-sc:policies/income_tax/pilot_liability_pipeline#sc_pit_pilot_income_tax_liability
+    country: us
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: sc_income_tax_before_non_refundable_credits
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    rationale: On the reviewed nonnegative completed-return boundary, both outputs apply South Carolina's enacted tax-year-2026 1.99 percent and 5.21 percent-minus-$966 schedule to South Carolina taxable income before nonrefundable credits, payments, or final annual liability.
+
   # Pennsylvania's bounded TY2026 resident tax before forgiveness. The
   # completed-return adjusted-taxable-income input remains a caller boundary;
   # these exact output mappings are promoted only with a runtime proof that the

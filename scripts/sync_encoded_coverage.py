@@ -196,7 +196,13 @@ STATE_RULES = {
         ),
     ],
     "or": [(r"^policies/odhs/", ("snap", None))],
-    "sc": [(r"^(policies/dss/snap|regulations/114/)", ("snap", None))],
+    "sc": [
+        (r"^(policies/dss/snap|regulations/114/)", ("snap", None)),
+        (
+            r"^policies/income_tax/pilot_liability_pipeline\.yaml$",
+            ("state_income_tax", None),
+        ),
+    ],
     "tn": [
         (r"^policies/dhs/snap/", ("snap", None)),
         (r"^regulations/1240-01/", ("snap", None)),

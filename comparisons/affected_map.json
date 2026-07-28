@@ -982,6 +982,15 @@
       "source": "comparisons/sc-income-tax-liability.yaml"
     },
     {
+      "suite": "sc-income-tax-populace",
+      "name": null,
+      "report": "axiom-policyengine-sc-income-tax-populace.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/state-income-tax-populace.yaml"
+    },
+    {
       "suite": "sc-snap-ecps",
       "name": "sc-snap-ecps",
       "report": "axiom-policyengine-sc-snap-ecps.json",

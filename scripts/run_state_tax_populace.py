@@ -57,6 +57,10 @@ _PA_ADJUSTED_TAXABLE_INCOME_INPUT = (
     "us-pa:policies/income_tax/pilot_liability_pipeline#input."
     "pa_pit_pilot_state_taxable_income"
 )
+_SC_TAXABLE_INCOME_INPUT = (
+    "us-sc:policies/income_tax/pilot_liability_pipeline#input."
+    "sc_pit_pilot_state_taxable_income"
+)
 _NY_INPUT_PREFIX = (
     "us-ny:policies/income_tax/pilot_liability_pipeline#input."
 )
@@ -231,6 +235,51 @@ def _projection_branch_diagnostics(
             "positive_adjusted_taxable_income_count": sum(
                 value > 0 for value in taxable
             ),
+            "zero_output_count": sum(value == 0 for value in outputs),
+            "positive_output_count": sum(value > 0 for value in outputs),
+        }
+    south_carolina = projection_inputs.get("SC")
+    if isinstance(south_carolina, dict):
+        ready_ids = {
+            route.tax_unit_id
+            for route in routes
+            if route.state == "SC" and route.disposition == DISPOSITION_READY
+        }
+        taxable_values = south_carolina[_SC_TAXABLE_INCOME_INPUT]
+        target_values = (
+            (policyengine_targets or {}).get("SC")
+            if isinstance(policyengine_targets, dict)
+            else None
+        )
+        if not isinstance(target_values, dict):
+            raise ValueError(
+                "SC projection diagnostics require the reviewed "
+                "sc_income_tax_before_non_refundable_credits target values"
+            )
+        missing_taxable = sorted(ready_ids - set(taxable_values), key=str)
+        missing_targets = sorted(ready_ids - set(target_values), key=str)
+        if missing_taxable or missing_targets:
+            raise ValueError(
+                "SC projection diagnostics require taxable income and output "
+                "values for every ready TaxUnit"
+            )
+        taxable = [float(taxable_values[item]) for item in ready_ids]
+        outputs = [float(target_values[item]) for item in ready_ids]
+        if any(value < 0 for value in taxable):
+            raise ValueError(
+                "SC projection diagnostics require nonnegative South Carolina "
+                "taxable income for every ready TaxUnit"
+            )
+        if any(value < 0 for value in outputs):
+            raise ValueError(
+                "SC projection diagnostics require nonnegative tax before "
+                "nonrefundable credits for every ready TaxUnit"
+            )
+        diagnostics["SC"] = {
+            "compared_tax_unit_count": len(ready_ids),
+            "negative_taxable_income_count": 0,
+            "zero_taxable_income_count": sum(value == 0 for value in taxable),
+            "positive_taxable_income_count": sum(value > 0 for value in taxable),
             "zero_output_count": sum(value == 0 for value in outputs),
             "positive_output_count": sum(value > 0 for value in outputs),
         }

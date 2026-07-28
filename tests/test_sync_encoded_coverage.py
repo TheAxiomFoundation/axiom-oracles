@@ -235,6 +235,49 @@ def test_pennsylvania_before_forgiveness_surface_is_executable_and_suite_backed(
     ]
 
 
+def test_south_carolina_before_nonrefundable_credits_tax_is_classified() -> None:
+    assert classify(
+        "us-sc/policies/income_tax/pilot_liability_pipeline.yaml"
+    ) == ("state_income_tax", "SC")
+
+
+def test_south_carolina_before_nonrefundable_credits_surface_is_executable() -> None:
+    coverage = json.loads(
+        (
+            REPO_ROOT / "dashboard/public/data/coverage_overview.json"
+        ).read_text()
+    )
+    matches = [
+        entry
+        for entry in coverage["axiom"]["programs"]
+        if entry.get("program") == "state_income_tax"
+        and entry.get("jurisdiction") == "SC"
+    ]
+
+    assert matches == [
+        {
+            "program": "state_income_tax",
+            "jurisdiction": "SC",
+            "status": "executable",
+            "source": (
+                "rulespec-us "
+                "b27a928884c67c158f3547ecba24109b96c35619 + pinned "
+                "Populace campaign projected as sc-income-tax-populace over "
+                "the canonical bounded TY2026 individual income tax before "
+                "nonrefundable credits"
+            ),
+            "known_non_tanf_gaps": [
+                "bounded before-nonrefundable-credit surface only; caller "
+                "supplies completed South Carolina taxable income and the "
+                "runtime requires every selected boundary to be nonnegative",
+                "taxable-income construction, nonrefundable credits, payments, "
+                "and final annual liability remain out of scope",
+            ],
+            "suite": "sc-income-tax-populace",
+        }
+    ]
+
+
 def test_new_york_main_income_tax_surface_is_executable_and_suite_backed() -> None:
     coverage = json.loads(
         (
