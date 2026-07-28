@@ -47,10 +47,26 @@
   MCP was unavailable and local registration was denied by the sandbox at
   `~/.gitnexus/registry.json`; the exact temporary index files were removed.
   Direct caller/config tracing supplied the blast-radius evidence instead.
+- Re-ran round 2's exact forced-unavailable probe against PolicyEngine 4.18.9,
+  PolicyEngine-US 1.767.3, and Core 3.30.3. With both native and source
+  definition-period lookups forced to return empty, independent real-engine
+  `run_cases()` requests for `al_tanf` and `ssi` both raised `RuntimeError`;
+  each diagnostic names its variable and `2026-01`, and neither returned a
+  numeric value.
+- Re-ran the healthy real-engine probe on the same runtime:
+  - `snap_min_allotment` at `2026-01`: `23.84000015258789`
+  - `snap_min_allotment` at `2026-10`: `24.3743953704834`
+  - ancillary round-2 invariants also remained unchanged (`al_tanf=304.0`,
+    `ssi=994.0`, `income_tax=3820.0`, boolean eligibility `True`).
+- Re-ran `tests/test_case_schema.py` in the PE-less unit environment:
+  `47 passed`. The annual-variable/month-request stub contract recorded exactly
+  one call, `(("income_tax",), 2026)`.
+- Ruff 0.15.0 passes repository-wide.
 
 ## Next
 
-- Re-run the required fault-injection, contract, healthy-path, and gate checks.
+- Complete the running full repository pytest and reconcile its failures with
+  the six known clean-main failures.
 - Write and commit `REVIEW-REPORT.md` with the final verdict.
 
 ---
