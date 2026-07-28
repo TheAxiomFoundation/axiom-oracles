@@ -5,7 +5,7 @@ title: Kansas TANF maximum benefit -- Axiom vs PolicyEngine
 description: >-
   Compares the monthly composed KEESM 7410 maximum-benefit standard (basic
   allowance plus energy supplement plus county shelter group, fixed at
-  group V / table-I percentage to match PolicyEngine's single combined
+  group I / table-I percentage to match PolicyEngine's single combined
   table) against PolicyEngine's ks_tanf_maximum_benefit on Enhanced CPS
   households in Kansas. The countable-income path is not yet encoded, so
   this scores the standards composition, not end-to-end eligibility.

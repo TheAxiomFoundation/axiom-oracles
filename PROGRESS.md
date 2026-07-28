@@ -10,7 +10,7 @@
   `policyengine-us==1.767.3`, `policyengine-core==3.30.3`.
 - Containment: the 19 suites, their dispositions, shared regenerated artifacts,
   row notes whose counts change, and this ledger only.
-- Phase: period semantics reconciled; pre-regeneration validation in progress.
+- Phase: period semantics and composition paths reconciled; regeneration next.
 
 ## Done
 
@@ -40,6 +40,31 @@
 - Replaced eight stale `$HOME/axiom-oracles/programs/...` TANF references with
   repository-relative paths so an isolated worktree composes the audited files,
   not an unrelated historical worktree under the home directory.
+- Confirmed from the pinned PolicyEngine-US metadata that all nine oracle
+  variables have `MONTH` definition periods. Confirmed the corresponding Axiom
+  leaves are monthly, except the Arizona and SSI annual leaves whose new
+  wrappers correctly divide by 12.
+- Repointed Minnesota, New York, and Washington TANF from missing copied
+  state-root directories to the canonical `rulespec-us` monorepo checkout,
+  matching the already-working Arizona/Kansas composition pattern.
+- Corrected the Kansas suite description from shelter group V to group I,
+  matching both the bridge's fixed inputs and PolicyEngine's no-county fallback.
+- The sandbox blocks `uv` from initializing its default cache under
+  `$HOME/.cache/uv` (`sdists-v9/.git: Operation not permitted`). Verified the
+  established read-only cache overlay used by the #423 lane instead: host
+  `policyengine==4.18.9` plus cached `policyengine-us==1.767.3` and
+  `policyengine-core==3.30.3`; the runtime reports all three exact versions.
+- Prepared a clean, local-only RuleSpec clone at cached `origin/main`
+  `c13cdf7dda5948e7a86ff0c317872f93743a2084` under `/private/tmp` because
+  the `$HOME/rulespec-us` worktree is a dirty historical TANF branch and lacks
+  three SNAP program specs. This clone is run input only and is not committed.
+- Composed and compiled all eight TANF programs plus SSI successfully after the
+  root fixes.
+- Targeted validation passed 92 tests with 3 skips. One
+  `test_materialize_ci_workspace` assertion remains stale: it requires the old
+  `$HOME/axiom-oracles` symlink solely because it assumes the superseded
+  absolute TANF program path; the repository-relative program path needs no
+  such materialization. The containment order excludes test-file edits.
 - Captured the committed pre-regeneration baseline:
 
   | Suite | Raw mismatches | Unexplained |

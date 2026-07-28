@@ -6,9 +6,8 @@ description: >-
   Compares the monthly WA TANF (WorkFirst) grant from the composed
   us-wa/tanf program (WAC 388-450 benefit and work deductions, 388-478
   payment standards and gross earned income limits) against PolicyEngine's
-  wa_tanf on Enhanced CPS households in Washington. Refresh the rulespec
-  root after pulling ~/rulespec-us with:
-  rsync -a --delete --exclude .axiom ~/rulespec-us/us-wa/ ~/.axiom-oracles/roots/rulespec-us-wa/
+  wa_tanf on Enhanced CPS households in Washington, using the canonical
+  rulespec-us monorepo checkout.
 
 runner:
   type: axiom-oracles-compare
@@ -34,9 +33,9 @@ runner:
     axiom_program: programs/us-wa/tanf/fy-2026.yaml
     axiom_composed_program: /tmp/wa-tanf-composed.yaml
     axiom_compiled_program: /tmp/wa-tanf-compiled.json
-    axiom_rulespec_repo_roots: $HOME/.axiom-oracles/roots
+    axiom_rulespec_repo_roots: $HOME/rulespec-us
     rulespec_roots:
-      - $HOME/.axiom-oracles/roots/rulespec-us-wa
+      - $HOME/rulespec-us
 
 artifacts:
   report_basename: axiom-policyengine-wa-tanf-ecps

@@ -6,9 +6,8 @@ description: >-
   Compares the monthly Minnesota Family Investment Program cash grant from
   the composed us-mn/tanf program (Combined Manual 0022.12 transitional
   standards, family wage level, and earned-income disregard) against
-  PolicyEngine's mn_mfip on Enhanced CPS households in Minnesota. Refresh
-  the rulespec root after pulling ~/rulespec-us with:
-  rsync -a --delete --exclude .axiom ~/rulespec-us/us-mn/ ~/.axiom-oracles/roots/rulespec-us-mn/
+  PolicyEngine's mn_mfip on Enhanced CPS households in Minnesota, using the
+  canonical rulespec-us monorepo checkout.
 
 runner:
   type: axiom-oracles-compare
@@ -34,9 +33,9 @@ runner:
     axiom_program: programs/us-mn/tanf/fy-2026.yaml
     axiom_composed_program: /tmp/mn-tanf-composed.yaml
     axiom_compiled_program: /tmp/mn-tanf-compiled.json
-    axiom_rulespec_repo_roots: $HOME/.axiom-oracles/roots
+    axiom_rulespec_repo_roots: $HOME/rulespec-us
     rulespec_roots:
-      - $HOME/.axiom-oracles/roots/rulespec-us-mn
+      - $HOME/rulespec-us
 
 artifacts:
   report_basename: axiom-policyengine-mn-tanf-ecps
