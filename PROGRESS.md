@@ -8,8 +8,7 @@
   `102b4edd5875fbe5e856daea0fafa9708a37003b`.
 - Merge base with locally cached `origin/main`:
   `86be77210aa03da867a6103558cb57fe51a2ba55`.
-- Review status: in progress; blocking findings reproduced, with remaining
-  legal/parity checks still being completed.
+- Review status: evidence audit complete; verdict is `REQUEST-CHANGES`.
 - All review writes are local detached-HEAD commits. The source worktree,
   target branch, remotes, and GitHub are untouched.
 - Final report path: `REVIEW-REPORT.md` in this review worktree.
@@ -57,15 +56,51 @@
   under any of those interventions. Both retain a material
   disability/shelter-cap divergence, so their four disposed rows fail the
   required live-PE neutralization standard.
+- Ran an independently seeded (`362441`) stratified sample of three cases from
+  every one of the nine bridge proof classes (27 reviewer-random cases), plus
+  the targeted `ecps-59082` counterexample. Twenty-six random cases passed;
+  random `ecps-62506` and targeted `ecps-59082` failed.
+- Independently reproduced all ten PolicyEngine gap cases under live
+  PE-US 1.767.3. In every case, changing only the erroneous minor-earner
+  exclusion makes PE count the wages and return ineligible / zero benefit.
+  Checked retained 7 CFR 273.9(b), (b)(1)(i), and (c)(7) text for all ten
+  cases; no misattribution was found in these 20 rows.
+- Proved exact row conservation and disjointness:
+  `325 + 20 + 77 + 19 = 441`. No selector outside the original 441 was added.
+  The four pre-existing BBCE selectors and their 243 expanded Axiom-attributed
+  rows are unchanged.
+- Confirmed all 19 genuinely unresolved rows remain unannotated across 14
+  households, with the rejected/confounded annual, January, self-employment,
+  TANF, and joint attempts recorded in the worker report.
+- Re-ran all 77 claimed drift rows through the current target runner on exact
+  PE-US 1.767.3. Only `ecps-59207`, `ecps-59732`, and `ecps-60346` close within
+  tolerance; the other 74 remain the same Axiom-higher amount-difference
+  class. All 77 remain unannotated, but the worker report neither discloses
+  this 3-close/74-persist outcome nor reflects that the target already contains
+  the requested-month runner fix.
+- Reconciled canonical overview, detail, history, burn-down, scoreboard, and
+  served disposition artifacts. Canonical accounting is exactly 96 unexplained,
+  243 Axiom-attributed, 20 upstream, and 325 bridge.
+- Reproduced a blocking served-parity failure:
+  `emit_case_artifacts.py --check ca-snap-ecps` reports 588 missing served
+  annotations (325 bridge, 243 BBCE, 20 upstream). The case explorer therefore
+  renders all 684 mismatch rows as unexplained instead of the canonical 96.
+- Ran the complete relevant chain checks. Dispositions, grids, boundary
+  suggestions, affected map, vacuous gate, overview, scoreboard, ratchet,
+  burn-down, served dispositions, and diff hygiene pass. The issue-specific
+  builder and served case-artifact checks fail as recorded above. The universe
+  check exits successfully but explicitly no-ops US-PE because the available
+  general checkout is 1.779.4 instead of the pin; exact 1.767.3 validation used
+  the cached isolated runtime.
+- Ran the focused test suite:
+  `303 passed, 2 skipped in 53.58s`.
 
 ## Next
 
-1. Finish the stratified counterfactual result table, including deterministic
-   reviewer-random cases from every proof class.
-2. Complete all upstream-gap repros and retained-corpus citation checks.
-3. Finish drift, unresolved-row, conservation, served-parity, and chain-gate
-   verification.
-4. Write and commit the final verdict report.
+1. Write and commit `REVIEW-REPORT.md` with the blocking findings and complete
+   evidence tables.
+2. Leave the detached review worktree and target branch untouched pending
+   revision.
 
 ---
 
