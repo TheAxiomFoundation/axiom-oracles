@@ -812,10 +812,21 @@ residual), #229 (small-suite grounding).
   dispositions / 100 remaining unexplained rows.
 - Replay, integrity, and disposition tests pass 28/28; Ruff and whitespace
   checks pass.
+- Regenerated `dispositions/ca-snap-ecps.yaml` from the pinned base and trace,
+  then reran the builder in `--check` mode successfully. It now contains 341
+  issue-362 entries: 321 bridge artifacts and 20 upstream-engine gaps.
+- Removed both selectors for each failed case (`ecps-59082` and `ecps-62506`);
+  relabeled both selectors for all 16 supported challenged cases with their
+  complete period and/or induced-TANF mechanism. Eleven proofs now state and
+  source-check the TANF induced by neutralizing self-employment before applying
+  the joint intervention.
+- Verified the four non-issue-362 BBCE selectors are structurally identical to
+  the prior document, preserving their expansion across all 243 BBCE rows.
 
 ### Next
 
-1. Apply the corrected disposition set, regenerate every served artifact, and
-   refresh scoreboard, burn-down, history, and report text.
-2. Run the complete repository `--check` chain and focused tests; record exact
+1. Apply the corrected disposition set and regenerate every canonical and
+   served artifact.
+2. Refresh scoreboard, burn-down, history, and report text.
+3. Run the complete repository `--check` chain and focused tests; record exact
    commands and results in the final untracked worker report.
