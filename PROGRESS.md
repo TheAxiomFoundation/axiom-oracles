@@ -719,6 +719,11 @@ residual), #229 (small-suite grounding).
   to 96 unexplained (gap 778 to 433).
 - Regenerated the browser-served overview from 215 reports so its embedded CA
   report carries the same disposition block. No other suite report changed.
+- The CA served-disposition check found that its artifact had never been
+  committed. Emitted the safe YAML-derived artifact only (349 entries). The
+  case emitter remains deliberately skipped because the ignored full report is
+  absent and emitting from the 499-case canonical mismatch subset would
+  truncate the existing 7,101-case shards.
 
 ### Next
 
