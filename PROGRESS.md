@@ -647,12 +647,18 @@ residual), #229 (small-suite grounding).
 - Verified the merge-resolution generators in read-only mode:
   vacuous gate reports 136 oracle-backed configs, 215 suites, and 34 executable
   surfaces; dashboard overview reports 216 bundled reports.
+- Verified the exact cached PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 /
+  Core 3.30.3 runtime. `savers_credit_potential` is a TaxUnit/year USD
+  variable that sums Person-level saver credits before the public
+  `savers_credit` applies its separate section 26 credit limit.
+- Classified all 11 Saver's Credit pipeline outputs in the bridge registry:
+  the corrected final maps directly to `savers_credit_potential`; the other
+  ten helpers are explicitly `not_comparable` with entity, add-back, cap, or
+  unexposed-intermediate rationales.
 
 ### Next
 
-- Commit the resolved `origin/main` merge and regenerated artifacts.
-- Verify PolicyEngine-US 1.767.3 variable existence, entity, period, and legal
-  quantity for every Saver's Credit pipeline output.
+- Validate and commit the complete Saver's Credit mapping inventory.
 - Add honest mappings and a comparable-only grid invariant; remove every
   non-comparable Additional Medicare money output from comparison.
 - Correct section 25B(e), add all nine below-boundary probes, and add positive
