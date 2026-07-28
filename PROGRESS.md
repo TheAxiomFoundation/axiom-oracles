@@ -69,11 +69,19 @@
   because network access is unavailable, and a full dashboard build cannot
   start because `next` is not installed in this checkout; both environment
   limits are retained for the final report.
+- Completed the clean-HEAD gate battery: 110 focused evidence/census mutants,
+  the bot no-op mutant, replay/index/census/certificate/overview freshness,
+  bridge validation (0 errors, four pre-existing findings), Ruff, compileall,
+  the direct dashboard boundary test, and cumulative whitespace all pass.
+- Wrote the requested final report to the new, committed
+  `sol-evidence-round6-residue-closure-2026-07-28-result.md`; no prior report
+  was edited.
 
 ## Next
 
-- Run all required non-population gates, write and commit the final report,
-  update this ledger, then update (but do not merge) PR #379.
+- Publish the committed branch, append the required `Residues closed` section
+  to PR #379 with the exact mutant names, and confirm the PR remains open and
+  unmerged.
 
 ---
 
