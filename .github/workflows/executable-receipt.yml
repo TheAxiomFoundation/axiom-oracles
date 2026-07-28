@@ -1,0 +1,51 @@
+name: Executable receipt
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+  attestations: write
+
+concurrency:
+  group: executable-receipt-${{ github.workflow_sha }}
+  cancel-in-progress: false
+
+jobs:
+  produce:
+    name: Released engine × published artifact
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Check out the governed producer
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: "3.13"
+
+      - name: Run the stranger path and emit the receipt
+        run: python3 scripts/produce_executable_receipt.py
+
+      - name: Parse the emitted JSON
+        run: >-
+          python3 -m json.tool
+          certificates/executable/us-co-snap/receipt.json
+          >/dev/null
+
+      - name: Attest the receipt
+        uses: actions/attest-build-provenance@96278af6caaf10aea03fd8d33a09a777ca52d62f # v3.2.0
+        with:
+          subject-path: certificates/executable/us-co-snap/receipt.json
+
+      - name: Upload the receipt for mechanical commit
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: executable-receipt-us-co-snap
+          path: certificates/executable/us-co-snap/receipt.json
+          if-no-files-found: error
+          retention-days: 30

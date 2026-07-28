@@ -28,6 +28,7 @@
     "allowlist": "certificates/executable/workflow-allowlist.json",
     "repository": "TheAxiomFoundation/axiom-oracles",
     "path": ".github/workflows/executable-receipt.yml",
-    "event": "workflow_dispatch"
+    "event": "workflow_dispatch",
+    "ref": "refs/heads/main"
   }
 }
