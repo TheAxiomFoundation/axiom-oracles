@@ -854,9 +854,15 @@ residual), #229 (small-suite grounding).
 - The repository-wide disposition check now passes with 83 documents, while
   CA served case and disposition checks still report exact 584-annotation /
   345-entry parity and zero silent classifications.
+- Regenerated the 215-report dashboard overview, US-PE detail and scoreboard
+  mirrors, the dated 2026-07-28 history snapshot, and the four-series
+  conformance burn-down. CA SNAP now records 100 unexplained, 243
+  Axiom-attributed, 20 oracle-attributed, and 321 bridge rows.
+- Reconciled the global US-PE totals to 100 unexplained and 3,661 bridge rows.
+  The 2026-07-28 burn-down gap rises honestly from the round-1 value of 433 to
+  437. Overview, scoreboard, and burn-down `--check` modes all pass.
 
 ### Next
 
-1. Refresh scoreboard, burn-down, history, and report text.
-2. Run the complete repository `--check` chain and focused tests; record exact
+1. Run the complete repository `--check` chain and focused tests; record exact
    commands and results in the final untracked worker report.
