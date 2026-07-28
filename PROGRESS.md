@@ -717,10 +717,12 @@ residual), #229 (small-suite grounding).
 - The conformance ratchet remained current with no invariant regression.
   Regenerated the burn-down; only the US-PE 2026-07-28 point changed, from 441
   to 96 unexplained (gap 778 to 433).
+- Regenerated the browser-served overview from 215 reports so its embedded CA
+  report carries the same disposition block. No other suite report changed.
 
 ### Next
 
-- Regenerate the overview, audit that no other suite file changed, then run all
-  chain members in `--check` mode.
+- Run all generated chain members in `--check` mode, then complete the
+  untracked report and final branch audit.
 - Complete the untracked worker report with the 441-to-96 result, class-level
   evidence, unresolved attempts, and draft issue text.
