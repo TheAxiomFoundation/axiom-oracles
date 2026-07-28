@@ -2,8 +2,8 @@
 
 ## State
 
-- Review status: in progress.
-- Verdict: pending evidence.
+- Review status: complete.
+- Verdict: APPROVE.
 - Source PR: `TheAxiomFoundation/axiom-oracles#422`.
 - Verified live head branch: `fed-parity/atomic0-mappings`.
 - Immutable source head: `f9fd1de2001247100b7d68db9ba59a23383fda05`.
@@ -115,9 +115,11 @@
   this PR source forced through `PYTHONPATH`, completed the gate successfully.
   Temporary regular-directory checkout simulations were removed. This was an
   environment limitation, not a gate failure.
+- Wrote and committed the final evidence report at `REVIEW-REPORT.md`; it
+  records an APPROVE verdict, the non-blocking stale section 67(g) reference
+  caveat, and all tool/sandbox limitations.
 
 ## Next
 
-1. Write and commit `REVIEW-REPORT.md`.
-2. Mark this ledger complete and report the verdict without writing to the PR
-   branch, remotes, or GitHub.
+None. Return the committed report to the user without writing to the PR branch,
+remotes, or GitHub.
