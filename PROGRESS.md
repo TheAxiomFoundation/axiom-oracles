@@ -655,14 +655,29 @@ residual), #229 (small-suite grounding).
   the corrected final maps directly to `savers_credit_potential`; the other
   ten helpers are explicitly `not_comparable` with entity, add-back, cap, or
   unexposed-intermediate rationales.
+- Added a fail-closed registry invariant for the two repaired grids. It rejects
+  unmapped, `not_comparable`, and target-drifted scored concepts and serializes
+  the exact direct-variable/parameter binding into each report.
+- Rebuilt the Additional Medicare grid boundary to score only the
+  filing-status-selected threshold and 0.9 percent rate. The combined tax and
+  isolated money legs are no longer evaluated or reported as comparisons;
+  the suite records the section 1401(c) domain-precondition blocker.
+- Added nine Saver B-1 cases and nine Additional Medicare cases. The latter
+  give joint, separate, and other statuses positive-SE observations below and
+  above unreduced thresholds plus B-1/exact/B+1 wage-coordinated probes.
+- Added repo-owned supplemental fixtures without changing the clean pinned
+  RuleSpec checkout. Released Axiom engine 0.1.0 recomputation confirmed all
+  nine Saver additions against independent section 25B arithmetic and queried
+  all 27 Additional Medicare selected thresholds from the compiled module.
+- Exact PolicyEngine-US 1.767.3 generation now yields Saver 23/34 raw matches
+  with the same 11 expected #9151 divergences, and Additional Medicare 28/28
+  comparable parameter matches across 27 scenarios.
+- Corrected the section 911/931/933 add-back citation to section 25B(e) in
+  source configuration and generated-report code.
+- Focused generator coverage passes (24 tests; the committed-report assertion
+  is intentionally deferred until regeneration), as does Ruff.
 
 ### Next
 
-- Validate and commit the complete Saver's Credit mapping inventory.
-- Add honest mappings and a comparable-only grid invariant; remove every
-  non-comparable Additional Medicare money output from comparison.
-- Correct section 25B(e), add all nine below-boundary probes, and add positive
-  self-employment cases on both sides of every filing-status threshold,
-  including wage-reduced variants.
 - Regenerate both suites and the full derived chain, audit row containment, run
   the full checks/tests, and obtain an independent defensive review.

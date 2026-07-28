@@ -1,0 +1,187 @@
+# Repo-owned extensions to the pinned RuleSpec-US companion fixture.
+#
+# Every selected-threshold value below was queried from the clean
+# rulespec-us@dcbae4344c522b4ad8004169316266cbc153186f module compiled by
+# axiom-rules-engine 0.1.0. The new wage/self-employment scenarios carry their
+# complete fixture facts; existing upstream scenarios receive only the
+# registry-comparable threshold output that their companion record omitted.
+
+- name: amt-single-150k
+  output:
+    us:policies/income_tax/additional_medicare_tax_pipeline#pipeline_additional_medicare_self_employment_threshold: 200000
+
+- name: amt-single-250k
+  output:
+    us:policies/income_tax/additional_medicare_tax_pipeline#pipeline_additional_medicare_self_employment_threshold: 200000
+
+- name: amt-joint-300k
+  output:
+    us:policies/income_tax/additional_medicare_tax_pipeline#pipeline_additional_medicare_self_employment_threshold: 250000
+
+- name: amt-mfs-150k
+  output:
+    us:policies/income_tax/additional_medicare_tax_pipeline#pipeline_additional_medicare_self_employment_threshold: 125000
+
+- name: amt-joint-450k
+  output:
+    us:policies/income_tax/additional_medicare_tax_pipeline#pipeline_additional_medicare_self_employment_threshold: 250000
+
+- name: amt-single-wage-derived-completed-se-income-non-contract
+  output:
+    us:policies/income_tax/additional_medicare_tax_pipeline#pipeline_additional_medicare_self_employment_threshold: 200000
+
+- name: amt-zero
+  output:
+    us:policies/income_tax/additional_medicare_tax_pipeline#pipeline_additional_medicare_self_employment_threshold: 200000
+
+- name: amt-single-exact-wage-threshold
+  output:
+    us:policies/income_tax/additional_medicare_tax_pipeline#pipeline_additional_medicare_self_employment_threshold: 200000
+
+- name: amt-single-one-dollar-above-wage-threshold
+  output:
+    us:policies/income_tax/additional_medicare_tax_pipeline#pipeline_additional_medicare_self_employment_threshold: 200000
+
+- name: amt-single-exact-coordinated-se-threshold
+  output:
+    us:policies/income_tax/additional_medicare_tax_pipeline#pipeline_additional_medicare_self_employment_threshold: 200000
+
+- name: amt-single-one-dollar-above-coordinated-se-threshold
+  output:
+    us:policies/income_tax/additional_medicare_tax_pipeline#pipeline_additional_medicare_self_employment_threshold: 200000
+
+- name: amt-self-employment-loss-has-no-negative-se-base
+  output:
+    us:policies/income_tax/additional_medicare_tax_pipeline#pipeline_additional_medicare_self_employment_threshold: 200000
+
+- name: amt-joint-one-dollar-below-coordinated-se-threshold
+  period: &tax_year_2026
+    period_kind: tax_year
+    start: '2026-01-01'
+    end: '2026-12-31'
+  input:
+    us:policies/income_tax/additional_medicare_tax_pipeline#input.no_foreign_system_exclusive_se_income: true
+    us:statutes/26/3101/b/2#input.filing_status: 1
+    us:policies/income_tax/additional_medicare_tax_pipeline#input.wages: 65299
+    us:policies/income_tax/self_employment_tax_pipeline#relation.self_employed_individual_of_tax_unit:
+      - <<: &domestic_person
+          us:statutes/26/1402/b#input.individual_is_nonresident_alien: false
+          us:statutes/26/1402/b#input.agreement_under_social_security_act_section_233_provides_for_individual: false
+          us:statutes/26/1402/b#input.individual_is_not_united_states_citizen_and_resident_of_puerto_rico_virgin_islands_guam_or_american_samoa: false
+        us:policies/income_tax/self_employment_tax_pipeline#input.gross_self_employment_profit: 200000
+        us:statutes/26/1402/b#input.wages_paid_to_individual_during_taxable_year_for_section_1401_a: 65299
+      - <<: *domestic_person
+        us:policies/income_tax/self_employment_tax_pipeline#input.gross_self_employment_profit: 0
+        us:statutes/26/1402/b#input.wages_paid_to_individual_during_taxable_year_for_section_1401_a: 0
+  output:
+    us:policies/income_tax/additional_medicare_tax_pipeline#pipeline_additional_medicare_self_employment_threshold: 250000
+
+- name: amt-joint-exact-coordinated-se-threshold
+  period: *tax_year_2026
+  input:
+    us:policies/income_tax/additional_medicare_tax_pipeline#input.no_foreign_system_exclusive_se_income: true
+    us:statutes/26/3101/b/2#input.filing_status: 1
+    us:policies/income_tax/additional_medicare_tax_pipeline#input.wages: 65300
+    us:policies/income_tax/self_employment_tax_pipeline#relation.self_employed_individual_of_tax_unit:
+      - <<: *domestic_person
+        us:policies/income_tax/self_employment_tax_pipeline#input.gross_self_employment_profit: 200000
+        us:statutes/26/1402/b#input.wages_paid_to_individual_during_taxable_year_for_section_1401_a: 65300
+      - <<: *domestic_person
+        us:policies/income_tax/self_employment_tax_pipeline#input.gross_self_employment_profit: 0
+        us:statutes/26/1402/b#input.wages_paid_to_individual_during_taxable_year_for_section_1401_a: 0
+  output:
+    us:policies/income_tax/additional_medicare_tax_pipeline#pipeline_additional_medicare_self_employment_threshold: 250000
+
+- name: amt-joint-one-dollar-above-coordinated-se-threshold
+  period: *tax_year_2026
+  input:
+    us:policies/income_tax/additional_medicare_tax_pipeline#input.no_foreign_system_exclusive_se_income: true
+    us:statutes/26/3101/b/2#input.filing_status: 1
+    us:policies/income_tax/additional_medicare_tax_pipeline#input.wages: 65301
+    us:policies/income_tax/self_employment_tax_pipeline#relation.self_employed_individual_of_tax_unit:
+      - <<: *domestic_person
+        us:policies/income_tax/self_employment_tax_pipeline#input.gross_self_employment_profit: 200000
+        us:statutes/26/1402/b#input.wages_paid_to_individual_during_taxable_year_for_section_1401_a: 65301
+      - <<: *domestic_person
+        us:policies/income_tax/self_employment_tax_pipeline#input.gross_self_employment_profit: 0
+        us:statutes/26/1402/b#input.wages_paid_to_individual_during_taxable_year_for_section_1401_a: 0
+  output:
+    us:policies/income_tax/additional_medicare_tax_pipeline#pipeline_additional_medicare_self_employment_threshold: 250000
+
+- name: amt-married-separate-positive-se-above-unreduced-threshold
+  period: *tax_year_2026
+  input:
+    us:policies/income_tax/additional_medicare_tax_pipeline#input.no_foreign_system_exclusive_se_income: true
+    us:statutes/26/3101/b/2#input.filing_status: 2
+    us:policies/income_tax/additional_medicare_tax_pipeline#input.wages: 0
+    us:policies/income_tax/self_employment_tax_pipeline#relation.self_employed_individual_of_tax_unit:
+      - <<: *domestic_person
+        us:policies/income_tax/self_employment_tax_pipeline#input.gross_self_employment_profit: 150000
+        us:statutes/26/1402/b#input.wages_paid_to_individual_during_taxable_year_for_section_1401_a: 0
+  output:
+    us:policies/income_tax/additional_medicare_tax_pipeline#pipeline_additional_medicare_self_employment_threshold: 125000
+
+- name: amt-married-separate-one-dollar-below-coordinated-se-threshold
+  period: *tax_year_2026
+  input:
+    us:policies/income_tax/additional_medicare_tax_pipeline#input.no_foreign_system_exclusive_se_income: true
+    us:statutes/26/3101/b/2#input.filing_status: 2
+    us:policies/income_tax/additional_medicare_tax_pipeline#input.wages: 32649
+    us:policies/income_tax/self_employment_tax_pipeline#relation.self_employed_individual_of_tax_unit:
+      - <<: *domestic_person
+        us:policies/income_tax/self_employment_tax_pipeline#input.gross_self_employment_profit: 100000
+        us:statutes/26/1402/b#input.wages_paid_to_individual_during_taxable_year_for_section_1401_a: 32649
+  output:
+    us:policies/income_tax/additional_medicare_tax_pipeline#pipeline_additional_medicare_self_employment_threshold: 125000
+
+- name: amt-married-separate-exact-coordinated-se-threshold
+  period: *tax_year_2026
+  input:
+    us:policies/income_tax/additional_medicare_tax_pipeline#input.no_foreign_system_exclusive_se_income: true
+    us:statutes/26/3101/b/2#input.filing_status: 2
+    us:policies/income_tax/additional_medicare_tax_pipeline#input.wages: 32650
+    us:policies/income_tax/self_employment_tax_pipeline#relation.self_employed_individual_of_tax_unit:
+      - <<: *domestic_person
+        us:policies/income_tax/self_employment_tax_pipeline#input.gross_self_employment_profit: 100000
+        us:statutes/26/1402/b#input.wages_paid_to_individual_during_taxable_year_for_section_1401_a: 32650
+  output:
+    us:policies/income_tax/additional_medicare_tax_pipeline#pipeline_additional_medicare_self_employment_threshold: 125000
+
+- name: amt-married-separate-one-dollar-above-coordinated-se-threshold
+  period: *tax_year_2026
+  input:
+    us:policies/income_tax/additional_medicare_tax_pipeline#input.no_foreign_system_exclusive_se_income: true
+    us:statutes/26/3101/b/2#input.filing_status: 2
+    us:policies/income_tax/additional_medicare_tax_pipeline#input.wages: 32651
+    us:policies/income_tax/self_employment_tax_pipeline#relation.self_employed_individual_of_tax_unit:
+      - <<: *domestic_person
+        us:policies/income_tax/self_employment_tax_pipeline#input.gross_self_employment_profit: 100000
+        us:statutes/26/1402/b#input.wages_paid_to_individual_during_taxable_year_for_section_1401_a: 32651
+  output:
+    us:policies/income_tax/additional_medicare_tax_pipeline#pipeline_additional_medicare_self_employment_threshold: 125000
+
+- name: amt-single-positive-se-above-unreduced-other-threshold
+  period: *tax_year_2026
+  input:
+    us:policies/income_tax/additional_medicare_tax_pipeline#input.no_foreign_system_exclusive_se_income: true
+    us:statutes/26/3101/b/2#input.filing_status: 0
+    us:policies/income_tax/additional_medicare_tax_pipeline#input.wages: 0
+    us:policies/income_tax/self_employment_tax_pipeline#relation.self_employed_individual_of_tax_unit:
+      - <<: *domestic_person
+        us:policies/income_tax/self_employment_tax_pipeline#input.gross_self_employment_profit: 250000
+        us:statutes/26/1402/b#input.wages_paid_to_individual_during_taxable_year_for_section_1401_a: 0
+  output:
+    us:policies/income_tax/additional_medicare_tax_pipeline#pipeline_additional_medicare_self_employment_threshold: 200000
+
+- name: amt-single-one-dollar-below-coordinated-se-threshold
+  period: *tax_year_2026
+  input:
+    us:policies/income_tax/additional_medicare_tax_pipeline#input.no_foreign_system_exclusive_se_income: true
+    us:statutes/26/3101/b/2#input.filing_status: 0
+    us:policies/income_tax/additional_medicare_tax_pipeline#input.wages: 107649
+    us:policies/income_tax/self_employment_tax_pipeline#relation.self_employed_individual_of_tax_unit:
+      - <<: *domestic_person
+        us:policies/income_tax/self_employment_tax_pipeline#input.gross_self_employment_profit: 100000
+        us:statutes/26/1402/b#input.wages_paid_to_individual_during_taxable_year_for_section_1401_a: 107649
+  output:
+    us:policies/income_tax/additional_medicare_tax_pipeline#pipeline_additional_medicare_self_employment_threshold: 200000

@@ -98,10 +98,19 @@ def test_all_eight_contract_grids_are_explicit_and_independent():
             "amt-single-exact-coordinated-se-threshold",
             "amt-single-one-dollar-above-coordinated-se-threshold",
             "amt-joint-two-positive-se-earners-single-tax-unit-threshold",
+            "amt-joint-one-dollar-below-coordinated-se-threshold",
+            "amt-joint-exact-coordinated-se-threshold",
+            "amt-joint-one-dollar-above-coordinated-se-threshold",
             "amt-single-se-threshold-zero-at-wage-threshold",
             "amt-single-se-threshold-not-negative-above-wage-threshold",
             "amt-married-separate-positive-se",
+            "amt-married-separate-positive-se-above-unreduced-threshold",
+            "amt-married-separate-one-dollar-below-coordinated-se-threshold",
+            "amt-married-separate-exact-coordinated-se-threshold",
+            "amt-married-separate-one-dollar-above-coordinated-se-threshold",
             "amt-head-of-household-positive-se-other-threshold",
+            "amt-single-positive-se-above-unreduced-other-threshold",
+            "amt-single-one-dollar-below-coordinated-se-threshold",
             "amt-self-employment-loss-has-no-negative-se-base",
         ],
         "self_employment_tax": [
@@ -142,22 +151,31 @@ def test_all_eight_contract_grids_are_explicit_and_independent():
             "qbid-net-capital-gain-limit",
         ],
         "savers_credit": [
+            "single-one-below-50-percent-limit",
             "single-at-50-percent-limit-inclusive",
             "single-one-over-50-percent-limit",
+            "single-one-below-20-percent-limit",
             "single-at-20-percent-limit-inclusive",
             "single-one-over-20-percent-limit",
+            "single-one-below-10-percent-limit",
             "single-at-10-percent-limit-inclusive",
             "single-one-over-10-percent-limit",
+            "joint-one-below-50-percent-limit",
             "joint-at-50-percent-limit-inclusive",
             "joint-one-over-50-percent-limit",
+            "joint-one-below-20-percent-limit",
             "joint-at-20-percent-limit-inclusive",
             "joint-one-over-20-percent-limit",
+            "joint-one-below-10-percent-limit",
             "joint-at-10-percent-limit-inclusive",
             "joint-one-over-10-percent-limit",
+            "head-of-household-one-below-50-percent-limit",
             "head-of-household-at-50-percent-limit-inclusive",
             "head-of-household-one-over-50-percent-limit",
+            "head-of-household-one-below-20-percent-limit",
             "head-of-household-at-20-percent-limit-inclusive",
             "head-of-household-one-over-20-percent-limit",
+            "head-of-household-one-below-10-percent-limit",
             "head-of-household-at-10-percent-limit-inclusive",
             "head-of-household-one-over-10-percent-limit",
             "married-filing-separately-uses-all-other-limits",
@@ -216,9 +234,23 @@ def test_all_eight_contract_grids_are_explicit_and_independent():
 def test_policyengine_bindings_match_the_reviewed_output_boundaries():
     generator = _load_generator()
 
-    assert generator.POLICIES["additional_medicare_tax"].pe_output_variables == (
-        "additional_medicare_tax",
-    )
+    additional_medicare = generator.POLICIES["additional_medicare_tax"]
+    assert additional_medicare.pe_output_variables == ()
+    assert [
+        (binding.concept, binding.policyengine_target)
+        for binding in additional_medicare.comparison_bindings
+    ] == [
+        (
+            "us:policies/income_tax/additional_medicare_tax_pipeline"
+            "#pipeline_additional_medicare_self_employment_threshold",
+            "gov.irs.payroll.medicare.additional.exclusion",
+        ),
+        (
+            "us:policies/income_tax/additional_medicare_tax_pipeline"
+            "#pipeline_additional_medicare_self_employment_tax_rate",
+            "gov.irs.payroll.medicare.additional.rate",
+        ),
+    ]
     assert generator.POLICIES["self_employment_tax"].pe_output_variables == (
         "self_employment_tax",
     )
@@ -241,6 +273,122 @@ def test_policyengine_bindings_match_the_reviewed_output_boundaries():
     assert generator.POLICIES["lifetime_learning_credit"].pe_output_variables == (
         "lifetime_learning_credit",
     )
+
+
+def test_repaired_grids_fail_closed_on_unmapped_noncomparable_or_wrong_target():
+    generator = _load_generator()
+    savers = generator.POLICIES["savers_credit"]
+    module = "us:policies/income_tax/savers_credit_pipeline"
+    with pytest.raises(ValueError, match="unmapped"):
+        generator._assert_registry_comparable_bindings(
+            replace(
+                savers,
+                comparison_bindings=(
+                    generator.ComparisonBinding(
+                        concept=f"{module}#invented_unmapped_output",
+                        policyengine_target="savers_credit_potential",
+                        comparison="amount",
+                    ),
+                ),
+            )
+        )
+    with pytest.raises(ValueError, match="registry-not-comparable"):
+        generator._assert_registry_comparable_bindings(
+            replace(
+                generator.POLICIES["additional_medicare_tax"],
+                comparison_bindings=(
+                    generator.ComparisonBinding(
+                        concept=(
+                            "us:policies/income_tax/"
+                            "additional_medicare_tax_pipeline"
+                            "#federal_additional_medicare_tax"
+                        ),
+                        policyengine_target="additional_medicare_tax",
+                        comparison="amount",
+                    ),
+                ),
+            )
+        )
+    with pytest.raises(ValueError, match="registry target"):
+        generator._assert_registry_comparable_bindings(
+            replace(
+                savers,
+                comparison_bindings=(
+                    generator.ComparisonBinding(
+                        concept=f"{module}#federal_savers_credit",
+                        policyengine_target="savers_credit",
+                        comparison="amount",
+                    ),
+                ),
+            )
+        )
+
+    generator._assert_registry_comparable_bindings(savers)
+    generator._assert_registry_comparable_bindings(
+        generator.POLICIES["additional_medicare_tax"]
+    )
+
+
+def test_committed_repaired_reports_score_only_registry_comparable_bindings():
+    generator = _load_generator()
+    registry = generator.load_policyengine_registry()
+    expected = {
+        "us-savers-grid": {
+            "us:policies/income_tax/savers_credit_pipeline"
+            "#federal_savers_credit"
+        },
+        "us-additional-medicare-grid": {
+            "us:policies/income_tax/additional_medicare_tax_pipeline"
+            "#pipeline_additional_medicare_self_employment_threshold",
+            "us:policies/income_tax/additional_medicare_tax_pipeline"
+            "#pipeline_additional_medicare_self_employment_tax_rate",
+        },
+    }
+    for suite, expected_concepts in expected.items():
+        report = json.loads(
+            (
+                REPO_ROOT
+                / "dashboard/public/data"
+                / f"axiom-policyengine-{suite}.json"
+            ).read_text()
+        )
+        scored = {
+            aggregate["concept"]
+            for aggregate in report["aggregates"]
+            if aggregate["comparison_count"] > 0
+        }
+        bindings = report["engine_bindings"]["policyengine"][
+            "comparison_bindings"
+        ]
+        assert scored == expected_concepts
+        assert len(bindings) == len(scored)
+        assert {binding["concept"] for binding in bindings} == scored
+        assert sum(
+            aggregate["comparison_count"] for aggregate in report["aggregates"]
+        ) == report["summary"]["comparison_count"]
+        for binding in bindings:
+            mapping = registry.mapping_for_legal_id(
+                binding["concept"],
+                country="us",
+            )
+            assert mapping is not None and mapping.comparable
+            assert binding["mapping_type"] == mapping.mapping_type
+            if mapping.policyengine_variable:
+                assert binding["variable"] == mapping.policyengine_variable
+            if mapping.policyengine_parameter:
+                assert binding["parameter"] == mapping.policyengine_parameter
+            if mapping.parameter_key_input:
+                assert (
+                    binding["parameter_key_input"]
+                    == mapping.parameter_key_input
+                )
+                assert binding["parameter_key_map"] == mapping.parameter_key_map
+
+    combined = (
+        "us:policies/income_tax/additional_medicare_tax_pipeline"
+        "#federal_additional_medicare_tax"
+    )
+    assert combined not in expected["us-additional-medicare-grid"]
 
 
 def test_aca_grid_pins_prior_year_fpl_dollars_and_enrolled_premium():
@@ -301,6 +449,86 @@ def test_payroll_and_niit_inputs_are_derived_from_contract_facts():
     rental = generator._niit_situation(niit_cases["niit-rental"])
     assert rental["people"]["head"]["rental_income"][2026] == 60_000
     assert "adjusted_gross_income" not in rental["tax_units"]["tax_unit"]
+
+
+def test_additional_medicare_positive_se_spans_every_status_threshold():
+    generator = _load_generator()
+    cases = {
+        case.case_id: case
+        for case in generator.POLICIES["additional_medicare_tax"].cases
+    }
+
+    def combined(case_id):
+        case = cases[case_id]
+        wages = case.inputs["primary_wages"] + case.inputs["spouse_wages"]
+        gross_se = (
+            case.inputs["self_employment_income"]
+            + case.inputs["spouse_self_employment_income"]
+        )
+        return wages + gross_se * 0.9235
+
+    coordinated = {
+        "joint": (
+            250_000,
+            (
+                "amt-joint-one-dollar-below-coordinated-se-threshold",
+                "amt-joint-exact-coordinated-se-threshold",
+                "amt-joint-one-dollar-above-coordinated-se-threshold",
+            ),
+        ),
+        "separate": (
+            125_000,
+            (
+                "amt-married-separate-one-dollar-below-coordinated-se-threshold",
+                "amt-married-separate-exact-coordinated-se-threshold",
+                "amt-married-separate-one-dollar-above-coordinated-se-threshold",
+            ),
+        ),
+        "other": (
+            200_000,
+            (
+                "amt-single-one-dollar-below-coordinated-se-threshold",
+                "amt-single-exact-coordinated-se-threshold",
+                "amt-single-one-dollar-above-coordinated-se-threshold",
+            ),
+        ),
+    }
+    for threshold, case_ids in coordinated.values():
+        assert [combined(case_id) for case_id in case_ids] == [
+            threshold - 1,
+            threshold,
+            threshold + 1,
+        ]
+
+    unreduced = {
+        "joint": (
+            250_000,
+            "amt-joint-one-dollar-below-coordinated-se-threshold",
+            "amt-joint-two-positive-se-earners-single-tax-unit-threshold",
+        ),
+        "separate": (
+            125_000,
+            "amt-married-separate-one-dollar-below-coordinated-se-threshold",
+            "amt-married-separate-positive-se-above-unreduced-threshold",
+        ),
+        "other": (
+            200_000,
+            "amt-single-one-dollar-below-coordinated-se-threshold",
+            "amt-single-positive-se-above-unreduced-other-threshold",
+        ),
+    }
+    for threshold, below_id, above_id in unreduced.values():
+        below = cases[below_id]
+        above = cases[above_id]
+        below_se = (
+            below.inputs["self_employment_income"]
+            + below.inputs["spouse_self_employment_income"]
+        ) * 0.9235
+        above_se = (
+            above.inputs["self_employment_income"]
+            + above.inputs["spouse_self_employment_income"]
+        ) * 0.9235
+        assert 0 < below_se < threshold < above_se
 
 
 def test_qbid_grid_binds_correct_2026_band_and_active_business_diagnostic():
@@ -432,6 +660,37 @@ def test_savers_grid_uses_completed_person_contributions_and_two_caps():
     )
 
 
+def test_savers_grid_has_matching_b_minus_one_probe_at_all_nine_boundaries():
+    generator = _load_generator()
+    config = generator.POLICIES["savers_credit"]
+    cases = {case.case_id: case for case in config.cases}
+    fixture = yaml.safe_load(
+        (
+            REPO_ROOT
+            / "comparisons/fixtures/us-savers-grid-boundary-probes.yaml"
+        ).read_text()
+    )
+    outputs = {
+        record["name"]: record["output"][config.axiom_output]
+        for record in fixture
+    }
+    expected = {
+        "single-one-below-50-percent-limit": (24_249, 1_000),
+        "single-one-below-20-percent-limit": (26_249, 400),
+        "single-one-below-10-percent-limit": (40_249, 200),
+        "joint-one-below-50-percent-limit": (48_499, 1_000),
+        "joint-one-below-20-percent-limit": (52_499, 400),
+        "joint-one-below-10-percent-limit": (80_499, 200),
+        "head-of-household-one-below-50-percent-limit": (36_374, 1_000),
+        "head-of-household-one-below-20-percent-limit": (39_374, 400),
+        "head-of-household-one-below-10-percent-limit": (60_374, 200),
+    }
+    assert set(outputs) == set(expected)
+    for case_id, (agi, credit) in expected.items():
+        assert cases[case_id].inputs["adjusted_gross_income"] == agi
+        assert float(outputs[case_id]) == credit
+
+
 def test_savers_grid_report_discloses_section_911_match_cancellation():
     generator = _load_generator()
     config = generator.POLICIES["savers_credit"]
@@ -553,6 +812,33 @@ def test_additional_medicare_fixture_enforces_ordinary_person_boundary():
         )
 
 
+def test_additional_medicare_supplement_binds_all_nine_new_scenarios():
+    generator = _load_generator()
+    config = generator.POLICIES["additional_medicare_tax"]
+    path = (
+        REPO_ROOT
+        / "comparisons/fixtures/"
+        "us-additional-medicare-grid-threshold-probes.yaml"
+    )
+    records = {record["name"]: record for record in generator._fixture_records(path)}
+    new_records = {
+        name: record for name, record in records.items() if record.get("input")
+    }
+    assert len(new_records) == 9
+    cases = {case.case_id: case for case in config.cases}
+    thresholds = {
+        "single": 200_000,
+        "joint": 250_000,
+        "separate": 125_000,
+    }
+    for case_id, record in new_records.items():
+        case = cases[case_id]
+        generator._validate_additional_medicare_fixture(case, record["input"])
+        assert record["output"][config.axiom_output] == thresholds[
+            case.filing_status
+        ]
+
+
 def test_axiom_fixture_is_resolved_only_from_supplied_roots(tmp_path):
     generator = _load_generator()
     original = generator.POLICIES["net_investment_income_tax"]
@@ -598,7 +884,10 @@ def test_axiom_fixture_is_resolved_only_from_supplied_roots(tmp_path):
 def test_non_vacuous_guard_requires_a_nonzero_matching_case():
     generator = _load_generator()
     config = generator.POLICIES["additional_medicare_tax"]
-    all_zero = {case.case_id: 0.0 for case in config.cases}
+    row_ids = [
+        row_id for row_id, _case, _binding in generator._comparison_rows(config)
+    ]
+    all_zero = dict.fromkeys(row_ids, 0.0)
 
     with pytest.raises(RuntimeError, match="vacuous grid"):
         generator._assert_non_vacuous(config, all_zero, all_zero)
@@ -610,22 +899,20 @@ def test_non_vacuous_guard_requires_a_nonzero_matching_case():
     generator._assert_non_vacuous(config, axiom, policyengine)
 
 
-def test_v2_report_counts_one_pair_per_case():
+def test_v2_report_counts_only_comparable_additional_medicare_pairs():
     generator = _load_generator()
     config = generator.POLICIES["additional_medicare_tax"]
+    rows = generator._comparison_rows(config)
     axiom = {
-        case.case_id: float(index * 100)
-        for index, case in enumerate(
-            config.cases,
-            start=1,
-        )
+        row_id: float(index * 100)
+        for index, (row_id, _case, _binding) in enumerate(rows, start=1)
     }
     policyengine = dict(axiom)
     policyengine["amt-single-250k"] -= 1
     fixture_inputs = {case.case_id: {} for case in config.cases}
     components = {
-        case.case_id: {"additional_medicare_tax": policyengine[case.case_id]}
-        for case in config.cases
+        row_id: {binding.policyengine_target: policyengine[row_id]}
+        for row_id, _case, binding in rows
     }
 
     report = generator._build_report(
@@ -647,16 +934,26 @@ def test_v2_report_counts_one_pair_per_case():
             "policyengine_us": "1.767.3",
         },
     }
-    assert report["engine_bindings"]["policyengine"]["outputs"] == [
-        "additional_medicare_tax"
+    assert report["engine_bindings"]["policyengine"]["outputs"] == []
+    bindings = report["engine_bindings"]["policyengine"]["comparison_bindings"]
+    assert [binding["parameter"] for binding in bindings] == [
+        "gov.irs.payroll.medicare.additional.exclusion",
+        "gov.irs.payroll.medicare.additional.rate",
     ]
-    assert report["summary"]["comparison_count"] == 18
-    assert report["summary"]["match_count"] == 17
+    assert report["scenario_count"] == 27
+    assert report["summary"]["comparison_count"] == 28
+    assert report["summary"]["match_count"] == 27
     assert report["summary"]["mismatch_count"] == 1
-    assert report["aggregates"][0]["comparison_count"] == 18
-    assert report["aggregates"][0]["match_count"] == 17
+    assert report["aggregates"][0]["comparison_count"] == 27
+    assert report["aggregates"][0]["match_count"] == 26
     assert report["aggregates"][0]["mismatch_count"] == 1
+    assert report["aggregates"][1]["comparison_count"] == 1
+    assert report["aggregates"][1]["match_count"] == 1
     assert len(report["mismatches"]) == 1
+    assert all(
+        "federal_additional_medicare_tax" not in case["concept"]
+        for case in report["cases"]
+    )
 
 
 def test_registry_runner_uses_suite_pin_overrides_and_configured_roots(
