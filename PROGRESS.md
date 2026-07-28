@@ -8,8 +8,8 @@
 - Local PR refs (`fix/pe-runner-requested-month` and
   `origin/fix/pe-runner-requested-month`) both resolve to the requested head.
 - Live GitHub/fetch verification is sandbox-blocked by DNS resolution failures.
-- Review status: correctness audit in progress; one blocking fail-closed defect
-  reproduced.
+- Review status: gates complete; verdict is `REQUEST-CHANGES` for one blocking
+  fail-closed defect.
 
 ## Done
 
@@ -32,13 +32,25 @@
   `ssi` are omitted from requested-month candidates and their annual values are
   returned unchanged. The four-name SNAP allowlist masks this only for SNAP.
 - Confirmed no executable annual-divide-by-12 path remains in the runner.
+- Enumerated all 29 committed comparison suites with scalar month periods:
+  22 US PolicyEngine suites and seven unrelated UKMOD suites. The complete
+  affected set is 10 SNAP + eight TANF + SSI (19); CA/CO TANF are numeric YEAR
+  outputs and the Medicaid targets are boolean YEAR outputs, so no affected
+  suite is omitted.
+- Confirmed containment: the PR diff contains only the runner and three test
+  files; no reports, dispositions, suites, programs, or affected-map data.
+- Full tests with the live RuleSpec checkout: `2251 passed, 63 skipped, 6
+  failed`. All six failures reproduce on cached clean `origin/main`: CA/IL/NY/OH
+  external-RuleSpec mapping drift plus the sandboxed `npx esbuild` DNS failure.
+- Ruff 0.15.12 lint passes on both PR and clean main. Repository-wide format
+  check is already dirty on main (200 files) and is slightly improved on the PR
+  (198 files).
+- Confirmed the only real-PolicyEngine regression test import-skips in ordinary
+  PR CI because CI installs `dev`, while PolicyEngine is a separate optional
+  extra; no committed TANF/SSI requested-month integration test exists.
 
 ## Next
 
-- Enumerate every committed month-period suite and compare it with the PR's
-  affected-suite list.
-- Run tests and Ruff on the PR head and on a clean local-main worktree for
-  baseline comparison.
 - Consolidate evidence into the required full report and summary files.
 
 ---
