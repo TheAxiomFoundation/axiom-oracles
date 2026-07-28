@@ -8,6 +8,7 @@
 - Scope: confirm only the round-1 fail-closed defect, specified healthy-path
   regressions, YEAR/boolean/plain-year invariants, exact delta, and gates.
 - Review status: all scoped checks and gates complete; verdict is `APPROVE`.
+- Final report: `REVIEW-REPORT.md`.
 - Remote/GitHub writes: prohibited; none attempted.
 
 ## Done
@@ -48,10 +49,11 @@
   clean-main failures (CA/IL/NY/OH external RuleSpec drift plus the sandboxed
   dashboard-loader `npx esbuild` lookup); there are no new failures.
 - Ruff 0.15.12 passes repository-wide: `All checks passed!`.
+- Wrote the scoped confirmation report with an `APPROVE` verdict.
 
 ## Next
 
-- Write the final verdict to `REVIEW-REPORT.md`.
+- None; deliver the committed report and verdict.
 
 ---
 
