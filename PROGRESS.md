@@ -7,8 +7,7 @@
 - Reviewed commit: `bd9085e3e7186733eea96d9bf225adab4482dc90`
 - Scope: confirm only the round-1 fail-closed defect, specified healthy-path
   regressions, YEAR/boolean/plain-year invariants, exact delta, and gates.
-- Review status: scoped runtime confirmation complete; repository gates in
-  progress; no blocking defect found so far.
+- Review status: all scoped checks and gates complete; verdict is `APPROVE`.
 - Remote/GitHub writes: prohibited; none attempted.
 
 ## Done
@@ -44,11 +43,14 @@
   `_policyengine_definition_period` by replacing it with an assertion-raising
   mock during real runner requests.
 - Exact-environment targeted tests pass: `15 passed, 104 warnings`.
+- Full repository pytest completed in 324.96 seconds: `2253 passed, 62 skipped,
+  6 failed, 104 warnings`. The six failing node IDs exactly match round 1's
+  clean-main failures (CA/IL/NY/OH external RuleSpec drift plus the sandboxed
+  dashboard-loader `npx esbuild` lookup); there are no new failures.
+- Ruff 0.15.12 passes repository-wide: `All checks passed!`.
 
 ## Next
 
-- Run repository tests and Ruff, reconciling results with the six round-1
-  clean-main failures.
 - Write the final verdict to `REVIEW-REPORT.md`.
 
 ---
