@@ -1,4 +1,37 @@
-# PROGRESS — us-pe reconciliation (drive `unexplained_total` 23,138 → 0)
+# PROGRESS — PR #416 blind adversarial review
+
+## State
+
+- Review worktree: `.git/review-worktrees/pr416-d78d46e2-audit`
+- Throwaway branch: `review/pr416-d78d46e2-audit`
+- Reviewed commit: `d78d46e2914a2f3a2b2d075f4dd18eb6ebe430eb`
+- Local PR refs (`fix/pe-runner-requested-month` and
+  `origin/fix/pe-runner-requested-month`) both resolve to the requested head.
+- Live GitHub/fetch verification is sandbox-blocked by DNS resolution failures.
+- Review status: setup in progress; verdict not yet determined.
+
+## Done
+
+- Loaded the PolicyEngine review workflow and PolicyEngine calculation guidance.
+- Confirmed the requested commit exists locally and created an isolated worktree
+  without checking out or modifying the PR branch.
+- Compared the local PR head with the locally cached `origin/main`; merge base is
+  `a62340d2f1e2873b43404478835de5577e685736`.
+
+## Next
+
+- Audit requested-month execution, period/type invariants, fallback reachability,
+  and fail-closed behavior.
+- Independently reproduce SNAP, TANF, and SSI monthly values on PE-US 1.767.3.
+- Enumerate every committed month-period suite and compare it with the PR's
+  affected-suite list.
+- Run tests and Ruff on the PR head and on a clean local-main worktree for
+  baseline comparison.
+- Consolidate evidence into the required full report and summary files.
+
+---
+
+# Archived progress — us-pe reconciliation (drive `unexplained_total` 23,138 → 0)
 
 Predecessor: **#224** stood up the us-pe conformance universe (measurement only,
 day-one unexplained=23,138). This lane (`us-pe-reconciliation` from `origin/main`
