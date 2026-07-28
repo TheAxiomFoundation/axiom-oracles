@@ -7,7 +7,8 @@
 - Reviewed commit: `bd9085e3e7186733eea96d9bf225adab4482dc90`
 - Scope: confirm only the round-1 fail-closed defect, specified healthy-path
   regressions, YEAR/boolean/plain-year invariants, exact delta, and gates.
-- Review status: setup complete; verdict not yet determined.
+- Review status: delta and blast-radius checks complete; runtime confirmation in
+  progress; verdict not yet determined.
 - Remote/GitHub writes: prohibited; none attempted.
 
 ## Done
@@ -17,11 +18,20 @@
 - Created an isolated worktree at the exact requested head without checking out
   or modifying the PR branch.
 - Inspected the round-1 ledger and report conventions.
+- Confirmed `bd9085e3` has exactly one parent, `d78d46e2`, and the range contains
+  exactly one non-merge commit.
+- Confirmed the exact delta is 44 insertions and no deletions in only:
+  - `axiom_oracles/adapters/policyengine/runner.py` (six insertions)
+  - `tests/test_policyengine_requested_month.py` (38 insertions)
+- Confirmed the production change is one generic fail-closed guard whose error
+  names both the variable and requested period; `git diff --check` passes.
+- Indexed the disposable tree locally for the GitNexus review workflow.
+  GitNexus reports low blast-radius risk: two direct callers (`run_case` and
+  `_run_case_batch_once`), five upstream symbols, one process, and two modules.
+  No unupdated direct caller is exposed by the signature-preserving change.
 
 ## Next
 
-- Confirm `d78d46e2..bd9085e3` is exactly one commit changing only the runner and
-  the requested-month test file.
 - Re-run the forced-unavailable `al_tanf` and `ssi` probes and inspect errors.
 - Re-check SNAP COLA, TANF, SSI, YEAR-defined, boolean, and plain-year behavior.
 - Run repository tests and Ruff, reconciling results with the six round-1
