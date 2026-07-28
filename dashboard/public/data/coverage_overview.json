@@ -283,10 +283,21 @@
      "component surface only; caller supplies completed Mississippi taxable income for the joint/default Person branch",
      "filing-method selection, taxable-income construction, credits, allocation, proration, and final Mississippi liability remain out of scope"
     ],
-    "suite": "ms-income-tax-populace"
-   },
-   {
-    "program": "state_income_tax",
+   "suite": "ms-income-tax-populace"
+  },
+  {
+   "program": "state_income_tax",
+   "jurisdiction": "MT",
+   "status": "executable",
+   "source": "rulespec-us 6c58962f3de57a4dd26737c88767de728d230603 + pinned Populace campaign projected as mt-income-tax-populace over the canonical bounded TY2026 ordinary-income and net-long-term-capital-gain schedules before nonrefundable credits",
+   "known_non_tanf_gaps": [
+    "bounded before-nonrefundable-credit surface only; caller supplies completed Montana taxable income, its section 1222 net-long-term-capital-gain portion, and filing-status classifiers",
+    "taxable-income construction, credits, payments, and final annual liability remain out of scope"
+   ],
+   "suite": "mt-income-tax-populace"
+  },
+  {
+   "program": "state_income_tax",
     "jurisdiction": "OH",
     "status": "executable",
     "source": "pinned Populace campaign projected as oh-income-tax-populace over the bounded 2026 Ohio Revised Code section 5747.02(A)(3)(c) nonbusiness-income schedule before nonrefundable credits",

@@ -782,6 +782,15 @@
       "source": "comparisons/mt-income-tax-liability.yaml"
     },
     {
+      "suite": "mt-income-tax-populace",
+      "name": null,
+      "report": "axiom-policyengine-mt-income-tax-populace.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/state-income-tax-populace.yaml"
+    },
+    {
       "suite": "nc-income-tax-liability",
       "name": "nc-income-tax-liability",
       "report": "axiom-policyengine-taxsim-nc-income-tax-liability.json",

@@ -150,6 +150,12 @@ STATE_RULES = {
             ("state_income_tax", None),
         ),
     ],
+    "mt": [
+        (
+            r"^policies/income_tax/pilot_liability_pipeline\.yaml$",
+            ("state_income_tax", None),
+        ),
+    ],
     "ms": [
         (
             r"^policies/income_tax/"
