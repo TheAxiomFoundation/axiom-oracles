@@ -671,6 +671,14 @@ residual), #229 (small-suite grounding).
   lacks required below/exact coordinated-threshold coverage for joint and MFS
   cases and lacks SE-only above-threshold probes for MFS and the $200,000
   category.
+- Regenerated the Saver's Credit generator output with the exact pinned PE
+  stack and exact RuleSpec snapshot check. Applying the repository's normal
+  v2-to-v2.1 disposition merge, case-metadata stripping, and dashboard
+  serialization while retaining the committed immutable provenance block
+  produced a byte-identical 70,765-byte report with SHA-256
+  `826062ec24bb4b9a664aadfce6d7b30db2b22c7df5be046b2c5e2b9eb91b742c`.
+- Confirmed both reports' engines blocks attest `policyengine` 4.18.9,
+  `policyengine-us` 1.767.3, and `policyengine-core` 3.30.3.
 
 ### Next
 
