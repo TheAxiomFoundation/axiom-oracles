@@ -1,3 +1,35 @@
+# PROGRESS — PR #416 round-3 confirmation
+
+## State
+
+- Review worktree: `.git/review-worktrees/pr416-b5e0cd31-confirm`
+- Throwaway branch: `review/pr416-b5e0cd31-confirm`
+- Reviewed commit: `b5e0cd31e4252df32bc8188ad3c8c759fa74da53`
+- Baseline: `bd9085e3e7186733eea96d9bf225adab4482dc90`
+- Scope: assess the metadata-less carve-out, re-run the forced-unavailable
+  probe and stub-engine contract test, spot-check healthy real-PE values, and
+  verify the exact delta and repository gates.
+- Review status: in progress; verdict not yet determined.
+- Final report: `REVIEW-REPORT.md`.
+- Remote/GitHub writes: prohibited; none attempted.
+
+## Done
+
+- Loaded the GitNexus PR-review workflow.
+- Confirmed the requested head and round-2 baseline objects exist locally.
+- Inspected the prior round-2 ledger and report conventions.
+- Created an isolated review worktree rooted at the exact requested head,
+  without checking out or modifying the PR branch.
+
+## Next
+
+- Inspect the exact delta and map the changed runner path and callers.
+- Determine whether genuine comparison suites can lack PolicyEngine metadata.
+- Re-run the required fault-injection, contract, healthy-path, and gate checks.
+- Write and commit `REVIEW-REPORT.md` with the final verdict.
+
+---
+
 # PROGRESS — us-pe reconciliation (drive `unexplained_total` 23,138 → 0)
 
 Predecessor: **#224** stood up the us-pe conformance universe (measurement only,
