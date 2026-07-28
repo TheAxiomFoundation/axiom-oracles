@@ -57,13 +57,34 @@
   an accounting-period change, and estate or trust/common trust
   fund/partnership. The PR rationale's taxonomy is substantively accurate;
   “short-year” and “estate/trust” are only shorthand for the fuller C/D text.
+- Independently audited section 67(h) against the exact PolicyEngine wheel.
+  `gov.irs.deductions.itemized.misc.applies` exists with metadata unit `bool`
+  and period `year`, has Python-boolean values `true` from 2013 and `false`
+  from 2018 with no later override, and evaluates `False` at both ends of
+  2026 under PolicyEngine Core 3.30.3. Its TaxUnit/year consumer gates the
+  complete PE-modeled miscellaneous-deduction aggregate, rather than one
+  expense source or only the two-percent floor.
+- Confirmed the current-law intent from PolicyEngine history: OBBBA commit
+  `bf338c0dcd509833c518b8ae7a87ff68064d6ece`, an ancestor of the 1.767.3
+  release commit, deliberately removed the former `2026-01-01: true`
+  reactivation. The parameter metadata still links the former section 67(g)
+  anchor; that stale upstream anchor is non-blocking because the leaf's broad
+  gate, value history, and current-law update match the retained section
+  67(h) judgment.
+- Verified the RuleSpec section 67(h) atom is TaxUnit/Judgment/Year, formula
+  `false` from 2018, with a 2026 companion expecting `not_holds`. The exact
+  retained corpus provision says no miscellaneous itemized deduction is
+  allowed after 2017.
+- Checked mapping house style and the loaded registry object. All 888
+  repository `parameter_value` mappings omit `entity`; the new entry's
+  `period: year`, `comparison: boolean`, omitted entity/unit, and comparable
+  parameter target are appropriate for a global bool/year leaf feeding a
+  TaxUnit/year rule. Full registry validation returns zero issues.
 
 ## Next
 
-1. Verify the section 67(h) parameter schema, 2026 value, semantics, and mapping
-   house style.
-2. Run the changed-file coverage gate against the specified RuleSpec worktree.
-3. Verify YAML, duplicate IDs, diff containment, and the clean-main failure
+1. Run the changed-file coverage gate against the specified RuleSpec worktree.
+2. Verify YAML, duplicate IDs, diff containment, and the clean-main failure
    baseline without using the shared stash.
-4. Write and commit `REVIEW-REPORT.md`, update this ledger, and report the
+3. Write and commit `REVIEW-REPORT.md`, update this ledger, and report the
    verdict without writing to the PR branch, remotes, or GitHub.
