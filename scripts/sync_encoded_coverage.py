@@ -67,6 +67,12 @@ STATE_RULES = {
             ("state_income_tax", None),
         ),
     ],
+    "ar": [
+        (
+            r"^policies/income_tax/pilot_liability_pipeline\.yaml$",
+            ("state_income_tax", None),
+        ),
+    ],
     "az": [
         (r"^policies/des/ccap/", ("childcare_assistance", None)),
         (r"^policies/des/faa5/(ca-|two-parent)", ("tanf", None)),

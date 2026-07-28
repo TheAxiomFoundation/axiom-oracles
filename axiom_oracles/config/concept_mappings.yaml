@@ -2963,6 +2963,7 @@ concepts:
     category: tax
     comparison: amount
     tolerance: 0.01
+    relative_tolerance: 0.0000001
     priority: high
     locales: [US-AR]
     scope: {type: country, geoid: US}

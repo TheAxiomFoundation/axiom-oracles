@@ -29033,6 +29033,20 @@ mappings:
     candidate_priority: P4
     rationale: Axiom's signed net-liability output is deliberately zero while the annual income, deduction, tax, and credit chain remains source held; it must not be interpreted as zero Arizona tax. PolicyEngine az_income_tax is a completed modeled liability.
 
+  # Arkansas Act 2 of 2026 supplies this bounded Person-grain individual
+  # schedule component. Person-to-TaxUnit summation belongs only to the
+  # reviewed Populace comparison accounting and does not change its entity.
+  - legal_id: us-ar:policies/income_tax/pilot_liability_pipeline#ar_pit_pilot_income_tax_before_non_refundable_credits_indiv
+    country: us
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: ar_income_tax_before_non_refundable_credits_indiv
+    entity: person
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Both outputs apply Arkansas Act 2 of 2026 section 1's complete tax-year-2026 individual schedule, including the high-income bracket-adjustment table, to completed-return individual taxable income at Person grain before nonrefundable credits; this narrow mapping excludes taxable-income construction, filing-unit aggregation or method selection, low-income tables, credits, payments, and final liability.
+
   # Arkansas's TY2026 resident annual-return interface is fully source held.
   # Act 2 supplies the ordinary rate schedule, but the pinned corpus does not
   # supply the net-income, deduction, exemption, surtax, or credit chain.
