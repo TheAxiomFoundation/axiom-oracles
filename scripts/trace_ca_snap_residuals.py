@@ -1,30 +1,216 @@
 #!/usr/bin/env python3
-"""Trace the committed ca-snap-ecps residual households on PE-US 1.767.3.
+"""Trace pinned pre-disposition ca-snap-ecps households on PE-US 1.767.3.
 
 This is deliberately a diagnostic, not a comparison-suite runner. It reads the
-committed report and compact case evidence, evaluates only the households with
-unexplained rows, and never publishes or rewrites a dashboard artifact.
+explicit base report and committed compact case evidence, evaluates only the
+households that were unexplained in that base, and never publishes or rewrites
+a dashboard artifact.
 """
 
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
+import re
+import subprocess
 from importlib.metadata import version
 from pathlib import Path
 from typing import Any
 
 
 ROOT = Path(__file__).resolve().parent.parent
-REPORT = ROOT / "dashboard/public/data/axiom-policyengine-ca-snap-ecps.json"
+REPORT_RELATIVE_PATH = "dashboard/public/data/axiom-policyengine-ca-snap-ecps.json"
+TRACER_RELATIVE_PATH = "scripts/trace_ca_snap_residuals.py"
+RUNNER_RELATIVE_PATH = "axiom_oracles/adapters/policyengine/runner.py"
 CASE_DIR = ROOT / "dashboard/public/data/cases/ca-snap-ecps"
+
+BASE_REPORT_SHA256 = "a5ded34100a124ec3c6409a409fb64bca788d510b5233d1c9992a1809e6b484d"
+EXPECTED_BASE_MISMATCHES = 684
+EXPECTED_BASE_MISMATCH_HOUSEHOLDS = 499
+EXPECTED_BASE_UNEXPLAINED_ROWS = 441
+EXPECTED_BASE_RESIDUAL_HOUSEHOLDS = 361
+LEGACY_ANNUAL_SEMANTICS = "legacy_snap_outputs_calendar_sum_divided_by_12"
+LEGACY_MONTHLY_NORMALIZED_VARIABLES = {
+    "snap",
+    "snap_normal_allotment",
+}
+
+EXPECTED_BASE_PROVENANCE = {
+    "dataset": {"population": "enhanced-cps", "source": "config"},
+    "engine": {
+        "axiom_rules_engine_sha": "48797e101c093bb388be718c6f5d8fc9d9f94a7d",
+        "axiom_rules_engine_version": "0.1.0",
+    },
+    "generated_at": "2026-07-26T04:30:45Z",
+    "generated_by": "scripts/run_comparison.py::ca-snap-ecps",
+    "oracle": {
+        "name": "policyengine",
+        "policyengine_package": "policyengine==4.18.9",
+        "policyengine_us": "1.752.2",
+    },
+    "rulespecs": [
+        {
+            "repo": "TheAxiomFoundation/rulespec-us",
+            "sha": "ca2d424fcb85ce8c3a8f4706113331710f114460",
+        }
+    ],
+    "run_kind": "manual",
+    "schema": "axiom_oracles.provenance.v1",
+}
+
+EXPECTED_POPULACE_PIN = {
+    "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+    "revision": "populace-us-2024-f0af251-703bd81a565c-20260620T201958Z",
+    "sha256": ("16be6338f9d0b3c339883dae59949e995663b64cf145de6728b3dd0f916c5d5f"),
+}
 
 EXPECTED_VERSIONS = {
     "policyengine": "4.18.9",
     "policyengine-us": "1.767.3",
     "policyengine-core": "3.30.3",
 }
+
+
+def _row_key(row: dict[str, Any]) -> tuple[str, str, str]:
+    return row["case_id"], row["concept"], row["kind"]
+
+
+def _sha256_path(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def _implementation_provenance() -> dict[str, str]:
+    return {
+        "tracer_path": TRACER_RELATIVE_PATH,
+        "tracer_sha256": _sha256_path(ROOT / TRACER_RELATIVE_PATH),
+        "runner_path": RUNNER_RELATIVE_PATH,
+        "runner_sha256": _sha256_path(ROOT / RUNNER_RELATIVE_PATH),
+    }
+
+
+def _validate_base_report(report: dict[str, Any]) -> None:
+    if report.get("schema_version") != "axiom.comparison_report.v2.1":
+        raise ValueError("base report schema must be axiom.comparison_report.v2.1")
+    if report.get("suite") != "ca-snap-ecps":
+        raise ValueError("base report must be for ca-snap-ecps")
+    if report.get("provenance") != EXPECTED_BASE_PROVENANCE:
+        raise ValueError("base report provenance does not match the pinned run")
+
+    mismatches = report.get("mismatches")
+    if not isinstance(mismatches, list) or len(mismatches) != (
+        EXPECTED_BASE_MISMATCHES
+    ):
+        raise ValueError(
+            "base report must carry exactly "
+            f"{EXPECTED_BASE_MISMATCHES} complete mismatches"
+        )
+    summary = report.get("summary") or {}
+    if summary.get("mismatch_count") != EXPECTED_BASE_MISMATCHES:
+        raise ValueError("base report summary mismatch_count is not 684")
+    stored = summary.get(
+        "stored_mismatch_example_count",
+        len(mismatches),
+    )
+    if stored != EXPECTED_BASE_MISMATCHES:
+        raise ValueError("base report mismatch list is incomplete")
+
+    keys = [_row_key(row) for row in mismatches]
+    if len(set(keys)) != len(keys):
+        raise ValueError("base report contains duplicate mismatch keys")
+
+    cases = report.get("cases")
+    if not isinstance(cases, list) or len(cases) != (EXPECTED_BASE_MISMATCH_HOUSEHOLDS):
+        raise ValueError("base report mismatch-case evidence is incomplete")
+    cases_by_id: dict[str, dict[str, Any]] = {}
+    nested_keys: set[tuple[str, str, str]] = set()
+    for case in cases:
+        case_id = case.get("case_id")
+        if not isinstance(case_id, str) or case_id in cases_by_id:
+            raise ValueError("base report contains duplicate or invalid case ids")
+        cases_by_id[case_id] = case
+        for row in case.get("mismatches") or []:
+            nested_keys.add((case_id, row["concept"], row["kind"]))
+    if set(keys) != nested_keys:
+        raise ValueError(
+            "base report top-level mismatches do not exactly match case evidence"
+        )
+
+    unexplained = [row for row in mismatches if row.get("disposition") is None]
+    if len(unexplained) != EXPECTED_BASE_UNEXPLAINED_ROWS:
+        raise ValueError(
+            "base report must carry exactly "
+            f"{EXPECTED_BASE_UNEXPLAINED_ROWS} unexplained rows"
+        )
+    households = {row["case_id"] for row in unexplained}
+    if len(households) != EXPECTED_BASE_RESIDUAL_HOUSEHOLDS:
+        raise ValueError(
+            "base report must carry exactly "
+            f"{EXPECTED_BASE_RESIDUAL_HOUSEHOLDS} residual households"
+        )
+
+
+def _load_base_report(
+    *,
+    base_ref: str | None,
+    base_report: Path | None,
+) -> tuple[dict[str, Any], dict[str, str]]:
+    if (base_ref is None) == (base_report is None):
+        raise ValueError("provide exactly one of --base-ref or --base-report")
+
+    source: dict[str, str]
+    if base_ref is not None:
+        if not base_ref.strip() or base_ref.startswith("-"):
+            raise ValueError(f"invalid base ref {base_ref!r}")
+        resolved = subprocess.run(
+            [
+                "git",
+                "-C",
+                str(ROOT),
+                "rev-parse",
+                "--verify",
+                "--end-of-options",
+                f"{base_ref}^{{commit}}",
+            ],
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        if not re.fullmatch(r"[0-9a-f]{40,64}", resolved):
+            raise ValueError(f"git resolved {base_ref!r} ambiguously: {resolved!r}")
+        raw = subprocess.run(
+            [
+                "git",
+                "-C",
+                str(ROOT),
+                "show",
+                f"{resolved}:{REPORT_RELATIVE_PATH}",
+            ],
+            check=True,
+            capture_output=True,
+        ).stdout
+        source = {"kind": "git", "commit": resolved}
+    else:
+        assert base_report is not None
+        raw = base_report.read_bytes()
+        source = {"kind": "path", "path": str(base_report)}
+
+    digest = hashlib.sha256(raw).hexdigest()
+    if digest != BASE_REPORT_SHA256:
+        raise ValueError(
+            f"base report sha256 mismatch: expected {BASE_REPORT_SHA256}, got {digest}"
+        )
+    report = json.loads(raw)
+    if not isinstance(report, dict):
+        raise ValueError("base report must be a JSON object")
+    _validate_base_report(report)
+    return report, {**source, "sha256": digest}
+
 
 TRACE_VARIABLES = (
     "snap",
@@ -187,10 +373,6 @@ def _prepare_policyengine() -> dict[str, str]:
     return installed
 
 
-def _row_key(row: dict[str, Any]) -> tuple[str, str, str]:
-    return row["case_id"], row["concept"], row["kind"]
-
-
 def _outcome(case: dict[str, Any], suffix: str) -> dict[str, Any]:
     rows = [
         row
@@ -243,13 +425,11 @@ def _household_shape(ages: list[int]) -> str:
 
 
 def _load_residuals(
+    report: dict[str, Any],
     limit: int | None,
-) -> tuple[dict[str, Any], list[dict[str, Any]]]:
-    report = json.loads(REPORT.read_text())
+) -> list[dict[str, Any]]:
     unexplained_keys = {
-        _row_key(row)
-        for row in report["mismatches"]
-        if row.get("disposition") is None
+        _row_key(row) for row in report["mismatches"] if row.get("disposition") is None
     }
     residuals = []
     for case in report["cases"]:
@@ -283,7 +463,7 @@ def _load_residuals(
     residuals.sort(key=lambda row: int(row["case_id"].removeprefix("ecps-")))
     if limit is not None:
         residuals = residuals[:limit]
-    return report, residuals
+    return residuals
 
 
 def _load_compact_evidence(case_ids: set[str]) -> dict[str, dict[str, Any]]:
@@ -291,6 +471,10 @@ def _load_compact_evidence(case_ids: set[str]) -> dict[str, dict[str, Any]]:
     for chunk in sorted(CASE_DIR.glob("chunk-*.json")):
         for case in json.loads(chunk.read_text()):
             if case["id"] in case_ids:
+                if case["id"] in compact:
+                    raise ValueError(
+                        f"Committed compact evidence duplicates {case['id']}"
+                    )
                 compact[case["id"]] = case
     missing = sorted(case_ids - compact.keys())
     if missing:
@@ -318,6 +502,49 @@ def _committed_axiom_evidence(case: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+class _LegacyCalendarAverageMixin:
+    """Reproduce the requested-month normalization used by the stamped report.
+
+    Before PR #416, the comparison outputs ``snap`` and
+    ``snap_normal_allotment`` were divided by 12, while diagnostic
+    intermediates retained their annual dataset values. Supplying that exact
+    legacy selection through the current runner's requested-period hook is
+    deliberate: it keeps input overrides applied to the annual dataset instead
+    of rebuilding an unmodified direct-month situation.
+    """
+
+    def _requested_period_values(
+        self,
+        pe,
+        cases,
+        annual_values_by_case,
+    ) -> list[dict[str, float | bool]]:
+        from axiom_oracles.adapters.policyengine.runner import (
+            _policyengine_definition_period,
+            _policyengine_variable_is_boolean,
+        )
+
+        requested: list[dict[str, float | bool]] = []
+        for case, annual_values in zip(
+            cases,
+            annual_values_by_case,
+            strict=True,
+        ):
+            values: dict[str, float | bool] = {}
+            if "-" in str(case.period):
+                for variable, value in annual_values.items():
+                    if _policyengine_variable_is_boolean(pe, variable, value):
+                        continue
+                    if _policyengine_definition_period(pe, variable) == "month":
+                        values[variable] = (
+                            float(value) / 12
+                            if variable in LEGACY_MONTHLY_NORMALIZED_VARIABLES
+                            else float(value)
+                        )
+            requested.append(values)
+        return requested
+
+
 class _InputOverrideRunner:
     def __init__(
         self,
@@ -327,7 +554,7 @@ class _InputOverrideRunner:
     ) -> None:
         from axiom_oracles.adapters.policyengine.runner import PolicyEngineRunner
 
-        class Runner(PolicyEngineRunner):
+        class Runner(_LegacyCalendarAverageMixin, PolicyEngineRunner):
             def _policyengine_dataset_rows(inner_self, cases, variables):
                 rows = list(
                     super(Runner, inner_self)._policyengine_dataset_rows(
@@ -411,9 +638,7 @@ class _RequestedMonthRunner:
                 *_PERSON_CASE_CONCEPT_TO_PE.values(),
             ):
                 inputs.setdefault(variable, self._period_input(year, 0))
-            inputs["employment_income_before_lsr"] = dict(
-                inputs["employment_income"]
-            )
+            inputs["employment_income_before_lsr"] = dict(inputs["employment_income"])
             inputs["self_employment_income_before_lsr"] = dict(
                 inputs["self_employment_income"]
             )
@@ -431,13 +656,10 @@ class _RequestedMonthRunner:
             calculation_period = (
                 requested_period if definition_period == "month" else year
             )
-            raw = np.asarray(
-                simulation.calculate(variable, period=calculation_period)
-            )
+            raw = np.asarray(simulation.calculate(variable, period=calculation_period))
             entity = str(definition.entity.key)
             entity_ids = [
-                str(entity_id)
-                for entity_id in simulation.populations[entity].ids
+                str(entity_id) for entity_id in simulation.populations[entity].ids
             ]
             for index, case in enumerate(cases):
                 prefix = f"case_{index}"
@@ -502,14 +724,25 @@ def _bridge_checks(
         },
         "zero_self_employment": checks(zero_self_employment),
         "zero_tanf": checks(zero_tanf),
-        "zero_self_employment_and_tanf": checks(
-            zero_self_employment_and_tanf
-        ),
+        "zero_self_employment_and_tanf": checks(zero_self_employment_and_tanf),
     }
 
 
 def _parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
+    base = parser.add_mutually_exclusive_group(required=True)
+    base.add_argument(
+        "--base-ref",
+        help=(
+            "Git ref containing the exact pre-#362 disposition report. The ref "
+            "is resolved to a commit before reading the report blob."
+        ),
+    )
+    base.add_argument(
+        "--base-report",
+        type=Path,
+        help="Path to the exact pre-#362 disposition report JSON.",
+    )
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument(
         "--limit",
@@ -522,28 +755,56 @@ def _parse_args() -> argparse.Namespace:
 def main() -> int:
     args = _parse_args()
     os.environ.setdefault("HF_HUB_OFFLINE", "1")
+    report, _base_source = _load_base_report(
+        base_ref=args.base_ref,
+        base_report=args.base_report,
+    )
     runtime = _prepare_policyengine()
-    report, residuals = _load_residuals(args.limit)
+    residuals = _load_residuals(report, args.limit)
     case_ids = {row["case_id"] for row in residuals}
     compact = _load_compact_evidence(case_ids)
 
     from axiom_oracles.adapters.policyengine.runner import PolicyEngineRunner
     from axiom_oracles.core.geography import GeographyScope
-    from axiom_oracles.populations.populace_us import load_populace_us_cases
+    from axiom_oracles.populations.populace_us import (
+        POPULACE_PINS,
+        POPULACE_US_DATASET,
+        load_populace_us_cases,
+    )
+
+    pin = POPULACE_PINS[("policyengine/populace-us", "populace_us_2024.h5")]
+    populace_pin = {
+        "dataset": POPULACE_US_DATASET,
+        "revision": pin.revision,
+        "sha256": pin.sha256,
+    }
+    if populace_pin != EXPECTED_POPULACE_PIN:
+        raise ValueError(
+            f"certified Populace pin changed; refusing to replay against {populace_pin}"
+        )
 
     ca_cases = load_populace_us_cases(
         period="2026-01",
         sample_size=None,
         scope=GeographyScope(type="census_state", geoid="06"),
+        dataset=POPULACE_US_DATASET,
     )
     cases_by_id = {case.case_id: case for case in ca_cases}
+    if len(cases_by_id) != len(ca_cases):
+        raise ValueError("Live Populace loader returned duplicate case ids")
     missing = sorted(case_ids - cases_by_id.keys())
     if missing:
         raise ValueError(f"Live Populace loader is missing residual cases: {missing}")
     cases = [cases_by_id[row["case_id"]] for row in residuals]
 
+    class LegacyCalendarAverageRunner(
+        _LegacyCalendarAverageMixin,
+        PolicyEngineRunner,
+    ):
+        pass
+
     baseline = _result_values(
-        PolicyEngineRunner(batch_size=10_000).run_cases(
+        LegacyCalendarAverageRunner(batch_size=10_000).run_cases(
             cases,
             variables=list(TRACE_VARIABLES),
         )
@@ -558,9 +819,9 @@ def main() -> int:
         ).run_cases(cases, COUNTERFACTUAL_VARIABLES)
     )
     zero_tanf = _result_values(
-        _InputOverrideRunner(
-            spm_unit={"ca_tanf": 0, "tanf": 0}
-        ).run_cases(cases, COUNTERFACTUAL_VARIABLES)
+        _InputOverrideRunner(spm_unit={"ca_tanf": 0, "tanf": 0}).run_cases(
+            cases, COUNTERFACTUAL_VARIABLES
+        )
     )
     zero_self_employment_and_tanf = _result_values(
         _InputOverrideRunner(
@@ -602,15 +863,11 @@ def main() -> int:
         residual["counterfactuals"] = {
             "zero_self_employment": zero_self_employment[case_id],
             "zero_tanf": zero_tanf[case_id],
-            "zero_self_employment_and_tanf": (
-                zero_self_employment_and_tanf[case_id]
-            ),
+            "zero_self_employment_and_tanf": (zero_self_employment_and_tanf[case_id]),
         }
         residual["requested_month_pe"] = requested_month[case_id]
         residual["requested_month_counterfactuals"] = {
-            "zero_self_employment": (
-                requested_month_zero_self_employment[case_id]
-            ),
+            "zero_self_employment": (requested_month_zero_self_employment[case_id]),
             "zero_tanf": requested_month_zero_tanf[case_id],
             "zero_self_employment_and_tanf": (
                 requested_month_zero_self_employment_and_tanf[case_id]
@@ -625,10 +882,16 @@ def main() -> int:
         )
 
     output = {
-        "schema_version": "axiom_oracles.ca_snap_residual_trace.v1",
+        "schema_version": "axiom_oracles.ca_snap_residual_trace.v2",
         "runtime": runtime,
-        "committed_report": str(REPORT.relative_to(ROOT)),
-        "committed_report_provenance": report.get("provenance"),
+        "annual_baseline_semantics": LEGACY_ANNUAL_SEMANTICS,
+        "base_report": {
+            "path": REPORT_RELATIVE_PATH,
+            "provenance": report["provenance"],
+            "sha256": BASE_REPORT_SHA256,
+        },
+        "implementation": _implementation_provenance(),
+        "populace_pin": populace_pin,
         "residual_households": len(residuals),
         "unexplained_rows": sum(row["unexplained_rows"] for row in residuals),
         "trace_variables": list(TRACE_VARIABLES),

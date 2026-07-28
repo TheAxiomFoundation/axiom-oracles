@@ -667,9 +667,9 @@ residual), #229 (small-suite grounding).
   joint zero-self-employment/zero-TANF counterfactuals.
 - Verified live eligibility parity with the committed PE side for all 361
   households. Live benefit parity is exact for 284 households / 364 residual
-  rows; 77 households / 77 rows moved under the required 1.767.3 diagnostic
-  runtime and therefore cannot use live counterfactual output as proof of the
-  older committed amount without an independent case-level proof.
+  rows; 77 households / 77 rows changed under the required 1.767.3 diagnostic
+  runtime. The round-2 audit later established that only three close on direct
+  January output and the other 74 remain the same Axiom-higher mismatch class.
 - Extended the tracer with direct requested-month simulations. These reuse the
   batch bridge's explicit-zero income surface and calculate January 2026
   directly, instead of treating the calendar-year sum divided by 12 as January.
@@ -697,7 +697,8 @@ residual), #229 (small-suite grounding).
   The upstream rows are ten exact minor-only household repros of PE-US #9157.
 - Excluded three apparently closing income cases because a material medical or
   shelter-cap difference could create an offsetting-error result. Kept all 77
-  benefit rows with live 1.767.3 baseline drift unclassified. In-memory
+  changed-value benefit rows unclassified; the round-2 audit later split them
+  into three genuine version closures and 74 persistent mismatches. In-memory
   application validates 349 total disposition entries, no expired/orphaned
   entry, and exactly 96 unexplained rows after the 345 new entries.
 - Added an issue-specific, fail-closed disposition builder. It regenerates the
@@ -792,12 +793,29 @@ residual), #229 (small-suite grounding).
 - The stale-annotation and served-overlay focused suite passes 29 tests; Ruff,
   compilation, and whitespace checks pass on the four touched implementation
   and test files.
+- Made both issue-362 scripts require an explicit, mutually exclusive
+  `--base-ref` or `--base-report`. The loader resolves refs to commits and
+  refuses any report whose SHA-256, provenance, schema, counts, row identities,
+  or case identities differ from the pinned pre-disposition report at
+  `7dac6fef7019a00ed2b097db9250973223f9e907`.
+- Pinned the certified Populace revision and dataset SHA, exact PolicyEngine
+  4.18.9 / PolicyEngine-US 1.767.3 / Core 3.30.3 runtime, legacy annual-average
+  semantics, and tracer/runner implementation hashes into trace schema v2.
+- Replayed all 361 households / 441 rows from that base. The trace SHA-256 is
+  `c46af9b87c8f5ad01f1909bc45e80e00b4c4a50e5b802ea4ccbe194b5954b568`,
+  and its 361 per-case records are byte-for-byte identical to the retained
+  round-1 trace after correcting the post-#416 override path.
+- The builder now rejects any other trace bytes, validates the exact changed
+  set as three genuine version closures plus 74 persistent mismatches, routes
+  the 16 challenged two-mechanism cases through their complete live
+  counterfactuals, rejects the two failures, and gates exactly 341 generated
+  dispositions / 100 remaining unexplained rows.
+- Replay, integrity, and disposition tests pass 28/28; Ruff and whitespace
+  checks pass.
 
 ### Next
 
-1. Add explicit replay-base/provenance handling and deterministic
-   byte-identical replay checks.
-2. Apply the corrected disposition set, regenerate every served artifact, and
+1. Apply the corrected disposition set, regenerate every served artifact, and
    refresh scoreboard, burn-down, history, and report text.
-3. Run the complete repository `--check` chain and focused tests; record exact
+2. Run the complete repository `--check` chain and focused tests; record exact
    commands and results in the final untracked worker report.

@@ -10,8 +10,10 @@ from __future__ import annotations
 
 import argparse
 import copy
+import hashlib
 import json
 import math
+import sys
 from decimal import Decimal, ROUND_HALF_UP
 from pathlib import Path
 from typing import Any
@@ -20,9 +22,20 @@ import yaml
 
 
 ROOT = Path(__file__).resolve().parent.parent
-REPORT_PATH = (
-    ROOT / "dashboard/public/data/axiom-policyengine-ca-snap-ecps.json"
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from scripts.trace_ca_snap_residuals import (  # noqa: E402
+    BASE_REPORT_SHA256,
+    EXPECTED_BASE_PROVENANCE,
+    EXPECTED_BASE_RESIDUAL_HOUSEHOLDS,
+    EXPECTED_BASE_UNEXPLAINED_ROWS,
+    EXPECTED_POPULACE_PIN,
+    LEGACY_ANNUAL_SEMANTICS,
+    _implementation_provenance,
+    _load_base_report,
 )
+
 CASE_DIR = ROOT / "dashboard/public/data/cases/ca-snap-ecps"
 DISPOSITIONS_PATH = ROOT / "dispositions/ca-snap-ecps.yaml"
 
@@ -40,8 +53,7 @@ SE_FIX = (
     "4b4e34c155809a8d6010545b0bb8c54a86a97d93"
 )
 SNAP_INCOME = (
-    "https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/"
-    "part-273#p-273.9(b)"
+    "https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(b)"
 )
 SNAP_STUDENT = (
     "https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/"
@@ -77,11 +89,23 @@ STATIC_SE_NET = _ids(
     59123 59283 60499 61732 62042 62506 62715
     """
 )
-STATIC_SE = STATIC_SE_GROSS | STATIC_SE_NET
 
-MINOR_DEFECT = _ids(
-    "57065 57392 58015 58260 59775 60204 60550 60573 62068 62315"
+# Round-2 live counterfactual audit: these cases need the complete mechanisms
+# already encoded in TRACE_CLASSES rather than the single-mechanism forward
+# replay. The two failures close under none of the four live interventions and
+# therefore receive no disposition.
+STATIC_SE_MULTIMECHANISM = _ids(
+    """
+    56920 57511 58027 58098 58210 58520 58612 58771 59009 59014 59120
+    59593 59982 60109 60323 61411
+    """
 )
+STATIC_SE_FAILED = _ids("59082 62506")
+STATIC_SE = (
+    (STATIC_SE_GROSS | STATIC_SE_NET) - STATIC_SE_MULTIMECHANISM - STATIC_SE_FAILED
+)
+
+MINOR_DEFECT = _ids("57065 57392 58015 58260 59775 60204 60550 60573 62068 62315")
 
 TRACE_CLASSES = {
     "period": _ids(
@@ -141,8 +165,24 @@ TRACE_DEDUCTION_CONFOUNDS = _ids("58879 59946 60237")
 MEDICAL_BRIDGE = _ids("57453 59914 59967")
 DISABILITY_CAP_BRIDGE = _ids("56995 58732 61918 61953 62479 62602")
 
-EXPECTED_NEW_ROWS = 345
-EXPECTED_REMAINING_ROWS = 96
+EXPECTED_NEW_ROWS = 341
+EXPECTED_REMAINING_ROWS = 100
+EXPECTED_TRACE_SHA256 = (
+    "c46af9b87c8f5ad01f1909bc45e80e00b4c4a50e5b802ea4ccbe194b5954b568"
+)
+
+EXPECTED_VERSION_CHANGED_CASES = _ids(
+    """
+    56922 56934 56940 56970 56977 56987 57059 57104 57126 57171 57175
+    57217 57328 57426 57639 57690 57869 58062 58217 58244 58264 58327
+    58363 58497 58540 58562 58583 58656 58692 58724 58756 58763 58772
+    58780 58790 58798 58816 59015 59207 59500 59578 59640 59703 59705
+    59732 59751 59755 59933 60026 60046 60260 60281 60285 60310 60346
+    60406 60522 60745 60893 60896 60946 61025 61113 61237 61343 61504
+    61770 61794 61829 61901 62120 62134 62159 62239 62609 62668 62769
+    """
+)
+EXPECTED_GENUINE_VERSION_DRIFT = _ids("59207 59732 60346")
 
 
 class _DispositionDumper(yaml.SafeDumper):
@@ -160,6 +200,19 @@ def _represent_string(
 _DispositionDumper.add_representer(str, _represent_string)
 
 
+def _load_trace(path: Path) -> dict[str, Any]:
+    raw = path.read_bytes()
+    digest = hashlib.sha256(raw).hexdigest()
+    if digest != EXPECTED_TRACE_SHA256:
+        raise ValueError(
+            f"trace sha256 mismatch: expected {EXPECTED_TRACE_SHA256}, got {digest}"
+        )
+    trace = json.loads(raw)
+    if not isinstance(trace, dict):
+        raise ValueError("trace must be a JSON object")
+    return trace
+
+
 def _round_half_up(value: float) -> int:
     return int(Decimal(str(value)).quantize(Decimal("1"), rounding=ROUND_HALF_UP))
 
@@ -170,18 +223,69 @@ def _round_cents(value: float) -> float:
 
 def _close(values: dict[str, Any], case: dict[str, Any]) -> bool:
     return (
-        abs(float(values["snap"]) - case["report"]["axiom_benefit"])
-        <= TOLERANCE
-        and bool(values["is_snap_eligible"])
-        == case["report"]["axiom_eligible"]
+        abs(float(values["snap"]) - case["report"]["axiom_benefit"]) <= TOLERANCE
+        and bool(values["is_snap_eligible"]) == case["report"]["axiom_eligible"]
     )
 
 
+def _validate_version_drift(
+    cases: dict[str, dict[str, Any]],
+) -> tuple[int, int]:
+    changed = {
+        case_id
+        for case_id, case in cases.items()
+        if abs(float(case["live_pe"]["snap"]) - float(case["report"]["pe_benefit"]))
+        > 1e-6
+    }
+    if changed != EXPECTED_VERSION_CHANGED_CASES:
+        missing = sorted(EXPECTED_VERSION_CHANGED_CASES - changed)
+        extra = sorted(changed - EXPECTED_VERSION_CHANGED_CASES)
+        raise ValueError(
+            "PE-US 1.767.3 changed-value set is not the pinned 77 cases: "
+            f"missing={missing}, extra={extra}"
+        )
+
+    closures: set[str] = set()
+    persistent: set[str] = set()
+    for case_id in sorted(changed):
+        case = cases[case_id]
+        report = case["report"]
+        january = case["requested_month_pe"]
+        if bool(case["live_pe"]["is_snap_eligible"]) != bool(report["pe_eligible"]):
+            raise ValueError(f"{case_id}: legacy live eligibility changed")
+        if _close(january, case):
+            closures.add(case_id)
+            continue
+        delta = float(report["axiom_benefit"]) - float(january["snap"])
+        if (
+            bool(january["is_snap_eligible"]) != bool(report["axiom_eligible"])
+            or delta <= TOLERANCE
+        ):
+            raise ValueError(
+                f"{case_id}: does not remain an Axiom-higher amount mismatch"
+            )
+        persistent.add(case_id)
+
+    if closures != EXPECTED_GENUINE_VERSION_DRIFT:
+        raise ValueError(
+            "requested-month closure set is not the pinned three cases: "
+            f"got={sorted(closures)}"
+        )
+    expected_persistent = (
+        EXPECTED_VERSION_CHANGED_CASES - EXPECTED_GENUINE_VERSION_DRIFT
+    )
+    if persistent != expected_persistent:
+        raise ValueError(
+            "persistent requested-month mismatch set is not the pinned 74 cases"
+        )
+    return len(closures), len(persistent)
+
+
 def _exact_baseline(case: dict[str, Any]) -> bool:
-    check = case["checks"]["live_baseline"]
-    return bool(
-        check["pe_benefit_matches_report"]
-        and check["pe_eligibility_matches_report"]
+    return abs(
+        float(case["live_pe"]["snap"]) - float(case["report"]["pe_benefit"])
+    ) <= 1e-6 and bool(case["live_pe"]["is_snap_eligible"]) == bool(
+        case["report"]["pe_eligible"]
     )
 
 
@@ -209,10 +313,32 @@ def _tanf_guard(case: dict[str, Any]) -> bool:
     )
 
 
+def _induced_tanf_guard(
+    case: dict[str, Any],
+    *,
+    requested_month: bool,
+) -> bool:
+    key = "requested_month_counterfactuals" if requested_month else "counterfactuals"
+    values = case[key]["zero_self_employment"]
+    tanf = float(values["tanf"])
+    ca_tanf = float(values["ca_tanf"])
+    snap_unearned = float(values["snap_unearned_income"])
+    if requested_month:
+        snap_unearned *= 12
+    axiom_unearned = float(case["axiom_evidence"]["inputs"]["unearned_income"]) * 12
+    return (
+        tanf > 0.01
+        and abs(ca_tanf - tanf) < SOURCE_TOLERANCE
+        and abs(axiom_unearned - (snap_unearned - tanf)) < SOURCE_TOLERANCE
+    )
+
+
 def _load_compact_cases() -> dict[str, dict[str, Any]]:
     cases = {}
     for chunk in sorted(CASE_DIR.glob("chunk-*.json")):
         for case in json.loads(chunk.read_text()):
+            if case["id"] in cases:
+                raise ValueError(f"compact evidence duplicates {case['id']}")
             cases[case["id"]] = case
     return cases
 
@@ -222,9 +348,7 @@ def _compact_value(
     surface: str,
     suffix: str,
 ) -> float | bool:
-    matches = [
-        row["v"] for row in compact[surface] if row["n"].endswith(suffix)
-    ]
+    matches = [row["v"] for row in compact[surface] if row["n"].endswith(suffix)]
     if len(matches) != 1:
         raise ValueError(
             f"{compact['id']} has {len(matches)} compact values ending {suffix}"
@@ -238,6 +362,93 @@ def _unexplained_rows(report: dict[str, Any]) -> dict[str, list[dict[str, Any]]]
         if row.get("disposition") is None:
             rows.setdefault(row["case_id"], []).append(row)
     return rows
+
+
+def _case_outcome(case: dict[str, Any], suffix: str) -> dict[str, Any]:
+    rows = [
+        row
+        for row in (case.get("mismatches") or []) + (case.get("matches") or [])
+        if row["concept"].endswith(suffix)
+    ]
+    if len(rows) != 1:
+        raise ValueError(
+            f"{case['case_id']} has {len(rows)} base outcomes ending {suffix}"
+        )
+    return rows[0]
+
+
+def _expected_trace_report(case: dict[str, Any]) -> dict[str, Any]:
+    eligibility = _case_outcome(case, "#snap_eligible")
+    benefit = _case_outcome(case, "#snap_benefit")
+    return {
+        "axiom_eligible": bool(eligibility["left"]),
+        "pe_eligible": bool(eligibility["right"]),
+        "axiom_benefit": float(benefit["left"]),
+        "pe_benefit": float(benefit["right"]),
+    }
+
+
+def _validated_trace_cases(
+    trace: dict[str, Any],
+    base_report: dict[str, Any],
+) -> tuple[dict[str, dict[str, Any]], tuple[int, int]]:
+    if trace.get("schema_version") != "axiom_oracles.ca_snap_residual_trace.v2":
+        raise ValueError("trace schema must be axiom_oracles.ca_snap_residual_trace.v2")
+    expected_runtime = {
+        "policyengine": "4.18.9",
+        "policyengine-core": "3.30.3",
+        "policyengine-us": "1.767.3",
+    }
+    if trace.get("runtime") != expected_runtime:
+        raise ValueError(f"unexpected trace runtime: {trace.get('runtime')}")
+    if trace.get("annual_baseline_semantics") != LEGACY_ANNUAL_SEMANTICS:
+        raise ValueError("trace does not use the pinned legacy annual semantics")
+    base = trace.get("base_report")
+    if not isinstance(base, dict):
+        raise ValueError("trace is missing base_report provenance")
+    if base.get("sha256") != BASE_REPORT_SHA256:
+        raise ValueError("trace was not generated from the pinned base report")
+    if base.get("provenance") != EXPECTED_BASE_PROVENANCE:
+        raise ValueError("trace base report provenance does not match")
+    if trace.get("implementation") != _implementation_provenance():
+        raise ValueError("trace implementation provenance does not match HEAD")
+    if trace.get("populace_pin") != EXPECTED_POPULACE_PIN:
+        raise ValueError("trace Populace pin does not match")
+    if trace.get("residual_households") != EXPECTED_BASE_RESIDUAL_HOUSEHOLDS:
+        raise ValueError("trace must contain exactly 361 residual households")
+    if trace.get("unexplained_rows") != EXPECTED_BASE_UNEXPLAINED_ROWS:
+        raise ValueError("trace must contain exactly 441 unexplained rows")
+
+    raw_cases = trace.get("cases")
+    if not isinstance(raw_cases, list) or len(raw_cases) != (
+        EXPECTED_BASE_RESIDUAL_HOUSEHOLDS
+    ):
+        raise ValueError("trace cases are incomplete")
+    case_ids = [case.get("case_id") for case in raw_cases]
+    if any(not isinstance(case_id, str) for case_id in case_ids):
+        raise ValueError("trace contains an invalid case id")
+    if len(set(case_ids)) != len(case_ids):
+        raise ValueError("trace contains duplicate case ids")
+
+    unexplained = _unexplained_rows(base_report)
+    expected_ids = set(unexplained)
+    if set(case_ids) != expected_ids:
+        raise ValueError(
+            "trace case ids do not exactly match the base residual households"
+        )
+    base_cases = {case["case_id"]: case for case in base_report.get("cases") or []}
+    cases = {case["case_id"]: case for case in raw_cases}
+    for case_id, case in cases.items():
+        expected_rows = unexplained[case_id]
+        if case.get("unexplained_rows") != len(expected_rows):
+            raise ValueError(f"{case_id}: unexplained row count drifted")
+        expected_concepts = [row["concept"] for row in expected_rows]
+        if case.get("unexplained_concepts") != expected_concepts:
+            raise ValueError(f"{case_id}: unexplained concepts drifted")
+        if case.get("report") != _expected_trace_report(base_cases[case_id]):
+            raise ValueError(f"{case_id}: stamped report outcomes drifted")
+
+    return cases, _validate_version_drift(cases)
 
 
 def _pinned(row: dict[str, Any]) -> dict[str, Any]:
@@ -257,9 +468,7 @@ def _entry(
     linked_issue: str,
     evidence: dict[str, Any],
 ) -> dict[str, Any]:
-    concept_name = (
-        "benefit" if row["concept"] == BENEFIT_CONCEPT else "eligibility"
-    )
+    concept_name = "benefit" if row["concept"] == BENEFIT_CONCEPT else "eligibility"
     return {
         "id": f"ca-362-{mechanism_id}-{row['case_id']}-{concept_name}",
         "concept": row["concept"],
@@ -291,9 +500,7 @@ def _static_se_evidence(
     axiom_inputs = case["axiom_evidence"]["inputs"]
     axiom_outputs = case["axiom_evidence"]["outputs"]
     se_monthly = 0.6 * float(case["live_pe"]["self_employment_income"]) / 12
-    corrected_earned = _round_cents(
-        float(axiom_inputs["earned_income"]) + se_monthly
-    )
+    corrected_earned = _round_cents(float(axiom_inputs["earned_income"]) + se_monthly)
     corrected_gross = _round_cents(
         corrected_earned + float(axiom_inputs["unearned_income"])
     )
@@ -327,13 +534,10 @@ def _static_se_evidence(
             - float(axiom_inputs["medical_deduction"]),
             0,
         )
-        shelter = (
-            float(axiom_inputs["housing_cost"])
-            + float(axiom_outputs["utility_allowance"])
+        shelter = float(axiom_inputs["housing_cost"]) + float(
+            axiom_outputs["utility_allowance"]
         )
-        shelter_deduction = _round_half_up(
-            max(shelter - 0.5 * pre_shelter, 0)
-        )
+        shelter_deduction = _round_half_up(max(shelter - 0.5 * pre_shelter, 0))
         corrected_gate_value = max(pre_shelter - shelter_deduction, 0)
         limit = net_limit
         route = "net"
@@ -386,9 +590,8 @@ def _minor_defect_evidence(case: dict[str, Any]) -> dict[str, Any]:
         or not case["report"]["pe_eligible"]
     ):
         raise ValueError(f"{case['case_id']}: minor earnings signature changed")
-    input_delta = (
-        float(pe["employment_income"]) / 12
-        - float(axiom["inputs"]["earned_income"])
+    input_delta = float(pe["employment_income"]) / 12 - float(
+        axiom["inputs"]["earned_income"]
     )
     if abs(input_delta) > 0.01:
         raise ValueError(f"{case['case_id']}: minor wages do not align")
@@ -471,9 +674,7 @@ def _select_trace_counterfactual(
     for label, values in candidates:
         if _close(values, case):
             return label, values
-    raise ValueError(
-        f"{case['case_id']}: no {classification} counterfactual closes"
-    )
+    raise ValueError(f"{case['case_id']}: no {classification} counterfactual closes")
 
 
 def _trace_evidence(
@@ -489,20 +690,17 @@ def _trace_evidence(
     uses_period = "period" in classification
     if uses_se and not _se_guard(case):
         raise ValueError(f"{case_id}: SE source guard failed")
-    if uses_tanf and not (
-        _tanf_guard(case)
-        or float(
-            case["counterfactuals"]["zero_self_employment"].get("tanf", 0)
-        )
-        > 0.01
-        or float(
-            case["requested_month_counterfactuals"][
-                "zero_self_employment"
-            ].get("tanf", 0)
-        )
-        > 0.01
-    ):
+    requested_month = label.startswith("january_")
+    baseline_tanf_guard = _tanf_guard(case)
+    induced_tanf_guard = _induced_tanf_guard(
+        case,
+        requested_month=requested_month,
+    )
+    if uses_tanf and not (baseline_tanf_guard or induced_tanf_guard):
         raise ValueError(f"{case_id}: TANF source guard failed")
+    uses_induced_tanf = induced_tanf_guard and not baseline_tanf_guard
+    if uses_tanf and uses_induced_tanf and "zero_self_employment_and_tanf" not in label:
+        raise ValueError(f"{case_id}: induced TANF needs the joint intervention")
 
     pe = case["live_pe"]
     axiom = case["axiom_evidence"]["inputs"]
@@ -522,10 +720,36 @@ def _trace_evidence(
         )
         sources.append(SE_FIX)
     if uses_tanf:
-        details.append(
-            "PE's state/aggregate TANF is omitted from Axiom unearned income "
-            f"(baseline annual TANF {pe['tanf']})"
-        )
+        baseline_tanf = float(pe["tanf"])
+        if baseline_tanf > 0.01:
+            details.append(
+                "PE's state/aggregate TANF is omitted from Axiom unearned "
+                f"income (baseline annual TANF {baseline_tanf})"
+            )
+        else:
+            key = (
+                "requested_month_counterfactuals"
+                if requested_month
+                else "counterfactuals"
+            )
+            induced_values = case[key]["zero_self_employment"]
+            induced = float(induced_values["tanf"])
+            ca_tanf = float(induced_values["ca_tanf"])
+            snap_unearned = float(induced_values["snap_unearned_income"])
+            if requested_month:
+                snap_unearned *= 12
+            axiom_unearned = float(axiom["unearned_income"]) * 12
+            non_tanf_unearned = snap_unearned - induced
+            if not induced_tanf_guard:
+                raise ValueError(f"{case_id}: induced TANF source alignment failed")
+            details.append(
+                "neutralizing self-employment induces PE annual TANF "
+                f"{induced} (CA TANF {ca_tanf}); after removing TANF, PE annual "
+                f"SNAP unearned income {non_tanf_unearned} aligns with Axiom "
+                f"annual unearned income {axiom_unearned}. The joint "
+                f"intervention {label} explicitly zeroes both self-employment "
+                "and that induced TANF, which Axiom's bridge does not transport"
+            )
         sources.append(ISSUE_397)
         linked_issue = ISSUE_397
     if uses_period:
@@ -551,8 +775,7 @@ def _trace_evidence(
         "arithmetic": [
             {
                 "expression": (
-                    f"{float(values['snap'])} - "
-                    f"{case['report']['axiom_benefit']}"
+                    f"{float(values['snap'])} - {case['report']['axiom_benefit']}"
                 ),
                 "equals": delta,
                 "tolerance": 1e-7,
@@ -589,9 +812,7 @@ def _axiom_allotment(
     )
     shelter = float(inputs["housing_cost"]) + float(outputs["utility_allowance"])
     excess_shelter = _round_half_up(max(shelter - 0.5 * pre_shelter, 0))
-    shelter_deduction = (
-        min(excess_shelter, 744) if cap_shelter else excess_shelter
-    )
+    shelter_deduction = min(excess_shelter, 744) if cap_shelter else excess_shelter
     net = max(pre_shelter - shelter_deduction, 0)
     contribution = math.ceil(0.3 * net)
     maximum = float(case["requested_month_pe"]["snap_max_allotment"])
@@ -612,9 +833,7 @@ def _axiom_allotment(
 def _medical_evidence(case: dict[str, Any]) -> dict[str, Any]:
     if not _exact_baseline(case):
         raise ValueError(f"{case['case_id']}: medical baseline drift")
-    medical = float(
-        case["requested_month_pe"]["snap_excess_medical_expense_deduction"]
-    )
+    medical = float(case["requested_month_pe"]["snap_excess_medical_expense_deduction"])
     if medical <= 0 or float(case["axiom_evidence"]["inputs"]["medical_deduction"]):
         raise ValueError(f"{case['case_id']}: medical input signature changed")
     corrected = _axiom_allotment(case, medical=medical)
@@ -670,8 +889,7 @@ def _disability_cap_evidence(case: dict[str, Any]) -> dict[str, Any]:
     if abs(delta) > TOLERANCE:
         raise ValueError(f"{case['case_id']}: shelter-cap counterfactual misses")
     se_clause = (
-        " The same replay also adds the landed 60-percent self-employment "
-        "projection."
+        " The same replay also adds the landed 60-percent self-employment projection."
         if include_se
         else ""
     )
@@ -708,6 +926,19 @@ def _disability_cap_evidence(case: dict[str, Any]) -> dict[str, Any]:
 
 def _parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
+    base = parser.add_mutually_exclusive_group(required=True)
+    base.add_argument(
+        "--base-ref",
+        help=(
+            "Git ref containing the exact pre-#362 disposition report. The ref "
+            "is resolved to a commit before reading the report blob."
+        ),
+    )
+    base.add_argument(
+        "--base-report",
+        type=Path,
+        help="Path to the exact pre-#362 disposition report JSON.",
+    )
     parser.add_argument("--trace", type=Path, required=True)
     parser.add_argument(
         "--check",
@@ -719,18 +950,14 @@ def _parse_args() -> argparse.Namespace:
 
 def main() -> int:
     args = _parse_args()
-    trace = json.loads(args.trace.read_text())
-    if trace["runtime"] != {
-        "policyengine": "4.18.9",
-        "policyengine-core": "3.30.3",
-        "policyengine-us": "1.767.3",
-    }:
-        raise ValueError(f"unexpected trace runtime: {trace['runtime']}")
-
-    report = json.loads(REPORT_PATH.read_text())
+    report, _base_source = _load_base_report(
+        base_ref=args.base_ref,
+        base_report=args.base_report,
+    )
+    trace = _load_trace(args.trace)
     existing = yaml.safe_load(DISPOSITIONS_PATH.read_text())
     compact = _load_compact_cases()
-    cases = {case["case_id"]: case for case in trace["cases"]}
+    cases, drift_counts = _validated_trace_cases(trace, report)
     unexplained = _unexplained_rows(report)
     selected: dict[tuple[str, str, str], dict[str, Any]] = {}
 
@@ -855,14 +1082,17 @@ def main() -> int:
     )
     if args.check:
         if DISPOSITIONS_PATH.read_text() != text:
-            raise SystemExit(
-                "ca-snap-ecps dispositions are stale; rerun this script"
-            )
+            raise SystemExit("ca-snap-ecps dispositions are stale; rerun this script")
     else:
         DISPOSITIONS_PATH.write_text(text)
     print(
         f"Validated {len(additions)} evidence-pinned issue #362 rows; "
         f"{remaining} remain unexplained"
+    )
+    print(
+        "Verified PE-US 1.767.3 relabel: "
+        f"{drift_counts[0]} genuine version-drift closures / "
+        f"{drift_counts[1]} persistent Axiom-higher mismatches"
     )
     return 0
 
