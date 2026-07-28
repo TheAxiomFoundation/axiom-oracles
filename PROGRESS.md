@@ -7,8 +7,8 @@
 - Reviewed commit: `bd9085e3e7186733eea96d9bf225adab4482dc90`
 - Scope: confirm only the round-1 fail-closed defect, specified healthy-path
   regressions, YEAR/boolean/plain-year invariants, exact delta, and gates.
-- Review status: delta and blast-radius checks complete; runtime confirmation in
-  progress; verdict not yet determined.
+- Review status: scoped runtime confirmation complete; repository gates in
+  progress; no blocking defect found so far.
 - Remote/GitHub writes: prohibited; none attempted.
 
 ## Done
@@ -29,11 +29,24 @@
   GitNexus reports low blast-radius risk: two direct callers (`run_case` and
   `_run_case_batch_once`), five upstream symbols, one process, and two modules.
   No unupdated direct caller is exposed by the signature-preserving change.
+- Re-ran round 1's forced-unavailable path against PolicyEngine 4.18.9,
+  PolicyEngine-US 1.767.3, and Core 3.30.3. Separate end-to-end `run_cases()`
+  requests for `al_tanf` and `ssi` both raised `RuntimeError`; neither returned
+  a value. Each error names its variable and `2026-01`.
+- Reconfirmed the healthy path on the same exact runtime:
+  - `snap_min_allotment`: `23.84000015258789` at `2026-01` and
+    `24.3743953704834` at `2026-10`
+  - `al_tanf`: `304.0` at `2026-01`
+  - `ssi`: `994.0` at `2026-01`
+- Reconfirmed `income_tax` (numeric `YEAR`) is `3820.0` for both `2026` and
+  `2026-01`, and `is_snap_eligible` remains the boolean `True`.
+- Proved a plain-year request and the boolean path make zero calls to
+  `_policyengine_definition_period` by replacing it with an assertion-raising
+  mock during real runner requests.
+- Exact-environment targeted tests pass: `15 passed, 104 warnings`.
 
 ## Next
 
-- Re-run the forced-unavailable `al_tanf` and `ssi` probes and inspect errors.
-- Re-check SNAP COLA, TANF, SSI, YEAR-defined, boolean, and plain-year behavior.
 - Run repository tests and Ruff, reconciling results with the six round-1
   clean-main failures.
 - Write the final verdict to `REVIEW-REPORT.md`.
