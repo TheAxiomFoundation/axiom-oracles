@@ -855,6 +855,12 @@ residual), #229 (small-suite grounding).
 - Inspected the prior round-2 ledger and complete blocking report.
 - Created this isolated review worktree directly from the requested object.
 - Created this review ledger before substantive validation.
+- Ran the complete eight-command generated-artifact `--check` chain at the
+  reviewed tree. All commands passed: dispositions (83 files), grids, affected
+  map (172 suites / 181 edges), vacuous gate (136 configs / 215 suites /
+  34 executable surfaces), scoreboard (4 jurisdictions / 3 conformant),
+  ratchet, burn-down (4 series / 53 points), and overview (216 reports).
+  Four unrelated pre-existing disposition-expiry notes match round 2.
 
 ### Next
 
@@ -862,5 +868,4 @@ residual), #229 (small-suite grounding).
 - Diff all Saver's Credit surfaces against round 2 and allow only mechanical
   regeneration effects.
 - Prove the exact single-row and 33-to-34 scoreboard effects.
-- Run the complete generated-artifact `--check` chain and consolidate the
-  verdict.
+- Consolidate the independent validators and write the verdict.
