@@ -53,6 +53,10 @@ _IN_AGI_INPUT = (
     "us-in:policies/income_tax/pilot_liability_pipeline#input."
     "in_pit_pilot_indiana_adjusted_gross_income"
 )
+_PA_ADJUSTED_TAXABLE_INCOME_INPUT = (
+    "us-pa:policies/income_tax/pilot_liability_pipeline#input."
+    "pa_pit_pilot_state_taxable_income"
+)
 _NY_INPUT_PREFIX = (
     "us-ny:policies/income_tax/pilot_liability_pipeline#input."
 )
@@ -178,6 +182,55 @@ def _projection_branch_diagnostics(
             "compared_tax_unit_count": len(ready_ids),
             "nonpositive_agi_count": sum(value <= 0 for value in agi),
             "positive_agi_count": sum(value > 0 for value in agi),
+            "zero_output_count": sum(value == 0 for value in outputs),
+            "positive_output_count": sum(value > 0 for value in outputs),
+        }
+    pennsylvania = projection_inputs.get("PA")
+    if isinstance(pennsylvania, dict):
+        ready_ids = {
+            route.tax_unit_id
+            for route in routes
+            if route.state == "PA" and route.disposition == DISPOSITION_READY
+        }
+        taxable_values = pennsylvania[_PA_ADJUSTED_TAXABLE_INCOME_INPUT]
+        target_values = (
+            (policyengine_targets or {}).get("PA")
+            if isinstance(policyengine_targets, dict)
+            else None
+        )
+        if not isinstance(target_values, dict):
+            raise ValueError(
+                "PA projection diagnostics require the reviewed "
+                "pa_income_tax_before_forgiveness target values"
+            )
+        missing_taxable = sorted(ready_ids - set(taxable_values), key=str)
+        missing_targets = sorted(ready_ids - set(target_values), key=str)
+        if missing_taxable or missing_targets:
+            raise ValueError(
+                "PA projection diagnostics require adjusted taxable income and "
+                "output values for every ready TaxUnit"
+            )
+        taxable = [float(taxable_values[item]) for item in ready_ids]
+        outputs = [float(target_values[item]) for item in ready_ids]
+        if any(value < 0 for value in taxable):
+            raise ValueError(
+                "PA projection diagnostics require nonnegative adjusted "
+                "taxable income for every ready TaxUnit"
+            )
+        if any(value < 0 for value in outputs):
+            raise ValueError(
+                "PA projection diagnostics require nonnegative "
+                "before-forgiveness tax for every ready TaxUnit"
+            )
+        diagnostics["PA"] = {
+            "compared_tax_unit_count": len(ready_ids),
+            "negative_adjusted_taxable_income_count": 0,
+            "zero_adjusted_taxable_income_count": sum(
+                value == 0 for value in taxable
+            ),
+            "positive_adjusted_taxable_income_count": sum(
+                value > 0 for value in taxable
+            ),
             "zero_output_count": sum(value == 0 for value in outputs),
             "positive_output_count": sum(value > 0 for value in outputs),
         }

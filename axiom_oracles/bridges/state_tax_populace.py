@@ -269,7 +269,7 @@ EXPECTED_JURISDICTION_REGISTRY_SHA256 = (
     "f8b225f91487f42ec3a571e3a983103d33e67fa1327046004a24bfae35588f45"
 )
 EXPECTED_SOURCE_METADATA_SHA256 = (
-    "31d6758d81ec00c0a36c144f43dba7257c3bcaac2bed0e42361c5658e92b3cfa"
+    "48decbecdd9dcb7d2aca954255460061cbe6a5556bf7446a5ca760fbebcad777"
 )
 # Exact boundaries admitted only after independent legal and dependency-graph
 # review.  The comparison target itself is forbidden below, so these remain
