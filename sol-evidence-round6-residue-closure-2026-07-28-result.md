@@ -98,5 +98,36 @@ Local implementation commits:
 - `9aed1431` — bind matched verdict values to case identity;
 - `4e023fc9` — align exact match-rate semantics across evidence and dashboard.
 
-Branch publication and the required non-merging PR #379 description update are
-the only remaining delivery steps.
+The branch could not be published from this environment. Two normal
+fast-forward push attempts failed before authentication because the sandbox
+could not resolve `github.com`. The connected GitHub interface exposed an
+atomic Git-data alternative, but both orchestrated and direct blob writes were
+rejected by its write gate. No partial remote commit or ref update occurred.
+
+PR #379 was re-read successfully and remained open, unmerged, and pointed at
+the pre-fix `336b0a1b` head. Its description was deliberately left unchanged
+because the fix commits are not yet present on the remote branch.
+
+The exact body addition ready for publication after the branch is pushed is:
+
+```markdown
+## Residues closed
+
+- Permuted matched-value drift is closed by a per-case verdict-identity
+  commitment. Mutant:
+  `test_permuted_matched_case_values_must_reconcile_with_case_identity`.
+- The `r` boundary now has exact endpoint semantics and a tri-state dashboard
+  consumer. Mutants:
+  `test_full_agreement_rate_must_be_exact_at_semantic_boundary`,
+  `test_dashboard_match_rate_is_bounded_even_without_full_verdicts`, and
+  `test_dashboard_case_agreement_is_tristate_at_exact_boundary`.
+- Full focused evidence/census mutant battery: 110 passed. Bot no-op mutant:
+  1 passed. Replay, index, census, certificate, dashboard-overview, direct
+  Node boundary, Ruff, compileall, and whitespace checks pass.
+
+The PR remains open and unmerged for the standing review flow.
+```
+
+Remaining delivery action: publish the committed `evidence-validator` branch,
+append that section to PR #379, and re-confirm the PR remains open and
+unmerged.

@@ -15,6 +15,11 @@
   certificate freshness checks, and the relevant dashboard tests.
 - Output: a new residue-closure result file will carry the final report so
   prior committed review/build reports remain untouched.
+- Outcome: both residues and their mutants are complete and green locally.
+  Publication is externally blocked: the ordinary GitHub transport cannot
+  resolve `github.com`, and both direct and atomic-tree GitHub connector writes
+  were rejected by its write gate. PR #379 therefore still points to its
+  pre-fix head and has not been edited or merged.
 
 ## Done
 
@@ -76,12 +81,22 @@
 - Wrote the requested final report to the new, committed
   `sol-evidence-round6-residue-closure-2026-07-28-result.md`; no prior report
   was edited.
+- Attempted a normal fast-forward push twice; both attempts failed before
+  authentication with `Could not resolve host: github.com`.
+- Found an atomic Git-data publication path through the connected GitHub
+  interface and verified the intended remote parent/tree locally. Both an
+  orchestrated blob write and a direct blob write were rejected by the
+  connector's write gate, so no partial tree, branch-ref move, or PR edit was
+  made.
+- Re-read PR #379 after validation: it remains open and unmerged at remote head
+  `336b0a1b`. The exact `Residues closed` body addition is preserved in the
+  output report for publication once GitHub write access is available.
 
 ## Next
 
-- Publish the committed branch, append the required `Residues closed` section
-  to PR #379 with the exact mutant names, and confirm the PR remains open and
-  unmerged.
+- Once GitHub write access is available, push `evidence-validator`, append the
+  prepared `Residues closed` section to PR #379, and re-confirm its head is the
+  published residue closure while its state remains open and unmerged.
 
 ---
 
