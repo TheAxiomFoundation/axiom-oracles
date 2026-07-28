@@ -45,15 +45,16 @@ policies:
     suite: us-additional-medicare-grid
     note: >-
       The us-additional-medicare-grid suite compares PE-US
-      additional_medicare_tax with Axiom's combined final only on the
-      explicitly bounded tax-year-2026 zero-self-employment domain: five
-      wage-only GRID-CONTRACT cases across single, joint, and
-      married-filing-separately status, four nonzero. For zero-SE inputs,
-      PE-US additional_medicare_tax equals the section 3101(b)(2) wage-only
-      amount and Axiom's combined output remains valid. The suite does not test
-      or claim the section 1401(b)(2) self-employment leg; SE leg pending the 26
-      CFR 1.1401-1 operative-authority chain, axiom-corpus#523. The committed
-      report is 5/5 within one cent.
+      additional_medicare_tax with Axiom's combined sections 3101(b)(2) and
+      1401(b)(2) final on 18 tax-year-2026 cases inside the explicitly attested
+      section 1401(c) ordinary domain. The cases cover positive, zero, and loss
+      self-employment income; single, joint, separate, and other-return
+      thresholds; two joint SE earners; and the 26 CFR
+      1.1401-1(d)(2)(i) wage reduction both below and at its zero floor. The
+      globally not-comparable mapping remains correct because PE has no
+      equivalent international-agreement guard; the one false-domain companion
+      diagnostic is therefore excluded, not dispositioned. The committed
+      report is 18/18 within one cent.
   - id: us-pe:ak_atap
     oracle_policy_name: ak_atap
     oracle_policy_type: rules
@@ -1090,19 +1091,22 @@ policies:
     output_vars:
       - savers_credit
     in_scope: true
-    suite: null
+    suite: us-savers-grid
     note: >-
-      Coverage withdrawn because the Saver's Credit pipeline and companion
-      fixture were split out of rulespec-us PR #1004 and are absent from
-      canonical main. Reinstatement is pending the Notice 2025-67 corpus chain
-      tracked at https://github.com/TheAxiomFoundation/axiom-corpus/issues/506.
-      Historical boundary evidence, not live coverage, is preserved at
+      The us-savers-grid suite conditionally compares Axiom's pre-section-26
+      section 25B amount with PE-US savers_credit_potential on 25 shared,
+      fixture-bound tax-year-2026 cases; it does not claim a global mapped
+      equivalence or compare PE's liability-limited public credit. The grid
+      covers all five filing statuses, every exact Notice 2025-67 tier ceiling
+      and the next dollar, per-person contribution caps, a section 911 add-back,
+      and the age/student/dependent screens. The raw report is 14/25. All 11
+      differences are exact-ceiling cases explained by
       https://github.com/PolicyEngine/policyengine-us/issues/9151: PE-US
-      1.767.3 stores Notice 2025-67's correct 2026 tier values, but PolicyEngine
-      Core 3.30.3's right-exclusive scale digitization treats the published
-      $24,250 single-filer inclusive 50% maximum as the 20% tier's lower bound.
-      At $24,250 AGI and $2,000 contributions, the statutory amount is
-      $2,000 * 50% = $1,000 while PE returns $2,000 * 20% = $400.
+      1.767.3 carries the correct values, but Core 3.30.3 digitizes equality
+      into the next tier despite section 25B(b)'s inclusive ceilings. The
+      dispositioned report is 100% explained. The section 911 case's observed
+      match is cancellation between PE's omitted add-back and #9151, not
+      evidence of add-back parity.
   - id: us-pe:sc_income_tax
     oracle_policy_name: sc_income_tax
     oracle_policy_type: rules
