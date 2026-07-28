@@ -1,3 +1,46 @@
+# PROGRESS — PR #379 round-6 residue closure
+
+## State
+
+- Branch/worktree: `evidence-validator` in the existing
+  `/Users/maxghenis/TheAxiomFoundation/_worktrees/oracles-evidence` worktree;
+  starting HEAD `336b0a1bbfc87f5609828c209a6a7076c3cf4d4a`.
+- Scope: close only the two category-(a) residues from
+  `sol-fixverify6-2026-07-27`: per-case matched-value identity and the
+  near-100 `r` semantic boundary.
+- Constraints: minimal diffs; every fix includes its killed mutant; commit
+  every coherent step; do not modify committed reports, run population
+  suites, merge PR #379, or expand into category-(b) findings.
+- Required gates: full evidence tests, census/certify mutants, census and
+  certificate freshness checks, and the relevant dashboard tests.
+- Output: a new residue-closure result file will carry the final report so
+  prior committed review/build reports remain untouched.
+
+## Done
+
+- Read the encoder preamble, repository-local rules search, round-6 build
+  brief/result, and the sixth verification brief/findings.
+- Confirmed the requested branch and worktree are clean and match
+  `origin/evidence-validator`.
+- Confirmed the two accepted witnesses: permuting complete matched values
+  between cases preserves aggregate totals, and `r=99.9999995` passes
+  representation tolerance while the dashboard branches on exact `r===100`.
+- Attempted the prescribed GitNexus debugging workflow; graph tools are not
+  available in this session, so direct source/caller tracing is the recorded
+  fallback.
+
+## Next
+
+- Trace the report-to-compact-row binding and dashboard `r` consumers.
+- Add the exact permutation mutant, then minimally bind matched values to case
+  identity and commit the coherent fix.
+- Decide and align the exact/tri-state `r` contract across evidence and
+  dashboard code, add the boundary mutant, and commit the coherent fix.
+- Run all required non-population gates, write and commit the final report,
+  update this ledger, then update (but do not merge) PR #379.
+
+---
+
 # PROGRESS — round-6 value-level evidence reconciliation
 
 ## State
