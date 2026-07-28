@@ -29,26 +29,41 @@
   sole parent.
 - Confirmed the immutable source diff changes only
   `axiom_oracles/bridges/mappings/us.yaml`; `git diff --check` is clean.
-- Built a temporary GitNexus index and traced the packaged mapping loader into
-  the PolicyEngine coverage/queue and bridge-consumer flows. The graph exposes
-  the registry loader to 70 direct callers, including the coverage builder and
-  registry-driven bridge tests, so focused registry and coverage validation is
-  required. The temporary index was removed after querying.
+- A prior attempt recorded a temporary GitNexus index/impact query. The resumed
+  reviewer did not rely on that result: `npx --no-install gitnexus status`
+  found no local CLI and its fallback could not reach the sandbox-blocked npm
+  registry. Manual registry-consumer and focused executable coverage checks
+  therefore supply the review evidence.
 - Recorded the rulespec-us review target at
   `3f933cd935e68cb1cdd50a254ab449aeabe2d468` on
   `fed-parity/atomic-63c6-67h`; its existing untracked `WORKER-REPORT.md` is
   user state and will not be modified.
 - Recorded the RuleSpec toolchain corpus pin
   `10142cb0f07403c2de4599c76bec01e96640fda9`.
+- Independently audited section 63(c)(6) against the exact cached
+  `policyengine-us` 1.767.3 wheel and `policyengine-core` 3.30.3. The only
+  nearby federal surface, formula-less TaxUnit boolean/year input
+  `separate_filer_itemizes`, is consumed by `basic_standard_deduction` to
+  model branch (A); filing status has no alien category, the two nonresident
+  alien flags are section-25A-credit-specific, no short-period/accounting-
+  period surface exists, and the entity registry has no estate, trust, common
+  trust fund, or partnership taxpayer entity. Estate/partnership name hits are
+  estate-tax or income amounts, not taxpayer-type judgments. Therefore no
+  genuine combined or per-branch B-D counterpart exists and
+  `not_comparable` is the correct classification.
+- Verified the retained corpus object at the exact pin: provision rows 31-35
+  contain the parent and unique A-D children for married-separate/either-
+  spouse-itemizes, nonresident alien, section 443(a)(1) short return caused by
+  an accounting-period change, and estate or trust/common trust
+  fund/partnership. The PR rationale's taxonomy is substantively accurate;
+  “short-year” and “estate/trust” are only shorthand for the fuller C/D text.
 
 ## Next
 
-1. Verify the retained RuleSpec text and all PolicyEngine surfaces for
-   section 63(c)(6).
-2. Verify the section 67(h) parameter schema, 2026 value, semantics, and mapping
+1. Verify the section 67(h) parameter schema, 2026 value, semantics, and mapping
    house style.
-3. Run the changed-file coverage gate against the specified RuleSpec worktree.
-4. Verify YAML, duplicate IDs, diff containment, and the clean-main failure
+2. Run the changed-file coverage gate against the specified RuleSpec worktree.
+3. Verify YAML, duplicate IDs, diff containment, and the clean-main failure
    baseline without using the shared stash.
-5. Write and commit `REVIEW-REPORT.md`, update this ledger, and report the
+4. Write and commit `REVIEW-REPORT.md`, update this ledger, and report the
    verdict without writing to the PR branch, remotes, or GitHub.
