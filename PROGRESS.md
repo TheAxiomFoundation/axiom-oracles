@@ -845,11 +845,18 @@ residual), #229 (small-suite grounding).
   annotations no longer selected by their current disposition documents. Those
   command-generated changes were restored exactly while the scope and complete
   check-chain consequence are audited.
+- Confirmed those eight non-CA rows are legacy same-ID selector/pin drift whose
+  cleanup would require unrelated multi-engine case-artifact work. Narrowed the
+  reapplication repair to clear annotations only when their defining entry is
+  actually removed, which is the authorized failure mode for the four invalid
+  CA selectors. All four unrelated reports are again byte-identical to the
+  branch base.
+- The repository-wide disposition check now passes with 83 documents, while
+  CA served case and disposition checks still report exact 584-annotation /
+  345-entry parity and zero silent classifications.
 
 ### Next
 
-1. Reconcile the four pre-existing non-CA stale annotations required by the
-   corrected idempotent join behavior.
-2. Refresh scoreboard, burn-down, history, and report text.
-3. Run the complete repository `--check` chain and focused tests; record exact
+1. Refresh scoreboard, burn-down, history, and report text.
+2. Run the complete repository `--check` chain and focused tests; record exact
    commands and results in the final untracked worker report.
