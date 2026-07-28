@@ -44,17 +44,16 @@ policies:
     in_scope: true
     suite: us-additional-medicare-grid
     note: >-
-      The us-additional-medicare-grid suite compares PE-US
-      additional_medicare_tax with Axiom's combined sections 3101(b)(2) and
-      1401(b)(2) final on 18 tax-year-2026 cases inside the explicitly attested
-      section 1401(c) ordinary domain. The cases cover positive, zero, and loss
-      self-employment income; single, joint, separate, and other-return
-      thresholds; two joint SE earners; and the 26 CFR
-      1.1401-1(d)(2)(i) wage reduction both below and at its zero floor. The
-      globally not-comparable mapping remains correct because PE has no
-      equivalent international-agreement guard; the one false-domain companion
-      diagnostic is therefore excluded, not dispositioned. The committed
-      report is 18/18 within one cent.
+      The us-additional-medicare-grid suite scores only registry-comparable
+      section 1401(b)(2) parameters: 27 filing-status-selected threshold checks
+      and one 0.9 percent rate check, all matching PE-US 1.767.3. Its 27
+      scenarios cover positive, zero, and loss self-employment income; single,
+      joint, separate, and other-return thresholds; and B-1/exact/B+1
+      wage-coordinated probes. The combined Additional Medicare Tax and its
+      isolated wage and self-employment legs are not compared. Money-level
+      parity remains blocked because Axiom's combined final fail-closes outside
+      the section 1401(c) ordinary domain and the registry cannot yet express
+      that precondition. The committed comparable-only report is 28/28.
   - id: us-pe:ak_atap
     oracle_policy_name: ak_atap
     oracle_policy_type: rules
@@ -1096,14 +1095,14 @@ policies:
     in_scope: true
     suite: us-savers-grid
     note: >-
-      The us-savers-grid suite conditionally compares Axiom's pre-section-26
-      section 25B amount with PE-US savers_credit_potential on 25 shared,
-      fixture-bound tax-year-2026 cases; it does not claim a global mapped
-      equivalence or compare PE's liability-limited public credit. The grid
-      covers all five filing statuses, every exact Notice 2025-67 tier ceiling
-      and the next dollar, per-person contribution caps, a section 911 add-back,
-      and the age/student/dependent screens. The raw report is 14/25. All 11
-      differences are exact-ceiling cases explained by
+      The us-savers-grid suite compares Axiom's pre-section-26 section 25B
+      amount with its reviewed direct PE-US target, savers_credit_potential, on
+      34 fixture-bound tax-year-2026 cases. It does not compare PE's
+      liability-limited public credit. The grid covers all five filing
+      statuses, every exact Notice 2025-67 tier ceiling plus B-1 and B+1,
+      per-person contribution caps, the section 25B(e) section 911 add-back,
+      and the age/student/dependent screens. The raw report is 23/34. All 11
+      differences remain the exact-ceiling cases explained by
       https://github.com/PolicyEngine/policyengine-us/issues/9151: PE-US
       1.767.3 carries the correct values, but Core 3.30.3 digitizes equality
       into the next tier despite section 25B(b)'s inclusive ceilings. The

@@ -676,8 +676,23 @@ residual), #229 (small-suite grounding).
   source configuration and generated-report code.
 - Focused generator coverage passes (24 tests; the committed-report assertion
   is intentionally deferred until regeneration), as does Ruff.
+- Regenerated both suites through `run_comparison.py` against the clean pinned
+  RuleSpec tree, using the exact cached PE stack after sandboxed package
+  resolution failed. The temporary launcher shim was removed immediately.
+- Applied dispositions and regenerated grids, affected map, freshness/vacuous
+  gate, dated scoreboard, ratchet, burn-down, per-policy detail, and dashboard
+  overview. All eight corresponding `--check` commands pass.
+- Updated the two conformance notes to the honest scored boundaries. Structural
+  comparison shows exactly two changed `us-pe` rows: Saver's Credit remains
+  covered at 23/34 raw and 100% explained; Additional Medicare remains covered
+  at 28/28 comparable parameter checks. No row was added, removed, or changed
+  coverage, and the headline scoreboard is byte-identical.
+- The committed-report comparable-only invariant now passes. Focused federal
+  generator and conformance validation passes 105 tests with 3 skips.
+- Repository-wide search finds no remaining incorrect section 25B(d)(3)
+  add-back citation in tracked repair surfaces.
 
 ### Next
 
-- Regenerate both suites and the full derived chain, audit row containment, run
-  the full checks/tests, and obtain an independent defensive review.
+- Run the broader validation battery, obtain an independent defensive review,
+  repair any actionable findings, and finalize the untracked worker audit.
