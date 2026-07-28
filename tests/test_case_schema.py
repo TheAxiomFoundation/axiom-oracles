@@ -98,6 +98,23 @@ def test_concept_mapping_compares_accessnyc_eligibility_code() -> None:
     assert snap.matches
 
 
+def test_wic_program_label_uses_the_rulespec_pipeline_address() -> None:
+    assert Concepts.WIC_ELIGIBLE == "us:programs/wic#eligible"
+
+    wic = next(
+        mapping
+        for mapping in load_program_mappings()
+        if mapping.concept_id == Concepts.WIC_ELIGIBLE
+    )
+
+    assert (
+        wic.target_for_engine("axiom")
+        == "us:policies/usda/wic/eligibility_pipeline#wic_eligible"
+    )
+    assert wic.target_for_engine("policyengine") == "is_wic_eligible"
+    assert wic.target_for_engine("accessnyc") == "S2R022"
+
+
 def test_default_compare_concepts_are_engine_intersection_for_suite_locale() -> None:
     mappings = comparable_mappings(
         "accessnyc",

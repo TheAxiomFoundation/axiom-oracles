@@ -113,7 +113,7 @@ class Concepts:
     )
     BASIC_HEALTH_PROGRAM_ELIGIBLE = "us:programs/basic-health-program#eligible"
     CHILD_HEALTH_PLUS_ELIGIBLE = "us:programs/child-health-plus#eligible"
-    WIC_ELIGIBLE = "us:statutes/42/1786#wic_eligible"
+    WIC_ELIGIBLE = "us:programs/wic#eligible"
 
     # Federal income tax components (sub-outputs of FEDERAL_INCOME_TAX)
     AGI = "us:tax/federal-income-tax#agi"

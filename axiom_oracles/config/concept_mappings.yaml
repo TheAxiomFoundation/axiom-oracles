@@ -2140,13 +2140,13 @@ concepts:
         code: S2R057
         locales: [US-NY-NYC]
 
-  us:statutes/42/1786#wic_eligible:
+  us:programs/wic#eligible:
     description: WIC eligibility
     category: food
     comparison: eligibility
     priority: normal
     targets:
-      axiom: us:statutes/42/1786#wic_eligible
+      axiom: us:policies/usda/wic/eligibility_pipeline#wic_eligible
       policyengine: is_wic_eligible
       accessnyc:
         code: S2R022
