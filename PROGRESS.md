@@ -8,7 +8,7 @@
 - Local PR refs (`fix/pe-runner-requested-month` and
   `origin/fix/pe-runner-requested-month`) both resolve to the requested head.
 - Live GitHub/fetch verification is sandbox-blocked by DNS resolution failures.
-- Review status: gates complete; verdict is `REQUEST-CHANGES` for one blocking
+- Review status: complete; verdict is `REQUEST-CHANGES` for one blocking
   fail-closed defect.
 
 ## Done
@@ -48,10 +48,14 @@
 - Confirmed the only real-PolicyEngine regression test import-skips in ordinary
   PR CI because CI installs `dev`, while PolicyEngine is a separate optional
   extra; no committed TANF/SSI requested-month integration test exists.
+- Wrote the final committed report to `REVIEW-REPORT.md` and the workflow
+  handoff files to `/tmp/pr416-d78d46e2-review-full-report.md` and
+  `/tmp/pr416-d78d46e2-review-summary.md`.
 
 ## Next
 
-- Consolidate evidence into the required full report and summary files.
+- None. Await a PR revision that makes unknown definition periods fail closed
+  and adds non-SNAP fallback regressions.
 
 ---
 
