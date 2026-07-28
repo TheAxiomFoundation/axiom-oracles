@@ -9,7 +9,8 @@
 - Scope: assess the metadata-less carve-out, re-run the forced-unavailable
   probe and stub-engine contract test, spot-check healthy real-PE values, and
   verify the exact delta and repository gates.
-- Review status: in progress; verdict not yet determined.
+- Review status: semantic/delta review complete with no blocking finding;
+  runtime and repository gates are in progress.
 - Final report: `REVIEW-REPORT.md`.
 - Remote/GitHub writes: prohibited; none attempted.
 
@@ -20,11 +21,35 @@
 - Inspected the prior round-2 ledger and report conventions.
 - Created an isolated review worktree rooted at the exact requested head,
   without checking out or modifying the PR branch.
+- Confirmed the delta from `bd9085e3` is exactly one non-merge commit with that
+  commit as its sole parent, touching only:
+  - `axiom_oracles/adapters/policyengine/runner.py` (27 additions, 5 deletions)
+  - `tests/test_policyengine_requested_month.py` (35 additions)
+- Confirmed `git diff --check` passes.
+- Traced all production construction and execution paths. The CLI alone creates
+  `PolicyEngineRunner`; it has no production `pe` injection, and all case paths
+  load the official package through `_policyengine()`.
+- Audited all 24 PolicyEngine comparison configs: 22 request `2026-01` and two
+  request a year. Every config runs through the pinned comparison harness,
+  which installs `policyengine`, `policyengine-us`, and `policyengine-core`.
+- Confirmed the supported package extra is `policyengine[us]==4.18.9`; the lock
+  makes `policyengine-us` and Core dependencies of that extra, comparison CI
+  installs it, and the official pinned package exposes `pe.us` only when
+  `policyengine_us` is discoverable and then defines a non-null `us.model`.
+- Confirmed the batch path dereferences `pe.us.model` before normalization and
+  the exact-month path imports `policyengine_us.Simulation`; neither can produce
+  a genuine month comparison with both metadata sources absent.
+- Assessed the counterargument: an externally injected/custom model-less engine
+  could hide monthly semantics and receive the pass-through. No supported
+  repository construction, suite, install, or execution path can create that
+  state, so it is not a blocking real-runtime path.
+- Attempted the GitNexus local index required by the review workflow. The graph
+  MCP was unavailable and local registration was denied by the sandbox at
+  `~/.gitnexus/registry.json`; the exact temporary index files were removed.
+  Direct caller/config tracing supplied the blast-radius evidence instead.
 
 ## Next
 
-- Inspect the exact delta and map the changed runner path and callers.
-- Determine whether genuine comparison suites can lack PolicyEngine metadata.
 - Re-run the required fault-injection, contract, healthy-path, and gate checks.
 - Write and commit `REVIEW-REPORT.md` with the final verdict.
 
