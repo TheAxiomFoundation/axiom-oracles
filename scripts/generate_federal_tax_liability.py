@@ -97,180 +97,45 @@ def _case(
     return FederalCase(case_id, filing_status, inputs)
 
 
-# GRID-CONTRACT P1 plus the merged section 1401(b)(2) companion diagnostics.
-# Every selected case affirms the section 1401(c) ordinary-domain judgment.
-# The companion's one false-domain diagnostic is intentionally excluded:
-# PolicyEngine has no corresponding international-agreement guard, so its
-# unconditional public output is not commensurable on that case.
-def _additional_medicare_case(
-    case_id: str,
-    filing_status: str,
-    *,
-    primary_wages: float = 0,
-    spouse_wages: float = 0,
-    primary_self_employment_profit: float = 0,
-    spouse_self_employment_profit: float = 0,
-) -> FederalCase:
-    return _case(
-        case_id,
-        filing_status,
-        primary_wages=primary_wages,
-        spouse_wages=spouse_wages,
-        self_employment_income=primary_self_employment_profit,
-        spouse_self_employment_income=spouse_self_employment_profit,
-    )
-
-
+# GRID-CONTRACT P1, restricted to the five wage-only cases. The merged
+# RuleSpec composition fail-closes its combined output when imported federal
+# self-employment income is nonzero, so the former positive-SE case is outside
+# this suite's reviewed domain until the operative section 1401 authority lands.
 _ADDITIONAL_MEDICARE_CASES = (
-    _additional_medicare_case(
+    _case(
         "amt-single-150k",
         "single",
         primary_wages=150_000,
+        spouse_wages=0,
+        self_employment_income=0,
     ),
-    _additional_medicare_case(
+    _case(
         "amt-single-250k",
         "single",
         primary_wages=250_000,
+        spouse_wages=0,
+        self_employment_income=0,
     ),
-    _additional_medicare_case(
+    _case(
         "amt-joint-300k",
         "joint",
         primary_wages=150_000,
         spouse_wages=150_000,
+        self_employment_income=0,
     ),
-    _additional_medicare_case(
+    _case(
         "amt-mfs-150k",
         "separate",
         primary_wages=150_000,
+        spouse_wages=0,
+        self_employment_income=0,
     ),
-    _additional_medicare_case(
-        "amt-single-wage-se",
-        "single",
-        primary_wages=100_000,
-        primary_self_employment_profit=150_000,
-    ),
-    _additional_medicare_case(
+    _case(
         "amt-joint-450k",
         "joint",
         primary_wages=400_000,
         spouse_wages=50_000,
-    ),
-    _additional_medicare_case(
-        "amt-single-wage-derived-completed-se-income-non-contract",
-        "single",
-        primary_wages=100_000,
-        primary_self_employment_profit=200_000,
-    ),
-    _additional_medicare_case("amt-zero", "single"),
-    _additional_medicare_case(
-        "amt-single-exact-wage-threshold",
-        "single",
-        primary_wages=200_000,
-    ),
-    _additional_medicare_case(
-        "amt-single-one-dollar-above-wage-threshold",
-        "single",
-        primary_wages=200_001,
-    ),
-    _additional_medicare_case(
-        "amt-single-exact-coordinated-se-threshold",
-        "single",
-        primary_wages=107_650,
-        primary_self_employment_profit=100_000,
-    ),
-    _additional_medicare_case(
-        "amt-single-one-dollar-above-coordinated-se-threshold",
-        "single",
-        primary_wages=107_651,
-        primary_self_employment_profit=100_000,
-    ),
-    _additional_medicare_case(
-        "amt-joint-two-positive-se-earners-single-tax-unit-threshold",
-        "joint",
-        primary_self_employment_profit=150_000,
-        spouse_self_employment_profit=150_000,
-    ),
-    _additional_medicare_case(
-        "amt-joint-one-dollar-below-coordinated-se-threshold",
-        "joint",
-        primary_wages=65_299,
-        primary_self_employment_profit=200_000,
-    ),
-    _additional_medicare_case(
-        "amt-joint-exact-coordinated-se-threshold",
-        "joint",
-        primary_wages=65_300,
-        primary_self_employment_profit=200_000,
-    ),
-    _additional_medicare_case(
-        "amt-joint-one-dollar-above-coordinated-se-threshold",
-        "joint",
-        primary_wages=65_301,
-        primary_self_employment_profit=200_000,
-    ),
-    _additional_medicare_case(
-        "amt-single-se-threshold-zero-at-wage-threshold",
-        "single",
-        primary_wages=200_000,
-        primary_self_employment_profit=1_000,
-    ),
-    _additional_medicare_case(
-        "amt-single-se-threshold-not-negative-above-wage-threshold",
-        "single",
-        primary_wages=200_001,
-        primary_self_employment_profit=1_000,
-    ),
-    _additional_medicare_case(
-        "amt-married-separate-positive-se",
-        "separate",
-        primary_wages=125_000,
-        primary_self_employment_profit=100_000,
-    ),
-    _additional_medicare_case(
-        "amt-married-separate-positive-se-above-unreduced-threshold",
-        "separate",
-        primary_self_employment_profit=150_000,
-    ),
-    _additional_medicare_case(
-        "amt-married-separate-one-dollar-below-coordinated-se-threshold",
-        "separate",
-        primary_wages=32_649,
-        primary_self_employment_profit=100_000,
-    ),
-    _additional_medicare_case(
-        "amt-married-separate-exact-coordinated-se-threshold",
-        "separate",
-        primary_wages=32_650,
-        primary_self_employment_profit=100_000,
-    ),
-    _additional_medicare_case(
-        "amt-married-separate-one-dollar-above-coordinated-se-threshold",
-        "separate",
-        primary_wages=32_651,
-        primary_self_employment_profit=100_000,
-    ),
-    _additional_medicare_case(
-        "amt-head-of-household-positive-se-other-threshold",
-        "head_of_household",
-        primary_wages=150_000,
-        primary_self_employment_profit=100_000,
-    ),
-    _additional_medicare_case(
-        "amt-single-positive-se-above-unreduced-other-threshold",
-        "single",
-        primary_self_employment_profit=250_000,
-    ),
-    _additional_medicare_case(
-        "amt-single-one-dollar-below-coordinated-se-threshold",
-        "single",
-        primary_wages=107_649,
-        primary_self_employment_profit=100_000,
-    ),
-    _additional_medicare_case(
-        "amt-self-employment-loss-has-no-negative-se-base",
-        "single",
-        primary_wages=200_001,
-        primary_self_employment_profit=-10_000,
+        self_employment_income=0,
     ),
 )
 
@@ -1084,10 +949,7 @@ def _payroll_situation(case: FederalCase) -> dict[str, Any]:
         "employment_income": inputs["primary_wages"],
         "self_employment_income": inputs["self_employment_income"],
     }
-    spouse = {
-        "employment_income": inputs["spouse_wages"],
-        "self_employment_income": inputs.get("spouse_self_employment_income", 0),
-    }
+    spouse = {"employment_income": inputs["spouse_wages"]}
     return _tax_situation(case, primary_inputs=primary, spouse_inputs=spouse)
 
 
@@ -1379,13 +1241,12 @@ def _validate_additional_medicare_fixture(
     actual: Mapping[str, Any],
 ) -> None:
     pipeline = "us:policies/income_tax/additional_medicare_tax_pipeline"
-    status_codes = {
-        "single": 0,
-        "joint": 1,
-        "separate": 2,
-        "head_of_household": 3,
-        "surviving_spouse": 4,
-    }
+    status_codes = {"single": 0, "joint": 1, "separate": 2}
+    if Decimal(str(case.inputs["self_employment_income"])) != 0:
+        raise ValueError(
+            f"us-additional-medicare-grid: case {case.case_id!r} is outside "
+            "the reviewed wage-only, zero-self-employment domain"
+        )
     _require_fixture_values(
         suite="us-additional-medicare-grid",
         case_id=case.case_id,
@@ -1426,9 +1287,7 @@ def _validate_self_employment_relation(
     if case.filing_status == "joint":
         expected_people.append(
             {
-                "self_employment_income": case.inputs.get(
-                    "spouse_self_employment_income", 0
-                ),
+                "self_employment_income": 0,
                 "wages": case.inputs["spouse_wages"],
             }
         )
@@ -1919,29 +1778,6 @@ def _verify_savers_pe_parameters(tax_benefit_system: Any) -> None:
     )
 
 
-def _verify_additional_medicare_pe_parameters(tax_benefit_system: Any) -> None:
-    p = tax_benefit_system.parameters("2026-01-01").gov.irs.payroll.medicare.additional
-    _verify_parameter_values(
-        "us-additional-medicare-grid",
-        {
-            "rate": p.rate,
-            "exclusion.SINGLE": p.exclusion.SINGLE,
-            "exclusion.JOINT": p.exclusion.JOINT,
-            "exclusion.SEPARATE": p.exclusion.SEPARATE,
-            "exclusion.HEAD_OF_HOUSEHOLD": p.exclusion.HEAD_OF_HOUSEHOLD,
-            "exclusion.SURVIVING_SPOUSE": p.exclusion.SURVIVING_SPOUSE,
-        },
-        {
-            "rate": 0.009,
-            "exclusion.SINGLE": 200_000,
-            "exclusion.JOINT": 250_000,
-            "exclusion.SEPARATE": 125_000,
-            "exclusion.HEAD_OF_HOUSEHOLD": 200_000,
-            "exclusion.SURVIVING_SPOUSE": 200_000,
-        },
-    )
-
-
 def _verify_elderly_disabled_pe_parameters(
     tax_benefit_system: Any,
 ) -> None:
@@ -2114,55 +1950,24 @@ POLICIES: dict[str, PolicyConfig] = {
     "additional_medicare_tax": PolicyConfig(
         key="additional_medicare_tax",
         suite="us-additional-medicare-grid",
-        title="Additional Medicare Tax parameters",
+        title="Additional Medicare Tax",
         axiom_module_ref=("us:policies/income_tax/additional_medicare_tax_pipeline"),
         fixture_path=Path(
             "us/policies/income_tax/additional_medicare_tax_pipeline.test.yaml"
         ),
         axiom_output=(
             "us:policies/income_tax/additional_medicare_tax_pipeline"
-            "#pipeline_additional_medicare_self_employment_threshold"
+            "#federal_additional_medicare_tax"
         ),
-        pe_output_variables=(),
+        pe_output_variables=("additional_medicare_tax",),
         pe_boundary=(
-            "Registry-comparable section 1401(b)(2) filing-status threshold "
-            "and rate only. Money-level parity is blocked because the combined "
-            "tax mapping requires a section 1401(c) domain precondition that "
-            "the bridge schema cannot yet express."
+            "TaxUnit Additional Medicare Tax restricted to zero "
+            "self-employment income, where the public total equals the "
+            "section 3101(b)(2) wage-only amount"
         ),
         cases=_ADDITIONAL_MEDICARE_CASES,
         pe_situation=_payroll_situation,
         fixture_input_validator=_validate_additional_medicare_fixture,
-        pe_parameter_validator=_verify_additional_medicare_pe_parameters,
-        supplemental_fixture_paths=(
-            Path(
-                "comparisons/fixtures/"
-                "us-additional-medicare-grid-threshold-probes.yaml"
-            ),
-        ),
-        comparison_bindings=(
-            ComparisonBinding(
-                concept=(
-                    "us:policies/income_tax/additional_medicare_tax_pipeline"
-                    "#pipeline_additional_medicare_self_employment_threshold"
-                ),
-                policyengine_target=(
-                    "gov.irs.payroll.medicare.additional.exclusion"
-                ),
-                comparison="amount",
-            ),
-            ComparisonBinding(
-                concept=(
-                    "us:policies/income_tax/additional_medicare_tax_pipeline"
-                    "#pipeline_additional_medicare_self_employment_tax_rate"
-                ),
-                policyengine_target="gov.irs.payroll.medicare.additional.rate",
-                comparison="rate",
-                case_ids=("amt-single-wage-se",),
-                case_id_suffix="::rate",
-                tolerance=0.000000000001,
-            ),
-        ),
     ),
     "self_employment_tax": PolicyConfig(
         key="self_employment_tax",
@@ -2325,14 +2130,14 @@ def _mapping_for_binding(config: PolicyConfig, binding: ComparisonBinding) -> An
 
 
 def _assert_registry_comparable_bindings(config: PolicyConfig) -> None:
-    """Fail closed for the two federal grids repaired in PR #417.
+    """Fail closed for the Saver's Credit grid repaired in PR #417.
 
     Other older federal grids still need a separate mapping migration. Keeping
     this invariant scoped prevents this repair from silently blessing their
     pre-existing unmapped pipeline concepts.
     """
 
-    if config.suite not in {"us-savers-grid", "us-additional-medicare-grid"}:
+    if config.suite != "us-savers-grid":
         return
     for binding in _scored_bindings(config):
         _mapping_for_binding(config, binding)
@@ -2790,10 +2595,7 @@ def _build_report(
     match_count = sum(aggregate["match_count"] for aggregate in aggregates)
     mismatch_count = len(mismatches)
     match_rate = 100.0 * match_count / comparison_count
-    audited_suite = config.suite in {
-        "us-savers-grid",
-        "us-additional-medicare-grid",
-    }
+    audited_suite = config.suite == "us-savers-grid"
     comparison_bindings = (
         [_binding_payload(config, binding) for binding in _scored_bindings(config)]
         if audited_suite

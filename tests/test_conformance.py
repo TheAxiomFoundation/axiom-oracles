@@ -645,12 +645,6 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
     assert "reviewed direct PE-US target" in by_name["savers_credit"].note
     assert "23/34" in by_name["savers_credit"].note
     assert "policyengine-us/issues/9151" in by_name["savers_credit"].note
-    assert "28/28" in by_name["additional_medicare_tax"].note
-    assert "not compared" in by_name["additional_medicare_tax"].note
-    assert (
-        "Money-level parity remains blocked"
-        in by_name["additional_medicare_tax"].note
-    )
     assert by_name["self_employment_tax"].suite == "us-seca-grid"
     # State income-tax coverage counts only a comparison that proves the final
     # public variable. These blocked grids exercise useful narrower components,

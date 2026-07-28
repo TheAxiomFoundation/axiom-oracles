@@ -758,12 +758,27 @@ residual), #229 (small-suite grounding).
   the exact starting HEAD.
 - Preserved the pre-existing untracked `WORKER-REPORT.md` for replacement with
   the final split report.
+- Restored `comparisons/us-additional-medicare-grid.yaml` and its committed
+  report byte-for-byte from `origin/main`; removed the branch-only
+  Additional Medicare supplemental fixture. No Additional Medicare
+  disposition or mapping differs from main.
+- Restored the generator's Additional Medicare inventory, fixture validation,
+  PolicyEngine output, and report boundary to the five pre-existing wage-only
+  tax-dollar cases. The shared comparison-binding and supplemental-fixture
+  infrastructure remains only for the approved Saver's Credit grid.
+- Restored the Additional Medicare source row note exactly to main and removed
+  all expansion-specific assertions. A changed-hunk search finds no remaining
+  Additional Medicare edits in the mixed generator, generator tests,
+  conformance tests, or source row file.
+- Restored six unrelated federal grid configs whose only branch difference was
+  a shared snapshot-pin update. The snapshot invariant now records the new
+  Saver grid's reviewed RuleSpec snapshot separately from the unchanged legacy
+  grids, keeping the final source diff savers-scoped.
+- Focused generator validation passes: 23 tests. Ruff passes the generator and
+  both edited test files; `git diff --check` passes.
 
 ### Next
 
-- Restore every Additional Medicare-specific source, fixture, test,
-  disposition, generated report, conformance note, and mixed-file hunk to its
-  exact `origin/main` state while retaining the Saver's Credit work.
 - Regenerate the complete derived chain and run every member in `--check` mode.
 - Prove byte-level Additional Medicare restoration, savers-only row and
   scoreboard effects, exact diff containment, and write the final untracked

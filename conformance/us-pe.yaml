@@ -44,16 +44,16 @@ policies:
     in_scope: true
     suite: us-additional-medicare-grid
     note: >-
-      The us-additional-medicare-grid suite scores only registry-comparable
-      section 1401(b)(2) parameters: 27 filing-status-selected threshold checks
-      and one 0.9 percent rate check, all matching PE-US 1.767.3. Its 27
-      scenarios cover positive, zero, and loss self-employment income; single,
-      joint, separate, and other-return thresholds; and B-1/exact/B+1
-      wage-coordinated probes. The combined Additional Medicare Tax and its
-      isolated wage and self-employment legs are not compared. Money-level
-      parity remains blocked because Axiom's combined final fail-closes outside
-      the section 1401(c) ordinary domain and the registry cannot yet express
-      that precondition. The committed comparable-only report is 28/28.
+      The us-additional-medicare-grid suite compares PE-US
+      additional_medicare_tax with Axiom's combined final only on the
+      explicitly bounded tax-year-2026 zero-self-employment domain: five
+      wage-only GRID-CONTRACT cases across single, joint, and
+      married-filing-separately status, four nonzero. For zero-SE inputs,
+      PE-US additional_medicare_tax equals the section 3101(b)(2) wage-only
+      amount and Axiom's combined output remains valid. The suite does not test
+      or claim the section 1401(b)(2) self-employment leg; SE leg pending the 26
+      CFR 1.1401-1 operative-authority chain, axiom-corpus#523. The committed
+      report is 5/5 within one cent.
   - id: us-pe:ak_atap
     oracle_policy_name: ak_atap
     oracle_policy_type: rules

@@ -38,9 +38,15 @@ def _load_runner():
     return module
 
 
-def test_every_live_federal_grid_pins_canonical_rulespec_snapshot():
-    upstream_sha = "dcbae4344c522b4ad8004169316266cbc153186f"
-    upstream_tree = "7ee3ca44edd11cdaaf5d074a6a2a6c32d2f25dfb"
+def test_every_live_federal_grid_pins_its_reviewed_rulespec_snapshot():
+    legacy_snapshot = (
+        "3373e8411f7e141fd50879e3de964386f606f7f6",
+        "7e00f195ea81ff9aa21c58d53151e937d974a016",
+    )
+    savers_snapshot = (
+        "dcbae4344c522b4ad8004169316266cbc153186f",
+        "7ee3ca44edd11cdaaf5d074a6a2a6c32d2f25dfb",
+    )
     federal_configs = []
     for path in sorted((REPO_ROOT / "comparisons").glob("*.yaml")):
         config = yaml.safe_load(path.read_text())
@@ -49,8 +55,15 @@ def test_every_live_federal_grid_pins_canonical_rulespec_snapshot():
             continue
         federal_configs.append(path.name)
         parameters = runner["parameters"]
-        assert parameters["rulespec_upstream_sha"] == upstream_sha, path
-        assert parameters["rulespec_upstream_tree"] == upstream_tree, path
+        expected = (
+            savers_snapshot
+            if path.name == "us-savers-grid.yaml"
+            else legacy_snapshot
+        )
+        assert (
+            parameters["rulespec_upstream_sha"],
+            parameters["rulespec_upstream_tree"],
+        ) == expected, path
 
     assert federal_configs == [
         "us-aca-ptc-grid.yaml",
@@ -89,29 +102,7 @@ def test_all_eight_contract_grids_are_explicit_and_independent():
             "amt-single-250k",
             "amt-joint-300k",
             "amt-mfs-150k",
-            "amt-single-wage-se",
             "amt-joint-450k",
-            "amt-single-wage-derived-completed-se-income-non-contract",
-            "amt-zero",
-            "amt-single-exact-wage-threshold",
-            "amt-single-one-dollar-above-wage-threshold",
-            "amt-single-exact-coordinated-se-threshold",
-            "amt-single-one-dollar-above-coordinated-se-threshold",
-            "amt-joint-two-positive-se-earners-single-tax-unit-threshold",
-            "amt-joint-one-dollar-below-coordinated-se-threshold",
-            "amt-joint-exact-coordinated-se-threshold",
-            "amt-joint-one-dollar-above-coordinated-se-threshold",
-            "amt-single-se-threshold-zero-at-wage-threshold",
-            "amt-single-se-threshold-not-negative-above-wage-threshold",
-            "amt-married-separate-positive-se",
-            "amt-married-separate-positive-se-above-unreduced-threshold",
-            "amt-married-separate-one-dollar-below-coordinated-se-threshold",
-            "amt-married-separate-exact-coordinated-se-threshold",
-            "amt-married-separate-one-dollar-above-coordinated-se-threshold",
-            "amt-head-of-household-positive-se-other-threshold",
-            "amt-single-positive-se-above-unreduced-other-threshold",
-            "amt-single-one-dollar-below-coordinated-se-threshold",
-            "amt-self-employment-loss-has-no-negative-se-base",
         ],
         "self_employment_tax": [
             "seca-under-floor",
@@ -215,15 +206,8 @@ def test_all_eight_contract_grids_are_explicit_and_independent():
     for key, expected in expected_case_ids.items():
         assert [case.case_id for case in generator.POLICIES[key].cases] == expected
     additional_medicare = generator.POLICIES["additional_medicare_tax"].cases
-    assert any(
-        case.inputs["self_employment_income"] > 0 for case in additional_medicare
-    )
-    assert any(
-        case.inputs["self_employment_income"] < 0 for case in additional_medicare
-    )
     assert all(
-        case.case_id != "amt-se-domain-fails-closed-foreign-system-attestation"
-        for case in additional_medicare
+        case.inputs["self_employment_income"] == 0 for case in additional_medicare
     )
     assert any(
         case.inputs["primary_wages"] + case.inputs["spouse_wages"] > 200_000
@@ -234,23 +218,9 @@ def test_all_eight_contract_grids_are_explicit_and_independent():
 def test_policyengine_bindings_match_the_reviewed_output_boundaries():
     generator = _load_generator()
 
-    additional_medicare = generator.POLICIES["additional_medicare_tax"]
-    assert additional_medicare.pe_output_variables == ()
-    assert [
-        (binding.concept, binding.policyengine_target)
-        for binding in additional_medicare.comparison_bindings
-    ] == [
-        (
-            "us:policies/income_tax/additional_medicare_tax_pipeline"
-            "#pipeline_additional_medicare_self_employment_threshold",
-            "gov.irs.payroll.medicare.additional.exclusion",
-        ),
-        (
-            "us:policies/income_tax/additional_medicare_tax_pipeline"
-            "#pipeline_additional_medicare_self_employment_tax_rate",
-            "gov.irs.payroll.medicare.additional.rate",
-        ),
-    ]
+    assert generator.POLICIES["additional_medicare_tax"].pe_output_variables == (
+        "additional_medicare_tax",
+    )
     assert generator.POLICIES["self_employment_tax"].pe_output_variables == (
         "self_employment_tax",
     )
@@ -275,7 +245,7 @@ def test_policyengine_bindings_match_the_reviewed_output_boundaries():
     )
 
 
-def test_repaired_grids_fail_closed_on_unmapped_noncomparable_or_wrong_target():
+def test_savers_grid_fails_closed_on_unmapped_noncomparable_or_wrong_target():
     generator = _load_generator()
     savers = generator.POLICIES["savers_credit"]
     module = "us:policies/income_tax/savers_credit_pipeline"
@@ -295,15 +265,14 @@ def test_repaired_grids_fail_closed_on_unmapped_noncomparable_or_wrong_target():
     with pytest.raises(ValueError, match="registry-not-comparable"):
         generator._assert_registry_comparable_bindings(
             replace(
-                generator.POLICIES["additional_medicare_tax"],
+                savers,
                 comparison_bindings=(
                     generator.ComparisonBinding(
                         concept=(
-                            "us:policies/income_tax/"
-                            "additional_medicare_tax_pipeline"
-                            "#federal_additional_medicare_tax"
+                            f"{module}"
+                            "#pipeline_savers_credit_modified_adjusted_gross_income"
                         ),
-                        policyengine_target="additional_medicare_tax",
+                        policyengine_target="adjusted_gross_income",
                         comparison="amount",
                     ),
                 ),
@@ -324,24 +293,15 @@ def test_repaired_grids_fail_closed_on_unmapped_noncomparable_or_wrong_target():
         )
 
     generator._assert_registry_comparable_bindings(savers)
-    generator._assert_registry_comparable_bindings(
-        generator.POLICIES["additional_medicare_tax"]
-    )
 
 
-def test_committed_repaired_reports_score_only_registry_comparable_bindings():
+def test_committed_savers_report_scores_only_registry_comparable_bindings():
     generator = _load_generator()
     registry = generator.load_policyengine_registry()
     expected = {
         "us-savers-grid": {
             "us:policies/income_tax/savers_credit_pipeline"
             "#federal_savers_credit"
-        },
-        "us-additional-medicare-grid": {
-            "us:policies/income_tax/additional_medicare_tax_pipeline"
-            "#pipeline_additional_medicare_self_employment_threshold",
-            "us:policies/income_tax/additional_medicare_tax_pipeline"
-            "#pipeline_additional_medicare_self_employment_tax_rate",
         },
     }
     for suite, expected_concepts in expected.items():
@@ -384,13 +344,6 @@ def test_committed_repaired_reports_score_only_registry_comparable_bindings():
                 )
                 assert binding["parameter_key_map"] == mapping.parameter_key_map
 
-    combined = (
-        "us:policies/income_tax/additional_medicare_tax_pipeline"
-        "#federal_additional_medicare_tax"
-    )
-    assert combined not in expected["us-additional-medicare-grid"]
-
-
 def test_aca_grid_pins_prior_year_fpl_dollars_and_enrolled_premium():
     generator = _load_generator()
     cases = {case.case_id: case for case in generator.POLICIES["aca_ptc"].cases}
@@ -425,15 +378,6 @@ def test_payroll_and_niit_inputs_are_derived_from_contract_facts():
     mfs = generator._payroll_situation(payroll_cases["amt-mfs-150k"])
     assert mfs["people"]["head"]["is_separated"][2026] is True
     assert mfs["people"]["head"]["employment_income"][2026] == 150_000
-    joint_se = generator._payroll_situation(
-        payroll_cases["amt-joint-two-positive-se-earners-single-tax-unit-threshold"]
-    )
-    assert joint_se["people"]["head"]["self_employment_income"][2026] == 150_000
-    assert joint_se["people"]["spouse"]["self_employment_income"][2026] == 150_000
-    hoh = generator._payroll_situation(
-        payroll_cases["amt-head-of-household-positive-se-other-threshold"]
-    )
-    assert hoh["tax_units"]["tax_unit"]["filing_status"][2026] == "HEAD_OF_HOUSEHOLD"
 
     seca_cases = {
         case.case_id: case for case in generator.POLICIES["self_employment_tax"].cases
@@ -449,86 +393,6 @@ def test_payroll_and_niit_inputs_are_derived_from_contract_facts():
     rental = generator._niit_situation(niit_cases["niit-rental"])
     assert rental["people"]["head"]["rental_income"][2026] == 60_000
     assert "adjusted_gross_income" not in rental["tax_units"]["tax_unit"]
-
-
-def test_additional_medicare_positive_se_spans_every_status_threshold():
-    generator = _load_generator()
-    cases = {
-        case.case_id: case
-        for case in generator.POLICIES["additional_medicare_tax"].cases
-    }
-
-    def combined(case_id):
-        case = cases[case_id]
-        wages = case.inputs["primary_wages"] + case.inputs["spouse_wages"]
-        gross_se = (
-            case.inputs["self_employment_income"]
-            + case.inputs["spouse_self_employment_income"]
-        )
-        return wages + gross_se * 0.9235
-
-    coordinated = {
-        "joint": (
-            250_000,
-            (
-                "amt-joint-one-dollar-below-coordinated-se-threshold",
-                "amt-joint-exact-coordinated-se-threshold",
-                "amt-joint-one-dollar-above-coordinated-se-threshold",
-            ),
-        ),
-        "separate": (
-            125_000,
-            (
-                "amt-married-separate-one-dollar-below-coordinated-se-threshold",
-                "amt-married-separate-exact-coordinated-se-threshold",
-                "amt-married-separate-one-dollar-above-coordinated-se-threshold",
-            ),
-        ),
-        "other": (
-            200_000,
-            (
-                "amt-single-one-dollar-below-coordinated-se-threshold",
-                "amt-single-exact-coordinated-se-threshold",
-                "amt-single-one-dollar-above-coordinated-se-threshold",
-            ),
-        ),
-    }
-    for threshold, case_ids in coordinated.values():
-        assert [combined(case_id) for case_id in case_ids] == [
-            threshold - 1,
-            threshold,
-            threshold + 1,
-        ]
-
-    unreduced = {
-        "joint": (
-            250_000,
-            "amt-joint-one-dollar-below-coordinated-se-threshold",
-            "amt-joint-two-positive-se-earners-single-tax-unit-threshold",
-        ),
-        "separate": (
-            125_000,
-            "amt-married-separate-one-dollar-below-coordinated-se-threshold",
-            "amt-married-separate-positive-se-above-unreduced-threshold",
-        ),
-        "other": (
-            200_000,
-            "amt-single-one-dollar-below-coordinated-se-threshold",
-            "amt-single-positive-se-above-unreduced-other-threshold",
-        ),
-    }
-    for threshold, below_id, above_id in unreduced.values():
-        below = cases[below_id]
-        above = cases[above_id]
-        below_se = (
-            below.inputs["self_employment_income"]
-            + below.inputs["spouse_self_employment_income"]
-        ) * 0.9235
-        above_se = (
-            above.inputs["self_employment_income"]
-            + above.inputs["spouse_self_employment_income"]
-        ) * 0.9235
-        assert 0 < below_se < threshold < above_se
 
 
 def test_qbid_grid_binds_correct_2026_band_and_active_business_diagnostic():
@@ -754,27 +618,27 @@ def test_llc_grid_binds_explicit_status_and_liability_capped_final():
     }
 
 
-def test_additional_medicare_fixture_enforces_ordinary_person_boundary():
+def test_additional_medicare_fixture_enforces_wage_only_person_boundary():
     generator = _load_generator()
     case = next(
         case
         for case in generator.POLICIES["additional_medicare_tax"].cases
-        if case.case_id == "amt-single-wage-se"
+        if case.case_id == "amt-single-250k"
     )
     additional_module = "us:policies/income_tax/additional_medicare_tax_pipeline"
     se_module = "us:policies/income_tax/self_employment_tax_pipeline"
     relation = f"{se_module}#relation.self_employed_individual_of_tax_unit"
     actual = {
         "us:statutes/26/3101/b/2#input.filing_status": 0,
-        f"{additional_module}#input.wages": 100_000,
+        f"{additional_module}#input.wages": 250_000,
         f"{additional_module}#input.no_foreign_system_exclusive_se_income": True,
         relation: [
             {
-                f"{se_module}#input.gross_self_employment_profit": 150_000,
+                f"{se_module}#input.gross_self_employment_profit": 0,
                 (
                     "us:statutes/26/1402/b#input."
                     "wages_paid_to_individual_during_taxable_year_for_section_1401_a"
-                ): 100_000,
+                ): 250_000,
                 ("us:statutes/26/1402/b#input.individual_is_nonresident_alien"): False,
                 (
                     "us:statutes/26/1402/b#input."
@@ -792,15 +656,12 @@ def test_additional_medicare_fixture_enforces_ordinary_person_boundary():
 
     generator._validate_additional_medicare_fixture(case, actual)
 
-    false_domain_fixture = dict(actual)
-    false_domain_fixture[
-        f"{additional_module}#input.no_foreign_system_exclusive_se_income"
-    ] = False
-    with pytest.raises(ValueError, match="expected True"):
-        generator._validate_additional_medicare_fixture(
-            case,
-            false_domain_fixture,
-        )
+    positive_se_case = replace(
+        case,
+        inputs={**case.inputs, "self_employment_income": 1},
+    )
+    with pytest.raises(ValueError, match="wage-only, zero-self-employment"):
+        generator._validate_additional_medicare_fixture(positive_se_case, actual)
 
     stale_flat_fixture = dict(actual)
     stale_flat_fixture.pop(relation)
@@ -810,35 +671,6 @@ def test_additional_medicare_fixture_enforces_ordinary_person_boundary():
             case,
             stale_flat_fixture,
         )
-
-
-def test_additional_medicare_supplement_binds_all_nine_new_scenarios():
-    generator = _load_generator()
-    config = generator.POLICIES["additional_medicare_tax"]
-    path = (
-        REPO_ROOT
-        / "comparisons/fixtures/"
-        "us-additional-medicare-grid-threshold-probes.yaml"
-    )
-    records = {record["name"]: record for record in generator._fixture_records(path)}
-    new_records = {
-        name: record for name, record in records.items() if record.get("input")
-    }
-    assert len(new_records) == 9
-    cases = {case.case_id: case for case in config.cases}
-    thresholds = {
-        "single": 200_000,
-        "joint": 250_000,
-        "separate": 125_000,
-    }
-    for case_id, record in new_records.items():
-        case = cases[case_id]
-        generator._validate_additional_medicare_fixture(case, record["input"])
-        assert record["output"][config.axiom_output] == thresholds[
-            case.filing_status
-        ]
-
-
 def test_axiom_fixture_is_resolved_only_from_supplied_roots(tmp_path):
     generator = _load_generator()
     original = generator.POLICIES["net_investment_income_tax"]
@@ -884,10 +716,7 @@ def test_axiom_fixture_is_resolved_only_from_supplied_roots(tmp_path):
 def test_non_vacuous_guard_requires_a_nonzero_matching_case():
     generator = _load_generator()
     config = generator.POLICIES["additional_medicare_tax"]
-    row_ids = [
-        row_id for row_id, _case, _binding in generator._comparison_rows(config)
-    ]
-    all_zero = dict.fromkeys(row_ids, 0.0)
+    all_zero = {case.case_id: 0.0 for case in config.cases}
 
     with pytest.raises(RuntimeError, match="vacuous grid"):
         generator._assert_non_vacuous(config, all_zero, all_zero)
@@ -899,20 +728,22 @@ def test_non_vacuous_guard_requires_a_nonzero_matching_case():
     generator._assert_non_vacuous(config, axiom, policyengine)
 
 
-def test_v2_report_counts_only_comparable_additional_medicare_pairs():
+def test_v2_report_counts_one_pair_per_case():
     generator = _load_generator()
     config = generator.POLICIES["additional_medicare_tax"]
-    rows = generator._comparison_rows(config)
     axiom = {
-        row_id: float(index * 100)
-        for index, (row_id, _case, _binding) in enumerate(rows, start=1)
+        case.case_id: float(index * 100)
+        for index, case in enumerate(
+            config.cases,
+            start=1,
+        )
     }
     policyengine = dict(axiom)
     policyengine["amt-single-250k"] -= 1
     fixture_inputs = {case.case_id: {} for case in config.cases}
     components = {
-        row_id: {binding.policyengine_target: policyengine[row_id]}
-        for row_id, _case, binding in rows
+        case.case_id: {"additional_medicare_tax": policyengine[case.case_id]}
+        for case in config.cases
     }
 
     report = generator._build_report(
@@ -934,26 +765,16 @@ def test_v2_report_counts_only_comparable_additional_medicare_pairs():
             "policyengine_us": "1.767.3",
         },
     }
-    assert report["engine_bindings"]["policyengine"]["outputs"] == []
-    bindings = report["engine_bindings"]["policyengine"]["comparison_bindings"]
-    assert [binding["parameter"] for binding in bindings] == [
-        "gov.irs.payroll.medicare.additional.exclusion",
-        "gov.irs.payroll.medicare.additional.rate",
+    assert report["engine_bindings"]["policyengine"]["outputs"] == [
+        "additional_medicare_tax"
     ]
-    assert report["scenario_count"] == 27
-    assert report["summary"]["comparison_count"] == 28
-    assert report["summary"]["match_count"] == 27
+    assert report["summary"]["comparison_count"] == 5
+    assert report["summary"]["match_count"] == 4
     assert report["summary"]["mismatch_count"] == 1
-    assert report["aggregates"][0]["comparison_count"] == 27
-    assert report["aggregates"][0]["match_count"] == 26
+    assert report["aggregates"][0]["comparison_count"] == 5
+    assert report["aggregates"][0]["match_count"] == 4
     assert report["aggregates"][0]["mismatch_count"] == 1
-    assert report["aggregates"][1]["comparison_count"] == 1
-    assert report["aggregates"][1]["match_count"] == 1
     assert len(report["mismatches"]) == 1
-    assert all(
-        "federal_additional_medicare_tax" not in case["concept"]
-        for case in report["cases"]
-    )
 
 
 def test_registry_runner_uses_suite_pin_overrides_and_configured_roots(
