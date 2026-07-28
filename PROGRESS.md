@@ -714,3 +714,57 @@ residual), #229 (small-suite grounding).
 
 - None. Hand off the committed local branch and untracked worker report; do not
   push or write GitHub state.
+
+---
+
+## PR #417 split — retain Saver's Credit, hold Additional Medicare — 2026-07-28
+
+### State
+
+- Active branch: `fed-parity/savers-addmed-grids`; split starting HEAD
+  `12dae249aeb4765204e93d344c3ca400d36f70fe`.
+- Preservation branch:
+  `fed-parity/addmed-grid-expansion-hold` at
+  `12dae249aeb4765204e93d344c3ca400d36f70fe`. This local branch retains the
+  complete mixed Saver's Credit and Additional Medicare expansion for the
+  follow-up; it will not be pushed during the merge freeze.
+- Cached comparison base: local `origin/main`
+  `86be77210aa03da867a6103558cb57fe51a2ba55`. A fresh
+  `git fetch origin main` was attempted before editing, but sandbox DNS could
+  not resolve `github.com`; no ref changed.
+- Round-2 verdict read in full from
+  `.git/review-worktrees/pr417-12dae249-round2-blind/PR417-ROUND2-REVIEW.md`.
+- Split decision: retain the approved Saver's Credit half (truthful final
+  mapping, 34 cases, all nine B-1 probes, the same 11 twice-confirmed #9151
+  dispositions, and section 25B(e) citations). Withdraw every Additional
+  Medicare change from this branch because its parameter-only suite compares
+  no tax-liability output and therefore cannot cover the default-full
+  `output_vars: [additional_medicare_tax]` conformance row.
+- The Additional Medicare row and suite must be byte-identical to
+  `origin/main`, preserving its pre-existing 5/5 wage-only report without any
+  alteration. The follow-up first needs a RuleSpec ordinary-domain-scoped
+  tax-dollar output, a truthful comparable registry mapping, and a grid that
+  evaluates that money output against PolicyEngine's
+  `additional_medicare_tax`.
+- Required final containment: only `us-pe:savers_credit` changes coverage
+  (`uncovered` to `covered`); no other row changes; the US scoreboard moves
+  from 33 to 34 covered.
+
+### Done
+
+- Verified the requested worktree, active branch, clean tracked state, starting
+  HEAD, cached base, merge base, ahead/behind counts, remotes, and mixed diff.
+- Preserved the complete mixed expansion on the requested local hold branch at
+  the exact starting HEAD.
+- Preserved the pre-existing untracked `WORKER-REPORT.md` for replacement with
+  the final split report.
+
+### Next
+
+- Restore every Additional Medicare-specific source, fixture, test,
+  disposition, generated report, conformance note, and mixed-file hunk to its
+  exact `origin/main` state while retaining the Saver's Credit work.
+- Regenerate the complete derived chain and run every member in `--check` mode.
+- Prove byte-level Additional Medicare restoration, savers-only row and
+  scoreboard effects, exact diff containment, and write the final untracked
+  worker report.
