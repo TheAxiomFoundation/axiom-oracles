@@ -704,10 +704,14 @@ residual), #229 (small-suite grounding).
   345 entries from the exhaustive trace, validates pinned baselines and input
   alignment, rejects deduction confounds, and passes idempotent `--check`.
   The disposition schema suite passes 19 tests.
+- Applied the committed dispositions. The only stale report in the pre-write
+  check was `ca-snap-ecps`, and the writer changed only that canonical report.
+  Its disposition block now records 243 existing Axiom encoding gaps, 325
+  bridge artifacts, 20 upstream engine gaps, no expired/orphaned entry, and
+  exactly 96 unexplained rows.
 
 ### Next
 
-- Apply the 345 evidence-backed dispositions to the committed CA report.
 - Regenerate the required generated-data chain, audit that no other suite file
   changed, then run all `--check` parity gates.
 - Complete the untracked worker report with the 441-to-96 result, class-level
