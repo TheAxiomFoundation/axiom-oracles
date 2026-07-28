@@ -1,4 +1,42 @@
-# PROGRESS — us-pe reconciliation (drive `unexplained_total` 23,138 → 0)
+# PROGRESS — blind adversarial review of `triage/ca-snap-441`
+
+## State
+
+- Review worktree:
+  `.git/review-worktrees/ca-snap-441-102b4edd-adversarial`.
+- Reviewed local branch head:
+  `102b4edd5875fbe5e856daea0fafa9708a37003b`.
+- Merge base with locally cached `origin/main`:
+  `86be77210aa03da867a6103558cb57fe51a2ba55`.
+- Review status: in progress; no verdict yet.
+- All review writes are local detached-HEAD commits. The source worktree,
+  target branch, remotes, and GitHub are untouched.
+- Final report path: `REVIEW-REPORT.md` in this review worktree.
+
+## Done
+
+- Verified the exact target head independently from the local branch ref and
+  source worktree.
+- Read the untracked source `WORKER-REPORT.md`, including the complete class
+  table and claimed 325/20/77/19 decomposition.
+- Loaded the `gitnexus-pr-review` workflow. Its graph helpers are not exposed
+  in this session, so repository-native diff and call-chain inspection will be
+  used and the limitation disclosed.
+- Created the required disposable review worktree under
+  `.git/review-worktrees/` at the pinned commit.
+
+## Next
+
+1. Inventory the full merge-base diff and both committed evidence scripts.
+2. Reconstruct the 441-row universe and mutually exclusive claimed classes.
+3. Run stratified live PolicyEngine-US 1.767.3 counterfactuals, including
+   reviewer-random cases, then audit all upstream-gap repros and citations.
+4. Verify drift, unresolved rows, conservation, served parity, and every
+   relevant `--check` gate before writing the verdict.
+
+---
+
+# Archived target progress — us-pe reconciliation
 
 Predecessor: **#224** stood up the us-pe conformance universe (measurement only,
 day-one unexplained=23,138). This lane (`us-pe-reconciliation` from `origin/main`
