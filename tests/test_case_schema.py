@@ -1598,6 +1598,28 @@ def test_policyengine_projection_includes_case_scope_geography() -> None:
     assert household["place_fips"] == {2026: "51000"}
 
 
+def test_policyengine_projection_includes_fact_state_without_scope() -> None:
+    case = Case(
+        case_id="alaska-snap-case",
+        period="2026-01",
+        facts={Concepts.STATE_CODE: "AK"},
+        entities=(
+            Entity(
+                entity_id="head",
+                kind="person",
+                facts={Concepts.PERSON_AGE: 70},
+            ),
+        ),
+    )
+
+    household = PolicyEngineRunner()._build_situation_from_case(
+        case,
+        variables=["snap_min_allotment"],
+    )["households"]["household"]
+
+    assert household["state_code"] == {2026: "AK"}
+
+
 def test_policyengine_projection_includes_case_scope_for_income_tax() -> None:
     case = Case(
         case_id="county-tax-case",
