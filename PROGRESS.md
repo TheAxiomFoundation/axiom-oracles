@@ -824,7 +824,7 @@ residual), #229 (small-suite grounding).
 ### State
 
 - Review state: in progress.
-- Current verdict: pending.
+- Current verdict: `APPROVE` pending final report consolidation.
 - Disposable worktree:
   `.git/review-worktrees/pr417-94c8b7a9-round3-confirm`.
 - Throwaway ledger branch: `review/pr417-94c8b7a9-round3-confirm`.
@@ -861,11 +861,43 @@ residual), #229 (small-suite grounding).
   34 executable surfaces), scoreboard (4 jurisdictions / 3 conformant),
   ratchet, burn-down (4 series / 53 points), and overview (216 reports).
   Four unrelated pre-existing disposition-expiry notes match round 2.
+- Confirmed the cached-base-to-target diff has 23 paths and no path whose name
+  contains Additional Medicare or `addmed`. Additional-Medicare-specific
+  changed-line scans over shared source/test files are empty.
+- Confirmed the Additional Medicare suite config and 5/5 wage-only report are
+  the exact same Git blobs as `origin/main`. No disposition file exists in
+  either tree. Raw source-row and generated/served-row extractions are
+  byte-identical, and the embedded overview report object is structurally
+  identical. Extracted mapping, generator case, validator, and policy-config
+  blocks are also unchanged.
+- Diffed round 2 (`12dae249`) directly against the reviewed object. The Saver
+  config, supplemental fixture, report, disposition, full mapping registry,
+  bridge tests, generator case/situation/validator/parameter/config blocks,
+  source row, generated rows, freshness entry, and overview report object are
+  byte- or canonical-object-identical. Saver-adjacent shared edits only remove
+  Additional Medicare from the common audited scope or restore legacy pins.
+- Independently reconfirmed the Saver report has 34 unique cases, 23 raw
+  matches, and 11 mismatches; its single disposition selects exactly those
+  11 case IDs with no orphaned, expired, or unexplained entries. The unchanged
+  mapping set is exactly one direct `federal_savers_credit` to
+  `savers_credit_potential` binding plus ten explicit `not_comparable` helpers.
+- Focused Saver bridge/generator validation passed seven tests, and the
+  covered-suite conformance assertion passed separately.
+- Structural base-to-target comparison finds 148 US-PE policies in both trees
+  and exactly one changed ID: `us-pe:savers_credit`. It moves from uncovered
+  to conformant/covered with the 34/23/11 evidence. No policy ID is added or
+  removed.
+- The only changed scoreboard jurisdiction is `us-pe`: covered 33 to 34,
+  covered percent 25.9843 to 26.7717, oracle-attributed 16,661 to 16,672,
+  and `savers_credit` alone leaves the uncovered list (94 to 93). All other
+  headline values and jurisdictions are unchanged; ratchet/history/burn-down,
+  freshness, manifest, and overview changes are exactly the corresponding
+  mechanical derivatives.
+- Independent rollback, Saver-continuity, and row-effect validators all
+  returned PASS with no actionable finding.
+- `git diff --check` passes for both cached-base-to-target and
+  round-2-to-target.
 
 ### Next
 
-- Confirm zero Additional Medicare paths and byte-identical base surfaces.
-- Diff all Saver's Credit surfaces against round 2 and allow only mechanical
-  regeneration effects.
-- Prove the exact single-row and 33-to-34 scoreboard effects.
 - Consolidate the independent validators and write the verdict.
