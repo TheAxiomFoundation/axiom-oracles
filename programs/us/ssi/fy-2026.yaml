@@ -25,13 +25,13 @@ outputs:
   # Household-level: the oracle harness queries one household entity, and
   # PolicyEngine's person-level `ssi` aggregates to the household sum on
   # the other side.
-  - ssi_annual_benefit
+  - ssi_monthly_benefit
 
 acknowledged_incomplete:
   # The compose coverage guard wants the grandfathered 1382a(b)(2)
   # state-age payment path and couple-branch rules in the output tree;
   # both are out of the v1 individual slice.
-  - ssi_annual_benefit
+  - ssi_monthly_benefit
 
 scope:
   federal:
@@ -157,3 +157,13 @@ transformations:
     source: axiom-programs/us/ssi/fy-2026 program output
     formula: |-
       sum_where(member_of_household, individual_ssi_annual_benefit, person_ssi_counted)
+
+  - pattern: derived_formula
+    name: ssi_monthly_benefit
+    effective_from: '2026-01-01'
+    entity: Household
+    dtype: Money
+    period: Month
+    unit: USD
+    source: axiom-programs/us/ssi/fy-2026 program output
+    formula: ssi_annual_benefit / 12

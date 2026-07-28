@@ -14,10 +14,10 @@ program: us-mn/tanf
 period: 2026-01
 
 outputs:
-  - mn_mfip_annual_cash_benefit
+  - mn_mfip_monthly_cash_benefit
 
 acknowledged_incomplete:
-  - mn_mfip_annual_cash_benefit
+  - mn_mfip_monthly_cash_benefit
 
 scope:
   state:
