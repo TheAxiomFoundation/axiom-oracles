@@ -776,10 +776,19 @@ residual), #229 (small-suite grounding).
   grids, keeping the final source diff savers-scoped.
 - Focused generator validation passes: 23 tests. Ruff passes the generator and
   both edited test files; `git diff --check` passes.
+- Ran the complete derived write chain in order: dispositions, grids, affected
+  map, freshness/vacuous gate, dated scoreboard snapshot, ratchet, burn-down,
+  and dashboard overview. The split changed only four derived files relative
+  to the source rollback commit: canonical and served US-PE detail,
+  freshness, and overview.
+- Reran all eight chain members in `--check` mode: 83 disposition files are
+  consistent; grids are current; affected map has 172 suites / 181 edges;
+  vacuous gate has 136 oracle-backed configs / 215 suites / 34 executable
+  surfaces; scoreboard has 4 jurisdictions / 3 conformant; ratchet has no
+  regression; burn-down has 4 series / 53 points; overview has 216 reports.
 
 ### Next
 
-- Regenerate the complete derived chain and run every member in `--check` mode.
 - Prove byte-level Additional Medicare restoration, savers-only row and
   scoreboard effects, exact diff containment, and write the final untracked
   worker report.
