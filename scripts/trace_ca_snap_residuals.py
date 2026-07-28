@@ -102,6 +102,20 @@ COUNTERFACTUAL_VARIABLES = (
     "ca_tanf",
 )
 
+REQUESTED_MONTH_VARIABLES = (
+    *COUNTERFACTUAL_VARIABLES,
+    "snap_max_allotment",
+    "snap_min_allotment",
+    "snap_standard_deduction",
+    "snap_earned_income_deduction",
+    "snap_dependent_care_deduction",
+    "snap_child_support_deduction",
+    "snap_excess_medical_expense_deduction",
+    "snap_excess_shelter_expense_deduction",
+    "snap_net_income_pre_shelter",
+    "snap_expected_contribution",
+)
+
 AXIOM_OUTPUT_SUFFIXES = {
     "benefit": "#snap_benefit",
     "eligible": "#snap_eligible",
@@ -335,6 +349,115 @@ class _InputOverrideRunner:
         return self.runner.run_cases(cases, variables=list(variables))
 
 
+class _RequestedMonthRunner:
+    """Evaluate the exact requested month instead of the calendar average.
+
+    The committed runner normalizes month-defined annual output columns by
+    dividing them by 12. A direct PolicyEngine-US situation simulation retains
+    the monthly periods, so this diagnostic can separately test January 2026.
+    """
+
+    def __init__(
+        self,
+        *,
+        person: dict[str, Any] | None = None,
+        spm_unit: dict[str, Any] | None = None,
+    ) -> None:
+        self.person = person or {}
+        self.spm_unit = spm_unit or {}
+
+    @staticmethod
+    def _period_input(period: str, value: Any) -> dict[str, Any]:
+        return {period: value}
+
+    def run_cases(
+        self,
+        cases,
+        variables,
+    ) -> dict[str, dict[str, Any]]:
+        import numpy as np
+        from policyengine_us import Simulation
+
+        from axiom_oracles.adapters.policyengine.runner import (
+            PolicyEngineRunner,
+            _PERSON_CASE_CONCEPT_TO_PE,
+            _PERSON_INCOME_CONCEPT_TO_PE,
+        )
+
+        requested_period = str(cases[0].period)
+        year = requested_period.split("-", maxsplit=1)[0]
+        runner = PolicyEngineRunner()
+        situation = runner._build_situation_from_cases(
+            cases,
+            variables=list(variables),
+        )
+
+        # PolicyEngine-US 1.767.3 requires marital-unit membership. The
+        # committed runner predates that entity, so add the same one-unit-per-
+        # case relationship used by the requested-month runner fix.
+        situation["marital_units"] = {}
+        for spm_unit_id, inputs in situation["spm_units"].items():
+            prefix = spm_unit_id.partition("__")[0]
+            situation["marital_units"][f"{prefix}__marital_unit"] = {
+                "members": list(inputs["members"])
+            }
+
+        for inputs in situation["people"].values():
+            # Match the batch dataset bridge: absent source facts are explicit
+            # zero inputs, not invitations for PolicyEngine to impute SSI or
+            # another endogenous source in the direct simulation.
+            for variable in (
+                *_PERSON_INCOME_CONCEPT_TO_PE.values(),
+                *_PERSON_CASE_CONCEPT_TO_PE.values(),
+            ):
+                inputs.setdefault(variable, self._period_input(year, 0))
+            inputs["employment_income_before_lsr"] = dict(
+                inputs["employment_income"]
+            )
+            inputs["self_employment_income_before_lsr"] = dict(
+                inputs["self_employment_income"]
+            )
+            for variable, value in self.person.items():
+                inputs[variable] = self._period_input(year, value)
+        for inputs in situation["spm_units"].values():
+            for variable, value in self.spm_unit.items():
+                inputs[variable] = self._period_input(requested_period, value)
+
+        simulation = Simulation(situation=situation)
+        values = {str(case.case_id): {} for case in cases}
+        for variable in variables:
+            definition = simulation.tax_benefit_system.variables[variable]
+            definition_period = str(definition.definition_period).lower()
+            calculation_period = (
+                requested_period if definition_period == "month" else year
+            )
+            raw = np.asarray(
+                simulation.calculate(variable, period=calculation_period)
+            )
+            entity = str(definition.entity.key)
+            entity_ids = [
+                str(entity_id)
+                for entity_id in simulation.populations[entity].ids
+            ]
+            for index, case in enumerate(cases):
+                prefix = f"case_{index}"
+                selected = [
+                    raw[position]
+                    for position, entity_id in enumerate(entity_ids)
+                    if entity_id.partition("__")[0] == prefix
+                ]
+                if not selected:
+                    raise RuntimeError(
+                        f"No {entity} value for {case.case_id} / {variable}"
+                    )
+                if raw.dtype == bool:
+                    value = bool(np.asarray(selected).any())
+                else:
+                    value = float(np.asarray(selected).sum())
+                values[str(case.case_id)][variable] = value
+        return values
+
+
 def _result_values(results) -> dict[str, dict[str, Any]]:
     values = {}
     for result in results:
@@ -449,6 +572,28 @@ def main() -> int:
             spm_unit={"ca_tanf": 0, "tanf": 0},
         ).run_cases(cases, COUNTERFACTUAL_VARIABLES)
     )
+    requested_month = _RequestedMonthRunner().run_cases(
+        cases,
+        REQUESTED_MONTH_VARIABLES,
+    )
+    requested_month_zero_self_employment = _RequestedMonthRunner(
+        person={
+            "self_employment_income": 0,
+            "self_employment_income_before_lsr": 0,
+            "sstb_self_employment_income_before_lsr": 0,
+        }
+    ).run_cases(cases, COUNTERFACTUAL_VARIABLES)
+    requested_month_zero_tanf = _RequestedMonthRunner(
+        spm_unit={"ca_tanf": 0, "tanf": 0}
+    ).run_cases(cases, COUNTERFACTUAL_VARIABLES)
+    requested_month_zero_self_employment_and_tanf = _RequestedMonthRunner(
+        person={
+            "self_employment_income": 0,
+            "self_employment_income_before_lsr": 0,
+            "sstb_self_employment_income_before_lsr": 0,
+        },
+        spm_unit={"ca_tanf": 0, "tanf": 0},
+    ).run_cases(cases, COUNTERFACTUAL_VARIABLES)
 
     for residual in residuals:
         case_id = residual["case_id"]
@@ -459,6 +604,16 @@ def main() -> int:
             "zero_tanf": zero_tanf[case_id],
             "zero_self_employment_and_tanf": (
                 zero_self_employment_and_tanf[case_id]
+            ),
+        }
+        residual["requested_month_pe"] = requested_month[case_id]
+        residual["requested_month_counterfactuals"] = {
+            "zero_self_employment": (
+                requested_month_zero_self_employment[case_id]
+            ),
+            "zero_tanf": requested_month_zero_tanf[case_id],
+            "zero_self_employment_and_tanf": (
+                requested_month_zero_self_employment_and_tanf[case_id]
             ),
         }
         residual["checks"] = _bridge_checks(

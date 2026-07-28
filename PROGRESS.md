@@ -670,12 +670,26 @@ residual), #229 (small-suite grounding).
   rows; 77 households / 77 rows moved under the required 1.767.3 diagnostic
   runtime and therefore cannot use live counterfactual output as proof of the
   older committed amount without an independent case-level proof.
+- Extended the tracer with direct requested-month simulations. These reuse the
+  batch bridge's explicit-zero income surface and calculate January 2026
+  directly, instead of treating the calendar-year sum divided by 12 as January.
+  Across all 361 cases, direct-January gross income differs from the batch
+  annual average by at most $0.0053; parameter and allotment differences are
+  therefore isolated from source transport.
+- Wrote the exhaustive live trace to a temporary, uncommitted evidence artifact
+  (`sha256:286d28ac1307e2b44ac53eab9408d0726d9d4fe84576ec423feb6d5be6623992`).
+  Its exact-household evidence will be summarized in the untracked worker
+  report and pinned into each disposition that survives classification.
+- A first direct-month smoke attempt exposed that absent source facts were being
+  allowed to impute endogenous SSI; it produced no artifact and changed no repo
+  file. The tracer now explicitly mirrors the batch bridge's zero inputs, and
+  the exhaustive rerun completed successfully.
 
 ### Next
 
-- Reconcile the joint counterfactual passes against the committed Axiom input
-  panel, requiring that each claimed omitted source is present in PE and absent
-  from Axiom.
+- Reconcile the annual and direct-January counterfactual passes against the
+  committed Axiom input panel, requiring that each claimed omitted source is
+  present in PE and absent from Axiom.
 - Separate safe dispositions from oracle-version drift and strict
   counterfactual failures, retaining the latter as unexplained.
 - Apply only per-case-supported dispositions, regenerate the required chain,
