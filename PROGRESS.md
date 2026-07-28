@@ -28,12 +28,29 @@
 - Attempted the prescribed GitNexus debugging workflow; graph tools are not
   available in this session, so direct source/caller tracing is the recorded
   fallback.
+- Closed the matched-value identity residue without changing a committed
+  report: every `full` corpus now has a domain-separated, order-independent
+  `case_verdicts_sha256` commitment in its versioned chunk index over exact
+  `(case_id, concept, outcome, left, right)` records. Certification recomputes
+  that commitment and treats absence or drift as an unbound evidence leg.
+- Hardened the generic index generator so it cannot implicitly bless a
+  changed per-case verdict identity; only the full-corpus producer or the
+  immutable-source replay can legitimately refresh the commitment.
+- Added
+  `test_permuted_matched_case_values_must_reconcile_with_case_identity`,
+  reproducing the review's exact `ecps-spm-50666` ↔ `ecps-spm-50669` amount
+  and eligibility permutation. Aggregate/content reconciliation stays clean,
+  but the independent case identity makes the leg unbound.
+- Replayed the migrated ECPS corpus from immutable source `6c4f17b...`
+  without running an engine or population suite. Only its index gained the
+  new commitment; report and chunk bytes did not change. Regenerated the
+  certificate solely to bind the new index SHA.
+- Residue-1 gates pass: 63 certification mutants, the producer refresh test,
+  immutable replay `--check`, both chunk-index checks, certificate freshness,
+  Ruff, and diff whitespace.
 
 ## Next
 
-- Trace the report-to-compact-row binding and dashboard `r` consumers.
-- Add the exact permutation mutant, then minimally bind matched values to case
-  identity and commit the coherent fix.
 - Decide and align the exact/tri-state `r` contract across evidence and
   dashboard code, add the boundary mutant, and commit the coherent fix.
 - Run all required non-population gates, write and commit the final report,

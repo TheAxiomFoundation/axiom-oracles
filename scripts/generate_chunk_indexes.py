@@ -153,6 +153,8 @@ def _refuse_implicit_versioned_rebind(
     identity_changed = (
         existing.get("report_path") != candidate["report_path"]
         or existing.get("report_sha256") != candidate["report_sha256"]
+        or existing.get("case_verdicts_sha256")
+        != candidate.get("case_verdicts_sha256")
         or existing.get("chunks") != candidate["chunks"]
     )
     if identity_changed:

@@ -746,7 +746,12 @@ def _copied_evidence_fixture(tmp_path: Path, name: str = "full_bound"):
     return report_path, suite_dir
 
 
-def _refresh_fixture_binding(report_path: Path, suite_dir: Path) -> None:
+def _refresh_fixture_binding(
+    report_path: Path,
+    suite_dir: Path,
+    *,
+    refresh_case_verdicts: bool = True,
+) -> None:
     """Rebind a synthetic mutant after deliberately changing its content."""
 
     index_path = suite_dir / "index.json"
@@ -762,6 +767,12 @@ def _refresh_fixture_binding(report_path: Path, suite_dir: Path) -> None:
         total += len(rows)
     index["count"] = total
     index["chunk_count"] = len(index["chunks"])
+    if refresh_case_verdicts:
+        evidence = validate_suite_evidence(report_path)
+        if evidence.case_verdicts_sha256 is None:
+            index.pop("case_verdicts_sha256", None)
+        else:
+            index["case_verdicts_sha256"] = evidence.case_verdicts_sha256
     index_path.write_text(json.dumps(index, indent=2) + "\n")
 
 
@@ -885,6 +896,61 @@ def test_matched_eligibility_values_must_reconcile_with_positive_weights(
     assert evidence.valid is False
     for field in ("left_positive_weight", "right_positive_weight"):
         assert any(field in defect for defect in evidence.content_defects)
+
+
+def test_permuted_matched_case_values_must_reconcile_with_case_identity(
+    tmp_path,
+):
+    """The exact live 50666↔50669 permutation must not hide behind equal totals."""
+
+    data_dir = tmp_path / "dashboard" / "public" / "data"
+    data_dir.mkdir(parents=True)
+    report_path = data_dir / "axiom-policyengine-co-snap-ecps.json"
+    shutil.copy2(
+        REPO / "dashboard" / "public" / "data" / report_path.name,
+        report_path,
+    )
+    suite_dir = data_dir / "cases" / "co-snap-ecps"
+    shutil.copytree(
+        REPO / "dashboard" / "public" / "data" / "cases" / "co-snap-ecps",
+        suite_dir,
+    )
+
+    chunk_path = suite_dir / "chunk-0.json"
+    chunk = json.loads(chunk_path.read_text())
+    first = next(row for row in chunk if row["id"] == "ecps-spm-50666")
+    second = next(row for row in chunk if row["id"] == "ecps-spm-50669")
+    for concept in (
+        "us:statutes/7/2014/u#snap_benefit",
+        "us:statutes/7/2014/o#snap_eligible",
+    ):
+        first_verdict = next(row for row in first["v"] if row["c"] == concept)
+        second_verdict = next(row for row in second["v"] if row["c"] == concept)
+        first_verdict["l"], second_verdict["l"] = (
+            second_verdict["l"],
+            first_verdict["l"],
+        )
+        first_verdict["x"], second_verdict["x"] = (
+            second_verdict["x"],
+            first_verdict["x"],
+        )
+    chunk_path.write_text(json.dumps(chunk, separators=(",", ":")))
+    _refresh_fixture_binding(
+        report_path,
+        suite_dir,
+        refresh_case_verdicts=False,
+    )
+
+    evidence = validate_suite_evidence(report_path)
+    assert evidence.content_valid is True
+    assert evidence.reconciliation == "full"
+    assert evidence.binding == "unbound"
+    assert evidence.valid is False
+    assert any(
+        "case_verdicts_sha256" in defect
+        and "per-case verdict identity" in defect
+        for defect in evidence.binding_defects
+    )
 
 
 def test_aggregate_values_require_reproducible_unit_weight(tmp_path):
@@ -1230,14 +1296,10 @@ def test_compact_concept_and_input_names_must_be_strings(tmp_path):
     report_path = fixture / "dashboard" / "public" / "data" / "report.json"
     suite_dir = fixture / "dashboard" / "public" / "data" / "cases" / "full-bound"
     chunk_path = suite_dir / "chunk-0.json"
-    index_path = suite_dir / "index.json"
     chunk = json.loads(chunk_path.read_text())
     chunk[0]["v"][0]["c"] = []
     chunk_path.write_text(json.dumps(chunk, separators=(",", ":")))
-    index = json.loads(index_path.read_text())
-    index["report_path"], index["report_sha256"] = report_identity(report_path)
-    index["chunks"][0]["sha256"] = sha256_path(chunk_path)
-    index_path.write_text(json.dumps(index, indent=2) + "\n")
+    _refresh_fixture_binding(report_path, suite_dir)
 
     evidence = validate_suite_evidence(report_path)
     assert evidence.binding == "bound"

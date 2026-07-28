@@ -141,6 +141,7 @@ class EvidenceReport:
     match_count: int | None
     mismatch_count: int | None
     chunks: tuple[EvidenceChunk, ...]
+    case_verdicts_sha256: str | None
     content_defects: tuple[str, ...]
     binding_defects: tuple[str, ...]
 
@@ -425,6 +426,32 @@ def _case_verdicts(
                 )
             )
     return tuple(verdicts)
+
+
+def _case_verdicts_sha256(verdicts: tuple[_Verdict, ...]) -> str:
+    """Commit exact verdict values to case identity, independent of row order."""
+
+    records = [
+        json.dumps(
+            {
+                "case_id": verdict.case_id,
+                "concept": verdict.concept,
+                "left": verdict.left,
+                "outcome": verdict.outcome,
+                "right": verdict.right,
+            },
+            allow_nan=False,
+            ensure_ascii=False,
+            separators=(",", ":"),
+            sort_keys=True,
+        )
+        for verdict in verdicts
+    ]
+    payload = (
+        "axiom_oracles.case_verdicts.v1\n"
+        f"[{','.join(sorted(records))}]"
+    ).encode()
+    return hashlib.sha256(payload).hexdigest()
 
 
 def _validate_compact_delta(
@@ -1331,6 +1358,7 @@ def _validate_chunk_index(
     report_sha256: str | None,
     suite: str | None,
     chunks: tuple[EvidenceChunk, ...],
+    case_verdicts_sha256: str | None = None,
 ) -> tuple[Binding, list[str]]:
     defects: list[str] = []
     if not index_path.is_file():
@@ -1385,6 +1413,24 @@ def _validate_chunk_index(
                 f"report bytes {report_sha256}",
             )
         )
+    if case_verdicts_sha256 is not None:
+        indexed_verdicts_sha = payload.get("case_verdicts_sha256")
+        if (
+            not isinstance(indexed_verdicts_sha, str)
+            or not _SHA256.fullmatch(indexed_verdicts_sha)
+        ):
+            defects.append(
+                _defect(suite, "chunk index case_verdicts_sha256 is invalid")
+            )
+        elif indexed_verdicts_sha != case_verdicts_sha256:
+            defects.append(
+                _defect(
+                    suite,
+                    "chunk index case_verdicts_sha256 does not match the "
+                    "recomputed per-case verdict identity "
+                    f"({indexed_verdicts_sha} != {case_verdicts_sha256})",
+                )
+            )
 
     indexed_chunks = payload.get("chunks")
     if not isinstance(indexed_chunks, list):
@@ -1674,6 +1720,7 @@ def validate_suite_evidence(report_path: str | Path) -> EvidenceReport:
         )
 
     reconciliation: Reconciliation = "none"
+    case_verdicts_sha: str | None = None
     if (
         parsed_case_count
         and all(outcome is not None for outcome in outcomes)
@@ -1702,6 +1749,7 @@ def validate_suite_evidence(report_path: str | Path) -> EvidenceReport:
             content_defects,
             suite,
         )
+        case_verdicts_sha = _case_verdicts_sha256(tuple(semantic_verdicts))
     elif chunk_case_count and not inline_case_count and not any(explicit_verdicts):
         reconciliation = "cardinality"
         if comparison_count is not None and comparison_count != chunk_case_count:
@@ -1733,6 +1781,7 @@ def validate_suite_evidence(report_path: str | Path) -> EvidenceReport:
         report_sha256=report_sha,
         suite=suite,
         chunks=tuple(chunks),
+        case_verdicts_sha256=case_verdicts_sha,
     )
     return EvidenceReport(
         report_path=identity,
@@ -1747,6 +1796,7 @@ def validate_suite_evidence(report_path: str | Path) -> EvidenceReport:
         match_count=match_count,
         mismatch_count=mismatch_count,
         chunks=tuple(chunks),
+        case_verdicts_sha256=case_verdicts_sha,
         content_defects=tuple(content_defects),
         binding_defects=tuple(binding_defects),
     )
@@ -1782,6 +1832,7 @@ def build_chunk_index(report_path: str | Path) -> dict:
                     "schema_version",
                     "report_path",
                     "report_sha256",
+                    "case_verdicts_sha256",
                     "chunks",
                     "chunk_count",
                 }
@@ -1789,10 +1840,16 @@ def build_chunk_index(report_path: str | Path) -> dict:
     legacy["suite"] = evidence.suite
     legacy["count"] = evidence.chunk_case_count
     legacy["total_cases"] = evidence.chunk_case_count
+    verdict_identity = (
+        {"case_verdicts_sha256": evidence.case_verdicts_sha256}
+        if evidence.case_verdicts_sha256 is not None
+        else {}
+    )
     return {
         "schema_version": CHUNK_INDEX_SCHEMA_VERSION,
         "report_path": evidence.report_path,
         "report_sha256": evidence.report_sha256,
+        **verdict_identity,
         **legacy,
         "chunk_count": len(evidence.chunks),
         "chunks": [chunk.as_dict() for chunk in evidence.chunks],

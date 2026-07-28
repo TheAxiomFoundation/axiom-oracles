@@ -2,6 +2,7 @@
   "schema_version": "axiom_oracles.chunk_index.v1",
   "report_path": "dashboard/public/data/axiom-policyengine-co-snap-ecps.json",
   "report_sha256": "696efc8883e20afcc80ec69345b46ab88127f50f4a104757c6bc0a903a268a90",
+  "case_verdicts_sha256": "2f0ac2133152e5fd45c48c23cf8322cae888689cc61bad6b0959a09396922bcb",
   "suite": "co-snap-ecps",
   "count": 1072,
   "chunk_size": 500,

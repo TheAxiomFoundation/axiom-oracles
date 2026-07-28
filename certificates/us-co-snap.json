@@ -25,7 +25,7 @@
       "artifact": "dashboard/public/data/cases/co-snap-ecps/index.json",
       "claim": "case-evidence-index:co-snap-ecps",
       "mode": "computed",
-      "sha256": "7c1b82c60934a1bdc39634a781aa9c151a964776d6449ad489ee6caf0bba28d3"
+      "sha256": "b1db0d901aad3c7d159bb4b34718c6aecda40f4e5f0a2f1d60ee010e71414dea"
     },
     {
       "artifact": "dispositions/co-snap-ecps.yaml",
