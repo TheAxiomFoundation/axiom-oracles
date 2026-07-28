@@ -684,13 +684,31 @@ residual), #229 (small-suite grounding).
   allowed to impute endogenous SSI; it produced no artifact and changed no repo
   file. The tracer now explicitly mirrors the batch bridge's zero inputs, and
   the exhaustive rerun completed successfully.
+- Replayed the Axiom deduction stack for every both-eligible benefit residual:
+  gross, standard and earned deductions, pre-shelter income, the $744
+  nonelderly shelter cap, net income, contribution, maximum, and minimum.
+  Dependent-care and child-support deductions are zero in both engines. Medical
+  and disability-status projection differences were dispositioned only where a
+  case-level Axiom counterfactual closed.
+- Classified and pinned 345 of the 441 rows: 325 `bridge_artifact` rows and 20
+  `upstream_engine_gap` rows. The bridge proofs cover the landed
+  self-employment projection, endogenous TANF transport, exact-January output,
+  three medical-input cases, and six generic-disability/shelter-cap cases.
+  The upstream rows are ten exact minor-only household repros of PE-US #9157.
+- Excluded three apparently closing income cases because a material medical or
+  shelter-cap difference could create an offsetting-error result. Kept all 77
+  benefit rows with live 1.767.3 baseline drift unclassified. In-memory
+  application validates 349 total disposition entries, no expired/orphaned
+  entry, and exactly 96 unexplained rows after the 345 new entries.
+- Added an issue-specific, fail-closed disposition builder. It regenerates the
+  345 entries from the exhaustive trace, validates pinned baselines and input
+  alignment, rejects deduction confounds, and passes idempotent `--check`.
+  The disposition schema suite passes 19 tests.
 
 ### Next
 
-- Reconcile the annual and direct-January counterfactual passes against the
-  committed Axiom input panel, requiring that each claimed omitted source is
-  present in PE and absent from Axiom.
-- Separate safe dispositions from oracle-version drift and strict
-  counterfactual failures, retaining the latter as unexplained.
-- Apply only per-case-supported dispositions, regenerate the required chain,
-  run all `--check` parity gates, and report the exact before/after count.
+- Apply the 345 evidence-backed dispositions to the committed CA report.
+- Regenerate the required generated-data chain, audit that no other suite file
+  changed, then run all `--check` parity gates.
+- Complete the untracked worker report with the 441-to-96 result, class-level
+  evidence, unresolved attempts, and draft issue text.
