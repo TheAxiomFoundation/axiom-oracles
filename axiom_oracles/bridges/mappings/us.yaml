@@ -29033,6 +29033,20 @@ mappings:
     candidate_priority: P4
     rationale: Axiom's signed net-liability output is deliberately zero while the annual income, deduction, tax, and credit chain remains source held; it must not be interpreted as zero Arizona tax. PolicyEngine az_income_tax is a completed modeled liability.
 
+  # Arkansas Act 2 of 2026 supplies this bounded Person-grain individual
+  # schedule component. Person-to-TaxUnit summation belongs only to the
+  # reviewed Populace comparison accounting and does not change its entity.
+  - legal_id: us-ar:policies/income_tax/pilot_liability_pipeline#ar_pit_pilot_income_tax_before_non_refundable_credits_indiv
+    country: us
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: ar_income_tax_before_non_refundable_credits_indiv
+    entity: person
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Both outputs apply Arkansas Act 2 of 2026 section 1's complete tax-year-2026 individual schedule, including the high-income bracket-adjustment table, to completed-return individual taxable income at Person grain before nonrefundable credits; this narrow mapping excludes taxable-income construction, filing-unit aggregation or method selection, low-income tables, credits, payments, and final liability.
+
   # Arkansas's TY2026 resident annual-return interface is fully source held.
   # Act 2 supplies the ordinary rate schedule, but the pinned corpus does not
   # supply the net-income, deduction, exemption, surtax, or credit chain.
@@ -32046,6 +32060,21 @@ mappings:
     comparison: money
     rationale: Both outputs apply O.C.G.A. section 48-7-20 tax to completed Georgia taxable income before nonrefundable credits. This mapping excludes taxable-income construction, filing mechanics, credits, payments, and final Form 500 liability.
 
+  # Delaware's canonical TY2026 section 1102(a)(14) surface applies the enacted
+  # individual schedule to one caller-completed Person taxable-income amount.
+  # It does not select a filing method, compute a combined return, apply
+  # credits or payments, aggregate an annual return, or claim final liability.
+  - legal_id: us-de:policies/income_tax/pilot_liability_pipeline#de_pit_pilot_separate_schedule_tax
+    country: us
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: de_income_tax_before_non_refundable_credits_indv
+    entity: person
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Both outputs apply Delaware Code title 30 section 1102(a)(14)'s tax-year-2026 schedule to one Person's completed Delaware taxable income before nonrefundable credits. This mapping excludes filing-method selection, combined-return computation, TaxUnit aggregation, credits, payments, and final liability.
+
   # Mississippi's canonical TY2026 section 27-7-5 surface applies the enacted
   # Person-grain schedule to one caller-completed Mississippi taxable-income
   # amount. It does not select a filing method, construct taxable income,
@@ -33245,6 +33274,21 @@ mappings:
     unit: USD
     comparison: money
     rationale: Both outputs apply Minnesota's four-rate individual schedule to completed Minnesota taxable income selected by filing status. The final official tax-year-2026 RuleSpec thresholds are $10 to $30 above PolicyEngine-US 1.752.2's thresholds, producing only a reviewed sub-dollar residual under the preserved $1 absolute tolerance. This narrow mapping makes no claim about taxable-income construction, tax-table rounding, alternative minimum tax, net investment income tax, credits, payments, or final liability.
+
+  # Montana's bounded TY2026 tax before nonrefundable credits. Completed
+  # taxable income, section 1222 net long-term capital gain, and filing-status
+  # classification remain reviewed caller boundaries; credits, payments, and
+  # final annual liability are not promoted.
+  - legal_id: us-mt:policies/income_tax/pilot_liability_pipeline#mt_pit_pilot_income_tax_liability
+    country: us
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: mt_income_tax_before_non_refundable_credits_joint
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Both outputs compose Montana's complete temporary tax-year-2026 ordinary-income and net-long-term-capital-gain schedules under MCA 15-30-2103 from the same completed-return boundaries, before nonrefundable credits; this narrow mapping excludes credits, payments, and final annual liability.
 
   # New York Tax Law section 601's bounded TY2026 main resident schedule.
   # These exact records cover every output in the canonical RuleSpec module
@@ -36040,6 +36084,12 @@ prefixes:
     mapping_type: not_comparable
     candidate_priority: P4
     rationale: PolicyEngine-US does not model every MS statute, agency policy manual, or state regulation at output granularity; comparable state outputs carry exact mappings which take precedence over this prefix.
+
+  - legal_id_prefix: "us-mt:"
+    country: us
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: PolicyEngine-US does not model every Montana statute, agency policy manual, or state regulation at output granularity; independently reviewed comparable outputs carry exact mappings which take precedence over this jurisdiction-wide fallback.
 
   - legal_id_prefix: "us-ut:"
     country: us

@@ -160,6 +160,30 @@ def test_mississippi_canonical_schedule_uses_live_person_execution():
     assert generator._parse_args(["--state", "MS"]).state == "MS"
 
 
+def test_delaware_legacy_grid_is_explicitly_decoupled() -> None:
+    generator = _load_generator()
+    module = "us-de:policies/income_tax/pilot_liability_pipeline"
+
+    assert "DE" in generator._TAXSIM_STATE
+    assert "DE" in generator._POPULACE_STATES
+    assert "DE" not in generator._STATES
+    assert "Person-grain" in generator._GRID_EXCLUDED_STATES["DE"]
+    assert generator._POPULACE_OUTPUT["DE"] == (
+        f"{module}#de_pit_pilot_separate_schedule_tax"
+    )
+    assert generator._LIABILITY_OUTPUT["DE"] == generator._POPULACE_OUTPUT["DE"]
+    assert (
+        generator._PE_VAR["DE"]
+        == "de_income_tax_before_non_refundable_credits_indv"
+    )
+    assert (
+        generator._POPULACE_PE_VAR["DE"]
+        == "de_income_tax_before_non_refundable_credits_indv"
+    )
+    assert generator._POPULACE_AGGREGATION["DE"] == "person_sum_to_tax_unit"
+    assert generator._POPULACE_TOL["DE"] == (0.01, 1e-7)
+
+
 def test_mississippi_live_grid_maps_reordered_results_by_person_id(
     monkeypatch, tmp_path
 ):

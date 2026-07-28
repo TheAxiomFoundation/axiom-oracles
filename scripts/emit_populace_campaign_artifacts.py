@@ -32,7 +32,10 @@ REPORTS = REPO_ROOT / "reports"
 DASH_DATA = REPO_ROOT / "dashboard" / "public" / "data"
 POPULACE_SUITE_CONFIG = REPO_ROOT / "comparisons/state-income-tax-populace.yaml"
 RETIRED_MANIFEST_REPORTS = frozenset(
-    {"axiom-policyengine-taxsim-al-income-tax-liability.json"}
+    {
+        "axiom-policyengine-taxsim-al-income-tax-liability.json",
+        "axiom-policyengine-taxsim-de-income-tax-liability.json",
+    }
 )
 
 _DESCRIPTION_BY_OUTPUT = {
@@ -45,6 +48,18 @@ _DESCRIPTION_BY_OUTPUT = {
         "caller-supplied completed Alabama taxable income and the reviewed "
         "joint-or-surviving-spouse schedule classifier, over every routed tax "
         "unit in the pinned US Populace"
+    ),
+    (
+        "us-ar:policies/income_tax/pilot_liability_pipeline"
+        "#ar_pit_pilot_income_tax_before_non_refundable_credits_indiv"
+    ): (
+        "Arkansas Act 2 of 2026 section 1 individual schedule component before "
+        "nonrefundable credits, computed from caller-supplied completed "
+        "Arkansas individual taxable income at Person grain and summed to "
+        "TaxUnit only for comparison accounting over every routed tax unit and "
+        "linked person in the pinned US Populace; this bounded suite excludes "
+        "taxable-income construction, filing-unit aggregation or method "
+        "selection, low-income tables, credits, payments, and final liability"
     ),
     (
         "us-ct:policies/income_tax/"
@@ -72,6 +87,18 @@ _DESCRIPTION_BY_OUTPUT = {
         "schedule before credits, computed from caller-supplied completed "
         "joint-method District taxable income, over every routed tax unit in "
         "the pinned US Populace"
+    ),
+    (
+        "us-de:policies/income_tax/pilot_liability_pipeline"
+        "#de_pit_pilot_separate_schedule_tax"
+    ): (
+        "Delaware Code title 30 section 1102(a)(14) individual schedule "
+        "component before nonrefundable credits, computed from caller-supplied "
+        "completed Delaware taxable income at Person grain and summed to "
+        "TaxUnit only for comparison accounting over every routed tax unit and "
+        "linked person in the pinned US Populace; this bounded suite excludes "
+        "filing-method selection, combined-return computation, credits, "
+        "payments, and final liability"
     ),
     (
         "us-ga:policies/income_tax/"
@@ -131,6 +158,18 @@ _DESCRIPTION_BY_OUTPUT = {
         "unit in the pinned US Populace; this schedule suite does not claim "
         "tax-table rounding, alternative minimum tax, net investment income "
         "tax, credits, payments, or final Minnesota liability"
+    ),
+    (
+        "us-mt:policies/income_tax/pilot_liability_pipeline"
+        "#mt_pit_pilot_income_tax_liability"
+    ): (
+        "Montana tax-year-2026 individual income tax before nonrefundable "
+        "credits under MCA 15-30-2103, computed from caller-supplied completed "
+        "Montana taxable income, its reviewed section 1222 net-long-term-"
+        "capital-gain portion, and filing-status classifiers over every routed "
+        "tax unit in the pinned US Populace; this bounded suite excludes "
+        "taxable-income construction, credits, payments, and final annual "
+        "liability"
     ),
     (
         "us-ny:policies/income_tax/pilot_liability_pipeline"

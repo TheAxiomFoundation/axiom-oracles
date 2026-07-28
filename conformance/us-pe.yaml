@@ -281,9 +281,12 @@ policies:
       - de_income_tax
     in_scope: true
     suite: null
-    note: The de-income-tax-liability grid and full-Populace campaign validate only de_income_tax_before_non_refundable_credits_unit.
-      Final de_income_tax also applies personal, aged-personal, child-care, nonrefundable-EITC, and refundable-EITC
-      credits; 839 of 936 routed units differ from the narrow target.
+    note: The state-tax Populace campaign validates only the narrower Delaware section 1102(a)(14)
+      individual schedule component de_income_tax_before_non_refundable_credits_indv at Person grain
+      and sums both sides to TaxUnit only for accounting. It does not validate filing-method selection,
+      combined-return computation, personal, aged-personal, child-care, nonrefundable-EITC, or
+      refundable-EITC credits, payments, or final de_income_tax. The stale six-case broad-liability
+      grid has been retired.
   - id: us-pe:de_tanf
     oracle_policy_name: de_tanf
     oracle_policy_type: rules

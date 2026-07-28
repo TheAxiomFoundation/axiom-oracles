@@ -13,6 +13,80 @@ def test_ohio_bounded_income_tax_schedule_is_classified() -> None:
     ) == ("state_income_tax", "OH")
 
 
+def test_arkansas_person_schedule_component_is_classified() -> None:
+    assert classify(
+        "us-ar/policies/income_tax/pilot_liability_pipeline.yaml"
+    ) == ("state_income_tax", "AR")
+
+
+def test_delaware_person_schedule_component_is_classified() -> None:
+    assert classify(
+        "us-de/policies/income_tax/pilot_liability_pipeline.yaml"
+    ) == ("state_income_tax", "DE")
+
+
+def test_delaware_person_schedule_surface_is_executable() -> None:
+    coverage = json.loads(
+        (
+            REPO_ROOT / "dashboard/public/data/coverage_overview.json"
+        ).read_text()
+    )
+    matches = [
+        entry
+        for entry in coverage["axiom"]["programs"]
+        if entry.get("program") == "state_income_tax"
+        and entry.get("jurisdiction") == "DE"
+    ]
+
+    assert len(matches) == 1
+    assert matches[0]["status"] == "executable"
+    assert matches[0]["suite"] == "de-income-tax-populace"
+    assert "section 1102(a)(14)" in matches[0]["source"]
+    assert "Person-grain" in matches[0]["source"]
+    assert "filing-method selection" in " ".join(
+        matches[0]["known_non_tanf_gaps"]
+    )
+    assert "final liability" in " ".join(matches[0]["known_non_tanf_gaps"])
+
+
+def test_arkansas_person_schedule_surface_is_executable() -> None:
+    coverage = json.loads(
+        (
+            REPO_ROOT / "dashboard/public/data/coverage_overview.json"
+        ).read_text()
+    )
+    matches = [
+        entry
+        for entry in coverage["axiom"]["programs"]
+        if entry.get("program") == "state_income_tax"
+        and entry.get("jurisdiction") == "AR"
+    ]
+
+    assert matches == [
+        {
+            "program": "state_income_tax",
+            "jurisdiction": "AR",
+            "status": "executable",
+            "source": (
+                "rulespec-us "
+                "6c58962f3de57a4dd26737c88767de728d230603 + pinned "
+                "Populace campaign projected as ar-income-tax-populace over "
+                "the canonical Arkansas Act 2 of 2026 section 1 individual "
+                "schedule component before nonrefundable credits"
+            ),
+            "known_non_tanf_gaps": [
+                "bounded Person-grain component only; caller supplies "
+                "completed Arkansas individual taxable income and comparison "
+                "sums each side to TaxUnit only for Populace accounting",
+                "taxable-income construction, filing-unit aggregation or "
+                "method selection, low-income tables, credits, payments, and "
+                "final liability remain out of scope",
+            ],
+            "suite": "ar-income-tax-populace",
+        }
+    ]
+
+
 def test_california_bhst_pilot_is_classified() -> None:
     assert classify(
         "us-ca/policies/income_tax/pilot_liability_pipeline.yaml"
@@ -59,6 +133,50 @@ def test_minnesota_schedule_pilot_is_classified() -> None:
     assert classify(
         "us-mn/policies/income_tax/pilot_liability_pipeline.yaml"
     ) == ("state_income_tax", "MN")
+
+
+def test_montana_before_nonrefundable_credits_tax_is_classified() -> None:
+    assert classify(
+        "us-mt/policies/income_tax/pilot_liability_pipeline.yaml"
+    ) == ("state_income_tax", "MT")
+
+
+def test_montana_before_nonrefundable_credits_surface_is_executable() -> None:
+    coverage = json.loads(
+        (
+            REPO_ROOT / "dashboard/public/data/coverage_overview.json"
+        ).read_text()
+    )
+    matches = [
+        entry
+        for entry in coverage["axiom"]["programs"]
+        if entry.get("program") == "state_income_tax"
+        and entry.get("jurisdiction") == "MT"
+    ]
+
+    assert matches == [
+        {
+            "program": "state_income_tax",
+            "jurisdiction": "MT",
+            "status": "executable",
+            "source": (
+                "rulespec-us "
+                "6c58962f3de57a4dd26737c88767de728d230603 + pinned "
+                "Populace campaign projected as mt-income-tax-populace over "
+                "the canonical bounded TY2026 ordinary-income and net-long-"
+                "term-capital-gain schedules before nonrefundable credits"
+            ),
+            "known_non_tanf_gaps": [
+                "bounded before-nonrefundable-credit surface only; caller "
+                "supplies completed Montana taxable income, its section 1222 "
+                "net-long-term-capital-gain portion, and filing-status "
+                "classifiers",
+                "taxable-income construction, credits, payments, and final "
+                "annual liability remain out of scope",
+            ],
+            "suite": "mt-income-tax-populace",
+        }
+    ]
 
 
 def test_minnesota_schedule_surface_is_executable_and_suite_backed() -> None:

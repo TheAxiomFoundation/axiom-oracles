@@ -67,6 +67,12 @@ STATE_RULES = {
             ("state_income_tax", None),
         ),
     ],
+    "ar": [
+        (
+            r"^policies/income_tax/pilot_liability_pipeline\.yaml$",
+            ("state_income_tax", None),
+        ),
+    ],
     "az": [
         (r"^policies/des/ccap/", ("childcare_assistance", None)),
         (r"^policies/des/faa5/(ca-|two-parent)", ("tanf", None)),
@@ -104,6 +110,12 @@ STATE_RULES = {
         (
             r"^policies/income_tax/"
             r"2026_section_47_1806_03_schedule_before_credits\.yaml$",
+            ("state_income_tax", None),
+        ),
+    ],
+    "de": [
+        (
+            r"^policies/income_tax/pilot_liability_pipeline\.yaml$",
             ("state_income_tax", None),
         ),
     ],
@@ -145,6 +157,12 @@ STATE_RULES = {
     "mn": [
         (r"^policies/dhs/combined-manual/0020", ("state_ssi_supplement", None)),
         (r"^policies/dhs/combined-manual/0022", ("tanf", None)),
+        (
+            r"^policies/income_tax/pilot_liability_pipeline\.yaml$",
+            ("state_income_tax", None),
+        ),
+    ],
+    "mt": [
         (
             r"^policies/income_tax/pilot_liability_pipeline\.yaml$",
             ("state_income_tax", None),
