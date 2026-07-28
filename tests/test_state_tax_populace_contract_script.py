@@ -19,8 +19,8 @@ def test_contract_check_reports_readiness(capsys) -> None:
     assert "43 jurisdictions" in output
     assert "32 ready" in output
     assert "11 blocked" in output
-    assert "137 explicit inputs" in output
-    assert "1 explicit relations" in output
+    assert "134 explicit inputs" in output
+    assert "0 explicit relations" in output
 
 
 def test_contract_check_json_is_machine_readable(capsys) -> None:

@@ -113,6 +113,12 @@ STATE_RULES = {
             ("state_income_tax", None),
         ),
     ],
+    "de": [
+        (
+            r"^policies/income_tax/pilot_liability_pipeline\.yaml$",
+            ("state_income_tax", None),
+        ),
+    ],
     "fl": [
         (r"ess-program-policy-manual/.*fs-tca", ("snap", None)),
         (r"ess-program-policy-manual/.*(cic-rap|tca)", ("tanf", None)),

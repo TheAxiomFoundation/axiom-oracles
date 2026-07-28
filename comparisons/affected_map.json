@@ -367,15 +367,6 @@
       "source": "comparisons/state-income-tax-populace.yaml"
     },
     {
-      "suite": "de-income-tax-liability",
-      "name": "de-income-tax-liability",
-      "report": "axiom-policyengine-taxsim-de-income-tax-liability.json",
-      "repos": [
-        "TheAxiomFoundation/rulespec-us"
-      ],
-      "source": "comparisons/de-income-tax-liability.yaml"
-    },
-    {
       "suite": "de-tanf-ecps",
       "name": "de-tanf-ecps",
       "report": "axiom-policyengine-de-tanf-ecps.json",

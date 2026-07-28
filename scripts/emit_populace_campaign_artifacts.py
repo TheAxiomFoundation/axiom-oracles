@@ -32,7 +32,10 @@ REPORTS = REPO_ROOT / "reports"
 DASH_DATA = REPO_ROOT / "dashboard" / "public" / "data"
 POPULACE_SUITE_CONFIG = REPO_ROOT / "comparisons/state-income-tax-populace.yaml"
 RETIRED_MANIFEST_REPORTS = frozenset(
-    {"axiom-policyengine-taxsim-al-income-tax-liability.json"}
+    {
+        "axiom-policyengine-taxsim-al-income-tax-liability.json",
+        "axiom-policyengine-taxsim-de-income-tax-liability.json",
+    }
 )
 
 _DESCRIPTION_BY_OUTPUT = {
@@ -84,6 +87,18 @@ _DESCRIPTION_BY_OUTPUT = {
         "schedule before credits, computed from caller-supplied completed "
         "joint-method District taxable income, over every routed tax unit in "
         "the pinned US Populace"
+    ),
+    (
+        "us-de:policies/income_tax/pilot_liability_pipeline"
+        "#de_pit_pilot_separate_schedule_tax"
+    ): (
+        "Delaware Code title 30 section 1102(a)(14) individual schedule "
+        "component before nonrefundable credits, computed from caller-supplied "
+        "completed Delaware taxable income at Person grain and summed to "
+        "TaxUnit only for comparison accounting over every routed tax unit and "
+        "linked person in the pinned US Populace; this bounded suite excludes "
+        "filing-method selection, combined-return computation, credits, "
+        "payments, and final liability"
     ),
     (
         "us-ga:policies/income_tax/"

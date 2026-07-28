@@ -144,7 +144,6 @@ _REVIEWED_ROUTE_BOOLEAN_INPUTS_BY_STATE = {
 }
 
 _REVIEWED_PERSON_SUM_VARIABLES_BY_STATE = {
-    "DE": frozenset({"de_taxable_income_joint"}),
     "HI": frozenset({"long_term_capital_gains"}),
     "KY": frozenset({"ky_taxable_income_indiv", "ky_taxable_income_joint"}),
     "MT": frozenset(
@@ -161,6 +160,7 @@ _REVIEWED_PERSON_SUM_VARIABLES_BY_STATE = {
 # sources, and therefore remain separate from the upstream-boundary allowlist.
 _REVIEWED_PERSON_TARGETS_BY_STATE = {
     "AR": frozenset({"ar_income_tax_before_non_refundable_credits_indiv"}),
+    "DE": frozenset({"de_income_tax_before_non_refundable_credits_indv"}),
     "MS": frozenset({"ms_income_tax_before_credits_joint"}),
 }
 
@@ -202,8 +202,6 @@ _REVIEWED_PERSON_INPUT_SLOTS_BY_STATE = {
         {
             "us-de:policies/income_tax/pilot_liability_pipeline#input."
             "de_pit_pilot_supplied_separate_taxable_income",
-            "us-de:policies/income_tax/pilot_liability_pipeline#input."
-            "de_pit_pilot_taxpayer_is_included",
         }
     ),
     "MS": frozenset(
@@ -223,10 +221,6 @@ _REVIEWED_PERSON_TAX_UNIT_RELATIONS_BY_STATE = {
         "us-dc:policies/income_tax/pilot_liability_pipeline#relation."
         "dc_pit_pilot_taxpayer_of_tax_unit": ("TaxUnit", "Person"),
     },
-    "DE": {
-        "us-de:policies/income_tax/pilot_liability_pipeline#relation."
-        "de_pit_pilot_taxpayer_of_tax_unit": ("Person", "TaxUnit"),
-    },
 }
 
 _REVIEWED_ALL_PERSON_RELATION_STATES = frozenset()
@@ -240,11 +234,6 @@ _REVIEWED_PERSON_FILER_ROLE_VARIABLES = {
         "DC",
         "us-dc:policies/income_tax/pilot_liability_pipeline#input."
         "dc_pit_pilot_taxpayer_is_included",
-    ): ("is_tax_unit_head", "is_tax_unit_spouse"),
-    (
-        "DE",
-        "us-de:policies/income_tax/pilot_liability_pipeline#input."
-        "de_pit_pilot_taxpayer_is_included",
     ): ("is_tax_unit_head", "is_tax_unit_spouse"),
 }
 

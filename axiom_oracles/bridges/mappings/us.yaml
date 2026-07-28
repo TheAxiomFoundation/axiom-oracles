@@ -32060,6 +32060,21 @@ mappings:
     comparison: money
     rationale: Both outputs apply O.C.G.A. section 48-7-20 tax to completed Georgia taxable income before nonrefundable credits. This mapping excludes taxable-income construction, filing mechanics, credits, payments, and final Form 500 liability.
 
+  # Delaware's canonical TY2026 section 1102(a)(14) surface applies the enacted
+  # individual schedule to one caller-completed Person taxable-income amount.
+  # It does not select a filing method, compute a combined return, apply
+  # credits or payments, aggregate an annual return, or claim final liability.
+  - legal_id: us-de:policies/income_tax/pilot_liability_pipeline#de_pit_pilot_separate_schedule_tax
+    country: us
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: de_income_tax_before_non_refundable_credits_indv
+    entity: person
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Both outputs apply Delaware Code title 30 section 1102(a)(14)'s tax-year-2026 schedule to one Person's completed Delaware taxable income before nonrefundable credits. This mapping excludes filing-method selection, combined-return computation, TaxUnit aggregation, credits, payments, and final liability.
+
   # Mississippi's canonical TY2026 section 27-7-5 surface applies the enacted
   # Person-grain schedule to one caller-completed Mississippi taxable-income
   # amount. It does not select a filing method, construct taxable income,

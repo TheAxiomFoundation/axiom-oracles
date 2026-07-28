@@ -659,7 +659,7 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
         "az_income_tax": "az_income_tax_before_non_refundable_credits",
         "ca_income_tax": "ca_income_tax_before_refundable_credits",
         "dc_income_tax": "dc_income_tax_before_credits",
-        "de_income_tax": "de_income_tax_before_non_refundable_credits_unit",
+        "de_income_tax": "de_income_tax_before_non_refundable_credits_indv",
         "ga_income_tax": "ga_income_tax_before_non_refundable_credits",
         "hi_income_tax": "hi_income_tax_before_non_refundable_credits",
         "ia_income_tax": "ia_income_tax_before_credits",

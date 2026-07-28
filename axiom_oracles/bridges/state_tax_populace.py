@@ -98,6 +98,13 @@ ALLOWED_NONSTANDARD_COMPARISON_SURFACES = frozenset(
             "tax_unit",
         ),
         (
+            "DE",
+            "us-de:policies/income_tax/pilot_liability_pipeline#"
+            "de_pit_pilot_separate_schedule_tax",
+            "de_income_tax_before_non_refundable_credits_indv",
+            "person_sum_to_tax_unit",
+        ),
+        (
             "KS",
             "us-ks:policies/income_tax/"
             "2026_k40es_schedule_before_credits#"
@@ -204,6 +211,10 @@ EXPECTED_OUTPUT_OVERRIDES = {
         "2026_section_47_1806_03_schedule_before_credits#"
         "dc_pit_2026_section_47_1806_03_schedule_before_credits"
     ),
+    "DE": (
+        "us-de:policies/income_tax/pilot_liability_pipeline#"
+        "de_pit_pilot_separate_schedule_tax"
+    ),
     "GA": (
         "us-ga:policies/income_tax/2026_annual_tax_before_nonrefundable_credits"
         "#ga_pit_2026_annual_tax_before_nonrefundable_credits"
@@ -260,16 +271,16 @@ EXPECTED_PROGRAM_OVERRIDES = {
         "2026_full_year_resident_before_credit_schedule"
     ),
 }
-EXPECTED_EXPLICIT_INPUT_COUNT = 137
-EXPECTED_EXPLICIT_RELATION_COUNT = 1
+EXPECTED_EXPLICIT_INPUT_COUNT = 134
+EXPECTED_EXPLICIT_RELATION_COUNT = 0
 EXPECTED_SLOT_INVENTORY_SHA256 = (
-    "23ea0ae38fa875de683bab3eacaf03d9c2e21a55f49d044a17ff97b62f047f5c"
+    "0cf1aa0846c66a021677d340d2921593395572f4fd58f6873c99f888c12b4b36"
 )
 EXPECTED_JURISDICTION_REGISTRY_SHA256 = (
-    "f8b225f91487f42ec3a571e3a983103d33e67fa1327046004a24bfae35588f45"
+    "58da6d33f9d4527d6128645acbb4e6cc90e4356fbe7f595a8913a85954cba8ed"
 )
 EXPECTED_SOURCE_METADATA_SHA256 = (
-    "48decbecdd9dcb7d2aca954255460061cbe6a5556bf7446a5ca760fbebcad777"
+    "a87a4ea5bf8be0789ae43b48f4b6e0cb2562c2c500fc3e02dedd05fe4083722e"
 )
 # Exact boundaries admitted only after independent legal and dependency-graph
 # review.  The comparison target itself is forbidden below, so these remain
@@ -339,12 +350,6 @@ ALLOWED_PE_UPSTREAM_BOUNDARIES: frozenset[tuple[str, str, str]] = frozenset(
             "2026_section_47_1806_03_schedule_before_credits#input."
             "dc_pit_2026_section_47_1806_03_completed_joint_method_taxable_income",
             "dc_taxable_income_joint",
-        ),
-        (
-            "DE",
-            "us-de:policies/income_tax/pilot_liability_pipeline#input."
-            "de_pit_pilot_files_separately",
-            "de_files_separately",
         ),
         (
             "GA",
@@ -521,13 +526,6 @@ ALLOWED_MULTI_SOURCE_DERIVED_PE_BOUNDARIES: frozenset[
 ] = frozenset(
     {
         (
-            "DE",
-            "us-de:policies/income_tax/pilot_liability_pipeline#input."
-            "de_pit_pilot_taxpayer_is_included",
-            ("is_tax_unit_head", "is_tax_unit_spouse"),
-            "person_filer_role_or",
-        ),
-        (
             "HI",
             "us-hi:policies/income_tax/pilot_liability_pipeline#input."
             "hi_pit_pilot_capital_gains_worksheet_line_10",
@@ -639,13 +637,6 @@ ALLOWED_DERIVED_PE_BOUNDARIES: frozenset[tuple[str, str, str, str]] = frozenset(
             "ct_pit_2026_ordinary_tax_filing_status_married_separate",
             "filing_status",
             "filing_status_is_separate",
-        ),
-        (
-            "DE",
-            "us-de:policies/income_tax/pilot_liability_pipeline#input."
-            "de_pit_pilot_supplied_combined_taxable_income",
-            "de_taxable_income_joint",
-            "person_sum_to_tax_unit",
         ),
         (
             "VA",
