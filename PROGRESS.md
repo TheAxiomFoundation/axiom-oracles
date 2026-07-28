@@ -721,7 +721,7 @@ residual), #229 (small-suite grounding).
 
 ### State
 
-- Review state: validation complete; consolidation in progress.
+- Review state: complete.
 - Current verdict: `REQUEST-CHANGES`.
 - Disposable worktree:
   `.git/review-worktrees/pr417-12dae249-round2-blind`.
@@ -789,10 +789,16 @@ residual), #229 (small-suite grounding).
   changes are confined to the two intended US rows, scoreboard changes are
   the direct Saver's Credit coverage effects, and other jurisdictions and
   mirrored artifacts have no side effects.
+- Reconciled the three independent validation slices through a separate
+  read-only consolidator. It agreed on `REQUEST-CHANGES` for the Additional
+  Medicare full-row coverage defect and found no second blocker.
+- Wrote and committed the final report at `PR417-ROUND2-REVIEW.md`.
+- Wrote the review workflow handoffs at
+  `/tmp/review-pr417-12dae249-round2-blind-review-full-report.md` and
+  `/tmp/review-pr417-12dae249-round2-blind-review-summary.md`.
+- Preserved the merge freeze and review boundary: no source, PR branch, remote,
+  PR, GitHub, or merge state was changed.
 
 ### Next
 
-- Consolidate independent findings into the tracked output report and required
-  `/tmp` full-report/summary files.
-- Commit the final report and close this ledger without changing source,
-  remote, PR, or GitHub state.
+- None. Hand off the committed review ledger and `REQUEST-CHANGES` report.
