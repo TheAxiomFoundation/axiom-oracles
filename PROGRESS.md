@@ -823,8 +823,8 @@ residual), #229 (small-suite grounding).
 
 ### State
 
-- Review state: in progress.
-- Current verdict: `APPROVE` pending final report consolidation.
+- Review state: complete.
+- Current verdict: `APPROVE`.
 - Disposable worktree:
   `.git/review-worktrees/pr417-94c8b7a9-round3-confirm`.
 - Throwaway ledger branch: `review/pr417-94c8b7a9-round3-confirm`.
@@ -897,7 +897,20 @@ residual), #229 (small-suite grounding).
   returned PASS with no actionable finding.
 - `git diff --check` passes for both cached-base-to-target and
   round-2-to-target.
+- A separate read-only consolidator reconciled all three validator reports and
+  the gate record and returned `APPROVE` with no actionable finding.
+- Wrote and committed the final output at `REVIEW-REPORT.md`
+  (`d5081a5d769eb78c7780d2699215ce98112c5348`).
+- Wrote the mandatory review-workflow handoffs at
+  `/tmp/review-pr417-94c8b7a9-round3-confirm-review-full-report.md` and
+  `/tmp/review-pr417-94c8b7a9-round3-confirm-review-summary.md`.
+- Reconfirmed that the PR branch and its remote-tracking ref remain at
+  `94c8b7a9`, while the local and remote-tracking hold refs remain at
+  `12dae249`. The throwaway review branch contains only this ledger and final
+  report above the reviewed object.
+- Preserved the merge freeze: no source, PR branch, remote, PR, GitHub, or
+  merge-state write was made.
 
 ### Next
 
-- Consolidate the independent validators and write the verdict.
+- None. Hand off the committed local review ledger and approval report.
