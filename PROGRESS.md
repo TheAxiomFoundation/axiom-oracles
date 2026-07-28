@@ -18,18 +18,27 @@
 - Independently confirmed that the requested head exists and that the source
   checkout is unrelated to the target.
 - Created this disposable detached worktree at the exact requested head.
+- Inventoried the complete repair delta from `102b4edd` to `9de6c1cb`: 32
+  files confined to CA SNAP disposition/report/served artifacts, the replay
+  and case-emission implementation with focused tests, shared regenerated
+  conformance artifacts, and this ledger.
+- Read the complete round-1 adversarial report and the round-2 worker handoff.
+- Ran the published replay block verbatim from its exact pinned worktree and
+  environment. It traced 361 households / 441 rows, produced SHA-256
+  `c46af9b87c8f5ad01f1909bc45e80e00b4c4a50e5b802ea4ccbe194b5954b568`,
+  passed the literal shell hash gate, and passed the explicit-base builder
+  `--check`: 341 evidence-pinned rows, 100 unexplained, and the exact
+  three-closure / 74-persistent diagnostic split.
+- Confirmed the verbatim replay left the target branch worktree unchanged
+  except for its pre-existing untracked `WORKER-REPORT.md`.
 
 ## Next
 
-1. Inventory the target and repair diffs, inspect the published replay commands,
-   and map affected code paths.
-2. Run the published replay verbatim, require the recorded trace SHA-256, and
-   require the builder `--check`.
-3. Run the requested live counterfactual samples with a seed other than
+1. Run the requested live counterfactual samples with a seed other than
    `362441`.
-4. Audit drift notes, conservation, explorer parity, BBCE preservation,
+2. Audit drift notes, conservation, explorer parity, BBCE preservation,
    containment, and the complete `--check` battery.
-5. Commit `REVIEW-REPORT.md` and finalize this ledger with an approve or
+3. Commit `REVIEW-REPORT.md` and finalize this ledger with an approve or
    request-changes verdict.
 
 ---
