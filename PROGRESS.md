@@ -11,6 +11,7 @@
 - Review ledger/worktree: `.git/review-worktrees/pr422-f9fd1de2-blind`.
 - Review branch: `review/pr422-f9fd1de2-blind` (local only).
 - Final output file: `REVIEW-REPORT.md`.
+- Source containment so far: one file, 17 insertions, no whitespace errors.
 
 ## Done
 
@@ -20,16 +21,30 @@
   to the live PR head.
 - Confirmed GitHub reports one commit, one changed file, and 17 insertions.
 - Created this disposable review worktree at the immutable source head.
+- Confirmed source head `f9fd1de2` has the PR base snapshot `8b876f6f` as its
+  sole parent.
+- Confirmed the immutable source diff changes only
+  `axiom_oracles/bridges/mappings/us.yaml`; `git diff --check` is clean.
+- Built a temporary GitNexus index and traced the packaged mapping loader into
+  the PolicyEngine coverage/queue and bridge-consumer flows. The graph exposes
+  the registry loader to 70 direct callers, including the coverage builder and
+  registry-driven bridge tests, so focused registry and coverage validation is
+  required. The temporary index was removed after querying.
+- Recorded the rulespec-us review target at
+  `3f933cd935e68cb1cdd50a254ab449aeabe2d468` on
+  `fed-parity/atomic-63c6-67h`; its existing untracked `WORKER-REPORT.md` is
+  user state and will not be modified.
+- Recorded the RuleSpec toolchain corpus pin
+  `10142cb0f07403c2de4599c76bec01e96640fda9`.
 
 ## Next
 
-1. Inspect the exact mapping diff and local mapping/test architecture.
-2. Verify the retained RuleSpec text and all PolicyEngine surfaces for
+1. Verify the retained RuleSpec text and all PolicyEngine surfaces for
    section 63(c)(6).
-3. Verify the section 67(h) parameter schema, 2026 value, semantics, and mapping
+2. Verify the section 67(h) parameter schema, 2026 value, semantics, and mapping
    house style.
-4. Run the changed-file coverage gate against the specified RuleSpec worktree.
-5. Verify YAML, duplicate IDs, diff containment, and the clean-main failure
+3. Run the changed-file coverage gate against the specified RuleSpec worktree.
+4. Verify YAML, duplicate IDs, diff containment, and the clean-main failure
    baseline without using the shared stash.
-6. Write and commit `REVIEW-REPORT.md`, update this ledger, and report the
+5. Write and commit `REVIEW-REPORT.md`, update this ledger, and report the
    verdict without writing to the PR branch, remotes, or GitHub.
