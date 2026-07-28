@@ -24,6 +24,7 @@ import argparse
 import sys
 from dataclasses import dataclass
 from decimal import Decimal
+from importlib.metadata import version as distribution_version
 from pathlib import Path
 from typing import Any, Callable, Mapping
 
@@ -36,6 +37,11 @@ if str(REPO_ROOT) not in sys.path:
 from axiom_oracles.comparison.dispositions import report_json_text  # noqa: E402
 
 VALIDATION_YEAR = 2026
+ENGINE_VERSIONS = {
+    "policyengine": "4.18.9",
+    "policyengine_core": "3.30.3",
+    "policyengine_us": "1.767.3",
+}
 
 
 @dataclass(frozen=True)
@@ -76,45 +82,128 @@ def _case(
     return FederalCase(case_id, filing_status, inputs)
 
 
-# GRID-CONTRACT P1, restricted to the five wage-only cases. The merged
-# RuleSpec composition fail-closes its combined output when imported federal
-# self-employment income is nonzero, so the former positive-SE case is outside
-# this suite's reviewed domain until the operative section 1401 authority lands.
+# GRID-CONTRACT P1 plus the merged section 1401(b)(2) companion diagnostics.
+# Every selected case affirms the section 1401(c) ordinary-domain judgment.
+# The companion's one false-domain diagnostic is intentionally excluded:
+# PolicyEngine has no corresponding international-agreement guard, so its
+# unconditional public output is not commensurable on that case.
+def _additional_medicare_case(
+    case_id: str,
+    filing_status: str,
+    *,
+    primary_wages: float = 0,
+    spouse_wages: float = 0,
+    primary_self_employment_profit: float = 0,
+    spouse_self_employment_profit: float = 0,
+) -> FederalCase:
+    return _case(
+        case_id,
+        filing_status,
+        primary_wages=primary_wages,
+        spouse_wages=spouse_wages,
+        self_employment_income=primary_self_employment_profit,
+        spouse_self_employment_income=spouse_self_employment_profit,
+    )
+
+
 _ADDITIONAL_MEDICARE_CASES = (
-    _case(
+    _additional_medicare_case(
         "amt-single-150k",
         "single",
         primary_wages=150_000,
-        spouse_wages=0,
-        self_employment_income=0,
     ),
-    _case(
+    _additional_medicare_case(
         "amt-single-250k",
         "single",
         primary_wages=250_000,
-        spouse_wages=0,
-        self_employment_income=0,
     ),
-    _case(
+    _additional_medicare_case(
         "amt-joint-300k",
         "joint",
         primary_wages=150_000,
         spouse_wages=150_000,
-        self_employment_income=0,
     ),
-    _case(
+    _additional_medicare_case(
         "amt-mfs-150k",
         "separate",
         primary_wages=150_000,
-        spouse_wages=0,
-        self_employment_income=0,
     ),
-    _case(
+    _additional_medicare_case(
+        "amt-single-wage-se",
+        "single",
+        primary_wages=100_000,
+        primary_self_employment_profit=150_000,
+    ),
+    _additional_medicare_case(
         "amt-joint-450k",
         "joint",
         primary_wages=400_000,
         spouse_wages=50_000,
-        self_employment_income=0,
+    ),
+    _additional_medicare_case(
+        "amt-single-wage-derived-completed-se-income-non-contract",
+        "single",
+        primary_wages=100_000,
+        primary_self_employment_profit=200_000,
+    ),
+    _additional_medicare_case("amt-zero", "single"),
+    _additional_medicare_case(
+        "amt-single-exact-wage-threshold",
+        "single",
+        primary_wages=200_000,
+    ),
+    _additional_medicare_case(
+        "amt-single-one-dollar-above-wage-threshold",
+        "single",
+        primary_wages=200_001,
+    ),
+    _additional_medicare_case(
+        "amt-single-exact-coordinated-se-threshold",
+        "single",
+        primary_wages=107_650,
+        primary_self_employment_profit=100_000,
+    ),
+    _additional_medicare_case(
+        "amt-single-one-dollar-above-coordinated-se-threshold",
+        "single",
+        primary_wages=107_651,
+        primary_self_employment_profit=100_000,
+    ),
+    _additional_medicare_case(
+        "amt-joint-two-positive-se-earners-single-tax-unit-threshold",
+        "joint",
+        primary_self_employment_profit=150_000,
+        spouse_self_employment_profit=150_000,
+    ),
+    _additional_medicare_case(
+        "amt-single-se-threshold-zero-at-wage-threshold",
+        "single",
+        primary_wages=200_000,
+        primary_self_employment_profit=1_000,
+    ),
+    _additional_medicare_case(
+        "amt-single-se-threshold-not-negative-above-wage-threshold",
+        "single",
+        primary_wages=200_001,
+        primary_self_employment_profit=1_000,
+    ),
+    _additional_medicare_case(
+        "amt-married-separate-positive-se",
+        "separate",
+        primary_wages=125_000,
+        primary_self_employment_profit=100_000,
+    ),
+    _additional_medicare_case(
+        "amt-head-of-household-positive-se-other-threshold",
+        "head_of_household",
+        primary_wages=150_000,
+        primary_self_employment_profit=100_000,
+    ),
+    _additional_medicare_case(
+        "amt-self-employment-loss-has-no-negative-se-base",
+        "single",
+        primary_wages=200_001,
+        primary_self_employment_profit=-10_000,
     ),
 )
 
@@ -416,7 +505,8 @@ _QBID_CASES = (
 )
 
 
-# GRID-CONTRACT P6 plus six eligibility/boundary diagnostics.  The selected PE
+# GRID-CONTRACT P6 plus the merged Notice 2025-67 boundary, filing-status,
+# exclusion, contribution-cap, and eligibility diagnostics. The selected PE
 # potential variable is the companion's pre-section-26 statutory boundary; the
 # separately calculated public variable is retained only as a diagnostic.
 def _savers_case(
@@ -426,6 +516,9 @@ def _savers_case(
     adjusted_gross_income: float,
     primary_contributions: float,
     spouse_contributions: float = 0,
+    section_911_excluded_income: float = 0,
+    section_931_excluded_income: float = 0,
+    section_933_excluded_income: float = 0,
     primary_age: int = 30,
     primary_is_student: bool = False,
     primary_is_dependent: bool = False,
@@ -433,6 +526,9 @@ def _savers_case(
     thresholds = {
         "single": (24_250, 26_250, 40_250),
         "joint": (48_500, 52_500, 80_500),
+        "head_of_household": (36_375, 39_375, 60_375),
+        "separate": (24_250, 26_250, 40_250),
+        "surviving_spouse": (24_250, 26_250, 40_250),
     }[filing_status]
     return _case(
         case_id,
@@ -440,6 +536,9 @@ def _savers_case(
         adjusted_gross_income=adjusted_gross_income,
         primary_contributions=primary_contributions,
         spouse_contributions=spouse_contributions,
+        section_911_excluded_income=section_911_excluded_income,
+        section_931_excluded_income=section_931_excluded_income,
+        section_933_excluded_income=section_933_excluded_income,
         primary_age=primary_age,
         primary_is_student=primary_is_student,
         primary_is_dependent=primary_is_dependent,
@@ -454,76 +553,156 @@ def _savers_case(
 
 _SAVERS_CREDIT_CASES = (
     _savers_case(
-        "savers-50pct",
-        "single",
-        adjusted_gross_income=20_000,
-        primary_contributions=2_000,
-    ),
-    _savers_case(
-        "savers-20pct",
-        "single",
-        adjusted_gross_income=25_250,
-        primary_contributions=2_000,
-    ),
-    _savers_case(
-        "savers-10pct",
-        "single",
-        adjusted_gross_income=33_250,
-        primary_contributions=2_000,
-    ),
-    _savers_case(
-        "savers-over",
-        "single",
-        adjusted_gross_income=40_251,
-        primary_contributions=2_000,
-    ),
-    _savers_case(
-        "savers-cap",
-        "single",
-        adjusted_gross_income=20_000,
-        primary_contributions=5_000,
-    ),
-    _savers_case(
-        "savers-joint-both",
-        "joint",
-        adjusted_gross_income=38_000,
-        primary_contributions=2_000,
-        spouse_contributions=2_000,
-    ),
-    _savers_case(
-        "savers-zero-contributions",
-        "single",
-        adjusted_gross_income=0,
-        primary_contributions=0,
-    ),
-    _savers_case(
-        "savers-at-first-threshold",
+        "single-at-50-percent-limit-inclusive",
         "single",
         adjusted_gross_income=24_250,
         primary_contributions=2_000,
     ),
     _savers_case(
-        "savers-one-over-first-threshold",
+        "single-one-over-50-percent-limit",
         "single",
         adjusted_gross_income=24_251,
         primary_contributions=2_000,
     ),
     _savers_case(
-        "savers-age-screen",
+        "single-at-20-percent-limit-inclusive",
+        "single",
+        adjusted_gross_income=26_250,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "single-one-over-20-percent-limit",
+        "single",
+        adjusted_gross_income=26_251,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "single-at-10-percent-limit-inclusive",
+        "single",
+        adjusted_gross_income=40_250,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "single-one-over-10-percent-limit",
+        "single",
+        adjusted_gross_income=40_251,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "joint-at-50-percent-limit-inclusive",
+        "joint",
+        adjusted_gross_income=48_500,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "joint-one-over-50-percent-limit",
+        "joint",
+        adjusted_gross_income=48_501,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "joint-at-20-percent-limit-inclusive",
+        "joint",
+        adjusted_gross_income=52_500,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "joint-one-over-20-percent-limit",
+        "joint",
+        adjusted_gross_income=52_501,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "joint-at-10-percent-limit-inclusive",
+        "joint",
+        adjusted_gross_income=80_500,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "joint-one-over-10-percent-limit",
+        "joint",
+        adjusted_gross_income=80_501,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "head-of-household-at-50-percent-limit-inclusive",
+        "head_of_household",
+        adjusted_gross_income=36_375,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "head-of-household-one-over-50-percent-limit",
+        "head_of_household",
+        adjusted_gross_income=36_376,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "head-of-household-at-20-percent-limit-inclusive",
+        "head_of_household",
+        adjusted_gross_income=39_375,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "head-of-household-one-over-20-percent-limit",
+        "head_of_household",
+        adjusted_gross_income=39_376,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "head-of-household-at-10-percent-limit-inclusive",
+        "head_of_household",
+        adjusted_gross_income=60_375,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "head-of-household-one-over-10-percent-limit",
+        "head_of_household",
+        adjusted_gross_income=60_376,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "married-filing-separately-uses-all-other-limits",
+        "separate",
+        adjusted_gross_income=24_250,
+        primary_contributions=2_000,
+        spouse_contributions=2_000,
+    ),
+    _savers_case(
+        "surviving-spouse-uses-all-other-limits",
+        "surviving_spouse",
+        adjusted_gross_income=24_250,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "section-911-add-back-crosses-inclusive-limit",
+        "single",
+        adjusted_gross_income=24_250,
+        section_911_excluded_income=1,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "joint-separate-cap-for-each-spouse",
+        "joint",
+        adjusted_gross_income=40_000,
+        primary_contributions=5_000,
+        spouse_contributions=5_000,
+    ),
+    _savers_case(
+        "age-screen",
         "single",
         adjusted_gross_income=20_000,
         primary_contributions=2_000,
         primary_age=17,
     ),
     _savers_case(
-        "savers-student-screen",
+        "student-screen",
         "single",
         adjusted_gross_income=20_000,
         primary_contributions=2_000,
         primary_is_student=True,
     ),
     _savers_case(
-        "savers-dependent-screen",
+        "dependent-screen",
         "single",
         adjusted_gross_income=20_000,
         primary_contributions=2_000,
@@ -755,7 +934,7 @@ def _tax_situation(
     if case.filing_status == "joint":
         people["spouse"] = _person(**dict(spouse_inputs or {}))
         members.append("spouse")
-    return {
+    situation = {
         "people": people,
         "tax_units": {"tax_unit": {"members": members}},
         "families": {"family": {"members": members}},
@@ -767,6 +946,15 @@ def _tax_situation(
             }
         },
     }
+    explicit_statuses = {
+        "head_of_household": "HEAD_OF_HOUSEHOLD",
+        "surviving_spouse": "SURVIVING_SPOUSE",
+    }
+    if case.filing_status in explicit_statuses:
+        situation["tax_units"]["tax_unit"]["filing_status"] = {
+            VALIDATION_YEAR: explicit_statuses[case.filing_status]
+        }
+    return situation
 
 
 def _payroll_situation(case: FederalCase) -> dict[str, Any]:
@@ -775,7 +963,10 @@ def _payroll_situation(case: FederalCase) -> dict[str, Any]:
         "employment_income": inputs["primary_wages"],
         "self_employment_income": inputs["self_employment_income"],
     }
-    spouse = {"employment_income": inputs["spouse_wages"]}
+    spouse = {
+        "employment_income": inputs["spouse_wages"],
+        "self_employment_income": inputs.get("spouse_self_employment_income", 0),
+    }
     return _tax_situation(case, primary_inputs=primary, spouse_inputs=spouse)
 
 
@@ -892,6 +1083,9 @@ def _savers_credit_situation(case: FederalCase) -> dict[str, Any]:
     tax_unit = situation["tax_units"]["tax_unit"]
     tax_unit["adjusted_gross_income"] = {
         VALIDATION_YEAR: inputs["adjusted_gross_income"]
+    }
+    tax_unit["foreign_earned_income_exclusion"] = {
+        VALIDATION_YEAR: inputs["section_911_excluded_income"]
     }
     return situation
 
@@ -1064,12 +1258,13 @@ def _validate_additional_medicare_fixture(
     actual: Mapping[str, Any],
 ) -> None:
     pipeline = "us:policies/income_tax/additional_medicare_tax_pipeline"
-    status_codes = {"single": 0, "joint": 1, "separate": 2}
-    if Decimal(str(case.inputs["self_employment_income"])) != 0:
-        raise ValueError(
-            f"us-additional-medicare-grid: case {case.case_id!r} is outside "
-            "the reviewed wage-only, zero-self-employment domain"
-        )
+    status_codes = {
+        "single": 0,
+        "joint": 1,
+        "separate": 2,
+        "head_of_household": 3,
+        "surviving_spouse": 4,
+    }
     _require_fixture_values(
         suite="us-additional-medicare-grid",
         case_id=case.case_id,
@@ -1110,7 +1305,9 @@ def _validate_self_employment_relation(
     if case.filing_status == "joint":
         expected_people.append(
             {
-                "self_employment_income": 0,
+                "self_employment_income": case.inputs.get(
+                    "spouse_self_employment_income", 0
+                ),
                 "wages": case.inputs["spouse_wages"],
             }
         )
@@ -1300,20 +1497,29 @@ def _validate_savers_credit_fixture(
 ) -> None:
     inputs = case.inputs
     prefix = "us:policies/income_tax/savers_credit_pipeline#input."
-    status_codes = {"single": 0, "joint": 1, "separate": 2}
+    status_codes = {
+        "single": 0,
+        "joint": 1,
+        "separate": 2,
+        "head_of_household": 3,
+        "surviving_spouse": 4,
+    }
     _require_fixture_values(
-        suite="us-savers-credit-grid",
+        suite="us-savers-grid",
         case_id=case.case_id,
         actual=actual,
         expected={
-            f"{prefix}section_911_excluded_income": 0,
-            f"{prefix}section_931_excluded_income": 0,
-            f"{prefix}section_933_excluded_income": 0,
+            f"{prefix}section_911_excluded_income": inputs[
+                "section_911_excluded_income"
+            ],
+            f"{prefix}section_931_excluded_income": inputs[
+                "section_931_excluded_income"
+            ],
+            f"{prefix}section_933_excluded_income": inputs[
+                "section_933_excluded_income"
+            ],
             f"{prefix}filing_status": status_codes[case.filing_status],
             f"{prefix}adjusted_gross_income": inputs["adjusted_gross_income"],
-            f"{prefix}savers_credit_first_threshold_2026": inputs["first_threshold"],
-            f"{prefix}savers_credit_second_threshold_2026": inputs["second_threshold"],
-            f"{prefix}savers_credit_third_threshold_2026": inputs["third_threshold"],
             f"{prefix}primary_age_at_close_of_taxable_year": inputs["primary_age"],
             f"{prefix}primary_is_student_under_section_152_f_2": inputs[
                 "primary_is_student"
@@ -1558,7 +1764,7 @@ def _verify_savers_pe_parameters(tax_benefit_system: Any) -> None:
     # and at each published value proves the exact stored breakpoints while
     # leaving the inclusive-maximum truth case to surface as a real mismatch.
     _verify_parameter_values(
-        "us-savers-credit-grid",
+        "us-savers-grid",
         {
             "rate.joint@48499.99": float(p.rate.joint.calc(48_499.99)),
             "rate.joint@48500": float(p.rate.joint.calc(48_500)),
@@ -1566,6 +1772,15 @@ def _verify_savers_pe_parameters(tax_benefit_system: Any) -> None:
             "rate.joint@80500": float(p.rate.joint.calc(80_500)),
             "rate.threshold_adjustment.JOINT": (p.rate.threshold_adjustment.JOINT),
             "rate.threshold_adjustment.SINGLE": (p.rate.threshold_adjustment.SINGLE),
+            "rate.threshold_adjustment.SEPARATE": (
+                p.rate.threshold_adjustment.SEPARATE
+            ),
+            "rate.threshold_adjustment.HEAD_OF_HOUSEHOLD": (
+                p.rate.threshold_adjustment.HEAD_OF_HOUSEHOLD
+            ),
+            "rate.threshold_adjustment.SURVIVING_SPOUSE": (
+                p.rate.threshold_adjustment.SURVIVING_SPOUSE
+            ),
             "contributions_cap": p.contributions_cap,
         },
         {
@@ -1575,7 +1790,33 @@ def _verify_savers_pe_parameters(tax_benefit_system: Any) -> None:
             "rate.joint@80500": 0,
             "rate.threshold_adjustment.JOINT": 1,
             "rate.threshold_adjustment.SINGLE": 0.5,
+            "rate.threshold_adjustment.SEPARATE": 0.5,
+            "rate.threshold_adjustment.HEAD_OF_HOUSEHOLD": 0.75,
+            "rate.threshold_adjustment.SURVIVING_SPOUSE": 0.5,
             "contributions_cap": 2_000,
+        },
+    )
+
+
+def _verify_additional_medicare_pe_parameters(tax_benefit_system: Any) -> None:
+    p = tax_benefit_system.parameters("2026-01-01").gov.irs.payroll.medicare.additional
+    _verify_parameter_values(
+        "us-additional-medicare-grid",
+        {
+            "rate": p.rate,
+            "exclusion.SINGLE": p.exclusion.SINGLE,
+            "exclusion.JOINT": p.exclusion.JOINT,
+            "exclusion.SEPARATE": p.exclusion.SEPARATE,
+            "exclusion.HEAD_OF_HOUSEHOLD": p.exclusion.HEAD_OF_HOUSEHOLD,
+            "exclusion.SURVIVING_SPOUSE": p.exclusion.SURVIVING_SPOUSE,
+        },
+        {
+            "rate": 0.009,
+            "exclusion.SINGLE": 200_000,
+            "exclusion.JOINT": 250_000,
+            "exclusion.SEPARATE": 125_000,
+            "exclusion.HEAD_OF_HOUSEHOLD": 200_000,
+            "exclusion.SURVIVING_SPOUSE": 200_000,
         },
     )
 
@@ -1669,7 +1910,7 @@ POLICIES: dict[str, PolicyConfig] = {
     ),
     "savers_credit": PolicyConfig(
         key="savers_credit",
-        suite="us-savers-credit-grid",
+        suite="us-savers-grid",
         title="Saver's credit before section 26",
         axiom_module_ref=("us:policies/income_tax/savers_credit_pipeline"),
         fixture_path=Path("us/policies/income_tax/savers_credit_pipeline.test.yaml"),
@@ -1677,12 +1918,15 @@ POLICIES: dict[str, PolicyConfig] = {
             "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit"
         ),
         # The public PE variable applies the nonrefundable credit limit.
-        # `savers_credit_potential` is its statutory pre-section-26 input and
-        # therefore matches the Axiom companion boundary.
+        # `savers_credit_potential` is the adjacent pre-section-26 surface.
+        # mappings/us.yaml correctly rejects a global mapping; this grid makes
+        # only the narrower equivalence claim established by these shared,
+        # fixture-bound Person and TaxUnit facts.
         pe_output_variables=("savers_credit_potential",),
         pe_boundary=(
-            "TaxUnit statutory section 25B amount before section 26, summed "
-            "from separately capped eligible Persons"
+            "Conditional 25-case comparison of the TaxUnit section 25B amount "
+            "before section 26 to PE's adjacent potential-credit surface; "
+            "not a global mapped equivalence"
         ),
         cases=_SAVERS_CREDIT_CASES,
         pe_situation=_savers_credit_situation,
@@ -1760,13 +2004,13 @@ POLICIES: dict[str, PolicyConfig] = {
         ),
         pe_output_variables=("additional_medicare_tax",),
         pe_boundary=(
-            "TaxUnit Additional Medicare Tax restricted to zero "
-            "self-employment income, where the public total equals the "
-            "section 3101(b)(2) wage-only amount"
+            "TaxUnit combined sections 3101(b)(2) and 1401(b)(2) Additional "
+            "Medicare Tax, restricted to the section 1401(c) ordinary domain"
         ),
         cases=_ADDITIONAL_MEDICARE_CASES,
         pe_situation=_payroll_situation,
         fixture_input_validator=_validate_additional_medicare_fixture,
+        pe_parameter_validator=_verify_additional_medicare_pe_parameters,
     ),
     "self_employment_tax": PolicyConfig(
         key="self_employment_tax",
@@ -1911,6 +2155,16 @@ def _axiom_values(
 def _policyengine_values(
     config: PolicyConfig,
 ) -> tuple[dict[str, float], dict[str, dict[str, float]]]:
+    actual_versions = {
+        "policyengine": distribution_version("policyengine"),
+        "policyengine_core": distribution_version("policyengine-core"),
+        "policyengine_us": distribution_version("policyengine-us"),
+    }
+    if actual_versions != ENGINE_VERSIONS:
+        raise RuntimeError(
+            f"{config.suite}: runtime PolicyEngine stack {actual_versions} "
+            f"does not match reviewed stack {ENGINE_VERSIONS}"
+        )
     from policyengine_us import Simulation
 
     totals: dict[str, float] = {}
@@ -2021,20 +2275,28 @@ def _build_report(
         left_positive += int(abs(axiom_value) > config.tolerance)
         right_positive += int(abs(pe_value) > config.tolerance)
         difference = axiom_value - pe_value
-        cases.append(
-            {
-                "case_id": case.case_id,
-                "concept": config.axiom_output,
-                "filing_status": case.filing_status,
-                "inputs": dict(case.inputs),
-                "axiom_fixture_inputs": dict(fixture_inputs[case.case_id]),
-                "axiom": axiom_value,
-                "policyengine": pe_value,
-                "policyengine_components": dict(policyengine_components[case.case_id]),
-                "difference": difference,
-                "match": matched,
-            }
-        )
+        case_report = {
+            "case_id": case.case_id,
+            "concept": config.axiom_output,
+            "filing_status": case.filing_status,
+            "inputs": dict(case.inputs),
+            "axiom_fixture_inputs": dict(fixture_inputs[case.case_id]),
+            "axiom": axiom_value,
+            "policyengine": pe_value,
+            "policyengine_components": dict(policyengine_components[case.case_id]),
+            "difference": difference,
+            "match": matched,
+        }
+        if (
+            config.suite == "us-savers-grid"
+            and case.case_id == "section-911-add-back-crosses-inclusive-limit"
+        ):
+            case_report["diagnostic_note"] = (
+                "Observed match is cancellation, not section 911 parity: "
+                "PolicyEngine omits the section 25B(d)(3) add-back while "
+                "PolicyEngine #9151 moves exact $24,250 into the 20-percent tier."
+            )
+        cases.append(case_report)
         if not matched:
             mismatches.append(
                 {
@@ -2071,7 +2333,11 @@ def _build_report(
         "concept": config.axiom_output,
         "population": "case-grid",
         "validation_year": VALIDATION_YEAR,
-        "engines": {"left": "axiom", "right": "policyengine"},
+        "engines": {
+            "left": "axiom",
+            "right": "policyengine",
+            "versions": dict(ENGINE_VERSIONS),
+        },
         "engine_bindings": {
             "axiom": {
                 "module": config.axiom_module_ref,

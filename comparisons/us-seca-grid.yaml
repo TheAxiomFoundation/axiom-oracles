@@ -49,8 +49,8 @@ runner:
     rulespec_remote: https://github.com/TheAxiomFoundation/rulespec-us.git
     rulespec_roots:
       - /private/tmp/oracle-rerun/rulespec-us
-    rulespec_upstream_sha: 3373e8411f7e141fd50879e3de964386f606f7f6
-    rulespec_upstream_tree: 7e00f195ea81ff9aa21c58d53151e937d974a016
+    rulespec_upstream_sha: dcbae4344c522b4ad8004169316266cbc153186f
+    rulespec_upstream_tree: 7ee3ca44edd11cdaaf5d074a6a2a6c32d2f25dfb
 
 artifacts:
   report_basename: axiom-policyengine-us-seca-grid

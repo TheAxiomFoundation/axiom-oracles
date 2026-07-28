@@ -39,8 +39,8 @@ def _load_runner():
 
 
 def test_every_live_federal_grid_pins_canonical_rulespec_snapshot():
-    upstream_sha = "3373e8411f7e141fd50879e3de964386f606f7f6"
-    upstream_tree = "7e00f195ea81ff9aa21c58d53151e937d974a016"
+    upstream_sha = "dcbae4344c522b4ad8004169316266cbc153186f"
+    upstream_tree = "7ee3ca44edd11cdaaf5d074a6a2a6c32d2f25dfb"
     federal_configs = []
     for path in sorted((REPO_ROOT / "comparisons").glob("*.yaml")):
         config = yaml.safe_load(path.read_text())
@@ -59,6 +59,7 @@ def test_every_live_federal_grid_pins_canonical_rulespec_snapshot():
         "us-llc-grid.yaml",
         "us-niit-grid.yaml",
         "us-qbid-grid.yaml",
+        "us-savers-grid.yaml",
         "us-seca-grid.yaml",
     ]
 
@@ -88,7 +89,20 @@ def test_all_eight_contract_grids_are_explicit_and_independent():
             "amt-single-250k",
             "amt-joint-300k",
             "amt-mfs-150k",
+            "amt-single-wage-se",
             "amt-joint-450k",
+            "amt-single-wage-derived-completed-se-income-non-contract",
+            "amt-zero",
+            "amt-single-exact-wage-threshold",
+            "amt-single-one-dollar-above-wage-threshold",
+            "amt-single-exact-coordinated-se-threshold",
+            "amt-single-one-dollar-above-coordinated-se-threshold",
+            "amt-joint-two-positive-se-earners-single-tax-unit-threshold",
+            "amt-single-se-threshold-zero-at-wage-threshold",
+            "amt-single-se-threshold-not-negative-above-wage-threshold",
+            "amt-married-separate-positive-se",
+            "amt-head-of-household-positive-se-other-threshold",
+            "amt-self-employment-loss-has-no-negative-se-base",
         ],
         "self_employment_tax": [
             "seca-under-floor",
@@ -128,18 +142,31 @@ def test_all_eight_contract_grids_are_explicit_and_independent():
             "qbid-net-capital-gain-limit",
         ],
         "savers_credit": [
-            "savers-50pct",
-            "savers-20pct",
-            "savers-10pct",
-            "savers-over",
-            "savers-cap",
-            "savers-joint-both",
-            "savers-zero-contributions",
-            "savers-at-first-threshold",
-            "savers-one-over-first-threshold",
-            "savers-age-screen",
-            "savers-student-screen",
-            "savers-dependent-screen",
+            "single-at-50-percent-limit-inclusive",
+            "single-one-over-50-percent-limit",
+            "single-at-20-percent-limit-inclusive",
+            "single-one-over-20-percent-limit",
+            "single-at-10-percent-limit-inclusive",
+            "single-one-over-10-percent-limit",
+            "joint-at-50-percent-limit-inclusive",
+            "joint-one-over-50-percent-limit",
+            "joint-at-20-percent-limit-inclusive",
+            "joint-one-over-20-percent-limit",
+            "joint-at-10-percent-limit-inclusive",
+            "joint-one-over-10-percent-limit",
+            "head-of-household-at-50-percent-limit-inclusive",
+            "head-of-household-one-over-50-percent-limit",
+            "head-of-household-at-20-percent-limit-inclusive",
+            "head-of-household-one-over-20-percent-limit",
+            "head-of-household-at-10-percent-limit-inclusive",
+            "head-of-household-one-over-10-percent-limit",
+            "married-filing-separately-uses-all-other-limits",
+            "surviving-spouse-uses-all-other-limits",
+            "section-911-add-back-crosses-inclusive-limit",
+            "joint-separate-cap-for-each-spouse",
+            "age-screen",
+            "student-screen",
+            "dependent-screen",
         ],
         "elderly_disabled_credit": [
             "eld-basic",
@@ -170,8 +197,15 @@ def test_all_eight_contract_grids_are_explicit_and_independent():
     for key, expected in expected_case_ids.items():
         assert [case.case_id for case in generator.POLICIES[key].cases] == expected
     additional_medicare = generator.POLICIES["additional_medicare_tax"].cases
+    assert any(
+        case.inputs["self_employment_income"] > 0 for case in additional_medicare
+    )
+    assert any(
+        case.inputs["self_employment_income"] < 0 for case in additional_medicare
+    )
     assert all(
-        case.inputs["self_employment_income"] == 0 for case in additional_medicare
+        case.case_id != "amt-se-domain-fails-closed-foreign-system-attestation"
+        for case in additional_medicare
     )
     assert any(
         case.inputs["primary_wages"] + case.inputs["spouse_wages"] > 200_000
@@ -243,6 +277,15 @@ def test_payroll_and_niit_inputs_are_derived_from_contract_facts():
     mfs = generator._payroll_situation(payroll_cases["amt-mfs-150k"])
     assert mfs["people"]["head"]["is_separated"][2026] is True
     assert mfs["people"]["head"]["employment_income"][2026] == 150_000
+    joint_se = generator._payroll_situation(
+        payroll_cases["amt-joint-two-positive-se-earners-single-tax-unit-threshold"]
+    )
+    assert joint_se["people"]["head"]["self_employment_income"][2026] == 150_000
+    assert joint_se["people"]["spouse"]["self_employment_income"][2026] == 150_000
+    hoh = generator._payroll_situation(
+        payroll_cases["amt-head-of-household-positive-se-other-threshold"]
+    )
+    assert hoh["tax_units"]["tax_unit"]["filing_status"][2026] == "HEAD_OF_HOUSEHOLD"
 
     seca_cases = {
         case.case_id: case for case in generator.POLICIES["self_employment_tax"].cases
@@ -355,7 +398,7 @@ def test_qbid_fixture_binding_matches_merged_pipeline_surface(monkeypatch):
 def test_savers_grid_uses_completed_person_contributions_and_two_caps():
     generator = _load_generator()
     cases = {case.case_id: case for case in generator.POLICIES["savers_credit"].cases}
-    joint = cases["savers-joint-both"]
+    joint = cases["joint-separate-cap-for-each-spouse"]
     situation = generator._savers_credit_situation(joint)
 
     assert joint.inputs["first_threshold"] == 48_500
@@ -363,17 +406,52 @@ def test_savers_grid_uses_completed_person_contributions_and_two_caps():
     assert joint.inputs["third_threshold"] == 80_500
     assert (
         situation["people"]["head"]["savers_credit_qualified_contributions"][2026]
-        == 2_000
+        == 5_000
     )
     assert (
         situation["people"]["spouse"]["savers_credit_qualified_contributions"][2026]
-        == 2_000
+        == 5_000
     )
-    assert situation["tax_units"]["tax_unit"]["adjusted_gross_income"][2026] == 38_000
+    assert situation["tax_units"]["tax_unit"]["adjusted_gross_income"][2026] == 40_000
+    section_911 = generator._savers_credit_situation(
+        cases["section-911-add-back-crosses-inclusive-limit"]
+    )
+    assert (
+        section_911["tax_units"]["tax_unit"]["foreign_earned_income_exclusion"][2026]
+        == 1
+    )
+    surviving = generator._savers_credit_situation(
+        cases["surviving-spouse-uses-all-other-limits"]
+    )
+    assert (
+        surviving["tax_units"]["tax_unit"]["filing_status"][2026] == "SURVIVING_SPOUSE"
+    )
     assert generator.POLICIES["savers_credit"].pe_diagnostic_variables == (
         "savers_credit",
         "savers_credit_credit_limit",
     )
+
+
+def test_savers_grid_report_discloses_section_911_match_cancellation():
+    generator = _load_generator()
+    config = generator.POLICIES["savers_credit"]
+    values = {case.case_id: 400.0 for case in config.cases}
+    empty_by_case = {case.case_id: {} for case in config.cases}
+
+    report = generator._build_report(
+        config,
+        axiom=values,
+        fixture_inputs=empty_by_case,
+        policyengine=values,
+        policyengine_components=empty_by_case,
+    )
+    section_911 = next(
+        case
+        for case in report["cases"]
+        if case["case_id"] == "section-911-add-back-crosses-inclusive-limit"
+    )
+
+    assert "cancellation, not section 911 parity" in section_911["diagnostic_note"]
 
 
 def test_elderly_disabled_grid_collapses_only_proven_disability_facts():
@@ -417,27 +495,27 @@ def test_llc_grid_binds_explicit_status_and_liability_capped_final():
     }
 
 
-def test_additional_medicare_fixture_enforces_wage_only_person_boundary():
+def test_additional_medicare_fixture_enforces_ordinary_person_boundary():
     generator = _load_generator()
     case = next(
         case
         for case in generator.POLICIES["additional_medicare_tax"].cases
-        if case.case_id == "amt-single-250k"
+        if case.case_id == "amt-single-wage-se"
     )
     additional_module = "us:policies/income_tax/additional_medicare_tax_pipeline"
     se_module = "us:policies/income_tax/self_employment_tax_pipeline"
     relation = f"{se_module}#relation.self_employed_individual_of_tax_unit"
     actual = {
         "us:statutes/26/3101/b/2#input.filing_status": 0,
-        f"{additional_module}#input.wages": 250_000,
+        f"{additional_module}#input.wages": 100_000,
         f"{additional_module}#input.no_foreign_system_exclusive_se_income": True,
         relation: [
             {
-                f"{se_module}#input.gross_self_employment_profit": 0,
+                f"{se_module}#input.gross_self_employment_profit": 150_000,
                 (
                     "us:statutes/26/1402/b#input."
                     "wages_paid_to_individual_during_taxable_year_for_section_1401_a"
-                ): 250_000,
+                ): 100_000,
                 ("us:statutes/26/1402/b#input.individual_is_nonresident_alien"): False,
                 (
                     "us:statutes/26/1402/b#input."
@@ -455,12 +533,15 @@ def test_additional_medicare_fixture_enforces_wage_only_person_boundary():
 
     generator._validate_additional_medicare_fixture(case, actual)
 
-    positive_se_case = replace(
-        case,
-        inputs={**case.inputs, "self_employment_income": 1},
-    )
-    with pytest.raises(ValueError, match="wage-only, zero-self-employment"):
-        generator._validate_additional_medicare_fixture(positive_se_case, actual)
+    false_domain_fixture = dict(actual)
+    false_domain_fixture[
+        f"{additional_module}#input.no_foreign_system_exclusive_se_income"
+    ] = False
+    with pytest.raises(ValueError, match="expected True"):
+        generator._validate_additional_medicare_fixture(
+            case,
+            false_domain_fixture,
+        )
 
     stale_flat_fixture = dict(actual)
     stale_flat_fixture.pop(relation)
@@ -557,15 +638,23 @@ def test_v2_report_counts_one_pair_per_case():
 
     assert report["schema_version"] == "axiom.comparison_report.v2"
     assert report["suite"] == "us-additional-medicare-grid"
-    assert report["engines"] == {"left": "axiom", "right": "policyengine"}
+    assert report["engines"] == {
+        "left": "axiom",
+        "right": "policyengine",
+        "versions": {
+            "policyengine": "4.18.9",
+            "policyengine_core": "3.30.3",
+            "policyengine_us": "1.767.3",
+        },
+    }
     assert report["engine_bindings"]["policyengine"]["outputs"] == [
         "additional_medicare_tax"
     ]
-    assert report["summary"]["comparison_count"] == 5
-    assert report["summary"]["match_count"] == 4
+    assert report["summary"]["comparison_count"] == 18
+    assert report["summary"]["match_count"] == 17
     assert report["summary"]["mismatch_count"] == 1
-    assert report["aggregates"][0]["comparison_count"] == 5
-    assert report["aggregates"][0]["match_count"] == 4
+    assert report["aggregates"][0]["comparison_count"] == 18
+    assert report["aggregates"][0]["match_count"] == 17
     assert report["aggregates"][0]["mismatch_count"] == 1
     assert len(report["mismatches"]) == 1
 

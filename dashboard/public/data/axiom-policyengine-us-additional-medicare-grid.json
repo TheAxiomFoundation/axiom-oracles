@@ -1,20 +1,20 @@
 {
   "aggregates": [
     {
-      "compared": 5,
+      "compared": 18,
       "comparison": "amount",
-      "comparison_count": 5,
+      "comparison_count": 18,
       "concept": "us:policies/income_tax/additional_medicare_tax_pipeline#federal_additional_medicare_tax",
-      "left_positive_rate": 80.0,
-      "match_count": 5,
+      "left_positive_rate": 61.111111111111114,
+      "match_count": 18,
       "match_rate": 100.0,
-      "matched": 5,
+      "matched": 18,
       "mismatch_count": 0,
       "mismatched": 0,
-      "right_positive_rate": 80.0
+      "right_positive_rate": 61.111111111111114
     }
   ],
-  "case_count": 5,
+  "case_count": 18,
   "cases": [
     {
       "axiom": 0.0,
@@ -39,6 +39,7 @@
       "inputs": {
         "primary_wages": 150000,
         "self_employment_income": 0,
+        "spouse_self_employment_income": 0,
         "spouse_wages": 0
       },
       "match": true,
@@ -70,6 +71,7 @@
       "inputs": {
         "primary_wages": 250000,
         "self_employment_income": 0,
+        "spouse_self_employment_income": 0,
         "spouse_wages": 0
       },
       "match": true,
@@ -108,6 +110,7 @@
       "inputs": {
         "primary_wages": 150000,
         "self_employment_income": 0,
+        "spouse_self_employment_income": 0,
         "spouse_wages": 150000
       },
       "match": true,
@@ -139,12 +142,45 @@
       "inputs": {
         "primary_wages": 150000,
         "self_employment_income": 0,
+        "spouse_self_employment_income": 0,
         "spouse_wages": 0
       },
       "match": true,
       "policyengine": 225.0,
       "policyengine_components": {
         "additional_medicare_tax": 225.0
+      }
+    },
+    {
+      "axiom": 346.725,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/additional_medicare_tax_pipeline#input.no_foreign_system_exclusive_se_income": true,
+        "us:policies/income_tax/additional_medicare_tax_pipeline#input.wages": 100000,
+        "us:policies/income_tax/self_employment_tax_pipeline#relation.self_employed_individual_of_tax_unit": [
+          {
+            "us:policies/income_tax/self_employment_tax_pipeline#input.gross_self_employment_profit": 150000,
+            "us:statutes/26/1402/b#input.agreement_under_social_security_act_section_233_provides_for_individual": false,
+            "us:statutes/26/1402/b#input.individual_is_nonresident_alien": false,
+            "us:statutes/26/1402/b#input.individual_is_not_united_states_citizen_and_resident_of_puerto_rico_virgin_islands_guam_or_american_samoa": false,
+            "us:statutes/26/1402/b#input.wages_paid_to_individual_during_taxable_year_for_section_1401_a": 100000
+          }
+        ],
+        "us:statutes/26/3101/b/2#input.filing_status": 0
+      },
+      "case_id": "amt-single-wage-se",
+      "concept": "us:policies/income_tax/additional_medicare_tax_pipeline#federal_additional_medicare_tax",
+      "difference": -6.1035156022626325e-06,
+      "filing_status": "single",
+      "inputs": {
+        "primary_wages": 100000,
+        "self_employment_income": 150000,
+        "spouse_self_employment_income": 0,
+        "spouse_wages": 0
+      },
+      "match": true,
+      "policyengine": 346.7250061035156,
+      "policyengine_components": {
+        "additional_medicare_tax": 346.7250061035156
       }
     },
     {
@@ -177,12 +213,404 @@
       "inputs": {
         "primary_wages": 400000,
         "self_employment_income": 0,
+        "spouse_self_employment_income": 0,
         "spouse_wages": 50000
       },
       "match": true,
       "policyengine": 1800.0,
       "policyengine_components": {
         "additional_medicare_tax": 1800.0
+      }
+    },
+    {
+      "axiom": 762.3,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/additional_medicare_tax_pipeline#input.no_foreign_system_exclusive_se_income": true,
+        "us:policies/income_tax/additional_medicare_tax_pipeline#input.wages": 100000,
+        "us:policies/income_tax/self_employment_tax_pipeline#relation.self_employed_individual_of_tax_unit": [
+          {
+            "us:policies/income_tax/self_employment_tax_pipeline#input.gross_self_employment_profit": 200000,
+            "us:statutes/26/1402/b#input.agreement_under_social_security_act_section_233_provides_for_individual": false,
+            "us:statutes/26/1402/b#input.individual_is_nonresident_alien": false,
+            "us:statutes/26/1402/b#input.individual_is_not_united_states_citizen_and_resident_of_puerto_rico_virgin_islands_guam_or_american_samoa": false,
+            "us:statutes/26/1402/b#input.wages_paid_to_individual_during_taxable_year_for_section_1401_a": 100000
+          }
+        ],
+        "us:statutes/26/3101/b/2#input.filing_status": 0
+      },
+      "case_id": "amt-single-wage-derived-completed-se-income-non-contract",
+      "concept": "us:policies/income_tax/additional_medicare_tax_pipeline#federal_additional_medicare_tax",
+      "difference": 1.2207031204525265e-05,
+      "filing_status": "single",
+      "inputs": {
+        "primary_wages": 100000,
+        "self_employment_income": 200000,
+        "spouse_self_employment_income": 0,
+        "spouse_wages": 0
+      },
+      "match": true,
+      "policyengine": 762.2999877929688,
+      "policyengine_components": {
+        "additional_medicare_tax": 762.2999877929688
+      }
+    },
+    {
+      "axiom": 0.0,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/additional_medicare_tax_pipeline#input.no_foreign_system_exclusive_se_income": true,
+        "us:policies/income_tax/additional_medicare_tax_pipeline#input.wages": 0,
+        "us:policies/income_tax/self_employment_tax_pipeline#relation.self_employed_individual_of_tax_unit": [
+          {
+            "us:policies/income_tax/self_employment_tax_pipeline#input.gross_self_employment_profit": 0,
+            "us:statutes/26/1402/b#input.agreement_under_social_security_act_section_233_provides_for_individual": false,
+            "us:statutes/26/1402/b#input.individual_is_nonresident_alien": false,
+            "us:statutes/26/1402/b#input.individual_is_not_united_states_citizen_and_resident_of_puerto_rico_virgin_islands_guam_or_american_samoa": false,
+            "us:statutes/26/1402/b#input.wages_paid_to_individual_during_taxable_year_for_section_1401_a": 0
+          }
+        ],
+        "us:statutes/26/3101/b/2#input.filing_status": 0
+      },
+      "case_id": "amt-zero",
+      "concept": "us:policies/income_tax/additional_medicare_tax_pipeline#federal_additional_medicare_tax",
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "primary_wages": 0,
+        "self_employment_income": 0,
+        "spouse_self_employment_income": 0,
+        "spouse_wages": 0
+      },
+      "match": true,
+      "policyengine": 0.0,
+      "policyengine_components": {
+        "additional_medicare_tax": 0.0
+      }
+    },
+    {
+      "axiom": 0.0,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/additional_medicare_tax_pipeline#input.no_foreign_system_exclusive_se_income": true,
+        "us:policies/income_tax/additional_medicare_tax_pipeline#input.wages": 200000,
+        "us:policies/income_tax/self_employment_tax_pipeline#relation.self_employed_individual_of_tax_unit": [
+          {
+            "us:policies/income_tax/self_employment_tax_pipeline#input.gross_self_employment_profit": 0,
+            "us:statutes/26/1402/b#input.agreement_under_social_security_act_section_233_provides_for_individual": false,
+            "us:statutes/26/1402/b#input.individual_is_nonresident_alien": false,
+            "us:statutes/26/1402/b#input.individual_is_not_united_states_citizen_and_resident_of_puerto_rico_virgin_islands_guam_or_american_samoa": false,
+            "us:statutes/26/1402/b#input.wages_paid_to_individual_during_taxable_year_for_section_1401_a": 200000
+          }
+        ],
+        "us:statutes/26/3101/b/2#input.filing_status": 0
+      },
+      "case_id": "amt-single-exact-wage-threshold",
+      "concept": "us:policies/income_tax/additional_medicare_tax_pipeline#federal_additional_medicare_tax",
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "primary_wages": 200000,
+        "self_employment_income": 0,
+        "spouse_self_employment_income": 0,
+        "spouse_wages": 0
+      },
+      "match": true,
+      "policyengine": 0.0,
+      "policyengine_components": {
+        "additional_medicare_tax": 0.0
+      }
+    },
+    {
+      "axiom": 0.009,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/additional_medicare_tax_pipeline#input.no_foreign_system_exclusive_se_income": true,
+        "us:policies/income_tax/additional_medicare_tax_pipeline#input.wages": 200001,
+        "us:policies/income_tax/self_employment_tax_pipeline#relation.self_employed_individual_of_tax_unit": [
+          {
+            "us:policies/income_tax/self_employment_tax_pipeline#input.gross_self_employment_profit": 0,
+            "us:statutes/26/1402/b#input.agreement_under_social_security_act_section_233_provides_for_individual": false,
+            "us:statutes/26/1402/b#input.individual_is_nonresident_alien": false,
+            "us:statutes/26/1402/b#input.individual_is_not_united_states_citizen_and_resident_of_puerto_rico_virgin_islands_guam_or_american_samoa": false,
+            "us:statutes/26/1402/b#input.wages_paid_to_individual_during_taxable_year_for_section_1401_a": 200001
+          }
+        ],
+        "us:statutes/26/3101/b/2#input.filing_status": 0
+      },
+      "case_id": "amt-single-one-dollar-above-wage-threshold",
+      "concept": "us:policies/income_tax/additional_medicare_tax_pipeline#federal_additional_medicare_tax",
+      "difference": 3.8743019036002746e-10,
+      "filing_status": "single",
+      "inputs": {
+        "primary_wages": 200001,
+        "self_employment_income": 0,
+        "spouse_self_employment_income": 0,
+        "spouse_wages": 0
+      },
+      "match": true,
+      "policyengine": 0.008999999612569809,
+      "policyengine_components": {
+        "additional_medicare_tax": 0.008999999612569809
+      }
+    },
+    {
+      "axiom": 0.0,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/additional_medicare_tax_pipeline#input.no_foreign_system_exclusive_se_income": true,
+        "us:policies/income_tax/additional_medicare_tax_pipeline#input.wages": 107650,
+        "us:policies/income_tax/self_employment_tax_pipeline#relation.self_employed_individual_of_tax_unit": [
+          {
+            "us:policies/income_tax/self_employment_tax_pipeline#input.gross_self_employment_profit": 100000,
+            "us:statutes/26/1402/b#input.agreement_under_social_security_act_section_233_provides_for_individual": false,
+            "us:statutes/26/1402/b#input.individual_is_nonresident_alien": false,
+            "us:statutes/26/1402/b#input.individual_is_not_united_states_citizen_and_resident_of_puerto_rico_virgin_islands_guam_or_american_samoa": false,
+            "us:statutes/26/1402/b#input.wages_paid_to_individual_during_taxable_year_for_section_1401_a": 107650
+          }
+        ],
+        "us:statutes/26/3101/b/2#input.filing_status": 0
+      },
+      "case_id": "amt-single-exact-coordinated-se-threshold",
+      "concept": "us:policies/income_tax/additional_medicare_tax_pipeline#federal_additional_medicare_tax",
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "primary_wages": 107650,
+        "self_employment_income": 100000,
+        "spouse_self_employment_income": 0,
+        "spouse_wages": 0
+      },
+      "match": true,
+      "policyengine": 0.0,
+      "policyengine_components": {
+        "additional_medicare_tax": 0.0
+      }
+    },
+    {
+      "axiom": 0.009,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/additional_medicare_tax_pipeline#input.no_foreign_system_exclusive_se_income": true,
+        "us:policies/income_tax/additional_medicare_tax_pipeline#input.wages": 107651,
+        "us:policies/income_tax/self_employment_tax_pipeline#relation.self_employed_individual_of_tax_unit": [
+          {
+            "us:policies/income_tax/self_employment_tax_pipeline#input.gross_self_employment_profit": 100000,
+            "us:statutes/26/1402/b#input.agreement_under_social_security_act_section_233_provides_for_individual": false,
+            "us:statutes/26/1402/b#input.individual_is_nonresident_alien": false,
+            "us:statutes/26/1402/b#input.individual_is_not_united_states_citizen_and_resident_of_puerto_rico_virgin_islands_guam_or_american_samoa": false,
+            "us:statutes/26/1402/b#input.wages_paid_to_individual_during_taxable_year_for_section_1401_a": 107651
+          }
+        ],
+        "us:statutes/26/3101/b/2#input.filing_status": 0
+      },
+      "case_id": "amt-single-one-dollar-above-coordinated-se-threshold",
+      "concept": "us:policies/income_tax/additional_medicare_tax_pipeline#federal_additional_medicare_tax",
+      "difference": 3.8743019036002746e-10,
+      "filing_status": "single",
+      "inputs": {
+        "primary_wages": 107651,
+        "self_employment_income": 100000,
+        "spouse_self_employment_income": 0,
+        "spouse_wages": 0
+      },
+      "match": true,
+      "policyengine": 0.008999999612569809,
+      "policyengine_components": {
+        "additional_medicare_tax": 0.008999999612569809
+      }
+    },
+    {
+      "axiom": 243.45,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/additional_medicare_tax_pipeline#input.no_foreign_system_exclusive_se_income": true,
+        "us:policies/income_tax/additional_medicare_tax_pipeline#input.wages": 0,
+        "us:policies/income_tax/self_employment_tax_pipeline#relation.self_employed_individual_of_tax_unit": [
+          {
+            "us:policies/income_tax/self_employment_tax_pipeline#input.gross_self_employment_profit": 150000,
+            "us:statutes/26/1402/b#input.agreement_under_social_security_act_section_233_provides_for_individual": false,
+            "us:statutes/26/1402/b#input.individual_is_nonresident_alien": false,
+            "us:statutes/26/1402/b#input.individual_is_not_united_states_citizen_and_resident_of_puerto_rico_virgin_islands_guam_or_american_samoa": false,
+            "us:statutes/26/1402/b#input.wages_paid_to_individual_during_taxable_year_for_section_1401_a": 0
+          },
+          {
+            "us:policies/income_tax/self_employment_tax_pipeline#input.gross_self_employment_profit": 150000,
+            "us:statutes/26/1402/b#input.agreement_under_social_security_act_section_233_provides_for_individual": false,
+            "us:statutes/26/1402/b#input.individual_is_nonresident_alien": false,
+            "us:statutes/26/1402/b#input.individual_is_not_united_states_citizen_and_resident_of_puerto_rico_virgin_islands_guam_or_american_samoa": false,
+            "us:statutes/26/1402/b#input.wages_paid_to_individual_during_taxable_year_for_section_1401_a": 0
+          }
+        ],
+        "us:statutes/26/3101/b/2#input.filing_status": 1
+      },
+      "case_id": "amt-joint-two-positive-se-earners-single-tax-unit-threshold",
+      "concept": "us:policies/income_tax/additional_medicare_tax_pipeline#federal_additional_medicare_tax",
+      "difference": 3.0517578011313162e-06,
+      "filing_status": "joint",
+      "inputs": {
+        "primary_wages": 0,
+        "self_employment_income": 150000,
+        "spouse_self_employment_income": 150000,
+        "spouse_wages": 0
+      },
+      "match": true,
+      "policyengine": 243.4499969482422,
+      "policyengine_components": {
+        "additional_medicare_tax": 243.4499969482422
+      }
+    },
+    {
+      "axiom": 8.3115,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/additional_medicare_tax_pipeline#input.no_foreign_system_exclusive_se_income": true,
+        "us:policies/income_tax/additional_medicare_tax_pipeline#input.wages": 200000,
+        "us:policies/income_tax/self_employment_tax_pipeline#relation.self_employed_individual_of_tax_unit": [
+          {
+            "us:policies/income_tax/self_employment_tax_pipeline#input.gross_self_employment_profit": 1000,
+            "us:statutes/26/1402/b#input.agreement_under_social_security_act_section_233_provides_for_individual": false,
+            "us:statutes/26/1402/b#input.individual_is_nonresident_alien": false,
+            "us:statutes/26/1402/b#input.individual_is_not_united_states_citizen_and_resident_of_puerto_rico_virgin_islands_guam_or_american_samoa": false,
+            "us:statutes/26/1402/b#input.wages_paid_to_individual_during_taxable_year_for_section_1401_a": 200000
+          }
+        ],
+        "us:statutes/26/3101/b/2#input.filing_status": 0
+      },
+      "case_id": "amt-single-se-threshold-zero-at-wage-threshold",
+      "concept": "us:policies/income_tax/additional_medicare_tax_pipeline#federal_additional_medicare_tax",
+      "difference": 4.0435791071047333e-07,
+      "filing_status": "single",
+      "inputs": {
+        "primary_wages": 200000,
+        "self_employment_income": 1000,
+        "spouse_self_employment_income": 0,
+        "spouse_wages": 0
+      },
+      "match": true,
+      "policyengine": 8.31149959564209,
+      "policyengine_components": {
+        "additional_medicare_tax": 8.31149959564209
+      }
+    },
+    {
+      "axiom": 8.3205,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/additional_medicare_tax_pipeline#input.no_foreign_system_exclusive_se_income": true,
+        "us:policies/income_tax/additional_medicare_tax_pipeline#input.wages": 200001,
+        "us:policies/income_tax/self_employment_tax_pipeline#relation.self_employed_individual_of_tax_unit": [
+          {
+            "us:policies/income_tax/self_employment_tax_pipeline#input.gross_self_employment_profit": 1000,
+            "us:statutes/26/1402/b#input.agreement_under_social_security_act_section_233_provides_for_individual": false,
+            "us:statutes/26/1402/b#input.individual_is_nonresident_alien": false,
+            "us:statutes/26/1402/b#input.individual_is_not_united_states_citizen_and_resident_of_puerto_rico_virgin_islands_guam_or_american_samoa": false,
+            "us:statutes/26/1402/b#input.wages_paid_to_individual_during_taxable_year_for_section_1401_a": 200001
+          }
+        ],
+        "us:statutes/26/3101/b/2#input.filing_status": 0
+      },
+      "case_id": "amt-single-se-threshold-not-negative-above-wage-threshold",
+      "concept": "us:policies/income_tax/additional_medicare_tax_pipeline#federal_additional_medicare_tax",
+      "difference": -3.73840332912323e-07,
+      "filing_status": "single",
+      "inputs": {
+        "primary_wages": 200001,
+        "self_employment_income": 1000,
+        "spouse_self_employment_income": 0,
+        "spouse_wages": 0
+      },
+      "match": true,
+      "policyengine": 8.320500373840332,
+      "policyengine_components": {
+        "additional_medicare_tax": 8.320500373840332
+      }
+    },
+    {
+      "axiom": 831.15,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/additional_medicare_tax_pipeline#input.no_foreign_system_exclusive_se_income": true,
+        "us:policies/income_tax/additional_medicare_tax_pipeline#input.wages": 125000,
+        "us:policies/income_tax/self_employment_tax_pipeline#relation.self_employed_individual_of_tax_unit": [
+          {
+            "us:policies/income_tax/self_employment_tax_pipeline#input.gross_self_employment_profit": 100000,
+            "us:statutes/26/1402/b#input.agreement_under_social_security_act_section_233_provides_for_individual": false,
+            "us:statutes/26/1402/b#input.individual_is_nonresident_alien": false,
+            "us:statutes/26/1402/b#input.individual_is_not_united_states_citizen_and_resident_of_puerto_rico_virgin_islands_guam_or_american_samoa": false,
+            "us:statutes/26/1402/b#input.wages_paid_to_individual_during_taxable_year_for_section_1401_a": 125000
+          }
+        ],
+        "us:statutes/26/3101/b/2#input.filing_status": 2
+      },
+      "case_id": "amt-married-separate-positive-se",
+      "concept": "us:policies/income_tax/additional_medicare_tax_pipeline#federal_additional_medicare_tax",
+      "difference": -2.4414062522737368e-05,
+      "filing_status": "separate",
+      "inputs": {
+        "primary_wages": 125000,
+        "self_employment_income": 100000,
+        "spouse_self_employment_income": 0,
+        "spouse_wages": 0
+      },
+      "match": true,
+      "policyengine": 831.1500244140625,
+      "policyengine_components": {
+        "additional_medicare_tax": 831.1500244140625
+      }
+    },
+    {
+      "axiom": 381.15,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/additional_medicare_tax_pipeline#input.no_foreign_system_exclusive_se_income": true,
+        "us:policies/income_tax/additional_medicare_tax_pipeline#input.wages": 150000,
+        "us:policies/income_tax/self_employment_tax_pipeline#relation.self_employed_individual_of_tax_unit": [
+          {
+            "us:policies/income_tax/self_employment_tax_pipeline#input.gross_self_employment_profit": 100000,
+            "us:statutes/26/1402/b#input.agreement_under_social_security_act_section_233_provides_for_individual": false,
+            "us:statutes/26/1402/b#input.individual_is_nonresident_alien": false,
+            "us:statutes/26/1402/b#input.individual_is_not_united_states_citizen_and_resident_of_puerto_rico_virgin_islands_guam_or_american_samoa": false,
+            "us:statutes/26/1402/b#input.wages_paid_to_individual_during_taxable_year_for_section_1401_a": 150000
+          }
+        ],
+        "us:statutes/26/3101/b/2#input.filing_status": 3
+      },
+      "case_id": "amt-head-of-household-positive-se-other-threshold",
+      "concept": "us:policies/income_tax/additional_medicare_tax_pipeline#federal_additional_medicare_tax",
+      "difference": 6.1035156022626325e-06,
+      "filing_status": "head_of_household",
+      "inputs": {
+        "primary_wages": 150000,
+        "self_employment_income": 100000,
+        "spouse_self_employment_income": 0,
+        "spouse_wages": 0
+      },
+      "match": true,
+      "policyengine": 381.1499938964844,
+      "policyengine_components": {
+        "additional_medicare_tax": 381.1499938964844
+      }
+    },
+    {
+      "axiom": 0.009,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/additional_medicare_tax_pipeline#input.no_foreign_system_exclusive_se_income": true,
+        "us:policies/income_tax/additional_medicare_tax_pipeline#input.wages": 200001,
+        "us:policies/income_tax/self_employment_tax_pipeline#relation.self_employed_individual_of_tax_unit": [
+          {
+            "us:policies/income_tax/self_employment_tax_pipeline#input.gross_self_employment_profit": -10000,
+            "us:statutes/26/1402/b#input.agreement_under_social_security_act_section_233_provides_for_individual": false,
+            "us:statutes/26/1402/b#input.individual_is_nonresident_alien": false,
+            "us:statutes/26/1402/b#input.individual_is_not_united_states_citizen_and_resident_of_puerto_rico_virgin_islands_guam_or_american_samoa": false,
+            "us:statutes/26/1402/b#input.wages_paid_to_individual_during_taxable_year_for_section_1401_a": 200001
+          }
+        ],
+        "us:statutes/26/3101/b/2#input.filing_status": 0
+      },
+      "case_id": "amt-self-employment-loss-has-no-negative-se-base",
+      "concept": "us:policies/income_tax/additional_medicare_tax_pipeline#federal_additional_medicare_tax",
+      "difference": 3.8743019036002746e-10,
+      "filing_status": "single",
+      "inputs": {
+        "primary_wages": 200001,
+        "self_employment_income": -10000,
+        "spouse_self_employment_income": 0,
+        "spouse_wages": 0
+      },
+      "match": true,
+      "policyengine": 0.008999999612569809,
+      "policyengine_components": {
+        "additional_medicare_tax": 0.008999999612569809
       }
     }
   ],
@@ -207,7 +635,7 @@
       "output": "us:policies/income_tax/additional_medicare_tax_pipeline#federal_additional_medicare_tax"
     },
     "policyengine": {
-      "boundary": "TaxUnit Additional Medicare Tax restricted to zero self-employment income, where the public total equals the section 3101(b)(2) wage-only amount",
+      "boundary": "TaxUnit combined sections 3101(b)(2) and 1401(b)(2) Additional Medicare Tax, restricted to the section 1401(c) ordinary domain",
       "diagnostic_outputs": [],
       "outputs": [
         "additional_medicare_tax"
@@ -216,13 +644,18 @@
   },
   "engines": {
     "left": "axiom",
-    "right": "policyengine"
+    "right": "policyengine",
+    "versions": {
+      "policyengine": "4.18.9",
+      "policyengine_core": "3.30.3",
+      "policyengine_us": "1.767.3"
+    }
   },
   "mismatches": [],
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-25T15:23:03Z",
+    "generated_at": "2026-07-28T03:33:51Z",
     "generated_by": "scripts/run_comparison.py::us-additional-medicare-grid",
     "oracle": {
       "name": "policyengine",
@@ -233,7 +666,7 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": "3373e8411f7e141fd50879e3de964386f606f7f6"
+        "sha": "dcbae4344c522b4ad8004169316266cbc153186f"
       }
     ],
     "run_kind": "manual",
@@ -243,7 +676,7 @@
   "suite": "us-additional-medicare-grid",
   "summary": {
     "axiom_vs_policyengine_match_rate": 100.0,
-    "comparison_count": 5,
+    "comparison_count": 18,
     "dispositioned": {
       "counts": {
         "axiom_encoding_gap": 0,
@@ -262,7 +695,7 @@
     },
     "error_count": 0,
     "errors_by_engine": {},
-    "match_count": 5,
+    "match_count": 18,
     "mismatch_count": 0,
     "mismatches_by_concept": [],
     "mismatches_by_kind": [],
