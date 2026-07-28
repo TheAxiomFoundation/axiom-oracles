@@ -19,6 +19,10 @@
 - Verified live PR metadata and diff through the read-only GitHub connector.
 - Confirmed the local source branch and cached remote-tracking ref both resolve
   to the live PR head.
+- Independently reverified on resume that GitHub still reports open PR #422 at
+  head `f9fd1de2001247100b7d68db9ba59a23383fda05`, branch
+  `fed-parity/atomic0-mappings`, base `8b876f6fdea5551fb00d8a98ae33e22707e17c68`,
+  with one commit, one changed file, and 17 insertions.
 - Confirmed GitHub reports one commit, one changed file, and 17 insertions.
 - Created this disposable review worktree at the immutable source head.
 - Confirmed source head `f9fd1de2` has the PR base snapshot `8b876f6f` as its
