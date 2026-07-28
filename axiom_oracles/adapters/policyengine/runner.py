@@ -1043,11 +1043,16 @@ def _normalize_value_for_requested_period(
         return value
     definition_period = _policyengine_definition_period(pe, variable)
     if not definition_period:
-        raise RuntimeError(
-            "Could not determine the definition period of PolicyEngine "
-            f"variable {variable!r} for requested period {requested_period!r}; "
-            "refusing to serve the annual output-dataset value in its place"
-        )
+        if _policyengine_metadata_available(pe):
+            raise RuntimeError(
+                "Could not determine the definition period of PolicyEngine "
+                f"variable {variable!r} for requested period "
+                f"{requested_period!r}; refusing to serve the annual "
+                "output-dataset value in its place"
+            )
+        # Without PolicyEngine metadata (stub engines, metadata-less unit
+        # environments) no month semantics exist; outputs are year-shaped.
+        return value
     if definition_period.lower() != "month":
         return value
     if requested_value is _MISSING_REQUESTED_PERIOD_VALUE:
@@ -1124,6 +1129,23 @@ def _policyengine_definition_period(pe, variable: str) -> str:
     if variable in _MONTHLY_NUMERIC_OUTPUT_VARIABLES:
         return "month"
     return _policyengine_source_definition_period(variable)
+
+
+def _policyengine_metadata_available(pe) -> bool:
+    """Report whether any variable-metadata source exists for ``pe``.
+
+    True when the runner can interrogate definition periods at all — via the
+    engine's own model or the installed policyengine_us package. Stub engines
+    in metadata-less environments return False, and their outputs are treated
+    as year-shaped because no month semantics exist without metadata.
+    """
+    if getattr(getattr(pe, "us", None), "model", None) is not None:
+        return True
+    try:
+        import policyengine_us  # noqa: F401
+    except Exception:
+        return False
+    return True
 
 
 @lru_cache(maxsize=None)

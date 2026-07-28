@@ -100,6 +100,11 @@ def test_unknown_definition_period_fails_closed(monkeypatch) -> None:
         "_policyengine_variable_is_boolean",
         lambda pe, variable, value: False,
     )
+    monkeypatch.setattr(
+        runner_module,
+        "_policyengine_metadata_available",
+        lambda pe: True,
+    )
     with pytest.raises(RuntimeError, match="definition period"):
         runner_module._normalize_value_for_requested_period(
             object(),
@@ -116,4 +121,34 @@ def test_unknown_definition_period_fails_closed(monkeypatch) -> None:
             3648.0,
         )
         == 3648.0
+    )
+
+
+def test_metadata_less_stub_engines_stay_year_shaped(monkeypatch) -> None:
+    """Without any metadata source, outputs pass through as year-shaped."""
+    from axiom_oracles.adapters.policyengine import runner as runner_module
+
+    monkeypatch.setattr(
+        runner_module,
+        "_policyengine_definition_period",
+        lambda pe, variable: "",
+    )
+    monkeypatch.setattr(
+        runner_module,
+        "_policyengine_variable_is_boolean",
+        lambda pe, variable, value: False,
+    )
+    monkeypatch.setattr(
+        runner_module,
+        "_policyengine_metadata_available",
+        lambda pe: False,
+    )
+    assert (
+        runner_module._normalize_value_for_requested_period(
+            object(),
+            "income_tax",
+            "2026-05",
+            3820.0,
+        )
+        == 3820.0
     )
