@@ -750,10 +750,11 @@ residual), #229 (small-suite grounding).
   worktree directly from the requested head.
 - Created this committed review ledger before beginning substantive
   validation.
+- Saved the compact workflow context, 32-file inventory, and exact
+  cached-base-to-head diff under `/tmp`.
 
 ### Next
 
-- Save compact review context and exact base-to-head diff handoffs.
 - Independently validate every scored mapping against PolicyEngine-US 1.767.3,
   with special attention to the new Saver's Credit bridge mappings.
 - Determine whether threshold/rate-only Additional Medicare checks satisfy the
