@@ -714,3 +714,52 @@ residual), #229 (small-suite grounding).
 
 - None. Hand off the committed local branch and untracked worker report; do not
   push or write GitHub state.
+
+---
+
+## PR #417 round-2 blind review — 2026-07-28
+
+### State
+
+- Review state: in progress.
+- Disposable worktree:
+  `.git/review-worktrees/pr417-12dae249-round2-blind`.
+- Throwaway ledger branch: `review/pr417-12dae249-round2-blind`.
+- Reviewed object:
+  `12dae249aeb4765204e93d344c3ca400d36f70fe`.
+- The local PR branch and `origin/fed-parity/savers-addmed-grids` both resolve
+  to that exact object. The target is 10 commits ahead and zero behind the
+  locally cached `origin/main` object
+  `86be77210aa03da867a6103558cb57fe51a2ba55`.
+- Read-only GitHub and fetch attempts were blocked by sandbox DNS. No ref or
+  worktree changed as a result; live PR metadata will not be inferred from the
+  failure.
+- Review-only ledger/report commits are allowed on this throwaway branch.
+  Source files, the PR branch, remotes, the PR, and GitHub state must remain
+  untouched.
+- Tracked final output: `PR417-ROUND2-REVIEW.md`. The review workflow's full
+  and summary outputs will also be written under `/tmp`.
+
+### Done
+
+- Loaded the PolicyEngine review workflow and its subagent contract.
+- Inspected the original checkout before substantive work; it is clean on
+  `z1-wic-citation`.
+- Inspected the prior round-1 ledger and report.
+- Resolved the exact local head/base objects and created this isolated
+  worktree directly from the requested head.
+- Created this committed review ledger before beginning substantive
+  validation.
+
+### Next
+
+- Save compact review context and exact base-to-head diff handoffs.
+- Independently validate every scored mapping against PolicyEngine-US 1.767.3,
+  with special attention to the new Saver's Credit bridge mappings.
+- Determine whether threshold/rate-only Additional Medicare checks satisfy the
+  row's actual coverage contract and verify the suite's coverage disclosure.
+- Verify all boundary probes, exact-boundary dispositions, legal citations,
+  positive-SE threshold coverage, containment, scoreboard invariants, and the
+  complete generated-artifact check chain.
+- Consolidate independent findings into the tracked output report and required
+  `/tmp` full-report/summary files, then close this ledger.
