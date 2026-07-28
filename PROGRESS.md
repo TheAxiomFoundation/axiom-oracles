@@ -609,3 +609,50 @@ residual), #229 (small-suite grounding).
 
 - Open the PR from the current branch tip (this docs commit) and land it after
   a final confirmation pass.
+
+---
+
+## PR #417 repair round 2 — savers + Additional Medicare grids — 2026-07-28
+
+### State
+
+- Branch: `fed-parity/savers-addmed-grids`; starting HEAD
+  `3f59d6b596d6af3817b526bd50db9abdacb9c811`.
+- Defensive correctness/completeness audit of the round-1 suite construction.
+- Local `origin/main` is `86be77210aa03da867a6103558cb57fe51a2ba55`;
+  the branch is 47 commits behind and 4 commits ahead.
+- Required constraints: local commits only, no push or GitHub writes,
+  `WORKER-REPORT.md` remains untracked, and this ledger remains tracked.
+- Review read in full:
+  `.git/review-worktrees/pr417-3f59d6b5-adversarial/PR417-REVIEW.md`.
+- The review independently confirmed all 11 Saver's Credit dispositions and
+  all 18 existing Additional Medicare numeric results; repairs concern honest
+  comparable-only construction, legal citation, boundary completeness,
+  self-employment threshold coverage, merge hygiene, and generated artifacts.
+
+### Done
+
+- Inspected the requested worktree, active branch, remotes, HEAD, merge base,
+  dirty files, and worktree registry before editing.
+- Preserved the pre-existing untracked `WORKER-REPORT.md` for later replacement
+  with the required round-2 audit.
+- Restored the tracked historical ledger after the prior uncommitted round-1
+  handoff had replaced it with a short file.
+- Attempted the required `git fetch origin main`; sandbox DNS blocked access
+  to `github.com`. No ref or worktree state changed. All subsequent merge
+  work will use the exact local `origin/main` SHA recorded above.
+
+### Next
+
+- Commit this initial round-2 ledger.
+- Merge the current local `origin/main`, resolving generated artifacts by
+  regeneration.
+- Verify PolicyEngine-US 1.767.3 variable existence, entity, period, and legal
+  quantity for every Saver's Credit pipeline output.
+- Add honest mappings and a comparable-only grid invariant; remove every
+  non-comparable Additional Medicare money output from comparison.
+- Correct section 25B(e), add all nine below-boundary probes, and add positive
+  self-employment cases on both sides of every filing-status threshold,
+  including wage-reduced variants.
+- Regenerate both suites and the full derived chain, audit row containment, run
+  the full checks/tests, and obtain an independent defensive review.
