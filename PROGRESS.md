@@ -630,6 +630,7 @@ residual), #229 (small-suite grounding).
   corroborated the exact head, passing `test` and `gettsim-live` checks, and
   the current GitHub merge state `DIRTY` / `CONFLICTING`; the live endpoint is
   intermittent in this sandbox and the primary agent's repeat query failed.
+  The reason for GitHub's conflict state was not established.
 - Review-only artifacts may be committed on this throwaway branch. No source,
   PR-branch, remote, or GitHub writes are permitted.
 - Current review verdict is `REQUEST-CHANGES`: both gridded legal outputs fail
@@ -679,11 +680,25 @@ residual), #229 (small-suite grounding).
   `826062ec24bb4b9a664aadfce6d7b30db2b22c7df5be046b2c5e2b9eb91b742c`.
 - Confirmed both reports' engines blocks attest `policyengine` 4.18.9,
   `policyengine-us` 1.767.3, and `policyengine-core` 3.30.3.
+- Semantically compared all 148 US-PE rows and confirmed exactly the two
+  claimed rows change. Confirmed covered 33 to 34, with
+  `unexplained_total=441` and `axiom_attributed_open=243` unchanged and solely
+  attributable to the CA SNAP row.
+- Verified report/disposition containment, no target-diff `WORKER-REPORT` or
+  `PROGRESS.md`, clean target whitespace/object integrity, every committed
+  chain/check gate, and Ruff.
+- Completed full local pytest: 2,270 passed, 70 skipped, and one sandbox DNS
+  failure when `npx` attempted to download `esbuild`. The exact-head GitHub
+  `test` and `gettsim-live` checks passed.
+- Drafted `PR417-REVIEW.md` with `VERDICT: REQUEST-CHANGES` and subjected it to
+  an independent fact/coverage review. Corrections were incorporated for
+  positive-SE threshold coverage, finding severity, and the uncertain cause
+  of GitHub's reported conflict state.
 
 ### Next
 
-- Finish the chain, full-test, containment, and hygiene audit.
-- Consolidate all findings and evidence into the required full report, short
-  summary, and tracked final output file.
-- Commit the final ledger/report step without touching the PR branch or any
-  remote.
+- Commit the finalized report and ledger on this throwaway branch.
+- Copy the final report and short summary to the review workflow's `/tmp`
+  output paths.
+- Hand the request-changes findings to the user; no PR-branch, remote, PR, or
+  GitHub write is authorized.
