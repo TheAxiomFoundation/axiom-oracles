@@ -709,10 +709,15 @@ residual), #229 (small-suite grounding).
   Its disposition block now records 243 existing Axiom encoding gaps, 325
   bridge artifacts, 20 upstream engine gaps, no expired/orphaned entry, and
   exactly 96 unexplained rows.
+- The US grid, affected map, and vacuous gate were already current after the
+  report merge. Regenerated the dated scoreboard snapshot; only the US-PE
+  detail/scoreboard mirrors and 2026-07-28 US-PE history changed. The CA SNAP
+  scoreboard row now carries 96 unexplained, 243 Axiom-attributed, 20
+  oracle-attributed, and 325 bridge rows.
 
 ### Next
 
-- Regenerate the required generated-data chain, audit that no other suite file
-  changed, then run all `--check` parity gates.
+- Regenerate the ratchet, burn-down, and overview; audit that no other suite
+  file changed, then run all chain members in `--check` mode.
 - Complete the untracked worker report with the 441-to-96 result, class-level
   evidence, unresolved attempts, and draft issue text.
