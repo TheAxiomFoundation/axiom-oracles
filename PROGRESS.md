@@ -786,9 +786,33 @@ residual), #229 (small-suite grounding).
   vacuous gate has 136 oracle-backed configs / 215 suites / 34 executable
   surfaces; scoreboard has 4 jurisdictions / 3 conformant; ratchet has no
   regression; burn-down has 4 series / 53 points; overview has 216 reports.
+- Byte-level and structural assertions against `origin/main` pass: the
+  Additional Medicare config, 5/5 report, source row block, canonical detail
+  object, and served detail object are identical; exactly
+  `us-pe:savers_credit` changes in the source and detail row sets.
+- Confirmed the sole row effect is Saver's Credit `uncovered` to `covered`.
+  The US scoreboard is 33 to 34 covered; unexplained, Axiom-attributed-open,
+  and bridge-artifact totals are unchanged. Oracle-attributed increases by the
+  same 11 reviewed Saver #9151 dispositions.
+- The final `origin/main..HEAD` diff contains 23 paths and zero Additional
+  Medicare paths. It is confined to Saver source/evidence, shared regenerated
+  artifacts, the shared generator/tests, `conformance/us-pe.yaml`, and this
+  ledger.
+- Final focused validation passes: 229 tests with 3 skips across the federal
+  generator, conformance, affected-map, case-grid, and Saver bridge suites.
+  Ruff and `git diff --check` pass. Conformance-universe checks pass for UK and
+  BE and cleanly no-op for mismatched local UK-PE/US-PE checkouts; all 23 BE
+  covered compositions pass.
+- Independent read-only final review at `8f2d8fc1` returned APPROVE with no
+  actionable findings. It independently reconfirmed the byte-identical
+  Additional Medicare surfaces, Saver 34/23/11 evidence and exact selectors,
+  single-row/scoreboard effect, clean path scope, hold-branch SHA, and all
+  eight generated checks.
+- Replaced the stale mixed-expansion `WORKER-REPORT.md` with the requested
+  split report, including the follow-up design note. It remains intentionally
+  untracked and will be stamped with the closing ledger commit SHA.
 
 ### Next
 
-- Prove byte-level Additional Medicare restoration, savers-only row and
-  scoreboard effects, exact diff containment, and write the final untracked
-  worker report.
+- None. Hand off the committed local branch and untracked split report; do not
+  push or write GitHub state during the merge freeze.
