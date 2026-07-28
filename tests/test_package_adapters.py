@@ -176,6 +176,69 @@ def test_policyengine_runner_selects_each_side_of_october_snap_cola(
     ]
 
 
+def test_policyengine_requested_month_partitions_out_of_order_batch(
+    monkeypatch,
+) -> None:
+    captured_situations = []
+
+    class FakeSimulation:
+        tax_benefit_system = SimpleNamespace(
+            variables={"snap_min_allotment": _FakeVariable("month")}
+        )
+        populations = {
+            "spm_unit": SimpleNamespace(ids=["case_1__spm_unit", "case_0__spm_unit"]),
+        }
+
+        @staticmethod
+        def calculate(variable, period):
+            assert variable == "snap_min_allotment"
+            assert period == "2026-01"
+            return [24.0, 23.0]
+
+    def fake_simulation(situation):
+        captured_situations.append(situation)
+        return FakeSimulation()
+
+    monkeypatch.setattr(
+        policyengine_runner_module,
+        "_policyengine_us_simulation",
+        fake_simulation,
+    )
+    pe = _FakePolicyEngine("month")
+    cases = [
+        Case(
+            case_id=f"case-{index}",
+            period="2026-01",
+            entities=(
+                Entity(
+                    entity_id="head",
+                    kind="person",
+                    facts={Concepts.PERSON_AGE: 70},
+                ),
+            ),
+        )
+        for index in range(2)
+    ]
+
+    values = PolicyEngineRunner()._requested_period_values(
+        pe,
+        cases,
+        [
+            {"snap_min_allotment": 276.0},
+            {"snap_min_allotment": 288.0},
+        ],
+    )
+
+    assert values == [
+        {"snap_min_allotment": 23.0},
+        {"snap_min_allotment": 24.0},
+    ]
+    assert set(captured_situations[0]["marital_units"]) == {
+        "case_0__marital_unit",
+        "case_1__marital_unit",
+    }
+
+
 def test_policyengine_runner_fails_closed_when_requested_month_is_unavailable(
     monkeypatch,
 ) -> None:

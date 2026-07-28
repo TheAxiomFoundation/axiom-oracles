@@ -37,7 +37,11 @@ def test_policyengine_runner_uses_requested_month_across_october_snap_cola() -> 
 
         result = runner.run_cases(
             [case],
-            variables=["snap_min_allotment", "snap_max_allotment"],
+            variables=[
+                "snap_min_allotment",
+                "snap_max_allotment",
+                "snap_standard_deduction",
+            ],
         )[0]
         actual[period] = result.values
 
@@ -48,8 +52,30 @@ def test_policyengine_runner_uses_requested_month_across_october_snap_cola() -> 
         assert result.values["snap_max_allotment"] == pytest.approx(
             period_expected["snap_max_allotment"]
         )
+        if period == "2026-01":
+            assert result.values["snap_standard_deduction"] == pytest.approx(209.0)
 
     assert actual["2026-01"] != actual["2026-10"]
     calendar_average = 287.68316650390625 / 12
     assert actual["2026-01"]["snap_min_allotment"] != pytest.approx(calendar_average)
     assert actual["2026-10"]["snap_min_allotment"] != pytest.approx(calendar_average)
+
+    alaska_case = Case(
+        case_id="snap-alaska-2026-01",
+        period="2026-01",
+        facts={Concepts.STATE_CODE: "AK"},
+        entities=(
+            Entity(
+                entity_id="head",
+                kind="person",
+                facts={Concepts.PERSON_AGE: 70},
+            ),
+        ),
+    )
+    alaska_result = runner.run_cases(
+        [alaska_case],
+        variables=["snap_min_allotment", "snap_max_allotment"],
+    )[0]
+
+    assert alaska_result.values["snap_min_allotment"] == pytest.approx(30.8)
+    assert alaska_result.values["snap_max_allotment"] == pytest.approx(385.0)

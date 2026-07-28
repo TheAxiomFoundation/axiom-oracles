@@ -378,11 +378,11 @@ class PolicyEngineRunner(EngineAdapter):
             people[person_name] = person_inputs
 
         household_inputs = {"members": person_names}
+        state_code = case.fact(Concepts.STATE_CODE)
+        if state_code is not None:
+            household_inputs["state_code"] = {year: str(state_code)}
         scope_inputs = _scope_inputs_for_variables(case, variables)
         if scope_inputs:
-            state_code = case.fact(Concepts.STATE_CODE)
-            if state_code is not None:
-                household_inputs["state_code"] = {year: str(state_code)}
             for variable, value in scope_inputs.items():
                 household_inputs[variable] = {year: value}
 
@@ -688,11 +688,23 @@ class PolicyEngineRunner(EngineAdapter):
 
         import numpy as np
 
+        case_indices_by_entity: dict[str, list[list[int]]] = {}
         for variable in candidates:
-            definition = _simulation_variable_definition(simulation, variable)
-            definition_period = str(
-                getattr(definition, "definition_period", "")
-            ).lower()
+            try:
+                definition = _simulation_variable_definition(simulation, variable)
+                definition_period = str(
+                    getattr(definition, "definition_period", "")
+                ).lower()
+                entity = _simulation_variable_entity(definition)
+                if not entity:
+                    entity = _variable_entity(pe, variable)
+            except Exception as exc:
+                raise RuntimeError(
+                    "PolicyEngine could not inspect month-defined variable "
+                    f"{variable!r} for requested period {requested_period!r}; "
+                    "refusing to derive it from the annual output-dataset sum"
+                ) from exc
+
             if definition_period == "year":
                 continue
             if definition_period != "month":
@@ -700,9 +712,6 @@ class PolicyEngineRunner(EngineAdapter):
                 if fallback_period != "month":
                     continue
 
-            entity = _simulation_variable_entity(definition)
-            if not entity:
-                entity = _variable_entity(pe, variable)
             try:
                 raw_values = np.asarray(
                     simulation.calculate(variable, period=requested_period)
@@ -724,13 +733,21 @@ class PolicyEngineRunner(EngineAdapter):
                     f"population has {len(entity_ids)} entities"
                 )
 
-            for case_index, _case in enumerate(cases):
-                prefix = f"case_{case_index}__"
-                indices = [
-                    index
-                    for index, entity_id in enumerate(entity_ids)
-                    if entity_id.startswith(prefix)
-                ]
+            if entity not in case_indices_by_entity:
+                case_indices = [[] for _case in cases]
+                for entity_index, entity_id in enumerate(entity_ids):
+                    prefix, separator, _original_id = entity_id.partition("__")
+                    if not separator or not prefix.startswith("case_"):
+                        continue
+                    try:
+                        case_index = int(prefix.removeprefix("case_"))
+                    except ValueError:
+                        continue
+                    if 0 <= case_index < len(cases):
+                        case_indices[case_index].append(entity_index)
+                case_indices_by_entity[entity] = case_indices
+
+            for case_index, indices in enumerate(case_indices_by_entity[entity]):
                 if not indices:
                     raise RuntimeError(
                         "PolicyEngine returned no "
@@ -1095,13 +1112,34 @@ def _policyengine_definition_period(pe, variable: str) -> str:
     definition_period = getattr(variable_definition, "definition_period", None)
     if definition_period is not None:
         return str(definition_period).lower()
+    native_definition_period = _policyengine_native_definition_period(variable)
+    if native_definition_period:
+        return native_definition_period
     if variable in _MONTHLY_NUMERIC_OUTPUT_VARIABLES:
         return "month"
     return _policyengine_source_definition_period(variable)
 
 
 @lru_cache(maxsize=None)
+def _policyengine_native_definition_period(variable: str) -> str:
+    try:
+        from policyengine_us.system import system as pe_us_system
+    except Exception:
+        return ""
+
+    variable_definition = pe_us_system.variables.get(variable)
+    definition_period = getattr(variable_definition, "definition_period", None)
+    if definition_period is None:
+        return ""
+    return str(definition_period).lower()
+
+
+@lru_cache(maxsize=None)
 def _policyengine_source_definition_period(variable: str) -> str:
+    native_definition_period = _policyengine_native_definition_period(variable)
+    if native_definition_period:
+        return native_definition_period
+
     try:
         import importlib
         import pkgutil
