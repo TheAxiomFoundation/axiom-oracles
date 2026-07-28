@@ -80,11 +80,44 @@
   `period: year`, `comparison: boolean`, omitted entity/unit, and comparable
   parameter target are appropriate for a global bool/year leaf feeding a
   TaxUnit/year rule. Full registry validation returns zero issues.
+- Reproduced the exact workflow-pinned changed-file coverage gate against
+  RuleSpec head `3f933cd935e68cb1cdd50a254ab449aeabe2d468`, with this PR
+  worktree first on `PYTHONPATH`. The workflow selected 14 outputs across the
+  changed section 63(c), 63(c)(6), and 67(h) files: 13 were
+  `known_not_comparable`, one was `comparable`, no changed file was absent,
+  and there were zero unmapped, pending, incomplete, or untested-comparable
+  failures. The target section 63(c)(6) item is `known_not_comparable`,
+  references `separate_filer_itemizes`, and has five companion outputs; the
+  section 67(h) item is `comparable`, targets
+  `gov.irs.deductions.itemized.misc.applies`, and has one companion output.
+- Independently invoked the coverage builder directly on the supplied
+  RuleSpec worktree. It returned the same target classifications and
+  `tested: true` values (`test_output_count` 5 and 1 respectively).
+- Rechecked containment from the immutable PR parent to head: only
+  `axiom_oracles/bridges/mappings/us.yaml` changes, with 17 insertions and no
+  whitespace errors.
+- Parsed the PR YAML successfully. Its `mappings` list has 4,410 records,
+  including 4,409 exact `legal_id` records and one prefix record; the exact-ID
+  counter has zero duplicates and each new target occurs exactly once. The
+  registry loads each new target as an exact mapping and validates with zero
+  issues.
+- Ran the exact-mapping-set selection against the supplied atomic RuleSpec
+  checkout: 28 passed and two skipped. Against the ambient RuleSpec checkout,
+  the four known CA/IL/NY/OH exact-set assertions fail identically on the PR
+  worktree and detached clean main. For the explicit baseline run, restored
+  only `us.yaml` from source parent `f9fd1de2^`, ran the four assertions, and
+  restored the file from review `HEAD` through an exit trap; no stash was used.
+  The restored PR blob equals both review `HEAD` and immutable source head,
+  while the clean-main file equals clean-main `HEAD`; both worktrees are clean.
+- The default local axiom-encode entry point initially failed before
+  classification because its environment lacked `receipt`. An existing
+  receipt-equipped environment, with the exact workflow encoder source and
+  this PR source forced through `PYTHONPATH`, completed the gate successfully.
+  Temporary regular-directory checkout simulations were removed. This was an
+  environment limitation, not a gate failure.
 
 ## Next
 
-1. Run the changed-file coverage gate against the specified RuleSpec worktree.
-2. Verify YAML, duplicate IDs, diff containment, and the clean-main failure
-   baseline without using the shared stash.
-3. Write and commit `REVIEW-REPORT.md`, update this ledger, and report the
-   verdict without writing to the PR branch, remotes, or GitHub.
+1. Write and commit `REVIEW-REPORT.md`.
+2. Mark this ledger complete and report the verdict without writing to the PR
+   branch, remotes, or GitHub.
