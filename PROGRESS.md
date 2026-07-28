@@ -619,8 +619,10 @@ residual), #229 (small-suite grounding).
 - Branch: `fed-parity/savers-addmed-grids`; starting HEAD
   `3f59d6b596d6af3817b526bd50db9abdacb9c811`.
 - Defensive correctness/completeness audit of the round-1 suite construction.
-- Local `origin/main` is `86be77210aa03da867a6103558cb57fe51a2ba55`;
-  the branch is 47 commits behind and 4 commits ahead.
+- At audit start, local `origin/main` was
+  `86be77210aa03da867a6103558cb57fe51a2ba55` and the branch was 47 commits
+  behind / 4 ahead. That exact local ref is now merged and is an ancestor of
+  the repair tip.
 - Required constraints: local commits only, no push or GitHub writes,
   `WORKER-REPORT.md` remains untracked, and this ledger remains tracked.
 - Review read in full:
@@ -689,10 +691,26 @@ residual), #229 (small-suite grounding).
   coverage, and the headline scoreboard is byte-identical.
 - The committed-report comparable-only invariant now passes. Focused federal
   generator and conformance validation passes 105 tests with 3 skips.
-- Repository-wide search finds no remaining incorrect section 25B(d)(3)
-  add-back citation in tracked repair surfaces.
+- Repository-wide search finds no remaining obsolete add-back citation in
+  tracked repair surfaces.
+- Ruff passes repository-wide. The full pytest pass reached 2,283 passed / 72
+  skipped with one environment-only failure when `npx` attempted a blocked npm
+  download. Exposing the already cached exact `esbuild` binary made that sole
+  loader test pass offline, for 2,284 runnable tests validated in total; the
+  temporary ignored wrapper was removed.
+- An independent read-only defensive review returned APPROVE with no remaining
+  actionable findings after two wording cleanups. It reran 107 focused tests
+  (3 skipped), all eight generated checks, and confirmed that the selected
+  threshold exercises every required filing-status parameter cell without
+  redundant fixed-helper aggregates.
+- Replaced the stale round-1 `WORKER-REPORT.md` with the required round-2 case
+  inventory, PE-existence mapping evidence, divergence table, validation
+  record, and sandbox disclosures. It remains intentionally untracked.
+- Environment limitations are fully recorded in that report: GitHub/PyPI/npm
+  DNS failures, default uv-cache denial, and a rejected `/private/tmp` patch.
+  None changed tracked evidence or was treated as a substantive result.
 
 ### Next
 
-- Run the broader validation battery, obtain an independent defensive review,
-  repair any actionable findings, and finalize the untracked worker audit.
+- None. Hand off the committed local branch and untracked worker report; do not
+  push or write GitHub state.

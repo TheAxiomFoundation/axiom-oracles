@@ -5,7 +5,7 @@ Each invocation selects exactly one policy.  The selected policy's reviewed
 case grid is evaluated independently:
 
 * ``axiom`` reads the expected value from that policy's engine-verified
-  RuleSpec companion fixture; and
+  RuleSpec companion fixture plus any reviewed repo-owned extension; and
 * ``policyengine`` builds a fresh PolicyEngine-US ``Simulation`` at tax year
   2026 from the same case inputs.
 

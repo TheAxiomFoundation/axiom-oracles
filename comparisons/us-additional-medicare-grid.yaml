@@ -10,8 +10,9 @@
 # ordinary-domain attestation false, while PE exposes no equivalent guard. The
 # bridge schema cannot express this domain precondition. The isolated wage and
 # self-employment legs are also not comparable because PE exposes only its
-# combined tax. Accordingly, no money output is scored here; money-level parity
-# remains explicitly blocked until the registry can encode that precondition.
+# combined tax. Accordingly, no Additional Medicare Tax dollar result is
+# scored here; tax-dollar parity remains explicitly blocked until the registry
+# can encode that precondition.
 # Code: rulespec-us main@dcbae4344
 # us/policies/income_tax/additional_medicare_tax_pipeline.yaml:105-141,
 # 143-298,300-411.
