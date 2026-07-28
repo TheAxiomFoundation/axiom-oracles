@@ -636,6 +636,7 @@ residual), #229 (small-suite grounding).
 - Current review verdict is `REQUEST-CHANGES`: both gridded legal outputs fail
   the requested comparable-only invariant, and both suites have required
   domain-coverage gaps.
+- Review state: complete. The tracked final report is `PR417-REVIEW.md`.
 
 ### Done
 
@@ -694,11 +695,17 @@ residual), #229 (small-suite grounding).
   an independent fact/coverage review. Corrections were incorporated for
   positive-SE threshold coverage, finding severity, and the uncertain cause
   of GitHub's reported conflict state.
+- Wrote the byte-identical full-report output to
+  `/tmp/review-pr417-3f59d6b5-adversarial-review-full-report.md` and the short
+  output to
+  `/tmp/review-pr417-3f59d6b5-adversarial-review-summary.md`. The tracked and
+  `/tmp` full reports both have SHA-256
+  `d2137b5b923bb38bcbaa37038ba3d36327804eac3c0b54c3b44f74640a5bc207`.
 
 ### Next
 
-- Commit the finalized report and ledger on this throwaway branch.
-- Copy the final report and short summary to the review workflow's `/tmp`
-  output paths.
-- Hand the request-changes findings to the user; no PR-branch, remote, PR, or
-  GitHub write is authorized.
+- Hand the request-changes findings to the user.
+- Maintainers should address the comparable-only, citation, domain-coverage,
+  and reported-conflict findings, then request a new review at the new head.
+- No PR-branch, remote, PR, or GitHub write is authorized from this review
+  branch.
