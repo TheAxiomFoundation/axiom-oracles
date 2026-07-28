@@ -609,3 +609,35 @@ residual), #229 (small-suite grounding).
 
 - Open the PR from the current branch tip (this docs commit) and land it after
   a final confirmation pass.
+
+---
+
+## Issue #362 — decompose 441 `ca-snap-ecps` residuals — 2026-07-28
+
+### State
+
+- Branch: `triage/ca-snap-441`; starting from local `origin/main`
+  `43631d24c8e161ca1af36368a2b5abaa73c3a910`.
+- Scope is only the 441 honestly unexplained rows in the committed
+  `ca-snap-ecps` report.
+- Required oracle runtime: PolicyEngine-US 1.767.3. Evidence must be per case;
+  no blanket dispositioning and no regeneration on another engine version.
+- `WORKER-REPORT.md` will remain untracked. This ledger is tracked and will be
+  updated and committed after each coherent step.
+
+### Done
+
+- Created an isolated worktree from `origin/main` on the requested branch.
+- Confirmed the pre-analysis starting point and preserved the existing shared
+  progress history.
+
+### Next
+
+- Locate and validate the committed report, config, prior `5a747cac` triage,
+  bridge context, and generated-chain commands.
+- Partition all 441 rows by eligibility direction, benefit direction, and
+  household shape; record the class table before attribution.
+- Run live PolicyEngine-US 1.767.3 traces for at least
+  `max(10, ceil(class_size * 10%))` representative households in every class.
+- Apply only per-case-supported dispositions, regenerate the required chain,
+  run all `--check` parity gates, and report the exact before/after count.
