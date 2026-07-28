@@ -609,3 +609,136 @@ residual), #229 (small-suite grounding).
 
 - Open the PR from the current branch tip (this docs commit) and land it after
   a final confirmation pass.
+
+---
+
+## Issue #362 — decompose 441 `ca-snap-ecps` residuals — 2026-07-28
+
+### State
+
+- Branch: `triage/ca-snap-441`; starting from local `origin/main`
+  `43631d24c8e161ca1af36368a2b5abaa73c3a910`.
+- Scope is only the 441 honestly unexplained rows in the committed
+  `ca-snap-ecps` report.
+- Required oracle runtime: PolicyEngine-US 1.767.3. Evidence must be per case;
+  no blanket dispositioning and no regeneration on another engine version.
+- `WORKER-REPORT.md` will remain untracked. This ledger is tracked and will be
+  updated and committed after each coherent step.
+
+### Done
+
+- Created an isolated worktree from `origin/main` on the requested branch.
+- Confirmed the pre-analysis starting point and preserved the existing shared
+  progress history.
+- Located the complete committed evidence surface: 684 mismatch rows in the
+  canonical report, 499 mismatching cases there, and 15 compact shards covering
+  all 7,101 cases.
+- Verified the starting accounting: 243 existing BBCE
+  `axiom_encoding_gap` rows and exactly 441 unexplained rows across 361
+  households (356 benefit, 69 eligibility-left-only, 16
+  eligibility-right-only).
+- Partitioned the residuals into 18 supported classes crossing eligibility
+  direction, benefit direction, and age-derived household shape. The shape
+  taxonomy uses only adult/minor counts; no family relationships are inferred.
+- Wrote the class table first in untracked `WORKER-REPORT.md`. The planned
+  trace covers all 361 residual households, which exceeds every attainable
+  10-percent-or-10-household class minimum.
+- Confirmed the committed report used PolicyEngine 4.18.9 /
+  PolicyEngine-US 1.752.2, while this issue requires live diagnostic traces on
+  1.767.3. The CA config is unpinned, so the suite will not be regenerated on
+  the diagnostic version.
+- Located a read-only cached overlay that imports the exact requested live
+  stack: PolicyEngine 4.18.9, PolicyEngine-US 1.767.3, and PolicyEngine Core
+  3.30.3.
+- Recovered the #397 proof standard from committed dispositions: one pinned
+  entry per case, baseline reproduction, differing input neutralized, continued
+  eligibility, and post-counterfactual SNAP within the suite's $7 tolerance.
+- Audited the generated chain and found a served-artifact hazard: the ignored
+  full report is absent, so the case emitter must not replace the existing
+  7,101-case shards with the 499-case canonical subset.
+- GitNexus MCP tools were unavailable. Direct web and `gh` issue reads also
+  failed under blocked network access; these failures changed no files.
+- Added a CA-only diagnostic tracer which requires PolicyEngine 4.18.9 /
+  PolicyEngine-US 1.767.3 / Core 3.30.3, reads the committed report and compact
+  evidence, and does not write suite artifacts.
+- Ran the requested live source-income and deduction traces for all 361
+  residual households (441 rows), exceeding every class sampling minimum.
+  The run also evaluated exact-household zero-self-employment, zero-TANF, and
+  joint zero-self-employment/zero-TANF counterfactuals.
+- Verified live eligibility parity with the committed PE side for all 361
+  households. Live benefit parity is exact for 284 households / 364 residual
+  rows; 77 households / 77 rows moved under the required 1.767.3 diagnostic
+  runtime and therefore cannot use live counterfactual output as proof of the
+  older committed amount without an independent case-level proof.
+- Extended the tracer with direct requested-month simulations. These reuse the
+  batch bridge's explicit-zero income surface and calculate January 2026
+  directly, instead of treating the calendar-year sum divided by 12 as January.
+  Across all 361 cases, direct-January gross income differs from the batch
+  annual average by at most $0.0053; parameter and allotment differences are
+  therefore isolated from source transport.
+- Wrote the exhaustive live trace to a temporary, uncommitted evidence artifact
+  (`sha256:286d28ac1307e2b44ac53eab9408d0726d9d4fe84576ec423feb6d5be6623992`).
+  Its exact-household evidence will be summarized in the untracked worker
+  report and pinned into each disposition that survives classification.
+- A first direct-month smoke attempt exposed that absent source facts were being
+  allowed to impute endogenous SSI; it produced no artifact and changed no repo
+  file. The tracer now explicitly mirrors the batch bridge's zero inputs, and
+  the exhaustive rerun completed successfully.
+- Replayed the Axiom deduction stack for every both-eligible benefit residual:
+  gross, standard and earned deductions, pre-shelter income, the $744
+  nonelderly shelter cap, net income, contribution, maximum, and minimum.
+  Dependent-care and child-support deductions are zero in both engines. Medical
+  and disability-status projection differences were dispositioned only where a
+  case-level Axiom counterfactual closed.
+- Classified and pinned 345 of the 441 rows: 325 `bridge_artifact` rows and 20
+  `upstream_engine_gap` rows. The bridge proofs cover the landed
+  self-employment projection, endogenous TANF transport, exact-January output,
+  three medical-input cases, and six generic-disability/shelter-cap cases.
+  The upstream rows are ten exact minor-only household repros of PE-US #9157.
+- Excluded three apparently closing income cases because a material medical or
+  shelter-cap difference could create an offsetting-error result. Kept all 77
+  benefit rows with live 1.767.3 baseline drift unclassified. In-memory
+  application validates 349 total disposition entries, no expired/orphaned
+  entry, and exactly 96 unexplained rows after the 345 new entries.
+- Added an issue-specific, fail-closed disposition builder. It regenerates the
+  345 entries from the exhaustive trace, validates pinned baselines and input
+  alignment, rejects deduction confounds, and passes idempotent `--check`.
+  The disposition schema suite passes 19 tests.
+- Applied the committed dispositions. The only stale report in the pre-write
+  check was `ca-snap-ecps`, and the writer changed only that canonical report.
+  Its disposition block now records 243 existing Axiom encoding gaps, 325
+  bridge artifacts, 20 upstream engine gaps, no expired/orphaned entry, and
+  exactly 96 unexplained rows.
+- The US grid, affected map, and vacuous gate were already current after the
+  report merge. Regenerated the dated scoreboard snapshot; only the US-PE
+  detail/scoreboard mirrors and 2026-07-28 US-PE history changed. The CA SNAP
+  scoreboard row now carries 96 unexplained, 243 Axiom-attributed, 20
+  oracle-attributed, and 325 bridge rows.
+- The conformance ratchet remained current with no invariant regression.
+  Regenerated the burn-down; only the US-PE 2026-07-28 point changed, from 441
+  to 96 unexplained (gap 778 to 433).
+- Regenerated the browser-served overview from 215 reports so its embedded CA
+  report carries the same disposition block. No other suite report changed.
+- The CA served-disposition check found that its artifact had never been
+  committed. Emitted the safe YAML-derived artifact only (349 entries). The
+  case emitter remains deliberately skipped because the ignored full report is
+  absent and emitting from the 499-case canonical mismatch subset would
+  truncate the existing 7,101-case shards.
+- Completed the full check chain: 83 disposition files; current US grids;
+  affected map 171 suites / 180 edges; vacuous gate 135 configs / 214 suites /
+  34 executable surfaces; scoreboard 4 jurisdictions / 3 conformant; ratchet
+  no regression; burn-down 4 series / 53 points; overview 215 reports; served
+  CA dispositions 349 entries with exact YAML parity.
+- Ran the focused generated-data validation suite: 296 passed, 3 skipped.
+  Final scope audit finds no other suite report in the branch diff and no
+  whitespace error.
+- Completed untracked `WORKER-REPORT.md` with the first-table class partition,
+  exhaustive evidence, 441-to-96 accounting, all remaining case IDs and probes,
+  draft bridge/PE text, validation, and sandbox disclosures.
+
+### Next
+
+- Hand off the committed local branch and untracked worker report. Do not push
+  or write to GitHub.
+- Complete the untracked worker report with the 441-to-96 result, class-level
+  evidence, unresolved attempts, and draft issue text.
