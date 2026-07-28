@@ -13,6 +13,50 @@ def test_ohio_bounded_income_tax_schedule_is_classified() -> None:
     ) == ("state_income_tax", "OH")
 
 
+def test_arkansas_person_schedule_component_is_classified() -> None:
+    assert classify(
+        "us-ar/policies/income_tax/pilot_liability_pipeline.yaml"
+    ) == ("state_income_tax", "AR")
+
+
+def test_arkansas_person_schedule_surface_is_executable() -> None:
+    coverage = json.loads(
+        (
+            REPO_ROOT / "dashboard/public/data/coverage_overview.json"
+        ).read_text()
+    )
+    matches = [
+        entry
+        for entry in coverage["axiom"]["programs"]
+        if entry.get("program") == "state_income_tax"
+        and entry.get("jurisdiction") == "AR"
+    ]
+
+    assert matches == [
+        {
+            "program": "state_income_tax",
+            "jurisdiction": "AR",
+            "status": "executable",
+            "source": (
+                "rulespec-us "
+                "6c58962f3de57a4dd26737c88767de728d230603 + pinned "
+                "Populace campaign projected as ar-income-tax-populace over "
+                "the canonical Arkansas Act 2 of 2026 section 1 individual "
+                "schedule component before nonrefundable credits"
+            ),
+            "known_non_tanf_gaps": [
+                "bounded Person-grain component only; caller supplies "
+                "completed Arkansas individual taxable income and comparison "
+                "sums each side to TaxUnit only for Populace accounting",
+                "taxable-income construction, filing-unit aggregation or "
+                "method selection, low-income tables, credits, payments, and "
+                "final liability remain out of scope",
+            ],
+            "suite": "ar-income-tax-populace",
+        }
+    ]
+
+
 def test_california_bhst_pilot_is_classified() -> None:
     assert classify(
         "us-ca/policies/income_tax/pilot_liability_pipeline.yaml"

@@ -47,6 +47,18 @@ _DESCRIPTION_BY_OUTPUT = {
         "unit in the pinned US Populace"
     ),
     (
+        "us-ar:policies/income_tax/pilot_liability_pipeline"
+        "#ar_pit_pilot_income_tax_before_non_refundable_credits_indiv"
+    ): (
+        "Arkansas Act 2 of 2026 section 1 individual schedule component before "
+        "nonrefundable credits, computed from caller-supplied completed "
+        "Arkansas individual taxable income at Person grain and summed to "
+        "TaxUnit only for comparison accounting over every routed tax unit and "
+        "linked person in the pinned US Populace; this bounded suite excludes "
+        "taxable-income construction, filing-unit aggregation or method "
+        "selection, low-income tables, credits, payments, and final liability"
+    ),
+    (
         "us-ct:policies/income_tax/"
         "2026_resident_ordinary_tax_before_personal_credit"
         "#ct_pit_2026_resident_ordinary_tax_before_personal_credit"
