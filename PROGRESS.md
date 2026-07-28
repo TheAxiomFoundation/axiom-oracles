@@ -816,3 +816,51 @@ residual), #229 (small-suite grounding).
 
 - None. Hand off the committed local branch and untracked split report; do not
   push or write GitHub state during the merge freeze.
+
+---
+
+## PR #417 round-3 confirmation — 2026-07-28
+
+### State
+
+- Review state: in progress.
+- Current verdict: pending.
+- Disposable worktree:
+  `.git/review-worktrees/pr417-94c8b7a9-round3-confirm`.
+- Throwaway ledger branch: `review/pr417-94c8b7a9-round3-confirm`.
+- Reviewed object:
+  `94c8b7a96376fd6a25765d9b92bd15f6ba11b6dd`.
+- Cached comparison base:
+  `origin/main` at `86be77210aa03da867a6103558cb57fe51a2ba55`.
+  The target is 14 commits ahead and zero behind that object.
+- A required read-only `git fetch origin main` attempt failed because sandbox
+  DNS could not resolve `github.com`; no remote, PR, or source state changed.
+- Scope is limited to confirming the Additional Medicare rollback, Saver's
+  Credit preservation, exact row/scoreboard effects, and the generated
+  `--check` chain.
+- Review-only ledger/report commits are allowed on this throwaway branch.
+  Source files, the PR branch, remotes, the PR, and GitHub state must remain
+  untouched.
+- Tracked final output: `REVIEW-REPORT.md`. The review workflow's full and
+  summary handoffs will also be written under `/tmp`.
+
+### Done
+
+- Loaded the mandatory PolicyEngine PR-review workflow and its subagent
+  contract.
+- Inspected the original checkout before substantive work; it is clean on
+  `z1-wic-citation`.
+- Resolved the exact requested head, prior-round object, cached base, merge
+  base, ahead/behind counts, remotes, and existing worktree registry.
+- Inspected the prior round-2 ledger and complete blocking report.
+- Created this isolated review worktree directly from the requested object.
+- Created this review ledger before substantive validation.
+
+### Next
+
+- Confirm zero Additional Medicare paths and byte-identical base surfaces.
+- Diff all Saver's Credit surfaces against round 2 and allow only mechanical
+  regeneration effects.
+- Prove the exact single-row and 33-to-34 scoreboard effects.
+- Run the complete generated-artifact `--check` chain and consolidate the
+  verdict.
