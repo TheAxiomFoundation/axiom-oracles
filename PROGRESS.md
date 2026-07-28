@@ -8,7 +8,8 @@
   `102b4edd5875fbe5e856daea0fafa9708a37003b`.
 - Merge base with locally cached `origin/main`:
   `86be77210aa03da867a6103558cb57fe51a2ba55`.
-- Review status: in progress; no verdict yet.
+- Review status: in progress; blocking findings reproduced, with remaining
+  legal/parity checks still being completed.
 - All review writes are local detached-HEAD commits. The source worktree,
   target branch, remotes, and GitHub are untouched.
 - Final report path: `REVIEW-REPORT.md` in this review worktree.
@@ -24,15 +25,47 @@
   used and the limitation disclosed.
 - Created the required disposable review worktree under
   `.git/review-worktrees/` at the pinned commit.
+- Inventoried the complete 13-file target diff. It is confined to the expected
+  progress ledger, two evidence scripts, CA SNAP disposition/report artifacts,
+  and shared regenerated conformance/overview/history artifacts.
+- Read both committed evidence scripts completely and reconstructed all new
+  proof classes: 128 static self-employment-forward rows; 29 live
+  self-employment; 72 TANF; 27 self-employment plus TANF; 28 January; 27 January
+  plus TANF; five January plus self-employment plus TANF; three medical; six
+  disability/shelter-cap; and 20 upstream K–12 earnings rows.
+- Located an exact offline runtime: PolicyEngine 4.18.9, PolicyEngine-US
+  1.767.3, and PolicyEngine-Core 3.30.3.
+- Added read-only baseline and pre-merge worktrees under the review ledger.
+  Pointing the unchanged committed tracer at the original 441-row report and
+  the target's pre-merge runner independently regenerated all 361 households
+  and reproduced the worker's trace byte-for-byte at SHA-256
+  `286d28ac1307e2b44ac53eab9408d0726d9d4fe84576ec423feb6d5be6623992`.
+- Confirmed that the target builder reproduces all 345 YAML entries when
+  explicitly pointed at that original report and regenerated trace.
+- Reproduced a blocking committed-state machinery defect: the tracer now
+  selects only 91 households / 96 rows, and the builder with the valid trace
+  selects zero new rows then fails its expected-345 gate. The claimed
+  idempotent `--check` cannot run from the committed tree.
+- Confirmed that the final merge of the requested-month runner changed 286 live
+  baseline benefit amounts versus the pre-merge trace; only 75 of 361 now
+  exactly reproduce the old stamped report, while direct-January outputs remain
+  identical. The evidence scripts were not adapted after that merge.
+- Reproduced the largest-class counterfactual defect. Of 64 households labeled
+  solely as corrected-Axiom self-employment artifacts, only 46 close under live
+  PE zero-self-employment. Seven require TANF too, five require January too,
+  four require January plus TANF, and `ecps-59082` / `ecps-62506` do not close
+  under any of those interventions. Both retain a material
+  disability/shelter-cap divergence, so their four disposed rows fail the
+  required live-PE neutralization standard.
 
 ## Next
 
-1. Inventory the full merge-base diff and both committed evidence scripts.
-2. Reconstruct the 441-row universe and mutually exclusive claimed classes.
-3. Run stratified live PolicyEngine-US 1.767.3 counterfactuals, including
-   reviewer-random cases, then audit all upstream-gap repros and citations.
-4. Verify drift, unresolved rows, conservation, served parity, and every
-   relevant `--check` gate before writing the verdict.
+1. Finish the stratified counterfactual result table, including deterministic
+   reviewer-random cases from every proof class.
+2. Complete all upstream-gap repros and retained-corpus citation checks.
+3. Finish drift, unresolved-row, conservation, served-parity, and chain-gate
+   verification.
+4. Write and commit the final verdict report.
 
 ---
 
