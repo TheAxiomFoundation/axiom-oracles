@@ -436,6 +436,117 @@ def test_committed_indiana_populace_evidence_is_canonical_and_complete(
     assert second == first
 
 
+def test_committed_pennsylvania_populace_evidence_is_canonical_and_complete(
+    tmp_path,
+    monkeypatch,
+):
+    rulespec_sha = "ecb057ef35ab47fb055213b42459c42ae63485ef"
+    engine_sha = "68d65229632e371b96d8eb25c704c1977a2b7ed3"
+    executable_sha = (
+        "2e881f18dda64ae801d318a16c61525f50d094d83f5de71d330098696da9dd42"
+    )
+    concept = (
+        "us-pa:policies/income_tax/pilot_liability_pipeline"
+        "#pa_pit_pilot_income_tax_liability"
+    )
+    campaign_path = (
+        REPO_ROOT / "reports/state-tax-populace-pa-campaign-2026-07-27.json"
+    )
+    report_path = (
+        DASHBOARD_DATA / "axiom-policyengine-pa-income-tax-populace.json"
+    )
+    cases_path = DASHBOARD_DATA / "cases/pa-income-tax-populace"
+
+    campaign = json.loads(campaign_path.read_text())
+    state = campaign["comparison"]["states"]["PA"]
+    cases = state["cases"]
+    assert campaign["requested_states"] == ["PA"]
+    assert campaign["comparison"]["sample_size_per_state"] == 0
+    assert state["compared_count"] == 2_457
+    assert state["mismatch_count"] == 0
+    assert state["max_absolute_difference"] == 0.4159999992698431
+    assert state["tolerance"] == 1.0
+    assert state["relative_tolerance"] == 0.0
+    assert state["output"] == concept
+    # Comparison cases are cent-rounded, so nine positive sub-cent runtime
+    # outputs serialize as zero. The raw branch inventory below remains the
+    # authoritative proof of 118 exact-zero and 2,339 positive outputs.
+    assert sum(case["policyengine"] == 0 for case in cases) == 127
+    assert sum(case["policyengine"] > 0 for case in cases) == 2_330
+    assert all(case["matched"] for case in cases)
+    assert campaign["projection_diagnostics"]["PA"] == {
+        "compared_tax_unit_count": 2_457,
+        "negative_adjusted_taxable_income_count": 0,
+        "zero_adjusted_taxable_income_count": 118,
+        "positive_adjusted_taxable_income_count": 2_339,
+        "zero_output_count": 118,
+        "positive_output_count": 2_339,
+    }
+
+    runtime = campaign["runtime_provenance"]
+    assert runtime["rulespec"]["commit"] == rulespec_sha
+    assert runtime["rulespec"]["working_tree"] == "clean"
+    assert runtime["axiom_engine"]["commit"] == engine_sha
+    assert runtime["axiom_engine"]["executable_sha256"] == executable_sha
+    assert runtime["axiom_engine"]["working_tree"] == "clean"
+    assert runtime["packages"] == {
+        "policyengine": "4.18.9",
+        "policyengine-us": "1.752.2",
+    }
+
+    report = json.loads(report_path.read_text())
+    assert report["suite"] == "pa-income-tax-populace"
+    assert report["case_count"] == 2_457
+    assert report["summary"] == {
+        "comparison_count": 2_457,
+        "match_count": 2_457,
+        "match_rate": 100.0,
+        "mismatch_count": 0,
+    }
+    assert report["aggregates"][0]["concept"] == concept
+    description = report["aggregates"][0]["description"]
+    assert "3.07 percent rate" in description
+    assert "completed Pennsylvania adjusted taxable income" in description
+    assert "fails closed" in description
+    assert report["provenance"]["branch_diagnostics"] == (
+        campaign["projection_diagnostics"]["PA"]
+    )
+    assert report["provenance"]["rulespecs"] == [
+        {
+            "repo": "TheAxiomFoundation/rulespec-us",
+            "sha": rulespec_sha,
+        }
+    ]
+
+    index = json.loads((cases_path / "index.json").read_text())
+    chunks = [
+        json.loads((cases_path / f"chunk-{number}.json").read_text())
+        for number in range(index["chunks"])
+    ]
+    assert index["count"] == index["total_cases"] == 2_457
+    assert index["chunk_size"] == 500
+    assert [len(chunk) for chunk in chunks] == [500, 500, 500, 500, 457]
+    projected_cases = [case for chunk in chunks for case in chunk]
+    assert len({case["id"] for case in projected_cases}) == 2_457
+    assert [case["id"] for case in projected_cases] == [
+        case["tax_unit_id"] for case in cases
+    ]
+    assert all(case["r"] == 1.0 for case in projected_cases)
+
+    monkeypatch.setattr(emitter, "CASES_ROOT", tmp_path)
+    emitter.emit_case_chunks("PA", state)
+    first = {
+        path.name: hashlib.sha256(path.read_bytes()).hexdigest()
+        for path in sorted((tmp_path / "pa-income-tax-populace").iterdir())
+    }
+    emitter.emit_case_chunks("PA", state)
+    second = {
+        path.name: hashlib.sha256(path.read_bytes()).hexdigest()
+        for path in sorted((tmp_path / "pa-income-tax-populace").iterdir())
+    }
+    assert second == first
+
+
 def test_committed_kansas_populace_evidence_is_canonical_and_complete():
     rulespec_sha = "a0a3032ca9e25b6d7d6d6b92be3f9609d796d143"
     engine_sha = "ffd8213271947b0189a9dd61a055c1e0e78908a0"

@@ -369,6 +369,88 @@ def test_indiana_projection_diagnostics_require_exact_target_inventory() -> None
         )
 
 
+def test_pennsylvania_projection_diagnostics_pin_nonnegative_boundary_and_output() -> None:
+    slot = (
+        "us-pa:policies/income_tax/pilot_liability_pipeline#input."
+        "pa_pit_pilot_state_taxable_income"
+    )
+    routes = (
+        TaxUnitRoute(1, 1, "PA", "42", 1, DISPOSITION_READY),
+        TaxUnitRoute(2, 2, "PA", "42", 1, DISPOSITION_READY),
+        TaxUnitRoute(3, 3, "PA", "42", 1, DISPOSITION_READY),
+        TaxUnitRoute(4, 4, "PA", "42", 1, DISPOSITION_BLOCKED),
+    )
+
+    diagnostics = campaign._projection_branch_diagnostics(
+        {
+            "PA": {
+                slot: {
+                    1: 0.0,
+                    2: 100.0,
+                    3: 200.0,
+                    4: -1.0,
+                }
+            }
+        },
+        routes,
+        {
+            "PA": {
+                1: 0.0,
+                2: 3.07,
+                3: 6.14,
+                4: -0.0307,
+            }
+        },
+    )
+
+    assert diagnostics == {
+        "PA": {
+            "compared_tax_unit_count": 3,
+            "negative_adjusted_taxable_income_count": 0,
+            "zero_adjusted_taxable_income_count": 1,
+            "positive_adjusted_taxable_income_count": 2,
+            "zero_output_count": 1,
+            "positive_output_count": 2,
+        }
+    }
+
+
+def test_pennsylvania_projection_diagnostics_require_exact_target_inventory() -> None:
+    slot = (
+        "us-pa:policies/income_tax/pilot_liability_pipeline#input."
+        "pa_pit_pilot_state_taxable_income"
+    )
+    with pytest.raises(ValueError, match="target values"):
+        campaign._projection_branch_diagnostics(
+            {"PA": {slot: {1: 100.0}}},
+            (TaxUnitRoute(1, 1, "PA", "42", 1, DISPOSITION_READY),),
+        )
+
+
+@pytest.mark.parametrize(
+    ("taxable", "target", "message"),
+    [
+        (-1.0, 0.0, "nonnegative adjusted taxable income"),
+        (0.0, -1.0, "nonnegative before-forgiveness tax"),
+    ],
+)
+def test_pennsylvania_projection_diagnostics_reject_negative_values(
+    taxable,
+    target,
+    message,
+) -> None:
+    slot = (
+        "us-pa:policies/income_tax/pilot_liability_pipeline#input."
+        "pa_pit_pilot_state_taxable_income"
+    )
+    with pytest.raises(ValueError, match=message):
+        campaign._projection_branch_diagnostics(
+            {"PA": {slot: {1: taxable}}},
+            (TaxUnitRoute(1, 1, "PA", "42", 1, DISPOSITION_READY),),
+            {"PA": {1: target}},
+        )
+
+
 @pytest.mark.parametrize(
     ("taxable", "recapture", "message"),
     [

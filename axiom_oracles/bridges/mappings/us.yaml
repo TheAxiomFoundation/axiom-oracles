@@ -33634,6 +33634,32 @@ mappings:
     comparison: money
     rationale: Both outputs apply Indiana's tax-year-2026 2.95 percent state rate to completed Indiana adjusted gross income with a zero floor, before credits and excluding the separate county tax.
 
+  # Pennsylvania's bounded TY2026 resident tax before forgiveness. The
+  # completed-return adjusted-taxable-income input remains a caller boundary;
+  # these exact output mappings are promoted only with a runtime proof that the
+  # selected certified population stays in RuleSpec's nonnegative domain.
+  - legal_id: us-pa:policies/income_tax/pilot_liability_pipeline#pa_pit_pilot_taxable_income
+    country: us
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: pa_adjusted_taxable_income
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    rationale: On the reviewed nonnegative completed-return boundary, RuleSpec's taxable-income output and PolicyEngine's pa_adjusted_taxable_income expose the same Pennsylvania adjusted taxable income before tax forgiveness and credits.
+
+  - legal_id: us-pa:policies/income_tax/pilot_liability_pipeline#pa_pit_pilot_income_tax_liability
+    country: us
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: pa_income_tax_before_forgiveness
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    rationale: On the reviewed nonnegative completed-return boundary, both outputs apply Pennsylvania's tax-year-2026 3.07 percent rate to adjusted taxable income before tax forgiveness, credits, payments, or final annual liability.
+
   # Illinois's bounded TY2026 annual tax before nonrefundable credits.
   # The canonical module accepts completed Illinois taxable income and
   # investment-credit recapture boundaries; it does not reconstruct either
@@ -36027,6 +36053,12 @@ prefixes:
     mapping_type: not_comparable
     candidate_priority: P4
     rationale: PolicyEngine-US does not model OK agency policy manuals or state regulations at output granularity; comparable state outputs carry exact mappings which take precedence over this prefix.
+
+  - legal_id_prefix: "us-pa:"
+    country: us
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: PolicyEngine-US does not model PA agency policy manuals or state regulations at output granularity; comparable state outputs carry exact mappings which take precedence over this prefix.
 
   - legal_id_prefix: "us-sc:"
     country: us

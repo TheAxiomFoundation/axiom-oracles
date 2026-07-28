@@ -240,11 +240,22 @@
     "known_non_tanf_gaps": [
      "bounded AGI-tax surface only; caller supplies completed Indiana adjusted gross income",
      "adjusted-gross-income construction, county tax, credits, payments, and final annual liability remain out of scope"
-    ],
-    "suite": "in-income-tax-populace"
-   },
-   {
-    "program": "state_income_tax",
+   ],
+   "suite": "in-income-tax-populace"
+  },
+  {
+   "program": "state_income_tax",
+   "jurisdiction": "PA",
+   "status": "executable",
+   "source": "rulespec-us ecb057ef35ab47fb055213b42459c42ae63485ef + pinned Populace campaign projected as pa-income-tax-populace over the canonical bounded TY2026 resident income tax before forgiveness",
+   "known_non_tanf_gaps": [
+    "bounded before-forgiveness surface only; caller supplies completed Pennsylvania adjusted taxable income and the runtime requires every selected boundary to be nonnegative",
+    "adjusted-taxable-income construction, forgiveness, credits, payments, and final annual liability remain out of scope"
+   ],
+   "suite": "pa-income-tax-populace"
+  },
+  {
+   "program": "state_income_tax",
     "jurisdiction": "KY",
     "status": "executable",
     "source": "rulespec-us/us-ky/policies/income_tax/2026_krs_141_020_schedule_before_credits.yaml + axiom-policyengine-ky-income-tax-populace",

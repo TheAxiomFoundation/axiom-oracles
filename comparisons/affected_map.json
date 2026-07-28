@@ -946,6 +946,15 @@
       "source": "comparisons/pa-income-tax-liability.yaml"
     },
     {
+      "suite": "pa-income-tax-populace",
+      "name": null,
+      "report": "axiom-policyengine-pa-income-tax-populace.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/state-income-tax-populace.yaml"
+    },
+    {
       "suite": "pell-parameters",
       "name": null,
       "report": "axiom-policyengine-pell-parameters.json",

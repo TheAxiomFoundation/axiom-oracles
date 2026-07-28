@@ -93,6 +93,13 @@ suites:
   oracle: policyengine
   campaign_runner: scripts/run_state_tax_populace.py
   projector: scripts/emit_populace_campaign_artifacts.py
+- suite: pa-income-tax-populace
+  report: axiom-policyengine-pa-income-tax-populace.json
+  jurisdiction: PA
+  program: state_income_tax
+  oracle: policyengine
+  campaign_runner: scripts/run_state_tax_populace.py
+  projector: scripts/emit_populace_campaign_artifacts.py
 - suite: ut-income-tax-populace
   report: axiom-policyengine-ut-income-tax-populace.json
   jurisdiction: UT

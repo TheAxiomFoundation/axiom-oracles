@@ -144,6 +144,18 @@ _DESCRIPTION_BY_OUTPUT = {
         "payments, and final liability"
     ),
     (
+        "us-pa:policies/income_tax/pilot_liability_pipeline"
+        "#pa_pit_pilot_income_tax_liability"
+    ): (
+        "Pennsylvania resident income tax before forgiveness, computed by "
+        "applying the tax-year-2026 3.07 percent rate to caller-supplied "
+        "completed Pennsylvania adjusted taxable income over every routed tax "
+        "unit in the pinned US Populace; the runtime fails closed unless every "
+        "selected boundary is nonnegative, and this bounded suite excludes "
+        "adjusted-taxable-income construction, forgiveness, credits, payments, "
+        "and final annual liability"
+    ),
+    (
         "us-oh:policies/income_tax/pilot_liability_pipeline"
         "#oh_pit_pilot_schedule_tax"
     ): (
