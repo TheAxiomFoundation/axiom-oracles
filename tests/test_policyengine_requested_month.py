@@ -79,3 +79,41 @@ def test_policyengine_runner_uses_requested_month_across_october_snap_cola() -> 
 
     assert alaska_result.values["snap_min_allotment"] == pytest.approx(30.8)
     assert alaska_result.values["snap_max_allotment"] == pytest.approx(385.0)
+
+
+def test_unknown_definition_period_fails_closed(monkeypatch) -> None:
+    """An undetermined definition period must never serve the annual value.
+
+    With every lookup unavailable, a numeric variable requested for a month
+    previously fell through the != "month" branch and returned the annual
+    output-dataset sum (e.g. al_tanf 3,648 instead of 304).
+    """
+    from axiom_oracles.adapters.policyengine import runner as runner_module
+
+    monkeypatch.setattr(
+        runner_module,
+        "_policyengine_definition_period",
+        lambda pe, variable: "",
+    )
+    monkeypatch.setattr(
+        runner_module,
+        "_policyengine_variable_is_boolean",
+        lambda pe, variable, value: False,
+    )
+    with pytest.raises(RuntimeError, match="definition period"):
+        runner_module._normalize_value_for_requested_period(
+            object(),
+            "al_tanf",
+            "2026-01",
+            3648.0,
+        )
+    # A year request never consults the definition period and stays untouched.
+    assert (
+        runner_module._normalize_value_for_requested_period(
+            object(),
+            "al_tanf",
+            "2026",
+            3648.0,
+        )
+        == 3648.0
+    )

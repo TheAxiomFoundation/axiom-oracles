@@ -1042,6 +1042,12 @@ def _normalize_value_for_requested_period(
     ):
         return value
     definition_period = _policyengine_definition_period(pe, variable)
+    if not definition_period:
+        raise RuntimeError(
+            "Could not determine the definition period of PolicyEngine "
+            f"variable {variable!r} for requested period {requested_period!r}; "
+            "refusing to serve the annual output-dataset value in its place"
+        )
     if definition_period.lower() != "month":
         return value
     if requested_value is _MISSING_REQUESTED_PERIOD_VALUE:
