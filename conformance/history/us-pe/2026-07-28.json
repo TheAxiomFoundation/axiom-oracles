@@ -7,7 +7,7 @@
   "covered": 34,
   "covered_pct": 26.7717,
   "excluded": 21,
-  "unexplained_total": 441,
+  "unexplained_total": 96,
   "axiom_attributed_open": 243,
   "conformant": false
 }
