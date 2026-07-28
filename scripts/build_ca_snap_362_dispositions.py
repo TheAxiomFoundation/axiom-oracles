@@ -13,6 +13,7 @@ import copy
 import hashlib
 import json
 import math
+import subprocess
 import sys
 from decimal import Decimal, ROUND_HALF_UP
 from pathlib import Path
@@ -38,6 +39,7 @@ from scripts.trace_ca_snap_residuals import (  # noqa: E402
 
 CASE_DIR = ROOT / "dashboard/public/data/cases/ca-snap-ecps"
 DISPOSITIONS_PATH = ROOT / "dispositions/ca-snap-ecps.yaml"
+DISPOSITIONS_RELATIVE_PATH = "dispositions/ca-snap-ecps.yaml"
 
 BENEFIT_CONCEPT = "us:statutes/7/2014/u#snap_benefit"
 ELIGIBILITY_CONCEPT = "us:statutes/7/2014/o#snap_eligible"
@@ -170,6 +172,9 @@ EXPECTED_REMAINING_ROWS = 100
 EXPECTED_TRACE_SHA256 = (
     "c46af9b87c8f5ad01f1909bc45e80e00b4c4a50e5b802ea4ccbe194b5954b568"
 )
+BASE_DISPOSITIONS_SHA256 = (
+    "18cfbe28f951261142bfa3c52d0c88f6d0a3d53b77b597fcd807b4d2e9a23086"
+)
 
 EXPECTED_VERSION_CHANGED_CASES = _ids(
     """
@@ -211,6 +216,86 @@ def _load_trace(path: Path) -> dict[str, Any]:
     if not isinstance(trace, dict):
         raise ValueError("trace must be a JSON object")
     return trace
+
+
+def _load_base_dispositions(
+    *,
+    base_source: dict[str, str],
+    base_dispositions: Path | None,
+) -> dict[str, Any]:
+    if base_source["kind"] == "git":
+        if base_dispositions is not None:
+            raise ValueError(
+                "--base-dispositions is only valid together with --base-report"
+            )
+        raw = subprocess.run(
+            [
+                "git",
+                "-C",
+                str(ROOT),
+                "show",
+                f"{base_source['commit']}:{DISPOSITIONS_RELATIVE_PATH}",
+            ],
+            check=True,
+            capture_output=True,
+        ).stdout
+    else:
+        if base_dispositions is None:
+            raise ValueError(
+                "--base-report requires the matching --base-dispositions path"
+            )
+        raw = base_dispositions.read_bytes()
+
+    digest = hashlib.sha256(raw).hexdigest()
+    if digest != BASE_DISPOSITIONS_SHA256:
+        raise ValueError(
+            "base dispositions sha256 mismatch: "
+            f"expected {BASE_DISPOSITIONS_SHA256}, got {digest}"
+        )
+    document = yaml.safe_load(raw)
+    if not isinstance(document, dict):
+        raise ValueError("base dispositions must be a YAML object")
+    if document.get("schema") != "axiom_oracles.dispositions.v1":
+        raise ValueError("base dispositions schema does not match")
+    if document.get("suite") != "ca-snap-ecps":
+        raise ValueError("base dispositions suite does not match")
+    entries = document.get("entries")
+    if not isinstance(entries, list):
+        raise ValueError("base dispositions entries must be a list")
+    retained = [
+        entry for entry in entries if not str(entry.get("id", "")).startswith("ca-362-")
+    ]
+    if len(retained) != 4:
+        raise ValueError("base dispositions must contain exactly four BBCE selectors")
+    return document
+
+
+def _render_dispositions(
+    base_document: dict[str, Any],
+    additions: list[dict[str, Any]],
+) -> str:
+    base_entries = [
+        entry
+        for entry in base_document["entries"]
+        if not str(entry.get("id", "")).startswith("ca-362-")
+    ]
+    existing_ids = {entry["id"] for entry in base_entries}
+    duplicate_ids = existing_ids & {entry["id"] for entry in additions}
+    if duplicate_ids:
+        raise ValueError(f"generated IDs already exist: {sorted(duplicate_ids)}")
+
+    output = {
+        **{key: value for key, value in base_document.items() if key != "entries"},
+        "updated": "2026-07-28",
+        "entries": [*base_entries, *additions],
+    }
+    return yaml.dump(
+        output,
+        Dumper=_DispositionDumper,
+        sort_keys=False,
+        allow_unicode=True,
+        width=100,
+    )
 
 
 def _round_half_up(value: float) -> int:
@@ -939,6 +1024,14 @@ def _parse_args() -> argparse.Namespace:
         type=Path,
         help="Path to the exact pre-#362 disposition report JSON.",
     )
+    parser.add_argument(
+        "--base-dispositions",
+        type=Path,
+        help=(
+            "Path to the matching pre-#362 disposition YAML; required with "
+            "--base-report and inferred from the resolved commit with --base-ref."
+        ),
+    )
     parser.add_argument("--trace", type=Path, required=True)
     parser.add_argument(
         "--check",
@@ -950,12 +1043,15 @@ def _parse_args() -> argparse.Namespace:
 
 def main() -> int:
     args = _parse_args()
-    report, _base_source = _load_base_report(
+    report, base_source = _load_base_report(
         base_ref=args.base_ref,
         base_report=args.base_report,
     )
+    base_document = _load_base_dispositions(
+        base_source=base_source,
+        base_dispositions=args.base_dispositions,
+    )
     trace = _load_trace(args.trace)
-    existing = yaml.safe_load(DISPOSITIONS_PATH.read_text())
     compact = _load_compact_cases()
     cases, drift_counts = _validated_trace_cases(trace, report)
     unexplained = _unexplained_rows(report)
@@ -1047,12 +1143,6 @@ def main() -> int:
             f"expected {EXPECTED_REMAINING_ROWS} remaining rows, got {remaining}"
         )
 
-    base_entries = [
-        entry
-        for entry in existing["entries"]
-        if not str(entry.get("id", "")).startswith("ca-362-")
-    ]
-    existing_ids = {entry["id"] for entry in base_entries}
     additions = [
         selected[key]
         for key in sorted(
@@ -1064,22 +1154,7 @@ def main() -> int:
             ),
         )
     ]
-    duplicate_ids = existing_ids & {entry["id"] for entry in additions}
-    if duplicate_ids:
-        raise ValueError(f"generated IDs already exist: {sorted(duplicate_ids)}")
-
-    output = {
-        **{key: value for key, value in existing.items() if key != "entries"},
-        "updated": "2026-07-28",
-        "entries": [*base_entries, *additions],
-    }
-    text = yaml.dump(
-        output,
-        Dumper=_DispositionDumper,
-        sort_keys=False,
-        allow_unicode=True,
-        width=100,
-    )
+    text = _render_dispositions(base_document, additions)
     if args.check:
         if DISPOSITIONS_PATH.read_text() != text:
             raise SystemExit("ca-snap-ecps dispositions are stale; rerun this script")

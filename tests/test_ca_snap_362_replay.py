@@ -63,6 +63,83 @@ def test_base_report_hash_gate_rejects_semantically_equal_byte_drift(tmp_path):
         tracer._load_base_report(base_ref=None, base_report=path)
 
 
+def test_base_dispositions_come_from_explicit_base_not_current_output(
+    tmp_path,
+    monkeypatch,
+):
+    _, source = tracer._load_base_report(
+        base_ref=BASE_REF,
+        base_report=None,
+    )
+    corrupt_output = tmp_path / "ca-snap-ecps.yaml"
+    corrupt_output.write_text(
+        "schema: axiom_oracles.dispositions.v1\n"
+        "suite: ca-snap-ecps\n"
+        "entries:\n"
+        "- id: silently-corrupted-current-output\n"
+    )
+    monkeypatch.setattr(builder, "DISPOSITIONS_PATH", corrupt_output)
+
+    base = builder._load_base_dispositions(
+        base_source=source,
+        base_dispositions=None,
+    )
+
+    retained = [
+        entry for entry in base["entries"] if not entry["id"].startswith("ca-362-")
+    ]
+    assert len(retained) == 4
+    assert all(entry["id"].startswith("ca-bbce-") for entry in retained)
+    assert "silently-corrupted-current-output" not in {
+        entry["id"] for entry in base["entries"]
+    }
+
+    corrected_text = (tracer.ROOT / builder.DISPOSITIONS_RELATIVE_PATH).read_text()
+    corrected = builder.yaml.safe_load(corrected_text)
+    additions = [
+        entry for entry in corrected["entries"] if entry["id"].startswith("ca-362-")
+    ]
+    rebuilt = builder._render_dispositions(base, additions)
+    assert rebuilt == corrected_text
+    assert rebuilt != corrupt_output.read_text()
+
+
+def test_base_dispositions_path_is_required_and_hash_pinned(tmp_path):
+    path = tmp_path / "base-dispositions.yaml"
+    raw = subprocess.run(
+        [
+            "git",
+            "-C",
+            str(tracer.ROOT),
+            "show",
+            f"{BASE_REF}:{builder.DISPOSITIONS_RELATIVE_PATH}",
+        ],
+        check=True,
+        capture_output=True,
+    ).stdout
+    path.write_bytes(raw)
+    source = {"kind": "path", "path": "base-report.json"}
+
+    document = builder._load_base_dispositions(
+        base_source=source,
+        base_dispositions=path,
+    )
+    assert document["suite"] == "ca-snap-ecps"
+
+    with pytest.raises(ValueError, match="requires the matching"):
+        builder._load_base_dispositions(
+            base_source=source,
+            base_dispositions=None,
+        )
+
+    path.write_bytes(raw + b"\n")
+    with pytest.raises(ValueError, match="sha256 mismatch"):
+        builder._load_base_dispositions(
+            base_source=source,
+            base_dispositions=path,
+        )
+
+
 def test_trace_implementation_provenance_binds_tracer_and_runner_bytes():
     provenance = tracer._implementation_provenance()
 

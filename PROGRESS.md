@@ -822,6 +822,18 @@ residual), #229 (small-suite grounding).
   the joint intervention.
 - Verified the four non-issue-362 BBCE selectors are structurally identical to
   the prior document, preserving their expansion across all 243 BBCE rows.
+- An independent defensive replay review found that the first implementation
+  still copied those BBCE selectors and document metadata from the current
+  output YAML. That could let a corrupted output approve itself.
+- Closed that replay hole by loading the exact base disposition blob from the
+  same resolved Git commit, or from a required paired path when
+  `--base-report` is used, and pinning its SHA-256 to
+  `18cfbe28f951261142bfa3c52d0c88f6d0a3d53b77b597fcd807b4d2e9a23086`.
+  The builder no longer parses the current output as an input.
+- Added regression coverage for an absent/corrupted current output, paired-path
+  requirements, base-YAML byte drift, and a byte-identical rebuild of the
+  corrected document. The replay/disposition suite now passes 30/30, and the
+  full builder `--check` succeeds from the explicit Git base.
 
 ### Next
 
