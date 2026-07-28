@@ -1,3 +1,41 @@
+# PROGRESS — round-2 adversarial review of `triage/ca-snap-441`
+
+## State
+
+- Detached review worktree:
+  `.git/review-worktrees/ca-snap-441-9de6c1cb-round2`.
+- Pinned target head:
+  `9de6c1cbf1f5849ce1348d8ef715e6dcf74f4533`.
+- Review status: in progress; merge freeze is in effect and the deliverable is
+  a verdict only.
+- All review writes and commits are confined to this detached worktree. The
+  target branch, remotes, and GitHub remain untouched.
+- Final report path: `REVIEW-REPORT.md` in this review worktree.
+
+## Done
+
+- Loaded the `gitnexus-pr-review` workflow.
+- Independently confirmed that the requested head exists and that the source
+  checkout is unrelated to the target.
+- Created this disposable detached worktree at the exact requested head.
+
+## Next
+
+1. Inventory the target and repair diffs, inspect the published replay commands,
+   and map affected code paths.
+2. Run the published replay verbatim, require the recorded trace SHA-256, and
+   require the builder `--check`.
+3. Run the requested live counterfactual samples with a seed other than
+   `362441`.
+4. Audit drift notes, conservation, explorer parity, BBCE preservation,
+   containment, and the complete `--check` battery.
+5. Commit `REVIEW-REPORT.md` and finalize this ledger with an approve or
+   request-changes verdict.
+
+---
+
+# Archived target progress
+
 # PROGRESS — us-pe reconciliation (drive `unexplained_total` 23,138 → 0)
 
 Predecessor: **#224** stood up the us-pe conformance universe (measurement only,
