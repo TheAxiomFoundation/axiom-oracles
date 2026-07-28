@@ -609,3 +609,42 @@ residual), #229 (small-suite grounding).
 
 - Open the PR from the current branch tip (this docs commit) and land it after
   a final confirmation pass.
+
+---
+
+## PR #417 blind adversarial review — 2026-07-28
+
+### State
+
+- Review worktree:
+  `.git/review-worktrees/pr417-3f59d6b5-adversarial`
+- Throwaway ledger branch: `review/pr417-3f59d6b5-adversarial`
+- Reviewed object:
+  `3f59d6b596d6af3817b526bd50db9abdacb9c811`
+- The local `fed-parity/savers-addmed-grids` and
+  `origin/fed-parity/savers-addmed-grids` refs both resolve to that object.
+- The reviewed merge commit's second parent is the locally cached
+  `origin/main` object `43631d24c8e161ca1af36368a2b5abaa73c3a910`.
+- Live `git fetch origin main` failed because the sandbox could not resolve
+  `github.com`; remote freshness remains to be corroborated if another
+  available read-only channel permits it.
+- Review-only artifacts may be committed on this throwaway branch. No source,
+  PR-branch, remote, or GitHub writes are permitted.
+
+### Done
+
+- Inspected the original checkout before making substantive changes; it is
+  clean on `z1-wic-citation`.
+- Loaded the PolicyEngine review, calculation, US-domain, and healthcare
+  guidance.
+- Created this isolated worktree directly from the claimed PR head.
+
+### Next
+
+- Save the PR context/diff handoff files required by the review workflow.
+- Recompute all 11 Saver's Credit boundary divergences in both engines and
+  validate the statutory arithmetic against the retained corpus.
+- Audit suite-domain coverage, bridge comparability, generation provenance,
+  row containment, scoreboard invariants, chain checks, tests, and Ruff.
+- Consolidate the evidence into the required full report, short summary, and
+  final output file; commit each coherent ledger/report step.
