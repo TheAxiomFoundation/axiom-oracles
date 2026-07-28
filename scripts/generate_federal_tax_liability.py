@@ -5,7 +5,7 @@ Each invocation selects exactly one policy.  The selected policy's reviewed
 case grid is evaluated independently:
 
 * ``axiom`` reads the expected value from that policy's engine-verified
-  RuleSpec companion fixture; and
+  RuleSpec companion fixture plus any reviewed repo-owned extension; and
 * ``policyengine`` builds a fresh PolicyEngine-US ``Simulation`` at tax year
   2026 from the same case inputs.
 
@@ -24,6 +24,7 @@ import argparse
 import sys
 from dataclasses import dataclass
 from decimal import Decimal
+from importlib.metadata import version as distribution_version
 from pathlib import Path
 from typing import Any, Callable, Mapping
 
@@ -34,8 +35,14 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 from axiom_oracles.comparison.dispositions import report_json_text  # noqa: E402
+from axiom_oracles.bridges import load_policyengine_registry  # noqa: E402
 
 VALIDATION_YEAR = 2026
+ENGINE_VERSIONS = {
+    "policyengine": "4.18.9",
+    "policyengine_core": "3.30.3",
+    "policyengine_us": "1.767.3",
+}
 
 
 @dataclass(frozen=True)
@@ -45,6 +52,18 @@ class FederalCase:
     case_id: str
     filing_status: str
     inputs: Mapping[str, Any]
+
+
+@dataclass(frozen=True)
+class ComparisonBinding:
+    """One scored Axiom concept and its reviewed PolicyEngine target."""
+
+    concept: str
+    policyengine_target: str
+    comparison: str
+    case_ids: tuple[str, ...] = ()
+    case_id_suffix: str = ""
+    tolerance: float | None = None
 
 
 @dataclass(frozen=True)
@@ -64,6 +83,8 @@ class PolicyConfig:
     fixture_input_validator: Callable[[FederalCase, Mapping[str, Any]], None]
     pe_diagnostic_variables: tuple[str, ...] = ()
     pe_parameter_validator: Callable[[Any], None] | None = None
+    supplemental_fixture_paths: tuple[Path, ...] = ()
+    comparison_bindings: tuple[ComparisonBinding, ...] = ()
     tolerance: float = 0.01
     relative_tolerance: float = 0.0
 
@@ -416,7 +437,8 @@ _QBID_CASES = (
 )
 
 
-# GRID-CONTRACT P6 plus six eligibility/boundary diagnostics.  The selected PE
+# GRID-CONTRACT P6 plus the merged Notice 2025-67 boundary, filing-status,
+# exclusion, contribution-cap, and eligibility diagnostics. The selected PE
 # potential variable is the companion's pre-section-26 statutory boundary; the
 # separately calculated public variable is retained only as a diagnostic.
 def _savers_case(
@@ -426,6 +448,9 @@ def _savers_case(
     adjusted_gross_income: float,
     primary_contributions: float,
     spouse_contributions: float = 0,
+    section_911_excluded_income: float = 0,
+    section_931_excluded_income: float = 0,
+    section_933_excluded_income: float = 0,
     primary_age: int = 30,
     primary_is_student: bool = False,
     primary_is_dependent: bool = False,
@@ -433,6 +458,9 @@ def _savers_case(
     thresholds = {
         "single": (24_250, 26_250, 40_250),
         "joint": (48_500, 52_500, 80_500),
+        "head_of_household": (36_375, 39_375, 60_375),
+        "separate": (24_250, 26_250, 40_250),
+        "surviving_spouse": (24_250, 26_250, 40_250),
     }[filing_status]
     return _case(
         case_id,
@@ -440,6 +468,9 @@ def _savers_case(
         adjusted_gross_income=adjusted_gross_income,
         primary_contributions=primary_contributions,
         spouse_contributions=spouse_contributions,
+        section_911_excluded_income=section_911_excluded_income,
+        section_931_excluded_income=section_931_excluded_income,
+        section_933_excluded_income=section_933_excluded_income,
         primary_age=primary_age,
         primary_is_student=primary_is_student,
         primary_is_dependent=primary_is_dependent,
@@ -454,76 +485,210 @@ def _savers_case(
 
 _SAVERS_CREDIT_CASES = (
     _savers_case(
-        "savers-50pct",
+        "single-one-below-50-percent-limit",
         "single",
-        adjusted_gross_income=20_000,
+        adjusted_gross_income=24_249,
         primary_contributions=2_000,
     ),
     _savers_case(
-        "savers-20pct",
-        "single",
-        adjusted_gross_income=25_250,
-        primary_contributions=2_000,
-    ),
-    _savers_case(
-        "savers-10pct",
-        "single",
-        adjusted_gross_income=33_250,
-        primary_contributions=2_000,
-    ),
-    _savers_case(
-        "savers-over",
-        "single",
-        adjusted_gross_income=40_251,
-        primary_contributions=2_000,
-    ),
-    _savers_case(
-        "savers-cap",
-        "single",
-        adjusted_gross_income=20_000,
-        primary_contributions=5_000,
-    ),
-    _savers_case(
-        "savers-joint-both",
-        "joint",
-        adjusted_gross_income=38_000,
-        primary_contributions=2_000,
-        spouse_contributions=2_000,
-    ),
-    _savers_case(
-        "savers-zero-contributions",
-        "single",
-        adjusted_gross_income=0,
-        primary_contributions=0,
-    ),
-    _savers_case(
-        "savers-at-first-threshold",
+        "single-at-50-percent-limit-inclusive",
         "single",
         adjusted_gross_income=24_250,
         primary_contributions=2_000,
     ),
     _savers_case(
-        "savers-one-over-first-threshold",
+        "single-one-over-50-percent-limit",
         "single",
         adjusted_gross_income=24_251,
         primary_contributions=2_000,
     ),
     _savers_case(
-        "savers-age-screen",
+        "single-one-below-20-percent-limit",
+        "single",
+        adjusted_gross_income=26_249,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "single-at-20-percent-limit-inclusive",
+        "single",
+        adjusted_gross_income=26_250,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "single-one-over-20-percent-limit",
+        "single",
+        adjusted_gross_income=26_251,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "single-one-below-10-percent-limit",
+        "single",
+        adjusted_gross_income=40_249,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "single-at-10-percent-limit-inclusive",
+        "single",
+        adjusted_gross_income=40_250,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "single-one-over-10-percent-limit",
+        "single",
+        adjusted_gross_income=40_251,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "joint-one-below-50-percent-limit",
+        "joint",
+        adjusted_gross_income=48_499,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "joint-at-50-percent-limit-inclusive",
+        "joint",
+        adjusted_gross_income=48_500,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "joint-one-over-50-percent-limit",
+        "joint",
+        adjusted_gross_income=48_501,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "joint-one-below-20-percent-limit",
+        "joint",
+        adjusted_gross_income=52_499,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "joint-at-20-percent-limit-inclusive",
+        "joint",
+        adjusted_gross_income=52_500,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "joint-one-over-20-percent-limit",
+        "joint",
+        adjusted_gross_income=52_501,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "joint-one-below-10-percent-limit",
+        "joint",
+        adjusted_gross_income=80_499,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "joint-at-10-percent-limit-inclusive",
+        "joint",
+        adjusted_gross_income=80_500,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "joint-one-over-10-percent-limit",
+        "joint",
+        adjusted_gross_income=80_501,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "head-of-household-one-below-50-percent-limit",
+        "head_of_household",
+        adjusted_gross_income=36_374,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "head-of-household-at-50-percent-limit-inclusive",
+        "head_of_household",
+        adjusted_gross_income=36_375,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "head-of-household-one-over-50-percent-limit",
+        "head_of_household",
+        adjusted_gross_income=36_376,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "head-of-household-one-below-20-percent-limit",
+        "head_of_household",
+        adjusted_gross_income=39_374,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "head-of-household-at-20-percent-limit-inclusive",
+        "head_of_household",
+        adjusted_gross_income=39_375,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "head-of-household-one-over-20-percent-limit",
+        "head_of_household",
+        adjusted_gross_income=39_376,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "head-of-household-one-below-10-percent-limit",
+        "head_of_household",
+        adjusted_gross_income=60_374,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "head-of-household-at-10-percent-limit-inclusive",
+        "head_of_household",
+        adjusted_gross_income=60_375,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "head-of-household-one-over-10-percent-limit",
+        "head_of_household",
+        adjusted_gross_income=60_376,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "married-filing-separately-uses-all-other-limits",
+        "separate",
+        adjusted_gross_income=24_250,
+        primary_contributions=2_000,
+        spouse_contributions=2_000,
+    ),
+    _savers_case(
+        "surviving-spouse-uses-all-other-limits",
+        "surviving_spouse",
+        adjusted_gross_income=24_250,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "section-911-add-back-crosses-inclusive-limit",
+        "single",
+        adjusted_gross_income=24_250,
+        section_911_excluded_income=1,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "joint-separate-cap-for-each-spouse",
+        "joint",
+        adjusted_gross_income=40_000,
+        primary_contributions=5_000,
+        spouse_contributions=5_000,
+    ),
+    _savers_case(
+        "age-screen",
         "single",
         adjusted_gross_income=20_000,
         primary_contributions=2_000,
         primary_age=17,
     ),
     _savers_case(
-        "savers-student-screen",
+        "student-screen",
         "single",
         adjusted_gross_income=20_000,
         primary_contributions=2_000,
         primary_is_student=True,
     ),
     _savers_case(
-        "savers-dependent-screen",
+        "dependent-screen",
         "single",
         adjusted_gross_income=20_000,
         primary_contributions=2_000,
@@ -755,7 +920,7 @@ def _tax_situation(
     if case.filing_status == "joint":
         people["spouse"] = _person(**dict(spouse_inputs or {}))
         members.append("spouse")
-    return {
+    situation = {
         "people": people,
         "tax_units": {"tax_unit": {"members": members}},
         "families": {"family": {"members": members}},
@@ -767,6 +932,15 @@ def _tax_situation(
             }
         },
     }
+    explicit_statuses = {
+        "head_of_household": "HEAD_OF_HOUSEHOLD",
+        "surviving_spouse": "SURVIVING_SPOUSE",
+    }
+    if case.filing_status in explicit_statuses:
+        situation["tax_units"]["tax_unit"]["filing_status"] = {
+            VALIDATION_YEAR: explicit_statuses[case.filing_status]
+        }
+    return situation
 
 
 def _payroll_situation(case: FederalCase) -> dict[str, Any]:
@@ -892,6 +1066,9 @@ def _savers_credit_situation(case: FederalCase) -> dict[str, Any]:
     tax_unit = situation["tax_units"]["tax_unit"]
     tax_unit["adjusted_gross_income"] = {
         VALIDATION_YEAR: inputs["adjusted_gross_income"]
+    }
+    tax_unit["foreign_earned_income_exclusion"] = {
+        VALIDATION_YEAR: inputs["section_911_excluded_income"]
     }
     return situation
 
@@ -1300,20 +1477,29 @@ def _validate_savers_credit_fixture(
 ) -> None:
     inputs = case.inputs
     prefix = "us:policies/income_tax/savers_credit_pipeline#input."
-    status_codes = {"single": 0, "joint": 1, "separate": 2}
+    status_codes = {
+        "single": 0,
+        "joint": 1,
+        "separate": 2,
+        "head_of_household": 3,
+        "surviving_spouse": 4,
+    }
     _require_fixture_values(
-        suite="us-savers-credit-grid",
+        suite="us-savers-grid",
         case_id=case.case_id,
         actual=actual,
         expected={
-            f"{prefix}section_911_excluded_income": 0,
-            f"{prefix}section_931_excluded_income": 0,
-            f"{prefix}section_933_excluded_income": 0,
+            f"{prefix}section_911_excluded_income": inputs[
+                "section_911_excluded_income"
+            ],
+            f"{prefix}section_931_excluded_income": inputs[
+                "section_931_excluded_income"
+            ],
+            f"{prefix}section_933_excluded_income": inputs[
+                "section_933_excluded_income"
+            ],
             f"{prefix}filing_status": status_codes[case.filing_status],
             f"{prefix}adjusted_gross_income": inputs["adjusted_gross_income"],
-            f"{prefix}savers_credit_first_threshold_2026": inputs["first_threshold"],
-            f"{prefix}savers_credit_second_threshold_2026": inputs["second_threshold"],
-            f"{prefix}savers_credit_third_threshold_2026": inputs["third_threshold"],
             f"{prefix}primary_age_at_close_of_taxable_year": inputs["primary_age"],
             f"{prefix}primary_is_student_under_section_152_f_2": inputs[
                 "primary_is_student"
@@ -1558,7 +1744,7 @@ def _verify_savers_pe_parameters(tax_benefit_system: Any) -> None:
     # and at each published value proves the exact stored breakpoints while
     # leaving the inclusive-maximum truth case to surface as a real mismatch.
     _verify_parameter_values(
-        "us-savers-credit-grid",
+        "us-savers-grid",
         {
             "rate.joint@48499.99": float(p.rate.joint.calc(48_499.99)),
             "rate.joint@48500": float(p.rate.joint.calc(48_500)),
@@ -1566,6 +1752,15 @@ def _verify_savers_pe_parameters(tax_benefit_system: Any) -> None:
             "rate.joint@80500": float(p.rate.joint.calc(80_500)),
             "rate.threshold_adjustment.JOINT": (p.rate.threshold_adjustment.JOINT),
             "rate.threshold_adjustment.SINGLE": (p.rate.threshold_adjustment.SINGLE),
+            "rate.threshold_adjustment.SEPARATE": (
+                p.rate.threshold_adjustment.SEPARATE
+            ),
+            "rate.threshold_adjustment.HEAD_OF_HOUSEHOLD": (
+                p.rate.threshold_adjustment.HEAD_OF_HOUSEHOLD
+            ),
+            "rate.threshold_adjustment.SURVIVING_SPOUSE": (
+                p.rate.threshold_adjustment.SURVIVING_SPOUSE
+            ),
             "contributions_cap": p.contributions_cap,
         },
         {
@@ -1575,6 +1770,9 @@ def _verify_savers_pe_parameters(tax_benefit_system: Any) -> None:
             "rate.joint@80500": 0,
             "rate.threshold_adjustment.JOINT": 1,
             "rate.threshold_adjustment.SINGLE": 0.5,
+            "rate.threshold_adjustment.SEPARATE": 0.5,
+            "rate.threshold_adjustment.HEAD_OF_HOUSEHOLD": 0.75,
+            "rate.threshold_adjustment.SURVIVING_SPOUSE": 0.5,
             "contributions_cap": 2_000,
         },
     )
@@ -1669,7 +1867,7 @@ POLICIES: dict[str, PolicyConfig] = {
     ),
     "savers_credit": PolicyConfig(
         key="savers_credit",
-        suite="us-savers-credit-grid",
+        suite="us-savers-grid",
         title="Saver's credit before section 26",
         axiom_module_ref=("us:policies/income_tax/savers_credit_pipeline"),
         fixture_path=Path("us/policies/income_tax/savers_credit_pipeline.test.yaml"),
@@ -1677,12 +1875,12 @@ POLICIES: dict[str, PolicyConfig] = {
             "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit"
         ),
         # The public PE variable applies the nonrefundable credit limit.
-        # `savers_credit_potential` is its statutory pre-section-26 input and
-        # therefore matches the Axiom companion boundary.
+        # `savers_credit_potential` is PE's TaxUnit pre-section-26 amount and
+        # the bridge registry's reviewed direct target for this final.
         pe_output_variables=("savers_credit_potential",),
         pe_boundary=(
-            "TaxUnit statutory section 25B amount before section 26, summed "
-            "from separately capped eligible Persons"
+            "TaxUnit section 25B amount before section 26, mapped directly to "
+            "PE's pre-section-26 potential-credit surface"
         ),
         cases=_SAVERS_CREDIT_CASES,
         pe_situation=_savers_credit_situation,
@@ -1692,6 +1890,9 @@ POLICIES: dict[str, PolicyConfig] = {
             "savers_credit_credit_limit",
         ),
         pe_parameter_validator=_verify_savers_pe_parameters,
+        supplemental_fixture_paths=(
+            Path("comparisons/fixtures/us-savers-grid-boundary-probes.yaml"),
+        ),
     ),
     "elderly_disabled_credit": PolicyConfig(
         key="elderly_disabled_credit",
@@ -1865,18 +2066,190 @@ def _fixture_records(path: Path) -> list[dict[str, Any]]:
     return records
 
 
+def _scored_bindings(config: PolicyConfig) -> tuple[ComparisonBinding, ...]:
+    if config.comparison_bindings:
+        return config.comparison_bindings
+    if len(config.pe_output_variables) != 1:
+        raise ValueError(
+            f"{config.suite}: a single legacy PE output or explicit comparison "
+            "bindings are required"
+        )
+    return (
+        ComparisonBinding(
+            concept=config.axiom_output,
+            policyengine_target=config.pe_output_variables[0],
+            comparison="amount",
+        ),
+    )
+
+
+def _comparison_rows(
+    config: PolicyConfig,
+) -> list[tuple[str, FederalCase, ComparisonBinding]]:
+    known_cases = {case.case_id: case for case in config.cases}
+    rows: list[tuple[str, FederalCase, ComparisonBinding]] = []
+    for binding in _scored_bindings(config):
+        selected_ids = binding.case_ids or tuple(known_cases)
+        unknown = sorted(set(selected_ids) - set(known_cases))
+        if unknown:
+            raise ValueError(
+                f"{config.suite}: comparison binding {binding.concept!r} "
+                f"selects unknown cases {unknown}"
+            )
+        for case_id in selected_ids:
+            case = known_cases[case_id]
+            rows.append((f"{case_id}{binding.case_id_suffix}", case, binding))
+    row_ids = [row_id for row_id, _, _ in rows]
+    if len(row_ids) != len(set(row_ids)):
+        raise ValueError(f"{config.suite}: comparison row IDs are not unique")
+    return rows
+
+
+def _mapping_for_binding(config: PolicyConfig, binding: ComparisonBinding) -> Any:
+    mapping = load_policyengine_registry().mapping_for_legal_id(
+        binding.concept,
+        country="us",
+    )
+    if mapping is None:
+        raise ValueError(
+            f"{config.suite}: scored concept {binding.concept!r} is unmapped"
+        )
+    if not mapping.comparable:
+        raise ValueError(
+            f"{config.suite}: scored concept {binding.concept!r} is "
+            "registry-not-comparable"
+        )
+    mapped_target = mapping.policyengine_variable or mapping.policyengine_parameter
+    if binding.policyengine_target != mapped_target:
+        raise ValueError(
+            f"{config.suite}: scored concept {binding.concept!r} binds "
+            f"{binding.policyengine_target!r}, but the registry target is "
+            f"{mapped_target!r}"
+        )
+    return mapping
+
+
+def _assert_registry_comparable_bindings(config: PolicyConfig) -> None:
+    """Fail closed for the Saver's Credit grid repaired in PR #417.
+
+    Other older federal grids still need a separate mapping migration. Keeping
+    this invariant scoped prevents this repair from silently blessing their
+    pre-existing unmapped pipeline concepts.
+    """
+
+    if config.suite != "us-savers-grid":
+        return
+    for binding in _scored_bindings(config):
+        _mapping_for_binding(config, binding)
+
+
+def _binding_payload(
+    config: PolicyConfig,
+    binding: ComparisonBinding,
+) -> dict[str, Any]:
+    mapping = _mapping_for_binding(config, binding)
+    payload: dict[str, Any] = {
+        "concept": binding.concept,
+        "mapping_type": mapping.mapping_type,
+        "comparison": binding.comparison,
+    }
+    if mapping.policyengine_variable:
+        payload["variable"] = mapping.policyengine_variable
+    if mapping.policyengine_parameter:
+        payload["parameter"] = mapping.policyengine_parameter
+    if mapping.parameter_key:
+        payload["parameter_key"] = mapping.parameter_key
+    if mapping.parameter_key_input:
+        payload["parameter_key_input"] = mapping.parameter_key_input
+    if mapping.parameter_key_map:
+        payload["parameter_key_map"] = dict(mapping.parameter_key_map)
+    if binding.case_ids:
+        payload["case_ids"] = list(binding.case_ids)
+    return payload
+
+
+def _merge_fixture_record(
+    *,
+    suite: str,
+    base: dict[str, Any],
+    extension: Mapping[str, Any],
+    extension_path: Path,
+) -> dict[str, Any]:
+    merged = dict(base)
+    for field in ("period",):
+        if field in extension and field in merged and extension[field] != merged[field]:
+            raise ValueError(
+                f"{suite}: {extension_path} conflicts on {field!r} for "
+                f"case {base.get('name')!r}"
+            )
+        if field in extension:
+            merged[field] = extension[field]
+    for field in ("input", "output"):
+        existing = merged.get(field) or {}
+        additional = extension.get(field) or {}
+        if not isinstance(existing, dict) or not isinstance(additional, dict):
+            raise ValueError(
+                f"{suite}: fixture case {base.get('name')!r} field {field!r} "
+                "must be a mapping"
+            )
+        combined = dict(existing)
+        for key, value in additional.items():
+            if key in combined and combined[key] != value:
+                raise ValueError(
+                    f"{suite}: {extension_path} conflicts on {field}.{key} "
+                    f"for case {base.get('name')!r}"
+                )
+            combined[key] = value
+        merged[field] = combined
+    return merged
+
+
+def _merged_fixture_records(
+    config: PolicyConfig,
+    fixture: Path,
+) -> dict[str, dict[str, Any]]:
+    by_name = {
+        str(record.get("name")): record for record in _fixture_records(fixture)
+    }
+    configured_ids = {case.case_id for case in config.cases}
+    for relative_path in config.supplemental_fixture_paths:
+        extension_path = REPO_ROOT / relative_path
+        if not extension_path.is_file():
+            raise FileNotFoundError(
+                f"{config.suite}: supplemental fixture not found: {extension_path}"
+            )
+        for extension in _fixture_records(extension_path):
+            name = str(extension.get("name"))
+            if name not in configured_ids:
+                raise ValueError(
+                    f"{config.suite}: {extension_path} contains unconfigured "
+                    f"case {name!r}"
+                )
+            if name in by_name:
+                by_name[name] = _merge_fixture_record(
+                    suite=config.suite,
+                    base=by_name[name],
+                    extension=extension,
+                    extension_path=extension_path,
+                )
+            else:
+                by_name[name] = extension
+    return by_name
+
+
 def _axiom_values(
     config: PolicyConfig,
     roots: list[Path],
 ) -> tuple[Path, dict[str, float], dict[str, dict[str, Any]]]:
-    if not config.axiom_output.startswith(f"{config.axiom_module_ref}#"):
-        raise ValueError(
-            f"{config.suite}: Axiom output {config.axiom_output!r} is not "
-            f"defined by configured module {config.axiom_module_ref!r}"
-        )
+    bindings = _scored_bindings(config)
+    for binding in bindings:
+        if not binding.concept.startswith(f"{config.axiom_module_ref}#"):
+            raise ValueError(
+                f"{config.suite}: Axiom output {binding.concept!r} is not "
+                f"defined by configured module {config.axiom_module_ref!r}"
+            )
     fixture = _fixture_file(config, roots)
-    records = _fixture_records(fixture)
-    by_name = {str(record.get("name")): record for record in records}
+    by_name = _merged_fixture_records(config, fixture)
     values: dict[str, float] = {}
     fixture_inputs: dict[str, dict[str, Any]] = {}
     for case in config.cases:
@@ -1894,24 +2267,102 @@ def _axiom_values(
                 f"{VALIDATION_YEAR} tax-year period"
             )
         outputs = record.get("output")
-        if not isinstance(outputs, dict) or config.axiom_output not in outputs:
-            raise ValueError(
-                f"{fixture}: case {case.case_id!r} has no output "
-                f"{config.axiom_output!r}"
-            )
-        values[case.case_id] = float(str(outputs[config.axiom_output]))
+        if not isinstance(outputs, dict):
+            raise ValueError(f"{fixture}: case {case.case_id!r} output is not a mapping")
         raw_inputs = record.get("input") or {}
         if not isinstance(raw_inputs, dict):
             raise ValueError(f"{fixture}: case {case.case_id!r} input is not a mapping")
         config.fixture_input_validator(case, raw_inputs)
         fixture_inputs[case.case_id] = raw_inputs
+    for row_id, case, binding in _comparison_rows(config):
+        outputs = by_name[case.case_id].get("output") or {}
+        if binding.concept not in outputs:
+            raise ValueError(
+                f"{fixture}: case {case.case_id!r} has no output "
+                f"{binding.concept!r}"
+            )
+        values[row_id] = float(str(outputs[binding.concept]))
     return fixture, values, fixture_inputs
 
 
 def _policyengine_values(
     config: PolicyConfig,
 ) -> tuple[dict[str, float], dict[str, dict[str, float]]]:
+    actual_versions = {
+        "policyengine": distribution_version("policyengine"),
+        "policyengine_core": distribution_version("policyengine-core"),
+        "policyengine_us": distribution_version("policyengine-us"),
+    }
+    if actual_versions != ENGINE_VERSIONS:
+        raise RuntimeError(
+            f"{config.suite}: runtime PolicyEngine stack {actual_versions} "
+            f"does not match reviewed stack {ENGINE_VERSIONS}"
+        )
     from policyengine_us import Simulation
+
+    if config.comparison_bindings:
+        totals: dict[str, float] = {}
+        components: dict[str, dict[str, float]] = {}
+        rows_by_case: dict[
+            str,
+            list[tuple[str, ComparisonBinding]],
+        ] = {}
+        for row_id, case, binding in _comparison_rows(config):
+            rows_by_case.setdefault(case.case_id, []).append((row_id, binding))
+        parameters_verified = False
+        for case in config.cases:
+            simulation = Simulation(situation=config.pe_situation(case))
+            if config.pe_parameter_validator is not None and not parameters_verified:
+                config.pe_parameter_validator(simulation.tax_benefit_system)
+                parameters_verified = True
+            for row_id, binding in rows_by_case.get(case.case_id, []):
+                mapping = _mapping_for_binding(config, binding)
+                if mapping.policyengine_variable:
+                    calculated = simulation.calculate(
+                        mapping.policyengine_variable,
+                        VALIDATION_YEAR,
+                    )
+                    value = sum(float(item) for item in calculated)
+                elif mapping.policyengine_parameter:
+                    parameter: Any = simulation.tax_benefit_system.parameters(
+                        f"{VALIDATION_YEAR}-01-01"
+                    )
+                    for part in mapping.policyengine_parameter.split("."):
+                        parameter = getattr(parameter, part)
+                    if mapping.parameter_key:
+                        parameter = getattr(parameter, mapping.parameter_key)
+                    elif mapping.parameter_key_input:
+                        status_codes = {
+                            "single": 0,
+                            "joint": 1,
+                            "separate": 2,
+                            "head_of_household": 3,
+                            "surviving_spouse": 4,
+                        }
+                        raw_key = (
+                            status_codes[case.filing_status]
+                            if mapping.parameter_key_input == "filing_status"
+                            else case.inputs[mapping.parameter_key_input]
+                        )
+                        selected_key = mapping.parameter_key_map.get(
+                            str(raw_key),
+                            mapping.parameter_key_map.get(raw_key),
+                        )
+                        if selected_key is None:
+                            raise ValueError(
+                                f"{config.suite}: no parameter key for "
+                                f"{mapping.parameter_key_input}={raw_key!r}"
+                            )
+                        parameter = getattr(parameter, selected_key)
+                    value = float(parameter)
+                else:
+                    raise ValueError(
+                        f"{config.suite}: unsupported scored registry mapping "
+                        f"for {binding.concept!r}"
+                    )
+                totals[row_id] = value
+                components[row_id] = {binding.policyengine_target: value}
+        return totals, components
 
     totals: dict[str, float] = {}
     components: dict[str, dict[str, float]] = {}
@@ -1965,9 +2416,16 @@ def _policyengine_values(
     return totals, components
 
 
-def _matches(config: PolicyConfig, left: float, right: float) -> bool:
+def _matches(
+    config: PolicyConfig,
+    left: float,
+    right: float,
+    *,
+    tolerance: float | None = None,
+) -> bool:
+    absolute_tolerance = config.tolerance if tolerance is None else tolerance
     difference = abs(left - right)
-    if difference <= config.tolerance:
+    if difference <= absolute_tolerance:
         return True
     scale = max(abs(left), abs(right))
     return (
@@ -1982,17 +2440,32 @@ def _assert_non_vacuous(
     axiom: Mapping[str, float],
     policyengine: Mapping[str, float],
 ) -> None:
-    nonzero_matches = [
-        case.case_id
-        for case in config.cases
-        if abs(axiom[case.case_id]) > config.tolerance
-        and abs(policyengine[case.case_id]) > config.tolerance
-        and _matches(
-            config,
-            axiom[case.case_id],
-            policyengine[case.case_id],
+    if set(axiom) != set(policyengine):
+        raise RuntimeError(
+            f"{config.suite}: Axiom and PolicyEngine comparison rows differ"
         )
-    ]
+    tolerances = {
+        row_id: binding.tolerance
+        for row_id, _case, binding in _comparison_rows(config)
+    }
+    nonzero_matches = []
+    for row_id in axiom:
+        tolerance = (
+            config.tolerance
+            if tolerances[row_id] is None
+            else float(tolerances[row_id])
+        )
+        if (
+            abs(axiom[row_id]) > tolerance
+            and abs(policyengine[row_id]) > tolerance
+            and _matches(
+                config,
+                axiom[row_id],
+                policyengine[row_id],
+                tolerance=tolerance,
+            )
+        ):
+            nonzero_matches.append(row_id)
     if not nonzero_matches:
         raise RuntimeError(
             f"{config.suite}: vacuous grid: no nonzero expected case matches "
@@ -2010,36 +2483,50 @@ def _build_report(
 ) -> dict[str, Any]:
     cases: list[dict[str, Any]] = []
     mismatches: list[dict[str, Any]] = []
-    match_count = 0
-    left_positive = 0
-    right_positive = 0
-    for case in config.cases:
-        axiom_value = axiom[case.case_id]
-        pe_value = policyengine[case.case_id]
-        matched = _matches(config, axiom_value, pe_value)
-        match_count += int(matched)
-        left_positive += int(abs(axiom_value) > config.tolerance)
-        right_positive += int(abs(pe_value) > config.tolerance)
-        difference = axiom_value - pe_value
-        cases.append(
-            {
-                "case_id": case.case_id,
-                "concept": config.axiom_output,
-                "filing_status": case.filing_status,
-                "inputs": dict(case.inputs),
-                "axiom_fixture_inputs": dict(fixture_inputs[case.case_id]),
-                "axiom": axiom_value,
-                "policyengine": pe_value,
-                "policyengine_components": dict(policyengine_components[case.case_id]),
-                "difference": difference,
-                "match": matched,
-            }
+    aggregate_state: dict[str, dict[str, Any]] = {}
+    for row_id, case, binding in _comparison_rows(config):
+        tolerance = (
+            config.tolerance
+            if binding.tolerance is None
+            else binding.tolerance
         )
+        axiom_value = axiom[row_id]
+        pe_value = policyengine[row_id]
+        matched = _matches(
+            config,
+            axiom_value,
+            pe_value,
+            tolerance=tolerance,
+        )
+        difference = axiom_value - pe_value
+        case_report = {
+            "case_id": row_id,
+            "scenario_id": case.case_id,
+            "concept": binding.concept,
+            "filing_status": case.filing_status,
+            "inputs": dict(case.inputs),
+            "axiom_fixture_inputs": dict(fixture_inputs[case.case_id]),
+            "axiom": axiom_value,
+            "policyengine": pe_value,
+            "policyengine_components": dict(policyengine_components[row_id]),
+            "difference": difference,
+            "match": matched,
+        }
+        if (
+            config.suite == "us-savers-grid"
+            and case.case_id == "section-911-add-back-crosses-inclusive-limit"
+        ):
+            case_report["diagnostic_note"] = (
+                "Observed match is cancellation, not section 911 parity: "
+                "PolicyEngine omits the section 25B(e) add-back while "
+                "PolicyEngine #9151 moves exact $24,250 into the 20-percent tier."
+            )
+        cases.append(case_report)
         if not matched:
             mismatches.append(
                 {
-                    "case_id": case.case_id,
-                    "concept": config.axiom_output,
+                    "case_id": row_id,
+                    "concept": binding.concept,
                     "kind": "amount_difference",
                     "engines": ["axiom", "policyengine"],
                     "left_engine": "axiom",
@@ -2049,39 +2536,98 @@ def _build_report(
                     "difference": difference,
                 }
             )
-    comparison_count = len(config.cases)
+        state = aggregate_state.setdefault(
+            binding.concept,
+            {
+                "comparison": binding.comparison,
+                "tolerance": tolerance,
+                "comparison_count": 0,
+                "match_count": 0,
+                "left_positive": 0,
+                "right_positive": 0,
+            },
+        )
+        state["comparison_count"] += 1
+        state["match_count"] += int(matched)
+        state["left_positive"] += int(abs(axiom_value) > tolerance)
+        state["right_positive"] += int(abs(pe_value) > tolerance)
+
+    aggregates: list[dict[str, Any]] = []
+    concepts: list[dict[str, Any]] = []
+    for concept, state in aggregate_state.items():
+        count = state["comparison_count"]
+        matched = state["match_count"]
+        mismatch = count - matched
+        aggregates.append(
+            {
+                "concept": concept,
+                "comparison": state["comparison"],
+                "comparison_count": count,
+                "match_count": matched,
+                "mismatch_count": mismatch,
+                "compared": count,
+                "matched": matched,
+                "mismatched": mismatch,
+                "match_rate": 100.0 * matched / count,
+                "left_positive_rate": 100.0 * state["left_positive"] / count,
+                "right_positive_rate": 100.0 * state["right_positive"] / count,
+            }
+        )
+        concepts.append(
+            {
+                "id": concept,
+                "description": (
+                    config.title
+                    if len(aggregate_state) == 1
+                    else concept.rsplit("#", 1)[-1].replace("_", " ")
+                ),
+                "category": "tax",
+                "comparison": state["comparison"],
+                "tolerance": state["tolerance"],
+                "relative_tolerance": config.relative_tolerance,
+                "priority": "high",
+                "components": [],
+                "parent": None,
+            }
+        )
+
+    comparison_count = len(cases)
+    match_count = sum(aggregate["match_count"] for aggregate in aggregates)
     mismatch_count = len(mismatches)
     match_rate = 100.0 * match_count / comparison_count
-    aggregate = {
-        "concept": config.axiom_output,
-        "comparison": "amount",
-        "comparison_count": comparison_count,
-        "match_count": match_count,
-        "mismatch_count": mismatch_count,
-        "compared": comparison_count,
-        "matched": match_count,
-        "mismatched": mismatch_count,
-        "match_rate": match_rate,
-        "left_positive_rate": 100.0 * left_positive / comparison_count,
-        "right_positive_rate": 100.0 * right_positive / comparison_count,
-    }
+    audited_suite = config.suite == "us-savers-grid"
+    comparison_bindings = (
+        [_binding_payload(config, binding) for binding in _scored_bindings(config)]
+        if audited_suite
+        else []
+    )
+    scored_concepts = list(aggregate_state)
     return {
         "schema_version": "axiom.comparison_report.v2",
         "suite": config.suite,
         "concept": config.axiom_output,
         "population": "case-grid",
         "validation_year": VALIDATION_YEAR,
-        "engines": {"left": "axiom", "right": "policyengine"},
+        "engines": {
+            "left": "axiom",
+            "right": "policyengine",
+            "versions": dict(ENGINE_VERSIONS),
+        },
         "engine_bindings": {
             "axiom": {
                 "module": config.axiom_module_ref,
                 "output": config.axiom_output,
+                "outputs": scored_concepts,
                 "fixture": str(config.fixture_path),
+                "supplemental_fixtures": [
+                    str(path) for path in config.supplemental_fixture_paths
+                ],
             },
             "policyengine": {
                 "outputs": list(config.pe_output_variables),
                 "diagnostic_outputs": list(config.pe_diagnostic_variables),
                 "boundary": config.pe_boundary,
+                "comparison_bindings": comparison_bindings,
             },
         },
         "tolerance": {
@@ -2089,20 +2635,9 @@ def _build_report(
             "relative": config.relative_tolerance,
         },
         "case_count": comparison_count,
-        "concepts": [
-            {
-                "id": config.axiom_output,
-                "description": config.title,
-                "category": "tax",
-                "comparison": "amount",
-                "tolerance": config.tolerance,
-                "relative_tolerance": config.relative_tolerance,
-                "priority": "high",
-                "components": [],
-                "parent": None,
-            }
-        ],
-        "aggregates": [aggregate],
+        "scenario_count": len(config.cases),
+        "concepts": concepts,
+        "aggregates": aggregates,
         "summary": {
             "comparison_count": comparison_count,
             "match_count": match_count,
@@ -2110,9 +2645,14 @@ def _build_report(
             "error_count": 0,
             "errors_by_engine": {},
             "mismatches_by_concept": (
-                [{"value": config.axiom_output, "count": mismatch_count}]
-                if mismatch_count
-                else []
+                [
+                    {
+                        "value": aggregate["concept"],
+                        "count": aggregate["mismatch_count"],
+                    }
+                    for aggregate in aggregates
+                    if aggregate["mismatch_count"]
+                ]
             ),
             "mismatches_by_kind": (
                 [{"value": "amount_difference", "count": mismatch_count}]
@@ -2133,6 +2673,7 @@ def generate(policy: str, roots: list[Path]) -> dict[str, Any]:
     if not roots:
         raise ValueError("at least one --rulespec-root is required")
     config = POLICIES[policy]
+    _assert_registry_comparable_bindings(config)
     _fixture, axiom, fixture_inputs = _axiom_values(config, roots)
     policyengine, components = _policyengine_values(config)
     _assert_non_vacuous(config, axiom, policyengine)

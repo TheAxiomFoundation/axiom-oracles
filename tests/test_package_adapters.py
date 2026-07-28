@@ -1,4 +1,10 @@
+from types import SimpleNamespace
+
+import pytest
+
+from axiom_oracles.adapters.policyengine import PolicyEngineRunner
 from axiom_oracles.adapters.policyengine import PolicyEngineTaxsimRunner
+from axiom_oracles.adapters.policyengine import runner as policyengine_runner_module
 from axiom_oracles.adapters.policyengine.runner import (
     _normalize_value_for_requested_period,
 )
@@ -8,8 +14,16 @@ from axiom_oracles.core.case import Case, Concepts, Entity
 
 
 class _FakeVariable:
-    def __init__(self, definition_period: str) -> None:
+    def __init__(
+        self,
+        definition_period: str,
+        *,
+        entity: str = "spm_unit",
+        value_type: type = float,
+    ) -> None:
         self.definition_period = definition_period
+        self.entity = entity
+        self.value_type = value_type
 
 
 class _FakePolicyEngineModel:
@@ -23,18 +37,36 @@ class _FakePolicyEngineModel:
 
 class _FakePolicyEngine:
     def __init__(self, definition_period: str) -> None:
-        self.us = type("FakeUS", (), {"model": _FakePolicyEngineModel(definition_period)})()
+        self.us = type(
+            "FakeUS", (), {"model": _FakePolicyEngineModel(definition_period)}
+        )()
 
 
-def test_policyengine_monthly_numeric_output_is_normalized_for_month_period() -> None:
+def test_policyengine_monthly_numeric_output_selects_requested_month() -> None:
     value = _normalize_value_for_requested_period(
         _FakePolicyEngine("month"),
-        "snap",
+        "snap_min_allotment",
         "2026-01",
-        1_846.6170654296875,
+        287.68316650390625,
+        requested_value=23.84000015258789,
     )
 
-    assert value == 1_846.6170654296875 / 12
+    assert value == 23.84000015258789
+
+
+def test_policyengine_monthly_numeric_output_fails_without_requested_month() -> None:
+    with pytest.raises(
+        RuntimeError,
+        match=(
+            "month-defined variable 'snap_min_allotment'.*'2026-01'.*refusing to derive"
+        ),
+    ):
+        _normalize_value_for_requested_period(
+            _FakePolicyEngine("month"),
+            "snap_min_allotment",
+            "2026-01",
+            287.68316650390625,
+        )
 
 
 def test_policyengine_normalization_preserves_booleans_and_annual_values() -> None:
@@ -44,6 +76,7 @@ def test_policyengine_normalization_preserves_booleans_and_annual_values() -> No
             "is_snap_eligible",
             "2026-01",
             True,
+            requested_value=False,
         )
         is True
     )
@@ -53,9 +86,211 @@ def test_policyengine_normalization_preserves_booleans_and_annual_values() -> No
             "income_tax",
             "2026-01",
             1200,
+            requested_value=100,
         )
         == 1200
     )
+
+
+def test_policyengine_runner_selects_each_side_of_october_snap_cola(
+    monkeypatch,
+) -> None:
+    annual_values = {
+        "snap_min_allotment": 287.68316650390625,
+        "snap_max_allotment": 3596.039794921875,
+    }
+    monthly_values = {
+        "2026-01": {
+            "snap_min_allotment": 23.84000015258789,
+            "snap_max_allotment": 298.0,
+        },
+        "2026-10": {
+            "snap_min_allotment": 24.3743953704834,
+            "snap_max_allotment": 304.6799621582031,
+        },
+    }
+    requested_periods = []
+
+    class FakeUS:
+        model = _FakePolicyEngineModel("month")
+
+        @staticmethod
+        def calculate_household(**kwargs):
+            return {
+                "spm_unit": {
+                    variable: annual_values[variable]
+                    for variable in kwargs["extra_variables"]
+                }
+            }
+
+    class FakeSimulation:
+        tax_benefit_system = SimpleNamespace(
+            variables={variable: _FakeVariable("month") for variable in annual_values}
+        )
+        populations = {
+            "spm_unit": SimpleNamespace(ids=["case_0__spm_unit"]),
+        }
+
+        @staticmethod
+        def calculate(variable, period):
+            requested_periods.append((variable, period))
+            return [monthly_values[period][variable]]
+
+    monkeypatch.setattr(
+        policyengine_runner_module,
+        "_policyengine",
+        lambda: SimpleNamespace(us=FakeUS()),
+    )
+    monkeypatch.setattr(
+        policyengine_runner_module,
+        "_policyengine_us_simulation",
+        lambda _situation: FakeSimulation(),
+    )
+
+    runner = PolicyEngineRunner()
+    variables = ["snap_min_allotment", "snap_max_allotment"]
+    results = []
+    for period in ("2026-01", "2026-10"):
+        case = Case(
+            case_id=period,
+            period=period,
+            entities=(
+                Entity(
+                    entity_id="head",
+                    kind="person",
+                    facts={Concepts.PERSON_AGE: 70},
+                ),
+            ),
+        )
+        results.append(runner.run_case(case, variables))
+
+    assert results[0].values == monthly_values["2026-01"]
+    assert results[1].values == monthly_values["2026-10"]
+    assert results[0].errors == ()
+    assert results[1].errors == ()
+    assert requested_periods == [
+        ("snap_min_allotment", "2026-01"),
+        ("snap_max_allotment", "2026-01"),
+        ("snap_min_allotment", "2026-10"),
+        ("snap_max_allotment", "2026-10"),
+    ]
+
+
+def test_policyengine_requested_month_partitions_out_of_order_batch(
+    monkeypatch,
+) -> None:
+    captured_situations = []
+
+    class FakeSimulation:
+        tax_benefit_system = SimpleNamespace(
+            variables={"snap_min_allotment": _FakeVariable("month")}
+        )
+        populations = {
+            "spm_unit": SimpleNamespace(ids=["case_1__spm_unit", "case_0__spm_unit"]),
+        }
+
+        @staticmethod
+        def calculate(variable, period):
+            assert variable == "snap_min_allotment"
+            assert period == "2026-01"
+            return [24.0, 23.0]
+
+    def fake_simulation(situation):
+        captured_situations.append(situation)
+        return FakeSimulation()
+
+    monkeypatch.setattr(
+        policyengine_runner_module,
+        "_policyengine_us_simulation",
+        fake_simulation,
+    )
+    pe = _FakePolicyEngine("month")
+    cases = [
+        Case(
+            case_id=f"case-{index}",
+            period="2026-01",
+            entities=(
+                Entity(
+                    entity_id="head",
+                    kind="person",
+                    facts={Concepts.PERSON_AGE: 70},
+                ),
+            ),
+        )
+        for index in range(2)
+    ]
+
+    values = PolicyEngineRunner()._requested_period_values(
+        pe,
+        cases,
+        [
+            {"snap_min_allotment": 276.0},
+            {"snap_min_allotment": 288.0},
+        ],
+    )
+
+    assert values == [
+        {"snap_min_allotment": 23.0},
+        {"snap_min_allotment": 24.0},
+    ]
+    assert set(captured_situations[0]["marital_units"]) == {
+        "case_0__marital_unit",
+        "case_1__marital_unit",
+    }
+
+
+def test_policyengine_runner_fails_closed_when_requested_month_is_unavailable(
+    monkeypatch,
+) -> None:
+    class FakeUS:
+        model = _FakePolicyEngineModel("month")
+
+        @staticmethod
+        def calculate_household(**kwargs):
+            del kwargs
+            return {"spm_unit": {"snap_min_allotment": 287.68316650390625}}
+
+    class FailingSimulation:
+        tax_benefit_system = SimpleNamespace(
+            variables={"snap_min_allotment": _FakeVariable("month")}
+        )
+        populations = {
+            "spm_unit": SimpleNamespace(ids=["case_0__spm_unit"]),
+        }
+
+        @staticmethod
+        def calculate(variable, period):
+            raise ValueError(f"no {variable} data for {period}")
+
+    monkeypatch.setattr(
+        policyengine_runner_module,
+        "_policyengine",
+        lambda: SimpleNamespace(us=FakeUS()),
+    )
+    monkeypatch.setattr(
+        policyengine_runner_module,
+        "_policyengine_us_simulation",
+        lambda _situation: FailingSimulation(),
+    )
+    case = Case(
+        case_id="missing-month",
+        period="2026-01",
+        entities=(
+            Entity(
+                entity_id="head",
+                kind="person",
+                facts={Concepts.PERSON_AGE: 70},
+            ),
+        ),
+    )
+
+    result = PolicyEngineRunner().run_case(case, ["snap_min_allotment"])
+
+    assert "snap_min_allotment" not in result.values
+    assert len(result.errors) == 1
+    assert "snap_min_allotment" in result.errors[0]
+    assert "2026-01" in result.errors[0]
+    assert "refusing to derive" in result.errors[0]
 
 
 def test_taxsim_package_runner_wraps_taxsim_format_rows() -> None:
@@ -67,9 +302,7 @@ def test_taxsim_package_runner_wraps_taxsim_format_rows() -> None:
 
         def run(self, show_progress=False):
             del show_progress
-            return [
-                {"taxsimid": "case-1", "fiitax": 100, "siitax": 25, "unused": 1}
-            ]
+            return [{"taxsimid": "case-1", "fiitax": 100, "siitax": 25, "unused": 1}]
 
     case = Case(
         case_id="case-1",
@@ -139,7 +372,9 @@ def test_taxsim_package_runner_projects_cases_and_maps_canonical_concepts() -> N
     assert results[0].values == {"fiitax": 100, "siitax": 25}
 
 
-def test_policyengine_taxsim_runner_maps_taxsim_output_to_policyengine_targets() -> None:
+def test_policyengine_taxsim_runner_maps_taxsim_output_to_policyengine_targets() -> (
+    None
+):
     captured_inputs = []
 
     class FakePolicyEngineTaxsimRunner:
@@ -180,7 +415,9 @@ def test_policyengine_taxsim_runner_maps_taxsim_output_to_policyengine_targets()
     assert results[0].values == {"income_tax": 100, "state_income_tax": 25}
 
 
-def test_policyengine_taxsim_pairs_prefer_canonical_concepts_on_shared_columns() -> None:
+def test_policyengine_taxsim_pairs_prefer_canonical_concepts_on_shared_columns() -> (
+    None
+):
     from axiom_oracles.adapters.policyengine.taxsim_runner import (
         _taxsim_to_policyengine_pairs,
     )

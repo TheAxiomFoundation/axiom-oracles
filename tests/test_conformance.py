@@ -614,6 +614,7 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
         "us-llc-grid",
         "us-niit-grid",
         "us-qbid-grid",
+        "us-savers-grid",
         "us-seca-grid",
     }
     covered = {p.suite for p in universe.in_scope() if p.suite is not None}
@@ -639,8 +640,10 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
         by_name["qualified_business_income_deduction"].suite
         == "us-qbid-grid"
     )
-    assert by_name["savers_credit"].suite is None
-    assert "axiom-corpus/issues/506" in by_name["savers_credit"].note
+    assert by_name["savers_credit"].suite == "us-savers-grid"
+    assert "34 fixture-bound" in by_name["savers_credit"].note
+    assert "reviewed direct PE-US target" in by_name["savers_credit"].note
+    assert "23/34" in by_name["savers_credit"].note
     assert "policyengine-us/issues/9151" in by_name["savers_credit"].note
     assert by_name["self_employment_tax"].suite == "us-seca-grid"
     # State income-tax coverage counts only a comparison that proves the final

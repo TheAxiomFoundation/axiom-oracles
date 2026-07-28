@@ -38,9 +38,15 @@ def _load_runner():
     return module
 
 
-def test_every_live_federal_grid_pins_canonical_rulespec_snapshot():
-    upstream_sha = "3373e8411f7e141fd50879e3de964386f606f7f6"
-    upstream_tree = "7e00f195ea81ff9aa21c58d53151e937d974a016"
+def test_every_live_federal_grid_pins_its_reviewed_rulespec_snapshot():
+    legacy_snapshot = (
+        "3373e8411f7e141fd50879e3de964386f606f7f6",
+        "7e00f195ea81ff9aa21c58d53151e937d974a016",
+    )
+    savers_snapshot = (
+        "dcbae4344c522b4ad8004169316266cbc153186f",
+        "7ee3ca44edd11cdaaf5d074a6a2a6c32d2f25dfb",
+    )
     federal_configs = []
     for path in sorted((REPO_ROOT / "comparisons").glob("*.yaml")):
         config = yaml.safe_load(path.read_text())
@@ -49,8 +55,15 @@ def test_every_live_federal_grid_pins_canonical_rulespec_snapshot():
             continue
         federal_configs.append(path.name)
         parameters = runner["parameters"]
-        assert parameters["rulespec_upstream_sha"] == upstream_sha, path
-        assert parameters["rulespec_upstream_tree"] == upstream_tree, path
+        expected = (
+            savers_snapshot
+            if path.name == "us-savers-grid.yaml"
+            else legacy_snapshot
+        )
+        assert (
+            parameters["rulespec_upstream_sha"],
+            parameters["rulespec_upstream_tree"],
+        ) == expected, path
 
     assert federal_configs == [
         "us-aca-ptc-grid.yaml",
@@ -59,6 +72,7 @@ def test_every_live_federal_grid_pins_canonical_rulespec_snapshot():
         "us-llc-grid.yaml",
         "us-niit-grid.yaml",
         "us-qbid-grid.yaml",
+        "us-savers-grid.yaml",
         "us-seca-grid.yaml",
     ]
 
@@ -128,18 +142,40 @@ def test_all_eight_contract_grids_are_explicit_and_independent():
             "qbid-net-capital-gain-limit",
         ],
         "savers_credit": [
-            "savers-50pct",
-            "savers-20pct",
-            "savers-10pct",
-            "savers-over",
-            "savers-cap",
-            "savers-joint-both",
-            "savers-zero-contributions",
-            "savers-at-first-threshold",
-            "savers-one-over-first-threshold",
-            "savers-age-screen",
-            "savers-student-screen",
-            "savers-dependent-screen",
+            "single-one-below-50-percent-limit",
+            "single-at-50-percent-limit-inclusive",
+            "single-one-over-50-percent-limit",
+            "single-one-below-20-percent-limit",
+            "single-at-20-percent-limit-inclusive",
+            "single-one-over-20-percent-limit",
+            "single-one-below-10-percent-limit",
+            "single-at-10-percent-limit-inclusive",
+            "single-one-over-10-percent-limit",
+            "joint-one-below-50-percent-limit",
+            "joint-at-50-percent-limit-inclusive",
+            "joint-one-over-50-percent-limit",
+            "joint-one-below-20-percent-limit",
+            "joint-at-20-percent-limit-inclusive",
+            "joint-one-over-20-percent-limit",
+            "joint-one-below-10-percent-limit",
+            "joint-at-10-percent-limit-inclusive",
+            "joint-one-over-10-percent-limit",
+            "head-of-household-one-below-50-percent-limit",
+            "head-of-household-at-50-percent-limit-inclusive",
+            "head-of-household-one-over-50-percent-limit",
+            "head-of-household-one-below-20-percent-limit",
+            "head-of-household-at-20-percent-limit-inclusive",
+            "head-of-household-one-over-20-percent-limit",
+            "head-of-household-one-below-10-percent-limit",
+            "head-of-household-at-10-percent-limit-inclusive",
+            "head-of-household-one-over-10-percent-limit",
+            "married-filing-separately-uses-all-other-limits",
+            "surviving-spouse-uses-all-other-limits",
+            "section-911-add-back-crosses-inclusive-limit",
+            "joint-separate-cap-for-each-spouse",
+            "age-screen",
+            "student-screen",
+            "dependent-screen",
         ],
         "elderly_disabled_credit": [
             "eld-basic",
@@ -208,6 +244,105 @@ def test_policyengine_bindings_match_the_reviewed_output_boundaries():
         "lifetime_learning_credit",
     )
 
+
+def test_savers_grid_fails_closed_on_unmapped_noncomparable_or_wrong_target():
+    generator = _load_generator()
+    savers = generator.POLICIES["savers_credit"]
+    module = "us:policies/income_tax/savers_credit_pipeline"
+    with pytest.raises(ValueError, match="unmapped"):
+        generator._assert_registry_comparable_bindings(
+            replace(
+                savers,
+                comparison_bindings=(
+                    generator.ComparisonBinding(
+                        concept=f"{module}#invented_unmapped_output",
+                        policyengine_target="savers_credit_potential",
+                        comparison="amount",
+                    ),
+                ),
+            )
+        )
+    with pytest.raises(ValueError, match="registry-not-comparable"):
+        generator._assert_registry_comparable_bindings(
+            replace(
+                savers,
+                comparison_bindings=(
+                    generator.ComparisonBinding(
+                        concept=(
+                            f"{module}"
+                            "#pipeline_savers_credit_modified_adjusted_gross_income"
+                        ),
+                        policyengine_target="adjusted_gross_income",
+                        comparison="amount",
+                    ),
+                ),
+            )
+        )
+    with pytest.raises(ValueError, match="registry target"):
+        generator._assert_registry_comparable_bindings(
+            replace(
+                savers,
+                comparison_bindings=(
+                    generator.ComparisonBinding(
+                        concept=f"{module}#federal_savers_credit",
+                        policyengine_target="savers_credit",
+                        comparison="amount",
+                    ),
+                ),
+            )
+        )
+
+    generator._assert_registry_comparable_bindings(savers)
+
+
+def test_committed_savers_report_scores_only_registry_comparable_bindings():
+    generator = _load_generator()
+    registry = generator.load_policyengine_registry()
+    expected = {
+        "us-savers-grid": {
+            "us:policies/income_tax/savers_credit_pipeline"
+            "#federal_savers_credit"
+        },
+    }
+    for suite, expected_concepts in expected.items():
+        report = json.loads(
+            (
+                REPO_ROOT
+                / "dashboard/public/data"
+                / f"axiom-policyengine-{suite}.json"
+            ).read_text()
+        )
+        scored = {
+            aggregate["concept"]
+            for aggregate in report["aggregates"]
+            if aggregate["comparison_count"] > 0
+        }
+        bindings = report["engine_bindings"]["policyengine"][
+            "comparison_bindings"
+        ]
+        assert scored == expected_concepts
+        assert len(bindings) == len(scored)
+        assert {binding["concept"] for binding in bindings} == scored
+        assert sum(
+            aggregate["comparison_count"] for aggregate in report["aggregates"]
+        ) == report["summary"]["comparison_count"]
+        for binding in bindings:
+            mapping = registry.mapping_for_legal_id(
+                binding["concept"],
+                country="us",
+            )
+            assert mapping is not None and mapping.comparable
+            assert binding["mapping_type"] == mapping.mapping_type
+            if mapping.policyengine_variable:
+                assert binding["variable"] == mapping.policyengine_variable
+            if mapping.policyengine_parameter:
+                assert binding["parameter"] == mapping.policyengine_parameter
+            if mapping.parameter_key_input:
+                assert (
+                    binding["parameter_key_input"]
+                    == mapping.parameter_key_input
+                )
+                assert binding["parameter_key_map"] == mapping.parameter_key_map
 
 def test_aca_grid_pins_prior_year_fpl_dollars_and_enrolled_premium():
     generator = _load_generator()
@@ -355,7 +490,7 @@ def test_qbid_fixture_binding_matches_merged_pipeline_surface(monkeypatch):
 def test_savers_grid_uses_completed_person_contributions_and_two_caps():
     generator = _load_generator()
     cases = {case.case_id: case for case in generator.POLICIES["savers_credit"].cases}
-    joint = cases["savers-joint-both"]
+    joint = cases["joint-separate-cap-for-each-spouse"]
     situation = generator._savers_credit_situation(joint)
 
     assert joint.inputs["first_threshold"] == 48_500
@@ -363,17 +498,83 @@ def test_savers_grid_uses_completed_person_contributions_and_two_caps():
     assert joint.inputs["third_threshold"] == 80_500
     assert (
         situation["people"]["head"]["savers_credit_qualified_contributions"][2026]
-        == 2_000
+        == 5_000
     )
     assert (
         situation["people"]["spouse"]["savers_credit_qualified_contributions"][2026]
-        == 2_000
+        == 5_000
     )
-    assert situation["tax_units"]["tax_unit"]["adjusted_gross_income"][2026] == 38_000
+    assert situation["tax_units"]["tax_unit"]["adjusted_gross_income"][2026] == 40_000
+    section_911 = generator._savers_credit_situation(
+        cases["section-911-add-back-crosses-inclusive-limit"]
+    )
+    assert (
+        section_911["tax_units"]["tax_unit"]["foreign_earned_income_exclusion"][2026]
+        == 1
+    )
+    surviving = generator._savers_credit_situation(
+        cases["surviving-spouse-uses-all-other-limits"]
+    )
+    assert (
+        surviving["tax_units"]["tax_unit"]["filing_status"][2026] == "SURVIVING_SPOUSE"
+    )
     assert generator.POLICIES["savers_credit"].pe_diagnostic_variables == (
         "savers_credit",
         "savers_credit_credit_limit",
     )
+
+
+def test_savers_grid_has_matching_b_minus_one_probe_at_all_nine_boundaries():
+    generator = _load_generator()
+    config = generator.POLICIES["savers_credit"]
+    cases = {case.case_id: case for case in config.cases}
+    fixture = yaml.safe_load(
+        (
+            REPO_ROOT
+            / "comparisons/fixtures/us-savers-grid-boundary-probes.yaml"
+        ).read_text()
+    )
+    outputs = {
+        record["name"]: record["output"][config.axiom_output]
+        for record in fixture
+    }
+    expected = {
+        "single-one-below-50-percent-limit": (24_249, 1_000),
+        "single-one-below-20-percent-limit": (26_249, 400),
+        "single-one-below-10-percent-limit": (40_249, 200),
+        "joint-one-below-50-percent-limit": (48_499, 1_000),
+        "joint-one-below-20-percent-limit": (52_499, 400),
+        "joint-one-below-10-percent-limit": (80_499, 200),
+        "head-of-household-one-below-50-percent-limit": (36_374, 1_000),
+        "head-of-household-one-below-20-percent-limit": (39_374, 400),
+        "head-of-household-one-below-10-percent-limit": (60_374, 200),
+    }
+    assert set(outputs) == set(expected)
+    for case_id, (agi, credit) in expected.items():
+        assert cases[case_id].inputs["adjusted_gross_income"] == agi
+        assert float(outputs[case_id]) == credit
+
+
+def test_savers_grid_report_discloses_section_911_match_cancellation():
+    generator = _load_generator()
+    config = generator.POLICIES["savers_credit"]
+    values = {case.case_id: 400.0 for case in config.cases}
+    empty_by_case = {case.case_id: {} for case in config.cases}
+
+    report = generator._build_report(
+        config,
+        axiom=values,
+        fixture_inputs=empty_by_case,
+        policyengine=values,
+        policyengine_components=empty_by_case,
+    )
+    section_911 = next(
+        case
+        for case in report["cases"]
+        if case["case_id"] == "section-911-add-back-crosses-inclusive-limit"
+    )
+
+    assert "cancellation, not section 911 parity" in section_911["diagnostic_note"]
 
 
 def test_elderly_disabled_grid_collapses_only_proven_disability_facts():
@@ -470,8 +671,6 @@ def test_additional_medicare_fixture_enforces_wage_only_person_boundary():
             case,
             stale_flat_fixture,
         )
-
-
 def test_axiom_fixture_is_resolved_only_from_supplied_roots(tmp_path):
     generator = _load_generator()
     original = generator.POLICIES["net_investment_income_tax"]
@@ -557,7 +756,15 @@ def test_v2_report_counts_one_pair_per_case():
 
     assert report["schema_version"] == "axiom.comparison_report.v2"
     assert report["suite"] == "us-additional-medicare-grid"
-    assert report["engines"] == {"left": "axiom", "right": "policyengine"}
+    assert report["engines"] == {
+        "left": "axiom",
+        "right": "policyengine",
+        "versions": {
+            "policyengine": "4.18.9",
+            "policyengine_core": "3.30.3",
+            "policyengine_us": "1.767.3",
+        },
+    }
     assert report["engine_bindings"]["policyengine"]["outputs"] == [
         "additional_medicare_tax"
     ]
