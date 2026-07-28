@@ -123,6 +123,21 @@ def test_project_dispositions_reconciles_markers_bidirectionally(
     )
 
 
+def test_project_dispositions_derives_exact_match_rate_endpoint():
+    report = _full_report(None)
+    report["mismatches"] = []
+    source = _full_chunks(None)
+    row = source[0][1][0]
+    row["r"] = 99.9999995
+    row["v"] = [{"c": CONCEPT, "l": 10, "x": 10}]
+    row["m"] = []
+
+    projected = project_dispositions(report, source)
+
+    assert projected[0][1][0]["r"] == 100.0
+    assert source[0][1][0]["r"] == 99.9999995
+
+
 @pytest.mark.parametrize(
     ("mutation", "message"),
     [

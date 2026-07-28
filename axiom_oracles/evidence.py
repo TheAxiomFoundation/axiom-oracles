@@ -84,6 +84,13 @@ def dashboard_delta(left: object, right: object) -> int | float | None:
     return _finite_native_number(difference)
 
 
+def dashboard_match_rate(matches: int, mismatches: int) -> float:
+    """Derive the compact dashboard percentage with exact semantic endpoints."""
+
+    total = matches + mismatches
+    return 100.0 if total == 0 else 100.0 * matches / total
+
+
 def _representation_matches(left: int | float, right: int | float) -> bool:
     """Compare derived JSON numbers at six-decimal/IEEE representation precision."""
 
@@ -528,10 +535,7 @@ def _validate_compact_case(
         defects.append(
             _defect(suite, f"{location}.r must be a finite number or null")
         )
-    elif rate is not None and (
-        (rate < 0 and not _representation_matches(rate, 0))
-        or (rate > 100 and not _representation_matches(rate, 100))
-    ):
+    elif rate is not None and (rate < 0 or rate > 100):
         defects.append(_defect(suite, f"{location}.r must be between 0 and 100"))
     household = row.get("h")
     if not isinstance(household, dict):
@@ -587,8 +591,7 @@ def _validate_compact_case(
     )
     if outcomes is not None:
         matches, mismatch_count = outcomes
-        total = matches + mismatch_count
-        expected_rate = 100.0 if total == 0 else 100.0 * matches / total
+        expected_rate = dashboard_match_rate(matches, mismatch_count)
         if raw_rate is None:
             defects.append(
                 _defect(
@@ -597,16 +600,26 @@ def _validate_compact_case(
                     f"{expected_rate!r}",
                 )
             )
-        elif rate is not None and not _representation_matches(rate, expected_rate):
-            defects.append(
-                _defect(
-                    suite,
-                    f"{location}.r {raw_rate!r} does not equal the stored "
-                    f"verdict match rate {expected_rate!r} within "
-                    "representation tolerance",
+        elif rate is not None:
+            if expected_rate in (0.0, 100.0):
+                if rate != expected_rate:
+                    defects.append(
+                        _defect(
+                            suite,
+                            f"{location}.r {raw_rate!r} does not equal the exact "
+                            f"stored verdict match rate endpoint {expected_rate!r}",
+                        )
+                    )
+            elif not _representation_matches(rate, expected_rate):
+                defects.append(
+                    _defect(
+                        suite,
+                        f"{location}.r {raw_rate!r} does not equal the stored "
+                        f"verdict match rate {expected_rate!r} within "
+                        "representation tolerance",
+                    )
                 )
-            )
-    elif mismatches and rate is not None and _representation_matches(rate, 100):
+    elif mismatches and rate == 100:
         defects.append(
             _defect(
                 suite,

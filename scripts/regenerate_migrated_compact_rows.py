@@ -28,6 +28,7 @@ if str(REPO_ROOT) not in sys.path:
 from axiom_oracles.evidence import (  # noqa: E402
     build_chunk_index,
     dashboard_delta,
+    dashboard_match_rate,
     is_safe_suite_name,
     strict_json_loads,
     validate_suite_evidence,
@@ -223,6 +224,11 @@ def project_dispositions(
                 )
                 projected_mismatches.append(mismatch)
             row["m"] = projected_mismatches
+            if isinstance(raw_matches, list):
+                row["r"] = dashboard_match_rate(
+                    len(raw_matches),
+                    len(projected_mismatches),
+                )
             projected_rows.append(row)
         projected.append((name, projected_rows))
 

@@ -48,11 +48,30 @@
 - Residue-1 gates pass: 63 certification mutants, the producer refresh test,
   immutable replay `--check`, both chunk-index checks, certificate freshness,
   Ruff, and diff whitespace.
+- Closed the `r` boundary residue with one cross-layer contract: `null` is
+  unmeasured, exact `100` is full agreement, and finite `[0,100)` is measured
+  non-full agreement. Evidence now applies strict bounds and exact equality at
+  derived `0/100` endpoints while retaining representation tolerance only for
+  interior fractional percentages.
+- Fresh compaction and immutable historical replay derive `r` from stored
+  match/mismatch counts, so neither trusts a near-endpoint stored rate.
+- Added `test_full_agreement_rate_must_be_exact_at_semantic_boundary` for the
+  exact `r=99.9999995` witness and extended the bounds mutant to
+  `r=100.0000005`. Added replay/emitter controls proving both normalize exact
+  endpoints.
+- Replaced both dashboard `r===100` branches with a shared tri-state helper.
+  Unmeasured rows are excluded from triangulation and no longer render as
+  agreement in the case table. The direct Node mutant pins `100 → true`,
+  `99.9999995 → false`, and `null → null`.
+- Residue-2 focused gates pass: 107 evidence/replay/producer tests, the direct
+  dashboard semantic test, immutable replay and index checks, Ruff, and diff
+  whitespace. The existing dashboard loader test cannot obtain `esbuild`
+  because network access is unavailable, and a full dashboard build cannot
+  start because `next` is not installed in this checkout; both environment
+  limits are retained for the final report.
 
 ## Next
 
-- Decide and align the exact/tri-state `r` contract across evidence and
-  dashboard code, add the boundary mutant, and commit the coherent fix.
 - Run all required non-population gates, write and commit the final report,
   update this ledger, then update (but do not merge) PR #379.
 

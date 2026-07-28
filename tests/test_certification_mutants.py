@@ -976,16 +976,22 @@ def test_aggregate_values_require_reproducible_unit_weight(tmp_path):
 
 
 @pytest.mark.parametrize(
-    ("mutation", "marker"),
+    ("mutation", "marker", "detail"),
     [
-        pytest.param("d", ".d", id="d-drift"),
-        pytest.param("r", ".r", id="r-drift"),
+        pytest.param("d", ".d", "representation tolerance", id="d-drift"),
+        pytest.param(
+            "r",
+            ".r",
+            "exact stored verdict match rate endpoint",
+            id="r-drift",
+        ),
     ],
 )
 def test_dashboard_semantic_fields_must_match_stored_verdicts(
     tmp_path,
     mutation,
     marker,
+    detail,
 ):
     report_path, suite_dir = _copied_evidence_fixture(tmp_path)
     chunk_path = suite_dir / "chunk-0.json"
@@ -1002,12 +1008,31 @@ def test_dashboard_semantic_fields_must_match_stored_verdicts(
     assert evidence.reconciliation == "full"
     assert evidence.valid is False
     assert any(
-        marker in defect and "representation tolerance" in defect
+        marker in defect and detail in defect
         for defect in evidence.content_defects
     )
 
 
-@pytest.mark.parametrize("rate", [-1, 101])
+def test_full_agreement_rate_must_be_exact_at_semantic_boundary(tmp_path):
+    report_path, suite_dir = _copied_evidence_fixture(tmp_path)
+    chunk_path = suite_dir / "chunk-0.json"
+    chunk = json.loads(chunk_path.read_text())
+    chunk[0]["r"] = 99.9999995
+    chunk_path.write_text(json.dumps(chunk, separators=(",", ":")))
+    _refresh_fixture_binding(report_path, suite_dir)
+
+    evidence = validate_suite_evidence(report_path)
+    assert evidence.binding == "bound"
+    assert evidence.reconciliation == "full"
+    assert evidence.valid is False
+    assert any(
+        ".r 99.9999995 does not equal the exact stored verdict match rate "
+        "endpoint 100.0" in defect
+        for defect in evidence.content_defects
+    )
+
+
+@pytest.mark.parametrize("rate", [-1, 100.0000005, 101])
 def test_dashboard_match_rate_is_bounded_even_without_full_verdicts(
     tmp_path,
     rate,

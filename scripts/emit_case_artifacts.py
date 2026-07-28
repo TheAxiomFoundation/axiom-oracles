@@ -41,7 +41,10 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from axiom_oracles.evidence import dashboard_delta  # noqa: E402
+from axiom_oracles.evidence import (  # noqa: E402
+    dashboard_delta,
+    dashboard_match_rate,
+)
 
 REPORTS = REPO_ROOT / "reports"
 DASHBOARD_DATA = REPO_ROOT / "dashboard" / "public" / "data"
@@ -183,9 +186,13 @@ def compact_case(case: dict, explained: dict) -> dict:
             }
         )
     earned = hs.get("yearly_earned_income_per_person")
+    matches = case.get("matches")
+    match_rate = case.get("match_rate")
+    if isinstance(matches, list):
+        match_rate = dashboard_match_rate(len(matches), len(mismatches))
     row = {
         "id": case.get("case_id"),
-        "r": case.get("match_rate"),
+        "r": match_rate,
         "h": {
             "n": hs.get("household_size") or len(ages) or None,
             # None (not 0) when the harness never captured earnings — the
@@ -246,7 +253,6 @@ def compact_case(case: dict, explained: dict) -> dict:
         synth = engine_pair_records(case.get("metadata") or {})
         if synth:
             row["i"] = synth
-    matches = case.get("matches")
     if isinstance(matches, list):
         row["v"] = [
             {"c": m.get("concept"), "l": m.get("left"), "x": m.get("right")}

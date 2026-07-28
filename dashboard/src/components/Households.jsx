@@ -2,6 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import { loadSuiteCases } from "../utils/caseData";
+import { caseAgreement } from "../utils/caseAgreement.mjs";
 import { engineLabel, formatPct } from "../utils/format";
 import { suiteMeta, suiteLabel, otherOracle } from "../utils/suites";
 
@@ -70,12 +71,14 @@ function Triangulation({ runs, bySuite, onPick }) {
   const seen = new Map();
   for (const run of loaded) {
     for (const row of bySuite[run.suite].cases) {
+      const agrees = caseAgreement(row.r);
+      if (agrees === null) continue;
       if (!seen.has(row.id)) {
         seen.set(row.id, 0);
         agreement.set(row.id, new Set());
       }
       seen.set(row.id, seen.get(row.id) + 1);
-      if (row.r === 100) agreement.get(row.id).add(run.oracle);
+      if (agrees) agreement.get(row.id).add(run.oracle);
     }
   }
   const oracles = loaded.map((r) => r.oracle);
@@ -405,7 +408,8 @@ export default function HouseholdsView({ title, reports, onBack, backLabel }) {
       out = out.filter(
         (c) => (c.m || []).length > 0 && unexplainedCount(c) === 0,
       );
-    if (status === "match") out = out.filter((c) => c.r === 100);
+    if (status === "match")
+      out = out.filter((c) => caseAgreement(c.r) === true);
     if (minDiff > 0)
       out = out.filter((c) =>
         (c.m || []).some((m) => Math.abs(m.d || 0) >= minDiff),
@@ -606,6 +610,7 @@ export default function HouseholdsView({ title, reports, onBack, backLabel }) {
                       </tr>
                     );
                     if (ms.length === 0) {
+                      const agrees = caseAgreement(c.r);
                       return (
                         <React.Fragment key={rid}>
                           <tr
@@ -614,7 +619,11 @@ export default function HouseholdsView({ title, reports, onBack, backLabel }) {
                           >
                             {who}
                             <td colSpan={5} className="v2-hh-agree">
-                              engines agree on every compared value
+                              {agrees === true
+                                ? "engines agree on every compared value"
+                                : agrees === null
+                                  ? "case-level agreement not recorded"
+                                  : "case-level disagreement recorded; values unavailable"}
                             </td>
                           </tr>
                           {detail}

@@ -1008,6 +1008,15 @@ def test_compact_full_evidence_preserves_explicit_zero_matches():
         },
         {},
     )
+    all_match = compact_case(
+        {
+            "case_id": "all-match",
+            "match_rate": 99.9999995,
+            "matches": [{"concept": "benefit", "left": 1, "right": 1}],
+            "mismatches": [],
+        },
+        {},
+    )
     verdict_free = compact_case(
         {"case_id": "qc-shape", "matched": True, "mismatches": []},
         {},
@@ -1015,6 +1024,8 @@ def test_compact_full_evidence_preserves_explicit_zero_matches():
 
     assert all_mismatch["v"] == []
     assert all_mismatch["m"][0]["d"] == 1
+    assert all_mismatch["r"] == 0.0
+    assert all_match["r"] == 100.0
     assert "v" not in verdict_free
 
 
