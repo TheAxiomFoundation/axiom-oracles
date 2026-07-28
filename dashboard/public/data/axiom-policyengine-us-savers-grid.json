@@ -60,6 +60,10 @@
       "case_id": "single-at-50-percent-limit-inclusive",
       "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
       "difference": 600.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "inclusive-tier-ceilings-enter-next-policyengine-bracket-at-equality"
+      },
       "engines": [
         "axiom",
         "policyengine"
@@ -74,6 +78,10 @@
       "case_id": "single-at-20-percent-limit-inclusive",
       "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
       "difference": 200.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "inclusive-tier-ceilings-enter-next-policyengine-bracket-at-equality"
+      },
       "engines": [
         "axiom",
         "policyengine"
@@ -88,6 +96,10 @@
       "case_id": "single-at-10-percent-limit-inclusive",
       "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
       "difference": 200.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "inclusive-tier-ceilings-enter-next-policyengine-bracket-at-equality"
+      },
       "engines": [
         "axiom",
         "policyengine"
@@ -102,6 +114,10 @@
       "case_id": "joint-at-50-percent-limit-inclusive",
       "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
       "difference": 600.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "inclusive-tier-ceilings-enter-next-policyengine-bracket-at-equality"
+      },
       "engines": [
         "axiom",
         "policyengine"
@@ -116,6 +132,10 @@
       "case_id": "joint-at-20-percent-limit-inclusive",
       "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
       "difference": 200.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "inclusive-tier-ceilings-enter-next-policyengine-bracket-at-equality"
+      },
       "engines": [
         "axiom",
         "policyengine"
@@ -130,6 +150,10 @@
       "case_id": "joint-at-10-percent-limit-inclusive",
       "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
       "difference": 200.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "inclusive-tier-ceilings-enter-next-policyengine-bracket-at-equality"
+      },
       "engines": [
         "axiom",
         "policyengine"
@@ -144,6 +168,10 @@
       "case_id": "head-of-household-at-50-percent-limit-inclusive",
       "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
       "difference": 600.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "inclusive-tier-ceilings-enter-next-policyengine-bracket-at-equality"
+      },
       "engines": [
         "axiom",
         "policyengine"
@@ -158,6 +186,10 @@
       "case_id": "head-of-household-at-20-percent-limit-inclusive",
       "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
       "difference": 200.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "inclusive-tier-ceilings-enter-next-policyengine-bracket-at-equality"
+      },
       "engines": [
         "axiom",
         "policyengine"
@@ -172,6 +204,10 @@
       "case_id": "head-of-household-at-10-percent-limit-inclusive",
       "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
       "difference": 200.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "inclusive-tier-ceilings-enter-next-policyengine-bracket-at-equality"
+      },
       "engines": [
         "axiom",
         "policyengine"
@@ -186,6 +222,10 @@
       "case_id": "married-filing-separately-uses-all-other-limits",
       "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
       "difference": 600.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "inclusive-tier-ceilings-enter-next-policyengine-bracket-at-equality"
+      },
       "engines": [
         "axiom",
         "policyengine"
@@ -200,6 +240,10 @@
       "case_id": "surviving-spouse-uses-all-other-limits",
       "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
       "difference": 600.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "inclusive-tier-ceilings-enter-next-policyengine-bracket-at-equality"
+      },
       "engines": [
         "axiom",
         "policyengine"
@@ -212,11 +256,46 @@
     }
   ],
   "population": "case-grid",
-  "schema_version": "axiom.comparison_report.v2",
+  "provenance": {
+    "engine": {},
+    "generated_at": "2026-07-28T03:43:59Z",
+    "generated_by": "scripts/run_comparison.py::us-savers-grid",
+    "oracle": {
+      "name": "policyengine",
+      "policyengine_core": "3.30.3",
+      "policyengine_package": "policyengine==4.18.9",
+      "policyengine_us": "1.767.3"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-us",
+        "sha": "dcbae4344c522b4ad8004169316266cbc153186f"
+      }
+    ],
+    "run_kind": "manual",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
   "suite": "us-savers-grid",
   "summary": {
     "axiom_vs_policyengine_match_rate": 56.0,
     "comparison_count": 25,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 11
+      },
+      "dispositions_file": "dispositions/us-savers-grid.yaml",
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 56,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
     "error_count": 0,
     "errors_by_engine": {},
     "match_count": 14,
@@ -1392,24 +1471,5 @@
         "savers_credit_potential": 0.0
       }
     }
-  ],
-  "provenance": {
-    "schema": "axiom_oracles.provenance.v1",
-    "generated_at": "2026-07-28T03:43:59Z",
-    "generated_by": "scripts/run_comparison.py::us-savers-grid",
-    "run_kind": "manual",
-    "rulespecs": [
-      {
-        "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": "dcbae4344c522b4ad8004169316266cbc153186f"
-      }
-    ],
-    "engine": {},
-    "oracle": {
-      "name": "policyengine",
-      "policyengine_package": "policyengine==4.18.9",
-      "policyengine_us": "1.767.3",
-      "policyengine_core": "3.30.3"
-    }
-  }
+  ]
 }
