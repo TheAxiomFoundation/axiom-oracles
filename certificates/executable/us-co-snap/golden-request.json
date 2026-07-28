@@ -1,0 +1,4311 @@
+{
+ "_description": "Golden CO SNAP household as a request against the PUBLISHED per-program artifact us-co-snap.compiled.json. Derived from co-snap-golden.engine-request.json by rewriting every dataset input from the composed-program namespace (axiom:co-snap-fy-2026#input.*) onto the durable legal id of the provision that owns the slot, per the engine's {module_target}#input.{slot} convention.",
+ "_provenance": {
+  "added_reason": "snap_countable_earned_income=1200 \u2014 the artifact treats this as an input where the composed program derived it, and the certified household definition says the $1,200 monthly income is EARNED. Under 7 CFR 273.10(e)(1)(ii)(A), 1200 - 240 (20% earned-income deduction) - 209 (standard deduction) = 751; the raw excess shelter amount 900 - 375.5 = 524.5 rounds up to 525; and statutory snap_net_income is therefore 751 - 525 = 226.",
+  "artifact": "us-co-snap.compiled.json",
+  "artifact_compiler_ref": "ffd8213271947b0189a9dd61a055c1e0e78908a0",
+  "artifact_release": "program-artifacts-59a10dab866e",
+  "artifact_sha256": "ed76001985e5d5bdcec6b3d3d3f820b0af40f106892a4ad7d8d8eb6eb1940220",
+  "dropped_reason": "41 entries named slots that do not exist in the per-program artifact's input surface (composed-program-only aggregation inputs: llc_s_corporation_*, training_allowance_*, wioa_*, vista_*, current_household_income, employee_wages_received, striking-member income, sick/vacation/bonus pay). Listed in the 2026-07-25 receipt.",
+  "eligibility_limitation": "No categorical inputs were added in this refresh. The certified household definition does not say whether either member provided or applied for an SSN, so it cannot justify the 7 CFR 273.6 inputs needed to certify snap_eligible=holds. On the pinned artifact and released engine this request returns snap_eligible=not_holds and the eligibility-gated allotment 0.",
+  "engine_ref_executed": "e3e2da83222463d9b68b0681c00820e9d412c011",
+  "engine_release_executed": "v0.1.1",
+  "inputs_added": 1,
+  "inputs_dropped": 41,
+  "inputs_rewritten": 312,
+  "source_fixture": "co-snap-golden.engine-request.json"
+ },
+ "dataset": {
+  "inputs": [
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.403.2#input.actual_documented_boarder_room_and_meal_costs",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.407.3#input.all_household_members_experiencing_homelessness",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.403.11#input.allowable_self_employment_business_costs_for_period",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.403.11#input.anticipated_capital_gains_next_12_months",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.403.11#input.anticipated_monthly_allowable_self_employment_business_costs",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.403.11#input.anticipated_monthly_self_employment_income",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.207.2#input.application_date",
+    "value": {
+     "kind": "date",
+     "value": "2026-01-01"
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.404#input.assistance_payments",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.404#input.available_trust_dividends",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.407.5#input.average_monthly_child_support_paid",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.404#input.average_rental_property_management_hours_per_week",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.410#input.battered_shelter_resident",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.403.2#input.boarder_income_is_foster_care_payment",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.403.2#input.boarder_payments_for_room_meals_and_shelter_contributions",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.410#input.bona_fide_prepaid_funeral_agreement",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.207.2#input.break_in_participation_days",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.407.5#input.child_support_payment_history_months",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.407.5#input.child_support_payment_verified",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.407.4#input.dependent_care_expense_necessary_for_work_or_training",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.407.4#input.dependent_care_expenses_paid",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.407.4#input.dependent_care_reimbursed_or_paid_by_other_program",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.404#input.direct_support_and_alimony_payments",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.403.2#input.earned_income_excluding_boarder_net_income",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.410#input.earned_income_tax_credit_resource_value",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.410#input.eitc_recipient_was_participating_in_snap_when_eitc_received",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.407.5#input.estimated_monthly_child_support_paid",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.410#input.estimated_return_after_sale_costs_and_ownership_share",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.410#input.farm_self_employment_property_value",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.410#input.farm_self_employment_terminated",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.410#input.federal_eitc_received_in_current_or_following_month",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.410#input.federal_eitc_resource_value",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.410#input.federal_income_tax_refund_received_on_or_after_2010_01_01",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.410#input.federal_income_tax_refund_resource_value",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.410#input.federal_tax_preferred_retirement_account_value",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.404#input.gifts_from_other_sources",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.404#input.gifts_from_other_sources_can_be_anticipated",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.410#input.home_and_surrounding_property_owned_or_purchased",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.410#input.home_and_surrounding_property_value",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.407.3#input.homeless_household_free_shelter_all_month",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.407.3#input.homeless_household_has_shelter_costs",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/3#input.household_contains_individual_participating_in_more_than_one_household_or_project_area",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.410#input.household_goods_personal_effects_life_insurance_and_exempt_livestock_value",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/3#input.household_in_project_area_solely_for_vacation",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.407.31#input.household_incurred_or_anticipated_heating_or_cooling_costs_separate_from_rent_or_mortgage",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.410#input.household_intends_to_build_permanent_home_on_property",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/3#input.household_lives_in_application_state",
+    "value": {
+     "kind": "bool",
+     "value": true
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.404#input.household_member_allocated_lottery_or_gambling_winnings",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.410#input.household_member_cannot_revoke_trust_or_change_beneficiary",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.410#input.household_member_use_resource_value",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.410#input.household_occupies_home",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.407.31#input.household_pays_cooking_fuel_utility_cost",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.407.31#input.household_pays_electricity_utility_cost",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.407.31#input.household_pays_sewer_utility_cost",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.407.31#input.household_pays_telephone_service_cost",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.407.31#input.household_pays_trash_utility_cost",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.407.31#input.household_pays_water_utility_cost",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.407.31#input.household_received_leap_or_e_ebt_payment_within_previous_12_months",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.407.31#input.household_shares_residence_and_pays_portion_of_heating_or_cooling_cost",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:policies/cdhs/snap/fy-2026-benefit-calculation#input.household_shelter_costs_incurred",
+    "value": {
+     "kind": "integer",
+     "value": 900
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.207.3#input.household_size",
+    "value": {
+     "kind": "integer",
+     "value": 2
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.410#input.household_vehicle_resource_value",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.410#input.inaccessible_former_household_resource_value",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.410#input.inaccessible_resource_value",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.410#input.income_producing_property_value",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.207.2#input.initial_application_month",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.410#input.installment_contract_and_secured_property_value",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.410#input.installment_contract_produces_income_consistent_with_fair_market_value",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.407.31#input.irregular_heating_or_cooling_costs_between_billing_periods",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.408.1#input.liquid_resource_current_redemption_rate",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.408.1#input.liquid_resource_encumbrances",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.207.2#input.migrant_or_seasonal_farmworker_household_in_job_stream",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.410#input.months_since_eitc_received",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.410#input.months_since_farm_self_employment_terminated",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.410#input.months_since_federal_income_tax_refund_received",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.410#input.no_significant_return_resource_value",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.408.1#input.non_liquid_resource_condition_adjustment",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.408.1#input.non_liquid_resource_market_value",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.410#input.non_liquid_resource_net_return_if_sold",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.408.1#input.non_liquid_resource_verified_encumbrances",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.408.2#input.nonexempt_transferred_resources",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.404#input.nonprofit_gifts_received_in_fiscal_quarter",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:policies/cdhs/snap/fy-2026-benefit-calculation#input.number_of_boarders",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.408.2#input.other_countable_resources",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.404#input.other_gain_or_benefit_payments",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:policies/cdhs/snap/fy-2026-benefit-calculation#input.other_household_resource_value",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.410#input.prepaid_funeral_agreement_equity_value_excluding_burial_plot",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.407.31#input.private_rental_housing_landlord_bills_heating_or_cooling_separately",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.410#input.property_produces_annual_income_consistent_with_fair_market_value",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.410#input.prorated_income_resource_value",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.410#input.prorated_income_still_being_counted_as_income",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.407.31#input.public_housing_responsible_for_excess_heating_or_cooling_costs",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.207.2#input.public_institution_joint_ssi_snap_application_before_release",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.207.2#input.public_institution_release_date",
+    "value": {
+     "kind": "date",
+     "value": "2026-01-01"
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.408.1#input.real_property_actual_value_reported_by_county_assessor",
+    "value": {
+     "kind": "bool",
+     "value": true
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.408.1#input.real_property_amount_owed",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.408.1#input.real_property_assessment_percentage_rate",
+    "value": {
+     "kind": "integer",
+     "value": 1
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.408.1#input.real_property_county_assessor_actual_value",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.408.1#input.real_property_current_assessed_valuation",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.410#input.real_property_good_faith_sale_effort",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.404#input.rental_property_business_costs",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.404#input.rental_property_gross_income",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/3#input.resident_of_battered_women_and_children_shelter_and_prior_abusive_household_member",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.410#input.resource_access_depends_on_abusive_former_household_member",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.410#input.resource_cash_value_not_accessible_to_household",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.410#input.resource_exclusion_applies_because_used_by_or_for_household_member_or_counted_disqualified_person",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.410#input.resource_in_probate_or_sale_barred_by_lien",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.410#input.resource_is_negotiable_financial_instrument",
+    "value": {
+     "kind": "bool",
+     "value": true
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.408.2#input.resource_transfer_by_counted_person_within_review_period",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.408.2#input.resource_transferred_knowingly_to_qualify_for_snap",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.408.2#input.resources_transferred_between_same_household_members",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.404#input.retirement_disability_payments",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.403.11#input.self_employment_capital_gains_for_period",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.403.11#input.self_employment_gross_income_for_period",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.403.11#input.self_employment_income_calculated_on_anticipated_basis",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.403.11#input.self_employment_income_period_months",
+    "value": {
+     "kind": "integer",
+     "value": 1
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.403.2#input.shelter_expenses_paid_directly_by_boarder_to_third_party",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.207.3#input.snap_basic_categorical_eligible",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.207.3#input.snap_expanded_categorical_eligible",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.410#input.snap_participation_continues_or_temporary_nonparticipation_is_administrative",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.410#input.specific_purpose_or_federally_excluded_government_payment_resource_value",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.404#input.sponsor_income_deemed_to_household",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.408#input.sponsor_total_resources",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.404#input.sponsored_noncitizen_household",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.307#input.striking_member_current_income",
+    "value": {
+     "kind": "decimal",
+     "value": "0"
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.404#input.substantial_lottery_or_gambling_winnings_received",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.410#input.tax_deferred_education_account_value",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.410#input.temporary_absence_for_allowed_reason_with_intent_to_return",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:policies/cdhs/snap/fy-2026-benefit-calculation#input.total_medical_expenses",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.408.2#input.transfer_reason_other_than_snap_qualification",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.408.2#input.transferred_resources_sold_or_traded_at_or_near_fair_market_value",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.408.2#input.transferred_resources_would_not_affect_eligibility",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.410#input.trust_arrangement_will_not_likely_cease_during_certification_period",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.404#input.trust_fund_withdrawals",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.410#input.trust_funds_are_for_allowed_investment_education_or_medical_purpose_or_from_nonhousehold_member",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.410#input.trust_investments_do_not_assist_household_controlled_business",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.410#input.trustee_is_independent_or_court_limited",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.404#input.vacation_sick_or_bonus_pay",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.404#input.vacation_sick_or_bonus_pay_after_terminated_employment",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.404#input.vacation_sick_or_bonus_pay_received_as_lump_sum",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.404#input.vacation_sick_or_bonus_pay_received_in_installments",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.407.3#input.verified_higher_homeless_shelter_costs",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:statutes/7/2014/e/2#input.work_supplementation_earned_income",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/5#input.adequate_child_care_unavailable_to_attend_class_and_meet_student_work_requirement",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/7#input.alaska_subsistence_hunts_or_fishes_30_hours_weekly",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/4#input.alien_status_documentation_missing_or_unwilling",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/5#input.assigned_or_placed_in_higher_education_through_qualifying_employment_training_program",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.401#input.co_resident_gross_income",
+    "value": {
+     "kind": "decimal",
+     "value": "0"
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.401#input.elderly_disabled_person_unable_to_purchase_and_prepare_meals",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/5#input.enrolled_at_least_half_time",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/5#input.enrolled_in_business_technical_trade_or_vocational_school_requiring_high_school_diploma",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/5#input.enrolled_in_college_or_university_degree_program",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/5#input.enrolled_through_jobs_or_successor_program",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.306.1#input.federal_minimum_wage",
+    "value": {
+     "kind": "decimal",
+     "value": "0"
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/7#input.federal_or_state_minimum_wage",
+    "value": {
+     "kind": "decimal",
+     "value": "0"
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/5#input.known_student_refused_work_study_assignment",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.311#input.member_abawd_monthly_work_hours",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.311#input.member_abawd_weekly_work_hours",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/7#input.member_accepted_bona_fide_suitable_employment_offer_if_offered",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.311#input.member_age",
+    "value": {
+     "kind": "integer",
+     "value": 42
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/7#input.member_age_16_or_17_is_not_household_head_or_attends_school_or_training_half_time",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/24#input.member_age_24_or_younger_and_was_in_foster_care_on_attaining_age_18",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/24#input.member_combines_work_and_work_program_20_hours_weekly",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/24#input.member_covered_by_abawd_time_limit_waiver",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/24#input.member_has_additional_three_month_abawd_eligibility",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/4#input.member_has_deportation_or_removal_withheld",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/4#input.member_has_eligible_military_connection",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/4#input.member_is_amerasian_immigrant",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/4#input.member_is_american_indian_born_in_canada_or_recognized_indian_tribe_member",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/4#input.member_is_asylee",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/4#input.member_is_cuban_or_haitian_entrant",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/4#input.member_is_hmong_or_highland_laotian_qualifying_person_or_family_member",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/24#input.member_is_homeless",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/24#input.member_is_parent_of_household_member_under_age_eighteen",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/24#input.member_is_pregnant",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/4#input.member_is_qualified_alien_subject_to_five_year_wait",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/4#input.member_is_qualified_alien_with_forty_qualifying_quarters",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/4#input.member_is_refugee",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/4#input.member_is_trafficking_victim_or_qualifying_family_member",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/4#input.member_is_under_age_eighteen",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/4#input.member_is_us_citizen",
+    "value": {
+     "kind": "bool",
+     "value": true
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/4#input.member_is_us_noncitizen_national",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/24#input.member_is_veteran",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/24#input.member_medically_certified_physically_or_mentally_unfit_for_employment",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/7#input.member_participated_in_snap_et_if_assigned",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/7#input.member_participated_in_workfare_if_assigned",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.311#input.member_participates_in_abawd_work_program_20_hours_weekly",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/24#input.member_participates_in_abawd_workfare_program",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/7#input.member_physically_or_mentally_unfit_for_employment",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/7#input.member_provided_employment_status_or_availability_information",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/4#input.member_receives_blindness_or_disability_benefits",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/7#input.member_receiving_or_applying_for_unemployment_compensation_and_complying",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/24#input.member_regained_abawd_eligibility",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/7#input.member_registered_for_work_or_registered_by_state",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/7#input.member_regular_participant_in_drug_or_alcohol_treatment",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/7#input.member_reported_to_referred_suitable_employer_if_referred",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/24#input.member_resides_with_household_member_under_age_eighteen",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/7#input.member_responsible_for_dependent_child_under_six_or_incapacitated_person",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/7#input.member_snap_work_requirements_waived_due_to_pending_ssi_joint_application",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/7#input.member_student_enrolled_at_least_half_time_and_student_eligible",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/7#input.member_subject_to_and_complying_with_title_iv_work_requirement",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/7#input.member_voluntarily_quit_or_reduced_work_below_30_hours_without_good_cause",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/4#input.member_was_lawfully_residing_on_1996_08_22_and_born_on_or_before_1931_08_22",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/7#input.member_weekly_wages",
+    "value": {
+     "kind": "decimal",
+     "value": "0"
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/7#input.member_weekly_work_hours",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/7#input.migrant_or_seasonal_farmworker_under_contract_to_begin_employment_within_30_days",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/4#input.qualified_alien_five_year_status_period_met",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/5#input.responsible_for_care_of_dependent_child_under_twelve",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/5#input.responsible_for_care_of_dependent_household_member_age_six_to_under_twelve",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/5#input.responsible_for_care_of_dependent_household_member_under_age_six",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/5#input.single_parent_enrolled_full_time_in_higher_education",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/5#input.single_parent_household_condition_satisfied",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.311#input.snap_abawd_countable_months_in_three_year_period",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:statutes/7/2012/j#input.snap_member_is_elderly_or_disabled",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/5#input.state_agency_averaged_student_work_hours_meet_twenty_per_week",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/5#input.student_age",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/5#input.student_anticipates_working_in_work_study",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.306.1#input.student_currently_being_trained_by_employer",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/5#input.student_paid_employment_hours_per_week",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.306.1#input.student_participating_in_on_the_job_training_program",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/5#input.student_participating_in_state_or_federally_financed_work_study",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/5#input.student_physically_or_mentally_unfit",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/5#input.student_receives_tanf",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/5#input.student_self_employment_hours_per_week",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/5#input.student_self_employment_weekly_earnings",
+    "value": {
+     "kind": "decimal",
+     "value": "0"
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/5#input.work_study_approved_at_snap_application",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.306.1#input.work_study_approved_for_school_term",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/5#input.work_study_exemption_period_active",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/5#input.adequate_child_care_unavailable_to_attend_class_and_meet_student_work_requirement",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/7#input.alaska_subsistence_hunts_or_fishes_30_hours_weekly",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/4#input.alien_status_documentation_missing_or_unwilling",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/5#input.assigned_or_placed_in_higher_education_through_qualifying_employment_training_program",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.401#input.co_resident_gross_income",
+    "value": {
+     "kind": "decimal",
+     "value": "0"
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.401#input.elderly_disabled_person_unable_to_purchase_and_prepare_meals",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/5#input.enrolled_at_least_half_time",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/5#input.enrolled_in_business_technical_trade_or_vocational_school_requiring_high_school_diploma",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/5#input.enrolled_in_college_or_university_degree_program",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/5#input.enrolled_through_jobs_or_successor_program",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.306.1#input.federal_minimum_wage",
+    "value": {
+     "kind": "decimal",
+     "value": "0"
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/7#input.federal_or_state_minimum_wage",
+    "value": {
+     "kind": "decimal",
+     "value": "0"
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/5#input.known_student_refused_work_study_assignment",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.311#input.member_abawd_monthly_work_hours",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.311#input.member_abawd_weekly_work_hours",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/7#input.member_accepted_bona_fide_suitable_employment_offer_if_offered",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.311#input.member_age",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/7#input.member_age_16_or_17_is_not_household_head_or_attends_school_or_training_half_time",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/24#input.member_age_24_or_younger_and_was_in_foster_care_on_attaining_age_18",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/24#input.member_combines_work_and_work_program_20_hours_weekly",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/24#input.member_covered_by_abawd_time_limit_waiver",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/24#input.member_has_additional_three_month_abawd_eligibility",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/4#input.member_has_deportation_or_removal_withheld",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/4#input.member_has_eligible_military_connection",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/4#input.member_is_amerasian_immigrant",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/4#input.member_is_american_indian_born_in_canada_or_recognized_indian_tribe_member",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/4#input.member_is_asylee",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/4#input.member_is_cuban_or_haitian_entrant",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/4#input.member_is_hmong_or_highland_laotian_qualifying_person_or_family_member",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/24#input.member_is_homeless",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/24#input.member_is_parent_of_household_member_under_age_eighteen",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/24#input.member_is_pregnant",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/4#input.member_is_qualified_alien_subject_to_five_year_wait",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/4#input.member_is_qualified_alien_with_forty_qualifying_quarters",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/4#input.member_is_refugee",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/4#input.member_is_trafficking_victim_or_qualifying_family_member",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/4#input.member_is_under_age_eighteen",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/4#input.member_is_us_citizen",
+    "value": {
+     "kind": "bool",
+     "value": true
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/4#input.member_is_us_noncitizen_national",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/24#input.member_is_veteran",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/24#input.member_medically_certified_physically_or_mentally_unfit_for_employment",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/7#input.member_participated_in_snap_et_if_assigned",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/7#input.member_participated_in_workfare_if_assigned",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.311#input.member_participates_in_abawd_work_program_20_hours_weekly",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/24#input.member_participates_in_abawd_workfare_program",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/7#input.member_physically_or_mentally_unfit_for_employment",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/7#input.member_provided_employment_status_or_availability_information",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/4#input.member_receives_blindness_or_disability_benefits",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/7#input.member_receiving_or_applying_for_unemployment_compensation_and_complying",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/24#input.member_regained_abawd_eligibility",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/7#input.member_registered_for_work_or_registered_by_state",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/7#input.member_regular_participant_in_drug_or_alcohol_treatment",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/7#input.member_reported_to_referred_suitable_employer_if_referred",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/24#input.member_resides_with_household_member_under_age_eighteen",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/7#input.member_responsible_for_dependent_child_under_six_or_incapacitated_person",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/7#input.member_snap_work_requirements_waived_due_to_pending_ssi_joint_application",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/7#input.member_student_enrolled_at_least_half_time_and_student_eligible",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/7#input.member_subject_to_and_complying_with_title_iv_work_requirement",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/7#input.member_voluntarily_quit_or_reduced_work_below_30_hours_without_good_cause",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/4#input.member_was_lawfully_residing_on_1996_08_22_and_born_on_or_before_1931_08_22",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/7#input.member_weekly_wages",
+    "value": {
+     "kind": "decimal",
+     "value": "0"
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/7#input.member_weekly_work_hours",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/7#input.migrant_or_seasonal_farmworker_under_contract_to_begin_employment_within_30_days",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/4#input.qualified_alien_five_year_status_period_met",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/5#input.responsible_for_care_of_dependent_child_under_twelve",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/5#input.responsible_for_care_of_dependent_household_member_age_six_to_under_twelve",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/5#input.responsible_for_care_of_dependent_household_member_under_age_six",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/5#input.single_parent_enrolled_full_time_in_higher_education",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/5#input.single_parent_household_condition_satisfied",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.311#input.snap_abawd_countable_months_in_three_year_period",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:statutes/7/2012/j#input.snap_member_is_elderly_or_disabled",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/5#input.state_agency_averaged_student_work_hours_meet_twenty_per_week",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/5#input.student_age",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/5#input.student_anticipates_working_in_work_study",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.306.1#input.student_currently_being_trained_by_employer",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/5#input.student_paid_employment_hours_per_week",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.306.1#input.student_participating_in_on_the_job_training_program",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/5#input.student_participating_in_state_or_federally_financed_work_study",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/5#input.student_physically_or_mentally_unfit",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/5#input.student_receives_tanf",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/5#input.student_self_employment_hours_per_week",
+    "value": {
+     "kind": "integer",
+     "value": 0
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/5#input.student_self_employment_weekly_earnings",
+    "value": {
+     "kind": "decimal",
+     "value": "0"
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/5#input.work_study_approved_at_snap_application",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us-co:regulations/10-ccr-2506-1/4.306.1#input.work_study_approved_for_school_term",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/5#input.work_study_exemption_period_active",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Household",
+    "entity_id": "household:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:statutes/7/2014/e/2#input.snap_countable_earned_income",
+    "value": {
+     "kind": "decimal",
+     "value": "1200"
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/6#input.member_refused_or_failed_to_provide_or_apply_for_ssn",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/6#input.member_has_documentary_or_collateral_evidence_of_ssn_application_or_every_effort",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/6#input.state_agency_fault_in_ssn_application_processing",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/6#input.member_unable_to_obtain_documents_required_for_ssn_application_with_caseworker_assistance_needed",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/6#input.member_ssn_application_filed_pending_state_agency_notification",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:1",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/6#input.member_later_provided_ssn_ending_disqualification",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/6#input.member_refused_or_failed_to_provide_or_apply_for_ssn",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/6#input.member_has_documentary_or_collateral_evidence_of_ssn_application_or_every_effort",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/6#input.state_agency_fault_in_ssn_application_processing",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/6#input.member_unable_to_obtain_documents_required_for_ssn_application_with_caseworker_assistance_needed",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/6#input.member_ssn_application_filed_pending_state_agency_notification",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   },
+   {
+    "entity": "Person",
+    "entity_id": "person:1:2",
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:regulations/7-cfr/273/6#input.member_later_provided_ssn_ending_disqualification",
+    "value": {
+     "kind": "bool",
+     "value": false
+    }
+   }
+  ],
+  "relations": [
+   {
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:statutes/7/2012/j#relation.member_of_household",
+    "tuple": [
+     "person:1:1",
+     "household:1"
+    ]
+   },
+   {
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "us:statutes/7/2012/j#relation.member_of_household",
+    "tuple": [
+     "person:1:2",
+     "household:1"
+    ]
+   },
+   {
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "member_of_household",
+    "tuple": [
+     "person:1:1",
+     "household:1"
+    ]
+   },
+   {
+    "interval": {
+     "end": "2026-02-01",
+     "start": "2026-01-01"
+    },
+    "name": "member_of_household",
+    "tuple": [
+     "person:1:2",
+     "household:1"
+    ]
+   }
+  ]
+ },
+ "mode": "explain",
+ "queries": [
+  {
+   "entity_id": "household:1",
+   "outputs": [
+    "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
+    "us:regulations/7-cfr/273/10#snap_monthly_allotment",
+    "us:statutes/7/2014/e/6/A#snap_net_income",
+    "us:policies/usda/snap/fy-2026-cola/maximum-allotments#snap_maximum_allotment",
+    "us-co:policies/cdhs/snap/fy-2026-benefit-calculation#snap_eligible"
+   ],
+   "period": {
+    "end": "2026-02-01",
+    "period_kind": "month",
+    "start": "2026-01-01"
+   }
+  }
+ ]
+}

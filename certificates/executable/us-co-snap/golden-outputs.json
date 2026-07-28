@@ -1,0 +1,13 @@
+{
+ "description": "Golden-household output bindings: calculate-request variable -> engine legal-id output. Derived from axiom-api data/compiled-packages.current.json (co-snap outputs_by_name + output_aliases). Regenerate with the fixture whenever the co-snap package config changes.",
+ "bindings": {
+  "snap_benefit_amount": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
+  "snap_net_income": "us:statutes/7/2014/e/6/A#snap_net_income",
+  "snap_eligible": "us-co:policies/cdhs/snap/fy-2026-benefit-calculation#snap_eligible"
+ },
+ "expected": {
+  "snap_benefit_amount": 478,
+  "snap_net_income": 226,
+  "snap_eligible": "holds"
+ }
+}

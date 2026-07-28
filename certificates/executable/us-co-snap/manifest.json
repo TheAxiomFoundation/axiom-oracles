@@ -1,0 +1,33 @@
+{
+  "schema": "axiom_oracles.executable_manifest.v1",
+  "program": "us-co/snap",
+  "receipt_path": "certificates/executable/us-co-snap/receipt.json",
+  "engine": {
+    "release_manifest": "certificates/executable/engine-releases.json",
+    "release": "v0.1.1",
+    "target": "x86_64-unknown-linux-gnu"
+  },
+  "artifact": {
+    "repository": "TheAxiomFoundation/rulespec-us",
+    "release": "program-artifacts-59a10dab866e",
+    "release_manifest": {
+      "name": "manifest.json",
+      "sha256": "5fd597f79bf3fb77f756276339be588bb8d202ff8152553ec4af3ab9e2cba307"
+    },
+    "name": "us-co-snap.compiled.json",
+    "sha256": "ed76001985e5d5bdcec6b3d3d3f820b0af40f106892a4ad7d8d8eb6eb1940220"
+  },
+  "golden": {
+    "name": "co-snap-golden",
+    "input_path": "certificates/executable/us-co-snap/golden-request.json",
+    "input_sha256": "8cbf093601f94a8f5a4517aeb27a4851439776d9d16933785c540839f4655dc3",
+    "outputs_path": "certificates/executable/us-co-snap/golden-outputs.json",
+    "outputs_sha256": "aeb58a9c5729744beb2757000d49bbdbce4e10a03ac919a623539f27b291344f"
+  },
+  "workflow": {
+    "allowlist": "certificates/executable/workflow-allowlist.json",
+    "repository": "TheAxiomFoundation/axiom-oracles",
+    "path": ".github/workflows/executable-receipt.yml",
+    "event": "workflow_dispatch"
+  }
+}

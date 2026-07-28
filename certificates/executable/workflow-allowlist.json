@@ -1,0 +1,6 @@
+{
+  "schema": "axiom_oracles.executable_workflow_allowlist.v1",
+  "repository": "TheAxiomFoundation/axiom-oracles",
+  "path": ".github/workflows/executable-receipt.yml",
+  "allowed_workflow_shas": []
+}
