@@ -156,6 +156,18 @@ _DESCRIPTION_BY_OUTPUT = {
         "and final annual liability"
     ),
     (
+        "us-sc:policies/income_tax/pilot_liability_pipeline"
+        "#sc_pit_pilot_income_tax_liability"
+    ): (
+        "South Carolina tax-year-2026 individual income tax before "
+        "nonrefundable credits, computed from caller-supplied completed South "
+        "Carolina taxable income under the enacted two-bracket schedule over "
+        "every routed tax unit in the pinned US Populace; the runtime fails "
+        "closed unless every selected boundary is nonnegative, and this "
+        "bounded suite excludes taxable-income construction, nonrefundable "
+        "credits, payments, and final annual liability"
+    ),
+    (
         "us-oh:policies/income_tax/pilot_liability_pipeline"
         "#oh_pit_pilot_schedule_tax"
     ): (

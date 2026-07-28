@@ -451,6 +451,88 @@ def test_pennsylvania_projection_diagnostics_reject_negative_values(
         )
 
 
+def test_south_carolina_projection_diagnostics_pin_nonnegative_boundary_and_output() -> None:
+    slot = (
+        "us-sc:policies/income_tax/pilot_liability_pipeline#input."
+        "sc_pit_pilot_state_taxable_income"
+    )
+    routes = (
+        TaxUnitRoute(1, 1, "SC", "45", 1, DISPOSITION_READY),
+        TaxUnitRoute(2, 2, "SC", "45", 1, DISPOSITION_READY),
+        TaxUnitRoute(3, 3, "SC", "45", 1, DISPOSITION_READY),
+        TaxUnitRoute(4, 4, "SC", "45", 1, DISPOSITION_BLOCKED),
+    )
+
+    diagnostics = campaign._projection_branch_diagnostics(
+        {
+            "SC": {
+                slot: {
+                    1: 0.0,
+                    2: 30_000.0,
+                    3: 100_000.0,
+                    4: -1.0,
+                }
+            }
+        },
+        routes,
+        {
+            "SC": {
+                1: 0.0,
+                2: 596.81,
+                3: 4_281.0,
+                4: 0.0,
+            }
+        },
+    )
+
+    assert diagnostics == {
+        "SC": {
+            "compared_tax_unit_count": 3,
+            "negative_taxable_income_count": 0,
+            "zero_taxable_income_count": 1,
+            "positive_taxable_income_count": 2,
+            "zero_output_count": 1,
+            "positive_output_count": 2,
+        }
+    }
+
+
+def test_south_carolina_projection_diagnostics_require_exact_target_inventory() -> None:
+    slot = (
+        "us-sc:policies/income_tax/pilot_liability_pipeline#input."
+        "sc_pit_pilot_state_taxable_income"
+    )
+    with pytest.raises(ValueError, match="target values"):
+        campaign._projection_branch_diagnostics(
+            {"SC": {slot: {1: 100.0}}},
+            (TaxUnitRoute(1, 1, "SC", "45", 1, DISPOSITION_READY),),
+        )
+
+
+@pytest.mark.parametrize(
+    ("taxable", "target", "message"),
+    [
+        (-1.0, 0.0, "nonnegative South Carolina taxable income"),
+        (0.0, -1.0, "nonnegative tax before nonrefundable credits"),
+    ],
+)
+def test_south_carolina_projection_diagnostics_reject_negative_values(
+    taxable,
+    target,
+    message,
+) -> None:
+    slot = (
+        "us-sc:policies/income_tax/pilot_liability_pipeline#input."
+        "sc_pit_pilot_state_taxable_income"
+    )
+    with pytest.raises(ValueError, match=message):
+        campaign._projection_branch_diagnostics(
+            {"SC": {slot: {1: taxable}}},
+            (TaxUnitRoute(1, 1, "SC", "45", 1, DISPOSITION_READY),),
+            {"SC": {1: target}},
+        )
+
+
 @pytest.mark.parametrize(
     ("taxable", "recapture", "message"),
     [

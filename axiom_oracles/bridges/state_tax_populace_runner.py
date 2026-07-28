@@ -101,6 +101,21 @@ PA_BEFORE_FORGIVENESS_INPUT = (
 )
 PA_ADJUSTED_TAXABLE_INCOME = "pa_adjusted_taxable_income"
 PA_2026_RATE = 0.0307
+SC_BEFORE_NONREFUNDABLE_CREDITS_TARGET = (
+    "sc_income_tax_before_non_refundable_credits"
+)
+SC_BEFORE_NONREFUNDABLE_CREDITS_PROGRAM = (
+    "us-sc:policies/income_tax/pilot_liability_pipeline"
+)
+SC_BEFORE_NONREFUNDABLE_CREDITS_OUTPUT = (
+    f"{SC_BEFORE_NONREFUNDABLE_CREDITS_PROGRAM}"
+    "#sc_pit_pilot_income_tax_liability"
+)
+SC_BEFORE_NONREFUNDABLE_CREDITS_INPUT = (
+    f"{SC_BEFORE_NONREFUNDABLE_CREDITS_PROGRAM}#input."
+    "sc_pit_pilot_state_taxable_income"
+)
+SC_TAXABLE_INCOME = "sc_taxable_income"
 OH_NONBUSINESS_BEFORE_CREDITS_DERIVED_TARGET = (
     "oh_nonbusiness_income_tax_before_non_refundable_credits_derived"
 )
@@ -830,6 +845,9 @@ def calculate_policyengine_targets(
         if state == "PA":
             _validate_pennsylvania_runtime_contract(jurisdiction)
             _validate_pennsylvania_policyengine_runtime(sim=sim, year=year)
+        if state == "SC":
+            _validate_south_carolina_runtime_contract(jurisdiction)
+            _validate_south_carolina_policyengine_runtime(sim=sim, year=year)
         if state == "IL":
             _validate_illinois_runtime_contract(jurisdiction)
         if (
@@ -1316,6 +1334,113 @@ def calculate_policyengine_targets(
                 zip(tax_unit_ids, reviewed, strict=True)
             )
             continue
+        if state == "SC":
+            modeled_ids = [
+                _clean_id(value)
+                for value in _array_values(
+                    sim.calculate("tax_unit_id", period=year)
+                )
+            ]
+            taxable_values = _array_values(
+                sim.calculate(SC_TAXABLE_INCOME, period=year)
+            )
+            tax_values = _array_values(
+                sim.calculate(
+                    SC_BEFORE_NONREFUNDABLE_CREDITS_TARGET,
+                    period=year,
+                )
+            )
+            cardinalities = (
+                len(modeled_ids),
+                len(taxable_values),
+                len(tax_values),
+            )
+            if any(length != len(tax_unit_ids) for length in cardinalities):
+                raise StateTaxPopulationRoutingError(
+                    "SC: PolicyEngine before-nonrefundable-credits target "
+                    "inputs returned "
+                    f"{', '.join(str(length) for length in cardinalities)} rows "
+                    f"for {len(tax_unit_ids)} tax units"
+                )
+            _reject_duplicate_ids(tax_unit_ids, "SC source tax_unit_id")
+            _reject_duplicate_ids(
+                modeled_ids, "SC PolicyEngine tax_unit_id"
+            )
+            if modeled_ids != tax_unit_ids:
+                raise StateTaxPopulationRoutingError(
+                    "SC: PolicyEngine tax_unit_id order does not match the "
+                    "certified source tax-unit order"
+                )
+            selected_ids = {
+                route.tax_unit_id
+                for route in route_rows
+                if route.state == "SC"
+                and route.disposition == DISPOSITION_READY
+            }
+            reviewed: list[float] = []
+            selected_taxable: list[float] = []
+            selected_tax: list[float] = []
+            for tax_unit_id, taxable_value, tax_value in zip(
+                tax_unit_ids,
+                taxable_values,
+                tax_values,
+                strict=True,
+            ):
+                taxable = _finite_number(
+                    taxable_value,
+                    label=SC_TAXABLE_INCOME,
+                )
+                tax = _finite_number(
+                    tax_value,
+                    label=SC_BEFORE_NONREFUNDABLE_CREDITS_TARGET,
+                )
+                if tax_unit_id in selected_ids:
+                    if taxable < 0:
+                        raise StateTaxPopulationRoutingError(
+                            "SC: every selected sc_taxable_income value must "
+                            "be nonnegative"
+                        )
+                    if tax < 0:
+                        raise StateTaxPopulationRoutingError(
+                            "SC: tax before nonrefundable credits must be "
+                            "nonnegative for every selected tax unit"
+                        )
+                    if taxable == 0 and tax != 0:
+                        raise StateTaxPopulationRoutingError(
+                            "SC: zero sc_taxable_income must produce exactly "
+                            "zero tax before nonrefundable credits"
+                        )
+                    if taxable > 0 and tax <= 0:
+                        raise StateTaxPopulationRoutingError(
+                            "SC: positive sc_taxable_income must produce "
+                            "positive tax before nonrefundable credits"
+                        )
+                    selected_taxable.append(taxable)
+                    selected_tax.append(tax)
+                reviewed.append(tax)
+            if not selected_taxable:
+                raise StateTaxPopulationRoutingError(
+                    "SC: before-nonrefundable-credits promotion requires "
+                    "selected tax units"
+                )
+            if not any(value == 0 for value in selected_taxable) or not any(
+                value > 0 for value in selected_taxable
+            ):
+                raise StateTaxPopulationRoutingError(
+                    "SC: selected sc_taxable_income must include both zero "
+                    "and positive witnesses"
+                )
+            if not any(value == 0 for value in selected_tax) or not any(
+                value > 0 for value in selected_tax
+            ):
+                raise StateTaxPopulationRoutingError(
+                    "SC: selected tax before nonrefundable credits must "
+                    "include both zero and positive witnesses"
+                )
+            targets[state] = dict(
+                zip(tax_unit_ids, reviewed, strict=True)
+            )
+            continue
         if (
             state == "OH"
             and jurisdiction.policyengine_target
@@ -1583,6 +1708,9 @@ def calculate_policyengine_projection_inputs(
         if state == "PA":
             _validate_pennsylvania_runtime_contract(jurisdiction)
             _validate_pennsylvania_policyengine_runtime(sim=sim, year=year)
+        if state == "SC":
+            _validate_south_carolina_runtime_contract(jurisdiction)
+            _validate_south_carolina_policyengine_runtime(sim=sim, year=year)
         if state == "IL":
             _validate_illinois_runtime_contract(jurisdiction)
             for variable in IL_REVIEWED_INPUTS.values():
@@ -1591,7 +1719,7 @@ def calculate_policyengine_projection_inputs(
                     state="IL",
                     variable=variable,
                 )
-        if state in {"IL", "IN", "NY", "PA"}:
+        if state in {"IL", "IN", "NY", "PA", "SC"}:
             modeled_ids = [
                 _clean_id(value)
                 for value in _array_values(
@@ -1920,6 +2048,31 @@ def calculate_policyengine_projection_inputs(
                         raise StateTaxPopulationRoutingError(
                             "PA: every selected pa_adjusted_taxable_income "
                             "boundary must be nonnegative"
+                        )
+                if state == "SC" and variable == SC_TAXABLE_INCOME:
+                    selected_ids = {
+                        route.tax_unit_id
+                        for route in route_rows
+                        if route.state == "SC"
+                        and route.disposition == DISPOSITION_READY
+                    }
+                    selected_values = [
+                        value
+                        for tax_unit_id, value in zip(
+                            tax_unit_ids,
+                            projected,
+                            strict=True,
+                        )
+                        if tax_unit_id in selected_ids
+                    ]
+                    if not selected_values:
+                        raise StateTaxPopulationRoutingError(
+                            "SC: projection requires selected tax units"
+                        )
+                    if any(value < 0 for value in selected_values):
+                        raise StateTaxPopulationRoutingError(
+                            "SC: every selected sc_taxable_income boundary "
+                            "must be nonnegative"
                         )
             state_inputs[slot.slot] = dict(
                 zip(tax_unit_ids, projected, strict=True)
@@ -2919,6 +3072,195 @@ def _validate_pennsylvania_policyengine_runtime(*, sim: Any, year: int) -> None:
                 "PA: active 2026 before-forgiveness formula must read exactly "
                 "pa_adjusted_taxable_income and "
                 "gov.states.pa.tax.income.rate"
+            )
+
+
+def _validate_south_carolina_runtime_contract(jurisdiction: Any) -> None:
+    """Fail closed if the canonical South Carolina PIT contract drifts."""
+
+    if (
+        jurisdiction.policyengine_target
+        != SC_BEFORE_NONREFUNDABLE_CREDITS_TARGET
+    ):
+        raise StateTaxPopulationRoutingError(
+            "SC: reviewed runner requires the exact "
+            "sc_income_tax_before_non_refundable_credits target"
+        )
+    if (
+        jurisdiction.program != SC_BEFORE_NONREFUNDABLE_CREDITS_PROGRAM
+        or jurisdiction.output != SC_BEFORE_NONREFUNDABLE_CREDITS_OUTPUT
+    ):
+        raise StateTaxPopulationRoutingError(
+            "SC: reviewed runner requires the exact canonical RuleSpec "
+            "program and before-nonrefundable-credits output"
+        )
+    actual_inputs = {
+        slot.slot: (
+            slot.source_kind,
+            slot.status,
+            slot.policyengine_variable,
+            slot.policyengine_variables,
+            slot.policyengine_relationship,
+            slot.policyengine_transform,
+            slot.constant_value,
+        )
+        for slot in jurisdiction.inputs
+    }
+    expected_inputs = {
+        SC_BEFORE_NONREFUNDABLE_CREDITS_INPUT: (
+            "pe_upstream_boundary",
+            "ready",
+            SC_TAXABLE_INCOME,
+            (),
+            "upstream",
+            None,
+            None,
+        )
+    }
+    if actual_inputs != expected_inputs or jurisdiction.relations:
+        raise StateTaxPopulationRoutingError(
+            "SC: reviewed runner requires exactly the completed South "
+            "Carolina taxable-income upstream boundary and no relations"
+        )
+
+
+def _south_carolina_2026_schedule(taxable_income: float) -> float:
+    if taxable_income < 30_000:
+        return taxable_income * 0.0199
+    return taxable_income * 0.0521 - 966
+
+
+def _validate_south_carolina_policyengine_runtime(
+    *,
+    sim: Any,
+    year: int,
+) -> None:
+    """Prove the active PolicyEngine target retains its reviewed 2026 shape."""
+
+    if year != 2026:
+        raise StateTaxPopulationRoutingError(
+            "SC: reviewed before-nonrefundable-credits schedule is 2026 only"
+        )
+    for variable in (
+        SC_BEFORE_NONREFUNDABLE_CREDITS_TARGET,
+        SC_TAXABLE_INCOME,
+    ):
+        _require_policyengine_tax_unit_year_money_variable(
+            sim,
+            state="SC",
+            variable=variable,
+        )
+    try:
+        target_definition = sim.tax_benefit_system.variables[
+            SC_BEFORE_NONREFUNDABLE_CREDITS_TARGET
+        ]
+        formula = target_definition.get_formula(year)
+        rates = (
+            sim.tax_benefit_system.parameters(year)
+            .gov.states.sc.tax.income.rates
+        )
+    except (AttributeError, KeyError, TypeError) as exc:
+        raise StateTaxPopulationRoutingError(
+            "SC: active 2026 formula, dependency, or rates schema drifted"
+        ) from exc
+    if formula is None or not callable(getattr(rates, "calc", None)):
+        raise StateTaxPopulationRoutingError(
+            "SC: active 2026 formula and marginal-rate schedule are required"
+        )
+
+    probes = (0.0, 1.0, 29_999.0, 30_000.0, 30_001.0, 100_000.0)
+    for taxable_income in probes:
+        actual = _finite_number(
+            rates.calc(taxable_income),
+            label="gov.states.sc.tax.income.rates",
+        )
+        expected = _south_carolina_2026_schedule(taxable_income)
+        if actual != expected:
+            raise StateTaxPopulationRoutingError(
+                "SC: active 2026 marginal-rate schedule must retain the "
+                "reviewed 1.99% / 5.21%-minus-$966 boundary; "
+                f"at {taxable_income!r}, got {actual!r}"
+            )
+
+    class FormulaRates:
+        def __init__(self) -> None:
+            self.calls: list[float] = []
+
+        def calc(self, taxable_income: float) -> float:
+            self.calls.append(taxable_income)
+            return _south_carolina_2026_schedule(taxable_income)
+
+    class FormulaParameters:
+        def __init__(self) -> None:
+            self.accesses: list[str] = []
+            self.calls: list[int] = []
+            self.reviewed_rates = FormulaRates()
+
+        def __call__(self, period: int) -> FormulaParameters:
+            self.calls.append(period)
+            return self
+
+        @property
+        def gov(self) -> FormulaParameters:
+            self.accesses.append("gov")
+            return self
+
+        @property
+        def states(self) -> FormulaParameters:
+            self.accesses.append("states")
+            return self
+
+        @property
+        def sc(self) -> FormulaParameters:
+            self.accesses.append("sc")
+            return self
+
+        @property
+        def tax(self) -> FormulaParameters:
+            self.accesses.append("tax")
+            return self
+
+        @property
+        def income(self) -> FormulaParameters:
+            self.accesses.append("income")
+            return self
+
+        @property
+        def rates(self) -> FormulaRates:
+            self.accesses.append("rates")
+            return self.reviewed_rates
+
+    for taxable_income in probes:
+        tax_unit_calls: list[tuple[str, int]] = []
+
+        def tax_unit(variable: str, period: int) -> float:
+            tax_unit_calls.append((variable, period))
+            if variable != SC_TAXABLE_INCOME:
+                raise KeyError(variable)
+            return taxable_income
+
+        parameters = FormulaParameters()
+        try:
+            result = _finite_number(
+                formula(tax_unit, year, parameters),
+                label="SC active before-nonrefundable-credits formula probe",
+            )
+        except (AttributeError, KeyError, TypeError) as exc:
+            raise StateTaxPopulationRoutingError(
+                "SC: active 2026 formula dependency path drifted"
+            ) from exc
+        expected = _south_carolina_2026_schedule(taxable_income)
+        if (
+            result != expected
+            or tax_unit_calls != [(SC_TAXABLE_INCOME, year)]
+            or parameters.calls != [year]
+            or parameters.accesses
+            != ["gov", "states", "sc", "tax", "income", "rates"]
+            or parameters.reviewed_rates.calls != [taxable_income]
+        ):
+            raise StateTaxPopulationRoutingError(
+                "SC: active 2026 formula must read exactly sc_taxable_income "
+                "and gov.states.sc.tax.income.rates.calc"
             )
 
 
