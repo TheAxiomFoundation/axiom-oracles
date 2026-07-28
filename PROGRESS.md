@@ -721,7 +721,8 @@ residual), #229 (small-suite grounding).
 
 ### State
 
-- Review state: in progress.
+- Review state: validation complete; consolidation in progress.
+- Current verdict: `REQUEST-CHANGES`.
 - Disposable worktree:
   `.git/review-worktrees/pr417-12dae249-round2-blind`.
 - Throwaway ledger branch: `review/pr417-12dae249-round2-blind`.
@@ -752,15 +753,46 @@ residual), #229 (small-suite grounding).
   validation.
 - Saved the compact workflow context, 32-file inventory, and exact
   cached-base-to-head diff under `/tmp`.
+- Independently resolved every scored grid concept through the registry. All
+  three scored concepts are marked `comparable`, and their committed report
+  targets agree with the registry.
+- Audited the new Saver's Credit pipeline mappings against the pinned
+  PolicyEngine-US 1.767.3 source and the pinned RuleSpec source. The final
+  pipeline amount truthfully maps to `savers_credit_potential`, the same
+  pre-section-26 legal quantity; the other ten pipeline outputs remain
+  non-comparable for defensible entity, intermediate-value, or legal-quantity
+  reasons.
+- Confirmed that the Additional Medicare suite compares no tax-dollar output
+  and that both its configuration and conformance note disclose this and the
+  registry-domain-precondition reason. This honesty does not satisfy the row's
+  contract: the row defaults to `comparability: full` for the public
+  `additional_medicare_tax` output, while the suite compares only static
+  threshold and rate parameters. Repository documentation, schema semantics,
+  and the state-income-tax precedent all require a final public-variable
+  comparison before such a row counts as covered. This is the blocking
+  finding.
+- Verified all nine below-boundary (`-1`) Saver's Credit probes match. The
+  exact-boundary set still has precisely the 11 independently explained
+  inclusive-ceiling dispositions, with no unexplained or orphaned
+  disposition.
+- Confirmed that the obsolete `25B(d)(3)` citation is absent and `25B(e)` is
+  used on the relevant tracked surfaces.
+- Confirmed that the Additional Medicare fixture inventory spans below, exact,
+  and above the joint, married-filing-separately, and other thresholds,
+  including positive-self-employment-income wage-reduced variants. Those
+  inputs do not cure the absence of a compared money output.
+- Ran the complete eight-command generated-artifact `--check` chain
+  successfully. Focused registry, generator, and conformance tests passed
+  (107 passed, 3 skipped); an independent validator's broader focused run
+  passed 206 tests with 3 skips plus the pin invariant.
+- Compared the cached base and exact head structurally. Conformance row/detail
+  changes are confined to the two intended US rows, scoreboard changes are
+  the direct Saver's Credit coverage effects, and other jurisdictions and
+  mirrored artifacts have no side effects.
 
 ### Next
 
-- Independently validate every scored mapping against PolicyEngine-US 1.767.3,
-  with special attention to the new Saver's Credit bridge mappings.
-- Determine whether threshold/rate-only Additional Medicare checks satisfy the
-  row's actual coverage contract and verify the suite's coverage disclosure.
-- Verify all boundary probes, exact-boundary dispositions, legal citations,
-  positive-SE threshold coverage, containment, scoreboard invariants, and the
-  complete generated-artifact check chain.
 - Consolidate independent findings into the tracked output report and required
-  `/tmp` full-report/summary files, then close this ledger.
+  `/tmp` full-report/summary files.
+- Commit the final report and close this ledger without changing source,
+  remote, PR, or GitHub state.
