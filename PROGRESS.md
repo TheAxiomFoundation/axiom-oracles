@@ -1,4 +1,36 @@
-# PROGRESS — us-pe reconciliation (drive `unexplained_total` 23,138 → 0)
+# PROGRESS — PR #416 round-2 confirmation
+
+## State
+
+- Review worktree: `.git/review-worktrees/pr416-bd9085e3-confirm`
+- Throwaway branch: `review/pr416-bd9085e3-confirm`
+- Reviewed commit: `bd9085e3e7186733eea96d9bf225adab4482dc90`
+- Scope: confirm only the round-1 fail-closed defect, specified healthy-path
+  regressions, YEAR/boolean/plain-year invariants, exact delta, and gates.
+- Review status: setup complete; verdict not yet determined.
+- Remote/GitHub writes: prohibited; none attempted.
+
+## Done
+
+- Loaded the GitNexus PR-review workflow.
+- Confirmed the requested commit and both comparison endpoints exist locally.
+- Created an isolated worktree at the exact requested head without checking out
+  or modifying the PR branch.
+- Inspected the round-1 ledger and report conventions.
+
+## Next
+
+- Confirm `d78d46e2..bd9085e3` is exactly one commit changing only the runner and
+  the requested-month test file.
+- Re-run the forced-unavailable `al_tanf` and `ssi` probes and inspect errors.
+- Re-check SNAP COLA, TANF, SSI, YEAR-defined, boolean, and plain-year behavior.
+- Run repository tests and Ruff, reconciling results with the six round-1
+  clean-main failures.
+- Write the final verdict to `REVIEW-REPORT.md`.
+
+---
+
+# Archived progress — us-pe reconciliation (drive `unexplained_total` 23,138 → 0)
 
 Predecessor: **#224** stood up the us-pe conformance universe (measurement only,
 day-one unexplained=23,138). This lane (`us-pe-reconciliation` from `origin/main`
