@@ -742,3 +742,210 @@ residual), #229 (small-suite grounding).
   or write to GitHub.
 - Complete the untracked worker report with the 441-to-96 result, class-level
   evidence, unresolved attempts, and draft issue text.
+
+---
+
+## PR #417 repair round 2 — savers + Additional Medicare grids — 2026-07-28
+
+### State
+
+- Branch: `fed-parity/savers-addmed-grids`; starting HEAD
+  `3f59d6b596d6af3817b526bd50db9abdacb9c811`.
+- Defensive correctness/completeness audit of the round-1 suite construction.
+- At audit start, local `origin/main` was
+  `86be77210aa03da867a6103558cb57fe51a2ba55` and the branch was 47 commits
+  behind / 4 ahead. That exact local ref is now merged and is an ancestor of
+  the repair tip.
+- Required constraints: local commits only, no push or GitHub writes,
+  `WORKER-REPORT.md` remains untracked, and this ledger remains tracked.
+- Review read in full:
+  `.git/review-worktrees/pr417-3f59d6b5-adversarial/PR417-REVIEW.md`.
+- The review independently confirmed all 11 Saver's Credit dispositions and
+  all 18 existing Additional Medicare numeric results; repairs concern honest
+  comparable-only construction, legal citation, boundary completeness,
+  self-employment threshold coverage, merge hygiene, and generated artifacts.
+
+### Done
+
+- Inspected the requested worktree, active branch, remotes, HEAD, merge base,
+  dirty files, and worktree registry before editing.
+- Preserved the pre-existing untracked `WORKER-REPORT.md` for later replacement
+  with the required round-2 audit.
+- Restored the tracked historical ledger after the prior uncommitted round-1
+  handoff had replaced it with a short file.
+- Attempted the required `git fetch origin main`; sandbox DNS blocked access
+  to `github.com`. No ref or worktree state changed. All subsequent merge
+  work will use the exact local `origin/main` SHA recorded above.
+- Merged local `origin/main` at `86be7721`. The only conflicts were the
+  generated `freshness.json` and `overview.json` artifacts; both were rebuilt
+  from the merged source/report set rather than choosing either conflict side.
+- Verified the merge-resolution generators in read-only mode:
+  vacuous gate reports 136 oracle-backed configs, 215 suites, and 34 executable
+  surfaces; dashboard overview reports 216 bundled reports.
+- Verified the exact cached PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 /
+  Core 3.30.3 runtime. `savers_credit_potential` is a TaxUnit/year USD
+  variable that sums Person-level saver credits before the public
+  `savers_credit` applies its separate section 26 credit limit.
+- Classified all 11 Saver's Credit pipeline outputs in the bridge registry:
+  the corrected final maps directly to `savers_credit_potential`; the other
+  ten helpers are explicitly `not_comparable` with entity, add-back, cap, or
+  unexposed-intermediate rationales.
+- Added a fail-closed registry invariant for the two repaired grids. It rejects
+  unmapped, `not_comparable`, and target-drifted scored concepts and serializes
+  the exact direct-variable/parameter binding into each report.
+- Rebuilt the Additional Medicare grid boundary to score only the
+  filing-status-selected threshold and 0.9 percent rate. The combined tax and
+  isolated money legs are no longer evaluated or reported as comparisons;
+  the suite records the section 1401(c) domain-precondition blocker.
+- Added nine Saver B-1 cases and nine Additional Medicare cases. The latter
+  give joint, separate, and other statuses positive-SE observations below and
+  above unreduced thresholds plus B-1/exact/B+1 wage-coordinated probes.
+- Added repo-owned supplemental fixtures without changing the clean pinned
+  RuleSpec checkout. Released Axiom engine 0.1.0 recomputation confirmed all
+  nine Saver additions against independent section 25B arithmetic and queried
+  all 27 Additional Medicare selected thresholds from the compiled module.
+- Exact PolicyEngine-US 1.767.3 generation now yields Saver 23/34 raw matches
+  with the same 11 expected #9151 divergences, and Additional Medicare 28/28
+  comparable parameter matches across 27 scenarios.
+- Corrected the section 911/931/933 add-back citation to section 25B(e) in
+  source configuration and generated-report code.
+- Focused generator coverage passes (24 tests; the committed-report assertion
+  is intentionally deferred until regeneration), as does Ruff.
+- Regenerated both suites through `run_comparison.py` against the clean pinned
+  RuleSpec tree, using the exact cached PE stack after sandboxed package
+  resolution failed. The temporary launcher shim was removed immediately.
+- Applied dispositions and regenerated grids, affected map, freshness/vacuous
+  gate, dated scoreboard, ratchet, burn-down, per-policy detail, and dashboard
+  overview. All eight corresponding `--check` commands pass.
+- Updated the two conformance notes to the honest scored boundaries. Structural
+  comparison shows exactly two changed `us-pe` rows: Saver's Credit remains
+  covered at 23/34 raw and 100% explained; Additional Medicare remains covered
+  at 28/28 comparable parameter checks. No row was added, removed, or changed
+  coverage, and the headline scoreboard is byte-identical.
+- The committed-report comparable-only invariant now passes. Focused federal
+  generator and conformance validation passes 105 tests with 3 skips.
+- Repository-wide search finds no remaining obsolete add-back citation in
+  tracked repair surfaces.
+- Ruff passes repository-wide. The full pytest pass reached 2,283 passed / 72
+  skipped with one environment-only failure when `npx` attempted a blocked npm
+  download. Exposing the already cached exact `esbuild` binary made that sole
+  loader test pass offline, for 2,284 runnable tests validated in total; the
+  temporary ignored wrapper was removed.
+- An independent read-only defensive review returned APPROVE with no remaining
+  actionable findings after two wording cleanups. It reran 107 focused tests
+  (3 skipped), all eight generated checks, and confirmed that the selected
+  threshold exercises every required filing-status parameter cell without
+  redundant fixed-helper aggregates.
+- Replaced the stale round-1 `WORKER-REPORT.md` with the required round-2 case
+  inventory, PE-existence mapping evidence, divergence table, validation
+  record, and sandbox disclosures. It remains intentionally untracked.
+- Environment limitations are fully recorded in that report: GitHub/PyPI/npm
+  DNS failures, default uv-cache denial, and a rejected `/private/tmp` patch.
+  None changed tracked evidence or was treated as a substantive result.
+
+### Next
+
+- None. Hand off the committed local branch and untracked worker report; do not
+  push or write GitHub state.
+
+---
+
+## PR #417 split — retain Saver's Credit, hold Additional Medicare — 2026-07-28
+
+### State
+
+- Active branch: `fed-parity/savers-addmed-grids`; split starting HEAD
+  `12dae249aeb4765204e93d344c3ca400d36f70fe`.
+- Preservation branch:
+  `fed-parity/addmed-grid-expansion-hold` at
+  `12dae249aeb4765204e93d344c3ca400d36f70fe`. This local branch retains the
+  complete mixed Saver's Credit and Additional Medicare expansion for the
+  follow-up; it will not be pushed during the merge freeze.
+- Cached comparison base: local `origin/main`
+  `86be77210aa03da867a6103558cb57fe51a2ba55`. A fresh
+  `git fetch origin main` was attempted before editing, but sandbox DNS could
+  not resolve `github.com`; no ref changed.
+- Round-2 verdict read in full from
+  `.git/review-worktrees/pr417-12dae249-round2-blind/PR417-ROUND2-REVIEW.md`.
+- Split decision: retain the approved Saver's Credit half (truthful final
+  mapping, 34 cases, all nine B-1 probes, the same 11 twice-confirmed #9151
+  dispositions, and section 25B(e) citations). Withdraw every Additional
+  Medicare change from this branch because its parameter-only suite compares
+  no tax-liability output and therefore cannot cover the default-full
+  `output_vars: [additional_medicare_tax]` conformance row.
+- The Additional Medicare row and suite must be byte-identical to
+  `origin/main`, preserving its pre-existing 5/5 wage-only report without any
+  alteration. The follow-up first needs a RuleSpec ordinary-domain-scoped
+  tax-dollar output, a truthful comparable registry mapping, and a grid that
+  evaluates that money output against PolicyEngine's
+  `additional_medicare_tax`.
+- Required final containment: only `us-pe:savers_credit` changes coverage
+  (`uncovered` to `covered`); no other row changes; the US scoreboard moves
+  from 33 to 34 covered.
+
+### Done
+
+- Verified the requested worktree, active branch, clean tracked state, starting
+  HEAD, cached base, merge base, ahead/behind counts, remotes, and mixed diff.
+- Preserved the complete mixed expansion on the requested local hold branch at
+  the exact starting HEAD.
+- Preserved the pre-existing untracked `WORKER-REPORT.md` for replacement with
+  the final split report.
+- Restored `comparisons/us-additional-medicare-grid.yaml` and its committed
+  report byte-for-byte from `origin/main`; removed the branch-only
+  Additional Medicare supplemental fixture. No Additional Medicare
+  disposition or mapping differs from main.
+- Restored the generator's Additional Medicare inventory, fixture validation,
+  PolicyEngine output, and report boundary to the five pre-existing wage-only
+  tax-dollar cases. The shared comparison-binding and supplemental-fixture
+  infrastructure remains only for the approved Saver's Credit grid.
+- Restored the Additional Medicare source row note exactly to main and removed
+  all expansion-specific assertions. A changed-hunk search finds no remaining
+  Additional Medicare edits in the mixed generator, generator tests,
+  conformance tests, or source row file.
+- Restored six unrelated federal grid configs whose only branch difference was
+  a shared snapshot-pin update. The snapshot invariant now records the new
+  Saver grid's reviewed RuleSpec snapshot separately from the unchanged legacy
+  grids, keeping the final source diff savers-scoped.
+- Focused generator validation passes: 23 tests. Ruff passes the generator and
+  both edited test files; `git diff --check` passes.
+- Ran the complete derived write chain in order: dispositions, grids, affected
+  map, freshness/vacuous gate, dated scoreboard snapshot, ratchet, burn-down,
+  and dashboard overview. The split changed only four derived files relative
+  to the source rollback commit: canonical and served US-PE detail,
+  freshness, and overview.
+- Reran all eight chain members in `--check` mode: 83 disposition files are
+  consistent; grids are current; affected map has 172 suites / 181 edges;
+  vacuous gate has 136 oracle-backed configs / 215 suites / 34 executable
+  surfaces; scoreboard has 4 jurisdictions / 3 conformant; ratchet has no
+  regression; burn-down has 4 series / 53 points; overview has 216 reports.
+- Byte-level and structural assertions against `origin/main` pass: the
+  Additional Medicare config, 5/5 report, source row block, canonical detail
+  object, and served detail object are identical; exactly
+  `us-pe:savers_credit` changes in the source and detail row sets.
+- Confirmed the sole row effect is Saver's Credit `uncovered` to `covered`.
+  The US scoreboard is 33 to 34 covered; unexplained, Axiom-attributed-open,
+  and bridge-artifact totals are unchanged. Oracle-attributed increases by the
+  same 11 reviewed Saver #9151 dispositions.
+- The final `origin/main..HEAD` diff contains 23 paths and zero Additional
+  Medicare paths. It is confined to Saver source/evidence, shared regenerated
+  artifacts, the shared generator/tests, `conformance/us-pe.yaml`, and this
+  ledger.
+- Final focused validation passes: 229 tests with 3 skips across the federal
+  generator, conformance, affected-map, case-grid, and Saver bridge suites.
+  Ruff and `git diff --check` pass. Conformance-universe checks pass for UK and
+  BE and cleanly no-op for mismatched local UK-PE/US-PE checkouts; all 23 BE
+  covered compositions pass.
+- Independent read-only final review at `8f2d8fc1` returned APPROVE with no
+  actionable findings. It independently reconfirmed the byte-identical
+  Additional Medicare surfaces, Saver 34/23/11 evidence and exact selectors,
+  single-row/scoreboard effect, clean path scope, hold-branch SHA, and all
+  eight generated checks.
+- Replaced the stale mixed-expansion `WORKER-REPORT.md` with the requested
+  split report, including the follow-up design note. It remains intentionally
+  untracked and will be stamped with the closing ledger commit SHA.
+
+### Next
+
+- None. Hand off the committed local branch and untracked split report; do not
+  push or write GitHub state during the merge freeze.

@@ -1449,6 +1449,15 @@
       "source": "comparisons/us-qbid-grid.yaml"
     },
     {
+      "suite": "us-savers-grid",
+      "name": "us-savers-grid",
+      "report": "axiom-policyengine-us-savers-grid.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/us-savers-grid.yaml"
+    },
+    {
       "suite": "us-seca-grid",
       "name": "us-seca-grid",
       "report": "axiom-policyengine-us-seca-grid.json",

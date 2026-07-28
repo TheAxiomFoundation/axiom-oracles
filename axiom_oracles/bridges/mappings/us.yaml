@@ -8188,6 +8188,94 @@ mappings:
     candidate_priority: P4
     rationale: Axiom exposes the tax-unit wages taken into account under 26 CFR 1.1401-1(d)(2)(i) for the threshold reduction; PolicyEngine consumes payroll_tax_gross_wages as a person-level input element inside additional_medicare_tax and exposes no Additional-Medicare-specific wage surface at the tax-unit boundary.
 
+  - legal_id: us:policies/income_tax/savers_credit_pipeline#federal_savers_credit
+    country: us
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: savers_credit_potential
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    candidate_priority: P1
+    rationale: Both outputs are the TaxUnit section 25B amount before section 26's nonrefundable-credit liability cap. The corrected RuleSpec pipeline composes the separately capped eligible-person legs, while PolicyEngine's savers_credit_potential sums its Person-level savers_credit_person amounts. PolicyEngine 1.767.3's inclusive-boundary and section 25B(e) add-back defects are implementation divergences on this shared legal quantity, not a different output boundary; its public savers_credit is not used because that variable applies the separate credit limit.
+
+  - legal_id: us:policies/income_tax/savers_credit_pipeline#pipeline_savers_credit_modified_adjusted_gross_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: adjusted_gross_income
+    candidate_priority: P4
+    rationale: This RuleSpec output is section 25B(e) modified AGI after adding back sections 911, 931, and 933 exclusions. PolicyEngine 1.767.3 uses ordinary adjusted_gross_income inside savers_credit_person and exposes no saver-credit-specific modified-AGI variable.
+
+  - legal_id: us:policies/income_tax/savers_credit_pipeline#pipeline_tier_50_applicable_ceiling_for_return_category
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_parameter: gov.irs.credits.retirement_saving.rate.joint
+    candidate_priority: P4
+    rationale: This is a composed TaxUnit/year ceiling selected for the return category. PolicyEngine stores joint scale thresholds and a separate filing-status threshold multiplier, not the selected 50-percent ceiling as one equivalent variable or parameter value.
+
+  - legal_id: us:policies/income_tax/savers_credit_pipeline#pipeline_tier_20_applicable_ceiling_for_return_category
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_parameter: gov.irs.credits.retirement_saving.rate.joint
+    candidate_priority: P4
+    rationale: This is a composed TaxUnit/year ceiling selected for the return category. PolicyEngine stores joint scale thresholds and a separate filing-status threshold multiplier, not the selected 20-percent ceiling as one equivalent variable or parameter value.
+
+  - legal_id: us:policies/income_tax/savers_credit_pipeline#pipeline_tier_10_applicable_ceiling_for_return_category
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_parameter: gov.irs.credits.retirement_saving.rate.joint
+    candidate_priority: P4
+    rationale: This is a composed TaxUnit/year ceiling selected for the return category. PolicyEngine stores joint scale thresholds and a separate filing-status threshold multiplier, not the selected 10-percent ceiling as one equivalent variable or parameter value.
+
+  - legal_id: us:policies/income_tax/savers_credit_pipeline#pipeline_savers_credit_filing_status_is_enumerated
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    rationale: This RuleSpec Judgment validates the pipeline's five-value filing-status boundary. PolicyEngine exposes no equivalent saver-credit filing-status validity Judgment.
+
+  - legal_id: us:policies/income_tax/savers_credit_pipeline#pipeline_savers_credit_applicable_percentage
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    rationale: This RuleSpec output exposes the selected TaxUnit/year section 25B percentage. PolicyEngine 1.767.3 selects the rate only inside the Person-level savers_credit_person formula and exposes no equivalent rate variable.
+
+  - legal_id: us:policies/income_tax/savers_credit_pipeline#primary_savers_credit_eligible
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: savers_credit_eligible_person
+    candidate_priority: P4
+    rationale: This RuleSpec output projects the primary individual's section 25B(c) eligibility as a role-specific TaxUnit Judgment. PolicyEngine exposes Person/year savers_credit_eligible_person and no equivalent primary-role TaxUnit projection.
+
+  - legal_id: us:policies/income_tax/savers_credit_pipeline#spouse_savers_credit_eligible
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: savers_credit_eligible_person
+    candidate_priority: P4
+    rationale: This RuleSpec output projects the spouse's section 25B(c) eligibility as a role-specific TaxUnit Judgment. PolicyEngine exposes Person/year savers_credit_eligible_person and no equivalent spouse-role TaxUnit projection.
+
+  - legal_id: us:policies/income_tax/savers_credit_pipeline#primary_savers_credit_contributions_taken_into_account
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: savers_credit_qualified_contributions
+    candidate_priority: P4
+    rationale: This RuleSpec output is the primary individual's completed, nonnegative section 25B(d) contribution amount after the per-person $2,000 cap. PolicyEngine's Person/year savers_credit_qualified_contributions is uncapped and no equivalent primary-role capped TaxUnit amount is exposed.
+
+  - legal_id: us:policies/income_tax/savers_credit_pipeline#spouse_savers_credit_contributions_taken_into_account
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: savers_credit_qualified_contributions
+    candidate_priority: P4
+    rationale: This RuleSpec output is the spouse's completed, nonnegative section 25B(d) contribution amount after the per-person $2,000 cap. PolicyEngine's Person/year savers_credit_qualified_contributions is uncapped and no equivalent spouse-role capped TaxUnit amount is exposed.
+
   - legal_id: us:statutes/26/1401#additional_medicare_self_employment_joint_threshold
     country: us
     program: tax
