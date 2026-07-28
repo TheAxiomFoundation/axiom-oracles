@@ -241,7 +241,10 @@
   ],
   "engines": {
     "left": "euromod",
-    "right": "axiom"
+    "right": "axiom",
+    "versions": {
+      "axiom_rules_engine": "0.1.0"
+    }
   },
   "errors": [],
   "locales": [
@@ -255,10 +258,10 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "68d65229632e371b96d8eb25c704c1977a2b7ed3",
+      "axiom_rules_engine_sha": "c4b62bdb740d4149f0872783964f917e74cffe42",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-27T20:06:17Z",
+    "generated_at": "2026-07-28T03:45:07Z",
     "generated_by": "scripts/run_comparison.py::be-regional-pit-surcharge",
     "oracle": {
       "euromod_country": "BE",
