@@ -724,10 +724,21 @@ residual), #229 (small-suite grounding).
   case emitter remains deliberately skipped because the ignored full report is
   absent and emitting from the 499-case canonical mismatch subset would
   truncate the existing 7,101-case shards.
+- Completed the full check chain: 83 disposition files; current US grids;
+  affected map 171 suites / 180 edges; vacuous gate 135 configs / 214 suites /
+  34 executable surfaces; scoreboard 4 jurisdictions / 3 conformant; ratchet
+  no regression; burn-down 4 series / 53 points; overview 215 reports; served
+  CA dispositions 349 entries with exact YAML parity.
+- Ran the focused generated-data validation suite: 296 passed, 3 skipped.
+  Final scope audit finds no other suite report in the branch diff and no
+  whitespace error.
+- Completed untracked `WORKER-REPORT.md` with the first-table class partition,
+  exhaustive evidence, 441-to-96 accounting, all remaining case IDs and probes,
+  draft bridge/PE text, validation, and sandbox disclosures.
 
 ### Next
 
-- Run all generated chain members in `--check` mode, then complete the
-  untracked report and final branch audit.
+- Hand off the committed local branch and untracked worker report. Do not push
+  or write to GitHub.
 - Complete the untracked worker report with the 441-to-96 result, class-level
   evidence, unresolved attempts, and draft issue text.
