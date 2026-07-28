@@ -8188,6 +8188,23 @@ mappings:
     candidate_priority: P4
     rationale: Axiom exposes the tax-unit wages taken into account under 26 CFR 1.1401-1(d)(2)(i) for the threshold reduction; PolicyEngine consumes payroll_tax_gross_wages as a person-level input element inside additional_medicare_tax and exposes no Additional-Medicare-specific wage surface at the tax-unit boundary.
 
+  - legal_id: us:statutes/26/63/c/6#standard_deduction_ineligible
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: separate_filer_itemizes
+    candidate_priority: P4
+    rationale: Section 63(c)(6) makes four classes ineligible for the standard deduction; PolicyEngine's separate_filer_itemizes models only the married-filing-separately branch (A) and exposes no judgment covering the nonresident-alien, short-year, and estate/trust branches (B-D), so the combined ineligibility judgment has no one-to-one PE surface.
+
+  - legal_id: us:statutes/26/67/h#miscellaneous_itemized_deduction_allowed_for_individual
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.irs.deductions.itemized.misc.applies
+    period: year
+    comparison: boolean
+    rationale: Same section 67 miscellaneous-itemized-deduction availability switch, stored in PE as boolean parameter data (its reference cites 26 USC 67); not_holds for a 2026 individual matches the parameter's false value under current law.
+
   - legal_id: us:statutes/26/1401#additional_medicare_self_employment_joint_threshold
     country: us
     program: tax
