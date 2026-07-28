@@ -658,13 +658,25 @@ residual), #229 (small-suite grounding).
   7,101-case shards with the 499-case canonical subset.
 - GitNexus MCP tools were unavailable. Direct web and `gh` issue reads also
   failed under blocked network access; these failures changed no files.
+- Added a CA-only diagnostic tracer which requires PolicyEngine 4.18.9 /
+  PolicyEngine-US 1.767.3 / Core 3.30.3, reads the committed report and compact
+  evidence, and does not write suite artifacts.
+- Ran the requested live source-income and deduction traces for all 361
+  residual households (441 rows), exceeding every class sampling minimum.
+  The run also evaluated exact-household zero-self-employment, zero-TANF, and
+  joint zero-self-employment/zero-TANF counterfactuals.
+- Verified live eligibility parity with the committed PE side for all 361
+  households. Live benefit parity is exact for 284 households / 364 residual
+  rows; 77 households / 77 rows moved under the required 1.767.3 diagnostic
+  runtime and therefore cannot use live counterfactual output as proof of the
+  older committed amount without an independent case-level proof.
 
 ### Next
 
-- Run live PolicyEngine-US 1.767.3 income-source and deduction-stack traces for
-  all 361 residual households, validating the live baseline against the
-  committed report before relying on each case.
-- Run per-case counterfactuals for every candidate bridge artifact and retain
-  strict failures as unexplained.
+- Reconcile the joint counterfactual passes against the committed Axiom input
+  panel, requiring that each claimed omitted source is present in PE and absent
+  from Axiom.
+- Separate safe dispositions from oracle-version drift and strict
+  counterfactual failures, retaining the latter as unexplained.
 - Apply only per-case-supported dispositions, regenerate the required chain,
   run all `--check` parity gates, and report the exact before/after count.
