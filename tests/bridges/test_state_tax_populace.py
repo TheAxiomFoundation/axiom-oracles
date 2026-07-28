@@ -49,7 +49,10 @@ def test_packaged_contract_has_exact_campaign_inventory() -> None:
         sum(len(item.inputs) for item in contract.jurisdictions)
         == EXPECTED_EXPLICIT_INPUT_COUNT
     )
-    assert sum(len(item.relations) for item in contract.jurisdictions) == 1
+    assert (
+        sum(len(item.relations) for item in contract.jurisdictions)
+        == EXPECTED_EXPLICIT_RELATION_COUNT
+    )
     assert len({item.program for item in contract.jurisdictions}) == 43
     assert len({item.output for item in contract.jurisdictions}) == 43
     assert len({item.policyengine_target for item in contract.jurisdictions}) == 43
@@ -315,8 +318,8 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
             }
         ),
         "explicit_input_count": EXPECTED_EXPLICIT_INPUT_COUNT,
-        "explicit_relation_count": EXPECTED_EXPLICIT_RELATION_COUNT,
-        "blocked_input_count": EXPECTED_EXPLICIT_INPUT_COUNT - 70,
+            "explicit_relation_count": EXPECTED_EXPLICIT_RELATION_COUNT,
+            "blocked_input_count": EXPECTED_EXPLICIT_INPUT_COUNT - 67,
         "blocked_relation_count": 0,
     }
     assert "NH" not in contract.by_state()
@@ -328,7 +331,7 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
         "CT": ["ct_taxable_income", "ct_agi"],
         "CO": ["co_taxable_income"],
         "DC": ["dc_taxable_income_joint"],
-        "DE": ["de_taxable_income_indv", "de_files_separately"],
+        "DE": ["de_taxable_income_indv"],
         "GA": ["ga_taxable_income"],
         "HI": ["hi_taxable_income"],
         "IL": ["il_taxable_income", "recapture_of_investment_credit"],
@@ -467,41 +470,23 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
     assert "positive_taxable_income_with_recapture fixture" in il.evidence
     assert "rather than synthesized population input" in il.inputs[1].evidence
     de = contract.by_state()["DE"]
-    assert de.policyengine_target == (
-        "de_income_tax_before_non_refundable_credits_unit"
+    assert de.output == (
+        "us-de:policies/income_tax/pilot_liability_pipeline#"
+        "de_pit_pilot_separate_schedule_tax"
     )
+    assert (
+        de.policyengine_target
+        == "de_income_tax_before_non_refundable_credits_indv"
+    )
+    assert de.comparison_aggregation == "person_sum_to_tax_unit"
     assert (de.tolerance, de.relative_tolerance) == (0.01, 1e-7)
     assert [item.slot for item in de.inputs] == [
         "us-de:policies/income_tax/pilot_liability_pipeline#input."
         "de_pit_pilot_supplied_separate_taxable_income",
-        "us-de:policies/income_tax/pilot_liability_pipeline#input."
-        "de_pit_pilot_taxpayer_is_included",
-        "us-de:policies/income_tax/pilot_liability_pipeline#input."
-        "de_pit_pilot_supplied_combined_taxable_income",
-        "us-de:policies/income_tax/pilot_liability_pipeline#input."
-        "de_pit_pilot_files_separately",
     ]
-    de_derived = [item for item in de.inputs if item.source_kind == "derived"]
-    assert [
-        (
-            item.policyengine_variable,
-            item.policyengine_variables,
-            item.policyengine_transform,
-        )
-        for item in de_derived
-    ] == [
-        (
-            None,
-            ("is_tax_unit_head", "is_tax_unit_spouse"),
-            "person_filer_role_or",
-        ),
-        ("de_taxable_income_joint", (), "person_sum_to_tax_unit"),
-    ]
-    assert [item.slot for item in de.relations] == [
-        "us-de:policies/income_tax/pilot_liability_pipeline#relation."
-        "de_pit_pilot_taxpayer_of_tax_unit"
-    ]
-    assert de.relations[0].source_kind == "raw_populace"
+    assert de.inputs[0].policyengine_variable == "de_taxable_income_indv"
+    assert de.inputs[0].source_kind == "pe_upstream_boundary"
+    assert de.relations == ()
     ms = contract.by_state()["MS"]
     assert ms.program == (
         "us-ms:policies/income_tax/2026_section_27_7_5_schedule"

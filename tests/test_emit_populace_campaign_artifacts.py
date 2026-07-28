@@ -51,16 +51,19 @@ def _campaign() -> dict:
     }
 
 
-def test_manifest_reconciliation_retires_only_alabama_taxsim_ghost(tmp_path):
+def test_manifest_reconciliation_retires_only_declared_taxsim_ghosts(tmp_path):
     published = tmp_path / "published.json"
     published.write_text("{}\n")
-    (retired_report,) = RETIRED_MANIFEST_REPORTS
 
     assert reconcile_manifest_reports(
-        ["published.json", retired_report],
+        ["published.json", *RETIRED_MANIFEST_REPORTS],
         data_dir=tmp_path,
         required_reports=frozenset({"published.json"}),
     ) == ["published.json"]
+    assert RETIRED_MANIFEST_REPORTS == {
+        "axiom-policyengine-taxsim-al-income-tax-liability.json",
+        "axiom-policyengine-taxsim-de-income-tax-liability.json",
+    }
 
 
 def test_manifest_reconciliation_rejects_missing_required_populace_report(
@@ -217,6 +220,35 @@ def test_california_dashboard_description_names_bhst_component():
     assert "Behavioral Health Services Tax" in description
     assert "completed California taxable income above $1 million" in description
     assert "does not claim broad California income-tax liability" in description
+
+
+def test_delaware_dashboard_description_names_person_schedule_component():
+    output = (
+        "us-de:policies/income_tax/pilot_liability_pipeline"
+        "#de_pit_pilot_separate_schedule_tax"
+    )
+    report = project_state(
+        "DE",
+        {
+            "compared_count": 1,
+            "mismatch_count": 0,
+            "output": output,
+            "program": output.split("#", 1)[0],
+            "policyengine_target": (
+                "de_income_tax_before_non_refundable_credits_indv"
+            ),
+        },
+        _campaign(),
+        "campaign.json",
+    )
+
+    description = report["aggregates"][0]["description"]
+    assert "section 1102(a)(14) individual schedule" in description
+    assert "Person grain" in description
+    assert "summed to TaxUnit only for comparison accounting" in description
+    assert "filing-method selection" in description
+    assert "combined-return computation" in description
+    assert "final liability" in description
 
 
 def test_minnesota_dashboard_description_names_narrow_schedule():

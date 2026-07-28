@@ -19,6 +19,36 @@ def test_arkansas_person_schedule_component_is_classified() -> None:
     ) == ("state_income_tax", "AR")
 
 
+def test_delaware_person_schedule_component_is_classified() -> None:
+    assert classify(
+        "us-de/policies/income_tax/pilot_liability_pipeline.yaml"
+    ) == ("state_income_tax", "DE")
+
+
+def test_delaware_person_schedule_surface_is_executable() -> None:
+    coverage = json.loads(
+        (
+            REPO_ROOT / "dashboard/public/data/coverage_overview.json"
+        ).read_text()
+    )
+    matches = [
+        entry
+        for entry in coverage["axiom"]["programs"]
+        if entry.get("program") == "state_income_tax"
+        and entry.get("jurisdiction") == "DE"
+    ]
+
+    assert len(matches) == 1
+    assert matches[0]["status"] == "executable"
+    assert matches[0]["suite"] == "de-income-tax-populace"
+    assert "section 1102(a)(14)" in matches[0]["source"]
+    assert "Person-grain" in matches[0]["source"]
+    assert "filing-method selection" in " ".join(
+        matches[0]["known_non_tanf_gaps"]
+    )
+    assert "final liability" in " ".join(matches[0]["known_non_tanf_gaps"])
+
+
 def test_arkansas_person_schedule_surface_is_executable() -> None:
     coverage = json.loads(
         (

@@ -163,14 +163,14 @@ _PE_VAR = {
     # exemption credit (a post-tax nonrefundable credit) that this core excludes.
     "NE": "ne_income_tax_before_credits",
     # Maine and Minnesota use a before-refundable-credits variable as the exact
-    # statutory analog of each composed pipeline. Delaware instead
-    # targets the unit-level tax before nonrefundable credits because its promoted
-    # RuleSpec encodes the section 1102 schedule and branch selection, not credits.
-    # Delaware's later variables net nonrefundable credits and refundable EITC;
+    # statutory analog of each composed pipeline. Delaware's canonical campaign
+    # target is instead the Person-grain individual schedule before
+    # nonrefundable credits; the legacy grid is excluded below because it cannot
+    # truthfully express Person aggregation or omit filing-method selection.
     # Maine and Minnesota net their refundable credits in the final variable;
     # Maryland uses the state-only before-credits target: county tax is separate,
     # and the before-refundable target additionally subtracts nonrefundable credits.
-    "DE": "de_income_tax_before_non_refundable_credits_unit",
+    "DE": "de_income_tax_before_non_refundable_credits_indv",
     "MD": "md_income_tax_before_credits",
     "ME": "me_income_tax_before_refundable_credits",
     "MN": "mn_income_tax_before_refundable_credits",
@@ -254,6 +254,11 @@ _GRID_EXCLUDED_STATES = {
         "12-700 component with a 98-fixture boundary suite; no broad liability "
         "output or legacy six-case grid fixtures"
     ),
+    "DE": (
+        "canonical RuleSpec comparison exposes only the Person-grain section "
+        "1102(a)(14) individual schedule; no filing-method selector, broad "
+        "TaxUnit liability output, or truthful TAXSIM comparison surface"
+    ),
 }
 
 # Ordered grid state list; new eligible states append through _TAXSIM_STATE.
@@ -293,6 +298,9 @@ _LIABILITY_OUTPUT["AL"] = (
 )
 _LIABILITY_OUTPUT["CT"] = (
     f"{_MODULE['CT']}#ct_pit_2026_resident_ordinary_tax_before_personal_credit"
+)
+_LIABILITY_OUTPUT["DE"] = (
+    f"{_MODULE['DE']}#de_pit_pilot_separate_schedule_tax"
 )
 _LIABILITY_OUTPUT["GA"] = (
     f"{_MODULE['GA']}#ga_pit_2026_annual_tax_before_nonrefundable_credits"
@@ -337,6 +345,7 @@ _POPULACE_OUTPUT = {
         f"{_POPULACE_MODULE['DC']}#"
         "dc_pit_2026_section_47_1806_03_schedule_before_credits"
     ),
+    "DE": _LIABILITY_OUTPUT["DE"],
     "KS": (
         f"{_POPULACE_MODULE['KS']}#"
         "ks_pit_2026_k40es_schedule_before_credits"
@@ -351,6 +360,7 @@ _POPULACE_PE_VAR = {
     "CA": "ca_mental_health_services_tax",
     "CT": "ct_resident_ordinary_tax_before_personal_credit_derived",
     "DC": "dc_income_tax_before_credits_joint",
+    "DE": "de_income_tax_before_non_refundable_credits_indv",
     "KS": "ks_k40es_schedule_before_credits_reviewed",
     "MS": "ms_income_tax_before_credits_joint",
     "MN": "mn_basic_tax_precision_stable",
@@ -359,6 +369,7 @@ _POPULACE_PE_VAR = {
 }
 _POPULACE_AGGREGATION = {
     "AR": "person_sum_to_tax_unit",
+    "DE": "person_sum_to_tax_unit",
     "MS": "person_sum_to_tax_unit",
 }
 
@@ -1086,6 +1097,7 @@ _POPULACE_TOL = {
     "AL": (0.01, 0.0000001),
     "AR": (0.01, 0.0000001),
     "AZ": (0.01, 0.0000001),
+    "DE": (0.01, 0.0000001),
     "CA": (0.01, 0.0000001),
     "CO": (0.01, 0.0000001),
     "DC": (0.01, 0.0000001),

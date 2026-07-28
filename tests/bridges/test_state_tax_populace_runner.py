@@ -2807,39 +2807,11 @@ def test_reviewed_person_values_reject_remapped_tax_unit_membership() -> None:
 def test_delaware_person_projection_preserves_person_grain(monkeypatch) -> None:
     prefix = "us-de:policies/income_tax/pilot_liability_pipeline#input."
     separate_slot = f"{prefix}de_pit_pilot_supplied_separate_taxable_income"
-    included_slot = f"{prefix}de_pit_pilot_taxpayer_is_included"
-    combined_slot = f"{prefix}de_pit_pilot_supplied_combined_taxable_income"
-    files_separately_slot = f"{prefix}de_pit_pilot_files_separately"
     inputs = (
         SimpleNamespace(
             slot=separate_slot,
             source_kind="pe_upstream_boundary",
             policyengine_variable="de_taxable_income_indv",
-            policyengine_variables=(),
-            policyengine_transform=None,
-            constant_value=None,
-        ),
-        SimpleNamespace(
-            slot=included_slot,
-            source_kind="derived",
-            policyengine_variable=None,
-            policyengine_variables=("is_tax_unit_head", "is_tax_unit_spouse"),
-            policyengine_relationship="upstream",
-            policyengine_transform="person_filer_role_or",
-            constant_value=None,
-        ),
-        SimpleNamespace(
-            slot=combined_slot,
-            source_kind="derived",
-            policyengine_variable="de_taxable_income_joint",
-            policyengine_variables=(),
-            policyengine_transform="person_sum_to_tax_unit",
-            constant_value=None,
-        ),
-        SimpleNamespace(
-            slot=files_separately_slot,
-            source_kind="pe_upstream_boundary",
-            policyengine_variable="de_files_separately",
             policyengine_variables=(),
             policyengine_transform=None,
             constant_value=None,
@@ -2863,13 +2835,7 @@ def test_delaware_person_projection_preserves_person_grain(monkeypatch) -> None:
             return {
                 "person_id": [11, 12, 13, 21],
                 "tax_unit_id": [1, 1, 1, 2],
-                # Unit 2 deliberately has no modeled PE filer; zero-filer units
-                # remain valid and their sum_where aggregate is zero.
-                "is_tax_unit_head": [True, False, False, False],
-                "is_tax_unit_spouse": [False, True, False, False],
                 "de_taxable_income_indv": [10_000.0, 20_000.0, 500.0, 30_000.0],
-                "de_taxable_income_joint": [30_000.0, 0.0, 0.0, 30_000.0],
-                "de_files_separately": [True, False],
             }[variable]
 
     projections = calculate_policyengine_projection_inputs(
@@ -2898,9 +2864,6 @@ def test_delaware_person_projection_preserves_person_grain(monkeypatch) -> None:
                 13: 500.0,
                 21: 30_000.0,
             },
-            included_slot: {11: True, 12: True, 13: False, 21: False},
-            combined_slot: {1: 30_000.0, 2: 30_000.0},
-            files_separately_slot: {1: True, 2: False},
         }
     }
 
@@ -3014,13 +2977,13 @@ def test_mississippi_request_emits_canonical_person_schedule_without_relation() 
     assert request["dataset"]["relations"] == []
 
 
-def test_delaware_filer_inclusion_rejects_ambiguous_policyengine_roles() -> None:
+def test_dc_filer_inclusion_rejects_ambiguous_policyengine_roles() -> None:
     with pytest.raises(
         StateTaxPopulationRoutingError,
         match="person_id 11 is both TaxUnit head and spouse",
     ):
         state_tax_runner._reviewed_filer_inclusions(
-            state="DE",
+            state="DC",
             person_ids=[11],
             person_tax_unit_ids=[1],
             tax_unit_ids=[1],
@@ -3034,7 +2997,7 @@ def test_delaware_filer_inclusion_rejects_ambiguous_policyengine_roles() -> None
         match=r"invalid PolicyEngine TaxUnit filer roles: 1 \(heads=2, spouses=0\)",
     ):
         state_tax_runner._reviewed_filer_inclusions(
-            state="DE",
+            state="DC",
             person_ids=[11, 12],
             person_tax_unit_ids=[1, 1],
             tax_unit_ids=[1],
@@ -3044,13 +3007,9 @@ def test_delaware_filer_inclusion_rejects_ambiguous_policyengine_roles() -> None
         )
 
 
-def test_delaware_person_inputs_and_raw_relation_cover_all_selected_members() -> None:
+def test_delaware_request_emits_canonical_person_schedule_without_relation() -> None:
     prefix = "us-de:policies/income_tax/pilot_liability_pipeline"
     separate_slot = f"{prefix}#input.de_pit_pilot_supplied_separate_taxable_income"
-    included_slot = f"{prefix}#input.de_pit_pilot_taxpayer_is_included"
-    combined_slot = f"{prefix}#input.de_pit_pilot_supplied_combined_taxable_income"
-    files_separately_slot = f"{prefix}#input.de_pit_pilot_files_separately"
-    relation = f"{prefix}#relation.de_pit_pilot_taxpayer_of_tax_unit"
     interval = {
         "period_kind": "tax_year",
         "start": "2026-01-01",
@@ -3061,14 +3020,10 @@ def test_delaware_person_inputs_and_raw_relation_cover_all_selected_members() ->
         state="DE",
         routes=(TaxUnitRoute(2, 2, "DE", "10", 1, DISPOSITION_READY),),
         year=2026,
-        output=f"{prefix}#de_pit_pilot_income_tax_liability",
+        output=f"{prefix}#de_pit_pilot_separate_schedule_tax",
         projected_inputs={
             separate_slot: {11: 1_000.0, 21: 20_000.0, 22: 30_000.0, 31: 4_000.0},
-            included_slot: {11: True, 21: True, 22: False, 31: True},
-            combined_slot: {1: 1_000.0, 2: 50_000.0, 3: 4_000.0},
-            files_separately_slot: {1: False, 2: True, 3: False},
         },
-        declared_relations=(relation,),
         raw_persons=pd.DataFrame(
             {
                 "person_id": [11, 21, 22, 31],
@@ -3076,23 +3031,10 @@ def test_delaware_person_inputs_and_raw_relation_cover_all_selected_members() ->
             }
         ),
         all_tax_unit_ids={1, 2, 3},
+        comparison_aggregation="person_sum_to_tax_unit",
     )
 
     assert request["dataset"]["inputs"] == [
-        {
-            "name": files_separately_slot,
-            "entity": "Entity",
-            "entity_id": "state-tax-unit-2",
-            "interval": interval,
-            "value": {"kind": "bool", "value": True},
-        },
-        {
-            "name": combined_slot,
-            "entity": "Entity",
-            "entity_id": "state-tax-unit-2",
-            "interval": interval,
-            "value": {"kind": "decimal", "value": "50000.0"},
-        },
         {
             "name": separate_slot,
             "entity": "Entity",
@@ -3101,76 +3043,30 @@ def test_delaware_person_inputs_and_raw_relation_cover_all_selected_members() ->
             "value": {"kind": "decimal", "value": "20000.0"},
         },
         {
-            "name": included_slot,
-            "entity": "Entity",
-            "entity_id": "state-tax-person-21",
-            "interval": interval,
-            "value": {"kind": "bool", "value": True},
-        },
-        {
             "name": separate_slot,
             "entity": "Entity",
             "entity_id": "state-tax-person-22",
             "interval": interval,
             "value": {"kind": "decimal", "value": "30000.0"},
         },
-        {
-            "name": included_slot,
-            "entity": "Entity",
-            "entity_id": "state-tax-person-22",
-            "interval": interval,
-            "value": {"kind": "bool", "value": False},
-        },
     ]
-    assert request["dataset"]["relations"] == [
-        {
-            "name": relation,
-            "tuple": ["state-tax-person-21", "state-tax-unit-2"],
-            "interval": interval,
-        },
-        {
-            "name": relation,
-            "tuple": ["state-tax-person-22", "state-tax-unit-2"],
-            "interval": interval,
-        },
-    ]
+    assert request["dataset"]["relations"] == []
 
 
-def test_filtered_delaware_comparison_preserves_national_tax_unit_universe(
+def test_filtered_delaware_person_comparison_preserves_national_tax_unit_universe(
     monkeypatch, tmp_path
 ) -> None:
     prefix = "us-de:policies/income_tax/pilot_liability_pipeline"
     separate_slot = f"{prefix}#input.de_pit_pilot_supplied_separate_taxable_income"
-    included_slot = f"{prefix}#input.de_pit_pilot_taxpayer_is_included"
-    combined_slot = f"{prefix}#input.de_pit_pilot_supplied_combined_taxable_income"
-    files_separately_slot = f"{prefix}#input.de_pit_pilot_files_separately"
-    relation_slot = f"{prefix}#relation.de_pit_pilot_taxpayer_of_tax_unit"
-    relation = SimpleNamespace(
-        slot=relation_slot,
-        source_kind="raw_populace",
-        status="ready",
-        policyengine_variable=None,
-        policyengine_variables=(),
-        policyengine_relationship=None,
-        policyengine_transform=None,
-        constant_value=None,
-    )
     jurisdiction = SimpleNamespace(
-        inputs=tuple(
-            SimpleNamespace(slot=slot)
-            for slot in (
-                separate_slot,
-                included_slot,
-                combined_slot,
-                files_separately_slot,
-            )
-        ),
-        relations=(relation,),
-        output=f"{prefix}#de_pit_pilot_income_tax_liability",
+        inputs=(SimpleNamespace(slot=separate_slot),),
+        relations=(),
+        output=f"{prefix}#de_pit_pilot_separate_schedule_tax",
         program="us-de:policies/income_tax/pilot_liability_pipeline",
         tolerance=0.01,
         relative_tolerance=1e-7,
-        policyengine_target="de_income_tax_before_non_refundable_credits_unit",
+        policyengine_target="de_income_tax_before_non_refundable_credits_indv",
+        comparison_aggregation="person_sum_to_tax_unit",
     )
     contract = SimpleNamespace(
         validation_year=2026,
@@ -3185,7 +3081,7 @@ def test_filtered_delaware_comparison_preserves_national_tax_unit_universe(
         calls.append(kwargs["request"])
         return [
             {
-                "entity_id": "state-tax-unit-1",
+                "entity_id": "state-tax-person-11",
                 "outputs": {
                     jurisdiction.output: {"value": {"value": "0"}}
                 },
@@ -3205,9 +3101,6 @@ def test_filtered_delaware_comparison_preserves_national_tax_unit_universe(
         "policyengine_projection_inputs": {
             "DE": {
                 separate_slot: {11: 0.0, 21: 0.0},
-                included_slot: {11: True, 21: True},
-                combined_slot: {1: 0.0, 2: 0.0},
-                files_separately_slot: {1: False, 2: False},
             }
         },
         "year": 2026,
@@ -3219,17 +3112,7 @@ def test_filtered_delaware_comparison_preserves_national_tax_unit_universe(
     report = compare_ready_state_tax_units(**common)
 
     assert report["compared_count"] == 1
-    assert calls[0]["dataset"]["relations"] == [
-        {
-            "name": relation_slot,
-            "tuple": ["state-tax-person-11", "state-tax-unit-1"],
-            "interval": {
-                "period_kind": "tax_year",
-                "start": "2026-01-01",
-                "end": "2026-12-31",
-            },
-        }
-    ]
+    assert calls[0]["dataset"]["relations"] == []
 
     with pytest.raises(
         StateTaxPopulationRoutingError,
@@ -3245,48 +3128,6 @@ def test_filtered_delaware_comparison_preserves_national_tax_unit_universe(
                     }
                 ),
             }
-        )
-
-
-def test_person_request_rejects_unknown_tax_unit_links_with_state() -> None:
-    prefix = "us-de:policies/income_tax/pilot_liability_pipeline"
-    slot = f"{prefix}#input.de_pit_pilot_supplied_separate_taxable_income"
-    relation = f"{prefix}#relation.de_pit_pilot_taxpayer_of_tax_unit"
-    with pytest.raises(
-        StateTaxPopulationRoutingError,
-        match="DE: Populace people link to unknown tax_unit_id values: 99",
-    ):
-        state_tax_runner._state_request(
-            state="DE",
-            routes=(TaxUnitRoute(2, 2, "DE", "10", 1, DISPOSITION_READY),),
-            year=2026,
-            output=f"{prefix}#de_pit_pilot_income_tax_liability",
-            projected_inputs={slot: {21: 10_000.0}},
-            declared_relations=(relation,),
-            raw_persons=pd.DataFrame(
-                {"person_id": [21, 99], "person_tax_unit_id": [2, 99]}
-            ),
-            all_tax_unit_ids={1, 2, 3},
-        )
-
-
-def test_person_inputs_never_create_an_implicit_generic_relation() -> None:
-    prefix = "us-de:policies/income_tax/pilot_liability_pipeline"
-    slot = f"{prefix}#input.de_pit_pilot_supplied_separate_taxable_income"
-    with pytest.raises(
-        StateTaxPopulationRoutingError,
-        match="DE: reviewed Person inputs require an explicitly declared",
-    ):
-        state_tax_runner._state_request(
-            state="DE",
-            routes=(TaxUnitRoute(2, 2, "DE", "10", 1, DISPOSITION_READY),),
-            year=2026,
-            output=f"{prefix}#de_pit_pilot_income_tax_liability",
-            projected_inputs={slot: {21: 10_000.0}},
-            raw_persons=pd.DataFrame(
-                {"person_id": [21], "person_tax_unit_id": [2]}
-            ),
-            all_tax_unit_ids={2},
         )
 
 

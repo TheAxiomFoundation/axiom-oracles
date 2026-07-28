@@ -330,77 +330,40 @@ jurisdictions:
   taxsim_state_code: 8
   jurisdiction: us-de
   program: us-de:policies/income_tax/pilot_liability_pipeline
-  output: us-de:policies/income_tax/pilot_liability_pipeline#de_pit_pilot_income_tax_liability
+  output: us-de:policies/income_tax/pilot_liability_pipeline#de_pit_pilot_separate_schedule_tax
   policyengine:
-    target: de_income_tax_before_non_refundable_credits_unit
+    target: de_income_tax_before_non_refundable_credits_indv
     tolerance: 0.01
     relative_tolerance: 0.0000001
+    aggregation: person_sum_to_tax_unit
   status: ready
   evidence: >-
-    RuleSpec applies Delaware's complete section 1102(a)(14) schedule to both
-    separate-return and combined-return taxable-income candidates, then uses
-    PolicyEngine's strict lower-pre-credit-tax branch selector. Independent
-    legal and semantic review plus a full certified-Populace run covered all
-    936 positive-weight Delaware tax units, including 124 separate-branch and
-    812 combined-branch selections. It found zero differences outside $0.01
-    absolute or 1e-7 relative tolerance; maximum absolute error was
-    $0.231999999844 and weighted MAE was $0.0000864010142.
+    Delaware Code title 30 section 1102(a)(14) supplies the complete 2026
+    individual/separate schedule. The reviewed RuleSpec deliberately remains
+    at Person grain and accepts completed-return individual taxable income; it
+    does not claim filing-method selection, combined-return computation,
+    credits, payments, or final TaxUnit liability. The campaign validates
+    certified Person identity, ordering, cardinality, and every
+    Person-to-TaxUnit link, evaluates the distinct Axiom and PolicyEngine
+    individual before-nonrefundable-credit schedule outputs, and sums each side
+    to TaxUnit only for population accounting. A full certified-Populace run
+    covered all 936 positive-weight routed Delaware TaxUnits with no tolerance
+    failures; maximum absolute difference was $0.231999999844 and maximum
+    relative difference was 5.55498188185e-8.
   inputs:
   - slot: us-de:policies/income_tax/pilot_liability_pipeline#input.de_pit_pilot_supplied_separate_taxable_income
     source_kind: pe_upstream_boundary
     status: ready
     evidence: >-
       PolicyEngine de_taxable_income_indv is the Person-grain completed-return
-      taxable-income candidate used by the separate-return schedule and is a
-      distinct ancestor of the TaxUnit comparison target.
+      taxable-income amount used by
+      de_income_tax_before_non_refundable_credits_indv and is a distinct
+      upstream ancestor of that Person-grain comparison target. The reviewed
+      projector validates certified Person identity, order, cardinality, and
+      every TaxUnit link before supplying this exact boundary.
     policyengine_variable: de_taxable_income_indv
     policyengine_relationship: upstream
-  - slot: us-de:policies/income_tax/pilot_liability_pipeline#input.de_pit_pilot_taxpayer_is_included
-    source_kind: derived
-    status: ready
-    evidence: >-
-      The reviewed Boolean-OR transform derives this Person-grain inclusion
-      predicate from the exact upstream PolicyEngine is_tax_unit_head and
-      is_tax_unit_spouse roles after validating Boolean type, no dual role,
-      selected-unit maximum cardinality, Person identity and order, and every
-      TaxUnit link. Zero-filer units are valid and aggregate to zero.
-    policyengine_variables:
-    - is_tax_unit_head
-    - is_tax_unit_spouse
-    policyengine_relationship: upstream
-    policyengine_transform: person_filer_role_or
-  - slot: us-de:policies/income_tax/pilot_liability_pipeline#input.de_pit_pilot_supplied_combined_taxable_income
-    source_kind: derived
-    status: ready
-    evidence: >-
-      PolicyEngine de_taxable_income_joint is Person-grain and assigns the
-      completed combined taxable income to the filing-unit representative. The
-      reviewed transform validates every Person identity and TaxUnit link before
-      summing the exact array to TaxUnit grain.
-    policyengine_variable: de_taxable_income_joint
-    policyengine_relationship: upstream
-    policyengine_transform: person_sum_to_tax_unit
-  - slot: us-de:policies/income_tax/pilot_liability_pipeline#input.de_pit_pilot_files_separately
-    source_kind: pe_upstream_boundary
-    status: ready
-    evidence: >-
-      PolicyEngine de_files_separately is the direct upstream strict selector:
-      true only when aggregate individual pre-credit schedule tax is less than
-      combined pre-credit schedule tax, with ties selecting combined.
-    policyengine_variable: de_files_separately
-    policyengine_relationship: upstream
-  relations:
-  - slot: us-de:policies/income_tax/pilot_liability_pipeline#relation.de_pit_pilot_taxpayer_of_tax_unit
-    source_kind: raw_populace
-    status: ready
-    evidence: >-
-      The relation links every Person in each selected TaxUnit using the
-      certified raw person_tax_unit_id column; the separate inclusion predicate
-      controls sum_where without changing raw relation membership. The pinned
-      engine currently lowers sum_where with related Person in runtime tuple
-      slot 0 and current TaxUnit in slot 1, so the adapter emits (Person,
-      TaxUnit). Preserving RuleSpec argument labels in engine relation lowering
-      is tracked as a follow-up.
+  relations: []
 - state: MD
   fips: '24'
   taxsim_state_code: 21
