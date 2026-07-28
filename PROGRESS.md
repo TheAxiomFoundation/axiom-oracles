@@ -630,14 +630,41 @@ residual), #229 (small-suite grounding).
 - Created an isolated worktree from `origin/main` on the requested branch.
 - Confirmed the pre-analysis starting point and preserved the existing shared
   progress history.
+- Located the complete committed evidence surface: 684 mismatch rows in the
+  canonical report, 499 mismatching cases there, and 15 compact shards covering
+  all 7,101 cases.
+- Verified the starting accounting: 243 existing BBCE
+  `axiom_encoding_gap` rows and exactly 441 unexplained rows across 361
+  households (356 benefit, 69 eligibility-left-only, 16
+  eligibility-right-only).
+- Partitioned the residuals into 18 supported classes crossing eligibility
+  direction, benefit direction, and age-derived household shape. The shape
+  taxonomy uses only adult/minor counts; no family relationships are inferred.
+- Wrote the class table first in untracked `WORKER-REPORT.md`. The planned
+  trace covers all 361 residual households, which exceeds every attainable
+  10-percent-or-10-household class minimum.
+- Confirmed the committed report used PolicyEngine 4.18.9 /
+  PolicyEngine-US 1.752.2, while this issue requires live diagnostic traces on
+  1.767.3. The CA config is unpinned, so the suite will not be regenerated on
+  the diagnostic version.
+- Located a read-only cached overlay that imports the exact requested live
+  stack: PolicyEngine 4.18.9, PolicyEngine-US 1.767.3, and PolicyEngine Core
+  3.30.3.
+- Recovered the #397 proof standard from committed dispositions: one pinned
+  entry per case, baseline reproduction, differing input neutralized, continued
+  eligibility, and post-counterfactual SNAP within the suite's $7 tolerance.
+- Audited the generated chain and found a served-artifact hazard: the ignored
+  full report is absent, so the case emitter must not replace the existing
+  7,101-case shards with the 499-case canonical subset.
+- GitNexus MCP tools were unavailable. Direct web and `gh` issue reads also
+  failed under blocked network access; these failures changed no files.
 
 ### Next
 
-- Locate and validate the committed report, config, prior `5a747cac` triage,
-  bridge context, and generated-chain commands.
-- Partition all 441 rows by eligibility direction, benefit direction, and
-  household shape; record the class table before attribution.
-- Run live PolicyEngine-US 1.767.3 traces for at least
-  `max(10, ceil(class_size * 10%))` representative households in every class.
+- Run live PolicyEngine-US 1.767.3 income-source and deduction-stack traces for
+  all 361 residual households, validating the live baseline against the
+  committed report before relying on each case.
+- Run per-case counterfactuals for every candidate bridge artifact and retain
+  strict failures as unexplained.
 - Apply only per-case-supported dispositions, regenerate the required chain,
   run all `--check` parity gates, and report the exact before/after count.
