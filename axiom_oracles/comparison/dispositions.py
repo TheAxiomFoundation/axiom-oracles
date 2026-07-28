@@ -558,6 +558,12 @@ def apply_dispositions(
     annotated_mismatches = []
     for row in report.get("mismatches") or []:
         annotated = dict(row)
+        # Recompute annotations from the current dispositions document rather
+        # than treating a previously merged report as an additive base.  This
+        # makes reapplication idempotent when an entry is removed or expires:
+        # a stale annotation must not survive merely because it was present in
+        # the committed post-state.
+        annotated.pop("disposition", None)
         for entry in entries:
             if not _entry_selects_row(entry, annotated):
                 continue

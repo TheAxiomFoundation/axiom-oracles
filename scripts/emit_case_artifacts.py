@@ -371,6 +371,33 @@ def emit_suite(suite: str, dashboard_config: dict) -> str:
         rows = [compact_case(c, explained) for c in cases]
         return write_artifacts(suite, rows, meta, source_name, partial=False)
 
+    # A committed full case explorer is itself the only retained source for
+    # some large manual suites once their ignored full report is gone.  In that
+    # situation, refresh only the disposition annotations after first proving
+    # that every served mismatch identity and value still matches the complete
+    # canonical mismatch list.  Re-emitting through write_artifacts would lose
+    # the full case population and the index's all-input/all-output slot
+    # dictionaries, neither of which can be reconstructed from compact rows.
+    if src is None and dash is not None and mismatches_complete(dash):
+        index_path = OUT_ROOT / suite / "index.json"
+        if index_path.exists():
+            try:
+                existing_index = json.loads(index_path.read_text())
+            except (OSError, json.JSONDecodeError) as exc:
+                raise ValueError(
+                    f"{suite}: cannot read existing case-artifact index: {exc}"
+                ) from exc
+            if not isinstance(existing_index, dict):
+                raise ValueError(
+                    f"{suite}: existing case-artifact index is not a JSON object"
+                )
+            if "partial" not in existing_index:
+                return overlay_existing_complete_artifacts(
+                    suite,
+                    dash,
+                    existing_index,
+                )
+
     # No usable case rows — fall back to a mismatch-only queue, from the
     # annotated dashboard list when complete, else the full report's own.
     if mismatches_complete(dash):
@@ -421,7 +448,10 @@ def dashboard_suites() -> dict[str, dict]:
     return out
 
 
-def _load_served_rows(suite: str, index: dict) -> tuple[list[dict], list[str]]:
+def _load_served_chunks(
+    suite: str,
+    index: dict,
+) -> tuple[list[tuple[Path, list[dict]]], list[str]]:
     """Load exactly the chunks declared by an artifact index."""
     problems: list[str] = []
     out_dir = OUT_ROOT / suite
@@ -441,7 +471,7 @@ def _load_served_rows(suite: str, index: dict) -> tuple[list[dict], list[str]]:
         problems.append(f"{suite}: index.chunk_size must be a positive integer")
         chunk_size = CHUNK_SIZE
 
-    rows: list[dict] = []
+    chunks: list[tuple[Path, list[dict]]] = []
     for name in sorted(expected_names, key=lambda item: int(item[6:-5])):
         path = out_dir / name
         if not path.exists():
@@ -459,7 +489,14 @@ def _load_served_rows(suite: str, index: dict) -> tuple[list[dict], list[str]]:
                 f"{suite}: {name} has {len(chunk)} rows, above chunk_size "
                 f"{chunk_size}"
             )
-        rows.extend(chunk)
+        chunks.append((path, chunk))
+    return chunks, problems
+
+
+def _load_served_rows(suite: str, index: dict) -> tuple[list[dict], list[str]]:
+    """Load and flatten exactly the chunks declared by an artifact index."""
+    chunks, problems = _load_served_chunks(suite, index)
+    rows = [row for _path, chunk in chunks for row in chunk]
     return rows, problems
 
 
@@ -528,37 +565,16 @@ def _served_mismatch_payloads(
     return payloads, problems
 
 
-def check_suite_artifacts(
+def _served_parity(
     suite: str,
-    dashboard_config: dict,
+    report: dict,
+    index: dict,
+    rows: list[dict],
+    *,
+    compare_annotations: bool,
 ) -> tuple[list[str], dict[str, int]]:
-    """Compare committed compact artifacts to the complete canonical report."""
+    """Validate one loaded served artifact against its canonical report."""
     problems: list[str] = []
-    basename = dashboard_config["basename"]
-    report = dashboard_report(basename)
-    if report is None:
-        return [f"{suite}: canonical dashboard report is missing"], {}
-    if not mismatches_complete(report):
-        stored = len(report.get("mismatches") or [])
-        declared = (report.get("summary") or {}).get("mismatch_count")
-        return [
-            f"{suite}: canonical mismatch list is incomplete "
-            f"({stored}/{declared}); compact parity is uncheckable"
-        ], {}
-
-    out_dir = OUT_ROOT / suite
-    index_path = out_dir / "index.json"
-    if not index_path.exists():
-        return [f"{suite}: case-artifact index.json is missing"], {}
-    try:
-        index = json.loads(index_path.read_text())
-    except (OSError, json.JSONDecodeError) as exc:
-        return [f"{suite}: cannot read case-artifact index.json: {exc}"], {}
-    if not isinstance(index, dict):
-        return [f"{suite}: case-artifact index is not a JSON object"], {}
-
-    rows, load_problems = _load_served_rows(suite, index)
-    problems.extend(load_problems)
     if index.get("suite") != suite:
         problems.append(
             f"{suite}: index suite is {index.get('suite')!r}, expected {suite!r}"
@@ -606,7 +622,7 @@ def check_suite_artifacts(
         for key in wrong_annotations
         if canonical[key]["e"] is None and served[key]["e"] is not None
     ]
-    if wrong_annotations:
+    if compare_annotations and wrong_annotations:
         problems.append(
             f"{suite}: {len(wrong_annotations)} served annotation(s) differ "
             f"from canonical ({len(silent)} silent classifications); "
@@ -641,8 +657,108 @@ def check_suite_artifacts(
         "cases": len(rows),
         "mismatches": len(canonical),
         "annotated": sum(payload["e"] is not None for payload in canonical.values()),
-        "silent": len(silent),
+        "silent": len(silent) if compare_annotations else 0,
     }
+
+
+def overlay_existing_complete_artifacts(
+    suite: str,
+    report: dict,
+    index: dict,
+) -> str:
+    """Refresh only annotations in a validated, full committed case explorer."""
+    if not mismatches_complete(report):
+        raise ValueError(
+            f"{suite}: annotation overlay requires a complete canonical "
+            "mismatch list"
+        )
+    if "partial" in index:
+        raise ValueError(
+            f"{suite}: annotation overlay requires a complete non-partial artifact"
+        )
+
+    chunks, load_problems = _load_served_chunks(suite, index)
+    rows = [row for _path, chunk in chunks for row in chunk]
+    parity_problems, stats = _served_parity(
+        suite,
+        report,
+        index,
+        rows,
+        compare_annotations=False,
+    )
+    problems = [*load_problems, *parity_problems]
+    if problems:
+        detail = "\n".join(f"- {problem}" for problem in problems)
+        raise ValueError(
+            f"{suite}: refusing unsafe annotation overlay:\n{detail}"
+        )
+
+    explained = explained_lookup(report)
+    rendered: list[tuple[Path, str]] = []
+    annotated = 0
+    for path, chunk in chunks:
+        for row in chunk:
+            case_id = row.get("id")
+            for mismatch in row.get("m") or []:
+                disposition = explained.get((case_id, mismatch.get("c")))
+                if disposition is None:
+                    mismatch.pop("e", None)
+                else:
+                    mismatch["e"] = disposition
+                    annotated += 1
+        rendered.append((path, json.dumps(chunk, separators=(",", ":"))))
+
+    # No write occurs until the complete source has passed every structural,
+    # identity, value, and engine check above.  Keep index.json byte-for-byte:
+    # its source, slot dictionaries, total, and chunk boundaries remain valid.
+    for path, text in rendered:
+        path.write_text(text)
+    return (
+        f"refreshed {suite}: {stats['cases']} complete cases, "
+        f"{stats['mismatches']} mismatches, {annotated} annotated"
+    )
+
+
+def check_suite_artifacts(
+    suite: str,
+    dashboard_config: dict,
+) -> tuple[list[str], dict[str, int]]:
+    """Compare committed compact artifacts to the complete canonical report."""
+    problems: list[str] = []
+    basename = dashboard_config["basename"]
+    report = dashboard_report(basename)
+    if report is None:
+        return [f"{suite}: canonical dashboard report is missing"], {}
+    if not mismatches_complete(report):
+        stored = len(report.get("mismatches") or [])
+        declared = (report.get("summary") or {}).get("mismatch_count")
+        return [
+            f"{suite}: canonical mismatch list is incomplete "
+            f"({stored}/{declared}); compact parity is uncheckable"
+        ], {}
+
+    out_dir = OUT_ROOT / suite
+    index_path = out_dir / "index.json"
+    if not index_path.exists():
+        return [f"{suite}: case-artifact index.json is missing"], {}
+    try:
+        index = json.loads(index_path.read_text())
+    except (OSError, json.JSONDecodeError) as exc:
+        return [f"{suite}: cannot read case-artifact index.json: {exc}"], {}
+    if not isinstance(index, dict):
+        return [f"{suite}: case-artifact index is not a JSON object"], {}
+
+    rows, load_problems = _load_served_rows(suite, index)
+    problems.extend(load_problems)
+    parity_problems, stats = _served_parity(
+        suite,
+        report,
+        index,
+        rows,
+        compare_annotations=True,
+    )
+    problems.extend(parity_problems)
+    return problems, stats
 
 
 def main() -> int:

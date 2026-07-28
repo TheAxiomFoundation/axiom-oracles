@@ -777,16 +777,27 @@ residual), #229 (small-suite grounding).
   the round-1 report.
 - Restored the full pre-existing campaign ledger after catching an initial
   replacement and appended this repair section without losing history.
+- Reconstructed all 18 challenged static self-employment households from the
+  retained exhaustive trace: 16 close only when the second period/TANF
+  mechanism is stated and neutralized, while `ecps-59082` and `ecps-62506`
+  fail every allowed live intervention. The corrected target is 341 issue-362
+  rows, 321 bridge rows, and 100 unexplained rows.
+- Found a reapplication defect that preserved stale report annotations after a
+  YAML entry was removed. `apply_dispositions` now clears prior annotations
+  before joining the current document, with a regression test for removal.
+- Added a fail-closed case-artifact overlay for suites whose complete served
+  shards are the only retained 7,101-case source. It validates every canonical
+  mismatch identity, value, engine, count, and chunk before changing only
+  annotations, and preserves the full index and chunk boundaries.
+- The stale-annotation and served-overlay focused suite passes 29 tests; Ruff,
+  compilation, and whitespace checks pass on the four touched implementation
+  and test files.
 
 ### Next
 
-1. Inventory the two evidence scripts, disposition/report schemas, artifact
-   generators, and all references to the old 77-row and 96-row claims.
-2. Reconstruct the challenged self-employment class from live trace evidence;
-   keep only entries whose full stated mechanism closes within tolerance.
-3. Add explicit replay-base/provenance handling and deterministic
+1. Add explicit replay-base/provenance handling and deterministic
    byte-identical replay checks.
-4. Apply the corrected disposition set, regenerate every served artifact, and
+2. Apply the corrected disposition set, regenerate every served artifact, and
    refresh scoreboard, burn-down, history, and report text.
-5. Run the complete repository `--check` chain and focused tests; record exact
+3. Run the complete repository `--check` chain and focused tests; record exact
    commands and results in the final untracked worker report.

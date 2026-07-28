@@ -205,6 +205,28 @@ def test_merge_adds_dispositioned_block_and_annotates_rows() -> None:
     assert "disposition" not in report["mismatches"][0]
 
 
+def test_reapplying_after_entry_removal_clears_stale_annotation() -> None:
+    report = _build_report(right_values=(125, 75))
+    first_entry = _entry()
+    second_entry = _entry(id="second-residual", case_id="case-2")
+    merged = apply_dispositions(
+        report,
+        _document([first_entry, second_entry]),
+    )
+
+    reapplied = apply_dispositions(
+        merged,
+        _document([second_entry]),
+    )
+
+    by_case = {row["case_id"]: row for row in reapplied["mismatches"]}
+    assert "disposition" not in by_case["case-1"]
+    assert by_case["case-2"]["disposition"]["id"] == "second-residual"
+    block = reapplied["summary"]["dispositioned"]
+    assert block["counts"]["upstream_engine_gap"] == 1
+    assert block["unexplained_count"] == 1
+
+
 def test_axiom_encoding_gap_is_classified_but_not_explained() -> None:
     report = _build_report()
     merged = apply_dispositions(

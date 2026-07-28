@@ -4,6 +4,8 @@ import importlib.util
 import json
 from pathlib import Path
 
+import pytest
+
 
 def _load_module():
     path = Path(__file__).parents[1] / "scripts" / "emit_case_artifacts.py"
@@ -90,6 +92,9 @@ def _write_fixture(
     data = tmp_path / "data"
     out = data / "cases" / "test-suite"
     out.mkdir(parents=True)
+    reports = tmp_path / "reports"
+    reports.mkdir()
+    module.REPORTS = reports
     module.DASHBOARD_DATA = data
     module.OUT_ROOT = data / "cases"
     basename = "axiom-policyengine-test"
@@ -228,3 +233,55 @@ def test_case_artifact_check_fails_closed_on_incomplete_canonical_list(tmp_path)
         "test-suite: canonical mismatch list is incomplete (2/3); "
         "compact parity is uncheckable"
     ]
+
+
+def test_write_mode_overlays_annotations_on_existing_complete_artifact(tmp_path):
+    module = _load_module()
+    rows = _served_rows()
+    rows[0]["m"][0].pop("e")
+    rows[1]["m"][0]["e"] = "axiom_encoding_gap"
+    config = _write_fixture(
+        module,
+        tmp_path,
+        report=_canonical_report(),
+        rows=rows,
+        index_updates={
+            "input_slots": ["income"],
+            "output_slots": ["benefit"],
+        },
+    )
+    out = module.OUT_ROOT / "test-suite"
+    index_before = (out / "index.json").read_bytes()
+
+    result = module.emit_suite("test-suite", config)
+
+    assert result == (
+        "refreshed test-suite: 2 complete cases, 2 mismatches, 1 annotated"
+    )
+    assert json.loads((out / "chunk-0.json").read_text()) == _served_rows()
+    assert (out / "index.json").read_bytes() == index_before
+
+
+@pytest.mark.parametrize("drift", ["value", "key"])
+def test_write_mode_rejects_unsafe_complete_artifact_overlay(tmp_path, drift):
+    module = _load_module()
+    rows = _served_rows()
+    if drift == "value":
+        rows[0]["m"][0]["l"] = 999
+    else:
+        rows[0]["m"][0]["c"] = "obsolete-benefit"
+    config = _write_fixture(
+        module,
+        tmp_path,
+        report=_canonical_report(),
+        rows=rows,
+    )
+    out = module.OUT_ROOT / "test-suite"
+    chunk_before = (out / "chunk-0.json").read_bytes()
+    index_before = (out / "index.json").read_bytes()
+
+    with pytest.raises(ValueError, match="refusing unsafe annotation overlay"):
+        module.emit_suite("test-suite", config)
+
+    assert (out / "chunk-0.json").read_bytes() == chunk_before
+    assert (out / "index.json").read_bytes() == index_before
