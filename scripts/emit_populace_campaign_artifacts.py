@@ -144,6 +144,17 @@ _DESCRIPTION_BY_OUTPUT = {
         "payments, and final liability"
     ),
     (
+        "us-ok:policies/income_tax/pilot_liability_pipeline"
+        "#ok_pit_pilot_income_tax_liability"
+    ): (
+        "Oklahoma tax-year-2026 individual income tax before credits, computed "
+        "from caller-supplied completed Oklahoma taxable income under the "
+        "enacted single-or-separate or doubled-width joint, surviving-spouse, "
+        "and head-of-household schedule over every routed tax unit in the "
+        "pinned US Populace; this bounded suite excludes taxable-income "
+        "construction, credits, payments, and final annual liability"
+    ),
+    (
         "us-pa:policies/income_tax/pilot_liability_pipeline"
         "#pa_pit_pilot_income_tax_liability"
     ): (
