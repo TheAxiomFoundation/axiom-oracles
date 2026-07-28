@@ -37,6 +37,9 @@
   exposed and disposition evidence revalidated, not absorbed by tolerance.
 - Added the declared Python/PolicyEngine pins to every affected config that did
   not already carry them and corrected Minnesota's stale New York description.
+- Replaced eight stale `$HOME/axiom-oracles/programs/...` TANF references with
+  repository-relative paths so an isolated worktree composes the audited files,
+  not an unrelated historical worktree under the home directory.
 - Captured the committed pre-regeneration baseline:
 
   | Suite | Raw mismatches | Unexplained |
