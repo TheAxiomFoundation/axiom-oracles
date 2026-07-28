@@ -133,6 +133,18 @@ _DESCRIPTION_BY_OUTPUT = {
         "tax, credits, payments, or final Minnesota liability"
     ),
     (
+        "us-mt:policies/income_tax/pilot_liability_pipeline"
+        "#mt_pit_pilot_income_tax_liability"
+    ): (
+        "Montana tax-year-2026 individual income tax before nonrefundable "
+        "credits under MCA 15-30-2103, computed from caller-supplied completed "
+        "Montana taxable income, its reviewed section 1222 net-long-term-"
+        "capital-gain portion, and filing-status classifiers over every routed "
+        "tax unit in the pinned US Populace; this bounded suite excludes "
+        "taxable-income construction, credits, payments, and final annual "
+        "liability"
+    ),
+    (
         "us-ny:policies/income_tax/pilot_liability_pipeline"
         "#ny_pit_pilot_main_income_tax"
     ): (

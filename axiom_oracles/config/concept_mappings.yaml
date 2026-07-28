@@ -2733,7 +2733,8 @@ concepts:
     description: Montana individual income tax liability (complete 2026 ordinary and net-long-term-capital-gain schedules)
     category: tax
     comparison: amount
-    tolerance: 1
+    tolerance: 0.01
+    relative_tolerance: 0.0000001
     priority: high
     locales: [US-MT]
     scope:

@@ -61,6 +61,50 @@ def test_minnesota_schedule_pilot_is_classified() -> None:
     ) == ("state_income_tax", "MN")
 
 
+def test_montana_before_nonrefundable_credits_tax_is_classified() -> None:
+    assert classify(
+        "us-mt/policies/income_tax/pilot_liability_pipeline.yaml"
+    ) == ("state_income_tax", "MT")
+
+
+def test_montana_before_nonrefundable_credits_surface_is_executable() -> None:
+    coverage = json.loads(
+        (
+            REPO_ROOT / "dashboard/public/data/coverage_overview.json"
+        ).read_text()
+    )
+    matches = [
+        entry
+        for entry in coverage["axiom"]["programs"]
+        if entry.get("program") == "state_income_tax"
+        and entry.get("jurisdiction") == "MT"
+    ]
+
+    assert matches == [
+        {
+            "program": "state_income_tax",
+            "jurisdiction": "MT",
+            "status": "executable",
+            "source": (
+                "rulespec-us "
+                "6c58962f3de57a4dd26737c88767de728d230603 + pinned "
+                "Populace campaign projected as mt-income-tax-populace over "
+                "the canonical bounded TY2026 ordinary-income and net-long-"
+                "term-capital-gain schedules before nonrefundable credits"
+            ),
+            "known_non_tanf_gaps": [
+                "bounded before-nonrefundable-credit surface only; caller "
+                "supplies completed Montana taxable income, its section 1222 "
+                "net-long-term-capital-gain portion, and filing-status "
+                "classifiers",
+                "taxable-income construction, credits, payments, and final "
+                "annual liability remain out of scope",
+            ],
+            "suite": "mt-income-tax-populace",
+        }
+    ]
+
+
 def test_minnesota_schedule_surface_is_executable_and_suite_backed() -> None:
     coverage = json.loads(
         (

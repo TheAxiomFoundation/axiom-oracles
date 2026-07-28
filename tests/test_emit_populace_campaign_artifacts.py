@@ -214,6 +214,34 @@ def test_minnesota_dashboard_description_names_narrow_schedule():
     assert "final Minnesota liability" in description
 
 
+def test_montana_dashboard_description_names_bounded_before_credit_tax():
+    output = (
+        "us-mt:policies/income_tax/pilot_liability_pipeline"
+        "#mt_pit_pilot_income_tax_liability"
+    )
+    report = project_state(
+        "MT",
+        {
+            "compared_count": 1,
+            "mismatch_count": 0,
+            "output": output,
+            "program": output.split("#", 1)[0],
+            "policyengine_target": (
+                "mt_income_tax_before_non_refundable_credits_joint"
+            ),
+        },
+        _campaign(),
+        "campaign.json",
+    )
+
+    description = report["aggregates"][0]["description"]
+    assert "before nonrefundable credits" in description
+    assert "MCA 15-30-2103" in description
+    assert "completed Montana taxable income" in description
+    assert "section 1222 net-long-term-capital-gain portion" in description
+    assert "final annual liability" in description
+
+
 def test_georgia_dashboard_description_names_narrow_component():
     output = (
         "us-ga:policies/income_tax/"
@@ -651,6 +679,130 @@ def test_committed_south_carolina_populace_evidence_is_canonical_and_complete(
     second = {
         path.name: hashlib.sha256(path.read_bytes()).hexdigest()
         for path in sorted((tmp_path / "sc-income-tax-populace").iterdir())
+    }
+    assert second == first
+
+
+def test_committed_montana_populace_evidence_is_canonical_and_complete(
+    tmp_path,
+    monkeypatch,
+):
+    rulespec_sha = "6c58962f3de57a4dd26737c88767de728d230603"
+    engine_sha = "68d65229632e371b96d8eb25c704c1977a2b7ed3"
+    executable_sha = (
+        "2e881f18dda64ae801d318a16c61525f50d094d83f5de71d330098696da9dd42"
+    )
+    concept = (
+        "us-mt:policies/income_tax/pilot_liability_pipeline"
+        "#mt_pit_pilot_income_tax_liability"
+    )
+    campaign_path = (
+        REPO_ROOT / "reports/state-tax-populace-mt-campaign-2026-07-28.json"
+    )
+    report_path = (
+        DASHBOARD_DATA / "axiom-policyengine-mt-income-tax-populace.json"
+    )
+    cases_path = DASHBOARD_DATA / "cases/mt-income-tax-populace"
+
+    campaign = json.loads(campaign_path.read_text())
+    state = campaign["comparison"]["states"]["MT"]
+    cases = state["cases"]
+    assert campaign["requested_states"] == ["MT"]
+    assert campaign["comparison"]["sample_size_per_state"] == 0
+    assert state["compared_count"] == 1_171
+    assert state["weighted_compared_tax_units"] == 564_739.7293636125
+    assert state["mismatch_count"] == 0
+    assert state["max_absolute_difference"] == 0.2914082035422325
+    assert state["max_relative_difference"] == 8.977572697967781e-08
+    assert state["tolerance"] == 0.01
+    assert state["relative_tolerance"] == 1e-7
+    assert state["output"] == concept
+    assert state["policyengine_target"] == (
+        "mt_income_tax_before_non_refundable_credits_joint"
+    )
+    assert sum(case["policyengine"] == 0 for case in cases) == 254
+    assert sum(case["policyengine"] > 0 for case in cases) == 917
+    assert all(case["matched"] for case in cases)
+    assert campaign["projection_diagnostics"] == {}
+
+    runtime = campaign["runtime_provenance"]
+    assert runtime["rulespec"]["commit"] == rulespec_sha
+    assert runtime["rulespec"]["working_tree"] == "clean"
+    assert runtime["axiom_engine"]["commit"] == engine_sha
+    assert runtime["axiom_engine"]["executable_sha256"] == executable_sha
+    assert runtime["axiom_engine"]["working_tree"] == "clean"
+    assert runtime["packages"] == {
+        "policyengine": "4.18.9",
+        "policyengine-us": "1.752.2",
+    }
+
+    report = json.loads(report_path.read_text())
+    assert report["suite"] == "mt-income-tax-populace"
+    assert report["case_count"] == 1_171
+    assert report["summary"] == {
+        "comparison_count": 1_171,
+        "match_count": 1_171,
+        "match_rate": 100.0,
+        "mismatch_count": 0,
+    }
+    assert report["aggregates"][0]["concept"] == concept
+    description = report["aggregates"][0]["description"]
+    assert "before nonrefundable credits" in description
+    assert "completed Montana taxable income" in description
+    assert "section 1222 net-long-term-capital-gain portion" in description
+    assert report["provenance"]["campaign_report"] == campaign_path.name
+    assert report["provenance"]["branch_diagnostics"] is None
+    assert report["provenance"]["rulespecs"] == [
+        {
+            "repo": "TheAxiomFoundation/rulespec-us",
+            "sha": rulespec_sha,
+        }
+    ]
+
+    index = json.loads((cases_path / "index.json").read_text())
+    chunks = [
+        json.loads((cases_path / f"chunk-{number}.json").read_text())
+        for number in range(index["chunks"])
+    ]
+    assert index["count"] == index["total_cases"] == 1_171
+    assert index["chunk_size"] == 500
+    assert [len(chunk) for chunk in chunks] == [500, 500, 171]
+    projected_cases = [case for chunk in chunks for case in chunk]
+    assert len({case["id"] for case in projected_cases}) == 1_171
+    assert [case["id"] for case in projected_cases] == [
+        case["tax_unit_id"] for case in cases
+    ]
+    assert all(case["r"] == 1.0 for case in projected_cases)
+
+    manifest = json.loads((DASHBOARD_DATA / "manifest.json").read_text())
+    assert manifest["reports"].count(report_path.name) == 1
+    suite_config = yaml.safe_load(POPULACE_SUITE_CONFIG.read_text())
+    assert [
+        suite
+        for suite in suite_config["suites"]
+        if suite["suite"] == "mt-income-tax-populace"
+    ] == [
+        {
+            "suite": "mt-income-tax-populace",
+            "report": report_path.name,
+            "jurisdiction": "MT",
+            "program": "state_income_tax",
+            "oracle": "policyengine",
+            "campaign_runner": "scripts/run_state_tax_populace.py",
+            "projector": "scripts/emit_populace_campaign_artifacts.py",
+        }
+    ]
+
+    monkeypatch.setattr(emitter, "CASES_ROOT", tmp_path)
+    emitter.emit_case_chunks("MT", state)
+    first = {
+        path.name: hashlib.sha256(path.read_bytes()).hexdigest()
+        for path in sorted((tmp_path / "mt-income-tax-populace").iterdir())
+    }
+    emitter.emit_case_chunks("MT", state)
+    second = {
+        path.name: hashlib.sha256(path.read_bytes()).hexdigest()
+        for path in sorted((tmp_path / "mt-income-tax-populace").iterdir())
     }
     assert second == first
 
