@@ -35,8 +35,6 @@ that would raise pending for a root is reported and refused.
 from __future__ import annotations
 
 import argparse
-import json
-import re
 import sys
 from pathlib import Path
 
