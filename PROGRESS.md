@@ -753,22 +753,15 @@ residual), #229 (small-suite grounding).
 - Branch: `triage/ca-snap-441`; round-2 base
   `102b4edd5875fbe5e856daea0fafa9708a37003b`.
 - The round-1 adversarial report at review commit `364f7066` is read in full.
-- Starting canonical accounting is 441 formerly unexplained rows split into
-  325 bridge dispositions, 20 upstream-engine-gap dispositions, and 96 rows
-  still unexplained.
-- The 243 pre-existing BBCE rows are out of repair scope and must remain
-  byte-identical.
-- Blocking repairs:
-  1. remove every disposition that lacks a complete live per-case
-     counterfactual, including the four rows for `ecps-59082` and
-     `ecps-62506`;
-  2. make the tracer and builder replay the committed disposition set from an
-     explicit pre-disposition report state;
-  3. reserve the version-drift note for the three cases that actually close on
-     PolicyEngine-US 1.767.3 and record the other 74 as persistent unexplained
-     mismatches;
-  4. regenerate all canonical and served artifacts with exact annotation
-     parity.
+- **Corrected final accounting:** the original 441 rows are 321 bridge
+  artifacts, 20 upstream-engine gaps, and **100 unexplained**. Across all 684
+  CA mismatches, the additional 243 rows remain Axiom BBCE encoding gaps.
+- All four round-2 blocking findings are closed: invalid evidence removed or
+  completed, explicit-base replay made byte-deterministic, the changed-version
+  set split honestly into three closures and 74 persistent mismatches, and all
+  served annotations reconciled.
+- The four pre-existing BBCE selectors and their 243 expanded rows remain
+  byte/structurally identical to the round-1 state.
 
 ### Done
 
@@ -784,8 +777,9 @@ residual), #229 (small-suite grounding).
   fail every allowed live intervention. The corrected target is 341 issue-362
   rows, 321 bridge rows, and 100 unexplained rows.
 - Found a reapplication defect that preserved stale report annotations after a
-  YAML entry was removed. `apply_dispositions` now clears prior annotations
-  before joining the current document, with a regression test for removal.
+  YAML entry was removed. `apply_dispositions` now clears a prior annotation
+  when its defining entry ID is absent from the current document, with a
+  regression test for removal.
 - Added a fail-closed case-artifact overlay for suites whose complete served
   shards are the only retained 7,101-case source. It validates every canonical
   mismatch identity, value, engine, count, and chunk before changing only
@@ -861,8 +855,26 @@ residual), #229 (small-suite grounding).
 - Reconciled the global US-PE totals to 100 unexplained and 3,661 bridge rows.
   The 2026-07-28 burn-down gap rises honestly from the round-1 value of 433 to
   437. Overview, scoreboard, and burn-down `--check` modes all pass.
+- Completed the full generated-data chain: 83 disposition documents; 341-row
+  explicit-base builder replay; CA served case/disposition parity; current
+  grids and boundary suggestions; affected map (171 suites / 180 edges);
+  vacuous gate (135 configs / 214 suites / 34 executable surfaces); overview
+  (215 reports); conformance universes/compositions; scoreboard and ratchet
+  (four jurisdictions / three conformant / no regression); and burn-down
+  (four series / 53 points).
+- The US-PE and UK-PE universe commands exited cleanly but explicitly left
+  their committed universes unverified because the available external
+  checkouts are newer than the pinned versions. UK and Belgium were verified.
+- The focused generated-data suite passes 395 tests with three expected skips.
+  The only excluded test invokes `npx esbuild`; its attempted npm download
+  failed with sandbox DNS `ENOTFOUND`. Ruff, compilation, and whitespace checks
+  pass.
+- Additional CI diagnostics found rule verification current (21,859 rules)
+  and a pre-existing DE/MN state-tax Populace registry/generator drift. The
+  latter is outside CA SNAP scope, changed no files, and is disclosed in the
+  worker report.
 
 ### Next
 
-1. Run the complete repository `--check` chain and focused tests; record exact
-   commands and results in the final untracked worker report.
+1. Complete the untracked `WORKER-REPORT.md`, hand off the committed local
+   branch, and do not push or write to GitHub.
