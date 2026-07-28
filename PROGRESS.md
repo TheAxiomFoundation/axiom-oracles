@@ -6,8 +6,7 @@
   `.git/review-worktrees/ca-snap-441-9de6c1cb-round2`.
 - Pinned target head:
   `9de6c1cbf1f5849ce1348d8ef715e6dcf74f4533`.
-- Review status: in progress; merge freeze is in effect and the deliverable is
-  a verdict only.
+- Review status: complete; verdict is `APPROVE`.
 - All review writes and commits are confined to this detached worktree. The
   target branch, remotes, and GitHub remain untouched.
 - Final report path: `REVIEW-REPORT.md` in this review worktree.
@@ -81,11 +80,11 @@
   base and round-1 target, no CA row is affected, and correcting those
   unrelated report/case surfaces would exceed this review's explicit
   containment. This should be tracked separately.
+- Wrote the final `VERDICT: APPROVE` evidence report to `REVIEW-REPORT.md`.
 
 ## Next
 
-1. Commit `REVIEW-REPORT.md` and finalize this ledger with an approve or
-   request-changes verdict.
+1. Preserve this detached review ledger; no further review action is required.
 
 ---
 
