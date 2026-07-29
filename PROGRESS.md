@@ -1369,3 +1369,49 @@ residual), #229 (small-suite grounding).
 - Verify protected artifact parity, SSI truncation/fail-closed behavior,
   containment, the seven-check battery, and focused tests.
 - Write and commit the final review report, then close this ledger.
+
+## Independent re-review checkpoint — ledger and gates verified
+
+### State
+
+- Phase: in progress. Ledger repair, repair-commit containment, the complete
+  seven-check battery, and focused test coverage are verified.
+- Independent California row sampling and SSI truncation history remain in
+  progress.
+
+### Done
+
+- Compared the first 57,579 bytes of reviewed-head `PROGRESS.md` directly with
+  merge-base `819f370b`; `cmp` returned zero and both byte streams have SHA-256
+  `c453af85c7e77b13a2ea18fcfd884f149d4783c4edf712354a85485d67b8379a`.
+  The prefix is exactly 951 lines.
+- Isolated the restored historical month-regeneration ledger after its
+  separator and proved it is byte-identical to `f0a6598e:PROGRESS.md`:
+  14,644 bytes, 245 lines, SHA-256
+  `0e2cabe4771cd9cb75547f6908d83d79dbb9d269aac46bc3e3892f8ce5d95851`.
+- Confirmed the final base-to-reviewed-head ledger diff is 391 insertions and
+  zero deletions. Its repair narrative agrees with the four repair commits,
+  their changed-path inventory, and the validations repeated so far.
+- Audited `f0a6598e..58c6075f0`: seven paths changed—`PROGRESS.md`, the
+  historical builder, the new reconciler, two focused test modules, and the
+  source/served copies of the California accounting note. No report, case
+  tree, comparison config, or other suite artifact changed.
+- Re-ran the complete required battery: dispositions, grids, affected map,
+  vacuous gate, scoreboard, ratchet, and burn-down all exited zero (7/7).
+- Re-ran the focused builder/reconciler/disposition/artifact suite: 50 tests
+  passed. The current reconciler and builder dispatch also both passed and
+  emitted byte-identical receipts.
+- Proved pre/post tracked status was unchanged; only the two pre-existing
+  untracked worker reports remain.
+- Sandbox disclosure: the review workflow's local GitNexus analysis could
+  create a partial worktree index but could not register it at
+  `/Users/maxghenis/.gitnexus/registry.json` (`EPERM`). The generated partial
+  index was removed, and direct diff/caller/test inspection replaced graph
+  queries.
+
+### Next
+
+- Complete the independent 345-row California derivation and required samples.
+- Complete protected-artifact hash parity and SSI pre-existing/fail-closed
+  verification.
+- Write `REVIEW-REPORT.md`, close this ledger, and commit each final unit.
