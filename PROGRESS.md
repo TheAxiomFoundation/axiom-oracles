@@ -1155,3 +1155,20 @@ residual), #229 (small-suite grounding).
   evidence and replace each `MAIN-LANE-TBD` placeholder with its issue URL.
 - Review and merge this local branch through the campaign's authorized main
   lane. No worker implementation step remains.
+
+## 2026-07-28 main-lane closeout: issues filed, placeholders resolved (chunk1-oracle)
+
+- State: review round 1 findings repaired on the main lane.
+- Done: filed policyengine-us#9167 (simulation taxable-income ceiling),
+  #9168 (AGI vs section 164(b)(7)(B)(iv) MAGI phaseout), #9169
+  (personal-property-tax source omission), #9170 (section 68 proxy base),
+  #9171 (truncated 2/37 rate); corrected #9168's repro entity binding and
+  statutory subsection and #9170's pinned-arithmetic statement after the
+  blind review verified both mechanisms; remapped the two shifted SALT
+  evidence URLs (magi->9168, personal-property->9169); added
+  evidence.upstream_url and the local comparison YAML source to all five
+  dispositions per the us-qbid-grid model; replaced the five MAIN-LANE-TBD
+  literals in conformance/us-pe.yaml adoption notes and regenerated the
+  detail copies; full check battery green.
+- Next: round-2 blind re-review, then merge after rulespec-us#1177 per the
+  section 9 pairing order.

@@ -592,9 +592,9 @@ policies:
       outside PE's six-item inventory, miscellaneous deductions above zero, or
       the section 63(e) itemization election. The section 68 wrong-base and
       truncated-rate cases remain visible as source divergences carried only
-      by evidence-backed per-case dispositions; their upstream issue
-      placeholders are itemized-68-other-deduction-base=MAIN-LANE-TBD and
-      itemized-68-rational-rate=MAIN-LANE-TBD. Suite coverage does not assert
+      by evidence-backed per-case dispositions; their upstream issues
+      are itemized-68-other-deduction-base=policyengine-us#9170 and
+      itemized-68-rational-rate=policyengine-us#9171. Suite coverage does not assert
       raw equality on those cases.
   - id: us-pe:ks_income_tax
     oracle_policy_name: ks_income_tax
@@ -1116,10 +1116,10 @@ policies:
       The low-AGI simulation ceiling, omitted personal-property-tax source,
       and AGI-instead-of-statutory-MAGI cases remain visible as source
       divergences carried only by evidence-backed per-case dispositions.
-      Their upstream issue placeholders are
-      salt-low-agi-engine-cap=MAIN-LANE-TBD,
-      salt-magi-911-addback=MAIN-LANE-TBD, and
-      salt-personal-property-tax-probe=MAIN-LANE-TBD. Suite coverage does not
+      Their upstream issues are
+      salt-low-agi-engine-cap=policyengine-us#9167,
+      salt-magi-911-addback=policyengine-us#9168, and
+      salt-personal-property-tax-probe=policyengine-us#9169. Suite coverage does not
       assert raw equality on those cases.
   - id: us-pe:savers_credit
     oracle_policy_name: savers_credit
