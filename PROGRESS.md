@@ -1266,3 +1266,54 @@ residual), #229 (small-suite grounding).
 - Complete conformance regeneration, placeholder, full-check, closeout, and
   containment verification.
 - Record the verdict and committed output report.
+
+### Checkpoint — conformance, checks, containment, and residual findings
+
+#### State
+
+- Repairs 1, 2, 5, and 6 pass. The requested issue-body corrections in repair
+  3 pass, and the active conformance/generated-artifact portion of repair 4
+  passes.
+- Verdict is `REQUEST-CHANGES` because two literal accuracy/acceptance defects
+  remain: issue #9168's title still cites the wrong subsection, and the claimed
+  repository-wide `MAIN-LANE-TBD` count is four rather than zero.
+
+#### Done
+
+- Confirmed issue #9168's corrected body and exact-stack reproduction, but the
+  live issue title still says section 164(b)(7)(D), contradicting the body and
+  the applicable section 164(b)(7)(B)(iv).
+- Confirmed `conformance/us-pe.yaml` names #9167-#9169 for SALT and
+  #9170-#9171 for itemized deductions, with no active placeholder.
+- Confirmed `conformance/detail/us-pe.json` and
+  `dashboard/public/data/conformance_detail_us-pe.json` are byte-identical and
+  carry the corrected notes.
+- Re-ran the eight canonical read-only gates successfully: dispositions (85
+  files), grids, affected map (174 suites / 183 edges), vacuous gate (138
+  configs; 217 suites / 34 executable surfaces), scoreboard (4 jurisdictions
+  / 3 conformant), ratchet, burn-down (4 series / 57 points), and dashboard
+  overview (218 reports).
+- A frozen-target whole-tree check found four literal `MAIN-LANE-TBD` matches,
+  all in historical `PROGRESS.md` prose at lines 1042, 1072, 1155, and 1170.
+  No match exists in conformance, dispositions, dashboard artifacts, or any
+  other path.
+- Verified the author's closeout is a strict EOF append: `PROGRESS.md` is
+  `+17/-0` against `309e380a`; the earlier ledger is byte-preserved.
+- Verified `1ce97c22` is the direct child of `309e380a` and the repair diff
+  contains exactly six regular-file modifications: the two disposition files,
+  `conformance/us-pe.yaml`, both allowed conformance-detail copies, and
+  `PROGRESS.md`. There are no renames, mode changes, submodules, or foreign
+  paths; `git diff --check` passes.
+- GitNexus's installed CLI reported this worktree unindexed. The MCP graph
+  tools were unavailable, and `npx` fallback attempted a blocked npm DNS
+  lookup. Direct immutable-diff analysis was used because this repair changes
+  YAML/JSON/ledger artifacts rather than executable symbols.
+- A first `uv run --no-sync` check attempt created an ignored incomplete
+  `.venv` and seven commands lacked PyYAML. All eight checks then passed with
+  the existing Python 3.13 project interpreter; the tracked tree stayed clean.
+
+#### Next
+
+- Write and commit `REVIEW-REPORT.md` with the two residual findings and full
+  evidence digest.
+- Append the review closeout checkpoint and return the explicit verdict.
