@@ -20814,11 +20814,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -20999,11 +20994,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -21020,11 +21010,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -21083,11 +21068,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-asset-waiver-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -21299,11 +21279,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -21457,11 +21432,6 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-asset-waiver-snap_benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -21478,11 +21448,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-asset-waiver-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -21499,11 +21464,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -21773,11 +21733,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-asset-waiver-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -21794,11 +21749,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-asset-waiver-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -21941,11 +21891,6 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-asset-waiver-snap_benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -21962,11 +21907,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-asset-waiver-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -22073,11 +22013,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -22357,11 +22292,6 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-asset-waiver-snap_benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -22378,11 +22308,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-asset-waiver-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -23111,11 +23036,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -23254,11 +23174,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-asset-waiver-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -23275,11 +23190,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -23475,11 +23385,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -23617,11 +23522,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -23675,11 +23575,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -23802,11 +23697,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -23908,11 +23798,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-asset-waiver-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -24098,11 +23983,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-asset-waiver-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -24135,11 +24015,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-asset-waiver-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -24193,11 +24068,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-asset-waiver-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -24626,11 +24496,6 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-gross-band-snap_benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -24647,11 +24512,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -24668,11 +24528,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -24894,11 +24749,6 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-asset-waiver-snap_benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -24915,11 +24765,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-asset-waiver-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -25679,11 +25524,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-asset-waiver-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -25905,11 +25745,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-asset-waiver-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -26026,11 +25861,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-asset-waiver-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -26084,11 +25914,6 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-asset-waiver-snap_benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -26105,11 +25930,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-asset-waiver-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -26405,11 +26225,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -26458,11 +26273,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-asset-waiver-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -26722,11 +26532,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -27001,11 +26806,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -27064,11 +26864,6 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-gross-band-snap_benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -27085,11 +26880,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -27322,11 +27112,6 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -25.5,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-gross-band-snap_benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -27343,11 +27128,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -27469,11 +27249,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-asset-waiver-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -27817,11 +27592,6 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-gross-band-snap_benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -27838,11 +27608,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -27949,11 +27714,6 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-gross-band-snap_benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -27970,11 +27730,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -28171,11 +27926,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-asset-waiver-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -28450,11 +28200,6 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 414.0,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-gross-band-snap_benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "amount_difference",
       "left": 414.0,
       "parent": null,
@@ -28508,11 +28253,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -28571,11 +28311,6 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-asset-waiver-snap_benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -28592,11 +28327,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-asset-waiver-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -28718,11 +28448,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -28792,11 +28517,6 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-gross-band-snap_benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -28813,11 +28533,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -29166,11 +28881,6 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -140.89996337890625,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-asset-waiver-snap_benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -29187,11 +28897,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-asset-waiver-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -29303,11 +29008,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -29424,11 +29124,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -29614,11 +29309,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-asset-waiver-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -29635,11 +29325,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-asset-waiver-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -29830,11 +29515,6 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-gross-band-snap_benefit",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -29851,11 +29531,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -29972,11 +29647,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-asset-waiver-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -30267,11 +29937,6 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ca-bbce-asset-waiver-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,

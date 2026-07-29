@@ -18,7 +18,7 @@ entries:
       prevents a new mechanism from being silently absorbed.
     sources:
     - axiom_oracles/data/populace_input_mapping.yaml
-    - programs/us-ks/tanf/fy-2026.yaml
+    - comparisons/ks-tanf-ecps.yaml
   linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/229
   expires_on_source_change: true
 - id: ks-group-i-vs-group-iv-size-2
@@ -33,7 +33,7 @@ entries:
       All 78 selected two-person rows have axiom=309 and PE=352.
     sources:
     - axiom_oracles/data/populace_input_mapping.yaml
-    - programs/us-ks/tanf/fy-2026.yaml
+    - comparisons/ks-tanf-ecps.yaml
   linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/229
   expires_on_source_change: true
 - id: ks-group-i-vs-group-iv-size-3
@@ -48,7 +48,7 @@ entries:
       All 22 selected three-person rows have axiom=386 and PE=429.
     sources:
     - axiom_oracles/data/populace_input_mapping.yaml
-    - programs/us-ks/tanf/fy-2026.yaml
+    - comparisons/ks-tanf-ecps.yaml
   linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/229
   expires_on_source_change: true
 - id: ks-group-i-vs-group-iv-size-4
@@ -63,7 +63,7 @@ entries:
       All 27 selected four-person rows have axiom=454 and PE=497.
     sources:
     - axiom_oracles/data/populace_input_mapping.yaml
-    - programs/us-ks/tanf/fy-2026.yaml
+    - comparisons/ks-tanf-ecps.yaml
   linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/229
   expires_on_source_change: true
 - id: ks-group-i-vs-group-iv-size-5
@@ -78,7 +78,7 @@ entries:
       All 9 selected five-person rows have axiom=515 and PE=558.
     sources:
     - axiom_oracles/data/populace_input_mapping.yaml
-    - programs/us-ks/tanf/fy-2026.yaml
+    - comparisons/ks-tanf-ecps.yaml
   linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/229
   expires_on_source_change: true
 - id: ks-group-i-vs-group-iv-size-6
@@ -93,7 +93,7 @@ entries:
       All 3 selected six-person rows have axiom=576 and PE=619.
     sources:
     - axiom_oracles/data/populace_input_mapping.yaml
-    - programs/us-ks/tanf/fy-2026.yaml
+    - comparisons/ks-tanf-ecps.yaml
   linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/229
   expires_on_source_change: true
 - id: ks-group-i-vs-group-iv-size-7
@@ -108,7 +108,7 @@ entries:
       The one selected seven-person row has axiom=637 and PE=680.
     sources:
     - axiom_oracles/data/populace_input_mapping.yaml
-    - programs/us-ks/tanf/fy-2026.yaml
+    - comparisons/ks-tanf-ecps.yaml
   linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/229
   expires_on_source_change: true
 - id: ks-assistance-unit-excludes-ssi-size-2-to-1-ecps-21176

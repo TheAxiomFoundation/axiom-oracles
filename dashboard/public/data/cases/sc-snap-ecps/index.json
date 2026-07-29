@@ -1012,7 +1012,6 @@
   "axiom:sc-snap-compiled#input.household_eligible_in_subsequent_month_because_of_anticipated_changes",
   "axiom:sc-snap-compiled#input.household_emergency",
   "axiom:sc-snap-compiled#input.household_emergency_prevented_abawd_from_meeting_work_requirement",
-  "axiom:sc-snap-compiled#input.household_entitled_to_basic_utility_allowance",
   "axiom:sc-snap-compiled#input.household_entitled_to_excess_medical_deduction",
   "axiom:sc-snap-compiled#input.household_entitled_to_medical_deduction",
   "axiom:sc-snap-compiled#input.household_entitled_to_mua_or_bua",
@@ -1068,7 +1067,6 @@
   "axiom:sc-snap-compiled#input.household_has_entitlement_to_restoration_of_lost_benefits",
   "axiom:sc-snap-compiled#input.household_has_extremely_low_shelter_costs",
   "axiom:sc-snap-compiled#input.household_has_garbage_or_trash_collection_expense",
-  "axiom:sc-snap-compiled#input.household_has_heating_or_cooling_costs",
   "axiom:sc-snap-compiled#input.household_has_household_provided_ssi_or_social_security_verification",
   "axiom:sc-snap-compiled#input.household_has_information_obtained_through_ievs_considered_verified_upon_receipt",
   "axiom:sc-snap-compiled#input.household_has_left_daa_treatment_center",
@@ -1101,6 +1099,7 @@
   "axiom:sc-snap-compiled#input.household_has_ucb_information_obtained_from_administering_agency",
   "axiom:sc-snap-compiled#input.household_has_water_expense",
   "axiom:sc-snap-compiled#input.household_has_well_or_septic_tank_installation_or_maintenance_expense",
+  "axiom:sc-snap-compiled#input.household_heating_or_cooling_cost_is_separate_from_rent_or_mortgage",
   "axiom:sc-snap-compiled#input.household_homeless_shelter_deduction_amount",
   "axiom:sc-snap-compiled#input.household_in_immediate_need",
   "axiom:sc-snap-compiled#input.household_in_private_rental_housing",
@@ -1115,6 +1114,7 @@
   "axiom:sc-snap-compiled#input.household_incurred_and_billed_for_at_least_two_bua_utilities",
   "axiom:sc-snap-compiled#input.household_incurred_and_billed_separately_for_cooling_cost",
   "axiom:sc-snap-compiled#input.household_incurred_and_billed_separately_for_heating_cost",
+  "axiom:sc-snap-compiled#input.household_incurred_heating_or_cooling_cost_during_year",
   "axiom:sc-snap-compiled#input.household_incurs_allowable_self_employment_costs",
   "axiom:sc-snap-compiled#input.household_incurs_and_is_billed_for_heating_and_cooling_cost",
   "axiom:sc-snap-compiled#input.household_incurs_heating_or_cooling_costs_exceeding_utility_payment",
@@ -1278,8 +1278,6 @@
   "axiom:sc-snap-compiled#input.household_reasonably_certain_expense_change_will_occur",
   "axiom:sc-snap-compiled#input.household_received_benefits_not_entitled_to_as_result",
   "axiom:sc-snap-compiled#input.household_received_cash_payments_from_non_household_member",
-  "axiom:sc-snap-compiled#input.household_received_energy_assistance_under_state_law",
-  "axiom:sc-snap-compiled#input.household_received_liheap",
   "axiom:sc-snap-compiled#input.household_received_liheap_payment_within_past_12_months",
   "axiom:sc-snap-compiled#input.household_received_liheap_within_previous_12_months",
   "axiom:sc-snap-compiled#input.household_received_notice_of_expiration_at_time_of_certification",
@@ -2970,6 +2968,6 @@
   "us:statutes/7/2014/o#snap_eligible",
   "us:statutes/7/2014/u#snap_benefit"
  ],
- "source": "axiom-policyengine-sc-snap-ecps-0-2026-07-27.json",
+ "source": "axiom-policyengine-sc-snap-ecps-0-2026-07-29.json",
  "total_cases": 1283
 }

@@ -10,8 +10,8 @@
   `policyengine-us==1.767.3`, `policyengine-core==3.30.3`.
 - Containment: the 19 suites, their dispositions, shared regenerated artifacts,
   row notes whose counts change, and this ledger only.
-- Phase: all 19 suites regenerated and their dispositions revalidated; shared
-  artifact refresh and the final check battery remain.
+- Phase: all 19 suites regenerated, dispositions revalidated, and shared
+  artifacts refreshed; final check consolidation and worker report remain.
 
 ## Done
 
@@ -199,10 +199,30 @@
   matches.
 - Verified all 19 regenerated reports record PolicyEngine `4.18.9`,
   PolicyEngine-US `1.767.3`, and PolicyEngine-Core `3.30.3`.
+- Caught and removed 67 stale California row-level labels left by applying the
+  final dispositions additively over the generation-time legacy merge. Rebuilt
+  the dashboard copy from the raw regenerated report with the final YAML and
+  re-emitted its case explorer. The report, case artifacts, and rollup now
+  agree exactly at 157 encoding + 111 bridge + 20 upstream annotations, with
+  zero silent classifications.
+- Refreshed all 19 case-artifact trees, all 13 affected disposition artifacts,
+  the affected map, freshness register, conformance scoreboard/detail and
+  four jurisdiction history snapshots, burn-down, and dashboard overview.
+  Removed Arizona TANF's now-obsolete served disposition artifact.
+- Corrected Kansas and New York TANF evidence citations to tracked
+  config/mapping sources available to the hermetic refresh fixture. Its full
+  11-test concurrency/regeneration suite now passes.
+- A first full pytest run reached 2,273 passes and 70 skips. Ten failures from
+  the now-corrected evidence citations were re-run successfully; the only
+  independent failure was `npx esbuild` attempting a network download in the
+  network-restricted sandbox.
+- The state-tax populace contract passes checkout-locally (43 jurisdictions,
+  32 ready, 11 blocked). Invoking the parent checkout's editable virtualenv
+  without `PYTHONPATH=.` imports a different parent `axiom_oracles` tree and
+  falsely reports DE/MN metadata drift; the governing files are identical at
+  this branch's base, HEAD, and local `origin/main`.
 
 ## Next
 
-1. Refresh case/disposition artifacts, affected map, scoreboard, history,
-   burndown, dashboard overview, and the changed conformance row notes.
-2. Run the full `--check` chain and test suite.
-3. Commit the final ledger, write the untracked worker report, and report HEAD.
+1. Consolidate the final `--check` chain and sandbox disclosures.
+2. Commit the final ledger, write the untracked worker report, and report HEAD.

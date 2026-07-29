@@ -53,7 +53,7 @@ entries:
       silently absorbed.
     sources:
     - comparisons/ny-tanf-ecps.yaml
-    - programs/us-ny/tanf/fy-2026.yaml
+    - axiom_oracles/data/populace_input_mapping.yaml
   linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/229
   expires_on_source_change: true
 - id: ny-tanf-zero-left-threshold-bridge
@@ -81,6 +81,6 @@ entries:
       replaced with this exact list.
     sources:
     - comparisons/ny-tanf-ecps.yaml
-    - programs/us-ny/tanf/fy-2026.yaml
+    - axiom_oracles/data/populace_input_mapping.yaml
   linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/229
   expires_on_source_change: true
