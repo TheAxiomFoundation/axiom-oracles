@@ -1415,3 +1415,60 @@ residual), #229 (small-suite grounding).
 - Complete protected-artifact hash parity and SSI pre-existing/fail-closed
   verification.
 - Write `REVIEW-REPORT.md`, close this ledger, and commit each final unit.
+
+## Independent re-review checkpoint — CA and protected artifacts verified
+
+### State
+
+- Phase: evidence collection complete. Both requested repairs and containment
+  verify cleanly; final report drafting remains.
+- Provisional verdict: approve.
+
+### Done
+
+- Independently parsed the literal `819f370b` disposition blob and reviewed
+  `58c6075f0` source/report/compact artifacts without importing the tracked
+  reconciler. The 345 rows partition exactly as 192 vanished, 22
+  current-but-dropped, and 131 kept; kept pins divide into 115 moved and 16
+  unchanged.
+- Confirmed the literal base blob is byte-identical to PR #423 merge
+  `1b57affd`, with SHA-256
+  `18cfbe28f951261142bfa3c52d0c88f6d0a3d53b77b597fcd807b4d2e9a23086`.
+- Independently joined the pinned saved trace to the new report and verified
+  that all 22 current-but-dropped requested-month pins moved materially.
+- Sampled 12 vanished rows, including all four merged-only identities for
+  `ecps-59082` and `ecps-62506`; every sampled household is present at 100%
+  compact match rate with zero current rows for the old concept identity.
+- Sampled ten kept rows across moved benefit pins and unchanged eligibility
+  pins. Every sample has exact current source/report identity and pin parity,
+  the expected report disposition ID, and one exact compact mismatch payload.
+- Reviewed the checker change and negative coverage. The current-schema path
+  validates all 529 canonical mismatches, 288 expanded annotations, exact
+  `id/r/h/m` compact parity, base/partition/movement identity digests,
+  requested-month pin receipts, and source/served parity. Historical mode now
+  reads hash-pinned legacy inputs from the explicit base ref. Tests cover
+  unsafe refs, byte drift, equal-count identity swaps, retired schema,
+  silent annotations, merged-only omissions, pin tampering, and invalid
+  dispatch modes; no guard was weakened.
+- Proved all 39 protected paths containing `ca-snap-ecps`,
+  `ks-tanf-ecps`, or `ssi-ecps` match repair start `f0a6598e` except the two
+  permitted California accounting-note copies. Primary report SHA-256 values
+  remain `d5b95f7c8f9e9a66f5146dcf82bcfe719c6433cb150217a181f4db959fe3911d`,
+  `1132d023920d768577617e074b914cd17c89a057dd7fd893c5052454b4a33532`,
+  and `0eb73772a9220a0cd0aaeb1ec174a43fab61bf33289f56c600202a1f7128399b`,
+  preserving 529, 218, and 2,990 total mismatches.
+- Confirmed SSI truncation predates this branch on both merge-base and current
+  local `origin/main`: the served report explicitly records 1,000 shown of
+  3,067 total there, versus 1,000 of 2,990 at the reviewed head. Its checker
+  exits one with `canonical mismatch list is incomplete (1000/2990); compact
+  parity is uncheckable`; the mismatch-only compact tree independently closes
+  to 2,990 unique rows. The behavior is genuinely fail-closed.
+- Containment wording caveat: the repair adds the reconciler and two explicitly
+  requested focused test modules; the accounting documents are modified, not
+  added. No unexpected tracked file or suite artifact was introduced.
+
+### Next
+
+- Write and commit `REVIEW-REPORT.md`.
+- Append and commit the final ledger closeout, verify final status, and report
+  the verdict without any remote or GitHub write.
