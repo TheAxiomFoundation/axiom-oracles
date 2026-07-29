@@ -855,6 +855,52 @@ def _run_context(
                         f"inputs.{name} does not match the producer bytes",
                     )
                 )
+    verified_runs = governed.get("verified_runs")
+    if not isinstance(verified_runs, list) or not all(
+        isinstance(row, dict) for row in verified_runs
+    ):
+        reasons.append(
+            _reason(
+                "harness",
+                "governance_invalid",
+                governance.name,
+                "verified_runs must be an array of separately governed run records",
+            )
+        )
+    else:
+        matching_runs = [
+            row for row in verified_runs if str(row.get("ci_run_id")) == str(run_id)
+        ]
+        if len(matching_runs) != 1:
+            reasons.append(
+                _reason(
+                    "harness",
+                    "governance_mismatch",
+                    governance.name,
+                    "CI run id has no unique separately governed verification record",
+                )
+            )
+        else:
+            verified = matching_runs[0]
+            for field in ("workflow_sha", "certify_check"):
+                if verified.get(field) != harness.get(field):
+                    reasons.append(
+                        _reason(
+                            "harness",
+                            "governance_mismatch",
+                            governance.name,
+                            f"verified run carries a different {field}",
+                        )
+                    )
+            if verified.get("inputs") != inputs:
+                reasons.append(
+                    _reason(
+                        "harness",
+                        "governance_mismatch",
+                        governance.name,
+                        "verified run does not bind the exact candidate producer bytes",
+                    )
+                )
     return (value if not reasons else None), reasons
 
 
@@ -1069,6 +1115,22 @@ def _comparison_declarations(
                     "comparison_applicability_invalid",
                     "node_index",
                     f"suite {suite!r} is declared more than once",
+                )
+            )
+            continue
+        dimensions = row.get("required_dimensions")
+        if (
+            not isinstance(dimensions, list)
+            or not dimensions
+            or not all(_is_string(item) for item in dimensions)
+            or len(set(dimensions)) != len(dimensions)
+        ):
+            reasons.append(
+                _reason(
+                    "conformant",
+                    "comparison_applicability_invalid",
+                    "node_index",
+                    f"suite {suite!r} has invalid required_dimensions",
                 )
             )
             continue
@@ -2041,7 +2103,6 @@ def evaluate_node(
             "node_comparisons": comparisons,
             "exercise_census": census,
             "node_executable": executable,
-            "workflow_governance": governance,
         },
     )
     pins = run.get("pinned") if run else None
@@ -2278,26 +2339,26 @@ def _declared_evidence_paths(
                         if isinstance(reference, dict)
                         else None
                     )
-                if resolved is not None:
-                    paths.add(resolved)
-                    if field == "manifest":
-                        loaded_manifest = _load(
-                            root,
-                            resolved,
-                            "executable_manifest",
-                        )
-                        golden = (
-                            loaded_manifest.value.get("golden")
-                            if loaded_manifest.value is not None
-                            else None
-                        )
-                        bindings_path = (
-                            _producer_path(root, golden.get("outputs_path"))
-                            if isinstance(golden, dict)
-                            else None
-                        )
-                        if bindings_path is not None:
-                            paths.add(bindings_path)
+                    if resolved is not None:
+                        paths.add(resolved)
+                        if field == "manifest":
+                            loaded_manifest = _load(
+                                root,
+                                resolved,
+                                "executable_manifest",
+                            )
+                            golden = (
+                                loaded_manifest.value.get("golden")
+                                if loaded_manifest.value is not None
+                                else None
+                            )
+                            bindings_path = (
+                                _producer_path(root, golden.get("outputs_path"))
+                                if isinstance(golden, dict)
+                                else None
+                            )
+                            if bindings_path is not None:
+                                paths.add(bindings_path)
     return paths
 
 
@@ -2388,7 +2449,6 @@ def main(argv: list[str] | None = None) -> int:
             "node_comparisons": comparisons,
             "exercise_census": census,
             "node_executable": executable,
-            "workflow_governance": governance,
         },
     )
     ledger = _render_ledger(evaluations, validated_run)

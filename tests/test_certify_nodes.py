@@ -44,7 +44,6 @@ RUN_INPUT_KEYS = {
     "comparisons": "node_comparisons",
     "exercise-census": "exercise_census",
     "executable": "node_executable",
-    "governance": "workflow_governance",
 }
 
 
@@ -105,9 +104,17 @@ def _bind_run_manifest(
         path = inputs[option]
         if path.exists():
             run["inputs"][run_key] = hashlib.sha256(path.read_bytes()).hexdigest()
+    governance = json.loads(inputs["governance"].read_text())
+    governance["verified_runs"][0]["inputs"] = deepcopy(run["inputs"])
+    governance_path = tmp_path / "bound-workflow-governance.json"
+    _write_json(governance_path, governance)
     path = tmp_path / "bound-run-manifest.json"
     _write_json(path, run)
-    return {**overrides, "run-manifest": path}
+    return {
+        **overrides,
+        "governance": governance_path,
+        "run-manifest": path,
+    }
 
 
 def _inputs_pinned_to_artifact(
@@ -183,11 +190,12 @@ def _inputs_pinned_to_artifact(
                 BASE_INPUTS["exercise-census"].read_bytes()
             ).hexdigest(),
             "node_executable": hashlib.sha256(executable_path.read_bytes()).hexdigest(),
-            "workflow_governance": hashlib.sha256(
-                BASE_INPUTS["governance"].read_bytes()
-            ).hexdigest(),
         }
     )
+    governance = json.loads(BASE_INPUTS["governance"].read_text())
+    governance["verified_runs"][0]["inputs"] = deepcopy(run_manifest["inputs"])
+    governance_path = fixture_root / "workflow-governance.json"
+    _write_json(governance_path, governance)
     run_manifest_path = fixture_root / "run-manifest.json"
     _write_json(run_manifest_path, run_manifest)
 
@@ -198,6 +206,7 @@ def _inputs_pinned_to_artifact(
             "comparisons": comparisons_path,
             "executable": executable_path,
             "run-manifest": run_manifest_path,
+            "governance": governance_path,
         },
         fixture_root,
     )
@@ -894,3 +903,59 @@ def test_partial_write_recomputes_and_preserves_existing_green_node(
 
     assert partial_result.returncode == 0, partial_result.stderr
     assert {row["node"] for row in _yaml_nodes(output)} == {NODE, DEPENDENCY}
+
+
+def test_allowlisted_workflow_cannot_claim_an_unverified_run(tmp_path: Path) -> None:
+    run = json.loads((FIXTURES / "run-manifest.json").read_text())
+    run["harness"]["ci_run_id"] = "999999"
+    path = tmp_path / "unverified-run.json"
+    _write_json(path, run)
+
+    result, _, reasons = _run(
+        tmp_path,
+        overrides={"run-manifest": path},
+    )
+
+    assert result.returncode != 0
+    _assert_reason(
+        reasons,
+        code="harness.governance_mismatch",
+        criterion="harness",
+    )
+
+
+def test_output_cannot_overwrite_manifest_or_bound_evidence(tmp_path: Path) -> None:
+    root = _copy_fixture_root(tmp_path)
+    manifest = root / "manifests" / "us-medicare.json"
+    before = manifest.read_bytes()
+
+    result, _, _ = _run(
+        tmp_path,
+        repo_root=root,
+        output=manifest,
+    )
+
+    assert result.returncode == 2
+    assert "must not overwrite producer/evidence inputs" in result.stderr
+    assert manifest.read_bytes() == before
+
+
+def test_malformed_required_dimensions_reject_instead_of_crashing(
+    tmp_path: Path,
+) -> None:
+    node_index = json.loads((FIXTURES / "node-index.json").read_text())
+    node_index["nodes"][NODE]["comparisons"][0]["required_dimensions"] = [
+        {"not": "a dimension"}
+    ]
+    path = tmp_path / "malformed-dimensions.json"
+    _write_json(path, node_index)
+    overrides = _bind_run_manifest(tmp_path, {"node-index": path})
+
+    result, _, reasons = _run(tmp_path, overrides=overrides)
+
+    assert result.returncode != 0
+    _assert_reason(
+        reasons,
+        code="conformant.declaration_invalid",
+        criterion="conformant",
+    )

@@ -23,14 +23,15 @@
 - Implemented `scripts/certify_nodes.py`: transitive node subgraphs, strict
   provenance, exact-root closure, parsed and reconciled comparison reports,
   dimension-level exercise, validated-receipt node coverage, separately
-  governed workflow provenance, exact producer-input binding, deterministic
-  YAML, atomic writes, byte-exact `--check`, manual-entry drift, partial-run
-  preservation, and decertification.
+  governed and run-recorded workflow provenance, exact candidate-producer input
+  binding, deterministic YAML, atomic writes, byte-exact `--check`,
+  manual-entry drift, partial-run preservation, and decertification.
 - Added six committed mutant inputs plus green, missing-producer, bridge-audit,
   comparison-error, dependency-cycle, bridged-dimension, foreign-report,
   foreign-receipt, governance, path-escape, impossible-cardinality,
-  duplicate/vacuous-root, CRLF, output-alias, and two-node projection coverage.
-  Focused validation: 30 tests pass; Ruff and `git diff --check` pass.
+  duplicate/vacuous-root, CRLF, output/evidence alias, unrecorded-run, malformed
+  applicability, and two-node projection coverage. Focused validation: 33
+  tests pass; Ruff and `git diff --check` pass.
 - Repository-wide validation reached 2,299 passing and 70 skipped; its sole
   failure was `npx` attempting a network download while DNS was unavailable.
 
