@@ -2461,9 +2461,12 @@ def main(argv: list[str] | None = None) -> int:
     )
     write_error: OSError | None = None
     if not args.check:
-        documents = {output_path: ledger}
+        documents: dict[Path, str] = {}
         if reasons_path is not None:
             documents[reasons_path] = result_rendered
+        # Replace the canonical ledger last: a failure updating a diagnostic
+        # artifact must never leave the ledger advanced on its own.
+        documents[output_path] = ledger
         try:
             _atomic_write_documents(documents)
         except OSError as exc:
