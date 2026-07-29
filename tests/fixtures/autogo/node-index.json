@@ -1,0 +1,22 @@
+{
+  "schema": "axiom_oracles.node_certification_index.v1",
+  "artifact_sha256": "95f24a7671ec603600d6f9e85f80c06f10939fcace3d1192a4ab5abec0b5d1b0",
+  "nodes": {
+    "us:statutes/26/3101/b/1#medicare_wage_tax": {
+      "label": "Employee Medicare payroll tax",
+      "provision": "26 USC 3101(b)(1)",
+      "corpus_citation_path": "us/statute/26/3101",
+      "closure_roots": [
+        "us:statutes/26/3101"
+      ],
+      "comparisons": [
+        {
+          "suite": "us-medicare-wage-tax",
+          "required_dimensions": [
+            "wages"
+          ]
+        }
+      ]
+    }
+  }
+}

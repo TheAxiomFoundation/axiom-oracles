@@ -1,0 +1,21 @@
+{
+  "schema": "axiom_oracles.closure.summary.v1",
+  "program": "us/medicare",
+  "roots": [
+    {
+      "root": "us:statutes/26/3101",
+      "total": 2,
+      "by_status": {
+        "encoded": 1,
+        "excluded": 0,
+        "pending": 1
+      },
+      "pins_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+      "pinned": {
+        "rulespec_us": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "corpus": "ffffffffffffffffffffffffffffffffffffffff"
+      }
+    }
+  ],
+  "closed": false
+}

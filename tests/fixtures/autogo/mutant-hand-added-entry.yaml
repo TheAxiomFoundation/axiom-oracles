@@ -1,0 +1,29 @@
+node: us:statutes/26/9999#hand_added
+label: Hand-added node
+provision: 26 USC 9999
+corpus_citation_path: us/statute/26/9999
+certified_at: "2026-07-29T12:34:56Z"
+harness:
+  run: manual-entry@not-a-workflow-sha
+  certify_check: not-produced-by-the-harness
+pinned:
+  rulespec_us: unknown
+  corpus: unknown
+  engine: unknown
+  artifact: unknown
+criteria:
+  provision_rooted:
+    holds: true
+    evidence: manual assertion
+  conformant:
+    holds: true
+    evidence: manual assertion
+  exercised:
+    holds: true
+    evidence: manual assertion
+  closed:
+    holds: true
+    evidence: manual assertion
+  executable:
+    holds: true
+    evidence: manual assertion

@@ -1,0 +1,23 @@
+{
+  "schema": "axiom.compiled_artifact.v1",
+  "metadata": {
+    "nodes": [
+      {
+        "id": "us:statutes/26/3101/b/1#medicare_wage_tax",
+        "provenance": "provision_backed",
+        "corpus_citation_path": "us/statute/26/3101"
+      },
+      {
+        "id": "us:statutes/26/3121/a#medicare_wage_base",
+        "provenance": "provision_backed",
+        "corpus_citation_path": "us/statute/26/3121"
+      }
+    ],
+    "dependency_graph": {
+      "us:statutes/26/3101/b/1#medicare_wage_tax": [
+        "us:statutes/26/3121/a#medicare_wage_base"
+      ],
+      "us:statutes/26/3121/a#medicare_wage_base": []
+    }
+  }
+}

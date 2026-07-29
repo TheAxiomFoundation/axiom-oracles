@@ -1,0 +1,20 @@
+{
+  "schema": "axiom_oracles.node_executable.v1",
+  "artifact_sha256": "95f24a7671ec603600d6f9e85f80c06f10939fcace3d1192a4ab5abec0b5d1b0",
+  "producer": {
+    "mode": "computed"
+  },
+  "nodes": {
+    "us:statutes/26/3101/b/1#medicare_wage_tax": {
+      "validated": true,
+      "receipt": {
+        "path": "receipts/us-medicare-wage-tax.json",
+        "sha256": "105a88fa69f0d90c5570e839146e4d3c9b7a41b41d674de71afe9c921f3223e6"
+      },
+      "pinned": {
+        "engine": "v0.1.1",
+        "artifact": "95f24a7671ec603600d6f9e85f80c06f10939fcace3d1192a4ab5abec0b5d1b0"
+      }
+    }
+  }
+}

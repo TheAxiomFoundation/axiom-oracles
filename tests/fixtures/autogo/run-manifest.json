@@ -1,0 +1,15 @@
+{
+  "schema": "axiom_oracles.certify_nodes.run.v1",
+  "certified_at": "2026-07-29T12:34:56Z",
+  "harness": {
+    "ci_run_id": "424242",
+    "workflow_sha": "cccccccccccccccccccccccccccccccccccccccc",
+    "certify_check": "dddddddddddddddddddddddddddddddddddddddd"
+  },
+  "pinned": {
+    "rulespec_us": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "corpus": "ffffffffffffffffffffffffffffffffffffffff",
+    "engine": "v0.1.1",
+    "artifact": "95f24a7671ec603600d6f9e85f80c06f10939fcace3d1192a4ab5abec0b5d1b0"
+  }
+}

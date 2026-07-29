@@ -1,0 +1,19 @@
+{
+  "schema": "axiom_oracles.exercise_census.v1",
+  "suites": {
+    "us-medicare-wage-tax": {
+      "report": "reports/us-medicare-wage-tax.json",
+      "report_sha256": "8395a522c8d3e84df46240de65279558ca913cf95b442caec622f60404272eba",
+      "binding": "bound",
+      "reconciliation": "full",
+      "cases_scanned": 4,
+      "evidence_fields": {
+        "wages": {
+          "distinct": 1,
+          "state": "constant"
+        }
+      },
+      "bridged_through": {}
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "schema": "axiom_oracles.node_comparisons.v1",
+  "artifact_sha256": "95f24a7671ec603600d6f9e85f80c06f10939fcace3d1192a4ab5abec0b5d1b0",
+  "producer": {
+    "mode": "computed"
+  },
+  "comparisons": {
+    "us-medicare-wage-tax": {
+      "committed": true,
+      "binding": "bound",
+      "reconciliation": "full",
+      "comparison_count": 4,
+      "unexplained_count": 0,
+      "axiom_attributed_count": 0,
+      "report": {
+        "path": "reports/us-medicare-wage-tax.json",
+        "sha256": "8395a522c8d3e84df46240de65279558ca913cf95b442caec622f60404272eba"
+      },
+      "pinned": {
+        "rulespec_us": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "corpus": "ffffffffffffffffffffffffffffffffffffffff",
+        "engine": "v0.1.1",
+        "artifact": "95f24a7671ec603600d6f9e85f80c06f10939fcace3d1192a4ab5abec0b5d1b0"
+      }
+    }
+  }
+}

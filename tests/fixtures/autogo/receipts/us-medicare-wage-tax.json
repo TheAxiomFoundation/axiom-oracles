@@ -1,0 +1,15 @@
+{
+  "schema": "axiom_oracles.executable_receipt.v1",
+  "node": "us:statutes/26/3101/b/1#medicare_wage_tax",
+  "validated": true,
+  "engine": {
+    "version": "v0.1.1"
+  },
+  "artifact": {
+    "sha256": "95f24a7671ec603600d6f9e85f80c06f10939fcace3d1192a4ab5abec0b5d1b0"
+  },
+  "workflow": {
+    "run_id": "424242",
+    "sha": "cccccccccccccccccccccccccccccccccccccccc"
+  }
+}
