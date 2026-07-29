@@ -949,3 +949,40 @@ residual), #229 (small-suite grounding).
 
 - None. Hand off the committed local branch and untracked split report; do not
   push or write GitHub state during the merge freeze.
+
+---
+
+## Spine Chunk 1 oracle build — SALT + itemized deductions — 2026-07-29
+
+### State
+
+- Worktree: `axiom-oracles/_worktrees/chunk1-oracle`.
+- Branch: `fed-parity/chunk1-oracle-suites`.
+- Starting point: local `origin/main`
+  `f8ea6027984b9da73c6f4b58d15a20b450181ac4` (tree
+  `27d02d523547c23a5a29d38a98babe90021420b6`).
+- Scope: add the `us-salt-deduction-grid` and
+  `us-itemized-taxable-income-deductions-grid` oracle suites specified by
+  `SPINE-PLAN.md`, adopt exactly their two `us-pe` rows, and regenerate the
+  dependent conformance/dashboard artifacts.
+- Constraints: local commits only; no push or GitHub writes; expected values
+  must come from the engine-verified RuleSpec PR #1177 companions;
+  `WORKER-REPORT.md` remains untracked.
+
+### Done
+
+- Verified the source checkout was clean and the requested branch/worktree did
+  not already exist.
+- Created this branch and worktree directly from the recorded local
+  `origin/main`.
+- Began read-only inspection of the binding plan, RuleSpec companion evidence,
+  generator contracts, and regeneration pipeline.
+
+### Next
+
+- Pin the exact RuleSpec PR #1177 head SHA/tree and transcribe the two verified
+  companion case inventories into generator configs.
+- Implement the generator, tests, bridge mappings, conformance rows, and
+  evidence-rich divergence dispositions in coherent committed steps.
+- Run real PolicyEngine generation on the declared stack, then the full
+  regeneration and `--check` gate chain.
