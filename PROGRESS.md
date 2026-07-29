@@ -1,3 +1,28 @@
+# Gate coverage review (`autogo/gate-coverage-review`)
+
+## State
+
+- Defensive correctness and completeness audit in progress.
+- Target gate branches are read only and will be inspected with `git show`.
+- This worktree will contain only the shared progress update, the audit report,
+  and new xfailed mutant proofs.
+
+## Done
+
+- Established the requested branch from `origin/main`.
+- Confirmed the named gate branches are available locally.
+- Confirmed the starting worktree was clean.
+
+## Next
+
+- Inventory each named gate and existing mutant suite.
+- Trace composition-level bindings between certification, closure, census,
+  manifests, and evidence.
+- Add clearly named `xfail` mutants for real gaps.
+- Write and verify the ranked report, then push and open a draft PR if possible.
+
+---
+
 # PROGRESS — us-pe reconciliation (drive `unexplained_total` 23,138 → 0)
 
 Predecessor: **#224** stood up the us-pe conformance universe (measurement only,
