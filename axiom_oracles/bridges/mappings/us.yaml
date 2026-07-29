@@ -4770,6 +4770,136 @@ mappings:
     candidate_priority: P4
     rationale: California CalFresh composition alias for monthly household income; PolicyEngine's SNAP gross income is adjacent but not the same legal output boundary.
 
+  - legal_id: us-ca:policies/cdss/snap/modified-categorical-eligibility#calfresh_mce_gross_income_limit_rate
+    country: us
+    program: snap
+    mapping_type: parameter_value
+    policyengine_parameter: gov.hhs.tanf.non_cash.income_limit.gross
+    parameter_key: CA
+    period: year
+    comparison: rate
+    rationale: Same statewide 200 percent MCE gross-income screen; PolicyEngine stores California's BBCE gross limit as the CA entry of the TANF non-cash gross income-limit parameter (2 since 2015-10-01), matching ACL 14-56's at-or-below 200 percent rate.
+
+  - legal_id: us-ca:policies/cdss/snap/modified-categorical-eligibility#calfresh_categorical_member_student_exclusion_applies
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    policyengine_variable: is_snap_ineligible_student
+    candidate_priority: P4
+    rationale: Axiom exposes the member student exclusion as a Person/month judgment; PolicyEngine's is_snap_ineligible_student is a Person/year boolean guarded by is_snap_higher_ed_student, and the registry has no period-bridging precondition to compare a month judgment against a year boolean without manufacturing period-boundary divergences. Restore as comparable if registry period reconciliation or a month-scoped PE surface lands.
+
+  - legal_id: us-ca:policies/cdss/snap/modified-categorical-eligibility#calfresh_mce_gross_income_limit
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    policyengine_variable: meets_tanf_non_cash_gross_income_test
+    candidate_priority: P4
+    rationale: Axiom exposes the monthly Money ceiling (200 percent of the household poverty line); PolicyEngine exposes only the pass/fail predicate meets_tanf_non_cash_gross_income_test, not the ceiling amount.
+
+  - legal_id: us-ca:policies/cdss/snap/modified-categorical-eligibility#calfresh_wic_18901_3_drug_felony_opt_out_applies
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: California's WIC 18901.3(a) opt-out judgment removing the conviction-alone drug-felony exclusion for the covered cohort; PolicyEngine has no drug-felony or state opt-out surface.
+
+  - legal_id: us-ca:policies/cdss/snap/modified-categorical-eligibility#calfresh_mce_federal_drug_felony_exclusion_before_state_opt_out
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: The pre-overlay federal 273.2(j)(2)(vii)(D) drug-felony gate retained for proof of the WIC 18901.3 overlay; PolicyEngine models no drug-felony ineligibility fact.
+
+  - legal_id: us-ca:policies/cdss/snap/modified-categorical-eligibility#calfresh_mce_household_exclusion_applies
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Combined household-level MCE bar over the seven federal 273.2(j)(2)(vii) gates; PolicyEngine exposes no complete household-bar variable covering IPV, monthly-reporting, workfare, head-of-household work, drug-felony, fleeing-felon, and serious-crime gates.
+
+  - legal_id: us-ca:policies/cdss/snap/modified-categorical-eligibility#calfresh_mce_member_household_exclusion_applies
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    policyengine_variable: meets_snap_work_requirements
+    candidate_priority: P4
+    rationale: Member-driven limb of the household MCE bar; PolicyEngine's meets_snap_work_requirements covers only the work-requirement limb and none of the other member-driven gates.
+
+  - legal_id: us-ca:policies/cdss/snap/modified-categorical-eligibility#calfresh_categorical_member_ineligible_alien_exclusion_applies
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    policyengine_variable: is_snap_immigration_status_eligible
+    candidate_priority: P4
+    rationale: Member ineligible-alien exclusion under 273.2(j)(2)(ix); PolicyEngine's is_snap_immigration_status_eligible is the opposite-polarity eligibility predicate and the registry expresses no negation precondition.
+
+  - legal_id: us-ca:policies/cdss/snap/modified-categorical-eligibility#calfresh_categorical_member_cash_out_ssi_exclusion_applies
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Member exclusion for SSI cash-out recipients under 273.2(j)(2)(ix); PolicyEngine has no SSI cash-out member exclusion surface for California after cash-out ended.
+
+  - legal_id: us-ca:policies/cdss/snap/modified-categorical-eligibility#calfresh_categorical_member_institution_exclusion_applies
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Member institutional-residence exclusion under 273.2(j)(2)(ix); PolicyEngine models no institutional-residence SNAP member fact.
+
+  - legal_id: us-ca:policies/cdss/snap/modified-categorical-eligibility#calfresh_categorical_member_work_exclusion_applies
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    policyengine_variable: meets_snap_work_requirements
+    candidate_priority: P4
+    rationale: Member work-rule exclusion judgment under 273.2(j)(2)(ix); PolicyEngine's meets_snap_work_requirements differs in polarity and scope (general work requirements, not the member categorical-eligibility exclusion).
+
+  - legal_id: us-ca:policies/cdss/snap/modified-categorical-eligibility#calfresh_categorical_member_inclusion_status
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Per-member composite inclusion status over the immigration, student, SSI cash-out, institution, and work exclusions; PolicyEngine exposes only partial immigration/student/work candidates and no composite.
+
+  - legal_id: us-ca:policies/cdss/snap/modified-categorical-eligibility#calfresh_mce_member_eligible
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Same-person composite requiring one member to pass every member exclusion simultaneously; PolicyEngine has no same-person composite eligibility variable.
+
+  - legal_id: us-ca:policies/cdss/snap/modified-categorical-eligibility#calfresh_mce_status_conferred
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    policyengine_variable: is_tanf_non_cash_eligible
+    candidate_priority: P4
+    rationale: California MCE conferral judgment gated on PUB 275 issuance/access and the household/member exclusion bars; PolicyEngine's is_tanf_non_cash_eligible lacks the PUB 275 trigger and exclusion gates and additionally imposes a net-income test that MCE conferral does not.
+
+  - legal_id: us-ca:policies/cdss/snap/fy-2026-benefit-calculation#calfresh_mce_resource_eligibility_test_waived
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    policyengine_variable: meets_tanf_non_cash_asset_test
+    candidate_priority: P4
+    rationale: Axiom exposes the waiver judgment (resource test not applied to MCE households per ACL 14-56); PolicyEngine's meets_tanf_non_cash_asset_test is a test outcome under an infinite limit, not a waiver fact.
+
+  - legal_id: us-ca:policies/cdss/snap/fy-2026-benefit-calculation#calfresh_mce_net_income_eligibility_test_waived
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    policyengine_variable: meets_tanf_non_cash_net_income_test
+    candidate_priority: P4
+    rationale: Axiom exposes the net-eligibility-ceiling waiver per retained 273.2(j)(2)(xi) and ACL 15-42; PolicyEngine's meets_tanf_non_cash_net_income_test asserts the opposite (a net test that applies), with both California net-test applicability parameters true at the pin.
+
+  - legal_id: us-ca:policies/cdss/snap/fy-2026-benefit-calculation#calfresh_categorical_zero_benefit_denial_applies
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: ACL 14-63 denial/discontinuance judgment for zero-benefit CE/MCE households of three or more; PolicyEngine's is_snap_eligible and snap_normal_allotment are downstream outcomes, not this denial predicate.
+
   - legal_id: us-ca:policies/cdss/snap/fy-2026-benefit-calculation#shelter_costs
     country: us
     program: snap
@@ -8187,6 +8317,23 @@ mappings:
     policyengine_variable: payroll_tax_gross_wages
     candidate_priority: P4
     rationale: Axiom exposes the tax-unit wages taken into account under 26 CFR 1.1401-1(d)(2)(i) for the threshold reduction; PolicyEngine consumes payroll_tax_gross_wages as a person-level input element inside additional_medicare_tax and exposes no Additional-Medicare-specific wage surface at the tax-unit boundary.
+
+  - legal_id: us:statutes/26/63/c/6#standard_deduction_ineligible
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: separate_filer_itemizes
+    candidate_priority: P4
+    rationale: Section 63(c)(6) makes four classes ineligible for the standard deduction; PolicyEngine's separate_filer_itemizes models only the married-filing-separately branch (A) and exposes no judgment covering the nonresident-alien, short-year, and estate/trust branches (B-D), so the combined ineligibility judgment has no one-to-one PE surface.
+
+  - legal_id: us:statutes/26/67/h#miscellaneous_itemized_deduction_allowed_for_individual
+    country: us
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.irs.deductions.itemized.misc.applies
+    period: year
+    comparison: boolean
+    rationale: Same section 67 miscellaneous-itemized-deduction availability switch, stored in PE as boolean parameter data (its reference cites 26 USC 67); not_holds for a 2026 individual matches the parameter's false value under current law.
 
   - legal_id: us:policies/income_tax/savers_credit_pipeline#federal_savers_credit
     country: us
