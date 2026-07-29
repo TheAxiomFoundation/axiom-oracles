@@ -1416,3 +1416,46 @@ residual), #229 (small-suite grounding).
   and complete evidence digest.
 - Append the closing ledger checkpoint, recheck the live PR head, and return
   the verdict without any remote or PR mutation.
+
+### Checkpoint — final adversarial QA and report closeout
+
+#### State
+
+- Verdict is `REQUEST-CHANGES`. The substantive suites and five measured
+  divergences are sound, but their mandatory issue/disposition evidence chain
+  is incomplete, mislinked, and partly inaccurate.
+- The final report is committed at `REVIEW-REPORT.md` through review commit
+  `6e77eab4`.
+
+#### Done
+
+- Final spec-to-report QA found a further binding defect: all five new entries
+  omit the section-7-prescribed `evidence.upstream_url`, placing issue URLs only
+  in free-text `evidence.mechanism`. All five `evidence.sources` lists also
+  omit their applicable local comparison YAML. The repository schema and
+  disposition check pass despite this stricter campaign-contract violation.
+- Corrected an earlier ledger overstatement: the eight named companion spot
+  checks covered four of the five disposition cases, not all five. The
+  exhaustive value-and-input comparison covered all 33 cases, including every
+  disposition.
+- Ran the binding full pytest battery after the scoped batteries:
+  `2 failed, 2294 passed, 69 skipped`. Both failures are disclosed sandbox
+  network dependencies before their assertions: `npx` could not download
+  `esbuild`, and PolicyEngine could not download its Populace HDF5 from
+  Hugging Face. No other test failed.
+- Reconfirmed the five request-changes classes in the report: missing
+  structured disposition evidence/comparison sources; two shifted SALT issue
+  URLs; issue #9168's invalid entity binding and wrong subsection; issue
+  #9170's inaccurate mechanism arithmetic; and stale conformance placeholders
+  plus frozen author ledger.
+- Reconfirmed the review worktree is confined to committed append-only review
+  ledger entries and the committed output report on top of the immutable PR
+  head. No PR branch, remote, issue, or GitHub state was changed.
+
+#### Next
+
+- Recheck the live PR metadata once more and return the committed verdict and
+  evidence digest.
+- Author follow-up must correct the structured evidence and issue bodies,
+  regenerate affected artifacts, append the author ledger, and rerun in a
+  network-capable environment.
