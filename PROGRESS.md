@@ -1121,12 +1121,16 @@ residual), #229 (small-suite grounding).
   `23.84000015258789`. Across the nine completed SNAP suites, the old constant
   therefore resolves to 577 rows at `23.84000015258789`, three other
   true-January amounts, and ten matches; California's 45 rows remain.
-- Verified the saved #423 California replay receipt at SHA-256
+- Retained the saved #423 California replay receipt at SHA-256
   `c46af9b87c8f5ad01f1909bc45e80e00b4c4a50e5b802ea4ccbe194b5954b568`
-  with its hardened builder and pinned base. It validates 341 issue-362 rows
-  and predicts 29 repaired rows, 172 materially moved surviving pins, and 140
-  unchanged surviving pins on that base. Its authoritative YAML is used as
-  evidence input only; no unrelated #423 commit is imported.
+  as per-row requested-month evidence only. Canonical disposition accounting
+  now comes from tracked `scripts/reconcile_ca_snap_423_dispositions.py`:
+  `--base-ref 819f370bf0346e4a6a8dfb1c8c4f0d873d6d0340 --check` resolves
+  the ref to a commit, hashes the literal merged
+  `dispositions/ca-snap-ecps.yaml` blob as
+  `18cfbe28f951261142bfa3c52d0c88f6d0a3d53b77b597fcd807b4d2e9a23086`,
+  and requires all 345 `ca-362-*` rows. No non-ancestor repaired YAML is
+  treated as authoritative.
 - A defensive California BBCE review found 83 of the 243 legacy annotations
   contradict their stated Axiom gate proof. The reconciliation removes both
   unsupported asset-waiver selectors and retains only the clean gross-band
@@ -1139,12 +1143,13 @@ residual), #229 (small-suite grounding).
 - California regenerated from `684 / 96` raw/unexplained to `529 / 241`.
   Its final disposition set classifies 157 BBCE encoding rows, 111 bridge
   rows, and 20 upstream-engine rows. No disposition is expired or orphaned.
-- The current clean RuleSpec checkout differs from the pinned #423 base, so the
-  341 issue entries were revalidated fail-closed against both sources. Of
-  those, 188 current identities vanished; 22 still exist but no longer
-  reproduce the replay's requested-month left/right evidence and were flagged
-  and dropped; 131 reproduce it exactly and were retained. Among those 131,
-  115 legacy pins moved materially and 16 are unchanged.
+- Reconciled the literal merged #423 set fail-closed: all 345 issue entries
+  partition as 192 vanished, 22 still-current mismatches whose requested-month
+  left/right evidence materially drifted and therefore remain dropped and
+  unclassified, and 131 kept after exact current-evidence verification. The
+  kept set splits into 115 materially moved legacy pins and 16 unchanged pins.
+  The four merged-only rows (benefit and eligibility for `ecps-59082` and
+  `ecps-62506`) are included among the 192 vanished.
 - California's 45 old `23.973597208658855` rows became 42 rows at
   `23.84000015258789` and three matches. Across all ten SNAP suites, the 635
   old constant rows therefore became 619 rows at January's
@@ -1231,8 +1236,46 @@ residual), #229 (small-suite grounding).
 - Track a reproducible `scripts/` reconciler with explicit `--base-ref`
   discipline and make the tracked disposition checker validate the current
   compact schema without weakening checks.
-- Update every tracked stale `188/341` accounting reference and add focused
-  regression coverage.
+- Verify that every tracked accounting and provenance reference names the
+  literal 345-row merged set and its tracked checker.
 - Run the full `--check` battery, assert suite artifacts are byte-unchanged,
   commit each coherent step, and write the short untracked
   `WORKER-REPORT-REPAIR.md`.
+
+## Repair checkpoint — literal merged accounting committed
+
+### State
+
+- Phase: accounting and checker repairs are committed; full repository gates
+  and final artifact-containment proof remain.
+- Root `PROGRESS.md` still begins with the merge-base's exact 57,579-byte,
+  951-line content.
+
+### Done
+
+- Committed `47949eb5` with a read-only literal-base reconciler and focused
+  regression coverage.
+- Reconciled the 345 literal merged #423 rows exactly as 192 vanished, 22
+  materially drifted and dropped, and 131 kept; the kept set closes as 115
+  materially moved pins plus 16 unchanged pins.
+- Validated the current 7,101-case `id/r/h/m` compact schema against all 529
+  report mismatches and 288 expanded annotations.
+- Kept the historical builder check operational by requiring the explicit
+  base ref and validating its pinned report, legacy compact snapshot, trace,
+  and generated YAML. The real saved-trace gate validates 345 rows with 96
+  historical unexplained rows.
+- Passed 50 focused checker/disposition/artifact tests, Ruff, diff-check, the
+  current checker, the historical checker, and exact current-checker receipt
+  parity through the builder dispatch.
+- Replaced the non-authoritative repaired-source provenance in both compact
+  BBCE disposition notes with the literal merged base ref, source SHA-256,
+  tracked checker command, and corrected partition.
+
+### Next
+
+- Commit the corrected tracked accounting prose and exact derived disposition
+  copy.
+- Run the full `--check` and validation battery, prove CA/KS/SSI suite
+  artifacts remain byte-identical to repair start, and close the ledger.
+- Write untracked `WORKER-REPORT-REPAIR.md`; do not modify the pre-existing
+  untracked `WORKER-REPORT.md`, push, or write to GitHub.
