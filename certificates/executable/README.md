@@ -61,6 +61,9 @@ identity/digest, source ref/digest, event, run ID/attempt, hosted runner, and a
 transparency timestamp. It then re-checks the certificate-owned
 `478 / 226 / holds` golden expectations.
 
+This is a repository-local certification harness, not a standalone wheel API:
+its default trust roots, receipt paths, and certifier live in this source tree.
+
 ## Maintainer handoff
 
 The initial workflow PR deliberately leaves the allowlist empty and commits no
@@ -84,6 +87,14 @@ After it lands:
    downloaded receipt:
 
    ```bash
+   WORKFLOW_SHA="$(
+     jq -er '.workflow.sha' \
+       /tmp/executable-receipt-us-co-snap/receipt.json
+   )"
+   SOURCE_SHA="$(
+     jq -er '.workflow.source_sha' \
+       /tmp/executable-receipt-us-co-snap/receipt.json
+   )"
    gh attestation verify \
      /tmp/executable-receipt-us-co-snap/receipt.json \
      --repo TheAxiomFoundation/axiom-oracles \
