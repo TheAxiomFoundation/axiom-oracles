@@ -2,10 +2,9 @@
 
 ## State
 
-- Defensive correctness and completeness audit in progress; the branch-wide
-  implementation review and adversarial probing are complete.
-- Target gate branches are read only and will be inspected with `git show`.
-- This worktree will contain only the shared progress update, the audit report,
+- Defensive correctness and completeness audit complete locally.
+- Target gate branches remained read only and were inspected with `git show`.
+- This worktree contains only the shared progress update, the audit report,
   and new xfailed mutant proofs.
 
 ## Done
@@ -35,13 +34,24 @@
   all-constant, unbound census row as complete.
 - Proved typed bridge-manifest and population-pin gaps, plus circular
   `covered_by` evidence and malformed classification-row laundering.
+- Added 20 strict xfailed regression mutants in
+  `tests/test_gate_coverage_gaps.py`; the loader exercises pinned review objects
+  on this cross-branch review and current files after gate-family integration.
+- Wrote the ranked defensive review to `docs/gate-coverage-review.md`, including
+  exact exploit inputs, responsible rejection gates, composition gaps, and
+  sections stating which gate behavior was sound.
+- Verified the focused suite: 20 expected XFAILs and no unexpected outcome;
+  Ruff and `git diff --check` pass.
+- Ran the repository-wide suite: 2,283 passed, 65 skipped, and the 20 expected
+  XFAILs. Five unrelated bridge tests fail against the adjacent RuleSpec
+  checkout's changed pilot outputs, and the dashboard loader test cannot
+  download `esbuild` because network access is unavailable.
 
 ## Next
 
-- Add clearly named `xfail` mutants for real gaps.
-- Write the ranked report, state sound areas, and verify the mutants.
-- Commit each coherent deliverable step, then push and open a draft PR if
-  network access allows.
+- No audit implementation work remains.
+- Push `autogo/gate-coverage-review` and open the requested draft PR if network
+  access allows.
 
 ---
 
