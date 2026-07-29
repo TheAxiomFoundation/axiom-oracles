@@ -1280,3 +1280,70 @@ residual), #229 (small-suite grounding).
 - Finish the source, issue-body, statutory, and expiry audit of all five
   dispositions.
 - Record any issue/disposition evidence defect as a merge finding.
+
+### Checkpoint — disposition, pinned-source, and statutory audit
+
+#### State
+
+- All five registered upstream-engine gaps are substantive and isolated, but
+  the frozen PR head fails the disposition-evidence contract.
+- The merge-blocking defects are two off-by-one issue links, an unrunnable and
+  miscited reproduction in issue #9168, and inaccurate mechanism arithmetic in
+  issue #9170.
+
+#### Done
+
+- Re-ran each disposition case in a fresh exact-stack `Simulation`. The lawful
+  and live PE results are, respectively: low-AGI SALT `10000` versus `5000`;
+  section-911 MAGI SALT `38900` versus `40400`; personal-property SALT `4000`
+  versus `0`; section-68 proxy-base itemized deduction `50000` versus
+  `47297.296875`; and exact-rate itemized deduction
+  `9459459.45945946` versus `9459460`.
+- Checked every required PolicyEngine source file at commit
+  `49d19b239a593dbac8920ac6fd80cfe33372343a`, tree
+  `272be973bc0adddc9e176a6a772a3e113bc15427`. Blob hashes for the installed
+  exact-version `salt_deduction.py`, `salt_cap.py`, SALT `sources.yaml`,
+  `itemized_taxable_income_deductions_reduction.py`, and OBBB
+  `rate.yaml`/`applies.yaml` match that Git pin.
+- Confirmed the mechanisms live: PE additionally ceilings the SALT deduction
+  by AGI minus exemptions; its SALT cap phases out from AGI without the
+  section-911 addback; its SALT source list omits personal-property tax; its
+  section-68 proxy uses AGI-minus-exemptions taxable income; and its stored
+  rate is the rounded decimal `0.05405405`.
+- Recomputed the governing arithmetic from the RuleSpec corpus pin
+  `8af592162231e9de748ba6b98792b426ad4fe8b7`, tree
+  `88994a6ae0170e44be83eb2574d4c19a7d79548f`: `min(10000,40400) =
+  10000`; `40400 - .30 * (510000 - 505000) = 38900`; personal-property
+  tax `4000`; section-68 base
+  `max(0,550000 + 50000 - 640600) = 0`; and reduction
+  `2/37 * 10000000 = 540540.540540...`.
+- Verified the mismatch set is exactly the five registered cases; the other
+  28 adopted cases match within the unchanged absolute/relative tolerances
+  `0.01`/`0.0`. All five dispositions set
+  `expires_on_source_change: true`.
+- Read live issues #9167 through #9171. The low-ceiling,
+  personal-property, and rounded-rate issue evidence is accurate.
+- Found that `salt-magi-911-addback` incorrectly links #9167 instead of #9168
+  and `salt-personal-property-tax-probe` incorrectly links #9168 instead of
+  #9169, leaving #9169 unreferenced.
+- Replayed issue #9168's pasted situation verbatim: it raises
+  `SituationParsingError` because `foreign_earned_income_exclusion` is a
+  TaxUnit/year variable, not a Person variable. The corrected binding
+  reproduces the divergence. The issue also cites section 164(b)(7)(D), while
+  the pinned proof's applicable MAGI definition is section 164(b)(7)(B)(iv).
+- Found issue #9170's explanatory arithmetic inaccurate. The pinned PE path
+  computes excess `700000 - 640600 = 59400`, then
+  `min(50000,59400) = 50000`; it does not add the itemized deduction to that
+  taxable-income proxy as the issue parenthetical states.
+- Direct shell access to the GitHub issue endpoint was unavailable in the
+  sandbox; the live issue bodies were retrieved read-only through the
+  connected GitHub service. Direct `uscode.house.gov` requests returned HTTP
+  403, so statutory verification used the pinned corpus sources and official
+  enrolled-law material.
+
+#### Next
+
+- Finish the adoption, mapping-surface, generated-artifact, and full-check
+  battery audit.
+- Compare the PR and clean-merge-base mapping-set failure fingerprints and
+  finish containment review.
