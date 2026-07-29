@@ -31,7 +31,7 @@ runner:
     policyengine_core_version: "3.30.3"
     jurisdiction_fips: "20"
     axiom_compose_binary: $HOME/axiom-compose/.venv/bin/axiom-compose
-    axiom_program: programs/us-ks/tanf/fy-2026.yaml
+    axiom_program: $HOME/axiom-oracles/programs/us-ks/tanf/fy-2026.yaml
     axiom_composed_program: /tmp/ks-tanf-composed.yaml
     axiom_compiled_program: /tmp/ks-tanf-compiled.json
     axiom_rulespec_repo_roots: $HOME/rulespec-us

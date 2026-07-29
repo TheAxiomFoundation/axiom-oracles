@@ -39,8 +39,8 @@
 - Added the declared Python/PolicyEngine pins to every affected config that did
   not already carry them and corrected Minnesota's stale New York description.
 - Replaced eight stale `$HOME/axiom-oracles/programs/...` TANF references with
-  repository-relative paths so an isolated worktree composes the audited files,
-  not an unrelated historical worktree under the home directory.
+  repository-relative paths during local regeneration so the isolated worktree
+  composed the audited files, not an unrelated historical checkout.
 - Confirmed from the pinned PolicyEngine-US metadata that all nine oracle
   variables have `MONTH` definition periods. Confirmed the corresponding Axiom
   leaves are monthly, except the Arizona and SSI annual leaves whose new
@@ -113,6 +113,10 @@
 - Rebuilt Arizona TANF's dashboard copy from its regenerated full report after
   deleting the vanished four-row disposition, so the report now records a null
   dispositions file with no expired legacy entry.
+- Restored the eight committed TANF config paths to the CI materializer's
+  `$HOME/axiom-oracles/...` convention after regeneration; the focused
+  materialization suite now passes all 7 tests. The temporary relative paths
+  were an execution overlay, not a portable config change.
 - `apply_dispositions.py --check` passes after the TANF/SSI refresh, and the
   focused disposition/requested-month test battery passes (22 tests).
 - The SNAP composition preflight exposed two sandbox/toolchain constraints.
