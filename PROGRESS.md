@@ -1202,3 +1202,31 @@ residual), #229 (small-suite grounding).
   full check battery, author closeout, and exact changed-path containment.
 - Write and commit `REVIEW-REPORT.md`, append the closing checkpoint, and
   return an explicit verdict with any sandbox limitations.
+
+### Checkpoint — disposition evidence and URL mapping
+
+#### State
+
+- Repairs 1 and 2 pass at frozen head `1ce97c22`.
+- The worktree remains unchanged from the target for both disposition files.
+
+#### Done
+
+- Parsed all five `upstream_engine_gap` entries and confirmed their evidence
+  keys match the `us-qbid-grid` model: `mechanism`, `arithmetic`,
+  `upstream_url`, and `sources`.
+- Confirmed each entry names its same-suite comparison YAML in
+  `evidence.sources`.
+- Verified both the structured URL and free-text mechanism URL map the five
+  cases to policyengine-us issues #9167, #9168, #9169, #9170, and #9171 in
+  order, with each issue assigned to exactly one entry in each field.
+- Ran `scripts/apply_dispositions.py --check` successfully: 85 disposition
+  files validated and committed dashboard data was consistent.
+- The default uv cache was sandbox-denied; the same check passed using a
+  writable cache under `/private/tmp` and the existing project environment.
+
+#### Next
+
+- Complete the read-only issue-body and pinned-source audit.
+- Complete conformance regeneration, placeholder, full-check, closeout, and
+  containment verification.
