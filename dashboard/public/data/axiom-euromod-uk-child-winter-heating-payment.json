@@ -148,7 +148,10 @@
   ],
   "engines": {
     "left": "euromod",
-    "right": "axiom"
+    "right": "axiom",
+    "versions": {
+      "axiom_rules_engine": "0.1.0"
+    }
   },
   "errors": [],
   "locales": [
@@ -162,10 +165,10 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "68d65229632e371b96d8eb25c704c1977a2b7ed3",
+      "axiom_rules_engine_sha": "0ec13c88ef89cec11e528a78b16211b2a7986e1b",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-27T15:23:35Z",
+    "generated_at": "2026-07-29T19:52:00Z",
     "generated_by": "scripts/run_comparison.py::uk-child-winter-heating-payment-ukmod",
     "oracle": {
       "euromod_country": "UK",

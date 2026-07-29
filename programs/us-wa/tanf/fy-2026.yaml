@@ -4,7 +4,7 @@
 # (earned income work deductions), 388-478-0020 (payment standards), and
 # 388-478-0035 (maximum gross earned income levels). The encoded rules
 # already assemble the monthly benefit; this wrapper adds the demographic
-# gate mirroring PolicyEngine's wa_tanf_eligible and annualizes the output.
+# gate mirroring PolicyEngine's wa_tanf_eligible.
 #
 # v1 scope decisions (documented on the dashboard):
 #   - Demographic gate: any member under 18 or pregnant; immigration
@@ -16,10 +16,10 @@ program: us-wa/tanf
 period: 2026-01
 
 outputs:
-  - wa_tanf_annual_benefit
+  - wa_tanf_monthly_benefit
 
 acknowledged_incomplete:
-  - wa_tanf_annual_benefit
+  - wa_tanf_monthly_benefit
 
 scope:
   state:

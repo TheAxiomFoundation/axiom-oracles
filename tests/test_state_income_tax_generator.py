@@ -160,6 +160,30 @@ def test_mississippi_canonical_schedule_uses_live_person_execution():
     assert generator._parse_args(["--state", "MS"]).state == "MS"
 
 
+def test_delaware_legacy_grid_is_explicitly_decoupled() -> None:
+    generator = _load_generator()
+    module = "us-de:policies/income_tax/pilot_liability_pipeline"
+
+    assert "DE" in generator._TAXSIM_STATE
+    assert "DE" in generator._POPULACE_STATES
+    assert "DE" not in generator._STATES
+    assert "Person-grain" in generator._GRID_EXCLUDED_STATES["DE"]
+    assert generator._POPULACE_OUTPUT["DE"] == (
+        f"{module}#de_pit_pilot_separate_schedule_tax"
+    )
+    assert generator._LIABILITY_OUTPUT["DE"] == generator._POPULACE_OUTPUT["DE"]
+    assert (
+        generator._PE_VAR["DE"]
+        == "de_income_tax_before_non_refundable_credits_indv"
+    )
+    assert (
+        generator._POPULACE_PE_VAR["DE"]
+        == "de_income_tax_before_non_refundable_credits_indv"
+    )
+    assert generator._POPULACE_AGGREGATION["DE"] == "person_sum_to_tax_unit"
+    assert generator._POPULACE_TOL["DE"] == (0.01, 1e-7)
+
+
 def test_mississippi_live_grid_maps_reordered_results_by_person_id(
     monkeypatch, tmp_path
 ):
@@ -595,6 +619,86 @@ def test_kansas_populace_schedule_is_decoupled_from_legacy_taxsim_grid() -> None
     )
     assert generator._PE_VAR["KS"] == "ks_income_tax_before_credits"
     assert generator._TOL["KS"] == (1.0, 0.0)
+
+
+def test_dc_populace_schedule_is_decoupled_from_legacy_taxsim_grid() -> None:
+    generator = _load_generator()
+    canonical_module = (
+        "us-dc:policies/income_tax/"
+        "2026_section_47_1806_03_schedule_before_credits"
+    )
+    legacy_module = "us-dc:policies/income_tax/pilot_liability_pipeline"
+
+    assert generator._POPULACE_MODULE["DC"] == canonical_module
+    assert generator._POPULACE_OUTPUT["DC"] == (
+        f"{canonical_module}#"
+        "dc_pit_2026_section_47_1806_03_schedule_before_credits"
+    )
+    assert (
+        generator._POPULACE_PE_VAR["DC"]
+        == "dc_income_tax_before_credits_joint"
+    )
+    assert generator._POPULACE_TOL["DC"] == (0.01, 1e-7)
+
+    assert generator._MODULE["DC"] == legacy_module
+    assert generator._LIABILITY_OUTPUT["DC"] == (
+        f"{legacy_module}#dc_pit_pilot_income_tax_liability"
+    )
+    assert generator._PE_VAR["DC"] == "dc_income_tax_before_credits"
+    assert generator._TOL["DC"] == (1.0, 0.0)
+    assert "DC" in generator._STATES
+
+
+def test_california_populace_bhst_is_decoupled_from_legacy_taxsim_grid() -> None:
+    generator = _load_generator()
+    module = "us-ca:policies/income_tax/pilot_liability_pipeline"
+
+    assert generator._POPULACE_MODULE["CA"] == module
+    assert generator._POPULACE_OUTPUT["CA"] == (
+        f"{module}#ca_pit_pilot_behavioral_health_services_tax"
+    )
+    assert (
+        generator._POPULACE_PE_VAR["CA"]
+        == "ca_mental_health_services_tax"
+    )
+    assert generator._POPULACE_TOL["CA"] == (0.01, 1e-7)
+
+    assert generator._MODULE["CA"] == module
+    assert generator._LIABILITY_OUTPUT["CA"] == (
+        f"{module}#ca_pit_pilot_income_tax_liability"
+    )
+    assert (
+        generator._PE_VAR["CA"]
+        == "ca_income_tax_before_refundable_credits"
+    )
+    assert generator._TOL["CA"] == (5.0, 0.02)
+    assert "CA" in generator._STATES
+
+
+def test_minnesota_populace_schedule_is_decoupled_from_legacy_grid() -> None:
+    generator = _load_generator()
+    module = "us-mn:policies/income_tax/pilot_liability_pipeline"
+
+    assert generator._POPULACE_MODULE["MN"] == module
+    assert generator._POPULACE_OUTPUT["MN"] == (
+        f"{module}#mn_pit_pilot_schedule_tax"
+    )
+    assert (
+        generator._POPULACE_PE_VAR["MN"]
+        == "mn_basic_tax_precision_stable"
+    )
+    assert generator._POPULACE_TOL["MN"] == (1.0, 0.0)
+
+    assert generator._MODULE["MN"] == module
+    assert generator._LIABILITY_OUTPUT["MN"] == (
+        f"{module}#mn_pit_pilot_income_tax_liability"
+    )
+    assert (
+        generator._PE_VAR["MN"]
+        == "mn_income_tax_before_refundable_credits"
+    )
+    assert generator._TOL["MN"] == (1.0, 0.0)
+    assert "MN" in generator._STATES
 
 
 def test_kentucky_registry_uses_canonical_live_schedule_surface() -> None:

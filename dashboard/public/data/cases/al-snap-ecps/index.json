@@ -482,6 +482,7 @@
   "snap_income_eligible",
   "snap_total_allowable_shelter_expenses",
   "us-al:policies/dhr/poe/chapter-09-income-and-deductions/900#household_meets_snap_income_eligibility_standards",
+  "us:policies/usda/snap/fy-2026-cola/deductions#snap_asset_limit",
   "us:policies/usda/snap/fy-2026-cola/deductions#snap_standard_deduction",
   "us:policies/usda/snap/fy-2026-cola/deductions#snap_standard_deduction_48_states_dc",
   "us:policies/usda/snap/fy-2026-cola/income-eligibility-standards#snap_gross_income_limit_130_percent_fpl_48_states_dc",
@@ -499,6 +500,13 @@
   "us:regulations/7-cfr/273/10#snap_net_income_before_shelter",
   "us:regulations/7-cfr/273/10#snap_net_monthly_income",
   "us:regulations/7-cfr/273/10#snap_total_gross_income",
+  "us:regulations/7-cfr/273/3#snap_duplicate_participation_exception_applies",
+  "us:regulations/7-cfr/273/3#snap_household_duplicate_participation_barred",
+  "us:regulations/7-cfr/273/3#snap_household_residency_eligible",
+  "us:regulations/7-cfr/273/3#snap_household_state_resident",
+  "us:regulations/7-cfr/273/8#snap_financial_resources_within_limit",
+  "us:regulations/7-cfr/273/8#snap_resource_eligible",
+  "us:regulations/7-cfr/273/8#snap_resource_limit_categorical_exemption_applies",
   "us:regulations/7-cfr/273/9#snap_standard_gross_income_eligible",
   "us:regulations/7-cfr/273/9#snap_standard_income_eligible",
   "us:regulations/7-cfr/273/9#snap_standard_net_income_eligible",
@@ -507,12 +515,18 @@
  "chunk_size": 500,
  "engines": {
   "left": "axiom",
-  "right": "policyengine"
+  "right": "policyengine",
+  "versions": {
+   "axiom_rules_engine": "0.1.0",
+   "policyengine": "4.18.9",
+   "policyengine_core": "3.30.3",
+   "policyengine_us": "1.767.3"
+  }
  },
  "mismatch_concepts": [
   "us:statutes/7/2014/o#snap_eligible",
   "us:statutes/7/2014/u#snap_benefit"
  ],
- "source": "axiom-policyengine-al-snap-ecps-0-2026-07-26.json",
+ "source": "axiom-policyengine-al-snap-ecps-0-2026-07-28.json",
  "total_cases": 1444
 }

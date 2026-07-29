@@ -337,80 +337,1164 @@ residual), #229 (small-suite grounding).
 
 ---
 
-## Closure universes — charter #374 (2026-07-27)
+## SNAP residual integration — 2026-07-27
 
 ### State
 
-- Branch: `closure-universes`; starting point `origin/main` at `105b7133`.
-- Implementation and local validation are complete at `6b8cdbf2`.
-- Publication is externally blocked: the sandbox cannot resolve/connect to
-  GitHub, and the connected GitHub app cancelled both blob and branch writes.
-  The remote branch does not yet exist.
-- Goal: add a standalone closure/completeness layer for CO SNAP over the
-  `10 CCR 2506-1`, `7 CFR 273`, and `7 USC chapter 51` roots.
-- Inputs must be pinned from the closure sprint snapshots and resolved by
-  citation path across the inventory, never by snapshot-name filtering.
-- This branch may use only `origin/main`; the parked #372–#379 stack is not a
-  dependency.
-- Delivery: coherent-step commits, CI coverage, push, and an unmerged PR
-  referencing #374.
+- Branch: `fed-parity/snap-residual-cleanup`; starting HEAD `105b7133`.
+- Status: complete.
+- Scope: regenerate only `al/ma/nc/sc/tn-snap-ecps` on
+  `policyengine-us==1.767.3`, then classify only evidence-backed residuals.
+- Current committed unexplained rows: AL 43, MA 49, NC 88, SC 54, TN 68
+  (302 total).
+- Required disposition classes:
+  - lone-minor PolicyEngine defect, linked to
+    `policyengine-us#9157`;
+  - endogenous-TANF bridge artifacts only after exact-household live
+    counterfactuals, linked to `axiom-oracles#397`;
+  - minimum-allotment rounding plus annual/12 artifacts only when exact
+    arithmetic and shared eligibility are proven, linked to
+    `policyengine-us#9158` and `axiom-oracles#399`.
+- The 69 MA/SC categorical-only candidates remain unexplained pending
+  state-law validation and will be tracked in the final PR-body text.
+- Constraints: no runner month-averaging fix, no generation in CI, no push,
+  and no GitHub writes.
 
 ### Done
 
-- Read the closure sprint design document in full, including the tier-2
-  correction and its citation-path lesson.
-- Confirmed the worktree is clean at the requested base commit.
-- Established this committed progress ledger before implementation.
-- Audited the conformance generator/ratchet, negative-test, and CI conventions.
-- Copied the four requested snapshots byte-for-byte into `closure/data/`.
-- Recorded reproducible extraction descriptions, full source refs, and verified
-  SHA-256 digests in `closure/data/provenance.yaml`.
-- Verified each JSONL directly against its committed corpus provision projection
-  at `bf97b17b`, and the file inventory against RuleSpec `1158ba5b`.
-- Documented the all-provision denominator, exact citation-path join, review
-  taxonomy, generated-versus-human fields, and provenance-bound pending ratchet.
-- Implemented `scripts/closure_universe.py` with deterministic `--generate` and
-  read-only `--check` modes, human-review overlay preservation, path/taxonomy
-  validation, citation drift detection, and the pending-only-falls ratchet.
-- Generated all 1,156 provision rows and `closure/summary.json`: Colorado
-  281 encoded / 9 pending; CFR 9 / 30; USC 11 / 816; `closed=false`.
-- Independently reproduced all three exact-join counts outside the generator.
-- Recorded the missing USC headings and flattened Colorado child hierarchy;
-  source review confirms `4.802.6` and `4.900` are containers, not reserved.
-- Added a hermetic tmpdir mutant suite proving the gate rejects missing basis,
-  ghost module paths, invalid taxonomy, pending regression, and citation drift;
-  the positive control and all five requested mutants pass.
-- Closed an adversarial ratchet bypass by cross-binding the content-pin
-  fingerprint and pending ceiling in each universe and `summary.json`; two
-  additional mutants prove neither a raised local ceiling nor edited universe
-  provenance can reset the unchanged-pin ratchet. All eight tests pass.
-- Wired `scripts/closure_universe.py --check` into the existing CI test job
-  directly after conformance-universe validation.
-- Replaced the mutable two-copy ratchet trust with a full-Git-history floor:
-  for unchanged content pins, the checker takes the lowest pending count from
-  every committed ancestor version of each universe. CI now fetches full
-  history, and shallow checkouts fail instead of weakening the guarantee.
-- Corrected pin-refresh behavior so an ordinary exact-path encoding re-derives
-  to `pending` when that module disappears under a new RuleSpec pin, while an
-  actually corrected `encoded_by` overlay still survives regeneration.
-- Expanded the hermetic mutant suite to 14 passing tests, including coordinated
-  two-copy ceiling tampering, forged pin resets, stale merge-parent history,
-  module removal under a new pin, corrected-overlay round trips, and the tier-2
-  descendant-only join lesson.
-- Independent adversarial re-audit found no remaining ratchet blocker after the
-  full-history fix. A deliberately shallow clone fails with the documented
-  full-history diagnostic.
-- Final validation passes: deterministic generation is clean; closure
-  `--check` reports 3 roots / 1,156 provisions / 855 pending /
-  `closed=false`; Ruff and compilation pass; all 14 closure tests pass; and a
-  fresh isolated-clone full suite reports 1,984 passed / 62 skipped with three
-  existing pandas warnings.
-- Recorded a third, count-neutral source defect: the supplied RuleSpec inventory
-  has three default-Git C-quoted Unicode paths for `1437c–1`. They are outside
-  the declared roots; future coverage of that root needs unquoted extraction.
+- Read all three class reports and the staged teen disposition file in full.
+- Confirmed the worktree is clean and on the requested branch.
+- Located the five suite configs and their report-producing path:
+  `scripts/run_comparison.py` with runner type `axiom-oracles-compare`.
+- Confirmed all five current reports still declare PolicyEngine-US 1.752.2
+  and must be regenerated on the requested 1.767.3 wheel.
+- Confirmed GitNexus MCP tools are unavailable for this worktree; direct
+  configuration and source tracing is the fallback.
+- Regenerated all five full suites through `scripts/run_comparison.py` and the
+  general `axiom-oracles-compare` runner on the cached, offline stack:
+  PolicyEngine 4.18.9, PolicyEngine-US 1.767.3, PolicyEngine Core 3.28.0,
+  Axiom rules engine 0.1.0 at `48797e1`, and RuleSpec-US at `ca2d424`.
+- Recorded all four engine versions additively under each report's `engines`
+  block while retaining the schema-required `left`/`right` engine names.
+- Raw mismatch rows after regeneration: AL 53, MA 255, NC 99, SC 181, TN 68.
+  SC gained one benefit mismatch (`ecps-29277`); the other state totals are
+  unchanged.
+- `apply_dispositions.py --check` passes on the regenerated reports.
+- Applied all 10 staged lone-minor entries: 12 households and 24 mismatch rows
+  remain present and are now linked to PolicyEngine-US issue #9157.
+- Reclassified AL `ecps-36459` from the pre-existing BBCE entries to the
+  evidence-backed lone-minor class; because its two rows were already
+  classified, the teen class reduces unexplained rows by 22.
+- Unexplained rows after the teen class: AL 37, MA 47, NC 82, SC 51, TN 64.
+- Removed the 69 categorical-only MA/SC households from pre-existing BBCE
+  selectors, as required: 27 MA and 42 SC households (138 mismatch rows) are
+  again unexplained pending state-law validation.
+- Unexplained rows after restoring those tracked candidates: AL 37, MA 101,
+  NC 82, SC 135, TN 64.
+- Replayed 121 exact benefit-only households in live PolicyEngine-US 1.767.3
+  simulations, first reproducing the regenerated baseline and then forcing
+  both the state TANF component and aggregate `tanf` to zero. The state
+  pass/fail counts are AL 14/2, MA 18/5, NC 11/2, SC 29/9, and TN 23/8
+  (95/26 overall).
+- Applied `bridge_artifact` only to the 95 counterfactual passes. Every entry
+  is linked to `axiom-oracles#397`, contains the exact Axiom, baseline PE,
+  TANF, zero-TANF, eligibility, and tolerance evidence, and pins the live
+  mismatch values so the disposition expires on an engine change.
+- Retained every counterfactual failure as unexplained, including strict
+  near-misses NC `ecps-28066` ($7.045) and TN `ecps-36247` ($7.195).
+- Unexplained rows after the TANF class: AL 23, MA 83, NC 71, SC 106, TN 41
+  (324 total).
+- Verified that the minimum-allotment class has zero qualifying residuals.
+  No above-tolerance shared-eligibility row reproduces the exact
+  $24/$23.84/$23.9736 rounding-plus-annual/12 pattern, so no #9158/#399
+  disposition was added.
+- Reran all five suites against the final selector files to clear stale
+  row-level annotations left by the additive disposition merger after
+  categorical selectors were removed. Raw results are unchanged, and an
+  exhaustive audit confirms that every embedded annotation matches a live
+  selector and all 138 rows for the 69 categorical candidates are physically
+  unannotated.
+- Kept the `us-pe:snap` registered suite fixed at `ca-snap-ecps` and updated
+  only its note to report final unexplained mismatch rows
+  AL/MA/NC/SC/TN = 23/83/71/106/41.
+- Ran the full requested write chain for UTC 2026-07-27: dispositions, grids,
+  affected map, vacuous-gate freshness, scoreboard plus snapshot, ratchet,
+  and burndown. All seven corresponding `--check` invocations pass.
+- Preserved the ratchet's unrelated inline history comments after its writer
+  reserialized unchanged numeric floors.
+- The sandbox denied `uv` cache initialization under
+  `/Users/maxghenis/.cache/uv`; generation used the exact cached PE-US wheel
+  read-only through the same comparison CLI and clean temporary dependency
+  snapshots.
+- The sandbox also denied a diagnostic `ps` process listing during the long
+  local rerun; bounded runner polling and report timestamps confirmed normal
+  progress, and all five processes exited successfully.
+- Wrote `WORKER-REPORT.md` with the before/after table, engine provenance,
+  class counts, exact TANF pass/fail evidence summary, zero-result
+  minimum-benefit screen, exhaustive remaining-residual classification, and
+  copy-ready tracked-candidate PR text.
+- Final scope audit found no state conformance row owned by another lane and
+  no file outside the requested SNAP reports/dispositions, US-PE row note,
+  generated detail/freshness data, and mandated Markdown deliverables.
+- Targeted validation passes: 168 tests passed and 3 skipped across
+  `test_dispositions.py`, `test_conformance.py`, and
+  `test_vacuous_gate.py`.
 
 ### Next
 
-- From a network-enabled session, run
-  `git push -u origin closure-universes`, then open the requested unmerged PR
-  referencing #374 and confirm remote CI.
+- None.
+
+---
+
+## SNAP residual integration — repair round 2 — 2026-07-27
+
+### State
+
+- Branch: `fed-parity/snap-residual-cleanup`; starting HEAD
+  `6846f433dbf126249997c92cea7a3ac3c153fe13`.
+- Local `origin/main`: `9b889a27432e84804938bd3b374b4f5f7466792e`.
+- Audit posture: defensive correctness and completeness. No prior disposition,
+  engine label, generated annotation, or count will be retained unless it is
+  reproduced on PolicyEngine-US 1.767.3 / PolicyEngine Core 3.30.3.
+- Review read in full:
+  `.git/review-worktrees/snap-residual-cleanup-6846f433/REVIEW-REPORT.md`
+  at review commit `d4460852f3f5791f851175a393f4feed44159f14`.
+- Required outputs: genuinely pinned five-suite regeneration; fresh evidence
+  for #9157, #397, #9158/#399; exact served/canonical annotation parity;
+  regenerated freshness after merging main; full generated-chain parity; and
+  a final worker report kept outside the branch (campaign ops directory).
+
+### Done
+
+- Confirmed the worktree was clean at the requested starting HEAD.
+- Confirmed the reviewer found committed config resolution falling back to
+  PolicyEngine-US 1.752.2 / Core 3.28.0 while report labels claimed 1.767.3.
+- Confirmed the reviewer found 266 stale served annotations, including all 138
+  returned categorical rows, plus three missing and two obsolete served rows.
+- Located the cached PolicyEngine-US 1.767.3 wheel recorded by the Tennessee
+  worker at
+  `/Users/maxghenis/.cache/uv/wheels-v6/pypi/policyengine-us/1.767.3-py3-none-any`.
+- Confirmed local `origin/main` is the same `9b889a27` target used by review.
+- Merged local `origin/main` and resolved its sole conflict by running
+  `scripts/check_vacuous_gate.py` in write mode. The regenerated freshness
+  register contains 213 suites and 24 executable surfaces; no side's
+  `generated_at` value was hand-picked.
+- Added explicit Python 3.13, PolicyEngine 4.18.9, PolicyEngine-US 1.767.3,
+  and PolicyEngine Core 3.30.3 pins to all five SNAP configs.
+- Extended comparison provenance stamping so the resolved Core pin is recorded
+  in provenance.
+- Corrected the initial engine-version stamping design after defensive review:
+  the isolated comparison subprocess now records its actually imported
+  PolicyEngine/US/Core distributions, and publication fails closed if those
+  runtime versions differ from the config-resolved pins. Config values are not
+  trusted as runtime evidence.
+- Updated the sanity-fixture path to honor each suite's Python and all three
+  PolicyEngine pin overrides instead of silently using global defaults.
+- Added regression tests covering all five config resolutions, actual report
+  engine-version stamping, and rejection of mismatched runtime evidence; 62
+  targeted runner/provenance tests pass.
+- Verified the sandbox-safe read-only package overlay imports PolicyEngine
+  4.18.9 / US 1.767.3 / Core 3.30.3 / SPM Calculator 0.3.1 from the existing
+  Python 3.13.9 environment. Core 3.30.3 resolves from cached archive
+  `UtYsCpOUGlMyeZqOH4zzz`; US 1.767.3 resolves from
+  `-QudTS5FEzSKZ0Anf7ddx`.
+- Ruff is not installed in the reusable repository virtual environment; the
+  attempted module invocation failed before linting and changed no files.
+- Added a read-only semantic `emit_case_artifacts.py --check` mode that uses
+  only committed canonical dashboard reports and served chunks. It checks
+  exact mismatch identities, values, annotations, chunks, counts, engines,
+  total cases, and concepts, and fails closed on incomplete canonical lists.
+- Added six hermetic case-artifact tests, including the exact silent-
+  classification regression and mismatch-only behavior.
+- Ran the new gate against the five currently committed served directories.
+  It independently reproduces the review's 266 wrong annotations, three
+  missing rows, two obsolete rows, and all 138 silent MA/SC categorical
+  classifications; it additionally detects 15 stale mismatch-value rows and
+  stale engine metadata. This failure is expected until the five suites and
+  chunks are regenerated.
+- Regenerated all five suites from clean Axiom and RuleSpec-US snapshots with
+  the exact cached runtime: PolicyEngine 4.18.9, PolicyEngine-US 1.767.3, and
+  PolicyEngine Core 3.30.3. The fresh raw mismatch-row counts are AL 53,
+  MA 255, NC 99, SC 181, and TN 68 (656 total). Each canonical report records
+  the imported runtime versions in its `engines` block.
+- Reverified the lone-minor #9157 signature on every regenerated case and
+  reran the explicit K-12 counterfactual on Core 3.30.3. The class remains
+  exactly 12 households / 24 mismatch rows: AL 4/8, MA 1/2, NC 3/6, SC 2/4,
+  and TN 2/4.
+- Reran every fresh benefit-only candidate for the TANF bridge on the corrected
+  runtime. Of 240 benefit-only candidates, 121 had endogenous TANF; all 121
+  reproduced their report baselines, remained eligible before and after, had
+  state-component TANF equal aggregate TANF, and zeroed both counterfactual
+  fields. Exact tolerance results remain AL 14/2, MA 18/5, NC 11/2, SC 29/9,
+  and TN 23/8: 95 passes and 26 failures. The authoritative evidence artifact
+  SHA-256 is
+  `0251315e09222289f11e21efc89c5421b84459acaa23bcd1f615828dadcb0b00`.
+  Its 95 pass IDs and all per-case numeric fields exactly match the selectors
+  and structured evidence; the evidence engine label is updated from Core
+  3.28.0 to the freshly used Core 3.30.3.
+- Re-screened the minimum-benefit #9158/#399 class. Seven shared-eligibility
+  near-minimum rows were considered, including the previously omitted MA
+  `ecps-2303`; none has the required $24 versus $23.84/$23.973597 pairing, so
+  the qualifying and disposition counts remain zero.
+- Applied the refreshed YAML evidence to the five canonical reports and
+  regenerated all five case-explorer directories from the fresh full reports:
+  7,640 household cases, 656 mismatch rows, and 332 annotated rows. The
+  semantic checker reports zero wrong/missing/obsolete rows and zero silent
+  classifications. All 69 requested MA/SC categorical households (138 rows)
+  remain physically unannotated in both canonical and served data.
+- Generated the five previously missing served disposition-explanation JSON
+  files (119 entries total). Extended their emitter with named-suite and exact
+  read-only `--check` modes, fail-closed source validation, and four hermetic
+  tests.
+- Added a targeted CI step that checks both compact case data and disposition
+  explanations for AL/MA/NC/SC/TN immediately after canonical disposition
+  validation. The focused served-artifact suite passes 10 tests.
+- Updated the `us-pe:snap` note to bind its unchanged
+  `23/83/71/106/41` unexplained-row counts to the actually regenerated
+  PolicyEngine 4.18.9 / US 1.767.3 / Core 3.30.3 runtime.
+- Reran the complete generated write chain in the required order:
+  dispositions, grids, affected map, vacuous/freshness gate, dated scoreboard
+  snapshot, ratchet, and burn-down. Post-merge freshness now carries the five
+  fresh report timestamps and was generated from the merged tree rather than
+  conflict-picked.
+- Reran every chain member in `--check` mode with scoreboard snapshot date
+  `2026-07-27`: 83 disposition files consistent; grids current; affected map
+  163 suites / 172 edges; vacuous gate 136 oracle-backed configs, 213 suites,
+  and 24 executable surfaces; scoreboard 4 jurisdictions / 3 conformant;
+  ratchet 4 jurisdictions / no regression; burn-down 4 series / 49 points.
+  Served-case and served-disposition checks also pass at zero silent
+  classifications and exact 119-entry YAML parity.
+- Final scope validation passes: 364 tests passed and 3 skipped across
+  dispositions, provenance/runner, both served emitters, case grids, affected
+  map, conformance, and vacuous-gate coverage. Ruff passes all seven Python
+  files changed relative to `origin/main`.
+- A broad repository test run reached 1,282 passed / 26 skipped at 62 percent
+  before its slow integration tail was interrupted after 6m27s. Its sole
+  failure is the unchanged `origin/main` Ohio exact-output contract expecting
+  four source-hold rules absent from both available RuleSpec-US checkouts;
+  a focused rerun reproduces 1 failure / 3 passes. No SNAP-scoped test failed.
+- Reconciled the version-labeled `origin/main` baseline against the corrected
+  five-report result and wrote the defensive final audit (dispositions, TANF
+  pass/fail evidence, served parity, chain results, sandbox failures) outside
+  the branch, at
+  `~/TheAxiomFoundation/ops/fed-parity-campaign/snapclean-repair2-REPORT.md`.
+- Round-2 review at `72718c96` (ledger
+  `.git/review-worktrees/snap-residual-cleanup-72718c96`, report `09e88efd`)
+  confirmed the version and served-data repairs but blocked on the
+  browser-served overview still bundling the pre-repair reports and on a
+  stale committed worker report. Both were fixed on top: the served overview
+  was regenerated from the repaired reports (214 bundles; 656 rows;
+  unexplained 23/83/71/106/41; US 1.767.3 / Core 3.30.3) and the stale report
+  was removed from the branch.
+
+- Round-3 review at `1fe6bbba` (ledger
+  `.git/review-worktrees/snap-residual-cleanup-1fe6bbba`, report `800e4b63`)
+  confirmed the served overview but blocked on two branch-hygiene defects: the
+  repair audit `REPAIR-ROUND2-REPORT.md` was present in the branch diff even
+  though it was meant to stay outside the branch, and this ledger described
+  that report as untracked. Both were fixed on top: the report was removed
+  from the branch (it lives at
+  `~/TheAxiomFoundation/ops/fed-parity-campaign/snapclean-repair2-REPORT.md`)
+  and this section was rewritten.
+- Round-4 review at `6fca6d19` (ledger
+  `.git/review-worktrees/snap-residual-cleanup-6fca6d19`, report `9ed26ef7`)
+  confirmed prohibited report paths absent, clean whitespace, the served
+  overview, and all thirteen chain checks; it asked for this ledger to record
+  the completed round-3 outcome, which this entry does. Its remaining note —
+  that the preceding commit both edited this file and deleted the stray report
+  — describes the intended fix, not a defect: removing the stray report was
+  the round-3 requirement.
+
+### Next
+
+- Open the PR from the current branch tip (this docs commit) and land it after
+  a final confirmation pass.
+
+---
+
+## Issue #362 — decompose 441 `ca-snap-ecps` residuals — 2026-07-28
+
+### State
+
+- Branch: `triage/ca-snap-441`; starting from local `origin/main`
+  `43631d24c8e161ca1af36368a2b5abaa73c3a910`.
+- Scope is only the 441 honestly unexplained rows in the committed
+  `ca-snap-ecps` report.
+- Required oracle runtime: PolicyEngine-US 1.767.3. Evidence must be per case;
+  no blanket dispositioning and no regeneration on another engine version.
+- `WORKER-REPORT.md` will remain untracked. This ledger is tracked and will be
+  updated and committed after each coherent step.
+
+### Done
+
+- Created an isolated worktree from `origin/main` on the requested branch.
+- Confirmed the pre-analysis starting point and preserved the existing shared
+  progress history.
+- Located the complete committed evidence surface: 684 mismatch rows in the
+  canonical report, 499 mismatching cases there, and 15 compact shards covering
+  all 7,101 cases.
+- Verified the starting accounting: 243 existing BBCE
+  `axiom_encoding_gap` rows and exactly 441 unexplained rows across 361
+  households (356 benefit, 69 eligibility-left-only, 16
+  eligibility-right-only).
+- Partitioned the residuals into 18 supported classes crossing eligibility
+  direction, benefit direction, and age-derived household shape. The shape
+  taxonomy uses only adult/minor counts; no family relationships are inferred.
+- Wrote the class table first in untracked `WORKER-REPORT.md`. The planned
+  trace covers all 361 residual households, which exceeds every attainable
+  10-percent-or-10-household class minimum.
+- Confirmed the committed report used PolicyEngine 4.18.9 /
+  PolicyEngine-US 1.752.2, while this issue requires live diagnostic traces on
+  1.767.3. The CA config is unpinned, so the suite will not be regenerated on
+  the diagnostic version.
+- Located a read-only cached overlay that imports the exact requested live
+  stack: PolicyEngine 4.18.9, PolicyEngine-US 1.767.3, and PolicyEngine Core
+  3.30.3.
+- Recovered the #397 proof standard from committed dispositions: one pinned
+  entry per case, baseline reproduction, differing input neutralized, continued
+  eligibility, and post-counterfactual SNAP within the suite's $7 tolerance.
+- Audited the generated chain and found a served-artifact hazard: the ignored
+  full report is absent, so the case emitter must not replace the existing
+  7,101-case shards with the 499-case canonical subset.
+- GitNexus MCP tools were unavailable. Direct web and `gh` issue reads also
+  failed under blocked network access; these failures changed no files.
+- Added a CA-only diagnostic tracer which requires PolicyEngine 4.18.9 /
+  PolicyEngine-US 1.767.3 / Core 3.30.3, reads the committed report and compact
+  evidence, and does not write suite artifacts.
+- Ran the requested live source-income and deduction traces for all 361
+  residual households (441 rows), exceeding every class sampling minimum.
+  The run also evaluated exact-household zero-self-employment, zero-TANF, and
+  joint zero-self-employment/zero-TANF counterfactuals.
+- Verified live eligibility parity with the committed PE side for all 361
+  households. Live benefit parity is exact for 284 households / 364 residual
+  rows; 77 households / 77 rows moved under the required 1.767.3 diagnostic
+  runtime and therefore cannot use live counterfactual output as proof of the
+  older committed amount without an independent case-level proof.
+- Extended the tracer with direct requested-month simulations. These reuse the
+  batch bridge's explicit-zero income surface and calculate January 2026
+  directly, instead of treating the calendar-year sum divided by 12 as January.
+  Across all 361 cases, direct-January gross income differs from the batch
+  annual average by at most $0.0053; parameter and allotment differences are
+  therefore isolated from source transport.
+- Wrote the exhaustive live trace to a temporary, uncommitted evidence artifact
+  (`sha256:286d28ac1307e2b44ac53eab9408d0726d9d4fe84576ec423feb6d5be6623992`).
+  Its exact-household evidence will be summarized in the untracked worker
+  report and pinned into each disposition that survives classification.
+- A first direct-month smoke attempt exposed that absent source facts were being
+  allowed to impute endogenous SSI; it produced no artifact and changed no repo
+  file. The tracer now explicitly mirrors the batch bridge's zero inputs, and
+  the exhaustive rerun completed successfully.
+- Replayed the Axiom deduction stack for every both-eligible benefit residual:
+  gross, standard and earned deductions, pre-shelter income, the $744
+  nonelderly shelter cap, net income, contribution, maximum, and minimum.
+  Dependent-care and child-support deductions are zero in both engines. Medical
+  and disability-status projection differences were dispositioned only where a
+  case-level Axiom counterfactual closed.
+- Classified and pinned 345 of the 441 rows: 325 `bridge_artifact` rows and 20
+  `upstream_engine_gap` rows. The bridge proofs cover the landed
+  self-employment projection, endogenous TANF transport, exact-January output,
+  three medical-input cases, and six generic-disability/shelter-cap cases.
+  The upstream rows are ten exact minor-only household repros of PE-US #9157.
+- Excluded three apparently closing income cases because a material medical or
+  shelter-cap difference could create an offsetting-error result. Kept all 77
+  benefit rows with live 1.767.3 baseline drift unclassified. In-memory
+  application validates 349 total disposition entries, no expired/orphaned
+  entry, and exactly 96 unexplained rows after the 345 new entries.
+- Added an issue-specific, fail-closed disposition builder. It regenerates the
+  345 entries from the exhaustive trace, validates pinned baselines and input
+  alignment, rejects deduction confounds, and passes idempotent `--check`.
+  The disposition schema suite passes 19 tests.
+- Applied the committed dispositions. The only stale report in the pre-write
+  check was `ca-snap-ecps`, and the writer changed only that canonical report.
+  Its disposition block now records 243 existing Axiom encoding gaps, 325
+  bridge artifacts, 20 upstream engine gaps, no expired/orphaned entry, and
+  exactly 96 unexplained rows.
+- The US grid, affected map, and vacuous gate were already current after the
+  report merge. Regenerated the dated scoreboard snapshot; only the US-PE
+  detail/scoreboard mirrors and 2026-07-28 US-PE history changed. The CA SNAP
+  scoreboard row now carries 96 unexplained, 243 Axiom-attributed, 20
+  oracle-attributed, and 325 bridge rows.
+- The conformance ratchet remained current with no invariant regression.
+  Regenerated the burn-down; only the US-PE 2026-07-28 point changed, from 441
+  to 96 unexplained (gap 778 to 433).
+- Regenerated the browser-served overview from 215 reports so its embedded CA
+  report carries the same disposition block. No other suite report changed.
+- The CA served-disposition check found that its artifact had never been
+  committed. Emitted the safe YAML-derived artifact only (349 entries). The
+  case emitter remains deliberately skipped because the ignored full report is
+  absent and emitting from the 499-case canonical mismatch subset would
+  truncate the existing 7,101-case shards.
+- Completed the full check chain: 83 disposition files; current US grids;
+  affected map 171 suites / 180 edges; vacuous gate 135 configs / 214 suites /
+  34 executable surfaces; scoreboard 4 jurisdictions / 3 conformant; ratchet
+  no regression; burn-down 4 series / 53 points; overview 215 reports; served
+  CA dispositions 349 entries with exact YAML parity.
+- Ran the focused generated-data validation suite: 296 passed, 3 skipped.
+  Final scope audit finds no other suite report in the branch diff and no
+  whitespace error.
+- Completed untracked `WORKER-REPORT.md` with the first-table class partition,
+  exhaustive evidence, 441-to-96 accounting, all remaining case IDs and probes,
+  draft bridge/PE text, validation, and sandbox disclosures.
+
+### Next
+
+- Hand off the committed local branch and untracked worker report. Do not push
+  or write to GitHub.
+- Complete the untracked worker report with the 441-to-96 result, class-level
+  evidence, unresolved attempts, and draft issue text.
+
+---
+
+## PR #417 repair round 2 — savers + Additional Medicare grids — 2026-07-28
+
+### State
+
+- Branch: `fed-parity/savers-addmed-grids`; starting HEAD
+  `3f59d6b596d6af3817b526bd50db9abdacb9c811`.
+- Defensive correctness/completeness audit of the round-1 suite construction.
+- At audit start, local `origin/main` was
+  `86be77210aa03da867a6103558cb57fe51a2ba55` and the branch was 47 commits
+  behind / 4 ahead. That exact local ref is now merged and is an ancestor of
+  the repair tip.
+- Required constraints: local commits only, no push or GitHub writes,
+  `WORKER-REPORT.md` remains untracked, and this ledger remains tracked.
+- Review read in full:
+  `.git/review-worktrees/pr417-3f59d6b5-adversarial/PR417-REVIEW.md`.
+- The review independently confirmed all 11 Saver's Credit dispositions and
+  all 18 existing Additional Medicare numeric results; repairs concern honest
+  comparable-only construction, legal citation, boundary completeness,
+  self-employment threshold coverage, merge hygiene, and generated artifacts.
+
+### Done
+
+- Inspected the requested worktree, active branch, remotes, HEAD, merge base,
+  dirty files, and worktree registry before editing.
+- Preserved the pre-existing untracked `WORKER-REPORT.md` for later replacement
+  with the required round-2 audit.
+- Restored the tracked historical ledger after the prior uncommitted round-1
+  handoff had replaced it with a short file.
+- Attempted the required `git fetch origin main`; sandbox DNS blocked access
+  to `github.com`. No ref or worktree state changed. All subsequent merge
+  work will use the exact local `origin/main` SHA recorded above.
+- Merged local `origin/main` at `86be7721`. The only conflicts were the
+  generated `freshness.json` and `overview.json` artifacts; both were rebuilt
+  from the merged source/report set rather than choosing either conflict side.
+- Verified the merge-resolution generators in read-only mode:
+  vacuous gate reports 136 oracle-backed configs, 215 suites, and 34 executable
+  surfaces; dashboard overview reports 216 bundled reports.
+- Verified the exact cached PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 /
+  Core 3.30.3 runtime. `savers_credit_potential` is a TaxUnit/year USD
+  variable that sums Person-level saver credits before the public
+  `savers_credit` applies its separate section 26 credit limit.
+- Classified all 11 Saver's Credit pipeline outputs in the bridge registry:
+  the corrected final maps directly to `savers_credit_potential`; the other
+  ten helpers are explicitly `not_comparable` with entity, add-back, cap, or
+  unexposed-intermediate rationales.
+- Added a fail-closed registry invariant for the two repaired grids. It rejects
+  unmapped, `not_comparable`, and target-drifted scored concepts and serializes
+  the exact direct-variable/parameter binding into each report.
+- Rebuilt the Additional Medicare grid boundary to score only the
+  filing-status-selected threshold and 0.9 percent rate. The combined tax and
+  isolated money legs are no longer evaluated or reported as comparisons;
+  the suite records the section 1401(c) domain-precondition blocker.
+- Added nine Saver B-1 cases and nine Additional Medicare cases. The latter
+  give joint, separate, and other statuses positive-SE observations below and
+  above unreduced thresholds plus B-1/exact/B+1 wage-coordinated probes.
+- Added repo-owned supplemental fixtures without changing the clean pinned
+  RuleSpec checkout. Released Axiom engine 0.1.0 recomputation confirmed all
+  nine Saver additions against independent section 25B arithmetic and queried
+  all 27 Additional Medicare selected thresholds from the compiled module.
+- Exact PolicyEngine-US 1.767.3 generation now yields Saver 23/34 raw matches
+  with the same 11 expected #9151 divergences, and Additional Medicare 28/28
+  comparable parameter matches across 27 scenarios.
+- Corrected the section 911/931/933 add-back citation to section 25B(e) in
+  source configuration and generated-report code.
+- Focused generator coverage passes (24 tests; the committed-report assertion
+  is intentionally deferred until regeneration), as does Ruff.
+- Regenerated both suites through `run_comparison.py` against the clean pinned
+  RuleSpec tree, using the exact cached PE stack after sandboxed package
+  resolution failed. The temporary launcher shim was removed immediately.
+- Applied dispositions and regenerated grids, affected map, freshness/vacuous
+  gate, dated scoreboard, ratchet, burn-down, per-policy detail, and dashboard
+  overview. All eight corresponding `--check` commands pass.
+- Updated the two conformance notes to the honest scored boundaries. Structural
+  comparison shows exactly two changed `us-pe` rows: Saver's Credit remains
+  covered at 23/34 raw and 100% explained; Additional Medicare remains covered
+  at 28/28 comparable parameter checks. No row was added, removed, or changed
+  coverage, and the headline scoreboard is byte-identical.
+- The committed-report comparable-only invariant now passes. Focused federal
+  generator and conformance validation passes 105 tests with 3 skips.
+- Repository-wide search finds no remaining obsolete add-back citation in
+  tracked repair surfaces.
+- Ruff passes repository-wide. The full pytest pass reached 2,283 passed / 72
+  skipped with one environment-only failure when `npx` attempted a blocked npm
+  download. Exposing the already cached exact `esbuild` binary made that sole
+  loader test pass offline, for 2,284 runnable tests validated in total; the
+  temporary ignored wrapper was removed.
+- An independent read-only defensive review returned APPROVE with no remaining
+  actionable findings after two wording cleanups. It reran 107 focused tests
+  (3 skipped), all eight generated checks, and confirmed that the selected
+  threshold exercises every required filing-status parameter cell without
+  redundant fixed-helper aggregates.
+- Replaced the stale round-1 `WORKER-REPORT.md` with the required round-2 case
+  inventory, PE-existence mapping evidence, divergence table, validation
+  record, and sandbox disclosures. It remains intentionally untracked.
+- Environment limitations are fully recorded in that report: GitHub/PyPI/npm
+  DNS failures, default uv-cache denial, and a rejected `/private/tmp` patch.
+  None changed tracked evidence or was treated as a substantive result.
+
+### Next
+
+- None. Hand off the committed local branch and untracked worker report; do not
+  push or write GitHub state.
+
+---
+
+## PR #417 split — retain Saver's Credit, hold Additional Medicare — 2026-07-28
+
+### State
+
+- Active branch: `fed-parity/savers-addmed-grids`; split starting HEAD
+  `12dae249aeb4765204e93d344c3ca400d36f70fe`.
+- Preservation branch:
+  `fed-parity/addmed-grid-expansion-hold` at
+  `12dae249aeb4765204e93d344c3ca400d36f70fe`. This local branch retains the
+  complete mixed Saver's Credit and Additional Medicare expansion for the
+  follow-up; it will not be pushed during the merge freeze.
+- Cached comparison base: local `origin/main`
+  `86be77210aa03da867a6103558cb57fe51a2ba55`. A fresh
+  `git fetch origin main` was attempted before editing, but sandbox DNS could
+  not resolve `github.com`; no ref changed.
+- Round-2 verdict read in full from
+  `.git/review-worktrees/pr417-12dae249-round2-blind/PR417-ROUND2-REVIEW.md`.
+- Split decision: retain the approved Saver's Credit half (truthful final
+  mapping, 34 cases, all nine B-1 probes, the same 11 twice-confirmed #9151
+  dispositions, and section 25B(e) citations). Withdraw every Additional
+  Medicare change from this branch because its parameter-only suite compares
+  no tax-liability output and therefore cannot cover the default-full
+  `output_vars: [additional_medicare_tax]` conformance row.
+- The Additional Medicare row and suite must be byte-identical to
+  `origin/main`, preserving its pre-existing 5/5 wage-only report without any
+  alteration. The follow-up first needs a RuleSpec ordinary-domain-scoped
+  tax-dollar output, a truthful comparable registry mapping, and a grid that
+  evaluates that money output against PolicyEngine's
+  `additional_medicare_tax`.
+- Required final containment: only `us-pe:savers_credit` changes coverage
+  (`uncovered` to `covered`); no other row changes; the US scoreboard moves
+  from 33 to 34 covered.
+
+### Done
+
+- Verified the requested worktree, active branch, clean tracked state, starting
+  HEAD, cached base, merge base, ahead/behind counts, remotes, and mixed diff.
+- Preserved the complete mixed expansion on the requested local hold branch at
+  the exact starting HEAD.
+- Preserved the pre-existing untracked `WORKER-REPORT.md` for replacement with
+  the final split report.
+- Restored `comparisons/us-additional-medicare-grid.yaml` and its committed
+  report byte-for-byte from `origin/main`; removed the branch-only
+  Additional Medicare supplemental fixture. No Additional Medicare
+  disposition or mapping differs from main.
+- Restored the generator's Additional Medicare inventory, fixture validation,
+  PolicyEngine output, and report boundary to the five pre-existing wage-only
+  tax-dollar cases. The shared comparison-binding and supplemental-fixture
+  infrastructure remains only for the approved Saver's Credit grid.
+- Restored the Additional Medicare source row note exactly to main and removed
+  all expansion-specific assertions. A changed-hunk search finds no remaining
+  Additional Medicare edits in the mixed generator, generator tests,
+  conformance tests, or source row file.
+- Restored six unrelated federal grid configs whose only branch difference was
+  a shared snapshot-pin update. The snapshot invariant now records the new
+  Saver grid's reviewed RuleSpec snapshot separately from the unchanged legacy
+  grids, keeping the final source diff savers-scoped.
+- Focused generator validation passes: 23 tests. Ruff passes the generator and
+  both edited test files; `git diff --check` passes.
+- Ran the complete derived write chain in order: dispositions, grids, affected
+  map, freshness/vacuous gate, dated scoreboard snapshot, ratchet, burn-down,
+  and dashboard overview. The split changed only four derived files relative
+  to the source rollback commit: canonical and served US-PE detail,
+  freshness, and overview.
+- Reran all eight chain members in `--check` mode: 83 disposition files are
+  consistent; grids are current; affected map has 172 suites / 181 edges;
+  vacuous gate has 136 oracle-backed configs / 215 suites / 34 executable
+  surfaces; scoreboard has 4 jurisdictions / 3 conformant; ratchet has no
+  regression; burn-down has 4 series / 53 points; overview has 216 reports.
+- Byte-level and structural assertions against `origin/main` pass: the
+  Additional Medicare config, 5/5 report, source row block, canonical detail
+  object, and served detail object are identical; exactly
+  `us-pe:savers_credit` changes in the source and detail row sets.
+- Confirmed the sole row effect is Saver's Credit `uncovered` to `covered`.
+  The US scoreboard is 33 to 34 covered; unexplained, Axiom-attributed-open,
+  and bridge-artifact totals are unchanged. Oracle-attributed increases by the
+  same 11 reviewed Saver #9151 dispositions.
+- The final `origin/main..HEAD` diff contains 23 paths and zero Additional
+  Medicare paths. It is confined to Saver source/evidence, shared regenerated
+  artifacts, the shared generator/tests, `conformance/us-pe.yaml`, and this
+  ledger.
+- Final focused validation passes: 229 tests with 3 skips across the federal
+  generator, conformance, affected-map, case-grid, and Saver bridge suites.
+  Ruff and `git diff --check` pass. Conformance-universe checks pass for UK and
+  BE and cleanly no-op for mismatched local UK-PE/US-PE checkouts; all 23 BE
+  covered compositions pass.
+- Independent read-only final review at `8f2d8fc1` returned APPROVE with no
+  actionable findings. It independently reconfirmed the byte-identical
+  Additional Medicare surfaces, Saver 34/23/11 evidence and exact selectors,
+  single-row/scoreboard effect, clean path scope, hold-branch SHA, and all
+  eight generated checks.
+- Replaced the stale mixed-expansion `WORKER-REPORT.md` with the requested
+  split report, including the follow-up design note. It remains intentionally
+  untracked and will be stamped with the closing ledger commit SHA.
+
+### Next
+
+- None. Hand off the committed local branch and untracked split report; do not
+  push or write GitHub state during the merge freeze.
+
+# Month-scoped suite regeneration audit
+
+## State
+
+- Branch: `data/month-fix-regen`
+- Base: `origin/main` at `819f370bf0346e4a6a8dfb1c8c4f0d873d6d0340`
+- Purpose: defensively regenerate the 19 US month-scoped comparison suites after
+  the requested-month PolicyEngine runner fix merged in `86be7721`.
+- Required oracle stack: `policyengine==4.18.9`,
+  `policyengine-us==1.767.3`, `policyengine-core==3.30.3`.
+- Containment: the 19 suites, their dispositions, shared regenerated artifacts,
+  row notes whose counts change, and this ledger only.
+- Phase: complete. All 19 suites are regenerated, dispositions revalidated,
+  shared artifacts refreshed, final checks complete, and the untracked worker
+  report written.
+
+## Done
+
+- Created an isolated worktree from the exact local `origin/main` ref.
+- Confirmed the worktree branch tracks `origin/main`.
+- Audited one committed report shape and all nine TANF/SSI configurations and
+  program outputs before regenerating. The requested comparison period remains
+  `2026-01` for every suite: changing it to a year would evade the runner fix.
+- Reconciled the Axiom side to true-month units without changing any tolerance:
+
+  | Suite | Period decision | Axiom comparison output |
+  |---|---|---|
+  | `al-tanf-ecps` | keep `2026-01` | `al_tanf_monthly_benefit` |
+  | `az-tanf-ecps` | keep `2026-01` | `az_tanf_monthly_cash_benefit` |
+  | `de-tanf-ecps` | keep `2026-01` | `de_tanf_monthly_benefit` |
+  | `ga-tanf-ecps` | keep `2026-01` | `ga_tanf_monthly_benefit` |
+  | `ks-tanf-ecps` | keep `2026-01` | new `ks_tanf_monthly_maximum_benefit` wrapper |
+  | `mn-tanf-ecps` | keep `2026-01` | `mn_mfip_monthly_cash_benefit` |
+  | `ny-tanf-ecps` | keep `2026-01` | `ny_tanf_benefit` |
+  | `wa-tanf-ecps` | keep `2026-01` | `wa_tanf_monthly_benefit` |
+  | `ssi-ecps` | keep `2026-01` | new `ssi_monthly_benefit` household output |
+
+- Kept each literal `$25` TANF/SSI tolerance unchanged; movements must be
+  exposed and disposition evidence revalidated, not absorbed by tolerance.
+- Added the declared Python/PolicyEngine pins to every affected config that did
+  not already carry them and corrected Minnesota's stale New York description.
+- Replaced eight stale `$HOME/axiom-oracles/programs/...` TANF references with
+  repository-relative paths during local regeneration so the isolated worktree
+  composed the audited files, not an unrelated historical checkout.
+- Confirmed from the pinned PolicyEngine-US metadata that all nine oracle
+  variables have `MONTH` definition periods. Confirmed the corresponding Axiom
+  leaves are monthly, except the Arizona and SSI annual leaves whose new
+  wrappers correctly divide by 12.
+- Repointed Minnesota, New York, and Washington TANF from missing copied
+  state-root directories to the canonical `rulespec-us` monorepo checkout,
+  matching the already-working Arizona/Kansas composition pattern.
+- Corrected the Kansas suite description from shelter group V to group I,
+  matching both the bridge's fixed inputs and PolicyEngine's no-county fallback.
+- The sandbox blocks `uv` from initializing its default cache under
+  `$HOME/.cache/uv` (`sdists-v9/.git: Operation not permitted`). Verified the
+  established read-only cache overlay used by the #423 lane instead: host
+  `policyengine==4.18.9` plus cached `policyengine-us==1.767.3` and
+  `policyengine-core==3.30.3`; the runtime reports all three exact versions.
+- Prepared a clean, local-only RuleSpec clone at cached `origin/main`
+  `c13cdf7dda5948e7a86ff0c317872f93743a2084` under `/private/tmp` because
+  the `$HOME/rulespec-us` worktree is a dirty historical TANF branch and lacks
+  three SNAP program specs. This clone is run input only and is not committed.
+- Composed and compiled all eight TANF programs plus SSI successfully after the
+  root fixes.
+- Targeted validation passed 92 tests with 3 skips. One
+  `test_materialize_ci_workspace` assertion remains stale: it requires the old
+  `$HOME/axiom-oracles` symlink solely because it assumes the superseded
+  absolute TANF program path; the repository-relative program path needs no
+  such materialization. The containment order excludes test-file edits.
+- Captured the committed pre-regeneration baseline:
+
+  | Suite | Raw mismatches | Unexplained |
+  |---|---:|---:|
+  | `al-snap-ecps` | 53 | 23 |
+  | `az-snap-ecps` | 597 | 0 |
+  | `ca-snap-ecps` | 684 | 96 |
+  | `fl-snap-ecps` | 834 | 834 |
+  | `ga-snap-ecps` | 250 | 80 |
+  | `ma-snap-ecps` | 255 | 83 |
+  | `nc-snap-ecps` | 99 | 71 |
+  | `ny-snap-ecps` | 354 | 349 |
+  | `sc-snap-ecps` | 181 | 106 |
+  | `tn-snap-ecps` | 68 | 41 |
+  | `al-tanf-ecps` | 0 | 0 |
+  | `az-tanf-ecps` | 4 | 0 |
+  | `de-tanf-ecps` | 0 | 0 |
+  | `ga-tanf-ecps` | 1 | 0 |
+  | `ks-tanf-ecps` | 6 | 0 |
+  | `mn-tanf-ecps` | 0 | 0 |
+  | `ny-tanf-ecps` | 36 | 0 |
+  | `wa-tanf-ecps` | 0 | 0 |
+  | `ssi-ecps` | 3,067 | 0 |
+
+- Regenerated all eight TANF suites and SSI under the declared stack; every
+  full report records PolicyEngine `4.18.9`, US `1.767.3`, and core `3.30.3`.
+  The true-month raw residuals are AL 3, AZ 0, DE 0, GA 1, KS 218, MN 0,
+  NY 36, WA 0, and SSI 2,990.
+- Revalidated rather than silently carrying annualized disposition evidence:
+
+  - deleted Arizona's expired four-row disposition;
+  - pinned Georgia's surviving case to `0 / 164.970459` (exactly one twelfth
+    of the legacy PE amount);
+  - replaced Kansas's blanket prefix with seven exact county-group case sets
+    (212 rows, each PE-Axiom = $43) and six individually pinned
+    applicable-SSI assistance-unit rows;
+  - replaced New York's blanket prefix with exact 30 both-positive and 6
+    zero-left case sets, documenting 6 vanished and 6 new identities;
+  - refreshed SSI's full 2,990-row evidence from a direct PE eligibility join
+    and removed obsolete subtype counts and the now-within-tolerance
+    `ecps-588` representative.
+
+- Corrected the Kansas program and projector notes: the Axiom bridge fixes
+  shelter group I, while PolicyEngine 1.767.3 derives actual county groups.
+- Rebuilt Arizona TANF's dashboard copy from its regenerated full report after
+  deleting the vanished four-row disposition, so the report now records a null
+  dispositions file with no expired legacy entry.
+- Restored the eight committed TANF config paths to the CI materializer's
+  `$HOME/axiom-oracles/...` convention after regeneration; the focused
+  materialization suite now passes all 7 tests. The temporary relative paths
+  were an execution overlay, not a portable config change.
+- `apply_dispositions.py --check` passes after the TANF/SSI refresh, and the
+  focused disposition/requested-month test battery passes (22 tests).
+- The SNAP composition preflight exposed two sandbox/toolchain constraints.
+  The configured July 6 release binary predates `compile-composed`; a current
+  offline rebuild recognizes it but rejects an unrelated noncanonical Unicode
+  filename in the cached RuleSpec tree. No source checkout was altered.
+  The committed compatibility fallback succeeds when its legacy resolver is
+  pointed at the clean `/private/tmp` clone's parent, so the SNAP regeneration
+  uses that established release engine and clean RuleSpec input.
+- Regenerated seven SNAP suites on the declared engine stack and re-applied
+  their dispositions:
+
+  | Suite | Before raw/unexplained | True-month raw/unexplained |
+  |---|---:|---:|
+  | `al-snap-ecps` | 53 / 23 | 56 / 40 |
+  | `az-snap-ecps` | 597 / 0 | 597 / 0 |
+  | `fl-snap-ecps` | 834 / 834 | 774 / 774 |
+  | `ga-snap-ecps` | 250 / 80 | 245 / 75 |
+  | `ma-snap-ecps` | 255 / 83 | 263 / 92 |
+  | `ny-snap-ecps` | 354 / 349 | 245 / 240 |
+  | `tn-snap-ecps` | 68 / 41 | 70 / 43 |
+
+- Revalidated their legacy evidence row by row. Alabama drops 14 materially
+  moved TANF-counterfactual classifications rather than silently retaining
+  them; Massachusetts refreshes 17 TANF pins and drops one invalidated row;
+  Tennessee refreshes all 23 TANF pins. The AL/MA/TN lone-minor case sets are
+  unchanged, with their moved benefits explicitly recorded. New York's five
+  BBCE boolean rows are byte-identical and remain classified; an interrupted
+  worker's deletion of that still-valid disposition was reversed.
+- Across these seven suites, 524 old `23.973597208658855` mismatch rows became
+  511 rows at January's `23.84000015258789`, three at other true-January
+  amounts, and ten matches. CA/NC/SC remain to be measured.
+- Regenerated North Carolina and South Carolina SNAP on the same declared
+  stack. North Carolina moved from `99 / 71` raw/unexplained to `76 / 49`;
+  South Carolina moved from `181 / 106` to `185 / 110`. Both reports record
+  PolicyEngine `4.18.9`, US `1.767.3`, and core `3.30.3`.
+- Replayed all 40 surviving NC/SC TANF bridge households through direct
+  requested-period simulations. All 11 North Carolina and 29 South Carolina
+  zero-TANF counterfactuals reproduce the fixed-runner baseline and close
+  within the unchanged $7 tolerance. Their legacy pins all moved materially
+  and are now replaced with exact January pins and old-to-new evidence.
+- The NC/SC lone-minor case sets are unchanged (three and two cases,
+  respectively). All five eligibility rows are unchanged; all five benefit
+  rows moved materially and are explicitly listed in their evidence. The
+  obsolete North Carolina BBCE amount selector was deleted after its sole
+  mismatch vanished. No current NC/SC disposition is expired or orphaned.
+- North Carolina's two and South Carolina's 64 old
+  `23.973597208658855` rows all persist at January's
+  `23.84000015258789`. Across the nine completed SNAP suites, the old constant
+  therefore resolves to 577 rows at `23.84000015258789`, three other
+  true-January amounts, and ten matches; California's 45 rows remain.
+- Retained the saved #423 California replay receipt at SHA-256
+  `c46af9b87c8f5ad01f1909bc45e80e00b4c4a50e5b802ea4ccbe194b5954b568`
+  as per-row requested-month evidence only. Canonical disposition accounting
+  now comes from tracked `scripts/reconcile_ca_snap_423_dispositions.py`:
+  `--base-ref 819f370bf0346e4a6a8dfb1c8c4f0d873d6d0340 --check` resolves
+  the ref to a commit, hashes the literal merged
+  `dispositions/ca-snap-ecps.yaml` blob as
+  `18cfbe28f951261142bfa3c52d0c88f6d0a3d53b77b597fcd807b4d2e9a23086`,
+  and requires all 345 `ca-362-*` rows. No non-ancestor repaired YAML is
+  treated as authoritative.
+- A defensive California BBCE review found 83 of the 243 legacy annotations
+  contradict their stated Axiom gate proof. The reconciliation removes both
+  unsupported asset-waiver selectors and retains only the clean gross-band
+  proof: 79 eligibility rows and 78 benefit rows. Three otherwise-supported
+  identities vanished, and all 78 surviving benefit pins moved materially.
+- The first California regeneration reached batch 68 of 72 before the process
+  was killed with signal 9. A retry kept cyclic garbage collection enabled
+  (the runner disables it by default) and completed all 72 batches under the
+  exact declared stack. This was a runtime-only containment measure.
+- California regenerated from `684 / 96` raw/unexplained to `529 / 241`.
+  Its final disposition set classifies 157 BBCE encoding rows, 111 bridge
+  rows, and 20 upstream-engine rows. No disposition is expired or orphaned.
+- Reconciled the literal merged #423 set fail-closed: all 345 issue entries
+  partition as 192 vanished, 22 still-current mismatches whose requested-month
+  left/right evidence materially drifted and therefore remain dropped and
+  unclassified, and 131 kept after exact current-evidence verification. The
+  kept set splits into 115 materially moved legacy pins and 16 unchanged pins.
+  The four merged-only rows (benefit and eligibility for `ecps-59082` and
+  `ecps-62506`) are included among the 192 vanished.
+- California's 45 old `23.973597208658855` rows became 42 rows at
+  `23.84000015258789` and three matches. Across all ten SNAP suites, the 635
+  old constant rows therefore became 619 rows at January's
+  `23.84000015258789`, three rows at other true-January amounts, and 13
+  matches.
+- Verified all 19 regenerated reports record PolicyEngine `4.18.9`,
+  PolicyEngine-US `1.767.3`, and PolicyEngine-Core `3.30.3`.
+- Caught and removed 67 stale California row-level labels left by applying the
+  final dispositions additively over the generation-time legacy merge. Rebuilt
+  the dashboard copy from the raw regenerated report with the final YAML and
+  re-emitted its case explorer. The report, case artifacts, and rollup now
+  agree exactly at 157 encoding + 111 bridge + 20 upstream annotations, with
+  zero silent classifications.
+- Refreshed all 19 case-artifact trees, all 13 affected disposition artifacts,
+  the affected map, freshness register, conformance scoreboard/detail and
+  four jurisdiction history snapshots, burn-down, and dashboard overview.
+  Removed Arizona TANF's now-obsolete served disposition artifact.
+- Corrected Kansas and New York TANF evidence citations to tracked
+  config/mapping sources available to the hermetic refresh fixture. Its full
+  11-test concurrency/regeneration suite now passes.
+- A first full pytest run reached 2,273 passes and 70 skips. Ten failures from
+  the now-corrected evidence citations were re-run successfully; the only
+  independent failure was `npx esbuild` attempting a network download in the
+  network-restricted sandbox.
+- The state-tax populace contract passes checkout-locally (43 jurisdictions,
+  32 ready, 11 blocked). Invoking the parent checkout's editable virtualenv
+  without `PYTHONPATH=.` imports a different parent `axiom_oracles` tree and
+  falsely reports DE/MN metadata drift; the governing files are identical at
+  this branch's base, HEAD, and local `origin/main`.
+- Final post-commit gates pass: comparison registry listing (135 entries),
+  rule verification (21,859 rules), checkout-local state-tax contract,
+  dispositions (82 files), selected affected case artifacts (zero silent
+  classifications), all 13 affected disposition artifacts, grids, boundary
+  cases, affected map, vacuous gate, dashboard overview, conformance
+  universes/compositions, scoreboard, ratchet, and burn-down.
+- The final broad Python run, excluding only the separately exercised
+  network-dependent dashboard loader, passes 2,283 tests with 70 skips. The
+  loader's `npx esbuild` invocation cannot reach the npm registry in the
+  network-restricted sandbox (`ENOTFOUND`). Ruff is not installed in the
+  declared virtualenv.
+- Additional sandbox disclosures: `ps` and `sysctl -n hw.memsize` were denied
+  during the California recovery audit; process status and memory pressure
+  were checked with permitted alternatives. The bare system Python lacks
+  PyYAML, so all repository checks used the declared virtualenv.
+- Wrote the required final audit report to untracked `WORKER-REPORT.md`.
+
+## Next
+
+- No implementation work remains. Handoff the committed branch HEAD and
+  untracked worker report; do not push.
+
+# Month-fix regeneration review repair
+
+## State
+
+- Branch: `data/month-fix-regen`
+- Repair start: `f0a6598e1337310fdf2f663af91b7ab81f773491`
+- Literal merge base: `819f370bf0346e4a6a8dfb1c8c4f0d873d6d0340`
+- Review ledger: closed at `3097abcb`; verdict `REQUEST-CHANGES`.
+- Purpose: defensively repair reviewability and containment findings without
+  regenerating or changing any suite artifact.
+- Phase: in progress. The root ledger now follows append discipline; the
+  California literal-merged-set reconciliation and checker repair remain.
+
+## Done
+
+- Read the closed blind review before inspecting or changing the branch.
+- Preserved the pre-existing untracked `WORKER-REPORT.md` without modification.
+- Restored all 57,579 bytes and 951 lines of the merge-base `PROGRESS.md` as
+  the exact file prefix (SHA-256
+  `c453af85c7e77b13a2ea18fcfd884f149d4783c4edf712354a85485d67b8379a`).
+- Appended all 14,644 bytes and 245 lines of the branch's prior progress ledger
+  unchanged (SHA-256
+  `0e2cabe4771cd9cb75547f6908d83d79dbb9d269aac46bc3e3892f8ce5d95851`).
+- Confirmed the restoration is append-only relative to the branch head:
+  `952` insertions and `0` deletions before this repair entry.
+- GitNexus graph tools were not exposed, so the schema failure will be traced
+  directly through the tracked checker and its tests.
+
+## Next
+
+- Reconcile all 345 literal merged #423 rows as 192 vanished, 22
+  materially-drifted-and-dropped, and 131 kept.
+- Track a reproducible `scripts/` reconciler with explicit `--base-ref`
+  discipline and make the tracked disposition checker validate the current
+  compact schema without weakening checks.
+- Verify that every tracked accounting and provenance reference names the
+  literal 345-row merged set and its tracked checker.
+- Run the full `--check` battery, assert suite artifacts are byte-unchanged,
+  commit each coherent step, and write the short untracked
+  `WORKER-REPORT-REPAIR.md`.
+
+## Repair checkpoint — literal merged accounting committed
+
+### State
+
+- Phase: accounting and checker repairs are committed; full repository gates
+  and final artifact-containment proof remain.
+- Root `PROGRESS.md` still begins with the merge-base's exact 57,579-byte,
+  951-line content.
+
+### Done
+
+- Committed `47949eb5` with a read-only literal-base reconciler and focused
+  regression coverage.
+- Reconciled the 345 literal merged #423 rows exactly as 192 vanished, 22
+  materially drifted and dropped, and 131 kept; the kept set closes as 115
+  materially moved pins plus 16 unchanged pins.
+- Validated the current 7,101-case `id/r/h/m` compact schema against all 529
+  report mismatches and 288 expanded annotations.
+- Kept the historical builder check operational by requiring the explicit
+  base ref and validating its pinned report, legacy compact snapshot, trace,
+  and generated YAML. The real saved-trace gate validates 345 rows with 96
+  historical unexplained rows.
+- Passed 50 focused checker/disposition/artifact tests, Ruff, diff-check, the
+  current checker, the historical checker, and exact current-checker receipt
+  parity through the builder dispatch.
+- Replaced the non-authoritative repaired-source provenance in both compact
+  BBCE disposition notes with the literal merged base ref, source SHA-256,
+  tracked checker command, and corrected partition.
+
+### Next
+
+- Commit the corrected tracked accounting prose and exact derived disposition
+  copy.
+- Run the full `--check` and validation battery, prove CA/KS/SSI suite
+  artifacts remain byte-identical to repair start, and close the ledger.
+- Write untracked `WORKER-REPORT-REPAIR.md`; do not modify the pre-existing
+  untracked `WORKER-REPORT.md`, push, or write to GitHub.
+
+## Repair closeout — defensive audit complete
+
+### State
+
+- Phase: complete. The branch contains the append-only ledger restoration,
+  literal merged-set reconciliation, tracked checker, corrected provenance,
+  focused tests, and final validation evidence.
+- No suite was regenerated. The only tracked data edits are the two required
+  California source row-note corrections and their exact served copy.
+- No push or GitHub write was performed.
+
+### Done
+
+- Passed the review's complete seven-command lightweight battery:
+  dispositions, grids, affected map, vacuous gate, scoreboard, ratchet, and
+  burn-down.
+- Also passed boundary cases, dashboard overview, conformance
+  universe/compositions, comparison registry listing (135 suites), rule
+  verification (21,859 rules), and the state-tax populace contract (43
+  jurisdictions; 32 ready and 11 blocked). The UK-PE and US-PE universe checks
+  were clean no-ops because the adjacent checkout versions do not match the
+  committed pins.
+- Passed both tracked CA checker entry points with byte-identical receipts:
+  345 literal rows close as 192 vanished + 22 materially drifted and dropped
+  + 131 kept, and kept pins close as 115 moved + 16 unchanged. The current
+  evidence closes at 529 report mismatches, 288 expanded annotations, and
+  7,101 compact cases.
+- Passed the real saved-trace historical gate: 345 evidence-pinned rows
+  validate with 96 historical unexplained rows.
+- Passed Ruff, diff-check, and 50 focused disposition/checker/artifact tests.
+  A broad Python run passed 2,304 tests and skipped 70. Its sole failure was
+  the known network-dependent dashboard loader: `npx esbuild` could not reach
+  `registry.npmjs.org` (`ENOTFOUND`), so no code assertion failed.
+- The exact affected emitter scope passes for 18 complete canonical case
+  suites and all 13 extant disposition suites. SSI intentionally stores only
+  1,000 of 2,990 mismatches in its canonical dashboard report, so the case
+  emitter correctly refuses to claim full parity; its 2,990-row
+  mismatch-only compact tree is internally consistent and unchanged.
+  Repository-wide no-argument emitter probes likewise expose unrelated
+  pre-existing stale/missing suites; California is absent from those findings.
+- Proved every protected tracked path containing `ca-snap-ecps`,
+  `ks-tanf-ecps`, or `ssi-ecps` is byte-identical to repair start, excluding
+  only the explicitly required California disposition note and served copy.
+  The primary report SHA-256 values remain `d5b95f7c8f9e9a66...`,
+  `1132d023920d7685...`, and `0eb73772a9220a0c...`.
+- Reconfirmed the root ledger's exact merge-base prefix: 57,579 bytes, 951
+  lines, SHA-256
+  `c453af85c7e77b13a2ea18fcfd884f149d4783c4edf712354a85485d67b8379a`.
+- Confirmed no tracked `188/341` accounting or non-authoritative
+  `da5bf292...` provenance remains.
+- Wrote the required short untracked `WORKER-REPORT-REPAIR.md` and preserved
+  pre-existing untracked `WORKER-REPORT.md` byte-for-byte.
+- Sandbox disclosure: a read-only `ps` diagnostic was denied while monitoring
+  the broad test run. It did not affect the test process; no other sandbox
+  permission failure occurred during this repair.
+
+### Next
+
+- Handoff the committed local branch and untracked repair report. Do not push
+  or write to GitHub.
+
+## Independent repair re-review opened — `58c6075f0`
+
+### State
+
+- Phase: in progress. Review scope is limited to the two mechanical repairs
+  and containment requested for `data/month-fix-regen` at reviewed head
+  `58c6075f0`.
+- Work is confined to the disposable local worktree. No remote or GitHub
+  writes are authorized.
+
+### Done
+
+- Confirmed the worktree began at `58c6075f0` on
+  `data/month-fix-regen`.
+- Recorded two pre-existing untracked files, `WORKER-REPORT.md` and
+  `WORKER-REPORT-REPAIR.md`; they will remain untouched.
+- Loaded the repository review workflow and identified merge base
+  `819f370bf0346e4a6a8dfb1c8c4f0d873d6d0340`.
+
+### Next
+
+- Verify exact merge-base ledger prefix identity and audit the appended record.
+- Independently re-derive the literal 345-row California disposition split,
+  inspect checker discipline and coverage, and sample at least 10 vanished
+  plus 5 kept rows.
+- Verify protected artifact parity, SSI truncation/fail-closed behavior,
+  containment, the seven-check battery, and focused tests.
+- Write and commit the final review report, then close this ledger.
+
+## Independent re-review checkpoint — ledger and gates verified
+
+### State
+
+- Phase: in progress. Ledger repair, repair-commit containment, the complete
+  seven-check battery, and focused test coverage are verified.
+- Independent California row sampling and SSI truncation history remain in
+  progress.
+
+### Done
+
+- Compared the first 57,579 bytes of reviewed-head `PROGRESS.md` directly with
+  merge-base `819f370b`; `cmp` returned zero and both byte streams have SHA-256
+  `c453af85c7e77b13a2ea18fcfd884f149d4783c4edf712354a85485d67b8379a`.
+  The prefix is exactly 951 lines.
+- Isolated the restored historical month-regeneration ledger after its
+  separator and proved it is byte-identical to `f0a6598e:PROGRESS.md`:
+  14,644 bytes, 245 lines, SHA-256
+  `0e2cabe4771cd9cb75547f6908d83d79dbb9d269aac46bc3e3892f8ce5d95851`.
+- Confirmed the final base-to-reviewed-head ledger diff is 391 insertions and
+  zero deletions. Its repair narrative agrees with the four repair commits,
+  their changed-path inventory, and the validations repeated so far.
+- Audited `f0a6598e..58c6075f0`: seven paths changed—`PROGRESS.md`, the
+  historical builder, the new reconciler, two focused test modules, and the
+  source/served copies of the California accounting note. No report, case
+  tree, comparison config, or other suite artifact changed.
+- Re-ran the complete required battery: dispositions, grids, affected map,
+  vacuous gate, scoreboard, ratchet, and burn-down all exited zero (7/7).
+- Re-ran the focused builder/reconciler/disposition/artifact suite: 50 tests
+  passed. The current reconciler and builder dispatch also both passed and
+  emitted byte-identical receipts.
+- Proved pre/post tracked status was unchanged; only the two pre-existing
+  untracked worker reports remain.
+- Sandbox disclosure: the review workflow's local GitNexus analysis could
+  create a partial worktree index but could not register it at
+  `/Users/maxghenis/.gitnexus/registry.json` (`EPERM`). The generated partial
+  index was removed, and direct diff/caller/test inspection replaced graph
+  queries.
+
+### Next
+
+- Complete the independent 345-row California derivation and required samples.
+- Complete protected-artifact hash parity and SSI pre-existing/fail-closed
+  verification.
+- Write `REVIEW-REPORT.md`, close this ledger, and commit each final unit.
+
+## Independent re-review checkpoint — CA and protected artifacts verified
+
+### State
+
+- Phase: evidence collection complete. Both requested repairs and containment
+  verify cleanly; final report drafting remains.
+- Provisional verdict: approve.
+
+### Done
+
+- Independently parsed the literal `819f370b` disposition blob and reviewed
+  `58c6075f0` source/report/compact artifacts without importing the tracked
+  reconciler. The 345 rows partition exactly as 192 vanished, 22
+  current-but-dropped, and 131 kept; kept pins divide into 115 moved and 16
+  unchanged.
+- Confirmed the literal base blob is byte-identical to PR #423 merge
+  `1b57affd`, with SHA-256
+  `18cfbe28f951261142bfa3c52d0c88f6d0a3d53b77b597fcd807b4d2e9a23086`.
+- Independently joined the pinned saved trace to the new report and verified
+  that all 22 current-but-dropped requested-month pins moved materially.
+- Sampled 12 vanished rows, including all four merged-only identities for
+  `ecps-59082` and `ecps-62506`; every sampled household is present at 100%
+  compact match rate with zero current rows for the old concept identity.
+- Sampled ten kept rows across moved benefit pins and unchanged eligibility
+  pins. Every sample has exact current source/report identity and pin parity,
+  the expected report disposition ID, and one exact compact mismatch payload.
+- Reviewed the checker change and negative coverage. The current-schema path
+  validates all 529 canonical mismatches, 288 expanded annotations, exact
+  `id/r/h/m` compact parity, base/partition/movement identity digests,
+  requested-month pin receipts, and source/served parity. Historical mode now
+  reads hash-pinned legacy inputs from the explicit base ref. Tests cover
+  unsafe refs, byte drift, equal-count identity swaps, retired schema,
+  silent annotations, merged-only omissions, pin tampering, and invalid
+  dispatch modes; no guard was weakened.
+- Proved all 39 protected paths containing `ca-snap-ecps`,
+  `ks-tanf-ecps`, or `ssi-ecps` match repair start `f0a6598e` except the two
+  permitted California accounting-note copies. Primary report SHA-256 values
+  remain `d5b95f7c8f9e9a66f5146dcf82bcfe719c6433cb150217a181f4db959fe3911d`,
+  `1132d023920d768577617e074b914cd17c89a057dd7fd893c5052454b4a33532`,
+  and `0eb73772a9220a0cd0aaeb1ec174a43fab61bf33289f56c600202a1f7128399b`,
+  preserving 529, 218, and 2,990 total mismatches.
+- Confirmed SSI truncation predates this branch on both merge-base and current
+  local `origin/main`: the served report explicitly records 1,000 shown of
+  3,067 total there, versus 1,000 of 2,990 at the reviewed head. Its checker
+  exits one with `canonical mismatch list is incomplete (1000/2990); compact
+  parity is uncheckable`; the mismatch-only compact tree independently closes
+  to 2,990 unique rows. The behavior is genuinely fail-closed.
+- Containment wording caveat: the repair adds the reconciler and two explicitly
+  requested focused test modules; the accounting documents are modified, not
+  added. No unexpected tracked file or suite artifact was introduced.
+
+### Next
+
+- Write and commit `REVIEW-REPORT.md`.
+- Append and commit the final ledger closeout, verify final status, and report
+  the verdict without any remote or GitHub write.
+
+## Independent repair re-review closeout
+
+### State
+
+- Phase: complete.
+- Verdict: `APPROVE`.
+- Reviewed target remains frozen at `58c6075f0`; subsequent local commits
+  contain only this re-review's ledger and output report.
+
+### Done
+
+- Committed `REVIEW-REPORT.md` at `5da282c9` with exact first line
+  `VERDICT: APPROVE` and the complete repair/containment evidence digest.
+- Verified both prior mechanical findings are resolved, the required 7/7
+  battery and 50 focused tests pass, protected artifact hashes/counts remain
+  exact, and SSI truncation is pre-existing and fail-closed.
+- Preserved `WORKER-REPORT.md` and `WORKER-REPORT-REPAIR.md` as the only
+  pre-existing untracked files.
+- Removed the partial untracked GitNexus index produced before its sandbox
+  registry denial; it left no repository residue.
+- Performed no remote or GitHub write.
+
+### Next
+
+- Handoff the committed local re-review ledger and `REVIEW-REPORT.md`.

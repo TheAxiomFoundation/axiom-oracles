@@ -588,7 +588,18 @@ def main() -> int:
     # the reports/ JSON and the dashboard copy, so a checked-in report records
     # exactly what it ran against and the affected-rerun map can diff its SHAs.
     provenance = _build_run_provenance(config, runner_type, output)
-    _stamp_report_provenance(output, provenance)
+    compared_engines = {
+        str(config["runner"]["parameters"].get("left", "")),
+        str(config["runner"]["parameters"].get("right", "")),
+    }
+    _stamp_report_provenance(
+        output,
+        provenance,
+        require_engine_versions=(
+            runner_type == "axiom-oracles-compare"
+            and "policyengine" in compared_engines
+        ),
+    )
 
     dashboard_target = config.get("dashboard", {}).get("filename")
     if dashboard_target:
@@ -863,6 +874,7 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
             "name": params.get("right", "policyengine"),
             "policyengine_package": pins[0],
             "policyengine_us": pins[1].split("==", 1)[-1],
+            "policyengine_core": pins[2].split("==", 1)[-1],
         }
         # Pin the Tax-Calculator engine version when it is a participant, so a
         # taxcalc-vs-policyengine report records both engine stacks it compared
@@ -954,7 +966,12 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
     )
 
 
-def _stamp_report_provenance(output: Path, provenance: dict) -> None:
+def _stamp_report_provenance(
+    output: Path,
+    provenance: dict,
+    *,
+    require_engine_versions: bool = False,
+) -> None:
     """Add ``provenance`` to the reports/ JSON, preserving the file's own format.
 
     Different runners serialize their reports/ artifact differently (sorted vs
@@ -970,6 +987,45 @@ def _stamp_report_provenance(output: Path, provenance: dict) -> None:
     if not isinstance(data, dict):
         return
     data["provenance"] = provenance
+    engines = data.get("engines")
+    if require_engine_versions and not isinstance(engines, dict):
+        raise SystemExit(
+            "comparison report did not record its runtime engine versions"
+        )
+    if isinstance(engines, dict):
+        versions = dict(engines.get("versions") or {})
+        engine = provenance.get("engine") or {}
+        oracle = provenance.get("oracle") or {}
+        axiom_version = engine.get("axiom_rules_engine_version")
+        expected_versions = {}
+        policyengine_pin = oracle.get("policyengine_package")
+        if (
+            isinstance(policyengine_pin, str)
+            and policyengine_pin.startswith("policyengine==")
+        ):
+            expected_versions["policyengine"] = policyengine_pin.split("==", 1)[1]
+        for provenance_key, version_key in (
+            ("policyengine_core", "policyengine_core"),
+            ("policyengine_us", "policyengine_us"),
+        ):
+            value = oracle.get(provenance_key)
+            if value:
+                expected_versions[version_key] = str(value)
+        if require_engine_versions:
+            mismatched = {
+                key: {"expected": expected, "actual": versions.get(key)}
+                for key, expected in expected_versions.items()
+                if versions.get(key) != expected
+            }
+            if mismatched:
+                raise SystemExit(
+                    "comparison report runtime engine versions do not match "
+                    f"the resolved oracle pins: {mismatched}"
+                )
+        if axiom_version:
+            versions["axiom_rules_engine"] = str(axiom_version)
+        if versions:
+            engines["versions"] = versions
     trailing = "\n" if original_text.endswith("\n") else ""
     for sort_keys in (True, False):
         for indent in (2, 1):
@@ -1482,7 +1538,15 @@ def _resolve_pe_oracle_pins(params: dict) -> tuple[str, str, str]:
 # need to bypass certification, but the shim keeps policyengine.us import
 # behavior stable for the local CLI.
 _PE_CERT_OVERRIDE = """
-import os, sys
+import json, os, sys
+from importlib.metadata import version as _dist_version
+from pathlib import Path
+
+_runtime_engine_versions = {
+    'policyengine': _dist_version('policyengine'),
+    'policyengine_core': _dist_version('policyengine-core'),
+    'policyengine_us': _dist_version('policyengine-us'),
+}
 os.environ['POLICYENGINE_SKIP_COUNTRY_IMPORTS'] = '1'
 try:
     import policyengine
@@ -1517,6 +1581,13 @@ except Exception:
 
 from axiom_oracles.cli import cli as _cli
 _cli(sys.argv[1:], standalone_mode=False)
+if '--output' in sys.argv:
+    _output = Path(sys.argv[sys.argv.index('--output') + 1])
+    _report = json.loads(_output.read_text())
+    _report.setdefault('engines', {}).setdefault('versions', {}).update(
+        _runtime_engine_versions
+    )
+    _output.write_text(json.dumps(_report, indent=2, sort_keys=True) + '\\n')
 """
 
 
@@ -2939,18 +3010,29 @@ def _run_sanity(name: str) -> int:
         print(f"No fixtures file at {fixtures_path}", file=sys.stderr)
         return 2
     params = config["runner"]["parameters"]
+    pe_pins = _resolve_pe_oracle_pins(params)
     axiom_rules_repo = _resolve_path(
         config["runner"].get("axiom_rules_repo", "$HOME/axiom-rules"),
         "axiom_rules_repo",
     )
     cmd = [
-        "uv", "run", "--python", "3.14", "--no-project",
-        "--with-editable", str(REPO_ROOT),
-        *(arg for pin in _PE_ORACLE_PINS for arg in ("--with", pin)),
-        "python", "-c", _PE_CERT_OVERRIDE,
-        "sanity", str(fixtures_path),
-        "--left", params.get("left", "axiom"),
-        "--right", params.get("right", "policyengine"),
+        "uv",
+        "run",
+        "--python",
+        str(params.get("python", "3.14")),
+        "--no-project",
+        "--with-editable",
+        str(REPO_ROOT),
+        *(arg for pin in pe_pins for arg in ("--with", pin)),
+        "python",
+        "-c",
+        _PE_CERT_OVERRIDE,
+        "sanity",
+        str(fixtures_path),
+        "--left",
+        params.get("left", "axiom"),
+        "--right",
+        params.get("right", "policyengine"),
         "--axiom-engine-binary",
         str(axiom_rules_repo / "target" / "release" / "axiom-rules-engine"),
     ]

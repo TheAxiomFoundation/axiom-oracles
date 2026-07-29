@@ -58,6 +58,15 @@
       "source": "comparisons/parameter-oracles.yaml"
     },
     {
+      "suite": "ar-income-tax-populace",
+      "name": null,
+      "report": "axiom-policyengine-ar-income-tax-populace.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/state-income-tax-populace.yaml"
+    },
+    {
       "suite": "az-income-tax-liability",
       "name": "az-income-tax-liability",
       "report": "axiom-policyengine-taxsim-az-income-tax-liability.json",
@@ -211,6 +220,15 @@
       "source": "comparisons/ca-income-tax-liability.yaml"
     },
     {
+      "suite": "ca-income-tax-populace",
+      "name": null,
+      "report": "axiom-policyengine-ca-income-tax-populace.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/state-income-tax-populace.yaml"
+    },
+    {
       "suite": "ca-snap-ecps",
       "name": "ca-snap-ecps",
       "report": "axiom-policyengine-ca-snap-ecps.json",
@@ -340,13 +358,13 @@
       "source": "comparisons/dc-income-tax-liability.yaml"
     },
     {
-      "suite": "de-income-tax-liability",
-      "name": "de-income-tax-liability",
-      "report": "axiom-policyengine-taxsim-de-income-tax-liability.json",
+      "suite": "dc-income-tax-populace",
+      "name": null,
+      "report": "axiom-policyengine-dc-income-tax-populace.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
       ],
-      "source": "comparisons/de-income-tax-liability.yaml"
+      "source": "comparisons/state-income-tax-populace.yaml"
     },
     {
       "suite": "de-tanf-ecps",
@@ -519,6 +537,15 @@
       "source": "comparisons/il-income-tax-liability.yaml"
     },
     {
+      "suite": "il-income-tax-populace",
+      "name": null,
+      "report": "axiom-policyengine-il-income-tax-populace.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/state-income-tax-populace.yaml"
+    },
+    {
       "suite": "in-income-tax-liability",
       "name": "in-income-tax-liability",
       "report": "axiom-policyengine-taxsim-in-income-tax-liability.json",
@@ -526,6 +553,15 @@
         "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/in-income-tax-liability.yaml"
+    },
+    {
+      "suite": "in-income-tax-populace",
+      "name": null,
+      "report": "axiom-policyengine-in-income-tax-populace.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/state-income-tax-populace.yaml"
     },
     {
       "suite": "irs-adjustment-parameters",
@@ -692,10 +728,20 @@
       "source": "comparisons/mn-income-tax-liability.yaml"
     },
     {
+      "suite": "mn-income-tax-populace",
+      "name": null,
+      "report": "axiom-policyengine-mn-income-tax-populace.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/state-income-tax-populace.yaml"
+    },
+    {
       "suite": "mn-tanf-ecps",
       "name": "mn-tanf-ecps",
       "report": "axiom-policyengine-mn-tanf-ecps.json",
       "repos": [
+        "TheAxiomFoundation/rulespec-us",
         "TheAxiomFoundation/rulespec-us-mn"
       ],
       "source": "comparisons/mn-tanf-ecps.yaml"
@@ -735,6 +781,15 @@
         "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/mt-income-tax-liability.yaml"
+    },
+    {
+      "suite": "mt-income-tax-populace",
+      "name": null,
+      "report": "axiom-policyengine-mt-income-tax-populace.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/state-income-tax-populace.yaml"
     },
     {
       "suite": "nc-income-tax-liability",
@@ -800,6 +855,15 @@
       "source": "comparisons/ny-income-tax-liability.yaml"
     },
     {
+      "suite": "ny-income-tax-populace",
+      "name": null,
+      "report": "axiom-policyengine-ny-income-tax-populace.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/state-income-tax-populace.yaml"
+    },
+    {
       "suite": "ny-snap-ecps",
       "name": "ny-snap-ecps",
       "report": "axiom-policyengine-ny-snap-ecps.json",
@@ -823,6 +887,7 @@
       "name": "ny-tanf-ecps",
       "report": "axiom-policyengine-ny-tanf-ecps.json",
       "repos": [
+        "TheAxiomFoundation/rulespec-us",
         "TheAxiomFoundation/rulespec-us-ny"
       ],
       "source": "comparisons/ny-tanf-ecps.yaml"
@@ -892,6 +957,15 @@
       "source": "comparisons/pa-income-tax-liability.yaml"
     },
     {
+      "suite": "pa-income-tax-populace",
+      "name": null,
+      "report": "axiom-policyengine-pa-income-tax-populace.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/state-income-tax-populace.yaml"
+    },
+    {
       "suite": "pell-parameters",
       "name": null,
       "report": "axiom-policyengine-pell-parameters.json",
@@ -917,6 +991,15 @@
         "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/sc-income-tax-liability.yaml"
+    },
+    {
+      "suite": "sc-income-tax-populace",
+      "name": null,
+      "report": "axiom-policyengine-sc-income-tax-populace.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/state-income-tax-populace.yaml"
     },
     {
       "suite": "sc-snap-ecps",
@@ -1368,6 +1451,15 @@
       "source": "comparisons/us-qbid-grid.yaml"
     },
     {
+      "suite": "us-savers-grid",
+      "name": "us-savers-grid",
+      "report": "axiom-policyengine-us-savers-grid.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/us-savers-grid.yaml"
+    },
+    {
       "suite": "us-seca-grid",
       "name": "us-seca-grid",
       "report": "axiom-policyengine-us-seca-grid.json",
@@ -1436,6 +1528,7 @@
       "name": "wa-tanf-ecps",
       "report": "axiom-policyengine-wa-tanf-ecps.json",
       "repos": [
+        "TheAxiomFoundation/rulespec-us",
         "TheAxiomFoundation/rulespec-us-wa"
       ],
       "source": "comparisons/wa-tanf-ecps.yaml"

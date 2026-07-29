@@ -42,6 +42,11 @@ jobs:
       - name: Validate mismatch dispositions
         run: uv run scripts/apply_dispositions.py --check
 
+      - name: Validate served SNAP case-explorer parity
+        run: |
+          uv run scripts/emit_case_artifacts.py --check al-snap-ecps ma-snap-ecps nc-snap-ecps sc-snap-ecps tn-snap-ecps
+          uv run scripts/emit_disposition_artifacts.py --check al-snap-ecps ma-snap-ecps nc-snap-ecps sc-snap-ecps tn-snap-ecps
+
       - name: Validate canonical case grids are up to date
         run: uv run scripts/extract_grids.py --check
 

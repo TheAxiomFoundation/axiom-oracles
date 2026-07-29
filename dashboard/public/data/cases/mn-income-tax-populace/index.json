@@ -1,0 +1,15 @@
+{
+ "suite": "mn-income-tax-populace",
+ "count": 1117,
+ "total_cases": 1117,
+ "chunks": 3,
+ "chunk_size": 500,
+ "engines": {
+  "left": "axiom",
+  "right": "policyengine"
+ },
+ "mismatch_concepts": [
+  "us-mn:policies/income_tax/pilot_liability_pipeline#mn_pit_pilot_schedule_tax"
+ ],
+ "source": "state-tax-populace-campaign"
+}

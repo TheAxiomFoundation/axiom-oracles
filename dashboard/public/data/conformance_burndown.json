@@ -132,6 +132,26 @@
         "axiom_attributed_open": 0,
         "gap": 0,
         "conformant": true
+      },
+      {
+        "date": "2026-07-28",
+        "in_scope": 23,
+        "covered": 23,
+        "uncovered": 0,
+        "unexplained": 0,
+        "axiom_attributed_open": 0,
+        "gap": 0,
+        "conformant": true
+      },
+      {
+        "date": "2026-07-29",
+        "in_scope": 23,
+        "covered": 23,
+        "uncovered": 0,
+        "unexplained": 0,
+        "axiom_attributed_open": 0,
+        "gap": 0,
+        "conformant": true
       }
     ],
     "uk": [
@@ -264,6 +284,26 @@
         "axiom_attributed_open": 0,
         "gap": 0,
         "conformant": true
+      },
+      {
+        "date": "2026-07-28",
+        "in_scope": 21,
+        "covered": 21,
+        "uncovered": 0,
+        "unexplained": 0,
+        "axiom_attributed_open": 0,
+        "gap": 0,
+        "conformant": true
+      },
+      {
+        "date": "2026-07-29",
+        "in_scope": 21,
+        "covered": 21,
+        "uncovered": 0,
+        "unexplained": 0,
+        "axiom_attributed_open": 0,
+        "gap": 0,
+        "conformant": true
       }
     ],
     "uk-pe": [
@@ -386,6 +426,26 @@
         "axiom_attributed_open": 0,
         "gap": 0,
         "conformant": true
+      },
+      {
+        "date": "2026-07-28",
+        "in_scope": 23,
+        "covered": 23,
+        "uncovered": 0,
+        "unexplained": 0,
+        "axiom_attributed_open": 0,
+        "gap": 0,
+        "conformant": true
+      },
+      {
+        "date": "2026-07-29",
+        "in_scope": 23,
+        "covered": 23,
+        "uncovered": 0,
+        "unexplained": 0,
+        "axiom_attributed_open": 0,
+        "gap": 0,
+        "conformant": true
       }
     ],
     "us-pe": [
@@ -497,6 +557,26 @@
         "unexplained": 441,
         "axiom_attributed_open": 243,
         "gap": 778,
+        "conformant": false
+      },
+      {
+        "date": "2026-07-28",
+        "in_scope": 127,
+        "covered": 34,
+        "uncovered": 93,
+        "unexplained": 96,
+        "axiom_attributed_open": 243,
+        "gap": 432,
+        "conformant": false
+      },
+      {
+        "date": "2026-07-29",
+        "in_scope": 127,
+        "covered": 34,
+        "uncovered": 93,
+        "unexplained": 244,
+        "axiom_attributed_open": 157,
+        "gap": 494,
         "conformant": false
       }
     ]

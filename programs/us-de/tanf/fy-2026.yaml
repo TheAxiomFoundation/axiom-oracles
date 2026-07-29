@@ -19,18 +19,17 @@
 #   defined_for de_tanf_eligible. The standard of need is 75% of the monthly
 #   federal poverty guideline; for the zero-income units that dominate the
 #   caseload the 50% deficit remainder exceeds the payment standard, so the
-#   benefit equals the payment standard exactly. The annualized output mirrors
-#   the covered al/co/ga convention; the compare framework annualizes PE's
-#   monthly de_tanf.
+#   benefit equals the payment standard exactly. The comparison requests
+#   January 2026 and therefore exposes the composed monthly benefit.
 
 program: us-de/tanf
 period: 2026-01
 
 outputs:
-  - de_tanf_annual_benefit
+  - de_tanf_monthly_benefit
 
 acknowledged_incomplete:
-  - de_tanf_annual_benefit
+  - de_tanf_monthly_benefit
 
 scope:
   state:

@@ -28,8 +28,12 @@ _STATE_SCOPE_FEDERAL_TAX_VARIABLES = {
 
 _MONTHLY_NUMERIC_OUTPUT_VARIABLES = {
     "snap",
+    "snap_max_allotment",
+    "snap_min_allotment",
     "snap_normal_allotment",
 }
+
+_MISSING_REQUESTED_PERIOD_VALUE = object()
 
 _PERSON_INCOME_CONCEPT_TO_PE = {
     Concepts.DIVIDEND_INCOME: "dividend_income",
@@ -102,7 +106,7 @@ def _policyengine():
     if pe.us is None:
         raise RuntimeError(
             "Install the US PolicyEngine extra: uv pip install -e '.[policyengine]'"
-    )
+        )
     return pe
 
 
@@ -143,7 +147,9 @@ class PolicyEngineRunner(EngineAdapter):
         if not cases:
             return []
 
-        requested = tuple(variables) if variables is not None else tuple(cases[0].outputs)
+        requested = (
+            tuple(variables) if variables is not None else tuple(cases[0].outputs)
+        )
         pe_variables = self._policyengine_variables(requested)
         if not pe_variables:
             return [
@@ -185,12 +191,25 @@ class PolicyEngineRunner(EngineAdapter):
                 **household_input,
                 extra_variables=variables,
             )
+            annual_values = {
+                variable: _household_result_value(result, variable)
+                for variable in variables
+            }
+            requested_values = self._requested_period_values(
+                pe,
+                [case],
+                [annual_values],
+            )[0]
             values = {
                 variable: _normalize_value_for_requested_period(
                     pe,
                     variable,
                     str(case.period),
-                    _household_result_value(result, variable),
+                    annual_values[variable],
+                    requested_value=requested_values.get(
+                        variable,
+                        _MISSING_REQUESTED_PERIOD_VALUE,
+                    ),
                 )
                 for variable in variables
             }
@@ -201,13 +220,25 @@ class PolicyEngineRunner(EngineAdapter):
                         **household_input,
                         extra_variables=[variable],
                     )
+                    annual_value = _household_result_value(result, variable)
+                    requested_values = self._requested_period_values(
+                        pe,
+                        [case],
+                        [{variable: annual_value}],
+                    )[0]
                     values[variable] = _normalize_value_for_requested_period(
                         pe,
                         variable,
                         str(case.period),
-                        _household_result_value(result, variable),
+                        annual_value,
+                        requested_value=requested_values.get(
+                            variable,
+                            _MISSING_REQUESTED_PERIOD_VALUE,
+                        ),
                     )
-                except Exception as exc:  # pragma: no cover - depends on PE variable set
+                except (
+                    Exception
+                ) as exc:  # pragma: no cover - depends on PE variable set
                     errors.append(f"{variable}: {exc}")
 
         return EngineResult(
@@ -243,7 +274,9 @@ class PolicyEngineRunner(EngineAdapter):
                         extra_variables=[variable],
                     )
                     values[variable] = _household_result_value(result, variable)
-                except Exception as exc:  # pragma: no cover - depends on PE variable set
+                except (
+                    Exception
+                ) as exc:  # pragma: no cover - depends on PE variable set
                     errors.append(f"{variable}: {exc}")
 
         return EngineResult(
@@ -278,6 +311,7 @@ class PolicyEngineRunner(EngineAdapter):
 
         return {
             "people": people,
+            "marital_units": {"marital_unit": {"members": person_names}},
             "families": {"family": {"members": person_names}},
             "tax_units": {"tax_unit": {"members": person_names}},
             "spm_units": {"spm_unit": {"members": person_names}},
@@ -344,11 +378,11 @@ class PolicyEngineRunner(EngineAdapter):
             people[person_name] = person_inputs
 
         household_inputs = {"members": person_names}
+        state_code = case.fact(Concepts.STATE_CODE)
+        if state_code is not None:
+            household_inputs["state_code"] = {year: str(state_code)}
         scope_inputs = _scope_inputs_for_variables(case, variables)
         if scope_inputs:
-            state_code = case.fact(Concepts.STATE_CODE)
-            if state_code is not None:
-                household_inputs["state_code"] = {year: str(state_code)}
             for variable, value in scope_inputs.items():
                 household_inputs[variable] = {year: value}
 
@@ -366,6 +400,7 @@ class PolicyEngineRunner(EngineAdapter):
 
         return {
             "people": people,
+            "marital_units": {"marital_unit": {"members": person_names}},
             "families": {"family": {"members": person_names}},
             "tax_units": {"tax_unit": tax_unit_inputs},
             "spm_units": {"spm_unit": spm_unit_inputs},
@@ -439,6 +474,7 @@ class PolicyEngineRunner(EngineAdapter):
     ) -> dict:
         situation: dict[str, dict[str, dict]] = {
             "people": {},
+            "marital_units": {},
             "families": {},
             "tax_units": {},
             "spm_units": {},
@@ -559,7 +595,7 @@ class PolicyEngineRunner(EngineAdapter):
             "spm_unit": pd.DataFrame(output.spm_unit),
             "tax_unit": pd.DataFrame(output.tax_unit),
         }
-        values_by_case: list[dict[str, float | bool]] = []
+        annual_values_by_case: list[dict[str, float | bool]] = []
         for case_index, _case in enumerate(cases):
             case_values = {}
             for variable in variables:
@@ -570,11 +606,27 @@ class PolicyEngineRunner(EngineAdapter):
                 rows = frame[frame[id_column].isin(entity_ids)]
                 if variable not in rows:
                     raise KeyError(variable)
+                case_values[variable] = self._coerce_value(rows[variable].to_numpy())
+            annual_values_by_case.append(case_values)
+
+        requested_values_by_case = self._requested_period_values(
+            pe,
+            cases,
+            annual_values_by_case,
+        )
+        values_by_case: list[dict[str, float | bool]] = []
+        for case_index, _case in enumerate(cases):
+            case_values = {}
+            for variable in variables:
                 case_values[variable] = _normalize_value_for_requested_period(
                     pe,
                     variable,
                     str(_case.period),
-                    self._coerce_value(rows[variable].to_numpy()),
+                    annual_values_by_case[case_index][variable],
+                    requested_value=requested_values_by_case[case_index].get(
+                        variable,
+                        _MISSING_REQUESTED_PERIOD_VALUE,
+                    ),
                 )
             values_by_case.append(case_values)
 
@@ -586,6 +638,128 @@ class PolicyEngineRunner(EngineAdapter):
             )
             for index, case in enumerate(cases)
         ]
+
+    def _requested_period_values(
+        self,
+        pe,
+        cases: Sequence[Case],
+        annual_values_by_case: Sequence[Mapping[str, float | bool]],
+    ) -> list[dict[str, float | bool]]:
+        """Calculate month-defined numeric outputs at the requested month.
+
+        PolicyEngine's high-level output dataset stores month-defined variables
+        as annual sums. Its native situation simulation retains the monthly
+        periods, so use that simulation to validate month definitions and
+        calculate the exact requested month.
+        """
+        requested_values: list[dict[str, float | bool]] = [{} for _case in cases]
+        if not cases:
+            return requested_values
+
+        requested_period = str(cases[0].period)
+        if "-" not in requested_period:
+            return requested_values
+
+        variables = list(annual_values_by_case[0])
+        candidates = [
+            variable
+            for variable in variables
+            if not _policyengine_variable_is_boolean(
+                pe,
+                variable,
+                annual_values_by_case[0][variable],
+            )
+            and _policyengine_definition_period(pe, variable) == "month"
+        ]
+        if not candidates:
+            return requested_values
+
+        try:
+            simulation = _policyengine_us_simulation(
+                self._build_situation_from_cases(cases, variables=variables)
+            )
+        except Exception as exc:
+            names = ", ".join(repr(variable) for variable in candidates)
+            raise RuntimeError(
+                "PolicyEngine could not create a direct requested-period "
+                f"simulation for {requested_period!r} ({names}); refusing to "
+                "derive month values from annual output-dataset sums"
+            ) from exc
+
+        import numpy as np
+
+        case_indices_by_entity: dict[str, list[list[int]]] = {}
+        for variable in candidates:
+            try:
+                definition = _simulation_variable_definition(simulation, variable)
+                definition_period = str(
+                    getattr(definition, "definition_period", "")
+                ).lower()
+                entity = _simulation_variable_entity(definition)
+                if not entity:
+                    entity = _variable_entity(pe, variable)
+            except Exception as exc:
+                raise RuntimeError(
+                    "PolicyEngine could not inspect month-defined variable "
+                    f"{variable!r} for requested period {requested_period!r}; "
+                    "refusing to derive it from the annual output-dataset sum"
+                ) from exc
+
+            if definition_period == "year":
+                continue
+            if definition_period != "month":
+                fallback_period = _policyengine_definition_period(pe, variable)
+                if fallback_period != "month":
+                    continue
+
+            try:
+                raw_values = np.asarray(
+                    simulation.calculate(variable, period=requested_period)
+                )
+                population = simulation.populations[entity]
+                entity_ids = [str(item) for item in population.ids]
+            except Exception as exc:
+                raise RuntimeError(
+                    "PolicyEngine could not calculate month-defined variable "
+                    f"{variable!r} for requested period {requested_period!r}; "
+                    "refusing to derive it from the annual output-dataset sum"
+                ) from exc
+
+            if raw_values.size != len(entity_ids):
+                raise RuntimeError(
+                    "PolicyEngine returned "
+                    f"{raw_values.size} values for month-defined variable "
+                    f"{variable!r} at {requested_period!r}, but its {entity!r} "
+                    f"population has {len(entity_ids)} entities"
+                )
+
+            if entity not in case_indices_by_entity:
+                case_indices = [[] for _case in cases]
+                for entity_index, entity_id in enumerate(entity_ids):
+                    prefix, separator, _original_id = entity_id.partition("__")
+                    if not separator or not prefix.startswith("case_"):
+                        continue
+                    try:
+                        case_index = int(prefix.removeprefix("case_"))
+                    except ValueError:
+                        continue
+                    if 0 <= case_index < len(cases):
+                        case_indices[case_index].append(entity_index)
+                case_indices_by_entity[entity] = case_indices
+
+            for case_index, indices in enumerate(case_indices_by_entity[entity]):
+                if not indices:
+                    raise RuntimeError(
+                        "PolicyEngine returned no "
+                        f"{entity!r} value for case {case_index} while "
+                        f"calculating month-defined variable {variable!r} at "
+                        f"{requested_period!r}"
+                    )
+                requested_values[case_index][variable] = self._coerce_value(
+                    raw_values[indices]
+                )
+
+        return requested_values
 
     def _policyengine_dataset_rows(
         self,
@@ -774,9 +948,7 @@ class PolicyEngineRunner(EngineAdapter):
 
         array = np.asarray(value)
         if array.size != size:
-            raise ValueError(
-                f"expected {size} PolicyEngine values, got {array.size}"
-            )
+            raise ValueError(f"expected {size} PolicyEngine values, got {array.size}")
         if array.dtype == bool:
             return [bool(item) for item in array.tolist()]
         cleaned = np.nan_to_num(array, nan=0)
@@ -852,20 +1024,95 @@ def _normalize_value_for_requested_period(
     variable: str,
     requested_period: str,
     value: float | bool,
+    *,
+    requested_value: float | bool | object = _MISSING_REQUESTED_PERIOD_VALUE,
 ) -> float | bool:
-    """Convert PolicyEngine annual output-dataset values to requested months.
+    """Select requested months from PolicyEngine's annual output dataset.
 
     policyengine.py's Simulation output dataset is year-shaped: month-defined
     numeric variables such as SNAP are emitted as annual sums. Oracle
-    comparisons can request a month (`2026-01`), so normalize those numeric
-    month variables back to one month before comparing with Axiom.
+    comparisons can request a month (`2026-01`), but annual / 12 is only a
+    calendar average. Callers must supply the value calculated for that exact
+    month; otherwise fail closed.
     """
-    if "-" not in requested_period or isinstance(value, bool):
+    if "-" not in requested_period or _policyengine_variable_is_boolean(
+        pe,
+        variable,
+        value,
+    ):
         return value
     definition_period = _policyengine_definition_period(pe, variable)
+    if not definition_period:
+        if _policyengine_metadata_available(pe):
+            raise RuntimeError(
+                "Could not determine the definition period of PolicyEngine "
+                f"variable {variable!r} for requested period "
+                f"{requested_period!r}; refusing to serve the annual "
+                "output-dataset value in its place"
+            )
+        # Without PolicyEngine metadata (stub engines, metadata-less unit
+        # environments) no month semantics exist; outputs are year-shaped.
+        return value
     if definition_period.lower() != "month":
         return value
-    return float(value) / 12
+    if requested_value is _MISSING_REQUESTED_PERIOD_VALUE:
+        raise RuntimeError(
+            "PolicyEngine did not calculate month-defined variable "
+            f"{variable!r} for requested period {requested_period!r}; refusing "
+            "to derive it from the annual output-dataset sum"
+        )
+    return requested_value
+
+
+def _policyengine_variable_is_boolean(
+    pe,
+    variable: str,
+    value: float | bool,
+) -> bool:
+    if isinstance(value, bool):
+        return True
+    model = getattr(pe.us, "model", None)
+    if model is None:
+        return False
+    try:
+        variable_definition = model.get_variable(variable)
+    except Exception:
+        return False
+    return (
+        getattr(variable_definition, "value_type", None) is bool
+        or getattr(variable_definition, "data_type", None) is bool
+    )
+
+
+def _policyengine_us_simulation(situation):
+    try:
+        from policyengine_us import Simulation
+    except ImportError as exc:
+        raise RuntimeError(
+            "Install the PolicyEngine US extra to calculate requested-month values"
+        ) from exc
+    return Simulation(situation=situation)
+
+
+def _simulation_variable_definition(simulation, variable: str):
+    tax_benefit_system = getattr(simulation, "tax_benefit_system", None)
+    variables = getattr(tax_benefit_system, "variables", {})
+    try:
+        return variables[variable]
+    except (KeyError, TypeError) as exc:
+        raise RuntimeError(
+            f"PolicyEngine simulation does not define variable {variable!r}"
+        ) from exc
+
+
+def _simulation_variable_entity(variable_definition) -> str:
+    entity = getattr(variable_definition, "entity", None)
+    key = getattr(entity, "key", None)
+    if key:
+        return str(key)
+    if isinstance(entity, str):
+        return entity
+    return ""
 
 
 def _policyengine_definition_period(pe, variable: str) -> str:
@@ -876,13 +1123,51 @@ def _policyengine_definition_period(pe, variable: str) -> str:
     definition_period = getattr(variable_definition, "definition_period", None)
     if definition_period is not None:
         return str(definition_period).lower()
+    native_definition_period = _policyengine_native_definition_period(variable)
+    if native_definition_period:
+        return native_definition_period
     if variable in _MONTHLY_NUMERIC_OUTPUT_VARIABLES:
         return "month"
     return _policyengine_source_definition_period(variable)
 
 
+def _policyengine_metadata_available(pe) -> bool:
+    """Report whether any variable-metadata source exists for ``pe``.
+
+    True when the runner can interrogate definition periods at all — via the
+    engine's own model or the installed policyengine_us package. Stub engines
+    in metadata-less environments return False, and their outputs are treated
+    as year-shaped because no month semantics exist without metadata.
+    """
+    if getattr(getattr(pe, "us", None), "model", None) is not None:
+        return True
+    try:
+        import policyengine_us  # noqa: F401
+    except Exception:
+        return False
+    return True
+
+
+@lru_cache(maxsize=None)
+def _policyengine_native_definition_period(variable: str) -> str:
+    try:
+        from policyengine_us.system import system as pe_us_system
+    except Exception:
+        return ""
+
+    variable_definition = pe_us_system.variables.get(variable)
+    definition_period = getattr(variable_definition, "definition_period", None)
+    if definition_period is None:
+        return ""
+    return str(definition_period).lower()
+
+
 @lru_cache(maxsize=None)
 def _policyengine_source_definition_period(variable: str) -> str:
+    native_definition_period = _policyengine_native_definition_period(variable)
+    if native_definition_period:
+        return native_definition_period
+
     try:
         import importlib
         import pkgutil
