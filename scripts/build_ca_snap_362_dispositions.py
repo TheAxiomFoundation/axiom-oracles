@@ -1,17 +1,27 @@
 #!/usr/bin/env python3
-"""Build the evidence-pinned ca-snap-ecps dispositions for issue #362.
+"""Build or audit the evidence-pinned CA SNAP dispositions for issue #362.
 
-The input is the exhaustive JSON emitted by ``trace_ca_snap_residuals.py``.
-This builder fails closed on baseline drift, source misalignment, deduction
-confounds, or a counterfactual outside the suite's $7 amount tolerance.
+Current reconciliation audit:
+    python scripts/build_ca_snap_362_dispositions.py \
+        --check --base-ref <literal-merged-base>
+
+Legacy generation and its historical stale-output check take the exhaustive
+JSON emitted by ``trace_ca_snap_residuals.py`` via ``--trace`` plus the same
+explicit ``--base-ref``. The legacy path reads its report, compact cases, and
+expected disposition source from that pinned Git snapshot, so it remains
+reproducible after the tracked compact schema changed. The generator fails
+closed on baseline drift, source misalignment, deduction confounds, or a
+counterfactual outside the suite's $7 amount tolerance.
 """
 
 from __future__ import annotations
 
 import argparse
 import copy
+import hashlib
 import json
 import math
+import sys
 from decimal import Decimal, ROUND_HALF_UP
 from pathlib import Path
 from typing import Any
@@ -20,11 +30,32 @@ import yaml
 
 
 ROOT = Path(__file__).resolve().parent.parent
-REPORT_PATH = (
-    ROOT / "dashboard/public/data/axiom-policyengine-ca-snap-ecps.json"
-)
-CASE_DIR = ROOT / "dashboard/public/data/cases/ca-snap-ecps"
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 DISPOSITIONS_PATH = ROOT / "dispositions/ca-snap-ecps.yaml"
+
+LEGACY_REPORT_RELATIVE_PATH = (
+    "dashboard/public/data/axiom-policyengine-ca-snap-ecps.json"
+)
+LEGACY_CASE_DIR_RELATIVE_PATH = (
+    "dashboard/public/data/cases/ca-snap-ecps"
+)
+LEGACY_REPORT_SHA256 = (
+    "f89c9da976412c591e79917f1ca41061f9b7c5119529488c74c0deeb49db587f"
+)
+LEGACY_CASE_INDEX_SHA256 = (
+    "a300c2e61eaaf1d117ee424efad73db2943db735a0f7302982bfbf76fd29aeb9"
+)
+LEGACY_CASE_CHUNKS_SHA256 = (
+    "197125c9d62f9a1b8c7b4bea9a517287435be4a899c1d50a51df8b4edcc6a94f"
+)
+LEGACY_TRACE_SHA256 = (
+    "c46af9b87c8f5ad01f1909bc45e80e00b4c4a50e5b802ea4ccbe194b5954b568"
+)
+EXPECTED_LEGACY_REPORT_ROWS = 684
+EXPECTED_LEGACY_ISSUE_362_ANNOTATIONS = 345
+EXPECTED_LEGACY_UNEXPLAINED_ROWS = 441
+EXPECTED_LEGACY_CASES = 7101
 
 BENEFIT_CONCEPT = "us:statutes/7/2014/u#snap_benefit"
 ELIGIBILITY_CONCEPT = "us:statutes/7/2014/o#snap_eligible"
@@ -207,14 +238,6 @@ def _tanf_guard(case: dict[str, Any]) -> bool:
         )
         < SOURCE_TOLERANCE
     )
-
-
-def _load_compact_cases() -> dict[str, dict[str, Any]]:
-    cases = {}
-    for chunk in sorted(CASE_DIR.glob("chunk-*.json")):
-        for case in json.loads(chunk.read_text()):
-            cases[case["id"]] = case
-    return cases
 
 
 def _compact_value(
@@ -706,20 +729,164 @@ def _disability_cap_evidence(case: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def _parse_args() -> argparse.Namespace:
+def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--trace", type=Path, required=True)
+    parser.add_argument(
+        "--trace",
+        type=Path,
+        help=(
+            "Legacy trace receipt to reproduce the historical #423 source; "
+            "requires --base-ref."
+        ),
+    )
+    parser.add_argument(
+        "--base-ref",
+        help="Git ref containing the literal merged #423 disposition set.",
+    )
     parser.add_argument(
         "--check",
         action="store_true",
-        help="Validate that the generated YAML is already committed.",
+        help=(
+            "With --base-ref, audit the current literal-base reconciliation. "
+            "With --trace, retain the legacy generated-YAML stale check."
+        ),
     )
-    return parser.parse_args()
+    args = parser.parse_args(argv)
+    if args.base_ref is None:
+        parser.error("--base-ref is required")
+    if args.trace is None and not args.check:
+        parser.error("--base-ref without --trace requires --check")
+    return args
 
 
-def main() -> int:
-    args = _parse_args()
-    trace = json.loads(args.trace.read_text())
+def _check_current_reconciliation(base_ref: str) -> dict[str, Any]:
+    from scripts.reconcile_ca_snap_423_dispositions import check_reconciliation
+
+    return check_reconciliation(base_ref)
+
+
+def _load_legacy_base_inputs(
+    base_ref: str,
+) -> tuple[
+    str,
+    dict[str, Any],
+    dict[str, Any],
+    dict[str, dict[str, Any]],
+    str,
+]:
+    from scripts.reconcile_ca_snap_423_dispositions import (
+        BASE_DISPOSITIONS_RELATIVE_PATH,
+        _git_show,
+        _load_base_dispositions,
+        _sha256,
+    )
+
+    commit, existing, _issue_entries = _load_base_dispositions(base_ref)
+
+    report_raw = _git_show(commit, LEGACY_REPORT_RELATIVE_PATH)
+    report_digest = _sha256(report_raw)
+    if report_digest != LEGACY_REPORT_SHA256:
+        raise ValueError(
+            "literal-base legacy report sha256 mismatch: "
+            f"expected {LEGACY_REPORT_SHA256}, got {report_digest}"
+        )
+    report = json.loads(report_raw)
+    mismatches = report.get("mismatches")
+    if not isinstance(mismatches, list):
+        raise ValueError("literal-base legacy report mismatches must be a list")
+    if len(mismatches) != EXPECTED_LEGACY_REPORT_ROWS:
+        raise ValueError(
+            "literal-base legacy report row count mismatch: "
+            f"expected {EXPECTED_LEGACY_REPORT_ROWS}, got {len(mismatches)}"
+        )
+
+    issue_annotations = 0
+    for row in mismatches:
+        disposition = row.get("disposition")
+        if isinstance(disposition, dict) and str(
+            disposition.get("id", "")
+        ).startswith("ca-362-"):
+            issue_annotations += 1
+            row["disposition"] = None
+    if issue_annotations != EXPECTED_LEGACY_ISSUE_362_ANNOTATIONS:
+        raise ValueError(
+            "literal-base legacy report issue #362 annotation mismatch: "
+            f"expected {EXPECTED_LEGACY_ISSUE_362_ANNOTATIONS}, "
+            f"got {issue_annotations}"
+        )
+    unexplained = sum(row.get("disposition") is None for row in mismatches)
+    if unexplained != EXPECTED_LEGACY_UNEXPLAINED_ROWS:
+        raise ValueError(
+            "literal-base legacy unexplained-row mismatch: "
+            f"expected {EXPECTED_LEGACY_UNEXPLAINED_ROWS}, got {unexplained}"
+        )
+
+    index_path = f"{LEGACY_CASE_DIR_RELATIVE_PATH}/index.json"
+    index_raw = _git_show(commit, index_path)
+    index_digest = _sha256(index_raw)
+    if index_digest != LEGACY_CASE_INDEX_SHA256:
+        raise ValueError(
+            "literal-base legacy compact index sha256 mismatch: "
+            f"expected {LEGACY_CASE_INDEX_SHA256}, got {index_digest}"
+        )
+    index = json.loads(index_raw)
+    chunk_count = index.get("chunks")
+    if not isinstance(chunk_count, int) or chunk_count <= 0:
+        raise ValueError("literal-base legacy compact chunk count is invalid")
+
+    chunks_digest = hashlib.sha256()
+    compact: dict[str, dict[str, Any]] = {}
+    for chunk_number in range(chunk_count):
+        chunk_path = (
+            f"{LEGACY_CASE_DIR_RELATIVE_PATH}/chunk-{chunk_number}.json"
+        )
+        chunk_raw = _git_show(commit, chunk_path)
+        chunks_digest.update(chunk_raw)
+        chunk_rows = json.loads(chunk_raw)
+        if not isinstance(chunk_rows, list):
+            raise ValueError(f"{chunk_path} must contain a list")
+        for case in chunk_rows:
+            case_id = case.get("id")
+            if not isinstance(case_id, str) or not case_id:
+                raise ValueError(f"{chunk_path} contains a case without an id")
+            if case_id in compact:
+                raise ValueError(f"duplicate legacy compact case {case_id}")
+            if not isinstance(case.get("o"), list):
+                raise ValueError(
+                    f"{case_id} does not use the pinned legacy compact schema"
+                )
+            compact[case_id] = case
+    observed_chunks_digest = chunks_digest.hexdigest()
+    if observed_chunks_digest != LEGACY_CASE_CHUNKS_SHA256:
+        raise ValueError(
+            "literal-base legacy compact chunks sha256 mismatch: "
+            f"expected {LEGACY_CASE_CHUNKS_SHA256}, "
+            f"got {observed_chunks_digest}"
+        )
+    if len(compact) != EXPECTED_LEGACY_CASES:
+        raise ValueError(
+            "literal-base legacy compact case count mismatch: "
+            f"expected {EXPECTED_LEGACY_CASES}, got {len(compact)}"
+        )
+
+    expected_text = _git_show(
+        commit,
+        BASE_DISPOSITIONS_RELATIVE_PATH,
+    ).decode()
+    return commit, report, existing, compact, expected_text
+
+
+def _run_legacy(args: argparse.Namespace) -> int:
+    assert args.trace is not None
+    assert args.base_ref is not None
+    trace_raw = args.trace.read_bytes()
+    trace_digest = hashlib.sha256(trace_raw).hexdigest()
+    if trace_digest != LEGACY_TRACE_SHA256:
+        raise ValueError(
+            "legacy trace sha256 mismatch: "
+            f"expected {LEGACY_TRACE_SHA256}, got {trace_digest}"
+        )
+    trace = json.loads(trace_raw)
     if trace["runtime"] != {
         "policyengine": "4.18.9",
         "policyengine-core": "3.30.3",
@@ -727,9 +894,13 @@ def main() -> int:
     }:
         raise ValueError(f"unexpected trace runtime: {trace['runtime']}")
 
-    report = json.loads(REPORT_PATH.read_text())
-    existing = yaml.safe_load(DISPOSITIONS_PATH.read_text())
-    compact = _load_compact_cases()
+    (
+        _base_commit,
+        report,
+        existing,
+        compact,
+        expected_text,
+    ) = _load_legacy_base_inputs(args.base_ref)
     cases = {case["case_id"]: case for case in trace["cases"]}
     unexplained = _unexplained_rows(report)
     selected: dict[tuple[str, str, str], dict[str, Any]] = {}
@@ -854,9 +1025,9 @@ def main() -> int:
         width=100,
     )
     if args.check:
-        if DISPOSITIONS_PATH.read_text() != text:
+        if expected_text != text:
             raise SystemExit(
-                "ca-snap-ecps dispositions are stale; rerun this script"
+                "literal-base ca-snap-ecps dispositions do not reproduce"
             )
     else:
         DISPOSITIONS_PATH.write_text(text)
@@ -865,6 +1036,16 @@ def main() -> int:
         f"{remaining} remain unexplained"
     )
     return 0
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = _parse_args(argv)
+    if args.trace is None:
+        assert args.base_ref is not None
+        receipt = _check_current_reconciliation(args.base_ref)
+        print(json.dumps(receipt, indent=2, sort_keys=True))
+        return 0
+    return _run_legacy(args)
 
 
 if __name__ == "__main__":
