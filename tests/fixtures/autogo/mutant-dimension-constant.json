@@ -6,6 +6,7 @@
       "report_sha256": "8395a522c8d3e84df46240de65279558ca913cf95b442caec622f60404272eba",
       "binding": "bound",
       "reconciliation": "full",
+      "bridge_audited": true,
       "cases_scanned": 4,
       "evidence_fields": {
         "wages": {

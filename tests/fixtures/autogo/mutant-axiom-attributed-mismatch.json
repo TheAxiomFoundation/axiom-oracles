@@ -10,6 +10,7 @@
       "binding": "bound",
       "reconciliation": "full",
       "comparison_count": 4,
+      "error_count": 0,
       "unexplained_count": 0,
       "axiom_attributed_count": 1,
       "report": {

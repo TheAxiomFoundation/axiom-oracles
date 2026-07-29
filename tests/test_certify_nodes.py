@@ -311,6 +311,65 @@ def test_bridged_required_dimension_contributes_zero_fidelity(tmp_path: Path) ->
     )
 
 
+def test_unaudited_bridge_declaration_cannot_hide_a_bridge(tmp_path: Path) -> None:
+    census = json.loads((FIXTURES / "exercise-census.json").read_text())
+    census["suites"]["us-medicare-wage-tax"]["bridge_audited"] = False
+    mutant_path = tmp_path / "mutant-bridge-unaudited.json"
+    _write_json(mutant_path, census)
+
+    result, _, reasons = _run(
+        tmp_path,
+        overrides={"exercise-census": mutant_path},
+    )
+
+    assert result.returncode != 0
+    _assert_node_result(_stdout_json(result), certified=False)
+    _assert_reason(
+        reasons,
+        code="exercised.bridge_unaudited",
+        criterion="exercised",
+    )
+
+
+def test_comparison_error_is_not_evidence(tmp_path: Path) -> None:
+    comparisons = json.loads((FIXTURES / "comparisons.json").read_text())
+    comparisons["comparisons"]["us-medicare-wage-tax"]["error_count"] = 1
+    mutant_path = tmp_path / "mutant-comparison-error.json"
+    _write_json(mutant_path, comparisons)
+
+    result, _, reasons = _run(
+        tmp_path,
+        overrides={"comparisons": mutant_path},
+    )
+
+    assert result.returncode != 0
+    _assert_node_result(_stdout_json(result), certified=False)
+    _assert_reason(reasons, code="conformant.errors", criterion="conformant")
+
+
+def test_dependency_cycle_fails_closed(tmp_path: Path) -> None:
+    artifact = json.loads((FIXTURES / "artifact.json").read_text())
+    dependency = "us:statutes/26/3121/a#medicare_wage_base"
+    artifact["metadata"]["dependency_graph"][dependency] = [NODE]
+    mutant_path = tmp_path / "mutant-dependency-cycle.json"
+    _write_json(mutant_path, artifact)
+    overrides, fixture_root = _inputs_pinned_to_artifact(tmp_path, mutant_path)
+
+    result, _, reasons = _run(
+        tmp_path,
+        overrides=overrides,
+        repo_root=fixture_root,
+    )
+
+    assert result.returncode != 0
+    _assert_node_result(_stdout_json(result), certified=False)
+    _assert_reason(
+        reasons,
+        code="provision_rooted.graph_invalid",
+        criterion="provision_rooted",
+    )
+
+
 @pytest.mark.parametrize(
     ("option", "criterion", "code"),
     [

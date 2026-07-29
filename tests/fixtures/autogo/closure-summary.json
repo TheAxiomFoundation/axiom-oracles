@@ -10,6 +10,9 @@
         "excluded": 1,
         "pending": 0
       },
+      "by_reason": {
+        "outside_node_scope": 1
+      },
       "pins_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
       "pinned": {
         "rulespec_us": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",

@@ -24,8 +24,9 @@
   provenance, exact-root closure, per-suite conformance, dimension-level
   exercise, receipt/pin validation, deterministic YAML, structured rejection
   reasons, byte-exact `--check`, manual-entry drift, and decertification.
-- Added six committed mutant inputs plus green/missing-producer/bridged
-  coverage. Focused validation: 13 tests pass; Ruff and `git diff --check` pass.
+- Added six committed mutant inputs plus green, missing-producer, bridge-audit,
+  comparison-error, dependency-cycle, and bridged-dimension coverage. Focused
+  validation: 16 tests pass; Ruff and `git diff --check` pass.
 
 ## Next
 

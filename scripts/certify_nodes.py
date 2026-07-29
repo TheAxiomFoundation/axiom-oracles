@@ -95,6 +95,7 @@ _CODE_ALIASES = {
     "comparison_unbound": "unbound",
     "comparison_not_fully_reconciled": "not_full",
     "comparison_result_invalid": "producer_invalid",
+    "comparison_errors": "errors",
     "unexplained_mismatch": "unexplained",
     "axiom_attributed_mismatch": "axiom_attributed",
     "exercise_dimensions_invalid": "declaration_invalid",
@@ -294,13 +295,29 @@ def _artifact_nodes(
 
     ordered: list[str] = []
     seen: set[str] = set()
-    stack = [node_id]
+    active: set[str] = set()
+    stack: list[tuple[str, bool]] = [(node_id, False)]
     while stack:
-        current = stack.pop()
+        current, exiting = stack.pop()
+        if exiting:
+            active.discard(current)
+            seen.add(current)
+            continue
         if current in seen:
             continue
-        seen.add(current)
+        if current in active:
+            reasons.append(
+                _reason(
+                    "provision_rooted",
+                    "dependency_graph_invalid",
+                    artifact.name,
+                    f"dependency graph contains a cycle through {current!r}",
+                )
+            )
+            continue
+        active.add(current)
         ordered.append(current)
+        stack.append((current, True))
         dependencies = graph.get(current)
         if not isinstance(dependencies, list) or not all(
             _is_string(item) for item in dependencies
@@ -314,6 +331,15 @@ def _artifact_nodes(
                 )
             )
             continue
+        if len(set(dependencies)) != len(dependencies):
+            reasons.append(
+                _reason(
+                    "provision_rooted",
+                    "dependency_graph_invalid",
+                    artifact.name,
+                    f"dependency row for {current!r} contains duplicate nodes",
+                )
+            )
         for dependency in reversed(dependencies):
             if dependency not in nodes:
                 reasons.append(
@@ -325,7 +351,20 @@ def _artifact_nodes(
                     )
                 )
                 continue
-            stack.append(dependency)
+            if dependency in active:
+                reasons.append(
+                    _reason(
+                        "provision_rooted",
+                        "dependency_graph_invalid",
+                        artifact.name,
+                        (
+                            "dependency graph contains a cycle from "
+                            f"{current!r} to {dependency!r}"
+                        ),
+                    )
+                )
+                continue
+            stack.append((dependency, False))
     return ordered, nodes, reasons
 
 
@@ -612,6 +651,23 @@ def _closed(
                 )
             )
             continue
+        by_reason = row.get("by_reason")
+        if (
+            not isinstance(by_reason, dict)
+            or any(not _is_int(count) for count in by_reason.values())
+            or sum(by_reason.values()) != by_status["excluded"]
+        ):
+            reasons.append(
+                _reason(
+                    "closed",
+                    "closure_summary_invalid",
+                    closure.name,
+                    (
+                        f"closure root {root_id!r} excluded count is not "
+                        "fully accounted for by_reason"
+                    ),
+                )
+            )
         total = row.get("total")
         accounted = sum(by_status[status] for status in ("encoded", "excluded", "pending"))
         if not _is_int(total) or total != accounted:
@@ -836,6 +892,25 @@ def _conformant(
                     f"suite {suite!r} evidence is not fully reconciled",
                 )
             )
+        errors = row.get("error_count")
+        if not _is_int(errors):
+            reasons.append(
+                _reason(
+                    "conformant",
+                    "comparison_result_invalid",
+                    comparisons.name,
+                    f"suite {suite!r} lacks error_count",
+                )
+            )
+        elif errors:
+            reasons.append(
+                _reason(
+                    "conformant",
+                    "comparison_errors",
+                    comparisons.name,
+                    f"suite {suite!r} has {errors} comparison error(s)",
+                )
+            )
         unexplained = row.get("unexplained_count")
         if not _is_int(unexplained):
             reasons.append(
@@ -990,6 +1065,18 @@ def _exercised(
                     "comparison_not_fully_reconciled",
                     census.name,
                     f"suite {suite!r} census evidence is not fully reconciled",
+                )
+            )
+        if row.get("bridge_audited") is not True:
+            reasons.append(
+                _reason(
+                    "exercised",
+                    "bridge_unaudited",
+                    census.name,
+                    (
+                        f"suite {suite!r} has no clean bridge audit; "
+                        "absence cannot establish that a dimension is unbridged"
+                    ),
                 )
             )
         if not _is_int(row.get("cases_scanned"), minimum=1):
