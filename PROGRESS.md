@@ -44,10 +44,23 @@
 - Sandbox note: the first `uv run` attempt could not write its default
   `~/.cache/uv`; a second offline attempt could not download PyYAML. Tests ran
   successfully through an existing local project virtual environment.
+- RuleSpec source is pinned read-only at
+  `fed-parity/ca-bbce@8d1f31d50cfa094db9206172ee56c6fb68665e7c`
+  (local and origin refs agree), based on `af6c57d6`. Its worktree has only an
+  unrelated untracked `WORKER-REPORT.md`, which was excluded and untouched.
+- Mechanical public-surface comparison passes exactly: the new MCE module has
+  14 public rules plus one excluded `data_relation`; the FY-2026 module adds
+  three public rules. The 17 expected legal IDs equal the 17 PR mapping
+  additions, with empty missing and phantom sets.
+- Companion YAML evidence matches the claimed boundaries: the MCE rate is
+  encoded as `2.00` and asserted as `2.0`; the student output and its source
+  rule are Person/Month and exercised at `2026-01`; MCE conferral requires a
+  PUB 275 trigger, gross screen, household bars, and an eligible member but no
+  net/asset test; separate cases exercise resource and net waivers and both
+  MCE and traditional-CE zero-benefit denials.
 
 ## Next
 
 1. Audit the comparable mapping against PolicyEngine US 1.767.3 and house style.
 2. Adversarially audit all 16 `not_comparable` rows and named candidates.
-3. Cross-check exactly 17 legal IDs against the two RuleSpec public surfaces.
-4. Write and commit `REVIEW-REPORT.md`, update this ledger, and issue a verdict.
+3. Write and commit `REVIEW-REPORT.md`, update this ledger, and issue a verdict.
