@@ -21,11 +21,30 @@ VERDICT: REQUEST-CHANGES
 The suites, expected values, live divergences, statutory arithmetic, generator
 contracts, mappings, and generated artifacts are technically sound. Approval is
 blocked because the evidence chain required to adopt five known mismatches is
-mislinked and partly inaccurate.
+structurally incomplete, mislinked, and partly inaccurate.
 
 ## Required changes
 
-### 1. Two SALT dispositions point to the wrong upstream issues
+### 1. All five dispositions omit prescriptive structured evidence
+
+SPINE-PLAN section 7 requires each upstream-engine-gap entry to carry both
+`evidence.upstream_url` and statutory/comparison sources. None of the five new
+entries has `evidence.upstream_url`; each places `issue: https://...` only
+inside the free-text `evidence.mechanism`. Their `evidence.sources` lists also
+omit the applicable local comparison YAML.
+
+This is a binding-contract failure even though the repository's current
+disposition schema and `apply_dispositions.py --check` accept it. Follow the
+merged `us-qbid-grid` model:
+
+- Add the correctly matched #9167–#9169 URL as `evidence.upstream_url` to
+  each SALT entry and add `comparisons/us-salt-deduction-grid.yaml` to each
+  entry's `evidence.sources`.
+- Add #9170 and #9171 as `evidence.upstream_url` to the itemized entries and
+  add `comparisons/us-itemized-taxable-income-deductions-grid.yaml` to each
+  entry's `evidence.sources`.
+
+### 2. Two SALT dispositions point to the wrong upstream issues
 
 The evidence URLs are shifted by one issue:
 
@@ -38,11 +57,12 @@ The evidence URLs are shifted by one issue:
   at line 89. This case belongs to
   [#9169](https://github.com/PolicyEngine/policyengine-us/issues/9169).
 
-As committed, #9169 is not referenced by any disposition. Correct both URLs so
-each source-expiring exception points to the issue that actually tracks its
+As committed, #9169 is not referenced by any disposition. Correct both
+free-text URLs while adding the required structured URLs so each
+source-expiring exception points to the issue that actually tracks its
 mechanism.
 
-### 2. Issue #9168 is not an accurate, runnable evidence artifact
+### 3. Issue #9168 is not an accurate, runnable evidence artifact
 
 The divergence is real, but the filed reproduction is defective:
 
@@ -57,7 +77,7 @@ The divergence is real, but the filed reproduction is defective:
 Update [#9168](https://github.com/PolicyEngine/policyengine-us/issues/9168), or
 replace it with a correct issue, before using it as disposition evidence.
 
-### 3. Issue #9170 inaccurately states the pinned PE mechanism
+### 4. Issue #9170 inaccurately states the pinned PE mechanism
 
 The issue's high-level mismatch and observed result are correct, but its
 parenthetical arithmetic is not the path in the pinned code. PE does not add
@@ -74,7 +94,7 @@ Update [#9170](https://github.com/PolicyEngine/policyengine-us/issues/9170) so
 the filed mechanism matches
 `itemized_taxable_income_deductions_reduction.py` at the pin.
 
-### 4. Adoption notes and the author ledger still describe unfinished work
+### 5. Adoption notes and the author ledger still describe unfinished work
 
 All five issue placeholders remain literal `MAIN-LANE-TBD` values in
 [`conformance/us-pe.yaml`](conformance/us-pe.yaml), at lines 596–597 and
@@ -106,8 +126,9 @@ a fresh `Simulation` for every case.
 - Canonical report bytes matched after removing only
   `provenance.generated_at`.
 - All 33 Axiom values and all 33 `axiom_fixture_inputs` mappings equal the
-  #1177 companion outputs and inputs. Eight explicit spot checks covered both
-  suites and all disposition classes.
+  #1177 companion outputs and inputs. Eight explicit spot checks covered four
+  SALT and four itemized cases; the exhaustive comparison covered every
+  disposition case.
 - The absolute/relative tolerance remains exactly `0.01`/`0.0`; there is no
   case or binding override and no widened tolerance.
 
@@ -173,6 +194,11 @@ max(0, 550000 + 50000 - 640600) = 0; reduction = 0
   `39 passed` mapping loader/import tests;
   `47 passed` case-schema tests; and
   `25 passed` pinned-RuleSpec state bridge tests.
+- The binding full `pytest -q` battery was also executed:
+  `2 failed, 2294 passed, 69 skipped`. Both failures are sandbox-network
+  failures before their assertions: `npx` could not download `esbuild`, and
+  PE could not download the Populace dataset from Hugging Face. No other test
+  failed.
 - The merge-base-to-head patch contains exactly the intended 26 paths,
   5,681 additions, and 137 deletions. `git diff --check` passes; no foreign
   path is present.
@@ -195,6 +221,11 @@ max(0, 550000 + 50000 - 640600) = 0; reduction = 0
 - Shell GitHub access and `git fetch` could not resolve `github.com`. Live PR,
   issue, commit, patch, and blob evidence was retrieved read-only through the
   connected GitHub service. No branch, remote, PR, or issue was modified.
+- Full pytest reached all tests, but sandbox DNS blocked its two on-demand
+  downloads: npm/esbuild in `test_dashboard_loader.py` and the PolicyEngine
+  Populace HDF5 in `test_policyengine_requested_month.py`. The final result was
+  `2 failed, 2294 passed, 69 skipped`; both tracebacks are environmental and
+  occur before the tested PR-specific assertions.
 - Direct `uscode.house.gov` requests returned HTTP 403. Statutory verification
   used the pinned RuleSpec/corpus sources and official enrolled-law material.
 - Sandbox policy rejected one `rm -rf` cleanup attempt. Both explicitly named
@@ -203,8 +234,10 @@ max(0, 550000 + 50000 - 640600) = 0; reduction = 0
 
 ## Required retest after correction
 
-Correct the two disposition URLs and the two filed issue bodies; replace all
-five adoption placeholders; regenerate conformance detail, scoreboard,
+Add all five structured upstream URLs and comparison sources; correct the two
+mislinked free-text URLs and the two filed issue bodies; replace all five
+adoption placeholders; regenerate conformance detail, scoreboard,
 history/ratchet/burn-down/freshness/overview as applicable; append
 `PROGRESS.md`; then rerun the two generators, disposition check, all nine drift
-gates, exact-stack generator/conformance tests, and diff containment check.
+gates, full pytest in a network-capable environment, exact-stack focused tests,
+and diff containment check.
