@@ -37,7 +37,10 @@
   absence/mutation, receipt-command failure, trust-root mutation, contested
   report ownership, protected-validator output aliasing, and two-node projection
   coverage. The complete fixture passes the real parked executable validator.
-  Focused validation: 45 tests pass; Ruff and `git diff --check` pass.
+  Dispositioned mismatches now require the pinned v1 validator, exact taxonomy,
+  a strict/hash-bound source artifact, and exact block recomputation; malformed
+  paths/imports/run ids fail with machine reasons. Focused validation: 50 tests
+  pass; Ruff and `git diff --check` pass.
 - Repository-wide validation reached 2,299 passing and 70 skipped; its sole
   failure was `npx` attempting a network download while DNS was unavailable.
 

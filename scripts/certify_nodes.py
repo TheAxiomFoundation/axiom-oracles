@@ -28,6 +28,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import importlib
+import importlib.util
 import json
 import math
 import os
@@ -54,6 +55,15 @@ RECEIPT_SCHEMA = "axiom_oracles.executable_receipt.v1"
 RUN_SCHEMA = "axiom_oracles.certify_nodes.run.v1"
 GOVERNANCE_SCHEMA = "axiom_oracles.certify_nodes.governance.v1"
 REPORT_SCHEMA = "axiom.comparison_report.v2.1"
+DISPOSITIONS_SCHEMA = "axiom_oracles.dispositions.v1"
+DISPOSITIONS_VALIDATOR = "axiom_oracles.comparison.dispositions.validate_dispositions"
+DISPOSITION_KINDS = {
+    "explained_residual",
+    "upstream_engine_gap",
+    "bridge_artifact",
+    "axiom_encoding_gap",
+    "unexplained",
+}
 
 CRITERIA = (
     "provision_rooted",
@@ -204,10 +214,13 @@ def _producer_path(root: Path, value: Any) -> Path | None:
 
     if not _is_string(value):
         return None
-    relative = Path(str(value))
-    if relative.is_absolute() or ".." in relative.parts:
+    try:
+        relative = Path(str(value))
+        if relative.is_absolute() or ".." in relative.parts:
+            return None
+        resolved = (root / relative).resolve()
+    except (OSError, RuntimeError, ValueError):
         return None
-    resolved = (root / relative).resolve()
     if resolved == root or root not in resolved.parents:
         return None
     return resolved
@@ -308,6 +321,16 @@ def _path_label(path: Path, root: Path) -> str:
 
 def _is_int(value: Any, *, minimum: int = 0) -> bool:
     return type(value) is int and value >= minimum
+
+
+def _is_positive_run_id(value: Any) -> bool:
+    return (type(value) is int and value > 0) or (
+        isinstance(value, str)
+        and value.isascii()
+        and value.isdecimal()
+        and len(value) <= 20
+        and bool(value.strip("0"))
+    )
 
 
 def _is_string(value: Any) -> bool:
@@ -685,10 +708,7 @@ def _run_context(
             )
         )
     run_id = harness.get("ci_run_id")
-    if not (
-        (type(run_id) is int and run_id > 0)
-        or (isinstance(run_id, str) and run_id.isdigit() and int(run_id) > 0)
-    ):
+    if not _is_positive_run_id(run_id):
         reasons.append(
             _reason(
                 "harness",
@@ -1187,6 +1207,221 @@ def _comparison_declarations(
     return clean, reasons
 
 
+def _load_dispositions_validator(
+    comparisons: Loaded,
+    producer: Any,
+) -> tuple[Any | None, dict[str, str], list[dict[str, Any]]]:
+    """Load the pinned in-checkout dispositions validator fail-closed."""
+
+    reasons: list[dict[str, Any]] = []
+    source = REPO_ROOT / "axiom_oracles" / "comparison" / "dispositions.py"
+    expected_sha = (
+        producer.get("dispositions_validator_sha256")
+        if isinstance(producer, dict)
+        else None
+    )
+    if (
+        not isinstance(producer, dict)
+        or producer.get("dispositions_validator") != DISPOSITIONS_VALIDATOR
+        or not isinstance(expected_sha, str)
+        or not _SHA256_RE.fullmatch(expected_sha)
+    ):
+        reasons.append(
+            _reason(
+                "conformant",
+                "producer_missing",
+                comparisons.name,
+                (
+                    "comparison producer does not identify and hash-bind the "
+                    "required dispositions validator"
+                ),
+            )
+        )
+        return None, {}, reasons
+    try:
+        source_sha = _sha256(source.read_bytes())
+    except OSError as exc:
+        reasons.append(
+            _reason(
+                "conformant",
+                "producer_missing",
+                comparisons.name,
+                f"dispositions validator source is unreadable: {exc}",
+            )
+        )
+        return None, {}, reasons
+    if source_sha != expected_sha:
+        reasons.append(
+            _reason(
+                "conformant",
+                "producer_missing",
+                comparisons.name,
+                "dispositions validator bytes do not match the producer pin",
+            )
+        )
+        return None, {}, reasons
+    try:
+        spec = importlib.util.spec_from_file_location(
+            "_axiom_autogo_dispositions_validator",
+            source,
+        )
+        if spec is None or spec.loader is None:
+            raise ImportError("could not construct module spec")
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        if (
+            getattr(module, "DISPOSITIONS_SCHEMA_VERSION", None) != DISPOSITIONS_SCHEMA
+            or set(getattr(module, "DISPOSITION_KINDS", ())) != DISPOSITION_KINDS
+            or not callable(getattr(module, "validate_dispositions", None))
+            or not callable(getattr(module, "apply_dispositions", None))
+        ):
+            raise ImportError("validator public contract is incompatible")
+    except Exception as exc:
+        reasons.append(
+            _reason(
+                "conformant",
+                "producer_missing",
+                comparisons.name,
+                (
+                    "dispositions validator could not be loaded: "
+                    f"{type(exc).__name__}: {exc}"
+                ),
+            )
+        )
+        return None, {}, reasons
+    return (
+        module,
+        {
+            "validator": DISPOSITIONS_VALIDATOR,
+            "validator_path": _path_label(source, REPO_ROOT),
+            "validator_sha256": source_sha,
+        },
+        reasons,
+    )
+
+
+def _validate_report_dispositions(
+    *,
+    report: dict[str, Any],
+    summary: dict[str, Any],
+    comparison: dict[str, Any],
+    suite: str,
+    mismatch_count: int | None,
+    validator: Any | None,
+    root: Path,
+) -> tuple[int | None, int | None, list[str], dict[str, str] | None]:
+    """Recompute a v2.1 disposition block from its validated source file."""
+
+    errors: list[str] = []
+    dispositioned = summary.get("dispositioned")
+    reference = comparison.get("dispositions")
+    if dispositioned is None:
+        if reference is not None:
+            errors.append("comparison declares dispositions absent from the report")
+        return mismatch_count, 0, errors, None
+    if not isinstance(dispositioned, dict):
+        return None, None, ["summary.dispositioned is invalid"], None
+
+    counts = dispositioned.get("counts")
+    unexplained = dispositioned.get("unexplained_count")
+    axiom = counts.get("axiom_encoding_gap") if isinstance(counts, dict) else None
+    if dispositioned.get("schema_version") != DISPOSITIONS_SCHEMA:
+        errors.append(
+            f"summary.dispositioned.schema_version is not {DISPOSITIONS_SCHEMA}"
+        )
+    if (
+        not isinstance(counts, dict)
+        or set(counts) != DISPOSITION_KINDS
+        or any(not _is_int(count) for count in counts.values())
+    ):
+        errors.append(
+            "summary.dispositioned.counts does not carry the exact v1 taxonomy"
+        )
+    if not _is_int(unexplained):
+        errors.append("summary.dispositioned.unexplained_count is invalid")
+    if not _is_int(axiom):
+        errors.append("summary.dispositioned.counts.axiom_encoding_gap is invalid")
+
+    dispositions_file = dispositioned.get("dispositions_file")
+    dispositions_document: dict[str, Any] | None = None
+    evidence: dict[str, str] | None = None
+    if dispositions_file is None:
+        if reference is not None:
+            errors.append("comparison dispositions reference disagrees with the report")
+    elif not _is_string(dispositions_file):
+        errors.append("summary.dispositioned.dispositions_file must be a nonempty path")
+    else:
+        dispositions_path = _producer_path(root, dispositions_file)
+        if dispositions_path is None or dispositions_path.suffix.lower() not in {
+            ".yaml",
+            ".yml",
+        }:
+            errors.append("dispositions file path is invalid or escapes the repository")
+        else:
+            loaded = _load(
+                root,
+                dispositions_path,
+                f"comparison_dispositions:{suite}",
+            )
+            if (
+                not isinstance(reference, dict)
+                or reference.get("path") != dispositions_file
+                or reference.get("sha256") != loaded.sha256
+                or loaded.sha256 is None
+                or loaded.value is None
+            ):
+                errors.append(
+                    "dispositions file is absent, malformed, or not hash-bound"
+                )
+            else:
+                dispositions_document = loaded.value
+                evidence = {
+                    "path": _path_label(dispositions_path, root),
+                    "sha256": loaded.sha256,
+                }
+                if validator is None:
+                    errors.append("dispositions validator producer is unavailable")
+                else:
+                    try:
+                        validation_errors = validator.validate_dispositions(
+                            dispositions_document,
+                            path_label=str(dispositions_path),
+                            expected_suite=suite,
+                            repo_root=root,
+                        )
+                    except Exception as exc:
+                        errors.append(
+                            f"dispositions validator raised {type(exc).__name__}: {exc}"
+                        )
+                    else:
+                        errors.extend(
+                            f"dispositions file: {detail}"
+                            for detail in validation_errors
+                        )
+
+    if validator is not None and not errors:
+        try:
+            recomputed = validator.apply_dispositions(
+                report,
+                dispositions_document,
+                dispositions_file=(
+                    str(dispositions_file) if _is_string(dispositions_file) else None
+                ),
+            )
+            expected = recomputed["summary"]["dispositioned"]
+        except Exception as exc:
+            errors.append(
+                f"dispositions recomputation raised {type(exc).__name__}: {exc}"
+            )
+        else:
+            if dispositioned != expected:
+                errors.append(
+                    "summary.dispositioned does not match validator recomputation"
+                )
+
+    return unexplained, axiom, errors, evidence
+
+
 def _conformant(
     comparisons: Loaded,
     node_ids: list[str],
@@ -1202,6 +1437,8 @@ def _conformant(
     if schema:
         reasons.append(schema)
     suites: dict[str, dict[str, Any]] = {}
+    dispositions_validator: Any | None = None
+    dispositions_evidence: dict[str, str] = {}
     if comparisons.value is not None:
         if comparisons.value.get("artifact_sha256") != artifact.sha256:
             reasons.append(
@@ -1222,6 +1459,12 @@ def _conformant(
                     "comparison index is not marked mode=computed",
                 )
             )
+        (
+            dispositions_validator,
+            dispositions_evidence,
+            disposition_validator_reasons,
+        ) = _load_dispositions_validator(comparisons, producer)
+        reasons.extend(disposition_validator_reasons)
         raw = comparisons.value.get("comparisons")
         if isinstance(raw, dict):
             suites = {
@@ -1420,61 +1663,23 @@ def _conformant(
                 report_errors.append("summary counts do not conserve")
 
             mismatch_count = raw_counts.get("mismatch_count")
-            dispositioned = summary.get("dispositioned")
-            if dispositioned is None and mismatch_count is not None:
-                derived_unexplained = mismatch_count
-                derived_axiom = 0
-            elif isinstance(dispositioned, dict):
-                derived_unexplained = dispositioned.get("unexplained_count")
-                counts = dispositioned.get("counts")
-                derived_axiom = (
-                    counts.get("axiom_encoding_gap")
-                    if isinstance(counts, dict)
-                    else None
-                )
-                if not _is_int(derived_unexplained):
-                    report_errors.append(
-                        "summary.dispositioned.unexplained_count is invalid"
-                    )
-                if not _is_int(derived_axiom):
-                    report_errors.append(
-                        "summary.dispositioned.counts.axiom_encoding_gap is invalid"
-                    )
-                counts_valid = isinstance(counts, dict) and all(
-                    _is_string(category) and _is_int(count)
-                    for category, count in counts.items()
-                )
-                explicit_unexplained = (
-                    counts.get("unexplained", 0) if isinstance(counts, dict) else None
-                )
-                dispositioned_other = (
-                    sum(
-                        count
-                        for category, count in counts.items()
-                        if category != "unexplained"
-                    )
-                    if counts_valid
-                    else None
-                )
-                if (
-                    not counts_valid
-                    or not _is_int(explicit_unexplained)
-                    or not _is_int(derived_unexplained)
-                    or mismatch_count is None
-                    or explicit_unexplained > derived_unexplained
-                    or dispositioned_other + derived_unexplained != mismatch_count
-                ):
-                    report_errors.append(
-                        "summary.dispositioned counts do not reconcile mismatches"
-                    )
-                if mismatch_count and dispositioned.get("dispositions_file") is None:
-                    report_errors.append(
-                        "summary.dispositioned.dispositions_file is missing"
-                    )
-            else:
-                derived_unexplained = None
-                derived_axiom = None
-                report_errors.append("summary.dispositioned is invalid")
+            (
+                derived_unexplained,
+                derived_axiom,
+                disposition_errors,
+                disposition_evidence,
+            ) = _validate_report_dispositions(
+                report=report_value or {},
+                summary=summary,
+                comparison=row,
+                suite=suite,
+                mismatch_count=mismatch_count,
+                validator=dispositions_validator,
+                root=root,
+            )
+            report_errors.extend(disposition_errors)
+            if disposition_evidence is not None:
+                evidence_rows[-1]["dispositions"] = disposition_evidence
 
             expected_counts = {
                 "case_count": case_count,
@@ -1610,6 +1815,7 @@ def _conformant(
         "index": _path_label(comparisons.path, root),
         "sha256": comparisons.sha256,
         "reports": evidence_rows,
+        "dispositions_validator": dispositions_evidence,
     }
     return {"holds": not reasons, "evidence": evidence}, reasons, suites
 
@@ -2121,7 +2327,7 @@ def _executable(
                     validator_module,
                     "validate_executable_receipt",
                 )
-            except (ImportError, AttributeError) as exc:
+            except Exception as exc:
                 reasons.append(
                     _reason(
                         "executable",
@@ -2359,14 +2565,7 @@ def _executable(
                 or not _is_string(workflow.get("path"))
                 or not _is_string(workflow.get("event"))
                 or not _is_string(workflow.get("ref"))
-                or not (
-                    (type(workflow.get("run_id")) is int and workflow["run_id"] > 0)
-                    or (
-                        isinstance(workflow.get("run_id"), str)
-                        and workflow["run_id"].isdigit()
-                        and int(workflow["run_id"]) > 0
-                    )
-                )
+                or not _is_positive_run_id(workflow.get("run_id"))
                 or not (
                     type(workflow.get("run_attempt")) is int
                     and workflow["run_attempt"] > 0
@@ -2670,35 +2869,37 @@ def _declared_evidence_paths(
     comparisons: Loaded,
     executable: Loaded,
 ) -> set[Path]:
-    paths: set[Path] = set()
+    paths: set[Path] = {REPO_ROOT / "axiom_oracles" / "comparison" / "dispositions.py"}
     if comparisons.value is not None:
         rows = comparisons.value.get("comparisons")
         if isinstance(rows, dict):
             for row in rows.values():
-                report = row.get("report") if isinstance(row, dict) else None
-                resolved = (
-                    _producer_path(root, report.get("path"))
-                    if isinstance(report, dict)
-                    else None
-                )
-                if resolved is not None:
-                    paths.add(resolved)
+                if not isinstance(row, dict):
+                    continue
+                for field in ("report", "dispositions"):
+                    reference = row.get(field)
+                    resolved = (
+                        _producer_path(root, reference.get("path"))
+                        if isinstance(reference, dict)
+                        else None
+                    )
+                    if resolved is not None:
+                        paths.add(resolved)
+    try:
+        validator_spec = importlib.util.find_spec("axiom_oracles.executable_receipt")
+        validator_origin = validator_spec.origin if validator_spec is not None else None
+        if validator_origin is not None:
+            paths.add(Path(validator_origin).resolve())
+    except Exception:
+        pass
+    try:
+        validator_module = importlib.import_module("axiom_oracles.executable_receipt")
+        validator_source = Path(validator_module.__file__).resolve()
+    except Exception:
+        pass
+    else:
+        paths.add(validator_source)
     if executable.value is not None:
-        producer = executable.value.get("producer")
-        if (
-            isinstance(producer, dict)
-            and producer.get("validator")
-            == "axiom_oracles.executable_receipt.validate_executable_receipt"
-        ):
-            try:
-                validator_module = importlib.import_module(
-                    "axiom_oracles.executable_receipt"
-                )
-                validator_source = Path(validator_module.__file__).resolve()
-            except (AttributeError, ImportError, TypeError):
-                pass
-            else:
-                paths.add(validator_source)
         rows = executable.value.get("nodes")
         if isinstance(rows, dict):
             for row in rows.values():

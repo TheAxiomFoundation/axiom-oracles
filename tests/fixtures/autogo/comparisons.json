@@ -2,7 +2,9 @@
   "schema": "axiom_oracles.node_comparisons.v1",
   "artifact_sha256": "f0b8a0ccf74d587955324dabf780afd8b7e8140124e2e942806f915afa1710da",
   "producer": {
-    "mode": "computed"
+    "mode": "computed",
+    "dispositions_validator": "axiom_oracles.comparison.dispositions.validate_dispositions",
+    "dispositions_validator_sha256": "371b8a8cf89d46e0f765ad7471dc8438ae413f5f728714ba7649ed20b64140f8"
   },
   "comparisons": {
     "us-medicare-wage-tax": {

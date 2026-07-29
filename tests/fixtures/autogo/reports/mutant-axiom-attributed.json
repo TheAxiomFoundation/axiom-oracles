@@ -8,11 +8,29 @@
     "mismatch_count": 1,
     "error_count": 0,
     "dispositioned": {
-      "dispositions_file": "conformance/dispositions/us-medicare-wage-tax.yaml",
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "dispositions_file": "dispositions/us-medicare-wage-tax.yaml",
+      "raw_match_rate": 75,
+      "explained_rate": 75,
       "unexplained_count": 0,
       "counts": {
-        "axiom_encoding_gap": 1
-      }
+        "explained_residual": 0,
+        "upstream_engine_gap": 0,
+        "bridge_artifact": 0,
+        "axiom_encoding_gap": 1,
+        "unexplained": 0
+      },
+      "expired_entries": [],
+      "orphaned_entries": []
     }
-  }
+  },
+  "mismatches": [
+    {
+      "case_id": "case-4",
+      "concept": "us:statutes/26/3101/b/1#medicare_wage_tax",
+      "kind": "amount_difference",
+      "left": 145,
+      "right": 146
+    }
+  ]
 }

@@ -1,0 +1,13 @@
+schema: axiom_oracles.dispositions.v1
+suite: us-medicare-wage-tax
+updated: "2026-07-29"
+entries:
+  - id: medicare-wage-tax-axiom-gap
+    concept: us:statutes/26/3101/b/1#medicare_wage_tax
+    case_id: case-4
+    kind: amount_difference
+    disposition: axiom_encoding_gap
+    evidence:
+      mechanism: The synthetic mutant attributes its one residual to Axiom.
+    linked_issue: https://github.com/TheAxiomFoundation/rulespec-us/issues/115
+    expires_on_source_change: true

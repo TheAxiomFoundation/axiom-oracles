@@ -470,6 +470,60 @@ def test_committed_mutants_fail_closed_with_machine_reason(
         assert all(row["node"] != NODE for row in _yaml_nodes(output))
 
 
+def test_validated_upstream_attributed_residual_can_remain_conformant(
+    tmp_path: Path,
+) -> None:
+    root = _copy_fixture_root(tmp_path)
+    dispositions_path = root / "dispositions" / "us-medicare-wage-tax.yaml"
+    dispositions = yaml.safe_load(dispositions_path.read_text())
+    dispositions["entries"][0]["disposition"] = "upstream_engine_gap"
+    dispositions_path.write_text(yaml.safe_dump(dispositions, sort_keys=False))
+    dispositions_sha = hashlib.sha256(dispositions_path.read_bytes()).hexdigest()
+
+    report_path = root / "reports" / "mutant-axiom-attributed.json"
+    report = json.loads(report_path.read_text())
+    block = report["summary"]["dispositioned"]
+    block["counts"]["axiom_encoding_gap"] = 0
+    block["counts"]["upstream_engine_gap"] = 1
+    block["explained_rate"] = 100
+    _write_json(report_path, report)
+    report_sha = hashlib.sha256(report_path.read_bytes()).hexdigest()
+
+    comparisons = json.loads(
+        (root / "mutant-axiom-attributed-mismatch.json").read_text()
+    )
+    comparison = comparisons["comparisons"]["us-medicare-wage-tax"]
+    comparison["axiom_attributed_count"] = 0
+    comparison["report"]["sha256"] = report_sha
+    comparison["dispositions"]["sha256"] = dispositions_sha
+    comparisons_path = root / "upstream-attributed-comparisons.json"
+    _write_json(comparisons_path, comparisons)
+
+    census = json.loads((root / "exercise-census.json").read_text())
+    census_row = census["suites"]["us-medicare-wage-tax"]
+    census_row["report"] = "reports/mutant-axiom-attributed.json"
+    census_row["report_sha256"] = report_sha
+    census_path = root / "upstream-attributed-census.json"
+    _write_json(census_path, census)
+    overrides = _bind_run_manifest(
+        tmp_path,
+        {
+            "comparisons": comparisons_path,
+            "exercise-census": census_path,
+        },
+    )
+
+    result, output, _ = _run(
+        tmp_path,
+        overrides=overrides,
+        repo_root=root,
+    )
+
+    assert result.returncode == 0, result.stderr
+    _assert_node_result(_stdout_json(result), certified=True)
+    assert _yaml_nodes(output)[0]["criteria"]["conformant"]["holds"] is True
+
+
 def test_bridged_required_dimension_contributes_zero_fidelity(tmp_path: Path) -> None:
     census = json.loads((FIXTURES / "exercise-census.json").read_text())
     bridged = deepcopy(census)
@@ -728,6 +782,70 @@ def test_producer_report_path_cannot_escape_repository(tmp_path: Path) -> None:
     )
 
 
+def test_invented_disposition_bucket_cannot_explain_a_mismatch(
+    tmp_path: Path,
+) -> None:
+    root = _copy_fixture_root(tmp_path)
+    report_path = root / "reports" / "us-medicare-wage-tax.json"
+    report = json.loads(report_path.read_text())
+    report["summary"].update(
+        {
+            "match_count": 3,
+            "mismatch_count": 1,
+            "dispositioned": {
+                "schema_version": "axiom_oracles.dispositions.v1",
+                "dispositions_file": False,
+                "raw_match_rate": 75,
+                "explained_rate": 100,
+                "unexplained_count": 0,
+                "counts": {
+                    "explained_residual": 0,
+                    "upstream_engine_gap": 0,
+                    "bridge_artifact": 0,
+                    "axiom_encoding_gap": 0,
+                    "unexplained": 0,
+                    "invented_safe_bucket": 1,
+                },
+                "expired_entries": [],
+                "orphaned_entries": [],
+            },
+        }
+    )
+    _write_json(report_path, report)
+    report_sha = hashlib.sha256(report_path.read_bytes()).hexdigest()
+
+    comparisons = json.loads((root / "comparisons.json").read_text())
+    row = comparisons["comparisons"]["us-medicare-wage-tax"]
+    row["report"]["sha256"] = report_sha
+    comparisons_path = root / "invented-disposition-comparisons.json"
+    _write_json(comparisons_path, comparisons)
+
+    census = json.loads((root / "exercise-census.json").read_text())
+    census["suites"]["us-medicare-wage-tax"]["report_sha256"] = report_sha
+    census_path = root / "invented-disposition-census.json"
+    _write_json(census_path, census)
+    overrides = _bind_run_manifest(
+        tmp_path,
+        {
+            "comparisons": comparisons_path,
+            "exercise-census": census_path,
+        },
+    )
+
+    result, _, reasons = _run(
+        tmp_path,
+        overrides=overrides,
+        repo_root=root,
+    )
+
+    assert result.returncode != 0
+    _assert_reason(
+        reasons,
+        code="conformant.report_invalid",
+        criterion="conformant",
+    )
+
+
 def test_foreign_program_receipt_cannot_be_rekeyed_to_node(tmp_path: Path) -> None:
     root = _copy_fixture_root(tmp_path)
     receipt_path = root / "receipts" / "us-medicare-wage-tax.json"
@@ -866,6 +984,28 @@ def test_certified_at_must_match_separately_governed_run(tmp_path: Path) -> None
     _assert_reason(
         reasons,
         code="harness.governance_mismatch",
+        criterion="harness",
+    )
+
+
+def test_oversized_string_run_id_rejects_without_integer_conversion_crash(
+    tmp_path: Path,
+) -> None:
+    run = json.loads((FIXTURES / "run-manifest.json").read_text())
+    run["harness"]["ci_run_id"] = "9" * 5000
+    path = tmp_path / "oversized-run-id.json"
+    _write_json(path, run)
+
+    result, _, reasons = _run(
+        tmp_path,
+        overrides={"run-manifest": path},
+    )
+
+    assert result.returncode != 0
+    assert "Traceback" not in result.stderr
+    _assert_reason(
+        reasons,
+        code="harness.harness_provenance_invalid",
         criterion="harness",
     )
 
@@ -1073,6 +1213,24 @@ def test_missing_upstream_receipt_validator_fails_closed(tmp_path: Path) -> None
     )
 
 
+def test_broken_upstream_receipt_validator_import_fails_machine_readably(
+    tmp_path: Path,
+) -> None:
+    root = _copy_fixture_root(tmp_path)
+    validator = root / "validator_stub" / "axiom_oracles" / "executable_receipt.py"
+    validator.write_text("raise RuntimeError('broken producer import')\n")
+
+    result, _, reasons = _run(tmp_path, repo_root=root)
+
+    assert result.returncode != 0
+    assert "Traceback" not in result.stderr
+    _assert_reason(
+        reasons,
+        code="executable.producer_missing",
+        criterion="executable",
+    )
+
+
 def test_partial_write_recomputes_and_preserves_existing_green_node(
     tmp_path: Path,
 ) -> None:
@@ -1187,4 +1345,22 @@ def test_malformed_covered_nodes_rejects_without_traceback(tmp_path: Path) -> No
         reasons,
         code="executable.coverage_invalid",
         criterion="executable",
+    )
+
+
+def test_malformed_report_path_rejects_without_traceback(tmp_path: Path) -> None:
+    comparisons = json.loads((FIXTURES / "comparisons.json").read_text())
+    comparisons["comparisons"]["us-medicare-wage-tax"]["report"]["path"] = "\u0000.json"
+    path = tmp_path / "malformed-report-path.json"
+    _write_json(path, comparisons)
+    overrides = _bind_run_manifest(tmp_path, {"comparisons": path})
+
+    result, _, reasons = _run(tmp_path, overrides=overrides)
+
+    assert result.returncode != 0
+    assert "Traceback" not in result.stderr
+    _assert_reason(
+        reasons,
+        code="conformant.report_missing",
+        criterion="conformant",
     )

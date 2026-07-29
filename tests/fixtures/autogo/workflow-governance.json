@@ -14,14 +14,14 @@
     {
       "ci_run_id": "424242",
       "certified_at": "2026-07-29T12:34:56Z",
-      "run_manifest_sha256": "19799eac481cdb4987f98d954276c66ca17d8abb2adcaf71235a9fabcf5941c1",
+      "run_manifest_sha256": "92984ec6605f48fc917692f9d62c89e9d6f2e41ad5e2c02fa83932b7a3d8e9a9",
       "workflow_sha": "cccccccccccccccccccccccccccccccccccccccc",
       "certify_check": "dddddddddddddddddddddddddddddddddddddddd",
       "inputs": {
         "compiled_artifact": "f0b8a0ccf74d587955324dabf780afd8b7e8140124e2e942806f915afa1710da",
         "node_index": "fac37537d96f91aaec381e486ff12163964478dffa25ac1c60ce9cdd6b92fe3b",
         "closure_summary": "ab3ef022ddea9714d7ecee937cb8447a1a9d88dd492475a1a32232d2cca371b8",
-        "node_comparisons": "13474ee91bfb79b8073e02aebc39a705ddda3bf3384f2d7881bcfe7536e878ff",
+        "node_comparisons": "30090c430fce44a347241e393e97dedfafa472b0f04c120cf2fa8811a2c91244",
         "exercise_census": "5adb2f85188c3e81e295136a4ba33076091e952773a90314fadbc9328f6524b9",
         "node_executable": "07bf8b100441c55c4090a442e13f29bcd9299784b2549cd5d7d2086ecfadfbf8"
       }
