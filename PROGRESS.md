@@ -1229,3 +1229,54 @@ residual), #229 (small-suite grounding).
   bytes and companion fixture values.
 - Trace the changed generator symbols into every direct caller and test.
 - Re-derive the five disposition cases from live PE and pinned source.
+
+### Checkpoint — independent regeneration and generator contract
+
+#### State
+
+- Both frozen suites reproduce exactly under Python 3.13 and PolicyEngine
+  4.18.9 / PE-US 1.767.3 / Core 3.30.3.
+- Raw results are SALT 13/16 and itemized 15/17; the five measured mismatches
+  are the five pre-registered cases and the other 28 adopted cases match.
+- No generator-contract finding was identified.
+
+#### Done
+
+- Ran both generators independently against the clean RuleSpec snapshot at the
+  pinned SHA/tree. After applying the committed dispositions, each generated
+  report is canonical-byte-identical to its committed dashboard report with
+  only `provenance.generated_at` removed. Independent registry regeneration
+  likewise differed by exactly that timestamp line.
+- Confirmed regeneration leaves both comparison YAML files byte-identical;
+  their pins are 4.18.9 / 1.767.3 / 3.30.3, tolerances are exactly 0.01/0.0,
+  and their RuleSpec SHA/tree match the live clean snapshot.
+- Compared all 33 committed `axiom` values and all 33
+  `axiom_fixture_inputs` mappings to the two #1177 companion files: no
+  difference. Explicit spot checks included four SALT and four itemized cases,
+  including every disposition case.
+- Verified `_axiom_values` extracts the compared amount from companion
+  `output`; `FederalCase` has no expected-value field.
+- Exact-stack generator tests pass: 34 passed. Instrumentation observed a
+  distinct fresh `Simulation` for every case (16/16 and 17/17).
+- Live situations resolve all five filing statuses to enum values 0, 1, 2, 3,
+  and 4 in both suites. Joint/separate are relationship-derived; head of
+  household and surviving spouse are explicitly bound and do not fall through.
+- Mutation probes reject missing, extra, string, and boolean bridge values,
+  missing/wrong domain facts, missing RuleSpec-only inputs, and foreign
+  fixture inputs. Each suite has exactly one scored Axiom output, disjoint from
+  bridge and diagnostic outputs.
+- Personal-property tax is nonzero only in its named SALT probe and is absent
+  from every PE situation. The section-68 completed taxable-income scalar is
+  present in all 17 adopted itemized fixtures and absent from every PE
+  situation; legal domain facts also never reach PE.
+- Sandbox note: ordinary `uv run` could not initialize the read-only default
+  cache (`/Users/maxghenis/.cache/uv/sdists-v9/.git`, operation not
+  permitted). The full independent runs succeeded offline using existing
+  writable exact-wheel caches; a second direct run used an immutable cached
+  exact-stack Python environment.
+
+#### Next
+
+- Finish the source, issue-body, statutory, and expiry audit of all five
+  dispositions.
+- Record any issue/disposition evidence defect as a merge finding.
