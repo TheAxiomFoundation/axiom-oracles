@@ -12,6 +12,9 @@
 - Core node evaluator, launch-critical mutants, final trust-boundary hardening,
   and the producer integration contract are implemented, committed, and
   validated.
+- Publication is locally blocked: `git push` cannot resolve `github.com`, and
+  the available GitHub connector rejected write operations. The requested
+  draft PR therefore remains unopened.
 
 ## Done
 
@@ -53,5 +56,7 @@
 
 ## Next
 
-- Push if possible, open the requested draft pull request, and write the
-  closure-sprint output report.
+- When a GitHub write path is available, push `autogo/harness-integration` and
+  open the requested draft pull request.
+- Land every producer obligation in `docs/autogo-contract.md` against one
+  shared vintage before attempting a production node certification.
