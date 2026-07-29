@@ -1279,3 +1279,64 @@ residual), #229 (small-suite grounding).
   artifacts remain byte-identical to repair start, and close the ledger.
 - Write untracked `WORKER-REPORT-REPAIR.md`; do not modify the pre-existing
   untracked `WORKER-REPORT.md`, push, or write to GitHub.
+
+## Repair closeout — defensive audit complete
+
+### State
+
+- Phase: complete. The branch contains the append-only ledger restoration,
+  literal merged-set reconciliation, tracked checker, corrected provenance,
+  focused tests, and final validation evidence.
+- No suite was regenerated. The only tracked data edits are the two required
+  California source row-note corrections and their exact served copy.
+- No push or GitHub write was performed.
+
+### Done
+
+- Passed the review's complete seven-command lightweight battery:
+  dispositions, grids, affected map, vacuous gate, scoreboard, ratchet, and
+  burn-down.
+- Also passed boundary cases, dashboard overview, conformance
+  universe/compositions, comparison registry listing (135 suites), rule
+  verification (21,859 rules), and the state-tax populace contract (43
+  jurisdictions; 32 ready and 11 blocked). The UK-PE and US-PE universe checks
+  were clean no-ops because the adjacent checkout versions do not match the
+  committed pins.
+- Passed both tracked CA checker entry points with byte-identical receipts:
+  345 literal rows close as 192 vanished + 22 materially drifted and dropped
+  + 131 kept, and kept pins close as 115 moved + 16 unchanged. The current
+  evidence closes at 529 report mismatches, 288 expanded annotations, and
+  7,101 compact cases.
+- Passed the real saved-trace historical gate: 345 evidence-pinned rows
+  validate with 96 historical unexplained rows.
+- Passed Ruff, diff-check, and 50 focused disposition/checker/artifact tests.
+  A broad Python run passed 2,304 tests and skipped 70. Its sole failure was
+  the known network-dependent dashboard loader: `npx esbuild` could not reach
+  `registry.npmjs.org` (`ENOTFOUND`), so no code assertion failed.
+- The exact affected emitter scope passes for 18 complete canonical case
+  suites and all 13 extant disposition suites. SSI intentionally stores only
+  1,000 of 2,990 mismatches in its canonical dashboard report, so the case
+  emitter correctly refuses to claim full parity; its 2,990-row
+  mismatch-only compact tree is internally consistent and unchanged.
+  Repository-wide no-argument emitter probes likewise expose unrelated
+  pre-existing stale/missing suites; California is absent from those findings.
+- Proved every protected tracked path containing `ca-snap-ecps`,
+  `ks-tanf-ecps`, or `ssi-ecps` is byte-identical to repair start, excluding
+  only the explicitly required California disposition note and served copy.
+  The primary report SHA-256 values remain `d5b95f7c8f9e9a66...`,
+  `1132d023920d7685...`, and `0eb73772a9220a0c...`.
+- Reconfirmed the root ledger's exact merge-base prefix: 57,579 bytes, 951
+  lines, SHA-256
+  `c453af85c7e77b13a2ea18fcfd884f149d4783c4edf712354a85485d67b8379a`.
+- Confirmed no tracked `188/341` accounting or non-authoritative
+  `da5bf292...` provenance remains.
+- Wrote the required short untracked `WORKER-REPORT-REPAIR.md` and preserved
+  pre-existing untracked `WORKER-REPORT.md` byte-for-byte.
+- Sandbox disclosure: a read-only `ps` diagnostic was denied while monitoring
+  the broad test run. It did not affect the test process; no other sandbox
+  permission failure occurred during this repair.
+
+### Next
+
+- Handoff the committed local branch and untracked repair report. Do not push
+  or write to GitHub.
