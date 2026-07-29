@@ -1508,7 +1508,7 @@ residual), #229 (small-suite grounding).
   `github.com`.
 - Intended publication ref: `autogo/executable-producer`.
 - Phase: producer and standalone computed-certificate consumption implemented;
-  full repository verification and adversarial review are next.
+  adversarial review found two trust-boundary repairs now in progress.
 - Scope: add a deterministic, sign-only CI producer for executable receipts and
   standalone receipt consumption by the certificate harness.
 - Existing workflows, toolchain files, dependency pins, and CODEOWNERS are
@@ -1541,8 +1541,31 @@ residual), #229 (small-suite grounding).
 - Added constructed receipt and producer tests for checksum, golden-output,
   workflow-provenance, workflow-allowlist, dev-engine, command, input, timestamp,
   and failure-cleanup mutants. Focused result: 61 passed.
+- Ran the full repository suite: 2,365 passed and 70 skipped. The sole failure
+  was the dashboard loader-equivalence test because its `npx esbuild` subprocess
+  attempted a blocked npm download in this fresh worktree; the cached esbuild
+  binary remains available for an equivalent direct check.
+- Independent receipt and workflow reviews reproduced a release-blocking gap:
+  workflow provenance was only self-asserted in the JSON while the generated
+  Sigstore bundle was discarded. A hand-authored receipt that copied an
+  allowlisted workflow SHA could therefore pass.
+- Read the final local `axiom-encode#1192` notary design. Its load-bearing
+  boundary is a secretless deterministic execution job followed by a signing
+  job that runs no candidate code, with cryptographic authentication required
+  at consumption.
+- Independent review also found that producer output parsing coerces numeric
+  strings and floats to integers. That masks output-type disagreement and must
+  be replaced by exact type-and-value comparison.
+- Audited the apparent ops golden-fixture contradiction. The committed fixture
+  on ops `origin/main` has stale `_provenance` prose, but contains the later SSN
+  and relation repair; the ops repair branch records that the released pair
+  returns the pinned `478 / 226 / holds` tuple. The later minimal audited fixture
+  has not landed on ops main and is therefore not silently substituted here.
 
 ### Next
 
-- Run focused and repository-level checks, review the diff, update this ledger,
-  and publish a draft PR if network access becomes available.
+- Split secretless execution from signing, retain and authenticate the
+  attestation bundle during certificate consumption, enforce exact output
+  types, expand the mechanical maintainer handoff, and add adversarial tests.
+- Rerun focused and repository-level checks, complete independent review, write
+  the final report, and publish a draft PR if network access becomes available.
