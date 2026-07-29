@@ -81,9 +81,9 @@ def _golden_bindings() -> dict[str, Any]:
 
 def _engine_response(
     *,
-    benefit: int = 478,
-    net_income: int = 226,
-    eligibility: str = "holds",
+    benefit: Any = 478,
+    net_income: Any = 226,
+    eligibility: Any = "holds",
 ) -> bytes:
     return json.dumps(
         {
@@ -91,11 +91,33 @@ def _engine_response(
                 {
                     "outputs": {
                         BENEFIT_ID: {
-                            "value": {"kind": "integer", "value": benefit}
+                            "kind": "scalar",
+                            "name": "snap_allotment",
+                            "id": BENEFIT_ID,
+                            "dtype": "integer",
+                            "unit": None,
+                            "value": {
+                                "kind": "integer",
+                                "value": benefit,
+                            },
                         },
-                        NET_INCOME_ID: {"outcome": net_income},
+                        NET_INCOME_ID: {
+                            "kind": "scalar",
+                            "name": "snap_net_income",
+                            "id": NET_INCOME_ID,
+                            "dtype": "integer",
+                            "unit": None,
+                            "value": {
+                                "kind": "integer",
+                                "value": net_income,
+                            },
+                        },
                         ELIGIBILITY_ID: {
-                            "value": {"kind": "verdict", "value": eligibility}
+                            "kind": "judgment",
+                            "name": "snap_eligible",
+                            "id": ELIGIBILITY_ID,
+                            "unit": None,
+                            "outcome": eligibility,
                         },
                     }
                 }
@@ -125,17 +147,12 @@ def test_local_cli_fails_without_creating_or_deleting_receipt(
     if receipt_already_exists:
         receipt_path.write_bytes(sentinel)
 
-    real_produce = producer.produce
     monkeypatch.setattr(producer, "REPO_ROOT", tmp_path.resolve())
-    monkeypatch.setattr(
-        producer,
-        "produce",
-        lambda: real_produce(
-            repo_root=tmp_path,
-            manifest_path=manifest_path,
-            env={},
-        ),
-    )
+    monkeypatch.setattr(producer, "MANIFEST_PATH", manifest_path)
+    for name in _github_env():
+        monkeypatch.delenv(name, raising=False)
+    for name in producer.FORBIDDEN_CREDENTIALS:
+        monkeypatch.delenv(name, raising=False)
     monkeypatch.setattr(sys, "argv", [str(SCRIPT)])
 
     assert producer.main() != 0
@@ -171,13 +188,9 @@ def test_cli_rejects_engine_and_artifact_escape_hatches(
     assert "argument" in capsys.readouterr().err.lower()
 
 
-def test_producer_api_has_no_engine_or_artifact_path_parameters() -> None:
+def test_producer_api_has_no_engine_artifact_or_manifest_escape_hatches() -> None:
     assert set(inspect.signature(producer.main).parameters) == set()
-    assert set(inspect.signature(producer.produce).parameters) == {
-        "repo_root",
-        "manifest_path",
-        "env",
-    }
+    assert set(inspect.signature(producer.produce).parameters) == set()
     workflow_command = [
         line.strip()
         for line in WORKFLOW.read_text().splitlines()
@@ -279,6 +292,53 @@ def test_golden_output_extraction_returns_478_226_and_holds() -> None:
 def test_wrong_golden_output_is_rejected(response: bytes) -> None:
     with pytest.raises(producer.ProducerError, match="golden mismatch"):
         producer._extract_outputs(response, _golden_bindings())
+
+
+@pytest.mark.parametrize(
+    "response",
+    [
+        pytest.param(
+            _engine_response(benefit="478"),
+            id="numeric-string",
+        ),
+        pytest.param(
+            _engine_response(benefit=478.0),
+            id="float",
+        ),
+        pytest.param(
+            _engine_response().replace(
+                b'"value": 478}',
+                b'"value": 4.78e2}',
+                1,
+            ),
+            id="scientific-notation",
+        ),
+        pytest.param(
+            _engine_response(benefit=True),
+            id="boolean-is-not-integer",
+        ),
+    ],
+)
+def test_integer_output_rejects_noninteger_json_types(response: bytes) -> None:
+    with pytest.raises(
+        producer.ProducerError,
+        match="expected exact JSON integer output",
+    ):
+        producer._extract_outputs(response, _golden_bindings())
+
+
+def test_integer_output_rejects_wrong_released_engine_value_kind() -> None:
+    response = json.loads(_engine_response())
+    response["results"][0]["outputs"][BENEFIT_ID]["value"]["kind"] = "decimal"
+
+    with pytest.raises(
+        producer.ProducerError,
+        match="expected released-engine scalar/integer output",
+    ):
+        producer._extract_outputs(
+            json.dumps(response).encode(),
+            _golden_bindings(),
+        )
 
 
 @pytest.mark.parametrize(
@@ -490,6 +550,11 @@ def governed_case(
             }
         )
     )
+    monkeypatch.setattr(producer, "MANIFEST_PATH", manifest_path)
+    for name, value in _github_env().items():
+        monkeypatch.setenv(name, value)
+    for name in producer.FORBIDDEN_CREDENTIALS:
+        monkeypatch.delenv(name, raising=False)
 
     engine_url = (
         "https://github.com/TheAxiomFoundation/axiom-rules-engine/"
@@ -586,11 +651,7 @@ def test_mocked_nine_command_stranger_path_emits_complete_receipt(
 ) -> None:
     calls = _install_stranger_path(monkeypatch, governed_case)
 
-    output_path = producer.produce(
-        repo_root=governed_case.repo_root,
-        manifest_path=governed_case.manifest_path,
-        env=_github_env(),
-    )
+    output_path = producer.produce()
 
     assert output_path == governed_case.receipt_path
     receipt = json.loads(output_path.read_text())
@@ -689,11 +750,7 @@ def test_download_hash_and_run_failures_remove_stale_receipt(
     )
 
     with pytest.raises(producer.ProducerError, match="exited 41"):
-        producer.produce(
-            repo_root=governed_case.repo_root,
-            manifest_path=governed_case.manifest_path,
-            env=_github_env(),
-        )
+        producer.produce()
 
     assert len(calls) == fail_step
     assert Path(calls[-1]["argv"][0]).name == failed_command

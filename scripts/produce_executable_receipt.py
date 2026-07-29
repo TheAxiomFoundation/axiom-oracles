@@ -21,7 +21,6 @@ import shutil
 import subprocess
 import sys
 from datetime import datetime, timezone
-from decimal import Decimal, InvalidOperation
 from pathlib import Path
 from typing import Any
 
@@ -199,30 +198,49 @@ def _published_program_entry(
     return row
 
 
-def _normalized_output(raw: Any, expected: Any) -> Any:
-    if not isinstance(raw, dict):
-        raise ProducerError("engine output entry is not an object")
-    if "outcome" in raw:
-        value = raw["outcome"]
-    else:
-        value = raw.get("value")
-        if isinstance(value, dict):
-            value = value.get("value")
+def _exact_typed_output(raw: Any, expected: Any) -> Any:
+    """Return an engine output only when its released JSON type is exact."""
 
-    if isinstance(expected, bool):
-        if not isinstance(value, bool):
-            raise ProducerError(f"expected boolean engine output, got {value!r}")
-        return value
-    if isinstance(expected, int):
-        try:
-            decimal = Decimal(str(value))
-        except InvalidOperation as exc:
+    if type(raw) is not dict:
+        raise ProducerError("engine output entry is not an object")
+
+    expected_type = type(expected)
+    scalar_kind: str | None = None
+    if expected_type is bool:
+        scalar_kind = "bool"
+    elif expected_type is int:
+        scalar_kind = "integer"
+
+    if scalar_kind is not None:
+        typed_value = raw.get("value")
+        if (
+            raw.get("kind") != "scalar"
+            or raw.get("dtype") != scalar_kind
+            or type(typed_value) is not dict
+            or typed_value.get("kind") != scalar_kind
+            or "value" not in typed_value
+        ):
             raise ProducerError(
-                f"expected numeric engine output, got {value!r}"
-            ) from exc
-        if decimal != Decimal(expected):
-            raise ProducerError(f"golden mismatch: {decimal} != {expected}")
-        return expected
+                f"expected released-engine scalar/{scalar_kind} output"
+            )
+        value = typed_value["value"]
+        if type(value) is not expected_type:
+            raise ProducerError(
+                f"expected exact JSON {scalar_kind} output, got {value!r}"
+            )
+    elif expected_type is str:
+        if raw.get("kind") != "judgment" or "outcome" not in raw:
+            raise ProducerError("expected released-engine judgment output")
+        value = raw["outcome"]
+        if type(value) is not str:
+            raise ProducerError(
+                f"expected exact JSON judgment string, got {value!r}"
+            )
+    else:
+        raise ProducerError(
+            f"unsupported pinned golden output type: {expected_type.__name__}"
+        )
+
     if value != expected:
         raise ProducerError(f"golden mismatch: {value!r} != {expected!r}")
     return value
@@ -251,22 +269,16 @@ def _extract_outputs(
     for name, legal_id in bindings.items():
         if legal_id not in raw_outputs:
             raise ProducerError(f"engine response is missing {legal_id}")
-        observed[name] = _normalized_output(raw_outputs[legal_id], expected[name])
+        observed[name] = _exact_typed_output(raw_outputs[legal_id], expected[name])
     return observed
 
 
-def produce(
-    *,
-    repo_root: Path = REPO_ROOT,
-    manifest_path: Path = MANIFEST_PATH,
-    env: dict[str, str] | None = None,
-) -> Path:
+def produce() -> Path:
     """Run the only receipt-producing path and return its committed output path."""
 
-    if repo_root.resolve() != REPO_ROOT:
-        raise ProducerError("the CLI only produces receipts from this repository root")
-    environment = dict(os.environ if env is None else env)
-    manifest = _load_json(manifest_path)
+    repo_root = REPO_ROOT
+    environment = dict(os.environ)
+    manifest = _load_json(MANIFEST_PATH)
     provenance = _workflow_provenance(manifest, environment)
 
     if (platform.system(), platform.machine()) != ("Linux", "x86_64"):

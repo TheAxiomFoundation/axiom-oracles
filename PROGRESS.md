@@ -1508,7 +1508,7 @@ residual), #229 (small-suite grounding).
   `github.com`.
 - Intended publication ref: `autogo/executable-producer`.
 - Phase: producer and standalone computed-certificate consumption implemented;
-  adversarial review found two trust-boundary repairs now in progress.
+  cryptographic workflow-attestation repair remains in progress.
 - Scope: add a deterministic, sign-only CI producer for executable receipts and
   standalone receipt consumption by the certificate harness.
 - Existing workflows, toolchain files, dependency pins, and CODEOWNERS are
@@ -1556,6 +1556,13 @@ residual), #229 (small-suite grounding).
 - Independent review also found that producer output parsing coerces numeric
   strings and floats to integers. That masks output-type disagreement and must
   be replaced by exact type-and-value comparison.
+- Replaced numeric coercion with exact released-engine schema, JSON type, and
+  pinned-value checks. Added mutants for numeric strings, floats, scientific
+  notation, booleans masquerading as integers, and the wrong typed-value kind.
+- Sealed the public producer entry point: `produce()` and `main()` accept no
+  repository, manifest, environment, engine, or artifact parameters. Tests use
+  private constant monkeypatching rather than a production escape hatch.
+- Reran the producer suite after those repairs: 46 passed.
 - Audited the apparent ops golden-fixture contradiction. The committed fixture
   on ops `origin/main` has stale `_provenance` prose, but contains the later SSN
   and relation repair; the ops repair branch records that the released pair
@@ -1565,7 +1572,7 @@ residual), #229 (small-suite grounding).
 ### Next
 
 - Split secretless execution from signing, retain and authenticate the
-  attestation bundle during certificate consumption, enforce exact output
-  types, expand the mechanical maintainer handoff, and add adversarial tests.
+  attestation bundle during certificate consumption, expand the mechanical
+  maintainer handoff, and add attestation adversarial tests.
 - Rerun focused and repository-level checks, complete independent review, write
   the final report, and publish a draft PR if network access becomes available.
