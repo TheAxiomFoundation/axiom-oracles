@@ -281,3 +281,65 @@
 6. Run the complete derived-artifact check battery and reconcile totals.
 7. Write and commit `REVIEW-REPORT.md`, append the closing ledger entry, and
    issue the recorded verdict.
+
+## Review checkpoint — regeneration and independent audits
+
+### State
+
+- Required replays: complete with byte parity.
+- Containment, disposition, period-semantics, and chain audits: complete.
+- Provisional verdict: request changes because the target rewrites the existing
+  progress ledger; final report remains to be written.
+
+### Done
+
+- Replayed `ks-tanf-ecps` with 861 cases and 218 mismatches. The regenerated
+  dashboard artifact is byte-identical to the committed artifact at SHA-256
+  `1132d023920d768577617e074b914cd17c89a057dd7fd893c5052454b4a33532`.
+- Replayed `ssi-ecps` with 75,112 cases and 2,990 mismatches. Byte-identical
+  artifact SHA-256:
+  `0eb73772a9220a0cd0aaeb1ec174a43fab61bf33289f56c600202a1f7128399b`.
+- Replayed `ca-snap-ecps` through all 72 comparison batches with cyclic garbage
+  collection retained. It produced 7,101 cases and 529 mismatches and is
+  byte-identical at SHA-256
+  `d5b95f7c8f9e9a66f5146dcf82bcfe719c6433cb150217a181f4db959fe3911d`.
+- Each replay reported `policyengine==4.18.9`,
+  `policyengine-us==1.767.3`, and `policyengine-core==3.30.3`; every
+  provenance field other than the inherently volatile `generated_at` matched
+  independently. The committed timestamp was then reused for the literal byte
+  comparison.
+- Accounted for all 194 target paths and found no foreign artifact paths. The
+  primary reports and case trees cover exactly the 19 requested suites.
+  CA/CO TANF, Medicaid MAGI, and UKMOD suite artifacts remain unchanged.
+- Verified no comparison tolerance changed and all 19 reports/configs carry
+  the declared engine stack.
+- Reconstructed the California disposition results: the repaired 341-row
+  evidence source yields 188 vanished, 22 drifted/unclassified, and 131
+  retained rows; the requested vanished and retained samples pass.
+- Identified a provenance caveat: the literal merged #423/base tree contains
+  345 rather than 341 issue identities. Its accounting is 192 vanished, 22
+  drifted, and 131 retained; the four additional vanished identities belong
+  to `ecps-59082` and `ecps-62506`. The 341-row reconciler and exact drift
+  receipt are untracked temporary files, and the tracked HEAD builder cannot
+  read the refreshed compact case schema.
+- Reconciled the old SNAP minimum-benefit class exactly:
+  635 becomes 619 at `23.84000015258789`, three at other January values, and
+  13 matches.
+- Verified all nine TANF/SSI suites retain monthly `2026-01` semantics and
+  unchanged `$25` tolerance. Kansas's 218 rows are evidence-backed; Alabama's
+  three new rows are unclassified and unexplained.
+- The complete required derived check battery passed, including byte
+  recomputation of all four history snapshots. Every requested suite row
+  reconciles, including California
+  `529 = 157 + 111 + 20 + 241`.
+- Found the blocking containment failure: base `PROGRESS.md` has 951 lines and
+  the target has 245; base-to-target numstat is `+245/-951`, so the target
+  replaced rather than appended the pre-existing ledger.
+
+### Next
+
+1. Write and commit the self-contained verdict and evidence to
+   `REVIEW-REPORT.md`.
+2. Append the final review closure to this ledger and commit it.
+3. Confirm the disposable review worktree is clean and report the verdict
+   without any remote or GitHub write.
