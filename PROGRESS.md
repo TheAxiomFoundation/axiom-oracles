@@ -1121,3 +1121,37 @@ residual), #229 (small-suite grounding).
 - Commit the adoption artifacts and closed test contract.
 - Complete the final live-pin/containment audit, append the closing ledger
   entry, and write the untracked worker report.
+
+### Checkpoint — worker closeout
+
+#### State
+
+- The complete implementation is committed through `3cf99290`.
+- The branch contains only the 26 intended ledger, generator, suite,
+  disposition, mapping, conformance, test, history, and dashboard paths
+  relative to `origin/main`.
+- Both comparison registries and both reports pin live RuleSpec branch
+  `fed-parity/chunk1-salt-itemized` at
+  `345c22030642cbd37a9fe46877591a8e1df5af7e` (tree
+  `40e08f7dbaa88a70660006f3a5a32bfa283ebd85`); the external worktree and its
+  local origin ref agree exactly.
+
+#### Done
+
+- Final targeted review passed the two repaired test requirements and reported
+  no remaining blocker.
+- Reconfirmed raw/dispositioned results of SALT `13/16 -> 16/16` and itemized
+  `15/17 -> 17/17`, with all five mismatches tied to their pre-registered,
+  source-expiring evidence entries.
+- Reconfirmed all eight derived-data gates, exact-stack focused tests, Ruff,
+  diff hygiene, live pin, and changed-path containment.
+- No corpus citation path changed, so the conditional citation census is not
+  applicable; this repository exposes no citation-census command.
+- No branch was pushed and no GitHub write was made.
+
+#### Next
+
+- Main lane: file the five upstream PolicyEngine issues from the measured
+  evidence and replace each `MAIN-LANE-TBD` placeholder with its issue URL.
+- Review and merge this local branch through the campaign's authorized main
+  lane. No worker implementation step remains.
