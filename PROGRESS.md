@@ -986,3 +986,36 @@ residual), #229 (small-suite grounding).
   evidence-rich divergence dispositions in coherent committed steps.
 - Run real PolicyEngine generation on the declared stack, then the full
   regeneration and `--check` gate chain.
+
+### Checkpoint — runner and registry implementation
+
+#### State
+
+- RuleSpec PR #1177 is pinned at
+  `f4cc1b88d1efd8dcca25058695dc1735c0fbb3de` (tree
+  `3388c508f2d565f3c067d3f9beb4bfd03182b9b1`) through the two comparison
+  registries.
+- Both federal configs, their complete adopted case inventories, their strict
+  fixture contracts, the SALT output bridge, itemized diagnostic
+  reconciliation, and all seven reviewed mapping rows are implemented.
+
+#### Done
+
+- Added explicit HOH and surviving-spouse situations and confirmed live PE
+  simulations return filing-status enum values `0, 1, 2, 3, 4`.
+- Added missing/extra/nonnumeric bridge rejection, compared-output separation,
+  RuleSpec domain/only-input closure, undeclared PE-override rejection, and a
+  fresh-Simulation-per-case test.
+- Corrected the SALT builder after exact-stack measurement proved
+  `real_estate_taxes` is a Person input in PE-US 1.767.3; the implementation
+  error was fixed rather than dispositioned.
+- The focused generator suite passes all 32 tests under Python 3.13 with
+  PolicyEngine 4.18.9, PE-US 1.767.3, and Core 3.30.3. Ruff and
+  `git diff --check` pass.
+
+#### Next
+
+- Commit the runner/registry step, then commit measured per-case evidence and
+  dashboard reports separately.
+- Regenerate the adoption/scoreboard chain and run every available
+  `--check` gate before final handoff.
