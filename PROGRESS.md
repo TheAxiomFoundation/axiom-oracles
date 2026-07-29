@@ -1347,3 +1347,72 @@ residual), #229 (small-suite grounding).
   battery audit.
 - Compare the PR and clean-merge-base mapping-set failure fingerprints and
   finish containment review.
+
+### Checkpoint — adoption, mappings, checks, and containment
+
+#### State
+
+- The two intended rows are adopted and every generated-artifact/check gate is
+  current, but adoption notes and the author's own ledger remain stale after
+  the five issues were filed.
+- The frozen patch is contained to exactly its 26 intended paths. The five
+  known CA/IL/NY/OH mapping-set failures are unchanged on GitHub's live main
+  snapshot and are not introduced by this PR.
+
+#### Done
+
+- Confirmed `conformance/us-pe.yaml` changes exactly
+  `us-pe:itemized_taxable_income_deductions` and
+  `us-pe:salt_deduction`, with only each row's `suite` and `note` fields
+  changed. Their reports use `axiom -> policyengine` at the pinned engine
+  versions.
+- Cross-checked the two RuleSpec module public surfaces: three SALT outputs and
+  four itemized outputs equal the seven added mapping records exactly. The
+  records classify the two legal-domain judgments as P4 not-comparable, the
+  section-911 aggregate and section-68 reduction as diagnostic P4
+  not-comparable candidates, and the three common annual TaxUnit money
+  quantities as P1 direct variables. All five named PE candidates dynamically
+  exist in PE-US 1.767.3 as TaxUnit/year USD floats.
+- Verified all 4,421 pre-existing mapping records are structurally unchanged.
+- Re-ran the nine native drift gates. All pass: dispositions (85 files);
+  canonical grids; affected map (174 suites/183 edges); vacuous gate (138
+  configs/217 suites/34 executable surfaces); scoreboard (4 jurisdictions/3
+  conformant); ratchet; burn-down (4 series/57 points); dashboard overview
+  (218 reports); and conformance compositions (BE, 23 covered suites).
+- Scoped test batteries pass: generator `34 passed`; conformance
+  `81 passed, 2 skipped`; affected-map/grid/disposition tests `147 passed`;
+  mapping loader/import surface `39 passed`; case schema `47 passed`; and the
+  five state bridges against the pinned Chunk 1 RuleSpec worktree `25 passed`.
+- Found five literal `MAIN-LANE-TBD` issue placeholders still present in the
+  two adopted notes at `conformance/us-pe.yaml:596-597` and
+  `:1120-1122`; both generated detail mirrors faithfully retain the stale
+  text. SPINE-PLAN section 8 requires the filed issue links in those notes.
+- Inspected the frozen PR-head `PROGRESS.md`: commit `309e380a` did not append
+  a checkpoint. Its final `Next` still says to file the five issues and
+  replace the placeholders, even though that commit claims the disposition
+  links were added.
+- Compared the merge base with the frozen head: exactly 26 intended paths,
+  5,681 additions, 137 deletions, and clean diff hygiene. There are no foreign
+  or missing paths.
+- Reproduced the pre-existing current-RuleSpec fingerprint on the frozen PR
+  and a clean merge-base archive: exactly `5 failed, 19 passed, 1 skipped`,
+  comprising CA, two IL, NY, and OH failures.
+- Tightened that control to GitHub's actual live base
+  `fe00bad51f85e7128f762d66dd5121324889b156`. The only test-relevant change
+  since the merge base is the 17-row CalFresh BBCE mapping addition. Applied
+  its GitHub patch to a clean archive and verified the resulting mapping Git
+  blob exactly equals live main's `ca6238a9e519bacd8fbb3c7a33d71faa372f8e30`.
+  The same five tests then produced the identical
+  `5 failed, 19 passed, 1 skipped` fingerprint.
+- Direct `git fetch` of the live base failed because sandbox DNS could not
+  resolve GitHub; read-only GitHub commit/compare data supplied the exact
+  patch and blob identity instead. Sandbox policy also rejected an `rm -rf`
+  cleanup command; the two explicitly named disposable control archives were
+  successfully removed with depth-first `find -delete`.
+
+#### Next
+
+- Write and commit the final request-changes report with prioritized findings
+  and complete evidence digest.
+- Append the closing ledger checkpoint, recheck the live PR head, and return
+  the verdict without any remote or PR mutation.
