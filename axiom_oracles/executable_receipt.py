@@ -1198,10 +1198,10 @@ def _read_json(
     try:
         raw = path.read_bytes()
     except FileNotFoundError:
-        failures.append(f"{label}: file does not exist at {path}")
+        failures.append(f"{label}: file does not exist")
         return None, None
     except OSError as error:
-        failures.append(f"{label}: cannot read {path} ({error})")
+        failures.append(f"{label}: cannot read file (errno {error.errno})")
         return None, None
     digest = hashlib.sha256(raw).hexdigest()
     try:

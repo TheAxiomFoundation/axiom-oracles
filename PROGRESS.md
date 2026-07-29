@@ -1507,8 +1507,8 @@ residual), #229 (small-suite grounding).
   `origin/main` at `2a1660d` because the network cannot currently resolve
   `github.com`.
 - Intended publication ref: `autogo/executable-producer`.
-- Phase: release and golden-case trust roots pinned; producer implementation
-  is next.
+- Phase: producer and standalone computed-certificate consumption implemented;
+  full repository verification and adversarial review are next.
 - Scope: add a deterministic, sign-only CI producer for executable receipts and
   standalone receipt consumption by the certificate harness.
 - Existing workflows, toolchain files, dependency pins, and CODEOWNERS are
@@ -1531,11 +1531,18 @@ residual), #229 (small-suite grounding).
 - Pinned the full `v0.1.1` release archive checksums, artifact release manifest
   and content hash, byte-identical ops golden request/output bindings, committed
   receipt path, and an initially empty governed workflow-SHA allowlist.
+- Added the governed workflow and its only producer path: anonymous release
+  downloads, checksum checks, archive extraction, version check, published
+  manifest binding, artifact hash check, real engine execution, golden-value
+  comparison, receipt emission, signing, and artifact upload.
+- Replaced the hand-carried executable attestation with standalone, fail-closed
+  receipt validation in `scripts/certify.py`; missing evidence now produces a
+  stable computed-false verdict.
+- Added constructed receipt and producer tests for checksum, golden-output,
+  workflow-provenance, workflow-allowlist, dev-engine, command, input, timestamp,
+  and failure-cleanup mutants. Focused result: 61 passed.
 
 ### Next
 
-- Implement the receipt schema, producer workflow, and fail-closed validation
-  boundary.
-- Implement producer and certifier tests, including all required mutants.
 - Run focused and repository-level checks, review the diff, update this ledger,
   and publish a draft PR if network access becomes available.

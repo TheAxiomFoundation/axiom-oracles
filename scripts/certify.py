@@ -10,14 +10,15 @@ question about a program's validation posture is not answerable from its
 certificate, that is a certificate defect to file — not a prompt to go read
 adapters.
 
-Two evidence modes, stated per claim:
+Evidence modes are stated per claim:
 
 * ``computed`` — this script re-derives the value from committed in-repo
   artifacts; drift fails ``--check``.
 * ``attested`` — the value is carried from a sha-pinned external receipt
-  (today: the ops closure prototype and the engine-execution receipts).
-  Attested is scaffolding, not certification; the roadmap is monotone
-  conversion of attested claims to computed ones.
+  (today: only the ops closure prototype). Attested is scaffolding, not
+  certification; the roadmap is monotone conversion of attested claims to
+  computed ones. Executability is computed from the governed CI receipt and
+  fails closed when that receipt is missing or invalid.
 
 Oracle types matter to the verdict. ``reference`` oracles (another
 implementation) can be wrong in code, so their unexplained mismatches block
@@ -40,6 +41,13 @@ import sys
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from axiom_oracles.executable_receipt import (  # noqa: E402
+    validate_executable_receipt,
+)
+
 DATA_DIR = REPO_ROOT / "dashboard" / "public" / "data"
 CENSUS_PATH = REPO_ROOT / "conformance" / "exercise-census.json"
 OUT_DIR = REPO_ROOT / "certificates"
@@ -48,8 +56,9 @@ SCHEMA = "axiom_oracles.program_certificate.v1"
 
 #: Program registry. One entry per certified (jurisdiction, program).
 #: ``suites`` lists every comparison that bears on the program, typed.
-#: ``attested`` carries sha-pinned claims from outside this repo, verbatim,
-#: with their provenance; nothing here is recomputable in-repo yet.
+#: ``attested`` carries the remaining external closure claim. ``executable``
+#: pins the certificate-owned expectations independently re-checked against
+#: the governed producer's committed receipt.
 PROGRAMS: dict[str, dict] = {
     "us-co/snap": {
         "period": "2026-01",
@@ -84,19 +93,16 @@ PROGRAMS: dict[str, dict] = {
                 "source_commits": ["ee4bcfe6aa9b", "968e9e2805e2"],
                 "status": "prototype",
             },
-            "executable": {
-                "value": {
-                    "tuple": "engine v0.1.1 x program-artifacts-59a10dab866e",
-                    "loads_and_runs": True,
-                    "golden_values_reproduce": False,
-                    "detail": "rc=0, snap_monthly_allotment=478; committed "
-                    "fixture predates the input-naming cutover so eligibility "
-                    "is unresolved (gated output $0) and net income lands at "
-                    "226 vs certified 226.50 — fixture regeneration pending",
-                },
-                "source": "TheAxiomFoundation/ops launch-readiness/receipts/"
-                "engine-v0.1.1-receipt-2026-07-26.md",
-                "status": "fail_open_item",
+        },
+        "executable": {
+            "manifest": "certificates/executable/us-co-snap/manifest.json",
+            "golden_input_sha256": (
+                "8cbf093601f94a8f5a4517aeb27a4851439776d9d16933785c540839f4655dc3"
+            ),
+            "expected_outputs": {
+                "snap_benefit_amount": 478,
+                "snap_net_income": 226,
+                "snap_eligible": "holds",
             },
         },
     },
@@ -174,6 +180,59 @@ def _exercise_block(suites: list[dict], census: dict) -> tuple[dict, bool]:
     return rows, complete
 
 
+def _executable_verdict(spec: dict) -> tuple[dict, dict | None]:
+    """Compute executability from the producer receipt, never an attestation."""
+
+    manifest_path = REPO_ROOT / spec["manifest"]
+    validation = validate_executable_receipt(
+        repo_root=REPO_ROOT,
+        manifest_path=manifest_path,
+        expected_outputs=spec["expected_outputs"],
+    )
+    failures = list(validation.failures)
+    manifest_sha256 = sha256_of(manifest_path) if manifest_path.is_file() else None
+    receipt_path = "certificates/executable/us-co-snap/receipt.json"
+    try:
+        manifest = _load(manifest_path)
+        receipt_path = str(manifest.get("receipt_path") or receipt_path)
+        manifest_input_sha = (manifest.get("golden") or {}).get("input_sha256")
+        if manifest_input_sha != spec["golden_input_sha256"]:
+            failures.append(
+                "certificate golden input SHA-256 disagrees with the "
+                "executable manifest"
+            )
+    except (OSError, json.JSONDecodeError, TypeError, AttributeError):
+        # The validator already records the actionable malformed-manifest
+        # failure. Keep certificate generation fail-closed and deterministic.
+        pass
+
+    holds = validation.valid and not failures
+    verdict = {
+        "value": holds,
+        "mode": "computed",
+        "receipt": receipt_path,
+        "receipt_sha256": validation.receipt_sha256,
+        "manifest": spec["manifest"],
+        "manifest_sha256": manifest_sha256,
+        "golden_input_sha256": spec["golden_input_sha256"],
+        "expected_outputs": spec["expected_outputs"],
+        "failures": failures,
+    }
+    if holds:
+        verdict["evidence"] = validation.evidence
+
+    evidence = None
+    if validation.receipt_sha256:
+        evidence = {
+            "claim": "executable",
+            "mode": "computed",
+            "artifact": receipt_path,
+            "sha256": validation.receipt_sha256,
+            "accepted": holds,
+        }
+    return verdict, evidence
+
+
 def build_certificate(program: str, spec: dict) -> dict:
     census = _load(CENSUS_PATH)
     legs = []
@@ -196,6 +255,9 @@ def build_certificate(program: str, spec: dict) -> dict:
     reality_leads = sum(leg["mismatches"] for leg in reality_legs)
 
     exercise_rows, exercise_complete = _exercise_block(spec["suites"], census)
+    executable, executable_evidence = _executable_verdict(spec["executable"])
+    if executable_evidence:
+        evidence.append(executable_evidence)
 
     blockers = []
     for leg in reference_legs:
@@ -209,6 +271,9 @@ def build_certificate(program: str, spec: dict) -> dict:
             "exercise: census incomplete (missing per-case evidence or "
             "unaudited bridge) for at least one suite"
         )
+    if not executable["value"]:
+        detail = "; ".join(executable["failures"]) or "receipt did not validate"
+        blockers.append(f"executable: {detail}")
 
     attested = spec.get("attested") or {}
     return {
@@ -232,15 +297,16 @@ def build_certificate(program: str, spec: dict) -> dict:
                 "suites": exercise_rows,
             },
             "closed": {"mode": "attested", **attested.get("closed", {})},
-            "executable": {"mode": "attested", **attested.get("executable", {})},
+            "executable": executable,
         },
         "blockers": blockers,
         "evidence": evidence,
         "_comment": (
             "Generated by scripts/certify.py — do not hand-edit. Every "
             "computed field re-derives from the named artifacts under "
-            "--check; attested fields carry sha-pinned external receipts "
-            "and are scaffolding, not certification. A certification "
+            "--check; the executable premise only holds for a receipt accepted "
+            "against the pinned release and workflow manifests. Remaining "
+            "attested fields are scaffolding, not certification. A certification "
             "question not answerable from this document is a certificate "
             "defect to file."
         ),
@@ -288,7 +354,7 @@ def main() -> int:
             f"{program}: conformant={verdicts['conformant']['value']} "
             f"exercised={verdicts['exercised']['value']} "
             f"closed={verdicts['closed'].get('status')} "
-            f"executable={verdicts['executable'].get('status')}"
+            f"executable={verdicts['executable']['value']}"
         )
         for blocker in certificate["blockers"]:
             print(f"  blocker: {blocker}")
