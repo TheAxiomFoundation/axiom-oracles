@@ -469,8 +469,7 @@ def test_real_gh_cli_accepts_verifier_flag_combination(
     # must succeed. This catches mutually exclusive gh identity flags that mocks
     # cannot detect.
     assert completed.returncode != 0
-    assert "if any flags in the group" not in completed.stderr
-    assert "were all set" not in completed.stderr
+    assert "bundle content could not be parsed" in completed.stderr.lower()
 
 
 def test_receipt_changed_after_signing_is_rejected(

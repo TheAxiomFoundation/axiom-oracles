@@ -91,10 +91,12 @@ def validate_executable_receipt(
 ) -> ReceiptValidation:
     """Validate a v1 executable receipt against committed trust roots.
 
-    ``receipt`` may be an already-parsed JSON object or a path.  When omitted,
-    the receipt is read from the output path declared by the executable
-    manifest.  Relative paths are resolved below ``repo_root`` and declared
-    paths are not allowed to escape it.
+    ``receipt`` may be a path.  An already-parsed JSON object is accepted only
+    for fail-closed structural diagnostics: it can never validate because its
+    exact signed bytes are unavailable.  When omitted, the receipt is read from
+    the output path declared by the executable manifest.  Relative paths are
+    resolved below ``repo_root`` and declared paths are not allowed to escape
+    it.
 
     ``expected_outputs`` is an optional second pin supplied by a certificate
     consumer.  When present, it must exactly equal the expectations in the
