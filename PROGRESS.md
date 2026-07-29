@@ -1172,3 +1172,25 @@ residual), #229 (small-suite grounding).
   detail copies; full check battery green.
 - Next: round-2 blind re-review, then merge after rulespec-us#1177 per the
   section 9 pairing order.
+
+## 2026-07-29 PR #425 final verification (reviewer)
+
+### State
+
+- Frozen target: `ac80a27f0b0419fdf505838a66f181f20d927cad`.
+- Baseline for containment: `1ce97c22`.
+- Scope is limited to the two round-2 mechanical blockers and containment.
+
+### Done
+
+- Created a disposable review worktree and local review branch under
+  `.git/review-worktrees/`; no PR branch, remote, or GitHub state was changed.
+- Confirmed the target and baseline objects are available locally.
+
+### Next
+
+- Fetch issue policyengine-us#9168 read-only and verify its exact live title.
+- Verify the frozen target's tracked-tree token count and merge-base-prefix
+  preservation.
+- Verify containment and run the two named read-only checks.
+- Record and commit the final report and closeout state.
