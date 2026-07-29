@@ -1507,8 +1507,8 @@ residual), #229 (small-suite grounding).
   `origin/main` at `2a1660d` because the network cannot currently resolve
   `github.com`.
 - Intended publication ref: `autogo/executable-producer`.
-- Phase: certificate baseline ported and refreshed; producer trust-root
-  implementation is next.
+- Phase: release and golden-case trust roots pinned; producer implementation
+  is next.
 - Scope: add a deterministic, sign-only CI producer for executable receipts and
   standalone receipt consumption by the certificate harness.
 - Existing workflows, toolchain files, dependency pins, and CODEOWNERS are
@@ -1528,11 +1528,14 @@ residual), #229 (small-suite grounding).
   branch (#378/#379).
 - Regenerated the census and certificate against this worktree's current main
   data. The expected pre-producer certificate remains attested and red.
+- Pinned the full `v0.1.1` release archive checksums, artifact release manifest
+  and content hash, byte-identical ops golden request/output bindings, committed
+  receipt path, and an initially empty governed workflow-SHA allowlist.
 
 ### Next
 
-- Define the release manifest, receipt schema/output path, producer workflow,
-  and fail-closed validation boundary.
+- Implement the receipt schema, producer workflow, and fail-closed validation
+  boundary.
 - Implement producer and certifier tests, including all required mutants.
 - Run focused and repository-level checks, review the diff, update this ledger,
   and publish a draft PR if network access becomes available.
