@@ -1230,3 +1230,39 @@ residual), #229 (small-suite grounding).
 - Complete the read-only issue-body and pinned-source audit.
 - Complete conformance regeneration, placeholder, full-check, closeout, and
   containment verification.
+
+### Checkpoint — issue-body and pinned-source repairs
+
+#### State
+
+- Repair 3 passes at frozen head `1ce97c22`.
+- Issues #9168 and #9170 were read through the GitHub connector only; no
+  GitHub mutation was made.
+
+#### Done
+
+- Confirmed issue #9168's body binds
+  `foreign_earned_income_exclusion` under `tax_units`, calls it a
+  TaxUnit/year variable, and cites section 164(b)(7)(B)(iv).
+- Replayed that body verbatim against the exact cached PE-US 1.767.3 /
+  PE-Core 3.30.3 stack. It runs and returns exclusion `10000` and SALT cap
+  `40400`; the variable entity is `tax_unit` and its definition period is
+  `year`.
+- Checked source pin `49d19b239a593dbac8920ac6fd80cfe33372343a`:
+  `foreign_earned_income_exclusion` declares `entity = TaxUnit`, while
+  `salt_cap.py` phases out from `adjusted_gross_income` without a section-911
+  addback.
+- Confirmed issue #9170's body now states the pinned path as
+  `taxable_income=700000`, `excess=59400`, `lesser=50000`, and
+  `reduction=2702.70`.
+- Replayed the named case against the same exact stack. The pinned formula
+  returns reduction `2702.702392578125` and final deductions
+  `47297.296875`; source lines 31-39 compute AGI minus exemptions, top-bracket
+  excess, the lesser amount, and the `0.05405405` rate exactly as the body
+  says.
+
+#### Next
+
+- Complete conformance regeneration, placeholder, full-check, closeout, and
+  containment verification.
+- Record the verdict and committed output report.
