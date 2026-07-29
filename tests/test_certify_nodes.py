@@ -131,9 +131,7 @@ def _inputs_pinned_to_artifact(
     _write_json(receipt_path, receipt)
     receipt_sha = hashlib.sha256(receipt_path.read_bytes()).hexdigest()
 
-    output_bindings_source = (
-        FIXTURES / "manifests" / "us-medicare-golden-outputs.json"
-    )
+    output_bindings_source = FIXTURES / "manifests" / "us-medicare-golden-outputs.json"
     output_bindings_path = (
         fixture_root / "manifests" / "us-medicare-golden-outputs.json"
     )
@@ -141,9 +139,7 @@ def _inputs_pinned_to_artifact(
     shutil.copyfile(output_bindings_source, output_bindings_path)
     output_bindings_sha = hashlib.sha256(output_bindings_path.read_bytes()).hexdigest()
 
-    manifest = json.loads(
-        (FIXTURES / "manifests" / "us-medicare.json").read_text()
-    )
+    manifest = json.loads((FIXTURES / "manifests" / "us-medicare.json").read_text())
     manifest["artifact"]["sha256"] = artifact_sha
     manifest["golden"]["outputs_sha256"] = output_bindings_sha
     manifest_path = fixture_root / "manifests" / "us-medicare.json"
@@ -157,9 +153,9 @@ def _inputs_pinned_to_artifact(
 
     comparisons = json.loads((FIXTURES / "comparisons.json").read_text())
     comparisons["artifact_sha256"] = artifact_sha
-    comparisons["comparisons"]["us-medicare-wage-tax"]["pinned"][
-        "artifact"
-    ] = artifact_sha
+    comparisons["comparisons"]["us-medicare-wage-tax"]["pinned"]["artifact"] = (
+        artifact_sha
+    )
     comparisons_path = fixture_root / "comparisons.json"
     _write_json(comparisons_path, comparisons)
 
@@ -186,9 +182,7 @@ def _inputs_pinned_to_artifact(
             "exercise_census": hashlib.sha256(
                 BASE_INPUTS["exercise-census"].read_bytes()
             ).hexdigest(),
-            "node_executable": hashlib.sha256(
-                executable_path.read_bytes()
-            ).hexdigest(),
+            "node_executable": hashlib.sha256(executable_path.read_bytes()).hexdigest(),
             "workflow_governance": hashlib.sha256(
                 BASE_INPUTS["governance"].read_bytes()
             ).hexdigest(),
@@ -290,9 +284,7 @@ def test_green_baseline_writes_exact_entry_and_checks_without_mutating(
     rendered = output.read_text()
     assert all(f"#   {index}." in rendered for index in range(1, 7))
     executable_evidence = entry["criteria"]["executable"]["evidence"]
-    assert executable_evidence["index_sha256"] != executable_evidence[
-        "receipt_sha256"
-    ]
+    assert executable_evidence["index_sha256"] != executable_evidence["receipt_sha256"]
     assert isinstance(yaml.safe_load(rendered)["nodes"][0]["certified_at"], str)
     assert reasons.exists()
 
@@ -566,9 +558,7 @@ def test_regressed_node_fails_check_then_write_removes_stale_green_entry(
 
 def test_foreign_comparison_report_cannot_be_rekeyed_green(tmp_path: Path) -> None:
     root = _copy_fixture_root(tmp_path)
-    report = json.loads(
-        (root / "reports" / "us-medicare-wage-tax.json").read_text()
-    )
+    report = json.loads((root / "reports" / "us-medicare-wage-tax.json").read_text())
     report["suite"] = "foreign-suite"
     foreign_path = root / "reports" / "foreign-suite.json"
     _write_json(foreign_path, report)
@@ -660,12 +650,8 @@ def test_foreign_program_receipt_cannot_be_rekeyed_to_node(tmp_path: Path) -> No
 
 
 def test_workflow_sha_must_be_separately_governed(tmp_path: Path) -> None:
-    governance = json.loads(
-        (FIXTURES / "workflow-governance.json").read_text()
-    )
-    governance["allowed_workflow_shas"] = [
-        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-    ]
+    governance = json.loads((FIXTURES / "workflow-governance.json").read_text())
+    governance["allowed_workflow_shas"] = ["aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"]
     governance_path = tmp_path / "untrusted-governance.json"
     _write_json(governance_path, governance)
     overrides = _bind_run_manifest(tmp_path, {"governance": governance_path})

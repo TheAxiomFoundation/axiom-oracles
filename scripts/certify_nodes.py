@@ -381,24 +381,32 @@ def _artifact_nodes(
         )
     metadata = artifact.value.get("metadata")
     if not isinstance(metadata, dict):
-        return [], {}, [
-            _reason(
-                "provision_rooted",
-                "producer_missing",
-                artifact.name,
-                "compiled artifact has no metadata object",
-            )
-        ]
+        return (
+            [],
+            {},
+            [
+                _reason(
+                    "provision_rooted",
+                    "producer_missing",
+                    artifact.name,
+                    "compiled artifact has no metadata object",
+                )
+            ],
+        )
     raw_nodes = metadata.get("nodes")
     if not isinstance(raw_nodes, list):
-        return [], {}, [
-            _reason(
-                "provision_rooted",
-                "producer_missing",
-                artifact.name,
-                "compiled artifact metadata.nodes producer is absent",
-            )
-        ]
+        return (
+            [],
+            {},
+            [
+                _reason(
+                    "provision_rooted",
+                    "producer_missing",
+                    artifact.name,
+                    "compiled artifact metadata.nodes producer is absent",
+                )
+            ],
+        )
     nodes: dict[str, dict[str, Any]] = {}
     for index, row in enumerate(raw_nodes):
         if not isinstance(row, dict) or not _is_string(row.get("id")):
@@ -811,9 +819,7 @@ def _run_context(
         artifact.value.get("metadata") if artifact.value is not None else None
     )
     artifact_pins = (
-        artifact_metadata.get("pinned")
-        if isinstance(artifact_metadata, dict)
-        else None
+        artifact_metadata.get("pinned") if isinstance(artifact_metadata, dict) else None
     )
     expected_artifact_pins = {
         field: pins.get(field) for field in ("rulespec_us", "corpus", "engine")
@@ -864,8 +870,10 @@ def _closed(
     if schema:
         reasons.append(schema)
     roots = declaration.get("closure_roots") if declaration else None
-    if not isinstance(roots, list) or not roots or not all(
-        _is_string(item) for item in roots
+    if (
+        not isinstance(roots, list)
+        or not roots
+        or not all(_is_string(item) for item in roots)
     ):
         reasons.append(
             _reason(
@@ -972,7 +980,9 @@ def _closed(
                 )
             )
         total = row.get("total")
-        accounted = sum(by_status[status] for status in ("encoded", "excluded", "pending"))
+        accounted = sum(
+            by_status[status] for status in ("encoded", "excluded", "pending")
+        )
         if not _is_int(total, minimum=1) or total != accounted:
             reasons.append(
                 _reason(
@@ -1104,7 +1114,9 @@ def _conformant(
             )
         raw = comparisons.value.get("comparisons")
         if isinstance(raw, dict):
-            suites = {str(key): value for key, value in raw.items() if isinstance(value, dict)}
+            suites = {
+                str(key): value for key, value in raw.items() if isinstance(value, dict)
+            }
         else:
             reasons.append(
                 _reason(
@@ -1307,8 +1319,7 @@ def _conformant(
                     )
                     or not _is_int(derived_unexplained)
                     or mismatch_count is None
-                    or sum(counts.values()) + derived_unexplained
-                    != mismatch_count
+                    or sum(counts.values()) + derived_unexplained != mismatch_count
                 ):
                     report_errors.append(
                         "summary.dispositioned counts do not reconcile mismatches"
@@ -1332,9 +1343,7 @@ def _conformant(
             }
             for field, expected in expected_counts.items():
                 if not _is_int(expected) or row.get(field) != expected:
-                    report_errors.append(
-                        f"computed {field} does not match the report"
-                    )
+                    report_errors.append(f"computed {field} does not match the report")
             if report_errors:
                 reasons.append(
                     _reason(
@@ -1478,7 +1487,9 @@ def _exercised(
     if census.value is not None:
         raw = census.value.get("suites")
         if isinstance(raw, dict):
-            suites = {str(key): value for key, value in raw.items() if isinstance(value, dict)}
+            suites = {
+                str(key): value for key, value in raw.items() if isinstance(value, dict)
+            }
         else:
             reasons.append(
                 _reason(
@@ -1492,8 +1503,10 @@ def _exercised(
     for declaration in applicable:
         suite = str(declaration["suite"])
         required = declaration.get("required_dimensions")
-        if not isinstance(required, list) or not required or not all(
-            _is_string(item) for item in required
+        if (
+            not isinstance(required, list)
+            or not required
+            or not all(_is_string(item) for item in required)
         ):
             reasons.append(
                 _reason(
@@ -1528,7 +1541,10 @@ def _exercised(
         report = comparison.get("report")
         expected_path = report.get("path") if isinstance(report, dict) else None
         expected_sha = report.get("sha256") if isinstance(report, dict) else None
-        if row.get("report") != expected_path or row.get("report_sha256") != expected_sha:
+        if (
+            row.get("report") != expected_path
+            or row.get("report_sha256") != expected_sha
+        ):
             reasons.append(
                 _reason(
                     "exercised",
@@ -1561,10 +1577,7 @@ def _exercised(
                     "exercised",
                     "comparison_not_fully_reconciled",
                     census.name,
-                    (
-                        f"suite {suite!r} census evidence is not "
-                        "cardinality-reconciled"
-                    ),
+                    (f"suite {suite!r} census evidence is not cardinality-reconciled"),
                 )
             )
         if row.get("bridge_declared") is not True:
@@ -1836,8 +1849,7 @@ def _executable(
             manifest_engine = manifest_value.get("engine")
             manifest_golden = manifest_value.get("golden")
             if (
-                manifest_value.get("schema")
-                != "axiom_oracles.executable_manifest.v1"
+                manifest_value.get("schema") != "axiom_oracles.executable_manifest.v1"
                 or manifest_value.get("program") != program
                 or not isinstance(manifest_artifact, dict)
                 or manifest_artifact.get("sha256") != artifact.sha256
@@ -2323,9 +2335,7 @@ def main(argv: list[str] | None = None) -> int:
     governance = _load(root, args.governance, "workflow_governance")
 
     output_path = _resolve(root, args.output)
-    reasons_path = (
-        _resolve(root, args.reasons_output) if args.reasons_output else None
-    )
+    reasons_path = _resolve(root, args.reasons_output) if args.reasons_output else None
     protected_paths = {
         artifact.path,
         node_index.path,
@@ -2387,9 +2397,7 @@ def main(argv: list[str] | None = None) -> int:
 
     output_drift = _drifted(output_path, ledger)
     reasons_drift = (
-        _drifted(reasons_path, result_rendered)
-        if reasons_path is not None
-        else False
+        _drifted(reasons_path, result_rendered) if reasons_path is not None else False
     )
     write_error: OSError | None = None
     if not args.check:
