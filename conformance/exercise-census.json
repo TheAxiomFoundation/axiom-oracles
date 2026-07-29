@@ -102,7 +102,7 @@
           "state": "constant"
         },
         "axiom:al-snap-compiled#input.household_shelter_costs_incurred": {
-          "distinct": 574,
+          "distinct": 573,
           "state": "varied"
         },
         "axiom:al-snap-compiled#input.household_size": {
@@ -184,7 +184,7 @@
           "distinct_left_values": 2
         },
         "us:statutes/7/2014/u#snap_benefit": {
-          "distinct_left_values": 97
+          "distinct_left_values": 105
         }
       }
     },
@@ -214,7 +214,7 @@
       "varied_fields": 3,
       "verdict_concepts": {
         "us-al:policies/dhr/tanf#al_tanf_benefit": {
-          "distinct_left_values": 12
+          "distinct_left_values": 9
         }
       }
     },
@@ -322,7 +322,7 @@
           "state": "constant"
         },
         "axiom:az-snap-compiled#input.household_shelter_costs_incurred": {
-          "distinct": 584,
+          "distinct": 582,
           "state": "varied"
         },
         "axiom:az-snap-compiled#input.household_size": {
@@ -493,7 +493,7 @@
       "varied_fields": 6,
       "verdict_concepts": {
         "us-az:policies/des/faa5#az_tanf_benefit": {
-          "distinct_left_values": 3
+          "distinct_left_values": 6
         }
       }
     },
@@ -1564,114 +1564,27 @@
       "varied_fields": 0,
       "verdict_concepts": {}
     },
+    "ca-income-tax-populace": {
+      "bridge_audited": false,
+      "bridged_through": {},
+      "cases_scanned": 8883,
+      "constant_fields": 0,
+      "evidence_fields": {},
+      "varied_fields": 0,
+      "verdict_concepts": {
+        "us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_behavioral_health_services_tax": {
+          "distinct_left_values": 1207
+        }
+      }
+    },
     "ca-snap-ecps": {
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 7101,
-      "constant_fields": 14,
-      "evidence_fields": {
-        "axiom:ca-snap-compiled#input.gross_monthly_income": {
-          "distinct": 6262,
-          "state": "varied"
-        },
-        "axiom:ca-snap-compiled#input.household_has_heating_and_cooling_costs_separate_from_rent_or_mortgage": {
-          "distinct": 1,
-          "state": "constant"
-        },
-        "axiom:ca-snap-compiled#input.household_lives_in_application_state": {
-          "distinct": 1,
-          "state": "constant"
-        },
-        "axiom:ca-snap-compiled#input.household_shelter_costs_incurred": {
-          "distinct": 2904,
-          "state": "varied"
-        },
-        "axiom:ca-snap-compiled#input.household_size": {
-          "distinct": 10,
-          "state": "varied"
-        },
-        "axiom:ca-snap-compiled#input.legal_noncitizen_of_united_states": {
-          "distinct": 1,
-          "state": "constant"
-        },
-        "axiom:ca-snap-compiled#input.member_abawd_monthly_work_hours": {
-          "distinct": 1,
-          "state": "constant"
-        },
-        "axiom:ca-snap-compiled#input.member_abawd_weekly_work_hours": {
-          "distinct": 1,
-          "state": "constant"
-        },
-        "axiom:ca-snap-compiled#input.member_age": {
-          "distinct": 81,
-          "state": "varied"
-        },
-        "axiom:ca-snap-compiled#input.member_is_pregnant": {
-          "distinct": 1,
-          "state": "constant"
-        },
-        "axiom:ca-snap-compiled#input.member_is_us_citizen": {
-          "distinct": 1,
-          "state": "constant"
-        },
-        "axiom:ca-snap-compiled#input.member_is_veteran": {
-          "distinct": 1,
-          "state": "constant"
-        },
-        "axiom:ca-snap-compiled#input.member_medically_certified_physically_or_mentally_unfit_for_employment": {
-          "distinct": 1,
-          "state": "constant"
-        },
-        "axiom:ca-snap-compiled#input.member_physically_or_mentally_unfit_for_employment": {
-          "distinct": 1,
-          "state": "constant"
-        },
-        "axiom:ca-snap-compiled#input.member_weekly_wages": {
-          "distinct": 3433,
-          "state": "varied"
-        },
-        "axiom:ca-snap-compiled#input.member_weekly_work_hours": {
-          "distinct": 1,
-          "state": "constant"
-        },
-        "axiom:ca-snap-compiled#input.number_of_days_in_month": {
-          "distinct": 1,
-          "state": "constant"
-        },
-        "axiom:ca-snap-compiled#input.person_age": {
-          "distinct": 81,
-          "state": "varied"
-        },
-        "axiom:ca-snap-compiled#input.snap_gross_monthly_earned_income": {
-          "distinct": 3442,
-          "state": "varied"
-        },
-        "axiom:ca-snap-compiled#input.snap_member_is_elderly_or_disabled": {
-          "distinct": 1,
-          "state": "constant"
-        },
-        "axiom:ca-snap-compiled#input.snap_total_monthly_unearned_income": {
-          "distinct": 4364,
-          "state": "varied"
-        },
-        "axiom:ca-snap-compiled#input.state_agency_rounds_thirty_percent_net_income_up": {
-          "distinct": 1,
-          "state": "constant"
-        },
-        "axiom:ca-snap-compiled#input.total_gross_earned_income": {
-          "distinct": 3844,
-          "state": "varied"
-        }
-      },
-      "varied_fields": 9,
-      "verdict_concepts": {
-        "us:statutes/7/2014/o#snap_eligible": {
-          "distinct_left_values": 2
-        },
-        "us:statutes/7/2014/u#snap_benefit": {
-          "distinct_left_values": 187
-        }
-      }
+      "constant_fields": 0,
+      "evidence_fields": {},
+      "varied_fields": 0,
+      "verdict_concepts": {}
     },
     "ca-snap-qc": {
       "bridge_audited": false,
@@ -1990,15 +1903,6 @@
       "varied_fields": 0,
       "verdict_concepts": {}
     },
-    "ct-income-tax-liability": {
-      "bridge_audited": false,
-      "bridged_through": {},
-      "cases_scanned": 6,
-      "constant_fields": 0,
-      "evidence_fields": {},
-      "varied_fields": 0,
-      "verdict_concepts": {}
-    },
     "ct-income-tax-populace": {
       "bridge_audited": false,
       "bridged_through": {},
@@ -2007,8 +1911,8 @@
       "evidence_fields": {},
       "varied_fields": 0,
       "verdict_concepts": {
-        "us-ct:policies/income_tax/pilot_liability_pipeline#ct_pit_pilot_income_tax_liability": {
-          "distinct_left_values": 744
+        "us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_resident_ordinary_tax_before_personal_credit": {
+          "distinct_left_values": 752
         }
       }
     },
@@ -2021,14 +1925,18 @@
       "varied_fields": 0,
       "verdict_concepts": {}
     },
-    "de-income-tax-liability": {
+    "dc-income-tax-populace": {
       "bridge_audited": false,
       "bridged_through": {},
-      "cases_scanned": 6,
+      "cases_scanned": 1362,
       "constant_fields": 0,
       "evidence_fields": {},
       "varied_fields": 0,
-      "verdict_concepts": {}
+      "verdict_concepts": {
+        "us-dc:policies/income_tax/2026_section_47_1806_03_schedule_before_credits#dc_pit_2026_section_47_1806_03_schedule_before_credits": {
+          "distinct_left_values": 1069
+        }
+      }
     },
     "de-income-tax-populace": {
       "bridge_audited": false,
@@ -2038,7 +1946,7 @@
       "evidence_fields": {},
       "varied_fields": 0,
       "verdict_concepts": {
-        "us-de:policies/income_tax/pilot_liability_pipeline#de_pit_pilot_income_tax_liability": {
+        "us-de:policies/income_tax/pilot_liability_pipeline#de_pit_pilot_separate_schedule_tax": {
           "distinct_left_values": 801
         }
       }
@@ -2047,42 +1955,18 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 781,
-      "constant_fields": 3,
+      "constant_fields": 0,
       "evidence_fields": {
-        "axiom:de-tanf-compiled#input.applicable_tanf_standard_of_need": {
+        "input_records": {
+          "distinct": 753,
+          "state": "varied"
+        },
+        "relations": {
           "distinct": 8,
           "state": "varied"
-        },
-        "axiom:de-tanf-compiled#input.assistance_unit_member_count": {
-          "distinct": 8,
-          "state": "varied"
-        },
-        "axiom:de-tanf-compiled#input.gross_income": {
-          "distinct": 738,
-          "state": "varied"
-        },
-        "axiom:de-tanf-compiled#input.household_has_minor_or_pregnant_member": {
-          "distinct": 1,
-          "state": "constant"
-        },
-        "axiom:de-tanf-compiled#input.thirty_plus_one_third_disregard_applies": {
-          "distinct": 1,
-          "state": "constant"
-        },
-        "axiom:de-tanf-compiled#input.total_wage_earner_earnings": {
-          "distinct": 481,
-          "state": "varied"
-        },
-        "axiom:de-tanf-compiled#input.unearned_income": {
-          "distinct": 564,
-          "state": "varied"
-        },
-        "axiom:de-tanf-compiled#input.wage_earner_count": {
-          "distinct": 1,
-          "state": "constant"
         }
       },
-      "varied_fields": 5,
+      "varied_fields": 2,
       "verdict_concepts": {
         "us-de:regulations/title-16/4000-financial-responsibility#de_tanf_benefit": {
           "distinct_left_values": 5
@@ -2156,7 +2040,7 @@
           "state": "constant"
         },
         "axiom:fl-snap-compiled#input.household_shelter_costs_incurred": {
-          "distinct": 1613,
+          "distinct": 1614,
           "state": "varied"
         },
         "axiom:fl-snap-compiled#input.household_size": {
@@ -2208,7 +2092,7 @@
           "state": "varied"
         },
         "axiom:fl-snap-compiled#input.snap_gross_monthly_earned_income": {
-          "distinct": 1956,
+          "distinct": 2180,
           "state": "varied"
         },
         "axiom:fl-snap-compiled#input.snap_member_is_elderly_or_disabled": {
@@ -2230,7 +2114,7 @@
           "distinct_left_values": 2
         },
         "us:statutes/7/2014/u#snap_benefit": {
-          "distinct_left_values": 172
+          "distinct_left_values": 193
         }
       }
     },
@@ -2327,7 +2211,7 @@
       "evidence_fields": {},
       "varied_fields": 0,
       "verdict_concepts": {
-        "us-ga:policies/income_tax/pilot_liability_pipeline#ga_pit_pilot_income_tax_liability": {
+        "us-ga:policies/income_tax/2026_annual_tax_before_nonrefundable_credits#ga_pit_2026_annual_tax_before_nonrefundable_credits": {
           "distinct_left_values": 1551
         }
       }
@@ -2421,7 +2305,7 @@
           "distinct_left_values": 2
         },
         "us:statutes/7/2014/u#snap_benefit": {
-          "distinct_left_values": 105
+          "distinct_left_values": 117
         }
       }
     },
@@ -2438,26 +2322,18 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 1897,
-      "constant_fields": 1,
+      "constant_fields": 0,
       "evidence_fields": {
-        "axiom:ga-tanf-compiled#input.allowable_earned_income_deductions": {
-          "distinct": 47,
+        "input_records": {
+          "distinct": 1804,
           "state": "varied"
         },
-        "axiom:ga-tanf-compiled#input.assistance_unit_included_income": {
-          "distinct": 1751,
-          "state": "varied"
-        },
-        "axiom:ga-tanf-compiled#input.assistance_unit_member_count": {
+        "relations": {
           "distinct": 8,
           "state": "varied"
-        },
-        "axiom:ga-tanf-compiled#input.household_has_minor_or_pregnant_member": {
-          "distinct": 1,
-          "state": "constant"
         }
       },
-      "varied_fields": 3,
+      "varied_fields": 2,
       "verdict_concepts": {
         "us-ga:policies/dfcs/tanf#ga_tanf_benefit": {
           "distinct_left_values": 12
@@ -2730,7 +2606,7 @@
       "evidence_fields": {},
       "varied_fields": 0,
       "verdict_concepts": {
-        "us-ks:policies/income_tax/pilot_liability_pipeline#ks_pit_pilot_income_tax_liability": {
+        "us-ks:policies/income_tax/2026_k40es_schedule_before_credits#ks_pit_2026_k40es_schedule_before_credits": {
           "distinct_left_values": 819
         }
       }
@@ -2867,7 +2743,7 @@
           "state": "constant"
         },
         "axiom:ma-snap-compiled#input.household_shelter_costs_incurred": {
-          "distinct": 763,
+          "distinct": 761,
           "state": "varied"
         },
         "axiom:ma-snap-compiled#input.household_size": {
@@ -2949,7 +2825,7 @@
           "distinct_left_values": 2
         },
         "us:statutes/7/2014/u#snap_benefit": {
-          "distinct_left_values": 82
+          "distinct_left_values": 83
         }
       }
     },
@@ -3200,54 +3076,35 @@
       "varied_fields": 0,
       "verdict_concepts": {}
     },
+    "mn-income-tax-populace": {
+      "bridge_audited": false,
+      "bridged_through": {},
+      "cases_scanned": 1117,
+      "constant_fields": 0,
+      "evidence_fields": {},
+      "varied_fields": 0,
+      "verdict_concepts": {
+        "us-mn:policies/income_tax/pilot_liability_pipeline#mn_pit_pilot_schedule_tax": {
+          "distinct_left_values": 922
+        }
+      }
+    },
     "mn-tanf-ecps": {
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 991,
-      "constant_fields": 5,
+      "constant_fields": 0,
       "evidence_fields": {
-        "axiom:mn-tanf-compiled#input.family_wage_level_for_corresponding_payment_month": {
+        "input_records": {
+          "distinct": 968,
+          "state": "varied"
+        },
+        "relations": {
           "distinct": 7,
           "state": "varied"
-        },
-        "axiom:mn-tanf-compiled#input.household_has_minor_or_pregnant_member": {
-          "distinct": 1,
-          "state": "constant"
-        },
-        "axiom:mn-tanf-compiled#input.mfip_food_portion_amount_under_section_0020_09": {
-          "distinct": 7,
-          "state": "varied"
-        },
-        "axiom:mn-tanf-compiled#input.net_earned_income_in_budget_month": {
-          "distinct": 685,
-          "state": "varied"
-        },
-        "axiom:mn-tanf-compiled#input.transitional_standard_for_corresponding_payment_month": {
-          "distinct": 7,
-          "state": "varied"
-        },
-        "axiom:mn-tanf-compiled#input.unearned_income_in_budget_month": {
-          "distinct": 738,
-          "state": "varied"
-        },
-        "axiom:mn-tanf-compiled#input.unit_has_both_earned_and_unearned_income": {
-          "distinct": 1,
-          "state": "constant"
-        },
-        "axiom:mn-tanf-compiled#input.unit_has_earned_income_only": {
-          "distinct": 1,
-          "state": "constant"
-        },
-        "axiom:mn-tanf-compiled#input.unit_receives_no_income_other_than_mfip": {
-          "distinct": 1,
-          "state": "constant"
-        },
-        "axiom:mn-tanf-compiled#input.unit_receives_unearned_income_only": {
-          "distinct": 1,
-          "state": "constant"
         }
       },
-      "varied_fields": 5,
+      "varied_fields": 2,
       "verdict_concepts": {
         "us-mn:policies/dhs/combined-manual#mn_mfip_benefit": {
           "distinct_left_values": 15
@@ -3280,7 +3137,7 @@
       "evidence_fields": {},
       "varied_fields": 0,
       "verdict_concepts": {
-        "us-ms:policies/income_tax/pilot_liability_pipeline#ms_pit_pilot_income_tax_liability": {
+        "us-ms:policies/income_tax/2026_section_27_7_5_schedule#ms_pit_2026_section_27_7_5_schedule_tax": {
           "distinct_left_values": 892
         }
       }
@@ -3352,7 +3209,7 @@
           "state": "constant"
         },
         "axiom:nc-snap-compiled#input.household_shelter_costs_incurred": {
-          "distinct": 834,
+          "distinct": 838,
           "state": "varied"
         },
         "axiom:nc-snap-compiled#input.household_size": {
@@ -3446,7 +3303,7 @@
           "distinct_left_values": 2
         },
         "us:statutes/7/2014/u#snap_benefit": {
-          "distinct_left_values": 129
+          "distinct_left_values": 152
         }
       }
     },
@@ -3561,7 +3418,7 @@
           "state": "constant"
         },
         "axiom:ny-snap-compiled#input.household_shelter_costs_incurred": {
-          "distinct": 1474,
+          "distinct": 1476,
           "state": "varied"
         },
         "axiom:ny-snap-compiled#input.household_size": {
@@ -3613,7 +3470,7 @@
           "state": "varied"
         },
         "axiom:ny-snap-compiled#input.snap_gross_monthly_earned_income": {
-          "distinct": 1749,
+          "distinct": 1900,
           "state": "varied"
         },
         "axiom:ny-snap-compiled#input.snap_member_is_elderly_or_disabled": {
@@ -3635,7 +3492,7 @@
           "distinct_left_values": 2
         },
         "us:statutes/7/2014/u#snap_benefit": {
-          "distinct_left_values": 75
+          "distinct_left_values": 144
         }
       }
     },
@@ -3675,7 +3532,7 @@
           "state": "constant"
         },
         "axiom:ny-tanf-compiled#input.monthly_rent_amount_actually_paid": {
-          "distinct": 1474,
+          "distinct": 1476,
           "state": "varied"
         },
         "axiom:ny-tanf-compiled#input.number_of_persons_in_household": {
@@ -3694,7 +3551,7 @@
       "varied_fields": 5,
       "verdict_concepts": {
         "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit": {
-          "distinct_left_values": 8
+          "distinct_left_values": 14
         }
       }
     },
@@ -3879,7 +3736,7 @@
       "evidence_fields": {},
       "varied_fields": 0,
       "verdict_concepts": {
-        "us-oh:policies/income_tax/pilot_liability_pipeline#oh_pit_pilot_income_tax_liability": {
+        "us-oh:policies/income_tax/pilot_liability_pipeline#oh_pit_pilot_schedule_tax": {
           "distinct_left_values": 1568
         }
       }
@@ -4128,7 +3985,7 @@
           "distinct_left_values": 2
         },
         "us:statutes/7/2014/u#snap_benefit": {
-          "distinct_left_values": 73
+          "distinct_left_values": 72
         }
       }
     },
@@ -4169,7 +4026,7 @@
     "ssi-ecps": {
       "bridge_audited": false,
       "bridged_through": {},
-      "cases_scanned": 4044,
+      "cases_scanned": 2990,
       "constant_fields": 0,
       "evidence_fields": {},
       "varied_fields": 0,
@@ -4319,7 +4176,7 @@
           "distinct_left_values": 2
         },
         "us:statutes/7/2014/u#snap_benefit": {
-          "distinct_left_values": 73
+          "distinct_left_values": 74
         }
       }
     },
@@ -5195,6 +5052,15 @@
       "varied_fields": 0,
       "verdict_concepts": {}
     },
+    "us-savers-grid": {
+      "bridge_audited": false,
+      "bridged_through": {},
+      "cases_scanned": 34,
+      "constant_fields": 0,
+      "evidence_fields": {},
+      "varied_fields": 0,
+      "verdict_concepts": {}
+    },
     "us-seca-grid": {
       "bridge_audited": false,
       "bridged_through": {},
@@ -5221,8 +5087,8 @@
       "evidence_fields": {},
       "varied_fields": 0,
       "verdict_concepts": {
-        "us-ut:policies/income_tax/pilot_liability_pipeline#ut_pit_pilot_income_tax_liability": {
-          "distinct_left_values": 1139
+        "us-ut:policies/income_tax/2026_full_year_resident_before_credit_schedule#ut_pit_2026_resident_income_tax_before_credits": {
+          "distinct_left_values": 993
         }
       }
     },
@@ -5292,38 +5158,18 @@
       "bridge_audited": false,
       "bridged_through": {},
       "cases_scanned": 1467,
-      "constant_fields": 1,
+      "constant_fields": 0,
       "evidence_fields": {
-        "axiom:wa-tanf-compiled#input.assistance_unit_size": {
-          "distinct": 9,
+        "input_records": {
+          "distinct": 1420,
           "state": "varied"
         },
-        "axiom:wa-tanf-compiled#input.cash_assistance_family_gross_earned_income": {
-          "distinct": 981,
-          "state": "varied"
-        },
-        "axiom:wa-tanf-compiled#input.countable_unearned_income_after_exclusions_and_disregards": {
-          "distinct": 1093,
-          "state": "varied"
-        },
-        "axiom:wa-tanf-compiled#input.gross_monthly_income": {
-          "distinct": 1400,
-          "state": "varied"
-        },
-        "axiom:wa-tanf-compiled#input.household_gross_earned_income": {
-          "distinct": 981,
-          "state": "varied"
-        },
-        "axiom:wa-tanf-compiled#input.household_has_minor_or_pregnant_member": {
-          "distinct": 1,
-          "state": "constant"
-        },
-        "axiom:wa-tanf-compiled#input.number_of_family_members": {
+        "relations": {
           "distinct": 9,
           "state": "varied"
         }
       },
-      "varied_fields": 6,
+      "varied_fields": 2,
       "verdict_concepts": {
         "us-wa:regulations/388#wa_tanf_benefit": {
           "distinct_left_values": 19

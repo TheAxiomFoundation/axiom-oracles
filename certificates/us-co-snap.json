@@ -8,7 +8,7 @@
       "artifact": "conformance/exercise-census.json",
       "claim": "exercise census",
       "mode": "computed",
-      "sha256": "ffc390dbad229b41fe51059f02f9d05f628b44abcb14dc49230bbfb9000c544d"
+      "sha256": "588160626b472b8f42c5e8b708b083a22372ef646d8b650e9a4d2e28b52888bd"
     },
     {
       "artifact": "dashboard/public/data/axiom-policyengine-co-snap-ecps.json",
@@ -20,7 +20,7 @@
       "artifact": "dashboard/public/data/axiom-snapqc-co-snap.json",
       "claim": "suite:co-snap-qc",
       "mode": "computed",
-      "sha256": "dfb65174abf36e92beadfd8cb78430c85ef18f55d5586bf924b40d6d48bb607c"
+      "sha256": "976e066c678bcb6ed50d6b5c3f7136f5eb114e542e4bbdc9bba57b336f4f12e9"
     }
   ],
   "period": "2026-01",

@@ -1507,6 +1507,8 @@ residual), #229 (small-suite grounding).
   `origin/main` at `2a1660d` because the network cannot currently resolve
   `github.com`.
 - Intended publication ref: `autogo/executable-producer`.
+- Phase: certificate baseline ported and refreshed; producer trust-root
+  implementation is next.
 - Scope: add a deterministic, sign-only CI producer for executable receipts and
   standalone receipt consumption by the certificate harness.
 - Existing workflows, toolchain files, dependency pins, and CODEOWNERS are
@@ -1518,11 +1520,17 @@ residual), #229 (small-suite grounding).
 - Confirmed the requested local branch/worktree already contained stale,
   incomplete task work; preserved it untouched for read-only review.
 - Created this fresh worktree from the latest locally available `origin/main`.
+- Read the generated-only certified-node contract, the exact ops stranger-path
+  fixture and output bindings, the release/publication machinery, and the
+  parked certificate implementation.
+- Ported the coherent exercise-census/program-certificate baseline from
+  `program-certificate` without importing either parked evidence-validator
+  branch (#378/#379).
+- Regenerated the census and certificate against this worktree's current main
+  data. The expected pre-producer certificate remains attested and red.
 
 ### Next
 
-- Inspect certified-node shape, parked `program-certificate` consumption,
-  stranger-path parity fixtures, release publication, and test conventions.
 - Define the release manifest, receipt schema/output path, producer workflow,
   and fail-closed validation boundary.
 - Implement producer and certifier tests, including all required mutants.
