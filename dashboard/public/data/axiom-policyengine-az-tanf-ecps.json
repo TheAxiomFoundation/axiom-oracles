@@ -7,236 +7,29 @@
       "comparison_weight": 3482952.063627,
       "components": [],
       "concept": "us-az:policies/des/faa5#az_tanf_benefit",
-      "description": "AZ Cash Assistance benefit (annualized)",
-      "left_weighted_sum": 478897.011676,
-      "match_rate": 99.701715,
-      "match_weight": 3482802.33771,
-      "mismatch_count": 4,
-      "mismatch_weight": 149.725917,
+      "description": "AZ Cash Assistance monthly benefit",
+      "left_weighted_sum": 39908.084306,
+      "match_rate": 100,
+      "match_weight": 3482952.063627,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
       "missing_both_count": 0,
       "missing_left_count": 0,
       "missing_right_count": 0,
       "parent": null,
-      "right_weighted_sum": 471422.329755,
-      "weighted_difference": 7474.681921,
-      "weighted_match_rate": 99.995701
+      "right_weighted_sum": 39285.197598,
+      "weighted_difference": 622.886708,
+      "weighted_match_rate": 100
     }
   ],
   "case_count": 1341,
-  "cases": [
-    {
-      "case_id": "ecps-52105",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 0.0,
-      "matches": [],
-      "metadata": {
-        "axiom_all_outputs_count": 4,
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 25,
-        "axiom_relations_count": 10,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            21,
-            46,
-            16,
-            14,
-            9
-          ],
-          "household_size": 5,
-          "yearly_earned_income_per_person": [
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0
-          ],
-          "yearly_earned_income_total": 0.0
-        },
-        "household_weight": 106.08992004394531,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "04013",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [
-        {
-          "concept": "us-az:policies/des/faa5#az_tanf_benefit",
-          "description": "AZ Cash Assistance benefit (annualized)",
-          "difference": 52.25620117187509,
-          "kind": "amount_difference",
-          "left": 3755.9,
-          "parent": null,
-          "relative_tolerance": 0,
-          "right": 3703.643798828125,
-          "tolerance": 25
-        }
-      ],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
-      "case_id": "ecps-52180",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 0.0,
-      "matches": [],
-      "metadata": {
-        "axiom_all_outputs_count": 4,
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 25,
-        "axiom_relations_count": 8,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            45,
-            42,
-            14,
-            12
-          ],
-          "household_size": 4,
-          "yearly_earned_income_per_person": [
-            0.0,
-            0.0,
-            0.0,
-            0.0
-          ],
-          "yearly_earned_income_total": 0.0
-        },
-        "household_weight": 41.3708381652832,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "04021",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [
-        {
-          "concept": "us-az:policies/des/faa5#az_tanf_benefit",
-          "description": "AZ Cash Assistance benefit (annualized)",
-          "difference": 44.6440283203126,
-          "kind": "amount_difference",
-          "left": 1798.39,
-          "parent": null,
-          "relative_tolerance": 0,
-          "right": 1753.7459716796875,
-          "tolerance": 25
-        }
-      ],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
-      "case_id": "ecps-52389",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 0.0,
-      "matches": [],
-      "metadata": {
-        "axiom_all_outputs_count": 4,
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 25,
-        "axiom_relations_count": 6,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            30,
-            29,
-            2
-          ],
-          "household_size": 3,
-          "yearly_earned_income_per_person": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "yearly_earned_income_total": 0.0
-        },
-        "household_weight": 0.0017664377810433507,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "04017",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [
-        {
-          "concept": "us-az:policies/des/faa5#az_tanf_benefit",
-          "description": "AZ Cash Assistance benefit (annualized)",
-          "difference": 37.02382812499991,
-          "kind": "amount_difference",
-          "left": 2661.1,
-          "parent": null,
-          "relative_tolerance": 0,
-          "right": 2624.076171875,
-          "tolerance": 25
-        }
-      ],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
-      "case_id": "ecps-52760",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 0.0,
-      "matches": [],
-      "metadata": {
-        "axiom_all_outputs_count": 4,
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 25,
-        "axiom_relations_count": 6,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            52,
-            16,
-            13
-          ],
-          "household_size": 3,
-          "yearly_earned_income_per_person": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "yearly_earned_income_total": 0.0
-        },
-        "household_weight": 2.263392210006714,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "04013",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [
-        {
-          "concept": "us-az:policies/des/faa5#az_tanf_benefit",
-          "description": "AZ Cash Assistance benefit (annualized)",
-          "difference": 37.02382812499991,
-          "kind": "amount_difference",
-          "left": 2661.1,
-          "parent": null,
-          "relative_tolerance": 0,
-          "right": 2624.076171875,
-          "tolerance": 25
-        }
-      ],
-      "right_engine": "policyengine",
-      "right_errors": []
-    }
-  ],
+  "cases": [],
   "concepts": [
     {
       "category": "cash",
       "comparison": "amount",
       "components": [],
-      "description": "AZ Cash Assistance benefit (annualized)",
+      "description": "AZ Cash Assistance monthly benefit",
       "id": "us-az:policies/des/faa5#az_tanf_benefit",
       "parent": null,
       "priority": "high",
@@ -245,103 +38,24 @@
     }
   ],
   "dashboard_truncation": {
-    "shown_case_rows": 4,
-    "shown_mismatches": 4,
+    "shown_case_rows": 0,
+    "shown_mismatches": 0,
     "total_case_rows": 1341,
-    "total_mismatches": 4
+    "total_mismatches": 0
   },
   "engines": {
     "left": "axiom",
-    "right": "policyengine"
+    "right": "policyengine",
+    "versions": {
+      "axiom_rules_engine": "0.1.0",
+      "policyengine": "4.18.9",
+      "policyengine_core": "3.30.3",
+      "policyengine_us": "1.767.3"
+    }
   },
   "errors": [],
   "locales": [],
-  "mismatches": [
-    {
-      "ages": null,
-      "case_id": "ecps-52105",
-      "concept": "us-az:policies/des/faa5#az_tanf_benefit",
-      "description": "AZ Cash Assistance benefit (annualized)",
-      "difference": 52.25620117187509,
-      "disposition": {
-        "disposition": "bridge_artifact",
-        "id": "az-tanf-ecps-az_tanf_benefit-composed-vs-pe-bridge",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
-      },
-      "kind": "amount_difference",
-      "left": 3755.9,
-      "parent": null,
-      "pregnant_head": null,
-      "relative_tolerance": 0,
-      "right": 3703.643798828125,
-      "scenario": null,
-      "tolerance": 25,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
-      "case_id": "ecps-52180",
-      "concept": "us-az:policies/des/faa5#az_tanf_benefit",
-      "description": "AZ Cash Assistance benefit (annualized)",
-      "difference": 44.6440283203126,
-      "disposition": {
-        "disposition": "bridge_artifact",
-        "id": "az-tanf-ecps-az_tanf_benefit-composed-vs-pe-bridge",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
-      },
-      "kind": "amount_difference",
-      "left": 1798.39,
-      "parent": null,
-      "pregnant_head": null,
-      "relative_tolerance": 0,
-      "right": 1753.7459716796875,
-      "scenario": null,
-      "tolerance": 25,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
-      "case_id": "ecps-52389",
-      "concept": "us-az:policies/des/faa5#az_tanf_benefit",
-      "description": "AZ Cash Assistance benefit (annualized)",
-      "difference": 37.02382812499991,
-      "disposition": {
-        "disposition": "bridge_artifact",
-        "id": "az-tanf-ecps-az_tanf_benefit-composed-vs-pe-bridge",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
-      },
-      "kind": "amount_difference",
-      "left": 2661.1,
-      "parent": null,
-      "pregnant_head": null,
-      "relative_tolerance": 0,
-      "right": 2624.076171875,
-      "scenario": null,
-      "tolerance": 25,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
-      "case_id": "ecps-52760",
-      "concept": "us-az:policies/des/faa5#az_tanf_benefit",
-      "description": "AZ Cash Assistance benefit (annualized)",
-      "difference": 37.02382812499991,
-      "disposition": {
-        "disposition": "bridge_artifact",
-        "id": "az-tanf-ecps-az_tanf_benefit-composed-vs-pe-bridge",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
-      },
-      "kind": "amount_difference",
-      "left": 2661.1,
-      "parent": null,
-      "pregnant_head": null,
-      "relative_tolerance": 0,
-      "right": 2624.076171875,
-      "scenario": null,
-      "tolerance": 25,
-      "yearly_earned_income": null
-    }
-  ],
+  "mismatches": [],
   "population": "enhanced-cps",
   "provenance": {
     "dataset": {
@@ -349,20 +63,25 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "48797e101c093bb388be718c6f5d8fc9d9f94a7d",
+      "axiom_rules_engine_sha": "c4b62bdb740d4149f0872783964f917e74cffe42",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-24T18:10:59Z",
+    "generated_at": "2026-07-28T20:53:41Z",
     "generated_by": "scripts/run_comparison.py::az-tanf-ecps",
     "oracle": {
       "name": "policyengine",
+      "policyengine_core": "3.30.3",
       "policyengine_package": "policyengine==4.18.9",
-      "policyengine_us": "1.752.2"
+      "policyengine_us": "1.767.3"
     },
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": "ca2d424fcb85ce8c3a8f4706113331710f114460"
+        "sha": "c13cdf7dda5948e7a86ff0c317872f93743a2084"
+      },
+      {
+        "repo": "TheAxiomFoundation/rulespec-us-az",
+        "sha": "27e59d52e1dee3f608b50e19ae743c938b1685dd"
       }
     ],
     "run_kind": "manual",
@@ -379,47 +98,32 @@
     "dispositioned": {
       "counts": {
         "axiom_encoding_gap": 0,
-        "bridge_artifact": 4,
+        "bridge_artifact": 0,
         "explained_residual": 0,
         "unexplained": 0,
         "upstream_engine_gap": 0
       },
-      "dispositions_file": "dispositions/az-tanf-ecps.yaml",
+      "dispositions_file": null,
       "expired_entries": [],
       "explained_rate": 100,
       "orphaned_entries": [],
-      "raw_match_rate": 99.701715,
+      "raw_match_rate": 100,
       "schema_version": "axiom_oracles.dispositions.v1",
       "unexplained_count": 0
     },
     "error_count": 0,
     "errors_by_engine": [],
-    "match_count": 1337,
-    "mismatch_count": 4,
-    "mismatches_by_concept": [
-      {
-        "count": 4,
-        "value": "us-az:policies/des/faa5#az_tanf_benefit"
-      }
-    ],
-    "mismatches_by_kind": [
-      {
-        "count": 4,
-        "value": "amount_difference"
-      }
-    ],
-    "mismatches_by_scenario": [
-      {
-        "count": 4,
-        "value": null
-      }
-    ],
-    "stored_mismatch_example_count": 4,
+    "match_count": 1341,
+    "mismatch_count": 0,
+    "mismatches_by_concept": [],
+    "mismatches_by_kind": [],
+    "mismatches_by_scenario": [],
+    "stored_mismatch_example_count": 0,
     "weighted": {
       "comparison_weight": 3482952.063627,
-      "match_rate": 99.995701,
-      "match_weight": 3482802.33771,
-      "mismatch_weight": 149.725917
+      "match_rate": 100,
+      "match_weight": 3482952.063627,
+      "mismatch_weight": 0
     }
   }
 }

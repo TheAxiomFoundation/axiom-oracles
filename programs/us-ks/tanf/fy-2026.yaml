@@ -6,7 +6,7 @@
 # compares the composed MAXIMUM benefit against PolicyEngine's
 # ks_tanf_maximum_benefit — which resolves the long-deferred question of
 # whether the encoded basic+shelter composition matches PolicyEngine's
-# single combined table (it equals basic + shelter group V at 100%).
+# single combined table (the Axiom bridge fixes shelter group I at 100%).
 
 program: us-ks/tanf
 period: 2026-01

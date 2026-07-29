@@ -7,8 +7,8 @@
       "comparison_weight": 3419311.943044,
       "components": [],
       "concept": "us-wa:regulations/388#wa_tanf_benefit",
-      "description": "WA TANF benefit (annualized)",
-      "left_weighted_sum": 448772892.835603,
+      "description": "WA TANF monthly benefit",
+      "left_weighted_sum": 37397741.069634,
       "match_rate": 100,
       "match_weight": 3419311.943044,
       "mismatch_count": 0,
@@ -17,8 +17,8 @@
       "missing_left_count": 0,
       "missing_right_count": 0,
       "parent": null,
-      "right_weighted_sum": 448772808.324022,
-      "weighted_difference": 84.511581,
+      "right_weighted_sum": 37397735.357556,
+      "weighted_difference": 5.712078,
       "weighted_match_rate": 100
     }
   ],
@@ -29,7 +29,7 @@
       "category": "cash",
       "comparison": "amount",
       "components": [],
-      "description": "WA TANF benefit (annualized)",
+      "description": "WA TANF monthly benefit",
       "id": "us-wa:regulations/388#wa_tanf_benefit",
       "parent": null,
       "priority": "high",
@@ -45,7 +45,13 @@
   },
   "engines": {
     "left": "axiom",
-    "right": "policyengine"
+    "right": "policyengine",
+    "versions": {
+      "axiom_rules_engine": "0.1.0",
+      "policyengine": "4.18.9",
+      "policyengine_core": "3.30.3",
+      "policyengine_us": "1.767.3"
+    }
   },
   "errors": [],
   "locales": [],
@@ -57,17 +63,22 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "48797e101c093bb388be718c6f5d8fc9d9f94a7d",
+      "axiom_rules_engine_sha": "c4b62bdb740d4149f0872783964f917e74cffe42",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-24T18:20:05Z",
+    "generated_at": "2026-07-28T20:59:55Z",
     "generated_by": "scripts/run_comparison.py::wa-tanf-ecps",
     "oracle": {
       "name": "policyengine",
+      "policyengine_core": "3.30.3",
       "policyengine_package": "policyengine==4.18.9",
-      "policyengine_us": "1.752.2"
+      "policyengine_us": "1.767.3"
     },
     "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-us",
+        "sha": "c13cdf7dda5948e7a86ff0c317872f93743a2084"
+      },
       {
         "repo": "TheAxiomFoundation/rulespec-us-wa",
         "sha": null

@@ -10,7 +10,8 @@
   `policyengine-us==1.767.3`, `policyengine-core==3.30.3`.
 - Containment: the 19 suites, their dispositions, shared regenerated artifacts,
   row notes whose counts change, and this ledger only.
-- Phase: period semantics and composition paths reconciled; regeneration next.
+- Phase: TANF/SSI regenerated and dispositions revalidated; seven of ten SNAP
+  suites regenerated, with CA/NC/SC still outstanding.
 
 ## Done
 
@@ -89,11 +90,43 @@
   | `wa-tanf-ecps` | 0 | 0 |
   | `ssi-ecps` | 3,067 | 0 |
 
+- Regenerated all eight TANF suites and SSI under the declared stack; every
+  full report records PolicyEngine `4.18.9`, US `1.767.3`, and core `3.30.3`.
+  The true-month raw residuals are AL 3, AZ 0, DE 0, GA 1, KS 218, MN 0,
+  NY 36, WA 0, and SSI 2,990.
+- Revalidated rather than silently carrying annualized disposition evidence:
+
+  - deleted Arizona's expired four-row disposition;
+  - pinned Georgia's surviving case to `0 / 164.970459` (exactly one twelfth
+    of the legacy PE amount);
+  - replaced Kansas's blanket prefix with seven exact county-group case sets
+    (212 rows, each PE-Axiom = $43) and six individually pinned
+    applicable-SSI assistance-unit rows;
+  - replaced New York's blanket prefix with exact 30 both-positive and 6
+    zero-left case sets, documenting 6 vanished and 6 new identities;
+  - refreshed SSI's full 2,990-row evidence from a direct PE eligibility join
+    and removed obsolete subtype counts and the now-within-tolerance
+    `ecps-588` representative.
+
+- Corrected the Kansas program and projector notes: the Axiom bridge fixes
+  shelter group I, while PolicyEngine 1.767.3 derives actual county groups.
+- Rebuilt Arizona TANF's dashboard copy from its regenerated full report after
+  deleting the vanished four-row disposition, so the report now records a null
+  dispositions file with no expired legacy entry.
+- `apply_dispositions.py --check` passes after the TANF/SSI refresh, and the
+  focused disposition/requested-month test battery passes (22 tests).
+- The SNAP composition preflight exposed two sandbox/toolchain constraints.
+  The configured July 6 release binary predates `compile-composed`; a current
+  offline rebuild recognizes it but rejects an unrelated noncanonical Unicode
+  filename in the cached RuleSpec tree. No source checkout was altered.
+  The committed compatibility fallback succeeds when its legacy resolver is
+  pointed at the clean `/private/tmp` clone's parent, so the SNAP regeneration
+  uses that established release engine and clean RuleSpec input.
+
 ## Next
 
-1. Validate program composition/mapping and the exact cached oracle stack.
-2. Regenerate all 19 suites and verify every report's engine-version block.
-3. Revalidate dispositions, including materially shifted deltas and the
-   California TANF-bridge/lone-minor evidence.
-4. Refresh shared artifacts and counts and run the full `--check` chain.
-5. Write the untracked worker report and finish this ledger.
+1. Regenerate CA, NC, and SC SNAP, then verify all ten engine-version blocks.
+2. Revalidate every SNAP disposition, including the California
+   TANF-bridge/lone-minor replay and the January minimum-benefit class.
+3. Refresh shared artifacts/counts and run the full `--check` chain.
+4. Commit the final ledger, write the untracked worker report, and report HEAD.
