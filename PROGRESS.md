@@ -126,6 +126,29 @@
   The committed compatibility fallback succeeds when its legacy resolver is
   pointed at the clean `/private/tmp` clone's parent, so the SNAP regeneration
   uses that established release engine and clean RuleSpec input.
+- Regenerated seven SNAP suites on the declared engine stack and re-applied
+  their dispositions:
+
+  | Suite | Before raw/unexplained | True-month raw/unexplained |
+  |---|---:|---:|
+  | `al-snap-ecps` | 53 / 23 | 56 / 40 |
+  | `az-snap-ecps` | 597 / 0 | 597 / 0 |
+  | `fl-snap-ecps` | 834 / 834 | 774 / 774 |
+  | `ga-snap-ecps` | 250 / 80 | 245 / 75 |
+  | `ma-snap-ecps` | 255 / 83 | 263 / 92 |
+  | `ny-snap-ecps` | 354 / 349 | 245 / 240 |
+  | `tn-snap-ecps` | 68 / 41 | 70 / 43 |
+
+- Revalidated their legacy evidence row by row. Alabama drops 14 materially
+  moved TANF-counterfactual classifications rather than silently retaining
+  them; Massachusetts refreshes 17 TANF pins and drops one invalidated row;
+  Tennessee refreshes all 23 TANF pins. The AL/MA/TN lone-minor case sets are
+  unchanged, with their moved benefits explicitly recorded. New York's five
+  BBCE boolean rows are byte-identical and remain classified; an interrupted
+  worker's deletion of that still-valid disposition was reversed.
+- Across these seven suites, 524 old `23.973597208658855` mismatch rows became
+  511 rows at January's `23.84000015258789`, three at other true-January
+  amounts, and ten matches. CA/NC/SC remain to be measured.
 
 ## Next
 
