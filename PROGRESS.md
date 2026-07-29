@@ -1194,3 +1194,24 @@ residual), #229 (small-suite grounding).
   preservation.
 - Verify containment and run the two named read-only checks.
 - Record and commit the final report and closeout state.
+
+### Checkpoint — live issue title
+
+#### State
+
+- Mechanical blocker 1 passes.
+
+#### Done
+
+- Fetched `policyengine/policyengine-us#9168` read-only through the installed
+  GitHub connector.
+- Confirmed the open issue's exact live title is `SALT cap phaseout uses AGI
+  instead of §164(b)(7)(B)(iv) modified AGI (§§911/931/933 addbacks)`.
+- The connector reported
+  `https://github.com/PolicyEngine/policyengine-us/issues/9168` and
+  `updated_at=2026-07-29T22:59:45Z`.
+- No GitHub, remote, ref, or PR-branch write was made.
+
+#### Next
+
+- Complete tracked-tree/prefix and containment/check verification.
