@@ -1152,7 +1152,7 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-29T07:43:45Z",
+    "generated_at": "2026-07-29T07:57:50Z",
     "generated_by": "scripts/run_comparison.py::us-salt-deduction-grid",
     "oracle": {
       "name": "policyengine",
@@ -1163,7 +1163,7 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": "f4cc1b88d1efd8dcca25058695dc1735c0fbb3de"
+        "sha": "345c22030642cbd37a9fe46877591a8e1df5af7e"
       }
     ],
     "run_kind": "manual",

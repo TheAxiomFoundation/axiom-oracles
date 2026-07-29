@@ -1050,3 +1050,74 @@ residual), #229 (small-suite grounding).
 - Commit the measured evidence/reports.
 - Adopt exactly the two requested conformance rows, execute the ordered full
   regeneration chain, and prove write/check parity.
+
+### Checkpoint — refreshed pin, adoption, and derived-data parity
+
+#### State
+
+- A final upstream audit found RuleSpec PR #1177 had advanced after the first
+  evidence run. The authoritative pin is now
+  `345c22030642cbd37a9fe46877591a8e1df5af7e` (tree
+  `40e08f7dbaa88a70660006f3a5a32bfa283ebd85`) in both comparison registries
+  and both regenerated reports.
+- The two adopted companion files are byte-unchanged between the earlier
+  signed head and this repaired/re-signed head, and all five measured values
+  reproduced exactly.
+
+#### Done
+
+- Adopted only `us-pe:salt_deduction` and
+  `us-pe:itemized_taxable_income_deductions`. Their notes state the 2026 exact
+  engine stack, `16/16` and `16/17` nonzero counts, completed-return
+  boundaries, explicit exclusions, and named `MAIN-LANE-TBD` issue
+  placeholders.
+- Ran the full ordered write chain: dispositions, grids, affected map,
+  vacuous/freshness gate, dated scoreboard snapshot, ratchet, burn-down, and
+  dashboard overview. No grid file changed.
+- Ran all eight check forms successfully: 85 disposition files; 174 affected
+  suites / 183 edges; 138 oracle-backed configs; 217 suites / 34 executable
+  surfaces; 4 scoreboard jurisdictions / 3 conformant; no ratchet regression;
+  4 burn-down series / 57 points; 218 overview reports.
+- Focused exact-stack validation passes: 33 generator tests and 81 conformance
+  tests with 2 unrelated skips. The broader validation pass previously
+  completed 716 additional relevant tests with 2 unrelated skips. Ruff and
+  `git diff --check` pass.
+- US-PE coverage rises from 34 to 36 rows. Only the two requested detail rows
+  change; unexplained and Axiom-attributed-open counts do not increase.
+
+#### Next
+
+- Commit the conformance and derived adoption artifacts.
+- Perform one final live-pin/containment audit, write the untracked
+  `WORKER-REPORT.md`, append the closing ledger entry, and hand off without
+  pushing.
+
+### Checkpoint — final-review test closure
+
+#### State
+
+- Final review found no numerical, mapping, disposition, provenance, or
+  containment defect, but identified two missing direct assertions in the
+  generator tests.
+- Both test gaps are now closed before the adoption commit.
+
+#### Done
+
+- Replaced the self-referential Chunk 1 fixture test with a durable comparison:
+  all 33 committed report `axiom_fixture_inputs` mappings are checked against
+  the applicable exact fixture validator and RuleSpec input contract.
+- Added a live exact-stack test that invokes both Chunk 1 PE parameter
+  validators and independently asserts the complete §5 expected mappings:
+  SALT sources/caps/thresholds/rate/floors/flags and itemized aggregate,
+  applicability flags, five thresholds, and stored OBBBA rate.
+- Exact-stack validation now passes 34 generator tests and 81 conformance tests
+  with 2 unrelated skips. Ruff and `git diff --check` pass.
+- Re-ran all eight read-only derived-data gates successfully: dispositions,
+  grids, affected map, vacuous gate, scoreboard, ratchet, burn-down, and
+  dashboard overview.
+
+#### Next
+
+- Commit the adoption artifacts and closed test contract.
+- Complete the final live-pin/containment audit, append the closing ledger
+  entry, and write the untracked worker report.
