@@ -10,8 +10,8 @@
   `policyengine-us==1.767.3`, `policyengine-core==3.30.3`.
 - Containment: the 19 suites, their dispositions, shared regenerated artifacts,
   row notes whose counts change, and this ledger only.
-- Phase: all 19 suites regenerated, dispositions revalidated, and shared
-  artifacts refreshed; final check consolidation and worker report remain.
+- Phase: all 19 suites regenerated, dispositions revalidated, shared
+  artifacts refreshed, and final checks complete; worker report remains.
 
 ## Done
 
@@ -221,8 +221,23 @@
   without `PYTHONPATH=.` imports a different parent `axiom_oracles` tree and
   falsely reports DE/MN metadata drift; the governing files are identical at
   this branch's base, HEAD, and local `origin/main`.
+- Final post-commit gates pass: comparison registry listing (135 entries),
+  rule verification (21,859 rules), checkout-local state-tax contract,
+  dispositions (82 files), selected affected case artifacts (zero silent
+  classifications), all 13 affected disposition artifacts, grids, boundary
+  cases, affected map, vacuous gate, dashboard overview, conformance
+  universes/compositions, scoreboard, ratchet, and burn-down.
+- The final broad Python run, excluding only the separately exercised
+  network-dependent dashboard loader, passes 2,283 tests with 70 skips. The
+  loader's `npx esbuild` invocation cannot reach the npm registry in the
+  network-restricted sandbox (`ENOTFOUND`). Ruff is not installed in the
+  declared virtualenv.
+- Additional sandbox disclosures: `ps` and `sysctl -n hw.memsize` were denied
+  during the California recovery audit; process status and memory pressure
+  were checked with permitted alternatives. The bare system Python lacks
+  PyYAML, so all repository checks used the declared virtualenv.
 
 ## Next
 
-1. Consolidate the final `--check` chain and sandbox disclosures.
-2. Commit the final ledger, write the untracked worker report, and report HEAD.
+1. Commit this final ledger state.
+2. Write the untracked worker report and report HEAD.
