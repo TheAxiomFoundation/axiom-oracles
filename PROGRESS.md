@@ -1340,3 +1340,32 @@ residual), #229 (small-suite grounding).
 
 - Handoff the committed local branch and untracked repair report. Do not push
   or write to GitHub.
+
+## Independent repair re-review opened — `58c6075f0`
+
+### State
+
+- Phase: in progress. Review scope is limited to the two mechanical repairs
+  and containment requested for `data/month-fix-regen` at reviewed head
+  `58c6075f0`.
+- Work is confined to the disposable local worktree. No remote or GitHub
+  writes are authorized.
+
+### Done
+
+- Confirmed the worktree began at `58c6075f0` on
+  `data/month-fix-regen`.
+- Recorded two pre-existing untracked files, `WORKER-REPORT.md` and
+  `WORKER-REPORT-REPAIR.md`; they will remain untouched.
+- Loaded the repository review workflow and identified merge base
+  `819f370bf0346e4a6a8dfb1c8c4f0d873d6d0340`.
+
+### Next
+
+- Verify exact merge-base ledger prefix identity and audit the appended record.
+- Independently re-derive the literal 345-row California disposition split,
+  inspect checker discipline and coverage, and sample at least 10 vanished
+  plus 5 kept rows.
+- Verify protected artifact parity, SSI truncation/fail-closed behavior,
+  containment, the seven-check battery, and focused tests.
+- Write and commit the final review report, then close this ledger.
