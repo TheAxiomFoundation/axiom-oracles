@@ -10,7 +10,8 @@
 - Upstream producer branches remain parked and will be inspected, not merged or
   rebased.
 - Core node evaluator, launch-critical mutants, final trust-boundary hardening,
-  and the producer integration contract are implemented and passing.
+  and the producer integration contract are implemented, committed, and
+  validated.
 
 ## Done
 
@@ -39,17 +40,18 @@
   coverage. The complete fixture passes the real parked executable validator.
   Dispositioned mismatches now require the pinned v1 validator, exact taxonomy,
   a strict/hash-bound source artifact, and exact block recomputation; malformed
-  paths/imports/run ids fail with machine reasons. Focused validation: 54 tests
-  pass; Ruff and `git diff --check` pass.
+  paths/imports/run ids fail with machine reasons. A clean `git archive` of
+  `HEAD`, pointed at the real parked executable validator, passes all 54 focused
+  tests; Ruff and `git diff --check` pass.
 - Wrote and independently reconciled `docs/autogo-contract.md`: all eight input
   envelopes, transitive node scope, exact criterion gates, ledger/result byte
   shapes, 67 stable reasons, six launch-critical mutants, and the concrete
   landing obligations and current gaps for every parked producer.
-- Repository-wide validation reached 2,333 passing and 70 skipped; its sole
-  failure was `npx` attempting a network download while DNS was unavailable.
+- Repository-wide validation reached 2,337 passing and 70 skipped; its sole
+  failure was `tests/test_dashboard_loader.py::test_loader_equivalence`, where
+  `npx esbuild` attempted a registry download while DNS was unavailable.
 
 ## Next
 
-- Re-run the focused suite from a clean archive and repository-wide validation.
 - Push if possible, open the requested draft pull request, and write the
   closure-sprint output report.
