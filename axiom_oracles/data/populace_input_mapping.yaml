@@ -1470,10 +1470,10 @@ mappings:
 
   # ---------------------------------------------------------------------
   # KS TANF (us-ks/tanf program) — KEESM 7410 budgetary standards.
-  # PolicyEngine 1.752's combined payment-standard table equals the KEESM
-  # basic allowance plus shelter group I (92) at the table-I (100%)
-  # percentage, so the comparison fixes group I and a day-1 full month.
-  # (Earlier PE releases used group IV/V's 135 — version-sensitive.)
+  # The Axiom projection fixes shelter group I and a day-1 full month.
+  # PolicyEngine 1.767.3 instead derives the county group; Douglas, Harvey,
+  # and Johnson ECPS rows resolve to group IV, producing a visible $43
+  # bridge residual at each household size. Keep the projection explicit.
   # ---------------------------------------------------------------------
 
   - match: { kind: suffix, value: assistance_plan_person_count }

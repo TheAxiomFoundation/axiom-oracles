@@ -1,6 +1,6 @@
 schema: axiom_oracles.dispositions.v1
 suite: ny-snap-ecps
-updated: '2026-07-26'
+updated: '2026-07-28'
 entries:
 - id: ny-bbce-gross-band-snap_eligible
   concept: us:statutes/7/2014/o#snap_eligible
@@ -24,6 +24,8 @@ entries:
       sits inside the band above the federal 130 percent limit the composed
       program applies and at or below the state's BBCE screen, verified
       against axiom's own computed gross income and limit. Axiom-side modeling
-      boundary, tracked for encoding in rulespec-us#1098.
+      boundary, tracked for encoding in rulespec-us#1098. The requested-month
+      regeneration preserves all five case identities and their boolean
+      left/right values exactly, so the evidence remains current.
   linked_issue: https://github.com/TheAxiomFoundation/rulespec-us/issues/1098
   expires_on_source_change: true

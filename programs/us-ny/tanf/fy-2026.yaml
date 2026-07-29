@@ -21,12 +21,10 @@ program: us-ny/tanf
 period: 2026-01
 
 outputs:
-  # Annual: the oracle harness evaluates PolicyEngine households at year
-  # granularity, so monthly PE variables come back as annual sums.
-  - ny_tanf_annual_benefit
+  - ny_tanf_benefit
 
 acknowledged_incomplete:
-  - ny_tanf_annual_benefit
+  - ny_tanf_benefit
 
 scope:
   state:

@@ -1975,7 +1975,7 @@ concepts:
       policyengine: is_ssi_recipient_for_medicaid
 
   us-wa:regulations/388#wa_tanf_benefit:
-    description: WA TANF benefit (annualized)
+    description: WA TANF monthly benefit
     category: cash
     comparison: amount
     # Both sides: max(0, payment standard - countable income) with the
@@ -1985,67 +1985,67 @@ concepts:
     tolerance: 25
     priority: high
     targets:
-      axiom: wa_tanf_annual_benefit
+      axiom: wa_tanf_monthly_benefit
       policyengine: wa_tanf
 
   us-al:policies/dhr/tanf#al_tanf_benefit:
-    description: AL TANF (Family Assistance) benefit (annualized)
+    description: AL TANF (Family Assistance) monthly benefit
     category: cash
     comparison: amount
     tolerance: 25
     priority: high
     targets:
-      axiom: al_tanf_annual_benefit
+      axiom: al_tanf_monthly_benefit
       policyengine: al_tanf
 
   us-ga:policies/dfcs/tanf#ga_tanf_benefit:
-    description: GA TANF benefit (annualized)
+    description: GA TANF monthly benefit
     category: cash
     comparison: amount
     tolerance: 25
     priority: high
     targets:
-      axiom: ga_tanf_annual_benefit
+      axiom: ga_tanf_monthly_benefit
       policyengine: ga_tanf
 
   us-de:regulations/title-16/4000-financial-responsibility#de_tanf_benefit:
-    description: DE TANF benefit (annualized)
+    description: DE TANF monthly benefit
     category: cash
     comparison: amount
     tolerance: 25
     priority: high
     targets:
-      axiom: de_tanf_annual_benefit
+      axiom: de_tanf_monthly_benefit
       policyengine: de_tanf
 
   us-ks:policies/dcf/keesm#ks_tanf_maximum_benefit:
-    description: KS TANF maximum benefit standard (annualized)
+    description: KS TANF monthly maximum benefit standard
     category: cash
     comparison: amount
     tolerance: 25
     priority: high
     targets:
-      axiom: ks_tanf_annual_maximum_benefit
+      axiom: ks_tanf_monthly_maximum_benefit
       policyengine: ks_tanf_maximum_benefit
 
   us-az:policies/des/faa5#az_tanf_benefit:
-    description: AZ Cash Assistance benefit (annualized)
+    description: AZ Cash Assistance monthly benefit
     category: cash
     comparison: amount
     tolerance: 25
     priority: high
     targets:
-      axiom: az_tanf_annual_cash_benefit
+      axiom: az_tanf_monthly_cash_benefit
       policyengine: az_tanf
 
   us-mn:policies/dhs/combined-manual#mn_mfip_benefit:
-    description: MN MFIP cash benefit (annualized)
+    description: MN MFIP monthly cash benefit
     category: cash
     comparison: amount
     tolerance: 25
     priority: high
     targets:
-      axiom: mn_mfip_annual_cash_benefit
+      axiom: mn_mfip_monthly_cash_benefit
       policyengine: mn_mfip
 
   us-ca:policies/cdss/calworks#ca_tanf_benefit:
@@ -2069,7 +2069,7 @@ concepts:
       policyengine: co_tanf
 
   us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit:
-    description: NY TANF benefit (annualized)
+    description: NY TANF monthly benefit
     category: cash
     comparison: amount
     # Both sides compute max(0, need standard - countable income) monthly.
@@ -2079,20 +2079,21 @@ concepts:
     tolerance: 25
     priority: high
     targets:
-      axiom: ny_tanf_annual_benefit
+      axiom: ny_tanf_benefit
       policyengine: ny_tanf
 
   us:statutes/42/1382#ssi_benefit:
-    description: SSI annual benefit amount
+    description: SSI monthly benefit amount
     category: cash
     comparison: amount
-    # PolicyEngine's `ssi` is person-level annual dollars; the composed
-    # us/ssi program emits ssi_annual_benefit on the same shape. Keep a
-    # $25/year tolerance to absorb monthly-vs-annual rounding.
+    # PolicyEngine's `ssi` is person-level monthly dollars; the composed
+    # us/ssi program emits ssi_monthly_benefit on the same household-aggregate
+    # shape. Keep the suite's existing literal tolerance during the period
+    # reconciliation so the runner correction is not masked by a threshold edit.
     tolerance: 25
     priority: high
     targets:
-      axiom: ssi_annual_benefit
+      axiom: ssi_monthly_benefit
       policyengine: ssi
 
   us:statutes/7/2014/o#snap_eligible:

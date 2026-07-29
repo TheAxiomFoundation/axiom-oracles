@@ -1,13 +1,13 @@
 {
  "suite": "tn-snap-ecps",
- "updated": "2026-07-27",
+ "updated": "2026-07-28",
  "entries": [
   {
    "id": "pe-lone-minor-child-earnings-benefit",
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "upstream_engine_gap",
-   "mechanism": "Reverified on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3, and PolicyEngine-Core 3.30.3. The exact-household signature and explicit K-12 counterfactual reproduce the mechanism: PolicyEngine excludes all earnings of an imputed K-12 member age 17 or younger without requiring the co-resident-parent or parental-control condition in 7 CFR 273.9(c)(7). The sole minor is a valid household under 273.1(a)(1), but wages count under 273.9(b)(1)(i), so Axiom correctly fails the income gate and returns zero benefit.",
+   "mechanism": "Reverified on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3, and PolicyEngine-Core 3.30.3. The exact-household signature and explicit K-12 counterfactual reproduce the mechanism: PolicyEngine excludes all earnings of an imputed K-12 member age 17 or younger without requiring the co-resident-parent or parental-control condition in 7 CFR 273.9(c)(7). The sole minor is a valid household under 273.1(a)(1), but wages count under 273.9(b)(1)(i), so Axiom correctly fails the income gate and returns zero benefit. Requested-month regeneration retained exactly the same two case IDs and both paired eligibility rows. The two benefit rows materially changed from Axiom 0 / PolicyEngine 299.66998291015625 to Axiom 0 / PolicyEngine 298.0; the eligibility direction and lone-minor mechanism are unchanged.",
    "cases": [
     "ecps-35407",
     "ecps-35601"
@@ -20,7 +20,7 @@
    "concept": "us:statutes/7/2014/o#snap_eligible",
    "kind": "eligibility_right_only",
    "disposition": "upstream_engine_gap",
-   "mechanism": "Reverified on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3, and PolicyEngine-Core 3.30.3. The exact-household signature and explicit K-12 counterfactual reproduce the mechanism: PolicyEngine excludes all earnings of an imputed K-12 member age 17 or younger without requiring the co-resident-parent or parental-control condition in 7 CFR 273.9(c)(7). The sole minor is a valid household under 273.1(a)(1), but wages count under 273.9(b)(1)(i), so Axiom correctly fails the income gate and returns zero benefit.",
+   "mechanism": "Reverified on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3, and PolicyEngine-Core 3.30.3. The exact-household signature and explicit K-12 counterfactual reproduce the mechanism: PolicyEngine excludes all earnings of an imputed K-12 member age 17 or younger without requiring the co-resident-parent or parental-control condition in 7 CFR 273.9(c)(7). The sole minor is a valid household under 273.1(a)(1), but wages count under 273.9(b)(1)(i), so Axiom correctly fails the income gate and returns zero benefit. Requested-month regeneration retained exactly the same two case IDs and both paired eligibility rows. The two benefit rows materially changed from Axiom 0 / PolicyEngine 299.66998291015625 to Axiom 0 / PolicyEngine 298.0; the eligibility direction and lone-minor mechanism are unchanged.",
    "cases": [
     "ecps-35407",
     "ecps-35601"
@@ -33,14 +33,14 @@
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3, and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 667.0 versus PE 564.6453450520834. PE reports monthly tn_ff 362.0347493489583 and aggregate TANF 362.0347493489583. Forcing both to zero leaves SNAP eligibility true and produces PE SNAP 673.5453694661459; its absolute delta from Axiom is 6.545369466145871, within the suite tolerance 7. This exact counterfactual isolates endogenous TANF transport as the mismatch mechanism.",
+   "mechanism": "The old annualized-period pin expired when PE SNAP materially changed to 558.699951171875. A fixed-runner, exact-household 2026-01 replay on PolicyEngine 4.18.9 / US 1.767.3 / core 3.30.3 forced both tn_ff and aggregate tanf to zero. SNAP stayed eligible and became 667.5999755859375, only 0.5999755859375 from Axiom 667.0 and within the unchanged tolerance 7, revalidating endogenous TANF transport as the mismatch mechanism.",
    "cases": [
     "ecps-35254"
    ],
    "arithmetic": [
     {
-     "expression": "673.5453694661459 - 667.0",
-     "equals": 6.545369466145871
+     "expression": "667.5999755859375 - 667.0",
+     "equals": 0.5999755859375
     }
    ],
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
@@ -50,14 +50,14 @@
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3, and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 732.0 versus PE 607.5453694661459. PE reports monthly tn_ff 438 and aggregate TANF 438.0. Forcing both to zero leaves SNAP eligibility true and produces PE SNAP 738.9453125; its absolute delta from Axiom is 6.9453125, within the suite tolerance 7. This exact counterfactual isolates endogenous TANF transport as the mismatch mechanism.",
+   "mechanism": "The old annualized-period pin expired when PE SNAP materially changed to 601.5999755859375. The fixed-runner 2026-01 replay described above forced tn_ff and aggregate tanf to zero; SNAP stayed eligible and became 733.0, only 1.0 from Axiom 732.0 and within the unchanged tolerance 7.",
    "cases": [
     "ecps-35266"
    ],
    "arithmetic": [
     {
-     "expression": "738.9453125 - 732.0",
-     "equals": 6.9453125
+     "expression": "733.0 - 732.0",
+     "equals": 1.0
     }
    ],
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
@@ -67,14 +67,14 @@
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3, and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 280.0 versus PE 208.33479817708334. PE reports monthly tn_ff 253.36238606770834 and aggregate TANF 253.36238606770834. Forcing both to zero leaves SNAP eligibility true and produces PE SNAP 284.2347819010417; its absolute delta from Axiom is 4.234781901041686, within the suite tolerance 7. This exact counterfactual isolates endogenous TANF transport as the mismatch mechanism.",
+   "mechanism": "The old annualized-period pin expired when PE SNAP materially changed to 204.89999389648438. The fixed-runner 2026-01 replay described above forced tn_ff and aggregate tanf to zero; SNAP stayed eligible and became 280.79998779296875, only 0.79998779296875 from Axiom 280.0 and within the unchanged tolerance 7.",
    "cases": [
     "ecps-35320"
    ],
    "arithmetic": [
     {
-     "expression": "284.2347819010417 - 280.0",
-     "equals": 4.234781901041686
+     "expression": "280.79998779296875 - 280.0",
+     "equals": 0.79998779296875
     }
    ],
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
@@ -84,14 +84,14 @@
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3, and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 457.0 versus PE 387.7741292317708. PE reports monthly tn_ff 248.93611653645834 and aggregate TANF 248.93611653645834. Forcing both to zero leaves SNAP eligibility true and produces PE SNAP 462.4740804036458; its absolute delta from Axiom is 5.474080403645814, within the suite tolerance 7. This exact counterfactual isolates endogenous TANF transport as the mismatch mechanism.",
+   "mechanism": "The old annualized-period pin expired when PE SNAP materially changed to 382.9999694824219. The fixed-runner 2026-01 replay described above forced tn_ff and aggregate tanf to zero; SNAP stayed eligible and became 457.6999816894531, only 0.699981689453125 from Axiom 457.0 and within the unchanged tolerance 7.",
    "cases": [
     "ecps-35324"
    ],
    "arithmetic": [
     {
-     "expression": "462.4740804036458 - 457.0",
-     "equals": 5.474080403645814
+     "expression": "457.6999816894531 - 457.0",
+     "equals": 0.699981689453125
     }
    ],
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
@@ -101,14 +101,14 @@
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3, and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 497.0 versus PE 386.5741373697917. PE reports monthly tn_ff 387 and aggregate TANF 387.0. Forcing both to zero leaves SNAP eligibility true and produces PE SNAP 502.6741129557292; its absolute delta from Axiom is 5.674112955729186, within the suite tolerance 7. This exact counterfactual isolates endogenous TANF transport as the mismatch mechanism.",
+   "mechanism": "The old annualized-period pin expired when PE SNAP materially changed to 381.79998779296875. The fixed-runner 2026-01 replay described above forced tn_ff and aggregate tanf to zero; SNAP stayed eligible and became 497.8999938964844, only 0.899993896484375 from Axiom 497.0 and within the unchanged tolerance 7.",
    "cases": [
     "ecps-35347"
    ],
    "arithmetic": [
     {
-     "expression": "502.6741129557292 - 497.0",
-     "equals": 5.674112955729186
+     "expression": "497.8999938964844 - 497.0",
+     "equals": 0.899993896484375
     }
    ],
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
@@ -118,14 +118,14 @@
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3, and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 479.0 versus PE 379.9347737630208. PE reports monthly tn_ff 343 and aggregate TANF 343.0. Forcing both to zero leaves SNAP eligibility true and produces PE SNAP 482.8347574869792; its absolute delta from Axiom is 3.8347574869791856, within the suite tolerance 7. This exact counterfactual isolates endogenous TANF transport as the mismatch mechanism.",
+   "mechanism": "The old annualized-period pin expired when PE SNAP materially changed to 376.5. The fixed-runner 2026-01 replay described above forced tn_ff and aggregate tanf to zero; SNAP stayed eligible and became 479.3999938964844, only 0.399993896484375 from Axiom 479.0 and within the unchanged tolerance 7.",
    "cases": [
     "ecps-35590"
    ],
    "arithmetic": [
     {
-     "expression": "482.8347574869792 - 479.0",
-     "equals": 3.8347574869791856
+     "expression": "479.3999938964844 - 479.0",
+     "equals": 0.399993896484375
     }
    ],
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
@@ -135,14 +135,14 @@
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3, and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 411.0 versus PE 312.65976969401044. PE reports monthly tn_ff 343 and aggregate TANF 343.0. Forcing both to zero leaves SNAP eligibility true and produces PE SNAP 415.5597737630208; its absolute delta from Axiom is 4.559773763020814, within the suite tolerance 7. This exact counterfactual isolates endogenous TANF transport as the mismatch mechanism.",
+   "mechanism": "The old annualized-period pin expired when PE SNAP materially changed to 309.29998779296875. The fixed-runner 2026-01 replay forced tn_ff and aggregate tanf to zero; SNAP stayed eligible and became 412.20001220703125, only 1.20001220703125 from Axiom 411.0 and within the unchanged tolerance 7.",
    "cases": [
     "ecps-35596"
    ],
    "arithmetic": [
     {
-     "expression": "415.5597737630208 - 411.0",
-     "equals": 4.559773763020814
+     "expression": "412.20001220703125 - 411.0",
+     "equals": 1.20001220703125
     }
    ],
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
@@ -152,14 +152,14 @@
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3, and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 465.0 versus PE 366.7347819010417. PE reports monthly tn_ff 343 and aggregate TANF 343.0. Forcing both to zero leaves SNAP eligibility true and produces PE SNAP 469.6347249348958; its absolute delta from Axiom is 4.634724934895814, within the suite tolerance 7. This exact counterfactual isolates endogenous TANF transport as the mismatch mechanism.",
+   "mechanism": "The old annualized-period pin expired when PE SNAP materially changed to 363.29998779296875. The fixed-runner 2026-01 replay forced tn_ff and aggregate tanf to zero; SNAP stayed eligible and became 466.20001220703125, only 1.20001220703125 from Axiom 465.0 and within the unchanged tolerance 7.",
    "cases": [
     "ecps-35643"
    ],
    "arithmetic": [
     {
-     "expression": "469.6347249348958 - 465.0",
-     "equals": 4.634724934895814
+     "expression": "466.20001220703125 - 465.0",
+     "equals": 1.20001220703125
     }
    ],
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
@@ -169,14 +169,14 @@
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3, and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 785.0 versus PE 736.3741048177084. PE reports monthly tn_ff 387 and aggregate TANF 387.0. Forcing both to zero leaves SNAP eligibility true and produces PE SNAP 789.399169921875; its absolute delta from Axiom is 4.399169921875, within the suite tolerance 7. This exact counterfactual isolates endogenous TANF transport as the mismatch mechanism.",
+   "mechanism": "The old annualized-period pin expired when PE SNAP materially changed to 731.5999755859375. The fixed-runner 2026-01 replay forced tn_ff and aggregate tanf to zero; SNAP stayed eligible and became exactly Axiom's 785.0, within the unchanged tolerance 7.",
    "cases": [
     "ecps-35661"
    ],
    "arithmetic": [
     {
-     "expression": "789.399169921875 - 785.0",
-     "equals": 4.399169921875
+     "expression": "785.0 - 785.0",
+     "equals": 0.0
     }
    ],
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
@@ -186,14 +186,14 @@
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3, and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 994.0 versus PE 935.4453125. PE reports monthly tn_ff 438 and aggregate TANF 438.0. Forcing both to zero leaves SNAP eligibility true and produces PE SNAP 999.5703125; its absolute delta from Axiom is 5.5703125, within the suite tolerance 7. This exact counterfactual isolates endogenous TANF transport as the mismatch mechanism.",
+   "mechanism": "The old annualized-period pin expired when PE SNAP materially changed to 929.5. The fixed-runner 2026-01 replay forced tn_ff and aggregate tanf to zero; SNAP stayed eligible and became exactly Axiom's 994.0, within the unchanged tolerance 7.",
    "cases": [
     "ecps-35708"
    ],
    "arithmetic": [
     {
-     "expression": "999.5703125 - 994.0",
-     "equals": 5.5703125
+     "expression": "994.0 - 994.0",
+     "equals": 0.0
     }
    ],
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
@@ -203,14 +203,14 @@
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3, and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 716.0 versus PE 605.274169921875. PE reports monthly tn_ff 387 and aggregate TANF 387.0. Forcing both to zero leaves SNAP eligibility true and produces PE SNAP 721.3741048177084; its absolute delta from Axiom is 5.374104817708371, within the suite tolerance 7. This exact counterfactual isolates endogenous TANF transport as the mismatch mechanism.",
+   "mechanism": "The old annualized-period pin expired when PE SNAP materially changed to 600.5. The fixed-runner 2026-01 replay forced tn_ff and aggregate tanf to zero; SNAP stayed eligible and became 716.5999755859375, only 0.5999755859375 from Axiom 716.0 and within the unchanged tolerance 7.",
    "cases": [
     "ecps-35789"
    ],
    "arithmetic": [
     {
-     "expression": "721.3741048177084 - 716.0",
-     "equals": 5.374104817708371
+     "expression": "716.5999755859375 - 716.0",
+     "equals": 0.5999755859375
     }
    ],
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
@@ -220,14 +220,14 @@
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3, and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 460.0 versus PE 409.6741129557292. PE reports monthly tn_ff 186.89013671875 and aggregate TANF 186.89013671875. Forcing both to zero leaves SNAP eligibility true and produces PE SNAP 465.6990966796875; its absolute delta from Axiom is 5.6990966796875, within the suite tolerance 7. This exact counterfactual isolates endogenous TANF transport as the mismatch mechanism.",
+   "mechanism": "The old annualized-period pin expired when PE SNAP materially changed to 404.8999938964844. The fixed-runner 2026-01 replay forced tn_ff and aggregate tanf to zero; SNAP stayed eligible and became 461.0, only 1.0 from Axiom 460.0 and within the unchanged tolerance 7.",
    "cases": [
     "ecps-35974"
    ],
    "arithmetic": [
     {
-     "expression": "465.6990966796875 - 460.0",
-     "equals": 5.6990966796875
+     "expression": "461.0 - 460.0",
+     "equals": 1.0
     }
    ],
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
@@ -237,14 +237,14 @@
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3, and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 298.0 versus PE 289.54498291015625. PE reports monthly tn_ff 244 and aggregate TANF 244.0. Forcing both to zero leaves SNAP eligibility true and produces PE SNAP 299.66998291015625; its absolute delta from Axiom is 1.66998291015625, within the suite tolerance 7. This exact counterfactual isolates endogenous TANF transport as the mismatch mechanism.",
+   "mechanism": "The old annualized-period pin expired when PE SNAP materially changed to 287.5. The fixed-runner 2026-01 replay forced tn_ff and aggregate tanf to zero; SNAP stayed eligible and became exactly Axiom's 298.0, within the unchanged tolerance 7.",
    "cases": [
     "ecps-36024"
    ],
    "arithmetic": [
     {
-     "expression": "299.66998291015625 - 298.0",
-     "equals": 1.66998291015625
+     "expression": "298.0 - 298.0",
+     "equals": 0.0
     }
    ],
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
@@ -254,14 +254,14 @@
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3, and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 280.0 versus PE 208.33479817708334. PE reports monthly tn_ff 253.36238606770834 and aggregate TANF 253.36238606770834. Forcing both to zero leaves SNAP eligibility true and produces PE SNAP 284.2347819010417; its absolute delta from Axiom is 4.234781901041686, within the suite tolerance 7. This exact counterfactual isolates endogenous TANF transport as the mismatch mechanism.",
+   "mechanism": "The old annualized-period pin expired when PE SNAP materially changed to 204.89999389648438. The fixed-runner 2026-01 replay forced tn_ff and aggregate tanf to zero; SNAP stayed eligible and became 280.79998779296875, only 0.79998779296875 from Axiom 280.0 and within the unchanged tolerance 7.",
    "cases": [
     "ecps-36069"
    ],
    "arithmetic": [
     {
-     "expression": "284.2347819010417 - 280.0",
-     "equals": 4.234781901041686
+     "expression": "280.79998779296875 - 280.0",
+     "equals": 0.79998779296875
     }
    ],
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
@@ -271,14 +271,14 @@
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3, and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 527.0 versus PE 416.274169921875. PE reports monthly tn_ff 387 and aggregate TANF 387.0. Forcing both to zero leaves SNAP eligibility true and produces PE SNAP 532.3741048177084; its absolute delta from Axiom is 5.374104817708371, within the suite tolerance 7. This exact counterfactual isolates endogenous TANF transport as the mismatch mechanism.",
+   "mechanism": "The old annualized-period pin expired when PE SNAP materially changed to 411.5. The fixed-runner 2026-01 replay forced tn_ff and aggregate tanf to zero; SNAP stayed eligible and became 527.5999755859375, only 0.5999755859375 from Axiom 527.0 and within the unchanged tolerance 7.",
    "cases": [
     "ecps-36071"
    ],
    "arithmetic": [
     {
-     "expression": "532.3741048177084 - 527.0",
-     "equals": 5.374104817708371
+     "expression": "527.5999755859375 - 527.0",
+     "equals": 0.5999755859375
     }
    ],
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
@@ -288,14 +288,14 @@
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3, and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 785.0 versus PE 736.3741048177084. PE reports monthly tn_ff 387 and aggregate TANF 387.0. Forcing both to zero leaves SNAP eligibility true and produces PE SNAP 789.399169921875; its absolute delta from Axiom is 4.399169921875, within the suite tolerance 7. This exact counterfactual isolates endogenous TANF transport as the mismatch mechanism.",
+   "mechanism": "The old annualized-period pin expired when PE SNAP materially changed to 731.5999755859375. The fixed-runner 2026-01 replay forced tn_ff and aggregate tanf to zero; SNAP stayed eligible and became exactly Axiom's 785.0, within the unchanged tolerance 7.",
    "cases": [
     "ecps-36102"
    ],
    "arithmetic": [
     {
-     "expression": "789.399169921875 - 785.0",
-     "equals": 4.399169921875
+     "expression": "785.0 - 785.0",
+     "equals": 0.0
     }
    ],
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
@@ -305,14 +305,14 @@
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3, and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 680.0 versus PE 561.6453450520834. PE reports monthly tn_ff 416.7002360026042 and aggregate TANF 416.7002360026042. Forcing both to zero leaves SNAP eligibility true and produces PE SNAP 686.4453125; its absolute delta from Axiom is 6.4453125, within the suite tolerance 7. This exact counterfactual isolates endogenous TANF transport as the mismatch mechanism.",
+   "mechanism": "The old annualized-period pin expired when PE SNAP materially changed to 555.699951171875. The fixed-runner 2026-01 replay forced tn_ff and aggregate tanf to zero; SNAP stayed eligible and became 680.5, only 0.5 from Axiom 680.0 and within the unchanged tolerance 7.",
    "cases": [
     "ecps-36129"
    ],
    "arithmetic": [
     {
-     "expression": "686.4453125 - 680.0",
-     "equals": 6.4453125
+     "expression": "680.5 - 680.0",
+     "equals": 0.5
     }
    ],
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
@@ -322,14 +322,14 @@
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3, and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 607.0 versus PE 495.9991861979167. PE reports monthly tn_ff 387 and aggregate TANF 387.0. Forcing both to zero leaves SNAP eligibility true and produces PE SNAP 612.0990397135416; its absolute delta from Axiom is 5.099039713541629, within the suite tolerance 7. This exact counterfactual isolates endogenous TANF transport as the mismatch mechanism.",
+   "mechanism": "The old annualized-period pin expired when PE SNAP materially changed to 491.29998779296875. The fixed-runner 2026-01 replay forced tn_ff and aggregate tanf to zero; SNAP stayed eligible and became 607.4000244140625, only 0.4000244140625 from Axiom 607.0 and within the unchanged tolerance 7.",
    "cases": [
     "ecps-36188"
    ],
    "arithmetic": [
     {
-     "expression": "612.0990397135416 - 607.0",
-     "equals": 5.099039713541629
+     "expression": "607.4000244140625 - 607.0",
+     "equals": 0.4000244140625
     }
    ],
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
@@ -339,14 +339,14 @@
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3, and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 1183.0 versus PE 1143.804443359375. PE reports monthly tn_ff 471 and aggregate TANF 471.0. Forcing both to zero leaves SNAP eligibility true and produces PE SNAP 1189.62939453125; its absolute delta from Axiom is 6.62939453125, within the suite tolerance 7. This exact counterfactual isolates endogenous TANF transport as the mismatch mechanism.",
+   "mechanism": "The old annualized-period pin expired when PE SNAP materially changed to 1136.5. The fixed-runner 2026-01 replay forced tn_ff and aggregate tanf to zero; SNAP stayed eligible and became exactly Axiom's 1183.0, within the unchanged tolerance 7.",
    "cases": [
     "ecps-36258"
    ],
    "arithmetic": [
     {
-     "expression": "1189.62939453125 - 1183.0",
-     "equals": 6.62939453125
+     "expression": "1183.0 - 1183.0",
+     "equals": 0.0
     }
    ],
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
@@ -356,14 +356,14 @@
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3, and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 546.0 versus PE 414.8848063151042. PE reports monthly tn_ff 343 and aggregate TANF 343.0. Forcing both to zero leaves SNAP eligibility true and produces PE SNAP 549.059814453125; its absolute delta from Axiom is 3.059814453125, within the suite tolerance 7. This exact counterfactual isolates endogenous TANF transport as the mismatch mechanism.",
+   "mechanism": "The old annualized-period pin expired when PE SNAP materially changed to 411.29998779296875. The fixed-runner 2026-01 replay forced tn_ff and aggregate tanf to zero; SNAP stayed eligible and became exactly Axiom's 546.0, within the unchanged tolerance 7.",
    "cases": [
     "ecps-36346"
    ],
    "arithmetic": [
     {
-     "expression": "549.059814453125 - 546.0",
-     "equals": 3.059814453125
+     "expression": "546.0 - 546.0",
+     "equals": 0.0
     }
    ],
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
@@ -373,14 +373,14 @@
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3, and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 624.0 versus PE 513.4740804036459. PE reports monthly tn_ff 387 and aggregate TANF 387.0. Forcing both to zero leaves SNAP eligibility true and produces PE SNAP 629.5740966796875; its absolute delta from Axiom is 5.5740966796875, within the suite tolerance 7. This exact counterfactual isolates endogenous TANF transport as the mismatch mechanism.",
+   "mechanism": "The old annualized-period pin expired when PE SNAP materially changed to 508.6999816894531. The fixed-runner 2026-01 replay forced tn_ff and aggregate tanf to zero; SNAP stayed eligible and became 624.7999877929688, only 0.79998779296875 from Axiom 624.0 and within the unchanged tolerance 7.",
    "cases": [
     "ecps-36403"
    ],
    "arithmetic": [
     {
-     "expression": "629.5740966796875 - 624.0",
-     "equals": 5.5740966796875
+     "expression": "624.7999877929688 - 624.0",
+     "equals": 0.79998779296875
     }
    ],
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
@@ -390,14 +390,14 @@
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3, and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 1183.0 versus PE 1127.07958984375. PE reports monthly tn_ff 471 and aggregate TANF 471.0. Forcing both to zero leaves SNAP eligibility true and produces PE SNAP 1189.62939453125; its absolute delta from Axiom is 6.62939453125, within the suite tolerance 7. This exact counterfactual isolates endogenous TANF transport as the mismatch mechanism.",
+   "mechanism": "The old annualized-period pin expired when PE SNAP materially changed to 1120.0. The fixed-runner 2026-01 replay forced tn_ff and aggregate tanf to zero; SNAP stayed eligible and became exactly Axiom's 1183.0, within the unchanged tolerance 7.",
    "cases": [
     "ecps-36407"
    ],
    "arithmetic": [
     {
-     "expression": "1189.62939453125 - 1183.0",
-     "equals": 6.62939453125
+     "expression": "1183.0 - 1183.0",
+     "equals": 0.0
     }
    ],
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
@@ -407,14 +407,14 @@
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "Exact-household live counterfactual on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3, and PolicyEngine-Core 3.30.3: the regenerated baseline is Axiom 298.0 versus PE 289.54498291015625. PE reports monthly tn_ff 244 and aggregate TANF 244.0. Forcing both to zero leaves SNAP eligibility true and produces PE SNAP 299.66998291015625; its absolute delta from Axiom is 1.66998291015625, within the suite tolerance 7. This exact counterfactual isolates endogenous TANF transport as the mismatch mechanism.",
+   "mechanism": "The old annualized-period pin expired when PE SNAP materially changed to 287.5. The fixed-runner 2026-01 replay forced tn_ff and aggregate tanf to zero; SNAP stayed eligible and became exactly Axiom's 298.0, within the unchanged tolerance 7.",
    "cases": [
     "ecps-36436"
    ],
    "arithmetic": [
     {
-     "expression": "299.66998291015625 - 298.0",
-     "equals": 1.66998291015625
+     "expression": "298.0 - 298.0",
+     "equals": 0.0
     }
    ],
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
