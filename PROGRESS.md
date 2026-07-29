@@ -2,8 +2,8 @@
 
 ## State
 
-- Defensive correctness and completeness audit in progress; gate inventory is
-  complete and adversarial probing is underway.
+- Defensive correctness and completeness audit in progress; the branch-wide
+  implementation review and adversarial probing are complete.
 - Target gate branches are read only and will be inspected with `git show`.
 - This worktree will contain only the shared progress update, the audit report,
   and new xfailed mutant proofs.
@@ -23,14 +23,25 @@
 - Checked the local GitNexus registry; this repository is not indexed, so the
   audit is using direct branch-object and execution-flow analysis rather than
   creating a forbidden index artifact.
+- Proved the certification composition can be self-activated by registry
+  `status: computed`, omits the fifth `provision_rooted` premise, drops
+  misspelled oracle types, and can skip disposition replay behind a false slim
+  report count.
+- Proved closure accepts empty pinned denominators as closed, treats unrelated
+  path membership and review prose as semantic coverage, permits unbound
+  partial-coverage disclosures, and has two pending-ratchet reset/bypass paths.
+- Proved conformance evidence is not joined to the executable
+  engine/artifact/dependency tuple, while the exercise verdict accepts an
+  all-constant, unbound census row as complete.
+- Proved typed bridge-manifest and population-pin gaps, plus circular
+  `covered_by` evidence and malformed classification-row laundering.
 
 ## Next
 
-- Trace composition-level bindings between certification, closure, census,
-  manifests, and evidence.
-- Prove or falsify each candidate hole against a hermetic branch snapshot.
 - Add clearly named `xfail` mutants for real gaps.
-- Write and verify the ranked report, then push and open a draft PR if possible.
+- Write the ranked report, state sound areas, and verify the mutants.
+- Commit each coherent deliverable step, then push and open a draft PR if
+  network access allows.
 
 ---
 
