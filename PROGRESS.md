@@ -1155,3 +1155,37 @@ residual), #229 (small-suite grounding).
   evidence and replace each `MAIN-LANE-TBD` placeholder with its issue URL.
 - Review and merge this local branch through the campaign's authorized main
   lane. No worker implementation step remains.
+
+## Blind adversarial review — PR #425
+
+### Checkpoint — review initialization
+
+#### State
+
+- Disposable review worktree:
+  `.git/review-worktrees/pr425-309e380a-blind`.
+- Local-only review branch: `review/pr425-309e380a-blind`.
+- Frozen GitHub target: `TheAxiomFoundation/axiom-oracles#425`, head branch
+  `fed-parity/chunk1-oracle-suites`, immutable head
+  `309e380a6d7bc6f80fb47b4341985786e98c9ad0`.
+- GitHub-reported base snapshot:
+  `fe00bad51f85e7128f762d66dd5121324889b156`.
+- Review writes are confined to this local worktree and branch. No PR branch,
+  remote, or GitHub writes are authorized.
+- Final output: `REVIEW-REPORT.md`.
+- Verdict: pending.
+
+#### Done
+
+- Read the `gitnexus-pr-review` workflow.
+- Queried PR metadata read-only and verified that the local origin-tracking
+  head ref exactly matches the live GitHub head SHA.
+- Created this disposable worktree directly from the immutable PR head,
+  without touching the author's existing branch or worktree.
+
+#### Next
+
+- Freeze and inspect the exact patch and binding specifications.
+- Independently regenerate both suites at the pinned engine stack.
+- Audit all five dispositions, statutory arithmetic, generator contracts,
+  mappings, adoption artifacts, containment, and clean-main failure baseline.
