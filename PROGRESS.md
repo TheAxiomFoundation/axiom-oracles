@@ -35,13 +35,14 @@
   duplicate/vacuous-root, CRLF, output/evidence alias, unrecorded-run, malformed
   applicability/coverage, dependency-root pending, partial census, validator
   absence/mutation, receipt-command failure, trust-root mutation, contested
-  report ownership, protected-validator output aliasing, and two-node projection
+  report ownership, protected-validator output aliasing, recursive/deep
+  producer documents, symlink-loop producer paths, and two-node projection
   coverage. The complete fixture passes the real parked executable validator.
   Dispositioned mismatches now require the pinned v1 validator, exact taxonomy,
   a strict/hash-bound source artifact, and exact block recomputation; malformed
-  paths/imports/run ids fail with machine reasons. Focused validation: 50 tests
+  paths/imports/run ids fail with machine reasons. Focused validation: 54 tests
   pass; Ruff and `git diff --check` pass.
-- Repository-wide validation reached 2,299 passing and 70 skipped; its sole
+- Repository-wide validation reached 2,333 passing and 70 skipped; its sole
   failure was `npx` attempting a network download while DNS was unavailable.
 
 ## Next

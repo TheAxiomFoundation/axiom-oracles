@@ -1364,3 +1364,92 @@ def test_malformed_report_path_rejects_without_traceback(tmp_path: Path) -> None
         code="conformant.report_missing",
         criterion="conformant",
     )
+
+
+def test_recursive_yaml_alias_rejects_without_traceback(tmp_path: Path) -> None:
+    path = tmp_path / "recursive-closure.yaml"
+    path.write_text(
+        "schema: axiom_oracles.closure.summary.v1\nroots: &cycle\n  - *cycle\n"
+    )
+
+    result, _, reasons = _run(
+        tmp_path,
+        overrides={"closure-summary": path},
+    )
+
+    assert result.returncode != 0
+    assert "Traceback" not in result.stderr
+    _assert_reason(
+        reasons,
+        code="closed.producer_missing",
+        criterion="closed",
+    )
+
+
+def test_nonfinite_yaml_set_rejects_without_traceback(tmp_path: Path) -> None:
+    path = tmp_path / "nonfinite-closure.yaml"
+    path.write_text(
+        "schema: axiom_oracles.closure.summary.v1\nroots: []\nextra: !!set\n  .nan:\n"
+    )
+
+    result, _, reasons = _run(
+        tmp_path,
+        overrides={"closure-summary": path},
+    )
+
+    assert result.returncode != 0
+    assert "Traceback" not in result.stderr
+    _assert_reason(
+        reasons,
+        code="closed.producer_missing",
+        criterion="closed",
+    )
+
+
+def test_excessive_document_nesting_rejects_without_traceback(
+    tmp_path: Path,
+) -> None:
+    path = tmp_path / "deeply-nested-closure.json"
+    path.write_text(
+        '{"schema":"axiom_oracles.closure.summary.v1","extra":'
+        + "[" * 160
+        + "0"
+        + "]" * 160
+        + "}\n"
+    )
+
+    result, _, reasons = _run(
+        tmp_path,
+        overrides={"closure-summary": path},
+    )
+
+    assert result.returncode != 0
+    assert "Traceback" not in result.stderr
+    _assert_reason(
+        reasons,
+        code="closed.producer_missing",
+        criterion="closed",
+    )
+
+
+def test_producer_path_symlink_loop_rejects_without_traceback(
+    tmp_path: Path,
+) -> None:
+    path = tmp_path / "closure-loop.json"
+    try:
+        path.symlink_to(path.name)
+    except OSError as exc:
+        pytest.skip(f"cannot create a symlink loop on this platform: {exc}")
+
+    result, _, reasons = _run(
+        tmp_path,
+        overrides={"closure-summary": path},
+    )
+
+    assert result.returncode != 0
+    assert "Traceback" not in result.stderr
+    _assert_reason(
+        reasons,
+        code="closed.producer_missing",
+        criterion="closed",
+    )

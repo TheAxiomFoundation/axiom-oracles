@@ -75,6 +75,7 @@ CRITERIA = (
 
 _SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 _COMMIT_RE = re.compile(r"^[0-9a-f]{40}$")
+_MAX_DOCUMENT_DEPTH = 128
 _NODE_RE = re.compile(
     r"^[a-z]{2}(?:-[a-z0-9]+)*:"
     r"(?:legislation|policies|regulations|statutes)/"
@@ -265,19 +266,45 @@ def _json_object(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
 
 
 def _reject_nonfinite(value: Any) -> None:
-    if isinstance(value, float) and not math.isfinite(value):
-        raise ValueError("non-finite numbers are not allowed")
-    if isinstance(value, dict):
-        for key, item in value.items():
-            _reject_nonfinite(key)
-            _reject_nonfinite(item)
-    elif isinstance(value, list):
-        for item in value:
-            _reject_nonfinite(item)
+    """Validate a parsed document without recursing through YAML aliases."""
+
+    active: set[int] = set()
+    validated: set[int] = set()
+
+    def visit(item: Any, depth: int) -> None:
+        if depth > _MAX_DOCUMENT_DEPTH:
+            raise ValueError(f"document nesting exceeds {_MAX_DOCUMENT_DEPTH} levels")
+        if isinstance(item, float) and not math.isfinite(item):
+            raise ValueError("non-finite numbers are not allowed")
+        if not isinstance(item, dict | list | tuple | set | frozenset):
+            return
+
+        identity = id(item)
+        if identity in active:
+            raise ValueError("recursive aliases are not allowed")
+        if identity in validated:
+            return
+        active.add(identity)
+        if isinstance(item, dict):
+            for key, nested in item.items():
+                visit(key, depth + 1)
+                visit(nested, depth + 1)
+        else:
+            for nested in item:
+                visit(nested, depth + 1)
+        active.remove(identity)
+        validated.add(identity)
+
+    visit(value, 0)
 
 
 def _load(root: Path, value: str | Path, name: str) -> Loaded:
-    path = _resolve(root, value)
+    try:
+        path = _resolve(root, value)
+    except (OSError, RuntimeError, ValueError) as exc:
+        unresolved = Path(value)
+        path = unresolved if unresolved.is_absolute() else root / unresolved
+        return Loaded(name, path, None, None, f"cannot resolve {name}: {exc}")
     try:
         raw = path.read_bytes()
     except OSError as exc:
@@ -298,6 +325,7 @@ def _load(root: Path, value: str | Path, name: str) -> Loaded:
         UnicodeDecodeError,
         json.JSONDecodeError,
         yaml.YAMLError,
+        RecursionError,
         ValueError,
     ) as exc:
         return Loaded(name, path, None, _sha256(raw), f"invalid {name}: {exc}")
