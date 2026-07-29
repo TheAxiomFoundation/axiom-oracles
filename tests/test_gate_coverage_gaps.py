@@ -1,9 +1,10 @@
 """Expected-failing mutants found by the AUTOGO gate-coverage audit.
 
 The gates under review live on sibling feature branches that are intentionally
-read-only for this review.  Load their pinned Git objects in memory so the
-mutants prove the reviewed implementations without checking out or copying
-those branches into this worktree.
+read-only for this review.  Until a complete gate family is present in this
+worktree, load its pinned Git objects in memory so the mutants prove the
+reviewed implementations without checking out or copying those branches.
+After integration, prefer the worktree implementation so a fix can XPASS.
 
 Every test is a strict xfail: an XPASS means the corresponding gate hole was
 closed and the marker should be removed when this review is integrated with the
@@ -27,6 +28,24 @@ import yaml
 REPO_ROOT = Path(__file__).resolve().parents[1]
 CUMULATIVE_GATE_REF = "a312ace12615593ef2076d95a41e7c68d18c9412"
 CLOSURE_GATE_REF = "9414bc89781e0ea12ebbc6c9b2d1e2f7c709735b"
+CUMULATIVE_GATE_PATHS = {
+    "axiom_oracles/evidence.py",
+    "scripts/apply_dispositions.py",
+    "scripts/certify.py",
+    "scripts/validate_bridge_manifests.py",
+}
+CLOSURE_GATE_PATHS = {
+    "scripts/closure_universe.py",
+    "scripts/merge_closure_classifications.py",
+}
+
+
+def _gate_family_paths(ref: str) -> set[str]:
+    if ref == CUMULATIVE_GATE_REF:
+        return CUMULATIVE_GATE_PATHS
+    if ref == CLOSURE_GATE_REF:
+        return CLOSURE_GATE_PATHS
+    raise AssertionError(f"unregistered gate ref: {ref}")
 
 
 def _git_text(ref: str, path: str) -> str:
@@ -38,8 +57,15 @@ def _git_text(ref: str, path: str) -> str:
         text=True,
     )
     if result.returncode:
-        pytest.fail(f"cannot read reviewed gate object {ref}:{path}: {result.stderr}")
+        pytest.skip(f"reviewed gate object is unavailable: {ref}:{path}")
     return result.stdout
+
+
+def _gate_text(ref: str, path: str) -> str:
+    family = _gate_family_paths(ref)
+    if all((REPO_ROOT / member).is_file() for member in family):
+        return (REPO_ROOT / path).read_text(encoding="utf-8")
+    return _git_text(ref, path)
 
 
 def _exec_module(ref: str, path: str, name: str) -> ModuleType:
@@ -47,7 +73,7 @@ def _exec_module(ref: str, path: str, name: str) -> ModuleType:
     module.__file__ = str(REPO_ROOT / path)
     module.__package__ = name.rpartition(".")[0]
     sys.modules[name] = module
-    source = _git_text(ref, path)
+    source = _gate_text(ref, path)
     exec(compile(source, module.__file__, "exec"), module.__dict__)
     return module
 
@@ -142,7 +168,7 @@ def _patch_certificate_inputs(monkeypatch: pytest.MonkeyPatch, certify: ModuleTy
     reason="GCR-01: a false slim count bypasses disposition replay",
 )
 def test_forged_stored_mismatch_count_cannot_skip_disposition_replay():
-    """Finding GCR-01: the full disposition/evidence/certificate composition leaks."""
+    """Finding GCR-01: the slim-report predicate trusts the false stored count."""
 
     gate = _apply_dispositions()
     mutant = {
@@ -462,7 +488,7 @@ def test_exercised_requires_bound_material_variation(
     reason="GCR-07: an empty pinned closure denominator is accepted",
 )
 def test_empty_pinned_closure_denominator_cannot_be_closed(tmp_path: Path):
-    """Finding GCR-07: zero rows is valid input and `all([])` closes the root."""
+    """Finding GCR-07: zero rows yield zero pending, so every root closes."""
 
     closure = _closure()
     config = closure.ROOTS[0]
