@@ -135,5 +135,22 @@ The requested local work is committed in the fresh worktree on
 `autogo/executable-producer`. Both `git fetch origin main` and the exact
 non-force push failed because this environment could not resolve
 `github.com`. The GitHub connector confirmed that the requested remote branch
-does not already exist. Connector-based publication and draft-PR creation will
-be attempted after this report commit.
+does not already exist, but its blob/tree write endpoint rejected both
+publication attempts before creating any Git object or branch. Therefore no
+draft PR was created.
+
+A maintainer with GitHub network access can publish the exact committed state
+from this worktree with:
+
+```bash
+git push -u origin HEAD:refs/heads/autogo/executable-producer
+gh pr create \
+  --repo TheAxiomFoundation/axiom-oracles \
+  --base main \
+  --head autogo/executable-producer \
+  --draft \
+  --title \
+    "Executable producer: sign-only CI receipt for the autogo harness" \
+  --body \
+    "Adds the computed executable-receipt producer and fail-closed consumer on the certified-nodes critical path. The new signing/CI workflow requires cross-family agreement and maintainer approval before landing."
+```

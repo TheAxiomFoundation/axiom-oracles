@@ -1508,8 +1508,8 @@ residual), #229 (small-suite grounding).
   `github.com`.
 - Intended publication ref: `autogo/executable-producer`.
 - Phase: implementation, trust-boundary repair, validation, and independent
-  re-review complete; direct Git publication is blocked by DNS and the
-  authenticated connector fallback is pending.
+  re-review complete; publication is blocked by unavailable Git transport and
+  connector write access.
 - Scope: add a deterministic, sign-only CI producer for executable receipts and
   standalone receipt consumption by the certificate harness.
 - Existing workflows, toolchain files, dependency pins, and CODEOWNERS are
@@ -1614,9 +1614,14 @@ residual), #229 (small-suite grounding).
   `autogo/executable-producer`; both failed because `github.com` could not be
   resolved. Confirmed through the GitHub connector that no branch with that
   name exists.
+- Attempted connector-based publication of the exact committed tree. Both the
+  tree and single-blob write probes were rejected before creating an object or
+  branch, so a draft PR could not be opened.
+- Added the exact maintainer push and draft-PR commands, including the required
+  title and certified-nodes critical-path reference, to `FINAL-REPORT.md`.
 
 ### Next
 
-- Attempt connector-based publication of the exact committed tree and open the
-  requested draft PR. If connector writes are unavailable, hand off the local
-  commit and the exact push/PR instructions to a maintainer.
+- A maintainer with GitHub network/write access publishes the exact committed
+  tree and opens the documented draft PR; after review and landing, perform the
+  evidence-pair and allowlist handoff documented above.
