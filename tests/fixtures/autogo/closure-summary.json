@@ -18,6 +18,21 @@
         "rulespec_us": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
         "corpus": "ffffffffffffffffffffffffffffffffffffffff"
       }
+    },
+    {
+      "root": "us:statutes/26/3121",
+      "total": 1,
+      "by_status": {
+        "encoded": 1,
+        "excluded": 0,
+        "pending": 0
+      },
+      "by_reason": {},
+      "pins_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+      "pinned": {
+        "rulespec_us": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "corpus": "ffffffffffffffffffffffffffffffffffffffff"
+      }
     }
   ],
   "closed": true

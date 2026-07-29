@@ -7,8 +7,9 @@ test, so the six launch-critical mutants live under ``fixtures/autogo``.
 
 from __future__ import annotations
 
-import json
 import hashlib
+import json
+import os
 import shutil
 import subprocess
 import sys
@@ -56,6 +57,7 @@ def _run(
     reasons_output: Path | None = None,
     repo_root: Path | None = None,
     nodes: tuple[str, ...] = (NODE,),
+    validator_stub: bool = True,
 ) -> tuple[subprocess.CompletedProcess[str], Path, Path]:
     inputs = {**BASE_INPUTS, **(overrides or {})}
     output = output or tmp_path / "certified-nodes.yaml"
@@ -73,12 +75,29 @@ def _run(
     command.extend(("--output", str(output), "--reasons-output", str(reasons_output)))
     if check:
         command.append("--check")
+    environment = dict(os.environ)
+    if validator_stub:
+        validator_root = (
+            repo_root / "validator_stub"
+            if (repo_root / "validator_stub").is_dir()
+            else FIXTURES / "validator_stub"
+        )
+        environment["PYTHONPATH"] = os.pathsep.join(
+            filter(
+                None,
+                (
+                    str(validator_root),
+                    os.environ.get("PYTHONPATH"),
+                ),
+            )
+        )
     result = subprocess.run(
         command,
         cwd=REPO_ROOT,
         check=False,
         capture_output=True,
         text=True,
+        env=environment,
     )
     return result, output, reasons_output
 
@@ -104,12 +123,16 @@ def _bind_run_manifest(
         path = inputs[option]
         if path.exists():
             run["inputs"][run_key] = hashlib.sha256(path.read_bytes()).hexdigest()
+    path = tmp_path / "bound-run-manifest.json"
+    _write_json(path, run)
     governance = json.loads(inputs["governance"].read_text())
+    governance["verified_runs"][0]["certified_at"] = run["certified_at"]
+    governance["verified_runs"][0]["run_manifest_sha256"] = hashlib.sha256(
+        path.read_bytes()
+    ).hexdigest()
     governance["verified_runs"][0]["inputs"] = deepcopy(run["inputs"])
     governance_path = tmp_path / "bound-workflow-governance.json"
     _write_json(governance_path, governance)
-    path = tmp_path / "bound-run-manifest.json"
-    _write_json(path, run)
     return {
         **overrides,
         "governance": governance_path,
@@ -124,6 +147,10 @@ def _inputs_pinned_to_artifact(
     """Re-pin supporting producers so a provenance mutant tests only provenance."""
     fixture_root = tmp_path / "repinned-fixture"
     artifact_sha = hashlib.sha256(artifact.read_bytes()).hexdigest()
+    shutil.copytree(
+        FIXTURES / "validator_stub",
+        fixture_root / "validator_stub",
+    )
 
     report_source = FIXTURES / "reports" / "us-medicare-wage-tax.json"
     report_target = fixture_root / "reports" / report_source.name
@@ -145,6 +172,15 @@ def _inputs_pinned_to_artifact(
     output_bindings_path.parent.mkdir(parents=True, exist_ok=True)
     shutil.copyfile(output_bindings_source, output_bindings_path)
     output_bindings_sha = hashlib.sha256(output_bindings_path.read_bytes()).hexdigest()
+
+    for filename in (
+        "engine-releases.json",
+        "executable-workflow-allowlist.json",
+        "us-medicare-golden-request.json",
+    ):
+        source = FIXTURES / "manifests" / filename
+        target = fixture_root / "manifests" / filename
+        shutil.copyfile(source, target)
 
     manifest = json.loads((FIXTURES / "manifests" / "us-medicare.json").read_text())
     manifest["artifact"]["sha256"] = artifact_sha
@@ -192,12 +228,16 @@ def _inputs_pinned_to_artifact(
             "node_executable": hashlib.sha256(executable_path.read_bytes()).hexdigest(),
         }
     )
+    run_manifest_path = fixture_root / "run-manifest.json"
+    _write_json(run_manifest_path, run_manifest)
     governance = json.loads(BASE_INPUTS["governance"].read_text())
+    governance["verified_runs"][0]["certified_at"] = run_manifest["certified_at"]
+    governance["verified_runs"][0]["run_manifest_sha256"] = hashlib.sha256(
+        run_manifest_path.read_bytes()
+    ).hexdigest()
     governance["verified_runs"][0]["inputs"] = deepcopy(run_manifest["inputs"])
     governance_path = fixture_root / "workflow-governance.json"
     _write_json(governance_path, governance)
-    run_manifest_path = fixture_root / "run-manifest.json"
-    _write_json(run_manifest_path, run_manifest)
 
     return (
         {
@@ -312,6 +352,65 @@ def test_green_baseline_writes_exact_entry_and_checks_without_mutating(
         "reasons": False,
     }
     assert output.read_bytes() == before
+
+
+def test_baseline_receipt_passes_real_parked_validator_when_available(
+    tmp_path: Path,
+) -> None:
+    configured = os.environ.get("AXIOM_EXECUTABLE_PRODUCER_ROOT")
+    candidates = [
+        Path(configured) if configured else None,
+        REPO_ROOT.parent / "autogo-executable-producer",
+    ]
+    producer_root = next(
+        (
+            candidate
+            for candidate in candidates
+            if candidate is not None
+            and (candidate / "axiom_oracles" / "executable_receipt.py").is_file()
+        ),
+        None,
+    )
+    if producer_root is None:
+        pytest.skip(
+            "parked executable producer is unavailable; set "
+            "AXIOM_EXECUTABLE_PRODUCER_ROOT to run its contract test"
+        )
+
+    program = """
+import json
+import sys
+from pathlib import Path
+from axiom_oracles.executable_receipt import validate_executable_receipt
+
+root = Path(sys.argv[1])
+result = validate_executable_receipt(
+    Path(sys.argv[2]),
+    repo_root=root,
+    manifest_path=Path(sys.argv[3]),
+)
+print(json.dumps({"valid": result.valid, "failures": list(result.failures)}))
+"""
+    environment = dict(os.environ)
+    environment["PYTHONPATH"] = str(producer_root)
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-c",
+            program,
+            str(FIXTURES),
+            str(FIXTURES / "receipts" / "us-medicare-wage-tax.json"),
+            str(FIXTURES / "manifests" / "us-medicare.json"),
+        ],
+        cwd=tmp_path,
+        check=False,
+        capture_output=True,
+        text=True,
+        env=environment,
+    )
+
+    assert result.returncode == 0, result.stderr
+    assert json.loads(result.stdout) == {"valid": True, "failures": []}
 
 
 @pytest.mark.parametrize(
@@ -658,6 +757,83 @@ def test_foreign_program_receipt_cannot_be_rekeyed_to_node(tmp_path: Path) -> No
     )
 
 
+def test_failed_receipt_command_is_rejected_by_upstream_validator(
+    tmp_path: Path,
+) -> None:
+    root = _copy_fixture_root(tmp_path)
+    receipt_path = root / "receipts" / "us-medicare-wage-tax.json"
+    receipt = json.loads(receipt_path.read_text())
+    receipt["commands"][0]["exit_code"] = 1
+    _write_json(receipt_path, receipt)
+
+    executable = json.loads((root / "executable.json").read_text())
+    executable["nodes"][NODE]["receipt"]["sha256"] = hashlib.sha256(
+        receipt_path.read_bytes()
+    ).hexdigest()
+    executable_path = root / "failed-command-executable.json"
+    _write_json(executable_path, executable)
+    overrides = _bind_run_manifest(tmp_path, {"executable": executable_path})
+
+    result, _, reasons = _run(
+        tmp_path,
+        overrides=overrides,
+        repo_root=root,
+    )
+
+    assert result.returncode != 0
+    _assert_reason(
+        reasons,
+        code="executable.receipt_invalid",
+        criterion="executable",
+    )
+
+
+def test_validator_implementation_is_hash_bound(tmp_path: Path) -> None:
+    root = _copy_fixture_root(tmp_path)
+    validator = root / "validator_stub" / "axiom_oracles" / "executable_receipt.py"
+    validator.write_text(validator.read_text() + "\n# mutated validator bytes\n")
+
+    result, _, reasons = _run(tmp_path, repo_root=root)
+
+    assert result.returncode != 0
+    _assert_reason(
+        reasons,
+        code="executable.receipt_invalid",
+        criterion="executable",
+    )
+
+
+def test_transitive_receipt_trust_roots_are_hash_bound(tmp_path: Path) -> None:
+    root = _copy_fixture_root(tmp_path)
+    release_manifest = root / "manifests" / "engine-releases.json"
+    release_manifest.write_text(release_manifest.read_text() + "\n")
+
+    result, _, reasons = _run(tmp_path, repo_root=root)
+
+    assert result.returncode != 0
+    _assert_reason(
+        reasons,
+        code="executable.receipt_invalid",
+        criterion="executable",
+    )
+
+
+def test_output_cannot_overwrite_loaded_validator_source(tmp_path: Path) -> None:
+    root = _copy_fixture_root(tmp_path)
+    validator = root / "validator_stub" / "axiom_oracles" / "executable_receipt.py"
+    before = validator.read_bytes()
+
+    result, _, _ = _run(
+        tmp_path,
+        repo_root=root,
+        output=validator,
+    )
+
+    assert result.returncode == 2
+    assert "must not overwrite producer/evidence inputs" in result.stderr
+    assert validator.read_bytes() == before
+
+
 def test_workflow_sha_must_be_separately_governed(tmp_path: Path) -> None:
     governance = json.loads((FIXTURES / "workflow-governance.json").read_text())
     governance["allowed_workflow_shas"] = ["aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"]
@@ -666,6 +842,25 @@ def test_workflow_sha_must_be_separately_governed(tmp_path: Path) -> None:
     overrides = _bind_run_manifest(tmp_path, {"governance": governance_path})
 
     result, _, reasons = _run(tmp_path, overrides=overrides)
+
+    assert result.returncode != 0
+    _assert_reason(
+        reasons,
+        code="harness.governance_mismatch",
+        criterion="harness",
+    )
+
+
+def test_certified_at_must_match_separately_governed_run(tmp_path: Path) -> None:
+    run = json.loads((FIXTURES / "run-manifest.json").read_text())
+    run["certified_at"] = "2026-07-29T12:34:57Z"
+    path = tmp_path / "replayed-timestamp-run.json"
+    _write_json(path, run)
+
+    result, _, reasons = _run(
+        tmp_path,
+        overrides={"run-manifest": path},
+    )
 
     assert result.returncode != 0
     _assert_reason(
@@ -705,6 +900,26 @@ def test_vacuous_or_duplicate_closure_root_is_not_closed(
     )
 
 
+def test_pending_dependency_closure_root_rejects_target_node(tmp_path: Path) -> None:
+    closure = json.loads((FIXTURES / "closure-summary.json").read_text())
+    dependency = next(
+        row for row in closure["roots"] if row["root"] == "us:statutes/26/3121"
+    )
+    dependency["by_status"] = {"encoded": 0, "excluded": 0, "pending": 1}
+    path = tmp_path / "pending-dependency-root.json"
+    _write_json(path, closure)
+    overrides = _bind_run_manifest(tmp_path, {"closure-summary": path})
+
+    result, _, reasons = _run(tmp_path, overrides=overrides)
+
+    assert result.returncode != 0
+    _assert_reason(
+        reasons,
+        code="closed.pending",
+        criterion="closed",
+    )
+
+
 def test_impossible_exercise_cardinality_is_not_fidelity(tmp_path: Path) -> None:
     census = json.loads((FIXTURES / "exercise-census.json").read_text())
     row = census["suites"]["us-medicare-wage-tax"]
@@ -724,11 +939,58 @@ def test_impossible_exercise_cardinality_is_not_fidelity(tmp_path: Path) -> None
     )
 
 
-def test_comparison_applicability_cannot_omit_target(tmp_path: Path) -> None:
+def test_partial_exercise_census_cannot_stand_in_for_all_report_cases(
+    tmp_path: Path,
+) -> None:
+    census = json.loads((FIXTURES / "exercise-census.json").read_text())
+    row = census["suites"]["us-medicare-wage-tax"]
+    row["cases_scanned"] = 2
+    row["evidence_fields"]["wages"]["distinct"] = 2
+    path = tmp_path / "partial-census.json"
+    _write_json(path, census)
+    overrides = _bind_run_manifest(tmp_path, {"exercise-census": path})
+
+    result, _, reasons = _run(tmp_path, overrides=overrides)
+
+    assert result.returncode != 0
+    _assert_reason(
+        reasons,
+        code="exercised.evidence_incomplete",
+        criterion="exercised",
+    )
+
+
+def test_contested_suite_reports_cannot_supply_exercise_evidence(
+    tmp_path: Path,
+) -> None:
+    census = json.loads((FIXTURES / "exercise-census.json").read_text())
+    census["suites"]["us-medicare-wage-tax"]["contested_reports"] = [
+        "reports/us-medicare-wage-tax.json",
+        "reports/another-report-claiming-the-suite.json",
+    ]
+    path = tmp_path / "contested-census.json"
+    _write_json(path, census)
+    overrides = _bind_run_manifest(tmp_path, {"exercise-census": path})
+
+    result, _, reasons = _run(tmp_path, overrides=overrides)
+
+    assert result.returncode != 0
+    _assert_reason(
+        reasons,
+        code="exercised.contested_reports",
+        criterion="exercised",
+    )
+
+
+@pytest.mark.parametrize("kept_node", [NODE, DEPENDENCY])
+def test_comparison_applicability_cannot_omit_any_subgraph_node(
+    tmp_path: Path,
+    kept_node: str,
+) -> None:
     comparisons = json.loads((FIXTURES / "comparisons.json").read_text())
     row = comparisons["comparisons"]["us-medicare-wage-tax"]
-    row["applicable_nodes"] = [DEPENDENCY]
-    row["required_dimensions"] = {DEPENDENCY: ["wages"]}
+    row["applicable_nodes"] = [kept_node]
+    row["required_dimensions"] = {kept_node: ["wages"]}
     path = tmp_path / "omitted-applicability.json"
     _write_json(path, comparisons)
     overrides = _bind_run_manifest(tmp_path, {"comparisons": path})
@@ -800,72 +1062,24 @@ def test_missing_integration_or_governance_producer_fails_closed(
     _assert_reason(reasons, code=code, criterion=criterion)
 
 
+def test_missing_upstream_receipt_validator_fails_closed(tmp_path: Path) -> None:
+    result, _, reasons = _run(tmp_path, validator_stub=False)
+
+    assert result.returncode != 0
+    _assert_reason(
+        reasons,
+        code="executable.producer_missing",
+        criterion="executable",
+    )
+
+
 def test_partial_write_recomputes_and_preserves_existing_green_node(
     tmp_path: Path,
 ) -> None:
     root = _copy_fixture_root(tmp_path)
 
-    closure = json.loads((root / "closure-summary.json").read_text())
-    dependency_root = deepcopy(closure["roots"][0])
-    dependency_root.update(
-        {
-            "root": "us:statutes/26/3121",
-            "total": 1,
-            "by_status": {"encoded": 1, "excluded": 0, "pending": 0},
-            "by_reason": {},
-        }
-    )
-    closure["roots"].append(dependency_root)
-    closure_path = root / "two-node-closure.json"
-    _write_json(closure_path, closure)
-
-    node_index = json.loads((root / "node-index.json").read_text())
-    node_index["nodes"][DEPENDENCY] = {
-        "label": "Medicare wage base",
-        "provision": "26 USC 3121(a)",
-        "corpus_citation_path": "us/statute/26/3121",
-        "closure_roots": ["us:statutes/26/3121"],
-        "comparisons": [
-            {
-                "suite": "us-medicare-wage-tax",
-                "required_dimensions": ["wages"],
-            }
-        ],
-    }
-    node_index_path = root / "two-node-index.json"
-    _write_json(node_index_path, node_index)
-
-    comparisons = json.loads((root / "comparisons.json").read_text())
-    comparison = comparisons["comparisons"]["us-medicare-wage-tax"]
-    comparison["applicable_nodes"].append(DEPENDENCY)
-    comparison["required_dimensions"][DEPENDENCY] = ["wages"]
-    comparisons_path = root / "two-node-comparisons.json"
-    _write_json(comparisons_path, comparisons)
-
-    bindings_path = root / "manifests" / "us-medicare-golden-outputs.json"
-    bindings = json.loads(bindings_path.read_text())
-    bindings["bindings"]["medicare_wage_base"] = DEPENDENCY
-    bindings["expected"]["medicare_wage_base"] = 10000
-    _write_json(bindings_path, bindings)
-    bindings_sha = hashlib.sha256(bindings_path.read_bytes()).hexdigest()
-
-    manifest_path = root / "manifests" / "us-medicare.json"
-    manifest = json.loads(manifest_path.read_text())
-    manifest["golden"]["outputs_sha256"] = bindings_sha
-    _write_json(manifest_path, manifest)
-    manifest_sha = hashlib.sha256(manifest_path.read_bytes()).hexdigest()
-
-    receipt_path = root / "receipts" / "us-medicare-wage-tax.json"
-    receipt = json.loads(receipt_path.read_text())
-    receipt["golden"]["outputs"]["medicare_wage_base"] = 10000
-    _write_json(receipt_path, receipt)
-    receipt_sha = hashlib.sha256(receipt_path.read_bytes()).hexdigest()
-
     executable = json.loads((root / "executable.json").read_text())
     first = executable["nodes"][NODE]
-    first["covered_nodes"] = [NODE, DEPENDENCY]
-    first["manifest"]["sha256"] = manifest_sha
-    first["receipt"]["sha256"] = receipt_sha
     executable["nodes"][DEPENDENCY] = deepcopy(first)
     executable_path = root / "two-node-executable.json"
     _write_json(executable_path, executable)
@@ -873,9 +1087,6 @@ def test_partial_write_recomputes_and_preserves_existing_green_node(
     overrides = _bind_run_manifest(
         tmp_path,
         {
-            "node-index": node_index_path,
-            "closure-summary": closure_path,
-            "comparisons": comparisons_path,
             "executable": executable_path,
         },
     )
@@ -958,4 +1169,22 @@ def test_malformed_required_dimensions_reject_instead_of_crashing(
         reasons,
         code="conformant.declaration_invalid",
         criterion="conformant",
+    )
+
+
+def test_malformed_covered_nodes_rejects_without_traceback(tmp_path: Path) -> None:
+    executable = json.loads((FIXTURES / "executable.json").read_text())
+    executable["nodes"][NODE]["covered_nodes"] = [NODE, {"not": "a node id"}]
+    path = tmp_path / "malformed-covered-nodes.json"
+    _write_json(path, executable)
+    overrides = _bind_run_manifest(tmp_path, {"executable": path})
+
+    result, _, reasons = _run(tmp_path, overrides=overrides)
+
+    assert result.returncode != 0
+    assert "Traceback" not in result.stderr
+    _assert_reason(
+        reasons,
+        code="executable.coverage_invalid",
+        criterion="executable",
     )

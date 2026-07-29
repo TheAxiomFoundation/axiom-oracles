@@ -2,39 +2,131 @@
   "schema": "axiom_oracles.executable_receipt.v1",
   "program": "us/medicare",
   "engine": {
-    "repository": "TheAxiomFoundation/axiom-rules",
+    "repository": "TheAxiomFoundation/axiom-rules-engine",
     "release": "v0.1.1",
     "version": "0.1.1",
     "target": "x86_64-unknown-linux-gnu",
     "asset": "axiom-rules-engine-x86_64-unknown-linux-gnu.tar.xz",
-    "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    "sha256": "09bacb1b22805bfb5f9303ac53c79189e8ff3c7866e653c2f3a12b9dbb07b400"
   },
   "artifact": {
     "repository": "TheAxiomFoundation/rulespec-us",
     "release": "program-artifacts-test",
     "name": "us-medicare.compiled.json",
-    "sha256": "4ed1f70373efcfc88fff75f1f2ddb8606d161973b7c6fb946b26574738f3a88c",
-    "manifest_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    "sha256": "f0b8a0ccf74d587955324dabf780afd8b7e8140124e2e942806f915afa1710da",
+    "manifest_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
   },
   "golden": {
     "name": "us-medicare-golden",
     "input_path": "manifests/us-medicare-golden-request.json",
-    "input_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "input_sha256": "ac9075df43cc5a4c6e33368da4afe8931c0621ce0b0832b9381e898edfb5bd2a",
     "inputs": {
       "wages": 10000
     },
     "outputs": {
+      "medicare_wage_base": 10000,
       "medicare_wage_tax": 145
     }
   },
   "commands": [
     {
       "argv": [
-        ".executable-receipt-work/engine/axiom-rules-engine",
-        "run-compiled"
+        "curl",
+        "--fail",
+        "--location",
+        "--proto",
+        "=https",
+        "--tlsv1.2",
+        "--silent",
+        "--show-error",
+        "--output",
+        ".executable-receipt-work/engine.tar.xz",
+        "https://github.com/TheAxiomFoundation/axiom-rules-engine/releases/download/v0.1.1/axiom-rules-engine-x86_64-unknown-linux-gnu.tar.xz"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "sha256sum",
+        "--check",
+        ".executable-receipt-work/engine.sha256"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "tar",
+        "-xJf",
+        ".executable-receipt-work/engine.tar.xz",
+        "-C",
+        ".executable-receipt-work/engine"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        ".executable-receipt-work/engine/axiom-rules-engine-x86_64-unknown-linux-gnu/axiom-rules-engine",
+        "--version"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "curl",
+        "--fail",
+        "--location",
+        "--proto",
+        "=https",
+        "--tlsv1.2",
+        "--silent",
+        "--show-error",
+        "--output",
+        ".executable-receipt-work/artifact-manifest.json",
+        "https://github.com/TheAxiomFoundation/rulespec-us/releases/download/program-artifacts-test/manifest.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "sha256sum",
+        "--check",
+        ".executable-receipt-work/artifact-manifest.sha256"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "curl",
+        "--fail",
+        "--location",
+        "--proto",
+        "=https",
+        "--tlsv1.2",
+        "--silent",
+        "--show-error",
+        "--output",
+        ".executable-receipt-work/us-medicare.compiled.json",
+        "https://github.com/TheAxiomFoundation/rulespec-us/releases/download/program-artifacts-test/us-medicare.compiled.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "sha256sum",
+        "--check",
+        ".executable-receipt-work/artifact.sha256"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        ".executable-receipt-work/engine/axiom-rules-engine-x86_64-unknown-linux-gnu/axiom-rules-engine",
+        "run-compiled",
+        "--artifact",
+        ".executable-receipt-work/us-medicare.compiled.json"
       ],
       "exit_code": 0,
-      "stdin_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      "stdin_sha256": "ac9075df43cc5a4c6e33368da4afe8931c0621ce0b0832b9381e898edfb5bd2a"
     }
   ],
   "timestamp": "2026-07-29T12:30:00Z",

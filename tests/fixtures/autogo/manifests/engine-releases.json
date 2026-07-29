@@ -1,0 +1,18 @@
+{
+  "schema": "axiom_oracles.engine_release_manifest.v1",
+  "releases": {
+    "v0.1.1": {
+      "repository": "TheAxiomFoundation/axiom-rules-engine",
+      "tag_commit": "e3e2da83222463d9b68b0681c00820e9d412c011",
+      "version": "0.1.1",
+      "dist_manifest_sha256": "d8ca84777877857ec887b9901a9d4122f63b140ad22df5bcdb3976d41175d5e0",
+      "sha256_sum_sha256": "a8a89c6e2a69d23e0c4bbe37922d9123dad50d50e137a00f642c88e2cff6cbd2",
+      "assets": {
+        "x86_64-unknown-linux-gnu": {
+          "name": "axiom-rules-engine-x86_64-unknown-linux-gnu.tar.xz",
+          "sha256": "09bacb1b22805bfb5f9303ac53c79189e8ff3c7866e653c2f3a12b9dbb07b400"
+        }
+      }
+    }
+  }
+}

@@ -13,15 +13,17 @@
   "verified_runs": [
     {
       "ci_run_id": "424242",
+      "certified_at": "2026-07-29T12:34:56Z",
+      "run_manifest_sha256": "19799eac481cdb4987f98d954276c66ca17d8abb2adcaf71235a9fabcf5941c1",
       "workflow_sha": "cccccccccccccccccccccccccccccccccccccccc",
       "certify_check": "dddddddddddddddddddddddddddddddddddddddd",
       "inputs": {
-        "compiled_artifact": "4ed1f70373efcfc88fff75f1f2ddb8606d161973b7c6fb946b26574738f3a88c",
-        "node_index": "b8f770a585b6e79fdd3ef37e3cbf74cae642e05f03377e15b20e9d6a50586578",
-        "closure_summary": "143150f59fe2f236c8ff71cade0cd49ffd105e39318ceee5239cae1d6b898abc",
-        "node_comparisons": "bf23aa05a535dac602be2ed11f81f60a44f4870807cc3fdcd2d8d9b931153d7e",
-        "exercise_census": "7b1d5cf8867fbf97a6818727559d62522b2d9cac796bba8e0d4e8d027b0f1599",
-        "node_executable": "2715d418a4fcee708f8f8ad08f867264dc70fc8979cee4dea4035daae52ea663"
+        "compiled_artifact": "f0b8a0ccf74d587955324dabf780afd8b7e8140124e2e942806f915afa1710da",
+        "node_index": "fac37537d96f91aaec381e486ff12163964478dffa25ac1c60ce9cdd6b92fe3b",
+        "closure_summary": "ab3ef022ddea9714d7ecee937cb8447a1a9d88dd492475a1a32232d2cca371b8",
+        "node_comparisons": "13474ee91bfb79b8073e02aebc39a705ddda3bf3384f2d7881bcfe7536e878ff",
+        "exercise_census": "5adb2f85188c3e81e295136a4ba33076091e952773a90314fadbc9328f6524b9",
+        "node_executable": "07bf8b100441c55c4090a442e13f29bcd9299784b2549cd5d7d2086ecfadfbf8"
       }
     }
   ]

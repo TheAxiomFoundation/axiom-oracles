@@ -1,29 +1,37 @@
 {
   "schema": "axiom_oracles.node_executable.v1",
-  "artifact_sha256": "4ed1f70373efcfc88fff75f1f2ddb8606d161973b7c6fb946b26574738f3a88c",
+  "artifact_sha256": "f0b8a0ccf74d587955324dabf780afd8b7e8140124e2e942806f915afa1710da",
   "producer": {
     "mode": "computed",
     "adapter": "axiom_oracles.node_executable.from_validated_receipt.v1",
-    "validator": "axiom_oracles.executable_receipt.validate_executable_receipt"
+    "validator": "axiom_oracles.executable_receipt.validate_executable_receipt",
+    "validator_sha256": "03f919f9b2c989dc3c765ce0177143e11da8f46c3df61b0c88084bc3d1409825"
   },
   "nodes": {
     "us:statutes/26/3101/b/1#medicare_wage_tax": {
       "program": "us/medicare",
       "validated": false,
       "covered_nodes": [
-        "us:statutes/26/3101/b/1#medicare_wage_tax"
+        "us:statutes/26/3101/b/1#medicare_wage_tax",
+        "us:statutes/26/3121/a#medicare_wage_base"
       ],
       "manifest": {
         "path": "manifests/us-medicare.json",
-        "sha256": "71e78872874fb914efd35b75a70b646f740a4115b4d5fef5a9dd022d1e06ee39"
+        "sha256": "dd2b25d4da18a3a0a16ae9d0eeb18da1d0f4cf25e049164833d8994ab2bb73ee"
       },
       "receipt": {
         "path": "receipts/us-medicare-wage-tax.json",
-        "sha256": "f969b97da55125867ac37a236994f2a4fc68a009bf85009f8c7979bfc29f07d9"
+        "sha256": "e33f1885b2411427cb62ae5a630d2b10aef0b015c117d44696aea17b149f8e97"
+      },
+      "trust_roots": {
+        "manifests/engine-releases.json": "e4cdfdc6396a3726b5e3b284d3d75ced462e11e36d5b82ee50e987b763391f36",
+        "manifests/executable-workflow-allowlist.json": "a560522d4cef4109407317fed4d748cd8807c8a3164685a444363566f7b3ae26",
+        "manifests/us-medicare-golden-outputs.json": "5c94ec16feef8cc671cbce83190a02ffe774e9a94cd99b85118fbb34dc15471e",
+        "manifests/us-medicare-golden-request.json": "ac9075df43cc5a4c6e33368da4afe8931c0621ce0b0832b9381e898edfb5bd2a"
       },
       "pinned": {
         "engine": "v0.1.1",
-        "artifact": "4ed1f70373efcfc88fff75f1f2ddb8606d161973b7c6fb946b26574738f3a88c"
+        "artifact": "f0b8a0ccf74d587955324dabf780afd8b7e8140124e2e942806f915afa1710da"
       }
     }
   }

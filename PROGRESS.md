@@ -9,8 +9,9 @@
   `187f8e72`.
 - Upstream producer branches remain parked and will be inspected, not merged or
   rebased.
-- Core node evaluator, launch-critical mutants, and adversarial integration
-  hardening are implemented and passing; contract reconciliation remains.
+- Core node evaluator, launch-critical mutants, and final trust-boundary
+  hardening are implemented and passing; contract reconciliation is in final
+  review.
 
 ## Done
 
@@ -21,24 +22,28 @@
   #372/#375/#379 census/evidence stack, engine #115's parked node annotations,
   and the parked executable producer without merging or rebasing them.
 - Implemented `scripts/certify_nodes.py`: transitive node subgraphs, strict
-  provenance, exact-root closure, parsed and reconciled comparison reports,
-  dimension-level exercise, validated-receipt node coverage, separately
-  governed and run-recorded workflow provenance, exact candidate-producer input
-  binding, deterministic YAML, atomic writes, byte-exact `--check`,
-  manual-entry drift, partial-run preservation, and decertification.
+  provenance, subgraph-wide exact-root closure and comparison applicability,
+  parsed and reconciled comparison reports, report-to-census case cardinality,
+  dimension-level exercise, validated-receipt node coverage, hash-bound
+  validator and transitive receipt trust roots, separately governed and
+  run-recorded workflow provenance, exact run/candidate-producer input binding,
+  deterministic YAML, atomic writes, byte-exact `--check`, manual-entry drift,
+  partial-run preservation, and decertification.
 - Added six committed mutant inputs plus green, missing-producer, bridge-audit,
   comparison-error, dependency-cycle, bridged-dimension, foreign-report,
   foreign-receipt, governance, path-escape, impossible-cardinality,
   duplicate/vacuous-root, CRLF, output/evidence alias, unrecorded-run, malformed
-  applicability, and two-node projection coverage. Focused validation: 33
-  tests pass; Ruff and `git diff --check` pass.
+  applicability/coverage, dependency-root pending, partial census, validator
+  absence/mutation, receipt-command failure, trust-root mutation, contested
+  report ownership, protected-validator output aliasing, and two-node projection
+  coverage. The complete fixture passes the real parked executable validator.
+  Focused validation: 45 tests pass; Ruff and `git diff --check` pass.
 - Repository-wide validation reached 2,299 passing and 70 skipped; its sole
   failure was `npx` attempting a network download while DNS was unavailable.
 
 ## Next
 
-- Reconcile and review `docs/autogo-contract.md` against the hardened v1
-  schemas and record what every parked producer must add.
-- Re-run independent review and repository-wide validation after reconciliation.
+- Finish the independent contract audit and commit `docs/autogo-contract.md`.
+- Re-run the focused suite from a clean archive and repository-wide validation.
 - Commit the final ledger, push if possible, open the requested draft pull
   request, and write the closure-sprint output report.

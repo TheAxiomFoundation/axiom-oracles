@@ -15,14 +15,14 @@
       "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     },
     "name": "us-medicare.compiled.json",
-    "sha256": "4ed1f70373efcfc88fff75f1f2ddb8606d161973b7c6fb946b26574738f3a88c"
+    "sha256": "f0b8a0ccf74d587955324dabf780afd8b7e8140124e2e942806f915afa1710da"
   },
   "golden": {
     "name": "us-medicare-golden",
     "input_path": "manifests/us-medicare-golden-request.json",
-    "input_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "input_sha256": "ac9075df43cc5a4c6e33368da4afe8931c0621ce0b0832b9381e898edfb5bd2a",
     "outputs_path": "manifests/us-medicare-golden-outputs.json",
-    "outputs_sha256": "ea25a9e9a21d3263039c6b57de72f772718d2bb1f57202100c2cc35ab9153c85"
+    "outputs_sha256": "5c94ec16feef8cc671cbce83190a02ffe774e9a94cd99b85118fbb34dc15471e"
   },
   "workflow": {
     "allowlist": "manifests/executable-workflow-allowlist.json",

@@ -27,6 +27,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib
 import json
 import math
 import os
@@ -44,7 +45,6 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 
 LEDGER_SCHEMA = "axiom.certified_nodes.v1"
 RESULT_SCHEMA = "axiom_oracles.certify_nodes.result.v1"
-ARTIFACT_SCHEMA = "axiom.compiled_artifact.v1"
 NODE_INDEX_SCHEMA = "axiom_oracles.node_certification_index.v1"
 CLOSURE_SCHEMA = "axiom_oracles.closure.summary.v1"
 COMPARISON_SCHEMA = "axiom_oracles.node_comparisons.v1"
@@ -165,6 +165,7 @@ _CODE_ALIASES = {
     "exercise_dimensions_invalid": "declaration_invalid",
     "exercise_suite_missing": "suite_missing",
     "exercise_report_identity_mismatch": "report_mismatch",
+    "exercise_contested_reports": "contested_reports",
     "exercise_evidence_missing": "evidence_missing",
     "dimension_bridged": "dimension_bridged",
     "dimension_missing": "dimension_missing",
@@ -367,15 +368,17 @@ def _artifact_nodes(
     reasons: list[dict[str, Any]] = []
     if artifact.value is None:
         return [], {}, [_missing("provision_rooted", artifact)]
-    if artifact.value.get("schema") != ARTIFACT_SCHEMA:
+    if artifact.value.get("artifact_format_version") != 2 or not isinstance(
+        artifact.value.get("program"), dict
+    ):
         reasons.append(
             _reason(
                 "provision_rooted",
                 "producer_schema_invalid",
                 artifact.name,
                 (
-                    f"expected schema {ARTIFACT_SCHEMA!r}, "
-                    f"got {artifact.value.get('schema')!r}"
+                    "compiled artifact must use the engine's exact v2 "
+                    "artifact_format_version and carry a program object"
                 ),
             )
         )
@@ -529,15 +532,15 @@ def _artifact_nodes(
     return ordered, nodes, reasons
 
 
-def _node_declaration(
+def _node_declarations(
     node_index: Loaded,
     artifact: Loaded,
-    node_id: str,
-) -> tuple[dict[str, Any] | None, list[dict[str, Any]]]:
+    node_ids: list[str],
+) -> tuple[dict[str, dict[str, Any]], list[dict[str, Any]]]:
     reasons: list[dict[str, Any]] = []
     schema = _schema_reason("provision_rooted", node_index, NODE_INDEX_SCHEMA)
     if schema:
-        return None, [schema]
+        return {}, [schema]
     assert node_index.value is not None
     if node_index.value.get("artifact_sha256") != artifact.sha256:
         reasons.append(
@@ -568,19 +571,22 @@ def _node_declaration(
                 "node index has no nodes object",
             )
         )
-        return None, reasons
-    declaration = declarations.get(node_id)
-    if not isinstance(declaration, dict):
-        reasons.append(
-            _reason(
-                "provision_rooted",
-                "node_declaration_missing",
-                node_index.name,
-                f"node index has no declaration for {node_id!r}",
+        return {}, reasons
+    clean: dict[str, dict[str, Any]] = {}
+    for node_id in node_ids:
+        declaration = declarations.get(node_id)
+        if not isinstance(declaration, dict):
+            reasons.append(
+                _reason(
+                    "provision_rooted",
+                    "node_declaration_missing",
+                    node_index.name,
+                    f"node index has no declaration for subgraph node {node_id!r}",
+                )
             )
-        )
-        return None, reasons
-    return declaration, reasons
+            continue
+        clean[node_id] = declaration
+    return clean, reasons
 
 
 def _provision_rooted(
@@ -882,8 +888,12 @@ def _run_context(
             )
         else:
             verified = matching_runs[0]
-            for field in ("workflow_sha", "certify_check"):
-                if verified.get(field) != harness.get(field):
+            for field, expected in (
+                ("workflow_sha", harness.get("workflow_sha")),
+                ("certify_check", harness.get("certify_check")),
+                ("certified_at", certified_at),
+            ):
+                if verified.get(field) != expected:
                     reasons.append(
                         _reason(
                             "harness",
@@ -901,12 +911,22 @@ def _run_context(
                         "verified run does not bind the exact candidate producer bytes",
                     )
                 )
+            if verified.get("run_manifest_sha256") != run_manifest.sha256:
+                reasons.append(
+                    _reason(
+                        "harness",
+                        "governance_mismatch",
+                        governance.name,
+                        "verified run does not bind the exact run manifest bytes",
+                    )
+                )
     return (value if not reasons else None), reasons
 
 
 def _closed(
     closure: Loaded,
-    declaration: dict[str, Any] | None,
+    declarations: dict[str, dict[str, Any]],
+    node_ids: list[str],
     pins: dict[str, Any] | None,
     *,
     root: Path,
@@ -915,30 +935,41 @@ def _closed(
     schema = _schema_reason("closed", closure, CLOSURE_SCHEMA)
     if schema:
         reasons.append(schema)
-    roots = declaration.get("closure_roots") if declaration else None
-    if (
-        not isinstance(roots, list)
-        or not roots
-        or not all(_is_string(item) for item in roots)
-    ):
-        reasons.append(
-            _reason(
-                "closed",
-                "closure_roots_missing",
-                "node_index",
-                "node declaration must name at least one exact closure root",
+    roots: list[str] = []
+    seen_roots: set[str] = set()
+    for node_id in node_ids:
+        declaration = declarations.get(node_id)
+        declared_roots = declaration.get("closure_roots") if declaration else None
+        if (
+            not isinstance(declared_roots, list)
+            or not declared_roots
+            or not all(_is_string(item) for item in declared_roots)
+        ):
+            reasons.append(
+                _reason(
+                    "closed",
+                    "closure_roots_missing",
+                    "node_index",
+                    (
+                        f"subgraph node {node_id!r} must name at least one "
+                        "exact closure root"
+                    ),
+                )
             )
-        )
-        roots = []
-    elif len(set(roots)) != len(roots):
-        reasons.append(
-            _reason(
-                "closed",
-                "declaration_invalid",
-                "node_index",
-                "node declaration repeats a closure root",
+            continue
+        if len(set(declared_roots)) != len(declared_roots):
+            reasons.append(
+                _reason(
+                    "closed",
+                    "declaration_invalid",
+                    "node_index",
+                    f"subgraph node {node_id!r} repeats a closure root",
+                )
             )
-        )
+        for root_id in declared_roots:
+            if root_id not in seen_roots:
+                seen_roots.add(root_id)
+                roots.append(root_id)
     rows: dict[str, dict[str, Any]] = {}
     if closure.value is not None:
         raw_rows = closure.value.get("roots")
@@ -1082,66 +1113,83 @@ def _closed(
 
 
 def _comparison_declarations(
-    declaration: dict[str, Any] | None,
+    declarations: dict[str, dict[str, Any]],
+    node_ids: list[str],
 ) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
-    comparisons = declaration.get("comparisons") if declaration else None
-    if not isinstance(comparisons, list) or not comparisons:
-        reason = _reason(
-            "conformant",
-            "producer_missing",
-            "node_index",
-            "node declaration has no applicable comparison producer rows",
-        )
-        return [], [reason]
     clean: list[dict[str, Any]] = []
-    seen: set[str] = set()
     reasons: list[dict[str, Any]] = []
-    for index, row in enumerate(comparisons):
-        if not isinstance(row, dict) or not _is_string(row.get("suite")):
+    for node_id in node_ids:
+        declaration = declarations.get(node_id)
+        comparisons = declaration.get("comparisons") if declaration else None
+        if not isinstance(comparisons, list) or not comparisons:
             reasons.append(
                 _reason(
                     "conformant",
-                    "comparison_applicability_missing",
+                    "producer_missing",
                     "node_index",
-                    f"comparisons[{index}] has no suite",
+                    (
+                        f"subgraph node {node_id!r} has no applicable "
+                        "comparison producer rows"
+                    ),
                 )
             )
             continue
-        suite = str(row["suite"])
-        if suite in seen:
-            reasons.append(
-                _reason(
-                    "conformant",
-                    "comparison_applicability_invalid",
-                    "node_index",
-                    f"suite {suite!r} is declared more than once",
+        seen: set[str] = set()
+        for index, row in enumerate(comparisons):
+            if not isinstance(row, dict) or not _is_string(row.get("suite")):
+                reasons.append(
+                    _reason(
+                        "conformant",
+                        "comparison_applicability_missing",
+                        "node_index",
+                        (
+                            f"subgraph node {node_id!r} comparisons[{index}] "
+                            "has no suite"
+                        ),
+                    )
                 )
-            )
-            continue
-        dimensions = row.get("required_dimensions")
-        if (
-            not isinstance(dimensions, list)
-            or not dimensions
-            or not all(_is_string(item) for item in dimensions)
-            or len(set(dimensions)) != len(dimensions)
-        ):
-            reasons.append(
-                _reason(
-                    "conformant",
-                    "comparison_applicability_invalid",
-                    "node_index",
-                    f"suite {suite!r} has invalid required_dimensions",
+                continue
+            suite = str(row["suite"])
+            if suite in seen:
+                reasons.append(
+                    _reason(
+                        "conformant",
+                        "comparison_applicability_invalid",
+                        "node_index",
+                        (
+                            f"subgraph node {node_id!r} declares suite "
+                            f"{suite!r} more than once"
+                        ),
+                    )
                 )
-            )
-            continue
-        seen.add(suite)
-        clean.append(row)
+                continue
+            dimensions = row.get("required_dimensions")
+            if (
+                not isinstance(dimensions, list)
+                or not dimensions
+                or not all(_is_string(item) for item in dimensions)
+                or len(set(dimensions)) != len(dimensions)
+            ):
+                reasons.append(
+                    _reason(
+                        "conformant",
+                        "comparison_applicability_invalid",
+                        "node_index",
+                        (
+                            f"subgraph node {node_id!r} suite {suite!r} "
+                            "has invalid required_dimensions"
+                        ),
+                    )
+                )
+                continue
+            seen.add(suite)
+            clean.append({**row, "node": node_id})
     return clean, reasons
 
 
 def _conformant(
     comparisons: Loaded,
-    node_id: str,
+    node_ids: list[str],
     applicable: list[dict[str, Any]],
     prior: list[dict[str, Any]],
     artifact: Loaded,
@@ -1189,8 +1237,16 @@ def _conformant(
                 )
             )
 
-    declared_by_suite = {str(row["suite"]): row for row in applicable}
-    producer_suites: set[str] = set()
+    declared_by_node: dict[str, dict[str, dict[str, Any]]] = {
+        node_id: {} for node_id in node_ids
+    }
+    for declaration in applicable:
+        declared_by_node[str(declaration["node"])][str(declaration["suite"])] = (
+            declaration
+        )
+    producer_suites_by_node: dict[str, set[str]] = {
+        node_id: set() for node_id in node_ids
+    }
     for suite, row in suites.items():
         applicable_nodes = row.get("applicable_nodes")
         required_by_node = row.get("required_dimensions")
@@ -1234,9 +1290,11 @@ def _conformant(
                         ),
                     )
                 )
-        if node_id in applicable_nodes:
-            producer_suites.add(suite)
-            declared = declared_by_suite.get(suite)
+        for node_id in node_ids:
+            if node_id not in applicable_nodes:
+                continue
+            producer_suites_by_node[node_id].add(suite)
+            declared = declared_by_node[node_id].get(suite)
             declared_dimensions = (
                 declared.get("required_dimensions") if declared else None
             )
@@ -1253,27 +1311,31 @@ def _conformant(
                         "comparison_declaration_mismatch",
                         comparisons.name,
                         (
-                            f"suite {suite!r} required dimensions disagree "
-                            "between the node index and comparison producer"
+                            f"subgraph node {node_id!r} suite {suite!r} required "
+                            "dimensions disagree between the node index and "
+                            "comparison producer"
                         ),
                     )
                 )
-    if producer_suites != set(declared_by_suite):
-        reasons.append(
-            _reason(
-                "conformant",
-                "comparison_declaration_mismatch",
-                comparisons.name,
-                (
-                    "applicable suite set disagrees between the node index "
-                    "and comparison producer"
-                ),
+    for node_id in node_ids:
+        if producer_suites_by_node[node_id] != set(declared_by_node[node_id]):
+            reasons.append(
+                _reason(
+                    "conformant",
+                    "comparison_declaration_mismatch",
+                    comparisons.name,
+                    (
+                        f"subgraph node {node_id!r} applicable suite set "
+                        "disagrees between the node index and comparison producer"
+                    ),
+                )
             )
-        )
 
     evidence_rows: list[dict[str, Any]] = []
-    for declaration in applicable:
-        suite = str(declaration["suite"])
+    relevant_suites = list(
+        dict.fromkeys(str(declaration["suite"]) for declaration in applicable)
+    )
+    for suite in relevant_suites:
         row = suites.get(suite)
         if row is None:
             reasons.append(
@@ -1321,10 +1383,15 @@ def _conformant(
             report_errors: list[str] = []
             if report_value is None:
                 report_errors.append("report is not valid JSON")
-            elif report_value.get("schema") != REPORT_SCHEMA:
-                report_errors.append(f"schema is not {REPORT_SCHEMA}")
+            elif report_value.get("schema_version") != REPORT_SCHEMA:
+                report_errors.append(f"schema_version is not {REPORT_SCHEMA}")
             if report_value is not None and report_value.get("suite") != suite:
                 report_errors.append("suite identity does not match")
+            case_count = (
+                report_value.get("case_count") if report_value is not None else None
+            )
+            if not _is_int(case_count, minimum=1):
+                report_errors.append("case_count is invalid")
             if not isinstance(summary, dict):
                 report_errors.append("summary is missing")
                 summary = {}
@@ -1373,31 +1440,44 @@ def _conformant(
                     report_errors.append(
                         "summary.dispositioned.counts.axiom_encoding_gap is invalid"
                     )
-                if (
-                    not isinstance(counts, dict)
-                    or any(
-                        not _is_string(category) or not _is_int(count)
+                counts_valid = isinstance(counts, dict) and all(
+                    _is_string(category) and _is_int(count)
+                    for category, count in counts.items()
+                )
+                explicit_unexplained = (
+                    counts.get("unexplained", 0) if isinstance(counts, dict) else None
+                )
+                dispositioned_other = (
+                    sum(
+                        count
                         for category, count in counts.items()
+                        if category != "unexplained"
                     )
+                    if counts_valid
+                    else None
+                )
+                if (
+                    not counts_valid
+                    or not _is_int(explicit_unexplained)
                     or not _is_int(derived_unexplained)
                     or mismatch_count is None
-                    or sum(counts.values()) + derived_unexplained != mismatch_count
+                    or explicit_unexplained > derived_unexplained
+                    or dispositioned_other + derived_unexplained != mismatch_count
                 ):
                     report_errors.append(
                         "summary.dispositioned counts do not reconcile mismatches"
                     )
-                if (
-                    mismatch_count
-                    and dispositioned.get("dispositions_file") is None
-                    and _is_int(derived_unexplained)
-                ):
-                    derived_unexplained = max(derived_unexplained, mismatch_count)
+                if mismatch_count and dispositioned.get("dispositions_file") is None:
+                    report_errors.append(
+                        "summary.dispositioned.dispositions_file is missing"
+                    )
             else:
                 derived_unexplained = None
                 derived_axiom = None
                 report_errors.append("summary.dispositioned is invalid")
 
             expected_counts = {
+                "case_count": case_count,
                 "comparison_count": raw_counts.get("comparison_count"),
                 "error_count": raw_counts.get("error_count"),
                 "unexplained_count": derived_unexplained,
@@ -1431,6 +1511,15 @@ def _conformant(
                     "comparison_zero_cases",
                     comparisons.name,
                     f"suite {suite!r} has no positive comparison count",
+                )
+            )
+        if not _is_int(row.get("case_count"), minimum=1):
+            reasons.append(
+                _reason(
+                    "conformant",
+                    "comparison_zero_cases",
+                    comparisons.name,
+                    f"suite {suite!r} has no positive case count",
                 )
             )
         if row.get("binding") != "bound":
@@ -1562,6 +1651,7 @@ def _exercised(
                 )
             )
     evidence_rows: list[dict[str, Any]] = []
+    required_by_suite: dict[str, list[str]] = {}
     for declaration in applicable:
         suite = str(declaration["suite"])
         required = declaration.get("required_dimensions")
@@ -1588,6 +1678,13 @@ def _exercised(
                     f"suite {suite!r} repeats a required dimension",
                 )
             )
+            continue
+        combined = required_by_suite.setdefault(suite, [])
+        combined.extend(
+            dimension for dimension in required if dimension not in combined
+        )
+
+    for suite, required in required_by_suite.items():
         row = suites.get(suite)
         if row is None:
             reasons.append(
@@ -1613,6 +1710,18 @@ def _exercised(
                     "exercise_report_identity_mismatch",
                     census.name,
                     f"suite {suite!r} census row names a different report",
+                )
+            )
+        if row.get("contested_reports") not in (None, []):
+            reasons.append(
+                _reason(
+                    "exercised",
+                    "exercise_contested_reports",
+                    census.name,
+                    (
+                        f"suite {suite!r} is claimed by multiple reports; "
+                        "suite-keyed evidence ownership is ambiguous"
+                    ),
                 )
             )
         if row.get("binding") != "bound":
@@ -1674,6 +1783,23 @@ def _exercised(
                     "exercise_evidence_missing",
                     census.name,
                     f"suite {suite!r} has no scanned cases",
+                )
+            )
+        comparison_case_count = comparison.get("case_count")
+        if (
+            not _is_int(comparison_case_count, minimum=1)
+            or cases_scanned != comparison_case_count
+        ):
+            reasons.append(
+                _reason(
+                    "exercised",
+                    "evidence_incomplete",
+                    census.name,
+                    (
+                        f"suite {suite!r} census scanned {cases_scanned!r} "
+                        f"case(s), but the comparison report binds "
+                        f"{comparison_case_count!r}"
+                    ),
                 )
             )
         fields = row.get("evidence_fields")
@@ -1784,6 +1910,7 @@ def _executable(
     if schema:
         reasons.append(schema)
     row: dict[str, Any] | None = None
+    expected_validator_sha256: str | None = None
     if executable.value is not None:
         if executable.value.get("artifact_sha256") != artifact.sha256:
             reasons.append(
@@ -1802,6 +1929,8 @@ def _executable(
             != "axiom_oracles.node_executable.from_validated_receipt.v1"
             or producer.get("validator")
             != "axiom_oracles.executable_receipt.validate_executable_receipt"
+            or not isinstance(producer.get("validator_sha256"), str)
+            or not _SHA256_RE.fullmatch(producer["validator_sha256"])
         ):
             reasons.append(
                 _reason(
@@ -1814,6 +1943,8 @@ def _executable(
                     ),
                 )
             )
+        else:
+            expected_validator_sha256 = producer["validator_sha256"]
         nodes = executable.value.get("nodes")
         if isinstance(nodes, dict) and isinstance(nodes.get(node_id), dict):
             row = nodes[node_id]
@@ -1839,6 +1970,7 @@ def _executable(
             )
         program = row.get("program")
         covered_nodes = row.get("covered_nodes")
+        clean_covered_nodes: list[str] = []
         if (
             not _is_string(program)
             or not isinstance(covered_nodes, list)
@@ -1855,6 +1987,8 @@ def _executable(
                     "validated program receipt does not compute coverage for this node",
                 )
             )
+        else:
+            clean_covered_nodes = list(covered_nodes)
 
         manifest = row.get("manifest")
         receipt = row.get("receipt")
@@ -1905,11 +2039,222 @@ def _executable(
                 "manifest_sha256": manifest_hash,
                 "receipt": _path_label(receipt_path, root),
                 "receipt_sha256": receipt_hash,
-                "covered_nodes": covered_nodes,
+                "covered_nodes": clean_covered_nodes,
             }
-            manifest_artifact = manifest_value.get("artifact")
             manifest_engine = manifest_value.get("engine")
             manifest_golden = manifest_value.get("golden")
+            manifest_workflow = manifest_value.get("workflow")
+            trust_root_paths = [
+                manifest_engine.get("release_manifest")
+                if isinstance(manifest_engine, dict)
+                else None,
+                manifest_golden.get("input_path")
+                if isinstance(manifest_golden, dict)
+                else None,
+                manifest_golden.get("outputs_path")
+                if isinstance(manifest_golden, dict)
+                else None,
+                manifest_workflow.get("allowlist")
+                if isinstance(manifest_workflow, dict)
+                else None,
+            ]
+            declared_trust_roots = row.get("trust_roots")
+            if (
+                not all(_is_string(path) for path in trust_root_paths)
+                or len(set(trust_root_paths)) != len(trust_root_paths)
+                or not isinstance(declared_trust_roots, dict)
+                or set(declared_trust_roots) != set(trust_root_paths)
+                or not all(
+                    isinstance(digest, str) and _SHA256_RE.fullmatch(digest)
+                    for digest in declared_trust_roots.values()
+                )
+            ):
+                reasons.append(
+                    _reason(
+                        "executable",
+                        "executable_receipt_invalid",
+                        executable.name,
+                        (
+                            "executable row does not hash-bind every transitive "
+                            "receipt trust root"
+                        ),
+                    )
+                )
+            else:
+                linked_roots: list[dict[str, str]] = []
+                for declared_path in trust_root_paths:
+                    resolved = _producer_path(root, declared_path)
+                    loaded_root = (
+                        _load(root, resolved, f"executable_trust_root:{declared_path}")
+                        if resolved is not None and resolved.suffix.lower() == ".json"
+                        else None
+                    )
+                    if (
+                        loaded_root is None
+                        or loaded_root.sha256 is None
+                        or declared_trust_roots[declared_path] != loaded_root.sha256
+                    ):
+                        reasons.append(
+                            _reason(
+                                "executable",
+                                "executable_receipt_invalid",
+                                executable.name,
+                                (
+                                    f"transitive receipt trust root "
+                                    f"{declared_path!r} is missing or hash-mismatched"
+                                ),
+                            )
+                        )
+                    else:
+                        linked_roots.append(
+                            {
+                                "path": _path_label(resolved, root),
+                                "sha256": loaded_root.sha256,
+                            }
+                        )
+                linked_evidence["trust_roots"] = linked_roots
+            try:
+                validator_module = importlib.import_module(
+                    "axiom_oracles.executable_receipt"
+                )
+                validator = getattr(
+                    validator_module,
+                    "validate_executable_receipt",
+                )
+            except (ImportError, AttributeError) as exc:
+                reasons.append(
+                    _reason(
+                        "executable",
+                        "producer_missing",
+                        executable.name,
+                        f"upstream executable receipt validator is unavailable: {exc}",
+                    )
+                )
+            else:
+                module_file = getattr(validator_module, "__file__", None)
+                try:
+                    validator_path = Path(module_file).resolve()
+                    validator_path.relative_to(root)
+                except (TypeError, ValueError):
+                    reasons.append(
+                        _reason(
+                            "executable",
+                            "producer_missing",
+                            executable.name,
+                            (
+                                "upstream executable receipt validator is not "
+                                "loaded from the governed repository checkout"
+                            ),
+                        )
+                    )
+                    validator_path = None
+                if validator_path is not None:
+                    try:
+                        validator_sha256 = _sha256(validator_path.read_bytes())
+                    except OSError as exc:
+                        reasons.append(
+                            _reason(
+                                "executable",
+                                "producer_missing",
+                                executable.name,
+                                f"upstream validator bytes are unreadable: {exc}",
+                            )
+                        )
+                        validator_path = None
+                    else:
+                        linked_evidence["validator_path"] = _path_label(
+                            validator_path, root
+                        )
+                        linked_evidence["validator_sha256"] = validator_sha256
+                        if validator_sha256 != expected_validator_sha256:
+                            reasons.append(
+                                _reason(
+                                    "executable",
+                                    "executable_receipt_invalid",
+                                    executable.name,
+                                    (
+                                        "loaded validator bytes do not match the "
+                                        "hash-bound executable producer"
+                                    ),
+                                )
+                            )
+                try:
+                    validation = (
+                        validator(
+                            receipt_path,
+                            repo_root=root,
+                            manifest_path=manifest_path,
+                        )
+                        if validator_path is not None
+                        else None
+                    )
+                except Exception as exc:
+                    reasons.append(
+                        _reason(
+                            "executable",
+                            "executable_receipt_invalid",
+                            executable.name,
+                            (
+                                "upstream executable receipt validator raised "
+                                f"{type(exc).__name__}: {exc}"
+                            ),
+                        )
+                    )
+                else:
+                    validation_evidence = getattr(validation, "evidence", None)
+                    validation_engine = (
+                        validation_evidence.get("engine")
+                        if isinstance(validation_evidence, dict)
+                        else None
+                    )
+                    validation_artifact = (
+                        validation_evidence.get("artifact")
+                        if isinstance(validation_evidence, dict)
+                        else None
+                    )
+                    if validation is None:
+                        pass
+                    elif getattr(validation, "valid", None) is not True:
+                        failures = getattr(validation, "failures", ())
+                        detail = "; ".join(str(item) for item in failures)
+                        reasons.append(
+                            _reason(
+                                "executable",
+                                "executable_receipt_invalid",
+                                executable.name,
+                                (
+                                    "upstream executable receipt validator "
+                                    f"rejected the receipt: {detail or 'no detail'}"
+                                ),
+                            )
+                        )
+                    elif (
+                        getattr(validation, "receipt_sha256", None) != receipt_hash
+                        or not isinstance(validation_evidence, dict)
+                        or validation_evidence.get("program") != program
+                        or not isinstance(validation_engine, dict)
+                        or pins is None
+                        or validation_engine.get("release") != pins.get("engine")
+                        or not isinstance(validation_artifact, dict)
+                        or validation_artifact.get("sha256") != artifact.sha256
+                    ):
+                        reasons.append(
+                            _reason(
+                                "executable",
+                                "executable_receipt_invalid",
+                                executable.name,
+                                (
+                                    "upstream validator evidence does not bind "
+                                    "this program, receipt, engine, and artifact"
+                                ),
+                            )
+                        )
+                    else:
+                        linked_evidence["validator"] = (
+                            "axiom_oracles.executable_receipt."
+                            "validate_executable_receipt"
+                        )
+            manifest_artifact = manifest_value.get("artifact")
             if (
                 manifest_value.get("schema") != "axiom_oracles.executable_manifest.v1"
                 or manifest_value.get("program") != program
@@ -1973,7 +2318,7 @@ def _executable(
                 or not isinstance(bindings, dict)
                 or set(expected) != set(bindings)
                 or derived_nodes is None
-                or sorted(covered_nodes or []) != derived_nodes
+                or sorted(clean_covered_nodes) != derived_nodes
             ):
                 reasons.append(
                     _reason(
@@ -2091,7 +2436,10 @@ def evaluate_node(
     """Evaluate one requested node without ever converting absence to success."""
 
     subgraph, nodes, graph_reasons = _artifact_nodes(artifact, node_id)
-    declaration, declaration_reasons = _node_declaration(node_index, artifact, node_id)
+    declarations, declaration_reasons = _node_declarations(
+        node_index, artifact, subgraph
+    )
+    declaration = declarations.get(node_id)
     run, harness_reasons = _run_context(
         run_manifest,
         governance,
@@ -2114,11 +2462,20 @@ def evaluate_node(
         [*graph_reasons, *declaration_reasons],
         root=root,
     )
-    closed, closed_reasons = _closed(closure, declaration, pins, root=root)
-    applicable, applicability_reasons = _comparison_declarations(declaration)
+    closed, closed_reasons = _closed(
+        closure,
+        declarations,
+        subgraph,
+        pins,
+        root=root,
+    )
+    applicable, applicability_reasons = _comparison_declarations(
+        declarations,
+        subgraph,
+    )
     conformant, conformant_reasons, comparison_rows = _conformant(
         comparisons,
-        node_id,
+        subgraph,
         applicable,
         applicability_reasons,
         artifact,
@@ -2327,6 +2684,21 @@ def _declared_evidence_paths(
                 if resolved is not None:
                     paths.add(resolved)
     if executable.value is not None:
+        producer = executable.value.get("producer")
+        if (
+            isinstance(producer, dict)
+            and producer.get("validator")
+            == "axiom_oracles.executable_receipt.validate_executable_receipt"
+        ):
+            try:
+                validator_module = importlib.import_module(
+                    "axiom_oracles.executable_receipt"
+                )
+                validator_source = Path(validator_module.__file__).resolve()
+            except (AttributeError, ImportError, TypeError):
+                pass
+            else:
+                paths.add(validator_source)
         rows = executable.value.get("nodes")
         if isinstance(rows, dict):
             for row in rows.values():
@@ -2347,18 +2719,39 @@ def _declared_evidence_paths(
                                 resolved,
                                 "executable_manifest",
                             )
+                            engine = (
+                                loaded_manifest.value.get("engine")
+                                if loaded_manifest.value is not None
+                                else None
+                            )
                             golden = (
                                 loaded_manifest.value.get("golden")
                                 if loaded_manifest.value is not None
                                 else None
                             )
-                            bindings_path = (
-                                _producer_path(root, golden.get("outputs_path"))
-                                if isinstance(golden, dict)
+                            workflow = (
+                                loaded_manifest.value.get("workflow")
+                                if loaded_manifest.value is not None
                                 else None
                             )
-                            if bindings_path is not None:
-                                paths.add(bindings_path)
+                            trust_root_references = (
+                                engine.get("release_manifest")
+                                if isinstance(engine, dict)
+                                else None,
+                                golden.get("input_path")
+                                if isinstance(golden, dict)
+                                else None,
+                                golden.get("outputs_path")
+                                if isinstance(golden, dict)
+                                else None,
+                                workflow.get("allowlist")
+                                if isinstance(workflow, dict)
+                                else None,
+                            )
+                            for reference in trust_root_references:
+                                trust_root_path = _producer_path(root, reference)
+                                if trust_root_path is not None:
+                                    paths.add(trust_root_path)
     return paths
 
 
@@ -2398,6 +2791,7 @@ def main(argv: list[str] | None = None) -> int:
     output_path = _resolve(root, args.output)
     reasons_path = _resolve(root, args.reasons_output) if args.reasons_output else None
     protected_paths = {
+        Path(__file__).resolve(),
         artifact.path,
         node_index.path,
         closure.path,

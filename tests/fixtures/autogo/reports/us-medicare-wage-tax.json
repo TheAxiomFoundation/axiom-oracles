@@ -1,0 +1,11 @@
+{
+  "schema_version": "axiom.comparison_report.v2.1",
+  "suite": "us-medicare-wage-tax",
+  "case_count": 4,
+  "summary": {
+    "comparison_count": 4,
+    "match_count": 4,
+    "mismatch_count": 0,
+    "error_count": 0
+  }
+}
