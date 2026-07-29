@@ -1189,3 +1189,43 @@ residual), #229 (small-suite grounding).
 - Independently regenerate both suites at the pinned engine stack.
 - Audit all five dispositions, statutory arithmetic, generator contracts,
   mappings, adoption artifacts, containment, and clean-main failure baseline.
+
+### Checkpoint — frozen scope and binding contract
+
+#### State
+
+- GitHub reports six PR commits and 26 changed paths. The live base snapshot is
+  `fe00bad51f85e7128f762d66dd5121324889b156`; the PR merge base is
+  `f8ea6027984b9da73c6f4b58d15a20b450181ac4`.
+- The frozen head is 44 main commits behind that live base snapshot, so patch
+  containment is evaluated with the PR's three-dot merge-base diff while the
+  clean-main control is evaluated separately.
+- RuleSpec evidence worktree is exactly
+  `345c22030642cbd37a9fe46877591a8e1df5af7e`, tree
+  `40e08f7dbaa88a70660006f3a5a32bfa283ebd85`; its local branch and
+  origin-tracking ref agree. Its pre-existing untracked `WORKER-REPORT.md` is
+  excluded from review and untouched.
+
+#### Done
+
+- Read the prescriptive text in SPINE-PLAN §§5, 6.1, 6.2, 7, 8, and Chunk 1
+  of §9, including the exact case tables and five pre-registered divergence
+  classes.
+- Compared `f8ea6027...309e380a`: exactly 26 paths, 5,681 additions and 137
+  deletions. `git diff --check` passes.
+- Confirmed the patch adds the two comparison registries, two reports, two
+  disposition files, generator and tests, seven mapping rows, two conformance
+  adoptions, derived dashboard/history artifacts, and only the existing
+  append-only `PROGRESS.md` ledger.
+- The GitNexus MCP change/impact/context tools are not exposed. A local
+  GitNexus index of the frozen head completed in a disposable `/private/tmp`
+  worktree, but registration and therefore graph queries failed because the
+  sandbox denied writing `/Users/maxghenis/.gitnexus/registry.json`. Direct
+  changed-symbol, caller, and executable-gate analysis is the fallback.
+
+#### Next
+
+- Run independent exact-stack generation and compare all nonvolatile report
+  bytes and companion fixture values.
+- Trace the changed generator symbols into every direct caller and test.
+- Re-derive the five disposition cases from live PE and pinned source.
