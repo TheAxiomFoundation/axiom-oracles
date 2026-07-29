@@ -1472,3 +1472,29 @@ residual), #229 (small-suite grounding).
 - Write and commit `REVIEW-REPORT.md`.
 - Append and commit the final ledger closeout, verify final status, and report
   the verdict without any remote or GitHub write.
+
+## Independent repair re-review closeout
+
+### State
+
+- Phase: complete.
+- Verdict: `APPROVE`.
+- Reviewed target remains frozen at `58c6075f0`; subsequent local commits
+  contain only this re-review's ledger and output report.
+
+### Done
+
+- Committed `REVIEW-REPORT.md` at `5da282c9` with exact first line
+  `VERDICT: APPROVE` and the complete repair/containment evidence digest.
+- Verified both prior mechanical findings are resolved, the required 7/7
+  battery and 50 focused tests pass, protected artifact hashes/counts remain
+  exact, and SSI truncation is pre-existing and fail-closed.
+- Preserved `WORKER-REPORT.md` and `WORKER-REPORT-REPAIR.md` as the only
+  pre-existing untracked files.
+- Removed the partial untracked GitNexus index produced before its sandbox
+  registry denial; it left no repository residue.
+- Performed no remote or GitHub write.
+
+### Next
+
+- Handoff the committed local re-review ledger and `REVIEW-REPORT.md`.
