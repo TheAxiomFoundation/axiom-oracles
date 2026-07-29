@@ -58,9 +58,22 @@
   PUB 275 trigger, gross screen, household bars, and an eligible member but no
   net/asset test; separate cases exercise resource and net waivers and both
   MCE and traditional-CE zero-benefit denials.
+- Comparable-row audit passes against the exact cached PolicyEngine US 1.767.3
+  wheel and commit `49d19b239a593dbac8920ac6fd80cfe33372343a`.
+  Runtime resolves `gov.hhs.tanf.non_cash.income_limit.gross`, reports metadata
+  unit `/1`, period `year`, state breakdown, and returns CA `2` on both
+  2015-10-01 and 2026-01-01. The parameter YAML has exactly one CA history
+  entry (`2015-10-01: 2`), so there is no later CA change at the pin.
+- The comparable record exactly follows the Pell `max_pell_limits` keyed-rate
+  shape: `parameter_value`, parameter path, `parameter_key`, year period, and
+  rate comparison. RuleSpec's `2.00`, companion `2.0`, inclusive 200% pass,
+  and 201% fail cases establish the same boundary.
+- Companion CLI execution was unavailable: one local encoder environment lacks
+  `receipt`, while another rejects the nested RuleSpec worktree as a
+  noncanonical root. The source and companion assertions were inspected and
+  parsed directly; the PE runtime check executed successfully.
 
 ## Next
 
-1. Audit the comparable mapping against PolicyEngine US 1.767.3 and house style.
-2. Adversarially audit all 16 `not_comparable` rows and named candidates.
-3. Write and commit `REVIEW-REPORT.md`, update this ledger, and issue a verdict.
+1. Adversarially audit all 16 `not_comparable` rows and named candidates.
+2. Write and commit `REVIEW-REPORT.md`, update this ledger, and issue a verdict.
