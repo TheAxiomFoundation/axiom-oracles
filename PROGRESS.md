@@ -343,3 +343,26 @@
 2. Append the final review closure to this ledger and commit it.
 3. Confirm the disposable review worktree is clean and report the verdict
    without any remote or GitHub write.
+
+## Review closure
+
+### State
+
+- Review complete.
+- Verdict: `REQUEST-CHANGES`.
+- Final report: `REVIEW-REPORT.md`.
+
+### Done
+
+- Wrote and committed the final report at review commit `58204430`.
+- Recorded the two required corrections: restore-and-append `PROGRESS.md`, and
+  commit/correct the California reconciliation against the literal 345-row
+  merged-base evidence set.
+- Preserved the passing evidence for affected-set completeness, three replay
+  hashes, disposition samples, period semantics, chain parity, and scoreboard
+  reconciliation.
+- Made no target-branch, remote, or GitHub write.
+
+### Next
+
+- None for this review. Return the recorded verdict and report path.
