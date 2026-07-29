@@ -1586,8 +1586,16 @@ residual), #229 (small-suite grounding).
   only the executable premise and removes its blocker mechanically.
 - Expanded the maintainer handoff with exact artifact, verification, immutable
   copy, allowlist, regeneration, and check commands. No verdict is hand-edited.
+- A second adversarial pass caught that `gh` treats `--cert-identity` and
+  `--signer-workflow` as mutually exclusive. Removed the redundant workflow
+  flag, retained the stronger exact certificate identity, and added a smoke
+  test that sends the production flag set through the real installed CLI
+  parser so mocks cannot hide this failure class.
 - Reran all focused executable-receipt tests after the authentication repair:
-  83 passed.
+  84 passed.
+- Reran the full repository suite: 2,387 passed and 70 skipped. Its sole
+  failure remains the environment-only `npx esbuild` network lookup; no
+  task-related test failed.
 
 ### Next
 

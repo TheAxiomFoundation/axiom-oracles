@@ -5,6 +5,7 @@ from __future__ import annotations
 import copy
 import hashlib
 import json
+import os
 import shutil
 import subprocess
 from pathlib import Path
@@ -434,6 +435,42 @@ def test_structurally_invalid_bundle_is_rejected(
 
     assert result.valid is False
     assert result.failures == ("attestation: cryptographic verification failed",)
+
+
+@pytest.mark.skipif(shutil.which("gh") is None, reason="GitHub CLI unavailable")
+def test_real_gh_cli_accepts_verifier_flag_combination(
+    receipt_root: Path,
+    valid_receipt: dict,
+    monkeypatch: pytest.MonkeyPatch,
+):
+    real_run = subprocess.run
+    _write_receipt(receipt_root, valid_receipt)
+    calls = _install_verified_attestation(
+        monkeypatch,
+        receipt_root,
+        valid_receipt,
+    )
+    assert validate_executable_receipt(repo_root=receipt_root).valid is True
+
+    environment = dict(os.environ)
+    environment.pop("GH_TOKEN", None)
+    environment.pop("GITHUB_TOKEN", None)
+    completed = real_run(
+        calls[0],
+        cwd=receipt_root,
+        env=environment,
+        capture_output=True,
+        text=True,
+        check=False,
+        timeout=30,
+    )
+
+    # The synthetic bundle must fail cryptographic parsing, but argument parsing
+    # must succeed. This catches mutually exclusive gh identity flags that mocks
+    # cannot detect.
+    assert completed.returncode != 0
+    assert "if any flags in the group" not in completed.stderr
+    assert "were all set" not in completed.stderr
 
 
 def test_receipt_changed_after_signing_is_rejected(

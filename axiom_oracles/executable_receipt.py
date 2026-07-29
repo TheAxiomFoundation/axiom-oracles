@@ -1354,8 +1354,6 @@ def _verify_attestation(
         signer_identity,
         "--cert-oidc-issuer",
         "https://token.actions.githubusercontent.com",
-        "--signer-workflow",
-        f"{contract.workflow_repository}/{contract.workflow_path}",
         "--signer-digest",
         workflow["sha"],
         "--source-ref",

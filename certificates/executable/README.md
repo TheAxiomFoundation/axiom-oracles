@@ -93,8 +93,6 @@ After it lands:
      --predicate-type https://slsa.dev/provenance/v1 \
      --cert-identity \
        https://github.com/TheAxiomFoundation/axiom-oracles/.github/workflows/executable-receipt.yml@refs/heads/main \
-     --signer-workflow \
-       TheAxiomFoundation/axiom-oracles/.github/workflows/executable-receipt.yml \
      --signer-digest "$WORKFLOW_SHA" \
      --source-ref refs/heads/main \
      --source-digest "$SOURCE_SHA" \
