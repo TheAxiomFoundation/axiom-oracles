@@ -1215,3 +1215,31 @@ residual), #229 (small-suite grounding).
 #### Next
 
 - Complete tracked-tree/prefix and containment/check verification.
+
+### Checkpoint — tracked tree and prefix integrity
+
+#### State
+
+- Mechanical blocker 2 passes.
+
+#### Done
+
+- Checked frozen object `ac80a27f` directly: the requested placeholder token
+  has zero matches across all 1,541 tracked paths.
+- Confirmed the source branch worktree is otherwise clean and contains one
+  untracked file, `WORKER-REPORT.md`; its line 164 is the sole whole-worktree
+  token hit, and the file is absent from the target tree.
+- Resolved the PR merge-base with `origin/main` as
+  `f8ea6027984b9da73c6f4b58d15a20b450181ac4`. Its `PROGRESS.md` is exactly
+  951 lines and 57,579 bytes.
+- Compared the full merge-base file with target lines 1–951 using `cmp`; exit
+  status was zero. Both byte streams have SHA-256
+  `c453af85c7e77b13a2ea18fcfd884f149d4783c4edf712354a85485d67b8379a`.
+- Confirmed `1ce97c22..ac80a27f` is exactly four one-line replacements at
+  `PROGRESS.md` lines 1042, 1072, 1155, and 1170. Every line is after the
+  preserved prefix and belongs to a branch-authored progress entry.
+
+#### Next
+
+- Complete containment and the two named read-only checks.
+- Record the verdict in the committed output report and close the ledger.
