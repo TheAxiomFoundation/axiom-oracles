@@ -26,11 +26,28 @@
 - GitNexus change/impact/context tools are not exposed in this session. The
   patch is registry YAML with no changed code symbols, so blast radius will be
   checked through the registry parser, exact-set tests, and direct consumers.
+- Containment is exact: `f8ea6027..b8fc73f0` changes only
+  `axiom_oracles/bridges/mappings/us.yaml` (130 insertions), and
+  `git diff --check` passes.
+- Parsed all 11 mapping YAML files and loaded the packaged registry: 4,742 raw
+  rows, 4,741 legal IDs plus one prefix fallback, zero duplicate legal IDs.
+  The reviewed set resolves to 17 exact records: one `parameter_value` and 16
+  `not_comparable` records, with P4 on every non-comparable record.
+- Focused registry/coverage tests pass: 402 passed.
+- Full registry battery
+  (`tests/bridges tests/test_federal_tax_liability_generator.py`) on the PR
+  file produced 5 failed, 1,268 passed, 33 skipped. Replacing only `us.yaml`
+  with the base blob produced the identical five CA/IL/NY/OH failures and the
+  same pass/skip counts. The PR file was restored with
+  `git show HEAD:axiom_oracles/bridges/mappings/us.yaml > ...`; its blob hash
+  again matches HEAD and the worktree is clean.
+- Sandbox note: the first `uv run` attempt could not write its default
+  `~/.cache/uv`; a second offline attempt could not download PyYAML. Tests ran
+  successfully through an existing local project virtual environment.
 
 ## Next
 
 1. Audit the comparable mapping against PolicyEngine US 1.767.3 and house style.
 2. Adversarially audit all 16 `not_comparable` rows and named candidates.
 3. Cross-check exactly 17 legal IDs against the two RuleSpec public surfaces.
-4. Run YAML, duplicate-ID, containment, and registry/baseline checks.
-5. Write and commit `REVIEW-REPORT.md`, update this ledger, and issue a verdict.
+4. Write and commit `REVIEW-REPORT.md`, update this ledger, and issue a verdict.
