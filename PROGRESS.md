@@ -10,8 +10,9 @@
   `policyengine-us==1.767.3`, `policyengine-core==3.30.3`.
 - Containment: the 19 suites, their dispositions, shared regenerated artifacts,
   row notes whose counts change, and this ledger only.
-- Phase: all 19 suites regenerated, dispositions revalidated, shared
-  artifacts refreshed, and final checks complete; worker report remains.
+- Phase: complete. All 19 suites are regenerated, dispositions revalidated,
+  shared artifacts refreshed, final checks complete, and the untracked worker
+  report written.
 
 ## Done
 
@@ -236,8 +237,9 @@
   during the California recovery audit; process status and memory pressure
   were checked with permitted alternatives. The bare system Python lacks
   PyYAML, so all repository checks used the declared virtualenv.
+- Wrote the required final audit report to untracked `WORKER-REPORT.md`.
 
 ## Next
 
-1. Commit this final ledger state.
-2. Write the untracked worker report and report HEAD.
+- No implementation work remains. Handoff the committed branch HEAD and
+  untracked worker report; do not push.
