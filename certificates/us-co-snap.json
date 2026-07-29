@@ -76,6 +76,8 @@
       "value": true
     },
     "executable": {
+      "attestation": "certificates/executable/us-co-snap/receipt.sigstore.json",
+      "attestation_sha256": null,
       "expected_outputs": {
         "snap_benefit_amount": 478,
         "snap_eligible": "holds",
@@ -86,7 +88,7 @@
       ],
       "golden_input_sha256": "8cbf093601f94a8f5a4517aeb27a4851439776d9d16933785c540839f4655dc3",
       "manifest": "certificates/executable/us-co-snap/manifest.json",
-      "manifest_sha256": "0ddbafc6634259068e283242fdd4c541c7c7e41a05d00fa8d701ca45d7bdc93b",
+      "manifest_sha256": "7bd08b1b902191d5fd62c179ea23445bc341d41f190fe115dd6741df02c4b3a8",
       "mode": "computed",
       "receipt": "certificates/executable/us-co-snap/receipt.json",
       "receipt_sha256": null,

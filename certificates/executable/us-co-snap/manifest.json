@@ -2,6 +2,12 @@
   "schema": "axiom_oracles.executable_manifest.v1",
   "program": "us-co/snap",
   "receipt_path": "certificates/executable/us-co-snap/receipt.json",
+  "attestation": {
+    "path": "certificates/executable/us-co-snap/receipt.sigstore.json",
+    "predicate_type": "https://slsa.dev/provenance/v1",
+    "trusted_root_path": "certificates/executable/sigstore-public-good-trusted-root.jsonl",
+    "trusted_root_sha256": "3c2cc7f357dc064ec527fdcd78da6e9245c21a381e1abaa0f2b62b186bcac1a1"
+  },
   "engine": {
     "release_manifest": "certificates/executable/engine-releases.json",
     "release": "v0.1.1",
@@ -27,6 +33,7 @@
   "workflow": {
     "allowlist": "certificates/executable/workflow-allowlist.json",
     "repository": "TheAxiomFoundation/axiom-oracles",
+    "repository_id": "1229891647",
     "path": ".github/workflows/executable-receipt.yml",
     "event": "workflow_dispatch",
     "ref": "refs/heads/main"

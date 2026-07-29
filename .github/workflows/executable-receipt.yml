@@ -3,10 +3,7 @@ name: Executable receipt
 on:
   workflow_dispatch:
 
-permissions:
-  contents: read
-  id-token: write
-  attestations: write
+permissions: {}
 
 concurrency:
   group: executable-receipt-${{ github.workflow_sha }}
@@ -17,35 +14,98 @@ jobs:
     name: Released engine × published artifact
     runs-on: ubuntu-24.04
     timeout-minutes: 15
+    permissions: {}
     steps:
-      - name: Check out the governed producer
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-        with:
-          persist-credentials: false
-
-      - name: Set up Python
-        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
-        with:
-          python-version: "3.13"
+      - name: Fetch the governed producer without credentials
+        env:
+          SOURCE_REPOSITORY: ${{ github.repository }}
+          SOURCE_SHA: ${{ github.sha }}
+        run: |
+          git init .
+          git remote add origin "https://github.com/${SOURCE_REPOSITORY}.git"
+          git -c protocol.version=2 fetch --depth=1 origin "${SOURCE_SHA}"
+          git checkout --detach FETCH_HEAD
+          test "$(git rev-parse HEAD)" = "${SOURCE_SHA}"
 
       - name: Run the stranger path and emit the receipt
         run: python3 scripts/produce_executable_receipt.py
 
-      - name: Parse the emitted JSON
-        run: >-
-          python3 -m json.tool
-          certificates/executable/us-co-snap/receipt.json
-          >/dev/null
+      - name: Parse and publish the unsigned receipt digest
+        run: |
+          python3 -m json.tool \
+            certificates/executable/us-co-snap/receipt.json >/dev/null
+          {
+            echo '## Unsigned executable receipt'
+            echo
+            echo '```text'
+            sha256sum certificates/executable/us-co-snap/receipt.json
+            echo '```'
+          } >>"${GITHUB_STEP_SUMMARY}"
 
-      - name: Attest the receipt
+      - name: Transfer receipt to the isolated signing job
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: unsigned-executable-receipt-us-co-snap
+          path: certificates/executable/us-co-snap/receipt.json
+          if-no-files-found: error
+          retention-days: 1
+
+  sign:
+    name: Sign immutable receipt
+    needs: produce
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      id-token: write
+      attestations: write
+    steps:
+      - name: Download the completed receipt
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        with:
+          name: unsigned-executable-receipt-us-co-snap
+          path: certificates/executable/us-co-snap
+
+      - name: Re-check receipt provenance without repository code
+        env:
+          RECEIPT: certificates/executable/us-co-snap/receipt.json
+          SOURCE_REPOSITORY: ${{ github.repository }}
+          SOURCE_REPOSITORY_ID: ${{ github.repository_id }}
+          SOURCE_SHA: ${{ github.sha }}
+          WORKFLOW_SHA: ${{ github.workflow_sha }}
+          RUN_ID: ${{ github.run_id }}
+          RUN_ATTEMPT: ${{ github.run_attempt }}
+          EVENT_NAME: ${{ github.event_name }}
+          SOURCE_REF: ${{ github.ref }}
+        run: |
+          test "$(jq -r '.workflow.repository' "${RECEIPT}")" = "${SOURCE_REPOSITORY}"
+          test "$(jq -r '.workflow.repository_id' "${RECEIPT}")" = "${SOURCE_REPOSITORY_ID}"
+          test "$(jq -r '.workflow.sha' "${RECEIPT}")" = "${WORKFLOW_SHA}"
+          test "$(jq -r '.workflow.source_sha' "${RECEIPT}")" = "${SOURCE_SHA}"
+          test "$(jq -r '.workflow.run_id' "${RECEIPT}")" = "${RUN_ID}"
+          test "$(jq -r '.workflow.run_attempt' "${RECEIPT}")" = "${RUN_ATTEMPT}"
+          test "$(jq -r '.workflow.event' "${RECEIPT}")" = "${EVENT_NAME}"
+          test "$(jq -r '.workflow.ref' "${RECEIPT}")" = "${SOURCE_REF}"
+          sha256sum "${RECEIPT}"
+
+      - name: Attest the exact receipt bytes
+        id: attest
         uses: actions/attest-build-provenance@96278af6caaf10aea03fd8d33a09a777ca52d62f # v3.2.0
         with:
           subject-path: certificates/executable/us-co-snap/receipt.json
 
-      - name: Upload the receipt for mechanical commit
+      - name: Retain the Sigstore bundle
+        env:
+          BUNDLE_PATH: ${{ steps.attest.outputs.bundle-path }}
+        run: >-
+          install -m 0644 "${BUNDLE_PATH}"
+          certificates/executable/us-co-snap/receipt.sigstore.json
+
+      - name: Upload the authenticated evidence pair
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: executable-receipt-us-co-snap
-          path: certificates/executable/us-co-snap/receipt.json
+          path: |
+            certificates/executable/us-co-snap/receipt.json
+            certificates/executable/us-co-snap/receipt.sigstore.json
           if-no-files-found: error
           retention-days: 30

@@ -1507,8 +1507,8 @@ residual), #229 (small-suite grounding).
   `origin/main` at `2a1660d` because the network cannot currently resolve
   `github.com`.
 - Intended publication ref: `autogo/executable-producer`.
-- Phase: producer and standalone computed-certificate consumption implemented;
-  cryptographic workflow-attestation repair remains in progress.
+- Phase: implementation and trust-boundary repairs complete; final repository
+  verification and independent re-review are in progress.
 - Scope: add a deterministic, sign-only CI producer for executable receipts and
   standalone receipt consumption by the certificate harness.
 - Existing workflows, toolchain files, dependency pins, and CODEOWNERS are
@@ -1568,11 +1568,29 @@ residual), #229 (small-suite grounding).
   and relation repair; the ops repair branch records that the released pair
   returns the pinned `478 / 226 / holds` tuple. The later minimal audited fixture
   has not landed on ops main and is therefore not silently substituted here.
+- Split the workflow into a permission-empty execution job and an isolated
+  OIDC signing job that runs no repository or engine code. The execution job
+  fetches the public main commit anonymously; the signing job re-checks the
+  immutable receipt before signing its exact bytes.
+- Retained the Sigstore bundle beside the receipt and pinned a public-good
+  trusted root, its raw SHA-256, the immutable GitHub repository ID, workflow
+  identity, workflow/source commits, event/ref, and run ID/attempt.
+- Made `scripts/certify.py` authenticate the bundle offline through
+  `gh attestation verify`, then independently re-check the verified certificate
+  fields, hosted-runner identity, transparency timestamp, signed receipt digest,
+  release/checksum membership, fixture bytes, commands, and golden values.
+- Added adversarial cases for a copied allowlisted SHA without a bundle,
+  malformed bundle, post-signature receipt mutation, wrong repository/workflow/
+  digest/ref certificate fields, mutated trusted root, and parsed-object byte
+  bypass. Added a full-certificate test proving authenticated evidence flips
+  only the executable premise and removes its blocker mechanically.
+- Expanded the maintainer handoff with exact artifact, verification, immutable
+  copy, allowlist, regeneration, and check commands. No verdict is hand-edited.
+- Reran all focused executable-receipt tests after the authentication repair:
+  83 passed.
 
 ### Next
 
-- Split secretless execution from signing, retain and authenticate the
-  attestation bundle during certificate consumption, expand the mechanical
-  maintainer handoff, and add attestation adversarial tests.
-- Rerun focused and repository-level checks, complete independent review, write
-  the final report, and publish a draft PR if network access becomes available.
+- Run repository-level checks, complete independent re-review, write and commit
+  the final report, then publish the exact requested branch and draft PR if
+  network access becomes available.

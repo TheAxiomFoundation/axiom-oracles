@@ -3,12 +3,16 @@
 from __future__ import annotations
 
 import copy
+import hashlib
 import json
 import shutil
+import subprocess
 from pathlib import Path
+from typing import Any
 
 import pytest
 
+import axiom_oracles.executable_receipt as executable_receipt
 from axiom_oracles.executable_receipt import (
     RECEIPT_SCHEMA,
     validate_executable_receipt,
@@ -153,14 +157,142 @@ def valid_receipt(receipt_root: Path) -> dict:
         "timestamp": "2026-07-28T12:34:56Z",
         "workflow": {
             "repository": manifest["workflow"]["repository"],
+            "repository_id": manifest["workflow"]["repository_id"],
             "path": manifest["workflow"]["path"],
             "sha": WORKFLOW_SHA,
+            "source_sha": WORKFLOW_SHA,
             "run_id": 123456,
             "run_attempt": 1,
             "event": manifest["workflow"]["event"],
             "ref": manifest["workflow"]["ref"],
         },
     }
+
+
+def _write_receipt(root: Path, receipt: dict[str, Any]) -> Path:
+    manifest = json.loads(
+        (root / CERTIFICATES / "us-co-snap/manifest.json").read_text()
+    )
+    receipt_path = root / manifest["receipt_path"]
+    receipt_path.write_text(json.dumps(receipt, indent=2) + "\n")
+    return receipt_path
+
+
+def _verified_payload(
+    receipt: dict[str, Any],
+    receipt_sha256: str,
+    *,
+    certificate_overrides: dict[str, str] | None = None,
+) -> list[dict[str, Any]]:
+    workflow = receipt["workflow"]
+    signer_identity = (
+        f"https://github.com/{workflow['repository']}/{workflow['path']}"
+        f"@{workflow['ref']}"
+    )
+    certificate = {
+        "subjectAlternativeName": signer_identity,
+        "issuer": "https://token.actions.githubusercontent.com",
+        "githubWorkflowTrigger": workflow["event"],
+        "githubWorkflowSHA": workflow["sha"],
+        "githubWorkflowRepository": workflow["repository"],
+        "githubWorkflowRef": workflow["ref"],
+        "buildSignerURI": signer_identity,
+        "buildSignerDigest": workflow["sha"],
+        "runnerEnvironment": "github-hosted",
+        "sourceRepositoryURI": f"https://github.com/{workflow['repository']}",
+        "sourceRepositoryDigest": workflow["source_sha"],
+        "sourceRepositoryRef": workflow["ref"],
+        "sourceRepositoryIdentifier": workflow["repository_id"],
+        "buildConfigURI": signer_identity,
+        "buildConfigDigest": workflow["sha"],
+        "buildTrigger": workflow["event"],
+        "runInvocationURI": (
+            f"https://github.com/{workflow['repository']}/actions/runs/"
+            f"{workflow['run_id']}/attempts/{workflow['run_attempt']}"
+        ),
+    }
+    certificate.update(certificate_overrides or {})
+    return [
+        {
+            "attestation": {"test": "cryptographic bundle"},
+            "verificationResult": {
+                "signature": {"certificate": certificate},
+                "verifiedTimestamps": [
+                    {
+                        "type": "Tlog",
+                        "timestamp": "2026-07-28T12:35:01Z",
+                    }
+                ],
+                "statement": {
+                    "predicateType": "https://slsa.dev/provenance/v1",
+                    "subject": [
+                        {
+                            "name": "receipt.json",
+                            "digest": {"sha256": receipt_sha256},
+                        }
+                    ],
+                    "predicate": {},
+                },
+            },
+        }
+    ]
+
+
+def _install_verified_attestation(
+    monkeypatch: pytest.MonkeyPatch,
+    root: Path,
+    receipt: dict[str, Any],
+    *,
+    certificate_overrides: dict[str, str] | None = None,
+    returncode: int = 0,
+) -> list[list[str]]:
+    manifest = json.loads(
+        (root / CERTIFICATES / "us-co-snap/manifest.json").read_text()
+    )
+    receipt_path = root / manifest["receipt_path"]
+    bundle_path = root / manifest["attestation"]["path"]
+    bundle_path.write_text('{"test": "sigstore bundle"}\n')
+    receipt_sha256 = hashlib.sha256(receipt_path.read_bytes()).hexdigest()
+    payload = _verified_payload(
+        receipt,
+        receipt_sha256,
+        certificate_overrides=certificate_overrides,
+    )
+    calls: list[list[str]] = []
+
+    def fake_run(
+        command: list[str],
+        *,
+        cwd: Path,
+        env: dict[str, str],
+        capture_output: bool,
+        text: bool,
+        check: bool,
+        timeout: int,
+    ) -> subprocess.CompletedProcess[str]:
+        calls.append(command)
+        assert cwd == root.resolve()
+        assert capture_output is True
+        assert text is True
+        assert check is False
+        assert timeout == 30
+        assert "GH_TOKEN" not in env
+        assert "GITHUB_TOKEN" not in env
+        assert command[:3] == ["gh", "attestation", "verify"]
+        assert command[3] == str(receipt_path.resolve())
+        assert command[command.index("--bundle") + 1] == str(bundle_path.resolve())
+        assert command[command.index("--signer-digest") + 1] == WORKFLOW_SHA
+        assert command[command.index("--source-digest") + 1] == WORKFLOW_SHA
+        stderr = "test attestation refusal" if returncode else ""
+        return subprocess.CompletedProcess(
+            command,
+            returncode,
+            json.dumps(payload) if not returncode else "",
+            stderr,
+        )
+
+    monkeypatch.setattr(executable_receipt.subprocess, "run", fake_run)
+    return calls
 
 
 def _validate(
@@ -176,17 +308,25 @@ def _validate(
 
 
 def test_valid_receipt_from_committed_output_path(
-    receipt_root: Path, valid_receipt: dict
+    receipt_root: Path,
+    valid_receipt: dict,
+    monkeypatch: pytest.MonkeyPatch,
 ):
-    receipt_path = receipt_root / CERTIFICATES / "us-co-snap/receipt.json"
-    receipt_path.write_text(json.dumps(valid_receipt, indent=2) + "\n")
+    _write_receipt(receipt_root, valid_receipt)
+    calls = _install_verified_attestation(
+        monkeypatch,
+        receipt_root,
+        valid_receipt,
+    )
 
     result = validate_executable_receipt(repo_root=receipt_root)
 
     assert result.valid is True
     assert result.failures == ()
     assert result.receipt_sha256 is not None
+    assert result.attestation_sha256 is not None
     assert result.evidence is not None
+    assert len(calls) == 1
     assert result.evidence["golden"]["outputs"] == {
         "snap_benefit_amount": 478,
         "snap_net_income": 226,
@@ -240,12 +380,124 @@ def test_hand_authored_nonallowlisted_workflow_sha_is_rejected(
     receipt_root: Path, valid_receipt: dict
 ):
     valid_receipt["workflow"]["sha"] = "b" * 40
+    valid_receipt["workflow"]["source_sha"] = "b" * 40
 
     result = _validate(receipt_root, valid_receipt)
 
     assert result.valid is False
     assert result.failures == (
         "receipt.workflow.sha: is not a member of allowed_workflow_shas",
+    )
+
+
+def test_hand_authored_allowlisted_receipt_without_bundle_is_rejected(
+    receipt_root: Path,
+    valid_receipt: dict,
+):
+    _write_receipt(receipt_root, valid_receipt)
+
+    result = validate_executable_receipt(repo_root=receipt_root)
+
+    assert result.valid is False
+    assert result.failures == ("attestation: file does not exist",)
+
+
+def test_parsed_receipt_cannot_bypass_exact_byte_authentication(
+    receipt_root: Path,
+    valid_receipt: dict,
+):
+    result = validate_executable_receipt(
+        valid_receipt,
+        repo_root=receipt_root,
+    )
+
+    assert result.valid is False
+    assert result.failures == (
+        "attestation: receipt must be validated from its exact filesystem bytes",
+    )
+
+
+def test_structurally_invalid_bundle_is_rejected(
+    receipt_root: Path,
+    valid_receipt: dict,
+    monkeypatch: pytest.MonkeyPatch,
+):
+    _write_receipt(receipt_root, valid_receipt)
+    _install_verified_attestation(
+        monkeypatch,
+        receipt_root,
+        valid_receipt,
+        returncode=1,
+    )
+
+    result = validate_executable_receipt(repo_root=receipt_root)
+
+    assert result.valid is False
+    assert result.failures == ("attestation: cryptographic verification failed",)
+
+
+def test_receipt_changed_after_signing_is_rejected(
+    receipt_root: Path,
+    valid_receipt: dict,
+    monkeypatch: pytest.MonkeyPatch,
+):
+    receipt_path = _write_receipt(receipt_root, valid_receipt)
+    _install_verified_attestation(monkeypatch, receipt_root, valid_receipt)
+    valid_receipt["timestamp"] = "2026-07-28T12:35:02Z"
+    receipt_path.write_text(json.dumps(valid_receipt, indent=2) + "\n")
+
+    result = validate_executable_receipt(repo_root=receipt_root)
+
+    assert result.valid is False
+    assert result.failures == (
+        "attestation.statement.subject: does not bind the receipt SHA-256",
+    )
+
+
+@pytest.mark.parametrize(
+    ("certificate_overrides", "expected_field"),
+    [
+        (
+            {
+                "githubWorkflowRepository": "attacker/fork",
+                "sourceRepositoryIdentifier": "999",
+            },
+            "githubWorkflowRepository",
+        ),
+        (
+            {
+                "subjectAlternativeName": (
+                    "https://github.com/TheAxiomFoundation/axiom-oracles/"
+                    ".github/workflows/other.yml@refs/heads/main"
+                )
+            },
+            "subjectAlternativeName",
+        ),
+        ({"buildSignerDigest": "b" * 40}, "buildSignerDigest"),
+        ({"sourceRepositoryRef": "refs/heads/other"}, "sourceRepositoryRef"),
+    ],
+)
+def test_verified_certificate_provenance_must_match_governed_workflow(
+    receipt_root: Path,
+    valid_receipt: dict,
+    monkeypatch: pytest.MonkeyPatch,
+    certificate_overrides: dict[str, str],
+    expected_field: str,
+):
+    _write_receipt(receipt_root, valid_receipt)
+    _install_verified_attestation(
+        monkeypatch,
+        receipt_root,
+        valid_receipt,
+        certificate_overrides=certificate_overrides,
+    )
+
+    result = validate_executable_receipt(repo_root=receipt_root)
+
+    assert result.valid is False
+    assert any(
+        failure.startswith(f"attestation.certificate.{expected_field}:")
+        for failure in result.failures
     )
 
 
@@ -298,6 +550,25 @@ def test_raw_output_binding_bytes_are_rehashed(receipt_root: Path, valid_receipt
     assert result.failures == (
         "golden output bindings: raw bytes sha256 does not match "
         "manifest.golden.outputs_sha256",
+    )
+
+
+def test_sigstore_trusted_root_bytes_are_rehashed(
+    receipt_root: Path,
+    valid_receipt: dict,
+):
+    manifest = json.loads(
+        (receipt_root / CERTIFICATES / "us-co-snap/manifest.json").read_text()
+    )
+    trusted_root = receipt_root / manifest["attestation"]["trusted_root_path"]
+    trusted_root.write_bytes(trusted_root.read_bytes() + b"\n")
+
+    result = _validate(receipt_root, valid_receipt)
+
+    assert result.valid is False
+    assert result.failures == (
+        "Sigstore trusted root: raw bytes sha256 does not match "
+        "manifest.attestation.trusted_root_sha256",
     )
 
 

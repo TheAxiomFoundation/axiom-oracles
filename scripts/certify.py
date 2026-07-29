@@ -13,7 +13,8 @@ adapters.
 Evidence modes are stated per claim:
 
 * ``computed`` — this script re-derives the value from committed in-repo
-  artifacts; drift fails ``--check``.
+  artifacts, including cryptographic authentication of executable-receipt
+  provenance; drift fails ``--check``.
 * ``attested`` — the value is carried from a sha-pinned external receipt
   (today: only the ops closure prototype). Attested is scaffolding, not
   certification; the roadmap is monotone conversion of attested claims to
@@ -181,7 +182,7 @@ def _exercise_block(suites: list[dict], census: dict) -> tuple[dict, bool]:
 
 
 def _executable_verdict(spec: dict) -> tuple[dict, dict | None]:
-    """Compute executability from the producer receipt, never an attestation."""
+    """Compute executability from the signed producer receipt, never by hand."""
 
     manifest_path = REPO_ROOT / spec["manifest"]
     validation = validate_executable_receipt(
@@ -192,9 +193,16 @@ def _executable_verdict(spec: dict) -> tuple[dict, dict | None]:
     failures = list(validation.failures)
     manifest_sha256 = sha256_of(manifest_path) if manifest_path.is_file() else None
     receipt_path = "certificates/executable/us-co-snap/receipt.json"
+    attestation_path = (
+        "certificates/executable/us-co-snap/receipt.sigstore.json"
+    )
     try:
         manifest = _load(manifest_path)
         receipt_path = str(manifest.get("receipt_path") or receipt_path)
+        attestation_path = str(
+            (manifest.get("attestation") or {}).get("path")
+            or attestation_path
+        )
         manifest_input_sha = (manifest.get("golden") or {}).get("input_sha256")
         if manifest_input_sha != spec["golden_input_sha256"]:
             failures.append(
@@ -212,6 +220,8 @@ def _executable_verdict(spec: dict) -> tuple[dict, dict | None]:
         "mode": "computed",
         "receipt": receipt_path,
         "receipt_sha256": validation.receipt_sha256,
+        "attestation": attestation_path,
+        "attestation_sha256": validation.attestation_sha256,
         "manifest": spec["manifest"],
         "manifest_sha256": manifest_sha256,
         "golden_input_sha256": spec["golden_input_sha256"],
@@ -228,6 +238,8 @@ def _executable_verdict(spec: dict) -> tuple[dict, dict | None]:
             "mode": "computed",
             "artifact": receipt_path,
             "sha256": validation.receipt_sha256,
+            "attestation": attestation_path,
+            "attestation_sha256": validation.attestation_sha256,
             "accepted": holds,
         }
     return verdict, evidence

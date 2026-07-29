@@ -17,7 +17,9 @@ from __future__ import annotations
 import hashlib
 import json
 import math
+import os
 import re
+import subprocess
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
@@ -43,6 +45,7 @@ class ReceiptValidation:
     valid: bool
     failures: tuple[str, ...]
     receipt_sha256: str | None = None
+    attestation_sha256: str | None = None
     evidence: dict[str, Any] | None = None
 
 
@@ -50,6 +53,10 @@ class ReceiptValidation:
 class _Contract:
     program: str
     receipt_path: str
+    attestation_path: str
+    attestation_predicate_type: str
+    attestation_trusted_root_path: str
+    attestation_trusted_root_sha256: str
     engine_repository: str
     engine_release: str
     engine_version: str
@@ -68,6 +75,7 @@ class _Contract:
     golden_inputs: Any
     golden_outputs: dict[str, Any]
     workflow_repository: str
+    workflow_repository_id: str
     workflow_path: str
     workflow_event: str
     workflow_ref: str
@@ -143,6 +151,7 @@ def _validate_executable_receipt(
         return ReceiptValidation(False, tuple(failures))
 
     receipt_sha256: str | None = None
+    receipt_path: Path | None = None
     if receipt is None:
         receipt_path = _resolve_path(
             repo_root,
@@ -179,6 +188,37 @@ def _validate_executable_receipt(
         return ReceiptValidation(False, tuple(failures), receipt_sha256=receipt_sha256)
 
     workflow = receipt_value["workflow"]
+    attestation_sha256: str | None = None
+    if receipt_path is None:
+        failures.append(
+            "attestation: receipt must be validated from its exact filesystem bytes"
+        )
+    else:
+        attestation_path = _resolve_path(
+            repo_root,
+            contract.attestation_path,
+            "attestation path",
+            failures,
+            allow_absolute=False,
+        )
+        if attestation_path is not None:
+            attestation_sha256 = _verify_attestation(
+                receipt_path=receipt_path,
+                receipt_sha256=receipt_sha256,
+                attestation_path=attestation_path,
+                contract=contract,
+                workflow=workflow,
+                repo_root=repo_root,
+                failures=failures,
+            )
+    if failures:
+        return ReceiptValidation(
+            False,
+            tuple(failures),
+            receipt_sha256=receipt_sha256,
+            attestation_sha256=attestation_sha256,
+        )
+
     evidence = {
         "schema": RECEIPT_SCHEMA,
         "program": contract.program,
@@ -203,10 +243,19 @@ def _validate_executable_receipt(
             "outputs": dict(contract.golden_outputs),
         },
         "timestamp": receipt_value["timestamp"],
+        "attestation": {
+            "path": contract.attestation_path,
+            "sha256": attestation_sha256,
+            "predicate_type": contract.attestation_predicate_type,
+            "trusted_root_path": contract.attestation_trusted_root_path,
+            "trusted_root_sha256": contract.attestation_trusted_root_sha256,
+        },
         "workflow": {
             "repository": workflow["repository"],
+            "repository_id": workflow["repository_id"],
             "path": workflow["path"],
             "sha": workflow["sha"],
+            "source_sha": workflow["source_sha"],
             "run_id": workflow["run_id"],
             "run_attempt": workflow["run_attempt"],
             "event": workflow["event"],
@@ -217,6 +266,7 @@ def _validate_executable_receipt(
         True,
         (),
         receipt_sha256=receipt_sha256,
+        attestation_sha256=attestation_sha256,
         evidence=evidence,
     )
 
@@ -235,6 +285,7 @@ def _build_contract(
             "schema",
             "program",
             "receipt_path",
+            "attestation",
             "engine",
             "artifact",
             "golden",
@@ -257,6 +308,13 @@ def _build_contract(
     program = _string_field(manifest_object, "program", "manifest.program", failures)
     receipt_path = _string_field(
         manifest_object, "receipt_path", "manifest.receipt_path", failures
+    )
+    attestation = _exact_object(
+        manifest_object.get("attestation"),
+        ("path", "predicate_type", "trusted_root_path", "trusted_root_sha256"),
+        (),
+        "manifest.attestation",
+        failures,
     )
 
     engine = _exact_object(
@@ -294,13 +352,52 @@ def _build_contract(
     )
     workflow = _exact_object(
         manifest_object.get("workflow"),
-        ("allowlist", "repository", "path", "event", "ref"),
+        ("allowlist", "repository", "repository_id", "path", "event", "ref"),
         (),
         "manifest.workflow",
         failures,
     )
-    if engine is None or artifact is None or golden is None or workflow is None:
+    if (
+        attestation is None
+        or engine is None
+        or artifact is None
+        or golden is None
+        or workflow is None
+    ):
         return None
+
+    attestation_path = _string_field(
+        attestation,
+        "path",
+        "manifest.attestation.path",
+        failures,
+    )
+    attestation_predicate_type = _string_field(
+        attestation,
+        "predicate_type",
+        "manifest.attestation.predicate_type",
+        failures,
+    )
+    if (
+        attestation_predicate_type is not None
+        and attestation_predicate_type != "https://slsa.dev/provenance/v1"
+    ):
+        failures.append(
+            "manifest.attestation.predicate_type: only SLSA provenance v1 "
+            "is accepted"
+        )
+    attestation_trusted_root_path = _string_field(
+        attestation,
+        "trusted_root_path",
+        "manifest.attestation.trusted_root_path",
+        failures,
+    )
+    attestation_trusted_root_sha256 = _sha_field(
+        attestation,
+        "trusted_root_sha256",
+        "manifest.attestation.trusted_root_sha256",
+        failures,
+    )
 
     engine_manifest_path = _string_field(
         engine,
@@ -366,6 +463,12 @@ def _build_contract(
     workflow_repository = _string_field(
         workflow, "repository", "manifest.workflow.repository", failures
     )
+    workflow_repository_id = _decimal_string_field(
+        workflow,
+        "repository_id",
+        "manifest.workflow.repository_id",
+        failures,
+    )
     workflow_path = _string_field(workflow, "path", "manifest.workflow.path", failures)
     workflow_event = _string_field(
         workflow, "event", "manifest.workflow.event", failures
@@ -374,6 +477,11 @@ def _build_contract(
 
     declared_paths = (
         (receipt_path, "manifest.receipt_path"),
+        (attestation_path, "manifest.attestation.path"),
+        (
+            attestation_trusted_root_path,
+            "manifest.attestation.trusted_root_path",
+        ),
         (engine_manifest_path, "manifest.engine.release_manifest"),
         (golden_input_path, "manifest.golden.input_path"),
         (golden_outputs_path, "manifest.golden.outputs_path"),
@@ -410,6 +518,22 @@ def _build_contract(
             engine_release,
             engine_target,
             failures,
+        )
+
+    _, trusted_root_digest = _load_declared_json_with_digest(
+        repo_root,
+        attestation_trusted_root_path,
+        "Sigstore trusted root",
+        failures,
+    )
+    if (
+        trusted_root_digest is not None
+        and attestation_trusted_root_sha256 is not None
+        and trusted_root_digest != attestation_trusted_root_sha256
+    ):
+        failures.append(
+            "Sigstore trusted root: raw bytes sha256 does not match "
+            "manifest.attestation.trusted_root_sha256"
         )
 
     golden_inputs = None
@@ -462,6 +586,10 @@ def _build_contract(
     required_values = (
         program,
         receipt_path,
+        attestation_path,
+        attestation_predicate_type,
+        attestation_trusted_root_path,
+        attestation_trusted_root_sha256,
         engine_release,
         engine_target,
         engine_repository,
@@ -480,6 +608,7 @@ def _build_contract(
         golden_inputs,
         pinned_outputs,
         workflow_repository,
+        workflow_repository_id,
         workflow_path,
         workflow_event,
         workflow_ref,
@@ -491,6 +620,10 @@ def _build_contract(
     return _Contract(
         program=program,
         receipt_path=receipt_path,
+        attestation_path=attestation_path,
+        attestation_predicate_type=attestation_predicate_type,
+        attestation_trusted_root_path=attestation_trusted_root_path,
+        attestation_trusted_root_sha256=attestation_trusted_root_sha256,
         engine_repository=engine_repository,
         engine_release=engine_release,
         engine_version=engine_version,
@@ -509,6 +642,7 @@ def _build_contract(
         golden_inputs=golden_inputs,
         golden_outputs=pinned_outputs,
         workflow_repository=workflow_repository,
+        workflow_repository_id=workflow_repository_id,
         workflow_path=workflow_path,
         workflow_event=workflow_event,
         workflow_ref=workflow_ref,
@@ -1082,8 +1216,10 @@ def _validate_receipt_workflow(
         workflow,
         (
             "repository",
+            "repository_id",
             "path",
             "sha",
+            "source_sha",
             "run_id",
             "run_attempt",
             "event",
@@ -1102,6 +1238,19 @@ def _validate_receipt_workflow(
         "receipt.workflow.repository",
         failures,
     )
+    repository_id = _decimal_string_field(
+        root,
+        "repository_id",
+        "receipt.workflow.repository_id",
+        failures,
+    )
+    if (
+        repository_id is not None
+        and repository_id != contract.workflow_repository_id
+    ):
+        failures.append(
+            "receipt.workflow.repository_id: does not match the committed manifest"
+        )
     _matching_string(
         root,
         "path",
@@ -1113,6 +1262,20 @@ def _validate_receipt_workflow(
     if workflow_sha is not None and workflow_sha not in contract.allowed_workflow_shas:
         failures.append(
             "receipt.workflow.sha: is not a member of allowed_workflow_shas"
+        )
+    source_sha = _git_sha_field(
+        root,
+        "source_sha",
+        "receipt.workflow.source_sha",
+        failures,
+    )
+    if (
+        workflow_sha is not None
+        and source_sha is not None
+        and source_sha != workflow_sha
+    ):
+        failures.append(
+            "receipt.workflow.source_sha: must equal the governed workflow SHA"
         )
     _positive_int_field(root, "run_id", "receipt.workflow.run_id", failures)
     _positive_int_field(root, "run_attempt", "receipt.workflow.run_attempt", failures)
@@ -1130,6 +1293,213 @@ def _validate_receipt_workflow(
         "receipt.workflow.ref",
         failures,
     )
+
+
+def _verify_attestation(
+    *,
+    receipt_path: Path,
+    receipt_sha256: str | None,
+    attestation_path: Path,
+    contract: _Contract,
+    workflow: dict[str, Any],
+    repo_root: Path,
+    failures: list[str],
+) -> str | None:
+    """Cryptographically bind the receipt bytes to the governed Actions run."""
+
+    try:
+        bundle_bytes = attestation_path.read_bytes()
+    except FileNotFoundError:
+        failures.append("attestation: file does not exist")
+        return None
+    except OSError as error:
+        failures.append(f"attestation: cannot read file (errno {error.errno})")
+        return None
+    attestation_sha256 = hashlib.sha256(bundle_bytes).hexdigest()
+    if not bundle_bytes:
+        failures.append("attestation: file is empty")
+        return attestation_sha256
+    if receipt_sha256 is None:
+        failures.append("attestation: receipt bytes have no SHA-256")
+        return attestation_sha256
+
+    trusted_root_path = _resolve_path(
+        repo_root,
+        contract.attestation_trusted_root_path,
+        "Sigstore trusted root path",
+        failures,
+        allow_absolute=False,
+    )
+    if trusted_root_path is None:
+        return attestation_sha256
+
+    signer_identity = (
+        f"https://github.com/{contract.workflow_repository}/"
+        f"{contract.workflow_path}@{contract.workflow_ref}"
+    )
+    command = [
+        "gh",
+        "attestation",
+        "verify",
+        str(receipt_path),
+        "--repo",
+        contract.workflow_repository,
+        "--bundle",
+        str(attestation_path),
+        "--custom-trusted-root",
+        str(trusted_root_path),
+        "--predicate-type",
+        contract.attestation_predicate_type,
+        "--cert-identity",
+        signer_identity,
+        "--cert-oidc-issuer",
+        "https://token.actions.githubusercontent.com",
+        "--signer-workflow",
+        f"{contract.workflow_repository}/{contract.workflow_path}",
+        "--signer-digest",
+        workflow["sha"],
+        "--source-ref",
+        contract.workflow_ref,
+        "--source-digest",
+        workflow["source_sha"],
+        "--deny-self-hosted-runners",
+        "--format",
+        "json",
+    ]
+    environment = dict(os.environ)
+    for credential in ("GH_TOKEN", "GITHUB_TOKEN"):
+        environment.pop(credential, None)
+    environment["GH_NO_UPDATE_NOTIFIER"] = "1"
+    try:
+        completed = subprocess.run(
+            command,
+            cwd=repo_root,
+            env=environment,
+            capture_output=True,
+            text=True,
+            check=False,
+            timeout=30,
+        )
+    except FileNotFoundError:
+        failures.append("attestation: GitHub CLI is unavailable")
+        return attestation_sha256
+    except subprocess.TimeoutExpired:
+        failures.append("attestation: cryptographic verification timed out")
+        return attestation_sha256
+    except OSError as error:
+        failures.append(
+            f"attestation: GitHub CLI could not run (errno {error.errno})"
+        )
+        return attestation_sha256
+
+    if completed.returncode != 0:
+        failures.append("attestation: cryptographic verification failed")
+        return attestation_sha256
+    try:
+        payload = json.loads(
+            completed.stdout,
+            object_pairs_hook=_object_without_duplicate_keys,
+            parse_constant=_reject_non_json_constant,
+        )
+    except (json.JSONDecodeError, ValueError):
+        failures.append("attestation: verifier output is not strict JSON")
+        return attestation_sha256
+    _validate_verified_attestation(
+        payload=payload,
+        receipt_sha256=receipt_sha256,
+        contract=contract,
+        workflow=workflow,
+        failures=failures,
+    )
+    return attestation_sha256
+
+
+def _validate_verified_attestation(
+    *,
+    payload: Any,
+    receipt_sha256: str,
+    contract: _Contract,
+    workflow: dict[str, Any],
+    failures: list[str],
+) -> None:
+    """Re-check authenticated certificate fields from ``gh --format json``."""
+
+    if type(payload) is not list or len(payload) != 1:
+        failures.append(
+            "attestation: verifier must return exactly one verified attestation"
+        )
+        return
+    result = payload[0]
+    if type(result) is not dict:
+        failures.append("attestation: verified result must be a JSON object")
+        return
+    verification = result.get("verificationResult")
+    if type(verification) is not dict:
+        failures.append("attestation: verified result is missing verificationResult")
+        return
+    signature = verification.get("signature")
+    certificate = (
+        signature.get("certificate") if type(signature) is dict else None
+    )
+    if type(certificate) is not dict:
+        failures.append("attestation: verified result is missing its certificate")
+        return
+
+    signer_identity = (
+        f"https://github.com/{contract.workflow_repository}/"
+        f"{contract.workflow_path}@{contract.workflow_ref}"
+    )
+    expected_certificate = {
+        "subjectAlternativeName": signer_identity,
+        "issuer": "https://token.actions.githubusercontent.com",
+        "githubWorkflowTrigger": contract.workflow_event,
+        "githubWorkflowSHA": workflow["sha"],
+        "githubWorkflowRepository": contract.workflow_repository,
+        "githubWorkflowRef": contract.workflow_ref,
+        "buildSignerURI": signer_identity,
+        "buildSignerDigest": workflow["sha"],
+        "runnerEnvironment": "github-hosted",
+        "sourceRepositoryURI": (
+            f"https://github.com/{contract.workflow_repository}"
+        ),
+        "sourceRepositoryDigest": workflow["source_sha"],
+        "sourceRepositoryRef": contract.workflow_ref,
+        "sourceRepositoryIdentifier": contract.workflow_repository_id,
+        "buildConfigURI": signer_identity,
+        "buildConfigDigest": workflow["sha"],
+        "buildTrigger": contract.workflow_event,
+        "runInvocationURI": (
+            f"https://github.com/{contract.workflow_repository}/actions/runs/"
+            f"{workflow['run_id']}/attempts/{workflow['run_attempt']}"
+        ),
+    }
+    for field, expected in expected_certificate.items():
+        if certificate.get(field) != expected:
+            failures.append(
+                f"attestation.certificate.{field}: does not match governed "
+                "workflow provenance"
+            )
+
+    verified_timestamps = verification.get("verifiedTimestamps")
+    if type(verified_timestamps) is not list or not verified_timestamps:
+        failures.append("attestation: has no verified transparency timestamp")
+
+    statement = verification.get("statement")
+    if type(statement) is not dict:
+        failures.append("attestation: verified result is missing its statement")
+        return
+    if statement.get("predicateType") != contract.attestation_predicate_type:
+        failures.append("attestation.statement.predicateType: is not pinned")
+    subjects = statement.get("subject")
+    if type(subjects) is not list or len(subjects) != 1:
+        failures.append("attestation.statement.subject: must contain one subject")
+        return
+    subject = subjects[0]
+    digest = subject.get("digest") if type(subject) is dict else None
+    if type(digest) is not dict or digest.get("sha256") != receipt_sha256:
+        failures.append(
+            "attestation.statement.subject: does not bind the receipt SHA-256"
+        )
 
 
 def _resolve_path(
@@ -1274,6 +1644,19 @@ def _string_field(
     field = value[key]
     if type(field) is not str or not field:
         failures.append(f"{label}: must be a nonempty string")
+        return None
+    return field
+
+
+def _decimal_string_field(
+    value: dict[str, Any],
+    key: str,
+    label: str,
+    failures: list[str],
+) -> str | None:
+    field = _string_field(value, key, label, failures)
+    if field is not None and (not field.isascii() or not field.isdecimal()):
+        failures.append(f"{label}: must be a decimal identifier string")
         return None
     return field
 

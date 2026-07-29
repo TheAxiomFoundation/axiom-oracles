@@ -25,6 +25,7 @@ ELIGIBILITY_ID = (
 )
 WORKFLOW_SPEC = {
     "repository": "TheAxiomFoundation/axiom-oracles",
+    "repository_id": "1229891647",
     "path": ".github/workflows/executable-receipt.yml",
     "event": "workflow_dispatch",
     "ref": "refs/heads/main",
@@ -53,8 +54,10 @@ def _github_env() -> dict[str, str]:
     return {
         "GITHUB_ACTIONS": "true",
         "GITHUB_REPOSITORY": WORKFLOW_SPEC["repository"],
+        "GITHUB_REPOSITORY_ID": WORKFLOW_SPEC["repository_id"],
         "GITHUB_EVENT_NAME": WORKFLOW_SPEC["event"],
         "GITHUB_WORKFLOW_SHA": "a" * 40,
+        "GITHUB_SHA": "a" * 40,
         "GITHUB_REF": ref,
         "GITHUB_WORKFLOW_REF": (
             f"{WORKFLOW_SPEC['repository']}/{WORKFLOW_SPEC['path']}@{ref}"
@@ -201,6 +204,22 @@ def test_producer_api_has_no_engine_artifact_or_manifest_escape_hatches() -> Non
     ]
 
 
+def test_workflow_separates_secretless_execution_from_signing() -> None:
+    workflow = WORKFLOW.read_text()
+    produce_job, sign_job = workflow.split("\n  sign:\n", maxsplit=1)
+
+    assert "permissions: {}" in produce_job
+    assert "id-token: write" not in produce_job
+    assert "attestations: write" not in produce_job
+    assert "scripts/produce_executable_receipt.py" in produce_job
+    assert "id-token: write" in sign_job
+    assert "attestations: write" in sign_job
+    assert "scripts/produce_executable_receipt.py" not in sign_job
+    assert "actions/attest-build-provenance@" in sign_job
+    assert "receipt.sigstore.json" in sign_job
+    assert "${{ secrets." not in workflow
+
+
 @pytest.mark.parametrize("credential", producer.FORBIDDEN_CREDENTIALS)
 def test_credential_bearing_environment_is_rejected(credential: str) -> None:
     env = _github_env()
@@ -215,8 +234,10 @@ def test_credential_bearing_environment_is_rejected(credential: str) -> None:
     [
         "GITHUB_ACTIONS",
         "GITHUB_REPOSITORY",
+        "GITHUB_REPOSITORY_ID",
         "GITHUB_EVENT_NAME",
         "GITHUB_WORKFLOW_SHA",
+        "GITHUB_SHA",
         "GITHUB_REF",
         "GITHUB_WORKFLOW_REF",
         "GITHUB_RUN_ID",
@@ -235,9 +256,11 @@ def test_workflow_provenance_fields_are_required(missing: str) -> None:
     ("field", "bad_value"),
     [
         ("GITHUB_REPOSITORY", "attacker/fork"),
+        ("GITHUB_REPOSITORY_ID", "999"),
         ("GITHUB_EVENT_NAME", "pull_request"),
         ("GITHUB_WORKFLOW_SHA", "A" * 40),
         ("GITHUB_WORKFLOW_SHA", "a" * 39),
+        ("GITHUB_SHA", "b" * 40),
         (
             "GITHUB_WORKFLOW_REF",
             "TheAxiomFoundation/axiom-oracles/.github/workflows/other.yml"
@@ -262,8 +285,10 @@ def test_workflow_provenance_records_the_governed_run() -> None:
         {"workflow": WORKFLOW_SPEC}, _github_env()
     ) == {
         "repository": WORKFLOW_SPEC["repository"],
+        "repository_id": WORKFLOW_SPEC["repository_id"],
         "path": WORKFLOW_SPEC["path"],
         "sha": "a" * 40,
+        "source_sha": "a" * 40,
         "run_id": 123456789,
         "run_attempt": 2,
         "event": "workflow_dispatch",
@@ -697,8 +722,10 @@ def test_mocked_nine_command_stranger_path_emits_complete_receipt(
     }
     assert receipt["workflow"] == {
         "repository": WORKFLOW_SPEC["repository"],
+        "repository_id": WORKFLOW_SPEC["repository_id"],
         "path": WORKFLOW_SPEC["path"],
         "sha": "a" * 40,
+        "source_sha": "a" * 40,
         "run_id": 123456789,
         "run_attempt": 2,
         "event": "workflow_dispatch",

@@ -3,14 +3,18 @@
 from __future__ import annotations
 
 import copy
+import hashlib
 import importlib.util
 import json
 import shutil
+import subprocess
 from pathlib import Path
 from types import ModuleType
+from typing import Any
 
 import pytest
 
+import axiom_oracles.executable_receipt as executable_receipt
 from axiom_oracles.executable_receipt import RECEIPT_SCHEMA
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -171,8 +175,10 @@ def _write_valid_receipt(root: Path) -> Path:
         "timestamp": "2026-07-28T12:34:56Z",
         "workflow": {
             "repository": manifest["workflow"]["repository"],
+            "repository_id": manifest["workflow"]["repository_id"],
             "path": manifest["workflow"]["path"],
             "sha": WORKFLOW_SHA,
+            "source_sha": WORKFLOW_SHA,
             "run_id": 123456,
             "run_attempt": 1,
             "event": manifest["workflow"]["event"],
@@ -181,7 +187,80 @@ def _write_valid_receipt(root: Path) -> Path:
     }
     receipt_path = root / manifest["receipt_path"]
     receipt_path.write_text(json.dumps(receipt, indent=2) + "\n")
+    bundle_path = root / manifest["attestation"]["path"]
+    bundle_path.write_text('{"test": "sigstore bundle"}\n')
     return receipt_path
+
+
+def _install_attestation_verifier(
+    monkeypatch: pytest.MonkeyPatch,
+    root: Path,
+) -> None:
+    manifest = json.loads(
+        (root / EXECUTABLE_CERTIFICATES / "us-co-snap/manifest.json").read_text()
+    )
+    receipt_path = root / manifest["receipt_path"]
+    receipt = json.loads(receipt_path.read_text())
+    workflow = receipt["workflow"]
+    signer_identity = (
+        f"https://github.com/{workflow['repository']}/{workflow['path']}"
+        f"@{workflow['ref']}"
+    )
+    receipt_sha256 = hashlib.sha256(receipt_path.read_bytes()).hexdigest()
+    certificate = {
+        "subjectAlternativeName": signer_identity,
+        "issuer": "https://token.actions.githubusercontent.com",
+        "githubWorkflowTrigger": workflow["event"],
+        "githubWorkflowSHA": workflow["sha"],
+        "githubWorkflowRepository": workflow["repository"],
+        "githubWorkflowRef": workflow["ref"],
+        "buildSignerURI": signer_identity,
+        "buildSignerDigest": workflow["sha"],
+        "runnerEnvironment": "github-hosted",
+        "sourceRepositoryURI": f"https://github.com/{workflow['repository']}",
+        "sourceRepositoryDigest": workflow["source_sha"],
+        "sourceRepositoryRef": workflow["ref"],
+        "sourceRepositoryIdentifier": workflow["repository_id"],
+        "buildConfigURI": signer_identity,
+        "buildConfigDigest": workflow["sha"],
+        "buildTrigger": workflow["event"],
+        "runInvocationURI": (
+            f"https://github.com/{workflow['repository']}/actions/runs/"
+            f"{workflow['run_id']}/attempts/{workflow['run_attempt']}"
+        ),
+    }
+    payload: list[dict[str, Any]] = [
+        {
+            "attestation": {"test": "bundle"},
+            "verificationResult": {
+                "signature": {"certificate": certificate},
+                "verifiedTimestamps": [{"type": "Tlog", "timestamp": "now"}],
+                "statement": {
+                    "predicateType": manifest["attestation"]["predicate_type"],
+                    "subject": [
+                        {
+                            "name": "receipt.json",
+                            "digest": {"sha256": receipt_sha256},
+                        }
+                    ],
+                    "predicate": {},
+                },
+            },
+        }
+    ]
+
+    def fake_run(
+        command: list[str],
+        **_: Any,
+    ) -> subprocess.CompletedProcess[str]:
+        return subprocess.CompletedProcess(
+            command,
+            0,
+            json.dumps(payload),
+            "",
+        )
+
+    monkeypatch.setattr(executable_receipt.subprocess, "run", fake_run)
 
 
 def _verdict(
@@ -212,6 +291,7 @@ def test_certificate_executable_fails_closed_without_committed_receipt(
     assert verdict["mode"] == "computed"
     assert verdict["value"] is False
     assert verdict["receipt_sha256"] is None
+    assert verdict["attestation_sha256"] is None
     assert any(
         "receipt: file does not exist" in failure
         for failure in verdict["failures"]
@@ -225,6 +305,7 @@ def test_allowlisted_receipt_holds_only_for_certificate_owned_golden_values(
     monkeypatch: pytest.MonkeyPatch,
 ):
     _write_valid_receipt(certificate_root)
+    _install_attestation_verifier(monkeypatch, certificate_root)
     certify = _load_certify()
     executable_spec = copy.deepcopy(
         certify.PROGRAMS["us-co/snap"]["executable"]
@@ -240,12 +321,17 @@ def test_allowlisted_receipt_holds_only_for_certificate_owned_golden_values(
     assert verdict["value"] is True
     assert verdict["failures"] == []
     assert verdict["receipt_sha256"] is not None
+    assert verdict["attestation_sha256"] is not None
     assert verdict["evidence"]["workflow"]["sha"] == WORKFLOW_SHA
     assert evidence == {
         "claim": "executable",
         "mode": "computed",
         "artifact": "certificates/executable/us-co-snap/receipt.json",
         "sha256": verdict["receipt_sha256"],
+        "attestation": (
+            "certificates/executable/us-co-snap/receipt.sigstore.json"
+        ),
+        "attestation_sha256": verdict["attestation_sha256"],
         "accepted": True,
     }
 
@@ -265,3 +351,42 @@ def test_allowlisted_receipt_holds_only_for_certificate_owned_golden_values(
     assert mismatched_verdict["receipt_sha256"] is None
     assert "evidence" not in mismatched_verdict
     assert mismatched_evidence is None
+
+
+def test_full_certificate_autogo_consumes_authenticated_receipt(
+    certificate_root: Path,
+    monkeypatch: pytest.MonkeyPatch,
+):
+    _write_valid_receipt(certificate_root)
+    _install_attestation_verifier(monkeypatch, certificate_root)
+    certify = _load_certify()
+    program_spec = copy.deepcopy(certify.PROGRAMS["us-co/snap"])
+
+    required_paths = [
+        Path("conformance/exercise-census.json"),
+        *(Path(suite["report"]) for suite in program_spec["suites"]),
+    ]
+    for relative_path in required_paths:
+        destination = certificate_root / relative_path
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(REPO_ROOT / relative_path, destination)
+
+    monkeypatch.setattr(certify, "REPO_ROOT", certificate_root)
+    monkeypatch.setattr(
+        certify,
+        "CENSUS_PATH",
+        certificate_root / "conformance/exercise-census.json",
+    )
+
+    certificate = certify.build_certificate("us-co/snap", program_spec)
+
+    assert certificate["verdicts"]["executable"]["value"] is True
+    assert not any(
+        blocker.startswith("executable:") for blocker in certificate["blockers"]
+    )
+    executable_evidence = [
+        item for item in certificate["evidence"] if item["claim"] == "executable"
+    ]
+    assert len(executable_evidence) == 1
+    assert executable_evidence[0]["accepted"] is True
+    assert certificate["verdicts"]["closed"]["mode"] == "attested"

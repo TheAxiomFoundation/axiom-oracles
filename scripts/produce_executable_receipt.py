@@ -31,6 +31,8 @@ RECEIPT_SCHEMA = "axiom_oracles.executable_receipt.v1"
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 COMMIT_RE = re.compile(r"^[0-9a-f]{40}$")
 FORBIDDEN_CREDENTIALS = (
+    "ACTIONS_ID_TOKEN_REQUEST_TOKEN",
+    "ACTIONS_ID_TOKEN_REQUEST_URL",
     "ANTHROPIC_API_KEY",
     "AXIOM_API_KEY",
     "GH_TOKEN",
@@ -85,6 +87,10 @@ def _workflow_provenance(
         raise ProducerError("receipt production is restricted to GitHub Actions")
     if env.get("GITHUB_REPOSITORY") != workflow["repository"]:
         raise ProducerError("GITHUB_REPOSITORY does not match the pinned workflow")
+    if env.get("GITHUB_REPOSITORY_ID") != workflow["repository_id"]:
+        raise ProducerError(
+            "GITHUB_REPOSITORY_ID does not match the pinned repository"
+        )
     if env.get("GITHUB_EVENT_NAME") != workflow["event"]:
         raise ProducerError("GITHUB_EVENT_NAME does not match the pinned workflow")
     if env.get("GITHUB_REF") != workflow["ref"]:
@@ -93,6 +99,13 @@ def _workflow_provenance(
     sha = env.get("GITHUB_WORKFLOW_SHA", "")
     if not COMMIT_RE.fullmatch(sha):
         raise ProducerError("GITHUB_WORKFLOW_SHA must be a full lowercase commit SHA")
+    source_sha = env.get("GITHUB_SHA", "")
+    if not COMMIT_RE.fullmatch(source_sha):
+        raise ProducerError("GITHUB_SHA must be a full lowercase commit SHA")
+    if source_sha != sha:
+        raise ProducerError(
+            "GITHUB_SHA must equal GITHUB_WORKFLOW_SHA for this governed workflow"
+        )
     ref = workflow["ref"]
     expected_prefix = f"{workflow['repository']}/{workflow['path']}@"
     workflow_ref = env.get("GITHUB_WORKFLOW_REF", "")
@@ -107,8 +120,10 @@ def _workflow_provenance(
         )
     return {
         "repository": workflow["repository"],
+        "repository_id": workflow["repository_id"],
         "path": workflow["path"],
         "sha": sha,
+        "source_sha": source_sha,
         "run_id": _positive_int(env, "GITHUB_RUN_ID"),
         "run_attempt": _positive_int(env, "GITHUB_RUN_ATTEMPT"),
         "event": workflow["event"],
