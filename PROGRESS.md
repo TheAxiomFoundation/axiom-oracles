@@ -1243,3 +1243,37 @@ residual), #229 (small-suite grounding).
 
 - Complete containment and the two named read-only checks.
 - Record the verdict in the committed output report and close the ledger.
+
+### Checkpoint — containment and named checks
+
+#### State
+
+- Containment passes; all requested verification lanes are green.
+
+#### Done
+
+- Confirmed `1ce97c22..ac80a27f` changes only `PROGRESS.md`, with four
+  insertions and four deletions; `git diff --check` exits zero.
+- Confirmed no diff in `dispositions`, `conformance`,
+  `dashboard/public/data`, or the disposition-maintained EUROMOD coverage
+  artifact.
+- Verified the relevant Git object IDs are identical at `1ce97c22`,
+  `ac80a27f`, and the reviewer ledger head:
+  - `dispositions`: `c2c2adca17f35756442bded9aca578c8e8e50420`
+  - `conformance`: `ed9fb1f8a36994894b4ca9f324a54e6e5386e62b`
+  - `dashboard/public/data`:
+    `5a18e69d9cab1f9deb22bb01fa183ab8cee5b9c0`
+  - `axiom_oracles/data/euromod_be_coverage.json`:
+    `2b8a46336bb6dcef3a968a4e75ec40e58738a075`
+- Ran `scripts/apply_dispositions.py --check` through `uv run --no-sync`
+  with a writable temporary cache and the existing synced project
+  environment: exit zero, 85 disposition files validated, committed dashboard
+  data consistent.
+- Ran `scripts/conformance_scoreboard.py --check` the same way: exit zero,
+  four jurisdictions and three conformant.
+- Confirmed the checks left the review worktree clean.
+
+#### Next
+
+- Write and commit `REVIEW-REPORT.md`.
+- Append the final review-ledger closeout and return the explicit verdict.
