@@ -1,0 +1,9 @@
+{
+  "description": "Hash-bound legal-id coverage for the executable receipt.",
+  "bindings": {
+    "medicare_wage_tax": "us:statutes/26/3101/b/1#medicare_wage_tax"
+  },
+  "expected": {
+    "medicare_wage_tax": 145
+  }
+}

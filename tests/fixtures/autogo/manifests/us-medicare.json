@@ -1,0 +1,34 @@
+{
+  "schema": "axiom_oracles.executable_manifest.v1",
+  "program": "us/medicare",
+  "receipt_path": "receipts/us-medicare-wage-tax.json",
+  "engine": {
+    "release_manifest": "manifests/engine-releases.json",
+    "release": "v0.1.1",
+    "target": "x86_64-unknown-linux-gnu"
+  },
+  "artifact": {
+    "repository": "TheAxiomFoundation/rulespec-us",
+    "release": "program-artifacts-test",
+    "release_manifest": {
+      "name": "manifest.json",
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "name": "us-medicare.compiled.json",
+    "sha256": "4ed1f70373efcfc88fff75f1f2ddb8606d161973b7c6fb946b26574738f3a88c"
+  },
+  "golden": {
+    "name": "us-medicare-golden",
+    "input_path": "manifests/us-medicare-golden-request.json",
+    "input_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "outputs_path": "manifests/us-medicare-golden-outputs.json",
+    "outputs_sha256": "ea25a9e9a21d3263039c6b57de72f772718d2bb1f57202100c2cc35ab9153c85"
+  },
+  "workflow": {
+    "allowlist": "manifests/executable-workflow-allowlist.json",
+    "repository": "TheAxiomFoundation/axiom-oracles",
+    "path": ".github/workflows/executable-receipt.yml",
+    "event": "workflow_dispatch",
+    "ref": "refs/heads/main"
+  }
+}

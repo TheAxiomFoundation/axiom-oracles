@@ -1,15 +1,50 @@
 {
   "schema": "axiom_oracles.executable_receipt.v1",
-  "node": "us:statutes/26/3101/b/1#medicare_wage_tax",
-  "validated": true,
+  "program": "us/medicare",
   "engine": {
-    "version": "v0.1.1"
+    "repository": "TheAxiomFoundation/axiom-rules",
+    "release": "v0.1.1",
+    "version": "0.1.1",
+    "target": "x86_64-unknown-linux-gnu",
+    "asset": "axiom-rules-engine-x86_64-unknown-linux-gnu.tar.xz",
+    "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
   },
   "artifact": {
-    "sha256": "95f24a7671ec603600d6f9e85f80c06f10939fcace3d1192a4ab5abec0b5d1b0"
+    "repository": "TheAxiomFoundation/rulespec-us",
+    "release": "program-artifacts-test",
+    "name": "us-medicare.compiled.json",
+    "sha256": "4ed1f70373efcfc88fff75f1f2ddb8606d161973b7c6fb946b26574738f3a88c",
+    "manifest_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
   },
+  "golden": {
+    "name": "us-medicare-golden",
+    "input_path": "manifests/us-medicare-golden-request.json",
+    "input_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "inputs": {
+      "wages": 10000
+    },
+    "outputs": {
+      "medicare_wage_tax": 145
+    }
+  },
+  "commands": [
+    {
+      "argv": [
+        ".executable-receipt-work/engine/axiom-rules-engine",
+        "run-compiled"
+      ],
+      "exit_code": 0,
+      "stdin_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+    }
+  ],
+  "timestamp": "2026-07-29T12:30:00Z",
   "workflow": {
-    "run_id": "424242",
-    "sha": "cccccccccccccccccccccccccccccccccccccccc"
+    "repository": "TheAxiomFoundation/axiom-oracles",
+    "path": ".github/workflows/executable-receipt.yml",
+    "sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "run_id": 424241,
+    "run_attempt": 1,
+    "event": "workflow_dispatch",
+    "ref": "refs/heads/main"
   }
 }

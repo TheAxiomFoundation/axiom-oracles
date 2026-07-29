@@ -1,0 +1,13 @@
+{
+  "schema": "axiom_oracles.certify_nodes.governance.v1",
+  "repository": "TheAxiomFoundation/axiom-oracles",
+  "workflow_path": ".github/workflows/certify-nodes.yml",
+  "event": "workflow_dispatch",
+  "ref": "refs/heads/main",
+  "allowed_workflow_shas": [
+    "cccccccccccccccccccccccccccccccccccccccc"
+  ],
+  "allowed_certify_check_shas": [
+    "dddddddddddddddddddddddddddddddddddddddd"
+  ]
+}

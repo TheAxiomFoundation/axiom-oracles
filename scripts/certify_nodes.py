@@ -28,8 +28,11 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
+import os
 import re
 import sys
+import tempfile
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
@@ -41,6 +44,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 
 LEDGER_SCHEMA = "axiom.certified_nodes.v1"
 RESULT_SCHEMA = "axiom_oracles.certify_nodes.result.v1"
+ARTIFACT_SCHEMA = "axiom.compiled_artifact.v1"
 NODE_INDEX_SCHEMA = "axiom_oracles.node_certification_index.v1"
 CLOSURE_SCHEMA = "axiom_oracles.closure.summary.v1"
 COMPARISON_SCHEMA = "axiom_oracles.node_comparisons.v1"
@@ -48,6 +52,8 @@ CENSUS_SCHEMA = "axiom_oracles.exercise_census.v1"
 EXECUTABLE_SCHEMA = "axiom_oracles.node_executable.v1"
 RECEIPT_SCHEMA = "axiom_oracles.executable_receipt.v1"
 RUN_SCHEMA = "axiom_oracles.certify_nodes.run.v1"
+GOVERNANCE_SCHEMA = "axiom_oracles.certify_nodes.governance.v1"
+REPORT_SCHEMA = "axiom.comparison_report.v2.1"
 
 CRITERIA = (
     "provision_rooted",
@@ -66,11 +72,67 @@ _NODE_RE = re.compile(
 )
 
 HEADER = """\
-# Certified nodes — generated output only.
+# Certified nodes — the single source of truth for what the app shows as certified.
 #
-# Written by scripts/certify_nodes.py. A node appears only when all five
-# computed criteria are green. Manual entries are invalid, and a regression
-# removes the node on the next harness run.
+# RULING (Max, 2026-07-27 late): there is NO human review gate on certification.
+# Axiom's gates are deterministic checks, oracles, and adversarial verification
+# — never a person's signature. This file is therefore GENERATED OUTPUT ONLY:
+# when the certification harness computes all five criteria green for a node,
+# the node appears here automatically ("autogo"), and nothing else can add one.
+# The earlier attested_by/human-check pathway in this file's first draft is
+# deleted, not deferred: a hand-added entry is invalid by definition, whoever
+# adds it and however good the evidence looks.
+#
+# Autogo is live only when the harness is bulletproof. The named holes on that
+# critical path, tracked where listed:
+#   1. computed(executable): a sign-only CI producer that runs the PUBLISHED
+#      artifact on the RELEASED engine by the stranger path and emits the
+#      receipt deterministically (notary pattern — no model calls, no creds).
+#   2. computed(closed): closure harness lands (axiom-oracles#400) and runs
+#      per-node over declared roots.
+#   3. computed(exercised): census + evidence stack unparked — the two open
+#      category-(a) residues on #378/#379 must close first; they are exactly
+#      the kind of hole autogo cannot carry.
+#   4. provision_rooted as a computed field: engine#115 node-provenance
+#      annotations merged and artifacts rebuilt to carry them.
+#   5. Verifier governance (the self-certification question): the harness that
+#      grants certification must be separately governed from the lanes that
+#      produce candidates — protocol frozen before any candidate sha is known.
+#      Decision open with Max.
+#   6. Mutant discipline: every gate ships with the input it rejects, and the
+#      gate set survives adversarial review.
+#
+# Until autogo is live this file stays EMPTY — including for nodes whose
+# evidence packages look complete. Five nodes currently sit at 4-of-5 with
+# agent-assembled evidence (rulespec-us #1149 #1161 #1162 #1163 #1165); they
+# certify themselves the moment the harness goes green, and not before.
+# The five criteria are unchanged: provision_rooted, conformant, exercised,
+# closed, executable — all computed, zero defects.
+"""
+
+ENTRY_SHAPE_COMMENT = """\
+# Entry shape — written only by the harness. No mode field exists: every
+# criterion is computed, or the entry does not exist.
+#
+# - node: us:statutes/26/3101/b/1#medicare_wage_tax
+#   label: Employee Medicare payroll tax
+#   provision: 26 USC 3101(b)(1)
+#   corpus_citation_path: us/statute/26/3101
+#   certified_at: <UTC timestamp of the harness run>
+#   harness:
+#     run: <CI run id + workflow sha — the producer that computed this entry>
+#     certify_check: <sha of the certify --check pass>
+#   pinned:
+#     rulespec_us: <sha>
+#     corpus: <sha>
+#     engine: <released version>
+#     artifact: <content hash>
+#   criteria:   # every value computed; evidence = machine-checkable pointers
+#     provision_rooted: {holds: true, evidence: <artifact node-provenance field>}
+#     conformant:       {holds: true, evidence: <committed report + dispositions>}
+#     exercised:        {holds: true, evidence: <census rows>}
+#     closed:           {holds: true, evidence: <closure summary rows>}
+#     executable:       {holds: true, evidence: <stranger receipt from the CI producer>}
 """
 
 _CODE_ALIASES = {
@@ -90,6 +152,8 @@ _CODE_ALIASES = {
     "comparison_applicability_invalid": "declaration_invalid",
     "comparison_missing": "row_missing",
     "comparison_report_missing": "report_missing",
+    "comparison_report_invalid": "report_invalid",
+    "comparison_declaration_mismatch": "declaration_mismatch",
     "comparison_uncommitted": "not_committed",
     "comparison_zero_cases": "empty",
     "comparison_unbound": "unbound",
@@ -109,6 +173,7 @@ _CODE_ALIASES = {
     "executable_unvalidated": "unvalidated",
     "executable_receipt_missing": "receipt_invalid",
     "executable_receipt_invalid": "receipt_invalid",
+    "executable_coverage_invalid": "coverage_invalid",
     "output_drift": "drift",
 }
 
@@ -133,6 +198,70 @@ def _resolve(root: Path, value: str | Path) -> Path:
     return path.resolve() if path.is_absolute() else (root / path).resolve()
 
 
+def _producer_path(root: Path, value: Any) -> Path | None:
+    """Resolve one producer-declared evidence path below ``root``."""
+
+    if not _is_string(value):
+        return None
+    relative = Path(str(value))
+    if relative.is_absolute() or ".." in relative.parts:
+        return None
+    resolved = (root / relative).resolve()
+    if resolved == root or root not in resolved.parents:
+        return None
+    return resolved
+
+
+class _UniqueKeyLoader(yaml.SafeLoader):
+    """Safe YAML loader that rejects duplicate mapping keys."""
+
+
+def _construct_unique_mapping(
+    loader: _UniqueKeyLoader,
+    node: yaml.MappingNode,
+    deep: bool = False,
+) -> dict[Any, Any]:
+    loader.flatten_mapping(node)
+    mapping: dict[Any, Any] = {}
+    for key_node, value_node in node.value:
+        key = loader.construct_object(key_node, deep=deep)
+        try:
+            duplicate = key in mapping
+        except TypeError as exc:
+            raise yaml.YAMLError("unhashable YAML mapping key") from exc
+        if duplicate:
+            raise yaml.YAMLError(f"duplicate YAML mapping key: {key!r}")
+        mapping[key] = loader.construct_object(value_node, deep=deep)
+    return mapping
+
+
+_UniqueKeyLoader.add_constructor(
+    yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG,
+    _construct_unique_mapping,
+)
+
+
+def _json_object(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+    value: dict[str, Any] = {}
+    for key, item in pairs:
+        if key in value:
+            raise ValueError(f"duplicate JSON object key: {key!r}")
+        value[key] = item
+    return value
+
+
+def _reject_nonfinite(value: Any) -> None:
+    if isinstance(value, float) and not math.isfinite(value):
+        raise ValueError("non-finite numbers are not allowed")
+    if isinstance(value, dict):
+        for key, item in value.items():
+            _reject_nonfinite(key)
+            _reject_nonfinite(item)
+    elif isinstance(value, list):
+        for item in value:
+            _reject_nonfinite(item)
+
+
 def _load(root: Path, value: str | Path, name: str) -> Loaded:
     path = _resolve(root, value)
     try:
@@ -141,10 +270,22 @@ def _load(root: Path, value: str | Path, name: str) -> Loaded:
         return Loaded(name, path, None, None, f"cannot read {name}: {exc}")
     try:
         if path.suffix.lower() in {".yaml", ".yml"}:
-            payload = yaml.safe_load(raw)
+            payload = yaml.load(raw, Loader=_UniqueKeyLoader)
         else:
-            payload = json.loads(raw)
-    except (UnicodeDecodeError, json.JSONDecodeError, yaml.YAMLError) as exc:
+            payload = json.loads(
+                raw,
+                object_pairs_hook=_json_object,
+                parse_constant=lambda value: (_ for _ in ()).throw(
+                    ValueError(f"non-finite JSON number: {value}")
+                ),
+            )
+        _reject_nonfinite(payload)
+    except (
+        UnicodeDecodeError,
+        json.JSONDecodeError,
+        yaml.YAMLError,
+        ValueError,
+    ) as exc:
         return Loaded(name, path, None, _sha256(raw), f"invalid {name}: {exc}")
     if not isinstance(payload, dict):
         return Loaded(
@@ -226,6 +367,18 @@ def _artifact_nodes(
     reasons: list[dict[str, Any]] = []
     if artifact.value is None:
         return [], {}, [_missing("provision_rooted", artifact)]
+    if artifact.value.get("schema") != ARTIFACT_SCHEMA:
+        reasons.append(
+            _reason(
+                "provision_rooted",
+                "producer_schema_invalid",
+                artifact.name,
+                (
+                    f"expected schema {ARTIFACT_SCHEMA!r}, "
+                    f"got {artifact.value.get('schema')!r}"
+                ),
+            )
+        )
     metadata = artifact.value.get("metadata")
     if not isinstance(metadata, dict):
         return [], {}, [
@@ -387,6 +540,16 @@ def _node_declaration(
                 "node index artifact_sha256 does not match the compiled artifact bytes",
             )
         )
+    producer = node_index.value.get("producer")
+    if not isinstance(producer, dict) or producer.get("mode") != "computed":
+        reasons.append(
+            _reason(
+                "provision_rooted",
+                "producer_missing",
+                node_index.name,
+                "node index is not marked mode=computed",
+            )
+        )
     declarations = node_index.value.get("nodes")
     if not isinstance(declarations, dict):
         reasons.append(
@@ -448,7 +611,9 @@ def _provision_rooted(
 
 def _run_context(
     run_manifest: Loaded,
+    governance: Loaded,
     artifact: Loaded,
+    producer_inputs: dict[str, Loaded],
 ) -> tuple[dict[str, Any] | None, list[dict[str, Any]]]:
     reasons: list[dict[str, Any]] = []
     if run_manifest.value is None:
@@ -530,6 +695,66 @@ def _run_context(
                     f"harness.{field} must be a full lowercase commit SHA",
                 )
             )
+    governed: dict[str, Any] = {}
+    governance_schema = _schema_reason("harness", governance, GOVERNANCE_SCHEMA)
+    if governance_schema:
+        reasons.append(governance_schema)
+    elif governance.value is not None:
+        governed = governance.value
+        for field in ("repository", "workflow_path", "event", "ref"):
+            if not _is_string(governed.get(field)):
+                reasons.append(
+                    _reason(
+                        "harness",
+                        "governance_invalid",
+                        governance.name,
+                        f"{field} must be a nonempty string",
+                    )
+                )
+            elif harness.get(field) != governed[field]:
+                reasons.append(
+                    _reason(
+                        "harness",
+                        "governance_mismatch",
+                        governance.name,
+                        f"harness.{field} is not the governed value",
+                    )
+                )
+        allowlists = (
+            ("workflow_sha", "allowed_workflow_shas"),
+            ("certify_check", "allowed_certify_check_shas"),
+        )
+        for harness_field, governance_field in allowlists:
+            allowed = governed.get(governance_field)
+            if (
+                not isinstance(allowed, list)
+                or not allowed
+                or not all(
+                    isinstance(item, str) and _COMMIT_RE.fullmatch(item)
+                    for item in allowed
+                )
+                or len(set(allowed)) != len(allowed)
+            ):
+                reasons.append(
+                    _reason(
+                        "harness",
+                        "governance_invalid",
+                        governance.name,
+                        (
+                            f"{governance_field} must be a nonempty, unique "
+                            "array of full lowercase commit SHAs"
+                        ),
+                    )
+                )
+            elif harness.get(harness_field) not in allowed:
+                reasons.append(
+                    _reason(
+                        "harness",
+                        "governance_mismatch",
+                        governance.name,
+                        f"harness.{harness_field} is not allowlisted",
+                    )
+                )
     pins = value.get("pinned")
     if not isinstance(pins, dict):
         pins = {}
@@ -582,6 +807,48 @@ def _run_context(
                 "pinned.artifact does not match the compiled artifact bytes",
             )
         )
+    artifact_metadata = (
+        artifact.value.get("metadata") if artifact.value is not None else None
+    )
+    artifact_pins = (
+        artifact_metadata.get("pinned")
+        if isinstance(artifact_metadata, dict)
+        else None
+    )
+    expected_artifact_pins = {
+        field: pins.get(field) for field in ("rulespec_us", "corpus", "engine")
+    }
+    if artifact_pins != expected_artifact_pins:
+        reasons.append(
+            _reason(
+                "harness",
+                "pin_mismatch",
+                artifact.name,
+                "compiled artifact metadata.pinned does not match the harness pins",
+            )
+        )
+
+    inputs = value.get("inputs")
+    if not isinstance(inputs, dict) or set(inputs) != set(producer_inputs):
+        reasons.append(
+            _reason(
+                "harness",
+                "harness_inputs_invalid",
+                run_manifest.name,
+                "run manifest must name exactly every producer input SHA-256",
+            )
+        )
+    else:
+        for name, loaded in producer_inputs.items():
+            if loaded.sha256 is None or inputs.get(name) != loaded.sha256:
+                reasons.append(
+                    _reason(
+                        "harness",
+                        "harness_input_mismatch",
+                        run_manifest.name,
+                        f"inputs.{name} does not match the producer bytes",
+                    )
+                )
     return (value if not reasons else None), reasons
 
 
@@ -609,6 +876,15 @@ def _closed(
             )
         )
         roots = []
+    elif len(set(roots)) != len(roots):
+        reasons.append(
+            _reason(
+                "closed",
+                "declaration_invalid",
+                "node_index",
+                "node declaration repeats a closure root",
+            )
+        )
     rows: dict[str, dict[str, Any]] = {}
     if closure.value is not None:
         raw_rows = closure.value.get("roots")
@@ -622,9 +898,29 @@ def _closed(
                 )
             )
         else:
-            for row in raw_rows:
-                if isinstance(row, dict) and _is_string(row.get("root")):
-                    rows[str(row["root"])] = row
+            for index, row in enumerate(raw_rows):
+                if not isinstance(row, dict) or not _is_string(row.get("root")):
+                    reasons.append(
+                        _reason(
+                            "closed",
+                            "closure_summary_invalid",
+                            closure.name,
+                            f"closure roots[{index}] is malformed",
+                        )
+                    )
+                    continue
+                root_id = str(row["root"])
+                if root_id in rows:
+                    reasons.append(
+                        _reason(
+                            "closed",
+                            "closure_summary_invalid",
+                            closure.name,
+                            f"closure root {root_id!r} appears more than once",
+                        )
+                    )
+                    continue
+                rows[root_id] = row
     for root_id in roots:
         row = rows.get(root_id)
         if row is None:
@@ -638,9 +934,13 @@ def _closed(
             )
             continue
         by_status = row.get("by_status")
-        if not isinstance(by_status, dict) or any(
-            not _is_int(by_status.get(status))
-            for status in ("encoded", "excluded", "pending")
+        if (
+            not isinstance(by_status, dict)
+            or set(by_status) != {"encoded", "excluded", "pending"}
+            or any(
+                not _is_int(by_status.get(status))
+                for status in ("encoded", "excluded", "pending")
+            )
         ):
             reasons.append(
                 _reason(
@@ -654,7 +954,10 @@ def _closed(
         by_reason = row.get("by_reason")
         if (
             not isinstance(by_reason, dict)
-            or any(not _is_int(count) for count in by_reason.values())
+            or any(
+                not _is_string(reason) or not _is_int(count, minimum=1)
+                for reason, count in by_reason.items()
+            )
             or sum(by_reason.values()) != by_status["excluded"]
         ):
             reasons.append(
@@ -670,7 +973,7 @@ def _closed(
             )
         total = row.get("total")
         accounted = sum(by_status[status] for status in ("encoded", "excluded", "pending"))
-        if not _is_int(total) or total != accounted:
+        if not _is_int(total, minimum=1) or total != accounted:
             reasons.append(
                 _reason(
                     "closed",
@@ -766,6 +1069,7 @@ def _comparison_declarations(
 
 def _conformant(
     comparisons: Loaded,
+    node_id: str,
     applicable: list[dict[str, Any]],
     prior: list[dict[str, Any]],
     artifact: Loaded,
@@ -811,6 +1115,88 @@ def _conformant(
                 )
             )
 
+    declared_by_suite = {str(row["suite"]): row for row in applicable}
+    producer_suites: set[str] = set()
+    for suite, row in suites.items():
+        applicable_nodes = row.get("applicable_nodes")
+        required_by_node = row.get("required_dimensions")
+        if (
+            not isinstance(applicable_nodes, list)
+            or not applicable_nodes
+            or not all(_is_string(item) for item in applicable_nodes)
+            or len(set(applicable_nodes)) != len(applicable_nodes)
+            or not isinstance(required_by_node, dict)
+            or set(required_by_node) != set(applicable_nodes)
+        ):
+            reasons.append(
+                _reason(
+                    "conformant",
+                    "comparison_applicability_invalid",
+                    comparisons.name,
+                    (
+                        f"suite {suite!r} must carry unique applicable_nodes "
+                        "and one required_dimensions row for each"
+                    ),
+                )
+            )
+            continue
+        dimensions_valid = True
+        for covered_node, dimensions in required_by_node.items():
+            if (
+                not isinstance(dimensions, list)
+                or not dimensions
+                or not all(_is_string(item) for item in dimensions)
+                or len(set(dimensions)) != len(dimensions)
+            ):
+                dimensions_valid = False
+                reasons.append(
+                    _reason(
+                        "conformant",
+                        "comparison_applicability_invalid",
+                        comparisons.name,
+                        (
+                            f"suite {suite!r} has invalid required_dimensions "
+                            f"for {covered_node!r}"
+                        ),
+                    )
+                )
+        if node_id in applicable_nodes:
+            producer_suites.add(suite)
+            declared = declared_by_suite.get(suite)
+            declared_dimensions = (
+                declared.get("required_dimensions") if declared else None
+            )
+            produced_dimensions = required_by_node.get(node_id)
+            if (
+                not dimensions_valid
+                or not isinstance(declared_dimensions, list)
+                or set(declared_dimensions) != set(produced_dimensions or [])
+                or len(declared_dimensions) != len(produced_dimensions or [])
+            ):
+                reasons.append(
+                    _reason(
+                        "conformant",
+                        "comparison_declaration_mismatch",
+                        comparisons.name,
+                        (
+                            f"suite {suite!r} required dimensions disagree "
+                            "between the node index and comparison producer"
+                        ),
+                    )
+                )
+    if producer_suites != set(declared_by_suite):
+        reasons.append(
+            _reason(
+                "conformant",
+                "comparison_declaration_mismatch",
+                comparisons.name,
+                (
+                    "applicable suite set disagrees between the node index "
+                    "and comparison producer"
+                ),
+            )
+        )
+
     evidence_rows: list[dict[str, Any]] = []
     for declaration in applicable:
         suite = str(declaration["suite"])
@@ -828,12 +1214,13 @@ def _conformant(
         report = row.get("report")
         report_path: Path | None = None
         report_hash: str | None = None
-        if isinstance(report, dict) and _is_string(report.get("path")):
-            report_path = _resolve(root, str(report["path"]))
-            try:
-                report_hash = _sha256(report_path.read_bytes())
-            except OSError:
-                report_hash = None
+        report_value: dict[str, Any] | None = None
+        if isinstance(report, dict):
+            report_path = _producer_path(root, report.get("path"))
+        if report_path is not None and report_path.suffix.lower() == ".json":
+            loaded_report = _load(root, report_path, f"comparison_report:{suite}")
+            report_hash = loaded_report.sha256
+            report_value = loaded_report.value
         if (
             report_path is None
             or report_hash is None
@@ -856,6 +1243,107 @@ def _conformant(
                     "sha256": report_hash,
                 }
             )
+            summary = report_value.get("summary") if report_value else None
+            report_errors: list[str] = []
+            if report_value is None:
+                report_errors.append("report is not valid JSON")
+            elif report_value.get("schema") != REPORT_SCHEMA:
+                report_errors.append(f"schema is not {REPORT_SCHEMA}")
+            if report_value is not None and report_value.get("suite") != suite:
+                report_errors.append("suite identity does not match")
+            if not isinstance(summary, dict):
+                report_errors.append("summary is missing")
+                summary = {}
+            raw_counts: dict[str, int] = {}
+            for field in (
+                "comparison_count",
+                "match_count",
+                "mismatch_count",
+                "error_count",
+            ):
+                observed = summary.get(field)
+                if not _is_int(
+                    observed,
+                    minimum=1 if field == "comparison_count" else 0,
+                ):
+                    report_errors.append(f"summary.{field} is invalid")
+                else:
+                    raw_counts[field] = observed
+            if all(
+                field in raw_counts
+                for field in ("comparison_count", "match_count", "mismatch_count")
+            ) and (
+                raw_counts["match_count"] + raw_counts["mismatch_count"]
+                != raw_counts["comparison_count"]
+            ):
+                report_errors.append("summary counts do not conserve")
+
+            mismatch_count = raw_counts.get("mismatch_count")
+            dispositioned = summary.get("dispositioned")
+            if dispositioned is None and mismatch_count is not None:
+                derived_unexplained = mismatch_count
+                derived_axiom = 0
+            elif isinstance(dispositioned, dict):
+                derived_unexplained = dispositioned.get("unexplained_count")
+                counts = dispositioned.get("counts")
+                derived_axiom = (
+                    counts.get("axiom_encoding_gap")
+                    if isinstance(counts, dict)
+                    else None
+                )
+                if not _is_int(derived_unexplained):
+                    report_errors.append(
+                        "summary.dispositioned.unexplained_count is invalid"
+                    )
+                if not _is_int(derived_axiom):
+                    report_errors.append(
+                        "summary.dispositioned.counts.axiom_encoding_gap is invalid"
+                    )
+                if (
+                    not isinstance(counts, dict)
+                    or any(
+                        not _is_string(category) or not _is_int(count)
+                        for category, count in counts.items()
+                    )
+                    or not _is_int(derived_unexplained)
+                    or mismatch_count is None
+                    or sum(counts.values()) + derived_unexplained
+                    != mismatch_count
+                ):
+                    report_errors.append(
+                        "summary.dispositioned counts do not reconcile mismatches"
+                    )
+                if (
+                    mismatch_count
+                    and dispositioned.get("dispositions_file") is None
+                    and _is_int(derived_unexplained)
+                ):
+                    derived_unexplained = max(derived_unexplained, mismatch_count)
+            else:
+                derived_unexplained = None
+                derived_axiom = None
+                report_errors.append("summary.dispositioned is invalid")
+
+            expected_counts = {
+                "comparison_count": raw_counts.get("comparison_count"),
+                "error_count": raw_counts.get("error_count"),
+                "unexplained_count": derived_unexplained,
+                "axiom_attributed_count": derived_axiom,
+            }
+            for field, expected in expected_counts.items():
+                if not _is_int(expected) or row.get(field) != expected:
+                    report_errors.append(
+                        f"computed {field} does not match the report"
+                    )
+            if report_errors:
+                reasons.append(
+                    _reason(
+                        "conformant",
+                        "comparison_report_invalid",
+                        comparisons.name,
+                        f"suite {suite!r}: " + "; ".join(report_errors),
+                    )
+                )
         if row.get("committed") is not True:
             reasons.append(
                 _reason(
@@ -1058,13 +1546,37 @@ def _exercised(
                     f"suite {suite!r} census evidence is not bound",
                 )
             )
-        if row.get("reconciliation") != "full":
+        if row.get("binding_defects") != []:
+            reasons.append(
+                _reason(
+                    "exercised",
+                    "comparison_unbound",
+                    census.name,
+                    f"suite {suite!r} census has binding defects",
+                )
+            )
+        if row.get("reconciliation") not in {"cardinality", "full"}:
             reasons.append(
                 _reason(
                     "exercised",
                     "comparison_not_fully_reconciled",
                     census.name,
-                    f"suite {suite!r} census evidence is not fully reconciled",
+                    (
+                        f"suite {suite!r} census evidence is not "
+                        "cardinality-reconciled"
+                    ),
+                )
+            )
+        if row.get("bridge_declared") is not True:
+            reasons.append(
+                _reason(
+                    "exercised",
+                    "bridge_undeclared",
+                    census.name,
+                    (
+                        f"suite {suite!r} has no bridge manifest; "
+                        "absence cannot establish that a dimension is unbridged"
+                    ),
                 )
             )
         if row.get("bridge_audited") is not True:
@@ -1079,7 +1591,8 @@ def _exercised(
                     ),
                 )
             )
-        if not _is_int(row.get("cases_scanned"), minimum=1):
+        cases_scanned = row.get("cases_scanned")
+        if not _is_int(cases_scanned, minimum=1):
             reasons.append(
                 _reason(
                     "exercised",
@@ -1090,9 +1603,25 @@ def _exercised(
             )
         fields = row.get("evidence_fields")
         if not isinstance(fields, dict):
+            reasons.append(
+                _reason(
+                    "exercised",
+                    "exercise_evidence_missing",
+                    census.name,
+                    f"suite {suite!r} has no evidence_fields object",
+                )
+            )
             fields = {}
         bridged = row.get("bridged_through")
         if not isinstance(bridged, dict):
+            reasons.append(
+                _reason(
+                    "exercised",
+                    "exercise_evidence_missing",
+                    census.name,
+                    f"suite {suite!r} has malformed bridged_through evidence",
+                )
+            )
             bridged = {}
         for dimension in required:
             if dimension in bridged:
@@ -1132,8 +1661,12 @@ def _exercised(
                     )
                 )
                 continue
-            if field.get("state") != "varied" or not _is_int(
-                field.get("distinct"), minimum=2
+            distinct = field.get("distinct")
+            if (
+                field.get("state") != "varied"
+                or not _is_int(distinct, minimum=2)
+                or not _is_int(cases_scanned, minimum=1)
+                or distinct > cases_scanned
             ):
                 reasons.append(
                     _reason(
@@ -1163,6 +1696,14 @@ def _executable(
     *,
     root: Path,
 ) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    """Consume a node adapter over the parked program-receipt validator.
+
+    ``axiom_oracles.executable_receipt.v1`` remains the rich program receipt
+    owned by the executable producer.  The node index is a separate computed
+    adapter: it must invoke that receipt's upstream validator, then derive node
+    coverage from the receipt manifest's hash-bound golden-output bindings.
+    """
+
     reasons: list[dict[str, Any]] = []
     schema = _schema_reason("executable", executable, EXECUTABLE_SCHEMA)
     if schema:
@@ -1179,13 +1720,23 @@ def _executable(
                 )
             )
         producer = executable.value.get("producer")
-        if not isinstance(producer, dict) or producer.get("mode") != "computed":
+        if (
+            not isinstance(producer, dict)
+            or producer.get("mode") != "computed"
+            or producer.get("adapter")
+            != "axiom_oracles.node_executable.from_validated_receipt.v1"
+            or producer.get("validator")
+            != "axiom_oracles.executable_receipt.validate_executable_receipt"
+        ):
             reasons.append(
                 _reason(
                     "executable",
                     "producer_missing",
                     executable.name,
-                    "executable index is not marked mode=computed",
+                    (
+                        "executable index was not computed by the required "
+                        "upstream receipt validator adapter"
+                    ),
                 )
             )
         nodes = executable.value.get("nodes")
@@ -1200,7 +1751,7 @@ def _executable(
                     f"no computed executable result exists for {node_id!r}",
                 )
             )
-    receipt_evidence: dict[str, Any] = {}
+    linked_evidence: dict[str, Any] = {}
     if row is not None:
         if row.get("validated") is not True:
             reasons.append(
@@ -1211,17 +1762,52 @@ def _executable(
                     "executable producer did not validate the receipt",
                 )
             )
+        program = row.get("program")
+        covered_nodes = row.get("covered_nodes")
+        if (
+            not _is_string(program)
+            or not isinstance(covered_nodes, list)
+            or not covered_nodes
+            or not all(_is_string(item) for item in covered_nodes)
+            or len(set(covered_nodes)) != len(covered_nodes)
+            or node_id not in covered_nodes
+        ):
+            reasons.append(
+                _reason(
+                    "executable",
+                    "executable_coverage_invalid",
+                    executable.name,
+                    "validated program receipt does not compute coverage for this node",
+                )
+            )
+
+        manifest = row.get("manifest")
         receipt = row.get("receipt")
+        manifest_path: Path | None = None
         receipt_path: Path | None = None
+        manifest_hash: str | None = None
         receipt_hash: str | None = None
+        manifest_value: dict[str, Any] | None = None
         receipt_value: dict[str, Any] | None = None
-        if isinstance(receipt, dict) and _is_string(receipt.get("path")):
-            receipt_path = _resolve(root, str(receipt["path"]))
+        if isinstance(manifest, dict):
+            manifest_path = _producer_path(root, manifest.get("path"))
+        if manifest_path is not None and manifest_path.suffix.lower() == ".json":
+            loaded_manifest = _load(root, manifest_path, "executable_manifest")
+            manifest_hash = loaded_manifest.sha256
+            manifest_value = loaded_manifest.value
+        if isinstance(receipt, dict):
+            receipt_path = _producer_path(root, receipt.get("path"))
+        if receipt_path is not None and receipt_path.suffix.lower() == ".json":
             loaded_receipt = _load(root, receipt_path, "executable_receipt")
             receipt_hash = loaded_receipt.sha256
             receipt_value = loaded_receipt.value
         if (
-            receipt_path is None
+            manifest_path is None
+            or manifest_hash is None
+            or not isinstance(manifest, dict)
+            or manifest.get("sha256") != manifest_hash
+            or manifest_value is None
+            or receipt_path is None
             or receipt_hash is None
             or not isinstance(receipt, dict)
             or receipt.get("sha256") != receipt_hash
@@ -1232,53 +1818,128 @@ def _executable(
                     "executable",
                     "executable_receipt_missing",
                     executable.name,
-                    "executable receipt is absent, malformed, or not hash-bound",
+                    (
+                        "executable manifest/receipt is absent, malformed, "
+                        "outside the repository, or not hash-bound"
+                    ),
                 )
             )
         else:
-            receipt_evidence = {
+            linked_evidence = {
+                "manifest": _path_label(manifest_path, root),
+                "manifest_sha256": manifest_hash,
                 "receipt": _path_label(receipt_path, root),
-                "sha256": receipt_hash,
+                "receipt_sha256": receipt_hash,
+                "covered_nodes": covered_nodes,
             }
-            if receipt_value.get("schema") != RECEIPT_SCHEMA:
+            manifest_artifact = manifest_value.get("artifact")
+            manifest_engine = manifest_value.get("engine")
+            manifest_golden = manifest_value.get("golden")
+            if (
+                manifest_value.get("schema")
+                != "axiom_oracles.executable_manifest.v1"
+                or manifest_value.get("program") != program
+                or not isinstance(manifest_artifact, dict)
+                or manifest_artifact.get("sha256") != artifact.sha256
+                or not isinstance(manifest_engine, dict)
+                or pins is None
+                or manifest_engine.get("release") != pins.get("engine")
+                or not isinstance(manifest_golden, dict)
+                or manifest_value.get("receipt_path") != receipt.get("path")
+            ):
                 reasons.append(
                     _reason(
                         "executable",
                         "executable_receipt_invalid",
                         executable.name,
-                        "executable receipt schema is invalid",
+                        "executable manifest identity or release pins are invalid",
                     )
                 )
+
+            output_bindings_path = (
+                _producer_path(root, manifest_golden.get("outputs_path"))
+                if isinstance(manifest_golden, dict)
+                else None
+            )
+            output_bindings: dict[str, Any] | None = None
+            output_bindings_hash: str | None = None
+            if (
+                output_bindings_path is not None
+                and output_bindings_path.suffix.lower() == ".json"
+            ):
+                loaded_bindings = _load(
+                    root,
+                    output_bindings_path,
+                    "executable_output_bindings",
+                )
+                output_bindings = loaded_bindings.value
+                output_bindings_hash = loaded_bindings.sha256
+            bindings = (
+                output_bindings.get("bindings")
+                if isinstance(output_bindings, dict)
+                else None
+            )
+            expected = (
+                output_bindings.get("expected")
+                if isinstance(output_bindings, dict)
+                else None
+            )
+            derived_nodes = (
+                sorted(set(bindings.values()))
+                if isinstance(bindings, dict)
+                and bindings
+                and all(_is_string(item) for item in bindings.values())
+                else None
+            )
+            if (
+                output_bindings_hash is None
+                or not isinstance(manifest_golden, dict)
+                or manifest_golden.get("outputs_sha256") != output_bindings_hash
+                or not isinstance(expected, dict)
+                or not isinstance(bindings, dict)
+                or set(expected) != set(bindings)
+                or derived_nodes is None
+                or sorted(covered_nodes or []) != derived_nodes
+            ):
+                reasons.append(
+                    _reason(
+                        "executable",
+                        "executable_coverage_invalid",
+                        executable.name,
+                        (
+                            "node coverage does not equal the hash-bound "
+                            "golden-output legal-id bindings"
+                        ),
+                    )
+                )
+            else:
+                linked_evidence["output_bindings"] = _path_label(
+                    output_bindings_path, root
+                )
+                linked_evidence["output_bindings_sha256"] = output_bindings_hash
+
             receipt_engine = receipt_value.get("engine")
             receipt_artifact = receipt_value.get("artifact")
+            receipt_golden = receipt_value.get("golden")
             workflow = receipt_value.get("workflow")
             if (
-                not isinstance(receipt_engine, dict)
+                receipt_value.get("schema") != RECEIPT_SCHEMA
+                or receipt_value.get("program") != program
+                or not isinstance(receipt_engine, dict)
                 or pins is None
-                or receipt_engine.get("version") != pins.get("engine")
-            ):
-                reasons.append(
-                    _reason(
-                        "executable",
-                        "pin_mismatch",
-                        executable.name,
-                        "receipt engine version differs from the harness pin",
-                    )
-                )
-            if (
-                not isinstance(receipt_artifact, dict)
+                or receipt_engine.get("release") != pins.get("engine")
+                or not _is_string(receipt_engine.get("version"))
+                or not isinstance(receipt_artifact, dict)
                 or receipt_artifact.get("sha256") != artifact.sha256
-            ):
-                reasons.append(
-                    _reason(
-                        "executable",
-                        "pin_mismatch",
-                        executable.name,
-                        "receipt artifact hash differs from the compiled artifact",
-                    )
-                )
-            if (
-                not isinstance(workflow, dict)
+                or not isinstance(receipt_golden, dict)
+                or not isinstance(receipt_value.get("commands"), list)
+                or not receipt_value["commands"]
+                or not _is_string(receipt_value.get("timestamp"))
+                or not isinstance(workflow, dict)
+                or not _is_string(workflow.get("repository"))
+                or not _is_string(workflow.get("path"))
+                or not _is_string(workflow.get("event"))
+                or not _is_string(workflow.get("ref"))
                 or not (
                     (type(workflow.get("run_id")) is int and workflow["run_id"] > 0)
                     or (
@@ -1287,15 +1948,35 @@ def _executable(
                         and int(workflow["run_id"]) > 0
                     )
                 )
+                or not (
+                    type(workflow.get("run_attempt")) is int
+                    and workflow["run_attempt"] > 0
+                )
                 or not isinstance(workflow.get("sha"), str)
                 or not _COMMIT_RE.fullmatch(workflow["sha"])
             ):
                 reasons.append(
                     _reason(
                         "executable",
-                        "producer_provenance_missing",
+                        "executable_receipt_invalid",
                         executable.name,
-                        "receipt lacks CI run id and workflow SHA",
+                        (
+                            "receipt does not match the parked v1 program "
+                            "receipt identity and provenance interface"
+                        ),
+                    )
+                )
+            elif (
+                not isinstance(bindings, dict)
+                or not isinstance(receipt_golden.get("outputs"), dict)
+                or set(receipt_golden["outputs"]) != set(bindings)
+            ):
+                reasons.append(
+                    _reason(
+                        "executable",
+                        "executable_coverage_invalid",
+                        executable.name,
+                        "receipt outputs do not match the bound output names",
                     )
                 )
         expected_pins = (
@@ -1314,8 +1995,8 @@ def _executable(
             )
     evidence = {
         "index": _path_label(executable.path, root),
-        "sha256": executable.sha256,
-        **receipt_evidence,
+        "index_sha256": executable.sha256,
+        **linked_evidence,
     }
     return {"holds": not reasons, "evidence": evidence}, reasons
 
@@ -1331,12 +2012,26 @@ def evaluate_node(
     census: Loaded,
     executable: Loaded,
     run_manifest: Loaded,
+    governance: Loaded,
 ) -> dict[str, Any]:
     """Evaluate one requested node without ever converting absence to success."""
 
     subgraph, nodes, graph_reasons = _artifact_nodes(artifact, node_id)
     declaration, declaration_reasons = _node_declaration(node_index, artifact, node_id)
-    run, harness_reasons = _run_context(run_manifest, artifact)
+    run, harness_reasons = _run_context(
+        run_manifest,
+        governance,
+        artifact,
+        {
+            "compiled_artifact": artifact,
+            "node_index": node_index,
+            "closure_summary": closure,
+            "node_comparisons": comparisons,
+            "exercise_census": census,
+            "node_executable": executable,
+            "workflow_governance": governance,
+        },
+    )
     pins = run.get("pinned") if run else None
 
     provision, provision_reasons = _provision_rooted(
@@ -1350,6 +2045,7 @@ def evaluate_node(
     applicable, applicability_reasons = _comparison_declarations(declaration)
     conformant, conformant_reasons, comparison_rows = _conformant(
         comparisons,
+        node_id,
         applicable,
         applicability_reasons,
         artifact,
@@ -1442,14 +2138,17 @@ def evaluate_node(
     }
 
 
-def _render_ledger(evaluations: list[dict[str, Any]], run: Loaded) -> str:
+def _render_ledger(
+    evaluations: list[dict[str, Any]],
+    run: dict[str, Any] | None,
+) -> str:
     certified = sorted(
         (row["entry"] for row in evaluations if row["entry"] is not None),
         key=lambda row: row["node"],
     )
     as_of: str
-    if run.value is not None and _is_string(run.value.get("certified_at")):
-        as_of = str(run.value["certified_at"]).split("T", 1)[0]
+    if run is not None and _is_string(run.get("certified_at")):
+        as_of = str(run["certified_at"]).split("T", 1)[0]
     else:
         as_of = "unverified"
     payload = {
@@ -1458,12 +2157,13 @@ def _render_ledger(evaluations: list[dict[str, Any]], run: Loaded) -> str:
         "as_of": as_of,
         "nodes": certified,
     }
-    return HEADER + "\n" + yaml.safe_dump(
+    rendered = yaml.safe_dump(
         payload,
         sort_keys=False,
         allow_unicode=True,
         default_flow_style=False,
     )
+    return HEADER + "\n" + rendered + "\n" + ENTRY_SHAPE_COMMENT
 
 
 def _result_document(evaluations: list[dict[str, Any]]) -> dict[str, Any]:
@@ -1482,17 +2182,111 @@ def _result_document(evaluations: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
-def _check_or_write(path: Path, rendered: str, *, check: bool) -> bool:
-    """Return true when the target drifted."""
+def _drifted(path: Path, rendered: str) -> bool:
+    """Compare exact bytes, including newline convention and encoding."""
 
-    if check:
-        try:
-            return path.read_text() != rendered
-        except OSError:
-            return True
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(rendered)
-    return False
+    try:
+        return path.read_bytes() != rendered.encode("utf-8")
+    except OSError:
+        return True
+
+
+def _existing_node_ids(path: Path) -> set[str]:
+    """Return nodes already in the generated projection for recomputation."""
+
+    try:
+        payload = yaml.load(path.read_bytes(), Loader=_UniqueKeyLoader)
+    except (OSError, UnicodeDecodeError, yaml.YAMLError, ValueError):
+        return set()
+    if not isinstance(payload, dict) or not isinstance(payload.get("nodes"), list):
+        return set()
+    return {
+        str(row["node"])
+        for row in payload["nodes"]
+        if isinstance(row, dict) and _is_string(row.get("node"))
+    }
+
+
+def _atomic_write_documents(documents: dict[Path, str]) -> None:
+    """Stage every document before replacing any target."""
+
+    staged: dict[Path, Path] = {}
+    try:
+        for target, rendered in documents.items():
+            target.parent.mkdir(parents=True, exist_ok=True)
+            descriptor, temporary_name = tempfile.mkstemp(
+                prefix=f".{target.name}.",
+                suffix=".tmp",
+                dir=target.parent,
+            )
+            temporary = Path(temporary_name)
+            staged[target] = temporary
+            with os.fdopen(descriptor, "wb") as stream:
+                stream.write(rendered.encode("utf-8"))
+                stream.flush()
+                os.fsync(stream.fileno())
+        for target, temporary in staged.items():
+            temporary.replace(target)
+    finally:
+        for temporary in staged.values():
+            try:
+                temporary.unlink(missing_ok=True)
+            except OSError:
+                pass
+
+
+def _declared_evidence_paths(
+    root: Path,
+    comparisons: Loaded,
+    executable: Loaded,
+) -> set[Path]:
+    paths: set[Path] = set()
+    if comparisons.value is not None:
+        rows = comparisons.value.get("comparisons")
+        if isinstance(rows, dict):
+            for row in rows.values():
+                report = row.get("report") if isinstance(row, dict) else None
+                resolved = (
+                    _producer_path(root, report.get("path"))
+                    if isinstance(report, dict)
+                    else None
+                )
+                if resolved is not None:
+                    paths.add(resolved)
+    if executable.value is not None:
+        rows = executable.value.get("nodes")
+        if isinstance(rows, dict):
+            for row in rows.values():
+                if not isinstance(row, dict):
+                    continue
+                for field in ("manifest", "receipt"):
+                    reference = row.get(field)
+                    resolved = (
+                        _producer_path(root, reference.get("path"))
+                        if isinstance(reference, dict)
+                        else None
+                    )
+                if resolved is not None:
+                    paths.add(resolved)
+                    if field == "manifest":
+                        loaded_manifest = _load(
+                            root,
+                            resolved,
+                            "executable_manifest",
+                        )
+                        golden = (
+                            loaded_manifest.value.get("golden")
+                            if loaded_manifest.value is not None
+                            else None
+                        )
+                        bindings_path = (
+                            _producer_path(root, golden.get("outputs_path"))
+                            if isinstance(golden, dict)
+                            else None
+                        )
+                        if bindings_path is not None:
+                            paths.add(bindings_path)
+    return paths
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -1505,6 +2299,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--exercise-census", required=True)
     parser.add_argument("--executable", required=True)
     parser.add_argument("--run-manifest", required=True)
+    parser.add_argument("--governance", required=True)
     parser.add_argument("--output", default="certified-nodes.yaml")
     parser.add_argument("--reasons-output")
     parser.add_argument("--repo-root", default=str(REPO_ROOT))
@@ -1525,6 +2320,37 @@ def main(argv: list[str] | None = None) -> int:
     census = _load(root, args.exercise_census, "exercise_census")
     executable = _load(root, args.executable, "node_executable")
     run_manifest = _load(root, args.run_manifest, "run_manifest")
+    governance = _load(root, args.governance, "workflow_governance")
+
+    output_path = _resolve(root, args.output)
+    reasons_path = (
+        _resolve(root, args.reasons_output) if args.reasons_output else None
+    )
+    protected_paths = {
+        artifact.path,
+        node_index.path,
+        closure.path,
+        comparisons.path,
+        census.path,
+        executable.path,
+        run_manifest.path,
+        governance.path,
+        *_declared_evidence_paths(root, comparisons, executable),
+    }
+    output_paths = {output_path}
+    if reasons_path is not None:
+        if reasons_path == output_path:
+            parser.error("--output and --reasons-output must be different files")
+        output_paths.add(reasons_path)
+    collisions = output_paths & protected_paths
+    if collisions:
+        parser.error(
+            "output paths must not overwrite producer/evidence inputs: "
+            + ", ".join(sorted(path.as_posix() for path in collisions))
+        )
+
+    candidate_nodes = set(args.nodes)
+    candidate_nodes.update(_existing_node_ids(output_path))
 
     evaluations = [
         evaluate_node(
@@ -1537,23 +2363,46 @@ def main(argv: list[str] | None = None) -> int:
             census=census,
             executable=executable,
             run_manifest=run_manifest,
+            governance=governance,
         )
-        for node_id in sorted(args.nodes)
+        for node_id in sorted(candidate_nodes)
     ]
-    ledger = _render_ledger(evaluations, run_manifest)
+    validated_run, _ = _run_context(
+        run_manifest,
+        governance,
+        artifact,
+        {
+            "compiled_artifact": artifact,
+            "node_index": node_index,
+            "closure_summary": closure,
+            "node_comparisons": comparisons,
+            "exercise_census": census,
+            "node_executable": executable,
+            "workflow_governance": governance,
+        },
+    )
+    ledger = _render_ledger(evaluations, validated_run)
     result = _result_document(evaluations)
     result_rendered = json.dumps(result, indent=2, sort_keys=True) + "\n"
 
-    output_path = _resolve(root, args.output)
-    output_drift = _check_or_write(output_path, ledger, check=args.check)
-    reasons_drift = False
-    if args.reasons_output:
-        reasons_path = _resolve(root, args.reasons_output)
-        reasons_drift = _check_or_write(
-            reasons_path,
-            result_rendered,
-            check=args.check,
-        )
+    output_drift = _drifted(output_path, ledger)
+    reasons_drift = (
+        _drifted(reasons_path, result_rendered)
+        if reasons_path is not None
+        else False
+    )
+    write_error: OSError | None = None
+    if not args.check:
+        documents = {output_path: ledger}
+        if reasons_path is not None:
+            documents[reasons_path] = result_rendered
+        try:
+            _atomic_write_documents(documents)
+        except OSError as exc:
+            write_error = exc
+        else:
+            output_drift = False
+            reasons_drift = False
 
     result["drift"] = {
         "certified_nodes": output_drift,
@@ -1578,6 +2427,15 @@ def main(argv: list[str] | None = None) -> int:
                 "committed machine-readable reasons differ from the harness projection",
             )
         )
+    if write_error is not None:
+        output_reasons.append(
+            _reason(
+                "output",
+                "write_failed",
+                "certify_nodes",
+                f"could not atomically write generated outputs: {write_error}",
+            )
+        )
     result["output_reasons"] = output_reasons
     print(json.dumps(result, sort_keys=True))
     rejected = bool(result["rejected"])
@@ -1586,6 +2444,9 @@ def main(argv: list[str] | None = None) -> int:
             "certified node output drifted; regenerate with scripts/certify_nodes.py",
             file=sys.stderr,
         )
+        return 1
+    if write_error is not None:
+        print("could not write generated certification outputs", file=sys.stderr)
         return 1
     if rejected:
         print("one or more requested nodes did not certify", file=sys.stderr)

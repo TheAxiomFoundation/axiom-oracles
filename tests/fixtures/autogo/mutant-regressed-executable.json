@@ -1,19 +1,29 @@
 {
   "schema": "axiom_oracles.node_executable.v1",
-  "artifact_sha256": "95f24a7671ec603600d6f9e85f80c06f10939fcace3d1192a4ab5abec0b5d1b0",
+  "artifact_sha256": "4ed1f70373efcfc88fff75f1f2ddb8606d161973b7c6fb946b26574738f3a88c",
   "producer": {
-    "mode": "computed"
+    "mode": "computed",
+    "adapter": "axiom_oracles.node_executable.from_validated_receipt.v1",
+    "validator": "axiom_oracles.executable_receipt.validate_executable_receipt"
   },
   "nodes": {
     "us:statutes/26/3101/b/1#medicare_wage_tax": {
+      "program": "us/medicare",
       "validated": false,
+      "covered_nodes": [
+        "us:statutes/26/3101/b/1#medicare_wage_tax"
+      ],
+      "manifest": {
+        "path": "manifests/us-medicare.json",
+        "sha256": "71e78872874fb914efd35b75a70b646f740a4115b4d5fef5a9dd022d1e06ee39"
+      },
       "receipt": {
         "path": "receipts/us-medicare-wage-tax.json",
-        "sha256": "105a88fa69f0d90c5570e839146e4d3c9b7a41b41d674de71afe9c921f3223e6"
+        "sha256": "f969b97da55125867ac37a236994f2a4fc68a009bf85009f8c7979bfc29f07d9"
       },
       "pinned": {
         "engine": "v0.1.1",
-        "artifact": "95f24a7671ec603600d6f9e85f80c06f10939fcace3d1192a4ab5abec0b5d1b0"
+        "artifact": "4ed1f70373efcfc88fff75f1f2ddb8606d161973b7c6fb946b26574738f3a88c"
       }
     }
   }

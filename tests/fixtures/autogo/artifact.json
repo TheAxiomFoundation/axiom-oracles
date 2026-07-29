@@ -1,6 +1,11 @@
 {
   "schema": "axiom.compiled_artifact.v1",
   "metadata": {
+    "pinned": {
+      "rulespec_us": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "corpus": "ffffffffffffffffffffffffffffffffffffffff",
+      "engine": "v0.1.1"
+    },
     "nodes": [
       {
         "id": "us:statutes/26/3101/b/1#medicare_wage_tax",

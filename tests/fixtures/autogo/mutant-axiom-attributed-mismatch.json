@@ -1,11 +1,19 @@
 {
   "schema": "axiom_oracles.node_comparisons.v1",
-  "artifact_sha256": "95f24a7671ec603600d6f9e85f80c06f10939fcace3d1192a4ab5abec0b5d1b0",
+  "artifact_sha256": "4ed1f70373efcfc88fff75f1f2ddb8606d161973b7c6fb946b26574738f3a88c",
   "producer": {
     "mode": "computed"
   },
   "comparisons": {
     "us-medicare-wage-tax": {
+      "applicable_nodes": [
+        "us:statutes/26/3101/b/1#medicare_wage_tax"
+      ],
+      "required_dimensions": {
+        "us:statutes/26/3101/b/1#medicare_wage_tax": [
+          "wages"
+        ]
+      },
       "committed": true,
       "binding": "bound",
       "reconciliation": "full",
@@ -14,14 +22,14 @@
       "unexplained_count": 0,
       "axiom_attributed_count": 1,
       "report": {
-        "path": "reports/us-medicare-wage-tax.json",
-        "sha256": "8395a522c8d3e84df46240de65279558ca913cf95b442caec622f60404272eba"
+        "path": "reports/mutant-axiom-attributed.json",
+        "sha256": "245824d7f033988312fee3fac6f666c7566b77a2c8ca898435e685196e12e543"
       },
       "pinned": {
         "rulespec_us": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
         "corpus": "ffffffffffffffffffffffffffffffffffffffff",
         "engine": "v0.1.1",
-        "artifact": "95f24a7671ec603600d6f9e85f80c06f10939fcace3d1192a4ab5abec0b5d1b0"
+        "artifact": "4ed1f70373efcfc88fff75f1f2ddb8606d161973b7c6fb946b26574738f3a88c"
       }
     }
   }

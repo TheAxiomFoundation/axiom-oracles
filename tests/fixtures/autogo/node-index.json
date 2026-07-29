@@ -1,6 +1,9 @@
 {
   "schema": "axiom_oracles.node_certification_index.v1",
-  "artifact_sha256": "95f24a7671ec603600d6f9e85f80c06f10939fcace3d1192a4ab5abec0b5d1b0",
+  "artifact_sha256": "4ed1f70373efcfc88fff75f1f2ddb8606d161973b7c6fb946b26574738f3a88c",
+  "producer": {
+    "mode": "computed"
+  },
   "nodes": {
     "us:statutes/26/3101/b/1#medicare_wage_tax": {
       "label": "Employee Medicare payroll tax",

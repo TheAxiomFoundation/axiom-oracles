@@ -3,9 +3,11 @@
   "suites": {
     "us-medicare-wage-tax": {
       "report": "reports/us-medicare-wage-tax.json",
-      "report_sha256": "8395a522c8d3e84df46240de65279558ca913cf95b442caec622f60404272eba",
+      "report_sha256": "d1ab526d5afbb036cbfa0bb53b6e475b5b5e279c06fce07711a1e0f9c924dea4",
       "binding": "bound",
-      "reconciliation": "full",
+      "binding_defects": [],
+      "reconciliation": "cardinality",
+      "bridge_declared": true,
       "bridge_audited": true,
       "cases_scanned": 4,
       "evidence_fields": {
