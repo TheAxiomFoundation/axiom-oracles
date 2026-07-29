@@ -2,7 +2,8 @@
 
 ## State
 
-- Defensive correctness and completeness audit complete locally.
+- Defensive correctness and completeness audit complete locally; publication
+  is blocked by an invalid GitHub CLI token.
 - Target gate branches remained read only and were inspected with `git show`.
 - This worktree contains only the shared progress update, the audit report,
   and new xfailed mutant proofs.
@@ -46,12 +47,16 @@
   XFAILs. Five unrelated bridge tests fail against the adjacent RuleSpec
   checkout's changed pilot outputs, and the dashboard loader test cannot
   download `esbuild` because network access is unavailable.
+- Confirmed the final branch diff is clean and limited to this progress ledger,
+  the audit report, and the new mutant suite.
+- Attempted the publication prerequisite; `gh auth status` reports that the
+  active `MaxGhenis` token is invalid, so no push or draft PR was attempted.
 
 ## Next
 
 - No audit implementation work remains.
-- Push `autogo/gate-coverage-review` and open the requested draft PR if network
-  access allows.
+- Re-authenticate with `gh auth login -h github.com`, then push
+  `autogo/gate-coverage-review` and open the requested draft PR.
 
 ---
 
