@@ -10,8 +10,8 @@
   `policyengine-us==1.767.3`, `policyengine-core==3.30.3`.
 - Containment: the 19 suites, their dispositions, shared regenerated artifacts,
   row notes whose counts change, and this ledger only.
-- Phase: TANF/SSI regenerated and dispositions revalidated; nine of ten SNAP
-  suites regenerated, with California still outstanding.
+- Phase: all 19 suites regenerated and their dispositions revalidated; shared
+  artifact refresh and the final check battery remain.
 
 ## Done
 
@@ -172,17 +172,37 @@
   `c46af9b87c8f5ad01f1909bc45e80e00b4c4a50e5b802ea4ccbe194b5954b568`
   with its hardened builder and pinned base. It validates 341 issue-362 rows
   and predicts 29 repaired rows, 172 materially moved surviving pins, and 140
-  unchanged surviving pins. Its authoritative YAML is used as evidence input
-  only; no unrelated #423 commit is imported.
+  unchanged surviving pins on that base. Its authoritative YAML is used as
+  evidence input only; no unrelated #423 commit is imported.
 - A defensive California BBCE review found 83 of the 243 legacy annotations
-  contradict their stated Axiom gate proof. The final reconciliation will
-  remove both unsupported asset-waiver selectors and trim both gross-band
-  selectors to the same 80 semantically supported cases (160 rows total).
+  contradict their stated Axiom gate proof. The reconciliation removes both
+  unsupported asset-waiver selectors and retains only the clean gross-band
+  proof: 79 eligibility rows and 78 benefit rows. Three otherwise-supported
+  identities vanished, and all 78 surviving benefit pins moved materially.
+- The first California regeneration reached batch 68 of 72 before the process
+  was killed with signal 9. A retry kept cyclic garbage collection enabled
+  (the runner disables it by default) and completed all 72 batches under the
+  exact declared stack. This was a runtime-only containment measure.
+- California regenerated from `684 / 96` raw/unexplained to `529 / 241`.
+  Its final disposition set classifies 157 BBCE encoding rows, 111 bridge
+  rows, and 20 upstream-engine rows. No disposition is expired or orphaned.
+- The current clean RuleSpec checkout differs from the pinned #423 base, so the
+  341 issue entries were revalidated fail-closed against both sources. Of
+  those, 188 current identities vanished; 22 still exist but no longer
+  reproduce the replay's requested-month left/right evidence and were flagged
+  and dropped; 131 reproduce it exactly and were retained. Among those 131,
+  115 legacy pins moved materially and 16 are unchanged.
+- California's 45 old `23.973597208658855` rows became 42 rows at
+  `23.84000015258789` and three matches. Across all ten SNAP suites, the 635
+  old constant rows therefore became 619 rows at January's
+  `23.84000015258789`, three rows at other true-January amounts, and 13
+  matches.
+- Verified all 19 regenerated reports record PolicyEngine `4.18.9`,
+  PolicyEngine-US `1.767.3`, and PolicyEngine-Core `3.30.3`.
 
 ## Next
 
-1. Regenerate California SNAP and apply the checked #423 requested-month
-   disposition transform.
-2. Restore portable config paths and verify all 19 engine-version blocks.
-3. Refresh shared artifacts/counts and run the full `--check` chain.
-4. Commit the final ledger, write the untracked worker report, and report HEAD.
+1. Refresh case/disposition artifacts, affected map, scoreboard, history,
+   burndown, dashboard overview, and the changed conformance row notes.
+2. Run the full `--check` chain and test suite.
+3. Commit the final ledger, write the untracked worker report, and report HEAD.
