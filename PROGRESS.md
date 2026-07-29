@@ -1019,3 +1019,34 @@ residual), #229 (small-suite grounding).
   dashboard reports separately.
 - Regenerate the adoption/scoreboard chain and run every available
   `--check` gate before final handoff.
+
+### Checkpoint — measured divergence evidence
+
+#### State
+
+- The two reports were generated from the clean pinned RuleSpec snapshot with
+  Python 3.13, PolicyEngine 4.18.9, PE-US 1.767.3, and Core 3.30.3.
+- Every raw mismatch belongs to a pre-registered §6.1/§6.2 divergence class;
+  there are no boundary or unexplained implementation mismatches.
+
+#### Done
+
+- SALT measured `13/16` raw matches. Exact Axiom/PE values are:
+  low-AGI ceiling `10000/5000`, §911 MAGI add-back `38900/40400`, and
+  personal-property tax `4000/0`.
+- Itemized deductions measured `15/17` raw matches. Exact Axiom/PE finals are:
+  other-deduction §68 base `50000/47297.296875` (PE reduction
+  `2702.702392578125`) and rational-rate probe
+  `9459459.45945946/9459460` (PE reduction `540540.5`).
+- Added one evidence-rich, source-expiring disposition per mismatching case,
+  retaining `issue: MAIN-LANE-TBD` for the main lane to replace after filing
+  upstream issues. Both suites validate at 100% explained parity with zero
+  orphaned, expired, or unexplained entries.
+- Emitted the two declared dashboard reports with RuleSpec and engine
+  provenance and confirmed `apply_dispositions.py --check`.
+
+#### Next
+
+- Commit the measured evidence/reports.
+- Adopt exactly the two requested conformance rows, execute the ordered full
+  regeneration chain, and prove write/check parity.
