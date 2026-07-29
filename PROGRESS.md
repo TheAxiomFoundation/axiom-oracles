@@ -11,7 +11,7 @@
 - Rules: read-only toward the PR branch, remotes, and GitHub; all review
   artifacts and commits stay on the local `review/...` branch.
 - Output: `REVIEW-REPORT.md`
-- Verdict: pending evidence.
+- Verdict: `APPROVE`.
 
 ## Done
 
@@ -97,7 +97,13 @@
   zero-allotment path can remain eligible for households of three or more,
   confirming that its downstream status/allotment outputs are not the denial
   judgment.
+- Rechecked GitHub read-only metadata immediately before verdict: the live PR
+  still has base `f8ea6027`, head `b8fc73f0`, one commit, and one changed file;
+  local and origin-tracking head refs still match.
+- Wrote and committed the self-contained final evidence report at
+  `REVIEW-REPORT.md` (`29ba017c`).
 
 ## Next
 
-1. Write and commit `REVIEW-REPORT.md`, update this ledger, and issue a verdict.
+None. Review complete; issue the recorded verdict without writing to the PR,
+remotes, or GitHub.
