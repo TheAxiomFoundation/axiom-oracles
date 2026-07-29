@@ -9,9 +9,8 @@
   `187f8e72`.
 - Upstream producer branches remain parked and will be inspected, not merged or
   rebased.
-- Core node evaluator, launch-critical mutants, and final trust-boundary
-  hardening are implemented and passing; contract reconciliation is in final
-  review.
+- Core node evaluator, launch-critical mutants, final trust-boundary hardening,
+  and the producer integration contract are implemented and passing.
 
 ## Done
 
@@ -42,12 +41,15 @@
   a strict/hash-bound source artifact, and exact block recomputation; malformed
   paths/imports/run ids fail with machine reasons. Focused validation: 54 tests
   pass; Ruff and `git diff --check` pass.
+- Wrote and independently reconciled `docs/autogo-contract.md`: all eight input
+  envelopes, transitive node scope, exact criterion gates, ledger/result byte
+  shapes, 67 stable reasons, six launch-critical mutants, and the concrete
+  landing obligations and current gaps for every parked producer.
 - Repository-wide validation reached 2,333 passing and 70 skipped; its sole
   failure was `npx` attempting a network download while DNS was unavailable.
 
 ## Next
 
-- Finish the independent contract audit and commit `docs/autogo-contract.md`.
 - Re-run the focused suite from a clean archive and repository-wide validation.
-- Commit the final ledger, push if possible, open the requested draft pull
-  request, and write the closure-sprint output report.
+- Push if possible, open the requested draft pull request, and write the
+  closure-sprint output report.
