@@ -1317,3 +1317,34 @@ residual), #229 (small-suite grounding).
 - Write and commit `REVIEW-REPORT.md` with the two residual findings and full
   evidence digest.
 - Append the review closeout checkpoint and return the explicit verdict.
+
+### Checkpoint — review closeout
+
+#### State
+
+- Final verdict: `REQUEST-CHANGES`.
+- The committed output report is `REVIEW-REPORT.md` at review commit
+  `35ccdb2c`.
+
+#### Done
+
+- Recorded both residual blockers: issue #9168's stale section
+  164(b)(7)(D) title and the four nonzero whole-tree `MAIN-LANE-TBD` matches.
+- Recorded passing evidence for all requested body repairs, structured
+  disposition fields, exact URL cardinality, generated artifacts, eight
+  read-only checks, append-only author closeout, and six-path containment.
+- Reconfirmed the local and origin-tracking PR head refs remain exactly
+  `1ce97c22a4d0c9213e8a44c94fe120693b91faf1`.
+- Reconfirmed review commits change only this append-only ledger and
+  `REVIEW-REPORT.md` on top of the frozen target; PR dispositions,
+  conformance, and dashboard files remain byte-identical to `1ce97c22`.
+- Disclosed the GitNexus/npm DNS limitation, incomplete ignored `.venv`
+  attempt, denied process diagnostic, and direct-web issue fetch failure.
+- No PR branch, remote, pull request, or GitHub issue was changed.
+
+#### Next
+
+- Author: correct issue #9168's title and reconcile the literal whole-tree
+  placeholder-zero requirement with the append-only historical ledger.
+- Re-run the repair-only checks and request another review. No reviewer-side
+  implementation remains.
