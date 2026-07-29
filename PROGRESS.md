@@ -10,8 +10,8 @@
   `policyengine-us==1.767.3`, `policyengine-core==3.30.3`.
 - Containment: the 19 suites, their dispositions, shared regenerated artifacts,
   row notes whose counts change, and this ledger only.
-- Phase: TANF/SSI regenerated and dispositions revalidated; seven of ten SNAP
-  suites regenerated, with CA/NC/SC still outstanding.
+- Phase: TANF/SSI regenerated and dispositions revalidated; nine of ten SNAP
+  suites regenerated, with California still outstanding.
 
 ## Done
 
@@ -149,11 +149,40 @@
 - Across these seven suites, 524 old `23.973597208658855` mismatch rows became
   511 rows at January's `23.84000015258789`, three at other true-January
   amounts, and ten matches. CA/NC/SC remain to be measured.
+- Regenerated North Carolina and South Carolina SNAP on the same declared
+  stack. North Carolina moved from `99 / 71` raw/unexplained to `76 / 49`;
+  South Carolina moved from `181 / 106` to `185 / 110`. Both reports record
+  PolicyEngine `4.18.9`, US `1.767.3`, and core `3.30.3`.
+- Replayed all 40 surviving NC/SC TANF bridge households through direct
+  requested-period simulations. All 11 North Carolina and 29 South Carolina
+  zero-TANF counterfactuals reproduce the fixed-runner baseline and close
+  within the unchanged $7 tolerance. Their legacy pins all moved materially
+  and are now replaced with exact January pins and old-to-new evidence.
+- The NC/SC lone-minor case sets are unchanged (three and two cases,
+  respectively). All five eligibility rows are unchanged; all five benefit
+  rows moved materially and are explicitly listed in their evidence. The
+  obsolete North Carolina BBCE amount selector was deleted after its sole
+  mismatch vanished. No current NC/SC disposition is expired or orphaned.
+- North Carolina's two and South Carolina's 64 old
+  `23.973597208658855` rows all persist at January's
+  `23.84000015258789`. Across the nine completed SNAP suites, the old constant
+  therefore resolves to 577 rows at `23.84000015258789`, three other
+  true-January amounts, and ten matches; California's 45 rows remain.
+- Verified the saved #423 California replay receipt at SHA-256
+  `c46af9b87c8f5ad01f1909bc45e80e00b4c4a50e5b802ea4ccbe194b5954b568`
+  with its hardened builder and pinned base. It validates 341 issue-362 rows
+  and predicts 29 repaired rows, 172 materially moved surviving pins, and 140
+  unchanged surviving pins. Its authoritative YAML is used as evidence input
+  only; no unrelated #423 commit is imported.
+- A defensive California BBCE review found 83 of the 243 legacy annotations
+  contradict their stated Axiom gate proof. The final reconciliation will
+  remove both unsupported asset-waiver selectors and trim both gross-band
+  selectors to the same 80 semantically supported cases (160 rows total).
 
 ## Next
 
-1. Regenerate CA, NC, and SC SNAP, then verify all ten engine-version blocks.
-2. Revalidate every SNAP disposition, including the California
-   TANF-bridge/lone-minor replay and the January minimum-benefit class.
+1. Regenerate California SNAP and apply the checked #423 requested-month
+   disposition transform.
+2. Restore portable config paths and verify all 19 engine-version blocks.
 3. Refresh shared artifacts/counts and run the full `--check` chain.
 4. Commit the final ledger, write the untracked worker report, and report HEAD.
