@@ -72,8 +72,32 @@
   `receipt`, while another rejects the nested RuleSpec worktree as a
   noncanonical root. The source and companion assertions were inspected and
   parsed directly; the PE runtime check executed successfully.
+- Adversarial audit of all 16 `not_comparable` rows passes at PE-US 1.767.3.
+  Runtime confirms every named candidate exists with the expected grain:
+  `is_snap_ineligible_student` is Person/year; immigration is Person/month;
+  TANF non-cash gross/net/asset/status and SNAP work/status/allotment candidates
+  are SPMUnit/month.
+- Every variable in PE's seven-file SNAP student subtree is year-defined; no
+  month-scoped student judgment exists. RuleSpec's student exclusion and its
+  imported source are Person/Month, so the recorded period boundary is real.
+- PE's TANF non-cash status formula is exactly gross AND net AND asset. The
+  gross candidate is a ratio pass/fail predicate, asset is a test outcome
+  under CA's infinite limit, and net actively applies in CA for both household
+  categories. None represents the legal Money ceiling, PUB-275-gated status,
+  resource waiver, or net-test waiver.
+- Work and immigration candidates are partial and/or opposite-polarity;
+  PE's aggregate eligibility and unit-size formulas omit the RuleSpec
+  same-person five-gate composite. The ordinary registry runner executes only
+  direct variables, so it has no generic negation transform that would make
+  those negative legal judgments exact.
+- Commit-qualified PE source/class inventory and concept searches found no
+  one-to-one SNAP surface for the drug-felony overlay, full household bar,
+  cash-out SSI or institution exclusions, composite member inclusion, MCE
+  conferral, waiver facts, or categorical zero-benefit denial. The PE
+  zero-allotment path can remain eligible for households of three or more,
+  confirming that its downstream status/allotment outputs are not the denial
+  judgment.
 
 ## Next
 
-1. Adversarially audit all 16 `not_comparable` rows and named candidates.
-2. Write and commit `REVIEW-REPORT.md`, update this ledger, and issue a verdict.
+1. Write and commit `REVIEW-REPORT.md`, update this ledger, and issue a verdict.
