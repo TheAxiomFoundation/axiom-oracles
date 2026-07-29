@@ -1172,3 +1172,33 @@ residual), #229 (small-suite grounding).
   detail copies; full check battery green.
 - Next: round-2 blind re-review, then merge after rulespec-us#1177 per the
   section 9 pairing order.
+
+---
+
+## PR #425 repair re-review — 2026-07-29
+
+### State
+
+- Reviewing the immutable repair head `1ce97c22` against repair base
+  `309e380a` in disposable worktree
+  `.git/review-worktrees/pr425-1ce97c22-repair-rereview`.
+- Scope is limited to the five claimed repairs and changed-path containment.
+- Review work is local only; no PR-branch, remote, issue, or other GitHub
+  mutation is authorized.
+
+### Done
+
+- Read the prior blind-review report and its complete repair requirements.
+- Confirmed the pinned repair and base commits resolve locally.
+- Created the local review branch and disposable worktree without modifying
+  the PR branch.
+
+### Next
+
+- Audit disposition evidence shape, exact URL mapping, and disposition drift.
+- Retrieve issues #9168 and #9170 read-only and check them against the pinned
+  PolicyEngine source.
+- Verify adoption-note regeneration, repository-wide placeholder removal, the
+  full check battery, author closeout, and exact changed-path containment.
+- Write and commit `REVIEW-REPORT.md`, append the closing checkpoint, and
+  return an explicit verdict with any sandbox limitations.
