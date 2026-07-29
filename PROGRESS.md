@@ -243,3 +243,41 @@
 
 - No implementation work remains. Handoff the committed branch HEAD and
   untracked worker report; do not push.
+
+# Blind review of `data/month-fix-regen`
+
+## State
+
+- Review target: local `data/month-fix-regen` at immutable commit
+  `f0a6598e1337310fdf2f663af91b7ab81f773491`.
+- Review base declared by the branch:
+  `819f370bf0346e4a6a8dfb1c8c4f0d873d6d0340`.
+- Disposable worktree:
+  `.git/review-worktrees/month-fix-regen-f0a6598e-blind`.
+- Local review branch: `review/month-fix-regen-f0a6598e-blind`.
+- Rules: no writes to the target branch, remotes, or GitHub; all review
+  artifacts and commits remain on this local review branch.
+- Required replay stack: `policyengine==4.18.9`,
+  `policyengine-us==1.767.3`, `policyengine-core==3.30.3`.
+- Output: `REVIEW-REPORT.md`.
+- Verdict: pending evidence.
+
+## Done
+
+- Read the `gitnexus-pr-review` workflow and adapted it to a local branch
+  comparison.
+- Verified the supplied target worktree and local branch both resolve to the
+  requested immutable commit.
+- Created this disposable review worktree directly from that commit.
+- Preserved the worker's complete ledger above and appended this review ledger.
+
+## Next
+
+1. Freeze the base-to-target diff and audit affected-set containment.
+2. Verify stack pins, report engine blocks, and unchanged suite tolerances.
+3. Replay California SNAP, one TANF suite, and SSI for byte parity.
+4. Audit California disposition drops/retentions and January-value movement.
+5. Verify comparison-period decisions and AL/KS TANF outcomes.
+6. Run the complete derived-artifact check battery and reconcile totals.
+7. Write and commit `REVIEW-REPORT.md`, append the closing ledger entry, and
+   issue the recorded verdict.
