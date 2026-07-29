@@ -1039,7 +1039,7 @@ residual), #229 (small-suite grounding).
   `2702.702392578125`) and rational-rate probe
   `9459459.45945946/9459460` (PE reduction `540540.5`).
 - Added one evidence-rich, source-expiring disposition per mismatching case,
-  retaining `issue: MAIN-LANE-TBD` for the main lane to replace after filing
+  retaining a literal placeholder (since replaced with the filed issue URLs, policyengine-us#9167-#9171) for the main lane to fill after filing
   upstream issues. Both suites validate at 100% explained parity with zero
   orphaned, expired, or unexplained entries.
 - Emitted the two declared dashboard reports with RuleSpec and engine
@@ -1069,7 +1069,7 @@ residual), #229 (small-suite grounding).
 - Adopted only `us-pe:salt_deduction` and
   `us-pe:itemized_taxable_income_deductions`. Their notes state the 2026 exact
   engine stack, `16/16` and `16/17` nonzero counts, completed-return
-  boundaries, explicit exclusions, and named `MAIN-LANE-TBD` issue
+  boundaries, explicit exclusions, and named placeholder issue
   placeholders.
 - Ran the full ordered write chain: dispositions, grids, affected map,
   vacuous/freshness gate, dated scoreboard snapshot, ratchet, burn-down, and
@@ -1152,7 +1152,7 @@ residual), #229 (small-suite grounding).
 #### Next
 
 - Main lane: file the five upstream PolicyEngine issues from the measured
-  evidence and replace each `MAIN-LANE-TBD` placeholder with its issue URL.
+  evidence and replace each literal placeholder with its issue URL (done: policyengine-us#9167-#9171).
 - Review and merge this local branch through the campaign's authorized main
   lane. No worker implementation step remains.
 
@@ -1167,7 +1167,7 @@ residual), #229 (small-suite grounding).
   blind review verified both mechanisms; remapped the two shifted SALT
   evidence URLs (magi->9168, personal-property->9169); added
   evidence.upstream_url and the local comparison YAML source to all five
-  dispositions per the us-qbid-grid model; replaced the five MAIN-LANE-TBD
+  dispositions per the us-qbid-grid model; replaced the five literal
   literals in conformance/us-pe.yaml adoption notes and regenerated the
   detail copies; full check battery green.
 - Next: round-2 blind re-review, then merge after rulespec-us#1177 per the
