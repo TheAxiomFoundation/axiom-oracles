@@ -2,7 +2,8 @@
 
 ## State
 
-- Defensive correctness and completeness audit in progress.
+- Defensive correctness and completeness audit in progress; gate inventory is
+  complete and adversarial probing is underway.
 - Target gate branches are read only and will be inspected with `git show`.
 - This worktree will contain only the shared progress update, the audit report,
   and new xfailed mutant proofs.
@@ -12,12 +13,22 @@
 - Established the requested branch from `origin/main`.
 - Confirmed the named gate branches are available locally.
 - Confirmed the starting worktree was clean.
+- Mapped the branch graph: `evidence-validator@a312ace1` contains the latest
+  integrated certification, census, manifest, and evidence hardening;
+  `closure-universes@9414bc89` is the separate closure-gate tip.
+- Inventoried the existing mutant suites and prior remediations so fixed inputs
+  are not re-reported.
+- Read the AUTOGO ruling and five computed criteria from
+  `ops` branch `launch/certified-nodes` without touching that repository.
+- Checked the local GitNexus registry; this repository is not indexed, so the
+  audit is using direct branch-object and execution-flow analysis rather than
+  creating a forbidden index artifact.
 
 ## Next
 
-- Inventory each named gate and existing mutant suite.
 - Trace composition-level bindings between certification, closure, census,
   manifests, and evidence.
+- Prove or falsify each candidate hole against a hermetic branch snapshot.
 - Add clearly named `xfail` mutants for real gaps.
 - Write and verify the ranked report, then push and open a draft PR if possible.
 
