@@ -1498,3 +1498,33 @@ residual), #229 (small-suite grounding).
 ### Next
 
 - Handoff the committed local re-review ledger and `REVIEW-REPORT.md`.
+
+## Executable producer — 2026-07-29
+
+### State
+
+- Branch: `autogo/executable-producer-rebuild`, based on the locally available
+  `origin/main` at `2a1660d` because the network cannot currently resolve
+  `github.com`.
+- Intended publication ref: `autogo/executable-producer`.
+- Scope: add a deterministic, sign-only CI producer for executable receipts and
+  standalone receipt consumption by the certificate harness.
+- Existing workflows, toolchain files, dependency pins, and CODEOWNERS are
+  out of scope and must remain unchanged.
+
+### Done
+
+- Read the closure-sprint encoder preamble and repository-level instructions.
+- Confirmed the requested local branch/worktree already contained stale,
+  incomplete task work; preserved it untouched for read-only review.
+- Created this fresh worktree from the latest locally available `origin/main`.
+
+### Next
+
+- Inspect certified-node shape, parked `program-certificate` consumption,
+  stranger-path parity fixtures, release publication, and test conventions.
+- Define the release manifest, receipt schema/output path, producer workflow,
+  and fail-closed validation boundary.
+- Implement producer and certifier tests, including all required mutants.
+- Run focused and repository-level checks, review the diff, update this ledger,
+  and publish a draft PR if network access becomes available.
