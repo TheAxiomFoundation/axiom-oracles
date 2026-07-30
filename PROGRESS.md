@@ -2366,3 +2366,39 @@ residual), #229 (small-suite grounding).
   contract and conformance ledger to describe the honest residual.
 - Re-run the declared PolicyEngine stack, regenerate dependent artifacts,
   correct the six stale served rows, and run the full unchanged check battery.
+
+### 2026-07-30 PUB 275 binding removal
+
+#### State
+
+- Both `household_was_issued_pub_275` and
+  `household_has_online_access_to_pub_275` are now deliberately unmapped.
+- PUB 275 issuance or online access is a household administrative fact that
+  the Enhanced-CPS population does not carry. Neither the population encode
+  nor the oracle may assume it.
+- The expected consequence is accepted: the 157 PUB 275 rows return as
+  bridge-attributed residuals, while the 735 rows exposed only by the
+  unsupported true binding disappear. The exact rerun is still pending.
+
+#### Done
+
+- Removed the complete exact-match constant-true bridge rule for
+  `household_was_issued_pub_275`; no substitute or composite assumption was
+  added.
+- Replaced the positive mapping test with a negative contract requiring both
+  household-specific PUB 275 leaves to remain absent from the loaded
+  population mapping.
+- Passed all 14 focused population-mapping loader tests.
+- Recorded the only two principled resolutions for this residual: use a
+  population source that carries household PUB 275 issuance/access, or have
+  PolicyEngine model the same household gate. Until one occurs, the gap is a
+  visible bridge residual rather than manufactured eligibility.
+
+#### Next
+
+- Re-run all 7,101 California cases on PolicyEngine 4.18.9,
+  PolicyEngine-US 1.767.3, and PolicyEngine-Core 3.30.3, then verify the raw
+  and attributed taxonomy.
+- Preserve the correct 157-row encoding-to-bridge classification and both
+  independently valid upstream issue references; describe #9175 as a known
+  divergence that the corrected bridge may no longer expose.

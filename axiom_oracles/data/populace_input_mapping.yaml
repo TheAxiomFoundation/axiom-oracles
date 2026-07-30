@@ -250,23 +250,6 @@ mappings:
     scope: household
     source: { kind: constant, value: true }
 
-  # California administers the PUB 275 service trigger through the CalFresh
-  # application path: ACL 14-56 says the brochure is included in the
-  # application packet or on a linked website and requires CWDs to document
-  # delivery; ACL 15-42 retains that operative issuance/access trigger.
-  # Retained authority:
-  #   us-ca/guidance/cdss/acl-2014-14-56/page-3
-  #   us-ca/guidance/cdss/acl-2014-14-56/page-6
-  #   us-ca/guidance/cdss/acl-2015-15-42/page-2
-  # Bind one limb of the encoded OR as the statewide administrative fact.
-  # "Receipt ... in and of itself" is not sufficient for MCE because the
-  # encoded income, exclusion, and other-eligibility gates still apply.
-  - match:
-      kind: exact
-      value: household_was_issued_pub_275
-    scope: household
-    source: { kind: constant, value: true }
-
   - match: { kind: substring, value: household_in_project_area_solely_for_vacation }
     scope: household
     source: { kind: constant, value: false }
