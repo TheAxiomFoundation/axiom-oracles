@@ -1487,6 +1487,15 @@
       "source": "comparisons/us-seca-grid.yaml"
     },
     {
+      "suite": "us-taxable-income-grid",
+      "name": "us-taxable-income-grid",
+      "report": "axiom-policyengine-us-taxable-income-grid.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/us-taxable-income-grid.yaml"
+    },
+    {
       "suite": "ut-income-tax-liability",
       "name": "ut-income-tax-liability",
       "report": "axiom-policyengine-taxsim-ut-income-tax-liability.json",

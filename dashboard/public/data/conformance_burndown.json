@@ -612,11 +612,11 @@
       {
         "date": "2026-07-30",
         "in_scope": 127,
-        "covered": 36,
-        "uncovered": 91,
+        "covered": 37,
+        "uncovered": 90,
         "unexplained": 244,
         "axiom_attributed_open": 157,
-        "gap": 492,
+        "gap": 491,
         "conformant": false
       }
     ]

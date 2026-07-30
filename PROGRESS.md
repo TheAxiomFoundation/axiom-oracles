@@ -1858,3 +1858,36 @@ residual), #229 (small-suite grounding).
 - Commit the adoption source change.
 - Run the complete dispositions, grids, affected-map, vacuity, dated
   scoreboard snapshot, ratchet, burndown, and overview regeneration chain.
+
+### Checkpoint — derived-data regeneration and parity
+
+#### State
+
+- The taxable-income adoption source is committed at `7f2356d2`.
+- The full required regeneration chain was run with the UTC scoreboard
+  snapshot date `2026-07-30`.
+
+#### Done
+
+- Re-applied dispositions, extracted every jurisdiction grid, regenerated the
+  affected map and freshness register, wrote the dated scoreboard/detail
+  snapshot, tightened the ratchet, rebuilt the burndown, and rebuilt the
+  dashboard overview.
+- Every paired parity command passes:
+  `apply_dispositions.py --check`, `extract_grids.py --check`,
+  `generate_affected_map.py --check`, `check_vacuous_gate.py --check`,
+  `conformance_scoreboard.py --check`, `conformance_ratchet.py --check`,
+  `conformance_burndown.py --check`, and
+  `generate_dashboard_overview.py --check`.
+- The exact-stack federal-generator plus conformance test battery passes with
+  119 tests and 2 environment-conditioned skips. Ruff and diff hygiene pass.
+- The regeneration changed only the expected affected-map, us-pe detail,
+  dated history, scoreboard, ratchet, burndown, freshness, and overview
+  artifacts; canonical grids were already byte-identical.
+
+#### Next
+
+- Commit the derived artifacts.
+- Run the full repository test/lint battery, inspect final containment and
+  committed history, append the closeout ledger entry, and write the untracked
+  worker report.
