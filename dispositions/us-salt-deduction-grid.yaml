@@ -1,0 +1,120 @@
+schema: axiom_oracles.dispositions.v1
+suite: us-salt-deduction-grid
+updated: "2026-07-29"
+entries:
+  - id: salt-low-agi-engine-cap
+    concept: us:policies/income_tax/salt_deduction_pipeline#federal_salt_deduction
+    case_id: salt-low-agi-engine-cap
+    kind: amount_difference
+    disposition: upstream_engine_gap
+    evidence:
+      upstream_url: https://github.com/PolicyEngine/policyengine-us/issues/9167
+      mechanism: >-
+        issue: https://github.com/PolicyEngine/policyengine-us/issues/9167. At the pinned 2026 stack, PE-US 1.767.3
+        parameter path gov.simulation.limit_itemized_deductions_to_taxable_income
+        is true. salt_deduction.py therefore replaces the otherwise allowable
+        10,000 SALT component with min(10,000, max(0, AGI 5,000 - exemptions
+        0)) = 5,000 before applying the 40,400 SALT cap. 26 USC 164(a) and
+        (b)(6)-(7) allow the 10,000 completed personal-tax amount here and do
+        not impose this simulation-only component ceiling; any zero floor on
+        taxable income belongs downstream. Axiom therefore returns 10,000 and
+        PE returns 5,000.
+      arithmetic:
+        - expression: "5000 - 0"
+          equals: 5000
+        - expression: "10000 - 5000"
+          equals: 5000
+      sources:
+        - comparisons/us-salt-deduction-grid.yaml
+        - https://uscode.house.gov/view.xhtml?req=%28title%3A26+section%3A164+edition%3Aprelim%29
+        - https://www.congress.gov/119/plaws/publ21/PLAW-119publ21.pdf
+        - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/variables/gov/irs/income/taxable_income/deductions/itemizing/salt.py#L4-L11
+        - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/variables/gov/irs/income/taxable_income/deductions/itemizing/salt_cap.py#L12-L24
+        - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/variables/gov/irs/income/taxable_income/deductions/itemizing/salt_deduction.py#L15-L23
+        - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/parameters/gov/simulation/limit_itemized_deductions_to_taxable_income.yaml#L1-L3
+        - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/parameters/gov/irs/deductions/itemized/salt_and_real_estate/cap.yaml#L53-L64
+    expires_on_source_change: true
+    pinned:
+      left: 10000
+      right: 5000
+      difference: 5000
+
+  - id: salt-magi-omits-section-911-addback
+    concept: us:policies/income_tax/salt_deduction_pipeline#federal_salt_deduction
+    case_id: salt-magi-911-addback
+    kind: amount_difference
+    disposition: upstream_engine_gap
+    evidence:
+      upstream_url: https://github.com/PolicyEngine/policyengine-us/issues/9168
+      mechanism: >-
+        issue: https://github.com/PolicyEngine/policyengine-us/issues/9168. 26 USC 164(b)(7)(B)(iv) defines SALT MAGI as
+        adjusted gross income increased by exclusions under sections 911,
+        931, and 933. This case has AGI 500,000, a bridge-observed section 911
+        exclusion of 10,000, and 50,000 of completed SALT. Law therefore uses
+        MAGI 510,000 and phases the 40,400 cap down by 30 percent of the 5,000
+        excess over the 505,000 threshold, producing 38,900. Pinned
+        salt_cap.py reads only adjusted_gross_income, even though PE observes
+        foreign_earned_income_exclusion=10,000; it sees no threshold excess
+        and returns 40,400. The source parameter paths are
+        gov.irs.deductions.itemized.salt_and_real_estate.cap,
+        phase_out.threshold, and phase_out.rate.
+      arithmetic:
+        - expression: "500000 + 10000"
+          equals: 510000
+        - expression: "40400 - 0.30 * (510000 - 505000)"
+          equals: 38900
+        - expression: "40400 - 0.30 * 0"
+          equals: 40400
+        - expression: "38900 - 40400"
+          equals: -1500
+      sources:
+        - comparisons/us-salt-deduction-grid.yaml
+        - https://uscode.house.gov/view.xhtml?req=%28title%3A26+section%3A164+edition%3Aprelim%29
+        - https://www.congress.gov/119/plaws/publ21/PLAW-119publ21.pdf
+        - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/variables/gov/irs/income/taxable_income/deductions/itemizing/salt.py#L4-L11
+        - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/variables/gov/irs/income/taxable_income/deductions/itemizing/salt_cap.py#L12-L24
+        - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/variables/gov/irs/income/taxable_income/deductions/itemizing/salt_deduction.py#L15-L23
+        - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/parameters/gov/irs/deductions/itemized/salt_and_real_estate/cap.yaml#L53-L64
+        - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/parameters/gov/irs/deductions/itemized/salt_and_real_estate/phase_out/threshold.yaml#L12-L14
+        - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/parameters/gov/irs/deductions/itemized/salt_and_real_estate/phase_out/rate.yaml#L1-L4
+    expires_on_source_change: true
+    pinned:
+      left: 38900
+      right: 40400
+      difference: -1500
+
+  - id: salt-aggregate-omits-personal-property-tax
+    concept: us:policies/income_tax/salt_deduction_pipeline#federal_salt_deduction
+    case_id: salt-personal-property-tax-probe
+    kind: amount_difference
+    disposition: upstream_engine_gap
+    evidence:
+      upstream_url: https://github.com/PolicyEngine/policyengine-us/issues/9169
+      mechanism: >-
+        issue: https://github.com/PolicyEngine/policyengine-us/issues/9169. 26 USC 164(a)(2), with the definition in
+        164(b)(1), allows this completed 4,000 annual ad valorem state/local
+        personal-property tax. Axiom includes it in SALT before the cap and
+        returns 4,000. Pinned salt.py delegates its aggregate to parameter
+        path gov.irs.deductions.itemized.salt_and_real_estate.sources, whose
+        complete list is only state_and_local_sales_or_income_tax and
+        real_estate_taxes. Both represented PE sources are zero in this probe;
+        PE-US has no independently bindable personal-property-tax category,
+        so its salt and salt_deduction diagnostics are both zero.
+      arithmetic:
+        - expression: "4000 + 0 + 0"
+          equals: 4000
+        - expression: "4000 - 0"
+          equals: 4000
+      sources:
+        - comparisons/us-salt-deduction-grid.yaml
+        - https://uscode.house.gov/view.xhtml?req=%28title%3A26+section%3A164+edition%3Aprelim%29
+        - https://www.congress.gov/119/plaws/publ21/PLAW-119publ21.pdf
+        - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/variables/gov/irs/income/taxable_income/deductions/itemizing/salt.py#L4-L11
+        - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/variables/gov/irs/income/taxable_income/deductions/itemizing/salt_cap.py#L12-L24
+        - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/variables/gov/irs/income/taxable_income/deductions/itemizing/salt_deduction.py#L15-L23
+        - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/parameters/gov/irs/deductions/itemized/salt_and_real_estate/sources.yaml#L1-L5
+    expires_on_source_change: true
+    pinned:
+      left: 4000
+      right: 0
+      difference: 4000

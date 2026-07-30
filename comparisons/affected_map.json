@@ -1424,6 +1424,15 @@
       "source": "comparisons/us-elderly-disabled-grid.yaml"
     },
     {
+      "suite": "us-itemized-taxable-income-deductions-grid",
+      "name": "us-itemized-taxable-income-deductions-grid",
+      "report": "axiom-policyengine-us-itemized-taxable-income-deductions-grid.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/us-itemized-taxable-income-deductions-grid.yaml"
+    },
+    {
       "suite": "us-llc-grid",
       "name": "us-llc-grid",
       "report": "axiom-policyengine-us-llc-grid.json",
@@ -1449,6 +1458,15 @@
         "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/us-qbid-grid.yaml"
+    },
+    {
+      "suite": "us-salt-deduction-grid",
+      "name": "us-salt-deduction-grid",
+      "report": "axiom-policyengine-us-salt-deduction-grid.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/us-salt-deduction-grid.yaml"
     },
     {
       "suite": "us-savers-grid",

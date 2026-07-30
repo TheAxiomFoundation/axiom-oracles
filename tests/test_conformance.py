@@ -616,6 +616,8 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
         "us-qbid-grid",
         "us-savers-grid",
         "us-seca-grid",
+        "us-salt-deduction-grid",
+        "us-itemized-taxable-income-deductions-grid",
     }
     covered = {p.suite for p in universe.in_scope() if p.suite is not None}
     assert covered <= live_pe_suites
@@ -640,6 +642,42 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
         by_name["qualified_business_income_deduction"].suite
         == "us-qbid-grid"
     )
+    assert (
+        by_name["itemized_taxable_income_deductions"].suite
+        == "us-itemized-taxable-income-deductions-grid"
+    )
+    assert (
+        "all five filing statuses"
+        in by_name["itemized_taxable_income_deductions"].note
+    )
+    assert by_name["salt_deduction"].suite == "us-salt-deduction-grid"
+    assert "all five filing statuses" in by_name["salt_deduction"].note
+    chunk_one_suites = {
+        "us-salt-deduction-grid",
+        "us-itemized-taxable-income-deductions-grid",
+    }
+    assert {
+        row.oracle_policy_name: row.suite
+        for row in universe.in_scope()
+        if row.suite in chunk_one_suites
+    } == {
+        "salt_deduction": "us-salt-deduction-grid",
+        "itemized_taxable_income_deductions": (
+            "us-itemized-taxable-income-deductions-grid"
+        ),
+    }
+    assert {
+        name: by_name[name].suite
+        for name in (
+            "alternative_minimum_tax",
+            "foreign_tax_credit",
+            "taxable_income",
+        )
+    } == {
+        "alternative_minimum_tax": None,
+        "foreign_tax_credit": None,
+        "taxable_income": None,
+    }
     assert by_name["savers_credit"].suite == "us-savers-grid"
     assert "34 fixture-bound" in by_name["savers_credit"].note
     assert "reviewed direct PE-US target" in by_name["savers_credit"].note

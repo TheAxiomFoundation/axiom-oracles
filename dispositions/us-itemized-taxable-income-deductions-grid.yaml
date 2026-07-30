@@ -1,0 +1,102 @@
+schema: axiom_oracles.dispositions.v1
+suite: us-itemized-taxable-income-deductions-grid
+updated: "2026-07-29"
+entries:
+  - id: itemized-section-68-base-uses-agi-proxy
+    concept: us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_itemized_taxable_income_deductions
+    case_id: itemized-68-other-deduction-base
+    kind: amount_difference
+    disposition: upstream_engine_gap
+    evidence:
+      upstream_url: https://github.com/PolicyEngine/policyengine-us/issues/9170
+      mechanism: >-
+        issue: https://github.com/PolicyEngine/policyengine-us/issues/9170. Under 26 USC 68(a)(2), the relevant base is
+        taxable income determined without section 68, increased by the
+        itemized deductions otherwise allowable. Here the completed lawful
+        scalar is 550,000 and pre-section-68 itemized deductions are 50,000;
+        after the separate 100,000 below-line deduction, 600,000 is below the
+        640,600 single threshold, so the lawful reduction is zero and Axiom
+        returns 50,000. Pinned itemized_taxable_income_deductions_reduction.py
+        instead forms taxable_income=max(0, adjusted_gross_income - exemptions).
+        With AGI 700,000 and exemptions zero it gets a 59,400 excess, takes
+        the lesser 50,000, and applies parameter path
+        gov.irs.deductions.itemized.limitation.obbb.rate=0.05405405. Its
+        observed float32 reduction is 2702.702392578125, and the final
+        subtraction in itemized_taxable_income_deductions.py returns
+        47297.296875. PE never consumes the completed lawful section-68 base.
+      arithmetic:
+        - expression: "700000 - 100000"
+          equals: 600000
+        - expression: "550000 + 50000 - 640600"
+          equals: -40600
+        - expression: "700000 - 640600"
+          equals: 59400
+        - expression: "50000 * 0.05405405"
+          equals: 2702.7025
+        - expression: "50000 - 47297.296875"
+          equals: 2702.703125
+      sources:
+        - comparisons/us-itemized-taxable-income-deductions-grid.yaml
+        - https://uscode.house.gov/view.xhtml?req=%28title%3A26+section%3A68+edition%3Aprelim%29
+        - https://www.congress.gov/119/plaws/publ21/PLAW-119publ21.pdf
+        - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/variables/gov/irs/income/taxable_income/deductions/itemizing/total_itemized_taxable_income_deductions.py#L4-L11
+        - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/variables/gov/irs/income/taxable_income/deductions/itemizing/itemized_taxable_income_deductions_reduction.py#L11-L40
+        - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/variables/gov/irs/income/taxable_income/deductions/itemizing/itemized_taxable_income_deductions.py#L11-L14
+        - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/parameters/gov/irs/deductions/itemized_deductions.yaml#L1-L24
+        - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/parameters/gov/irs/deductions/itemized/limitation/obbb/applies.yaml#L1-L5
+        - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/parameters/gov/irs/deductions/itemized/limitation/obbb/rate.yaml#L1-L4
+        - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/parameters/gov/irs/income/bracket.yaml#L529-L540
+    expires_on_source_change: true
+    pinned:
+      left: 50000
+      right: 47297.296875
+      difference: 2702.703125
+
+  - id: itemized-section-68-rate-truncated-float32
+    concept: us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_itemized_taxable_income_deductions
+    case_id: itemized-68-rational-rate
+    kind: amount_difference
+    disposition: upstream_engine_gap
+    evidence:
+      upstream_url: https://github.com/PolicyEngine/policyengine-us/issues/9171
+      mechanism: >-
+        issue: https://github.com/PolicyEngine/policyengine-us/issues/9171. 26 USC 68(a) requires the exact rational 2/37
+        reduction. This case makes the lesser-of base exactly 10,000,000, so
+        the lawful reduction is 20,000,000/37 = 540540.540540... and the
+        lawful final is 350,000,000/37 = 9459459.459459... (the generator's
+        float left value is 9459459.45945946). Pinned parameter path
+        gov.irs.deductions.itemized.limitation.obbb.rate stores the truncated
+        decimal 0.05405405. PE's observed float32 reduction is 540540.5, and
+        its float32 final subtraction rounds to 9459460.0. This is a source
+        parameter truncation amplified by the declared engine representation,
+        not a tolerance-only residual; the one-cent suite tolerance remains
+        unchanged.
+      arithmetic:
+        - expression: "10000000 * 2 / 37"
+          equals: 540540.5405405405
+          tolerance: 1.0e-8
+        - expression: "10000000 - 10000000 * 2 / 37"
+          equals: 9459459.45945946
+          tolerance: 1.0e-8
+        - expression: "10000000 * 0.05405405"
+          equals: 540540.5
+          tolerance: 1.0e-8
+        - expression: "9459459.45945946 - 9459460"
+          equals: -0.5405405405908823
+          tolerance: 1.0e-9
+      sources:
+        - comparisons/us-itemized-taxable-income-deductions-grid.yaml
+        - https://uscode.house.gov/view.xhtml?req=%28title%3A26+section%3A68+edition%3Aprelim%29
+        - https://www.congress.gov/119/plaws/publ21/PLAW-119publ21.pdf
+        - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/variables/gov/irs/income/taxable_income/deductions/itemizing/total_itemized_taxable_income_deductions.py#L4-L11
+        - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/variables/gov/irs/income/taxable_income/deductions/itemizing/itemized_taxable_income_deductions_reduction.py#L11-L40
+        - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/variables/gov/irs/income/taxable_income/deductions/itemizing/itemized_taxable_income_deductions.py#L11-L14
+        - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/parameters/gov/irs/deductions/itemized_deductions.yaml#L1-L24
+        - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/parameters/gov/irs/deductions/itemized/limitation/obbb/applies.yaml#L1-L5
+        - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/parameters/gov/irs/deductions/itemized/limitation/obbb/rate.yaml#L1-L4
+        - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/parameters/gov/irs/income/bracket.yaml#L529-L540
+    expires_on_source_change: true
+    pinned:
+      left: 9459459.45945946
+      right: 9459460
+      difference: -0.5405405405908823

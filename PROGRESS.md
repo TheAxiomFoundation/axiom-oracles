@@ -1498,3 +1498,226 @@ residual), #229 (small-suite grounding).
 ### Next
 
 - Handoff the committed local re-review ledger and `REVIEW-REPORT.md`.
+
+---
+
+## Spine Chunk 1 oracle build — SALT + itemized deductions — 2026-07-29
+
+### State
+
+- Worktree: `axiom-oracles/_worktrees/chunk1-oracle`.
+- Branch: `fed-parity/chunk1-oracle-suites`.
+- Starting point: local `origin/main`
+  `f8ea6027984b9da73c6f4b58d15a20b450181ac4` (tree
+  `27d02d523547c23a5a29d38a98babe90021420b6`).
+- Scope: add the `us-salt-deduction-grid` and
+  `us-itemized-taxable-income-deductions-grid` oracle suites specified by
+  `SPINE-PLAN.md`, adopt exactly their two `us-pe` rows, and regenerate the
+  dependent conformance/dashboard artifacts.
+- Constraints: local commits only; no push or GitHub writes; expected values
+  must come from the engine-verified RuleSpec PR #1177 companions;
+  `WORKER-REPORT.md` remains untracked.
+
+### Done
+
+- Verified the source checkout was clean and the requested branch/worktree did
+  not already exist.
+- Created this branch and worktree directly from the recorded local
+  `origin/main`.
+- Began read-only inspection of the binding plan, RuleSpec companion evidence,
+  generator contracts, and regeneration pipeline.
+
+### Next
+
+- Pin the exact RuleSpec PR #1177 head SHA/tree and transcribe the two verified
+  companion case inventories into generator configs.
+- Implement the generator, tests, bridge mappings, conformance rows, and
+  evidence-rich divergence dispositions in coherent committed steps.
+- Run real PolicyEngine generation on the declared stack, then the full
+  regeneration and `--check` gate chain.
+
+### Checkpoint — runner and registry implementation
+
+#### State
+
+- RuleSpec PR #1177 is pinned at
+  `f4cc1b88d1efd8dcca25058695dc1735c0fbb3de` (tree
+  `3388c508f2d565f3c067d3f9beb4bfd03182b9b1`) through the two comparison
+  registries.
+- Both federal configs, their complete adopted case inventories, their strict
+  fixture contracts, the SALT output bridge, itemized diagnostic
+  reconciliation, and all seven reviewed mapping rows are implemented.
+
+#### Done
+
+- Added explicit HOH and surviving-spouse situations and confirmed live PE
+  simulations return filing-status enum values `0, 1, 2, 3, 4`.
+- Added missing/extra/nonnumeric bridge rejection, compared-output separation,
+  RuleSpec domain/only-input closure, undeclared PE-override rejection, and a
+  fresh-Simulation-per-case test.
+- Corrected the SALT builder after exact-stack measurement proved
+  `real_estate_taxes` is a Person input in PE-US 1.767.3; the implementation
+  error was fixed rather than dispositioned.
+- The focused generator suite passes all 32 tests under Python 3.13 with
+  PolicyEngine 4.18.9, PE-US 1.767.3, and Core 3.30.3. Ruff and
+  `git diff --check` pass.
+
+#### Next
+
+- Commit the runner/registry step, then commit measured per-case evidence and
+  dashboard reports separately.
+- Regenerate the adoption/scoreboard chain and run every available
+  `--check` gate before final handoff.
+
+### Checkpoint — measured divergence evidence
+
+#### State
+
+- The two reports were generated from the clean pinned RuleSpec snapshot with
+  Python 3.13, PolicyEngine 4.18.9, PE-US 1.767.3, and Core 3.30.3.
+- Every raw mismatch belongs to a pre-registered §6.1/§6.2 divergence class;
+  there are no boundary or unexplained implementation mismatches.
+
+#### Done
+
+- SALT measured `13/16` raw matches. Exact Axiom/PE values are:
+  low-AGI ceiling `10000/5000`, §911 MAGI add-back `38900/40400`, and
+  personal-property tax `4000/0`.
+- Itemized deductions measured `15/17` raw matches. Exact Axiom/PE finals are:
+  other-deduction §68 base `50000/47297.296875` (PE reduction
+  `2702.702392578125`) and rational-rate probe
+  `9459459.45945946/9459460` (PE reduction `540540.5`).
+- Added one evidence-rich, source-expiring disposition per mismatching case,
+  retaining a literal placeholder (since replaced with the filed issue URLs, policyengine-us#9167-#9171) for the main lane to fill after filing
+  upstream issues. Both suites validate at 100% explained parity with zero
+  orphaned, expired, or unexplained entries.
+- Emitted the two declared dashboard reports with RuleSpec and engine
+  provenance and confirmed `apply_dispositions.py --check`.
+
+#### Next
+
+- Commit the measured evidence/reports.
+- Adopt exactly the two requested conformance rows, execute the ordered full
+  regeneration chain, and prove write/check parity.
+
+### Checkpoint — refreshed pin, adoption, and derived-data parity
+
+#### State
+
+- A final upstream audit found RuleSpec PR #1177 had advanced after the first
+  evidence run. The authoritative pin is now
+  `345c22030642cbd37a9fe46877591a8e1df5af7e` (tree
+  `40e08f7dbaa88a70660006f3a5a32bfa283ebd85`) in both comparison registries
+  and both regenerated reports.
+- The two adopted companion files are byte-unchanged between the earlier
+  signed head and this repaired/re-signed head, and all five measured values
+  reproduced exactly.
+
+#### Done
+
+- Adopted only `us-pe:salt_deduction` and
+  `us-pe:itemized_taxable_income_deductions`. Their notes state the 2026 exact
+  engine stack, `16/16` and `16/17` nonzero counts, completed-return
+  boundaries, explicit exclusions, and named placeholder issue
+  placeholders.
+- Ran the full ordered write chain: dispositions, grids, affected map,
+  vacuous/freshness gate, dated scoreboard snapshot, ratchet, burn-down, and
+  dashboard overview. No grid file changed.
+- Ran all eight check forms successfully: 85 disposition files; 174 affected
+  suites / 183 edges; 138 oracle-backed configs; 217 suites / 34 executable
+  surfaces; 4 scoreboard jurisdictions / 3 conformant; no ratchet regression;
+  4 burn-down series / 57 points; 218 overview reports.
+- Focused exact-stack validation passes: 33 generator tests and 81 conformance
+  tests with 2 unrelated skips. The broader validation pass previously
+  completed 716 additional relevant tests with 2 unrelated skips. Ruff and
+  `git diff --check` pass.
+- US-PE coverage rises from 34 to 36 rows. Only the two requested detail rows
+  change; unexplained and Axiom-attributed-open counts do not increase.
+
+#### Next
+
+- Commit the conformance and derived adoption artifacts.
+- Perform one final live-pin/containment audit, write the untracked
+  `WORKER-REPORT.md`, append the closing ledger entry, and hand off without
+  pushing.
+
+### Checkpoint — final-review test closure
+
+#### State
+
+- Final review found no numerical, mapping, disposition, provenance, or
+  containment defect, but identified two missing direct assertions in the
+  generator tests.
+- Both test gaps are now closed before the adoption commit.
+
+#### Done
+
+- Replaced the self-referential Chunk 1 fixture test with a durable comparison:
+  all 33 committed report `axiom_fixture_inputs` mappings are checked against
+  the applicable exact fixture validator and RuleSpec input contract.
+- Added a live exact-stack test that invokes both Chunk 1 PE parameter
+  validators and independently asserts the complete §5 expected mappings:
+  SALT sources/caps/thresholds/rate/floors/flags and itemized aggregate,
+  applicability flags, five thresholds, and stored OBBBA rate.
+- Exact-stack validation now passes 34 generator tests and 81 conformance tests
+  with 2 unrelated skips. Ruff and `git diff --check` pass.
+- Re-ran all eight read-only derived-data gates successfully: dispositions,
+  grids, affected map, vacuous gate, scoreboard, ratchet, burn-down, and
+  dashboard overview.
+
+#### Next
+
+- Commit the adoption artifacts and closed test contract.
+- Complete the final live-pin/containment audit, append the closing ledger
+  entry, and write the untracked worker report.
+
+### Checkpoint — worker closeout
+
+#### State
+
+- The complete implementation is committed through `3cf99290`.
+- The branch contains only the 26 intended ledger, generator, suite,
+  disposition, mapping, conformance, test, history, and dashboard paths
+  relative to `origin/main`.
+- Both comparison registries and both reports pin live RuleSpec branch
+  `fed-parity/chunk1-salt-itemized` at
+  `345c22030642cbd37a9fe46877591a8e1df5af7e` (tree
+  `40e08f7dbaa88a70660006f3a5a32bfa283ebd85`); the external worktree and its
+  local origin ref agree exactly.
+
+#### Done
+
+- Final targeted review passed the two repaired test requirements and reported
+  no remaining blocker.
+- Reconfirmed raw/dispositioned results of SALT `13/16 -> 16/16` and itemized
+  `15/17 -> 17/17`, with all five mismatches tied to their pre-registered,
+  source-expiring evidence entries.
+- Reconfirmed all eight derived-data gates, exact-stack focused tests, Ruff,
+  diff hygiene, live pin, and changed-path containment.
+- No corpus citation path changed, so the conditional citation census is not
+  applicable; this repository exposes no citation-census command.
+- No branch was pushed and no GitHub write was made.
+
+#### Next
+
+- Main lane: file the five upstream PolicyEngine issues from the measured
+  evidence and replace each literal placeholder with its issue URL (done: policyengine-us#9167-#9171).
+- Review and merge this local branch through the campaign's authorized main
+  lane. No worker implementation step remains.
+
+## 2026-07-28 main-lane closeout: issues filed, placeholders resolved (chunk1-oracle)
+
+- State: review round 1 findings repaired on the main lane.
+- Done: filed policyengine-us#9167 (simulation taxable-income ceiling),
+  #9168 (AGI vs section 164(b)(7)(B)(iv) MAGI phaseout), #9169
+  (personal-property-tax source omission), #9170 (section 68 proxy base),
+  #9171 (truncated 2/37 rate); corrected #9168's repro entity binding and
+  statutory subsection and #9170's pinned-arithmetic statement after the
+  blind review verified both mechanisms; remapped the two shifted SALT
+  evidence URLs (magi->9168, personal-property->9169); added
+  evidence.upstream_url and the local comparison YAML source to all five
+  dispositions per the us-qbid-grid model; replaced the five literal
+  literals in conformance/us-pe.yaml adoption notes and regenerated the
+  detail copies; full check battery green.
+- Next: round-2 blind re-review, then merge after rulespec-us#1177 per the
+  section 9 pairing order.
