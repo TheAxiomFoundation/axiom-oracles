@@ -2130,3 +2130,48 @@ residual), #229 (small-suite grounding).
 - Trace the 735 newly exposed rows through PolicyEngine's TANF non-cash and
   SNAP categorical-eligibility tests, then update dispositions only where the
   causal evidence supports a specific taxonomy.
+
+### 2026-07-30 causal classification and dispositions
+
+#### State
+
+- All 1,058 mismatch rows now have an honest post-bridge taxonomy: 0 encoding,
+  121 bridge, 745 upstream, and 192 unexplained.
+- The CA disposition source selects 866 live rows with no expired or orphaned
+  entries. Generated reports, cases, and shared artifacts are not yet updated.
+
+#### Done
+
+- Replayed the 735 newly exposed rows on the declared exact stack. For 353
+  paired cases, two eligibility-only cases, and 15 benefit-only cases,
+  changing only PolicyEngine's extra TANF non-cash net-income test to true
+  clears exactly 723 rows. Their sorted row-identity receipt is
+  `862c27d5068e3ccbff79b52876fa19f23e63a0d38e3ed6763b375e8e3bd437bd`.
+- Classified the two `ecps-69070` rows as an upstream threshold-
+  parameterization gap. Retained ACIN I-46-25 Attachment I sets the
+  two-person MCE limit to `$3,526`; Axiom's `$3,525.29` passes that table,
+  while PolicyEngine divides by an unrounded monthly poverty guideline and
+  obtains ratio `2.0001626`, which fails its exact `<= 2` gate.
+- Classified eight negative-self-employment rows as bridge artifacts. Axiom's
+  generic synthetic income permits losses to offset other earned income;
+  PolicyEngine floors SNAP self-employment income after expenses at zero.
+- Classified `ecps-58498` benefit as the TANF bridge half of a documented
+  interaction: neither zeroing the population-only TANF amount nor waiving
+  PolicyEngine's extra net test closes the row alone, but both together yield
+  `$184.90` versus Axiom's `$184`, within the unchanged `$7` tolerance.
+- Classified `ecps-68027` benefit as population-adapter batch contamination.
+  The production 100-household slice reports PolicyEngine net income
+  `$274,757.41` and benefit zero; direct and independent 377-case evaluation
+  of the same household reports `$62.10`, matching Axiom's `$62`. It is the
+  only newly exposed row whose production right value differs from the
+  independent causal-diagnostic baseline.
+- Applied the new and retained dispositions to the complete candidate report:
+  121 bridge and 745 upstream rows are selected, 192 remain unexplained, and
+  no disposition entry is expired or orphaned.
+
+#### Next
+
+- Install the complete candidate report, regenerate the CA disposition/case
+  artifacts and shared conformance derivatives, then update the frozen #423
+  provenance guards for the new RuleSpec SHA and explicit reclassification
+  partition.

@@ -2,225 +2,570 @@ schema: axiom_oracles.dispositions.v1
 suite: ca-snap-ecps
 updated: '2026-07-30'
 entries:
-- id: ca-bbce-pub275-bridge-snap_eligible
+- id: ca-mce-pe-extra-net-test-paired-eligibility
   concept: us:statutes/7/2014/o#snap_eligible
-  kind: eligibility_right_only
+  kind: eligibility_left_only
   case_selector:
-    case_ids:
-    - ecps-56918
-    - ecps-57033
-    - ecps-57143
-    - ecps-57151
-    - ecps-57178
-    - ecps-57285
-    - ecps-57297
-    - ecps-57332
-    - ecps-57391
-    - ecps-57518
-    - ecps-57612
-    - ecps-57682
-    - ecps-57702
-    - ecps-57733
-    - ecps-57750
-    - ecps-57828
-    - ecps-58282
-    - ecps-58315
-    - ecps-58542
-    - ecps-58560
-    - ecps-58567
-    - ecps-58577
-    - ecps-58579
-    - ecps-58792
-    - ecps-58840
-    - ecps-58966
-    - ecps-58985
-    - ecps-59040
-    - ecps-59219
-    - ecps-59249
-    - ecps-59262
-    - ecps-59263
-    - ecps-59304
-    - ecps-59340
-    - ecps-59390
-    - ecps-59407
-    - ecps-59452
-    - ecps-59507
-    - ecps-59629
-    - ecps-59743
-    - ecps-59781
-    - ecps-59799
-    - ecps-60126
-    - ecps-60304
-    - ecps-60325
-    - ecps-60377
-    - ecps-60455
-    - ecps-60472
-    - ecps-60515
-    - ecps-60577
-    - ecps-60642
-    - ecps-60738
-    - ecps-60804
-    - ecps-60858
-    - ecps-60867
-    - ecps-60887
-    - ecps-61013
-    - ecps-61105
-    - ecps-61211
-    - ecps-61255
-    - ecps-61290
-    - ecps-61422
-    - ecps-61444
-    - ecps-61463
-    - ecps-61667
-    - ecps-61721
-    - ecps-61735
-    - ecps-61786
-    - ecps-61858
-    - ecps-62004
-    - ecps-62128
-    - ecps-62362
-    - ecps-62429
-    - ecps-62549
-    - ecps-62589
-    - ecps-62761
-    - ecps-62850
-    - ecps-62888
-    - ecps-68027
-  disposition: bridge_artifact
-  evidence:
+    case_ids: &ca_mce_net_paired_cases
+    - ecps-56903
+    - ecps-56908
+    - ecps-56914
+    - ecps-56928
+    - ecps-56931
+    - ecps-56941
+    - ecps-56954
+    - ecps-56959
+    - ecps-56985
+    - ecps-56988
+    - ecps-56993
+    - ecps-57007
+    - ecps-57017
+    - ecps-57036
+    - ecps-57087
+    - ecps-57089
+    - ecps-57092
+    - ecps-57101
+    - ecps-57105
+    - ecps-57150
+    - ecps-57172
+    - ecps-57176
+    - ecps-57225
+    - ecps-57233
+    - ecps-57241
+    - ecps-57246
+    - ecps-57247
+    - ecps-57265
+    - ecps-57293
+    - ecps-57330
+    - ecps-57333
+    - ecps-57338
+    - ecps-57343
+    - ecps-57387
+    - ecps-57413
+    - ecps-57434
+    - ecps-57438
+    - ecps-57444
+    - ecps-57455
+    - ecps-57460
+    - ecps-57464
+    - ecps-57480
+    - ecps-57525
+    - ecps-57532
+    - ecps-57549
+    - ecps-57559
+    - ecps-57563
+    - ecps-57573
+    - ecps-57590
+    - ecps-57593
+    - ecps-57594
+    - ecps-57595
+    - ecps-57613
+    - ecps-57615
+    - ecps-57633
+    - ecps-57663
+    - ecps-57723
+    - ecps-57757
+    - ecps-57802
+    - ecps-57823
+    - ecps-57863
+    - ecps-57866
+    - ecps-57885
+    - ecps-57890
+    - ecps-57896
+    - ecps-57904
+    - ecps-57905
+    - ecps-57913
+    - ecps-57921
+    - ecps-57938
+    - ecps-57965
+    - ecps-57973
+    - ecps-57984
+    - ecps-57996
+    - ecps-58025
+    - ecps-58041
+    - ecps-58069
+    - ecps-58071
+    - ecps-58073
+    - ecps-58092
+    - ecps-58098
+    - ecps-58114
+    - ecps-58122
+    - ecps-58128
+    - ecps-58155
+    - ecps-58221
+    - ecps-58254
+    - ecps-58268
+    - ecps-58280
+    - ecps-58297
+    - ecps-58348
+    - ecps-58352
+    - ecps-58377
+    - ecps-58408
+    - ecps-58430
+    - ecps-58435
+    - ecps-58445
+    - ecps-58447
+    - ecps-58472
+    - ecps-58482
+    - ecps-58526
+    - ecps-58596
+    - ecps-58605
+    - ecps-58614
+    - ecps-58631
+    - ecps-58633
+    - ecps-58649
+    - ecps-58651
+    - ecps-58686
+    - ecps-58688
+    - ecps-58690
+    - ecps-58691
+    - ecps-58718
+    - ecps-58747
+    - ecps-58771
+    - ecps-58804
+    - ecps-58813
+    - ecps-58819
+    - ecps-58831
+    - ecps-58843
+    - ecps-58850
+    - ecps-58852
+    - ecps-58894
+    - ecps-58919
+    - ecps-58947
+    - ecps-58954
+    - ecps-58957
+    - ecps-58959
+    - ecps-58972
+    - ecps-58986
+    - ecps-59009
+    - ecps-59017
+    - ecps-59018
+    - ecps-59032
+    - ecps-59033
+    - ecps-59048
+    - ecps-59060
+    - ecps-59088
+    - ecps-59111
+    - ecps-59123
+    - ecps-59167
+    - ecps-59208
+    - ecps-59209
+    - ecps-59220
+    - ecps-59223
+    - ecps-59240
+    - ecps-59267
+    - ecps-59280
+    - ecps-59291
+    - ecps-59310
+    - ecps-59364
+    - ecps-59385
+    - ecps-59386
+    - ecps-59392
+    - ecps-59436
+    - ecps-59438
+    - ecps-59442
+    - ecps-59457
+    - ecps-59475
+    - ecps-59477
+    - ecps-59478
+    - ecps-59484
+    - ecps-59489
+    - ecps-59496
+    - ecps-59547
+    - ecps-59558
+    - ecps-59567
+    - ecps-59603
+    - ecps-59641
+    - ecps-59685
+    - ecps-59695
+    - ecps-59704
+    - ecps-59719
+    - ecps-59720
+    - ecps-59730
+    - ecps-59746
+    - ecps-59757
+    - ecps-59759
+    - ecps-59792
+    - ecps-59793
+    - ecps-59796
+    - ecps-59797
+    - ecps-59825
+    - ecps-59852
+    - ecps-59871
+    - ecps-59888
+    - ecps-59901
+    - ecps-59903
+    - ecps-59926
+    - ecps-59939
+    - ecps-59974
+    - ecps-59995
+    - ecps-59996
+    - ecps-60005
+    - ecps-60006
+    - ecps-60063
+    - ecps-60086
+    - ecps-60102
+    - ecps-60105
+    - ecps-60109
+    - ecps-60110
+    - ecps-60116
+    - ecps-60132
+    - ecps-60137
+    - ecps-60215
+    - ecps-60256
+    - ecps-60259
+    - ecps-60280
+    - ecps-60294
+    - ecps-60335
+    - ecps-60345
+    - ecps-60383
+    - ecps-60384
+    - ecps-60411
+    - ecps-60424
+    - ecps-60451
+    - ecps-60464
+    - ecps-60485
+    - ecps-60499
+    - ecps-60512
+    - ecps-60561
+    - ecps-60565
+    - ecps-60567
+    - ecps-60569
+    - ecps-60637
+    - ecps-60662
+    - ecps-60674
+    - ecps-60682
+    - ecps-60686
+    - ecps-60695
+    - ecps-60698
+    - ecps-60713
+    - ecps-60752
+    - ecps-60761
+    - ecps-60793
+    - ecps-60802
+    - ecps-60832
+    - ecps-60833
+    - ecps-60877
+    - ecps-60881
+    - ecps-60909
+    - ecps-60923
+    - ecps-60944
+    - ecps-60949
+    - ecps-60969
+    - ecps-61026
+    - ecps-61029
+    - ecps-61050
+    - ecps-61098
+    - ecps-61110
+    - ecps-61111
+    - ecps-61112
+    - ecps-61120
+    - ecps-61122
+    - ecps-61171
+    - ecps-61175
+    - ecps-61188
+    - ecps-61204
+    - ecps-61231
+    - ecps-61238
+    - ecps-61269
+    - ecps-61283
+    - ecps-61285
+    - ecps-61328
+    - ecps-61337
+    - ecps-61346
+    - ecps-61356
+    - ecps-61371
+    - ecps-61387
+    - ecps-61406
+    - ecps-61408
+    - ecps-61411
+    - ecps-61415
+    - ecps-61417
+    - ecps-61438
+    - ecps-61474
+    - ecps-61476
+    - ecps-61533
+    - ecps-61560
+    - ecps-61568
+    - ecps-61580
+    - ecps-61590
+    - ecps-61624
+    - ecps-61655
+    - ecps-61671
+    - ecps-61693
+    - ecps-61709
+    - ecps-61732
+    - ecps-61776
+    - ecps-61788
+    - ecps-61803
+    - ecps-61820
+    - ecps-61835
+    - ecps-61837
+    - ecps-61844
+    - ecps-61872
+    - ecps-61882
+    - ecps-61926
+    - ecps-61982
+    - ecps-62038
+    - ecps-62054
+    - ecps-62071
+    - ecps-62088
+    - ecps-62093
+    - ecps-62094
+    - ecps-62099
+    - ecps-62101
+    - ecps-62112
+    - ecps-62137
+    - ecps-62164
+    - ecps-62177
+    - ecps-62191
+    - ecps-62204
+    - ecps-62218
+    - ecps-62229
+    - ecps-62255
+    - ecps-62265
+    - ecps-62301
+    - ecps-62346
+    - ecps-62352
+    - ecps-62372
+    - ecps-62383
+    - ecps-62396
+    - ecps-62409
+    - ecps-62456
+    - ecps-62476
+    - ecps-62504
+    - ecps-62527
+    - ecps-62583
+    - ecps-62584
+    - ecps-62603
+    - ecps-62633
+    - ecps-62671
+    - ecps-62679
+    - ecps-62683
+    - ecps-62704
+    - ecps-62715
+    - ecps-62717
+    - ecps-62735
+    - ecps-62782
+    - ecps-62785
+    - ecps-62815
+    - ecps-62817
+    - ecps-62834
+    - ecps-62836
+    - ecps-62843
+    - ecps-62858
+    - ecps-62861
+    - ecps-62877
+    - ecps-62889
+    - ecps-62890
+    - ecps-65296
+    - ecps-65536
+  disposition: upstream_engine_gap
+  evidence: &ca_mce_pe_extra_net_test_evidence
+    upstream_url: https://github.com/PolicyEngine/policyengine-us/blob/1.767.3/policyengine_us/variables/gov/hhs/tanf/non_cash/meets_tanf_non_cash_net_income_test.py
     mechanism: |-
-      The California BBCE/MCE encode is present in rulespec-us at
-      edc62ea566a617cf5b9c3b620f712b73c6767c94 and the composed CalFresh
-      eligibility route now depends on calfresh_mce_status_conferred. The
-      populace projection supplies neither household_was_issued_pub_275 nor
-      household_has_online_access_to_pub_275. The generic projector defaults
-      both unmapped Judgment inputs to false, so MCE status and its resource
-      and net-ceiling waivers remain false and these households stay on the
-      standard income/resource route. The exact post-merge rerun retained all
-      79 selected eligibility mismatch identities and engine values, with
-      zero vanished and zero materially moved above 0.005. A 79-household
-      counterfactual that changed only household_was_issued_pub_275 to true
-      produced MCE status for all 79 households and eliminated all 157 former
-      BBCE mismatch rows within the declared tolerances (79 eligibility and
-      78 benefit, zero errors). This is a population-input bridge artifact,
-      not a remaining RuleSpec encoding gap.
+      Exact January replay on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3,
+      and PolicyEngine-Core 3.30.3. PolicyEngine defines TANF non-cash
+      eligibility as gross AND net AND asset and sets both California
+      net-test applicability parameters true. California MCE instead uses
+      the retained inclusive 200-percent gross screen and waives the SNAP
+      net-eligibility ceiling once MCE is conferred. Changing only
+      meets_tanf_non_cash_net_income_test to true cleared every one of these
+      723 selected rows within the unchanged comparison tolerances: 353
+      paired cases, two eligibility-only cases, and 15 benefit-only cases.
+      The sorted row-identity receipt is
+      862c27d5068e3ccbff79b52876fa19f23e63a0d38e3ed6763b375e8e3bd437bd.
     sources:
     - dashboard/public/data/axiom-policyengine-ca-snap-ecps.json
-    - axiom_oracles/adapters/axiom/generic_inputs.py
-    - axiom_oracles/data/populace_input_mapping.yaml
-    - comparisons/ca-snap-ecps.yaml
+    - axiom_oracles/bridges/mappings/us.yaml
     - PROGRESS.md
-    - https://github.com/TheAxiomFoundation/rulespec-us/commit/edc62ea566a617cf5b9c3b620f712b73c6767c94
+    - https://www.cdss.ca.gov/lettersnotices/entres/getinfo/acl/2015/15-42.pdf
+    - https://github.com/PolicyEngine/policyengine-us/blob/1.767.3/policyengine_us/variables/gov/hhs/tanf/non_cash/is_tanf_non_cash_eligible.py
+    - https://github.com/PolicyEngine/policyengine-us/blob/1.767.3/policyengine_us/variables/gov/hhs/tanf/non_cash/meets_tanf_non_cash_net_income_test.py
   expires_on_source_change: true
-- id: ca-bbce-pub275-bridge-snap_benefit
+- id: ca-mce-pe-extra-net-test-paired-benefit
+  concept: us:statutes/7/2014/u#snap_benefit
+  kind: amount_difference
+  case_selector:
+    case_ids: *ca_mce_net_paired_cases
+  disposition: upstream_engine_gap
+  evidence: *ca_mce_pe_extra_net_test_evidence
+  expires_on_source_change: true
+- id: ca-mce-pe-extra-net-test-eligibility-only
+  concept: us:statutes/7/2014/o#snap_eligible
+  kind: eligibility_left_only
+  case_selector:
+    case_ids:
+    - ecps-57881
+    - ecps-57929
+  disposition: upstream_engine_gap
+  evidence: *ca_mce_pe_extra_net_test_evidence
+  expires_on_source_change: true
+- id: ca-mce-pe-extra-net-test-benefit-only
   concept: us:statutes/7/2014/u#snap_benefit
   kind: amount_difference
   case_selector:
     case_ids:
-    - ecps-56918
-    - ecps-57033
-    - ecps-57143
-    - ecps-57151
-    - ecps-57178
-    - ecps-57285
-    - ecps-57297
-    - ecps-57332
-    - ecps-57391
-    - ecps-57518
-    - ecps-57612
-    - ecps-57682
-    - ecps-57702
-    - ecps-57733
-    - ecps-57750
-    - ecps-57828
-    - ecps-58282
-    - ecps-58315
-    - ecps-58542
-    - ecps-58560
-    - ecps-58567
-    - ecps-58577
-    - ecps-58579
-    - ecps-58792
-    - ecps-58840
-    - ecps-58966
-    - ecps-58985
-    - ecps-59040
-    - ecps-59219
-    - ecps-59249
-    - ecps-59262
-    - ecps-59263
-    - ecps-59304
-    - ecps-59340
-    - ecps-59390
-    - ecps-59407
-    - ecps-59452
-    - ecps-59507
-    - ecps-59629
-    - ecps-59743
-    - ecps-59781
-    - ecps-59799
-    - ecps-60126
-    - ecps-60304
-    - ecps-60325
-    - ecps-60377
-    - ecps-60455
-    - ecps-60472
-    - ecps-60515
-    - ecps-60577
-    - ecps-60642
-    - ecps-60738
-    - ecps-60804
-    - ecps-60858
-    - ecps-60867
-    - ecps-60887
-    - ecps-61013
-    - ecps-61105
-    - ecps-61211
-    - ecps-61255
-    - ecps-61290
-    - ecps-61422
-    - ecps-61444
-    - ecps-61463
-    - ecps-61667
-    - ecps-61721
-    - ecps-61735
-    - ecps-61786
-    - ecps-61858
-    - ecps-62004
-    - ecps-62128
-    - ecps-62362
-    - ecps-62429
-    - ecps-62549
-    - ecps-62589
-    - ecps-62761
-    - ecps-62850
-    - ecps-62888
+    - ecps-56942
+    - ecps-57146
+    - ecps-57360
+    - ecps-57587
+    - ecps-58241
+    - ecps-58574
+    - ecps-58669
+    - ecps-59189
+    - ecps-59941
+    - ecps-60228
+    - ecps-61413
+    - ecps-61486
+    - ecps-61909
+    - ecps-62313
+    - ecps-62794
+  disposition: upstream_engine_gap
+  evidence: *ca_mce_pe_extra_net_test_evidence
+  expires_on_source_change: true
+- id: ca-mce-self-employment-bridge-eligibility
+  concept: us:statutes/7/2014/o#snap_eligible
+  kind: eligibility_left_only
+  case_selector:
+    case_ids: &ca_mce_se_bridge_cases
+    - ecps-58737
+    - ecps-61130
+    - ecps-61242
+    - ecps-68601
   disposition: bridge_artifact
-  evidence:
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+  evidence: &ca_mce_self_employment_bridge_evidence
+    upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
     mechanism: |-
-      The California BBCE/MCE encode is present in rulespec-us at
-      edc62ea566a617cf5b9c3b620f712b73c6767c94 and the composed CalFresh
-      eligibility route now depends on calfresh_mce_status_conferred. The
-      populace projection supplies neither household_was_issued_pub_275 nor
-      household_has_online_access_to_pub_275. The generic projector defaults
-      both unmapped Judgment inputs to false, so MCE status and its resource
-      and net-ceiling waivers remain false and these households stay on the
-      standard income/resource route. The exact post-merge rerun retained all
-      78 selected benefit mismatch identities and engine values, with
-      zero vanished and zero materially moved above 0.005. A 79-household
-      counterfactual that changed only household_was_issued_pub_275 to true
-      produced MCE status for all 79 households and eliminated all 157 former
-      BBCE mismatch rows within the declared tolerances (79 eligibility and
-      78 benefit, zero errors). This is a population-input bridge artifact,
-      not a remaining RuleSpec encoding gap.
+      Exact-household replay on the declared stack isolates a population
+      income-construction difference, not a RuleSpec eligibility defect.
+      The Axiom bridge permits negative monthly self-employment amounts to
+      offset other earned income, while PolicyEngine floors
+      snap_self_employment_income_after_expense_deduction at zero. The
+      resulting Axiom/PolicyEngine gross-income pairs are 3462.73/4957.52,
+      2387.27/3117.76, 3395.57/3944.11, and 1712.47/39332.39 for cases
+      58737, 61130, 61242, and 68601 respectively. That different synthetic
+      income construction changes the 200-percent MCE gross gate.
     sources:
     - dashboard/public/data/axiom-policyengine-ca-snap-ecps.json
-    - axiom_oracles/adapters/axiom/generic_inputs.py
+    - scripts/trace_ca_snap_residuals.py
     - axiom_oracles/data/populace_input_mapping.yaml
-    - comparisons/ca-snap-ecps.yaml
     - PROGRESS.md
-    - https://github.com/TheAxiomFoundation/rulespec-us/commit/edc62ea566a617cf5b9c3b620f712b73c6767c94
+    - https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
   expires_on_source_change: true
+- id: ca-mce-self-employment-bridge-benefit
+  concept: us:statutes/7/2014/u#snap_benefit
+  kind: amount_difference
+  case_selector:
+    case_ids: *ca_mce_se_bridge_cases
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+  evidence: *ca_mce_self_employment_bridge_evidence
+  expires_on_source_change: true
+- id: ca-mce-acin-threshold-pe-eligibility
+  concept: us:statutes/7/2014/o#snap_eligible
+  case_id: ecps-69070
+  kind: eligibility_left_only
+  disposition: upstream_engine_gap
+  evidence: &ca_mce_acin_threshold_evidence
+    upstream_url: https://github.com/PolicyEngine/policyengine-us/blob/1.767.3/policyengine_us/variables/gov/hhs/tanf/non_cash/meets_tanf_non_cash_gross_income_test.py
+    mechanism: |-
+      CDSS ACIN I-46-25 Attachment I gives the operative FY 2026 two-person
+      MCE/BBCE gross monthly limit as $3,526. Axiom compares this household's
+      $3,525.29 gross income to that table amount and confers MCE. PolicyEngine
+      instead computes a 2.0001626 FPG ratio and rejects it against an exact
+      2.0 ratio, so its gross test, categorical eligibility, final eligibility,
+      and benefit are false/zero. This is a counterpart parameterization gap
+      at the retained administrative-table boundary.
+    sources:
+    - dashboard/public/data/axiom-policyengine-ca-snap-ecps.json
+    - PROGRESS.md
+    - https://www.cdss.ca.gov/Portals/9/Additional-Resources/Letters-and-Notices/ACINs/2025/I-46_25.pdf?ver=KfyywOVXv5fZDkjuw5l9AA%3D%3D
+    - https://github.com/TheAxiomFoundation/rulespec-us/blob/edc62ea566a617cf5b9c3b620f712b73c6767c94/us-ca/policies/cdss/snap/modified-categorical-eligibility.yaml
+  expires_on_source_change: true
+  pinned:
+    left: true
+    right: false
+- id: ca-mce-acin-threshold-pe-benefit
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-69070
+  kind: amount_difference
+  disposition: upstream_engine_gap
+  evidence: *ca_mce_acin_threshold_evidence
+  expires_on_source_change: true
+  pinned:
+    left: 24.0
+    right: 0.0
+    difference: 24.0
+- id: ca-mce-tanf-bridge-ecps-58498-benefit
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-58498
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+  evidence:
+    upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+    mechanism: |-
+      Exact-household January replay on the declared stack. PolicyEngine
+      includes $1,346 monthly California TANF in SNAP unearned income, giving
+      gross income $4,266.08 and net income $4,043.08; the Axiom population
+      bridge omits that TANF amount and receives $2,920.08 gross and $2,697.08
+      net. Neither intervention closes the row alone: zeroing TANF still
+      leaves PolicyEngine's extra TANF non-cash net test false, while waiving
+      that test still counts TANF. Applying both the bridge correction and
+      the independently dispositioned net-test correction gives $184.90
+      versus Axiom's $184, within the unchanged $7 tolerance. The residual is
+      therefore the established #397 population-income bridge half of that
+      interaction, newly exposed by active MCE.
+    arithmetic:
+    - expression: 4266.08 - 1346
+      equals: 2920.08
+      tolerance: 1.0e-07
+    sources:
+    - dashboard/public/data/axiom-policyengine-ca-snap-ecps.json
+    - scripts/trace_ca_snap_residuals.py
+    - PROGRESS.md
+    - https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+  expires_on_source_change: true
+  pinned:
+    left: 184.0
+    right: 0.0
+    difference: 184.0
+- id: ca-mce-population-batch-contamination-ecps-68027-benefit
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-68027
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+  evidence:
+    upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+    mechanism: |-
+      Exact requested-month replay on the declared stack isolates this as
+      population-adapter batch contamination rather than a RuleSpec or
+      PolicyEngine formula difference. The canonical household is index 6333,
+      and replaying its production slice (indices 6300 through 6399) through
+      the configured 100-case SNAP runner reproduces eligibility and take-up
+      true but SNAP net income $274,757.41, expected contribution $82,427.10,
+      and benefit zero. The same household evaluated directly and in the
+      independent 377-case causal-diagnostic batch has net FPG ratio 0.91519
+      and benefit $62.10, matching Axiom's $62 within the unchanged $7
+      tolerance; forcing the counterpart net test true leaves that result
+      unchanged. This is the only one of the 735 newly exposed rows whose
+      production report value differs from its diagnostic baseline. Adapted
+      report SHA-256:
+      86e9d996e5f74a1796bb2e4de046b746c80c707dc7a8f0c4d1f318def702e52f.
+    sources:
+    - dashboard/public/data/axiom-policyengine-ca-snap-ecps.json
+    - scripts/trace_ca_snap_residuals.py
+    - axiom_oracles/data/populace_input_mapping.yaml
+    - PROGRESS.md
+    - https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+  expires_on_source_change: true
+  pinned:
+    left: 62.0
+    right: 0.0
+    difference: 62.0
 - id: ca-362-disability-shelter-cap-ecps-56995-benefit
   concept: us:statutes/7/2014/u#snap_benefit
   case_id: ecps-56995
