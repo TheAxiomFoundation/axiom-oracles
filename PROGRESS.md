@@ -2491,3 +2491,47 @@ residual), #229 (small-suite grounding).
 - Refresh conformance derivatives and implement a two-era #423 audit: the
   honest live 529-row state plus the separately hash-pinned accepted
   binding-era snapshot preserving the 156/17/41/131 and 22-row receipts.
+
+### 2026-07-30 honest CA artifact regeneration
+
+#### State
+
+- The canonical CA report, source/served dispositions, and all compact case
+  artifacts now represent the verified 529-row corrected-premise replay.
+- Shared conformance derivatives and the two-era frozen-history guard remain
+  to be updated.
+
+#### Done
+
+- Restored the two accepted PUB 275 bridge selectors covering 79 eligibility
+  and 78 benefit rows, and removed the ten selectors covering the 735 rows
+  exposed only by the unsupported issuance binding.
+- Preserved all 131 other disposition entries structurally unchanged. The
+  live source has 133 entries expanding to 288 rows, with zero expired and
+  zero orphaned entries.
+- Stated in both PUB 275 served mechanisms that the Enhanced-CPS population
+  carries neither household issuance nor online-access fact, and that the
+  residual can be resolved only by a population source carrying one of those
+  facts or by PolicyEngine modeling the same household gate.
+- Regenerated the dashboard report from the exact replay. After normalizing
+  only `provenance.generated_at`, it is byte-equivalent as parsed JSON to the
+  accepted 529-row report. It stores all 529 mismatches and all 404
+  mismatching case rows while retaining the full 7,101-case count.
+- Regenerated all 15 compact case chunks and their index. The complete case
+  artifact is byte-identical to the accepted 529-row artifact.
+- Regenerated the served disposition JSON from source. The artifact contains
+  the explicit corrected PUB 275 resolution text and exact YAML parity.
+- Confirmed the final live taxonomy: raw 529, encoding 0, bridge 268,
+  upstream 20, unexplained 241; raw parity 96.275173%, explained parity
+  98.303056%.
+- Passed the repository-wide disposition join check, focused CA case
+  artifact check (529 mismatches, 288 annotated, zero silent), focused served
+  artifact check (133 entries), and diff whitespace validation.
+
+#### Next
+
+- Update the US-PE conformance ledger to the corrected counts while retaining
+  PolicyEngine-US issues #9175 and #9176 as independently verified, currently
+  unexposed upstream findings.
+- Regenerate scoreboard, history, ratchet, burn-down, freshness, and overview
+  derivatives, then commit the shared conformance step.
