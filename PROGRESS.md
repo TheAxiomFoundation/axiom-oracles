@@ -1721,3 +1721,39 @@ residual), #229 (small-suite grounding).
   detail copies; full check battery green.
 - Next: round-2 blind re-review, then merge after rulespec-us#1177 per the
   section 9 pairing order.
+
+## 2026-07-29 spine Chunk 2 taxable-income oracle
+
+### Checkpoint — worker start
+
+#### State
+
+- Work is isolated in `_worktrees/chunk2-oracle` on
+  `fed-parity/chunk2-oracle-suite`.
+- The sandbox blocks DNS, so a read-only `git fetch origin main` failed with
+  `Could not resolve host: github.com`. The local `origin/main` is
+  `2a1660dcd9e175f6e3fd5e34861cb302d1b1d54e`, immediately before the remote
+  merge of PR #425.
+- The worktree therefore starts at the locally available merged Chunk 1 head
+  `def5c8cc8e0bd3f5450448f5fadfd7cb35220866`, whose first-parent merge
+  includes local `origin/main` and whose tree is the tree merged remotely by
+  PR #425. No push or GitHub write will be made.
+- The binding RuleSpec target is PR #1179 at
+  `4ced8fb7065311338ea732cab0a26105e750c40f`; its worktree, tree, companion
+  assertions, and mapping candidates remain to be verified before changes.
+
+#### Done
+
+- Confirmed the requested branch name was unused and created the isolated
+  worktree without modifying the caller's dirty root worktree.
+- Read SPINE-PLAN §5, §6.3, and §9 Chunk 2 and identified the one-config,
+  one-suite, exact-stack, evidence, adoption, and regeneration contracts.
+- Confirmed the merged Chunk 1 implementation and final-review refs are
+  locally available for structural reuse.
+
+#### Next
+
+- Verify the exact RuleSpec SHA/tree, engine-verified companion, three bridge
+  variables, and three conformance mapping candidates.
+- Trace the merged generator/tests and final SALT disposition schema, then
+  implement and commit the runner/test step.
