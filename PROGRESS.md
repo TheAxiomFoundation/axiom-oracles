@@ -1979,3 +1979,55 @@ residual), #229 (small-suite grounding).
 - Read ACL 14-56, ACL 15-42, and ACL 14-56E from the pinned corpus and decide
   from their controlling text whether the bridge may lawfully bind PUB 275 as
   a statewide administrative fact.
+
+### 2026-07-30 PUB 275 retained-authority determination
+
+#### State
+
+- The PUB 275 issuance/access disjunction is a statewide administrative fact
+  for the modeled California CalFresh application and certification process,
+  not a synthetic-household characteristic. The CA population bridge may
+  therefore bind the administrative trigger true.
+- The authority was read from the clean detached corpus checkout at
+  `8af592162231e9de748ba6b98792b426ad4fe8b7`.
+
+#### Done
+
+- ACL 14-56 page 3 states: “A household comes into the CWD and receives an
+  application packet (or completes an online application). Included in the
+  application packet (or on a linked website) is the PUB 275 (Family Planning
+  brochure).” Page 4 repeats the same statewide delivery mechanism for an
+  over-income household and says MCE still fails “even though the household
+  has received the PUB 275.” The controlling retained citation paths are
+  `us-ca/guidance/cdss/acl-2014-14-56/page-3` and
+  `us-ca/guidance/cdss/acl-2014-14-56/page-4`.
+- ACL 14-56 page 6 makes the administration mandatory: “CWDs shall document
+  that a household has been given the ‘Family Planning – PUB 275’ brochure
+  and is an MCE household.” It also requires corrective benefits if
+  implementation did not cover “all NACF applicants and continuing cases.”
+- ACL 15-42 page 2 later restates the operative route: households at or below
+  200 percent FPL “must be conferred MCE status if they are issued or have
+  online access to the TANF-funded ‘Family Planning – PUB 275’ brochure and
+  meet all other conditions of eligibility for CalFresh.” The retained
+  citation path is `us-ca/guidance/cdss/acl-2015-15-42/page-2`.
+- ACL 14-56E says its corrected language is limited to the impacted
+  paragraphs and must be read with ACL 14-56. Its page-2 correction preserves
+  immediate implementation by all counties for all NACF households, corrects
+  the inclusive boundary to “at or less than 200 percent,” and does not alter
+  the application-packet/online-link delivery mechanism.
+- “Receipt of the PUB 275, in and of itself, does not confer MCE status”
+  (`us-ca/guidance/cdss/acl-2014-14-56/page-3`) rejects sufficiency, not
+  statewide delivery. Gross income, household/member exclusions, and the
+  remaining CalFresh conditions still control; page 4 proves the distinction
+  by giving the brochure to an over-income household that is nevertheless
+  denied MCE.
+- The bridge convention will bind only
+  `household_was_issued_pub_275 = true`. The RuleSpec consumes issuance OR
+  online access, so this represents the guaranteed administrative delivery
+  disjunction without claiming that every household used the same online
+  channel or actually read the brochure.
+
+#### Next
+
+- Add the exact CA PUB 275 constant and a focused mapping guard, then run the
+  targeted mapping tests before committing the bridge implementation.
