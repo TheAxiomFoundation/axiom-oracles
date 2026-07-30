@@ -1956,3 +1956,52 @@ residual), #229 (small-suite grounding).
 - Run the complete repository test suite with the cached esbuild executable,
   repeat lint and containment audits, append the final closeout, and write the
   untracked worker report.
+
+### Closeout — Chunk 2 taxable-income oracle
+
+#### State
+
+- Source and measured evidence are committed through `507ebc36`.
+- The branch is ready for main-lane review; no push or GitHub write was made.
+
+#### Done
+
+- Final evidence is 14/14 raw matches, zero mismatches, zero errors, and 14/14
+  after disposition with zero unexplained rows and no disposition file.
+- The only nonzero final residual is
+  `ti-senior-single-plus-one`: Axiom $50,851.06 versus PolicyEngine
+  $50,851.0625, signed Axiom-minus-PolicyEngine -$0.0025, within $0.01.
+- The non-scored unbound itemization family records 12 nonitemizers and 2
+  itemizers; all 14 agree with the legal elections.
+- The exact-stack generator/conformance battery passes with 122 tests and 2
+  environment-conditioned skips. The normal full repository suite passes with
+  2,323 tests and 70 skips. Ruff, formatter checks on the touched Python files,
+  diff hygiene, Git object integrity, and all eight derived-data parity checks
+  pass.
+- Final containment against the Chunk 1 merged tree is exactly 20 intended
+  paths. An independent read-only audit found no implementation, adoption,
+  evidence, or containment blocker.
+- `PROGRESS.md` remains byte-prefix append-only across every task commit.
+- The pinned companion asserts all 14 scored taxable-income finals, all 14
+  deduction diagnostics, and all 14 verified-domain judgments. It omits five
+  zero-valued assertions across the three bridge outputs; the committed narrow
+  supplemental fixture supplies only those zero bridge assertions, is
+  fail-closed/tested, and is reported transparently. It supplies no scored
+  expected.
+- Environment disclosures: DNS blocked the requested remote refresh and npm/uv
+  resolution, so the branch used the locally verified Chunk 1 merged tree and
+  cached exact packages. The filesystem sandbox rejected one attempt to place a
+  temporary launcher under `/private/tmp`; launchers were instead created
+  inside the worktree and deleted after use. A direct repository-venv probe was
+  rejected by the generator's version gate, as intended. A later `python -S`
+  full-suite probe disabled editable-package and pandas loading and produced 14
+  environment-only failures; the normal-environment full rerun passed.
+
+#### Next
+
+- Main lane reviews the 20-path branch, the untracked `WORKER-REPORT.md`, and
+  the five-zero supplemental bridge-assertion caveat.
+- If main lane requires those five bridge assertions inside RuleSpec itself,
+  add them upstream, engine-verify a new RuleSpec commit, and advance both the
+  SHA and tree pins together; do not mutate the exact `4ced8fb7` evidence.
+- No upstream issue or disposition filing is warranted by the measured grid.
