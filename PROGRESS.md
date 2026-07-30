@@ -1721,3 +1721,287 @@ residual), #229 (small-suite grounding).
   detail copies; full check battery green.
 - Next: round-2 blind re-review, then merge after rulespec-us#1177 per the
   section 9 pairing order.
+
+## 2026-07-29 spine Chunk 2 taxable-income oracle
+
+### Checkpoint — worker start
+
+#### State
+
+- Work is isolated in `_worktrees/chunk2-oracle` on
+  `fed-parity/chunk2-oracle-suite`.
+- The sandbox blocks DNS, so a read-only `git fetch origin main` failed with
+  `Could not resolve host: github.com`. The local `origin/main` is
+  `2a1660dcd9e175f6e3fd5e34861cb302d1b1d54e`, immediately before the remote
+  merge of PR #425.
+- The worktree therefore starts at the locally available merged Chunk 1 head
+  `def5c8cc8e0bd3f5450448f5fadfd7cb35220866`, whose first-parent merge
+  includes local `origin/main` and whose tree is the tree merged remotely by
+  PR #425. No push or GitHub write will be made.
+- The binding RuleSpec target is PR #1179 at
+  `4ced8fb7065311338ea732cab0a26105e750c40f`; its worktree, tree, companion
+  assertions, and mapping candidates remain to be verified before changes.
+
+#### Done
+
+- Confirmed the requested branch name was unused and created the isolated
+  worktree without modifying the caller's dirty root worktree.
+- Read SPINE-PLAN §5, §6.3, and §9 Chunk 2 and identified the one-config,
+  one-suite, exact-stack, evidence, adoption, and regeneration contracts.
+- Confirmed the merged Chunk 1 implementation and final-review refs are
+  locally available for structural reuse.
+
+#### Next
+
+- Verify the exact RuleSpec SHA/tree, engine-verified companion, three bridge
+  variables, and three conformance mapping candidates.
+- Trace the merged generator/tests and final SALT disposition schema, then
+  implement and commit the runner/test step.
+
+### Checkpoint — taxable-income contract implementation
+
+#### State
+
+- RuleSpec PR #1179 is pinned at
+  `4ced8fb7065311338ea732cab0a26105e750c40f` with tree
+  `9a4aaf64acd4c0cfe407cce5b3bb94516aaceacb`; the tracked worktree is clean
+  apart from its unrelated untracked worker report.
+- The sandbox also blocks `uv` from writing its cache at
+  `/Users/maxghenis/.cache/uv`. Validation therefore uses the repository's
+  Python 3.13.9 interpreter with the already-cached, read-only exact package
+  roots for PolicyEngine 4.18.9, PolicyEngine-Core 3.30.3, and
+  PolicyEngine-US 1.767.3.
+- The exact companion omits imported zero-output assertions for three
+  senior-only cases. A narrow supplemental assertion-closure fixture supplies
+  only those five missing zero bridge assertions and supplies no scored
+  taxable-income expected value.
+
+#### Done
+
+- Added the single `taxable_income` PolicyConfig and all 14 adopted §6.3
+  cases, with all five filing statuses, direct election binding, the exact
+  three-output bridge map named in the worker brief, independently derived
+  standard/senior/exemption amounts, and fresh-simulation compatibility.
+- Added an exact 85-input companion validator, reviewed auxiliary-module
+  allowlist, complete diagnostic inventory, exact 2026 parameter/list
+  validator, and strict bridge/input fail-closed checks.
+- Added the pinned `us-taxable-income-grid` comparison config and exactly
+  three registry mappings: taxable income, selected deductions, and the
+  non-comparable verified-domain judgment.
+- Exact-stack dry evaluation produced 14 values within the one-cent
+  tolerance; 13 were bit-for-bit equal and
+  `ti-senior-single-plus-one` differed by $0.0025.
+- Ruff, 36 focused generator tests (two report-dependent tests deferred until
+  generation), 26 bridge import-surface tests, and `git diff --check` pass.
+
+#### Next
+
+- Commit this coherent contract implementation.
+- Create the clean canonical RuleSpec clone, run the registry comparison,
+  inspect raw mismatches, and add dispositions only for measured mismatches.
+
+### Checkpoint — exact-stack measured comparison
+
+#### State
+
+- A clean canonical RuleSpec checkout now exists at
+  `/private/tmp/oracle-rerun/rulespec-us`; HEAD and the verified tree match the
+  exact PR #1179 pin.
+- The registry runner completed through its normal provenance, dashboard, and
+  manifest path. Because its hardcoded `uv --with` subprocess cannot write the
+  sandboxed uv cache or reach package indexes, a temporary untracked shim
+  dispatched that exact command to the cached reviewed stack; the generator's
+  independent version gate confirmed all three required package versions.
+
+#### Done
+
+- Generated `us-taxable-income-grid` under Python 3.13.9, PolicyEngine 4.18.9,
+  PolicyEngine-US 1.767.3, and PolicyEngine-Core 3.30.3 from a fresh
+  Simulation per case.
+- The raw result is 14/14 matches, zero mismatches, and zero errors. The
+  after-disposition result is also 14/14 with zero unexplained rows.
+- No disposition file was created: none of §6.3's pre-registered divergence
+  classes produced a mismatch in the primary election-bound grid.
+- The only nonzero observed amount residual is the expected sub-cent float32
+  representation in `ti-senior-single-plus-one`: Axiom $50,851.06 versus
+  PolicyEngine $50,851.0625, a signed Axiom-minus-PolicyEngine difference of
+  -$0.0025, within the $0.01 contract tolerance.
+- All 38 focused generator tests, Ruff, and diff hygiene pass with the
+  generated report present.
+
+#### Next
+
+- Commit the measured dashboard report and manifest entry.
+- Adopt only `us-pe:taxable_income`, run the full derived-data regeneration
+  chain, and prove `--check` parity.
+
+### Checkpoint — taxable-income conformance adoption
+
+#### State
+
+- The measured report is committed at `92861ea4`; it has no mismatch entries
+  and therefore no disposition dependency.
+
+#### Done
+
+- Adopted only `us-pe:taxable_income` into
+  `us-taxable-income-grid`. The note records the direct boundary, three
+  bridges, independent deductions, 14/14 raw and after-disposition result,
+  sub-cent residual, and aggregate-suite exclusions.
+- Extended the conformance allowlist/assertions to require this one Chunk 2
+  adoption while keeping alternative minimum tax and foreign tax credit
+  unadopted.
+- The targeted conformance adoption test, Ruff, and diff hygiene pass.
+
+#### Next
+
+- Commit the adoption source change.
+- Run the complete dispositions, grids, affected-map, vacuity, dated
+  scoreboard snapshot, ratchet, burndown, and overview regeneration chain.
+
+### Checkpoint — derived-data regeneration and parity
+
+#### State
+
+- The taxable-income adoption source is committed at `7f2356d2`.
+- The full required regeneration chain was run with the UTC scoreboard
+  snapshot date `2026-07-30`.
+
+#### Done
+
+- Re-applied dispositions, extracted every jurisdiction grid, regenerated the
+  affected map and freshness register, wrote the dated scoreboard/detail
+  snapshot, tightened the ratchet, rebuilt the burndown, and rebuilt the
+  dashboard overview.
+- Every paired parity command passes:
+  `apply_dispositions.py --check`, `extract_grids.py --check`,
+  `generate_affected_map.py --check`, `check_vacuous_gate.py --check`,
+  `conformance_scoreboard.py --check`, `conformance_ratchet.py --check`,
+  `conformance_burndown.py --check`, and
+  `generate_dashboard_overview.py --check`.
+- The exact-stack federal-generator plus conformance test battery passes with
+  119 tests and 2 environment-conditioned skips. Ruff and diff hygiene pass.
+- The regeneration changed only the expected affected-map, us-pe detail,
+  dated history, scoreboard, ratchet, burndown, freshness, and overview
+  artifacts; canonical grids were already byte-identical.
+
+#### Next
+
+- Commit the derived artifacts.
+- Run the full repository test/lint battery, inspect final containment and
+  committed history, append the closeout ledger entry, and write the untracked
+  worker report.
+
+### Checkpoint — taxable-income diagnostic contract closure
+
+#### State
+
+- The first full regeneration is committed at `71a77451`; a final contract
+  audit found three evidence gaps that did not change the scored 14-case grid.
+
+#### Done
+
+- Added a separate, non-scored `unbound-itemization-heuristic` diagnostic
+  family. Each primary case still binds the legal section 63(e) election, while
+  a second fresh PolicyEngine simulation removes exactly that override and
+  records the engine-derived branch as an `oracle-model boundary`.
+- Measured the unbound family on the exact pinned stack. All 14 heuristic
+  results agree with the registered elections: 12 nonitemizers and 2
+  itemizers. Diagnostic rows remain outside cases, aggregates, and raw or
+  after-disposition counts.
+- Completed the five-status aged/blind parameter assertion: $2,050 for single
+  and head of household, and $1,650 for joint, separate, and surviving spouse.
+- Restored the shared-contract meaning of `rulespec_only_inputs` by leaving it
+  empty for taxable income; the exact 85-input fixture validator continues to
+  record and reject drift in all companion inputs.
+- Added fail-closed config validation, distinct-simulation regression coverage,
+  14-case component/bridge/diagnostic reconciliation, and exact tests for all
+  three worker-handoff registry mappings.
+- Refreshed the comparison through the official runner shape. The report
+  remains 14/14 with zero mismatches and zero errors, and now carries the
+  separate diagnostic family.
+- A direct probe through the repository venv was correctly rejected because
+  its installed metadata resolves PE-US 1.752.2/Core 3.28.0. The successful
+  rerun used Python 3.13 with isolated cached PE 4.18.9, PE-US 1.767.3, and
+  Core 3.30.3; the generator's independent version gate passed.
+
+#### Next
+
+- Commit the diagnostic-contract source, tests, and refreshed measured report.
+- Regenerate every conformance derivative affected by the adoption-note
+  clarification, prove the complete `--check` chain again, and close out the
+  full test/containment audit.
+
+### Checkpoint — diagnostic derivative parity
+
+#### State
+
+- The unbound diagnostic implementation, strengthened parameter/input
+  contracts, refreshed exact-stack report, and focused tests are committed at
+  `479bab42`.
+
+#### Done
+
+- Re-ran dispositions, canonical grid extraction, affected-map generation,
+  vacuity/freshness, the UTC `2026-07-30` scoreboard snapshot, ratchet,
+  burn-down, and dashboard overview after the conformance-note clarification.
+- The history snapshot and ratchet were already current. Only the US
+  conformance detail copies, freshness timestamps, and overview bundle changed.
+- All eight paired checks pass: dispositions, grids, affected map,
+  vacuity/freshness, scoreboard, ratchet, burn-down, and overview.
+
+#### Next
+
+- Commit the refreshed derivatives.
+- Run the complete repository test suite with the cached esbuild executable,
+  repeat lint and containment audits, append the final closeout, and write the
+  untracked worker report.
+
+### Closeout — Chunk 2 taxable-income oracle
+
+#### State
+
+- Source and measured evidence are committed through `507ebc36`.
+- The branch is ready for main-lane review; no push or GitHub write was made.
+
+#### Done
+
+- Final evidence is 14/14 raw matches, zero mismatches, zero errors, and 14/14
+  after disposition with zero unexplained rows and no disposition file.
+- The only nonzero final residual is
+  `ti-senior-single-plus-one`: Axiom $50,851.06 versus PolicyEngine
+  $50,851.0625, signed Axiom-minus-PolicyEngine -$0.0025, within $0.01.
+- The non-scored unbound itemization family records 12 nonitemizers and 2
+  itemizers; all 14 agree with the legal elections.
+- The exact-stack generator/conformance battery passes with 122 tests and 2
+  environment-conditioned skips. The normal full repository suite passes with
+  2,323 tests and 70 skips. Ruff, formatter checks on the touched Python files,
+  diff hygiene, Git object integrity, and all eight derived-data parity checks
+  pass.
+- Final containment against the Chunk 1 merged tree is exactly 20 intended
+  paths. An independent read-only audit found no implementation, adoption,
+  evidence, or containment blocker.
+- `PROGRESS.md` remains byte-prefix append-only across every task commit.
+- The pinned companion asserts all 14 scored taxable-income finals, all 14
+  deduction diagnostics, and all 14 verified-domain judgments. It omits five
+  zero-valued assertions across the three bridge outputs; the committed narrow
+  supplemental fixture supplies only those zero bridge assertions, is
+  fail-closed/tested, and is reported transparently. It supplies no scored
+  expected.
+- Environment disclosures: DNS blocked the requested remote refresh and npm/uv
+  resolution, so the branch used the locally verified Chunk 1 merged tree and
+  cached exact packages. The filesystem sandbox rejected one attempt to place a
+  temporary launcher under `/private/tmp`; launchers were instead created
+  inside the worktree and deleted after use. A direct repository-venv probe was
+  rejected by the generator's version gate, as intended. A later `python -S`
+  full-suite probe disabled editable-package and pandas loading and produced 14
+  environment-only failures; the normal-environment full rerun passed.
+
+#### Next
+
+- Main lane reviews the 20-path branch, the untracked `WORKER-REPORT.md`, and
+  the five-zero supplemental bridge-assertion caveat.
+- If main lane requires those five bridge assertions inside RuleSpec itself,
+  add them upstream, engine-verify a new RuleSpec commit, and advance both the
+  SHA and tree pins together; do not mutate the exact `4ced8fb7` evidence.
+- No upstream issue or disposition filing is warranted by the measured grid.
