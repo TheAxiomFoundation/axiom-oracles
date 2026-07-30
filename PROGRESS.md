@@ -1834,3 +1834,27 @@ residual), #229 (small-suite grounding).
 - Commit the measured dashboard report and manifest entry.
 - Adopt only `us-pe:taxable_income`, run the full derived-data regeneration
   chain, and prove `--check` parity.
+
+### Checkpoint — taxable-income conformance adoption
+
+#### State
+
+- The measured report is committed at `92861ea4`; it has no mismatch entries
+  and therefore no disposition dependency.
+
+#### Done
+
+- Adopted only `us-pe:taxable_income` into
+  `us-taxable-income-grid`. The note records the direct boundary, three
+  bridges, independent deductions, 14/14 raw and after-disposition result,
+  sub-cent residual, and aggregate-suite exclusions.
+- Extended the conformance allowlist/assertions to require this one Chunk 2
+  adoption while keeping alternative minimum tax and foreign tax credit
+  unadopted.
+- The targeted conformance adoption test, Ruff, and diff hygiene pass.
+
+#### Next
+
+- Commit the adoption source change.
+- Run the complete dispositions, grids, affected-map, vacuity, dated
+  scoreboard snapshot, ratchet, burndown, and overview regeneration chain.

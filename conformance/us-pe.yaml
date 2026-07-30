@@ -1249,7 +1249,21 @@ policies:
     output_vars:
       - taxable_income
     in_scope: true
-    suite: null
+    suite: us-taxable-income-grid
+    note: >-
+      The us-taxable-income-grid suite directly compares annual TaxUnit
+      taxable_income on 14 engine-verified 2026 RuleSpec companion cases across
+      all five filing statuses. It binds the same resolved section 63(e)
+      itemization election, bridges only the completed itemized, QBI, and
+      nonitemizer-charity amounts named by the reviewed Chunk 2 boundary, and
+      independently derives PolicyEngine-US 1.767.3's standard deduction,
+      additional senior deduction, suspended exemption amount, selected
+      deduction total, and zero floor under PolicyEngine 4.18.9 and Core
+      3.30.3. The raw and after-disposition reports are both 14/14; no
+      disposition is required. The $0.0025 senior-plus-one float32 residual is
+      within the contract's $0.01 tolerance. This aggregate composition suite
+      does not certify the bridged component entitlement formulas or
+      PolicyEngine's unbound tax-minimizing itemization heuristic.
   - id: us-pe:tn_ff
     oracle_policy_name: tn_ff
     oracle_policy_type: rules

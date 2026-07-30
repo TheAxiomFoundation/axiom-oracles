@@ -618,6 +618,7 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
         "us-seca-grid",
         "us-salt-deduction-grid",
         "us-itemized-taxable-income-deductions-grid",
+        "us-taxable-income-grid",
     }
     covered = {p.suite for p in universe.in_scope() if p.suite is not None}
     assert covered <= live_pe_suites
@@ -652,6 +653,11 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
     )
     assert by_name["salt_deduction"].suite == "us-salt-deduction-grid"
     assert "all five filing statuses" in by_name["salt_deduction"].note
+    assert by_name["taxable_income"].suite == "us-taxable-income-grid"
+    assert "14 engine-verified" in by_name["taxable_income"].note
+    assert "all five filing statuses" in by_name["taxable_income"].note
+    assert "resolved section 63(e)" in by_name["taxable_income"].note
+    assert "both 14/14" in by_name["taxable_income"].note
     chunk_one_suites = {
         "us-salt-deduction-grid",
         "us-itemized-taxable-income-deductions-grid",
@@ -671,12 +677,10 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
         for name in (
             "alternative_minimum_tax",
             "foreign_tax_credit",
-            "taxable_income",
         )
     } == {
         "alternative_minimum_tax": None,
         "foreign_tax_credit": None,
-        "taxable_income": None,
     }
     assert by_name["savers_credit"].suite == "us-savers-grid"
     assert "34 fixture-bound" in by_name["savers_credit"].note
