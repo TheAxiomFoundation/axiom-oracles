@@ -2031,3 +2031,34 @@ residual), #229 (small-suite grounding).
 
 - Add the exact CA PUB 275 constant and a focused mapping guard, then run the
   targeted mapping tests before committing the bridge implementation.
+
+### 2026-07-30 PUB 275 bridge implementation
+
+#### State
+
+- The CA-only population bridge now supplies the statewide PUB 275
+  administrative issuance fact; no comparison artifacts have yet been
+  regenerated from it.
+
+#### Done
+
+- Added an exact mapping for
+  `us-ca:policies/cdss/snap/modified-categorical-eligibility#input.household_was_issued_pub_275`
+  to constant `true`, with the retained ACL 14-56 and ACL 15-42 citation paths
+  and the sufficiency/distribution distinction recorded beside the mapping.
+- Left `household_has_online_access_to_pub_275` unmapped. The encoded
+  disjunction needs only one administrative limb, and the bridge does not
+  assert a household-specific online channel.
+- Added a focused test that requires issuance to resolve true and requires
+  online access to remain unmapped.
+- Passed all 14 population-mapping loader tests under Python 3.13.9.
+- The worktree has no `.venv`; the first relative `.venv/bin/python` test
+  command did not start. The successful run used the existing repository
+  environment at `/Users/maxghenis/TheAxiomFoundation/axiom-oracles/.venv`.
+
+#### Next
+
+- Verify the detached RuleSpec checkout at current local `origin/main`, run
+  the complete `ca-snap-ecps` comparison on the declared PolicyEngine stack,
+  and classify the resulting mismatch identities before changing
+  dispositions.
