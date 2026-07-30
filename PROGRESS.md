@@ -2436,3 +2436,58 @@ residual), #229 (small-suite grounding).
   binding's 1,058-row artifact state with the honest 529-row state.
 - Revalidate the same three entry points after all final artifact and ledger
   regeneration.
+
+### 2026-07-30 exact corrected-premise replay
+
+#### State
+
+- The complete corrected-premise comparison is finished and verified in
+  temporary output. No tracked data artifact has yet been replaced from it.
+- The exact result is 529 raw mismatches across 404 cases: 0 encoding, 268
+  bridge, 20 upstream, and 241 unexplained after the accepted dispositions
+  are applied.
+
+#### Done
+
+- Replayed 7,101 California households and 14,202 comparisons with zero
+  execution errors, 13,673 matches, and 529 mismatches on PolicyEngine
+  4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3.
+- Used the clean RuleSpec-US checkout
+  `edc62ea566a617cf5b9c3b620f712b73c6767c94` and clean compatible engine
+  `e19f1b7573c74512f20a6b71a0c55dbbf333d41b`. The composed and compiled
+  inputs have SHA-256
+  `03166c96d74382dae2fef348ee6ab8c05ea92e5b855555db0ba60b473700910d`
+  and
+  `c1d2c5bdac8d03e137d569d50791654981a219699557018ccd151273b8a0bb23`;
+  both are byte-identical to the accepted reviewer replay inputs.
+- Verified the runtime import paths and report stamps resolve the declared
+  three PolicyEngine versions. The certified cached Populace dataset was used
+  in offline mode.
+- Verified every mismatch identity and numerical/boolean payload against the
+  accepted 529-row report after stripping only dispositions. Both sorted
+  lists have SHA-256
+  `6b629ae7fdfe5a9cf628591e045dc3d2d69fd17f07051e2f8b295012effc3251`.
+- Verified all 404 mismatching case payloads exactly, with SHA-256
+  `59aa74fdb551291cc5ac5c18087a070c15663fd1ca7c8553f2ae754c189bcb6f`.
+  Eligibility tolerance remains zero; benefit tolerance remains $7; both
+  relative tolerances remain zero.
+- Saved the raw replay at `/private/tmp/ca-snap-repair2-raw.json`, SHA-256
+  `fe63c28f0e3ead5c8cedc169d4c81c874911e82e533901b6ed54623d735f2bc7`.
+- An initial partial launch was stopped at batch 34 because it omitted the
+  registry's explicit `--report-suite ca-snap-ecps` metadata argument. It
+  wrote no tracked artifact and supplied no accepted evidence. The corrected
+  complete launch included the argument and used the prior cyclic-GC
+  safeguard.
+- A direct offline `uv run` probe could not resolve cached Plotly 5.24.1 even
+  though the exact extracted archive was present. The successful run used
+  the previously verified read-only exact-package overlay instead of network
+  resolution.
+
+#### Next
+
+- Restore the two 157-row PUB 275 bridge selectors, remove the ten
+  binding-exposed selectors, and regenerate the canonical report, served
+  dispositions, and compact case artifacts from this verified replay.
+- Refresh conformance derivatives and implement a two-era #423 audit: the
+  honest live 529-row state plus the separately hash-pinned accepted
+  binding-era snapshot preserving the 156/17/41/131 and 22-row receipts.
