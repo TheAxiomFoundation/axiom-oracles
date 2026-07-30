@@ -362,7 +362,7 @@ entries:
     - ecps-65536
   disposition: upstream_engine_gap
   evidence: &ca_mce_pe_extra_net_test_evidence
-    upstream_url: https://github.com/PolicyEngine/policyengine-us/blob/1.767.3/policyengine_us/variables/gov/hhs/tanf/non_cash/meets_tanf_non_cash_net_income_test.py
+    upstream_url: https://github.com/PolicyEngine/policyengine-us/issues/9175
     mechanism: |-
       Exact January replay on PolicyEngine 4.18.9, PolicyEngine-US 1.767.3,
       and PolicyEngine-Core 3.30.3. PolicyEngine defines TANF non-cash
@@ -376,6 +376,7 @@ entries:
       The sorted row-identity receipt is
       862c27d5068e3ccbff79b52876fa19f23e63a0d38e3ed6763b375e8e3bd437bd.
     sources:
+    - https://github.com/PolicyEngine/policyengine-us/blob/1.767.3/policyengine_us/variables/gov/hhs/tanf/non_cash/is_tanf_non_cash_eligible.py
     - dashboard/public/data/axiom-policyengine-ca-snap-ecps.json
     - axiom_oracles/bridges/mappings/us.yaml
     - PROGRESS.md
@@ -469,7 +470,7 @@ entries:
   kind: eligibility_left_only
   disposition: upstream_engine_gap
   evidence: &ca_mce_acin_threshold_evidence
-    upstream_url: https://github.com/PolicyEngine/policyengine-us/blob/1.767.3/policyengine_us/variables/gov/hhs/tanf/non_cash/meets_tanf_non_cash_gross_income_test.py
+    upstream_url: https://github.com/PolicyEngine/policyengine-us/issues/9176
     mechanism: |-
       CDSS ACIN I-46-25 Attachment I gives the operative FY 2026 two-person
       MCE/BBCE gross monthly limit as $3,526. Axiom compares this household's
