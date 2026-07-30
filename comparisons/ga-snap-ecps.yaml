@@ -20,6 +20,10 @@ runner:
     sample_size: 0
     period: 2026-01
     population: enhanced-cps
+    python: "3.13"
+    policyengine_version: "4.18.9"
+    policyengine_us_version: "1.767.3"
+    policyengine_core_version: "3.30.3"
     axiom_compose_binary: $HOME/axiom-compose/.venv/bin/axiom-compose
     axiom_program: $HOME/rulespec-us/programs/us-ga/snap/fy-2026.yaml
     axiom_composed_program: /tmp/ga-snap-composed.yaml

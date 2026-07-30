@@ -1,6 +1,6 @@
 schema: axiom_oracles.dispositions.v1
 suite: ga-snap-ecps
-updated: '2026-07-27'
+updated: '2026-07-28'
 entries:
 - id: ga-bbce-gross-band-snap_eligible
   concept: us:statutes/7/2014/o#snap_eligible
@@ -199,6 +199,12 @@ entries:
       or below the state's BBCE screen, verified against axiom's own computed
       gross income and limit. Axiom-side modeling boundary, tracked for
       encoding in rulespec-us#1098.
+      Revalidated after requested-month regeneration with PolicyEngine
+      4.18.9 / US 1.767.3 / core 3.30.3: all 52 selected amount rows retain
+      the paired eligibility-right-only mismatch, with Axiom benefit 0 and
+      PolicyEngine January benefit 23.84000015258789. The amount changed from
+      the annualized-period report, but the case set and BBCE mechanism did
+      not.
   linked_issue: https://github.com/TheAxiomFoundation/rulespec-us/issues/1098
   expires_on_source_change: true
 - id: ga-bbce-net-waiver-snap_benefit
@@ -246,5 +252,12 @@ entries:
       persisted output surface: the household passes axiom's gross test and
       fails only the net-income test, which the state's BBCE waives. Axiom-
       side modeling boundary, tracked for encoding in rulespec-us#1098.
+      Revalidated after requested-month regeneration with PolicyEngine
+      4.18.9 / US 1.767.3 / core 3.30.3: all 29 selected amount rows retain
+      the paired eligibility-right-only mismatch and Axiom benefit 0.
+      PolicyEngine's January benefits are 23.84000015258789 for 26 rows and
+      59.5999755859375, 219.0999755859375, and 231.39996337890625 for one row
+      each. The values changed from the annualized-period report, but the
+      case set and BBCE mechanism did not.
   linked_issue: https://github.com/TheAxiomFoundation/rulespec-us/issues/1098
   expires_on_source_change: true

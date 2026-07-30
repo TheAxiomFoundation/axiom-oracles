@@ -741,6 +741,7 @@
       "name": "mn-tanf-ecps",
       "report": "axiom-policyengine-mn-tanf-ecps.json",
       "repos": [
+        "TheAxiomFoundation/rulespec-us",
         "TheAxiomFoundation/rulespec-us-mn"
       ],
       "source": "comparisons/mn-tanf-ecps.yaml"
@@ -886,6 +887,7 @@
       "name": "ny-tanf-ecps",
       "report": "axiom-policyengine-ny-tanf-ecps.json",
       "repos": [
+        "TheAxiomFoundation/rulespec-us",
         "TheAxiomFoundation/rulespec-us-ny"
       ],
       "source": "comparisons/ny-tanf-ecps.yaml"
@@ -1544,6 +1546,7 @@
       "name": "wa-tanf-ecps",
       "report": "axiom-policyengine-wa-tanf-ecps.json",
       "repos": [
+        "TheAxiomFoundation/rulespec-us",
         "TheAxiomFoundation/rulespec-us-wa"
       ],
       "source": "comparisons/wa-tanf-ecps.yaml"

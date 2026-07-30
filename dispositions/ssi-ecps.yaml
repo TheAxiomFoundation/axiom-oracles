@@ -1,32 +1,27 @@
 schema: axiom_oracles.dispositions.v1
 suite: ssi-ecps
-updated: "2026-07-08"
-# Residual after the resource-screen fix (axiom-oracles#227) regenerated the
-# ssi-ecps report: 4,044 -> 3,067 ssi_benefit mismatches. The remaining residual
-# is NOT the resource screen and NOT takeup (takes_up_ssi_if_eligible is 100%
-# among PE-eligible in this build). It is a BRIDGE artifact of this comparison:
+updated: "2026-07-28"
+# True-month regeneration under PE 4.18.9 / US 1.767.3 / core 3.30.3 leaves
+# 2,990 ssi_benefit mismatches. The legacy annualized report had 3,067. This is
+# NOT the resource screen and NOT takeup. It is a BRIDGE artifact of this
+# comparison:
 # rulespec-us correctly encodes SSI eligibility (1382), income (1382a) and
 # resources (1382b), but the ssi-ecps bridge feeds Axiom generic is_disabled/
 # is_blind flags (not PE's SSI-specific disability determination) and runs the
 # documented v1 individual slice (programs/us/ssi/fy-2026.yaml lists
-# ssi_annual_benefit under acknowledged_incomplete; couple/ineligible-spouse
+# ssi_monthly_benefit under acknowledged_incomplete; couple/ineligible-spouse
 # deeming is an explicit encoder-backlog divergence class). So the divergence is
 # the comparison's projection + v1-slice scope, not Axiom's statutory encoding —
 # classified bridge_artifact (explained), tracked in axiom-oracles#228.
 #
-# Characterized per-household against PE-US 1.752.2 over the certified populace-us
-# build (3,067 = axiom>PE 2,942, axiom<PE 125, both-positive 227):
-#   1,768  axiom awards but PE has NO eligible member (is_ssi_eligible False for
-#          every member): Axiom's aged/blind/disabled + eligibility chain is
-#          broader than PE's is_ssi_eligible (SSI-specific disability, qualified-
-#          alien/institutional status), and the projector feeds generic
-#          is_disabled/is_blind rather than PE's SSI determination.
-#     996  PE has an eligible taker-up but benefit computes to $0 (income offsets
-#          the FBR) while Axiom awards: countable-income assembly diverges from
-#          PE ssi_countable_income.
-# Concrete records: ecps-30 axiom 17,880 vs PE 0; ecps-42 axiom 11,928 vs PE 0
-# (no PE-eligible member); ecps-588 axiom 1,384.90 vs PE 1,504.90 (benefit-amount
-# composition). Full evidence in axiom-oracles#228 and PROGRESS.md.
+# A fresh direct PolicyEngine eligibility join reconciles all 2,990 report rows:
+# 1,746 Axiom awards/PE=0 with no PE-eligible member; 987 Axiom awards/PE=0
+# with an eligible member whose benefit offsets to zero; 167 both-positive
+# Axiom>PE; 17 both-positive Axiom<PE; and 73 Axiom=0/PE>0. In the 1,000 legacy
+# mismatch examples that were committed, 976 persist and scale by 1/12 (maximum
+# PE rounding drift $0.000204); 24 now fall within the unchanged $25 tolerance.
+# The old full report was not committed, so the other net closures cannot be
+# identity-audited.
 entries:
   - id: ssi-v1-slice-eligibility-and-income-composition
     concept: us:statutes/42/1382#ssi_benefit
@@ -34,17 +29,23 @@ entries:
     disposition: bridge_artifact
     evidence:
       mechanism: >-
-        ssi-ecps bridge projection + v1-slice scope, not an Axiom statutory
-        encoding defect. Two verified sub-classes (per-household PE correlation):
-        (a) 1,768 households where Axiom awards but PE has no is_ssi_eligible
-        member — the bridge feeds Axiom generic is_disabled/is_blind rather than
-        PE's SSI-specific disability determination, and the v1 slice omits
-        qualified-alien/institutional criteria; (b) 996 households where PE is
-        eligible but benefit offsets to $0 on income while Axiom awards — the
-        bridge's countable-income assembly diverges from PE ssi_countable_income.
-        Representative:
-        ecps-30 (axiom 17,880 / PE 0), ecps-42 (axiom 11,928 / PE 0), ecps-588
-        (axiom 1,384.90 / PE 1,504.90).
+        ssi-ecps bridge projection + documented v1-slice scope, not an Axiom
+        statutory encoding defect. The bridge feeds generic is_disabled/is_blind
+        rather than PolicyEngine's SSI-specific disability determination, while
+        the v1 slice omits couple/ineligible-spouse deeming and other
+        acknowledged eligibility branches. Fresh true-month characterization is
+        2,990 rows. A direct PE eligibility join verifies five current classes:
+        1,746 Axiom awards/PE=0 with no eligible PE member; 987 Axiom awards/PE=0
+        with an eligible member whose income offsets the award; 167 both-positive
+        Axiom>PE; 17 both-positive Axiom<PE; and 73 Axiom=0/PE>0. Representative
+        rows are ecps-64 (axiom=994 / PE=0, no eligible member), ecps-30
+        (axiom=1490 / PE=0, eligible member), ecps-831
+        (836.618333 / 330.067780), ecps-5872 (843.740833 / 1361.741028), and
+        ecps-1587 (0 / 994). The disposition materially changed from 3,067
+        annualized rows; 976/1,000 committed legacy examples were replayable and
+        scaled by 1/12, while 24 dropped below the unchanged $25 tolerance.
+        Obsolete subtype counts and the now-within-tolerance ecps-588
+        representative were removed.
       sources:
         - PROGRESS.md
     linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/228
