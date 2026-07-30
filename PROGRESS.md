@@ -2201,3 +2201,29 @@ residual), #229 (small-suite grounding).
 - Write and commit the final request-changes report.
 - Reverify report/ledger cleanliness and hand off without any PR-branch,
   remote, or GitHub mutation.
+
+### Review closeout
+
+#### State
+
+- Final verdict: REQUEST-CHANGES.
+- The numerical oracle result passes; two binding provenance/chain
+  requirements remain unresolved.
+
+#### Done
+
+- Wrote `REVIEW-REPORT.md` with the exact reviewed identities, two blocking
+  findings, regeneration evidence, bridge and senior-addback analysis,
+  statutory recomputations, adoption/mapping audit, full check and baseline
+  results, containment, and sandbox disclosures.
+- Identified the required author actions: synchronize the Chunk 2 pin-census
+  expectation with the merged RuleSpec tree, and obtain explicit authority
+  for the provenance of the five supplemental bridge zeros.
+- Preserved all review work as local commits on
+  `review/pr430-2404dd5b-blind`; no target branch, remote, pull request, or
+  GitHub state was mutated.
+
+#### Next
+
+- PR author resolves both blockers and reruns the complete suite.
+- Re-review the amended immutable head and its bridge provenance.
