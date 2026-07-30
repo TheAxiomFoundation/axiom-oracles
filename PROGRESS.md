@@ -1955,3 +1955,27 @@ residual), #229 (small-suite grounding).
 
 - Write the untracked worker report with the final head SHA and hand the local
   branch back for review. No further in-scope implementation remains.
+
+### 2026-07-30 PUB 275 bridge follow-up start
+
+#### State
+
+- Follow-up work begins from local branch head
+  `3c694c77f4b63c89fbac478cbdaa629317d4ec2a`; the branch remains unpushed.
+- The legal/administrative character of PUB 275 issuance and online access is
+  undecided pending review of the retained pinned CDSS authority.
+
+#### Done
+
+- Read the predecessor's untracked `WORKER-REPORT.md` before beginning work.
+- Confirmed the predecessor's 529-row baseline taxonomy: encoding 0, bridge
+  268, upstream 20, and unexplained 241.
+- Recorded the required containment, exact PolicyEngine stack, current
+  RuleSpec-origin requirement, frozen #423 guard repair, and no-push/no-GitHub
+  constraints.
+
+#### Next
+
+- Read ACL 14-56, ACL 15-42, and ACL 14-56E from the pinned corpus and decide
+  from their controlling text whether the bridge may lawfully bind PUB 275 as
+  a statewide administrative fact.
