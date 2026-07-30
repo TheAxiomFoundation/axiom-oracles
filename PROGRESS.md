@@ -2628,3 +2628,68 @@ residual), #229 (small-suite grounding).
 - Audit commit containment, unchanged tolerances, append-only progress
   history, and final worktree state before writing the untracked repair
   report.
+
+### 2026-07-30 defensive repair 2 final validation
+
+#### State
+
+- The requested defensive correctness and completeness repair is complete on
+  the local branch. No push or GitHub write was made.
+- The tracked worktree is clean before this closing ledger append. The two
+  pre-existing untracked worker reports remain untouched; the required
+  untracked `WORKER-REPORT-REPAIR2.md` will be written after this entry is
+  committed so it can name the final head.
+
+#### Done
+
+- Passed the complete read-only chain for disposition joins, focused CA case
+  and served artifacts, grids, boundary cases, affected map,
+  vacuous/freshness, dashboard overview, conformance universes and
+  compositions, scoreboard, ratchet, burn-down, frozen #423 reconciliation,
+  and dependent #362 dispatch. All three checks that failed the accepted blind
+  review are green without assertion or tolerance changes.
+- Passed comparison-registry loading, the 21,859-rule verification guard
+  (99.6% grounded, 97.8% manifest-backed, 34/130 executable surfaces), and the
+  43-jurisdiction state-tax Populace contract.
+- Reconfirmed the exact replay environment from the retained local evidence:
+  PolicyEngine 4.18.9, PolicyEngine-US 1.767.3, core 3.30.3, and Plotly
+  5.24.1; RuleSpec commit `edc62ea566a617cf5b9c3b620f712b73c6767c94`;
+  compiled hash `c1d2c5bd...`; composed hash `03166c96...`; and raw report hash
+  `fe63c28f...`.
+- Passed 40 focused repair tests and the full repair-specific subsets. The
+  full repository run collected 2,392 tests and completed in 263.35 seconds
+  with 2,320 passed, 70 skipped, two failed, and 104 warnings. Both failures
+  are unchanged, unrelated baseline/environment failures:
+  - `test_dashboard_loader.py::test_loader_equivalence` cannot resolve
+    `registry.npmjs.org` for sandboxed `npx esbuild` (`ENOTFOUND`).
+  - `test_federal_tax_liability_generator.py::test_every_live_federal_grid_pins_its_reviewed_rulespec_snapshot`
+    compares unchanged commits `345c2203...` and `ae64af27...`, which resolve
+    to the same tree `40e08f7d...`.
+- Passed repository-wide Ruff 0.15.12 lint and changed guard-file format
+  checks. The optional repository-wide format check reports 202 pre-existing
+  files; the changed mapping test was already unformatted at accepted start
+  `eee181a`, and this repair did not broaden it with mechanical rewrites.
+- Independently confirmed 31 changed paths, all within the repair whitelist.
+  Every repair commit appends a State/Done/Next section to `PROGRESS.md`; each
+  prior ledger blob is an exact byte prefix of its successor. Benefit
+  tolerance remains 7, eligibility tolerance 0, both relative tolerances 0,
+  and historical movement threshold 0.005.
+- Reconfirmed both exact historical receipts: honest live partition
+  192/22/0/131 and rejected snapshot partition 156/17/41/131, each closing
+  over all 345 base rows and the same 22-row `fa54f6fd...` drift receipt.
+- Sandbox/tooling disclosures: the worktree has no local virtualenv, so the
+  existing parent environment was used; offline dependency resolution could
+  not fetch cached Plotly through a fresh uv solve, so the exact cached
+  package overlay was used; the current rules engine rejected an unrelated
+  pre-existing en-dash RuleSpec path, so compatible engine commit
+  `e19f1b75...` compiled the byte-identical accepted program; GitNexus query
+  tools were unavailable and its CLI could not complete offline, so the
+  required debugging workflow used direct source/Git inspection; process
+  enumeration was denied by the sandbox; and npm network resolution caused
+  the disclosed dashboard-loader test failure.
+
+#### Next
+
+- Commit this closing append, write the untracked
+  `WORKER-REPORT-REPAIR2.md` with the final head SHA, and hand the local branch
+  back without pushing.
