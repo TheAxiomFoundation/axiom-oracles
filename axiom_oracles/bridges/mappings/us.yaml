@@ -4900,6 +4900,40 @@ mappings:
     candidate_priority: P4
     rationale: ACL 14-63 denial/discontinuance judgment for zero-benefit CE/MCE households of three or more; PolicyEngine's is_snap_eligible and snap_normal_allotment are downstream outcomes, not this denial predicate.
 
+  - legal_id: us:policies/income_tax/taxable_income_pipeline#taxable_income_pipeline_verified_domain_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    entity: tax_unit
+    period: year
+    comparison: decision
+    candidate_priority: P4
+    rationale: This RuleSpec judgment fail-closes the taxable-income composition unless the filing status, section 63(c)(6) standard-deduction eligibility, imported component domains, completed worksheet boundaries, itemization election, and nonnegative amount constraints all hold. PolicyEngine-US 1.767.3 exposes no one-to-one judgment for that legal-domain contract.
+
+  - legal_id: us:policies/income_tax/taxable_income_pipeline#federal_taxable_income
+    country: us
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: taxable_income
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    candidate_priority: P1
+    rationale: Both companion-asserted outputs are annual TaxUnit federal taxable income, floored at zero after subtracting section 151 exemptions and the selected taxable-income deductions from adjusted gross income. The 14-case grid binds all five filing statuses and the resolved election at this direct shared boundary.
+
+  - legal_id: us:policies/income_tax/taxable_income_pipeline#federal_taxable_income_deductions
+    country: us
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: taxable_income_deductions
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    candidate_priority: P1
+    rationale: Both companion-asserted outputs are the annual TaxUnit total of the election-selected 2026 below-line deduction inventory. The oracle binds the same resolved itemization election and completed component boundaries, while independently deriving the standard and senior deductions in PolicyEngine-US 1.767.3.
+
   - legal_id: us-ca:policies/cdss/snap/fy-2026-benefit-calculation#shelter_costs
     country: us
     program: snap
