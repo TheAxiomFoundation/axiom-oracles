@@ -2361,3 +2361,50 @@ residual), #229 (small-suite grounding).
   supportable.
 - Reproduce attribution, frozen-row, guard, regeneration, and containment
   claims; record evidence after each coherent review step.
+
+### 2026-07-30 blind review: PUB 275 legal determination
+
+#### State
+
+- **Blocking finding:** the retained ACL text does not support binding
+  `household_was_issued_pub_275 = true` for every statewide comparison case.
+- This finding alone requires `REQUEST-CHANGES`; the remaining review
+  dimensions continue so the final report supplies the requested complete
+  evidence digest.
+
+#### Done
+
+- Read the retained rows directly at corpus pin `8af59216`:
+  - ACL 14-56 page 3 distinguishes “receipt of, or online access to” PUB 275,
+    says receipt alone does not confer MCE, and presents paper-packet versus
+    linked-website alternatives.
+  - ACL 14-56 page 6 directs CWDs to document that an MCE household was given
+    PUB 275 and provides a corrective-benefit remedy for implementation
+    failures; that is a duty/remedy, not proof that every household was issued
+    the brochure.
+  - ACL 15-42 page 2 says eligible households must be conferred MCE **if**
+    issued or given online access and if the other conditions hold.
+- Confirmed the PR binds the specifically named issuance leaf to constant
+  `true` in `axiom_oracles/data/populace_input_mapping.yaml` while its new
+  loader test deliberately leaves `household_has_online_access_to_pub_275`
+  unmapped. Generic Judgment fallback makes the latter `false`.
+- Confirmed pinned RuleSpec `edc62ea566a617cf5b9c3b620f712b73c6767c94`
+  preserves the two facts as separate OR operands and includes an online-only
+  fixture with issuance false and access true.
+- Determined that “receipt ... in and of itself” is not independently
+  disqualifying because the encoded formula retains income, exclusion, and
+  membership gates. The blocker is substituting one household-specific fact
+  for a composite conditional trigger and thereby manufacturing MCE where
+  neither fact is observed.
+- GitNexus change detection indexed 98 changed symbols in 32 files and no
+  affected execution processes; its low-risk label is not probative for this
+  data-driven legal bridge. Index registration failed on sandbox-denied
+  `/Users/maxghenis/.gitnexus/registry.json`, although the task-local graph
+  completed and was queried directly.
+
+#### Next
+
+- Complete the 735-row counterfactual, pinned PolicyEngine logic/parameter,
+  boundary arithmetic, and upstream-issue reproduction audit.
+- Complete frozen-row sampling, guard comparison, drift/tolerance checks, and
+  full regeneration/parity/containment checks.
