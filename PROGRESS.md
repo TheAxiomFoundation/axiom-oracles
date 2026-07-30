@@ -2790,3 +2790,28 @@ residual), #229 (small-suite grounding).
   byte-prefix appends.
 - Finish changed-path, mode, assertion, tolerance, and branch containment.
 - Write and commit `REVIEW-REPORT.md`.
+
+### Repair re-review entry 4 — APPROVE closeout
+
+#### State
+
+- Verdict is APPROVE; no blocking repair or containment finding remains.
+- `REVIEW-REPORT.md` contains the complete evidence digest and sandbox
+  disclosures.
+
+#### Done
+
+- Verified exactly 31 mode-stable whitelisted repair paths and the same
+  full-PR path count; no add, delete, rename, or mode change occurred.
+- Verified all eight repair ledger transitions and all reviewer transitions
+  are exact byte-prefix appends with zero removed bytes.
+- Confirmed `_require` sites increased 114 to 123, guard tests increased 13
+  to 14, skip/xfail remained zero, and 323 common identities have zero
+  tolerance changes.
+- Confirmed the author branch still points exactly to `f268e26cb`; all review
+  commits are isolated on the local review branch.
+- Wrote the final approval report.
+
+#### Next
+
+- Hand off the committed report. No further review work is pending.
