@@ -1,0 +1,55 @@
+# Federal taxable income — Axiom vs PolicyEngine-US, tax year 2026.
+#
+# Axiom boundary: the engine-verified RuleSpec companion supplies all 14
+# adopted cases and the lawful federal_taxable_income expected value. The grid
+# covers all five filing statuses, the resolved itemization election, all
+# 2026 below-line inventory branches, the suspended personal exemption,
+# senior-deduction phaseout, and the zero floor.
+#
+# PolicyEngine binding: compare taxable_income directly. Bind the resolved
+# election to tax_unit_itemizes; bridge the companion's completed itemized,
+# QBI, and nonitemizer-charity outputs. PolicyEngine independently derives the
+# standard deduction, senior deduction, exemption amount, selected deduction
+# total, and final taxable income.
+#
+# RuleSpec: rulespec-us PR #1179 commit
+# 4ced8fb7065311338ea732cab0a26105e750c40f
+# (tree 9a4aaf64acd4c0cfe407cce5b3bb94516aaceacb).
+# PolicyEngine source pin: policyengine-us 1.767.3.
+#
+# Run locally:
+#   uv run python scripts/run_comparison.py us-taxable-income-grid --summary
+
+name: us-taxable-income-grid
+title: Federal taxable income — Axiom vs PolicyEngine
+description: >-
+  Compares lawful 2026 federal taxable income against PolicyEngine-US on 14
+  engine-verified companion cases across all five filing statuses, both
+  itemization branches, the full below-line inventory, senior thresholds,
+  suspended exemptions, and the zero floor.
+
+runner:
+  type: federal-tax-liability-grid
+  parameters:
+    policy: taxable_income
+    period: "2026"
+    concept: >-
+      us:policies/income_tax/taxable_income_pipeline#federal_taxable_income
+    python: "3.13"
+    policyengine_version: "4.18.9"
+    policyengine_us_version: "1.767.3"
+    policyengine_core_version: "3.30.3"
+    tolerance: 0.01
+    relative_tolerance: 0.0
+    rulespec_remote: https://github.com/TheAxiomFoundation/rulespec-us.git
+    rulespec_roots:
+      - /private/tmp/oracle-rerun/rulespec-us
+    rulespec_upstream_sha: 4ced8fb7065311338ea732cab0a26105e750c40f
+    rulespec_upstream_tree: 9a4aaf64acd4c0cfe407cce5b3bb94516aaceacb
+
+artifacts:
+  report_basename: axiom-policyengine-us-taxable-income-grid
+
+dashboard:
+  filename: axiom-policyengine-us-taxable-income-grid.json
+  suite: us-taxable-income-grid

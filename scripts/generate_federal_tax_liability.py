@@ -89,6 +89,7 @@ class PolicyConfig:
     pe_parameter_validator: Callable[[Any], None] | None = None
     supplemental_fixture_paths: tuple[Path, ...] = ()
     comparison_bindings: tuple[ComparisonBinding, ...] = ()
+    axiom_auxiliary_module_refs: tuple[str, ...] = ()
     axiom_bridge_outputs: Mapping[str, str] = dataclass_field(default_factory=dict)
     axiom_diagnostic_outputs: Mapping[str, str] = dataclass_field(default_factory=dict)
     rulespec_domain_inputs: Mapping[str, Any] = dataclass_field(default_factory=dict)
@@ -108,12 +109,27 @@ def _case(
 
 _SALT_MODULE = "us:policies/income_tax/salt_deduction_pipeline"
 _ITEMIZED_MODULE = "us:policies/income_tax/itemized_taxable_income_deductions_pipeline"
+_TAXABLE_MODULE = "us:policies/income_tax/taxable_income_pipeline"
+_STANDARD_DEDUCTION_MODULE = "us:policies/irs/rev-proc-2025-32/standard-deduction"
+_QBID_MODULE = "us:policies/income_tax/qualified_business_income_deduction_pipeline"
+_SECTION_151_MODULE = "us:statutes/26/151"
+_NONITEMIZER_CHARITY_MODULE = "us:statutes/26/170/p"
+_TIPS_MODULE = "us:statutes/26/224"
+_OVERTIME_MODULE = "us:statutes/26/225"
+_AUTO_LOAN_INTEREST_MODULE = "us:statutes/26/163/h/4/C/ii/I"
 _SALT_SECTION_911_BRIDGE = f"{_SALT_MODULE}#federal_section_911_exclusion_for_salt_magi"
 _ITEMIZED_BEFORE_SECTION_68 = (
     f"{_ITEMIZED_MODULE}"
     "#itemized_deductions_otherwise_allowable_after_other_limitations"
 )
 _ITEMIZED_SECTION_68_REDUCTION = f"{_ITEMIZED_MODULE}#federal_section_68_reduction"
+_TAXABLE_ITEMIZED_BRIDGE = (
+    f"{_ITEMIZED_MODULE}#federal_itemized_taxable_income_deductions"
+)
+_TAXABLE_QBID_BRIDGE = f"{_QBID_MODULE}#federal_qualified_business_income_deduction"
+_TAXABLE_CHARITY_BRIDGE = (
+    f"{_NONITEMIZER_CHARITY_MODULE}#nonitemizer_charitable_deduction"
+)
 _PE_STRUCTURAL_INPUTS = (
     "age",
     "filing_status",
@@ -404,6 +420,184 @@ _ITEMIZED_DEDUCTION_CASES = (
         adjusted_gross_income=10_640_600,
         taxable_income_determined_without_section_68=640_600,
         charitable_deduction=10_000_000,
+    ),
+)
+
+
+# SPINE-PLAN section 6.3.  The selected branch is a legal/return election,
+# not PolicyEngine's tax-minimizing simulation heuristic.  The three completed
+# imported amounts named in the Chunk 2 handoff are fixture-output bridges;
+# the remaining completed below-line inputs are bound directly and checked
+# against the exact companion input contract.
+def _taxable_case(
+    case_id: str,
+    filing_status: str,
+    *,
+    adjusted_gross_income: float,
+    taxable_income_determined_without_section_68: float,
+    taxable_income_computed_without_section_199A: float,
+    resolved_itemization_election: bool = False,
+    itemized_charitable_deduction: float = 0,
+    qualified_business_income: float = 0,
+    nonitemizer_charity_payment: float = 0,
+    tip_income_deduction: float = 0,
+    overtime_income_deduction: float = 0,
+    auto_loan_interest_deduction: float = 0,
+    wagering_losses_deduction: float = 0,
+    head_age: int = 40,
+    spouse_age: int = 40,
+    exemption_person_count: int = 0,
+) -> FederalCase:
+    additional_standard_deduction_entitlement_count = int(head_age >= 65)
+    if filing_status == "joint":
+        additional_standard_deduction_entitlement_count += int(spouse_age >= 65)
+    return _case(
+        case_id,
+        filing_status,
+        adjusted_gross_income=adjusted_gross_income,
+        taxable_income_determined_without_section_68=(
+            taxable_income_determined_without_section_68
+        ),
+        taxable_income_computed_without_section_199A=(
+            taxable_income_computed_without_section_199A
+        ),
+        resolved_itemization_election=resolved_itemization_election,
+        itemized_charitable_deduction=itemized_charitable_deduction,
+        qualified_business_income=qualified_business_income,
+        nonitemizer_charity_payment=nonitemizer_charity_payment,
+        tip_income_deduction=tip_income_deduction,
+        overtime_income_deduction=overtime_income_deduction,
+        auto_loan_interest_deduction=auto_loan_interest_deduction,
+        wagering_losses_deduction=wagering_losses_deduction,
+        head_age=head_age,
+        spouse_age=spouse_age,
+        exemption_person_count=exemption_person_count,
+        additional_standard_deduction_entitlement_count=(
+            additional_standard_deduction_entitlement_count
+        ),
+    )
+
+
+_TAXABLE_INCOME_CASES = (
+    _taxable_case(
+        "ti-single-standard",
+        "single",
+        adjusted_gross_income=100_000,
+        taxable_income_determined_without_section_68=100_000,
+        taxable_income_computed_without_section_199A=83_900,
+    ),
+    _taxable_case(
+        "ti-joint-standard",
+        "joint",
+        adjusted_gross_income=200_000,
+        taxable_income_determined_without_section_68=200_000,
+        taxable_income_computed_without_section_199A=167_800,
+    ),
+    _taxable_case(
+        "ti-hoh-standard",
+        "head_of_household",
+        adjusted_gross_income=100_000,
+        taxable_income_determined_without_section_68=100_000,
+        taxable_income_computed_without_section_199A=75_850,
+    ),
+    _taxable_case(
+        "ti-mfs-standard",
+        "separate",
+        adjusted_gross_income=100_000,
+        taxable_income_determined_without_section_68=100_000,
+        taxable_income_computed_without_section_199A=83_900,
+    ),
+    _taxable_case(
+        "ti-surviving-standard",
+        "surviving_spouse",
+        adjusted_gross_income=200_000,
+        taxable_income_determined_without_section_68=200_000,
+        taxable_income_computed_without_section_199A=167_800,
+    ),
+    _taxable_case(
+        "ti-single-itemized",
+        "single",
+        adjusted_gross_income=100_000,
+        taxable_income_determined_without_section_68=75_000,
+        taxable_income_computed_without_section_199A=75_000,
+        resolved_itemization_election=True,
+        itemized_charitable_deduction=25_000,
+    ),
+    _taxable_case(
+        "ti-choice-equal",
+        "single",
+        adjusted_gross_income=100_000,
+        taxable_income_determined_without_section_68=83_900,
+        taxable_income_computed_without_section_199A=83_900,
+        itemized_charitable_deduction=16_100,
+    ),
+    _taxable_case(
+        "ti-nonitemizer-all-components",
+        "single",
+        adjusted_gross_income=75_000,
+        taxable_income_determined_without_section_68=75_000,
+        taxable_income_computed_without_section_199A=75_000,
+        qualified_business_income=50_000,
+        nonitemizer_charity_payment=500,
+        tip_income_deduction=5_000,
+        overtime_income_deduction=2_000,
+        auto_loan_interest_deduction=1_000,
+        head_age=65,
+    ),
+    _taxable_case(
+        "ti-itemizer-all-components",
+        "single",
+        adjusted_gross_income=75_000,
+        taxable_income_determined_without_section_68=16_000,
+        taxable_income_computed_without_section_199A=75_000,
+        resolved_itemization_election=True,
+        itemized_charitable_deduction=30_000,
+        qualified_business_income=50_000,
+        tip_income_deduction=5_000,
+        overtime_income_deduction=2_000,
+        auto_loan_interest_deduction=1_000,
+        wagering_losses_deduction=5_000,
+        head_age=65,
+    ),
+    _taxable_case(
+        "ti-personal-exemption-zero",
+        "single",
+        adjusted_gross_income=50_000,
+        taxable_income_determined_without_section_68=50_000,
+        taxable_income_computed_without_section_199A=33_900,
+        exemption_person_count=4,
+    ),
+    _taxable_case(
+        "ti-floor-zero",
+        "single",
+        adjusted_gross_income=10_000,
+        taxable_income_determined_without_section_68=10_000,
+        taxable_income_computed_without_section_199A=0,
+    ),
+    _taxable_case(
+        "ti-senior-single-threshold",
+        "single",
+        adjusted_gross_income=75_000,
+        taxable_income_determined_without_section_68=75_000,
+        taxable_income_computed_without_section_199A=50_850,
+        head_age=65,
+    ),
+    _taxable_case(
+        "ti-senior-single-plus-one",
+        "single",
+        adjusted_gross_income=75_001,
+        taxable_income_determined_without_section_68=75_001,
+        taxable_income_computed_without_section_199A=50_851.06,
+        head_age=65,
+    ),
+    _taxable_case(
+        "ti-senior-joint-threshold",
+        "joint",
+        adjusted_gross_income=150_000,
+        taxable_income_determined_without_section_68=150_000,
+        taxable_income_computed_without_section_199A=102_500,
+        head_age=65,
+        spouse_age=65,
     ),
 )
 
@@ -1385,6 +1579,89 @@ def _itemized_situation(
     return situation
 
 
+def _taxable_income_situation(
+    case: FederalCase,
+    bridge_outputs: Mapping[str, float],
+) -> dict[str, Any]:
+    values = _require_bridge_output_values(
+        suite="us-taxable-income-grid",
+        case_id=case.case_id,
+        bridge_outputs=bridge_outputs,
+        expected_keys=(
+            _TAXABLE_ITEMIZED_BRIDGE,
+            _TAXABLE_QBID_BRIDGE,
+            _TAXABLE_CHARITY_BRIDGE,
+        ),
+    )
+    inputs = case.inputs
+    situation = _tax_situation(
+        case,
+        primary_inputs={
+            "age": inputs["head_age"],
+            "ssn_card_type": "CITIZEN",
+        },
+        spouse_inputs={
+            "age": inputs["spouse_age"],
+            "ssn_card_type": "CITIZEN",
+        },
+    )
+
+    # The personal-exemption diagnostic intentionally carries four people.
+    # Other cases retain the natural membership implied by filing status.
+    members = situation["tax_units"]["tax_unit"]["members"]
+    while len(members) < inputs["exemption_person_count"]:
+        person_id = f"exemption_person_{len(members) + 1}"
+        situation["people"][person_id] = _person(
+            age=10,
+            is_tax_unit_dependent=True,
+        )
+        # `_tax_situation` deliberately shares this members list across all
+        # four group entities.
+        members.append(person_id)
+
+    tax_unit = situation["tax_units"]["tax_unit"]
+    tax_unit.update(
+        {
+            "filing_status": {
+                VALIDATION_YEAR: {
+                    "single": "SINGLE",
+                    "joint": "JOINT",
+                    "separate": "SEPARATE",
+                    "head_of_household": "HEAD_OF_HOUSEHOLD",
+                    "surviving_spouse": "SURVIVING_SPOUSE",
+                }[case.filing_status]
+            },
+            "adjusted_gross_income": {VALIDATION_YEAR: inputs["adjusted_gross_income"]},
+            "tax_unit_itemizes": {
+                VALIDATION_YEAR: inputs["resolved_itemization_election"]
+            },
+            "itemized_taxable_income_deductions": {
+                VALIDATION_YEAR: values[_TAXABLE_ITEMIZED_BRIDGE]
+            },
+            "qualified_business_income_deduction": {
+                VALIDATION_YEAR: values[_TAXABLE_QBID_BRIDGE]
+            },
+            "charitable_deduction_for_non_itemizers": {
+                VALIDATION_YEAR: values[_TAXABLE_CHARITY_BRIDGE]
+            },
+            # These are completed composition-boundary inputs in the
+            # RuleSpec companion. They are not broadened into component
+            # entitlement comparisons in this aggregate suite.
+            "wagering_losses_deduction": {
+                VALIDATION_YEAR: inputs["wagering_losses_deduction"]
+            },
+            "tip_income_deduction": {VALIDATION_YEAR: inputs["tip_income_deduction"]},
+            "overtime_income_deduction": {
+                VALIDATION_YEAR: inputs["overtime_income_deduction"]
+            },
+            "auto_loan_interest_deduction": {
+                VALIDATION_YEAR: inputs["auto_loan_interest_deduction"]
+            },
+        }
+    )
+    return situation
+
+
 def _payroll_situation(case: FederalCase) -> dict[str, Any]:
     inputs = case.inputs
     primary = {
@@ -1760,6 +2037,136 @@ _FILING_STATUS_CODES = {
     "head_of_household": 3,
     "surviving_spouse": 4,
 }
+_TAXABLE_QBID_DOMAIN_INPUT = (
+    f"{_QBID_MODULE}"
+    "#input.supplied_amounts_are_for_taxpayers_only_qualified_trade_or_business"
+)
+_TAXABLE_STANDARD_ELIGIBILITY_INPUTS = {
+    (
+        "us:statutes/26/63/c/6#input."
+        "married_individual_filing_separate_return_where_either_spouse_"
+        "itemizes_deductions"
+    ): False,
+    "us:statutes/26/63/c/6#input.nonresident_alien_individual": False,
+    (
+        "us:statutes/26/63/c/6#input."
+        "return_period_less_than_12_months_due_to_accounting_period_change"
+    ): False,
+    (
+        "us:statutes/26/63/c/6#input.estate_or_trust_common_trust_fund_or_partnership"
+    ): False,
+    "us:statutes/26/443/a/1#input.taxpayer_changes_annual_accounting_period": False,
+    (
+        "us:statutes/26/443/a/1#input."
+        "secretary_approves_change_of_annual_accounting_period"
+    ): False,
+    "us:statutes/26/443/a/1#input.return_is_made_for_short_period": False,
+    (
+        "us:statutes/26/443/a/1#input."
+        "short_period_begins_on_day_after_close_of_former_taxable_year"
+    ): False,
+    (
+        "us:statutes/26/443/a/1#input."
+        "short_period_ends_at_close_of_day_before_first_day_of_new_taxable_year"
+    ): False,
+}
+_TAXABLE_DOMAIN_INPUTS = {
+    **_ITEMIZED_DOMAIN_INPUTS,
+    _TAXABLE_QBID_DOMAIN_INPUT: True,
+    **_TAXABLE_STANDARD_ELIGIBILITY_INPUTS,
+    (
+        "us:statutes/26/151#input.taxable_year_begins_after_exemption_amount_zero_start"
+    ): True,
+    (
+        "us:statutes/26/151#input."
+        "taxable_year_begins_before_senior_deduction_termination"
+    ): True,
+    (
+        "us:statutes/26/163/h/4/C/ii/I#input."
+        "taxable_year_is_in_temporary_effective_window"
+    ): True,
+    (
+        "us:statutes/26/224#input.taxpayer_social_security_number_included_on_return"
+    ): True,
+    "us:statutes/26/224#input.taxable_year_begins_after_termination_date": False,
+}
+_TAXABLE_COMMON_FIXTURE_INPUTS = {
+    **_NEUTRAL_POSSESSION_INPUTS,
+    **_TAXABLE_DOMAIN_INPUTS,
+    "us:statutes/26/911/a#input.individual_is_qualified_individual": False,
+    ("us:statutes/26/911/a#input.election_made_for_foreign_earned_income"): False,
+    ("us:statutes/26/911/a#input.election_made_for_housing_cost_amount"): False,
+    "us:statutes/26/911/a#input.foreign_earned_income_of_individual": 0,
+    "us:statutes/26/911/a#input.housing_cost_amount_of_individual": 0,
+    _SALT_SECTION_911_RELATION: [],
+    f"{_SALT_INPUT_PREFIX}state_and_local_sales_or_income_tax": 0,
+    _SALT_PERSONAL_PROPERTY_INPUT: 0,
+    f"{_SALT_INPUT_PREFIX}real_estate_taxes": 0,
+    f"{_ITEMIZED_INPUT_PREFIX}interest_deduction": 0,
+    f"{_ITEMIZED_INPUT_PREFIX}medical_expense_deduction": 0,
+    f"{_ITEMIZED_INPUT_PREFIX}casualty_loss_deduction": 0,
+    f"{_ITEMIZED_INPUT_PREFIX}misc_deduction": 0,
+    (
+        f"{_STANDARD_DEDUCTION_MODULE}"
+        "#input.may_be_claimed_as_dependent_by_another_taxpayer"
+    ): False,
+    f"{_STANDARD_DEDUCTION_MODULE}#input.earned_income": 0,
+    "us:statutes/26/199A#input.qualified_trade_or_business_w2_wages": 0,
+    ("us:statutes/26/199A#input.qualified_trade_or_business_unadjusted_basis"): 0,
+    (
+        "us:statutes/26/199A#input."
+        "qualified_business_income_allocable_to_qualified_cooperative_payments"
+    ): 0,
+    (
+        "us:statutes/26/199A#input.w2_wages_allocable_to_qualified_cooperative_payments"
+    ): 0,
+    "us:statutes/26/199A#input.qualified_reit_dividends": 0,
+    ("us:statutes/26/199A#input.qualified_publicly_traded_partnership_income"): 0,
+    "us:statutes/26/199A#input.taxpayer_is_corporation": False,
+    (
+        "us:statutes/26/199A#input."
+        "aggregate_qualified_business_income_from_active_qualified_trades_"
+        "or_businesses"
+    ): 0,
+    "us:statutes/26/199A#input.qualified_production_activities_income": 0,
+    (
+        "us:statutes/26/199A#input."
+        "taxpayer_is_specified_agricultural_or_horticultural_cooperative"
+    ): False,
+    "us:statutes/26/199A#input.cooperative_w2_wages": 0,
+    (
+        "us:statutes/26/1/h#input."
+        "net_capital_gain_taken_into_account_as_investment_income_under_"
+        "section_163_d_4_B_iii"
+    ): 0,
+    "us:statutes/26/1/h#input.long_term_capital_gains": 0,
+    "us:statutes/26/1/h#input.short_term_capital_gains": 0,
+    "us:statutes/26/1/h#input.qualified_dividend_income": 0,
+    (
+        "us:statutes/26/224#input."
+        "nonemployee_trade_or_business_qualified_tips_included_on_"
+        "statements_or_form_4137"
+    ): 0,
+    (
+        "us:statutes/26/224#input."
+        "gross_income_from_nonemployee_trade_or_business_including_qualified_tips"
+    ): 0,
+    (
+        "us:statutes/26/224#input."
+        "deductions_allocable_to_nonemployee_trade_or_business_other_than_"
+        "section_224"
+    ): 0,
+    ("us:statutes/26/225#input.qualified_tips_included_in_overtime_compensation"): 0,
+}
+_TAXABLE_EXEMPTION_RELATION = (
+    f"{_SECTION_151_MODULE}#relation.exemption_individual_of_tax_unit"
+)
+_TAXABLE_SENIOR_RELATION = (
+    f"{_SECTION_151_MODULE}#relation.senior_deduction_individual_of_tax_unit"
+)
+_TAXABLE_CHARITY_RELATION = (
+    f"{_NONITEMIZER_CHARITY_MODULE}#relation.charitable_contribution_of_tax_unit"
+)
 
 
 def _section_911_fixture_people(
@@ -1857,6 +2264,154 @@ def _validate_itemized_fixture(
     }
     _require_exact_fixture_values(
         suite="us-itemized-taxable-income-deductions-grid",
+        case_id=case.case_id,
+        actual=actual,
+        expected=expected,
+    )
+
+
+def _taxable_section_151_row(
+    *,
+    filing_status: str,
+    is_taxpayer: bool,
+    is_spouse: bool,
+    age: int,
+    qualified_ssn: bool,
+) -> dict[str, Any]:
+    prefix = f"{_SECTION_151_MODULE}#input."
+    return {
+        f"{prefix}tin_included_on_return_claiming_exemption": True,
+        f"{prefix}is_taxpayer": is_taxpayer,
+        f"{prefix}is_spouse_of_taxpayer": is_spouse,
+        f"{prefix}spouse_has_no_gross_income_for_calendar_year": False,
+        f"{prefix}spouse_is_dependent_of_another_taxpayer": False,
+        f"{prefix}qualified_individual_social_security_number_included_on_return": (
+            qualified_ssn
+        ),
+        f"{prefix}age": age,
+        f"{prefix}filing_status": _FILING_STATUS_CODES[filing_status],
+    }
+
+
+def _taxable_senior_relation(case: FederalCase) -> list[dict[str, Any]]:
+    inputs = case.inputs
+    rows: list[dict[str, Any]] = []
+    if inputs["head_age"] >= 65:
+        rows.append(
+            _taxable_section_151_row(
+                filing_status=case.filing_status,
+                is_taxpayer=True,
+                is_spouse=False,
+                age=inputs["head_age"],
+                qualified_ssn=True,
+            )
+        )
+    if case.filing_status == "joint" and inputs["spouse_age"] >= 65:
+        rows.append(
+            _taxable_section_151_row(
+                filing_status=case.filing_status,
+                is_taxpayer=False,
+                is_spouse=True,
+                age=inputs["spouse_age"],
+                qualified_ssn=True,
+            )
+        )
+    return rows
+
+
+def _taxable_exemption_relation(case: FederalCase) -> list[dict[str, Any]]:
+    row = _taxable_section_151_row(
+        filing_status=case.filing_status,
+        is_taxpayer=True,
+        is_spouse=False,
+        age=0,
+        qualified_ssn=False,
+    )
+    return [dict(row) for _ in range(case.inputs["exemption_person_count"])]
+
+
+def _taxable_charity_relation(case: FederalCase) -> list[dict[str, Any]]:
+    amount = case.inputs["nonitemizer_charity_payment"]
+    if amount == 0:
+        return []
+    prefix = f"{_NONITEMIZER_CHARITY_MODULE}#input."
+    return [
+        {
+            f"{prefix}payment_amount": amount,
+            f"{prefix}contribution_made_in_cash_during_taxable_year": True,
+            (
+                f"{prefix}contribution_to_organization_described_in_section_170_b_1_A"
+            ): True,
+            (
+                f"{prefix}contribution_to_organization_described_in_section_509_a_3"
+            ): False,
+            (
+                f"{prefix}"
+                "contribution_for_establishment_or_maintenance_of_donor_"
+                "advised_fund_defined_in_section_4966_d_2"
+            ): False,
+        }
+    ]
+
+
+def _validate_taxable_income_fixture(
+    case: FederalCase,
+    actual: Mapping[str, Any],
+) -> None:
+    inputs = case.inputs
+    expected = {
+        **_TAXABLE_COMMON_FIXTURE_INPUTS,
+        f"{_SALT_INPUT_PREFIX}filing_status": _FILING_STATUS_CODES[case.filing_status],
+        f"{_SALT_INPUT_PREFIX}adjusted_gross_income": inputs["adjusted_gross_income"],
+        f"{_ITEMIZED_INPUT_PREFIX}charitable_deduction": inputs[
+            "itemized_charitable_deduction"
+        ],
+        (
+            f"{_STANDARD_DEDUCTION_MODULE}"
+            "#input.additional_standard_deduction_entitlement_count_under_subsection_f"
+        ): inputs["additional_standard_deduction_entitlement_count"],
+        _TAXABLE_EXEMPTION_RELATION: _taxable_exemption_relation(case),
+        _TAXABLE_SENIOR_RELATION: _taxable_senior_relation(case),
+        "us:statutes/26/199A#input.qualified_business_income": inputs[
+            "qualified_business_income"
+        ],
+        _TAXABLE_CHARITY_RELATION: _taxable_charity_relation(case),
+        (
+            f"{_NONITEMIZER_CHARITY_MODULE}"
+            "#input.individual_does_not_elect_to_itemize_deductions_for_taxable_year"
+        ): not inputs["resolved_itemization_election"],
+        (
+            "us:statutes/26/224#input."
+            "employee_qualified_tips_included_on_statements_or_form_4137"
+        ): inputs["tip_income_deduction"],
+        (
+            "us:statutes/26/225#input."
+            "overtime_compensation_required_under_flsa_section_7_in_excess_"
+            "of_regular_rate_included_on_statements"
+        ): inputs["overtime_income_deduction"],
+        (
+            "us:statutes/26/163/h/4/C#input."
+            "interest_taken_into_account_under_subparagraph_B_before_dollar_limit"
+        ): inputs["auto_loan_interest_deduction"],
+        _ITEMIZED_SECTION_68_BASE_INPUT: inputs[
+            "taxable_income_determined_without_section_68"
+        ],
+        (
+            "us:statutes/26/199A#input.taxable_income_computed_without_section_199A"
+        ): inputs["taxable_income_computed_without_section_199A"],
+        (
+            "us:statutes/26/163/h/4/C/ii/I#input."
+            "modified_adjusted_gross_income_of_taxpayer_for_taxable_year"
+        ): inputs["adjusted_gross_income"],
+        f"{_TAXABLE_MODULE}#input.wagering_losses_deduction": inputs[
+            "wagering_losses_deduction"
+        ],
+        f"{_TAXABLE_MODULE}#input.resolved_itemization_election": inputs[
+            "resolved_itemization_election"
+        ],
+    }
+    _require_exact_fixture_values(
+        suite="us-taxable-income-grid",
         case_id=case.case_id,
         actual=actual,
         expected=expected,
@@ -2507,6 +3062,61 @@ def _verify_itemized_pe_parameters(tax_benefit_system: Any) -> None:
     )
 
 
+def _verify_taxable_income_pe_parameters(tax_benefit_system: Any) -> None:
+    parameters = tax_benefit_system.parameters("2026-01-01")
+    deductions = parameters.gov.irs.deductions
+    standard = deductions.standard
+    _verify_parameter_values(
+        "us-taxable-income-grid",
+        {
+            "standard.amount.SINGLE": float(standard.amount.SINGLE),
+            "standard.amount.JOINT": float(standard.amount.JOINT),
+            "standard.amount.SEPARATE": float(standard.amount.SEPARATE),
+            "standard.amount.HEAD_OF_HOUSEHOLD": float(
+                standard.amount.HEAD_OF_HOUSEHOLD
+            ),
+            "standard.amount.SURVIVING_SPOUSE": float(standard.amount.SURVIVING_SPOUSE),
+            "aged_or_blind.amount.SINGLE": float(standard.aged_or_blind.amount.SINGLE),
+            "aged_or_blind.amount.JOINT": float(standard.aged_or_blind.amount.JOINT),
+            "deductions_if_itemizing": list(deductions.deductions_if_itemizing),
+            "deductions_if_not_itemizing": list(deductions.deductions_if_not_itemizing),
+            "exemption.suspended": bool(parameters.gov.irs.income.exemption.suspended),
+            "simulation.branch_to_determine_itemization": bool(
+                parameters.gov.simulation.branch_to_determine_itemization
+            ),
+        },
+        {
+            "standard.amount.SINGLE": 16_100,
+            "standard.amount.JOINT": 32_200,
+            "standard.amount.SEPARATE": 16_100,
+            "standard.amount.HEAD_OF_HOUSEHOLD": 24_150,
+            "standard.amount.SURVIVING_SPOUSE": 32_200,
+            "aged_or_blind.amount.SINGLE": 2_050,
+            "aged_or_blind.amount.JOINT": 1_650,
+            "deductions_if_itemizing": [
+                "qualified_business_income_deduction",
+                "wagering_losses_deduction",
+                "itemized_taxable_income_deductions",
+                "tip_income_deduction",
+                "overtime_income_deduction",
+                "additional_senior_deduction",
+                "auto_loan_interest_deduction",
+            ],
+            "deductions_if_not_itemizing": [
+                "charitable_deduction_for_non_itemizers",
+                "standard_deduction",
+                "qualified_business_income_deduction",
+                "tip_income_deduction",
+                "overtime_income_deduction",
+                "additional_senior_deduction",
+                "auto_loan_interest_deduction",
+            ],
+            "exemption.suspended": True,
+            "simulation.branch_to_determine_itemization": True,
+        },
+    )
+
+
 def _verify_qbid_pe_parameters(tax_benefit_system: Any) -> None:
     p = tax_benefit_system.parameters("2026-01-01").gov.irs.deductions.qbi
     _verify_parameter_values(
@@ -2722,6 +3332,87 @@ POLICIES: dict[str, PolicyConfig] = {
             "medical_expense_deduction",
             "casualty_loss_deduction",
             "misc_deduction",
+        ),
+    ),
+    "taxable_income": PolicyConfig(
+        key="taxable_income",
+        suite="us-taxable-income-grid",
+        title="Federal taxable income",
+        axiom_module_ref=_TAXABLE_MODULE,
+        fixture_path=Path("us/policies/income_tax/taxable_income_pipeline.test.yaml"),
+        axiom_output=f"{_TAXABLE_MODULE}#federal_taxable_income",
+        pe_output_variables=("taxable_income",),
+        pe_boundary=(
+            "TaxUnit annual taxable income after section 151 exemptions and "
+            "the election-selected 2026 below-line deduction inventory"
+        ),
+        cases=_TAXABLE_INCOME_CASES,
+        pe_situation=_taxable_income_situation,
+        fixture_input_validator=_validate_taxable_income_fixture,
+        pe_diagnostic_variables=(
+            "tax_unit_itemizes",
+            "standard_deduction",
+            "itemized_taxable_income_deductions",
+            "qualified_business_income_deduction",
+            "charitable_deduction_for_non_itemizers",
+            "wagering_losses_deduction",
+            "tip_income_deduction",
+            "overtime_income_deduction",
+            "additional_senior_deduction",
+            "auto_loan_interest_deduction",
+            "exemptions",
+            "taxable_income_deductions",
+            "adjusted_gross_income",
+            "taxable_income",
+        ),
+        pe_parameter_validator=_verify_taxable_income_pe_parameters,
+        supplemental_fixture_paths=(
+            Path("comparisons/fixtures/us-taxable-income-grid-assertion-closure.yaml"),
+        ),
+        axiom_auxiliary_module_refs=(
+            _ITEMIZED_MODULE,
+            _QBID_MODULE,
+            _NONITEMIZER_CHARITY_MODULE,
+            _STANDARD_DEDUCTION_MODULE,
+            _SECTION_151_MODULE,
+        ),
+        axiom_bridge_outputs={
+            _TAXABLE_ITEMIZED_BRIDGE: "itemized_taxable_income_deductions",
+            _TAXABLE_QBID_BRIDGE: "qualified_business_income_deduction",
+            _TAXABLE_CHARITY_BRIDGE: ("charitable_deduction_for_non_itemizers"),
+        },
+        axiom_diagnostic_outputs={
+            f"{_STANDARD_DEDUCTION_MODULE}#standard_deduction": ("standard_deduction"),
+            f"{_SECTION_151_MODULE}#section_151_exemption_deduction": ("exemptions"),
+            f"{_SECTION_151_MODULE}#senior_deduction": ("additional_senior_deduction"),
+            f"{_TAXABLE_MODULE}#federal_taxable_income_deductions": (
+                "taxable_income_deductions"
+            ),
+        },
+        rulespec_domain_inputs=_TAXABLE_DOMAIN_INPUTS,
+        rulespec_only_inputs=(
+            _ITEMIZED_SECTION_68_BASE_INPUT,
+            "us:statutes/26/199A#input.taxable_income_computed_without_section_199A",
+            f"{_ITEMIZED_INPUT_PREFIX}charitable_deduction",
+            "us:statutes/26/199A#input.qualified_business_income",
+            (
+                f"{_STANDARD_DEDUCTION_MODULE}"
+                "#input.additional_standard_deduction_entitlement_count_under_"
+                "subsection_f"
+            ),
+        ),
+        pe_input_variables=(
+            *_PE_STRUCTURAL_INPUTS,
+            "ssn_card_type",
+            "adjusted_gross_income",
+            "tax_unit_itemizes",
+            "itemized_taxable_income_deductions",
+            "qualified_business_income_deduction",
+            "charitable_deduction_for_non_itemizers",
+            "wagering_losses_deduction",
+            "tip_income_deduction",
+            "overtime_income_deduction",
+            "auto_loan_interest_deduction",
         ),
     ),
     "qualified_business_income_deduction": PolicyConfig(
@@ -3026,6 +3717,7 @@ def _assert_registry_comparable_bindings(config: PolicyConfig) -> None:
         "us-savers-grid",
         "us-salt-deduction-grid",
         "us-itemized-taxable-income-deductions-grid",
+        "us-taxable-income-grid",
     }
     if config.suite not in audited_suites:
         return
@@ -3049,11 +3741,23 @@ def _validate_policy_config(config: PolicyConfig) -> None:
             f"{config.suite}: diagnostic Axiom outputs must be distinct from "
             f"compared and bridge outputs: {sorted(overlap)}"
         )
+    allowed_auxiliary_modules = (
+        config.axiom_module_ref,
+        *config.axiom_auxiliary_module_refs,
+    )
+    if len(allowed_auxiliary_modules) != len(set(allowed_auxiliary_modules)):
+        raise ValueError(
+            f"{config.suite}: Axiom auxiliary module references contain duplicates"
+        )
     for output in bridge_outputs | diagnostic_outputs:
-        if not output.startswith(f"{config.axiom_module_ref}#"):
+        if not any(
+            output.startswith(f"{module_ref}#")
+            for module_ref in allowed_auxiliary_modules
+        ):
             raise ValueError(
                 f"{config.suite}: auxiliary Axiom output {output!r} is not "
-                f"defined by configured module {config.axiom_module_ref!r}"
+                "defined by the configured module or a reviewed auxiliary "
+                f"module: {allowed_auxiliary_modules!r}"
             )
     bridge_targets = tuple(config.axiom_bridge_outputs.values())
     if len(bridge_targets) != len(set(bridge_targets)):
@@ -3689,6 +4393,7 @@ def _build_report(
         "us-savers-grid",
         "us-salt-deduction-grid",
         "us-itemized-taxable-income-deductions-grid",
+        "us-taxable-income-grid",
     }
     comparison_bindings = (
         [_binding_payload(config, binding) for binding in _scored_bindings(config)]
@@ -3710,6 +4415,7 @@ def _build_report(
         "engine_bindings": {
             "axiom": {
                 "module": config.axiom_module_ref,
+                "auxiliary_modules": list(config.axiom_auxiliary_module_refs),
                 "output": config.axiom_output,
                 "outputs": scored_concepts,
                 "fixture": str(config.fixture_path),

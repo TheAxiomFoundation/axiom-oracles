@@ -1757,3 +1757,45 @@ residual), #229 (small-suite grounding).
   variables, and three conformance mapping candidates.
 - Trace the merged generator/tests and final SALT disposition schema, then
   implement and commit the runner/test step.
+
+### Checkpoint — taxable-income contract implementation
+
+#### State
+
+- RuleSpec PR #1179 is pinned at
+  `4ced8fb7065311338ea732cab0a26105e750c40f` with tree
+  `9a4aaf64acd4c0cfe407cce5b3bb94516aaceacb`; the tracked worktree is clean
+  apart from its unrelated untracked worker report.
+- The sandbox also blocks `uv` from writing its cache at
+  `/Users/maxghenis/.cache/uv`. Validation therefore uses the repository's
+  Python 3.13.9 interpreter with the already-cached, read-only exact package
+  roots for PolicyEngine 4.18.9, PolicyEngine-Core 3.30.3, and
+  PolicyEngine-US 1.767.3.
+- The exact companion omits imported zero-output assertions for three
+  senior-only cases. A narrow supplemental assertion-closure fixture supplies
+  only those five missing zero bridge assertions and supplies no scored
+  taxable-income expected value.
+
+#### Done
+
+- Added the single `taxable_income` PolicyConfig and all 14 adopted §6.3
+  cases, with all five filing statuses, direct election binding, the exact
+  three-output bridge map named in the worker brief, independently derived
+  standard/senior/exemption amounts, and fresh-simulation compatibility.
+- Added an exact 85-input companion validator, reviewed auxiliary-module
+  allowlist, complete diagnostic inventory, exact 2026 parameter/list
+  validator, and strict bridge/input fail-closed checks.
+- Added the pinned `us-taxable-income-grid` comparison config and exactly
+  three registry mappings: taxable income, selected deductions, and the
+  non-comparable verified-domain judgment.
+- Exact-stack dry evaluation produced 14 values within the one-cent
+  tolerance; 13 were bit-for-bit equal and
+  `ti-senior-single-plus-one` differed by $0.0025.
+- Ruff, 36 focused generator tests (two report-dependent tests deferred until
+  generation), 26 bridge import-surface tests, and `git diff --check` pass.
+
+#### Next
+
+- Commit this coherent contract implementation.
+- Create the clean canonical RuleSpec clone, run the registry comparison,
+  inspect raw mismatches, and add dispositions only for measured mismatches.

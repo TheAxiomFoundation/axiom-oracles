@@ -1,0 +1,31 @@
+# The pinned RuleSpec companion asserts the final taxable-income amount and
+# every nonzero component for the three senior-only cases, but omits the
+# imported itemized zero in all three and two additional imported zeros in the
+# plus-one case. Close only those assertion gaps so the reviewed bridge remains
+# fail-closed for every adopted case; no scored expected value is supplied or
+# changed here.
+- name: ti-senior-single-threshold
+  period:
+    period_kind: tax_year
+    start: "2026-01-01"
+    end: "2026-12-31"
+  output:
+    us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_itemized_taxable_income_deductions: "0"
+
+- name: ti-senior-single-plus-one
+  period:
+    period_kind: tax_year
+    start: "2026-01-01"
+    end: "2026-12-31"
+  output:
+    us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_itemized_taxable_income_deductions: "0"
+    us:policies/income_tax/qualified_business_income_deduction_pipeline#federal_qualified_business_income_deduction: "0"
+    us:statutes/26/170/p#nonitemizer_charitable_deduction: "0"
+
+- name: ti-senior-joint-threshold
+  period:
+    period_kind: tax_year
+    start: "2026-01-01"
+    end: "2026-12-31"
+  output:
+    us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_itemized_taxable_income_deductions: "0"
