@@ -2468,3 +2468,63 @@ residual), #229 (small-suite grounding).
   integrity, and artifact parity checks.
 - Replay the declared suite and full `--check` battery, then perform
   changed-path and append-only containment audits.
+
+### 2026-07-30 blind review: frozen movement and provenance guards
+
+#### State
+
+- The frozen #423 movement is fully accounted for: 156 vanished, 17
+  current-but-dropped, 41 reclassified, and 131 kept rows.
+- **Blocking artifact finding:** the compact source dispositions were edited
+  in the final PR commit, but the served disposition JSON was not regenerated.
+  Both repository artifact checks and the end-to-end #423 guard fail at the
+  exact-source/served equality assertion.
+
+#### Done
+
+- Independently reconstructed the four-way partition and its identity
+  receipts. Sampled 12 vanished rows across self-employment, forward,
+  period, eligibility, and benefit classes; every sampled identity is absent
+  from the canonical mismatch report and its household is a compact clean
+  case with `r: 100.0` and `m: []`.
+- Sampled 11 reclassified rows spanning six cases (`ecps-57444`,
+  `ecps-58098`, `ecps-58241`, `ecps-59009`, `ecps-59209`, and
+  `ecps-61411`). Canonical report, compact artifacts, and expanded selector
+  agree on the observed pins and `upstream_engine_gap` disposition.
+- Recomputed the exact 41-row replacement receipt: 20 paired eligibility,
+  20 paired benefit, and one benefit-only row, SHA-256
+  `e70a713f5610eb393432df046fc8386c43cde3255769f9547ce939674b46373e`.
+- Reconstructed the full requested-month drift receipt as 22 canonical JSON
+  rows / 9,033 bytes / SHA-256
+  `fa54f6fdf05592da62c3c03b74264a4dfb7d9828e4f33ea169e75fc033ad3a51`.
+  The expected full-receipt value and literal 22-row pin map are byte-exact
+  between base and PR head; active/retired subreceipts add coverage without
+  replacing the original receipt.
+- Confirmed `comparisons/ca-snap-ecps.yaml`,
+  `comparisons/ca-snap-ecps.fixtures.yaml`, and the concept mapping are
+  byte-identical between base and PR head. `MOVEMENT_THRESHOLD` remains
+  `0.005`; all 323 common report identities retain identical
+  `tolerance`/`relative_tolerance` values. The new `1e-7` fields are evidence
+  arithmetic checks, not comparison tolerances.
+- Diffed the eight changed frozen-guard invocations. No pre-existing test was
+  removed, no skip/xfail was introduced, `_require` calls increased from 106
+  to 113, and the changed assertions either update exact facts or add stricter
+  reclassification/retired-pin receipts. The full focused file currently
+  yields 15 passes and one failure: the repository reconciliation guard
+  detects the stale served dispositions.
+- Reproduced the stale artifact independently:
+  - `scripts/reconcile_ca_snap_423_dispositions.py --check` exits 1 because
+    served CA dispositions do not exactly match compacted source entries.
+  - `scripts/emit_disposition_artifacts.py --check ca-snap-ecps` exits 1 and
+    requests regeneration.
+  - The source YAML points the affected net/gross classes to PolicyEngine
+    issues #9175/#9176, while six served rows still expose the superseded
+    GitHub blob URLs.
+
+#### Next
+
+- Replay the comparison under the declared exact stack and compare generated
+  output with the committed canonical/compact artifacts, excluding only
+  explicitly volatile provenance.
+- Run the complete `--check` and focused/full test batteries, then audit
+  changed-path containment and the append-only ledger invariant.
