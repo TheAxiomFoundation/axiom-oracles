@@ -1893,3 +1893,65 @@ residual), #229 (small-suite grounding).
 - Commit the shared regeneration, run the complete repository check battery,
   repair any in-scope drift, then write the untracked worker report and final
   closing ledger entry.
+
+### 2026-07-30 validation and worker closeout
+
+#### State
+
+- The requested CA rerun, disposition re-validation, reclassification,
+  artifact regeneration, and permitted shared rollups are complete.
+- The branch remains local and unpushed. The final untracked
+  `WORKER-REPORT.md` will be written after this closing ledger commit so it can
+  quote the final head SHA.
+
+#### Done
+
+- Passed every targeted CA chain gate: source and served dispositions, compact
+  case artifacts (529 rows, 288 annotations, zero silent classifications),
+  disposition unit tests, and report/disposition consistency.
+- Passed the full derived-data gates for dispositions, grids, boundary cases,
+  affected map, vacuous/freshness, dashboard overview, scoreboard, ratchet,
+  and burn-down. The conformance-universe check passed UK and BE; UK-PE and
+  US-PE were clean no-op/unverified because the general repository
+  environment has package pins newer than those registry lanes. The CA rerun
+  itself used the exact declared US pins.
+- Passed comparison-registry loading, rule verification (21,859 rules; 99.6%
+  grounded; 97.8% manifest-backed; 34/130 executable surfaces), the state-tax
+  populace contract, 73 targeted state-tax/mapping tests, lockfile-exact Ruff
+  0.15.12, and `git diff --check`.
+- The full pytest run collected 2,386 tests and finished with 2,306 passed, 70
+  skipped, 10 failed, and 104 warnings. Two failures reproduce unchanged on an
+  archived `origin/main`: the sandboxed `npx esbuild` test cannot resolve the
+  npm registry, and an unrelated federal-grid test expects commit
+  `345c2203` while the unchanged config pins equivalent tree commit
+  `ae64af27`.
+- The other eight full-pytest failures are the historical #423 CA
+  reconciliation tests. Their excluded helper script hard-pins the prior
+  report's RuleSpec SHA and assumes every compact annotation includes a
+  `linked_issue`; the required post-rerun report instead honestly pins
+  `edc62ea56`, and the new bridge selectors intentionally have no fabricated
+  issue URL. With only those two expectations normalized in memory, all 14
+  reconciliation tests pass. The committed #423 `--base-ref
+  819f370bf0346e4a6a8dfb1c8c4f0d873d6d0340 --check` receipts passed before
+  the rerun and remain the historical baseline; the new exhaustive receipt
+  supersedes them for live values.
+- Repository-wide case/disposition artifact sweeps also report 138 and 16
+  unrelated stale/missing diagnostics respectively. Archived `origin/main`
+  reproduces the same case log byte-for-byte and the same disposition
+  diagnostics apart from absolute paths. Targeted `ca-snap-ecps` checks pass,
+  and containment forbids regenerating unrelated suites.
+- Confirmed the tracked diff is limited to `PROGRESS.md`, CA SNAP report,
+  source/served dispositions, compact CA case chunks/index, and the permitted
+  US-PE scoreboard/detail/history/ratchet/burn-down/freshness/overview
+  derivatives. The original 97,116-byte `PROGRESS.md` prefix is byte-exact.
+  No row note changed because the CA unexplained count remains 241, and no
+  citation-bearing corpus path changed.
+- Confirmed the exact checkout at `edc62ea566a617cf5b9c3b620f712b73c6767c94`
+  and the honest engine source at
+  `e19f1b7573c74512f20a6b71a0c55dbbf333d41b` are clean. No push or GitHub
+  write was made.
+
+#### Next
+
+- Write the untracked worker report with the final head SHA and hand the local
+  branch back for review. No further in-scope implementation remains.
