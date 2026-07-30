@@ -12,9 +12,9 @@
 # standard deduction, senior deduction, exemption amount, selected deduction
 # total, and final taxable income.
 #
-# RuleSpec: rulespec-us PR #1179 commit
-# 4ced8fb7065311338ea732cab0a26105e750c40f
-# (tree 9a4aaf64acd4c0cfe407cce5b3bb94516aaceacb).
+# RuleSpec: rulespec-us PR #1179 merge commit
+# 87d3cbd3b6ec580724f0b79a0472105347f79518
+# (tree 66562bc60977c02c6ea353de6323b57fe927bd4c).
 # PolicyEngine source pin: policyengine-us 1.767.3.
 #
 # Run locally:
@@ -44,8 +44,8 @@ runner:
     rulespec_remote: https://github.com/TheAxiomFoundation/rulespec-us.git
     rulespec_roots:
       - /private/tmp/oracle-rerun/rulespec-us
-    rulespec_upstream_sha: 4ced8fb7065311338ea732cab0a26105e750c40f
-    rulespec_upstream_tree: 9a4aaf64acd4c0cfe407cce5b3bb94516aaceacb
+    rulespec_upstream_sha: 87d3cbd3b6ec580724f0b79a0472105347f79518
+    rulespec_upstream_tree: 66562bc60977c02c6ea353de6323b57fe927bd4c
 
 artifacts:
   report_basename: axiom-policyengine-us-taxable-income-grid
