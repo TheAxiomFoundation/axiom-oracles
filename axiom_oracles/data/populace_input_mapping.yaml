@@ -263,7 +263,7 @@ mappings:
   # encoded income, exclusion, and other-eligibility gates still apply.
   - match:
       kind: exact
-      value: us-ca:policies/cdss/snap/modified-categorical-eligibility#input.household_was_issued_pub_275
+      value: household_was_issued_pub_275
     scope: household
     source: { kind: constant, value: true }
 

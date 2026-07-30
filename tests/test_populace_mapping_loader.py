@@ -251,14 +251,10 @@ def test_default_yaml_maps_ecps_snap_cases_as_non_initial_months() -> None:
 
 
 def test_default_yaml_maps_calfresh_pub_275_administrative_issuance() -> None:
-    issued = (
-        "us-ca:policies/cdss/snap/modified-categorical-eligibility"
-        "#input.household_was_issued_pub_275"
-    )
-    online_access = (
-        "us-ca:policies/cdss/snap/modified-categorical-eligibility"
-        "#input.household_has_online_access_to_pub_275"
-    )
+    # axiom-compose preserves these two leaves as bare compiled input names;
+    # qualification happens only after the population mapping is resolved.
+    issued = "household_was_issued_pub_275"
+    online_access = "household_has_online_access_to_pub_275"
     mapping = load_populace_mapping_for_program(_program([issued, online_access]))
 
     assert mapping[issued]({}, None) is True

@@ -2062,3 +2062,27 @@ residual), #229 (small-suite grounding).
   the complete `ca-snap-ecps` comparison on the declared PolicyEngine stack,
   and classify the resulting mismatch identities before changing
   dispositions.
+
+### 2026-07-30 compiled-slot bridge correction
+
+#### State
+
+- The bridge rule is corrected to the exact bare slot name emitted by the
+  composed CA program. The full rerun has not started evaluating cases.
+
+#### Done
+
+- Inspected the actual compiled input leaf and confirmed
+  `enumerate_inputs()` sees bare `household_was_issued_pub_275`; input-record
+  qualification occurs only after mapping resolution.
+- Replaced the ineffective absolute-name match with the narrow bare exact
+  match and changed the focused test to use the actual compiled slot shape.
+- The first full-run launch stopped in offline dependency resolution before
+  loading or evaluating any cases because the task-local uv resolver could
+  not locate its cached Plotly 5.24.1 wheel.
+
+#### Next
+
+- Re-run the focused bridge test, commit this correction, then use the
+  predecessor's read-only exact-package overlay to launch the full comparison
+  without network resolution.
