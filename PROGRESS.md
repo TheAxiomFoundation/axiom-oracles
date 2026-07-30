@@ -2718,3 +2718,42 @@ residual), #229 (small-suite grounding).
 - Verify PUB 275 removal, served-row fidelity, retained guards/framing,
   partitions, drift receipt, and containment.
 - Replay the declared stack and full `--check` battery.
+
+### Repair re-review entry 2 — repairs and exact replay verified
+
+#### State
+
+- Both accepted blockers now pass independent static and executable checks.
+- The fresh corrected-premise replay matches the committed 529-row state.
+- The full repository `--check` battery and containment audit remain.
+
+#### Done
+
+- Verified both PUB 275 household facts are unmapped and project through the
+  generic Judgment fallback as false; 14 focused loader tests pass.
+- Recomputed the taxonomy as raw 529, encoding 0, bridge 268, upstream 20,
+  and unexplained 241, closing exactly to 529.
+- Compared the rejected 1,058-row state to current: all 735 exposure-only
+  identities are absent, none is reclassified, and the current identity set
+  exactly equals the original 529-row base state.
+- Verified the immutable `c1084c23` snapshot hashes and exactly four #9175
+  plus two #9176 corrected links. The emit, #423, and #362 checks pass.
+- Reproduced live `192/22/0/131` and frozen `156/17/41/131` partitions, each
+  closing over 345 rows. Their 22-row drift receipts are byte-identical,
+  9,033 bytes, and SHA-256 `fa54f6fd...`.
+- Reclassified the same 157 PUB 275 identities from encoding to bridge with
+  no identity drift; the ledger honestly says the corrected bridge cannot
+  currently expose #9175/#9176.
+- Re-composed and compiled clean RuleSpec `edc62ea...` with compatible engine
+  `e19f1b75...`; hashes exactly match `03166c96...` and `c1d2c5bd...`.
+- Replayed 7,101 cases under PolicyEngine 4.18.9 / US 1.767.3 / Core 3.30.3:
+  14,202 comparisons, 13,673 matches, 529 mismatches, zero errors, raw SHA-256
+  `fe63c28f...`. Applying current dispositions reproduced all 529 mismatch
+  rows, 404 served case payloads, aggregates, concepts, and summary exactly.
+
+#### Next
+
+- Run the complete 15-command read-only `--check` chain and focused/full
+  tests.
+- Verify repair/full-PR containment and append-only ledger history.
+- Write and commit the final review report.
