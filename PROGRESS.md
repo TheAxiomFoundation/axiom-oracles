@@ -2086,3 +2086,47 @@ residual), #229 (small-suite grounding).
 - Re-run the focused bridge test, commit this correction, then use the
   predecessor's read-only exact-package overlay to launch the full comparison
   without network resolution.
+
+### 2026-07-30 exact-stack PUB 275 rerun
+
+#### State
+
+- The complete 7,101-case comparison finished with no execution errors.
+- The honest raw result is 1,058 mismatches, not the 372 that a simple
+  subtraction of the predecessor's 157 PUB 275 bridge rows would have
+  predicted. The 735 newly exposed rows are being traced before they receive
+  any disposition.
+
+#### Done
+
+- Ran against the clean detached RuleSpec-US checkout at current local
+  `origin/main`, SHA `edc62ea566a617cf5b9c3b620f712b73c6767c94`, using
+  PolicyEngine 4.18.9, PolicyEngine-US 1.767.3, and PolicyEngine-core 3.30.3.
+- Used the clean legacy rules engine at
+  `e19f1b757524f5656281b7b2dc328f5ac411cb36`; the current engine cannot compile
+  a pre-existing en-dash path in the pinned RuleSpec tree.
+- Completed 14,202 comparisons across 7,101 cases with zero errors:
+  13,144 matched and 1,058 mismatched. The mismatch rows comprise 640 benefit
+  amounts and 418 eligibility booleans, spanning 670 unique cases.
+- Wrote the raw diagnostic output to
+  `/private/tmp/ca-snap-pub275-followup-raw.json`
+  (`f1192e19aa89a2cb5e3e06bd96ed737b4d79335ec759bad9bf549eb5a13c2451`)
+  and the suite-adapted candidate report to
+  `/private/tmp/ca-snap-pub275-followup-adapted.json`
+  (`86e9d996e5f74a1796bb2e4de046b746c80c707dc7a8f0c4d1f318def702e52f`).
+- Compared row identities with the predecessor's committed 529-row report:
+  206 old rows vanished (including all 157 PUB 275 bridge-attributed rows),
+  323 persisted, and 735 new rows appeared. The vanished set contains the 157
+  bridge rows and 49 formerly unexplained rows; the new set contains 375
+  benefit amounts and 360 Axiom-only eligibility rows.
+- The first normal task-runner attempt made no case evaluations because its
+  isolated uv resolver tried to fetch Plotly 5.24.1 while network access is
+  disabled. The successful launch used the already-cached, read-only exact
+  package overlay and the same in-memory data-certification shim as the
+  predecessor.
+
+#### Next
+
+- Trace the 735 newly exposed rows through PolicyEngine's TANF non-cash and
+  SNAP categorical-eligibility tests, then update dispositions only where the
+  causal evidence supports a specific taxonomy.
