@@ -2331,3 +2331,38 @@ residual), #229 (small-suite grounding).
   report with the final head SHA and complete before/after/legal/guard
   findings, and hand the local branch back without pushing or making GitHub
   writes.
+
+### 2026-07-30 defensive repair 2 audit kickoff
+
+#### State
+
+- Repairing PR #432 locally from pushed head
+  `eee181a30885626b1c85c4273badb732d7840ba3`; no push or GitHub write is
+  authorized.
+- The blind review at commit `6a4af70ec` is accepted. Its two blockers are
+  the unconditional PUB 275 issuance binding and six stale served disposition
+  rows.
+- The pre-existing untracked `WORKER-REPORT.md` and
+  `WORKER-REPORT-FOLLOWUP.md` are preserved unchanged.
+
+#### Done
+
+- Read the blind review before inspecting or changing the repair worktree.
+- Confirmed the branch initially matched
+  `origin/data/ca-snap-bbce-rerun` and had no tracked worktree changes.
+- Fixed the repair invariants: retain the eight repaired frozen #423
+  provenance guards, retain the 157-row encoding-to-bridge reclassification,
+  retain PolicyEngine-US issue references #9175 and #9176, preserve the frozen
+  partition and 22-row drift receipt, and make no tolerance change.
+- Attempted a read-only local GitNexus status check; `npx` produced no output
+  and was stopped after its sandbox/offline-sensitive startup hung. Source
+  tracing will therefore use the repository's checked-in generators and
+  assertions directly.
+
+#### Next
+
+- Remove the universal `household_was_issued_pub_275` bridge binding while
+  leaving both PUB 275 household facts unmapped, then update the mapping
+  contract and conformance ledger to describe the honest residual.
+- Re-run the declared PolicyEngine stack, regenerate dependent artifacts,
+  correct the six stale served rows, and run the full unchanged check battery.
