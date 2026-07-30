@@ -615,8 +615,8 @@
         "covered": 36,
         "uncovered": 91,
         "unexplained": 244,
-        "axiom_attributed_open": 157,
-        "gap": 492,
+        "axiom_attributed_open": 0,
+        "gap": 335,
         "conformant": false
       }
     ]

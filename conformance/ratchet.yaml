@@ -22,5 +22,5 @@ ratchets:
 - jurisdiction: us-pe
   covered_min: 36
   unexplained_max: 244
-  axiom_attributed_open_max: 157
+  axiom_attributed_open_max: 0
   policies_in_scope: 127
