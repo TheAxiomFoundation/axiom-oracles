@@ -2232,3 +2232,38 @@ residual), #229 (small-suite grounding).
 - Update the eight frozen #423 guard expectations without weakening any
   assertion, retaining the complete historical drift receipt and adding an
   exact receipt for the 41 reclassified rows.
+
+### 2026-07-30 frozen #423 guard repair
+
+#### State
+
+- The historical #423 and #362 reconciliation guards now pass against the
+  complete rerun without weakening their frozen evidence.
+
+#### Done
+
+- Updated the exact report, expanded-disposition, and RuleSpec provenance
+  expectations to 1,058 rows, 866 annotations, and
+  `edc62ea566a617cf5b9c3b620f712b73c6767c94`.
+- Replaced the old three-way #423 partition with an exact four-way partition:
+  156 vanished, 17 current-but-dropped, 41 reclassified, and 131 kept. Every
+  partition retains its count and identity digest.
+- Added a strict receipt for the 41 reclassified rows. It binds their current
+  pins and exact replacement selectors: 20 paired eligibility, 20 paired
+  benefit, and one benefit-only row, with receipt SHA-256
+  `e70a713f5610eb393432df046fc8386c43cde3255769f9547ce939674b46373e`.
+- Preserved the original complete 22-row requested-month drift receipt and
+  its `fa54f6fd...` digest. Seventeen rows remain live; the five rows that
+  vanished retain explicit frozen last-observed current pins, plus separate
+  active, retired-identity, and retired-evidence digests.
+- Made expected report annotations follow the production rule that
+  `linked_issue` is present only when truthy; no assertion was removed.
+- Added equal-count replacement-swap and retired-pin tamper tests. All 16
+  focused #423 tests, the live #423 `--check`, the dependent #362 `--check`,
+  Ruff check/format, and diff whitespace validation pass.
+
+#### Next
+
+- Run the full repository test suite, confirm the two already-reproduced
+  origin/main failures are the only remaining failures, then perform final
+  containment and append-only ledger audits.

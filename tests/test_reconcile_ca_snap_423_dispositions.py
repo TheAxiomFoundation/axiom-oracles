@@ -101,8 +101,9 @@ def test_repository_reconciles_exact_partition_and_current_compact_schema():
     }
     partition = receipt["partition"]
     assert partition["base_rows"] == 345
-    assert partition["vanished"]["count"] == 192
-    assert partition["current_but_dropped"]["count"] == 22
+    assert partition["vanished"]["count"] == 156
+    assert partition["current_but_dropped"]["count"] == 17
+    assert partition["reclassified"]["count"] == 41
     assert partition["kept"]["count"] == 131
     assert len(partition["drifted_rows"]) == 22
     assert (
@@ -110,6 +111,20 @@ def test_repository_reconciles_exact_partition_and_current_compact_schema():
         == reconciliation.REQUESTED_MONTH_TRACE_SHA256
     )
     assert partition["drifted_rows_sha256"] == reconciliation.EXPECTED_DRIFT_ROWS_SHA256
+    assert (
+        partition["active_drifted_rows_sha256"]
+        == reconciliation.EXPECTED_ACTIVE_DRIFT_ROWS_SHA256
+    )
+    assert (
+        partition["retired_drifted_rows_sha256"]
+        == reconciliation.EXPECTED_RETIRED_DRIFT_ROWS_SHA256
+    )
+    assert partition["reclassified_replacements"] == {
+        "counts": reconciliation.EXPECTED_RECLASSIFIED_REPLACEMENTS,
+        "rows_sha256": reconciliation.EXPECTED_RECLASSIFIED_ROWS_SHA256,
+        "rows": partition["reclassified_replacements"]["rows"],
+    }
+    assert len(partition["reclassified_replacements"]["rows"]) == 41
     assert receipt["retained_pin_movement"]["moved"]["count"] == 115
     assert receipt["retained_pin_movement"]["unchanged"]["count"] == 16
     assert receipt["retained_pin_movement"]["requested_month_evidence"] == {
@@ -117,15 +132,17 @@ def test_repository_reconciles_exact_partition_and_current_compact_schema():
         "trace_sha256": reconciliation.REQUESTED_MONTH_TRACE_SHA256,
         "rows_sha256": (reconciliation.EXPECTED_KEPT_REQUESTED_MONTH_ROWS_SHA256),
     }
-    assert receipt["current"]["report"]["mismatches"] == 529
-    assert receipt["current"]["source_dispositions"]["expanded_rows"] == 288
+    assert receipt["current"]["report"]["mismatches"] == 1058
+    assert receipt["current"]["source_dispositions"]["expanded_rows"] == 866
     assert receipt["current"]["compact"]["cases"] == 7101
-    assert receipt["current"]["compact"]["mismatches"] == 529
-    assert receipt["current"]["compact"]["annotated"] == 288
+    assert receipt["current"]["compact"]["mismatches"] == 1058
+    assert receipt["current"]["compact"]["annotated"] == 866
 
-    # This old benefit identity vanished even though the household now has an
-    # unrelated eligibility mismatch.  The partition is identity-level.
-    assert "ca-362-self-employment-ecps-58241-benefit" in partition["vanished"]["ids"]
+    # This literal #423 identity remains a mismatch, but the rerun's causal
+    # selector now supplies its annotation instead of the retired direct id.
+    assert (
+        "ca-362-self-employment-ecps-58241-benefit" in partition["reclassified"]["ids"]
+    )
 
 
 def test_equal_count_partition_swap_fails_identity_digest():
@@ -133,7 +150,7 @@ def test_equal_count_partition_swap_fails_identity_digest():
     (
         _current_document,
         _current_entries,
-        _expanded,
+        expanded,
         _report,
         report_by_identity,
         _cases_by_id,
@@ -143,12 +160,15 @@ def test_equal_count_partition_swap_fails_identity_digest():
         base_entries,
         report_by_identity,
         current_issue_by_id,
+        expanded,
     )
     kept = partitions["kept"][0]
     dropped = partitions["current_but_dropped"][0]
 
     tampered = dict(current_issue_by_id)
+    tampered_expanded = dict(expanded)
     del tampered[kept["id"]]
+    del tampered_expanded[reconciliation._identity(kept)]
     tampered[dropped["id"]] = dropped
 
     with pytest.raises(
@@ -159,6 +179,58 @@ def test_equal_count_partition_swap_fails_identity_digest():
             base_entries,
             report_by_identity,
             tampered,
+            tampered_expanded,
+        )
+
+
+def test_reclassified_receipt_rejects_equal_count_replacement_swap():
+    (
+        _current_document,
+        _current_entries,
+        expanded,
+        _report,
+        report_by_identity,
+        _cases_by_id,
+        current_issue_by_id,
+    ) = _current_inputs()
+    _commit, _document, base_entries = reconciliation._load_base_dispositions(BASE_REF)
+    partitions = reconciliation._partition_base_entries(
+        base_entries,
+        report_by_identity,
+        current_issue_by_id,
+        expanded,
+    )
+    paired = next(
+        entry
+        for entry in partitions["reclassified"]
+        if expanded[reconciliation._identity(entry)]["id"]
+        == "ca-mce-pe-extra-net-test-paired-benefit"
+    )
+    benefit_only = next(
+        entry
+        for entry in partitions["reclassified"]
+        if expanded[reconciliation._identity(entry)]["id"]
+        == "ca-mce-pe-extra-net-test-benefit-only"
+    )
+    paired_key = reconciliation._identity(paired)
+    benefit_only_key = reconciliation._identity(benefit_only)
+    tampered_expanded = dict(expanded)
+    tampered_expanded[paired_key] = deepcopy(expanded[paired_key])
+    tampered_expanded[benefit_only_key] = deepcopy(expanded[benefit_only_key])
+    tampered_expanded[paired_key]["id"], tampered_expanded[benefit_only_key]["id"] = (
+        tampered_expanded[benefit_only_key]["id"],
+        tampered_expanded[paired_key]["id"],
+    )
+
+    with pytest.raises(
+        reconciliation.ReconciliationError,
+        match="reclassified replacement receipt digest mismatch",
+    ):
+        reconciliation._partition_receipt(
+            partitions,
+            report_by_identity,
+            current_issue_by_id,
+            tampered_expanded,
         )
 
 
@@ -234,7 +306,7 @@ def test_compact_checker_requires_merged_only_vanished_households(case_id):
     (
         _current_document,
         _current_entries,
-        _expanded,
+        expanded,
         report,
         report_by_identity,
         cases_by_id,
@@ -245,6 +317,7 @@ def test_compact_checker_requires_merged_only_vanished_households(case_id):
         base_entries,
         report_by_identity,
         current_issue_by_id,
+        expanded,
     )
     _index, rows, _receipt = reconciliation._load_compact_rows(
         report,
@@ -280,6 +353,7 @@ def test_kept_requested_month_digest_rejects_self_consistent_pin_tampering():
         base_entries,
         report_by_identity,
         current_issue_by_id,
+        expanded,
     )
     target = partitions["kept"][0]
     entry_id = target["id"]
@@ -320,6 +394,7 @@ def test_full_drift_receipt_digest_catches_current_pin_tampering():
         base_entries,
         report_by_identity,
         current_issue_by_id,
+        expanded,
     )
     target = partitions["current_but_dropped"][0]
     key = reconciliation._identity(target)
@@ -334,6 +409,40 @@ def test_full_drift_receipt_digest_catches_current_pin_tampering():
         reconciliation._partition_receipt(
             partitions,
             tampered_report,
+            current_issue_by_id,
+            expanded,
+        )
+
+
+def test_full_drift_receipt_digest_catches_retired_pin_tampering(monkeypatch):
+    (
+        _current_document,
+        _current_entries,
+        expanded,
+        _report,
+        report_by_identity,
+        _cases_by_id,
+        current_issue_by_id,
+    ) = _current_inputs()
+    _commit, _document, base_entries = reconciliation._load_base_dispositions(BASE_REF)
+    partitions = reconciliation._partition_base_entries(
+        base_entries,
+        report_by_identity,
+        current_issue_by_id,
+        expanded,
+    )
+    tampered = deepcopy(reconciliation.RETIRED_CURRENT_DRIFT_PINS)
+    entry_id = sorted(tampered)[0]
+    tampered[entry_id]["right"] += 1
+    monkeypatch.setattr(reconciliation, "RETIRED_CURRENT_DRIFT_PINS", tampered)
+
+    with pytest.raises(
+        reconciliation.ReconciliationError,
+        match="full drift-row receipt digest mismatch",
+    ):
+        reconciliation._partition_receipt(
+            partitions,
+            report_by_identity,
             current_issue_by_id,
             expanded,
         )
