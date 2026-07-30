@@ -2693,3 +2693,28 @@ residual), #229 (small-suite grounding).
 - Commit this closing append, write the untracked
   `WORKER-REPORT-REPAIR2.md` with the final head SHA, and hand the local branch
   back without pushing.
+
+---
+
+### Repair re-review entry 1 — review initialized
+
+#### State
+
+- Isolated local worktree created on
+  `review/pr432-f268e26cb-repair-rereview` from exact target
+  `f268e26cb907be0e5df63e255a3e8bc084e7e31d`.
+- Re-review scope is limited to the claimed repairs and containment.
+- No PR-branch, remote, or GitHub writes are authorized.
+
+#### Done
+
+- Confirmed the worktree began exactly at the requested target head.
+- Selected and read the GitNexus PR-review workflow.
+- Preserved every pre-existing ledger byte and appended this entry.
+
+#### Next
+
+- Read the predecessor report and derive the repair delta.
+- Verify PUB 275 removal, served-row fidelity, retained guards/framing,
+  partitions, drift receipt, and containment.
+- Replay the declared stack and full `--check` battery.
