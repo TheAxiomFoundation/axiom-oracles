@@ -1865,3 +1865,31 @@ residual), #229 (small-suite grounding).
 - Commit the coherent CA data step, refresh the permitted shared scoreboard,
   ratchet, burn-down, history, freshness, affected-map, and overview
   artifacts, then run the full chain checks.
+
+### 2026-07-30 shared artifact checkpoint
+
+#### State
+
+- All permitted shared artifacts derived from the CA report are refreshed and
+  pass their dedicated staleness checks.
+
+#### Done
+
+- Rebuilt the affected map (no content change), freshness register,
+  conformance scoreboard and US-PE detail mirrors, dated 2026-07-30 US-PE
+  history snapshot, ratchet, burn-down, and dashboard overview.
+- The scoreboard now records the CA SNAP transition as
+  `axiom_attributed_open: 157 -> 0` and `bridge_artifacts: 111 -> 268` for the
+  policy row. Across US-PE the bridge total is 3,582 -> 3,739 while the
+  unexplained total remains 244.
+- Tightened the US-PE ratchet's Axiom-attributed-open ceiling from 157 to 0;
+  the live ratchet check passes.
+- Passed affected-map, vacuous/freshness, scoreboard, ratchet, burn-down, and
+  dashboard-overview checks. No citation-bearing corpus path changed, so the
+  conditional citation census is not applicable.
+
+#### Next
+
+- Commit the shared regeneration, run the complete repository check battery,
+  repair any in-scope drift, then write the untracked worker report and final
+  closing ledger entry.
