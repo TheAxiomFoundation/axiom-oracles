@@ -2585,3 +2585,58 @@ residual), #229 (small-suite grounding).
   base/sandbox failures.
 - Complete final containment and reviewer-ledger prefix checks, remove
   reviewer-created analysis residue, and write the committed review report.
+
+### 2026-07-30 blind review: final validation and handoff
+
+#### State
+
+- Review complete with `REQUEST-CHANGES`.
+- Two independent blockers remain: the statewide always-true PUB 275 issuance
+  leaf is not supported by the retained authority, and the served CA
+  disposition artifact is stale relative to its source.
+- The self-contained final report is `REVIEW-REPORT.md`.
+
+#### Done
+
+- Reverified the live GitHub PR read-only at the end of review: open PR #432,
+  branch `data/ca-snap-bbce-rerun`, head
+  `eee181a30885626b1c85c4273badb732d7840ba3`, base
+  `e1374eb30c582639f8f71f9bf9c22ba93b6e36f4`. The head did not move during
+  review.
+- Passed comparison-registry loading, rule-verification KPI checks, the
+  43-jurisdiction state-tax Populace contract, Ruff, and diff whitespace
+  validation.
+- Focused mapping/#423/#362 tests produced 36 passes and one failure. The
+  failure is the end-to-end repository reconciliation assertion that catches
+  the stale served disposition artifact; the other frozen guards and tamper
+  tests pass.
+- The full repository suite produced 2,316 passes, 70 skips, three failures,
+  and 104 warnings in 270.36 seconds:
+  - The stale served-disposition reconciliation is the one PR-specific
+    failure.
+  - The sandboxed `npx esbuild` network failure and equivalent-tree
+    federal-grid commit-pin assertion both reproduce directly on an archived
+    base tree (two failures in 70.46 seconds).
+- Confirmed base-to-PR containment: exactly 32 modified, mode-stable paths,
+  all within the CA bridge/rerun, frozen guards, permitted shared generated
+  artifacts, and ledger scope; no additions, deletions, renames, package
+  files, or other comparison configs.
+- Reconfirmed `PROGRESS.md` byte-prefix append-only behavior across base,
+  every PR commit, the PR head, and every reviewer commit. The PR's final
+  source-link commit appended no ledger entry, so the file is structurally
+  append-only but its old “all checks pass” tail is semantically stale.
+- Moved the reviewer-created 87 MB GitNexus index out of the worktree to
+  `/private/tmp/pr432-review-gitnexus-index`; it is recoverable and can be
+  regenerated. The worktree had no other untracked analysis residue before
+  this final report.
+- No PR branch, remote ref, pull-request metadata, issue, comment, review, or
+  other GitHub state was written.
+
+#### Next
+
+- Remove the unconditional issued-PUB-275 leaf or replace it with a separately
+  justified, explicitly scoped administrative-delivery assumption; rerun the
+  comparison and attribution from that corrected premise.
+- Regenerate the served CA disposition JSON after the #9175/#9176 source-link
+  update, then rerun all three currently failing artifact/guard entry points
+  and append the outcome to `PROGRESS.md`.
