@@ -2535,3 +2535,50 @@ residual), #229 (small-suite grounding).
   unexposed upstream findings.
 - Regenerate scoreboard, history, ratchet, burn-down, freshness, and overview
   derivatives, then commit the shared conformance step.
+
+### 2026-07-30 corrected conformance ledger and rollups
+
+#### State
+
+- The conformance ledger and all permitted shared derivatives now reflect the
+  honest 529-row CA state.
+- The strengthened #423/#362 historical guard is the remaining implementation
+  step before the full unchanged check battery.
+
+#### Done
+
+- Updated the canonical US-PE SNAP ledger note to 241 CA unexplained rows and
+  recorded plainly that PUB 275 issuance/online access is a household
+  administrative fact absent from Enhanced CPS, both facts remain unmapped,
+  and neither the population encode nor the oracle assumes them.
+- Recorded the only principled resolutions in the canonical ledger: a
+  population source carrying household PUB 275 issuance/access, or
+  PolicyEngine modeling the same household gate.
+- Retained direct links to PolicyEngine-US issues #9175 and #9176 in the
+  canonical ledger. Both are independently verified divergences on the pinned
+  stack; the corrected bridge cannot currently expose them because the
+  household MCE gate is unobserved. They are not represented as orphan live
+  dispositions.
+- Regenerated US-PE detail and dashboard mirror, the 2026-07-30 history
+  snapshot, scoreboard and mirror, burn-down, freshness, and dashboard
+  overview. US-PE now records 244 unexplained, 16,697 oracle-attributed, and
+  3,739 bridge rows; CA records 13,673 matches, 241 unexplained, 20 upstream,
+  and 268 bridge.
+- Returned the US-PE conformance ratchet ceiling from 195 to 244 because 195
+  was tightened from the rejected universal-issuance premise. This restores
+  the honest generated count; it does not change the $7 benefit tolerance,
+  zero eligibility tolerance, zero relative tolerances, or the 0.005
+  historical movement threshold.
+- Passed conformance universe, composition, scoreboard, ratchet, burn-down,
+  vacuous/freshness, and overview checks. UK and BE universes verified.
+  UK-PE and US-PE were explicit clean no-ops because the available external
+  checkouts are newer than their registry pins.
+
+#### Next
+
+- Refactor the #423 reconciliation into separate live and immutable-snapshot
+  audits, preserving every strengthened assertion, the reviewed
+  156/17/41/131 partition, the `e70a713f...` replacement receipt, and the full
+  `fa54f6fd...` 22-row drift receipt.
+- Update and extend the focused tests without deleting or weakening an
+  assertion, then make both #423 and dependent #362 entry points pass.
