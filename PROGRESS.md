@@ -2089,3 +2089,60 @@ residual), #229 (small-suite grounding).
   binding companion-origin contract.
 - Complete statutory arithmetic, containment, full checks, and the clean-main
   mapping baseline.
+
+### Review checkpoint 3 — contract and statutory audit
+
+#### State
+
+- Two merge blockers are confirmed: stale post-merge pin coverage in the test
+  suite, and five oracle-owned bridge literals that violate the requested
+  companion-origin rule.
+- All other reviewed bridge, statutory, adoption, and mapping surfaces pass.
+
+#### Done
+
+- Reproduced
+  `test_every_live_federal_grid_pins_its_reviewed_rulespec_snapshot` failing at
+  the reviewed head. The comparison correctly pins the merged RuleSpec
+  `87d3cbd3b` / `66562bc60` pair, but
+  `tests/test_federal_tax_liability_generator.py` still requires the
+  pre-merge `4ced8fb7` / `9a4aaf64` pair. The final re-pin commit changed four
+  paths and omitted this test update, so the claimed full-green chain is
+  false.
+- Verified all three bridge targets are PolicyEngine-US 1.767.3
+  TaxUnit/YEAR/USD variables and are populated only from the generator's
+  extracted bridge-value mapping. Missing, extra, nonnumeric, or undeclared
+  values and PE overrides fail closed.
+- Confirmed the exact pinned companion supplies 37 of 42 required bridge
+  assertions. The other five are literal zero strings in the oracle-owned
+  supplemental fixture: three itemized values, one QBI value, and one charity
+  value. Removing the supplemental fixture makes `_axiom_values` fail at the
+  first missing companion output.
+- Determined those five zeros do not hide a scored numerical divergence: the
+  QBI and charity zeros are forced by asserted totals and their zero inputs;
+  the three itemized zeros have zero component inputs and are on unselected
+  branches. Nevertheless, they are not engine-verified outputs in the pinned
+  RuleSpec companion, contrary to the task's explicit “never hand-entered”
+  bridge-provenance contract.
+- Confirmed the three RuleSpec module rules have exactly three matching US
+  registry rows: verified-domain judgment not comparable, deductions direct
+  to `taxable_income_deductions`, and final direct to `taxable_income`. Both
+  comparable outputs are asserted for all 14 companion cases. Only
+  `us-pe:taxable_income` is adopted.
+- Independently recomputed nine statutory cases, including
+  `ti-senior-single-plus-one`: $6,000 - 6% × $1 = $5,999.94 senior deduction,
+  then $75,001 - $18,150 - $5,999.94 = $50,851.06. Every recomputation agrees
+  with SPINE-PLAN section 6.3 and the companion.
+- Confirmed the merged companion contains the nonzero section 931 senior-MAGI
+  diagnostic even though the scored report does not. Combined with the exact
+  PE probe recorded above, its omission is a coverage gap rather than a
+  concealed pinned-stack divergence.
+- Verified all ten PR commits preserve their first-parent `PROGRESS.md` bytes
+  as an exact prefix; no rewrite or truncation occurred.
+
+#### Next
+
+- Finish the complete head check/test inventory and clean-main five-failure
+  mapping baseline.
+- Record exact containment and environment-only failures.
+- Write and commit `REVIEW-REPORT.md` with a request-changes verdict.
