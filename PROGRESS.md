@@ -2175,3 +2175,31 @@ residual), #229 (small-suite grounding).
   artifacts and shared conformance derivatives, then update the frozen #423
   provenance guards for the new RuleSpec SHA and explicit reclassification
   partition.
+
+### 2026-07-30 complete CA artifact regeneration
+
+#### State
+
+- The checked-in CA dashboard, disposition artifact, and all 15 case chunks
+  now represent the complete 1,058-row rerun. Shared conformance derivatives
+  and the #423 guards remain to be refreshed.
+
+#### Done
+
+- Installed the complete 7,101-case candidate as the ignored full report used
+  by the artifact generators.
+- Regenerated the dashboard copy without dropping the 58 rows above its usual
+  1,000-mismatch cap: all 1,058 mismatch rows are stored, with 670 mismatching
+  case rows. The dashboard records both totals explicitly.
+- Regenerated the 141-entry disposition artifact and all 15 compact case
+  chunks. The case check finds 1,058 mismatch rows, 866 annotated rows, and
+  zero silent classifications.
+- Passed the repository-wide disposition join check, the focused disposition
+  artifact check, the focused case artifact check, and an explicit dashboard
+  completeness/taxonomy assertion.
+
+#### Next
+
+- Refresh shared conformance artifacts and rewrite the frozen #423
+  reconciliation guard so it preserves its historical receipts while
+  recognizing the 41 rows reclassified by the new upstream selectors.
