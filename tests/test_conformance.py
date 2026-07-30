@@ -655,6 +655,7 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
     assert "all five filing statuses" in by_name["salt_deduction"].note
     assert by_name["taxable_income"].suite == "us-taxable-income-grid"
     assert "14 engine-verified" in by_name["taxable_income"].note
+    assert "13 nonzero" in by_name["taxable_income"].note
     assert "all five filing statuses" in by_name["taxable_income"].note
     assert "resolved section 63(e)" in by_name["taxable_income"].note
     assert "both 14/14" in by_name["taxable_income"].note

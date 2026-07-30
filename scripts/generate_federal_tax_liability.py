@@ -86,6 +86,7 @@ class PolicyConfig:
     ]
     fixture_input_validator: Callable[[FederalCase, Mapping[str, Any]], None]
     pe_diagnostic_variables: tuple[str, ...] = ()
+    pe_unbound_diagnostics: Mapping[str, str] = dataclass_field(default_factory=dict)
     pe_parameter_validator: Callable[[Any], None] | None = None
     supplemental_fixture_paths: tuple[Path, ...] = ()
     comparison_bindings: tuple[ComparisonBinding, ...] = ()
@@ -3078,6 +3079,15 @@ def _verify_taxable_income_pe_parameters(tax_benefit_system: Any) -> None:
             "standard.amount.SURVIVING_SPOUSE": float(standard.amount.SURVIVING_SPOUSE),
             "aged_or_blind.amount.SINGLE": float(standard.aged_or_blind.amount.SINGLE),
             "aged_or_blind.amount.JOINT": float(standard.aged_or_blind.amount.JOINT),
+            "aged_or_blind.amount.SEPARATE": float(
+                standard.aged_or_blind.amount.SEPARATE
+            ),
+            "aged_or_blind.amount.HEAD_OF_HOUSEHOLD": float(
+                standard.aged_or_blind.amount.HEAD_OF_HOUSEHOLD
+            ),
+            "aged_or_blind.amount.SURVIVING_SPOUSE": float(
+                standard.aged_or_blind.amount.SURVIVING_SPOUSE
+            ),
             "deductions_if_itemizing": list(deductions.deductions_if_itemizing),
             "deductions_if_not_itemizing": list(deductions.deductions_if_not_itemizing),
             "exemption.suspended": bool(parameters.gov.irs.income.exemption.suspended),
@@ -3093,6 +3103,9 @@ def _verify_taxable_income_pe_parameters(tax_benefit_system: Any) -> None:
             "standard.amount.SURVIVING_SPOUSE": 32_200,
             "aged_or_blind.amount.SINGLE": 2_050,
             "aged_or_blind.amount.JOINT": 1_650,
+            "aged_or_blind.amount.SEPARATE": 1_650,
+            "aged_or_blind.amount.HEAD_OF_HOUSEHOLD": 2_050,
+            "aged_or_blind.amount.SURVIVING_SPOUSE": 1_650,
             "deductions_if_itemizing": [
                 "qualified_business_income_deduction",
                 "wagering_losses_deduction",
@@ -3365,6 +3378,7 @@ POLICIES: dict[str, PolicyConfig] = {
             "adjusted_gross_income",
             "taxable_income",
         ),
+        pe_unbound_diagnostics={"tax_unit_itemizes": "tax_unit_itemizes"},
         pe_parameter_validator=_verify_taxable_income_pe_parameters,
         supplemental_fixture_paths=(
             Path("comparisons/fixtures/us-taxable-income-grid-assertion-closure.yaml"),
@@ -3390,17 +3404,7 @@ POLICIES: dict[str, PolicyConfig] = {
             ),
         },
         rulespec_domain_inputs=_TAXABLE_DOMAIN_INPUTS,
-        rulespec_only_inputs=(
-            _ITEMIZED_SECTION_68_BASE_INPUT,
-            "us:statutes/26/199A#input.taxable_income_computed_without_section_199A",
-            f"{_ITEMIZED_INPUT_PREFIX}charitable_deduction",
-            "us:statutes/26/199A#input.qualified_business_income",
-            (
-                f"{_STANDARD_DEDUCTION_MODULE}"
-                "#input.additional_standard_deduction_entitlement_count_under_"
-                "subsection_f"
-            ),
-        ),
+        rulespec_only_inputs=(),
         pe_input_variables=(
             *_PE_STRUCTURAL_INPUTS,
             "ssn_card_type",
@@ -3788,6 +3792,40 @@ def _validate_policy_config(config: PolicyConfig) -> None:
             f"{config.suite}: Axiom diagnostic targets are not declared "
             f"PolicyEngine diagnostics: {undeclared_diagnostic_targets}"
         )
+    if config.comparison_bindings and config.pe_unbound_diagnostics:
+        raise ValueError(
+            f"{config.suite}: unbound PolicyEngine diagnostics are not "
+            "supported with multi-concept comparison bindings"
+        )
+    unbound_inputs = tuple(config.pe_unbound_diagnostics)
+    unbound_targets = tuple(config.pe_unbound_diagnostics.values())
+    if len(unbound_targets) != len(set(unbound_targets)):
+        raise ValueError(
+            f"{config.suite}: unbound PolicyEngine diagnostics contain "
+            "duplicate targets"
+        )
+    undeclared_unbound_inputs = sorted(
+        set(unbound_inputs) - set(config.pe_input_variables)
+    )
+    if undeclared_unbound_inputs:
+        raise ValueError(
+            f"{config.suite}: unbound PolicyEngine overrides are not declared "
+            f"inputs: {undeclared_unbound_inputs}"
+        )
+    bridged_unbound_inputs = sorted(set(unbound_inputs) & set(bridge_targets))
+    if bridged_unbound_inputs:
+        raise ValueError(
+            f"{config.suite}: bridged PolicyEngine inputs cannot also be "
+            f"unbound diagnostics: {bridged_unbound_inputs}"
+        )
+    undeclared_unbound_targets = sorted(
+        set(unbound_targets) - set(config.pe_diagnostic_variables)
+    )
+    if undeclared_unbound_targets:
+        raise ValueError(
+            f"{config.suite}: unbound PolicyEngine targets are not declared "
+            f"diagnostics: {undeclared_unbound_targets}"
+        )
     overlap = set(config.rulespec_domain_inputs) & set(config.rulespec_only_inputs)
     if overlap:
         raise ValueError(
@@ -4041,10 +4079,38 @@ def _validate_pe_situation_inputs(
         )
 
 
+def _remove_pe_situation_overrides(
+    config: PolicyConfig,
+    case: FederalCase,
+    situation: dict[str, Any],
+) -> None:
+    removed = dict.fromkeys(config.pe_unbound_diagnostics, 0)
+    for entities in situation.values():
+        if not isinstance(entities, dict):
+            continue
+        for entity in entities.values():
+            if not isinstance(entity, dict):
+                continue
+            for variable in removed:
+                if variable in entity:
+                    entity.pop(variable)
+                    removed[variable] += 1
+    invalid = {variable: count for variable, count in removed.items() if count != 1}
+    if invalid:
+        raise ValueError(
+            f"{config.suite}: case {case.case_id!r} must bind each unbound "
+            f"diagnostic override exactly once; observed {invalid}"
+        )
+
+
 def _policyengine_values(
     config: PolicyConfig,
     bridge_values: Mapping[str, Mapping[str, float]],
-) -> tuple[dict[str, float], dict[str, dict[str, float]]]:
+) -> tuple[
+    dict[str, float],
+    dict[str, dict[str, float]],
+    dict[str, dict[str, float]],
+]:
     actual_versions = {
         "policyengine": distribution_version("policyengine"),
         "policyengine_core": distribution_version("policyengine-core"),
@@ -4134,10 +4200,11 @@ def _policyengine_values(
                     )
                 totals[row_id] = value
                 components[row_id] = {binding.policyengine_target: value}
-        return totals, components
+        return totals, components, {}
 
     totals: dict[str, float] = {}
     components: dict[str, dict[str, float]] = {}
+    unbound_diagnostics: dict[str, dict[str, float]] = {}
     parameters_verified = False
     for case in config.cases:
         situation = config.pe_situation(
@@ -4190,7 +4257,21 @@ def _policyengine_values(
         totals[case.case_id] = sum(
             case_components[variable] for variable in config.pe_output_variables
         )
-    return totals, components
+        if config.pe_unbound_diagnostics:
+            unbound_situation = config.pe_situation(
+                case,
+                bridge_values[case.case_id],
+            )
+            _remove_pe_situation_overrides(config, case, unbound_situation)
+            _validate_pe_situation_inputs(config, case, unbound_situation)
+            unbound_simulation = Simulation(situation=unbound_situation)
+            unbound_diagnostics[case.case_id] = {}
+            for variable in config.pe_unbound_diagnostics.values():
+                values = unbound_simulation.calculate(variable, VALIDATION_YEAR)
+                unbound_diagnostics[case.case_id][variable] = sum(
+                    float(value) for value in values
+                )
+    return totals, components, unbound_diagnostics
 
 
 def _matches(
@@ -4256,11 +4337,13 @@ def _build_report(
     fixture_inputs: Mapping[str, Mapping[str, Any]],
     policyengine: Mapping[str, float],
     policyengine_components: Mapping[str, Mapping[str, float]],
+    policyengine_unbound_diagnostics: (Mapping[str, Mapping[str, float]] | None) = None,
     axiom_bridge_values: Mapping[str, Mapping[str, float]] | None = None,
     axiom_diagnostic_values: Mapping[str, Mapping[str, float]] | None = None,
 ) -> dict[str, Any]:
     bridge_values = axiom_bridge_values or {}
     diagnostic_values = axiom_diagnostic_values or {}
+    unbound_values = policyengine_unbound_diagnostics or {}
     cases: list[dict[str, Any]] = []
     mismatches: list[dict[str, Any]] = []
     aggregate_state: dict[str, dict[str, Any]] = {}
@@ -4306,6 +4389,10 @@ def _build_report(
                 }
                 for output, pe_variable in (config.axiom_diagnostic_outputs.items())
             ]
+        if config.pe_unbound_diagnostics:
+            case_report["policyengine_unbound_diagnostics"] = dict(
+                unbound_values[case.case_id]
+            )
         if (
             config.suite == "us-savers-grid"
             and case.case_id == "section-911-add-back-crosses-inclusive-limit"
@@ -4401,7 +4488,7 @@ def _build_report(
         else []
     )
     scored_concepts = list(aggregate_state)
-    return {
+    report = {
         "schema_version": "axiom.comparison_report.v2",
         "suite": config.suite,
         "concept": config.axiom_output,
@@ -4428,6 +4515,7 @@ def _build_report(
             "policyengine": {
                 "outputs": list(config.pe_output_variables),
                 "diagnostic_outputs": list(config.pe_diagnostic_variables),
+                "unbound_diagnostics": dict(config.pe_unbound_diagnostics),
                 "boundary": config.pe_boundary,
                 "comparison_bindings": comparison_bindings,
             },
@@ -4467,6 +4555,45 @@ def _build_report(
         "mismatches": mismatches,
         "cases": cases,
     }
+    if config.pe_unbound_diagnostics:
+        report["diagnostic_families"] = [
+            {
+                "id": (
+                    "unbound-itemization-heuristic"
+                    if override == "tax_unit_itemizes"
+                    else f"policyengine-unbound-{override.replace('_', '-')}"
+                ),
+                "scored": False,
+                "classification": "oracle-model boundary",
+                "removed_input_override": override,
+                "policyengine_variable": variable,
+                "cases": [
+                    {
+                        "scenario_id": case.case_id,
+                        "resolved_itemization_election": bool(
+                            case.inputs["resolved_itemization_election"]
+                            if override == "tax_unit_itemizes"
+                            else policyengine_components[case.case_id][variable]
+                        ),
+                        "policyengine_derived_itemizes": bool(
+                            unbound_values[case.case_id][variable]
+                        ),
+                        "differs": (
+                            bool(
+                                case.inputs["resolved_itemization_election"]
+                                if override == "tax_unit_itemizes"
+                                else policyengine_components[case.case_id][variable]
+                            )
+                            != bool(unbound_values[case.case_id][variable])
+                        ),
+                        "classification": "oracle-model boundary",
+                    }
+                    for case in config.cases
+                ],
+            }
+            for override, variable in config.pe_unbound_diagnostics.items()
+        ]
+    return report
 
 
 def generate(policy: str, roots: list[Path]) -> dict[str, Any]:
@@ -4484,7 +4611,7 @@ def generate(policy: str, roots: list[Path]) -> dict[str, Any]:
         bridge_values,
         diagnostic_values,
     ) = _axiom_values(config, roots)
-    policyengine, components = _policyengine_values(
+    policyengine, components, unbound_diagnostics = _policyengine_values(
         config,
         bridge_values,
     )
@@ -4495,6 +4622,7 @@ def generate(policy: str, roots: list[Path]) -> dict[str, Any]:
         fixture_inputs=fixture_inputs,
         policyengine=policyengine,
         policyengine_components=components,
+        policyengine_unbound_diagnostics=unbound_diagnostics,
         axiom_bridge_values=bridge_values,
         axiom_diagnostic_values=diagnostic_values,
     )

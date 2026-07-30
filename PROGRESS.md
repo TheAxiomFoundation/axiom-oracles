@@ -1891,3 +1891,43 @@ residual), #229 (small-suite grounding).
 - Run the full repository test/lint battery, inspect final containment and
   committed history, append the closeout ledger entry, and write the untracked
   worker report.
+
+### Checkpoint — taxable-income diagnostic contract closure
+
+#### State
+
+- The first full regeneration is committed at `71a77451`; a final contract
+  audit found three evidence gaps that did not change the scored 14-case grid.
+
+#### Done
+
+- Added a separate, non-scored `unbound-itemization-heuristic` diagnostic
+  family. Each primary case still binds the legal section 63(e) election, while
+  a second fresh PolicyEngine simulation removes exactly that override and
+  records the engine-derived branch as an `oracle-model boundary`.
+- Measured the unbound family on the exact pinned stack. All 14 heuristic
+  results agree with the registered elections: 12 nonitemizers and 2
+  itemizers. Diagnostic rows remain outside cases, aggregates, and raw or
+  after-disposition counts.
+- Completed the five-status aged/blind parameter assertion: $2,050 for single
+  and head of household, and $1,650 for joint, separate, and surviving spouse.
+- Restored the shared-contract meaning of `rulespec_only_inputs` by leaving it
+  empty for taxable income; the exact 85-input fixture validator continues to
+  record and reject drift in all companion inputs.
+- Added fail-closed config validation, distinct-simulation regression coverage,
+  14-case component/bridge/diagnostic reconciliation, and exact tests for all
+  three worker-handoff registry mappings.
+- Refreshed the comparison through the official runner shape. The report
+  remains 14/14 with zero mismatches and zero errors, and now carries the
+  separate diagnostic family.
+- A direct probe through the repository venv was correctly rejected because
+  its installed metadata resolves PE-US 1.752.2/Core 3.28.0. The successful
+  rerun used Python 3.13 with isolated cached PE 4.18.9, PE-US 1.767.3, and
+  Core 3.30.3; the generator's independent version gate passed.
+
+#### Next
+
+- Commit the diagnostic-contract source, tests, and refreshed measured report.
+- Regenerate every conformance derivative affected by the adoption-note
+  clarification, prove the complete `--check` chain again, and close out the
+  full test/containment audit.

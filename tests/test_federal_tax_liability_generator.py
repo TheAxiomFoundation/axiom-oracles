@@ -447,6 +447,8 @@ def test_taxable_income_config_binds_only_the_reviewed_chunk2_boundaries():
         "senior_deduction" not in output for output in config.axiom_bridge_outputs
     )
     assert "tax_unit_itemizes" in config.pe_input_variables
+    assert config.pe_unbound_diagnostics == {"tax_unit_itemizes": "tax_unit_itemizes"}
+    assert config.rulespec_only_inputs == ()
     assert (
         config.axiom_diagnostic_outputs["us:statutes/26/151#senior_deduction"]
         == "additional_senior_deduction"
@@ -480,6 +482,107 @@ def test_taxable_income_fixture_contract_matches_committed_report_exactly():
         len(report_cases[case.case_id]["axiom_fixture_inputs"]) == 85
         for case in config.cases
     )
+
+
+def test_taxable_income_report_reconciles_components_and_unbound_diagnostics():
+    generator = _load_generator()
+    config = generator.POLICIES["taxable_income"]
+    report = json.loads(
+        (
+            REPO_ROOT
+            / "dashboard/public/data/axiom-policyengine-us-taxable-income-grid.json"
+        ).read_text()
+    )
+    configured_cases = {case.case_id: case for case in config.cases}
+    report_cases = {case["scenario_id"]: case for case in report["cases"]}
+
+    assert report["case_count"] == 14
+    assert report["scenario_count"] == 14
+    assert report["summary"]["comparison_count"] == 14
+    assert sum(row["comparison_count"] for row in report["aggregates"]) == 14
+    assert set(report_cases) == set(configured_cases)
+    assert len(report["diagnostic_families"]) == 1
+    family = report["diagnostic_families"][0]
+    assert family["id"] == "unbound-itemization-heuristic"
+    assert family["scored"] is False
+    assert family["classification"] == "oracle-model boundary"
+    assert family["removed_input_override"] == "tax_unit_itemizes"
+    assert family["policyengine_variable"] == "tax_unit_itemizes"
+    family_cases = {row["scenario_id"]: row for row in family["cases"]}
+    assert set(family_cases) == set(configured_cases)
+
+    expected_component_keys = {
+        *config.pe_output_variables,
+        *config.pe_diagnostic_variables,
+    }
+    for case_id, case in configured_cases.items():
+        report_case = report_cases[case_id]
+        components = report_case["policyengine_components"]
+        assert set(components) == expected_component_keys
+        assert bool(components["tax_unit_itemizes"]) is bool(
+            case.inputs["resolved_itemization_election"]
+        )
+        for output, variable in config.axiom_bridge_outputs.items():
+            assert report_case["axiom_bridge_outputs"][output] == pytest.approx(
+                components[variable],
+                abs=config.tolerance,
+            )
+        reconciliation = {
+            row["axiom_output"]: row for row in report_case["diagnostic_reconciliation"]
+        }
+        assert set(reconciliation) == set(config.axiom_diagnostic_outputs)
+        for output, variable in config.axiom_diagnostic_outputs.items():
+            row = reconciliation[output]
+            assert row["policyengine_variable"] == variable
+            assert row["difference"] == pytest.approx(
+                row["axiom"] - components[variable],
+                abs=1e-12,
+            )
+
+        common_deductions = sum(
+            components[variable]
+            for variable in (
+                "qualified_business_income_deduction",
+                "wagering_losses_deduction",
+                "tip_income_deduction",
+                "overtime_income_deduction",
+                "additional_senior_deduction",
+                "auto_loan_interest_deduction",
+            )
+        )
+        if case.inputs["resolved_itemization_election"]:
+            expected_deductions = (
+                common_deductions + components["itemized_taxable_income_deductions"]
+            )
+        else:
+            expected_deductions = (
+                common_deductions
+                + components["standard_deduction"]
+                + components["charitable_deduction_for_non_itemizers"]
+            )
+        assert components["taxable_income_deductions"] == pytest.approx(
+            expected_deductions,
+            abs=config.tolerance,
+        )
+        assert components["taxable_income"] == pytest.approx(
+            max(
+                0,
+                components["adjusted_gross_income"]
+                - components["exemptions"]
+                - components["taxable_income_deductions"],
+            ),
+            abs=config.tolerance,
+        )
+
+        family_case = family_cases[case_id]
+        assert family_case["resolved_itemization_election"] is bool(
+            case.inputs["resolved_itemization_election"]
+        )
+        assert family_case["policyengine_derived_itemizes"] is bool(
+            report_case["policyengine_unbound_diagnostics"]["tax_unit_itemizes"]
+        )
+        assert family_case["differs"] is False
+        assert family_case["classification"] == "oracle-model boundary"
 
 
 def test_taxable_income_assertion_closure_only_supplies_missing_zero_bridges():
@@ -847,6 +950,9 @@ def test_spine_policyengine_parameter_validators_assert_exact_2026_values(
         "standard.amount.SURVIVING_SPOUSE": 32_200,
         "aged_or_blind.amount.SINGLE": 2_050,
         "aged_or_blind.amount.JOINT": 1_650,
+        "aged_or_blind.amount.SEPARATE": 1_650,
+        "aged_or_blind.amount.HEAD_OF_HOUSEHOLD": 2_050,
+        "aged_or_blind.amount.SURVIVING_SPOUSE": 1_650,
         "deductions_if_itemizing": [
             "qualified_business_income_deduction",
             "wagering_losses_deduction",
@@ -916,7 +1022,7 @@ def test_policyengine_values_creates_a_fresh_simulation_per_case(monkeypatch):
     monkeypatch.setattr(policyengine_us, "Simulation", FakeSimulation)
     bridge_values = {case.case_id: {} for case in config.cases}
 
-    totals, components = generator._policyengine_values(
+    totals, components, unbound_diagnostics = generator._policyengine_values(
         config,
         bridge_values,
     )
@@ -933,6 +1039,97 @@ def test_policyengine_values_creates_a_fresh_simulation_per_case(monkeypatch):
     assert components == {
         config.cases[0].case_id: {"test_output": 1},
         config.cases[1].case_id: {"test_output": 2},
+    }
+    assert unbound_diagnostics == {}
+
+
+def test_policyengine_unbound_diagnostics_use_distinct_override_free_simulations(
+    monkeypatch,
+):
+    generator = _load_generator()
+    policyengine_us = pytest.importorskip("policyengine_us")
+    original = generator.POLICIES["taxable_income"]
+    config = replace(
+        original,
+        cases=original.cases[:2],
+        pe_output_variables=("test_output",),
+        pe_diagnostic_variables=("tax_unit_itemizes",),
+        pe_parameter_validator=None,
+        axiom_bridge_outputs={},
+        axiom_diagnostic_outputs={},
+        pe_input_variables=("tax_unit_itemizes",),
+        pe_situation=lambda case, bridge_outputs: {
+            "tax_units": {
+                "tax_unit": {
+                    "members": [case.case_id],
+                    "tax_unit_itemizes": {
+                        2026: case.inputs["resolved_itemization_election"]
+                    },
+                }
+            }
+        },
+    )
+    created = []
+    case_positions = {
+        case.case_id: index + 1 for index, case in enumerate(config.cases)
+    }
+
+    class FakeSimulation:
+        def __init__(self, *, situation):
+            self.situation = situation
+            created.append(self)
+
+        def calculate(self, variable, year):
+            assert year == 2026
+            tax_unit = self.situation["tax_units"]["tax_unit"]
+            case_id = tax_unit["members"][0]
+            if variable == "test_output":
+                return [10 * case_positions[case_id]]
+            assert variable == "tax_unit_itemizes"
+            if variable in tax_unit:
+                return [tax_unit[variable][year]]
+            return [case_positions[case_id] == 2]
+
+    monkeypatch.setattr(
+        generator,
+        "distribution_version",
+        lambda distribution: generator.ENGINE_VERSIONS[distribution.replace("-", "_")],
+    )
+    monkeypatch.setattr(policyengine_us, "Simulation", FakeSimulation)
+    bridge_values = {case.case_id: {} for case in config.cases}
+
+    totals, components, unbound_diagnostics = generator._policyengine_values(
+        config,
+        bridge_values,
+    )
+
+    assert len(created) == 2 * len(config.cases)
+    assert len({id(simulation) for simulation in created}) == len(created)
+    assert all(
+        "tax_unit_itemizes" in created[index].situation["tax_units"]["tax_unit"]
+        for index in range(0, len(created), 2)
+    )
+    assert all(
+        "tax_unit_itemizes" not in created[index].situation["tax_units"]["tax_unit"]
+        for index in range(1, len(created), 2)
+    )
+    assert totals == {
+        config.cases[0].case_id: 10,
+        config.cases[1].case_id: 20,
+    }
+    assert components == {
+        config.cases[0].case_id: {
+            "test_output": 10,
+            "tax_unit_itemizes": 0,
+        },
+        config.cases[1].case_id: {
+            "test_output": 20,
+            "tax_unit_itemizes": 0,
+        },
+    }
+    assert unbound_diagnostics == {
+        config.cases[0].case_id: {"tax_unit_itemizes": 0},
+        config.cases[1].case_id: {"tax_unit_itemizes": 1},
     }
 
 
@@ -1221,6 +1418,37 @@ def test_committed_registry_audited_reports_score_only_comparable_bindings():
             if mapping.parameter_key_input:
                 assert binding["parameter_key_input"] == mapping.parameter_key_input
                 assert binding["parameter_key_map"] == mapping.parameter_key_map
+
+
+def test_taxable_income_registry_has_exact_three_worker_handoff_rows():
+    generator = _load_generator()
+    registry = generator.load_policyengine_registry()
+    module = "us:policies/income_tax/taxable_income_pipeline"
+    expected = {
+        f"{module}#taxable_income_pipeline_verified_domain_applies": (
+            "not_comparable",
+            None,
+            "P4",
+        ),
+        f"{module}#federal_taxable_income_deductions": (
+            "direct_variable",
+            "taxable_income_deductions",
+            "P1",
+        ),
+        f"{module}#federal_taxable_income": (
+            "direct_variable",
+            "taxable_income",
+            "P1",
+        ),
+    }
+
+    for legal_id, (mapping_type, variable, priority) in expected.items():
+        mapping = registry.mapping_for_legal_id(legal_id, country="us")
+        assert mapping is not None
+        assert mapping.mapping_type == mapping_type
+        assert mapping.policyengine_variable == variable
+        assert mapping.candidate_priority == priority
+        assert mapping.comparable is (mapping_type != "not_comparable")
 
 
 def test_aca_grid_pins_prior_year_fpl_dollars_and_enrolled_premium():
