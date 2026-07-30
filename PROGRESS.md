@@ -2005,3 +2005,35 @@ residual), #229 (small-suite grounding).
   add them upstream, engine-verify a new RuleSpec commit, and advance both the
   SHA and tree pins together; do not mutate the exact `4ced8fb7` evidence.
 - No upstream issue or disposition filing is warranted by the measured grid.
+
+---
+
+## Blind review — PR #430 (2026-07-30)
+
+### Review checkpoint 1 — isolated head established
+
+#### State
+
+- Disposable review worktree:
+  `.git/review-worktrees/pr430-2404dd5b-blind`.
+- Local-only review branch: `review/pr430-2404dd5b-blind`.
+- Immutable reviewed PR head:
+  `2404dd5b30ef0f76f199664aee713ba83ca8ac68`.
+
+#### Done
+
+- Queried GitHub read-only and verified PR #430 is open, targets `main` at
+  `a0b859eeceae401617805ecd1fd04a6ba34c80e6`, and has exact head branch
+  `fed-parity/chunk2-oracle-suite` at
+  `2404dd5b30ef0f76f199664aee713ba83ca8ac68`.
+- Created this disposable review worktree directly from that exact head.
+- Preserved all pre-existing `PROGRESS.md` bytes and began the review ledger by
+  append only. No PR-branch, remote, or GitHub write was made.
+
+#### Next
+
+- Read the binding SPINE-PLAN sections and inspect the exact 20-file diff.
+- Audit generator, bridge, diagnostic, adoption, and mapping contracts.
+- Regenerate independently on the exact pinned RuleSpec/PolicyEngine stack.
+- Recompute statutory expecteds, run the full check battery, compare clean
+  `main` mapping failures, then write `REVIEW-REPORT.md`.
