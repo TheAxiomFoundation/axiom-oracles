@@ -1931,3 +1931,28 @@ residual), #229 (small-suite grounding).
 - Regenerate every conformance derivative affected by the adoption-note
   clarification, prove the complete `--check` chain again, and close out the
   full test/containment audit.
+
+### Checkpoint — diagnostic derivative parity
+
+#### State
+
+- The unbound diagnostic implementation, strengthened parameter/input
+  contracts, refreshed exact-stack report, and focused tests are committed at
+  `479bab42`.
+
+#### Done
+
+- Re-ran dispositions, canonical grid extraction, affected-map generation,
+  vacuity/freshness, the UTC `2026-07-30` scoreboard snapshot, ratchet,
+  burn-down, and dashboard overview after the conformance-note clarification.
+- The history snapshot and ratchet were already current. Only the US
+  conformance detail copies, freshness timestamps, and overview bundle changed.
+- All eight paired checks pass: dispositions, grids, affected map,
+  vacuity/freshness, scoreboard, ratchet, burn-down, and overview.
+
+#### Next
+
+- Commit the refreshed derivatives.
+- Run the complete repository test suite with the cached esbuild executable,
+  repeat lint and containment audits, append the final closeout, and write the
+  untracked worker report.
