@@ -2528,3 +2528,60 @@ residual), #229 (small-suite grounding).
   explicitly volatile provenance.
 - Run the complete `--check` and focused/full test batteries, then audit
   changed-path containment and the append-only ledger invariant.
+
+### 2026-07-30 blind review: exact-stack regeneration and check chain
+
+#### State
+
+- The comparison outputs and compact case artifacts reproduce exactly under
+  the declared stack.
+- The complete 15-command artifact chain has 12 passes and three failures.
+  All three failures have the same cause: the final source-only disposition
+  link update was not propagated to the served CA disposition JSON.
+
+#### Done
+
+- Materialized RuleSpec-US commit
+  `edc62ea566a617cf5b9c3b620f712b73c6767c94` from its local Git object
+  (`ea886610c00ce0d4f01e7ae677f5708227b740b5` tree), used clean legacy
+  engine source `e19f1b7573c74512f20a6b71a0c55dbbf333d41b`, and ran with
+  PolicyEngine 4.18.9 / US 1.767.3 / core 3.30.3 from the read-only cached
+  overlay.
+- Replayed all 7,101 cases / 14,202 comparisons with zero execution errors:
+  13,144 matches and 1,058 mismatches (640 benefit, 418 eligibility), exactly
+  matching the committed headline.
+- Compared all 1,058 canonical identities and their complete mismatch
+  payloads against the replay; identities and payloads are exact. The 670
+  mismatch-case payloads and all nonvolatile aggregate, population, scope,
+  concept, error, and summary fields are also exact.
+- Regenerated the compact explorer from the replay's complete 7,101 case
+  rows plus the committed disposition classes. All 15 chunks are byte-exact.
+  After normalizing the run-stamped Axiom engine version/key order, the index
+  is byte-exact too: 16/16 compact artifact files match.
+- Ran the exact declared 15-command `--check` battery with the parent
+  repository interpreter because sandboxed/offline `uv` resolution is not
+  reliable here:
+  - Passed: disposition merge, CA case artifacts, grids, retained-pin
+    boundary suggestions, affected map, vacuous/freshness, dashboard
+    overview, conformance universe, conformance compositions, scoreboard,
+    ratchet, and burn-down.
+  - Failed: CA served disposition artifact, frozen #423 reconciliation, and
+    dependent #362 dispatch. The latter two fail the same
+    `served CA dispositions do not exactly match compacted source entries`
+    assertion.
+- The conformance-universe check verified UK and BE, but explicitly no-op
+  skipped US-PE and UK-PE because the available external checkouts are newer
+  than their registry pins. This is the declared checker's behavior, not full
+  external-universe verification; the CA replay itself used the exact pinned
+  US stack.
+- Kept replay products under `/private/tmp/pr432-review-replay` and removed
+  the temporary in-worktree replay helper after use. No PR branch, remote, or
+  GitHub state was changed.
+
+#### Next
+
+- Run the focused guard/mapping tests, repository validation extras, Ruff,
+  and the full test suite; distinguish branch regressions from reproducible
+  base/sandbox failures.
+- Complete final containment and reviewer-ledger prefix checks, remove
+  reviewer-created analysis residue, and write the committed review report.
