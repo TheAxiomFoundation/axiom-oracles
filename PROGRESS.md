@@ -2146,3 +2146,58 @@ residual), #229 (small-suite grounding).
   mapping baseline.
 - Record exact containment and environment-only failures.
 - Write and commit `REVIEW-REPORT.md` with a request-changes verdict.
+
+### Review checkpoint 4 — chain and baseline closeout
+
+#### State
+
+- The derived-artifact/check matrix is green, but the complete validation
+  chain is not: one actionable exact-pin census test fails at the reviewed
+  head.
+- The five live-RuleSpec CA/IL/NY/OH failures are unchanged from clean main and
+  are not regressions from this PR.
+
+#### Done
+
+- Ran all 16 current CI validation commands successfully: comparison registry
+  listing, rule verification, state-populace contract, disposition validation,
+  case/disposition artifact checks, grid/boundary/affected-map checks, vacuous
+  gate, dashboard overview, conformance universe/compositions, scoreboard,
+  ratchet, and burndown. The vacuous gate covered 139 oracle-backed configs and
+  218 suites.
+- Ran the full test suite: 2,315 passed, 76 skipped, and 2 failed. One failure
+  is actionable: the Chunk 2 exact-pin census still expects
+  `4ced8fb7` / `9a4aaf64` instead of the final required
+  `87d3cbd3b` / `66562bc60` pin. The other failure is environmental:
+  `npx esbuild` could not resolve the npm registry; its isolated dashboard
+  loader test passed with the already-cached esbuild 0.28.1 binary.
+- Confirmed clean main also fails the exact-pin census, but for a different
+  pre-existing Chunk 1 stale expectation. This PR repairs that Chunk 1 entry
+  and then introduces the analogous Chunk 2 inconsistency in its final re-pin
+  commit.
+- Reproduced the live-RuleSpec state-oracle baseline at both reviewed head and
+  clean main: exactly 5 failed, 19 passed, and 1 skipped, with identical
+  failure-nodeid-set digest
+  `a58b31bbb71579ab116ca9184a7c54e3af3a35d73dceda6ad1e272c7775aaf29`.
+  The unchanged failures are the CA BHST mapping set, IL mapping set, IL
+  positive-recapture fixture branch, NY mapping set, and OH mapping set. All
+  25 corresponding tests pass against the exact reviewed RuleSpec checkout.
+- Verified `ruff check .`, `git diff --check`, and repository object checks.
+  Cached Ruff 0.15.12 reports the same formatting delta in
+  `tests/test_conformance.py` at reviewed head and clean main; current CI runs
+  `ruff check`, which passes.
+- Audited containment as exactly 20 intended paths: the append-only ledger;
+  three-bridge US registry update; suite config and supplemental fixture;
+  generator and tests; committed report/manifest; the single conformance
+  adoption; and the associated affected-map, conformance, dashboard,
+  freshness, and overview derivatives.
+- Kept both disposable worktrees clean. The detached base worktree is
+  `.git/review-worktrees/pr430-clean-main-a0b859ee`.
+- Normal `uv` execution was also blocked by sandbox denial while initializing
+  `~/.cache/uv`; checks used the existing cached development environment.
+
+#### Next
+
+- Write and commit the final request-changes report.
+- Reverify report/ledger cleanliness and hand off without any PR-branch,
+  remote, or GitHub mutation.
