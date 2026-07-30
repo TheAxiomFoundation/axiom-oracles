@@ -2408,3 +2408,63 @@ residual), #229 (small-suite grounding).
   boundary arithmetic, and upstream-issue reproduction audit.
 - Complete frozen-row sampling, guard comparison, drift/tolerance checks, and
   full regeneration/parity/containment checks.
+
+### 2026-07-30 blind review: newly exposed upstream rows
+
+#### State
+
+- The 723-row TANF non-cash net-test class and two-row ACIN boundary class are
+  genuinely observable in pinned PolicyEngine behavior; they are not hidden
+  RuleSpec encoding defects.
+- This validates those upstream attributions but does not cure the separate
+  blocking PUB 275 bridge premise.
+
+#### Done
+
+- Recomputed base/head mismatch identities: 529 base rows, 1,058 head rows,
+  735 additions, and 206 vanished rows across the rerun transition.
+- Ran a stricter exact-stack counterfactual over all 377 newly affected cases.
+  Baseline and treatment used the same direct requested-month evaluator; the
+  treatment differed only by setting
+  `meets_tanf_non_cash_net_income_test = true`.
+  - Exactly 723 rows / 370 cases cleared: 353 paired cases, two
+    eligibility-only cases, and 15 benefit-only cases.
+  - The sorted `case_id<TAB>concept<TAB>kind` receipt is
+    `862c27d5068e3ccbff79b52876fa19f23e63a0d38e3ed6763b375e8e3bd437bd`,
+    matching the committed evidence.
+  - `ecps-68027` already matched Axiom in the unmodified direct baseline, so
+    it was correctly excluded from the net-test class as a batch-path
+    artifact.
+- Verified the cached wheel files byte-for-byte against PolicyEngine-US source
+  pin `49d19b239a593dbac8920ac6fd80cfe33372343a`.
+  `is_tanf_non_cash_eligible` returns `gross & net & asset`;
+  both `net_applies/hheod.yaml` and `net_applies/non_hheod.yaml` set California
+  true from 2015-10-01.
+- Read ACL 14-56 page 4 and ACL 15-42 page 4. They make net income relevant to
+  the allotment/zero-benefit outcome after MCE is conferred, while expressly
+  allowing one/two-person minimum benefits and three-plus issuance-table
+  benefits above the ordinary net maximum. That supports treating
+  PolicyEngine's pre-confer net ceiling as upstream.
+- Fetched policyengine-us issues #9175 and #9176 read-only. Both correctly
+  describe the pinned code path. Their published repros ran on PolicyEngine
+  4.18.9 / US 1.767.3 / core 3.30.3:
+  - #9175 produced gross ratio `1.916933`, net ratio `1.3732908`, gates
+    true/false/true, TANF non-cash eligibility false, and SNAP zero.
+  - #9176 produced gross `$3,525.29`, ratio `2.0001645`, gross gate false,
+    and TANF non-cash eligibility false.
+- Independently read retained ACIN I-46-25 Attachment I at
+  `us-ca/guidance/cdss/acin-2025-i-46-25/page-7`: the two-person MCE/BBCE
+  table limit is `$3,526`.
+  - Actual `ecps-69070` input is annual interest `$42,303.4375`, or
+    `$3,525.286458...` monthly, `$0.713541...` below the table.
+  - Dividing by PolicyEngine's unrounded two-person monthly FPG
+    `$21,150 / 12 = $1,762.50` gives `2.00016253...`, above exact `2.0`;
+    the rounded-cents issue repro gives the reported `2.0001645`.
+  - Thus the table passes the case while PolicyEngine's ratio gate rejects it.
+
+#### Next
+
+- Finish no-silent-movement sampling, guard comparison, drift/tolerance
+  integrity, and artifact parity checks.
+- Replay the declared suite and full `--check` battery, then perform
+  changed-path and append-only containment audits.
