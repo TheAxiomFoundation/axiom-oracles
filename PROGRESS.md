@@ -2331,3 +2331,33 @@ residual), #229 (small-suite grounding).
   report with the final head SHA and complete before/after/legal/guard
   findings, and hand the local branch back without pushing or making GitHub
   writes.
+
+### 2026-07-30 blind adversarial review initialization
+
+#### State
+
+- Reviewing PR #432 from a disposable worktree at
+  `.git/review-worktrees/pr432-eee181a-blind`.
+- GitHub independently reports head branch `data/ca-snap-bbce-rerun` at
+  `eee181a30885626b1c85c4273badb732d7840ba3`, with base `main` at
+  `e1374eb30c582639f8f71f9bf9c22ba93b6e36f4`.
+- Review commits are confined to local branch
+  `review/pr432-eee181a-blind`; no PR-branch, remote, or GitHub writes are
+  authorized.
+
+#### Done
+
+- Read the required GitNexus PR-review workflow.
+- Verified the exact PR head through the read-only GitHub connector and
+  matched it to the local branch tip.
+- Created the disposable review worktree and established this append-only
+  state/done/next ledger before substantive review.
+
+#### Next
+
+- Inspect the complete PR diff and affected execution paths.
+- Independently read the retained ACL 14-56 and ACL 15-42 rows and decide
+  whether statewide `household_was_issued_pub_275 = true` is legally
+  supportable.
+- Reproduce attribution, frozen-row, guard, regeneration, and containment
+  claims; record evidence after each coherent review step.
