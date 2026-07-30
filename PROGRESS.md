@@ -2037,3 +2037,55 @@ residual), #229 (small-suite grounding).
 - Regenerate independently on the exact pinned RuleSpec/PolicyEngine stack.
 - Recompute statutory expecteds, run the full check battery, compare clean
   `main` mapping failures, then write `REVIEW-REPORT.md`.
+
+### Review checkpoint 2 — independent exact-stack regeneration
+
+#### State
+
+- Independent raw evidence is retained outside the worktree at
+  `/private/tmp/pr430-regenerated/axiom-policyengine-us-taxable-income-grid-all-2026-07-30.json`.
+- The reviewed worktree is clean after restoring the committed provenance
+  timestamp and removing the temporary fail-closed launcher.
+
+#### Done
+
+- Read SPINE-PLAN sections 5, 6.3, 8, and 9 Chunk 2.
+- Verified the detached RuleSpec checkout is clean at exact merge commit
+  `87d3cbd3b6ec580724f0b79a0472105347f79518` and exact tree
+  `66562bc60977c02c6ea353de6323b57fe927bd4c`.
+- Ran the official registry path
+  `scripts/run_comparison.py us-taxable-income-grid --summary` under Python
+  3.13.9 with independently resolved PolicyEngine 4.18.9,
+  PolicyEngine-US 1.767.3, and PolicyEngine-Core 3.30.3 package roots. The
+  temporary launcher rejected every package or interpreter request outside
+  those exact pins.
+- Reproduced 14/14 matches, zero mismatches, and zero errors. The regenerated
+  dashboard report is byte-identical to the committed report after excluding
+  only `provenance.generated_at`.
+- Confirmed the scored binding is Axiom
+  `federal_taxable_income` versus PolicyEngine `taxable_income`, amount
+  comparison, with absolute tolerance 0.01 and relative tolerance 0.0.
+- Confirmed the grid is non-vacuous: 13/14 Axiom finals are nonzero, with 11
+  distinct values spanning $0 to $167,800; both aggregate positive rates are
+  92.857 percent.
+- Independently probed the companion-only nonzero section 931 senior-MAGI
+  addback on the exact PE stack. PE derived MAGI $85,000, senior deduction
+  $5,400, deductions $23,550, and taxable income $51,450, exactly matching the
+  RuleSpec companion diagnostic. The omission from the scored 14-case report
+  therefore does not conceal an observed pinned-stack divergence.
+- The GitNexus graph build could not register its local index because the
+  sandbox denied the write to `~/.gitnexus/registry.json` (`EPERM`). Its
+  87-MB untracked partial index was moved recoverably to
+  `/private/tmp/pr430-gitnexus-failed-2404dd5b`; no tracked residue remains.
+- A redundant checkout attempt against the already-present RuleSpec worktree
+  was denied at the source repository's `index.lock`; read-only HEAD/tree and
+  cleanliness verification still succeeded.
+
+#### Next
+
+- Finish direct bridge, fixture, mapping, and dependency-surface tracing in
+  place of the unavailable GitNexus graph.
+- Resolve whether the five hand-supplied zero bridge assertions satisfy the
+  binding companion-origin contract.
+- Complete statutory arithmetic, containment, full checks, and the clean-main
+  mapping baseline.
