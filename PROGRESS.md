@@ -2267,3 +2267,67 @@ residual), #229 (small-suite grounding).
 - Run the full repository test suite, confirm the two already-reproduced
   origin/main failures are the only remaining failures, then perform final
   containment and append-only ledger audits.
+
+### 2026-07-30 final validation and follow-up closeout
+
+#### State
+
+- The PUB 275 bridge gap, exact-stack rerun, causal reclassification, artifact
+  chain, and frozen provenance guards are complete. The branch remains local
+  and unpushed.
+- The required untracked `WORKER-REPORT-FOLLOWUP.md` will be written after
+  this closing ledger commit so it can quote the final branch head.
+
+#### Done
+
+- Passed the full `--check` chain for dispositions, CA case and disposition
+  artifacts, grids, boundary cases, affected map, vacuous/freshness,
+  dashboard overview, conformance universe and compositions, scoreboard,
+  ratchet, burn-down, #423 reconciliation, and the dependent #362 builder.
+- The conformance-universe command exited successfully and verified the
+  applicable UK/BE surfaces. It explicitly left US/UK external-checkout
+  enforcement unverified because the general environments are newer than
+  their registry pins; the CA rerun itself used the required exact
+  PolicyEngine 4.18.9 / US 1.767.3 / core 3.30.3 stack.
+- Passed comparison-registry validation (4,752 exact and 498 prefix
+  bindings), rule verification (21,859 rules; 99.6% grounded; 97.8%
+  manifest-backed; 34/130 executable surfaces), the 43-jurisdiction
+  state-tax population contract, 184 focused tests with three skips, all 16
+  #423 tests, Ruff lint, and diff whitespace validation.
+- The full repository suite completed in 289.07 seconds with 2,317 passed, 70
+  skipped, 2 failed, and 104 warnings. The prior eight #423 failures are
+  fixed. The two remaining failures reproduce on local `origin/main`
+  `e1374eb30c582639f8f71f9bf9c22ba93b6e36f4`, and their tests/configs are
+  byte-identical here:
+  - `tests/test_dashboard_loader.py::test_loader_equivalence`: sandboxed
+    `npx esbuild` cannot resolve the npm registry (`ENOTFOUND`).
+  - `tests/test_federal_tax_liability_generator.py::test_every_live_federal_grid_pins_its_reviewed_rulespec_snapshot`:
+    the unchanged itemized-grid config pins commit `ae64af27...` while the
+    frozen test expects `345c2203...`; both resolve to tree
+    `40e08f7dbaa88a70660006f3a5a32bfa283ebd85`.
+- Confirmed changed-path containment: only the CA bridge mapping/test, CA SNAP
+  report/disposition/case artifacts, permitted shared generated artifacts,
+  provenance guards/tests, conformance ledger, and `PROGRESS.md` changed.
+  The original 108,448-byte `PROGRESS.md` prefix is byte-exact; this follow-up
+  appended 312 lines before this entry and deleted none.
+- Sandbox/tooling disclosures:
+  - The worktree has no local `.venv`; tests used the existing parent
+    repository environment.
+  - The first task-local uv rerun stopped before case evaluation because the
+    offline resolver could not fetch Plotly 5.24.1. The successful rerun used
+    the already-cached exact-package overlay.
+  - The current rules engine could not compile an unrelated pre-existing
+    en-dash RuleSpec path, so the run used the clean compatible engine at
+    `e19f1b7573c74512f20a6b71a0c55dbbf333d41b`.
+  - A final attempt to launch lockfile Ruff 0.15.12 through uv could not
+    initialize the read-only cache outside the writable sandbox
+    (`Operation not permitted`). Installed Ruff 0.15.0 passed lint and the
+    changed guard files' format check; its repository-wide formatter differs
+    from the pinned baseline and was not used to rewrite unrelated files.
+
+#### Next
+
+- Commit this closing ledger entry, write the untracked follow-up worker
+  report with the final head SHA and complete before/after/legal/guard
+  findings, and hand the local branch back without pushing or making GitHub
+  writes.
