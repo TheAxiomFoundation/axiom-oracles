@@ -2757,3 +2757,36 @@ residual), #229 (small-suite grounding).
   tests.
 - Verify repair/full-PR containment and append-only ledger history.
 - Write and commit the final review report.
+
+### Repair re-review entry 3 — validation battery complete
+
+#### State
+
+- Every repair-specific and generated-artifact gate is green.
+- The broad test run retains only two unchanged baseline/environment failures.
+- Containment and final report assembly remain.
+
+#### Done
+
+- Passed all 15 read-only checks: disposition join, focused CA case and served
+  artifacts, grids, boundary cases, affected map, vacuous/freshness,
+  dashboard overview, conformance universes and compositions, scoreboard,
+  ratchet, burn-down, #423 reconciliation, and dependent #362 dispatch.
+- The universe check verified UK and BE. US-PE and UK-PE were explicit clean
+  no-ops because local checkouts are newer than the registry pins; the CA
+  model replay separately used the exact declared stack.
+- Passed all 40 focused mapping/#423/#362 tests.
+- Full pytest result: 2,320 passed, 70 skipped, two failed, and 104 warnings
+  in 267.11 seconds. Both failures are unchanged from base:
+  sandboxed `npx esbuild` cannot resolve `registry.npmjs.org`, and an
+  unchanged federal-grid guard compares two equivalent-tree commit labels.
+- Confirmed the two failed tests and both implicated federal-grid configs are
+  byte-unchanged from base.
+- Passed repository-wide Ruff 0.15.0 lint and `git diff --check`.
+
+#### Next
+
+- Prove all eight repair ledger transitions and reviewer transitions are exact
+  byte-prefix appends.
+- Finish changed-path, mode, assertion, tolerance, and branch containment.
+- Write and commit `REVIEW-REPORT.md`.
