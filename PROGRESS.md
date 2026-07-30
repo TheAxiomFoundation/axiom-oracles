@@ -1721,3 +1721,26 @@ residual), #229 (small-suite grounding).
   detail copies; full check battery green.
 - Next: round-2 blind re-review, then merge after rulespec-us#1177 per the
   section 9 pairing order.
+
+## 2026-07-30 ca-snap-ecps BBCE rerun
+
+### State
+
+- In progress on `data/ca-snap-bbce-rerun`, isolated at
+  `_worktrees/ca-snap-rerun` from `origin/main` (`e1374eb3`).
+- Scope is limited to the `ca-snap-ecps` rerun, exact disposition
+  re-validation, residual reclassification, permitted regenerated shared
+  artifacts and count notes, this ledger, and an untracked worker report.
+
+### Done
+
+- Created the requested worktree and branch without pushing or making GitHub
+  writes.
+- Recorded the pre-rerun baseline: 529 raw mismatches, comprising 157
+  encoding, 111 bridge, 20 upstream, and 241 unexplained cases.
+
+### Next
+
+- Inspect the committed replay/builder and validation machinery, provision
+  the declared PolicyEngine stack and a registry-backed `rulespec-us`
+  checkout at `edc62ea56`, then rerun and revalidate every disposition.
