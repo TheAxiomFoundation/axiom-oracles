@@ -1648,7 +1648,7 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": "345c22030642cbd37a9fe46877591a8e1df5af7e"
+        "sha": "ae64af274ab9a04d6ab04b4de56082f156ce8b09"
       }
     ],
     "run_kind": "manual",
