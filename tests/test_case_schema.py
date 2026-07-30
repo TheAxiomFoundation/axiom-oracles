@@ -1718,22 +1718,43 @@ def test_policyengine_projection_keeps_adult_child_out_of_spouse_role() -> None:
     assert people["adult-child"]["is_tax_unit_spouse"] == {2026: False}
 
 
-def test_policyengine_runner_calculates_case_variables_at_case_period(
-    monkeypatch,
-) -> None:
-    calls = []
+def _stub_policyengine_for_period(monkeypatch, definition_period: str) -> list:
+    """Stub the PE import and situation simulation, recording calculate calls."""
+    calls: list[tuple[str, object]] = []
 
-    class StubUS:
+    class StubModel:
         @staticmethod
-        def calculate_household(**kwargs):
-            calls.append((tuple(kwargs["extra_variables"]), kwargs["year"]))
-            return {"household": {"is_wic_eligible": False}}
+        def get_variable(variable):
+            del variable
+            return SimpleNamespace(definition_period=definition_period)
 
     monkeypatch.setattr(
         policyengine_runner_module,
         "_policyengine",
-        lambda: SimpleNamespace(us=StubUS()),
+        lambda: SimpleNamespace(us=SimpleNamespace(model=StubModel())),
     )
+
+    class StubSimulation:
+        @staticmethod
+        def calculate(variable, period):
+            calls.append((variable, period))
+            return [0.0]
+
+    monkeypatch.setattr(
+        PolicyEngineRunner,
+        "_build_situation_simulation",
+        staticmethod(lambda situation: StubSimulation()),
+    )
+    return calls
+
+
+def test_policyengine_runner_calculates_month_variables_at_case_month(
+    monkeypatch,
+) -> None:
+    # Month-defined variables must be computed at the requested month itself:
+    # the year-shaped annual sum spans two federal fiscal years (SNAP COLAs
+    # land October 1), so annual/12 is not any month's value.
+    calls = _stub_policyengine_for_period(monkeypatch, "month")
     case = Case(
         case_id="wic-period",
         period="2026-05",
@@ -1748,25 +1769,13 @@ def test_policyengine_runner_calculates_case_variables_at_case_period(
 
     PolicyEngineRunner().run_case(case, ["is_wic_eligible"])
 
-    assert calls == [(("is_wic_eligible",), 2026)]
+    assert calls == [("is_wic_eligible", "2026-05")]
 
 
 def test_policyengine_runner_calculates_annual_case_variables_at_year(
     monkeypatch,
 ) -> None:
-    calls = []
-
-    class StubUS:
-        @staticmethod
-        def calculate_household(**kwargs):
-            calls.append((tuple(kwargs["extra_variables"]), kwargs["year"]))
-            return {"tax_unit": {"income_tax": 0}}
-
-    monkeypatch.setattr(
-        policyengine_runner_module,
-        "_policyengine",
-        lambda: SimpleNamespace(us=StubUS()),
-    )
+    calls = _stub_policyengine_for_period(monkeypatch, "year")
     case = Case(
         case_id="tax-period",
         period="2026-05",
@@ -1781,7 +1790,7 @@ def test_policyengine_runner_calculates_annual_case_variables_at_year(
 
     PolicyEngineRunner().run_case(case, ["income_tax"])
 
-    assert calls == [(("income_tax",), 2026)]
+    assert calls == [("income_tax", 2026)]
 
 
 def test_policyengine_tax_case_runs_use_batched_dataset_path(monkeypatch) -> None:

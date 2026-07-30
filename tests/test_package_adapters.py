@@ -1,6 +1,6 @@
 from axiom_oracles.adapters.policyengine import PolicyEngineTaxsimRunner
 from axiom_oracles.adapters.policyengine.runner import (
-    _normalize_value_for_requested_period,
+    _calculation_period,
 )
 from axiom_oracles.adapters.prd import PrdPackageRunner
 from axiom_oracles.adapters.taxsim import TaxsimPackageRunner
@@ -26,35 +26,29 @@ class _FakePolicyEngine:
         self.us = type("FakeUS", (), {"model": _FakePolicyEngineModel(definition_period)})()
 
 
-def test_policyengine_monthly_numeric_output_is_normalized_for_month_period() -> None:
-    value = _normalize_value_for_requested_period(
-        _FakePolicyEngine("month"),
-        "snap",
-        "2026-01",
-        1_846.6170654296875,
-    )
-
-    assert value == 1_846.6170654296875 / 12
-
-
-def test_policyengine_normalization_preserves_booleans_and_annual_values() -> None:
+def test_policyengine_month_variable_is_computed_at_the_requested_month() -> None:
+    # Month-defined variables must be evaluated at the requested month itself:
+    # PE's year-shaped annual sum spans two federal fiscal years (SNAP COLAs
+    # land October 1), so annual/12 is not any month's value.
     assert (
-        _normalize_value_for_requested_period(
-            _FakePolicyEngine("month"),
-            "is_snap_eligible",
-            "2026-01",
-            True,
-        )
-        is True
+        _calculation_period(_FakePolicyEngine("month"), "snap", "2026-01", 2026)
+        == "2026-01"
     )
     assert (
-        _normalize_value_for_requested_period(
-            _FakePolicyEngine("year"),
-            "income_tax",
-            "2026-01",
-            1200,
+        _calculation_period(
+            _FakePolicyEngine("month"), "is_snap_eligible", "2026-01", 2026
         )
-        == 1200
+        == "2026-01"
+    )
+
+
+def test_policyengine_year_variables_and_year_requests_stay_year_shaped() -> None:
+    assert (
+        _calculation_period(_FakePolicyEngine("year"), "income_tax", "2026-01", 2026)
+        == 2026
+    )
+    assert (
+        _calculation_period(_FakePolicyEngine("month"), "snap", "2026", 2026) == 2026
     )
 
 

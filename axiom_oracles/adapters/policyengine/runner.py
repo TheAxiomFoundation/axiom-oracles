@@ -176,36 +176,30 @@ class PolicyEngineRunner(EngineAdapter):
         pe = _policyengine()
         values = {}
         errors = []
-        household_input = self._build_household_calculator_input_from_case(
-            case,
-            variables=variables,
-        )
+        requested_period = str(case.period)
+        year = int(requested_period.split("-", 1)[0])
+        situation = self._build_situation_from_case(case, variables=variables)
         try:
-            result = pe.us.calculate_household(
-                **household_input,
-                extra_variables=variables,
-            )
+            simulation = self._build_situation_simulation(situation)
             values = {
-                variable: _normalize_value_for_requested_period(
-                    pe,
-                    variable,
-                    str(case.period),
-                    _household_result_value(result, variable),
+                variable: self._coerce_value(
+                    simulation.calculate(
+                        variable,
+                        _calculation_period(pe, variable, requested_period, year),
+                    )
                 )
                 for variable in variables
             }
         except Exception:
+            values = {}
             for variable in variables:
                 try:
-                    result = pe.us.calculate_household(
-                        **household_input,
-                        extra_variables=[variable],
-                    )
-                    values[variable] = _normalize_value_for_requested_period(
-                        pe,
-                        variable,
-                        str(case.period),
-                        _household_result_value(result, variable),
+                    simulation = self._build_situation_simulation(situation)
+                    values[variable] = self._coerce_value(
+                        simulation.calculate(
+                            variable,
+                            _calculation_period(pe, variable, requested_period, year),
+                        )
                     )
                 except Exception as exc:  # pragma: no cover - depends on PE variable set
                     errors.append(f"{variable}: {exc}")
@@ -216,6 +210,12 @@ class PolicyEngineRunner(EngineAdapter):
             values=values,
             errors=tuple(errors),
         )
+
+    @staticmethod
+    def _build_situation_simulation(situation: dict):
+        from policyengine_us import Simulation
+
+        return Simulation(situation=situation)
 
     def run_household(
         self,
@@ -507,7 +507,6 @@ class PolicyEngineRunner(EngineAdapter):
         family_rows = sorted(family_rows, key=lambda row: row["family_id"])
         spm_unit_rows = sorted(spm_unit_rows, key=lambda row: row["spm_unit_id"])
         tax_unit_rows = sorted(tax_unit_rows, key=lambda row: row["tax_unit_id"])
-        extra_variables = _extra_variables_by_entity(pe, variables)
 
         with tempfile.TemporaryDirectory(prefix="axiom-oracles-pe-") as directory:
             dataset = pe.us.PolicyEngineUSDataset(
@@ -543,22 +542,27 @@ class PolicyEngineRunner(EngineAdapter):
                     ),
                 ),
             )
-            simulation = pe.Simulation(
-                dataset=dataset,
-                tax_benefit_model_version=pe.us.model,
-                extra_variables=extra_variables,
-            )
-            simulation.run()
-            output = simulation.output_dataset.data
+            microsim = _build_batch_microsimulation(pe, dataset)
 
+        requested_period = str(cases[0].period)
         frames = {
-            "person": pd.DataFrame(output.person),
-            "household": pd.DataFrame(output.household),
-            "marital_unit": pd.DataFrame(output.marital_unit),
-            "family": pd.DataFrame(output.family),
-            "spm_unit": pd.DataFrame(output.spm_unit),
-            "tax_unit": pd.DataFrame(output.tax_unit),
+            entity: pd.DataFrame(getattr(dataset.data, entity))
+            for entity in (
+                "person",
+                "household",
+                "marital_unit",
+                "family",
+                "spm_unit",
+                "tax_unit",
+            )
         }
+        for variable in variables:
+            entity = _variable_entity(pe, variable)
+            frames[entity][variable] = microsim.calculate(
+                variable,
+                period=_calculation_period(pe, variable, requested_period, year),
+                map_to=entity,
+            ).values
         values_by_case: list[dict[str, float | bool]] = []
         for case_index, _case in enumerate(cases):
             case_values = {}
@@ -570,11 +574,8 @@ class PolicyEngineRunner(EngineAdapter):
                 rows = frame[frame[id_column].isin(entity_ids)]
                 if variable not in rows:
                     raise KeyError(variable)
-                case_values[variable] = _normalize_value_for_requested_period(
-                    pe,
-                    variable,
-                    str(_case.period),
-                    self._coerce_value(rows[variable].to_numpy()),
+                case_values[variable] = self._coerce_value(
+                    rows[variable].to_numpy()
                 )
             values_by_case.append(case_values)
 
@@ -835,37 +836,57 @@ def _result_get(result, name: str):
     return getattr(result, name)
 
 
-def _extra_variables_by_entity(pe, variables: Sequence[str]) -> dict[str, list[str]]:
-    extra_variables: dict[str, list[str]] = {}
-    for variable in variables:
-        entity = _variable_entity(pe, variable)
-        extra_variables.setdefault(entity, []).append(variable)
-    return extra_variables
 
 
 def _variable_entity(pe, variable: str) -> str:
     return str(pe.us.model.get_variable(variable).entity)
 
 
-def _normalize_value_for_requested_period(
+def _calculation_period(
     pe,
     variable: str,
     requested_period: str,
-    value: float | bool,
-) -> float | bool:
-    """Convert PolicyEngine annual output-dataset values to requested months.
+    dataset_year: int,
+) -> str | int:
+    """Period to compute ``variable`` at for a comparison request.
 
-    policyengine.py's Simulation output dataset is year-shaped: month-defined
-    numeric variables such as SNAP are emitted as annual sums. Oracle
-    comparisons can request a month (`2026-01`), so normalize those numeric
-    month variables back to one month before comparing with Axiom.
+    Month-defined variables are computed at the requested month itself.
+    Dividing PolicyEngine's year-shaped annual sum by 12 (the old behavior)
+    blends two federal fiscal years — SNAP COLAs land every October 1 — so
+    annual/12 is not any month's value and systematically overstates the
+    January benefit. Everything else keeps policyengine.py's year-shaped
+    convention at the dataset year.
     """
-    if "-" not in requested_period or isinstance(value, bool):
-        return value
-    definition_period = _policyengine_definition_period(pe, variable)
-    if definition_period.lower() != "month":
-        return value
-    return float(value) / 12
+    if (
+        "-" in requested_period
+        and _policyengine_definition_period(pe, variable).lower() == "month"
+    ):
+        return requested_period
+    return dataset_year
+
+
+def _build_batch_microsimulation(pe, dataset):
+    """Country-package Microsimulation over an in-memory batch dataset.
+
+    Mirrors policyengine.py's US model ``run()`` construction (bare
+    ``Microsimulation`` + ``_build_simulation_from_dataset``, no reform) so
+    inputs bind identically to the wrapper's year-shaped run — but keeps the
+    microsimulation itself, letting callers compute month-defined variables
+    at the comparison's requested month instead of reading annual sums from
+    the wrapper's output dataset.
+    """
+    from policyengine_us import Microsimulation
+
+    model = pe.us.model
+    microsim = Microsimulation()
+    if getattr(microsim, "baseline", None) is not None:
+        model._build_simulation_from_dataset(
+            microsim.baseline, dataset, microsim.baseline.tax_benefit_system
+        )
+    model._build_simulation_from_dataset(
+        microsim, dataset, microsim.tax_benefit_system
+    )
+    return microsim
 
 
 def _policyengine_definition_period(pe, variable: str) -> str:
