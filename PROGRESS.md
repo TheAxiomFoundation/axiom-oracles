@@ -1799,3 +1799,38 @@ residual), #229 (small-suite grounding).
 - Commit this coherent contract implementation.
 - Create the clean canonical RuleSpec clone, run the registry comparison,
   inspect raw mismatches, and add dispositions only for measured mismatches.
+
+### Checkpoint — exact-stack measured comparison
+
+#### State
+
+- A clean canonical RuleSpec checkout now exists at
+  `/private/tmp/oracle-rerun/rulespec-us`; HEAD and the verified tree match the
+  exact PR #1179 pin.
+- The registry runner completed through its normal provenance, dashboard, and
+  manifest path. Because its hardcoded `uv --with` subprocess cannot write the
+  sandboxed uv cache or reach package indexes, a temporary untracked shim
+  dispatched that exact command to the cached reviewed stack; the generator's
+  independent version gate confirmed all three required package versions.
+
+#### Done
+
+- Generated `us-taxable-income-grid` under Python 3.13.9, PolicyEngine 4.18.9,
+  PolicyEngine-US 1.767.3, and PolicyEngine-Core 3.30.3 from a fresh
+  Simulation per case.
+- The raw result is 14/14 matches, zero mismatches, and zero errors. The
+  after-disposition result is also 14/14 with zero unexplained rows.
+- No disposition file was created: none of §6.3's pre-registered divergence
+  classes produced a mismatch in the primary election-bound grid.
+- The only nonzero observed amount residual is the expected sub-cent float32
+  representation in `ti-senior-single-plus-one`: Axiom $50,851.06 versus
+  PolicyEngine $50,851.0625, a signed Axiom-minus-PolicyEngine difference of
+  -$0.0025, within the $0.01 contract tolerance.
+- All 38 focused generator tests, Ruff, and diff hygiene pass with the
+  generated report present.
+
+#### Next
+
+- Commit the measured dashboard report and manifest entry.
+- Adopt only `us-pe:taxable_income`, run the full derived-data regeneration
+  chain, and prove `--check` parity.
