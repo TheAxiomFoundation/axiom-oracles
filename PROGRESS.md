@@ -1775,3 +1775,93 @@ residual), #229 (small-suite grounding).
 - Materialize clean temporary RuleSpec and engine inputs, run the registry
   suite at the declared PolicyEngine versions, and produce an exhaustive
   vanished/materially-changed/exact disposition partition.
+
+### 2026-07-30 exact rerun and BBCE boundary audit
+
+#### State
+
+- The full 7,101-case rerun and exhaustive disposition audit are complete.
+- The two obsolete BBCE encoding selectors are being replaced with
+  source-expiring bridge selectors; the 131 exact singleton dispositions are
+  unchanged.
+
+#### Done
+
+- Ran all 14,202 comparisons with PolicyEngine 4.18.9,
+  PolicyEngine-US 1.767.3, and PolicyEngine-Core 3.30.3 against a clean,
+  detached `rulespec-us` checkout at
+  `edc62ea566a617cf5b9c3b620f712b73c6767c94`.
+- Used the clean legacy engine source at
+  `e19f1b7573c74512f20a6b71a0c55dbbf333d41b` because the current engine's
+  fail-closed root validator rejects the exact merged RuleSpec tree's
+  pre-existing noncanonical `us/statutes/42/1437c–1.test.yaml` filename.
+  The legacy source and rebuilt binary agree, so provenance is honest.
+- Confirmed the raw outcome did not shrink: 529 mismatches across 404 unique
+  cases, with all 529 identities and left/right/difference values exact
+  against the pre-rerun report.
+- Revalidated every existing disposition row. The 288-row partition is:
+  0 vanished, 0 materially changed above 0.005, 157 numerically exact but
+  semantically invalidated BBCE rows flagged for reclassification, and 131
+  exact singleton rows kept. The audit receipt is
+  `/private/tmp/ca-snap-bbce-disposition-revalidation.json` with SHA-256
+  `47f3926399f2b5f407f1fd2b0e69eda109b549656177aa6604fadda073ceea2e`.
+- Proved the residual mechanism at the compiled input boundary: both
+  Household/Judgment inputs `household_was_issued_pub_275` and
+  `household_has_online_access_to_pub_275` are absent from the populace
+  mapping and therefore default to false. This prevents
+  `calfresh_mce_status_conferred` and both MCE waivers despite the merged
+  encode being present and reachable.
+- Ran a 79-household counterfactual that changed only
+  `household_was_issued_pub_275` to true. All 79 households then received MCE
+  status and all 157 affected rows matched PolicyEngine within their declared
+  tolerances (79/79 eligibility and 78/78 benefit, zero errors). The receipt
+  is `/private/tmp/ca-snap-bbce-pub275-counterfactual.json` with SHA-256
+  `d9a2c4f785474b92e675f0e742f8dd023341097ac7f141b77bc95d5ae42c484a`.
+- The first counterfactual receipt attempt read Axiom outputs under the
+  dashboard concept IDs rather than the adapter's local target keys and
+  therefore recorded null lookups. It was overwritten by the corrected,
+  successful receipt above and is not evidence.
+- The default `uv` cache was sandbox-inaccessible; a local-clone hardlink
+  attempt also failed under the filesystem boundary, and a cleanup command
+  containing `rm -rf` was rejected before execution. No repository data was
+  removed. The successful run used the already cached exact Python
+  environment, offline dataset caches, writable temporary artifacts, and
+  cyclic garbage collection left enabled to avoid the prior late-batch
+  memory kill.
+- GitNexus graph-query tools were unavailable in this session, so the boundary
+  trace was confirmed directly from the compiled input manifest, adapter
+  source, mapping table, RuleSpec formulas, and the all-household
+  counterfactual.
+
+#### Next
+
+- Apply the bridge reclassification, regenerate the CA and shared derived
+  artifacts, commit the coherent data step, then run the full check battery.
+
+### 2026-07-30 CA artifact reclassification checkpoint
+
+#### State
+
+- The rerun report, source/served dispositions, and compact CA case artifacts
+  are regenerated and internally consistent.
+
+#### Done
+
+- Replaced the two obsolete RuleSpec encoding selectors with two PUB 275
+  population-input bridge selectors while preserving their exact 79
+  eligibility and 78 benefit case lists.
+- The post-rerun taxonomy is 0 encoding rows / 0 cases, 268 bridge rows / 189
+  cases, 20 upstream rows / 10 cases, and 241 unexplained rows / 205 cases.
+  Raw mismatch volume remains 529 rows / 404 cases.
+- Confirmed zero expired and zero orphaned CA dispositions. The compact case
+  artifacts contain all 529 mismatches, exactly 288 annotations, and zero
+  silent classifications.
+- Passed the focused disposition unit suite (19 tests), CA case-artifact
+  parity, CA source/served disposition parity, the repository-wide
+  disposition join check, and diff whitespace validation.
+
+#### Next
+
+- Commit the coherent CA data step, refresh the permitted shared scoreboard,
+  ratchet, burn-down, history, freshness, affected-map, and overview
+  artifacts, then run the full chain checks.
