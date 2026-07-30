@@ -1744,3 +1744,34 @@ residual), #229 (small-suite grounding).
 - Inspect the committed replay/builder and validation machinery, provision
   the declared PolicyEngine stack and a registry-backed `rulespec-us`
   checkout at `edc62ea56`, then rerun and revalidate every disposition.
+
+### 2026-07-30 baseline disposition audit
+
+#### State
+
+- The pre-rerun disposition evidence is reproduced and pinned; exact-stack
+  checkout provisioning remains in progress.
+
+#### Done
+
+- Ran both committed #423 audit entry points with literal base ref
+  `819f370bf0346e4a6a8dfb1c8c4f0d873d6d0340`; the reconciler and builder
+  dispatch both passed.
+- Confirmed 133 source disposition entries expanding to 288 classified rows:
+  two BBCE selectors covering 157 encoding rows plus 131 individually pinned
+  #362 rows (111 bridge and 20 upstream).
+- Confirmed the earlier #423 transition receipt independently: 192 historical
+  rows vanished, 22 materially drifted and were dropped, and 131 were kept.
+- Identified that the #423 scripts deliberately pin the 529-row baseline and
+  therefore serve as the pre-rerun receipt; post-BBCE validation must compare
+  each live identity and pin without altering those containment-excluded
+  scripts.
+- A sandbox restriction prevents `uv` from initializing its default cache
+  under `~/.cache/uv`; subsequent isolated runs will use a task-specific
+  writable cache under `/private/tmp`.
+
+#### Next
+
+- Materialize clean temporary RuleSpec and engine inputs, run the registry
+  suite at the declared PolicyEngine versions, and produce an exhaustive
+  vanished/materially-changed/exact disposition partition.
