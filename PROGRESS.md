@@ -2402,3 +2402,37 @@ residual), #229 (small-suite grounding).
 - Preserve the correct 157-row encoding-to-bridge classification and both
   independently valid upstream issue references; describe #9175 as a known
   divergence that the corrected bridge may no longer expose.
+
+### 2026-07-30 stale served-disposition repair
+
+#### State
+
+- The served CA disposition artifact now exactly reflects its YAML source.
+- This checkpoint validates blocker 2 against the pre-rerun 1,058-row
+  artifact state; the corrected-PUB-275 rerun will regenerate the final
+  smaller artifact chain.
+
+#### Done
+
+- Regenerated `dashboard/public/data/dispositions/ca-snap-ecps.json` from
+  `dispositions/ca-snap-ecps.yaml`; no served JSON field was hand-edited.
+- Corrected exactly six stale `linked_issue` fields:
+  - `ca-mce-pe-extra-net-test-paired-eligibility`
+  - `ca-mce-pe-extra-net-test-paired-benefit`
+  - `ca-mce-pe-extra-net-test-eligibility-only`
+  - `ca-mce-pe-extra-net-test-benefit-only`
+  - `ca-mce-acin-threshold-pe-eligibility`
+  - `ca-mce-acin-threshold-pe-benefit`
+- The first four now serve PolicyEngine-US issue #9175 instead of the
+  superseded net-test source blob; the final two now serve issue #9176
+  instead of the superseded gross-test source blob.
+- Passed the unchanged disposition-artifact `--check`, frozen #423
+  reconciliation `--check`, and dependent #362 builder `--check` with
+  literal base `819f370bf0346e4a6a8dfb1c8c4f0d873d6d0340`.
+
+#### Next
+
+- Perform the exact corrected-premise rerun and replace the unsupported
+  binding's 1,058-row artifact state with the honest 529-row state.
+- Revalidate the same three entry points after all final artifact and ledger
+  regeneration.

@@ -364,7 +364,7 @@
     "ecps-65536"
    ],
    "arithmetic": [],
-   "linked_issue": "https://github.com/PolicyEngine/policyengine-us/blob/1.767.3/policyengine_us/variables/gov/hhs/tanf/non_cash/meets_tanf_non_cash_net_income_test.py"
+   "linked_issue": "https://github.com/PolicyEngine/policyengine-us/issues/9175"
   },
   {
    "id": "ca-mce-pe-extra-net-test-paired-benefit",
@@ -728,7 +728,7 @@
     "ecps-65536"
    ],
    "arithmetic": [],
-   "linked_issue": "https://github.com/PolicyEngine/policyengine-us/blob/1.767.3/policyengine_us/variables/gov/hhs/tanf/non_cash/meets_tanf_non_cash_net_income_test.py"
+   "linked_issue": "https://github.com/PolicyEngine/policyengine-us/issues/9175"
   },
   {
    "id": "ca-mce-pe-extra-net-test-eligibility-only",
@@ -741,7 +741,7 @@
     "ecps-57929"
    ],
    "arithmetic": [],
-   "linked_issue": "https://github.com/PolicyEngine/policyengine-us/blob/1.767.3/policyengine_us/variables/gov/hhs/tanf/non_cash/meets_tanf_non_cash_net_income_test.py"
+   "linked_issue": "https://github.com/PolicyEngine/policyengine-us/issues/9175"
   },
   {
    "id": "ca-mce-pe-extra-net-test-benefit-only",
@@ -767,7 +767,7 @@
     "ecps-62794"
    ],
    "arithmetic": [],
-   "linked_issue": "https://github.com/PolicyEngine/policyengine-us/blob/1.767.3/policyengine_us/variables/gov/hhs/tanf/non_cash/meets_tanf_non_cash_net_income_test.py"
+   "linked_issue": "https://github.com/PolicyEngine/policyengine-us/issues/9175"
   },
   {
    "id": "ca-mce-self-employment-bridge-eligibility",
@@ -809,7 +809,7 @@
     "ecps-69070"
    ],
    "arithmetic": [],
-   "linked_issue": "https://github.com/PolicyEngine/policyengine-us/blob/1.767.3/policyengine_us/variables/gov/hhs/tanf/non_cash/meets_tanf_non_cash_gross_income_test.py"
+   "linked_issue": "https://github.com/PolicyEngine/policyengine-us/issues/9176"
   },
   {
    "id": "ca-mce-acin-threshold-pe-benefit",
@@ -821,7 +821,7 @@
     "ecps-69070"
    ],
    "arithmetic": [],
-   "linked_issue": "https://github.com/PolicyEngine/policyengine-us/blob/1.767.3/policyengine_us/variables/gov/hhs/tanf/non_cash/meets_tanf_non_cash_gross_income_test.py"
+   "linked_issue": "https://github.com/PolicyEngine/policyengine-us/issues/9176"
   },
   {
    "id": "ca-mce-tanf-bridge-ecps-58498-benefit",
