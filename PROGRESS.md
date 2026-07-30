@@ -2582,3 +2582,49 @@ residual), #229 (small-suite grounding).
   `fa54f6fd...` 22-row drift receipt.
 - Update and extend the focused tests without deleting or weakening an
   assertion, then make both #423 and dependent #362 entry points pass.
+
+### 2026-07-30 two-era #423/#362 defensive guard
+
+#### State
+
+- The live artifact audit now guards the honest 529-row state, while an
+  immutable rejected-premise snapshot separately preserves the accepted
+  binding-era evidence and all six corrected served links.
+- Focused implementation tests are green; the full unchanged check and test
+  battery remains to be run.
+
+#### Done
+
+- Updated the live #423 partition guard to 192 vanished, 22
+  current-but-dropped, zero reclassified, and 131 kept rows. All 22 reviewed
+  drift identities are now active current-but-dropped rows; the full
+  `fa54f6fd...` drift receipt and the 115/16 retained-pin receipt are
+  unchanged.
+- Hash-pinned rejected snapshot commit
+  `c1084c2339ccc4bc41776f71b059fbabe8732916` and its exact source
+  (`c68761bf...`), canonical report (`d2e095a5...`), and served disposition
+  (`443a8fde...`) blobs. The snapshot replays the accepted 1,058/866 state,
+  156/17/41/131 partition, `e70a713f...` 41-row reclassification receipt,
+  and 17-active/5-retired split of the same 22-row receipt.
+- Explicitly pinned the four #9175 and two #9176 corrected URLs through the
+  source `evidence.upstream_url` to served `linked_issue` transformation.
+  Source, report, and served byte-hash tamper tests make this immutable proof
+  fail closed.
+- Bumped the deterministic reconciliation receipt to v2 with distinctly
+  labeled `current` and `rejected_pub275_exposure_snapshot` sections, avoiding
+  any use of the rejected rows as current evidence.
+- Preserved the compact current-artifact, equal-count partition swap,
+  reclassified selector swap, kept-pin, active drift-pin, and retired
+  drift-pin tamper assertions. Snapshot-only assertions were retargeted to the
+  snapshot instead of removed.
+- Passed 40 focused tests covering mapping, #423 reconciliation, and #362
+  dispatch; passed focused Ruff and whitespace validation; and ran both the
+  standalone #423 checker and its complete two-era receipt successfully.
+
+#### Next
+
+- Run the complete artifact, conformance, #423, and #362 `--check` battery,
+  then the full test and lint suites.
+- Audit commit containment, unchanged tolerances, append-only progress
+  history, and final worktree state before writing the untracked repair
+  report.
