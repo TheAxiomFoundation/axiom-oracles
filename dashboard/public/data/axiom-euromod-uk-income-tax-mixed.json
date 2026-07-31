@@ -388,7 +388,7 @@
       "axiom_rules_engine_sha": "13a86a737f2e791e272b7aeb0ce8d5f5cc7e69c3",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-31T14:57:29Z",
+    "generated_at": "2026-07-31T20:02:24Z",
     "generated_by": "scripts/run_comparison.py::uk-income-tax-mixed-ukmod",
     "oracle": {
       "euromod_country": "UK",
