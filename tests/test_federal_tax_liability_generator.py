@@ -64,7 +64,7 @@ def test_every_live_federal_grid_pins_its_reviewed_rulespec_snapshot():
         "7ee3ca44edd11cdaaf5d074a6a2a6c32d2f25dfb",
     )
     chunk1_snapshot = (
-        "345c22030642cbd37a9fe46877591a8e1df5af7e",
+        "ae64af2740340a40d04ed3c652254f53e62fab61",
         "40e08f7dbaa88a70660006f3a5a32bfa283ebd85",
     )
     chunk1_configs = {

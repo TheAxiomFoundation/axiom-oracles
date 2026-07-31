@@ -15,7 +15,7 @@
 # independently representable input in PE-US 1.767.3 and remains a
 # RuleSpec-only fixture input.
 #
-# RuleSpec: rulespec-us PR #1177 merge commit ae64af274ab9a04d6ab04b4de56082f156ce8b09
+# RuleSpec: rulespec-us PR #1177 merge commit ae64af2740340a40d04ed3c652254f53e62fab61
 # (tree 40e08f7dbaa88a70660006f3a5a32bfa283ebd85).
 # PolicyEngine source pin: policyengine-us 1.767.3.
 #
@@ -46,7 +46,7 @@ runner:
     rulespec_remote: https://github.com/TheAxiomFoundation/rulespec-us.git
     rulespec_roots:
       - /private/tmp/oracle-rerun/rulespec-us
-    rulespec_upstream_sha: ae64af274ab9a04d6ab04b4de56082f156ce8b09
+    rulespec_upstream_sha: ae64af2740340a40d04ed3c652254f53e62fab61
     rulespec_upstream_tree: 40e08f7dbaa88a70660006f3a5a32bfa283ebd85
 
 artifacts:
