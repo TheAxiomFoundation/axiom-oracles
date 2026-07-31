@@ -890,6 +890,15 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
             "policyengine_us": pins[1].split("==", 1)[-1],
             "policyengine_core": pins[2].split("==", 1)[-1],
         }
+    elif runner_type == "state-income-tax-liability-grid":
+        pins = _resolve_pe_oracle_pins(params)
+        oracle = {
+            "name": "policyengine-taxsim",
+            "policyengine_package": pins[0],
+            "policyengine_us": pins[1].split("==", 1)[-1],
+            "policyengine_core": pins[2].split("==", 1)[-1],
+            "policyengine_taxsim": "2.30.0",
+        }
     elif runner_type == "axiom-encode-snap-ecps-compare":
         oracle = {"name": "policyengine", "policyengine_us": "1.705.1"}
     elif runner_type == "euromod-synthetic-compare":
@@ -2239,6 +2248,7 @@ def _run_state_income_tax_liability_grid(runner: dict, output: Path) -> None:
     params["rulespec_roots"] = [str(rulespec_root)]
     params["axiom_rules_repo"] = str(axiom_rules_repo)
     state = str(params["state"]).lower()
+    pe_pins = _resolve_pe_oracle_pins(params)
     generator = REPO_ROOT / "scripts" / "generate_state_income_tax_liability.py"
     basename = f"axiom-policyengine-taxsim-{state}-income-tax-liability"
     cmd = [
@@ -2249,7 +2259,7 @@ def _run_state_income_tax_liability_grid(runner: dict, output: Path) -> None:
         "--no-project",
         "--with-editable",
         str(REPO_ROOT),
-        *(arg for pin in _PE_ORACLE_PINS for arg in ("--with", pin)),
+        *(arg for pin in pe_pins for arg in ("--with", pin)),
         "--with",
         # Must match adapters/taxsim/taxsim_pins.json — the pinned identity
         # every TAXSIM oracle number is reproducible against. 2.30.0 models

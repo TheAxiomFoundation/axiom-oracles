@@ -1098,6 +1098,20 @@ def test_snap_residual_suites_pin_reviewed_policyengine_stack(state):
     )
 
 
+def test_ri_income_tax_grid_pins_reviewed_policyengine_stack():
+    config = yaml.safe_load(
+        (COMPARISONS_DIR / "ri-income-tax-liability.yaml").read_text()
+    )
+    params = config["runner"]["parameters"]
+    run_comparison = load_run_comparison_module()
+
+    assert run_comparison._resolve_pe_oracle_pins(params) == (
+        "policyengine==4.18.9",
+        "policyengine-us==1.784.4",
+        "policyengine-core==3.30.3",
+    )
+
+
 def _euromod_be_registry_configs() -> list[dict]:
     configs: list[dict] = []
     for path in sorted(COMPARISONS_DIR.glob("*.yaml")):
@@ -1487,7 +1501,7 @@ def test_state_income_tax_grid_exposes_actual_repos_to_provenance(
         / "dashboard"
         / "public"
         / "data"
-        / "axiom-policyengine-taxsim-ut-income-tax-liability.json"
+        / "axiom-policyengine-taxsim-ri-income-tax-liability.json"
     )
     source.parent.mkdir(parents=True)
     source.write_text('{"fresh": true}\n')
@@ -1498,7 +1512,14 @@ def test_state_income_tax_grid_exposes_actual_repos_to_provenance(
         return subprocess.CompletedProcess(cmd, 0)
 
     monkeypatch.setattr(run_comparison.subprocess, "run", generated)
-    runner = {"parameters": {"state": "UT"}}
+    runner = {
+        "parameters": {
+            "state": "RI",
+            "policyengine_version": "4.18.9",
+            "policyengine_us_version": "1.784.4",
+            "policyengine_core_version": "3.30.3",
+        }
+    }
     output = tmp_path / "out.json"
 
     run_comparison._run_state_income_tax_liability_grid(runner, output)
@@ -1508,7 +1529,11 @@ def test_state_income_tax_grid_exposes_actual_repos_to_provenance(
     cmd, check, cwd, env = calls[0]
     assert check is True
     assert cwd == tmp_path
-    assert cmd[-2:] == ["--state", "UT"]
+    assert cmd[-2:] == ["--state", "RI"]
+    assert "policyengine==4.18.9" in cmd
+    assert "policyengine-us==1.784.4" in cmd
+    assert "policyengine-core==3.30.3" in cmd
+    assert run_comparison._PE_ORACLE_PINS[1] not in cmd
     assert env["RULESPEC_US_REPO"] == str(rulespec)
     assert env["AXIOM_RULES_REPO"] == str(engine)
     assert json.loads(output.read_text()) == {"fresh": True}
