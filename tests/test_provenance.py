@@ -295,6 +295,38 @@ def test_build_run_provenance_threads_rulespecs_and_oracle(tmp_path, monkeypatch
     assert block["dataset"]["population"] == "enhanced-cps"
 
 
+def test_state_income_tax_provenance_uses_suite_local_oracle_pins(tmp_path):
+    run_comparison = _load_run_comparison()
+    output = tmp_path / "ri.json"
+    output.write_text(json.dumps({"suite": "ri-income-tax-liability"}))
+    config = {
+        "name": "ri-income-tax-liability",
+        "runner": {
+            "type": "state-income-tax-liability-grid",
+            "parameters": {
+                "state": "RI",
+                "policyengine_version": "4.18.9",
+                "policyengine_us_version": "1.784.4",
+                "policyengine_core_version": "3.30.3",
+            },
+        },
+    }
+
+    block = run_comparison._build_run_provenance(
+        config,
+        "state-income-tax-liability-grid",
+        output,
+    )
+
+    assert block["oracle"] == {
+        "name": "policyengine-taxsim",
+        "policyengine_package": "policyengine==4.18.9",
+        "policyengine_us": "1.784.4",
+        "policyengine_core": "3.30.3",
+        "policyengine_taxsim": "2.30.0",
+    }
+
+
 def test_direct_de_oracle_provenance_has_both_engines_and_no_rulespecs(
     tmp_path, monkeypatch
 ):
