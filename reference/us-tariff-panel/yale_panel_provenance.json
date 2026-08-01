@@ -3,14 +3,17 @@
   "reference": "Yale Budget Lab tariff-rate-tracker (legal-date statutory panel)",
   "yale_repo": "Budget-Lab-Yale/tariff-rate-tracker",
   "yale_commit": "c4307e514196618afcbf88cf7fd33746417eeabf",
+  "yale_remote": "https://github.com/Budget-Lab-Yale/tariff-rate-tracker.git",
+  "yale_tree_clean": true,
   "panel_artifact": "data/timeseries/rate_timeseries.rds",
   "panel_sha256": "724a0be1dce45d423d5ce599bb56f2ab81cbf78b637ba59a3287738bfc488a35",
   "panel_bytes": 1929830536,
   "panel_build_flags": "--full --unweighted --skip-release-check",
+  "panel_build_attestation": "Build flags and date mode cannot be derived from the rds; they are attested by the supervising operator per the protocol in reference/us-tariff-panel/README.md. The script machine-verifies the checkout commit (== the reviewed EXPECTED_YALE_COMMIT pin), clean tracked state, and upstream remote.",
   "date_mode": "legal",
   "panel_rows_total": 277303920,
   "extractor": "scripts/extract_yale_panel.R",
-  "extractor_sha256": "d441560b62a38d3c96d787d1e42923c4b657a6ea5362f8a87c985d50b97c4aa4",
+  "extractor_sha256": "2aabb5f5e52c310a9ab152c87e648527b0fa8a1cc4e8be9e56fada0bdbf2c8be",
   "covered_lines": [
     "7202111000",
     "7601103000",
@@ -42,5 +45,5 @@
   "valid_from_range": ["2025-01-01", "2026-11-10"],
   "valid_until_range": ["2025-02-03", "2026-12-31"],
   "extract_sha256": "331d92d9ce30067e26c93d3f9f55b18af5e3b53a6846cbbc0f7652ecc1bd96c3",
-  "extracted_at": "2026-08-01T17:17:52-0400"
+  "extracted_at": "2026-08-01T18:34:32-0400"
 }

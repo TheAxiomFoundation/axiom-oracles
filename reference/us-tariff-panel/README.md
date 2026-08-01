@@ -11,12 +11,34 @@ Yale panel, never from artifacts shared with the rulespec-us implementation.
 
 | File | What | Produced by |
 |---|---|---|
-| `covered_lines.txt` | HTS-10 lines in the covered slice (burn-up list) | hand-maintained |
+| `covered_lines.txt` | HTS-10 lines in the covered slice (append-only burn-up list) | hand-maintained, gated |
 | `yale_panel_slice.csv` | Covered-slice extract of the Yale panel: spine + `statutory_*` columns, all intervals | `scripts/extract_yale_panel.R` (supervised) |
 | `yale_panel_provenance.json` | Yale commit, rds sha256/bytes, build flags, extractor sha, extract sha, shape | same |
 | `census_schedule_c_country.txt` | Official Census Schedule C country concordance snapshot | census.gov (via `--fetch`) |
-| `census_iso_bridge.csv` | census 4-digit code ↔ ISO alpha-2 bridge | `scripts/build_census_iso_bridge.py` |
-| `bridge_provenance.json` | Source URL, snapshot sha, build stamp | same |
+| `census_iso_bridge.csv` | census 4-digit code ↔ origin-code bridge (ISO alpha-2 + Schedule C extensions, see below) | `scripts/build_census_iso_bridge.py` |
+| `bridge_provenance.json` | Source URL, snapshot sha, builder sha, extension list, build stamp | same |
+
+`tests/test_us_tariff_reference.py` is the CI-side validator: it binds each
+committed artifact to its provenance stamp (sha256), the covered-lines list
+to the extract and to an append-only floor, and re-checks extract/bridge
+integrity (key uniqueness, interval tiling, code contract) on every run.
+Coverage is **append-only**: both the exporter and the validator fail if a
+previously covered line disappears — narrowing the reference to force
+agreement is the failure mode this suite exists to prevent.
+
+## Origin-code contract (bridge)
+
+The rulespec-us tariff spine takes 2-letter origin codes. Three Census
+Schedule C alpha codes have no assigned ISO 3166-1 counterpart and pass
+through the bridge unchanged: `KV` (Kosovo — ISO assigns no code), `GZ` and
+`WE` (Gaza Strip / West Bank — ISO assigns `PS` to the State of Palestine as
+a whole; Census splits it, and the Yale panel prices them separately). This
+is safe because the composed program matches named countries by code and
+otherwise applies the statutory "any country" baseline (HTS 9903.01.25):
+extension codes get the statutorily correct default, and any country-specific
+encoding gap surfaces as a classified mismatch — never a silent remap. The
+builder rejects any other non-ISO code until it is reviewed into
+`SCHEDULE_C_EXTENSIONS`.
 
 ## Why a committed extract (supervised leg)
 
@@ -33,14 +55,34 @@ shares, `swiss_*`, `usmca_eligible`, `heading_program`, `base_rate_type`,
 targets. Totals are reconciled against the **sum of the statutory columns**,
 never the stored effective totals (which are utilization-share-scaled).
 
+## What the provenance does and does not bind
+
+The stamp machine-verifies: the extract bytes (`extract_sha256`), the rds
+bytes (`panel_sha256`/`panel_bytes`), the exporter bytes
+(`extractor_sha256`), and that the Yale checkout was at the reviewed
+`EXPECTED_YALE_COMMIT` pin with **no tracked modifications** and an upstream
+`Budget-Lab-Yale/tariff-rate-tracker` remote at extraction time. It cannot
+machine-verify that the rds was *built* from that checkout with the recorded
+flags/date mode — the rds carries no build manifest — so those are attested
+by the supervising operator (`panel_build_attestation` in the stamp). A
+future upstream build manifest would close that residual; until then the
+supervised protocol is the boundary, stated here rather than implied away.
+
 ## Refresh procedure (any of: new HTS revision encoded, Yale pin bump, burn-up)
 
 1. In the Yale checkout, build the panel in legal-date mode:
    `--full --unweighted --skip-release-check`.
-2. If burning up coverage: append the new HTS-10 lines to `covered_lines.txt`.
+2. If burning up coverage: **append** the new HTS-10 lines to
+   `covered_lines.txt` (removals fail the exporter and the validator).
+   If bumping the Yale pin: update `EXPECTED_YALE_COMMIT` in
+   `scripts/extract_yale_panel.R` and in `tests/test_us_tariff_reference.py`
+   in the same reviewed diff.
 3. From this repo root:
    `YALE_TRACKER_CHECKOUT=/path/to/tariff-rate-tracker Rscript scripts/extract_yale_panel.R`
-4. Regenerate the comparison report (`scripts/generate_us_tariff_panel.py`)
-   and review dispositions whose `expires_on_source_change` is invalidated by
-   the new Yale commit.
+4. Regenerate the comparison report (`scripts/generate_us_tariff_panel.py`).
+   On a Yale pin bump, re-run `scripts/apply_dispositions.py`: tariff
+   dispositions match mismatch rows by selector, so entries whose underlying
+   values changed are reported as expired/orphaned by that script — they do
+   not expire automatically on the commit change itself. Reconcile every
+   warning before committing.
 5. Commit extract + provenance + report together.
