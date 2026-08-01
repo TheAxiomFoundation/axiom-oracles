@@ -974,13 +974,14 @@ case_sets:
         hts_number: 7202.11.10.00
         country_of_origin: CN
         entry_date: '2026-02-15'
-        expected_rate: 0.464
-        expected_duty: 4640.0
+        expected_rate: 0.364
+        expected_duty: 3640.0
         rate_components:
         - MFN 1.4% (7202.11.10.00 general rate, HTS 2026 Rev3/4/12/14 line files)
         - China-301 List 1 9903.88.03 +25% (Rev14 note 20(b); heading in all revisions)
-        - IEEPA fentanyl 9903.01.20 +10% China+HK (Rev3 heading; note 2(s))
-        - IEEPA fentanyl 9903.01.24 +10% China+HK (Rev3 heading; note 2(u))
+        - IEEPA fentanyl 9903.01.24 +10% China+HK (Rev3 heading; note 2(u), entries on/after 2025-11-10)
+        - 'IEEPA fentanyl 9903.01.20 inoperative: note 2(s) window covers entries 2025-02-04..2025-03-04
+          only (Rev14-notes p175)'
         - reciprocal annex exemption 9903.01.32 (note 2(v)(iii)(a); 7202.11.10.00 on Rev14-notes p182)
         - 7202.11.10.00 not a §232 steel article (absent from Rev14 note 16(c)(iii) p236)
       entities:
@@ -1203,14 +1204,15 @@ case_sets:
         hts_number: 7601.10.30.00
         country_of_origin: CN
         entry_date: '2026-02-15'
-        expected_rate: 0.976
-        expected_duty: 9760.0
+        expected_rate: 0.876
+        expected_duty: 8760.0
         rate_components:
         - MFN 2.6% (7601.10.30.00 general rate, HTS 2026 Rev3/4/12/14 line files)
         - '§232 aluminum +50%: 9903.85.02 (Rev3/4 note 19 p254) / 9903.82.02 (Rev12/14 note 16(c)(i) p236)'
         - China 2024-301 9903.91.01 +25% (aluminum, Rev14 note 31)
-        - IEEPA fentanyl 9903.01.20 +10% China+HK (Rev3 heading; note 2(s))
-        - IEEPA fentanyl 9903.01.24 +10% China+HK (Rev3 heading; note 2(u))
+        - IEEPA fentanyl 9903.01.24 +10% China+HK (Rev3 heading; note 2(u), entries on/after 2025-11-10)
+        - 'IEEPA fentanyl 9903.01.20 inoperative: note 2(s) window covers entries 2025-02-04..2025-03-04
+          only (Rev14-notes p175)'
         - reciprocal §232-metals exemption 9903.01.33
       entities:
       - id: entry
@@ -1443,14 +1445,15 @@ case_sets:
         hts_number: 9506.62.40.40
         country_of_origin: CN
         entry_date: '2026-02-15'
-        expected_rate: 0.375
-        expected_duty: 3750.0
+        expected_rate: 0.275
+        expected_duty: 2750.0
         rate_components:
         - MFN Free (9506.62.40.40 general rate, HTS 2026 Rev3/4/12/14 line files)
         - China-301 List 4A 9903.88.15 +7.5% (Rev14 note 20(r) p328, list hit p340; Rev14 static line
           file drops the footnote, heading and note unchanged — disposition us-tariff-rev14-footnote-drop)
-        - IEEPA fentanyl 9903.01.20 +10% China+HK (Rev3 heading; note 2(s))
-        - IEEPA fentanyl 9903.01.24 +10% China+HK (Rev3 heading; note 2(u))
+        - IEEPA fentanyl 9903.01.24 +10% China+HK (Rev3 heading; note 2(u), entries on/after 2025-11-10)
+        - 'IEEPA fentanyl 9903.01.20 inoperative: note 2(s) window covers entries 2025-02-04..2025-03-04
+          only (Rev14-notes p175)'
         - IEEPA reciprocal baseline 9903.01.25 +10% (Rev3 heading)
       entities:
       - id: entry
