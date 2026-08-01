@@ -2761,6 +2761,43 @@ def _run_uk_tv_licence_grid(runner: dict, output: Path) -> None:
     )
 
 
+def _run_us_tariff_grid(runner: dict, output: Path) -> None:
+    """US tariff duty T0 grid: rulespec-us duty spine vs frozen USITC rates.
+
+    Delegates to scripts/generate_us_tariff.py, which runs the 40 frozen grid
+    cases (axiom_oracles.suites.us_tariff) through the composed rulespec-us
+    us-tariff-duty pipeline via the axiom rules engine and grades against
+    duty amounts frozen from the retained USITC HTS editions and Federal
+    Register instruments. There is no external oracle process: the reference
+    side is a committed statutory computation. On a runner without a built
+    axiom rules engine or the rulespec-us tariff spine, the committed
+    dashboard report is reused, exactly like the UK case-grid runners.
+    """
+    del runner
+    generator = REPO_ROOT / "scripts" / "generate_us_tariff.py"
+    committed = (
+        REPO_ROOT / "dashboard" / "public" / "data" / "axiom-usitc-us-tariff.json"
+    )
+    cmd = [
+        "uv",
+        "run",
+        "--python",
+        "3.13",
+        "--no-project",
+        "--with-editable",
+        str(REPO_ROOT),
+        "python",
+        str(generator),
+    ]
+    try:
+        subprocess.run(cmd, check=True, cwd=REPO_ROOT)
+    except (subprocess.CalledProcessError, FileNotFoundError) as exc:
+        if not committed.exists():
+            raise
+        print(f"us-tariff grid generation unavailable ({exc}); reusing {committed}.")
+    output.write_text(committed.read_text())
+
+
 def _snap_qc_optional_path(raw: str | Path | None) -> Path | None:
     """Expand a config path value, or return None when it is unset."""
     return _expand_path(raw) if raw else None
@@ -3004,6 +3041,7 @@ RUNNERS = {
     "uk-vat-grid": _run_uk_vat_grid,
     "uk-fuel-duty-grid": _run_uk_fuel_duty_grid,
     "uk-tv-licence-grid": _run_uk_tv_licence_grid,
+    "us-tariff-grid": _run_us_tariff_grid,
 }
 
 
