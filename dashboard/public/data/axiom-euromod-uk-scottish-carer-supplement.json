@@ -166,10 +166,10 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "037bf7abd4e412bfec4c2e8aecdbbd69ad584643",
+      "axiom_rules_engine_sha": "59cdaf9b49aa4130c1377022a8ed3c27335533fe",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-08-01T14:07:10Z",
+    "generated_at": "2026-08-01T19:42:45Z",
     "generated_by": "scripts/run_comparison.py::uk-scottish-carer-supplement-ukmod",
     "oracle": {
       "euromod_country": "UK",
