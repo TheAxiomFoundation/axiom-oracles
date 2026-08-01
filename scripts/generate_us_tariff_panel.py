@@ -415,6 +415,14 @@ def build_report(
 def main() -> int:
     reference_dir = REPO_ROOT / REFERENCE_DIRNAME
     intervals, unbridged = load_reference(reference_dir)
+    if unbridged:
+        # A census code without a bridge entry means silently dropped
+        # comparison rows — refuse to emit a narrowed report.
+        raise SystemExit(
+            f"unbridged census code(s) in the panel extract: {unbridged} — "
+            "rebuild the bridge (scripts/build_census_iso_bridge.py) before "
+            "generating the report"
+        )
     reference_provenance = load_provenance(reference_dir)
     units = covered_units(intervals)
     print(
