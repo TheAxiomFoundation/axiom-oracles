@@ -2,7 +2,7 @@
   "case_count": 40,
   "cases": [
     {
-      "axiom": 4640.0,
+      "axiom": 3640.0,
       "axiom_vs_usitc_statutory": {
         "difference": 0.0,
         "match": true
@@ -12,19 +12,19 @@
       "country_of_origin": "CN",
       "customs_value": 10000.0,
       "entry_date": "2026-02-15",
-      "expected_rate": 0.464,
+      "expected_rate": 0.364,
       "hts_number": "7202.11.10.00",
       "is_postal_shipment": false,
       "rate_components": [
         "MFN 1.4% (7202.11.10.00 general rate, HTS 2026 Rev3/4/12/14 line files)",
         "China-301 List 1 9903.88.03 +25% (Rev14 note 20(b); heading in all revisions)",
-        "IEEPA fentanyl 9903.01.20 +10% China+HK (Rev3 heading; note 2(s))",
-        "IEEPA fentanyl 9903.01.24 +10% China+HK (Rev3 heading; note 2(u))",
+        "IEEPA fentanyl 9903.01.24 +10% China+HK (Rev3 heading; note 2(u), entries on/after 2025-11-10)",
+        "IEEPA fentanyl 9903.01.20 inoperative: note 2(s) window covers entries 2025-02-04..2025-03-04 only (Rev14-notes p175)",
         "reciprocal annex exemption 9903.01.32 (note 2(v)(iii)(a); 7202.11.10.00 on Rev14-notes p182)",
         "7202.11.10.00 not a \u00a7232 steel article (absent from Rev14 note 16(c)(iii) p236)"
       ],
       "scenario": "line-entry",
-      "usitc_statutory": 4640.0
+      "usitc_statutory": 3640.0
     },
     {
       "axiom": 2640.0,
@@ -267,7 +267,7 @@
       "usitc_statutory": 0.0
     },
     {
-      "axiom": 9760.0,
+      "axiom": 8760.0,
       "axiom_vs_usitc_statutory": {
         "difference": 0.0,
         "match": true
@@ -277,19 +277,19 @@
       "country_of_origin": "CN",
       "customs_value": 10000.0,
       "entry_date": "2026-02-15",
-      "expected_rate": 0.976,
+      "expected_rate": 0.876,
       "hts_number": "7601.10.30.00",
       "is_postal_shipment": false,
       "rate_components": [
         "MFN 2.6% (7601.10.30.00 general rate, HTS 2026 Rev3/4/12/14 line files)",
         "\u00a7232 aluminum +50%: 9903.85.02 (Rev3/4 note 19 p254) / 9903.82.02 (Rev12/14 note 16(c)(i) p236)",
         "China 2024-301 9903.91.01 +25% (aluminum, Rev14 note 31)",
-        "IEEPA fentanyl 9903.01.20 +10% China+HK (Rev3 heading; note 2(s))",
-        "IEEPA fentanyl 9903.01.24 +10% China+HK (Rev3 heading; note 2(u))",
+        "IEEPA fentanyl 9903.01.24 +10% China+HK (Rev3 heading; note 2(u), entries on/after 2025-11-10)",
+        "IEEPA fentanyl 9903.01.20 inoperative: note 2(s) window covers entries 2025-02-04..2025-03-04 only (Rev14-notes p175)",
         "reciprocal \u00a7232-metals exemption 9903.01.33"
       ],
       "scenario": "line-entry",
-      "usitc_statutory": 9760.0
+      "usitc_statutory": 8760.0
     },
     {
       "axiom": 7760.0,
@@ -543,7 +543,7 @@
       "usitc_statutory": 2760.0
     },
     {
-      "axiom": 3750.0,
+      "axiom": 2750.0,
       "axiom_vs_usitc_statutory": {
         "difference": 0.0,
         "match": true
@@ -553,18 +553,18 @@
       "country_of_origin": "CN",
       "customs_value": 10000.0,
       "entry_date": "2026-02-15",
-      "expected_rate": 0.375,
+      "expected_rate": 0.275,
       "hts_number": "9506.62.40.40",
       "is_postal_shipment": false,
       "rate_components": [
         "MFN Free (9506.62.40.40 general rate, HTS 2026 Rev3/4/12/14 line files)",
         "China-301 List 4A 9903.88.15 +7.5% (Rev14 note 20(r) p328, list hit p340; Rev14 static line file drops the footnote, heading and note unchanged \u2014 disposition us-tariff-rev14-footnote-drop)",
-        "IEEPA fentanyl 9903.01.20 +10% China+HK (Rev3 heading; note 2(s))",
-        "IEEPA fentanyl 9903.01.24 +10% China+HK (Rev3 heading; note 2(u))",
+        "IEEPA fentanyl 9903.01.24 +10% China+HK (Rev3 heading; note 2(u), entries on/after 2025-11-10)",
+        "IEEPA fentanyl 9903.01.20 inoperative: note 2(s) window covers entries 2025-02-04..2025-03-04 only (Rev14-notes p175)",
         "IEEPA reciprocal baseline 9903.01.25 +10% (Rev3 heading)"
       ],
       "scenario": "line-entry",
-      "usitc_statutory": 3750.0
+      "usitc_statutory": 2750.0
     },
     {
       "axiom": 1750.0,
@@ -913,7 +913,7 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-08-01T17:09:21Z",
+    "generated_at": "2026-08-01T19:09:08Z",
     "generated_by": "scripts/run_comparison.py::us-tariff",
     "rulespecs": [
       {

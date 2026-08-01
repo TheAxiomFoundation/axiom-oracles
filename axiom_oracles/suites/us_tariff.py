@@ -15,15 +15,17 @@ each case's metadata). Line-level comparison against the USITC machine-readable
 schedule is the T0 primary gate per axiom-oracles#444; reconciliation against
 the Budget Lab at Yale / TPC aggregate trackers is deliberately deferred to T1.
 
-Grid design is frozen in the lane workspace ``grid-design.md`` (v2,
-IEEPA-corrected): three pilot HTS-10 lines across chapters 72 / 76 / 95, three
+Grid design is frozen in the lane workspace ``grid-design.md`` (v3,
+9903.01.20-corrected): three pilot HTS-10 lines across chapters 72 / 76 / 95, three
 origins each, at four entry dates chosen one per retained HTS revision window
 so the temporal machinery is exercised on day one:
 
-- **2026-02-15** (Rev 3): full IEEPA stack — fentanyl 9903.01.20/.24,
-  reciprocal 9903.01.25 + 9903.02.xx with the annex (9903.01.32) and §232
-  metals (9903.01.33) carve-outs, Brazil IEEPA 9903.01.77. Chosen before the
-  2026-02-20 EO 14389 signature to avoid the wind-down ambiguity.
+- **2026-02-15** (Rev 3): full IEEPA stack — fentanyl 9903.01.24 (the
+  9903.01.20 note 2(s) window covered entries 2025-02-04..2025-03-04 only and
+  is inoperative at every grid date), reciprocal 9903.01.25 + 9903.02.xx with
+  the annex (9903.01.32) and §232 metals (9903.01.33) carve-outs, Brazil IEEPA
+  9903.01.77. Chosen before the 2026-02-20 EO 14389 signature to avoid the
+  wind-down ambiguity.
 - **2026-03-15** (Rev 4): IEEPA ad valorem duties terminated for entries on or
   after 2026-02-24 (EO 14389 §1) and the §122 balance-of-payments surcharge
   9903.03.01 +10% active with its annex (9903.03.03) and §232 (9903.03.06)
@@ -141,8 +143,11 @@ _C301_4A = (
     "disposition us-tariff-rev14-footnote-drop)"
 )
 _C301_2024 = "China 2024-301 9903.91.01 +25% (aluminum, Rev14 note 31)"
-_FENT_20 = "IEEPA fentanyl 9903.01.20 +10% China+HK (Rev3 heading; note 2(s))"
-_FENT_24 = "IEEPA fentanyl 9903.01.24 +10% China+HK (Rev3 heading; note 2(u))"
+_FENT_20_INOP = (
+    "IEEPA fentanyl 9903.01.20 inoperative: note 2(s) window covers entries "
+    "2025-02-04..2025-03-04 only (Rev14-notes p175)"
+)
+_FENT_24 = "IEEPA fentanyl 9903.01.24 +10% China+HK (Rev3 heading; note 2(u), entries on/after 2025-11-10)"
 _RECIP_BASE = "IEEPA reciprocal baseline 9903.01.25 +10% (Rev3 heading)"
 _RECIP_VN = "IEEPA reciprocal Vietnam 9903.02.69 +20% (Rev3 heading)"
 _RECIP_BR = "IEEPA reciprocal Brazil 9903.02.09 +10% (Rev3 heading)"
@@ -198,7 +203,7 @@ def _frozen_grid() -> tuple[TariffCase, ...]:
     d1, d2, d3, d4 = GRID_DATES
     cases: list[TariffCase] = [
         # ---- Line A: 7202.11.10.00 ferromanganese (base 1.4%) ----
-        _line(a, "CN", d1, 46.4, (_MFN_A, _C301_L1, _FENT_20, _FENT_24, _RECIP_ANNEX, _NOT_S232_A)),
+        _line(a, "CN", d1, 36.4, (_MFN_A, _C301_L1, _FENT_24, _FENT_20_INOP, _RECIP_ANNEX, _NOT_S232_A)),
         _line(a, "CN", d2, 26.4, (_MFN_A, _C301_L1, _IEEPA_END, _S122_ANNEX)),
         _line(a, "CN", d3, 26.4, (_MFN_A, _C301_L1, _S122_ANNEX)),
         _line(a, "CN", d4, 26.4, (_MFN_A, _C301_L1, _S122_END, _FL_ANNEX_A)),
@@ -211,7 +216,7 @@ def _frozen_grid() -> tuple[TariffCase, ...]:
         _line(a, "KR", d3, 0.0, (_KR_FREE, _S122_ANNEX)),
         _line(a, "KR", d4, 0.0, (_KR_FREE, _S122_END, _FL_ANNEX_A)),
         # ---- Line B: 7601.10.30.00 unwrought aluminum (base 2.6%) ----
-        _line(b, "CN", d1, 97.6, (_MFN_B, _S232_AL, _C301_2024, _FENT_20, _FENT_24, _RECIP_METALS)),
+        _line(b, "CN", d1, 87.6, (_MFN_B, _S232_AL, _C301_2024, _FENT_24, _FENT_20_INOP, _RECIP_METALS)),
         _line(b, "CN", d2, 77.6, (_MFN_B, _S232_AL, _C301_2024, _IEEPA_END, _S122_232)),
         _line(b, "CN", d3, 77.6, (_MFN_B, _S232_AL, _C301_2024, _S122_232)),
         _line(b, "CN", d4, 77.6, (_MFN_B, _S232_AL, _C301_2024, _S122_END, _FL_METALS)),
@@ -224,7 +229,7 @@ def _frozen_grid() -> tuple[TariffCase, ...]:
         _line(b, "GB", d3, 27.6, (_MFN_B, _S232_AL_UK, _S122_232)),
         _line(b, "GB", d4, 27.6, (_MFN_B, _S232_AL_UK, _S122_END, _FL_METALS)),
         # ---- Line C: 9506.62.40.40 footballs (base Free) ----
-        _line(c, "CN", d1, 37.5, (_MFN_C, _C301_4A, _FENT_20, _FENT_24, _RECIP_BASE)),
+        _line(c, "CN", d1, 27.5, (_MFN_C, _C301_4A, _FENT_24, _FENT_20_INOP, _RECIP_BASE)),
         _line(c, "CN", d2, 17.5, (_MFN_C, _C301_4A, _IEEPA_END, _S122)),
         _line(c, "CN", d3, 17.5, (_MFN_C, _C301_4A, _S122)),
         _line(c, "CN", d4, 20.0, (_MFN_C, _C301_4A, _S122_END, _FL_CN)),
