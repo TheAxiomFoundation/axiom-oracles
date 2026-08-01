@@ -1,0 +1,13 @@
+{
+ "suite": "us-tariff",
+ "count": 40,
+ "chunks": 1,
+ "chunk_size": 500,
+ "engines": {
+  "axiom": "us:policies/cbp/us-tariff-duty/composition#us_tariff_duty",
+  "usitc_statutory": "USITC HTS 2026 Rev3/4/12/14 + FR instruments (frozen statutory computation)"
+ },
+ "mismatch_concepts": [],
+ "source": "axiom-usitc-us-tariff.json (embedded)",
+ "total_cases": 40
+}
