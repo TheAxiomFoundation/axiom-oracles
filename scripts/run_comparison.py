@@ -2771,9 +2771,9 @@ def _run_us_tariff_grid(runner: dict, output: Path) -> None:
     Register instruments. There is no external oracle process: the reference
     side is a committed statutory computation. On a runner without a built
     axiom rules engine or the rulespec-us tariff spine, the committed
-    dashboard report is reused, exactly like the UK case-grid runners.
+    dashboard report is reused, exactly like the UK case-grid runners —
+    marked as a re-emit so provenance never stamps it fresh.
     """
-    del runner
     generator = REPO_ROOT / "scripts" / "generate_us_tariff.py"
     committed = (
         REPO_ROOT / "dashboard" / "public" / "data" / "axiom-usitc-us-tariff.json"
@@ -2794,7 +2794,28 @@ def _run_us_tariff_grid(runner: dict, output: Path) -> None:
     except (subprocess.CalledProcessError, FileNotFoundError) as exc:
         if not committed.exists():
             raise
+        # Mark the re-emit so provenance never resolves a configured checkout
+        # path to a current SHA — stamping fresh SHAs onto the committed
+        # report's numbers would label a skipped run fresh (#296 review;
+        # sol review of #446 finding 2).
+        runner["_reemitted_report"] = True
         print(f"us-tariff grid generation unavailable ({exc}); reusing {committed}.")
+    else:
+        # Record what actually ran: the generator honors RULESPEC_US_CHECKOUT
+        # (generate_us_tariff.py) while provenance otherwise reads the
+        # configured default root — under an env override those are different
+        # checkouts at different SHAs (sol review of #446 finding 3). Same for
+        # the engine identity via AXIOM_RULES_ENGINE_BINARY.
+        checkout = Path(
+            os.environ.get("RULESPEC_US_CHECKOUT")
+            or os.path.expanduser("~/TheAxiomFoundation/rulespec-us")
+        )
+        runner.setdefault("parameters", {})["rulespec_roots"] = [str(checkout)]
+        binary = os.environ.get("AXIOM_RULES_ENGINE_BINARY")
+        if binary:
+            engine_repo = Path(binary).resolve().parents[2]
+            if (engine_repo / ".git").exists():
+                runner["axiom_rules_repo"] = str(engine_repo)
     output.write_text(committed.read_text())
 
 

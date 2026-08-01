@@ -46,7 +46,10 @@ every grid date (EO 14324, continued by EO 14388; CBP IFRs 2026-12669 /
 2026-12670), so no case receives it — cases D1–D4 exercise the suspension, the
 postal flat-rate window, and its 2026-07-24 closure.
 
-Judgment calls carried as dispositions rather than silently baked in:
+Judgment calls are documented here and in each affected case's
+``rate_components`` (the dispositions schema requires non-empty mismatch
+entries, and this suite has none, so there is no dispositions file — the
+free-text IDs below are documentation labels, not registered dispositions):
 
 - Brazil 2026-08-01 stacks Brazil-301 9903.05.01 (+25%) with the forced-labor
   Brazil tier 9903.05.27 (+12.5%) on the explicit "shall also be subject to
@@ -55,6 +58,11 @@ Judgment calls carried as dispositions rather than silently baked in:
 - The Rev 14 static line file drops the 9903.88.03/.88.15 footnotes on the
   pilot lines while the headings and note 20 lists are unchanged; the China
   Section 301 duties are treated as still applicable.
+- The four Korea zero cells treat ``country_of_origin: KR`` as implying a
+  qualifying KORUS special-program claim (General Note 3(c)(i) symbol "KR").
+  General Note 3 program-eligibility machinery (claim codes, origin
+  qualification) is deferred at T0 alongside the 19 USC 1401a customs-value
+  machinery — origin alone selects the Special subcolumn here.
 
 The 2026-02-20..02-23 EO 14389 wind-down window is deliberately not exercised.
 """
@@ -136,7 +144,10 @@ _MFN_A = "MFN 1.4% (7202.11.10.00 general rate, HTS 2026 Rev3/4/12/14 line files
 _MFN_B = "MFN 2.6% (7601.10.30.00 general rate, HTS 2026 Rev3/4/12/14 line files)"
 _MFN_C = "MFN Free (9506.62.40.40 general rate, HTS 2026 Rev3/4/12/14 line files)"
 _KR_FREE = "Special rate Free incl. KR (7202.11.10.00 special subcolumn, KORUS)"
-_C301_L1 = "China-301 List 1 9903.88.03 +25% (Rev14 note 20(b); heading in all revisions)"
+_C301_L1 = (
+    "China-301 9903.88.03 +25% (Rev14 note 20(e) p268; 7202.11.10 in the "
+    "note 20(f) list, p287; heading in all revisions)"
+)
 _C301_4A = (
     "China-301 List 4A 9903.88.15 +7.5% (Rev14 note 20(r) p328, list hit p340; "
     "Rev14 static line file drops the footnote, heading and note unchanged — "

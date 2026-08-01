@@ -978,7 +978,8 @@ case_sets:
         expected_duty: 3640.0
         rate_components:
         - MFN 1.4% (7202.11.10.00 general rate, HTS 2026 Rev3/4/12/14 line files)
-        - China-301 List 1 9903.88.03 +25% (Rev14 note 20(b); heading in all revisions)
+        - China-301 9903.88.03 +25% (Rev14 note 20(e) p268; 7202.11.10 in the note 20(f) list, p287; heading
+          in all revisions)
         - IEEPA fentanyl 9903.01.24 +10% China+HK (Rev3 heading; note 2(u), entries on/after 2025-11-10)
         - 'IEEPA fentanyl 9903.01.20 inoperative: note 2(s) window covers entries 2025-02-04..2025-03-04
           only (Rev14-notes p175)'
@@ -1001,7 +1002,8 @@ case_sets:
         expected_duty: 2640.0
         rate_components:
         - MFN 1.4% (7202.11.10.00 general rate, HTS 2026 Rev3/4/12/14 line files)
-        - China-301 List 1 9903.88.03 +25% (Rev14 note 20(b); heading in all revisions)
+        - China-301 9903.88.03 +25% (Rev14 note 20(e) p268; 7202.11.10 in the note 20(f) list, p287; heading
+          in all revisions)
         - IEEPA ad valorem duties terminated for entries on/after 2026-02-24 (EO 14389 §1, FR 2026-03832)
         - §122 annex exemption 9903.03.03 (7202.11.10.00 in annex, Rev14 p226)
       entities:
@@ -1021,7 +1023,8 @@ case_sets:
         expected_duty: 2640.0
         rate_components:
         - MFN 1.4% (7202.11.10.00 general rate, HTS 2026 Rev3/4/12/14 line files)
-        - China-301 List 1 9903.88.03 +25% (Rev14 note 20(b); heading in all revisions)
+        - China-301 9903.88.03 +25% (Rev14 note 20(e) p268; 7202.11.10 in the note 20(f) list, p287; heading
+          in all revisions)
         - §122 annex exemption 9903.03.03 (7202.11.10.00 in annex, Rev14 p226)
       entities:
       - id: entry
@@ -1040,7 +1043,8 @@ case_sets:
         expected_duty: 2640.0
         rate_components:
         - MFN 1.4% (7202.11.10.00 general rate, HTS 2026 Rev3/4/12/14 line files)
-        - China-301 List 1 9903.88.03 +25% (Rev14 note 20(b); heading in all revisions)
+        - China-301 9903.88.03 +25% (Rev14 note 20(e) p268; 7202.11.10 in the note 20(f) list, p287; heading
+          in all revisions)
         - §122 expired after 2026-07-23 (150-day sunset; Rev14 p221 compiler's note, 91 FR 9339)
         - FL-301 annex exemption 9903.05.86 covers 7202.11.10.00 (Rev14 p558)
       entities:

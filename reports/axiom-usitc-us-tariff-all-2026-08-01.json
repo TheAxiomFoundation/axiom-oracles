@@ -13,7 +13,10 @@
   },
   "engines": {
     "axiom": "us:policies/cbp/us-tariff-duty/composition#us_tariff_duty",
-    "usitc_statutory": "USITC HTS 2026 Rev3/4/12/14 + FR instruments (frozen statutory computation)"
+    "usitc_statutory": "USITC HTS 2026 Rev3/4/12/14 + FR instruments (frozen statutory computation)",
+    "versions": {
+      "axiom_rules_engine": "0.1.0"
+    }
   },
   "tolerance": {
     "absolute": 0.01,
@@ -53,7 +56,7 @@
       "expected_rate": 0.364,
       "rate_components": [
         "MFN 1.4% (7202.11.10.00 general rate, HTS 2026 Rev3/4/12/14 line files)",
-        "China-301 List 1 9903.88.03 +25% (Rev14 note 20(b); heading in all revisions)",
+        "China-301 9903.88.03 +25% (Rev14 note 20(e) p268; 7202.11.10 in the note 20(f) list, p287; heading in all revisions)",
         "IEEPA fentanyl 9903.01.24 +10% China+HK (Rev3 heading; note 2(u), entries on/after 2025-11-10)",
         "IEEPA fentanyl 9903.01.20 inoperative: note 2(s) window covers entries 2025-02-04..2025-03-04 only (Rev14-notes p175)",
         "reciprocal annex exemption 9903.01.32 (note 2(v)(iii)(a); 7202.11.10.00 on Rev14-notes p182)",
@@ -78,7 +81,7 @@
       "expected_rate": 0.264,
       "rate_components": [
         "MFN 1.4% (7202.11.10.00 general rate, HTS 2026 Rev3/4/12/14 line files)",
-        "China-301 List 1 9903.88.03 +25% (Rev14 note 20(b); heading in all revisions)",
+        "China-301 9903.88.03 +25% (Rev14 note 20(e) p268; 7202.11.10 in the note 20(f) list, p287; heading in all revisions)",
         "IEEPA ad valorem duties terminated for entries on/after 2026-02-24 (EO 14389 \u00a71, FR 2026-03832)",
         "\u00a7122 annex exemption 9903.03.03 (7202.11.10.00 in annex, Rev14 p226)"
       ],
@@ -101,7 +104,7 @@
       "expected_rate": 0.264,
       "rate_components": [
         "MFN 1.4% (7202.11.10.00 general rate, HTS 2026 Rev3/4/12/14 line files)",
-        "China-301 List 1 9903.88.03 +25% (Rev14 note 20(b); heading in all revisions)",
+        "China-301 9903.88.03 +25% (Rev14 note 20(e) p268; 7202.11.10 in the note 20(f) list, p287; heading in all revisions)",
         "\u00a7122 annex exemption 9903.03.03 (7202.11.10.00 in annex, Rev14 p226)"
       ],
       "axiom": 2640.0,
@@ -123,7 +126,7 @@
       "expected_rate": 0.264,
       "rate_components": [
         "MFN 1.4% (7202.11.10.00 general rate, HTS 2026 Rev3/4/12/14 line files)",
-        "China-301 List 1 9903.88.03 +25% (Rev14 note 20(b); heading in all revisions)",
+        "China-301 9903.88.03 +25% (Rev14 note 20(e) p268; 7202.11.10 in the note 20(f) list, p287; heading in all revisions)",
         "\u00a7122 expired after 2026-07-23 (150-day sunset; Rev14 p221 compiler's note, 91 FR 9339)",
         "FL-301 annex exemption 9903.05.86 covers 7202.11.10.00 (Rev14 p558)"
       ],
@@ -942,15 +945,18 @@
   ],
   "provenance": {
     "schema": "axiom_oracles.provenance.v1",
-    "generated_at": "2026-08-01T19:09:08Z",
+    "generated_at": "2026-08-01T19:32:46Z",
     "generated_by": "scripts/run_comparison.py::us-tariff",
     "run_kind": "manual",
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": "9b36f0dbea820c28f81616601f53b8d724b3ced8"
+        "sha": "a614dea54b76658b9933fdd9b559825af5d6ecd6"
       }
     ],
-    "engine": {}
+    "engine": {
+      "axiom_rules_engine_sha": "ffd8213271947b0189a9dd61a055c1e0e78908a0",
+      "axiom_rules_engine_version": "0.1.0"
+    }
   }
 }
