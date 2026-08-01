@@ -41,6 +41,7 @@ SEED_DIRS = (
     "conformance",
     "dispositions",
     "docs",
+    "reference",
     "reports",
 )
 SEED_DATA = "dashboard/public/data"
