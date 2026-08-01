@@ -39,7 +39,9 @@ from axiom_oracles.conformance.universe import (  # noqa: E402
     PE_UK_PROGRAM_SPINE,
     PE_US_PROGRAM_SPINE,
     PolicyEngineUniverseBackend,
+    YaleTariffUniverseBackend,
     _is_queryable_output,
+    parse_r_string_vector,
     propose_scope,
     RawPolicy,
 )
@@ -320,7 +322,9 @@ def test_propose_scope_defaults_are_conservative():
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.parametrize("jurisdiction", ["uk", "be", "uk-pe", "us-pe"])
+@pytest.mark.parametrize(
+    "jurisdiction", ["uk", "be", "uk-pe", "us-pe", "us-tariff-yale"]
+)
 def test_committed_universe_parses_and_validates(jurisdiction):
     path = CONFORMANCE_DIR / f"{jurisdiction}.yaml"
     universe = parse_universe(path)
@@ -902,6 +906,97 @@ def test_ukmod_generated_facts_match_committed_universe():
     gen = _load_script("generate_conformance_universe.py")
     universe = gen.generate_universe("uk", _UKMOD_ROOT)
     committed = parse_universe(CONFORMANCE_DIR / "uk.yaml")
+    assert serialize(universe) == serialize(committed)
+
+
+# ---------------------------------------------------------------------------
+# Yale tariff-rate-tracker backend (R-literal parser + committed universe)
+# ---------------------------------------------------------------------------
+
+_YALE_ROOT = Path.home() / "TheAxiomFoundation" / "_tariff-yale"
+
+
+def test_parse_r_string_vector_reads_literals_na_and_integers():
+    source = """
+    rate_col = c('rate_232', "rate_301", NA),
+    panel_order = c(1L, 2L, NA),
+    """
+    assert parse_r_string_vector(source, "rate_col") == [
+        "rate_232",
+        "rate_301",
+        None,
+    ]
+    assert parse_r_string_vector(source, "panel_order") == ["1", "2", None]
+
+
+def test_parse_r_string_vector_rejects_spliced_expressions():
+    """A spliced expression inside c(...) must raise: a universe fact has to be
+    a literal the parse can pin, never something re-derived by memory."""
+    source = "rate_col = c('rate_232', registry$rate_col[schema_group == 'x'])"
+    with pytest.raises(ValueError, match="non-literal"):
+        parse_r_string_vector(source, "rate_col")
+
+
+def test_parse_r_string_vector_raises_on_missing_vector():
+    with pytest.raises(ValueError, match="not found"):
+        parse_r_string_vector("other = c('a')", "rate_col")
+
+
+def test_us_tariff_yale_universe_pin_matches_reference_provenance():
+    """The universe's oracle release must equal the committed reference
+    extract's yale_commit — one pin for both surfaces, so a divergent
+    universe/extract pair cannot pass silently."""
+    universe = parse_universe(CONFORMANCE_DIR / "us-tariff-yale.yaml")
+    assert universe.oracle.backend == "yale-tariff"
+    assert universe.oracle.model == "tariff-rate-tracker"
+    provenance = json.loads(
+        (
+            REPO_ROOT / "reference" / "us-tariff-panel" / "yale_panel_provenance.json"
+        ).read_text()
+    )
+    assert universe.oracle.release == provenance["yale_commit"]
+
+
+def test_us_tariff_yale_scope_decisions():
+    """12 statutory-surface rows in scope on the us-tariff-panel suite, each
+    with a note; the Swiss framework metadata and stacking/framing outputs are
+    excluded as technical (effective-layer machinery, no statutory surface)."""
+    universe = parse_universe(CONFORMANCE_DIR / "us-tariff-yale.yaml")
+    in_scope = [p for p in universe.policies if p.in_scope]
+    excluded = universe.excluded()
+    assert len(in_scope) == 12
+    for row in in_scope:
+        assert row.suite == "us-tariff-panel", row.oracle_policy_name
+        assert row.note, row.oracle_policy_name
+        # Every in-scope surface is a statutory_* column (pre-exemption,
+        # pre-stacking) — the comparison boundary the suite binds.
+        assert all(
+            v.startswith("statutory_") for v in row.output_vars
+        ), row.oracle_policy_name
+    assert {p.oracle_policy_name for p in excluded} == {
+        "swiss_framework",
+        "stacking_outputs",
+    }
+    for row in excluded:
+        assert row.exclusion_reason == "technical"
+        assert row.note, row.oracle_policy_name
+
+
+@pytest.mark.skipif(
+    not (_YALE_ROOT / "src" / "model" / "authority_registry.R").exists(),
+    reason="Yale tariff-rate-tracker checkout not present on this runner",
+)
+def test_yale_generated_facts_match_committed_universe():
+    """The committed us-tariff-yale.yaml facts must equal a fresh generation
+    from the pinned checkout (no drift)."""
+    backend = YaleTariffUniverseBackend(_YALE_ROOT)
+    if backend.pinned_commit() != parse_universe(
+        CONFORMANCE_DIR / "us-tariff-yale.yaml"
+    ).oracle.release:
+        pytest.skip("local Yale checkout is not at the pinned commit")
+    gen = _load_script("generate_conformance_universe.py")
+    universe = gen.generate_universe("us-tariff-yale", _YALE_ROOT)
+    committed = parse_universe(CONFORMANCE_DIR / "us-tariff-yale.yaml")
     assert serialize(universe) == serialize(committed)
 
 

@@ -907,3 +907,277 @@ class PolicyEngineUniverseBackend:
                 )
             )
         return policies
+
+
+# ---------------------------------------------------------------------------
+# Yale Budget Lab tariff-rate-tracker backend
+# ---------------------------------------------------------------------------
+
+#: RATE_SCHEMA literals that are table keys / interval framing, not simulated
+#: surfaces. Every OTHER literal column must map into a universe row (the
+#: no-silent-drop accounting); a new framing column must be added here
+#: deliberately, so it cannot vanish from the accounting unnoticed.
+_YALE_KEY_COLUMNS = frozenset(
+    {"hts10", "country", "revision", "effective_date", "valid_from", "valid_until"}
+)
+
+
+def parse_r_string_vector(source: str, name: str) -> list[str | None]:
+    """Parse ``name = c('a', 'b', NA, ...)`` from an R source block.
+
+    Returns the quoted strings in order, with ``NA`` entries as ``None``.
+    Only literal entries are read — a spliced expression inside ``c(...)``
+    (e.g. ``registry$rate_col[...]``) raises, because a universe fact must be
+    a literal the parse can pin, never something we'd re-derive by memory.
+    """
+    import re
+
+    match = re.search(
+        rf"{re.escape(name)}\s*=\s*c\((.*?)\)", source, flags=re.DOTALL
+    )
+    if match is None:
+        raise ValueError(f"vector {name!r} not found in registry source")
+    entries: list[str | None] = []
+    for raw in match.group(1).split(","):
+        token = raw.strip()
+        if not token:
+            continue
+        if token == "NA":
+            entries.append(None)
+        elif (token.startswith("'") and token.endswith("'")) or (
+            token.startswith('"') and token.endswith('"')
+        ):
+            entries.append(token[1:-1])
+        elif re.fullmatch(r"-?\d+L?", token):
+            entries.append(token.rstrip("L"))
+        else:
+            raise ValueError(
+                f"vector {name!r} contains a non-literal entry {token!r}; "
+                "the registry parse only pins literals"
+            )
+    return entries
+
+
+def parse_r_quoted_literals(source: str) -> list[str]:
+    """All single/double-quoted string literals in an R block, in order."""
+    import re
+
+    return [
+        m.group(1) or m.group(2)
+        for m in re.finditer(r"'([^']*)'|\"([^\"]*)\"", source)
+    ]
+
+
+class YaleTariffUniverseBackend:
+    """Enumerate the Yale Budget Lab tariff-rate-tracker's statutory panel spine.
+
+    The oracle's own model spine is ``src/model/authority_registry.R``
+    (``AUTHORITY_REGISTRY``: one row per tariff authority rate layer, with its
+    normalized authority name and stacking class) plus the canonical output
+    schema ``src/model/rate_schema.R`` (``RATE_SCHEMA``). Both are read by a
+    pure text parse of literal vectors — no R runtime — so this is CI-friendly
+    the same way the EUROMOD XML parse is.
+
+    Per panel authority the *statutory* column ``statutory_<rate_col>`` is the
+    queryable comparison surface (created pre-exemption/pre-stacking at
+    ``src/pipeline/06_calculate_rates.R`` — the backend verifies each name
+    appears there, so a renamed statutory column fails the drift check). The
+    effective-layer columns (``rate_*``/``net_*``, post share/utilization
+    transform) are recorded as internal-only evidence, outside the statutory
+    comparison boundary. The MFN base is its own row (``statutory_base_rate``
+    vs the exemption-share-adjusted effective ``base_rate``); the Swiss
+    framework metadata columns and the stacking/framing outputs are emitted as
+    non-queryable rows so the exclusion decision is visible, never a silent
+    drop.
+    """
+
+    backend = "yale-tariff"
+
+    def __init__(self, checkout: str | Path) -> None:
+        self.checkout = Path(checkout).expanduser()
+        self._registry_r = self.checkout / "src" / "model" / "authority_registry.R"
+        self._schema_r = self.checkout / "src" / "model" / "rate_schema.R"
+        self._pipeline_r = (
+            self.checkout / "src" / "pipeline" / "06_calculate_rates.R"
+        )
+
+    def pinned_commit(self) -> str:
+        """The checkout's HEAD commit — the oracle release the header pins."""
+        import subprocess
+
+        try:
+            result = subprocess.run(
+                ["git", "-C", str(self.checkout), "rev-parse", "HEAD"],
+                capture_output=True,
+                text=True,
+                check=True,
+            )
+        except (OSError, subprocess.CalledProcessError) as exc:
+            raise ValueError(
+                f"cannot pin the tariff-rate-tracker commit at {self.checkout}: "
+                f"{exc}"
+            ) from exc
+        return result.stdout.strip()
+
+    def _registry_rows(self) -> list[dict]:
+        source = self._registry_r.read_text()
+        import re
+
+        block = re.search(
+            r"AUTHORITY_REGISTRY\s*<-\s*data\.frame\((.*?)\n\)\n",
+            source,
+            flags=re.DOTALL,
+        )
+        if block is None:
+            raise ValueError(
+                f"AUTHORITY_REGISTRY data.frame not found in {self._registry_r}"
+            )
+        body = block.group(1)
+        columns = {
+            name: parse_r_string_vector(body, name)
+            for name in (
+                "rate_col",
+                "net_col",
+                "spec_authority",
+                "default_stacking_class",
+                "panel_order",
+                "schema_group",
+            )
+        }
+        length = len(columns["rate_col"])
+        if any(len(v) != length for v in columns.values()):
+            raise ValueError(
+                f"AUTHORITY_REGISTRY vectors have unequal lengths in "
+                f"{self._registry_r}"
+            )
+        return [
+            {name: values[i] for name, values in columns.items()}
+            for i in range(length)
+        ]
+
+    def _rate_schema_literals(self) -> list[str]:
+        source = self._schema_r.read_text()
+        import re
+
+        block = re.search(
+            r"RATE_SCHEMA\s*<-\s*c\((.*?)\n\)\n", source, flags=re.DOTALL
+        )
+        if block is None:
+            raise ValueError(f"RATE_SCHEMA not found in {self._schema_r}")
+        return parse_r_quoted_literals(block.group(1))
+
+    def _statutory_column(self, rate_col: str) -> str:
+        """``rate_232`` -> ``statutory_rate_232``, verified against the pipeline.
+
+        The statutory columns are created at src/pipeline/06_calculate_rates.R
+        (the pre-exemption, pre-stacking save); a rename there must fail the
+        drift check, not silently break the comparison surface.
+        """
+        column = f"statutory_{rate_col}"
+        if column not in self._pipeline_text():
+            raise ValueError(
+                f"statutory column {column!r} not found in {self._pipeline_r}; "
+                "the model renamed or removed it — review the panel suite's "
+                "statutory column mapping and regenerate"
+            )
+        return column
+
+    def _pipeline_text(self) -> str:
+        if not hasattr(self, "_pipeline_cache"):
+            self._pipeline_cache = self._pipeline_r.read_text()
+        return self._pipeline_cache
+
+    def raw_policies(self) -> list[RawPolicy]:
+        registry = self._registry_rows()
+        # The RATE_SCHEMA c(...) splices the registry's per-group rate columns
+        # via `panel_registry$rate_col[schema_group == '<group>']`; the quoted
+        # group names in those splices are selectors, not columns.
+        group_names = {r["schema_group"] for r in registry if r["schema_group"]}
+        schema_literals = [
+            c for c in self._rate_schema_literals() if c not in group_names
+        ]
+
+        policies: list[RawPolicy] = []
+
+        # MFN base: statutory_base_rate is the parsed HTS column-1 rate the
+        # panel keeps; the effective base_rate applies MFN exemption shares
+        # (06_calculate_rates.R step 6c) — outside the statutory boundary.
+        for required in ("statutory_base_rate", "base_rate"):
+            if required not in schema_literals:
+                raise ValueError(
+                    f"{required!r} missing from RATE_SCHEMA in {self._schema_r}"
+                )
+        policies.append(
+            RawPolicy(
+                name="mfn_base",
+                policy_type="base",
+                switch=None,
+                all_outputs=("statutory_base_rate", "base_rate"),
+                queryable_outputs=("statutory_base_rate",),
+                internal_outputs=("base_rate",),
+            )
+        )
+
+        # One row per panel authority in the model's own registry.
+        for row in registry:
+            if row["panel_order"] is None:
+                continue  # scenario-only authority: not in the baseline panel
+            rate_col = row["rate_col"]
+            statutory = self._statutory_column(rate_col)
+            policies.append(
+                RawPolicy(
+                    name=row["spec_authority"] or rate_col,
+                    policy_type=row["default_stacking_class"],
+                    switch=None,
+                    all_outputs=(statutory, rate_col, row["net_col"]),
+                    queryable_outputs=(statutory,),
+                    internal_outputs=(rate_col, row["net_col"]),
+                )
+            )
+
+        # Every remaining RATE_SCHEMA literal must land in a declared row (the
+        # no-silent-drop accounting): swiss framework metadata + the stacking/
+        # framing outputs. A new schema column fails here until classified.
+        claimed = {
+            "statutory_base_rate",
+            "base_rate",
+            *(f"statutory_{r['rate_col']}" for r in registry),
+        } | _YALE_KEY_COLUMNS
+        remaining = [c for c in schema_literals if c not in claimed]
+        swiss = [c for c in remaining if c.startswith("swiss_")]
+        framing = [c for c in remaining if not c.startswith("swiss_")]
+        expected_framing = {
+            "metal_share",
+            "heading_program",
+            "total_additional",
+            "total_rate",
+            "usmca_eligible",
+        }
+        unexpected = set(framing) - expected_framing
+        if unexpected:
+            raise ValueError(
+                "RATE_SCHEMA carries unclassified column(s) "
+                f"{sorted(unexpected)}; classify them in the Yale universe "
+                "backend (a new simulated surface must not be silently dropped)"
+            )
+        policies.append(
+            RawPolicy(
+                name="swiss_framework",
+                policy_type="framework_metadata",
+                switch=None,
+                all_outputs=tuple(swiss),
+                queryable_outputs=(),
+                internal_outputs=tuple(swiss),
+            )
+        )
+        policies.append(
+            RawPolicy(
+                name="stacking_outputs",
+                policy_type="output_framing",
+                switch=None,
+                all_outputs=tuple(framing),
+                queryable_outputs=(),
+                internal_outputs=tuple(framing),
+            )
+        )
+        return policies
