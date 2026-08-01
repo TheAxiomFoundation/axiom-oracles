@@ -119,9 +119,13 @@ def build_report(
 ) -> dict:
     slot_matches: dict[str, int] = defaultdict(int)
     slot_mismatches: dict[str, int] = defaultdict(int)
-    unit_mismatch_count = 0
     internal_inconsistencies = 0
 
+    # One dispositions-addressable row per mismatched unit (case_id = unit id,
+    # concept = the composed total): apply_dispositions matches rows by
+    # case_id/concept and counts annotated ROWS against the unit-grain
+    # match/comparison counts, so the mismatch list must be unit-grain too.
+    unit_rows: list[dict] = []
     # Lossless signature grouping: (hts10, slot, expected, actual) -> members.
     groups: dict[tuple[str, str, float, float], dict] = {}
     # Case families for the dashboard: (hts10, expected vector, actual
@@ -134,6 +138,7 @@ def build_report(
         vals = values[cid]
         expected_by_slot: dict[str, float] = {}
         actual_by_slot: dict[str, float] = {}
+        slot_deltas: dict[str, dict[str, float]] = {}
         unit_ok = True
         for slot, (concept, yale_columns) in AUTHORITY_SLOTS.items():
             expected = sum(interval.rates[column] for column in yale_columns)
@@ -145,6 +150,7 @@ def build_report(
                 continue
             unit_ok = False
             slot_mismatches[slot] += 1
+            slot_deltas[slot] = {"axiom": actual, "yale": expected}
             key = (interval.hts10, slot, round(expected, 12), round(actual, 12))
             group = groups.setdefault(
                 key,
@@ -170,11 +176,16 @@ def build_report(
         actual_total = vals[TOTAL]
         expected_by_slot["total"] = expected_total
         actual_by_slot["total"] = actual_total
-        if _match(actual_total, expected_total):
+        total_ok = _match(actual_total, expected_total)
+        if total_ok:
             slot_matches["total"] += 1
         else:
             unit_ok = False
             slot_mismatches["total"] += 1
+            slot_deltas["total"] = {
+                "axiom": actual_total,
+                "yale": expected_total,
+            }
             key = (interval.hts10, "total", round(expected_total, 12),
                    round(actual_total, 12))
             group = groups.setdefault(
@@ -207,7 +218,31 @@ def build_report(
             internal_inconsistencies += 1
 
         if not unit_ok:
-            unit_mismatch_count += 1
+            unit_rows.append(
+                {
+                    "case_id": cid,
+                    # A slot mismatch can in principle cancel in the total;
+                    # the kind records which is live for this unit.
+                    "kind": (
+                        "component_difference"
+                        if total_ok
+                        else "total_difference"
+                    ),
+                    "concept": TOTAL,
+                    "authority": "total",
+                    "hts_number": interval.hts10,
+                    "country_census": interval.country_census,
+                    "iso2": interval.iso2,
+                    "probe_date": probe.isoformat(),
+                    "engines": ["axiom", "yale_statutory"],
+                    "left_engine": "axiom",
+                    "right_engine": "yale_statutory",
+                    "left": actual_total,
+                    "right": expected_total,
+                    "difference": actual_total - expected_total,
+                    "slots": slot_deltas,
+                }
+            )
 
         family_key = (
             interval.hts10,
@@ -231,11 +266,20 @@ def build_report(
         family["probe_dates"].add(probe.isoformat())
 
     n_units = len(units)
+    unit_mismatch_count = len(unit_rows)
     match_count = n_units - unit_mismatch_count
     match_rate = round(100.0 * match_count / n_units, 6) if n_units else 100.0
     debt = temporal_debt(intervals)
 
     mismatches = sorted(
+        unit_rows,
+        key=lambda r: (
+            r["hts_number"],
+            r["country_census"],
+            r["probe_date"],
+        ),
+    )
+    signatures = sorted(
         groups.values(),
         key=lambda g: (-g["unit_count"], g["hts_number"], g["authority"]),
     )
@@ -324,13 +368,11 @@ def build_report(
             ),
             "mismatches_by_kind": [
                 {
-                    "count": sum(
-                        g["unit_count"] for g in mismatches if g["kind"] == kind
-                    ),
+                    "count": sum(1 for r in mismatches if r["kind"] == kind),
                     "value": kind,
                 }
                 for kind in ("component_difference", "total_difference")
-                if any(g["kind"] == kind for g in mismatches)
+                if any(r["kind"] == kind for r in mismatches)
             ],
             "internal_component_sum_inconsistencies": internal_inconsistencies,
             "unbridged_census_codes": unbridged,
@@ -338,6 +380,10 @@ def build_report(
             "errors_by_engine": [],
         },
         "mismatches": mismatches,
+        # Lossless signature index over the unit rows: every member unit of
+        # every (hts10, authority slot, expected, actual) signature is
+        # enumerated — nothing is capped or dropped.
+        "mismatch_signatures": signatures,
         "errors": [],
         "cases": case_rows,
         "provenance": {
@@ -391,7 +437,8 @@ def main() -> int:
     print(
         f"us-tariff-panel: match {summary['axiom_vs_yale_statutory_match_rate']}% "
         f"({summary['match_count']}/{report['case_count']} units); "
-        f"{len(report['mismatches'])} mismatch signatures"
+        f"{len(report['mismatches'])} mismatched units in "
+        f"{len(report['mismatch_signatures'])} signatures"
     )
     for slot, counts in summary["slots"].items():
         if counts["mismatches"]:
