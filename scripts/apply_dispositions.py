@@ -207,8 +207,14 @@ def _report_orphans(dispositions_by_suite: dict[str, dict]) -> None:
                 "dashboard report"
             )
             continue
-        merged = apply_dispositions(report, dispositions)
-        block = merged["summary"]["dispositioned"]
+        if _is_premerged_slim_report(report):
+            # Re-merging against the trimmed mismatch sample would report
+            # entries outside the stored examples as orphaned/expired; the
+            # generator already computed the full-run block.
+            block = report["summary"]["dispositioned"]
+        else:
+            merged = apply_dispositions(report, dispositions)
+            block = merged["summary"]["dispositioned"]
         for entry_id in block["orphaned_entries"]:
             print(
                 f"warning: dispositions/{suite}.yaml entry {entry_id!r} "
