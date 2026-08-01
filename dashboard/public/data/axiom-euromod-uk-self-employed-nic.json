@@ -332,10 +332,10 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "13a86a737f2e791e272b7aeb0ce8d5f5cc7e69c3",
+      "axiom_rules_engine_sha": "037bf7abd4e412bfec4c2e8aecdbbd69ad584643",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-08-01T08:41:44Z",
+    "generated_at": "2026-08-01T14:07:47Z",
     "generated_by": "scripts/run_comparison.py::uk-self-employed-nic-ukmod",
     "oracle": {
       "euromod_country": "UK",
