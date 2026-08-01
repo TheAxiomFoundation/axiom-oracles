@@ -2819,6 +2819,60 @@ def _run_us_tariff_grid(runner: dict, output: Path) -> None:
     output.write_text(committed.read_text())
 
 
+def _run_us_tariff_panel(runner: dict, output: Path) -> None:
+    """US tariff panel: rulespec-us duty spine vs the Yale statutory panel.
+
+    Delegates to scripts/generate_us_tariff_panel.py, which evaluates every
+    covered (HTS-10 line, country, validity interval) cell of the committed
+    Yale panel extract (reference/us-tariff-panel/) through the composed
+    rulespec-us us-tariff-duty pipeline via the axiom rules engine and
+    grades the per-authority statutory slots and the statutory total
+    exactly. The reference leg is a committed, provenance-pinned extract —
+    there is no external oracle process at comparison time. On a runner
+    without a built axiom rules engine or the rulespec-us tariff spine, the
+    committed dashboard report is reused, marked as a re-emit so provenance
+    never stamps it fresh (#296; same shape as _run_us_tariff_grid).
+    """
+    generator = REPO_ROOT / "scripts" / "generate_us_tariff_panel.py"
+    committed = (
+        REPO_ROOT / "dashboard" / "public" / "data" / "axiom-yale-us-tariff-panel.json"
+    )
+    cmd = [
+        "uv",
+        "run",
+        "--python",
+        "3.13",
+        "--no-project",
+        "--with-editable",
+        str(REPO_ROOT),
+        "python",
+        str(generator),
+    ]
+    try:
+        subprocess.run(cmd, check=True, cwd=REPO_ROOT)
+    except (subprocess.CalledProcessError, FileNotFoundError) as exc:
+        if not committed.exists():
+            raise
+        runner["_reemitted_report"] = True
+        print(f"us-tariff-panel generation unavailable ({exc}); reusing {committed}.")
+    else:
+        # Record what actually ran (same env-override honesty as the T0
+        # grid runner: the generator honors RULESPEC_US_CHECKOUT and
+        # AXIOM_RULES_ENGINE_BINARY, which may differ from the configured
+        # defaults).
+        checkout = Path(
+            os.environ.get("RULESPEC_US_CHECKOUT")
+            or os.path.expanduser("~/TheAxiomFoundation/rulespec-us")
+        )
+        runner.setdefault("parameters", {})["rulespec_roots"] = [str(checkout)]
+        binary = os.environ.get("AXIOM_RULES_ENGINE_BINARY")
+        if binary:
+            engine_repo = Path(binary).resolve().parents[2]
+            if (engine_repo / ".git").exists():
+                runner["axiom_rules_repo"] = str(engine_repo)
+    output.write_text(committed.read_text())
+
+
 def _snap_qc_optional_path(raw: str | Path | None) -> Path | None:
     """Expand a config path value, or return None when it is unset."""
     return _expand_path(raw) if raw else None
@@ -3063,6 +3117,7 @@ RUNNERS = {
     "uk-fuel-duty-grid": _run_uk_fuel_duty_grid,
     "uk-tv-licence-grid": _run_uk_tv_licence_grid,
     "us-tariff-grid": _run_us_tariff_grid,
+    "us-tariff-panel": _run_us_tariff_panel,
 }
 
 
