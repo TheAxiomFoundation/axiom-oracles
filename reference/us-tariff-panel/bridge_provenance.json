@@ -1,0 +1,13 @@
+{
+  "schema_version": "us_tariff_panel.bridge_provenance.v1",
+  "source": "U.S. Census Bureau, Schedule C - Country List",
+  "source_url": "https://www.census.gov/foreign-trade/schedules/c/country.txt",
+  "source_produced": "31JAN14",
+  "snapshot": "census_schedule_c_country.txt",
+  "snapshot_sha256": "ad7d599359d14c7d1d5977cf6b2331b85e25592bc51e594aae140c78a29204a5",
+  "builder": "scripts/build_census_iso_bridge.py",
+  "bridge_rows": 241,
+  "rows_without_iso": 0,
+  "bridge_sha256": "f41b37fb48c14003973fce6c20ac43150873386c82ce0fb36b2c9a5929343c71",
+  "built_at": "2026-08-01T21:13:28+00:00"
+}
