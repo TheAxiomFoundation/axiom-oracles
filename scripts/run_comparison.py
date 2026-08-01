@@ -2761,6 +2761,64 @@ def _run_uk_tv_licence_grid(runner: dict, output: Path) -> None:
     )
 
 
+def _run_us_tariff_grid(runner: dict, output: Path) -> None:
+    """US tariff duty T0 grid: rulespec-us duty spine vs frozen USITC rates.
+
+    Delegates to scripts/generate_us_tariff.py, which runs the 40 frozen grid
+    cases (axiom_oracles.suites.us_tariff) through the composed rulespec-us
+    us-tariff-duty pipeline via the axiom rules engine and grades against
+    duty amounts frozen from the retained USITC HTS editions and Federal
+    Register instruments. There is no external oracle process: the reference
+    side is a committed statutory computation. On a runner without a built
+    axiom rules engine or the rulespec-us tariff spine, the committed
+    dashboard report is reused, exactly like the UK case-grid runners —
+    marked as a re-emit so provenance never stamps it fresh.
+    """
+    generator = REPO_ROOT / "scripts" / "generate_us_tariff.py"
+    committed = (
+        REPO_ROOT / "dashboard" / "public" / "data" / "axiom-usitc-us-tariff.json"
+    )
+    cmd = [
+        "uv",
+        "run",
+        "--python",
+        "3.13",
+        "--no-project",
+        "--with-editable",
+        str(REPO_ROOT),
+        "python",
+        str(generator),
+    ]
+    try:
+        subprocess.run(cmd, check=True, cwd=REPO_ROOT)
+    except (subprocess.CalledProcessError, FileNotFoundError) as exc:
+        if not committed.exists():
+            raise
+        # Mark the re-emit so provenance never resolves a configured checkout
+        # path to a current SHA — stamping fresh SHAs onto the committed
+        # report's numbers would label a skipped run fresh (#296 review;
+        # sol review of #446 finding 2).
+        runner["_reemitted_report"] = True
+        print(f"us-tariff grid generation unavailable ({exc}); reusing {committed}.")
+    else:
+        # Record what actually ran: the generator honors RULESPEC_US_CHECKOUT
+        # (generate_us_tariff.py) while provenance otherwise reads the
+        # configured default root — under an env override those are different
+        # checkouts at different SHAs (sol review of #446 finding 3). Same for
+        # the engine identity via AXIOM_RULES_ENGINE_BINARY.
+        checkout = Path(
+            os.environ.get("RULESPEC_US_CHECKOUT")
+            or os.path.expanduser("~/TheAxiomFoundation/rulespec-us")
+        )
+        runner.setdefault("parameters", {})["rulespec_roots"] = [str(checkout)]
+        binary = os.environ.get("AXIOM_RULES_ENGINE_BINARY")
+        if binary:
+            engine_repo = Path(binary).resolve().parents[2]
+            if (engine_repo / ".git").exists():
+                runner["axiom_rules_repo"] = str(engine_repo)
+    output.write_text(committed.read_text())
+
+
 def _snap_qc_optional_path(raw: str | Path | None) -> Path | None:
     """Expand a config path value, or return None when it is unset."""
     return _expand_path(raw) if raw else None
@@ -3004,6 +3062,7 @@ RUNNERS = {
     "uk-vat-grid": _run_uk_vat_grid,
     "uk-fuel-duty-grid": _run_uk_fuel_duty_grid,
     "uk-tv-licence-grid": _run_uk_tv_licence_grid,
+    "us-tariff-grid": _run_us_tariff_grid,
 }
 
 

@@ -960,3 +960,806 @@ case_sets:
         living_renting: true
         living_owner: false
         cash_on_hand: 500
+  us-tariff:
+    locale: US
+    entity: CustomsEntry
+    entity_id: entry
+    outputs:
+    - us:policies/cbp/us-tariff-duty/composition#us_tariff_duty
+    cases:
+    - id: us-tariff-7202111000-cn-2026-02-15
+      period: '2026-02-15'
+      scenario: line-entry
+      parameters:
+        hts_number: 7202.11.10.00
+        country_of_origin: CN
+        entry_date: '2026-02-15'
+        expected_rate: 0.364
+        expected_duty: 3640.0
+        rate_components:
+        - MFN 1.4% (7202.11.10.00 general rate, HTS 2026 Rev3/4/12/14 line files)
+        - China-301 9903.88.03 +25% (Rev14 note 20(e) p268; 7202.11.10 in the note 20(f) list, p287; heading
+          in all revisions)
+        - IEEPA fentanyl 9903.01.24 +10% China+HK (Rev3 heading; note 2(u), entries on/after 2025-11-10)
+        - 'IEEPA fentanyl 9903.01.20 inoperative: note 2(s) window covers entries 2025-02-04..2025-03-04
+          only (Rev14-notes p175)'
+        - reciprocal annex exemption 9903.01.32 (note 2(v)(iii)(a); 7202.11.10.00 on Rev14-notes p182)
+        - 7202.11.10.00 not a §232 steel article (absent from Rev14 note 16(c)(iii) p236)
+      entities:
+      - id: entry
+        kind: customs_entry
+        hts_number: 7202.11.10.00
+        country_of_origin: CN
+        customs_value: 10000.0
+    - id: us-tariff-7202111000-cn-2026-03-15
+      period: '2026-03-15'
+      scenario: line-entry
+      parameters:
+        hts_number: 7202.11.10.00
+        country_of_origin: CN
+        entry_date: '2026-03-15'
+        expected_rate: 0.264
+        expected_duty: 2640.0
+        rate_components:
+        - MFN 1.4% (7202.11.10.00 general rate, HTS 2026 Rev3/4/12/14 line files)
+        - China-301 9903.88.03 +25% (Rev14 note 20(e) p268; 7202.11.10 in the note 20(f) list, p287; heading
+          in all revisions)
+        - IEEPA ad valorem duties terminated for entries on/after 2026-02-24 (EO 14389 §1, FR 2026-03832)
+        - §122 annex exemption 9903.03.03 (7202.11.10.00 in annex, Rev14 p226)
+      entities:
+      - id: entry
+        kind: customs_entry
+        hts_number: 7202.11.10.00
+        country_of_origin: CN
+        customs_value: 10000.0
+    - id: us-tariff-7202111000-cn-2026-07-23
+      period: '2026-07-23'
+      scenario: line-entry
+      parameters:
+        hts_number: 7202.11.10.00
+        country_of_origin: CN
+        entry_date: '2026-07-23'
+        expected_rate: 0.264
+        expected_duty: 2640.0
+        rate_components:
+        - MFN 1.4% (7202.11.10.00 general rate, HTS 2026 Rev3/4/12/14 line files)
+        - China-301 9903.88.03 +25% (Rev14 note 20(e) p268; 7202.11.10 in the note 20(f) list, p287; heading
+          in all revisions)
+        - §122 annex exemption 9903.03.03 (7202.11.10.00 in annex, Rev14 p226)
+      entities:
+      - id: entry
+        kind: customs_entry
+        hts_number: 7202.11.10.00
+        country_of_origin: CN
+        customs_value: 10000.0
+    - id: us-tariff-7202111000-cn-2026-08-01
+      period: '2026-08-01'
+      scenario: line-entry
+      parameters:
+        hts_number: 7202.11.10.00
+        country_of_origin: CN
+        entry_date: '2026-08-01'
+        expected_rate: 0.264
+        expected_duty: 2640.0
+        rate_components:
+        - MFN 1.4% (7202.11.10.00 general rate, HTS 2026 Rev3/4/12/14 line files)
+        - China-301 9903.88.03 +25% (Rev14 note 20(e) p268; 7202.11.10 in the note 20(f) list, p287; heading
+          in all revisions)
+        - §122 expired after 2026-07-23 (150-day sunset; Rev14 p221 compiler's note, 91 FR 9339)
+        - FL-301 annex exemption 9903.05.86 covers 7202.11.10.00 (Rev14 p558)
+      entities:
+      - id: entry
+        kind: customs_entry
+        hts_number: 7202.11.10.00
+        country_of_origin: CN
+        customs_value: 10000.0
+    - id: us-tariff-7202111000-za-2026-02-15
+      period: '2026-02-15'
+      scenario: line-entry
+      parameters:
+        hts_number: 7202.11.10.00
+        country_of_origin: ZA
+        entry_date: '2026-02-15'
+        expected_rate: 0.014
+        expected_duty: 140.0
+        rate_components:
+        - MFN 1.4% (7202.11.10.00 general rate, HTS 2026 Rev3/4/12/14 line files)
+        - 'South Africa reciprocal 9903.02.55 inapplicable: 7202.11.10.00 annex-exempt (9903.01.32)'
+      entities:
+      - id: entry
+        kind: customs_entry
+        hts_number: 7202.11.10.00
+        country_of_origin: ZA
+        customs_value: 10000.0
+    - id: us-tariff-7202111000-za-2026-03-15
+      period: '2026-03-15'
+      scenario: line-entry
+      parameters:
+        hts_number: 7202.11.10.00
+        country_of_origin: ZA
+        entry_date: '2026-03-15'
+        expected_rate: 0.014
+        expected_duty: 140.0
+        rate_components:
+        - MFN 1.4% (7202.11.10.00 general rate, HTS 2026 Rev3/4/12/14 line files)
+        - IEEPA ad valorem duties terminated for entries on/after 2026-02-24 (EO 14389 §1, FR 2026-03832)
+        - §122 annex exemption 9903.03.03 (7202.11.10.00 in annex, Rev14 p226)
+      entities:
+      - id: entry
+        kind: customs_entry
+        hts_number: 7202.11.10.00
+        country_of_origin: ZA
+        customs_value: 10000.0
+    - id: us-tariff-7202111000-za-2026-07-23
+      period: '2026-07-23'
+      scenario: line-entry
+      parameters:
+        hts_number: 7202.11.10.00
+        country_of_origin: ZA
+        entry_date: '2026-07-23'
+        expected_rate: 0.014
+        expected_duty: 140.0
+        rate_components:
+        - MFN 1.4% (7202.11.10.00 general rate, HTS 2026 Rev3/4/12/14 line files)
+        - §122 annex exemption 9903.03.03 (7202.11.10.00 in annex, Rev14 p226)
+      entities:
+      - id: entry
+        kind: customs_entry
+        hts_number: 7202.11.10.00
+        country_of_origin: ZA
+        customs_value: 10000.0
+    - id: us-tariff-7202111000-za-2026-08-01
+      period: '2026-08-01'
+      scenario: line-entry
+      parameters:
+        hts_number: 7202.11.10.00
+        country_of_origin: ZA
+        entry_date: '2026-08-01'
+        expected_rate: 0.014
+        expected_duty: 140.0
+        rate_components:
+        - MFN 1.4% (7202.11.10.00 general rate, HTS 2026 Rev3/4/12/14 line files)
+        - §122 expired after 2026-07-23 (150-day sunset; Rev14 p221 compiler's note, 91 FR 9339)
+        - FL-301 annex exemption 9903.05.86 covers 7202.11.10.00 (Rev14 p558)
+      entities:
+      - id: entry
+        kind: customs_entry
+        hts_number: 7202.11.10.00
+        country_of_origin: ZA
+        customs_value: 10000.0
+    - id: us-tariff-7202111000-kr-2026-02-15
+      period: '2026-02-15'
+      scenario: line-entry
+      parameters:
+        hts_number: 7202.11.10.00
+        country_of_origin: KR
+        entry_date: '2026-02-15'
+        expected_rate: 0.0
+        expected_duty: 0.0
+        rate_components:
+        - Special rate Free incl. KR (7202.11.10.00 special subcolumn, KORUS)
+        - reciprocal annex exemption 9903.01.32 (note 2(v)(iii)(a); 7202.11.10.00 on Rev14-notes p182)
+      entities:
+      - id: entry
+        kind: customs_entry
+        hts_number: 7202.11.10.00
+        country_of_origin: KR
+        customs_value: 10000.0
+    - id: us-tariff-7202111000-kr-2026-03-15
+      period: '2026-03-15'
+      scenario: line-entry
+      parameters:
+        hts_number: 7202.11.10.00
+        country_of_origin: KR
+        entry_date: '2026-03-15'
+        expected_rate: 0.0
+        expected_duty: 0.0
+        rate_components:
+        - Special rate Free incl. KR (7202.11.10.00 special subcolumn, KORUS)
+        - IEEPA ad valorem duties terminated for entries on/after 2026-02-24 (EO 14389 §1, FR 2026-03832)
+        - §122 annex exemption 9903.03.03 (7202.11.10.00 in annex, Rev14 p226)
+      entities:
+      - id: entry
+        kind: customs_entry
+        hts_number: 7202.11.10.00
+        country_of_origin: KR
+        customs_value: 10000.0
+    - id: us-tariff-7202111000-kr-2026-07-23
+      period: '2026-07-23'
+      scenario: line-entry
+      parameters:
+        hts_number: 7202.11.10.00
+        country_of_origin: KR
+        entry_date: '2026-07-23'
+        expected_rate: 0.0
+        expected_duty: 0.0
+        rate_components:
+        - Special rate Free incl. KR (7202.11.10.00 special subcolumn, KORUS)
+        - §122 annex exemption 9903.03.03 (7202.11.10.00 in annex, Rev14 p226)
+      entities:
+      - id: entry
+        kind: customs_entry
+        hts_number: 7202.11.10.00
+        country_of_origin: KR
+        customs_value: 10000.0
+    - id: us-tariff-7202111000-kr-2026-08-01
+      period: '2026-08-01'
+      scenario: line-entry
+      parameters:
+        hts_number: 7202.11.10.00
+        country_of_origin: KR
+        entry_date: '2026-08-01'
+        expected_rate: 0.0
+        expected_duty: 0.0
+        rate_components:
+        - Special rate Free incl. KR (7202.11.10.00 special subcolumn, KORUS)
+        - §122 expired after 2026-07-23 (150-day sunset; Rev14 p221 compiler's note, 91 FR 9339)
+        - FL-301 annex exemption 9903.05.86 covers 7202.11.10.00 (Rev14 p558)
+      entities:
+      - id: entry
+        kind: customs_entry
+        hts_number: 7202.11.10.00
+        country_of_origin: KR
+        customs_value: 10000.0
+    - id: us-tariff-7601103000-cn-2026-02-15
+      period: '2026-02-15'
+      scenario: line-entry
+      parameters:
+        hts_number: 7601.10.30.00
+        country_of_origin: CN
+        entry_date: '2026-02-15'
+        expected_rate: 0.876
+        expected_duty: 8760.0
+        rate_components:
+        - MFN 2.6% (7601.10.30.00 general rate, HTS 2026 Rev3/4/12/14 line files)
+        - '§232 aluminum +50%: 9903.85.02 (Rev3/4 note 19 p254) / 9903.82.02 (Rev12/14 note 16(c)(i) p236)'
+        - China 2024-301 9903.91.01 +25% (aluminum, Rev14 note 31)
+        - IEEPA fentanyl 9903.01.24 +10% China+HK (Rev3 heading; note 2(u), entries on/after 2025-11-10)
+        - 'IEEPA fentanyl 9903.01.20 inoperative: note 2(s) window covers entries 2025-02-04..2025-03-04
+          only (Rev14-notes p175)'
+        - reciprocal §232-metals exemption 9903.01.33
+      entities:
+      - id: entry
+        kind: customs_entry
+        hts_number: 7601.10.30.00
+        country_of_origin: CN
+        customs_value: 10000.0
+    - id: us-tariff-7601103000-cn-2026-03-15
+      period: '2026-03-15'
+      scenario: line-entry
+      parameters:
+        hts_number: 7601.10.30.00
+        country_of_origin: CN
+        entry_date: '2026-03-15'
+        expected_rate: 0.776
+        expected_duty: 7760.0
+        rate_components:
+        - MFN 2.6% (7601.10.30.00 general rate, HTS 2026 Rev3/4/12/14 line files)
+        - '§232 aluminum +50%: 9903.85.02 (Rev3/4 note 19 p254) / 9903.82.02 (Rev12/14 note 16(c)(i) p236)'
+        - China 2024-301 9903.91.01 +25% (aluminum, Rev14 note 31)
+        - IEEPA ad valorem duties terminated for entries on/after 2026-02-24 (EO 14389 §1, FR 2026-03832)
+        - §122 §232-article exemption 9903.03.06 (aluminum articles)
+      entities:
+      - id: entry
+        kind: customs_entry
+        hts_number: 7601.10.30.00
+        country_of_origin: CN
+        customs_value: 10000.0
+    - id: us-tariff-7601103000-cn-2026-07-23
+      period: '2026-07-23'
+      scenario: line-entry
+      parameters:
+        hts_number: 7601.10.30.00
+        country_of_origin: CN
+        entry_date: '2026-07-23'
+        expected_rate: 0.776
+        expected_duty: 7760.0
+        rate_components:
+        - MFN 2.6% (7601.10.30.00 general rate, HTS 2026 Rev3/4/12/14 line files)
+        - '§232 aluminum +50%: 9903.85.02 (Rev3/4 note 19 p254) / 9903.82.02 (Rev12/14 note 16(c)(i) p236)'
+        - China 2024-301 9903.91.01 +25% (aluminum, Rev14 note 31)
+        - §122 §232-article exemption 9903.03.06 (aluminum articles)
+      entities:
+      - id: entry
+        kind: customs_entry
+        hts_number: 7601.10.30.00
+        country_of_origin: CN
+        customs_value: 10000.0
+    - id: us-tariff-7601103000-cn-2026-08-01
+      period: '2026-08-01'
+      scenario: line-entry
+      parameters:
+        hts_number: 7601.10.30.00
+        country_of_origin: CN
+        entry_date: '2026-08-01'
+        expected_rate: 0.776
+        expected_duty: 7760.0
+        rate_components:
+        - MFN 2.6% (7601.10.30.00 general rate, HTS 2026 Rev3/4/12/14 line files)
+        - '§232 aluminum +50%: 9903.85.02 (Rev3/4 note 19 p254) / 9903.82.02 (Rev12/14 note 16(c)(i) p236)'
+        - China 2024-301 9903.91.01 +25% (aluminum, Rev14 note 31)
+        - §122 expired after 2026-07-23 (150-day sunset; Rev14 p221 compiler's note, 91 FR 9339)
+        - FL-301 metals exemption 9903.05.90 covers §232 aluminum articles (Rev14 p566)
+      entities:
+      - id: entry
+        kind: customs_entry
+        hts_number: 7601.10.30.00
+        country_of_origin: CN
+        customs_value: 10000.0
+    - id: us-tariff-7601103000-ae-2026-02-15
+      period: '2026-02-15'
+      scenario: line-entry
+      parameters:
+        hts_number: 7601.10.30.00
+        country_of_origin: AE
+        entry_date: '2026-02-15'
+        expected_rate: 0.526
+        expected_duty: 5260.0
+        rate_components:
+        - MFN 2.6% (7601.10.30.00 general rate, HTS 2026 Rev3/4/12/14 line files)
+        - '§232 aluminum +50%: 9903.85.02 (Rev3/4 note 19 p254) / 9903.82.02 (Rev12/14 note 16(c)(i) p236)'
+        - reciprocal §232-metals exemption 9903.01.33
+      entities:
+      - id: entry
+        kind: customs_entry
+        hts_number: 7601.10.30.00
+        country_of_origin: AE
+        customs_value: 10000.0
+    - id: us-tariff-7601103000-ae-2026-03-15
+      period: '2026-03-15'
+      scenario: line-entry
+      parameters:
+        hts_number: 7601.10.30.00
+        country_of_origin: AE
+        entry_date: '2026-03-15'
+        expected_rate: 0.526
+        expected_duty: 5260.0
+        rate_components:
+        - MFN 2.6% (7601.10.30.00 general rate, HTS 2026 Rev3/4/12/14 line files)
+        - '§232 aluminum +50%: 9903.85.02 (Rev3/4 note 19 p254) / 9903.82.02 (Rev12/14 note 16(c)(i) p236)'
+        - IEEPA ad valorem duties terminated for entries on/after 2026-02-24 (EO 14389 §1, FR 2026-03832)
+        - §122 §232-article exemption 9903.03.06 (aluminum articles)
+      entities:
+      - id: entry
+        kind: customs_entry
+        hts_number: 7601.10.30.00
+        country_of_origin: AE
+        customs_value: 10000.0
+    - id: us-tariff-7601103000-ae-2026-07-23
+      period: '2026-07-23'
+      scenario: line-entry
+      parameters:
+        hts_number: 7601.10.30.00
+        country_of_origin: AE
+        entry_date: '2026-07-23'
+        expected_rate: 0.526
+        expected_duty: 5260.0
+        rate_components:
+        - MFN 2.6% (7601.10.30.00 general rate, HTS 2026 Rev3/4/12/14 line files)
+        - '§232 aluminum +50%: 9903.85.02 (Rev3/4 note 19 p254) / 9903.82.02 (Rev12/14 note 16(c)(i) p236)'
+        - §122 §232-article exemption 9903.03.06 (aluminum articles)
+      entities:
+      - id: entry
+        kind: customs_entry
+        hts_number: 7601.10.30.00
+        country_of_origin: AE
+        customs_value: 10000.0
+    - id: us-tariff-7601103000-ae-2026-08-01
+      period: '2026-08-01'
+      scenario: line-entry
+      parameters:
+        hts_number: 7601.10.30.00
+        country_of_origin: AE
+        entry_date: '2026-08-01'
+        expected_rate: 0.526
+        expected_duty: 5260.0
+        rate_components:
+        - MFN 2.6% (7601.10.30.00 general rate, HTS 2026 Rev3/4/12/14 line files)
+        - '§232 aluminum +50%: 9903.85.02 (Rev3/4 note 19 p254) / 9903.82.02 (Rev12/14 note 16(c)(i) p236)'
+        - §122 expired after 2026-07-23 (150-day sunset; Rev14 p221 compiler's note, 91 FR 9339)
+        - FL-301 metals exemption 9903.05.90 covers §232 aluminum articles (Rev14 p566)
+      entities:
+      - id: entry
+        kind: customs_entry
+        hts_number: 7601.10.30.00
+        country_of_origin: AE
+        customs_value: 10000.0
+    - id: us-tariff-7601103000-gb-2026-02-15
+      period: '2026-02-15'
+      scenario: line-entry
+      parameters:
+        hts_number: 7601.10.30.00
+        country_of_origin: GB
+        entry_date: '2026-02-15'
+        expected_rate: 0.276
+        expected_duty: 2760.0
+        rate_components:
+        - MFN 2.6% (7601.10.30.00 general rate, HTS 2026 Rev3/4/12/14 line files)
+        - '§232 aluminum UK tier +25%: 9903.85.12 (Rev3/4) / 9903.82.04 (Rev12/14)'
+        - reciprocal §232-metals exemption 9903.01.33
+      entities:
+      - id: entry
+        kind: customs_entry
+        hts_number: 7601.10.30.00
+        country_of_origin: GB
+        customs_value: 10000.0
+    - id: us-tariff-7601103000-gb-2026-03-15
+      period: '2026-03-15'
+      scenario: line-entry
+      parameters:
+        hts_number: 7601.10.30.00
+        country_of_origin: GB
+        entry_date: '2026-03-15'
+        expected_rate: 0.276
+        expected_duty: 2760.0
+        rate_components:
+        - MFN 2.6% (7601.10.30.00 general rate, HTS 2026 Rev3/4/12/14 line files)
+        - '§232 aluminum UK tier +25%: 9903.85.12 (Rev3/4) / 9903.82.04 (Rev12/14)'
+        - IEEPA ad valorem duties terminated for entries on/after 2026-02-24 (EO 14389 §1, FR 2026-03832)
+        - §122 §232-article exemption 9903.03.06 (aluminum articles)
+      entities:
+      - id: entry
+        kind: customs_entry
+        hts_number: 7601.10.30.00
+        country_of_origin: GB
+        customs_value: 10000.0
+    - id: us-tariff-7601103000-gb-2026-07-23
+      period: '2026-07-23'
+      scenario: line-entry
+      parameters:
+        hts_number: 7601.10.30.00
+        country_of_origin: GB
+        entry_date: '2026-07-23'
+        expected_rate: 0.276
+        expected_duty: 2760.0
+        rate_components:
+        - MFN 2.6% (7601.10.30.00 general rate, HTS 2026 Rev3/4/12/14 line files)
+        - '§232 aluminum UK tier +25%: 9903.85.12 (Rev3/4) / 9903.82.04 (Rev12/14)'
+        - §122 §232-article exemption 9903.03.06 (aluminum articles)
+      entities:
+      - id: entry
+        kind: customs_entry
+        hts_number: 7601.10.30.00
+        country_of_origin: GB
+        customs_value: 10000.0
+    - id: us-tariff-7601103000-gb-2026-08-01
+      period: '2026-08-01'
+      scenario: line-entry
+      parameters:
+        hts_number: 7601.10.30.00
+        country_of_origin: GB
+        entry_date: '2026-08-01'
+        expected_rate: 0.276
+        expected_duty: 2760.0
+        rate_components:
+        - MFN 2.6% (7601.10.30.00 general rate, HTS 2026 Rev3/4/12/14 line files)
+        - '§232 aluminum UK tier +25%: 9903.85.12 (Rev3/4) / 9903.82.04 (Rev12/14)'
+        - §122 expired after 2026-07-23 (150-day sunset; Rev14 p221 compiler's note, 91 FR 9339)
+        - FL-301 metals exemption 9903.05.90 covers §232 aluminum articles (Rev14 p566)
+      entities:
+      - id: entry
+        kind: customs_entry
+        hts_number: 7601.10.30.00
+        country_of_origin: GB
+        customs_value: 10000.0
+    - id: us-tariff-9506624040-cn-2026-02-15
+      period: '2026-02-15'
+      scenario: line-entry
+      parameters:
+        hts_number: 9506.62.40.40
+        country_of_origin: CN
+        entry_date: '2026-02-15'
+        expected_rate: 0.275
+        expected_duty: 2750.0
+        rate_components:
+        - MFN Free (9506.62.40.40 general rate, HTS 2026 Rev3/4/12/14 line files)
+        - China-301 List 4A 9903.88.15 +7.5% (Rev14 note 20(r) p328, list hit p340; Rev14 static line
+          file drops the footnote, heading and note unchanged — disposition us-tariff-rev14-footnote-drop)
+        - IEEPA fentanyl 9903.01.24 +10% China+HK (Rev3 heading; note 2(u), entries on/after 2025-11-10)
+        - 'IEEPA fentanyl 9903.01.20 inoperative: note 2(s) window covers entries 2025-02-04..2025-03-04
+          only (Rev14-notes p175)'
+        - IEEPA reciprocal baseline 9903.01.25 +10% (Rev3 heading)
+      entities:
+      - id: entry
+        kind: customs_entry
+        hts_number: 9506.62.40.40
+        country_of_origin: CN
+        customs_value: 10000.0
+    - id: us-tariff-9506624040-cn-2026-03-15
+      period: '2026-03-15'
+      scenario: line-entry
+      parameters:
+        hts_number: 9506.62.40.40
+        country_of_origin: CN
+        entry_date: '2026-03-15'
+        expected_rate: 0.175
+        expected_duty: 1750.0
+        rate_components:
+        - MFN Free (9506.62.40.40 general rate, HTS 2026 Rev3/4/12/14 line files)
+        - China-301 List 4A 9903.88.15 +7.5% (Rev14 note 20(r) p328, list hit p340; Rev14 static line
+          file drops the footnote, heading and note unchanged — disposition us-tariff-rev14-footnote-drop)
+        - IEEPA ad valorem duties terminated for entries on/after 2026-02-24 (EO 14389 §1, FR 2026-03832)
+        - §122 surcharge 9903.03.01 +10%, entries 2026-02-24..2026-07-23 (FR 2026-03824)
+      entities:
+      - id: entry
+        kind: customs_entry
+        hts_number: 9506.62.40.40
+        country_of_origin: CN
+        customs_value: 10000.0
+    - id: us-tariff-9506624040-cn-2026-07-23
+      period: '2026-07-23'
+      scenario: line-entry
+      parameters:
+        hts_number: 9506.62.40.40
+        country_of_origin: CN
+        entry_date: '2026-07-23'
+        expected_rate: 0.175
+        expected_duty: 1750.0
+        rate_components:
+        - MFN Free (9506.62.40.40 general rate, HTS 2026 Rev3/4/12/14 line files)
+        - China-301 List 4A 9903.88.15 +7.5% (Rev14 note 20(r) p328, list hit p340; Rev14 static line
+          file drops the footnote, heading and note unchanged — disposition us-tariff-rev14-footnote-drop)
+        - §122 surcharge 9903.03.01 +10%, entries 2026-02-24..2026-07-23 (FR 2026-03824)
+      entities:
+      - id: entry
+        kind: customs_entry
+        hts_number: 9506.62.40.40
+        country_of_origin: CN
+        customs_value: 10000.0
+    - id: us-tariff-9506624040-cn-2026-08-01
+      period: '2026-08-01'
+      scenario: line-entry
+      parameters:
+        hts_number: 9506.62.40.40
+        country_of_origin: CN
+        entry_date: '2026-08-01'
+        expected_rate: 0.2
+        expected_duty: 2000.0
+        rate_components:
+        - MFN Free (9506.62.40.40 general rate, HTS 2026 Rev3/4/12/14 line files)
+        - China-301 List 4A 9903.88.15 +7.5% (Rev14 note 20(r) p328, list hit p340; Rev14 static line
+          file drops the footnote, heading and note unchanged — disposition us-tariff-rev14-footnote-drop)
+        - §122 expired after 2026-07-23 (150-day sunset; Rev14 p221 compiler's note, 91 FR 9339)
+        - FL-301 China tier 9903.05.31 +12.5%, from 2026-07-24 (Rev14 note 52)
+      entities:
+      - id: entry
+        kind: customs_entry
+        hts_number: 9506.62.40.40
+        country_of_origin: CN
+        customs_value: 10000.0
+    - id: us-tariff-9506624040-vn-2026-02-15
+      period: '2026-02-15'
+      scenario: line-entry
+      parameters:
+        hts_number: 9506.62.40.40
+        country_of_origin: VN
+        entry_date: '2026-02-15'
+        expected_rate: 0.2
+        expected_duty: 2000.0
+        rate_components:
+        - MFN Free (9506.62.40.40 general rate, HTS 2026 Rev3/4/12/14 line files)
+        - IEEPA reciprocal Vietnam 9903.02.69 +20% (Rev3 heading)
+      entities:
+      - id: entry
+        kind: customs_entry
+        hts_number: 9506.62.40.40
+        country_of_origin: VN
+        customs_value: 10000.0
+    - id: us-tariff-9506624040-vn-2026-03-15
+      period: '2026-03-15'
+      scenario: line-entry
+      parameters:
+        hts_number: 9506.62.40.40
+        country_of_origin: VN
+        entry_date: '2026-03-15'
+        expected_rate: 0.1
+        expected_duty: 1000.0
+        rate_components:
+        - MFN Free (9506.62.40.40 general rate, HTS 2026 Rev3/4/12/14 line files)
+        - IEEPA ad valorem duties terminated for entries on/after 2026-02-24 (EO 14389 §1, FR 2026-03832)
+        - §122 surcharge 9903.03.01 +10%, entries 2026-02-24..2026-07-23 (FR 2026-03824)
+      entities:
+      - id: entry
+        kind: customs_entry
+        hts_number: 9506.62.40.40
+        country_of_origin: VN
+        customs_value: 10000.0
+    - id: us-tariff-9506624040-vn-2026-07-23
+      period: '2026-07-23'
+      scenario: line-entry
+      parameters:
+        hts_number: 9506.62.40.40
+        country_of_origin: VN
+        entry_date: '2026-07-23'
+        expected_rate: 0.1
+        expected_duty: 1000.0
+        rate_components:
+        - MFN Free (9506.62.40.40 general rate, HTS 2026 Rev3/4/12/14 line files)
+        - §122 surcharge 9903.03.01 +10%, entries 2026-02-24..2026-07-23 (FR 2026-03824)
+      entities:
+      - id: entry
+        kind: customs_entry
+        hts_number: 9506.62.40.40
+        country_of_origin: VN
+        customs_value: 10000.0
+    - id: us-tariff-9506624040-vn-2026-08-01
+      period: '2026-08-01'
+      scenario: line-entry
+      parameters:
+        hts_number: 9506.62.40.40
+        country_of_origin: VN
+        entry_date: '2026-08-01'
+        expected_rate: 0.125
+        expected_duty: 1250.0
+        rate_components:
+        - MFN Free (9506.62.40.40 general rate, HTS 2026 Rev3/4/12/14 line files)
+        - §122 expired after 2026-07-23 (150-day sunset; Rev14 p221 compiler's note, 91 FR 9339)
+        - FL-301 Vietnam tier 9903.05.84 +12.5%, from 2026-07-24 (Rev14 note 52)
+      entities:
+      - id: entry
+        kind: customs_entry
+        hts_number: 9506.62.40.40
+        country_of_origin: VN
+        customs_value: 10000.0
+    - id: us-tariff-9506624040-br-2026-02-15
+      period: '2026-02-15'
+      scenario: line-entry
+      parameters:
+        hts_number: 9506.62.40.40
+        country_of_origin: BR
+        entry_date: '2026-02-15'
+        expected_rate: 0.5
+        expected_duty: 5000.0
+        rate_components:
+        - MFN Free (9506.62.40.40 general rate, HTS 2026 Rev3/4/12/14 line files)
+        - IEEPA reciprocal Brazil 9903.02.09 +10% (Rev3 heading)
+        - Brazil IEEPA 9903.01.77 +40% (EO 14323; Rev3 heading)
+      entities:
+      - id: entry
+        kind: customs_entry
+        hts_number: 9506.62.40.40
+        country_of_origin: BR
+        customs_value: 10000.0
+    - id: us-tariff-9506624040-br-2026-03-15
+      period: '2026-03-15'
+      scenario: line-entry
+      parameters:
+        hts_number: 9506.62.40.40
+        country_of_origin: BR
+        entry_date: '2026-03-15'
+        expected_rate: 0.1
+        expected_duty: 1000.0
+        rate_components:
+        - MFN Free (9506.62.40.40 general rate, HTS 2026 Rev3/4/12/14 line files)
+        - IEEPA ad valorem duties terminated for entries on/after 2026-02-24 (EO 14389 §1, FR 2026-03832)
+        - §122 surcharge 9903.03.01 +10%, entries 2026-02-24..2026-07-23 (FR 2026-03824)
+      entities:
+      - id: entry
+        kind: customs_entry
+        hts_number: 9506.62.40.40
+        country_of_origin: BR
+        customs_value: 10000.0
+    - id: us-tariff-9506624040-br-2026-07-23
+      period: '2026-07-23'
+      scenario: line-entry
+      parameters:
+        hts_number: 9506.62.40.40
+        country_of_origin: BR
+        entry_date: '2026-07-23'
+        expected_rate: 0.35
+        expected_duty: 3500.0
+        rate_components:
+        - MFN Free (9506.62.40.40 general rate, HTS 2026 Rev3/4/12/14 line files)
+        - §122 surcharge 9903.03.01 +10%, entries 2026-02-24..2026-07-23 (FR 2026-03824)
+        - Brazil-301 9903.05.01 +25%, entries on/after 2026-07-22 (FR 2026-14542)
+      entities:
+      - id: entry
+        kind: customs_entry
+        hts_number: 9506.62.40.40
+        country_of_origin: BR
+        customs_value: 10000.0
+    - id: us-tariff-9506624040-br-2026-08-01
+      period: '2026-08-01'
+      scenario: line-entry
+      parameters:
+        hts_number: 9506.62.40.40
+        country_of_origin: BR
+        entry_date: '2026-08-01'
+        expected_rate: 0.375
+        expected_duty: 3750.0
+        rate_components:
+        - MFN Free (9506.62.40.40 general rate, HTS 2026 Rev3/4/12/14 line files)
+        - §122 expired after 2026-07-23 (150-day sunset; Rev14 p221 compiler's note, 91 FR 9339)
+        - Brazil-301 9903.05.01 +25%, entries on/after 2026-07-22 (FR 2026-14542)
+        - FL-301 Brazil tier 9903.05.27 +12.5%, from 2026-07-24 (Rev14 note 52)
+        - Brazil-301 and FL-301 stack per Rev14 notes 50(a) p540 / 52(a) p553 ('shall also be subject
+          to any additional duty'); no cross-carve in (a)(ii)-(vi)/(b)-(k) — disposition us-tariff-brazil-301-fl-stacking
+      entities:
+      - id: entry
+        kind: customs_entry
+        hts_number: 9506.62.40.40
+        country_of_origin: BR
+        customs_value: 10000.0
+    - id: us-tariff-postal-d1-vn-nonpostal-2026-02-15
+      period: '2026-02-15'
+      scenario: line-entry
+      parameters:
+        hts_number: 9506.62.40.40
+        country_of_origin: VN
+        entry_date: '2026-02-15'
+        expected_rate: 0.2
+        expected_duty: 150.0
+        rate_components:
+        - 19 USC 1321(a)(2)(C) $800 de minimis suspended (EO 14324, continued by EO 14388; CBP IFRs 2026-12669/2026-12670)
+          — never operative at grid dates
+        - MFN Free (9506.62.40.40 general rate, HTS 2026 Rev3/4/12/14 line files)
+        - IEEPA reciprocal Vietnam 9903.02.69 +20% (Rev3 heading)
+      entities:
+      - id: entry
+        kind: customs_entry
+        hts_number: 9506.62.40.40
+        country_of_origin: VN
+        customs_value: 750.0
+    - id: us-tariff-postal-d2-cn-postal-2026-03-15
+      period: '2026-03-15'
+      scenario: postal
+      parameters:
+        hts_number: 9506.62.40.40
+        country_of_origin: CN
+        entry_date: '2026-03-15'
+        expected_rate: 0.1
+        expected_duty: 75.0
+        rate_components:
+        - 19 USC 1321(a)(2)(C) $800 de minimis suspended (EO 14324, continued by EO 14388; CBP IFRs 2026-12669/2026-12670)
+          — never operative at grid dates
+        - postal sub-$800 flat 10% in lieu of ad valorem, 2026-02-24..2026-07-23 (EO 14388 §3(b), FR 2026-03829)
+      entities:
+      - id: entry
+        kind: customs_entry
+        hts_number: 9506.62.40.40
+        country_of_origin: CN
+        customs_value: 750.0
+    - id: us-tariff-postal-d3-cn-postal-2026-07-23
+      period: '2026-07-23'
+      scenario: postal
+      parameters:
+        hts_number: 9506.62.40.40
+        country_of_origin: CN
+        entry_date: '2026-07-23'
+        expected_rate: 0.1
+        expected_duty: 75.0
+        rate_components:
+        - 19 USC 1321(a)(2)(C) $800 de minimis suspended (EO 14324, continued by EO 14388; CBP IFRs 2026-12669/2026-12670)
+          — never operative at grid dates
+        - postal sub-$800 flat 10% in lieu of ad valorem, 2026-02-24..2026-07-23 (EO 14388 §3(b), FR 2026-03829)
+      entities:
+      - id: entry
+        kind: customs_entry
+        hts_number: 9506.62.40.40
+        country_of_origin: CN
+        customs_value: 750.0
+    - id: us-tariff-postal-d4-cn-postal-2026-08-01
+      period: '2026-08-01'
+      scenario: postal
+      parameters:
+        hts_number: 9506.62.40.40
+        country_of_origin: CN
+        entry_date: '2026-08-01'
+        expected_rate: 0.2
+        expected_duty: 150.0
+        rate_components:
+        - 19 USC 1321(a)(2)(C) $800 de minimis suspended (EO 14324, continued by EO 14388; CBP IFRs 2026-12669/2026-12670)
+          — never operative at grid dates
+        - 'CBP postal informal-entry process effective 2026-07-24 (FR 2026-12669): postal shipments pay
+          regular duties'
+        - MFN Free (9506.62.40.40 general rate, HTS 2026 Rev3/4/12/14 line files)
+        - China-301 List 4A 9903.88.15 +7.5% (Rev14 note 20(r) p328, list hit p340; Rev14 static line
+          file drops the footnote, heading and note unchanged — disposition us-tariff-rev14-footnote-drop)
+        - §122 expired after 2026-07-23 (150-day sunset; Rev14 p221 compiler's note, 91 FR 9339)
+        - FL-301 China tier 9903.05.31 +12.5%, from 2026-07-24 (Rev14 note 52)
+      entities:
+      - id: entry
+        kind: customs_entry
+        hts_number: 9506.62.40.40
+        country_of_origin: CN
+        customs_value: 750.0
