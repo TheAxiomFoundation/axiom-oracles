@@ -190,15 +190,19 @@ if (!all(interval_check$contiguous)) {
   stop("interval gaps/overlaps in ", nrow(bad), " (hts10, country) series, ",
        "e.g. ", bad$hts10[1], "/", bad$country[1])
 }
-# Every covered line must carry the full country set and the same interval
-# profile — a line silently losing countries or revisions must not pass.
-country_sets <- slice %>%
+# Every covered line must carry the IDENTICAL country set (set equality,
+# not count equality — dropping a different country from each line keeps
+# counts equal) and the same interval profile — a line silently losing
+# countries or revisions must not pass.
+country_signatures <- slice %>%
   group_by(hts10) %>%
-  summarise(n_countries = n_distinct(country), .groups = "drop")
-if (n_distinct(country_sets$n_countries) != 1) {
-  stop("covered lines carry differing country counts: ",
-       paste(country_sets$hts10, country_sets$n_countries,
-             sep = "=", collapse = ", "))
+  summarise(
+    signature = paste(sort(unique(country)), collapse = ","),
+    .groups = "drop"
+  )
+if (n_distinct(country_signatures$signature) != 1) {
+  stop("covered lines carry differing country SETS — a country series was ",
+       "dropped from some line(s); inspect before committing")
 }
 if (n_distinct(interval_check$n_intervals) != 1) {
   stop("(hts10, country) series carry differing interval counts — a line ",
@@ -235,6 +239,7 @@ provenance <- list(
   covered_lines = as.list(covered_lines),
   columns = as.list(c(SPINE, STATUTORY)),
   extract_rows = nrow(slice),
+  countries = as.list(sort(unique(slice$country))),
   extract_countries = n_distinct(slice$country),
   extract_revisions = n_distinct(slice$revision),
   valid_from_range = c(format(min(slice$valid_from)), format(max(slice$valid_from))),

@@ -19,12 +19,18 @@ Yale panel, never from artifacts shared with the rulespec-us implementation.
 | `bridge_provenance.json` | Source URL, snapshot sha, builder sha, extension list, build stamp | same |
 
 `tests/test_us_tariff_reference.py` is the CI-side validator: it binds each
-committed artifact to its provenance stamp (sha256), the covered-lines list
-to the extract and to an append-only floor, and re-checks extract/bridge
-integrity (key uniqueness, interval tiling, code contract) on every run.
-Coverage is **append-only**: both the exporter and the validator fail if a
-previously covered line disappears — narrowing the reference to force
-agreement is the failure mode this suite exists to prevent.
+committed artifact to its provenance stamp (sha256), pins the covered slice
+to the reviewed `REVIEWED_COVERED_LINES` constant (exact set, not a floor —
+so append-only survives edits to the mutable provenance stamp) and the
+country dimension to `EXPECTED_COUNTRY_COUNT` (with per-line country-SET
+equality, so a dropped country series cannot hide behind equal counts),
+re-derives the bridge exactly from the snapshot (hash self-consistency
+alone would accept a hand-edited bridge with a restamped sha), and
+re-checks extract integrity (key uniqueness, finite non-negative rates,
+interval tiling) on every run. Coverage is **append-only**: both the
+exporter and the validator fail if a previously covered line disappears —
+narrowing the reference to force agreement is the failure mode this suite
+exists to prevent.
 
 ## Origin-code contract (bridge)
 
@@ -73,10 +79,13 @@ supervised protocol is the boundary, stated here rather than implied away.
 1. In the Yale checkout, build the panel in legal-date mode:
    `--full --unweighted --skip-release-check`.
 2. If burning up coverage: **append** the new HTS-10 lines to
-   `covered_lines.txt` (removals fail the exporter and the validator).
+   `covered_lines.txt` AND update `REVIEWED_COVERED_LINES` in
+   `tests/test_us_tariff_reference.py` in the same reviewed diff (removals
+   fail the exporter and the validator).
    If bumping the Yale pin: update `EXPECTED_YALE_COMMIT` in
    `scripts/extract_yale_panel.R` and in `tests/test_us_tariff_reference.py`
-   in the same reviewed diff.
+   in the same reviewed diff; if the upstream country universe changed,
+   `EXPECTED_COUNTRY_COUNT` too.
 3. From this repo root:
    `YALE_TRACKER_CHECKOUT=/path/to/tariff-rate-tracker Rscript scripts/extract_yale_panel.R`
 4. Regenerate the comparison report (`scripts/generate_us_tariff_panel.py`).

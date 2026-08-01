@@ -49,9 +49,21 @@ PANEL_EXTRACT = OUT_DIR / "yale_panel_slice.csv"
 SOURCE_URL = "https://www.census.gov/foreign-trade/schedules/c/country.txt"
 
 ROW_RE = re.compile(r"^(\d{4})\s*\|\s*(.*?)\s*\|\s*([A-Z]{2})?\s*$")
-#: Any line starting with a 4-digit code is a candidate data row; every
-#: candidate must parse via ROW_RE or the build fails (no partial parsing).
-CANDIDATE_RE = re.compile(r"^\d{4}\b")
+#: The single legitimate non-data pipe line in the concordance.
+HEADER_RE = re.compile(r"^Code\s*\|\s*Name\s*\|\s*ISO Code\s*$")
+
+
+def _is_candidate(line: str) -> bool:
+    """A line that looks like data must parse — no silent skipping.
+
+    Candidates are any line containing the pipe delimiter (except the one
+    column-header line) or whose stripped form starts with a digit. This
+    catches indented rows, malformed codes (e.g. ``737X``), and any other
+    data-shaped drift: they become parse failures, never silent omissions.
+    """
+    if HEADER_RE.match(line.strip()):
+        return False
+    return "|" in line or line.strip()[:1].isdigit()
 
 #: Assigned ISO 3166-1 alpha-2 codes (officially assigned entries only).
 #: Frozen from pycountry 26.2.16 (ISO 3166-1 dataset); 249 codes. A bridge
@@ -112,7 +124,7 @@ def parse_snapshot(text: str) -> tuple[list[tuple[str, str, str]], str | None]:
             m = re.search(r"\[Produced:\s*([^\]]+)\]", line)
             if m:
                 produced = m.group(1)
-        if not CANDIDATE_RE.match(line):
+        if not _is_candidate(line):
             continue
         m = ROW_RE.match(line)
         if m is None:
@@ -166,6 +178,21 @@ def panel_country_codes() -> set[str]:
         return {row["country"] for row in csv.DictReader(fh)}
 
 
+def check_panel_coverage(rows: list[tuple[str, str, str]]) -> None:
+    """Every committed-panel country must be bridged. Raises BridgeError.
+
+    An uncovered code would mean silently dropped comparison rows.
+    """
+    if not PANEL_EXTRACT.exists():
+        print(f"note: {PANEL_EXTRACT.name} absent; panel-coverage check skipped")
+        return
+    uncovered = sorted(panel_country_codes() - {c for c, _, _ in rows})
+    if uncovered:
+        raise BridgeError(
+            f"panel extract countries missing from the bridge: {uncovered}"
+        )
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -181,15 +208,20 @@ def main() -> int:
     if args.fetch:
         with urllib.request.urlopen(SOURCE_URL) as resp:  # noqa: S310
             fetched = resp.read()
-        # Validate BEFORE replacing the retained snapshot: a bad response
-        # must never clobber the source of record.
+        # ALL validation — structural parse AND panel coverage — runs on the
+        # fetched bytes BEFORE the retained snapshot is replaced: a response
+        # that parses but has lost a panel country must never clobber the
+        # source of record. The replacement itself is atomic (temp + rename).
         try:
-            parse_snapshot(fetched.decode())
+            fetched_rows, _ = parse_snapshot(fetched.decode())
+            check_panel_coverage(fetched_rows)
         except BridgeError as exc:
             print(f"fetched snapshot rejected, retained copy kept: {exc}",
                   file=sys.stderr)
             return 1
-        SNAPSHOT.write_bytes(fetched)
+        tmp = SNAPSHOT.with_suffix(".txt.tmp")
+        tmp.write_bytes(fetched)
+        tmp.replace(SNAPSHOT)
         retrieved_at = datetime.now(timezone.utc).isoformat(timespec="seconds")
         print(f"refreshed snapshot from {SOURCE_URL}")
 
@@ -199,22 +231,10 @@ def main() -> int:
 
     try:
         rows, produced = parse_snapshot(SNAPSHOT.read_text())
+        check_panel_coverage(rows)
     except BridgeError as exc:
         print(f"snapshot invalid: {exc}", file=sys.stderr)
         return 1
-
-    # The bridge must cover every country in the committed panel extract —
-    # an uncovered code would mean silently dropped comparison rows.
-    if PANEL_EXTRACT.exists():
-        uncovered = sorted(panel_country_codes() - {c for c, _, _ in rows})
-        if uncovered:
-            print(
-                f"panel extract countries missing from the bridge: {uncovered}",
-                file=sys.stderr,
-            )
-            return 1
-    else:
-        print(f"note: {PANEL_EXTRACT.name} absent; panel-coverage check skipped")
 
     extensions_used = sorted(
         {a for _, _, a in rows if a in SCHEDULE_C_EXTENSIONS}

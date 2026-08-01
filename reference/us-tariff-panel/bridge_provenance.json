@@ -7,7 +7,7 @@
   "snapshot_sha256": "ad7d599359d14c7d1d5977cf6b2331b85e25592bc51e594aae140c78a29204a5",
   "snapshot_retrieved_at": null,
   "builder": "scripts/build_census_iso_bridge.py",
-  "builder_sha256": "78e077d100594ee1b9b434c60d37cf743836d0bba4de4e28ee5f66da7ea94c7e",
+  "builder_sha256": "1c79b6dca2a58c255c52919a41857f7687c089d2835ba2195ea2dac78971a856",
   "bridge_rows": 241,
   "schedule_c_extensions": {
     "GZ": "Gaza Strip \u2014 ISO assigns PS to the State of Palestine as a whole; Census splits Gaza (GZ) and West Bank (WE).",
@@ -15,5 +15,5 @@
     "WE": "West Bank \u2014 ISO assigns PS to the State of Palestine as a whole; Census splits Gaza (GZ) and West Bank (WE)."
   },
   "bridge_sha256": "4a5a96988c92f51938326cffa16fb5cdb3dd7ce81a56a941f287c8b7a0ffe6f7",
-  "built_at": "2026-08-01T22:27:20+00:00"
+  "built_at": "2026-08-01T23:35:24+00:00"
 }

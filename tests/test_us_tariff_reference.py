@@ -14,6 +14,7 @@ import csv
 import hashlib
 import importlib.util
 import json
+import math
 from datetime import date, timedelta
 from pathlib import Path
 
@@ -30,11 +31,19 @@ SNAPSHOT = REFERENCE_DIR / "census_schedule_c_country.txt"
 #: provenance stamp. Bumping the pin edits all three in one reviewed diff.
 EXPECTED_YALE_COMMIT = "c4307e514196618afcbf88cf7fd33746417eeabf"
 
-#: Append-only coverage floor: the T0 pilot lines (laneB design memo §scope).
-#: Lines may be ADDED as rulespec-us coverage burns up; removing one is a
-#: reference-narrowing event and must fail here until this reviewed floor is
-#: deliberately changed.
-T0_COVERED_FLOOR = frozenset({"7202111000", "7601103000", "9506624040"})
+#: The EXACT reviewed covered slice — not a floor. Every burn-up (and any
+#: deliberate scope change) must edit this frozen set in the same reviewed
+#: diff as covered_lines.txt. An exact-set pin is what makes append-only
+#: durable: the exporter's check against the previous provenance stamp can
+#: be bypassed by editing/deleting the (mutable) stamp before a refresh,
+#: but this constant only changes in reviewed code.
+REVIEWED_COVERED_LINES = frozenset({"7202111000", "7601103000", "9506624040"})
+
+#: The reviewed country dimension of the Yale panel (240 Schedule C census
+#: codes). A pin bump that changes the upstream country universe must edit
+#: this constant in the same reviewed diff — a shrunk country set cannot
+#: hide behind a self-stamped provenance count.
+EXPECTED_COUNTRY_COUNT = 240
 
 
 def _sha256(path: Path) -> str:
@@ -96,10 +105,12 @@ def test_covered_lines_nonempty_unique_and_stamped():
     ) == lines
 
 
-def test_covered_lines_respect_the_append_only_floor():
-    assert T0_COVERED_FLOOR <= set(_covered_lines()), (
-        "a previously covered line was removed — reference narrowing; "
-        "coverage is append-only (see reference/us-tariff-panel/README.md)"
+def test_covered_lines_equal_the_reviewed_set():
+    assert set(_covered_lines()) == REVIEWED_COVERED_LINES, (
+        "covered_lines.txt differs from the reviewed covered slice — a "
+        "removal is reference narrowing; an addition (burn-up) must update "
+        "REVIEWED_COVERED_LINES in the same reviewed diff (see "
+        "reference/us-tariff-panel/README.md)"
     )
 
 
@@ -113,6 +124,25 @@ def test_extract_shape_matches_provenance():
     assert {r["hts10"] for r in rows} == set(_covered_lines())
 
 
+def test_extract_country_dimension_is_complete():
+    """Every covered line carries the identical, full country set.
+
+    Set equality per line (not count equality: dropping a different country
+    from each line keeps counts equal) plus the reviewed
+    EXPECTED_COUNTRY_COUNT pin (not the self-stamped provenance count, which
+    a narrowed refresh would restamp)."""
+    per_line: dict[str, set[str]] = {}
+    for r in _extract_rows():
+        per_line.setdefault(r["hts10"], set()).add(r["country"])
+    country_sets = list(per_line.values())
+    assert all(s == country_sets[0] for s in country_sets), (
+        "covered lines carry differing country sets — a country series "
+        "was dropped from some line(s)"
+    )
+    assert len(country_sets[0]) == EXPECTED_COUNTRY_COUNT
+    assert sorted(country_sets[0]) == list(_provenance()["countries"])
+
+
 def test_extract_keys_unique_rates_valid_intervals_tile():
     rows = _extract_rows()
     keys = [(r["hts10"], r["country"], r["valid_from"]) for r in rows]
@@ -122,7 +152,9 @@ def test_extract_keys_unique_rates_valid_intervals_tile():
     for r in rows:
         for c in rate_cols:
             value = float(r[c])  # raises on blank/non-numeric
-            assert value >= 0.0, (r["hts10"], r["country"], c, value)
+            assert math.isfinite(value) and value >= 0.0, (
+                r["hts10"], r["country"], c, value,
+            )
         lo, hi = date.fromisoformat(r["valid_from"]), date.fromisoformat(
             r["valid_until"]
         )
@@ -168,6 +200,19 @@ def test_bridge_schema_uniqueness_and_code_contract():
         f"{sorted(extensions - set(builder.SCHEDULE_C_EXTENSIONS))}"
     )
     assert set(prov["schedule_c_extensions"]) == extensions
+
+
+def test_bridge_rederives_exactly_from_snapshot():
+    """The committed bridge must be the exact deterministic derivation of
+    the committed snapshot — hash self-consistency alone would accept a
+    hand-edited bridge with a restamped bridge_sha256."""
+    builder = _load_builder()
+    rows, _ = builder.parse_snapshot(SNAPSHOT.read_text())
+    expected = [[code, alpha, name] for code, name, alpha in sorted(rows)]
+    with BRIDGE.open(newline="") as fh:
+        reader = csv.reader(fh)
+        assert next(reader) == ["census_code", "iso2", "name"]
+        assert list(reader) == expected
 
 
 def test_bridge_covers_every_panel_country():
