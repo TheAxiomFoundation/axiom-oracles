@@ -24,6 +24,16 @@
 #   uv run python scripts/run_comparison.py us-tariff-panel
 
 name: us-tariff-panel
+# Manual (supervised) lane: standard CI neither builds the Rust rules
+# engine nor exports AXIOM_RULES_ENGINE_BINARY, so a matrix run could only
+# ever take the HEAD re-emit path — appearing as coverage while never
+# executing the comparison (#448 review round 4). Refreshes run on a
+# supervised host with the engine + rulespec-us checkout (command above);
+# CI enforces the committed artifacts through the parity battery
+# (tests/test_us_tariff_panel_suite.py reconciles the committed report,
+# dashboard, signatures and case-family ledger against the committed
+# reference and reviewed pins on every push).
+ci: manual
 title: US tariff panel — Axiom vs Yale Budget Lab statutory panel
 description: >-
   Compares the composed US tariff duty pipeline encoded in Axiom RuleSpec

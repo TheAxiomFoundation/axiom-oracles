@@ -1497,7 +1497,7 @@
     },
     {
       "suite": "us-tariff-panel",
-      "name": "us-tariff-panel",
+      "name": null,
       "report": "axiom-yale-us-tariff-panel.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
