@@ -81,6 +81,7 @@ counts cover the full row set.
 from __future__ import annotations
 
 import ast
+import hashlib
 import json
 from pathlib import Path
 
@@ -613,6 +614,30 @@ def apply_dispositions(
     if report.get("schema_version") == "axiom.comparison_report.v2":
         merged["schema_version"] = DISPOSITIONED_REPORT_SCHEMA_VERSION
     return merged
+
+
+def assignment_digest(report: dict) -> str:
+    """SHA-256 over the complete per-row disposition assignment.
+
+    Serializes ``{case_id: [entry_id, disposition] | None}`` for EVERY
+    mismatch row of a merged report (canonical JSON, sorted keys) and hashes
+    it. Aggregate counts cannot distinguish two entries of equal cardinality
+    swapping disposition classes; this digest can, so a premerged-slim
+    dashboard block that embeds it is bound to the exact row-level
+    assignment a fresh merge over the full report produces (sol stack
+    review r2, F2 residual).
+    """
+
+    assignment: dict[str, list[str] | None] = {}
+    for row in report.get("mismatches") or []:
+        annotation = row.get("disposition")
+        assignment[str(row.get("case_id"))] = (
+            [str(annotation.get("id")), str(annotation.get("disposition"))]
+            if isinstance(annotation, dict)
+            else None
+        )
+    payload = json.dumps(assignment, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
 
 def apply_dispositions_from_dir(
