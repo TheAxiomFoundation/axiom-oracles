@@ -4761,11 +4761,15 @@ def _write_dashboard_report(
     )
     slim_summary = slim.get("summary")
     if full_report_path is not None:
-        # The pointer is a repo-relative path: a custom --output-dir can
-        # publish the full report outside the repository, where the
-        # dashboard copy cannot bind to it (and apply_dispositions.py
-        # could never resolve it) — skip binding instead of raising
-        # (sol stack review r3).
+        # The pointer contract mirrors the consumer's
+        # (apply_dispositions._resolve_source_pointer): a repo-relative
+        # path under reports/. A custom --output-dir can publish the full
+        # report outside the repository — or inside it but outside
+        # reports/ — where the consumer would reject (or never resolve)
+        # the pointer. Emitting a pointer the validator is guaranteed to
+        # refuse would fail every subsequent --check, so binding is
+        # skipped and the block stays pointer-free instead (sol stack
+        # reviews r3 + r4).
         try:
             source_rel = (
                 full_report_path.resolve()
@@ -4774,7 +4778,7 @@ def _write_dashboard_report(
             )
         except ValueError:
             source_rel = None
-        if source_rel is None:
+        if source_rel is None or not source_rel.startswith("reports/"):
             full_report_path = None
     if (
         full_report_path is not None

@@ -8,13 +8,17 @@ artifacts under /data/cases/<suite>/ and never falls back to the embedded
 rows). This bundle carries everything else (aggregates, summary,
 mismatches, concepts, engines, provenance) in ONE fetch.
 
-`--check` verifies the committed bundle is consistent with the manifest
-(same file set, same source sizes) so a regenerated report can't ship with
-a stale overview silently.
+`--check` rebuilds the bundle from the committed reports and requires the
+committed overview to equal it exactly — content, not file sizes. A
+size-based check let a regenerated panel report with a byte-length-
+identical predecessor ship a stale overview silently (sol stack review
+r4: the UI preferentially consumes this bundle, so it carried a
+superseded dispositioned block while every size matched).
 """
 
 from __future__ import annotations
 
+import hashlib
 import json
 import sys
 from pathlib import Path
@@ -32,11 +36,12 @@ def build() -> dict:
         path = DATA / name
         if not path.exists():
             continue
-        report = json.loads(path.read_text())
+        payload = path.read_bytes()
+        report = json.loads(payload)
         report.pop("cases", None)
         report["file"] = name
         reports.append(report)
-        sources[name] = path.stat().st_size
+        sources[name] = hashlib.sha256(payload).hexdigest()
     return {"schema": "axiom.dashboard_overview.v1", "sources": sources, "reports": reports}
 
 
@@ -48,9 +53,10 @@ def main() -> int:
             print("overview.json missing; run scripts/generate_dashboard_overview.py")
             return 1
         committed = json.loads(OUT.read_text())
-        if committed.get("sources") != bundle["sources"]:
+        if committed != bundle:
             print(
-                "overview.json is stale (report set or sizes changed); "
+                "overview.json is stale (bundle content differs from a "
+                "fresh rebuild of the committed reports); "
                 "run scripts/generate_dashboard_overview.py"
             )
             return 1

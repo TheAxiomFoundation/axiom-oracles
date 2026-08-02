@@ -1537,3 +1537,76 @@ def test_state_income_tax_grid_exposes_actual_repos_to_provenance(
     assert env["RULESPEC_US_REPO"] == str(rulespec)
     assert env["AXIOM_RULES_REPO"] == str(engine)
     assert json.loads(output.read_text()) == {"fresh": True}
+
+
+# ---------------------------------------------------------------------------
+# _write_dashboard_report source binding: the pointer contract must mirror
+# the consumer's (repo-relative AND under reports/) — sol stack reviews
+# r3 + r4. Emitting a pointer apply_dispositions.py is guaranteed to
+# reject would fail every subsequent --check, so binding is skipped and
+# the block stays pointer-free instead.
+# ---------------------------------------------------------------------------
+
+
+def _premerged_panel_report() -> dict:
+    """A merged report large enough to be slimmed into a premerged copy."""
+    n = 1001  # crosses _DASHBOARD_MAX_MISMATCHES so the slim is premerged
+    return {
+        "suite": "t-suite",
+        "summary": {
+            "mismatch_count": n,
+            "dispositioned": {"explained_rate": 1.0, "unexplained_count": 0},
+        },
+        "mismatches": [
+            {"case_id": f"c{i}", "concept": "x", "disposition": None}
+            for i in range(n)
+        ],
+        "cases": [],
+    }
+
+
+def _write_dashboard_with_full_report_at(tmp_path, monkeypatch, full_path):
+    run_comparison = load_run_comparison_module()
+    repo = tmp_path / "repo"
+    dashboard = repo / "dashboard" / "public" / "data"
+    dashboard.mkdir(parents=True)
+    monkeypatch.setattr(run_comparison, "REPO_ROOT", repo)
+    monkeypatch.setattr(run_comparison, "DASHBOARD_DATA_DIR", dashboard)
+    monkeypatch.setattr(run_comparison, "_merge_dispositions", lambda r: r)
+    full = repo / full_path if not full_path.is_absolute() else full_path
+    full.parent.mkdir(parents=True, exist_ok=True)
+    full.write_text(json.dumps(_premerged_panel_report()))
+    run_comparison._write_dashboard_report(
+        _premerged_panel_report(), "t-suite.json", full_report_path=full
+    )
+    slim = json.loads((dashboard / "t-suite.json").read_text())
+    assert "stored_mismatch_example_count" in slim["summary"]  # premerged
+    return slim["summary"]["dispositioned"]
+
+
+def test_dashboard_binding_emitted_for_reports_dir_source(tmp_path, monkeypatch):
+    block = _write_dashboard_with_full_report_at(
+        tmp_path, monkeypatch, Path("reports/t-suite-full.json")
+    )
+    assert block["source_report"]["path"] == "reports/t-suite-full.json"
+    assert len(block["source_report"]["sha256"]) == 64
+    assert len(block["assignment_sha256"]) == 64
+
+
+def test_dashboard_binding_skipped_for_in_repo_source_outside_reports(
+    tmp_path, monkeypatch
+):
+    """In-repo but outside reports/: the consumer would reject the pointer."""
+    block = _write_dashboard_with_full_report_at(
+        tmp_path, monkeypatch, Path("custom-out/t-suite-full.json")
+    )
+    assert "source_report" not in block
+    assert "assignment_sha256" not in block
+
+
+def test_dashboard_binding_skipped_for_source_outside_repo(tmp_path, monkeypatch):
+    block = _write_dashboard_with_full_report_at(
+        tmp_path, monkeypatch, tmp_path / "elsewhere" / "t-suite-full.json"
+    )
+    assert "source_report" not in block
+    assert "assignment_sha256" not in block
