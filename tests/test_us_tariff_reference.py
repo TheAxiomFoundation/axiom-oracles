@@ -25,6 +25,7 @@ import hashlib
 import importlib.util
 import json
 import math
+import re
 from datetime import date, timedelta
 from pathlib import Path
 
@@ -134,6 +135,23 @@ def _provenance() -> dict:
     return json.loads(EXTRACT_PROVENANCE.read_text())
 
 
+def _assert_exporter_pin(name: str, expected_rhs: str) -> None:
+    """Assert the exporter carries EXACTLY ONE assignment to `name`, whose
+    full right-hand side (to end of line) is exactly `expected_rhs`.
+    Substring containment is not enough: `NAME <- 57 - 1` contains
+    "NAME <- 57" yet evaluates to 56, and a second later assignment would
+    silently override the first."""
+    exporter = (REPO_ROOT / "scripts" / "extract_yale_panel.R").read_text()
+    assignments = re.findall(
+        rf"{re.escape(name)}\s*(?:<<-|<-|=)\s*([^\n]*)", exporter
+    )
+    assert assignments == [expected_rhs], (
+        f"exporter pin {name}: expected exactly one assignment with RHS "
+        f"{expected_rhs!r}, found {assignments!r} — exporter pin drifted "
+        "from the reviewed constant in this file"
+    )
+
+
 def test_extract_bytes_match_the_reviewed_pin():
     """The extract itself is pinned in reviewed code; the provenance stamp
     must agree (consistency, not identity — the stamp is mutable)."""
@@ -151,22 +169,19 @@ def test_yale_pin_is_the_reviewed_commit():
     prov = _provenance()
     assert prov["yale_commit"] == EXPECTED_YALE_COMMIT
     assert prov["yale_repo"] == "Budget-Lab-Yale/tariff-rate-tracker"
-    exporter = (REPO_ROOT / "scripts" / "extract_yale_panel.R").read_text()
-    assert f'EXPECTED_YALE_COMMIT <- "{EXPECTED_YALE_COMMIT}"' in exporter
+    _assert_exporter_pin("EXPECTED_YALE_COMMIT", f'"{EXPECTED_YALE_COMMIT}"')
 
 
 def test_exporter_mirrors_the_reviewed_pins():
     """The exporter's fail-before-write gates carry the same reviewed pins
     as this validator; a one-sided edit (drifting the exporter's copy) is a
-    CI failure, not a silent divergence."""
-    exporter = (REPO_ROOT / "scripts" / "extract_yale_panel.R").read_text()
-    assert (
-        f"EXPECTED_INTERVALS_PER_SERIES <- {EXPECTED_INTERVALS_PER_SERIES}"
-        in exporter
+    CI failure, not a silent divergence. Exact unique-assignment matching,
+    not substring containment (see _assert_exporter_pin)."""
+    _assert_exporter_pin(
+        "EXPECTED_INTERVALS_PER_SERIES", str(EXPECTED_INTERVALS_PER_SERIES)
     )
-    assert (
-        f'EXPECTED_COUNTRY_SET_SHA256 <- "{EXPECTED_COUNTRY_SET_SHA256}"'
-        in exporter
+    _assert_exporter_pin(
+        "EXPECTED_COUNTRY_SET_SHA256", f'"{EXPECTED_COUNTRY_SET_SHA256}"'
     )
 
 
