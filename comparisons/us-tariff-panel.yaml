@@ -12,10 +12,10 @@
 # (tolerance 1e-12). Totals reconcile against the SUM of the panel's
 # statutory_* columns, never its stored effective (share-scaled) totals.
 #
-# Mismatches are expected and stay visible: reference-vintage gaps (our
-# corpus holds HTS revisions the panel lacks), uncovered authorities
+# Mismatches are expected and stay visible: uncovered authorities
 # (§301 semiconductor / §338 / §201 / other compared against implicit 0),
-# 232 metal-scope and §122×232 exclusion-basis differences, Column 2 and
+# 232 metal-scope and §122×232 exclusion-basis differences, Column 2
+# origins (the panel reads only the HTS general column) and
 # FTA-preference semantics boundaries. They are grouped losslessly by
 # signature and classified in dispositions/us-tariff-panel.yaml.
 #
