@@ -98,6 +98,24 @@ def test_numeric_to_boolean_bundle_edit_fails_check(tmp_path, monkeypatch):
     assert _run(module, monkeypatch, "--check") == 1
 
 
+def test_crlf_bundle_edit_fails_check(tmp_path, monkeypatch):
+    """Text-mode reads apply universal-newline translation, so a
+    `read_text()` comparison accepted a terminal LF -> CRLF rewrite of the
+    bundle (sol stack review r6). The comparison must be over raw bytes."""
+    module, data = _seed(tmp_path, monkeypatch)
+    assert _run(module, monkeypatch) == 0
+    out = data / "overview.json"
+    raw = out.read_bytes()
+    assert raw.endswith(b"\n") and not raw.endswith(b"\r\n")
+    mutated = raw[:-1] + b"\r\n"
+    out.write_bytes(mutated)
+    # parsed equality holds AND a text-mode read normalizes the CRLF away —
+    # both defective pre-r6 comparisons would accept this mutant
+    assert json.loads(mutated) == json.loads(raw)
+    assert out.read_text() == raw.decode("utf-8")
+    assert _run(module, monkeypatch, "--check") == 1
+
+
 def test_missing_bundle_fails_check(tmp_path, monkeypatch):
     module, _ = _seed(tmp_path, monkeypatch)
     assert _run(module, monkeypatch, "--check") == 1

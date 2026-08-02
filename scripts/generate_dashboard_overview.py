@@ -59,8 +59,10 @@ def main() -> int:
         # Byte-exact against the canonical serialization this script would
         # write. Parsed-value equality was not type-strict — Python's
         # `1 == True` accepted a numeric-to-boolean bundle edit (sol stack
-        # review r5).
-        if OUT.read_text() != _serialize(bundle):
+        # review r5). Raw bytes, not read_text(): text-mode reads apply
+        # universal-newline translation, so a text comparison accepted a
+        # terminal LF -> CRLF rewrite of the bundle (sol stack review r6).
+        if OUT.read_bytes() != _serialize(bundle).encode("utf-8"):
             print(
                 "overview.json is stale (bytes differ from the canonical "
                 "serialization of a fresh rebuild of the committed "
@@ -69,7 +71,10 @@ def main() -> int:
             return 1
         print(f"overview OK: {len(bundle['reports'])} reports bundled")
         return 0
-    OUT.write_text(_serialize(bundle))
+    # write_bytes for symmetry with the --check comparison: text-mode
+    # writes translate "\n" to os.linesep, which would self-invalidate the
+    # bundle on platforms where that is CRLF.
+    OUT.write_bytes(_serialize(bundle).encode("utf-8"))
     size = OUT.stat().st_size / 1e6
     print(f"wrote overview.json: {len(bundle['reports'])} reports, {size:.1f} MB")
     return 0

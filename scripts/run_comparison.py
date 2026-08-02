@@ -4760,10 +4760,24 @@ def _write_dashboard_report(
         == merged_summary.get("mismatch_count")
     )
     slim_summary = slim.get("summary")
+    slim_stored = (
+        slim_summary.get("stored_mismatch_example_count")
+        if isinstance(slim_summary, dict)
+        else None
+    )
+    # Mirrors apply_dispositions._is_premerged_slim_report exactly: the
+    # consumer only treats a copy as premerged when its mismatch SAMPLE is
+    # actually truncated (stored < mismatch_count). Case-only overflow also
+    # writes stored_mismatch_example_count, so a key-presence predicate
+    # called those copies premerged while the consumer re-merges them
+    # directly — skipping their dashboard publish for no reason (sol stack
+    # review r6).
     slim_is_premerged = (
-        isinstance(slim_summary, dict)
+        slim.get("schema_version") == "axiom.comparison_report.v2.1"
+        and isinstance(slim_summary, dict)
         and isinstance(slim_summary.get("dispositioned"), dict)
-        and "stored_mismatch_example_count" in slim_summary
+        and isinstance(slim_stored, int)
+        and slim_stored < (slim_summary.get("mismatch_count") or 0)
     )
     if full_report_path is not None:
         # The pointer contract mirrors the consumer's
