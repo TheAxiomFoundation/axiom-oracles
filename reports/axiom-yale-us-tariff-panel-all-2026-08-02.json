@@ -222656,7 +222656,7 @@
   ],
   "provenance": {
     "schema": "axiom_oracles.provenance.v1",
-    "generated_at": "2026-08-02T04:34:26Z",
+    "generated_at": "2026-08-02T06:21:33Z",
     "generated_by": "scripts/run_comparison.py::us-tariff-panel",
     "run_kind": "manual",
     "rulespecs": [

@@ -653,7 +653,9 @@ def main() -> int:
             os.replace(staging, output)
             print(f"Wrote: {output}")
             if dashboard_target and adapted is not None:
-                _write_dashboard_report(adapted, dashboard_target)
+                _write_dashboard_report(
+                    adapted, dashboard_target, full_report_path=output
+                )
     finally:
         staging.unlink(missing_ok=True)
 
@@ -4729,7 +4731,9 @@ def _merge_dispositions(report: dict) -> dict:
     )
 
 
-def _write_dashboard_report(report: dict, filename: str) -> None:
+def _write_dashboard_report(
+    report: dict, filename: str, *, full_report_path: Path | None = None
+) -> None:
     DASHBOARD_DATA_DIR.mkdir(parents=True, exist_ok=True)
     from axiom_oracles.comparison.report import strip_heavy_case_metadata
 
@@ -4737,6 +4741,96 @@ def _write_dashboard_report(report: dict, filename: str) -> None:
     target = DASHBOARD_DATA_DIR / filename
     slim = _slim_report_for_dashboard(strip_heavy_case_metadata(report))
     truncation = slim.get("dashboard_truncation")
+    # A premerged-slim copy (v2.1, trimmed mismatch sample, full-run
+    # dispositioned block) binds its block to the just-published full
+    # report: a source pointer + file digest lets apply_dispositions.py
+    # --check fail CLOSED when the source is missing or edited, and the
+    # row-level assignment digest catches reclassifications that keep the
+    # aggregate counts identical — e.g. two equal-cardinality entries
+    # swapping disposition classes (sol stack review r2: F2 residual +
+    # fail-open MED).
+    # Only when the in-memory merged report is COMPLETE (every mismatch row
+    # present) is the published reports/ artifact a re-derivable full report
+    # and the row-level digest meaningful. Lanes whose generators already
+    # trim their mismatch sample before this point (population diagnostics)
+    # keep the pointer-free block they always had.
+    merged_summary = report.get("summary") or {}
+    merged_is_complete = (
+        len(report.get("mismatches") or [])
+        == merged_summary.get("mismatch_count")
+    )
+    slim_summary = slim.get("summary")
+    slim_stored = (
+        slim_summary.get("stored_mismatch_example_count")
+        if isinstance(slim_summary, dict)
+        else None
+    )
+    # Mirrors apply_dispositions._is_premerged_slim_report exactly: the
+    # consumer only treats a copy as premerged when its mismatch SAMPLE is
+    # actually truncated (stored < mismatch_count). Case-only overflow also
+    # writes stored_mismatch_example_count, so a key-presence predicate
+    # called those copies premerged while the consumer re-merges them
+    # directly — skipping their dashboard publish for no reason (sol stack
+    # review r6).
+    slim_is_premerged = (
+        slim.get("schema_version") == "axiom.comparison_report.v2.1"
+        and isinstance(slim_summary, dict)
+        and isinstance(slim_summary.get("dispositioned"), dict)
+        and isinstance(slim_stored, int)
+        and slim_stored < (slim_summary.get("mismatch_count") or 0)
+    )
+    if full_report_path is not None:
+        # The pointer contract mirrors the consumer's
+        # (apply_dispositions._resolve_source_pointer): a repo-relative
+        # path under reports/. A custom --output-dir can publish the full
+        # report outside the repository — or inside it but outside
+        # reports/ — where the consumer would reject (or never resolve)
+        # the pointer (sol stack reviews r3 + r4).
+        try:
+            source_rel = (
+                full_report_path.resolve()
+                .relative_to(REPO_ROOT.resolve())
+                .as_posix()
+            )
+        except ValueError:
+            source_rel = None
+        if source_rel is None or not source_rel.startswith("reports/"):
+            if slim_is_premerged:
+                # A premerged-slim copy is only ever trusted through its
+                # source binding (or, for suites committing no full
+                # report, its pointer-free provenance). When the full
+                # report goes to a non-canonical location the copy can
+                # be neither pointer-bound nor left pointer-free —
+                # apply_dispositions.py --check is guaranteed to flag it
+                # either way once the suite commits any full report (sol
+                # stack review r5). Canonical artifacts move together: a
+                # run publishing its full report elsewhere does not
+                # update the committed dashboard copy at all.
+                print(
+                    f"Dashboard copy {filename} NOT updated: full report "
+                    f"published outside reports/ ({full_report_path}); a "
+                    "premerged dashboard copy cannot be source-bound to it"
+                )
+                return
+            full_report_path = None
+    if (
+        full_report_path is not None
+        and merged_is_complete
+        and slim_is_premerged
+    ):
+        from axiom_oracles.comparison.dispositions import assignment_digest
+
+        block = dict(slim_summary["dispositioned"])
+        block["source_report"] = {
+            "path": source_rel,
+            "sha256": hashlib.sha256(
+                full_report_path.read_bytes()
+            ).hexdigest(),
+        }
+        block["assignment_sha256"] = assignment_digest(report)
+        slim_summary = dict(slim_summary)
+        slim_summary["dispositioned"] = block
+        slim["summary"] = slim_summary
     # Atomic publish: the dashboard is fetched by the UI and read by tests —
     # it must never be observable as partially written JSON (#448 review
     # round 4).

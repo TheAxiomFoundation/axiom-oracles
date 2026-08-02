@@ -1537,3 +1537,165 @@ def test_state_income_tax_grid_exposes_actual_repos_to_provenance(
     assert env["RULESPEC_US_REPO"] == str(rulespec)
     assert env["AXIOM_RULES_REPO"] == str(engine)
     assert json.loads(output.read_text()) == {"fresh": True}
+
+
+# ---------------------------------------------------------------------------
+# _write_dashboard_report source binding: the pointer contract must mirror
+# the consumer's (repo-relative AND under reports/) — sol stack reviews
+# r3–r6. A premerged-slim copy is only ever trusted through its source
+# binding, so when the full report goes to a non-canonical location the
+# committed dashboard copy is NOT updated at all: pointer-emitting OR
+# pointer-free, apply_dispositions.py --check is guaranteed to flag a
+# premerged copy that cannot be re-derived from a committed full report.
+# Consumer acceptance of the canonical emitted shape is pinned on the
+# real artifacts by test_dispositions.py::
+# test_panel_dashboard_block_is_bound_to_committed_full_report.
+# ---------------------------------------------------------------------------
+
+_SENTINEL = '{"sentinel": true}'
+
+
+def _premerged_panel_report() -> dict:
+    """A merged report large enough to be slimmed into a premerged copy."""
+    n = 1001  # crosses _DASHBOARD_MAX_MISMATCHES so the slim is premerged
+    return {
+        "suite": "t-suite",
+        "schema_version": "axiom.comparison_report.v2.1",
+        "summary": {
+            "mismatch_count": n,
+            "dispositioned": {"explained_rate": 1.0, "unexplained_count": 0},
+        },
+        "mismatches": [
+            {"case_id": f"c{i}", "concept": "x", "disposition": None}
+            for i in range(n)
+        ],
+        "cases": [],
+    }
+
+
+def _write_dashboard_with_full_report_at(tmp_path, monkeypatch, full_path):
+    """Returns the dashboard copy's path; it starts as a sentinel so tests
+    can distinguish 'updated' from 'left untouched'."""
+    run_comparison = load_run_comparison_module()
+    repo = tmp_path / "repo"
+    dashboard = repo / "dashboard" / "public" / "data"
+    dashboard.mkdir(parents=True)
+    monkeypatch.setattr(run_comparison, "REPO_ROOT", repo)
+    monkeypatch.setattr(run_comparison, "DASHBOARD_DATA_DIR", dashboard)
+    monkeypatch.setattr(run_comparison, "_merge_dispositions", lambda r: r)
+    target = dashboard / "t-suite.json"
+    target.write_text(_SENTINEL)
+    full = repo / full_path if not full_path.is_absolute() else full_path
+    full.parent.mkdir(parents=True, exist_ok=True)
+    full.write_text(json.dumps(_premerged_panel_report()))
+    run_comparison._write_dashboard_report(
+        _premerged_panel_report(), "t-suite.json", full_report_path=full
+    )
+    return target
+
+
+def test_dashboard_binding_emitted_for_reports_dir_source(tmp_path, monkeypatch):
+    target = _write_dashboard_with_full_report_at(
+        tmp_path, monkeypatch, Path("reports/t-suite-full.json")
+    )
+    slim = json.loads(target.read_text())
+    assert "stored_mismatch_example_count" in slim["summary"]  # premerged
+    block = slim["summary"]["dispositioned"]
+    assert block["source_report"]["path"] == "reports/t-suite-full.json"
+    assert len(block["source_report"]["sha256"]) == 64
+    assert len(block["assignment_sha256"]) == 64
+
+
+def test_dashboard_not_updated_for_in_repo_source_outside_reports(
+    tmp_path, monkeypatch, capsys
+):
+    """In-repo but outside reports/: an unbindable premerged copy would be
+    flagged by the consumer whether or not it carries a pointer, so the
+    committed dashboard copy must be left untouched (sol r5)."""
+    target = _write_dashboard_with_full_report_at(
+        tmp_path, monkeypatch, Path("custom-out/t-suite-full.json")
+    )
+    assert target.read_text() == _SENTINEL
+    assert "NOT updated" in capsys.readouterr().out
+
+
+def test_dashboard_not_updated_for_source_outside_repo(
+    tmp_path, monkeypatch, capsys
+):
+    target = _write_dashboard_with_full_report_at(
+        tmp_path, monkeypatch, tmp_path / "elsewhere" / "t-suite-full.json"
+    )
+    assert target.read_text() == _SENTINEL
+    assert "NOT updated" in capsys.readouterr().out
+
+
+def test_dashboard_still_updated_for_unbindable_non_premerged_copy(
+    tmp_path, monkeypatch
+):
+    """A small report slims to a FULL dashboard copy (no truncation, no
+    stored_mismatch_example_count): the consumer re-merges it directly and
+    never needs a pointer, so a non-canonical full-report location does
+    not block the dashboard write."""
+    run_comparison = load_run_comparison_module()
+    repo = tmp_path / "repo"
+    dashboard = repo / "dashboard" / "public" / "data"
+    dashboard.mkdir(parents=True)
+    monkeypatch.setattr(run_comparison, "REPO_ROOT", repo)
+    monkeypatch.setattr(run_comparison, "DASHBOARD_DATA_DIR", dashboard)
+    monkeypatch.setattr(run_comparison, "_merge_dispositions", lambda r: r)
+    small = {
+        "suite": "t-suite",
+        "summary": {"mismatch_count": 1},
+        "mismatches": [{"case_id": "c0", "concept": "x"}],
+        "cases": [],
+    }
+    full = tmp_path / "elsewhere" / "t-suite-full.json"
+    full.parent.mkdir(parents=True)
+    full.write_text(json.dumps(small))
+    run_comparison._write_dashboard_report(
+        small, "t-suite.json", full_report_path=full
+    )
+    slim = json.loads((dashboard / "t-suite.json").read_text())
+    assert "stored_mismatch_example_count" not in slim.get("summary", {})
+    assert "dispositioned" not in slim.get("summary", {})
+
+
+def test_dashboard_still_updated_for_case_only_truncated_copy(
+    tmp_path, monkeypatch
+):
+    """Case-only overflow also writes stored_mismatch_example_count, but the
+    consumer (apply_dispositions._is_premerged_slim_report) only treats a
+    copy as premerged when stored < mismatch_count. The producer must use
+    the same predicate: a copy whose mismatch sample is complete is
+    re-merged directly by the consumer and never needs a pointer, so a
+    non-canonical full-report location must not block its dashboard write
+    (sol stack review r6: 1 mismatch / 1,001 cases skipped publication)."""
+    run_comparison = load_run_comparison_module()
+    repo = tmp_path / "repo"
+    dashboard = repo / "dashboard" / "public" / "data"
+    dashboard.mkdir(parents=True)
+    monkeypatch.setattr(run_comparison, "REPO_ROOT", repo)
+    monkeypatch.setattr(run_comparison, "DASHBOARD_DATA_DIR", dashboard)
+    monkeypatch.setattr(run_comparison, "_merge_dispositions", lambda r: r)
+    report = {
+        "suite": "t-suite",
+        "schema_version": "axiom.comparison_report.v2.1",
+        "summary": {
+            "mismatch_count": 1,
+            "dispositioned": {"explained_rate": 1.0, "unexplained_count": 0},
+        },
+        "mismatches": [{"case_id": "c0", "concept": "x", "disposition": None}],
+        "cases": [{"case_id": f"c{i}"} for i in range(1001)],
+    }
+    full = tmp_path / "elsewhere" / "t-suite-full.json"
+    full.parent.mkdir(parents=True)
+    full.write_text(json.dumps(report))
+    run_comparison._write_dashboard_report(
+        report, "t-suite.json", full_report_path=full
+    )
+    slim = json.loads((dashboard / "t-suite.json").read_text())
+    # every mismatch row survives the trim: stored == mismatch_count
+    assert slim["summary"]["stored_mismatch_example_count"] == 1
+    assert slim["summary"]["mismatch_count"] == 1
+    # published, and pointer-free — the consumer re-merges it directly
+    assert "source_report" not in slim["summary"]["dispositioned"]

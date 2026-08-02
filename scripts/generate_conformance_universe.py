@@ -48,6 +48,7 @@ from axiom_oracles.conformance.universe import (  # noqa: E402
     PE_US_PROGRAM_SPINE,
     EuromodUniverseBackend,
     PolicyEngineUniverseBackend,
+    YaleTariffUniverseBackend,
     raw_to_universe_policy,
 )
 
@@ -121,6 +122,19 @@ JURISDICTIONS: dict[str, dict] = {
         "env_roots": ("POLICYENGINE_US_CHECKOUT",),
         "default_root": "$HOME/PolicyEngine/policyengine-us",
     },
+    "us-tariff-yale": {
+        "implemented": True,
+        "backend": "yale-tariff",
+        "country": "US",
+        "model": "tariff-rate-tracker",
+        # release is the checkout's pinned git commit, read at generation time
+        # (the same pin reference/us-tariff-panel/yale_panel_provenance.json
+        # stamps for the committed extract). This literal is error-text only.
+        "release": "checkout",
+        "system": "statutory_panel",
+        "env_roots": ("YALE_TARIFF_CHECKOUT",),
+        "default_root": "$HOME/TheAxiomFoundation/_tariff-yale",
+    },
 }
 
 
@@ -165,6 +179,11 @@ def generate_universe(jurisdiction: str, model_root: Path) -> Universe:
         )
         # Pin the exact version enumerated, read from the checkout (not memory).
         release = backend.pinned_version()
+    elif config["backend"] == "yale-tariff":
+        backend = YaleTariffUniverseBackend(checkout=model_root)
+        # Pin the exact git commit enumerated — the same identity the committed
+        # reference extract's provenance stamp pins.
+        release = backend.pinned_commit()
     else:
         raise NotImplementedError(
             f"{jurisdiction}: unknown backend {config['backend']!r}"
@@ -227,13 +246,19 @@ def _process(
     # header's release, it is not the pinned oracle — during --check treat that
     # like an absent checkout (no-op clean), so a runner that happens to have a
     # different policyengine-uk checked out cannot spuriously fail the drift gate.
-    if check and config["backend"] == "policyengine":
+    if check and config["backend"] in ("policyengine", "yale-tariff"):
         committed = parse_if_exists(output_path)
         if committed is not None:
             try:
-                present_version = PolicyEngineUniverseBackend(
-                    checkout=root, package=config.get("package", "policyengine_uk")
-                ).pinned_version()
+                if config["backend"] == "yale-tariff":
+                    present_version = YaleTariffUniverseBackend(
+                        checkout=root
+                    ).pinned_commit()
+                else:
+                    present_version = PolicyEngineUniverseBackend(
+                        checkout=root,
+                        package=config.get("package", "policyengine_uk"),
+                    ).pinned_version()
             except (FileNotFoundError, ValueError):
                 present_version = None
             if present_version and present_version != committed.oracle.release:

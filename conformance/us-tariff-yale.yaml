@@ -1,0 +1,189 @@
+# axiom_oracles.conformance.v1 — GENERATED universe facts + committed scope decisions.
+# Rows (policy id, oracle_policy_name, output_vars) are regenerated from the oracle
+# model spine by scripts/generate_conformance_universe.py — do NOT hand-edit those.
+# in_scope / exclusion_reason / suite / note ARE hand-authored decisions the generator
+# preserves; edit those here. CI fails if the generated facts drift from the model.
+schema: axiom_oracles.conformance.v1
+jurisdiction: us-tariff-yale
+oracle:
+  model: tariff-rate-tracker
+  release: c4307e514196618afcbf88cf7fd33746417eeabf
+  system: statutory_panel
+  country: US
+  backend: yale-tariff
+  label: tariff-rate-tracker_c4307e514196618afcbf88cf7fd33746417eeabf/statutory_panel
+policies:
+  - id: us-tariff-yale:ieepa_fentanyl
+    oracle_policy_name: ieepa_fentanyl
+    oracle_policy_type: content_split
+    output_vars:
+      - statutory_rate_ieepa_fent
+    in_scope: true
+    internal_only_vars:
+      - rate_ieepa_fent
+      - net_fentanyl
+    suite: us-tariff-panel
+    note: Compared jointly with ieepa_reciprocal via the suite's combined ieepa slot (the composition
+      encodes one IEEPA component).
+  - id: us-tariff-yale:ieepa_reciprocal
+    oracle_policy_name: ieepa_reciprocal
+    oracle_policy_type: content_split
+    output_vars:
+      - statutory_rate_ieepa_recip
+    in_scope: true
+    internal_only_vars:
+      - rate_ieepa_recip
+      - net_ieepa
+    suite: us-tariff-panel
+    note: 'Compared jointly with ieepa_fentanyl: the suite''s ieepa slot sums both statutory columns against
+      the one encoded IEEPA component (AUTHORITY_SLOTS in axiom_oracles/suites/us_tariff_panel.py). The
+      Swiss framework floor''s statutory effect is carried in this column for framework countries.'
+  - id: us-tariff-yale:mfn_base
+    oracle_policy_name: mfn_base
+    oracle_policy_type: base
+    output_vars:
+      - statutory_base_rate
+    in_scope: true
+    internal_only_vars:
+      - base_rate
+    suite: us-tariff-panel
+    note: statutory_base_rate parses only the HTS column-1 `general` field (src/pipeline/04_parse_products.R);
+      the Special subcolumn and column-2 field are never read, so FTA preferences and column-2 rates do
+      not enter the oracle's statutory base. Surfaced in the panel diff as the mfn-fta-preference-layer
+      (explained residual) and mfn-column2-reference-gap (upstream) dispositions.
+  - id: us-tariff-yale:other
+    oracle_policy_name: other
+    oracle_policy_type: additive
+    output_vars:
+      - statutory_rate_other
+    in_scope: true
+    internal_only_vars:
+      - rate_other
+      - net_other
+    suite: us-tariff-panel
+    note: Residual authority bucket; no encoded Axiom counterpart, compared against an implicit 0 — an
+      honest mismatch surface, never a silent drop.
+  - id: us-tariff-yale:rate_301_cs
+    oracle_policy_name: rate_301_cs
+    oracle_policy_type: content_split
+    output_vars:
+      - statutory_rate_301_cs
+    in_scope: true
+    internal_only_vars:
+      - rate_301_cs
+      - net_301_cs
+    suite: us-tariff-panel
+    note: China semiconductor §301 layer; no encoded Axiom counterpart yet, so the suite compares this
+      column against an implicit 0 — an honest mismatch surface, never a silent drop.
+  - id: us-tariff-yale:section_122
+    oracle_policy_name: section_122
+    oracle_policy_type: content_split
+    output_vars:
+      - statutory_rate_s122
+    in_scope: true
+    internal_only_vars:
+      - rate_s122
+      - net_s122
+    suite: us-tariff-panel
+    note: Compared against the encoded section_122_component_rate in the composed tariff program (AUTHORITY_SLOTS
+      in axiom_oracles/suites/us_tariff_panel.py).
+  - id: us-tariff-yale:section_201
+    oracle_policy_name: section_201
+    oracle_policy_type: additive
+    output_vars:
+      - statutory_rate_section_201
+    in_scope: true
+    internal_only_vars:
+      - rate_section_201
+      - net_section_201
+    suite: us-tariff-panel
+    note: No encoded Axiom counterpart yet; the suite compares this column against an implicit 0 — an
+      honest mismatch surface, never a silent drop.
+  - id: us-tariff-yale:section_232
+    oracle_policy_name: section_232
+    oracle_policy_type: primary
+    output_vars:
+      - statutory_rate_232
+    in_scope: true
+    internal_only_vars:
+      - rate_232
+      - net_232
+    suite: us-tariff-panel
+    note: Compared against the encoded section_232_aluminum_component_rate. Yale's rate_232 column spans
+      all §232 actions, so §232 programs without an encoded counterpart surface as classified mismatches
+      in the suite's dispositions.
+  - id: us-tariff-yale:section_301
+    oracle_policy_name: section_301
+    oracle_policy_type: additive
+    output_vars:
+      - statutory_rate_301
+    in_scope: true
+    internal_only_vars:
+      - rate_301
+      - net_301
+    suite: us-tariff-panel
+    note: China §301 (the tracker's Trump-era 301 column).
+  - id: us-tariff-yale:section_301_brazil
+    oracle_policy_name: section_301_brazil
+    oracle_policy_type: additive
+    output_vars:
+      - statutory_rate_s301br
+    in_scope: true
+    internal_only_vars:
+      - rate_s301br
+      - net_s301br
+    suite: us-tariff-panel
+    note: Compared against the encoded brazil_section_301_component_rate in the composed tariff program.
+  - id: us-tariff-yale:section_301_forced_labor
+    oracle_policy_name: section_301_forced_labor
+    oracle_policy_type: additive
+    output_vars:
+      - statutory_rate_s301fl
+    in_scope: true
+    internal_only_vars:
+      - rate_s301fl
+      - net_s301fl
+    suite: us-tariff-panel
+    note: Compared against the encoded forced_labor_section_301_component_rate in the composed tariff
+      program.
+  - id: us-tariff-yale:section_338
+    oracle_policy_name: section_338
+    oracle_policy_type: additive
+    output_vars:
+      - statutory_rate_s338
+    in_scope: true
+    internal_only_vars:
+      - rate_s338
+      - net_s338
+    suite: us-tariff-panel
+    note: No encoded Axiom counterpart yet; the suite compares this column against an implicit 0 — an
+      honest mismatch surface, never a silent drop.
+  - id: us-tariff-yale:stacking_outputs
+    oracle_policy_name: stacking_outputs
+    oracle_policy_type: output_framing
+    output_vars: []
+    in_scope: false
+    internal_only_vars:
+      - metal_share
+      - heading_program
+      - total_additional
+      - total_rate
+      - usmca_eligible
+    exclusion_reason: technical
+    note: Computed stacking totals (total_additional/total_rate) plus the content-share and eligibility
+      framing columns of the effective layer (metal_share, heading_program, usmca_eligible) — the model's
+      share/utilization machinery (docs/assumptions.md), not statutory instruments.
+  - id: us-tariff-yale:swiss_framework
+    oracle_policy_name: swiss_framework
+    oracle_policy_type: framework_metadata
+    output_vars: []
+    in_scope: false
+    internal_only_vars:
+      - swiss_underlying_rate_ieepa_recip
+      - swiss_framework_floor_rate
+      - swiss_framework_effective_date
+      - swiss_framework_expiry_date
+    exclusion_reason: technical
+    note: Decomposition metadata for the Swiss framework floor (underlying reciprocal rate, floor rate,
+      window dates); the floor's statutory effect is already carried in statutory_rate_ieepa_recip, which
+      the suite's ieepa slot compares (e.g. the SE floor-minus-base residual classified in dispositions/us-tariff-panel.yaml).

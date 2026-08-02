@@ -154,7 +154,12 @@ ExclusionReason = Literal[
 COMPARABILITY_KINDS: tuple[str, ...] = ("full", "rate_only", "ceiling_only")
 
 #: Backends a universe file may be generated from (stamped in the header).
-UNIVERSE_BACKENDS: tuple[str, ...] = ("ukmod", "euromod", "policyengine")
+UNIVERSE_BACKENDS: tuple[str, ...] = (
+    "ukmod",
+    "euromod",
+    "policyengine",
+    "yale-tariff",
+)
 
 
 @dataclass(frozen=True)

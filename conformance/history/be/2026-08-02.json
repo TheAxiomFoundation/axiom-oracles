@@ -9,5 +9,6 @@
   "excluded": 20,
   "unexplained_total": 0,
   "axiom_attributed_open": 0,
+  "temporal_debt": null,
   "conformant": true
 }

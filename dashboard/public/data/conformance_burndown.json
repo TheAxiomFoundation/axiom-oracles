@@ -739,6 +739,28 @@
         "gap": 335,
         "conformant": false
       }
+    ],
+    "us-tariff-yale": [
+      {
+        "date": "2026-08-01",
+        "in_scope": 12,
+        "covered": 12,
+        "uncovered": 0,
+        "unexplained": 0,
+        "axiom_attributed_open": 1057,
+        "gap": 1057,
+        "conformant": false
+      },
+      {
+        "date": "2026-08-02",
+        "in_scope": 12,
+        "covered": 8,
+        "uncovered": 4,
+        "unexplained": 0,
+        "axiom_attributed_open": 1057,
+        "gap": 1061,
+        "conformant": false
+      }
     ]
   }
 }
