@@ -23,7 +23,11 @@ model: provenance stamps are mutable data files, so anything checked only
 against them can be restamped in the same edit. Every load-bearing identity
 is therefore a **reviewed constant in the test file** (the
 `EXPECTED_YALE_COMMIT` pattern): the extract bytes
-(`EXPECTED_EXTRACT_SHA256`), the snapshot bytes
+(`EXPECTED_EXTRACT_SHA256`), the exporter source bytes
+(`EXPECTED_EXPORTER_SHA256` — the exporter's gates mirror the validator
+pins, and since R assignment syntax cannot be policed from Python, the
+mirror guarantee is enforced as a byte pin on the exporter itself), the
+snapshot bytes
 (`EXPECTED_SNAPSHOT_SHA256`), the covered slice (`REVIEWED_COVERED_LINES`,
 exact set — not a floor), the country dimension
 (`EXPECTED_COUNTRY_COUNT` + `EXPECTED_COUNTRY_SET_SHA256`, with per-line
@@ -97,7 +101,9 @@ supervised protocol is the boundary, stated here rather than implied away.
    `tests/test_us_tariff_reference.py` to the regenerated artifacts:
    `EXPECTED_EXTRACT_SHA256`, and on a schedule/profile change
    `EXPECTED_COLUMNS` / `EXPECTED_INTERVALS_PER_SERIES` (a snapshot
-   refresh via `--fetch` likewise updates `EXPECTED_SNAPSHOT_SHA256`).
+   refresh via `--fetch` likewise updates `EXPECTED_SNAPSHOT_SHA256`;
+   any edit to `scripts/extract_yale_panel.R` updates
+   `EXPECTED_EXPORTER_SHA256`).
    These pins changing IS the review surface — the diff shows exactly what
    the reference now claims.
 4. Regenerate the comparison report (`scripts/generate_us_tariff_panel.py`).

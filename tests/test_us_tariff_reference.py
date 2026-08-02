@@ -71,6 +71,16 @@ EXPECTED_EXTRACT_SHA256 = (
 EXPECTED_SNAPSHOT_SHA256 = (
     "ad7d599359d14c7d1d5977cf6b2331b85e25592bc51e594aae140c78a29204a5"
 )
+#: The exporter SOURCE is byte-pinned too. Its gates mirror this file's
+#: pins, but the exporter is R — assignment can be spelled `<-`, `->`,
+#: `assign()`, backticks, … — so no Python-side pattern match can prove
+#: the mirror semantically. The byte pin makes the guarantee total: ANY
+#: exporter edit fails CI until this constant is updated in the same
+#: reviewed diff (the _assert_exporter_pin checks below remain as a
+#: readable first-line diagnostic for WHICH pin drifted).
+EXPECTED_EXPORTER_SHA256 = (
+    "21eb6c562bdc3df53a49641b2785e1982fa9e473934b38f0e63047eb5ad19402"
+)
 
 #: Reviewed extract schema: the spine plus the COMPLETE statutory-column
 #: set (the sum-of-statutory-columns totals claim depends on completeness —
@@ -136,11 +146,14 @@ def _provenance() -> dict:
 
 
 def _assert_exporter_pin(name: str, expected_rhs: str) -> None:
-    """Assert the exporter carries EXACTLY ONE assignment to `name`, whose
-    full right-hand side (to end of line) is exactly `expected_rhs`.
-    Substring containment is not enough: `NAME <- 57 - 1` contains
-    "NAME <- 57" yet evaluates to 56, and a second later assignment would
-    silently override the first."""
+    """Assert the exporter carries EXACTLY ONE leftward assignment to
+    `name`, whose full right-hand side (to end of line) is exactly
+    `expected_rhs`. Substring containment is not enough: `NAME <- 57 - 1`
+    contains "NAME <- 57" yet evaluates to 56, and a later assignment
+    would silently override the first. This is a DIAGNOSTIC layer only —
+    R assignment can also be spelled `->`, `assign()`, backticks, …,
+    which no Python-side pattern can rule out; the hard guarantee against
+    any exporter drift is the EXPECTED_EXPORTER_SHA256 byte pin."""
     exporter = (REPO_ROOT / "scripts" / "extract_yale_panel.R").read_text()
     assignments = re.findall(
         rf"{re.escape(name)}\s*(?:<<-|<-|=)\s*([^\n]*)", exporter
@@ -160,8 +173,13 @@ def test_extract_bytes_match_the_reviewed_pin():
 
 
 def test_extractor_hash_matches_provenance():
+    """The exporter source is itself a reviewed byte pin (identity), and
+    the provenance stamp must agree (consistency)."""
+    exporter_path = REPO_ROOT / "scripts" / "extract_yale_panel.R"
+    assert _sha256(exporter_path) == EXPECTED_EXPORTER_SHA256
     prov = _provenance()
-    assert _sha256(REPO_ROOT / prov["extractor"]) == prov["extractor_sha256"]
+    assert (REPO_ROOT / prov["extractor"]) == exporter_path
+    assert prov["extractor_sha256"] == EXPECTED_EXPORTER_SHA256
 
 
 def test_yale_pin_is_the_reviewed_commit():
@@ -175,8 +193,10 @@ def test_yale_pin_is_the_reviewed_commit():
 def test_exporter_mirrors_the_reviewed_pins():
     """The exporter's fail-before-write gates carry the same reviewed pins
     as this validator; a one-sided edit (drifting the exporter's copy) is a
-    CI failure, not a silent divergence. Exact unique-assignment matching,
-    not substring containment (see _assert_exporter_pin)."""
+    CI failure, not a silent divergence. The hard guarantee is the
+    EXPECTED_EXPORTER_SHA256 byte pin (any exporter edit whatsoever fails
+    CI until the pin is bumped in a reviewed diff); these assignment
+    checks are the readable diagnostic underneath it."""
     _assert_exporter_pin(
         "EXPECTED_INTERVALS_PER_SERIES", str(EXPECTED_INTERVALS_PER_SERIES)
     )
