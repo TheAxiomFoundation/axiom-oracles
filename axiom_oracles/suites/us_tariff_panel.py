@@ -22,7 +22,7 @@ from __future__ import annotations
 import csv
 import json
 from dataclasses import dataclass
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 
 from axiom_oracles.core.case import Case, Entity
@@ -244,3 +244,93 @@ def covered_units(
 def temporal_debt(intervals: list[PanelInterval]) -> list[PanelInterval]:
     """Intervals wholly before the encoded domain (in scope, not covered)."""
     return [i for i in intervals if not i.covered_dates]
+
+
+def straddle_clipped(intervals: list[PanelInterval]) -> list[PanelInterval]:
+    """Intervals probed at clipped endpoints whose pre-domain days go unaudited.
+
+    ``covered_dates`` clips ``valid_from`` up to ``DOMAIN_START``, so an
+    interval that straddles the domain boundary IS compared — but only over
+    its in-domain portion. The days in ``[valid_from, DOMAIN_START)`` are
+    temporal debt exactly like wholly-pre-domain intervals, and must be
+    surfaced, not silently absorbed by the clip (sol stack review F4).
+    """
+    return [
+        i for i in intervals if i.valid_from < DOMAIN_START <= i.valid_until
+    ]
+
+
+def column_exposure(
+    units: list[tuple[PanelInterval, date]],
+) -> dict[str, int]:
+    """Comparison units with a POSITIVE reference rate, per statutory column.
+
+    A "covered" verdict for a policy whose statutory column never takes a
+    positive value anywhere in the covered slice is vacuous — the
+    comparison cannot exercise that policy, agreement with an implicit or
+    encoded 0 proves nothing. The conformance scoreboard requires a
+    positive-exposure witness on a policy's output_vars before granting
+    covered (sol stack review F3); these counts are the report-side basis
+    for that witness.
+    """
+    exposure = {column: 0 for column in YALE_STATUTORY_COLUMNS}
+    for interval, _probe in units:
+        for column in YALE_STATUTORY_COLUMNS:
+            if interval.rates[column] > 0:
+                exposure[column] += 1
+    return exposure
+
+
+def temporal_debt_records(intervals: list[PanelInterval]) -> list[dict]:
+    """Addressable temporal-debt records for the report scope.
+
+    One record per (kind, hts10, validity interval) group — the debt is
+    census-panel-uniform across countries, so grouping keeps the record
+    list compact while every unaudited interval stays addressable and its
+    units countable (an aggregate count alone cannot be burned down or
+    audited — sol stack review F4). Kinds:
+
+    - ``pre_domain``: the whole interval predates the encoded domain; no
+      probes exist (``interval_count`` intervals, one per country).
+    - ``straddle_clipped``: the interval is probed at clipped endpoints,
+      but its days in ``[unprobed_from, unprobed_until]`` are unaudited.
+    """
+    groups: dict[tuple, dict] = {}
+    for interval in intervals:
+        if not interval.covered_dates:
+            kind = "pre_domain"
+        elif interval.valid_from < DOMAIN_START:
+            kind = "straddle_clipped"
+        else:
+            continue
+        key = (kind, interval.hts10, interval.valid_from, interval.valid_until)
+        record = groups.setdefault(
+            key,
+            {
+                "debt_id": (
+                    f"debt-{kind}-{interval.hts10}-"
+                    f"{interval.valid_from.isoformat()}-"
+                    f"{interval.valid_until.isoformat()}"
+                ),
+                "kind": kind,
+                "hts_number": interval.hts10,
+                "valid_from": interval.valid_from.isoformat(),
+                "valid_until": interval.valid_until.isoformat(),
+                "interval_count": 0,
+                **(
+                    {
+                        "unprobed_from": interval.valid_from.isoformat(),
+                        "unprobed_until": (
+                            DOMAIN_START - timedelta(days=1)
+                        ).isoformat(),
+                    }
+                    if kind == "straddle_clipped"
+                    else {}
+                ),
+            },
+        )
+        record["interval_count"] += 1
+    return sorted(
+        groups.values(),
+        key=lambda r: (r["kind"], r["hts_number"], r["valid_from"]),
+    )

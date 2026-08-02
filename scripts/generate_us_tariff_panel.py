@@ -53,11 +53,14 @@ from axiom_oracles.suites.us_tariff_panel import (  # noqa: E402
     TOTAL,
     PanelInterval,
     case_id,
+    column_exposure,
     covered_units,
     load_provenance,
     load_reference,
     panel_case,
+    straddle_clipped,
     temporal_debt,
+    temporal_debt_records,
 )
 
 RULESPEC_US = Path(
@@ -109,6 +112,53 @@ def _evaluate(units: list[tuple[PanelInterval, date]]) -> dict[str, dict[str, fl
 
 def _match(left: float, right: float) -> bool:
     return abs(left - right) <= TOLERANCE
+
+
+def _composition_effective_dates(node: object) -> set[date]:
+    """Every ``effective_from`` date anywhere in a parsed composition doc."""
+    dates: set[date] = set()
+    if isinstance(node, dict):
+        for key, value in node.items():
+            if key == "effective_from":
+                dates.add(
+                    value if isinstance(value, date) else date.fromisoformat(str(value))
+                )
+            else:
+                dates |= _composition_effective_dates(value)
+    elif isinstance(node, list):
+        for item in node:
+            dates |= _composition_effective_dates(item)
+    return dates
+
+
+def assert_domain_matches_composition(composition_path: Path) -> None:
+    """DOMAIN_START must equal the live spine's earliest effective_from.
+
+    The temporal-debt account (pre-domain + straddle-clipped intervals in
+    the report scope) is only honest while the hardcoded ``DOMAIN_START``
+    matches what the composed spine actually parameterizes. If the spine
+    burns down coverage to earlier dates (or narrows), a stale constant
+    would silently mis-classify debt as covered or vice versa — so the
+    generator refuses to run on a divergent pair (sol stack review F4).
+    """
+    import yaml
+
+    doc = yaml.safe_load(composition_path.read_text())
+    dates = _composition_effective_dates(doc)
+    if not dates:
+        raise SystemExit(
+            f"no effective_from dates found in {composition_path} — cannot "
+            "verify DOMAIN_START against the live composition"
+        )
+    earliest = min(dates)
+    if earliest != DOMAIN_START:
+        raise SystemExit(
+            f"DOMAIN_START {DOMAIN_START.isoformat()} does not match the "
+            f"composed spine's earliest effective_from "
+            f"({earliest.isoformat()} in {composition_path}) — update "
+            "axiom_oracles/suites/us_tariff_panel.py and re-derive the "
+            "temporal-debt account in the same reviewed diff"
+        )
 
 
 def build_report(
@@ -319,6 +369,19 @@ def build_report(
             "in_scope_intervals": len(intervals),
             "covered_intervals": len(intervals) - len(debt),
             "temporal_debt_intervals": len(debt),
+            # Addressable temporal debt (sol stack review F4): every
+            # unaudited (interval, kind) group is enumerated — an aggregate
+            # count alone can neither be audited nor burned down.
+            "temporal_debt": {
+                "pre_domain_intervals": len(debt),
+                "straddle_clipped_intervals": len(straddle_clipped(intervals)),
+                "records": temporal_debt_records(intervals),
+            },
+            # Positive-exposure witness basis (sol stack review F3): the
+            # scoreboard refuses a covered verdict for a policy whose
+            # statutory columns are 0 everywhere in the covered slice —
+            # such a comparison exercises nothing.
+            "column_exposure": column_exposure(units),
             "comparison_units": n_units,
             "authority_slots": list(AUTHORITY_SLOTS) + ["total"],
             # Reference vintage lives here (not only under provenance):
@@ -430,6 +493,7 @@ def main(argv: list[str] | None = None) -> int:
         ),
     )
     args = parser.parse_args(argv)
+    assert_domain_matches_composition(RULESPEC_US / COMPOSITION_PATH)
     reference_dir = REPO_ROOT / REFERENCE_DIRNAME
     intervals, unbridged = load_reference(reference_dir)
     if unbridged:
