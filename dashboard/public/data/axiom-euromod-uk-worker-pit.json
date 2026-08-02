@@ -342,7 +342,7 @@
     "left": "euromod",
     "right": "axiom",
     "versions": {
-      "axiom_rules_engine": "0.1.0"
+      "axiom_rules_engine": "0.2.0"
     }
   },
   "errors": [],
@@ -357,10 +357,10 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "13a86a737f2e791e272b7aeb0ce8d5f5cc7e69c3",
-      "axiom_rules_engine_version": "0.1.0"
+      "axiom_rules_engine_sha": "32b3462336eeb67412b544da1cf5657a5b474daf",
+      "axiom_rules_engine_version": "0.2.0"
     },
-    "generated_at": "2026-07-30T14:41:48Z",
+    "generated_at": "2026-08-02T14:08:07Z",
     "generated_by": "scripts/run_comparison.py::uk-worker-pit-ukmod",
     "oracle": {
       "euromod_country": "UK",
@@ -369,6 +369,7 @@
       "euromod_system": "UK_2026",
       "name": "euromod"
     },
+    "reemitted_report": true,
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-uk",

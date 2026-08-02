@@ -24,3 +24,8 @@ ratchets:
   unexplained_max: 19
   axiom_attributed_open_max: 0
   policies_in_scope: 127
+- jurisdiction: us-tariff-yale
+  covered_min: 8
+  unexplained_max: 0
+  axiom_attributed_open_max: 1057
+  policies_in_scope: 12

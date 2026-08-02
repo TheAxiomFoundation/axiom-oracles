@@ -217,6 +217,8 @@
     "axiom-policyengine-mn-income-tax-populace.json",
     "axiom-policyengine-us-savers-grid.json",
     "axiom-policyengine-us-salt-deduction-grid.json",
-    "axiom-policyengine-us-itemized-taxable-income-deductions-grid.json"
+    "axiom-policyengine-us-itemized-taxable-income-deductions-grid.json",
+    "axiom-usitc-us-tariff.json",
+    "axiom-yale-us-tariff-panel.json"
   ]
 }

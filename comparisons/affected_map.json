@@ -1487,6 +1487,24 @@
       "source": "comparisons/us-seca-grid.yaml"
     },
     {
+      "suite": "us-tariff",
+      "name": "us-tariff",
+      "report": "axiom-usitc-us-tariff.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/us-tariff.yaml"
+    },
+    {
+      "suite": "us-tariff-panel",
+      "name": null,
+      "report": "axiom-yale-us-tariff-panel.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/us-tariff-panel.yaml"
+    },
+    {
       "suite": "ut-income-tax-liability",
       "name": "ut-income-tax-liability",
       "report": "axiom-policyengine-taxsim-ut-income-tax-liability.json",

@@ -1,0 +1,962 @@
+{
+  "schema_version": "axiom.comparison_report.v2",
+  "suite": "us-tariff",
+  "concept": "us:policies/cbp/us-tariff-duty/composition#us_tariff_duty",
+  "population": "case-grid",
+  "validation_year": 2026,
+  "locales": [
+    "US"
+  ],
+  "scope": {
+    "type": "country",
+    "geoid": "US"
+  },
+  "engines": {
+    "axiom": "us:policies/cbp/us-tariff-duty/composition#us_tariff_duty",
+    "usitc_statutory": "USITC HTS 2026 Rev3/4/12/14 + FR instruments (frozen statutory computation)",
+    "versions": {
+      "axiom_rules_engine": "0.1.0"
+    }
+  },
+  "tolerance": {
+    "absolute": 0.01,
+    "relative": 2e-07
+  },
+  "case_count": 40,
+  "summary": {
+    "comparison_count": 40,
+    "match_count": 40,
+    "mismatch_count": 0,
+    "axiom_vs_usitc_statutory_match_rate": 100.0,
+    "usitc_statutory_matches": 40,
+    "weighted": {
+      "comparison_weight": 40,
+      "match_weight": 40,
+      "mismatch_weight": 0,
+      "match_rate": 100.0
+    },
+    "mismatches_by_concept": [],
+    "mismatches_by_kind": [],
+    "mismatches_by_scenario": [],
+    "error_count": 0,
+    "errors_by_engine": []
+  },
+  "mismatches": [],
+  "errors": [],
+  "cases": [
+    {
+      "case_id": "us-tariff-7202111000-cn-2026-02-15",
+      "concept": "us:policies/cbp/us-tariff-duty/composition#us_tariff_duty",
+      "scenario": "line-entry",
+      "entry_date": "2026-02-15",
+      "hts_number": "7202.11.10.00",
+      "country_of_origin": "CN",
+      "customs_value": 10000.0,
+      "is_postal_shipment": false,
+      "expected_rate": 0.364,
+      "rate_components": [
+        "MFN 1.4% (7202.11.10.00 general rate, HTS 2026 Rev3/4/12/14 line files)",
+        "China-301 9903.88.03 +25% (Rev14 note 20(e) p268; 7202.11.10 in the note 20(f) list, p287; heading in all revisions)",
+        "IEEPA fentanyl 9903.01.24 +10% China+HK (Rev3 heading; note 2(u), entries on/after 2025-11-10)",
+        "IEEPA fentanyl 9903.01.20 inoperative: note 2(s) window covers entries 2025-02-04..2025-03-04 only (Rev14-notes p175)",
+        "reciprocal annex exemption 9903.01.32 (note 2(v)(iii)(a); 7202.11.10.00 on Rev14-notes p182)",
+        "7202.11.10.00 not a \u00a7232 steel article (absent from Rev14 note 16(c)(iii) p236)"
+      ],
+      "axiom": 3640.0,
+      "usitc_statutory": 3640.0,
+      "axiom_vs_usitc_statutory": {
+        "difference": 0.0,
+        "match": true
+      }
+    },
+    {
+      "case_id": "us-tariff-7202111000-cn-2026-03-15",
+      "concept": "us:policies/cbp/us-tariff-duty/composition#us_tariff_duty",
+      "scenario": "line-entry",
+      "entry_date": "2026-03-15",
+      "hts_number": "7202.11.10.00",
+      "country_of_origin": "CN",
+      "customs_value": 10000.0,
+      "is_postal_shipment": false,
+      "expected_rate": 0.264,
+      "rate_components": [
+        "MFN 1.4% (7202.11.10.00 general rate, HTS 2026 Rev3/4/12/14 line files)",
+        "China-301 9903.88.03 +25% (Rev14 note 20(e) p268; 7202.11.10 in the note 20(f) list, p287; heading in all revisions)",
+        "IEEPA ad valorem duties terminated for entries on/after 2026-02-24 (EO 14389 \u00a71, FR 2026-03832)",
+        "\u00a7122 annex exemption 9903.03.03 (7202.11.10.00 in annex, Rev14 p226)"
+      ],
+      "axiom": 2640.0,
+      "usitc_statutory": 2640.0,
+      "axiom_vs_usitc_statutory": {
+        "difference": 0.0,
+        "match": true
+      }
+    },
+    {
+      "case_id": "us-tariff-7202111000-cn-2026-07-23",
+      "concept": "us:policies/cbp/us-tariff-duty/composition#us_tariff_duty",
+      "scenario": "line-entry",
+      "entry_date": "2026-07-23",
+      "hts_number": "7202.11.10.00",
+      "country_of_origin": "CN",
+      "customs_value": 10000.0,
+      "is_postal_shipment": false,
+      "expected_rate": 0.264,
+      "rate_components": [
+        "MFN 1.4% (7202.11.10.00 general rate, HTS 2026 Rev3/4/12/14 line files)",
+        "China-301 9903.88.03 +25% (Rev14 note 20(e) p268; 7202.11.10 in the note 20(f) list, p287; heading in all revisions)",
+        "\u00a7122 annex exemption 9903.03.03 (7202.11.10.00 in annex, Rev14 p226)"
+      ],
+      "axiom": 2640.0,
+      "usitc_statutory": 2640.0,
+      "axiom_vs_usitc_statutory": {
+        "difference": 0.0,
+        "match": true
+      }
+    },
+    {
+      "case_id": "us-tariff-7202111000-cn-2026-08-01",
+      "concept": "us:policies/cbp/us-tariff-duty/composition#us_tariff_duty",
+      "scenario": "line-entry",
+      "entry_date": "2026-08-01",
+      "hts_number": "7202.11.10.00",
+      "country_of_origin": "CN",
+      "customs_value": 10000.0,
+      "is_postal_shipment": false,
+      "expected_rate": 0.264,
+      "rate_components": [
+        "MFN 1.4% (7202.11.10.00 general rate, HTS 2026 Rev3/4/12/14 line files)",
+        "China-301 9903.88.03 +25% (Rev14 note 20(e) p268; 7202.11.10 in the note 20(f) list, p287; heading in all revisions)",
+        "\u00a7122 expired after 2026-07-23 (150-day sunset; Rev14 p221 compiler's note, 91 FR 9339)",
+        "FL-301 annex exemption 9903.05.86 covers 7202.11.10.00 (Rev14 p558)"
+      ],
+      "axiom": 2640.0,
+      "usitc_statutory": 2640.0,
+      "axiom_vs_usitc_statutory": {
+        "difference": 0.0,
+        "match": true
+      }
+    },
+    {
+      "case_id": "us-tariff-7202111000-za-2026-02-15",
+      "concept": "us:policies/cbp/us-tariff-duty/composition#us_tariff_duty",
+      "scenario": "line-entry",
+      "entry_date": "2026-02-15",
+      "hts_number": "7202.11.10.00",
+      "country_of_origin": "ZA",
+      "customs_value": 10000.0,
+      "is_postal_shipment": false,
+      "expected_rate": 0.014,
+      "rate_components": [
+        "MFN 1.4% (7202.11.10.00 general rate, HTS 2026 Rev3/4/12/14 line files)",
+        "South Africa reciprocal 9903.02.55 inapplicable: 7202.11.10.00 annex-exempt (9903.01.32)"
+      ],
+      "axiom": 140.0,
+      "usitc_statutory": 140.0,
+      "axiom_vs_usitc_statutory": {
+        "difference": 0.0,
+        "match": true
+      }
+    },
+    {
+      "case_id": "us-tariff-7202111000-za-2026-03-15",
+      "concept": "us:policies/cbp/us-tariff-duty/composition#us_tariff_duty",
+      "scenario": "line-entry",
+      "entry_date": "2026-03-15",
+      "hts_number": "7202.11.10.00",
+      "country_of_origin": "ZA",
+      "customs_value": 10000.0,
+      "is_postal_shipment": false,
+      "expected_rate": 0.014,
+      "rate_components": [
+        "MFN 1.4% (7202.11.10.00 general rate, HTS 2026 Rev3/4/12/14 line files)",
+        "IEEPA ad valorem duties terminated for entries on/after 2026-02-24 (EO 14389 \u00a71, FR 2026-03832)",
+        "\u00a7122 annex exemption 9903.03.03 (7202.11.10.00 in annex, Rev14 p226)"
+      ],
+      "axiom": 140.0,
+      "usitc_statutory": 140.0,
+      "axiom_vs_usitc_statutory": {
+        "difference": 0.0,
+        "match": true
+      }
+    },
+    {
+      "case_id": "us-tariff-7202111000-za-2026-07-23",
+      "concept": "us:policies/cbp/us-tariff-duty/composition#us_tariff_duty",
+      "scenario": "line-entry",
+      "entry_date": "2026-07-23",
+      "hts_number": "7202.11.10.00",
+      "country_of_origin": "ZA",
+      "customs_value": 10000.0,
+      "is_postal_shipment": false,
+      "expected_rate": 0.014,
+      "rate_components": [
+        "MFN 1.4% (7202.11.10.00 general rate, HTS 2026 Rev3/4/12/14 line files)",
+        "\u00a7122 annex exemption 9903.03.03 (7202.11.10.00 in annex, Rev14 p226)"
+      ],
+      "axiom": 140.0,
+      "usitc_statutory": 140.0,
+      "axiom_vs_usitc_statutory": {
+        "difference": 0.0,
+        "match": true
+      }
+    },
+    {
+      "case_id": "us-tariff-7202111000-za-2026-08-01",
+      "concept": "us:policies/cbp/us-tariff-duty/composition#us_tariff_duty",
+      "scenario": "line-entry",
+      "entry_date": "2026-08-01",
+      "hts_number": "7202.11.10.00",
+      "country_of_origin": "ZA",
+      "customs_value": 10000.0,
+      "is_postal_shipment": false,
+      "expected_rate": 0.014,
+      "rate_components": [
+        "MFN 1.4% (7202.11.10.00 general rate, HTS 2026 Rev3/4/12/14 line files)",
+        "\u00a7122 expired after 2026-07-23 (150-day sunset; Rev14 p221 compiler's note, 91 FR 9339)",
+        "FL-301 annex exemption 9903.05.86 covers 7202.11.10.00 (Rev14 p558)"
+      ],
+      "axiom": 140.0,
+      "usitc_statutory": 140.0,
+      "axiom_vs_usitc_statutory": {
+        "difference": 0.0,
+        "match": true
+      }
+    },
+    {
+      "case_id": "us-tariff-7202111000-kr-2026-02-15",
+      "concept": "us:policies/cbp/us-tariff-duty/composition#us_tariff_duty",
+      "scenario": "line-entry",
+      "entry_date": "2026-02-15",
+      "hts_number": "7202.11.10.00",
+      "country_of_origin": "KR",
+      "customs_value": 10000.0,
+      "is_postal_shipment": false,
+      "expected_rate": 0.0,
+      "rate_components": [
+        "Special rate Free incl. KR (7202.11.10.00 special subcolumn, KORUS)",
+        "reciprocal annex exemption 9903.01.32 (note 2(v)(iii)(a); 7202.11.10.00 on Rev14-notes p182)"
+      ],
+      "axiom": 0.0,
+      "usitc_statutory": 0.0,
+      "axiom_vs_usitc_statutory": {
+        "difference": 0.0,
+        "match": true
+      }
+    },
+    {
+      "case_id": "us-tariff-7202111000-kr-2026-03-15",
+      "concept": "us:policies/cbp/us-tariff-duty/composition#us_tariff_duty",
+      "scenario": "line-entry",
+      "entry_date": "2026-03-15",
+      "hts_number": "7202.11.10.00",
+      "country_of_origin": "KR",
+      "customs_value": 10000.0,
+      "is_postal_shipment": false,
+      "expected_rate": 0.0,
+      "rate_components": [
+        "Special rate Free incl. KR (7202.11.10.00 special subcolumn, KORUS)",
+        "IEEPA ad valorem duties terminated for entries on/after 2026-02-24 (EO 14389 \u00a71, FR 2026-03832)",
+        "\u00a7122 annex exemption 9903.03.03 (7202.11.10.00 in annex, Rev14 p226)"
+      ],
+      "axiom": 0.0,
+      "usitc_statutory": 0.0,
+      "axiom_vs_usitc_statutory": {
+        "difference": 0.0,
+        "match": true
+      }
+    },
+    {
+      "case_id": "us-tariff-7202111000-kr-2026-07-23",
+      "concept": "us:policies/cbp/us-tariff-duty/composition#us_tariff_duty",
+      "scenario": "line-entry",
+      "entry_date": "2026-07-23",
+      "hts_number": "7202.11.10.00",
+      "country_of_origin": "KR",
+      "customs_value": 10000.0,
+      "is_postal_shipment": false,
+      "expected_rate": 0.0,
+      "rate_components": [
+        "Special rate Free incl. KR (7202.11.10.00 special subcolumn, KORUS)",
+        "\u00a7122 annex exemption 9903.03.03 (7202.11.10.00 in annex, Rev14 p226)"
+      ],
+      "axiom": 0.0,
+      "usitc_statutory": 0.0,
+      "axiom_vs_usitc_statutory": {
+        "difference": 0.0,
+        "match": true
+      }
+    },
+    {
+      "case_id": "us-tariff-7202111000-kr-2026-08-01",
+      "concept": "us:policies/cbp/us-tariff-duty/composition#us_tariff_duty",
+      "scenario": "line-entry",
+      "entry_date": "2026-08-01",
+      "hts_number": "7202.11.10.00",
+      "country_of_origin": "KR",
+      "customs_value": 10000.0,
+      "is_postal_shipment": false,
+      "expected_rate": 0.0,
+      "rate_components": [
+        "Special rate Free incl. KR (7202.11.10.00 special subcolumn, KORUS)",
+        "\u00a7122 expired after 2026-07-23 (150-day sunset; Rev14 p221 compiler's note, 91 FR 9339)",
+        "FL-301 annex exemption 9903.05.86 covers 7202.11.10.00 (Rev14 p558)"
+      ],
+      "axiom": 0.0,
+      "usitc_statutory": 0.0,
+      "axiom_vs_usitc_statutory": {
+        "difference": 0.0,
+        "match": true
+      }
+    },
+    {
+      "case_id": "us-tariff-7601103000-cn-2026-02-15",
+      "concept": "us:policies/cbp/us-tariff-duty/composition#us_tariff_duty",
+      "scenario": "line-entry",
+      "entry_date": "2026-02-15",
+      "hts_number": "7601.10.30.00",
+      "country_of_origin": "CN",
+      "customs_value": 10000.0,
+      "is_postal_shipment": false,
+      "expected_rate": 0.876,
+      "rate_components": [
+        "MFN 2.6% (7601.10.30.00 general rate, HTS 2026 Rev3/4/12/14 line files)",
+        "\u00a7232 aluminum +50%: 9903.85.02 (Rev3/4 note 19 p254) / 9903.82.02 (Rev12/14 note 16(c)(i) p236)",
+        "China 2024-301 9903.91.01 +25% (aluminum, Rev14 note 31)",
+        "IEEPA fentanyl 9903.01.24 +10% China+HK (Rev3 heading; note 2(u), entries on/after 2025-11-10)",
+        "IEEPA fentanyl 9903.01.20 inoperative: note 2(s) window covers entries 2025-02-04..2025-03-04 only (Rev14-notes p175)",
+        "reciprocal \u00a7232-metals exemption 9903.01.33"
+      ],
+      "axiom": 8760.0,
+      "usitc_statutory": 8760.0,
+      "axiom_vs_usitc_statutory": {
+        "difference": 0.0,
+        "match": true
+      }
+    },
+    {
+      "case_id": "us-tariff-7601103000-cn-2026-03-15",
+      "concept": "us:policies/cbp/us-tariff-duty/composition#us_tariff_duty",
+      "scenario": "line-entry",
+      "entry_date": "2026-03-15",
+      "hts_number": "7601.10.30.00",
+      "country_of_origin": "CN",
+      "customs_value": 10000.0,
+      "is_postal_shipment": false,
+      "expected_rate": 0.776,
+      "rate_components": [
+        "MFN 2.6% (7601.10.30.00 general rate, HTS 2026 Rev3/4/12/14 line files)",
+        "\u00a7232 aluminum +50%: 9903.85.02 (Rev3/4 note 19 p254) / 9903.82.02 (Rev12/14 note 16(c)(i) p236)",
+        "China 2024-301 9903.91.01 +25% (aluminum, Rev14 note 31)",
+        "IEEPA ad valorem duties terminated for entries on/after 2026-02-24 (EO 14389 \u00a71, FR 2026-03832)",
+        "\u00a7122 \u00a7232-article exemption 9903.03.06 (aluminum articles)"
+      ],
+      "axiom": 7760.0,
+      "usitc_statutory": 7760.0,
+      "axiom_vs_usitc_statutory": {
+        "difference": 0.0,
+        "match": true
+      }
+    },
+    {
+      "case_id": "us-tariff-7601103000-cn-2026-07-23",
+      "concept": "us:policies/cbp/us-tariff-duty/composition#us_tariff_duty",
+      "scenario": "line-entry",
+      "entry_date": "2026-07-23",
+      "hts_number": "7601.10.30.00",
+      "country_of_origin": "CN",
+      "customs_value": 10000.0,
+      "is_postal_shipment": false,
+      "expected_rate": 0.776,
+      "rate_components": [
+        "MFN 2.6% (7601.10.30.00 general rate, HTS 2026 Rev3/4/12/14 line files)",
+        "\u00a7232 aluminum +50%: 9903.85.02 (Rev3/4 note 19 p254) / 9903.82.02 (Rev12/14 note 16(c)(i) p236)",
+        "China 2024-301 9903.91.01 +25% (aluminum, Rev14 note 31)",
+        "\u00a7122 \u00a7232-article exemption 9903.03.06 (aluminum articles)"
+      ],
+      "axiom": 7760.0,
+      "usitc_statutory": 7760.0,
+      "axiom_vs_usitc_statutory": {
+        "difference": 0.0,
+        "match": true
+      }
+    },
+    {
+      "case_id": "us-tariff-7601103000-cn-2026-08-01",
+      "concept": "us:policies/cbp/us-tariff-duty/composition#us_tariff_duty",
+      "scenario": "line-entry",
+      "entry_date": "2026-08-01",
+      "hts_number": "7601.10.30.00",
+      "country_of_origin": "CN",
+      "customs_value": 10000.0,
+      "is_postal_shipment": false,
+      "expected_rate": 0.776,
+      "rate_components": [
+        "MFN 2.6% (7601.10.30.00 general rate, HTS 2026 Rev3/4/12/14 line files)",
+        "\u00a7232 aluminum +50%: 9903.85.02 (Rev3/4 note 19 p254) / 9903.82.02 (Rev12/14 note 16(c)(i) p236)",
+        "China 2024-301 9903.91.01 +25% (aluminum, Rev14 note 31)",
+        "\u00a7122 expired after 2026-07-23 (150-day sunset; Rev14 p221 compiler's note, 91 FR 9339)",
+        "FL-301 metals exemption 9903.05.90 covers \u00a7232 aluminum articles (Rev14 p566)"
+      ],
+      "axiom": 7760.0,
+      "usitc_statutory": 7760.0,
+      "axiom_vs_usitc_statutory": {
+        "difference": 0.0,
+        "match": true
+      }
+    },
+    {
+      "case_id": "us-tariff-7601103000-ae-2026-02-15",
+      "concept": "us:policies/cbp/us-tariff-duty/composition#us_tariff_duty",
+      "scenario": "line-entry",
+      "entry_date": "2026-02-15",
+      "hts_number": "7601.10.30.00",
+      "country_of_origin": "AE",
+      "customs_value": 10000.0,
+      "is_postal_shipment": false,
+      "expected_rate": 0.526,
+      "rate_components": [
+        "MFN 2.6% (7601.10.30.00 general rate, HTS 2026 Rev3/4/12/14 line files)",
+        "\u00a7232 aluminum +50%: 9903.85.02 (Rev3/4 note 19 p254) / 9903.82.02 (Rev12/14 note 16(c)(i) p236)",
+        "reciprocal \u00a7232-metals exemption 9903.01.33"
+      ],
+      "axiom": 5260.0,
+      "usitc_statutory": 5260.0,
+      "axiom_vs_usitc_statutory": {
+        "difference": 0.0,
+        "match": true
+      }
+    },
+    {
+      "case_id": "us-tariff-7601103000-ae-2026-03-15",
+      "concept": "us:policies/cbp/us-tariff-duty/composition#us_tariff_duty",
+      "scenario": "line-entry",
+      "entry_date": "2026-03-15",
+      "hts_number": "7601.10.30.00",
+      "country_of_origin": "AE",
+      "customs_value": 10000.0,
+      "is_postal_shipment": false,
+      "expected_rate": 0.526,
+      "rate_components": [
+        "MFN 2.6% (7601.10.30.00 general rate, HTS 2026 Rev3/4/12/14 line files)",
+        "\u00a7232 aluminum +50%: 9903.85.02 (Rev3/4 note 19 p254) / 9903.82.02 (Rev12/14 note 16(c)(i) p236)",
+        "IEEPA ad valorem duties terminated for entries on/after 2026-02-24 (EO 14389 \u00a71, FR 2026-03832)",
+        "\u00a7122 \u00a7232-article exemption 9903.03.06 (aluminum articles)"
+      ],
+      "axiom": 5260.0,
+      "usitc_statutory": 5260.0,
+      "axiom_vs_usitc_statutory": {
+        "difference": 0.0,
+        "match": true
+      }
+    },
+    {
+      "case_id": "us-tariff-7601103000-ae-2026-07-23",
+      "concept": "us:policies/cbp/us-tariff-duty/composition#us_tariff_duty",
+      "scenario": "line-entry",
+      "entry_date": "2026-07-23",
+      "hts_number": "7601.10.30.00",
+      "country_of_origin": "AE",
+      "customs_value": 10000.0,
+      "is_postal_shipment": false,
+      "expected_rate": 0.526,
+      "rate_components": [
+        "MFN 2.6% (7601.10.30.00 general rate, HTS 2026 Rev3/4/12/14 line files)",
+        "\u00a7232 aluminum +50%: 9903.85.02 (Rev3/4 note 19 p254) / 9903.82.02 (Rev12/14 note 16(c)(i) p236)",
+        "\u00a7122 \u00a7232-article exemption 9903.03.06 (aluminum articles)"
+      ],
+      "axiom": 5260.0,
+      "usitc_statutory": 5260.0,
+      "axiom_vs_usitc_statutory": {
+        "difference": 0.0,
+        "match": true
+      }
+    },
+    {
+      "case_id": "us-tariff-7601103000-ae-2026-08-01",
+      "concept": "us:policies/cbp/us-tariff-duty/composition#us_tariff_duty",
+      "scenario": "line-entry",
+      "entry_date": "2026-08-01",
+      "hts_number": "7601.10.30.00",
+      "country_of_origin": "AE",
+      "customs_value": 10000.0,
+      "is_postal_shipment": false,
+      "expected_rate": 0.526,
+      "rate_components": [
+        "MFN 2.6% (7601.10.30.00 general rate, HTS 2026 Rev3/4/12/14 line files)",
+        "\u00a7232 aluminum +50%: 9903.85.02 (Rev3/4 note 19 p254) / 9903.82.02 (Rev12/14 note 16(c)(i) p236)",
+        "\u00a7122 expired after 2026-07-23 (150-day sunset; Rev14 p221 compiler's note, 91 FR 9339)",
+        "FL-301 metals exemption 9903.05.90 covers \u00a7232 aluminum articles (Rev14 p566)"
+      ],
+      "axiom": 5260.0,
+      "usitc_statutory": 5260.0,
+      "axiom_vs_usitc_statutory": {
+        "difference": 0.0,
+        "match": true
+      }
+    },
+    {
+      "case_id": "us-tariff-7601103000-gb-2026-02-15",
+      "concept": "us:policies/cbp/us-tariff-duty/composition#us_tariff_duty",
+      "scenario": "line-entry",
+      "entry_date": "2026-02-15",
+      "hts_number": "7601.10.30.00",
+      "country_of_origin": "GB",
+      "customs_value": 10000.0,
+      "is_postal_shipment": false,
+      "expected_rate": 0.276,
+      "rate_components": [
+        "MFN 2.6% (7601.10.30.00 general rate, HTS 2026 Rev3/4/12/14 line files)",
+        "\u00a7232 aluminum UK tier +25%: 9903.85.12 (Rev3/4) / 9903.82.04 (Rev12/14)",
+        "reciprocal \u00a7232-metals exemption 9903.01.33"
+      ],
+      "axiom": 2760.0,
+      "usitc_statutory": 2760.0,
+      "axiom_vs_usitc_statutory": {
+        "difference": 0.0,
+        "match": true
+      }
+    },
+    {
+      "case_id": "us-tariff-7601103000-gb-2026-03-15",
+      "concept": "us:policies/cbp/us-tariff-duty/composition#us_tariff_duty",
+      "scenario": "line-entry",
+      "entry_date": "2026-03-15",
+      "hts_number": "7601.10.30.00",
+      "country_of_origin": "GB",
+      "customs_value": 10000.0,
+      "is_postal_shipment": false,
+      "expected_rate": 0.276,
+      "rate_components": [
+        "MFN 2.6% (7601.10.30.00 general rate, HTS 2026 Rev3/4/12/14 line files)",
+        "\u00a7232 aluminum UK tier +25%: 9903.85.12 (Rev3/4) / 9903.82.04 (Rev12/14)",
+        "IEEPA ad valorem duties terminated for entries on/after 2026-02-24 (EO 14389 \u00a71, FR 2026-03832)",
+        "\u00a7122 \u00a7232-article exemption 9903.03.06 (aluminum articles)"
+      ],
+      "axiom": 2760.0,
+      "usitc_statutory": 2760.0,
+      "axiom_vs_usitc_statutory": {
+        "difference": 0.0,
+        "match": true
+      }
+    },
+    {
+      "case_id": "us-tariff-7601103000-gb-2026-07-23",
+      "concept": "us:policies/cbp/us-tariff-duty/composition#us_tariff_duty",
+      "scenario": "line-entry",
+      "entry_date": "2026-07-23",
+      "hts_number": "7601.10.30.00",
+      "country_of_origin": "GB",
+      "customs_value": 10000.0,
+      "is_postal_shipment": false,
+      "expected_rate": 0.276,
+      "rate_components": [
+        "MFN 2.6% (7601.10.30.00 general rate, HTS 2026 Rev3/4/12/14 line files)",
+        "\u00a7232 aluminum UK tier +25%: 9903.85.12 (Rev3/4) / 9903.82.04 (Rev12/14)",
+        "\u00a7122 \u00a7232-article exemption 9903.03.06 (aluminum articles)"
+      ],
+      "axiom": 2760.0,
+      "usitc_statutory": 2760.0,
+      "axiom_vs_usitc_statutory": {
+        "difference": 0.0,
+        "match": true
+      }
+    },
+    {
+      "case_id": "us-tariff-7601103000-gb-2026-08-01",
+      "concept": "us:policies/cbp/us-tariff-duty/composition#us_tariff_duty",
+      "scenario": "line-entry",
+      "entry_date": "2026-08-01",
+      "hts_number": "7601.10.30.00",
+      "country_of_origin": "GB",
+      "customs_value": 10000.0,
+      "is_postal_shipment": false,
+      "expected_rate": 0.276,
+      "rate_components": [
+        "MFN 2.6% (7601.10.30.00 general rate, HTS 2026 Rev3/4/12/14 line files)",
+        "\u00a7232 aluminum UK tier +25%: 9903.85.12 (Rev3/4) / 9903.82.04 (Rev12/14)",
+        "\u00a7122 expired after 2026-07-23 (150-day sunset; Rev14 p221 compiler's note, 91 FR 9339)",
+        "FL-301 metals exemption 9903.05.90 covers \u00a7232 aluminum articles (Rev14 p566)"
+      ],
+      "axiom": 2760.0,
+      "usitc_statutory": 2760.0,
+      "axiom_vs_usitc_statutory": {
+        "difference": 0.0,
+        "match": true
+      }
+    },
+    {
+      "case_id": "us-tariff-9506624040-cn-2026-02-15",
+      "concept": "us:policies/cbp/us-tariff-duty/composition#us_tariff_duty",
+      "scenario": "line-entry",
+      "entry_date": "2026-02-15",
+      "hts_number": "9506.62.40.40",
+      "country_of_origin": "CN",
+      "customs_value": 10000.0,
+      "is_postal_shipment": false,
+      "expected_rate": 0.275,
+      "rate_components": [
+        "MFN Free (9506.62.40.40 general rate, HTS 2026 Rev3/4/12/14 line files)",
+        "China-301 List 4A 9903.88.15 +7.5% (Rev14 note 20(r) p328, list hit p340; Rev14 static line file drops the footnote, heading and note unchanged \u2014 disposition us-tariff-rev14-footnote-drop)",
+        "IEEPA fentanyl 9903.01.24 +10% China+HK (Rev3 heading; note 2(u), entries on/after 2025-11-10)",
+        "IEEPA fentanyl 9903.01.20 inoperative: note 2(s) window covers entries 2025-02-04..2025-03-04 only (Rev14-notes p175)",
+        "IEEPA reciprocal baseline 9903.01.25 +10% (Rev3 heading)"
+      ],
+      "axiom": 2750.0,
+      "usitc_statutory": 2750.0,
+      "axiom_vs_usitc_statutory": {
+        "difference": 0.0,
+        "match": true
+      }
+    },
+    {
+      "case_id": "us-tariff-9506624040-cn-2026-03-15",
+      "concept": "us:policies/cbp/us-tariff-duty/composition#us_tariff_duty",
+      "scenario": "line-entry",
+      "entry_date": "2026-03-15",
+      "hts_number": "9506.62.40.40",
+      "country_of_origin": "CN",
+      "customs_value": 10000.0,
+      "is_postal_shipment": false,
+      "expected_rate": 0.175,
+      "rate_components": [
+        "MFN Free (9506.62.40.40 general rate, HTS 2026 Rev3/4/12/14 line files)",
+        "China-301 List 4A 9903.88.15 +7.5% (Rev14 note 20(r) p328, list hit p340; Rev14 static line file drops the footnote, heading and note unchanged \u2014 disposition us-tariff-rev14-footnote-drop)",
+        "IEEPA ad valorem duties terminated for entries on/after 2026-02-24 (EO 14389 \u00a71, FR 2026-03832)",
+        "\u00a7122 surcharge 9903.03.01 +10%, entries 2026-02-24..2026-07-23 (FR 2026-03824)"
+      ],
+      "axiom": 1750.0,
+      "usitc_statutory": 1750.0,
+      "axiom_vs_usitc_statutory": {
+        "difference": 0.0,
+        "match": true
+      }
+    },
+    {
+      "case_id": "us-tariff-9506624040-cn-2026-07-23",
+      "concept": "us:policies/cbp/us-tariff-duty/composition#us_tariff_duty",
+      "scenario": "line-entry",
+      "entry_date": "2026-07-23",
+      "hts_number": "9506.62.40.40",
+      "country_of_origin": "CN",
+      "customs_value": 10000.0,
+      "is_postal_shipment": false,
+      "expected_rate": 0.175,
+      "rate_components": [
+        "MFN Free (9506.62.40.40 general rate, HTS 2026 Rev3/4/12/14 line files)",
+        "China-301 List 4A 9903.88.15 +7.5% (Rev14 note 20(r) p328, list hit p340; Rev14 static line file drops the footnote, heading and note unchanged \u2014 disposition us-tariff-rev14-footnote-drop)",
+        "\u00a7122 surcharge 9903.03.01 +10%, entries 2026-02-24..2026-07-23 (FR 2026-03824)"
+      ],
+      "axiom": 1750.0,
+      "usitc_statutory": 1750.0,
+      "axiom_vs_usitc_statutory": {
+        "difference": 0.0,
+        "match": true
+      }
+    },
+    {
+      "case_id": "us-tariff-9506624040-cn-2026-08-01",
+      "concept": "us:policies/cbp/us-tariff-duty/composition#us_tariff_duty",
+      "scenario": "line-entry",
+      "entry_date": "2026-08-01",
+      "hts_number": "9506.62.40.40",
+      "country_of_origin": "CN",
+      "customs_value": 10000.0,
+      "is_postal_shipment": false,
+      "expected_rate": 0.2,
+      "rate_components": [
+        "MFN Free (9506.62.40.40 general rate, HTS 2026 Rev3/4/12/14 line files)",
+        "China-301 List 4A 9903.88.15 +7.5% (Rev14 note 20(r) p328, list hit p340; Rev14 static line file drops the footnote, heading and note unchanged \u2014 disposition us-tariff-rev14-footnote-drop)",
+        "\u00a7122 expired after 2026-07-23 (150-day sunset; Rev14 p221 compiler's note, 91 FR 9339)",
+        "FL-301 China tier 9903.05.31 +12.5%, from 2026-07-24 (Rev14 note 52)"
+      ],
+      "axiom": 2000.0,
+      "usitc_statutory": 2000.0,
+      "axiom_vs_usitc_statutory": {
+        "difference": 0.0,
+        "match": true
+      }
+    },
+    {
+      "case_id": "us-tariff-9506624040-vn-2026-02-15",
+      "concept": "us:policies/cbp/us-tariff-duty/composition#us_tariff_duty",
+      "scenario": "line-entry",
+      "entry_date": "2026-02-15",
+      "hts_number": "9506.62.40.40",
+      "country_of_origin": "VN",
+      "customs_value": 10000.0,
+      "is_postal_shipment": false,
+      "expected_rate": 0.2,
+      "rate_components": [
+        "MFN Free (9506.62.40.40 general rate, HTS 2026 Rev3/4/12/14 line files)",
+        "IEEPA reciprocal Vietnam 9903.02.69 +20% (Rev3 heading)"
+      ],
+      "axiom": 2000.0,
+      "usitc_statutory": 2000.0,
+      "axiom_vs_usitc_statutory": {
+        "difference": 0.0,
+        "match": true
+      }
+    },
+    {
+      "case_id": "us-tariff-9506624040-vn-2026-03-15",
+      "concept": "us:policies/cbp/us-tariff-duty/composition#us_tariff_duty",
+      "scenario": "line-entry",
+      "entry_date": "2026-03-15",
+      "hts_number": "9506.62.40.40",
+      "country_of_origin": "VN",
+      "customs_value": 10000.0,
+      "is_postal_shipment": false,
+      "expected_rate": 0.1,
+      "rate_components": [
+        "MFN Free (9506.62.40.40 general rate, HTS 2026 Rev3/4/12/14 line files)",
+        "IEEPA ad valorem duties terminated for entries on/after 2026-02-24 (EO 14389 \u00a71, FR 2026-03832)",
+        "\u00a7122 surcharge 9903.03.01 +10%, entries 2026-02-24..2026-07-23 (FR 2026-03824)"
+      ],
+      "axiom": 1000.0,
+      "usitc_statutory": 1000.0,
+      "axiom_vs_usitc_statutory": {
+        "difference": 0.0,
+        "match": true
+      }
+    },
+    {
+      "case_id": "us-tariff-9506624040-vn-2026-07-23",
+      "concept": "us:policies/cbp/us-tariff-duty/composition#us_tariff_duty",
+      "scenario": "line-entry",
+      "entry_date": "2026-07-23",
+      "hts_number": "9506.62.40.40",
+      "country_of_origin": "VN",
+      "customs_value": 10000.0,
+      "is_postal_shipment": false,
+      "expected_rate": 0.1,
+      "rate_components": [
+        "MFN Free (9506.62.40.40 general rate, HTS 2026 Rev3/4/12/14 line files)",
+        "\u00a7122 surcharge 9903.03.01 +10%, entries 2026-02-24..2026-07-23 (FR 2026-03824)"
+      ],
+      "axiom": 1000.0,
+      "usitc_statutory": 1000.0,
+      "axiom_vs_usitc_statutory": {
+        "difference": 0.0,
+        "match": true
+      }
+    },
+    {
+      "case_id": "us-tariff-9506624040-vn-2026-08-01",
+      "concept": "us:policies/cbp/us-tariff-duty/composition#us_tariff_duty",
+      "scenario": "line-entry",
+      "entry_date": "2026-08-01",
+      "hts_number": "9506.62.40.40",
+      "country_of_origin": "VN",
+      "customs_value": 10000.0,
+      "is_postal_shipment": false,
+      "expected_rate": 0.125,
+      "rate_components": [
+        "MFN Free (9506.62.40.40 general rate, HTS 2026 Rev3/4/12/14 line files)",
+        "\u00a7122 expired after 2026-07-23 (150-day sunset; Rev14 p221 compiler's note, 91 FR 9339)",
+        "FL-301 Vietnam tier 9903.05.84 +12.5%, from 2026-07-24 (Rev14 note 52)"
+      ],
+      "axiom": 1250.0,
+      "usitc_statutory": 1250.0,
+      "axiom_vs_usitc_statutory": {
+        "difference": 0.0,
+        "match": true
+      }
+    },
+    {
+      "case_id": "us-tariff-9506624040-br-2026-02-15",
+      "concept": "us:policies/cbp/us-tariff-duty/composition#us_tariff_duty",
+      "scenario": "line-entry",
+      "entry_date": "2026-02-15",
+      "hts_number": "9506.62.40.40",
+      "country_of_origin": "BR",
+      "customs_value": 10000.0,
+      "is_postal_shipment": false,
+      "expected_rate": 0.5,
+      "rate_components": [
+        "MFN Free (9506.62.40.40 general rate, HTS 2026 Rev3/4/12/14 line files)",
+        "IEEPA reciprocal Brazil 9903.02.09 +10% (Rev3 heading)",
+        "Brazil IEEPA 9903.01.77 +40% (EO 14323; Rev3 heading)"
+      ],
+      "axiom": 5000.0,
+      "usitc_statutory": 5000.0,
+      "axiom_vs_usitc_statutory": {
+        "difference": 0.0,
+        "match": true
+      }
+    },
+    {
+      "case_id": "us-tariff-9506624040-br-2026-03-15",
+      "concept": "us:policies/cbp/us-tariff-duty/composition#us_tariff_duty",
+      "scenario": "line-entry",
+      "entry_date": "2026-03-15",
+      "hts_number": "9506.62.40.40",
+      "country_of_origin": "BR",
+      "customs_value": 10000.0,
+      "is_postal_shipment": false,
+      "expected_rate": 0.1,
+      "rate_components": [
+        "MFN Free (9506.62.40.40 general rate, HTS 2026 Rev3/4/12/14 line files)",
+        "IEEPA ad valorem duties terminated for entries on/after 2026-02-24 (EO 14389 \u00a71, FR 2026-03832)",
+        "\u00a7122 surcharge 9903.03.01 +10%, entries 2026-02-24..2026-07-23 (FR 2026-03824)"
+      ],
+      "axiom": 1000.0,
+      "usitc_statutory": 1000.0,
+      "axiom_vs_usitc_statutory": {
+        "difference": 0.0,
+        "match": true
+      }
+    },
+    {
+      "case_id": "us-tariff-9506624040-br-2026-07-23",
+      "concept": "us:policies/cbp/us-tariff-duty/composition#us_tariff_duty",
+      "scenario": "line-entry",
+      "entry_date": "2026-07-23",
+      "hts_number": "9506.62.40.40",
+      "country_of_origin": "BR",
+      "customs_value": 10000.0,
+      "is_postal_shipment": false,
+      "expected_rate": 0.35,
+      "rate_components": [
+        "MFN Free (9506.62.40.40 general rate, HTS 2026 Rev3/4/12/14 line files)",
+        "\u00a7122 surcharge 9903.03.01 +10%, entries 2026-02-24..2026-07-23 (FR 2026-03824)",
+        "Brazil-301 9903.05.01 +25%, entries on/after 2026-07-22 (FR 2026-14542)"
+      ],
+      "axiom": 3500.0,
+      "usitc_statutory": 3500.0,
+      "axiom_vs_usitc_statutory": {
+        "difference": 0.0,
+        "match": true
+      }
+    },
+    {
+      "case_id": "us-tariff-9506624040-br-2026-08-01",
+      "concept": "us:policies/cbp/us-tariff-duty/composition#us_tariff_duty",
+      "scenario": "line-entry",
+      "entry_date": "2026-08-01",
+      "hts_number": "9506.62.40.40",
+      "country_of_origin": "BR",
+      "customs_value": 10000.0,
+      "is_postal_shipment": false,
+      "expected_rate": 0.375,
+      "rate_components": [
+        "MFN Free (9506.62.40.40 general rate, HTS 2026 Rev3/4/12/14 line files)",
+        "\u00a7122 expired after 2026-07-23 (150-day sunset; Rev14 p221 compiler's note, 91 FR 9339)",
+        "Brazil-301 9903.05.01 +25%, entries on/after 2026-07-22 (FR 2026-14542)",
+        "FL-301 Brazil tier 9903.05.27 +12.5%, from 2026-07-24 (Rev14 note 52)",
+        "Brazil-301 and FL-301 stack per Rev14 notes 50(a) p540 / 52(a) p553 ('shall also be subject to any additional duty'); no cross-carve in (a)(ii)-(vi)/(b)-(k) \u2014 disposition us-tariff-brazil-301-fl-stacking"
+      ],
+      "axiom": 3750.0,
+      "usitc_statutory": 3750.0,
+      "axiom_vs_usitc_statutory": {
+        "difference": 0.0,
+        "match": true
+      }
+    },
+    {
+      "case_id": "us-tariff-postal-d1-vn-nonpostal-2026-02-15",
+      "concept": "us:policies/cbp/us-tariff-duty/composition#us_tariff_duty",
+      "scenario": "line-entry",
+      "entry_date": "2026-02-15",
+      "hts_number": "9506.62.40.40",
+      "country_of_origin": "VN",
+      "customs_value": 750.0,
+      "is_postal_shipment": false,
+      "expected_rate": 0.2,
+      "rate_components": [
+        "19 USC 1321(a)(2)(C) $800 de minimis suspended (EO 14324, continued by EO 14388; CBP IFRs 2026-12669/2026-12670) \u2014 never operative at grid dates",
+        "MFN Free (9506.62.40.40 general rate, HTS 2026 Rev3/4/12/14 line files)",
+        "IEEPA reciprocal Vietnam 9903.02.69 +20% (Rev3 heading)"
+      ],
+      "axiom": 150.0,
+      "usitc_statutory": 150.0,
+      "axiom_vs_usitc_statutory": {
+        "difference": 0.0,
+        "match": true
+      }
+    },
+    {
+      "case_id": "us-tariff-postal-d2-cn-postal-2026-03-15",
+      "concept": "us:policies/cbp/us-tariff-duty/composition#us_tariff_duty",
+      "scenario": "postal",
+      "entry_date": "2026-03-15",
+      "hts_number": "9506.62.40.40",
+      "country_of_origin": "CN",
+      "customs_value": 750.0,
+      "is_postal_shipment": true,
+      "expected_rate": 0.1,
+      "rate_components": [
+        "19 USC 1321(a)(2)(C) $800 de minimis suspended (EO 14324, continued by EO 14388; CBP IFRs 2026-12669/2026-12670) \u2014 never operative at grid dates",
+        "postal sub-$800 flat 10% in lieu of ad valorem, 2026-02-24..2026-07-23 (EO 14388 \u00a73(b), FR 2026-03829)"
+      ],
+      "axiom": 75.0,
+      "usitc_statutory": 75.0,
+      "axiom_vs_usitc_statutory": {
+        "difference": 0.0,
+        "match": true
+      }
+    },
+    {
+      "case_id": "us-tariff-postal-d3-cn-postal-2026-07-23",
+      "concept": "us:policies/cbp/us-tariff-duty/composition#us_tariff_duty",
+      "scenario": "postal",
+      "entry_date": "2026-07-23",
+      "hts_number": "9506.62.40.40",
+      "country_of_origin": "CN",
+      "customs_value": 750.0,
+      "is_postal_shipment": true,
+      "expected_rate": 0.1,
+      "rate_components": [
+        "19 USC 1321(a)(2)(C) $800 de minimis suspended (EO 14324, continued by EO 14388; CBP IFRs 2026-12669/2026-12670) \u2014 never operative at grid dates",
+        "postal sub-$800 flat 10% in lieu of ad valorem, 2026-02-24..2026-07-23 (EO 14388 \u00a73(b), FR 2026-03829)"
+      ],
+      "axiom": 75.0,
+      "usitc_statutory": 75.0,
+      "axiom_vs_usitc_statutory": {
+        "difference": 0.0,
+        "match": true
+      }
+    },
+    {
+      "case_id": "us-tariff-postal-d4-cn-postal-2026-08-01",
+      "concept": "us:policies/cbp/us-tariff-duty/composition#us_tariff_duty",
+      "scenario": "postal",
+      "entry_date": "2026-08-01",
+      "hts_number": "9506.62.40.40",
+      "country_of_origin": "CN",
+      "customs_value": 750.0,
+      "is_postal_shipment": true,
+      "expected_rate": 0.2,
+      "rate_components": [
+        "19 USC 1321(a)(2)(C) $800 de minimis suspended (EO 14324, continued by EO 14388; CBP IFRs 2026-12669/2026-12670) \u2014 never operative at grid dates",
+        "CBP postal informal-entry process effective 2026-07-24 (FR 2026-12669): postal shipments pay regular duties",
+        "MFN Free (9506.62.40.40 general rate, HTS 2026 Rev3/4/12/14 line files)",
+        "China-301 List 4A 9903.88.15 +7.5% (Rev14 note 20(r) p328, list hit p340; Rev14 static line file drops the footnote, heading and note unchanged \u2014 disposition us-tariff-rev14-footnote-drop)",
+        "\u00a7122 expired after 2026-07-23 (150-day sunset; Rev14 p221 compiler's note, 91 FR 9339)",
+        "FL-301 China tier 9903.05.31 +12.5%, from 2026-07-24 (Rev14 note 52)"
+      ],
+      "axiom": 150.0,
+      "usitc_statutory": 150.0,
+      "axiom_vs_usitc_statutory": {
+        "difference": 0.0,
+        "match": true
+      }
+    }
+  ],
+  "provenance": {
+    "schema": "axiom_oracles.provenance.v1",
+    "generated_at": "2026-08-01T19:32:46Z",
+    "generated_by": "scripts/run_comparison.py::us-tariff",
+    "run_kind": "manual",
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-us",
+        "sha": "a614dea54b76658b9933fdd9b559825af5d6ecd6"
+      }
+    ],
+    "engine": {
+      "axiom_rules_engine_sha": "ffd8213271947b0189a9dd61a055c1e0e78908a0",
+      "axiom_rules_engine_version": "0.1.0"
+    }
+  }
+}

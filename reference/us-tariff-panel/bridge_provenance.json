@@ -1,0 +1,19 @@
+{
+  "schema_version": "us_tariff_panel.bridge_provenance.v2",
+  "source": "U.S. Census Bureau, Schedule C - Country List",
+  "source_url": "https://www.census.gov/foreign-trade/schedules/c/country.txt",
+  "source_produced": "31JAN14",
+  "snapshot": "census_schedule_c_country.txt",
+  "snapshot_sha256": "ad7d599359d14c7d1d5977cf6b2331b85e25592bc51e594aae140c78a29204a5",
+  "snapshot_retrieved_at": null,
+  "builder": "scripts/build_census_iso_bridge.py",
+  "builder_sha256": "1c79b6dca2a58c255c52919a41857f7687c089d2835ba2195ea2dac78971a856",
+  "bridge_rows": 241,
+  "schedule_c_extensions": {
+    "GZ": "Gaza Strip \u2014 ISO assigns PS to the State of Palestine as a whole; Census splits Gaza (GZ) and West Bank (WE).",
+    "KV": "Kosovo \u2014 no assigned ISO 3166-1 code (XK is only a private-use convention); Census assigns KV.",
+    "WE": "West Bank \u2014 ISO assigns PS to the State of Palestine as a whole; Census splits Gaza (GZ) and West Bank (WE)."
+  },
+  "bridge_sha256": "4a5a96988c92f51938326cffa16fb5cdb3dd7ce81a56a941f287c8b7a0ffe6f7",
+  "built_at": "2026-08-01T23:35:24+00:00"
+}

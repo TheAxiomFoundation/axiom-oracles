@@ -136,6 +136,7 @@ def _snapshot_document(summary: dict, date: str) -> dict:
         "excluded": summary["excluded"],
         "unexplained_total": summary["unexplained_total"],
         "axiom_attributed_open": summary["axiom_attributed_open"],
+        "temporal_debt": summary.get("temporal_debt"),
         "conformant": summary["conformant"],
     }
 
