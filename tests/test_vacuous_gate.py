@@ -1002,3 +1002,54 @@ def test_write_freshness_rewrites_on_comparable_change(monkeypatch, tmp_path):
     }
     gate._write_freshness(rerun)
     assert json.loads(out.read_text()) == rerun
+
+
+def test_build_freshness_surfaces_reemission_status(monkeypatch, tmp_path):
+    """A skip-capable lane that re-emits the committed report stamps
+    `reemitted_report` (+ the source stamp dating the actual numbers) into
+    provenance; freshness must CARRY both — an entry showing only the
+    re-emission's generated_at presents permanently re-emitted numbers as
+    freshly run (sol stack review F6). A genuinely fresh run must read
+    reemitted=false."""
+    gate = _load_gate()
+    data_dir = tmp_path / "data"
+    data_dir.mkdir()
+    source = {"path": "reports/x-2026-07-01.json", "generated_at": "2026-07-01T00:00:00Z"}
+    (data_dir / "reemitted.json").write_text(
+        json.dumps(
+            {
+                "suite": "reemit-suite",
+                "provenance": {
+                    "generated_at": "2026-08-02T00:00:00Z",
+                    "run_kind": "weekly",
+                    "reemitted_report": True,
+                    "reemitted_from": source,
+                },
+            }
+        )
+    )
+    (data_dir / "fresh.json").write_text(
+        json.dumps(
+            {
+                "suite": "fresh-suite",
+                "provenance": {
+                    "generated_at": "2026-08-02T00:00:00Z",
+                    "run_kind": "manual",
+                },
+            }
+        )
+    )
+    (data_dir / "coverage_overview.json").write_text(
+        json.dumps({"axiom": {"programs": []}})
+    )
+    monkeypatch.setattr(gate, "DASHBOARD_DATA_DIR", data_dir)
+    monkeypatch.setattr(gate, "COVERAGE_OVERVIEW", data_dir / "coverage_overview.json")
+    monkeypatch.setattr(gate, "AFFECTED_MAP", tmp_path / "no-map.json")
+
+    fresh = gate.build_freshness()
+    reemitted = next(s for s in fresh["suites"] if s["suite"] == "reemit-suite")
+    assert reemitted["reemitted"] is True
+    assert reemitted["reemitted_from"] == source
+    genuinely_fresh = next(s for s in fresh["suites"] if s["suite"] == "fresh-suite")
+    assert genuinely_fresh["reemitted"] is False
+    assert genuinely_fresh["reemitted_from"] is None
