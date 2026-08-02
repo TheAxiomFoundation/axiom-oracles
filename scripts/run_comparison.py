@@ -10,6 +10,8 @@ from __future__ import annotations
 
 import argparse
 import csv
+import fnmatch
+import hashlib
 import json
 import os
 import shutil
@@ -578,39 +580,56 @@ def main() -> int:
     sample = config["runner"]["parameters"].get("sample_size", "all")
     output = args.output_dir / f"{basename}-{sample}-{today}.json"
     output.parent.mkdir(parents=True, exist_ok=True)
+    # Run-private staging path in the SAME directory (same filesystem, so the
+    # final publish is an atomic rename): the report stays private through
+    # provenance stamping and dashboard adaptation. Two same-day runs share
+    # the final filename but never a staging file, so a concurrent run can no
+    # longer replace the report between write and stamp and get the other
+    # run's identity stamped onto its payload; the published path only ever
+    # holds a fully stamped report (#448 review round 3).
+    staging = output.with_name(f".{output.name}.run-{os.getpid()}.tmp")
 
     print(f"Running {config['name']}: {config.get('title', config['name'])}")
-    runner_fn(config["runner"], output)
+    try:
+        runner_fn(config["runner"], staging)
+
+        # Provenance (O2): stamp what produced this report — rulespec repos +
+        # SHAs, engine identity, oracle identity, dataset identity, run kind —
+        # onto both the reports/ JSON and the dashboard copy, so a checked-in
+        # report records exactly what it ran against and the affected-rerun
+        # map can diff its SHAs.
+        provenance = _build_run_provenance(config, runner_type, staging)
+        compared_engines = {
+            str(config["runner"]["parameters"].get("left", "")),
+            str(config["runner"]["parameters"].get("right", "")),
+        }
+        _stamp_report_provenance(
+            staging,
+            provenance,
+            require_engine_versions=(
+                runner_type == "axiom-oracles-compare"
+                and "policyengine" in compared_engines
+            ),
+        )
+
+        dashboard_target = config.get("dashboard", {}).get("filename")
+        adapted = None
+        if dashboard_target:
+            suite = config.get("dashboard", {}).get("suite", config["name"])
+            adapted = _adapt_to_v2(
+                staging,
+                runner_type,
+                config,
+                suite=suite,
+            )
+            adapted["provenance"] = provenance
+
+        os.replace(staging, output)
+    finally:
+        staging.unlink(missing_ok=True)
     print(f"Wrote: {output}")
 
-    # Provenance (O2): stamp what produced this report — rulespec repos + SHAs,
-    # engine identity, oracle identity, dataset identity, run kind — onto both
-    # the reports/ JSON and the dashboard copy, so a checked-in report records
-    # exactly what it ran against and the affected-rerun map can diff its SHAs.
-    provenance = _build_run_provenance(config, runner_type, output)
-    compared_engines = {
-        str(config["runner"]["parameters"].get("left", "")),
-        str(config["runner"]["parameters"].get("right", "")),
-    }
-    _stamp_report_provenance(
-        output,
-        provenance,
-        require_engine_versions=(
-            runner_type == "axiom-oracles-compare"
-            and "policyengine" in compared_engines
-        ),
-    )
-
-    dashboard_target = config.get("dashboard", {}).get("filename")
-    if dashboard_target:
-        suite = config.get("dashboard", {}).get("suite", config["name"])
-        adapted = _adapt_to_v2(
-            output,
-            runner_type,
-            config,
-            suite=suite,
-        )
-        adapted["provenance"] = provenance
+    if dashboard_target and adapted is not None:
         _write_dashboard_report(adapted, dashboard_target)
 
     if args.summary:
@@ -809,6 +828,16 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
         except SystemExit:
             axiom_rules_path = None
     engine = engine_provenance(axiom_rules_path)
+    # Verifiable executable identity, when the lane resolved one (us-tariff-
+    # panel records the binary path + sha256 of its bytes): the repo-derived
+    # `axiom_rules_engine_sha` above labels the checkout's current HEAD, which
+    # can postdate the build that actually ran (#448 review round 3).
+    engine_binary = params.get("engine_binary")
+    engine_binary_sha256 = params.get("engine_binary_sha256")
+    if engine_binary:
+        engine = {**engine, "binary": str(engine_binary)}
+    if engine_binary_sha256:
+        engine = {**engine, "binary_sha256": str(engine_binary_sha256)}
 
     # Oracle identity (the side compared to). Derived from the runner type +
     # the pins each runner installs, so the report says which oracle stack ran.
@@ -2916,6 +2945,77 @@ def _validate_us_tariff_panel_payload(report: object, source: str) -> None:
             f"us-tariff-panel payload at {source} has signature memberships "
             "that do not cover exactly the mismatched units"
         )
+    # Fullness is NOT self-reported by the summary alone (#448 review round
+    # 3): the complete case-family ledger must reconcile against it. Every
+    # comparison unit lives in exactly one family; each family's match flag
+    # must equal its own expected/axiom vector agreement (exact tolerance,
+    # matching the suite's TOLERANCE = 1e-12), the family unit totals must
+    # reproduce the summary counts, and every mismatch row must belong to a
+    # non-matching family cell. Relabelling omitted mismatches as matches
+    # now has to forge the entire ledger consistently, not just the counts.
+    families = report.get("cases")
+    if not isinstance(families, list) or not families:
+        raise SystemExit(
+            f"us-tariff-panel payload at {source} lacks the case-family "
+            "ledger (cases)"
+        )
+    family_units = 0
+    family_mismatch_units = 0
+    mismatch_family_cells: dict[str, list[tuple[set, set]]] = {}
+    for family in families:
+        expected = family.get("expected")
+        axiom = family.get("axiom")
+        unit_count = family.get("unit_count")
+        if (
+            not isinstance(expected, dict)
+            or not isinstance(axiom, dict)
+            or set(expected) != set(axiom)
+            or not isinstance(unit_count, int)
+            or unit_count <= 0
+        ):
+            raise SystemExit(
+                f"us-tariff-panel payload at {source} has a malformed "
+                f"case family ({family.get('case_id')})"
+            )
+        vectors_agree = all(
+            abs(axiom[slot] - expected[slot]) <= 1e-12 for slot in expected
+        )
+        if bool(family.get("match")) != vectors_agree:
+            raise SystemExit(
+                f"us-tariff-panel payload at {source} has a case family "
+                f"({family.get('case_id')}) whose match flag contradicts "
+                "its own expected/axiom vectors"
+            )
+        family_units += unit_count
+        if not vectors_agree:
+            family_mismatch_units += unit_count
+            mismatch_family_cells.setdefault(
+                str(family.get("hts_number")), []
+            ).append(
+                (
+                    set(family.get("countries") or []),
+                    set(family.get("probe_dates") or []),
+                )
+            )
+    if family_units != comparison or family_mismatch_units != mismatch_count:
+        raise SystemExit(
+            f"us-tariff-panel payload at {source} has a case-family ledger "
+            f"({family_units} units, {family_mismatch_units} mismatched) "
+            "that does not reproduce the summary counts "
+            f"({comparison} units, {mismatch_count} mismatched)"
+        )
+    for row in mismatches:
+        cells = mismatch_family_cells.get(str(row.get("hts_number"))) or []
+        if not any(
+            row.get("country_census") in countries
+            and row.get("probe_date") in probes
+            for countries, probes in cells
+        ):
+            raise SystemExit(
+                f"us-tariff-panel payload at {source} has a mismatch row "
+                f"({row.get('case_id')}) with no covering non-matching "
+                "case family"
+            )
 
 
 def _run_us_tariff_panel(runner: dict, output: Path) -> None:
@@ -2938,36 +3038,57 @@ def _run_us_tariff_panel(runner: dict, output: Path) -> None:
     generator = REPO_ROOT / "scripts" / "generate_us_tariff_panel.py"
     reason = _us_tariff_panel_unavailable_reason()
     if reason is not None:
-        # Re-emits must source the UNIQUE git-tracked FULL report — never
-        # the dashboard copy (truncated for the UI) and never an untracked
-        # filesystem stray under the gitignored reports/ directory (#448
-        # review round 2). The payload is validated before reuse so a
+        # Re-emits must source the UNIQUE COMMITTED (HEAD) full report —
+        # never the dashboard copy (truncated for the UI), never an
+        # untracked filesystem stray under the gitignored reports/
+        # directory, and never mutable worktree/index bytes for the tracked
+        # path (a staged or in-place edit is not "committed" — #448 review
+        # rounds 2 and 3). The candidate list and the payload bytes both
+        # come from HEAD, and the payload is validated before reuse so a
         # truncated or unreconciled artifact cannot re-emit as the full
         # account.
-        tracked = subprocess.run(
+        committed_reports = subprocess.run(
             [
                 "git",
                 "-C",
                 str(REPO_ROOT),
-                "ls-files",
+                "ls-tree",
+                "-r",
+                "--name-only",
+                "HEAD",
                 "--",
-                "reports/axiom-yale-us-tariff-panel-all-*.json",
+                "reports/",
             ],
             capture_output=True,
             text=True,
             check=True,
         ).stdout.split()
-        if len(tracked) != 1:
+        candidates = [
+            path
+            for path in committed_reports
+            if fnmatch.fnmatch(
+                path, "reports/axiom-yale-us-tariff-panel-all-*.json"
+            )
+        ]
+        if len(candidates) != 1:
             raise SystemExit(
                 f"us-tariff-panel generation unavailable ({reason}) and the "
                 "committed full report is not uniquely identifiable "
-                f"(tracked candidates: {tracked or 'none'})"
+                f"(HEAD candidates: {candidates or 'none'})"
             )
-        committed = REPO_ROOT / tracked[0]
-        text = committed.read_text()
-        _validate_us_tariff_panel_payload(json.loads(text), str(committed))
+        committed = candidates[0]
+        text = subprocess.run(
+            ["git", "-C", str(REPO_ROOT), "show", f"HEAD:{committed}"],
+            capture_output=True,
+            text=True,
+            check=True,
+        ).stdout
+        _validate_us_tariff_panel_payload(json.loads(text), f"HEAD:{committed}")
         runner["_reemitted_report"] = True
-        print(f"us-tariff-panel generation unavailable ({reason}); reusing {committed}.")
+        print(
+            f"us-tariff-panel generation unavailable ({reason}); "
+            f"reusing HEAD:{committed}."
+        )
         output.write_text(text)
         return
     # Launched leg: the generator writes to a run-private path (never a
@@ -3001,17 +3122,34 @@ def _run_us_tariff_panel(runner: dict, output: Path) -> None:
     # runner: the generator honors RULESPEC_US_CHECKOUT and
     # AXIOM_RULES_ENGINE_BINARY). The engine binary is resolved exactly the
     # way the adapter resolves it, so conventional-path runs (no env
-    # override) record the engine identity too.
+    # override) record the engine identity too. A bare command name is
+    # resolved via PATH (never treated as cwd-relative), and the sha256 of
+    # the executable bytes is recorded as the VERIFIABLE engine identity —
+    # the enclosing checkout's HEAD (below) labels the checkout, not the
+    # build, and can postdate the binary (#448 review round 3).
     checkout, composition = _us_tariff_panel_env()
     runner.setdefault("parameters", {})["rulespec_roots"] = [str(checkout)]
     from axiom_oracles.adapters.axiom.runner import _resolve_binary_path
 
-    binary = _resolve_binary_path(None, composition).resolve()
-    runner["parameters"]["engine_binary"] = str(binary)
-    if len(binary.parents) > 2:
-        engine_repo = binary.parents[2]
-        if (engine_repo / ".git").exists():
-            runner["axiom_rules_repo"] = str(engine_repo)
+    binary = _resolve_binary_path(None, composition)
+    if binary.exists():
+        resolved = binary.resolve()
+    else:
+        which = shutil.which(str(binary))
+        resolved = Path(which).resolve() if which else None
+    if resolved is not None and resolved.is_file():
+        runner["parameters"]["engine_binary"] = str(resolved)
+        runner["parameters"]["engine_binary_sha256"] = hashlib.sha256(
+            resolved.read_bytes()
+        ).hexdigest()
+        # Only claim an enclosing repo when the executable actually lives
+        # under that repo's cargo target/ directory — never by fixed
+        # parent-depth arithmetic on an arbitrary install path.
+        for ancestor in resolved.parents:
+            if (ancestor / ".git").exists():
+                if resolved.is_relative_to(ancestor / "target"):
+                    runner["axiom_rules_repo"] = str(ancestor)
+                break
     output.write_text(text)
 
 
