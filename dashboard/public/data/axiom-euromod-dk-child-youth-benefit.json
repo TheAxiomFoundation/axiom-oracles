@@ -753,7 +753,7 @@
       "axiom_rules_engine_sha": "8da96493a6f9d755b1bad10e52cc119f0ec38629",
       "axiom_rules_engine_version": "0.2.0"
     },
-    "generated_at": "2026-08-02T04:03:43Z",
+    "generated_at": "2026-08-02T08:42:59Z",
     "generated_by": "scripts/run_comparison.py::dk-child-youth-benefit-euromod",
     "oracle": {
       "euromod_country": "DK",
@@ -762,6 +762,7 @@
       "euromod_system": "DK_2025",
       "name": "euromod"
     },
+    "reemitted_report": true,
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-dk",
