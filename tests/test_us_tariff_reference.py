@@ -6,6 +6,16 @@ partially regenerated, or silently narrowed reference fails CI instead of
 self-certifying. They consume only committed files (no Yale checkout, no
 network): this is the PR-local validator leg; the supervised exporter and
 bridge builder enforce the generation-time invariants.
+
+Trust model: provenance stamps are MUTABLE data files — anything checked
+only against them can be restamped in the same edit. Every load-bearing
+identity is therefore pinned as a reviewed constant in THIS file (content
+sha256 of the extract and the snapshot, the covered-line set, the country
+dimension, the column schema, the interval profile), mirroring the
+EXPECTED_YALE_COMMIT pattern: a legitimate refresh must update the
+constants here in the same reviewed diff, so any narrowing is visible in
+review rather than absorbable by restamping. Provenance checks then verify
+stamp CONSISTENCY, not identity.
 """
 
 from __future__ import annotations
@@ -41,9 +51,56 @@ REVIEWED_COVERED_LINES = frozenset({"7202111000", "7601103000", "9506624040"})
 
 #: The reviewed country dimension of the Yale panel (240 Schedule C census
 #: codes). A pin bump that changes the upstream country universe must edit
-#: this constant in the same reviewed diff — a shrunk country set cannot
-#: hide behind a self-stamped provenance count.
+#: these constants in the same reviewed diff — a shrunk or substituted
+#: country set cannot hide behind a self-stamped provenance count/list.
+#: The digest is sha256 of the comma-joined sorted census codes; the
+#: exporter carries the same pin (EXPECTED_COUNTRY_SET_SHA256).
 EXPECTED_COUNTRY_COUNT = 240
+EXPECTED_COUNTRY_SET_SHA256 = (
+    "17640ac633347c44d3017a4b43bbc12a8b7d3c5323393c780b89f262fcc166d7"
+)
+
+#: Reviewed content digests of the committed reference bytes. The refresh
+#: procedure (README) regenerates the artifacts supervised, then updates
+#: these pins in the same reviewed diff — CI accepts no other bytes, so a
+#: restamped provenance cannot certify an altered or narrowed reference.
+EXPECTED_EXTRACT_SHA256 = (
+    "331d92d9ce30067e26c93d3f9f55b18af5e3b53a6846cbbc0f7652ecc1bd96c3"
+)
+EXPECTED_SNAPSHOT_SHA256 = (
+    "ad7d599359d14c7d1d5977cf6b2331b85e25592bc51e594aae140c78a29204a5"
+)
+
+#: Reviewed extract schema: the spine plus the COMPLETE statutory-column
+#: set (the sum-of-statutory-columns totals claim depends on completeness —
+#: dynamic discovery would let a column removal make rate checks vacuous).
+EXPECTED_COLUMNS = (
+    "hts10",
+    "country",
+    "revision",
+    "effective_date",
+    "valid_from",
+    "valid_until",
+    "statutory_base_rate",
+    "statutory_rate_232",
+    "statutory_rate_ieepa_recip",
+    "statutory_rate_ieepa_fent",
+    "statutory_rate_301",
+    "statutory_rate_301_cs",
+    "statutory_rate_s301fl",
+    "statutory_rate_s301br",
+    "statutory_rate_s338",
+    "statutory_rate_s122",
+    "statutory_rate_section_201",
+    "statutory_rate_other",
+)
+STATUTORY_COLUMNS = tuple(c for c in EXPECTED_COLUMNS if c.startswith("statutory_"))
+
+#: Reviewed temporal profile: every (hts10, country) series carries exactly
+#: this many intervals, and all series share ONE global boundary signature
+#: (Yale revisions are global dates). A Yale pin bump that adds revisions
+#: updates this constant in the same reviewed diff.
+EXPECTED_INTERVALS_PER_SERIES = 57
 
 
 def _sha256(path: Path) -> str:
@@ -77,8 +134,11 @@ def _provenance() -> dict:
     return json.loads(EXTRACT_PROVENANCE.read_text())
 
 
-def test_extract_hash_matches_provenance():
-    assert _sha256(EXTRACT) == _provenance()["extract_sha256"]
+def test_extract_bytes_match_the_reviewed_pin():
+    """The extract itself is pinned in reviewed code; the provenance stamp
+    must agree (consistency, not identity — the stamp is mutable)."""
+    assert _sha256(EXTRACT) == EXPECTED_EXTRACT_SHA256
+    assert _provenance()["extract_sha256"] == EXPECTED_EXTRACT_SHA256
 
 
 def test_extractor_hash_matches_provenance():
@@ -114,13 +174,16 @@ def test_covered_lines_equal_the_reviewed_set():
     )
 
 
-def test_extract_shape_matches_provenance():
+def test_extract_shape_matches_reviewed_schema_and_provenance():
     rows = _extract_rows()
     prov = _provenance()
+    assert list(rows[0].keys()) == list(EXPECTED_COLUMNS), (
+        "extract columns differ from the reviewed schema"
+    )
+    assert list(prov["columns"]) == list(EXPECTED_COLUMNS)
     assert len(rows) == prov["extract_rows"]
     assert len({r["country"] for r in rows}) == prov["extract_countries"]
     assert len({r["revision"] for r in rows}) == prov["extract_revisions"]
-    assert list(rows[0].keys()) == list(prov["columns"])
     assert {r["hts10"] for r in rows} == set(_covered_lines())
 
 
@@ -140,6 +203,11 @@ def test_extract_country_dimension_is_complete():
         "was dropped from some line(s)"
     )
     assert len(country_sets[0]) == EXPECTED_COUNTRY_COUNT
+    canonical = ",".join(sorted(country_sets[0])).encode()
+    assert hashlib.sha256(canonical).hexdigest() == EXPECTED_COUNTRY_SET_SHA256, (
+        "extract country IDENTITY differs from the reviewed set digest — "
+        "a substituted country cannot hide behind a matching count"
+    )
     assert sorted(country_sets[0]) == list(_provenance()["countries"])
 
 
@@ -147,10 +215,11 @@ def test_extract_keys_unique_rates_valid_intervals_tile():
     rows = _extract_rows()
     keys = [(r["hts10"], r["country"], r["valid_from"]) for r in rows]
     assert len(keys) == len(set(keys)), "duplicate extract keys"
-    rate_cols = [c for c in rows[0] if c.startswith("statutory_")]
     series: dict[tuple[str, str], list[tuple[date, date]]] = {}
     for r in rows:
-        for c in rate_cols:
+        # Reviewed column list, NOT dynamic discovery: removing the
+        # statutory columns must fail here, not make this loop vacuous.
+        for c in STATUTORY_COLUMNS:
             value = float(r[c])  # raises on blank/non-numeric
             assert math.isfinite(value) and value >= 0.0, (
                 r["hts10"], r["country"], c, value,
@@ -160,23 +229,37 @@ def test_extract_keys_unique_rates_valid_intervals_tile():
         )
         assert lo <= hi
         series.setdefault((r["hts10"], r["country"]), []).append((lo, hi))
-    interval_counts = set()
+    boundary_signatures = set()
     for key, intervals in series.items():
         intervals.sort()
-        interval_counts.add(len(intervals))
+        assert len(intervals) == EXPECTED_INTERVALS_PER_SERIES, (
+            f"{key} carries {len(intervals)} intervals, reviewed profile is "
+            f"{EXPECTED_INTERVALS_PER_SERIES} — truncated/narrowed series"
+        )
+        boundary_signatures.add(tuple(intervals))
         for (_, prev_hi), (next_lo, _) in zip(intervals, intervals[1:]):
             assert next_lo == prev_hi + timedelta(days=1), (
                 f"gap/overlap in {key}: {prev_hi} -> {next_lo}"
             )
-    assert len(interval_counts) == 1, (
-        f"differing interval counts across series: {sorted(interval_counts)}"
+    # Yale revisions are global dates: every series must share ONE exact
+    # boundary signature (equal counts alone would admit shifted intervals).
+    assert len(boundary_signatures) == 1, (
+        f"{len(boundary_signatures)} distinct interval-boundary signatures "
+        "across series — the temporal profile is not uniform"
     )
+
+
+def test_snapshot_bytes_match_the_reviewed_pin():
+    """The Schedule C snapshot is the root of the bridge derivation chain;
+    pinning its bytes in reviewed code closes the co-edit path (snapshot
+    swap + rebuild + restamp)."""
+    assert _sha256(SNAPSHOT) == EXPECTED_SNAPSHOT_SHA256
 
 
 def test_bridge_hashes_match_provenance():
     prov = json.loads(BRIDGE_PROVENANCE.read_text())
     assert _sha256(BRIDGE) == prov["bridge_sha256"]
-    assert _sha256(SNAPSHOT) == prov["snapshot_sha256"]
+    assert prov["snapshot_sha256"] == EXPECTED_SNAPSHOT_SHA256
     assert _sha256(REPO_ROOT / prov["builder"]) == prov["builder_sha256"]
 
 

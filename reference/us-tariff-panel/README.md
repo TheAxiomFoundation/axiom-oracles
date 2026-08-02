@@ -18,19 +18,23 @@ Yale panel, never from artifacts shared with the rulespec-us implementation.
 | `census_iso_bridge.csv` | census 4-digit code ↔ origin-code bridge (ISO alpha-2 + Schedule C extensions, see below) | `scripts/build_census_iso_bridge.py` |
 | `bridge_provenance.json` | Source URL, snapshot sha, builder sha, extension list, build stamp | same |
 
-`tests/test_us_tariff_reference.py` is the CI-side validator: it binds each
-committed artifact to its provenance stamp (sha256), pins the covered slice
-to the reviewed `REVIEWED_COVERED_LINES` constant (exact set, not a floor —
-so append-only survives edits to the mutable provenance stamp) and the
-country dimension to `EXPECTED_COUNTRY_COUNT` (with per-line country-SET
-equality, so a dropped country series cannot hide behind equal counts),
-re-derives the bridge exactly from the snapshot (hash self-consistency
-alone would accept a hand-edited bridge with a restamped sha), and
-re-checks extract integrity (key uniqueness, finite non-negative rates,
-interval tiling) on every run. Coverage is **append-only**: both the
-exporter and the validator fail if a previously covered line disappears —
-narrowing the reference to force agreement is the failure mode this suite
-exists to prevent.
+`tests/test_us_tariff_reference.py` is the CI-side validator. Its trust
+model: provenance stamps are mutable data files, so anything checked only
+against them can be restamped in the same edit. Every load-bearing identity
+is therefore a **reviewed constant in the test file** (the
+`EXPECTED_YALE_COMMIT` pattern): the extract bytes
+(`EXPECTED_EXTRACT_SHA256`), the snapshot bytes
+(`EXPECTED_SNAPSHOT_SHA256`), the covered slice (`REVIEWED_COVERED_LINES`,
+exact set — not a floor), the country dimension
+(`EXPECTED_COUNTRY_COUNT` + `EXPECTED_COUNTRY_SET_SHA256`, with per-line
+country-SET equality), the column schema (`EXPECTED_COLUMNS`), and the
+temporal profile (`EXPECTED_INTERVALS_PER_SERIES` + one global
+interval-boundary signature). The bridge is re-derived exactly from the
+pinned snapshot. Provenance checks then verify stamp consistency, not
+identity. A legitimate refresh updates the constants in the same reviewed
+diff, so any narrowing is visible in review; coverage is **append-only**,
+and narrowing the reference to force agreement is the failure mode this
+suite exists to prevent.
 
 ## Origin-code contract (bridge)
 
@@ -85,9 +89,17 @@ supervised protocol is the boundary, stated here rather than implied away.
    If bumping the Yale pin: update `EXPECTED_YALE_COMMIT` in
    `scripts/extract_yale_panel.R` and in `tests/test_us_tariff_reference.py`
    in the same reviewed diff; if the upstream country universe changed,
-   `EXPECTED_COUNTRY_COUNT` too.
+   `EXPECTED_COUNTRY_COUNT` and `EXPECTED_COUNTRY_SET_SHA256` (in both
+   files) too.
 3. From this repo root:
    `YALE_TRACKER_CHECKOUT=/path/to/tariff-rate-tracker Rscript scripts/extract_yale_panel.R`
+   Then update the reviewed content pins in
+   `tests/test_us_tariff_reference.py` to the regenerated artifacts:
+   `EXPECTED_EXTRACT_SHA256`, and on a schedule/profile change
+   `EXPECTED_COLUMNS` / `EXPECTED_INTERVALS_PER_SERIES` (a snapshot
+   refresh via `--fetch` likewise updates `EXPECTED_SNAPSHOT_SHA256`).
+   These pins changing IS the review surface — the diff shows exactly what
+   the reference now claims.
 4. Regenerate the comparison report (`scripts/generate_us_tariff_panel.py`).
    On a Yale pin bump, re-run `scripts/apply_dispositions.py`: tariff
    dispositions match mismatch rows by selector, so entries whose underlying

@@ -21,6 +21,11 @@
 
 EXPECTED_YALE_COMMIT <- "c4307e514196618afcbf88cf7fd33746417eeabf"
 EXPECTED_YALE_REPO <- "Budget-Lab-Yale/tariff-rate-tracker"
+# Reviewed pin on the panel's country dimension: sha256 of the comma-joined
+# sorted census codes in the slice. Mirrored in
+# tests/test_us_tariff_reference.py (EXPECTED_COUNTRY_SET_SHA256); a Yale
+# pin bump that changes the country universe edits both in one reviewed diff.
+EXPECTED_COUNTRY_SET_SHA256 <- "17640ac633347c44d3017a4b43bbc12a8b7d3c5323393c780b89f262fcc166d7"
 
 suppressPackageStartupMessages({
   library(dplyr)
@@ -58,8 +63,11 @@ if (anyDuplicated(covered_lines)) {
 }
 # Append-only guard: the previously stamped coverage must survive a refresh.
 # Narrowing the reference (dropping a poorly matching line) is exactly the
-# reviewer-independence failure this suite exists to prevent; a deliberate
-# scope cut requires deleting the provenance stamp in the same reviewed diff.
+# reviewer-independence failure this suite exists to prevent. This stamp
+# check is the supervised-leg guard; the DURABLE gate is the reviewed
+# REVIEWED_COVERED_LINES exact-set pin in tests/test_us_tariff_reference.py,
+# which any coverage change (removal or burn-up) must edit in the same
+# reviewed diff.
 prev_prov_path <- file.path(out_dir, "yale_panel_provenance.json")
 if (file.exists(prev_prov_path)) {
   prev_lines <- unlist(jsonlite::read_json(prev_prov_path)$covered_lines)
@@ -204,9 +212,37 @@ if (n_distinct(country_signatures$signature) != 1) {
   stop("covered lines carry differing country SETS — a country series was ",
        "dropped from some line(s); inspect before committing")
 }
+# Country IDENTITY pin (not just cardinality): the canonical digest of the
+# sorted census-code set must equal the reviewed constant.
+canonical_countries <- paste(sort(unique(slice$country)), collapse = ",")
+tmp_canon <- tempfile()
+writeLines(canonical_countries, tmp_canon, sep = "")
+country_set_sha <- sha256(tmp_canon)
+unlink(tmp_canon)
+if (country_set_sha != EXPECTED_COUNTRY_SET_SHA256) {
+  stop("slice country set digest ", country_set_sha, " != reviewed pin ",
+       EXPECTED_COUNTRY_SET_SHA256,
+       " — the upstream country universe changed; review and update the ",
+       "pin here and in tests/test_us_tariff_reference.py in one diff")
+}
 if (n_distinct(interval_check$n_intervals) != 1) {
   stop("(hts10, country) series carry differing interval counts — a line ",
        "lost revisions/intervals; inspect before committing")
+}
+# Identical PROFILE, not just identical counts: Yale revisions are global
+# dates, so every series must share one exact interval-boundary signature
+# (equal counts alone would admit shifted/substituted intervals).
+boundary_signatures <- slice %>%
+  group_by(hts10, country) %>%
+  arrange(valid_from, .by_group = TRUE) %>%
+  summarise(
+    sig = paste(valid_from, valid_until, sep = "..", collapse = ";"),
+    .groups = "drop"
+  )
+if (n_distinct(boundary_signatures$sig) != 1) {
+  stop(n_distinct(boundary_signatures$sig),
+       " distinct interval-boundary signatures across series — the ",
+       "temporal profile is not uniform; inspect before committing")
 }
 
 csv_path <- file.path(out_dir, "yale_panel_slice.csv")
