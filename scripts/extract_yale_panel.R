@@ -109,9 +109,21 @@ yale_remote <- tryCatch(
   system2("git", c("-C", yale, "remote", "get-url", "origin"), stdout = TRUE),
   warning = function(w) ""
 )
-if (!grepl(EXPECTED_YALE_REPO, yale_remote, fixed = TRUE)) {
-  stop("Yale checkout origin remote is '", yale_remote, "', expected a ",
-       EXPECTED_YALE_REPO, " remote — refusing a fork-built panel")
+# Exact identity, never a substring: a fork or attacker remote can embed the
+# canonical owner/repo path anywhere in its URL
+# (e.g. evil.example/Budget-Lab-Yale/tariff-rate-tracker.git), so the
+# normalized remote must EQUAL one of the canonical github.com spellings of
+# the reviewed repo (sol stack review, nit 2).
+normalized_remote <- sub("/+$", "", sub("\\.git$", "", trimws(yale_remote)))
+canonical_remotes <- c(
+  paste0("https://github.com/", EXPECTED_YALE_REPO),
+  paste0("git@github.com:", EXPECTED_YALE_REPO),
+  paste0("ssh://git@github.com/", EXPECTED_YALE_REPO)
+)
+if (!(normalized_remote %in% canonical_remotes)) {
+  stop("Yale checkout origin remote is '", yale_remote, "', expected the ",
+       EXPECTED_YALE_REPO, " GitHub remote exactly — refusing a fork-built ",
+       "panel")
 }
 
 # Spine + statutory reference columns ONLY. Estimation-touched and effective

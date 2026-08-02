@@ -13,7 +13,7 @@
   "date_mode": "legal",
   "panel_rows_total": 277303920,
   "extractor": "scripts/extract_yale_panel.R",
-  "extractor_sha256": "21eb6c562bdc3df53a49641b2785e1982fa9e473934b38f0e63047eb5ad19402",
+  "extractor_sha256": "97086c88292eb339fa01abe07167062956bd570c732a3609a9ebb923760705dd",
   "covered_lines": [
     "7202111000",
     "7601103000",
@@ -287,5 +287,5 @@
   "valid_from_range": ["2025-01-01", "2026-11-10"],
   "valid_until_range": ["2025-02-03", "2026-12-31"],
   "extract_sha256": "331d92d9ce30067e26c93d3f9f55b18af5e3b53a6846cbbc0f7652ecc1bd96c3",
-  "extracted_at": "2026-08-01T20:50:18-0400"
+  "extracted_at": "2026-08-02T00:29:43-0400"
 }
