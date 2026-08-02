@@ -966,13 +966,21 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
         if population:
             dataset = {"source": "config", "population": str(population)}
 
-    return build_provenance(
+    provenance = build_provenance(
         generated_by=f"scripts/run_comparison.py::{config.get('name', '?')}",
         rulespecs=rulespecs,
         engine=engine,
         oracle=oracle,
         dataset=dataset,
     )
+    # Explicit serialized re-emission status: nulled rulespec SHAs already
+    # mark staleness for the affected-suite selector, but the payload itself
+    # must also say its numbers were re-emitted from the committed report
+    # rather than newly computed on this host (#448 review). The
+    # generated_at timestamp dates the re-emission, not the numbers.
+    if runner.get("_reemitted_report"):
+        provenance["reemitted_report"] = True
+    return provenance
 
 
 def _stamp_report_provenance(
@@ -2819,6 +2827,32 @@ def _run_us_tariff_grid(runner: dict, output: Path) -> None:
     output.write_text(committed.read_text())
 
 
+def _us_tariff_panel_unavailable_reason() -> str | None:
+    """Why the panel generator CANNOT run on this host, or None if it can.
+
+    Probed BEFORE launching the generator: the skip-capable re-emit lane is
+    only for hosts missing prerequisites (no rulespec-us tariff spine, no
+    built engine, no uv). A generator that was actually launched and failed
+    — unbridged countries, engine errors, integrity asserts — must fail the
+    job, never be converted into a successful re-emitted run (#448 review).
+    """
+    if shutil.which("uv") is None:
+        return "uv not on PATH"
+    checkout = Path(
+        os.environ.get("RULESPEC_US_CHECKOUT")
+        or os.path.expanduser("~/TheAxiomFoundation/rulespec-us")
+    )
+    composition = checkout / "us/policies/cbp/us-tariff-duty/composition.yaml"
+    if not composition.exists():
+        return f"rulespec-us tariff spine not found at {composition}"
+    from axiom_oracles.adapters.axiom.runner import _resolve_binary_path
+
+    binary = _resolve_binary_path(None, composition)
+    if not binary.exists() and shutil.which(str(binary)) is None:
+        return f"axiom rules engine binary not found ({binary})"
+    return None
+
+
 def _run_us_tariff_panel(runner: dict, output: Path) -> None:
     """US tariff panel: rulespec-us duty spine vs the Yale statutory panel.
 
@@ -2829,14 +2863,23 @@ def _run_us_tariff_panel(runner: dict, output: Path) -> None:
     grades the per-authority statutory slots and the statutory total
     exactly. The reference leg is a committed, provenance-pinned extract —
     there is no external oracle process at comparison time. On a runner
-    without a built axiom rules engine or the rulespec-us tariff spine, the
-    committed dashboard report is reused, marked as a re-emit so provenance
-    never stamps it fresh (#296; same shape as _run_us_tariff_grid).
+    without a built axiom rules engine or the rulespec-us tariff spine
+    (probed explicitly, BEFORE launching), the committed full report is
+    reused, marked as a re-emit so provenance never stamps it fresh
+    (#296; same shape as _run_us_tariff_grid). A launched generator that
+    fails propagates — its integrity hard-fails (unbridged census codes,
+    engine errors) must fail the job, not degrade into a re-emit.
     """
     generator = REPO_ROOT / "scripts" / "generate_us_tariff_panel.py"
-    committed = (
-        REPO_ROOT / "dashboard" / "public" / "data" / "axiom-yale-us-tariff-panel.json"
+    # Re-emits must source the committed FULL report, never the dashboard
+    # copy (whose mismatch rows are truncated for the UI) — otherwise a
+    # re-emitted run silently replaces the full unit-grain account with
+    # the truncated one (#448 review). The dashboard adaptation
+    # downstream re-truncates deterministically.
+    committed_candidates = sorted(
+        (REPO_ROOT / "reports").glob("axiom-yale-us-tariff-panel-all-*.json")
     )
+    committed = committed_candidates[-1] if committed_candidates else None
     cmd = [
         "uv",
         "run",
@@ -2848,29 +2891,39 @@ def _run_us_tariff_panel(runner: dict, output: Path) -> None:
         "python",
         str(generator),
     ]
-    try:
-        subprocess.run(cmd, check=True, cwd=REPO_ROOT)
-    except (subprocess.CalledProcessError, FileNotFoundError) as exc:
-        if not committed.exists():
-            raise
+    reason = _us_tariff_panel_unavailable_reason()
+    if reason is not None:
+        if committed is None:
+            raise SystemExit(
+                f"us-tariff-panel generation unavailable ({reason}) and no "
+                "committed full report exists under reports/"
+            )
         runner["_reemitted_report"] = True
-        print(f"us-tariff-panel generation unavailable ({exc}); reusing {committed}.")
-    else:
-        # Record what actually ran (same env-override honesty as the T0
-        # grid runner: the generator honors RULESPEC_US_CHECKOUT and
-        # AXIOM_RULES_ENGINE_BINARY, which may differ from the configured
-        # defaults).
-        checkout = Path(
-            os.environ.get("RULESPEC_US_CHECKOUT")
-            or os.path.expanduser("~/TheAxiomFoundation/rulespec-us")
-        )
-        runner.setdefault("parameters", {})["rulespec_roots"] = [str(checkout)]
-        binary = os.environ.get("AXIOM_RULES_ENGINE_BINARY")
-        if binary:
-            engine_repo = Path(binary).resolve().parents[2]
-            if (engine_repo / ".git").exists():
-                runner["axiom_rules_repo"] = str(engine_repo)
-    output.write_text(committed.read_text())
+        print(f"us-tariff-panel generation unavailable ({reason}); reusing {committed}.")
+        output.write_text(committed.read_text())
+        return
+    subprocess.run(cmd, check=True, cwd=REPO_ROOT)
+    # Record what actually ran (same env-override honesty as the T0
+    # grid runner: the generator honors RULESPEC_US_CHECKOUT and
+    # AXIOM_RULES_ENGINE_BINARY, which may differ from the configured
+    # defaults).
+    checkout = Path(
+        os.environ.get("RULESPEC_US_CHECKOUT")
+        or os.path.expanduser("~/TheAxiomFoundation/rulespec-us")
+    )
+    runner.setdefault("parameters", {})["rulespec_roots"] = [str(checkout)]
+    binary = os.environ.get("AXIOM_RULES_ENGINE_BINARY")
+    if binary:
+        engine_repo = Path(binary).resolve().parents[2]
+        if (engine_repo / ".git").exists():
+            runner["axiom_rules_repo"] = str(engine_repo)
+    # Hand off the FULL report the generator just wrote (the dashboard
+    # slot holds the untruncated report until the downstream dashboard
+    # adaptation truncates it).
+    fresh = (
+        REPO_ROOT / "dashboard" / "public" / "data" / "axiom-yale-us-tariff-panel.json"
+    )
+    output.write_text(fresh.read_text())
 
 
 def _snap_qc_optional_path(raw: str | Path | None) -> Path | None:
