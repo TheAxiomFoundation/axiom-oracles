@@ -14,7 +14,7 @@ import csv
 import hashlib
 import importlib.util
 import json
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 
 import pytest
@@ -28,12 +28,15 @@ from axiom_oracles.suites.us_tariff_panel import (
     TOTAL,
     YALE_STATUTORY_COLUMNS,
     case_id,
+    column_exposure,
     covered_units,
     dotted_hts,
     load_provenance,
     load_reference,
     panel_case,
+    straddle_clipped,
     temporal_debt,
+    temporal_debt_records,
 )
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -53,6 +56,51 @@ EXPECTED_COMPARISON_UNITS = 23_760
 EXPECTED_MATCH_COUNT = 16_873
 EXPECTED_MISMATCH_COUNT = 6_887
 EXPECTED_SIGNATURE_COUNT = 89
+
+#: Reviewed sha256 of the committed report's canonical ACCOUNT — the
+#: {summary, mismatches, mismatch_signatures, cases} sections serialized
+#: with sort_keys and compact separators (#448 review round 4). The count
+#: pins above constrain totals; this pin binds mismatch IDENTITY and the
+#: Axiom-side values, so relocating a genuine mismatch onto a
+#: previously-matching unit with the same Yale vector (consistent
+#: signature/family rewrites included) cannot reconcile. A genuine
+#: encoding or reference change moves this in the same reviewed diff.
+EXPECTED_ACCOUNT_SHA256 = (
+    "ad6b035a03db8ddd4f3f47b32921e939507e176638f23c9048eb4c3faafa5e42"
+)
+
+#: Reviewed positive-exposure counts per Yale statutory column: the number
+#: of comparison units whose REFERENCE value for the column is positive.
+#: This is the witness basis for the conformance scoreboard's covered
+#: verdicts (sol stack review F3): a policy whose columns are 0 everywhere
+#: in the covered slice (301_cs, s338, section_201, other) is exercised by
+#: NOTHING — "covered" for it is vacuous, and the scoreboard must say
+#: uncovered. A Yale pin bump or coverage burn-up moves these in the same
+#: reviewed diff.
+EXPECTED_COLUMN_EXPOSURE = {
+    "statutory_base_rate": 15_840,
+    "statutory_rate_232": 7_920,
+    "statutory_rate_ieepa_recip": 954,
+    "statutory_rate_ieepa_fent": 24,
+    "statutory_rate_301": 99,
+    "statutory_rate_301_cs": 0,
+    "statutory_rate_s301fl": 860,
+    "statutory_rate_s301br": 12,
+    "statutory_rate_s338": 0,
+    "statutory_rate_s122": 9_120,
+    "statutory_rate_section_201": 0,
+    "statutory_rate_other": 0,
+}
+
+#: Reviewed temporal-debt account (sol stack review F4): intervals wholly
+#: before the encoded domain (no probes at all) plus intervals straddling
+#: the boundary (probed, but their pre-domain days are unaudited). Every
+#: unit is addressable via scope.temporal_debt.records; these totals move
+#: only with a domain burn-down or Yale pin bump, in the same reviewed diff.
+EXPECTED_PRE_DOMAIN_INTERVALS = 28_800
+EXPECTED_STRADDLE_CLIPPED_INTERVALS = 720
+EXPECTED_PRE_DOMAIN_RECORD_GROUPS = 120
+EXPECTED_STRADDLE_RECORD_GROUPS = 3
 
 #: Reviewed dashboard truncation cap (run_comparison._DASHBOARD_MAX_MISMATCHES)
 #: — the dashboard copy must carry EXACTLY min(cap, mismatch_count) rows, not
@@ -350,6 +398,23 @@ def test_committed_report_reconciles_counts_rows_and_signatures() -> None:
         "the committed dated report must be the FULL report, not a "
         "dashboard-truncated copy"
     )
+    # Account digest pin: byte-level identity of the four account
+    # sections. Everything below re-derives structure; this closes the
+    # remaining relabelling family (round 4) where an internally
+    # consistent mutant relocates a mismatch between same-Yale-vector
+    # units without moving any count.
+    account = {
+        key: report[key]
+        for key in ("summary", "mismatches", "mismatch_signatures", "cases")
+    }
+    account_sha256 = hashlib.sha256(
+        json.dumps(account, sort_keys=True, separators=(",", ":")).encode()
+    ).hexdigest()
+    assert account_sha256 == EXPECTED_ACCOUNT_SHA256, (
+        "committed report account sections do not match the reviewed "
+        "digest — mismatch identity or values changed outside a reviewed "
+        "pin bump"
+    )
     summary = report["summary"]
     assert summary["comparison_count"] == EXPECTED_COMPARISON_UNITS
     # Reviewed outcome pins: internal reconciliation alone cannot prove
@@ -563,6 +628,13 @@ def test_committed_report_reconciles_counts_rows_and_signatures() -> None:
         "dashboard mismatch rows must be the deterministic prefix of the "
         "full report's rows"
     )
+    # Case-family evidence must survive publication (#448 review round
+    # 4): the panel's family ledger fits under the case cap, so the
+    # dashboard must carry ALL committed families verbatim — not zero
+    # rows dropped by an ID-set filter keyed to mismatch rows.
+    assert dashboard["cases"] == families, (
+        "dashboard case-family ledger must equal the full report's"
+    )
     truncation = dashboard.get("dashboard_truncation")
     if len(dash_rows) < summary["mismatch_count"]:
         assert truncation is not None, (
@@ -571,6 +643,8 @@ def test_committed_report_reconciles_counts_rows_and_signatures() -> None:
     if truncation is not None:
         assert truncation["shown_mismatches"] == len(dash_rows)
         assert truncation["total_mismatches"] == summary["mismatch_count"]
+        assert truncation["shown_case_rows"] == len(dashboard["cases"])
+        assert truncation["total_case_rows"] == len(families)
 
 
 def test_authority_slots_partition_the_statutory_columns() -> None:
@@ -669,3 +743,192 @@ def test_committed_report_provenance_pins_the_committed_extract(provenance) -> N
             f"{reports_path.name} embeds a reference provenance that "
             "differs from the committed yale_panel_provenance.json"
         )
+
+
+def test_panel_stays_on_the_manual_ci_lane() -> None:
+    """Standard CI neither builds the Rust rules engine nor exports
+    AXIOM_RULES_ENGINE_BINARY, so a matrix or affected-rerun dispatch of
+    this suite could only ever take the HEAD re-emit path — a permanently
+    stale lane presenting as a scheduled refresh (#448 review round 4).
+    The suite must stay `ci: manual` (and therefore `name: null` in the
+    committed affected map) until a CI leg actually builds and exports the
+    engine binary; whoever adds that leg flips these pins in the same
+    reviewed diff."""
+    import yaml
+
+    config = yaml.safe_load(
+        (REPO_ROOT / "comparisons" / "us-tariff-panel.yaml").read_text()
+    )
+    assert config.get("ci") == "manual", (
+        "us-tariff-panel must declare `ci: manual` — CI has no engine "
+        "binary, so a dispatched run silently re-emits HEAD bytes"
+    )
+    affected = json.loads(
+        (REPO_ROOT / "comparisons" / "affected_map.json").read_text()
+    )
+    entry = next(
+        e for e in affected["suites"] if e["suite"] == "us-tariff-panel"
+    )
+    assert entry["name"] is None, (
+        "us-tariff-panel must ride the manual lane (name: null) in the "
+        "committed affected map"
+    )
+
+
+def test_column_exposure_matches_the_reviewed_pin(reference) -> None:
+    """Positive-exposure counts, derived independently of the suite helper,
+    must equal the reviewed pin — and so must the helper. The four
+    zero-exposure columns are the reason 301_cs/s338/s201/other CANNOT be
+    covered by this suite: no unit ever exercises them."""
+    intervals, _ = reference
+    units = covered_units(intervals)
+    derived = {column: 0 for column in YALE_STATUTORY_COLUMNS}
+    for interval, _probe in units:
+        for column in YALE_STATUTORY_COLUMNS:
+            if interval.rates[column] > 0:
+                derived[column] += 1
+    assert derived == EXPECTED_COLUMN_EXPOSURE
+    assert column_exposure(units) == EXPECTED_COLUMN_EXPOSURE
+    assert [
+        c for c, n in EXPECTED_COLUMN_EXPOSURE.items() if n == 0
+    ] == [
+        "statutory_rate_301_cs",
+        "statutory_rate_s338",
+        "statutory_rate_section_201",
+        "statutory_rate_other",
+    ]
+
+
+def test_temporal_debt_records_conserve_and_address_every_interval(
+    reference,
+) -> None:
+    """The addressable debt account must conserve the interval totals and
+    keep every unaudited interval addressable: unique ids, exact interval
+    bounds, and kind-correct classification (pre-domain intervals end
+    before the domain; straddle records name their unaudited day range)."""
+    intervals, _ = reference
+    records = temporal_debt_records(intervals)
+
+    pre = [r for r in records if r["kind"] == "pre_domain"]
+    straddle = [r for r in records if r["kind"] == "straddle_clipped"]
+    assert len(records) == len(pre) + len(straddle)
+    assert len(pre) == EXPECTED_PRE_DOMAIN_RECORD_GROUPS
+    assert len(straddle) == EXPECTED_STRADDLE_RECORD_GROUPS
+    assert (
+        sum(r["interval_count"] for r in pre) == EXPECTED_PRE_DOMAIN_INTERVALS
+    )
+    assert (
+        sum(r["interval_count"] for r in straddle)
+        == EXPECTED_STRADDLE_CLIPPED_INTERVALS
+    )
+    # Independent totals: the helper-free derivation must agree.
+    assert len(temporal_debt(intervals)) == EXPECTED_PRE_DOMAIN_INTERVALS
+    assert (
+        len(straddle_clipped(intervals))
+        == EXPECTED_STRADDLE_CLIPPED_INTERVALS
+    )
+    assert sum(
+        1 for i in intervals if i.valid_until < DOMAIN_START
+    ) == EXPECTED_PRE_DOMAIN_INTERVALS
+    assert sum(
+        1 for i in intervals if i.valid_from < DOMAIN_START <= i.valid_until
+    ) == EXPECTED_STRADDLE_CLIPPED_INTERVALS
+
+    ids = [r["debt_id"] for r in records]
+    assert len(ids) == len(set(ids)), "debt records must be addressable"
+    for record in pre:
+        assert date.fromisoformat(record["valid_until"]) < DOMAIN_START
+    for record in straddle:
+        assert record["unprobed_from"] == record["valid_from"]
+        assert (
+            date.fromisoformat(record["unprobed_until"])
+            == DOMAIN_START - timedelta(days=1)
+        )
+        assert (
+            date.fromisoformat(record["valid_from"])
+            < DOMAIN_START
+            <= date.fromisoformat(record["valid_until"])
+        )
+
+
+def test_committed_report_scope_carries_exposure_and_debt(reference) -> None:
+    """Every committed report derivative must carry the positive-exposure
+    witness basis and the addressable temporal-debt account, exactly as
+    re-derived from the committed reference — the scoreboard consumes
+    these, so a drifted or forged account here would launder vacuous
+    coverage or hide debt (sol stack review F3/F4)."""
+    intervals, _ = reference
+    expected_records = temporal_debt_records(intervals)
+    paths = [
+        REPO_ROOT
+        / "dashboard"
+        / "public"
+        / "data"
+        / "axiom-yale-us-tariff-panel.json",
+        *sorted((REPO_ROOT / "reports").glob("axiom-yale-us-tariff-panel-*.json")),
+    ]
+    for path in paths:
+        if not path.exists():
+            pytest.skip("panel report not yet published")
+        scope = json.loads(path.read_text())["scope"]
+        assert scope["column_exposure"] == EXPECTED_COLUMN_EXPOSURE, path.name
+        debt = scope["temporal_debt"]
+        assert debt["pre_domain_intervals"] == EXPECTED_PRE_DOMAIN_INTERVALS
+        assert (
+            debt["straddle_clipped_intervals"]
+            == EXPECTED_STRADDLE_CLIPPED_INTERVALS
+        )
+        assert debt["records"] == expected_records, path.name
+        assert (
+            scope["temporal_debt_intervals"] == debt["pre_domain_intervals"]
+        )
+
+
+def test_generator_refuses_a_domain_start_composition_divergence(
+    tmp_path,
+) -> None:
+    """DOMAIN_START is only honest while it equals the live spine's earliest
+    effective_from: the generator must hard-refuse a divergent pair, in
+    either direction, and must refuse a composition it cannot read dates
+    from (a silent no-dates pass would unbind the domain entirely)."""
+    generator = _load_generator()
+
+    good = tmp_path / "good.yaml"
+    good.write_text(
+        "modules:\n"
+        "  - params:\n"
+        f"      - effective_from: '{DOMAIN_START.isoformat()}'\n"
+        "      - effective_from: '2026-06-01'\n"
+    )
+    generator.assert_domain_matches_composition(good)
+
+    earlier = tmp_path / "earlier.yaml"
+    earlier.write_text(
+        "modules:\n"
+        "  - params:\n"
+        "      - effective_from: '2026-01-01'\n"
+        f"      - effective_from: '{DOMAIN_START.isoformat()}'\n"
+    )
+    with pytest.raises(SystemExit, match="does not match"):
+        generator.assert_domain_matches_composition(earlier)
+
+    later = tmp_path / "later.yaml"
+    later.write_text("params:\n  - effective_from: '2026-03-01'\n")
+    with pytest.raises(SystemExit, match="does not match"):
+        generator.assert_domain_matches_composition(later)
+
+    empty = tmp_path / "empty.yaml"
+    empty.write_text("modules: []\n")
+    with pytest.raises(SystemExit, match="no effective_from"):
+        generator.assert_domain_matches_composition(empty)
+
+
+def test_generator_domain_binding_holds_against_the_live_spine() -> None:
+    """When the rulespec-us checkout is present (supervised hosts), the
+    binding must actually hold — the committed debt account was derived
+    under this DOMAIN_START."""
+    generator = _load_generator()
+    composition = generator.RULESPEC_US / generator.COMPOSITION_PATH
+    if not composition.exists():
+        pytest.skip("rulespec-us checkout not available")
+    generator.assert_domain_matches_composition(composition)
