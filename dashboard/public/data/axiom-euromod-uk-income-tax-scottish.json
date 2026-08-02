@@ -654,7 +654,7 @@
       "axiom_rules_engine_sha": "32b3462336eeb67412b544da1cf5657a5b474daf",
       "axiom_rules_engine_version": "0.2.0"
     },
-    "generated_at": "2026-08-02T14:06:55Z",
+    "generated_at": "2026-08-02T19:42:33Z",
     "generated_by": "scripts/run_comparison.py::uk-income-tax-scottish-ukmod",
     "oracle": {
       "euromod_country": "UK",
