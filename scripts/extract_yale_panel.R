@@ -26,6 +26,11 @@ EXPECTED_YALE_REPO <- "Budget-Lab-Yale/tariff-rate-tracker"
 # tests/test_us_tariff_reference.py (EXPECTED_COUNTRY_SET_SHA256); a Yale
 # pin bump that changes the country universe edits both in one reviewed diff.
 EXPECTED_COUNTRY_SET_SHA256 <- "17640ac633347c44d3017a4b43bbc12a8b7d3c5323393c780b89f262fcc166d7"
+# Reviewed temporal-profile pin: every (hts10, country) series must carry
+# exactly this many intervals (one per Yale revision). Mirrored in
+# tests/test_us_tariff_reference.py; a Yale pin bump that adds revisions
+# edits both in one reviewed diff.
+EXPECTED_INTERVALS_PER_SERIES <- 57
 
 suppressPackageStartupMessages({
   library(dplyr)
@@ -228,6 +233,14 @@ if (country_set_sha != EXPECTED_COUNTRY_SET_SHA256) {
 if (n_distinct(interval_check$n_intervals) != 1) {
   stop("(hts10, country) series carry differing interval counts — a line ",
        "lost revisions/intervals; inspect before committing")
+}
+# Equal counts are not enough: a UNIFORM truncation (every series losing
+# the same interval) passes the distinct-count check. Pin the count itself.
+if (any(interval_check$n_intervals != EXPECTED_INTERVALS_PER_SERIES)) {
+  stop("series carry ", interval_check$n_intervals[1], " intervals, ",
+       "reviewed pin expects ", EXPECTED_INTERVALS_PER_SERIES,
+       " — a Yale revision was added/lost; review and update the pin here ",
+       "and in tests/test_us_tariff_reference.py in one diff")
 }
 # Identical PROFILE, not just identical counts: Yale revisions are global
 # dates, so every series must share one exact interval-boundary signature

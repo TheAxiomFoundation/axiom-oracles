@@ -155,6 +155,21 @@ def test_yale_pin_is_the_reviewed_commit():
     assert f'EXPECTED_YALE_COMMIT <- "{EXPECTED_YALE_COMMIT}"' in exporter
 
 
+def test_exporter_mirrors_the_reviewed_pins():
+    """The exporter's fail-before-write gates carry the same reviewed pins
+    as this validator; a one-sided edit (drifting the exporter's copy) is a
+    CI failure, not a silent divergence."""
+    exporter = (REPO_ROOT / "scripts" / "extract_yale_panel.R").read_text()
+    assert (
+        f"EXPECTED_INTERVALS_PER_SERIES <- {EXPECTED_INTERVALS_PER_SERIES}"
+        in exporter
+    )
+    assert (
+        f'EXPECTED_COUNTRY_SET_SHA256 <- "{EXPECTED_COUNTRY_SET_SHA256}"'
+        in exporter
+    )
+
+
 def test_covered_lines_nonempty_unique_and_stamped():
     lines = _covered_lines()
     assert lines, "empty covered slice verifies nothing"
