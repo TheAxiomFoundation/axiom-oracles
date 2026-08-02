@@ -2827,6 +2827,15 @@ def _run_us_tariff_grid(runner: dict, output: Path) -> None:
     output.write_text(committed.read_text())
 
 
+def _us_tariff_panel_env() -> tuple[Path, Path]:
+    """(rulespec-us checkout, composition module path) for the panel suite."""
+    checkout = Path(
+        os.environ.get("RULESPEC_US_CHECKOUT")
+        or os.path.expanduser("~/TheAxiomFoundation/rulespec-us")
+    )
+    return checkout, checkout / "us/policies/cbp/us-tariff-duty/composition.yaml"
+
+
 def _us_tariff_panel_unavailable_reason() -> str | None:
     """Why the panel generator CANNOT run on this host, or None if it can.
 
@@ -2838,11 +2847,7 @@ def _us_tariff_panel_unavailable_reason() -> str | None:
     """
     if shutil.which("uv") is None:
         return "uv not on PATH"
-    checkout = Path(
-        os.environ.get("RULESPEC_US_CHECKOUT")
-        or os.path.expanduser("~/TheAxiomFoundation/rulespec-us")
-    )
-    composition = checkout / "us/policies/cbp/us-tariff-duty/composition.yaml"
+    _, composition = _us_tariff_panel_env()
     if not composition.exists():
         return f"rulespec-us tariff spine not found at {composition}"
     from axiom_oracles.adapters.axiom.runner import _resolve_binary_path
@@ -2851,6 +2856,66 @@ def _us_tariff_panel_unavailable_reason() -> str | None:
     if not binary.exists() and shutil.which(str(binary)) is None:
         return f"axiom rules engine binary not found ({binary})"
     return None
+
+
+def _validate_us_tariff_panel_payload(report: object, source: str) -> None:
+    """Refuse to stamp a truncated or internally unreconciled panel payload.
+
+    Applied to BOTH legs before provenance stamping (#448 review round 2):
+    the generator's run-private output (exit 0 alone does not prove a full
+    payload was produced) and the committed report a re-emit reuses (a
+    truncated dashboard copy or an edited artifact must never re-emit as
+    the full account).
+    """
+    if not isinstance(report, dict):
+        raise SystemExit(f"us-tariff-panel payload at {source} is not a report")
+    if "dashboard_truncation" in report:
+        raise SystemExit(
+            f"us-tariff-panel payload at {source} is a truncated dashboard "
+            "copy — it cannot serve as the full report"
+        )
+    summary = report.get("summary")
+    mismatches = report.get("mismatches")
+    if not isinstance(summary, dict) or not isinstance(mismatches, list):
+        raise SystemExit(
+            f"us-tariff-panel payload at {source} lacks summary/mismatches"
+        )
+    comparison = summary.get("comparison_count")
+    matches = summary.get("match_count")
+    mismatch_count = summary.get("mismatch_count")
+    if not all(
+        isinstance(count, int)
+        for count in (comparison, matches, mismatch_count)
+    ):
+        raise SystemExit(
+            f"us-tariff-panel payload at {source} lacks integral unit counts"
+        )
+    if matches + mismatch_count != comparison:
+        raise SystemExit(
+            f"us-tariff-panel payload at {source} does not conserve units: "
+            f"{matches} + {mismatch_count} != {comparison}"
+        )
+    if len(mismatches) != mismatch_count:
+        raise SystemExit(
+            f"us-tariff-panel payload at {source} carries "
+            f"{len(mismatches)} mismatch rows for "
+            f"mismatch_count={mismatch_count} — full-row account required"
+        )
+    case_ids = {row.get("case_id") for row in mismatches}
+    if len(case_ids) != len(mismatches):
+        raise SystemExit(
+            f"us-tariff-panel payload at {source} has duplicate mismatch rows"
+        )
+    signature_members = [
+        cid
+        for signature in report.get("mismatch_signatures") or []
+        for cid in signature.get("units") or []
+    ]
+    if set(signature_members) != case_ids:
+        raise SystemExit(
+            f"us-tariff-panel payload at {source} has signature memberships "
+            "that do not cover exactly the mismatched units"
+        )
 
 
 def _run_us_tariff_panel(runner: dict, output: Path) -> None:
@@ -2871,59 +2936,83 @@ def _run_us_tariff_panel(runner: dict, output: Path) -> None:
     engine errors) must fail the job, not degrade into a re-emit.
     """
     generator = REPO_ROOT / "scripts" / "generate_us_tariff_panel.py"
-    # Re-emits must source the committed FULL report, never the dashboard
-    # copy (whose mismatch rows are truncated for the UI) — otherwise a
-    # re-emitted run silently replaces the full unit-grain account with
-    # the truncated one (#448 review). The dashboard adaptation
-    # downstream re-truncates deterministically.
-    committed_candidates = sorted(
-        (REPO_ROOT / "reports").glob("axiom-yale-us-tariff-panel-all-*.json")
-    )
-    committed = committed_candidates[-1] if committed_candidates else None
-    cmd = [
-        "uv",
-        "run",
-        "--python",
-        "3.13",
-        "--no-project",
-        "--with-editable",
-        str(REPO_ROOT),
-        "python",
-        str(generator),
-    ]
     reason = _us_tariff_panel_unavailable_reason()
     if reason is not None:
-        if committed is None:
+        # Re-emits must source the UNIQUE git-tracked FULL report — never
+        # the dashboard copy (truncated for the UI) and never an untracked
+        # filesystem stray under the gitignored reports/ directory (#448
+        # review round 2). The payload is validated before reuse so a
+        # truncated or unreconciled artifact cannot re-emit as the full
+        # account.
+        tracked = subprocess.run(
+            [
+                "git",
+                "-C",
+                str(REPO_ROOT),
+                "ls-files",
+                "--",
+                "reports/axiom-yale-us-tariff-panel-all-*.json",
+            ],
+            capture_output=True,
+            text=True,
+            check=True,
+        ).stdout.split()
+        if len(tracked) != 1:
             raise SystemExit(
-                f"us-tariff-panel generation unavailable ({reason}) and no "
-                "committed full report exists under reports/"
+                f"us-tariff-panel generation unavailable ({reason}) and the "
+                "committed full report is not uniquely identifiable "
+                f"(tracked candidates: {tracked or 'none'})"
             )
+        committed = REPO_ROOT / tracked[0]
+        text = committed.read_text()
+        _validate_us_tariff_panel_payload(json.loads(text), str(committed))
         runner["_reemitted_report"] = True
         print(f"us-tariff-panel generation unavailable ({reason}); reusing {committed}.")
-        output.write_text(committed.read_text())
+        output.write_text(text)
         return
-    subprocess.run(cmd, check=True, cwd=REPO_ROOT)
-    # Record what actually ran (same env-override honesty as the T0
-    # grid runner: the generator honors RULESPEC_US_CHECKOUT and
-    # AXIOM_RULES_ENGINE_BINARY, which may differ from the configured
-    # defaults).
-    checkout = Path(
-        os.environ.get("RULESPEC_US_CHECKOUT")
-        or os.path.expanduser("~/TheAxiomFoundation/rulespec-us")
+    # Launched leg: the generator writes to a run-private path (never a
+    # shared slot a previous run could have populated), and the payload is
+    # validated before provenance stamping — exit 0 alone does not prove a
+    # fresh full report was produced (#448 review round 2).
+    with tempfile.TemporaryDirectory(prefix="us-tariff-panel-") as tmpdir:
+        fresh = Path(tmpdir) / "report.json"
+        subprocess.run(
+            [
+                "uv",
+                "run",
+                "--python",
+                "3.13",
+                "--no-project",
+                "--with-editable",
+                str(REPO_ROOT),
+                "python",
+                str(generator),
+                "--out",
+                str(fresh),
+            ],
+            check=True,
+            cwd=REPO_ROOT,
+        )
+        text = fresh.read_text()
+    _validate_us_tariff_panel_payload(
+        json.loads(text), "the generator's run-private output"
     )
+    # Record what actually ran (same env-override honesty as the T0 grid
+    # runner: the generator honors RULESPEC_US_CHECKOUT and
+    # AXIOM_RULES_ENGINE_BINARY). The engine binary is resolved exactly the
+    # way the adapter resolves it, so conventional-path runs (no env
+    # override) record the engine identity too.
+    checkout, composition = _us_tariff_panel_env()
     runner.setdefault("parameters", {})["rulespec_roots"] = [str(checkout)]
-    binary = os.environ.get("AXIOM_RULES_ENGINE_BINARY")
-    if binary:
-        engine_repo = Path(binary).resolve().parents[2]
+    from axiom_oracles.adapters.axiom.runner import _resolve_binary_path
+
+    binary = _resolve_binary_path(None, composition).resolve()
+    runner["parameters"]["engine_binary"] = str(binary)
+    if len(binary.parents) > 2:
+        engine_repo = binary.parents[2]
         if (engine_repo / ".git").exists():
             runner["axiom_rules_repo"] = str(engine_repo)
-    # Hand off the FULL report the generator just wrote (the dashboard
-    # slot holds the untruncated report until the downstream dashboard
-    # adaptation truncates it).
-    fresh = (
-        REPO_ROOT / "dashboard" / "public" / "data" / "axiom-yale-us-tariff-panel.json"
-    )
-    output.write_text(fresh.read_text())
+    output.write_text(text)
 
 
 def _snap_qc_optional_path(raw: str | Path | None) -> Path | None:

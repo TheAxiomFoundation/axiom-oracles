@@ -29,6 +29,7 @@ with the us-tariff-duty spine)::
 
 from __future__ import annotations
 
+import argparse
 import json
 import os
 import sys
@@ -412,7 +413,23 @@ def build_report(
     }
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(
+        description="US tariff panel comparison generator"
+    )
+    parser.add_argument(
+        "--out",
+        type=Path,
+        default=None,
+        help=(
+            "Write the full report ONLY to this run-private path. Used by "
+            "scripts/run_comparison.py so its handoff can never pick up a "
+            "stale shared artifact (a prior dashboard or reports/ file) as "
+            "this run's output. Without --out, the dated reports/ copy and "
+            "the dashboard slot are written (manual supervised runs)."
+        ),
+    )
+    args = parser.parse_args(argv)
     reference_dir = REPO_ROOT / REFERENCE_DIRNAME
     intervals, unbridged = load_reference(reference_dir)
     if unbridged:
@@ -433,13 +450,16 @@ def main() -> int:
     values = _evaluate(units)
     report = build_report(intervals, unbridged, units, values, reference_provenance)
 
-    REPORTS.mkdir(exist_ok=True)
-    DASH_PUBLIC.mkdir(parents=True, exist_ok=True)
-    stamp = date.today().isoformat()
-    (REPORTS / f"{BASENAME}-{stamp}.json").write_text(
-        json.dumps(report, indent=2) + "\n"
-    )
-    (DASH_PUBLIC / f"{BASENAME}.json").write_text(json.dumps(report, indent=2) + "\n")
+    payload = json.dumps(report, indent=2) + "\n"
+    if args.out is not None:
+        args.out.parent.mkdir(parents=True, exist_ok=True)
+        args.out.write_text(payload)
+    else:
+        REPORTS.mkdir(exist_ok=True)
+        DASH_PUBLIC.mkdir(parents=True, exist_ok=True)
+        stamp = date.today().isoformat()
+        (REPORTS / f"{BASENAME}-{stamp}.json").write_text(payload)
+        (DASH_PUBLIC / f"{BASENAME}.json").write_text(payload)
 
     summary = report["summary"]
     print(
