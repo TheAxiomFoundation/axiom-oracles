@@ -1,3 +1,5 @@
+import copy
+import importlib.util
 import json
 from pathlib import Path
 
@@ -321,3 +323,133 @@ def test_seeded_belgium_lane_rollup_covers_every_mismatch() -> None:
     # explained because other BE suites still carry dispositioned residuals.
     assert rollup["unexplained_count"] == 0
     assert rollup["explained_rate"] == 100
+
+
+# ---------------------------------------------------------------------------
+# apply_dispositions.py script: premerged-slim block validation (F2)
+# ---------------------------------------------------------------------------
+
+
+def _load_script_module():
+    path = REPO_ROOT / "scripts" / "apply_dispositions.py"
+    spec = importlib.util.spec_from_file_location(
+        "apply_dispositions_script", path
+    )
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def _premerged_fixture(tmp_path: Path) -> tuple[object, Path, dict, dict]:
+    """A tmp repo with a committed full report and its premerged-slim copy.
+
+    Returns (script module bound to tmp_path, slim dashboard path, slim
+    report, dispositions document). The slim copy embeds the
+    ``summary.dispositioned`` block a fresh merge over the full report
+    produces, then trims its mismatch rows to zero stored examples — the
+    exact shape the panel generator writes.
+    """
+
+    module = _load_script_module()
+    module.REPO_ROOT = tmp_path
+
+    doc = _document(
+        [_entry(linked_issue="https://example.org/upstream/1")]
+    )
+    full = _build_report()
+    merged = apply_dispositions(
+        full, doc, dispositions_file="dispositions/example-suite.yaml"
+    )
+
+    reports_dir = tmp_path / "reports"
+    reports_dir.mkdir()
+    (reports_dir / "example-suite-full.json").write_text(
+        json.dumps(full, indent=2)
+    )
+
+    slim = copy.deepcopy(merged)
+    slim["schema_version"] = DISPOSITIONED_REPORT_SCHEMA_VERSION
+    slim["summary"]["stored_mismatch_example_count"] = 0
+    slim["mismatches"] = []
+    dashboard_dir = tmp_path / "dashboard" / "public" / "data"
+    dashboard_dir.mkdir(parents=True)
+    slim_path = dashboard_dir / "example-suite.json"
+    slim_path.write_text(json.dumps(slim, indent=2))
+
+    assert module._is_premerged_slim_report(slim)
+    return module, slim_path, slim, doc
+
+
+def test_premerged_block_matching_full_report_merge_passes(
+    tmp_path: Path,
+) -> None:
+    module, slim_path, slim, doc = _premerged_fixture(tmp_path)
+    assert module._premerged_block_problems(slim_path, slim, doc) == []
+
+
+def test_hand_edited_premerged_block_is_flagged(tmp_path: Path) -> None:
+    module, slim_path, slim, doc = _premerged_fixture(tmp_path)
+    slim["summary"]["dispositioned"]["raw_match_rate"] = 95
+    problems = module._premerged_block_problems(slim_path, slim, doc)
+    assert problems
+    assert "does not match a fresh dispositions merge" in problems[0]
+
+
+def test_reclassified_dispositions_entry_is_flagged(tmp_path: Path) -> None:
+    # The embedded block was computed while the entry explained the
+    # mismatch as an upstream engine gap; reclassifying it (or deleting
+    # it) must fail --check instead of riding the trusted-block bypass.
+    module, slim_path, slim, doc = _premerged_fixture(tmp_path)
+    reclassified = copy.deepcopy(doc)
+    reclassified["entries"][0]["disposition"] = "axiom_encoding_gap"
+    problems = module._premerged_block_problems(
+        slim_path, slim, reclassified
+    )
+    assert problems
+    assert "does not match a fresh dispositions merge" in problems[0]
+
+    deleted = copy.deepcopy(doc)
+    deleted["entries"] = []
+    assert module._premerged_block_problems(slim_path, slim, deleted)
+
+
+def test_suite_without_committed_full_report_keeps_trusted_block(
+    tmp_path: Path,
+) -> None:
+    # Population diagnostics that store aggregates only have nothing to
+    # re-derive from; the embedded block stays trusted.
+    module, slim_path, slim, doc = _premerged_fixture(tmp_path)
+    (tmp_path / "reports" / "example-suite-full.json").unlink()
+    slim["summary"]["dispositioned"]["unexplained_count"] = 99
+    assert module._premerged_block_problems(slim_path, slim, doc) == []
+
+
+def test_partial_reports_are_not_full_merge_targets(tmp_path: Path) -> None:
+    # A committed report whose stored mismatch rows undercount its summary
+    # is itself a trimmed copy — re-deriving from it would undercount, so
+    # it must not qualify as a full report.
+    module, slim_path, slim, doc = _premerged_fixture(tmp_path)
+    full_path = tmp_path / "reports" / "example-suite-full.json"
+    partial = json.loads(full_path.read_text())
+    partial["mismatches"] = []
+    full_path.write_text(json.dumps(partial))
+    assert module._committed_full_reports("example-suite") == []
+    slim["summary"]["dispositioned"]["unexplained_count"] = 99
+    assert module._premerged_block_problems(slim_path, slim, doc) == []
+
+
+def test_merge_reports_check_flags_premerged_drift(tmp_path: Path) -> None:
+    # End-to-end through _merge_reports: the premerged branch must route
+    # through the block validation in check mode, not trust-and-continue.
+    module, slim_path, slim, doc = _premerged_fixture(tmp_path)
+    slim["summary"]["dispositioned"]["raw_match_rate"] = 95
+    slim_path.write_text(json.dumps(slim, indent=2))
+    module.DASHBOARD_DATA_DIR = slim_path.parent
+    problems, _, changed = module._merge_reports(
+        {"example-suite": doc}, check=True
+    )
+    assert changed is False
+    assert any(
+        "does not match a fresh dispositions merge" in problem
+        for problem in problems
+    )

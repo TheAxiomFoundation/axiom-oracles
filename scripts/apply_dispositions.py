@@ -113,6 +113,13 @@ def _merge_reports(
                 be_reports.append(report)
             continue
         if _is_premerged_slim_report(report):
+            # The slim copy cannot be re-merged (its mismatch rows are a
+            # bounded sample), but its embedded full-run block is NOT
+            # trusted where the suite commits its full report: it is
+            # re-derived from that report, so a dispositions edit or a
+            # hand-edited block fails --check instead of riding a
+            # trusted-block bypass (sol stack review F2).
+            problems.extend(_premerged_block_problems(path, report, dispositions))
             if str(suite).startswith("be-"):
                 be_reports.append(report)
             continue
@@ -137,6 +144,68 @@ def _merge_reports(
             print(f"Updated {path.relative_to(REPO_ROOT)}")
             changed = True
     return problems, be_reports, changed
+
+
+def _committed_full_reports(suite: str) -> list[tuple[Path, dict]]:
+    """Committed FULL reports under reports/ for a suite.
+
+    A report is full when it stores EVERY mismatch row its summary counts —
+    the only artifact a premerged-slim dashboard block can be re-derived
+    from.
+    """
+
+    matches: list[tuple[Path, dict]] = []
+    reports_dir = REPO_ROOT / "reports"
+    if not reports_dir.exists():
+        return matches
+    for path in sorted(reports_dir.glob("*.json")):
+        try:
+            data = json.loads(path.read_text())
+        except json.JSONDecodeError:
+            continue
+        if not isinstance(data, dict) or data.get("suite") != suite:
+            continue
+        summary = data.get("summary") or {}
+        if len(data.get("mismatches") or []) == summary.get("mismatch_count"):
+            matches.append((path, data))
+    return matches
+
+
+def _premerged_block_problems(
+    path: Path, report: dict, dispositions: dict
+) -> list[str]:
+    """Validate a premerged-slim report's embedded dispositioned block.
+
+    The block is recomputed by a fresh dispositions merge over every
+    committed FULL report for the suite; any divergence (a reclassified or
+    deleted dispositions entry, a hand-edited block, a stale dashboard
+    copy) is a problem in BOTH modes — the dashboard copy is rebuilt by
+    the suite's generation lane, never patched here. A suite with no
+    committed full report keeps the trust-the-block behavior (population
+    diagnostics store aggregates only; there is nothing to re-derive
+    from).
+    """
+
+    suite = report.get("suite")
+    problems: list[str] = []
+    embedded = (report.get("summary") or {}).get("dispositioned")
+    for full_path, full in _committed_full_reports(str(suite)):
+        merged = apply_dispositions(
+            full,
+            dispositions,
+            dispositions_file=f"dispositions/{suite}.yaml",
+        )
+        expected = merged["summary"]["dispositioned"]
+        if embedded != expected:
+            problems.append(
+                f"{path.relative_to(REPO_ROOT)} embeds a "
+                "summary.dispositioned block that does not match a fresh "
+                "dispositions merge over "
+                f"{full_path.relative_to(REPO_ROOT)} — refresh the "
+                f"{suite} report so its dashboard copy is rebuilt from the "
+                "full merge"
+            )
+    return problems
 
 
 def _is_premerged_slim_report(report: dict) -> bool:
