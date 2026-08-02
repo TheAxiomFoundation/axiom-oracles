@@ -427,7 +427,7 @@
     "left": "euromod",
     "right": "axiom",
     "versions": {
-      "axiom_rules_engine": "0.1.0"
+      "axiom_rules_engine": "0.2.0"
     }
   },
   "errors": [],
@@ -442,10 +442,10 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "59cdaf9b49aa4130c1377022a8ed3c27335533fe",
-      "axiom_rules_engine_version": "0.1.0"
+      "axiom_rules_engine_sha": "8da96493a6f9d755b1bad10e52cc119f0ec38629",
+      "axiom_rules_engine_version": "0.2.0"
     },
-    "generated_at": "2026-08-01T19:42:26Z",
+    "generated_at": "2026-08-02T04:05:03Z",
     "generated_by": "scripts/run_comparison.py::uk-income-tax-savings-ukmod",
     "oracle": {
       "euromod_country": "UK",
