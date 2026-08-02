@@ -237,10 +237,13 @@ def _premerged_block_problems(
     embedded_core = {
         k: v for k, v in embedded.items() if k not in _BINDING_KEYS
     }
-    embedded_by_id = {
-        row.get("case_id"): row.get("disposition")
+    # One retained row per (case_id, concept): a case validly carries one
+    # mismatch row per concept, so keying by case_id alone would collapse
+    # same-case rows and hide drift among them (sol stack review r3).
+    embedded_rows = [
+        (row.get("case_id"), row.get("concept"), row.get("disposition"))
         for row in report.get("mismatches") or []
-    }
+    ]
     for full_path, full in sources:
         merged = apply_dispositions(
             full,
@@ -266,21 +269,22 @@ def _premerged_block_problems(
                 "reclassification (possibly count-preserving) drifted from "
                 "the embedded block; refresh the report"
             )
-        merged_by_id = {
-            row.get("case_id"): row.get("disposition")
+        merged_by_row = {
+            (row.get("case_id"), row.get("concept")): row.get("disposition")
             for row in merged.get("mismatches") or []
         }
-        for case_id, annotation in embedded_by_id.items():
-            if case_id not in merged_by_id:
+        for case_id, concept, annotation in embedded_rows:
+            key = (case_id, concept)
+            if key not in merged_by_row:
                 problems.append(
-                    f"{rel} retains mismatch row {case_id!r} that the fresh "
-                    f"merge over {full_rel} does not produce"
+                    f"{rel} retains mismatch row {case_id!r}/{concept!r} "
+                    f"that the fresh merge over {full_rel} does not produce"
                 )
-            elif annotation != merged_by_id[case_id]:
+            elif annotation != merged_by_row[key]:
                 problems.append(
-                    f"{rel} retained mismatch row {case_id!r} carries a "
-                    "disposition annotation that does not match the fresh "
-                    f"merge over {full_rel} — refresh the report"
+                    f"{rel} retained mismatch row {case_id!r}/{concept!r} "
+                    "carries a disposition annotation that does not match "
+                    f"the fresh merge over {full_rel} — refresh the report"
                 )
     return problems
 
@@ -291,8 +295,8 @@ def _resolve_source_pointer(
     """Resolve and verify a block's source_report pointer, fail closed.
 
     Appends a problem and returns None unless the pointer names an
-    existing, hash-matching, FULL report for this suite inside the repo's
-    reports/ directory.
+    existing, hash-matching, FULL report for this suite via a
+    repo-relative path inside the repo's reports/ directory.
     """
 
     if not isinstance(pointer, dict):
@@ -303,6 +307,11 @@ def _resolve_source_pointer(
     if not isinstance(raw_path, str) or not isinstance(digest, str):
         problems.append(
             f"{rel} source_report pointer needs string `path` and `sha256`"
+        )
+        return None
+    if Path(raw_path).is_absolute():
+        problems.append(
+            f"{rel} source_report path {raw_path!r} must be repo-relative"
         )
         return None
     candidate = (REPO_ROOT / raw_path).resolve()
@@ -332,12 +341,12 @@ def _resolve_source_pointer(
     except json.JSONDecodeError:
         problems.append(f"{rel} source_report {raw_path!r} is not JSON")
         return None
-    summary = (data or {}).get("summary") or {}
     if not isinstance(data, dict) or data.get("suite") != suite:
         problems.append(
             f"{rel} source_report {raw_path!r} is not a {suite} report"
         )
         return None
+    summary = data.get("summary") or {}
     if len(data.get("mismatches") or []) != summary.get("mismatch_count"):
         problems.append(
             f"{rel} source_report {raw_path!r} is not a FULL report "

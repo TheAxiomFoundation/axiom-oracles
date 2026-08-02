@@ -4760,6 +4760,22 @@ def _write_dashboard_report(
         == merged_summary.get("mismatch_count")
     )
     slim_summary = slim.get("summary")
+    if full_report_path is not None:
+        # The pointer is a repo-relative path: a custom --output-dir can
+        # publish the full report outside the repository, where the
+        # dashboard copy cannot bind to it (and apply_dispositions.py
+        # could never resolve it) — skip binding instead of raising
+        # (sol stack review r3).
+        try:
+            source_rel = (
+                full_report_path.resolve()
+                .relative_to(REPO_ROOT.resolve())
+                .as_posix()
+            )
+        except ValueError:
+            source_rel = None
+        if source_rel is None:
+            full_report_path = None
     if (
         full_report_path is not None
         and merged_is_complete
@@ -4771,9 +4787,7 @@ def _write_dashboard_report(
 
         block = dict(slim_summary["dispositioned"])
         block["source_report"] = {
-            "path": full_report_path.resolve()
-            .relative_to(REPO_ROOT)
-            .as_posix(),
+            "path": source_rel,
             "sha256": hashlib.sha256(
                 full_report_path.read_bytes()
             ).hexdigest(),

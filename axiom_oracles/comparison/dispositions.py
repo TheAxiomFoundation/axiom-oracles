@@ -619,24 +619,37 @@ def apply_dispositions(
 def assignment_digest(report: dict) -> str:
     """SHA-256 over the complete per-row disposition assignment.
 
-    Serializes ``{case_id: [entry_id, disposition] | None}`` for EVERY
-    mismatch row of a merged report (canonical JSON, sorted keys) and hashes
-    it. Aggregate counts cannot distinguish two entries of equal cardinality
-    swapping disposition classes; this digest can, so a premerged-slim
-    dashboard block that embeds it is bound to the exact row-level
-    assignment a fresh merge over the full report produces (sol stack
-    review r2, F2 residual).
+    Serializes ``[case_id, concept, entry_id | None, disposition | None]``
+    for EVERY mismatch row of a merged report as a canonically sorted JSON
+    list and hashes it. Aggregate counts cannot distinguish two entries of
+    equal cardinality swapping disposition classes; this digest can, so a
+    premerged-slim dashboard block that embeds it is bound to the exact
+    row-level assignment a fresh merge over the full report produces (sol
+    stack review r2, F2 residual). A sorted LIST — never a mapping keyed
+    by case_id — because a case validly carries one mismatch row per
+    concept, and a map would let same-case rows overwrite each other,
+    hiding count-preserving reclassifications among them (sol stack
+    review r3).
     """
 
-    assignment: dict[str, list[str] | None] = {}
+    assignment: list[list[str | None]] = []
     for row in report.get("mismatches") or []:
         annotation = row.get("disposition")
-        assignment[str(row.get("case_id"))] = (
-            [str(annotation.get("id")), str(annotation.get("disposition"))]
+        entry_id, disposition = (
+            (str(annotation.get("id")), str(annotation.get("disposition")))
             if isinstance(annotation, dict)
-            else None
+            else (None, None)
         )
-    payload = json.dumps(assignment, sort_keys=True, separators=(",", ":"))
+        assignment.append(
+            [
+                str(row.get("case_id")),
+                str(row.get("concept")),
+                entry_id,
+                disposition,
+            ]
+        )
+    assignment.sort(key=lambda item: [part or "" for part in item])
+    payload = json.dumps(assignment, separators=(",", ":"))
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
 

@@ -581,6 +581,178 @@ def test_source_pointer_outside_reports_dir_is_rejected(
     assert any("outside reports/" in problem for problem in problems)
 
 
+def test_absolute_source_pointer_path_is_rejected(tmp_path: Path) -> None:
+    # The pointer contract is repo-relative; an absolute path — even one
+    # that resolves inside reports/ — must be rejected (sol stack review
+    # r3).
+    module, slim_path, slim, doc = _premerged_fixture(tmp_path)
+    slim["summary"]["dispositioned"]["source_report"]["path"] = str(
+        tmp_path / "reports" / "example-suite-full.json"
+    )
+    problems = module._premerged_block_problems(slim_path, slim, doc)
+    assert problems
+    assert any("must be repo-relative" in problem for problem in problems)
+
+
+def test_non_mapping_json_source_is_a_problem_not_a_crash(
+    tmp_path: Path,
+) -> None:
+    # A hash-matching source whose JSON is valid but not a report object
+    # (e.g. a bare list) must produce a validation problem, not an
+    # AttributeError (sol stack review r3).
+    module, slim_path, slim, doc = _premerged_fixture(tmp_path)
+    full_path = tmp_path / "reports" / "example-suite-full.json"
+    payload = "[1]"
+    full_path.write_text(payload)
+    slim["summary"]["dispositioned"]["source_report"]["sha256"] = (
+        hashlib.sha256(payload.encode("utf-8")).hexdigest()
+    )
+    problems = module._premerged_block_problems(slim_path, slim, doc)
+    assert problems
+    assert any(
+        "is not a example-suite report" in problem for problem in problems
+    )
+
+
+def _premerged_multi_concept_fixture(
+    tmp_path: Path,
+) -> tuple[object, Path, dict, dict]:
+    """Premerged fixture where each case carries TWO mismatch rows.
+
+    A report validly emits one mismatch row per (case, concept); a digest
+    or row map keyed by case_id alone collapses same-case rows, so a
+    count-preserving swap confined to rows shadowed in that map — and to
+    rows not retained in the dashboard sample — would go unseen (sol
+    stack review r3). Two single-row entries of different classes annotate
+    the income-tax row of each case; the payroll rows stay unannotated,
+    and the retained dashboard row is an unannotated payroll row.
+    """
+
+    module = _load_script_module()
+    module.REPO_ROOT = tmp_path
+
+    income = ProgramMapping(
+        standard="us:test#income_tax",
+        description="Federal income tax",
+        category="tax",
+        comparison="amount",
+        tolerance=5,
+        targets={"taxsim": "fiitax", "policyengine": "fiitax"},
+    )
+    payroll = ProgramMapping(
+        standard="us:test#payroll_tax",
+        description="Payroll tax",
+        category="tax",
+        comparison="amount",
+        tolerance=5,
+        targets={"taxsim": "tfica", "policyengine": "tfica"},
+    )
+    comparisons = Comparator([income, payroll]).compare(
+        [
+            EngineResult("taxsim", "case-1", {"fiitax": 100, "tfica": 10}),
+            EngineResult("taxsim", "case-2", {"fiitax": 50, "tfica": 20}),
+        ],
+        [
+            EngineResult(
+                "policyengine", "case-1", {"fiitax": 125, "tfica": 40}
+            ),
+            EngineResult(
+                "policyengine", "case-2", {"fiitax": 75, "tfica": 50}
+            ),
+        ],
+    )
+    full = build_comparison_report(
+        suite_name="example-suite",
+        population="synthetic",
+        locales=set(),
+        scope=None,
+        cases=[
+            Case(case_id="case-1", period="2026"),
+            Case(case_id="case-2", period="2026"),
+        ],
+        mappings=[income, payroll],
+        comparisons=comparisons,
+    )
+    doc = _document(
+        [
+            _entry(linked_issue="https://example.org/upstream/1"),
+            _entry(
+                id="example-axiom-gap",
+                case_id="case-2",
+                disposition="axiom_encoding_gap",
+                evidence={
+                    "mechanism": "Our encoding misses a component.",
+                    "arithmetic": [{"expression": "75 - 50", "equals": 25}],
+                },
+            ),
+        ]
+    )
+    merged = apply_dispositions(
+        full, doc, dispositions_file="dispositions/example-suite.yaml"
+    )
+    assert merged["summary"]["mismatch_count"] == 4
+    rows = merged["mismatches"]
+    assert [
+        (row["case_id"], row["concept"], row.get("disposition") is not None)
+        for row in rows
+    ] == [
+        ("case-1", "us:test#income_tax", True),
+        ("case-1", "us:test#payroll_tax", False),
+        ("case-2", "us:test#income_tax", True),
+        ("case-2", "us:test#payroll_tax", False),
+    ]
+
+    reports_dir = tmp_path / "reports"
+    reports_dir.mkdir()
+    full_path = reports_dir / "example-suite-full.json"
+    full_path.write_text(json.dumps(full, indent=2))
+
+    slim = copy.deepcopy(merged)
+    slim["schema_version"] = DISPOSITIONED_REPORT_SCHEMA_VERSION
+    slim["summary"]["stored_mismatch_example_count"] = 1
+    # Retain ONLY the unannotated case-1 payroll row: the mutant below is
+    # confined to non-retained rows.
+    slim["mismatches"] = [copy.deepcopy(rows[1])]
+    block = slim["summary"]["dispositioned"]
+    block["source_report"] = {
+        "path": "reports/example-suite-full.json",
+        "sha256": hashlib.sha256(full_path.read_bytes()).hexdigest(),
+    }
+    block["assignment_sha256"] = assignment_digest(merged)
+    dashboard_dir = tmp_path / "dashboard" / "public" / "data"
+    dashboard_dir.mkdir(parents=True)
+    slim_path = dashboard_dir / "example-suite.json"
+    slim_path.write_text(json.dumps(slim, indent=2))
+
+    assert module._is_premerged_slim_report(slim)
+    assert module._premerged_block_problems(slim_path, slim, doc) == []
+    return module, slim_path, slim, doc
+
+
+def test_same_case_multi_concept_swap_is_flagged(tmp_path: Path) -> None:
+    # Sol stack review r3: with one mismatch row per (case, concept), a
+    # case_id-keyed digest lets later concept rows shadow earlier ones, so
+    # swapping the classes of two single-row entries that annotate only
+    # shadowed, non-retained rows preserved aggregates, digest, and
+    # retained annotations. The row-identity digest must catch it.
+    module, slim_path, slim, doc = _premerged_multi_concept_fixture(tmp_path)
+    swapped = copy.deepcopy(doc)
+    assert swapped["entries"][0]["disposition"] == "upstream_engine_gap"
+    assert swapped["entries"][1]["disposition"] == "axiom_encoding_gap"
+    swapped["entries"][0]["disposition"] = "axiom_encoding_gap"
+    swapped["entries"][1]["disposition"] = "upstream_engine_gap"
+    problems = module._premerged_block_problems(slim_path, slim, swapped)
+    assert problems
+    # Aggregates and the retained (unannotated) row are unchanged by the
+    # swap — only the digest can flag it.
+    assert not any(
+        "embeds a summary.dispositioned block" in problem
+        for problem in problems
+    )
+    assert not any("retained mismatch row" in problem for problem in problems)
+    assert any("assignment_sha256" in problem for problem in problems)
+
+
 def test_merge_reports_check_flags_premerged_drift(tmp_path: Path) -> None:
     # End-to-end through _merge_reports: the premerged branch must route
     # through the block validation in check mode, not trust-and-continue.
