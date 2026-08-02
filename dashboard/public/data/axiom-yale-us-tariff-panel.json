@@ -53965,7 +53965,7 @@
       "binary": "/Users/maxghenis/TheAxiomFoundation/_tariff-t0/wt-engine/target/release/axiom-rules-engine",
       "binary_sha256": "674ca6e70afdccb59c3d6847933bc24b4590105e49db54790f2dcd0bdbbe32d7"
     },
-    "generated_at": "2026-08-02T04:41:30Z",
+    "generated_at": "2026-08-02T05:51:04Z",
     "generated_by": "scripts/run_comparison.py::us-tariff-panel",
     "rulespecs": [
       {
@@ -55316,6 +55316,7 @@
     "axiom_vs_yale_statutory_match_rate": 71.01431,
     "comparison_count": 23760,
     "dispositioned": {
+      "assignment_sha256": "25d58c7bbfe768684a6c947860a9c509f06ead5a03ffa0779eef90a53308b1ea",
       "counts": {
         "axiom_encoding_gap": 1057,
         "bridge_artifact": 0,
@@ -55329,6 +55330,10 @@
       "orphaned_entries": [],
       "raw_match_rate": 71.01431,
       "schema_version": "axiom_oracles.dispositions.v1",
+      "source_report": {
+        "path": "reports/axiom-yale-us-tariff-panel-all-2026-08-02.json",
+        "sha256": "0239f948797efb7c8cd0426f406c07a78395a30474084baf25c05391d9900237"
+      },
       "unexplained_count": 0
     },
     "error_count": 0,
