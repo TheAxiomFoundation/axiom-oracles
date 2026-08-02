@@ -18,6 +18,1016 @@
     "in_scope_intervals": 41040,
     "covered_intervals": 12240,
     "temporal_debt_intervals": 28800,
+    "temporal_debt": {
+      "pre_domain_intervals": 28800,
+      "straddle_clipped_intervals": 720,
+      "records": [
+        {
+          "debt_id": "debt-pre_domain-7202111000-2025-01-01-2025-02-03",
+          "kind": "pre_domain",
+          "hts_number": "7202111000",
+          "valid_from": "2025-01-01",
+          "valid_until": "2025-02-03",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7202111000-2025-02-04-2025-02-04",
+          "kind": "pre_domain",
+          "hts_number": "7202111000",
+          "valid_from": "2025-02-04",
+          "valid_until": "2025-02-04",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7202111000-2025-02-05-2025-03-03",
+          "kind": "pre_domain",
+          "hts_number": "7202111000",
+          "valid_from": "2025-02-05",
+          "valid_until": "2025-03-03",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7202111000-2025-03-04-2025-03-06",
+          "kind": "pre_domain",
+          "hts_number": "7202111000",
+          "valid_from": "2025-03-04",
+          "valid_until": "2025-03-06",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7202111000-2025-03-07-2025-03-11",
+          "kind": "pre_domain",
+          "hts_number": "7202111000",
+          "valid_from": "2025-03-07",
+          "valid_until": "2025-03-11",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7202111000-2025-03-12-2025-03-13",
+          "kind": "pre_domain",
+          "hts_number": "7202111000",
+          "valid_from": "2025-03-12",
+          "valid_until": "2025-03-13",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7202111000-2025-03-14-2025-04-02",
+          "kind": "pre_domain",
+          "hts_number": "7202111000",
+          "valid_from": "2025-03-14",
+          "valid_until": "2025-04-02",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7202111000-2025-04-03-2025-04-04",
+          "kind": "pre_domain",
+          "hts_number": "7202111000",
+          "valid_from": "2025-04-03",
+          "valid_until": "2025-04-04",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7202111000-2025-04-05-2025-04-08",
+          "kind": "pre_domain",
+          "hts_number": "7202111000",
+          "valid_from": "2025-04-05",
+          "valid_until": "2025-04-08",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7202111000-2025-04-09-2025-04-09",
+          "kind": "pre_domain",
+          "hts_number": "7202111000",
+          "valid_from": "2025-04-09",
+          "valid_until": "2025-04-09",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7202111000-2025-04-10-2025-04-14",
+          "kind": "pre_domain",
+          "hts_number": "7202111000",
+          "valid_from": "2025-04-10",
+          "valid_until": "2025-04-14",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7202111000-2025-04-15-2025-05-02",
+          "kind": "pre_domain",
+          "hts_number": "7202111000",
+          "valid_from": "2025-04-15",
+          "valid_until": "2025-05-02",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7202111000-2025-05-03-2025-05-13",
+          "kind": "pre_domain",
+          "hts_number": "7202111000",
+          "valid_from": "2025-05-03",
+          "valid_until": "2025-05-13",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7202111000-2025-05-14-2025-05-15",
+          "kind": "pre_domain",
+          "hts_number": "7202111000",
+          "valid_from": "2025-05-14",
+          "valid_until": "2025-05-15",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7202111000-2025-05-16-2025-05-31",
+          "kind": "pre_domain",
+          "hts_number": "7202111000",
+          "valid_from": "2025-05-16",
+          "valid_until": "2025-05-31",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7202111000-2025-06-01-2025-06-03",
+          "kind": "pre_domain",
+          "hts_number": "7202111000",
+          "valid_from": "2025-06-01",
+          "valid_until": "2025-06-03",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7202111000-2025-06-04-2025-06-22",
+          "kind": "pre_domain",
+          "hts_number": "7202111000",
+          "valid_from": "2025-06-04",
+          "valid_until": "2025-06-22",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7202111000-2025-06-23-2025-06-30",
+          "kind": "pre_domain",
+          "hts_number": "7202111000",
+          "valid_from": "2025-06-23",
+          "valid_until": "2025-06-30",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7202111000-2025-07-01-2025-07-31",
+          "kind": "pre_domain",
+          "hts_number": "7202111000",
+          "valid_from": "2025-07-01",
+          "valid_until": "2025-07-31",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7202111000-2025-08-01-2025-08-06",
+          "kind": "pre_domain",
+          "hts_number": "7202111000",
+          "valid_from": "2025-08-01",
+          "valid_until": "2025-08-06",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7202111000-2025-08-07-2025-08-17",
+          "kind": "pre_domain",
+          "hts_number": "7202111000",
+          "valid_from": "2025-08-07",
+          "valid_until": "2025-08-17",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7202111000-2025-08-18-2025-08-26",
+          "kind": "pre_domain",
+          "hts_number": "7202111000",
+          "valid_from": "2025-08-18",
+          "valid_until": "2025-08-26",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7202111000-2025-08-27-2025-08-31",
+          "kind": "pre_domain",
+          "hts_number": "7202111000",
+          "valid_from": "2025-08-27",
+          "valid_until": "2025-08-31",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7202111000-2025-09-01-2025-09-01",
+          "kind": "pre_domain",
+          "hts_number": "7202111000",
+          "valid_from": "2025-09-01",
+          "valid_until": "2025-09-01",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7202111000-2025-09-02-2025-09-07",
+          "kind": "pre_domain",
+          "hts_number": "7202111000",
+          "valid_from": "2025-09-02",
+          "valid_until": "2025-09-07",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7202111000-2025-09-08-2025-09-15",
+          "kind": "pre_domain",
+          "hts_number": "7202111000",
+          "valid_from": "2025-09-08",
+          "valid_until": "2025-09-15",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7202111000-2025-09-16-2025-09-24",
+          "kind": "pre_domain",
+          "hts_number": "7202111000",
+          "valid_from": "2025-09-16",
+          "valid_until": "2025-09-24",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7202111000-2025-09-25-2025-10-13",
+          "kind": "pre_domain",
+          "hts_number": "7202111000",
+          "valid_from": "2025-09-25",
+          "valid_until": "2025-10-13",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7202111000-2025-10-14-2025-10-31",
+          "kind": "pre_domain",
+          "hts_number": "7202111000",
+          "valid_from": "2025-10-14",
+          "valid_until": "2025-10-31",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7202111000-2025-11-01-2025-11-08",
+          "kind": "pre_domain",
+          "hts_number": "7202111000",
+          "valid_from": "2025-11-01",
+          "valid_until": "2025-11-08",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7202111000-2025-11-09-2025-11-09",
+          "kind": "pre_domain",
+          "hts_number": "7202111000",
+          "valid_from": "2025-11-09",
+          "valid_until": "2025-11-09",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7202111000-2025-11-10-2025-11-12",
+          "kind": "pre_domain",
+          "hts_number": "7202111000",
+          "valid_from": "2025-11-10",
+          "valid_until": "2025-11-12",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7202111000-2025-11-13-2025-11-13",
+          "kind": "pre_domain",
+          "hts_number": "7202111000",
+          "valid_from": "2025-11-13",
+          "valid_until": "2025-11-13",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7202111000-2025-11-14-2025-11-20",
+          "kind": "pre_domain",
+          "hts_number": "7202111000",
+          "valid_from": "2025-11-14",
+          "valid_until": "2025-11-20",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7202111000-2025-11-21-2025-11-29",
+          "kind": "pre_domain",
+          "hts_number": "7202111000",
+          "valid_from": "2025-11-21",
+          "valid_until": "2025-11-29",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7202111000-2025-11-30-2025-12-04",
+          "kind": "pre_domain",
+          "hts_number": "7202111000",
+          "valid_from": "2025-11-30",
+          "valid_until": "2025-12-04",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7202111000-2025-12-05-2025-12-31",
+          "kind": "pre_domain",
+          "hts_number": "7202111000",
+          "valid_from": "2025-12-05",
+          "valid_until": "2025-12-31",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7202111000-2026-01-01-2026-01-14",
+          "kind": "pre_domain",
+          "hts_number": "7202111000",
+          "valid_from": "2026-01-01",
+          "valid_until": "2026-01-14",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7202111000-2026-01-15-2026-01-31",
+          "kind": "pre_domain",
+          "hts_number": "7202111000",
+          "valid_from": "2026-01-15",
+          "valid_until": "2026-01-31",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7202111000-2026-02-01-2026-02-06",
+          "kind": "pre_domain",
+          "hts_number": "7202111000",
+          "valid_from": "2026-02-01",
+          "valid_until": "2026-02-06",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7601103000-2025-01-01-2025-02-03",
+          "kind": "pre_domain",
+          "hts_number": "7601103000",
+          "valid_from": "2025-01-01",
+          "valid_until": "2025-02-03",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7601103000-2025-02-04-2025-02-04",
+          "kind": "pre_domain",
+          "hts_number": "7601103000",
+          "valid_from": "2025-02-04",
+          "valid_until": "2025-02-04",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7601103000-2025-02-05-2025-03-03",
+          "kind": "pre_domain",
+          "hts_number": "7601103000",
+          "valid_from": "2025-02-05",
+          "valid_until": "2025-03-03",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7601103000-2025-03-04-2025-03-06",
+          "kind": "pre_domain",
+          "hts_number": "7601103000",
+          "valid_from": "2025-03-04",
+          "valid_until": "2025-03-06",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7601103000-2025-03-07-2025-03-11",
+          "kind": "pre_domain",
+          "hts_number": "7601103000",
+          "valid_from": "2025-03-07",
+          "valid_until": "2025-03-11",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7601103000-2025-03-12-2025-03-13",
+          "kind": "pre_domain",
+          "hts_number": "7601103000",
+          "valid_from": "2025-03-12",
+          "valid_until": "2025-03-13",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7601103000-2025-03-14-2025-04-02",
+          "kind": "pre_domain",
+          "hts_number": "7601103000",
+          "valid_from": "2025-03-14",
+          "valid_until": "2025-04-02",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7601103000-2025-04-03-2025-04-04",
+          "kind": "pre_domain",
+          "hts_number": "7601103000",
+          "valid_from": "2025-04-03",
+          "valid_until": "2025-04-04",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7601103000-2025-04-05-2025-04-08",
+          "kind": "pre_domain",
+          "hts_number": "7601103000",
+          "valid_from": "2025-04-05",
+          "valid_until": "2025-04-08",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7601103000-2025-04-09-2025-04-09",
+          "kind": "pre_domain",
+          "hts_number": "7601103000",
+          "valid_from": "2025-04-09",
+          "valid_until": "2025-04-09",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7601103000-2025-04-10-2025-04-14",
+          "kind": "pre_domain",
+          "hts_number": "7601103000",
+          "valid_from": "2025-04-10",
+          "valid_until": "2025-04-14",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7601103000-2025-04-15-2025-05-02",
+          "kind": "pre_domain",
+          "hts_number": "7601103000",
+          "valid_from": "2025-04-15",
+          "valid_until": "2025-05-02",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7601103000-2025-05-03-2025-05-13",
+          "kind": "pre_domain",
+          "hts_number": "7601103000",
+          "valid_from": "2025-05-03",
+          "valid_until": "2025-05-13",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7601103000-2025-05-14-2025-05-15",
+          "kind": "pre_domain",
+          "hts_number": "7601103000",
+          "valid_from": "2025-05-14",
+          "valid_until": "2025-05-15",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7601103000-2025-05-16-2025-05-31",
+          "kind": "pre_domain",
+          "hts_number": "7601103000",
+          "valid_from": "2025-05-16",
+          "valid_until": "2025-05-31",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7601103000-2025-06-01-2025-06-03",
+          "kind": "pre_domain",
+          "hts_number": "7601103000",
+          "valid_from": "2025-06-01",
+          "valid_until": "2025-06-03",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7601103000-2025-06-04-2025-06-22",
+          "kind": "pre_domain",
+          "hts_number": "7601103000",
+          "valid_from": "2025-06-04",
+          "valid_until": "2025-06-22",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7601103000-2025-06-23-2025-06-30",
+          "kind": "pre_domain",
+          "hts_number": "7601103000",
+          "valid_from": "2025-06-23",
+          "valid_until": "2025-06-30",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7601103000-2025-07-01-2025-07-31",
+          "kind": "pre_domain",
+          "hts_number": "7601103000",
+          "valid_from": "2025-07-01",
+          "valid_until": "2025-07-31",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7601103000-2025-08-01-2025-08-06",
+          "kind": "pre_domain",
+          "hts_number": "7601103000",
+          "valid_from": "2025-08-01",
+          "valid_until": "2025-08-06",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7601103000-2025-08-07-2025-08-17",
+          "kind": "pre_domain",
+          "hts_number": "7601103000",
+          "valid_from": "2025-08-07",
+          "valid_until": "2025-08-17",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7601103000-2025-08-18-2025-08-26",
+          "kind": "pre_domain",
+          "hts_number": "7601103000",
+          "valid_from": "2025-08-18",
+          "valid_until": "2025-08-26",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7601103000-2025-08-27-2025-08-31",
+          "kind": "pre_domain",
+          "hts_number": "7601103000",
+          "valid_from": "2025-08-27",
+          "valid_until": "2025-08-31",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7601103000-2025-09-01-2025-09-01",
+          "kind": "pre_domain",
+          "hts_number": "7601103000",
+          "valid_from": "2025-09-01",
+          "valid_until": "2025-09-01",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7601103000-2025-09-02-2025-09-07",
+          "kind": "pre_domain",
+          "hts_number": "7601103000",
+          "valid_from": "2025-09-02",
+          "valid_until": "2025-09-07",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7601103000-2025-09-08-2025-09-15",
+          "kind": "pre_domain",
+          "hts_number": "7601103000",
+          "valid_from": "2025-09-08",
+          "valid_until": "2025-09-15",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7601103000-2025-09-16-2025-09-24",
+          "kind": "pre_domain",
+          "hts_number": "7601103000",
+          "valid_from": "2025-09-16",
+          "valid_until": "2025-09-24",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7601103000-2025-09-25-2025-10-13",
+          "kind": "pre_domain",
+          "hts_number": "7601103000",
+          "valid_from": "2025-09-25",
+          "valid_until": "2025-10-13",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7601103000-2025-10-14-2025-10-31",
+          "kind": "pre_domain",
+          "hts_number": "7601103000",
+          "valid_from": "2025-10-14",
+          "valid_until": "2025-10-31",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7601103000-2025-11-01-2025-11-08",
+          "kind": "pre_domain",
+          "hts_number": "7601103000",
+          "valid_from": "2025-11-01",
+          "valid_until": "2025-11-08",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7601103000-2025-11-09-2025-11-09",
+          "kind": "pre_domain",
+          "hts_number": "7601103000",
+          "valid_from": "2025-11-09",
+          "valid_until": "2025-11-09",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7601103000-2025-11-10-2025-11-12",
+          "kind": "pre_domain",
+          "hts_number": "7601103000",
+          "valid_from": "2025-11-10",
+          "valid_until": "2025-11-12",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7601103000-2025-11-13-2025-11-13",
+          "kind": "pre_domain",
+          "hts_number": "7601103000",
+          "valid_from": "2025-11-13",
+          "valid_until": "2025-11-13",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7601103000-2025-11-14-2025-11-20",
+          "kind": "pre_domain",
+          "hts_number": "7601103000",
+          "valid_from": "2025-11-14",
+          "valid_until": "2025-11-20",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7601103000-2025-11-21-2025-11-29",
+          "kind": "pre_domain",
+          "hts_number": "7601103000",
+          "valid_from": "2025-11-21",
+          "valid_until": "2025-11-29",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7601103000-2025-11-30-2025-12-04",
+          "kind": "pre_domain",
+          "hts_number": "7601103000",
+          "valid_from": "2025-11-30",
+          "valid_until": "2025-12-04",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7601103000-2025-12-05-2025-12-31",
+          "kind": "pre_domain",
+          "hts_number": "7601103000",
+          "valid_from": "2025-12-05",
+          "valid_until": "2025-12-31",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7601103000-2026-01-01-2026-01-14",
+          "kind": "pre_domain",
+          "hts_number": "7601103000",
+          "valid_from": "2026-01-01",
+          "valid_until": "2026-01-14",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7601103000-2026-01-15-2026-01-31",
+          "kind": "pre_domain",
+          "hts_number": "7601103000",
+          "valid_from": "2026-01-15",
+          "valid_until": "2026-01-31",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-7601103000-2026-02-01-2026-02-06",
+          "kind": "pre_domain",
+          "hts_number": "7601103000",
+          "valid_from": "2026-02-01",
+          "valid_until": "2026-02-06",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-9506624040-2025-01-01-2025-02-03",
+          "kind": "pre_domain",
+          "hts_number": "9506624040",
+          "valid_from": "2025-01-01",
+          "valid_until": "2025-02-03",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-9506624040-2025-02-04-2025-02-04",
+          "kind": "pre_domain",
+          "hts_number": "9506624040",
+          "valid_from": "2025-02-04",
+          "valid_until": "2025-02-04",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-9506624040-2025-02-05-2025-03-03",
+          "kind": "pre_domain",
+          "hts_number": "9506624040",
+          "valid_from": "2025-02-05",
+          "valid_until": "2025-03-03",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-9506624040-2025-03-04-2025-03-06",
+          "kind": "pre_domain",
+          "hts_number": "9506624040",
+          "valid_from": "2025-03-04",
+          "valid_until": "2025-03-06",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-9506624040-2025-03-07-2025-03-11",
+          "kind": "pre_domain",
+          "hts_number": "9506624040",
+          "valid_from": "2025-03-07",
+          "valid_until": "2025-03-11",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-9506624040-2025-03-12-2025-03-13",
+          "kind": "pre_domain",
+          "hts_number": "9506624040",
+          "valid_from": "2025-03-12",
+          "valid_until": "2025-03-13",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-9506624040-2025-03-14-2025-04-02",
+          "kind": "pre_domain",
+          "hts_number": "9506624040",
+          "valid_from": "2025-03-14",
+          "valid_until": "2025-04-02",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-9506624040-2025-04-03-2025-04-04",
+          "kind": "pre_domain",
+          "hts_number": "9506624040",
+          "valid_from": "2025-04-03",
+          "valid_until": "2025-04-04",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-9506624040-2025-04-05-2025-04-08",
+          "kind": "pre_domain",
+          "hts_number": "9506624040",
+          "valid_from": "2025-04-05",
+          "valid_until": "2025-04-08",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-9506624040-2025-04-09-2025-04-09",
+          "kind": "pre_domain",
+          "hts_number": "9506624040",
+          "valid_from": "2025-04-09",
+          "valid_until": "2025-04-09",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-9506624040-2025-04-10-2025-04-14",
+          "kind": "pre_domain",
+          "hts_number": "9506624040",
+          "valid_from": "2025-04-10",
+          "valid_until": "2025-04-14",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-9506624040-2025-04-15-2025-05-02",
+          "kind": "pre_domain",
+          "hts_number": "9506624040",
+          "valid_from": "2025-04-15",
+          "valid_until": "2025-05-02",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-9506624040-2025-05-03-2025-05-13",
+          "kind": "pre_domain",
+          "hts_number": "9506624040",
+          "valid_from": "2025-05-03",
+          "valid_until": "2025-05-13",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-9506624040-2025-05-14-2025-05-15",
+          "kind": "pre_domain",
+          "hts_number": "9506624040",
+          "valid_from": "2025-05-14",
+          "valid_until": "2025-05-15",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-9506624040-2025-05-16-2025-05-31",
+          "kind": "pre_domain",
+          "hts_number": "9506624040",
+          "valid_from": "2025-05-16",
+          "valid_until": "2025-05-31",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-9506624040-2025-06-01-2025-06-03",
+          "kind": "pre_domain",
+          "hts_number": "9506624040",
+          "valid_from": "2025-06-01",
+          "valid_until": "2025-06-03",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-9506624040-2025-06-04-2025-06-22",
+          "kind": "pre_domain",
+          "hts_number": "9506624040",
+          "valid_from": "2025-06-04",
+          "valid_until": "2025-06-22",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-9506624040-2025-06-23-2025-06-30",
+          "kind": "pre_domain",
+          "hts_number": "9506624040",
+          "valid_from": "2025-06-23",
+          "valid_until": "2025-06-30",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-9506624040-2025-07-01-2025-07-31",
+          "kind": "pre_domain",
+          "hts_number": "9506624040",
+          "valid_from": "2025-07-01",
+          "valid_until": "2025-07-31",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-9506624040-2025-08-01-2025-08-06",
+          "kind": "pre_domain",
+          "hts_number": "9506624040",
+          "valid_from": "2025-08-01",
+          "valid_until": "2025-08-06",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-9506624040-2025-08-07-2025-08-17",
+          "kind": "pre_domain",
+          "hts_number": "9506624040",
+          "valid_from": "2025-08-07",
+          "valid_until": "2025-08-17",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-9506624040-2025-08-18-2025-08-26",
+          "kind": "pre_domain",
+          "hts_number": "9506624040",
+          "valid_from": "2025-08-18",
+          "valid_until": "2025-08-26",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-9506624040-2025-08-27-2025-08-31",
+          "kind": "pre_domain",
+          "hts_number": "9506624040",
+          "valid_from": "2025-08-27",
+          "valid_until": "2025-08-31",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-9506624040-2025-09-01-2025-09-01",
+          "kind": "pre_domain",
+          "hts_number": "9506624040",
+          "valid_from": "2025-09-01",
+          "valid_until": "2025-09-01",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-9506624040-2025-09-02-2025-09-07",
+          "kind": "pre_domain",
+          "hts_number": "9506624040",
+          "valid_from": "2025-09-02",
+          "valid_until": "2025-09-07",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-9506624040-2025-09-08-2025-09-15",
+          "kind": "pre_domain",
+          "hts_number": "9506624040",
+          "valid_from": "2025-09-08",
+          "valid_until": "2025-09-15",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-9506624040-2025-09-16-2025-09-24",
+          "kind": "pre_domain",
+          "hts_number": "9506624040",
+          "valid_from": "2025-09-16",
+          "valid_until": "2025-09-24",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-9506624040-2025-09-25-2025-10-13",
+          "kind": "pre_domain",
+          "hts_number": "9506624040",
+          "valid_from": "2025-09-25",
+          "valid_until": "2025-10-13",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-9506624040-2025-10-14-2025-10-31",
+          "kind": "pre_domain",
+          "hts_number": "9506624040",
+          "valid_from": "2025-10-14",
+          "valid_until": "2025-10-31",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-9506624040-2025-11-01-2025-11-08",
+          "kind": "pre_domain",
+          "hts_number": "9506624040",
+          "valid_from": "2025-11-01",
+          "valid_until": "2025-11-08",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-9506624040-2025-11-09-2025-11-09",
+          "kind": "pre_domain",
+          "hts_number": "9506624040",
+          "valid_from": "2025-11-09",
+          "valid_until": "2025-11-09",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-9506624040-2025-11-10-2025-11-12",
+          "kind": "pre_domain",
+          "hts_number": "9506624040",
+          "valid_from": "2025-11-10",
+          "valid_until": "2025-11-12",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-9506624040-2025-11-13-2025-11-13",
+          "kind": "pre_domain",
+          "hts_number": "9506624040",
+          "valid_from": "2025-11-13",
+          "valid_until": "2025-11-13",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-9506624040-2025-11-14-2025-11-20",
+          "kind": "pre_domain",
+          "hts_number": "9506624040",
+          "valid_from": "2025-11-14",
+          "valid_until": "2025-11-20",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-9506624040-2025-11-21-2025-11-29",
+          "kind": "pre_domain",
+          "hts_number": "9506624040",
+          "valid_from": "2025-11-21",
+          "valid_until": "2025-11-29",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-9506624040-2025-11-30-2025-12-04",
+          "kind": "pre_domain",
+          "hts_number": "9506624040",
+          "valid_from": "2025-11-30",
+          "valid_until": "2025-12-04",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-9506624040-2025-12-05-2025-12-31",
+          "kind": "pre_domain",
+          "hts_number": "9506624040",
+          "valid_from": "2025-12-05",
+          "valid_until": "2025-12-31",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-9506624040-2026-01-01-2026-01-14",
+          "kind": "pre_domain",
+          "hts_number": "9506624040",
+          "valid_from": "2026-01-01",
+          "valid_until": "2026-01-14",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-9506624040-2026-01-15-2026-01-31",
+          "kind": "pre_domain",
+          "hts_number": "9506624040",
+          "valid_from": "2026-01-15",
+          "valid_until": "2026-01-31",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-pre_domain-9506624040-2026-02-01-2026-02-06",
+          "kind": "pre_domain",
+          "hts_number": "9506624040",
+          "valid_from": "2026-02-01",
+          "valid_until": "2026-02-06",
+          "interval_count": 240
+        },
+        {
+          "debt_id": "debt-straddle_clipped-7202111000-2026-02-07-2026-02-19",
+          "kind": "straddle_clipped",
+          "hts_number": "7202111000",
+          "valid_from": "2026-02-07",
+          "valid_until": "2026-02-19",
+          "interval_count": 240,
+          "unprobed_from": "2026-02-07",
+          "unprobed_until": "2026-02-14"
+        },
+        {
+          "debt_id": "debt-straddle_clipped-7601103000-2026-02-07-2026-02-19",
+          "kind": "straddle_clipped",
+          "hts_number": "7601103000",
+          "valid_from": "2026-02-07",
+          "valid_until": "2026-02-19",
+          "interval_count": 240,
+          "unprobed_from": "2026-02-07",
+          "unprobed_until": "2026-02-14"
+        },
+        {
+          "debt_id": "debt-straddle_clipped-9506624040-2026-02-07-2026-02-19",
+          "kind": "straddle_clipped",
+          "hts_number": "9506624040",
+          "valid_from": "2026-02-07",
+          "valid_until": "2026-02-19",
+          "interval_count": 240,
+          "unprobed_from": "2026-02-07",
+          "unprobed_until": "2026-02-14"
+        }
+      ]
+    },
+    "column_exposure": {
+      "statutory_base_rate": 15840,
+      "statutory_rate_232": 7920,
+      "statutory_rate_ieepa_recip": 954,
+      "statutory_rate_ieepa_fent": 24,
+      "statutory_rate_301": 99,
+      "statutory_rate_301_cs": 0,
+      "statutory_rate_s301fl": 860,
+      "statutory_rate_s301br": 12,
+      "statutory_rate_s338": 0,
+      "statutory_rate_s122": 9120,
+      "statutory_rate_section_201": 0,
+      "statutory_rate_other": 0
+    },
     "comparison_units": 23760,
     "authority_slots": [
       "mfn",
@@ -48,7 +1058,7 @@
       "date_mode": "legal",
       "panel_rows_total": 277303920,
       "extractor": "scripts/extract_yale_panel.R",
-      "extractor_sha256": "21eb6c562bdc3df53a49641b2785e1982fa9e473934b38f0e63047eb5ad19402",
+      "extractor_sha256": "97086c88292eb339fa01abe07167062956bd570c732a3609a9ebb923760705dd",
       "covered_lines": [
         "7202111000",
         "7601103000",
@@ -328,7 +1338,7 @@
         "2026-12-31"
       ],
       "extract_sha256": "331d92d9ce30067e26c93d3f9f55b18af5e3b53a6846cbbc0f7652ecc1bd96c3",
-      "extracted_at": "2026-08-01T20:50:18-0400"
+      "extracted_at": "2026-08-02T00:29:43-0400"
     }
   },
   "engines": {
@@ -221646,7 +222656,7 @@
   ],
   "provenance": {
     "schema": "axiom_oracles.provenance.v1",
-    "generated_at": "2026-08-02T01:49:13Z",
+    "generated_at": "2026-08-02T04:34:26Z",
     "generated_by": "scripts/run_comparison.py::us-tariff-panel",
     "run_kind": "manual",
     "rulespecs": [
@@ -221657,7 +222667,9 @@
     ],
     "engine": {
       "axiom_rules_engine_sha": "ffd8213271947b0189a9dd61a055c1e0e78908a0",
-      "axiom_rules_engine_version": "0.1.0"
+      "axiom_rules_engine_version": "0.1.0",
+      "binary": "/Users/maxghenis/TheAxiomFoundation/_tariff-t0/wt-engine/target/release/axiom-rules-engine",
+      "binary_sha256": "674ca6e70afdccb59c3d6847933bc24b4590105e49db54790f2dcd0bdbbe32d7"
     }
   }
 }
