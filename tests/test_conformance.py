@@ -1398,6 +1398,109 @@ def test_scoreboard_excluded_breakdown_by_reason():
     assert board.covered == 0 and board.policies_in_scope == 0
 
 
+def test_scoreboard_witness_gate_uncovers_zero_exposure_policies():
+    """A report whose exposure basis never exercises a policy's output
+    columns with a positive rate does NOT cover that policy — comparing an
+    all-zero column against an implicit 0 verifies nothing (F3)."""
+    universe = _universe([
+        _in_scope(id="tx:a", oracle_policy_name="a", suite="suite-a",
+                  output_vars=("x_s",)),
+        _in_scope(id="tx:b", oracle_policy_name="b", suite="suite-a",
+                  output_vars=("y_s",)),
+    ])
+    report = _report("suite-a", comparisons=5, matches=5)
+    report["scope"] = {"column_exposure": {"x_s": 5, "y_s": 0}}
+    board, scores = score_jurisdiction(universe, [report])
+    assert board.covered == 1 and board.policies_in_scope == 2
+    assert board.uncovered_policies == ["b"]
+    assert board.unwitnessed_policies == ["b"]
+    assert board.conformant is False
+    assert any("positive-exposure witness" in r for r in board.blocking_reasons)
+    by_name = {s.oracle_policy_name: s for s in scores}
+    assert by_name["a"].status == "conformant" and by_name["a"].covered
+    assert by_name["b"].status == "unwitnessed" and not by_name["b"].covered
+
+
+def test_scoreboard_witness_accepts_any_positive_output_var():
+    """One positive column among a policy's output_vars is a witness."""
+    universe = _universe([
+        _in_scope(id="tx:a", oracle_policy_name="a", suite="suite-a",
+                  output_vars=("y_s", "x_s")),
+    ])
+    report = _report("suite-a", comparisons=5, matches=5)
+    report["scope"] = {"column_exposure": {"x_s": 3, "y_s": 0}}
+    board, _ = score_jurisdiction(universe, [report])
+    assert board.covered == 1 and board.unwitnessed_policies == []
+    assert board.conformant is True
+
+
+def test_scoreboard_without_exposure_basis_keeps_presence_coverage():
+    """Reports with no scope.column_exposure (other jurisdictions) keep the
+    presence-only coverage rule — the witness gate never fires blind."""
+    universe = _universe([
+        _in_scope(id="tx:a", oracle_policy_name="a", suite="suite-a",
+                  output_vars=("x_s",)),
+    ])
+    board, _ = score_jurisdiction(
+        universe, [_report("suite-a", comparisons=5, matches=5)]
+    )
+    assert board.covered == 1
+    assert board.unwitnessed_policies == []
+    assert board.temporal_debt is None
+
+
+def test_scoreboard_surfaces_temporal_debt_from_covered_reports():
+    """A covered report's scope.temporal_debt account lands on the
+    jurisdiction summary instead of being clipped out of the story (F4)."""
+    universe = _universe([
+        _in_scope(id="tx:a", oracle_policy_name="a", suite="suite-a",
+                  output_vars=("x_s",)),
+    ])
+    report = _report("suite-a", comparisons=5, matches=5)
+    report["scope"] = {
+        "column_exposure": {"x_s": 5},
+        "temporal_debt": {
+            "pre_domain_intervals": 100,
+            "straddle_clipped_intervals": 7,
+            "records": [{"debt_id": "d1"}, {"debt_id": "d2"}],
+        },
+    }
+    board, _ = score_jurisdiction(universe, [report])
+    assert board.temporal_debt == {
+        "pre_domain_intervals": 100,
+        "straddle_clipped_intervals": 7,
+        "addressable_records": 2,
+    }
+    # Debt is surfaced, not a conformance blocker.
+    assert board.conformant is True
+
+
+def test_committed_us_tariff_yale_scoreboard_pins_witnessed_coverage():
+    """The live us-tariff-yale verdict: 8 of 12 witnessed-covered — the four
+    authorities the reference never exercises with a positive rate (301_cs,
+    s338, section_201, other) are honestly uncovered, and the temporal-debt
+    account rides the summary (sol stack review F3/F4)."""
+    scoreboard = json.loads((CONFORMANCE_DIR / "scoreboard.json").read_text())
+    entry = {j["jurisdiction"]: j for j in scoreboard["jurisdictions"]}[
+        "us-tariff-yale"
+    ]
+    assert entry["policies_in_scope"] == 12
+    assert entry["covered"] == 8
+    assert entry["covered_pct"] == 66.6667
+    assert entry["conformant"] is False
+    assert entry["uncovered_policies"] == [
+        "other", "rate_301_cs", "section_201", "section_338",
+    ]
+    assert entry["unwitnessed_policies"] == entry["uncovered_policies"]
+    assert entry["temporal_debt"] == {
+        "pre_domain_intervals": 28800,
+        "straddle_clipped_intervals": 720,
+        "addressable_records": 123,
+    }
+    assert entry["oracle_attributed"] == 353
+    assert entry["axiom_attributed_open"] == 1057
+
+
 def test_committed_be_scoreboard_counts_dataset_lacks_input_exclusion():
     """The live BE scoreboard's excluded-by-reason breakdown surfaces the
     class (regression guard against the reason silently vanishing from the join).
