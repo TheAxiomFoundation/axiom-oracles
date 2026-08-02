@@ -10,11 +10,13 @@ from __future__ import annotations
 
 import argparse
 import csv
+import fcntl
 import fnmatch
 import hashlib
 import json
 import os
 import shutil
+import stat
 import subprocess
 import sys
 import tempfile
@@ -580,14 +582,22 @@ def main() -> int:
     sample = config["runner"]["parameters"].get("sample_size", "all")
     output = args.output_dir / f"{basename}-{sample}-{today}.json"
     output.parent.mkdir(parents=True, exist_ok=True)
-    # Run-private staging path in the SAME directory (same filesystem, so the
+    # Run-private staging file in the SAME directory (same filesystem, so the
     # final publish is an atomic rename): the report stays private through
-    # provenance stamping and dashboard adaptation. Two same-day runs share
-    # the final filename but never a staging file, so a concurrent run can no
-    # longer replace the report between write and stamp and get the other
+    # provenance stamping and dashboard adaptation, so a concurrent run can
+    # no longer replace the report between write and stamp and get the other
     # run's identity stamped onto its payload; the published path only ever
-    # holds a fully stamped report (#448 review round 3).
-    staging = output.with_name(f".{output.name}.run-{os.getpid()}.tmp")
+    # holds a fully stamped report. The staging file is created EXCLUSIVELY
+    # under a randomized name (a PID-derived name is predictable: same-PID
+    # containers sharing the directory collide, and a pre-created symlink at
+    # a predictable path would be followed by the runner's write) and is
+    # re-verified as this user's regular file immediately before publication
+    # (#448 review rounds 3 and 4).
+    staging_fd, staging_name = tempfile.mkstemp(
+        dir=output.parent, prefix=f".{output.name}.run-", suffix=".tmp"
+    )
+    os.close(staging_fd)
+    staging = Path(staging_name)
 
     print(f"Running {config['name']}: {config.get('title', config['name'])}")
     try:
@@ -624,13 +634,28 @@ def main() -> int:
             )
             adapted["provenance"] = provenance
 
-        os.replace(staging, output)
+        # Publish the report and its dashboard copy as a pair under an
+        # exclusive same-directory lock, so two same-day runs cannot
+        # interleave into a report-B/dashboard-A outcome; verify the staging
+        # path is still this user's regular file (not a swapped-in symlink)
+        # before the atomic rename (#448 review round 4).
+        lock_path = output.with_name(f".{output.name}.lock")
+        with open(lock_path, "a") as lock_fh:
+            fcntl.flock(lock_fh, fcntl.LOCK_EX)
+            staging_stat = os.lstat(staging)
+            if not stat.S_ISREG(staging_stat.st_mode) or (
+                staging_stat.st_uid != os.getuid()
+            ):
+                raise SystemExit(
+                    f"staging report {staging} is no longer this user's "
+                    "regular file — refusing to publish"
+                )
+            os.replace(staging, output)
+            print(f"Wrote: {output}")
+            if dashboard_target and adapted is not None:
+                _write_dashboard_report(adapted, dashboard_target)
     finally:
         staging.unlink(missing_ok=True)
-    print(f"Wrote: {output}")
-
-    if dashboard_target and adapted is not None:
-        _write_dashboard_report(adapted, dashboard_target)
 
     if args.summary:
         _print_summary(output)
@@ -1009,6 +1034,11 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
     # generated_at timestamp dates the re-emission, not the numbers.
     if runner.get("_reemitted_report"):
         provenance["reemitted_report"] = True
+        # The source report's identity + original generation time, when the
+        # re-emitting lane recorded it: generated_at above dates the
+        # re-emission, THIS dates the numbers (sol stack review F6).
+        if runner.get("_reemitted_source"):
+            provenance["reemitted_from"] = runner["_reemitted_source"]
     return provenance
 
 
@@ -2879,12 +2909,39 @@ def _us_tariff_panel_unavailable_reason() -> str | None:
     _, composition = _us_tariff_panel_env()
     if not composition.exists():
         return f"rulespec-us tariff spine not found at {composition}"
+    if _us_tariff_panel_engine_binary() is None:
+        from axiom_oracles.adapters.axiom.runner import _resolve_binary_path
+
+        return (
+            "axiom rules engine binary not found "
+            f"({_resolve_binary_path(None, composition)})"
+        )
+    return None
+
+
+def _us_tariff_panel_engine_binary() -> Path | None:
+    """The engine executable the generator will actually run, or None.
+
+    Mirrors POSIX exec semantics exactly (#448 review round 4): a bare
+    command name resolves through PATH ONLY (a same-named file in the
+    current directory is never the executed one), and a relative path with
+    a separator resolves against REPO_ROOT — the working directory the
+    generator subprocess is launched with — not this process's cwd.
+    """
+    _, composition = _us_tariff_panel_env()
     from axiom_oracles.adapters.axiom.runner import _resolve_binary_path
 
     binary = _resolve_binary_path(None, composition)
-    if not binary.exists() and shutil.which(str(binary)) is None:
-        return f"axiom rules engine binary not found ({binary})"
-    return None
+    if os.sep not in str(binary):
+        which = shutil.which(str(binary))
+        resolved = Path(which) if which else None
+    else:
+        candidate = binary if binary.is_absolute() else REPO_ROOT / binary
+        resolved = candidate if candidate.exists() else None
+    if resolved is None:
+        return None
+    resolved = resolved.resolve()
+    return resolved if resolved.is_file() else None
 
 
 def _validate_us_tariff_panel_payload(report: object, source: str) -> None:
@@ -2961,7 +3018,8 @@ def _validate_us_tariff_panel_payload(report: object, source: str) -> None:
         )
     family_units = 0
     family_mismatch_units = 0
-    mismatch_family_cells: dict[str, list[tuple[set, set]]] = {}
+    family_units_by_hts: dict[str, int] = {}
+    mismatch_family_cells: dict[str, list[tuple[set, set, dict, dict]]] = {}
     for family in families:
         expected = family.get("expected")
         axiom = family.get("axiom")
@@ -2987,14 +3045,18 @@ def _validate_us_tariff_panel_payload(report: object, source: str) -> None:
                 "its own expected/axiom vectors"
             )
         family_units += unit_count
+        family_hts = str(family.get("hts_number"))
+        family_units_by_hts[family_hts] = (
+            family_units_by_hts.get(family_hts, 0) + unit_count
+        )
         if not vectors_agree:
             family_mismatch_units += unit_count
-            mismatch_family_cells.setdefault(
-                str(family.get("hts_number")), []
-            ).append(
+            mismatch_family_cells.setdefault(family_hts, []).append(
                 (
                     set(family.get("countries") or []),
                     set(family.get("probe_dates") or []),
+                    expected,
+                    axiom,
                 )
             )
     if family_units != comparison or family_mismatch_units != mismatch_count:
@@ -3004,17 +3066,110 @@ def _validate_us_tariff_panel_payload(report: object, source: str) -> None:
             "that does not reproduce the summary counts "
             f"({comparison} units, {mismatch_count} mismatched)"
         )
+    # Bind the payload to the independently derived comparison universe
+    # (#448 review round 4): the covered slice's (hts, country, probe)
+    # units come straight from the committed reference extract, so a
+    # payload cannot invent units, relocate rows to coordinates outside
+    # the universe, or shrink the account per HTS line while keeping the
+    # global totals.
+    from axiom_oracles.suites.us_tariff_panel import (
+        REFERENCE_DIRNAME,
+        column_exposure,
+        covered_units,
+        load_reference,
+        temporal_debt,
+        temporal_debt_records,
+    )
+
+    intervals, _ = load_reference(REPO_ROOT / REFERENCE_DIRNAME)
+    # The conformance surfaces in scope — the positive-exposure witness
+    # basis and the addressable temporal-debt account — must reproduce the
+    # committed reference exactly, or the scoreboard would consume a forged
+    # coverage/debt story (sol stack review F3/F4).
+    scope = report.get("scope") or {}
+    expected_exposure = column_exposure(covered_units(intervals))
+    if scope.get("column_exposure") != expected_exposure:
+        raise SystemExit(
+            f"us-tariff-panel payload at {source} has a column_exposure "
+            "account that does not reproduce the committed reference"
+        )
+    debt_block = scope.get("temporal_debt") or {}
+    expected_records = temporal_debt_records(intervals)
+    if (
+        debt_block.get("records") != expected_records
+        or debt_block.get("pre_domain_intervals") != len(temporal_debt(intervals))
+        or debt_block.get("straddle_clipped_intervals")
+        != sum(
+            r["interval_count"]
+            for r in expected_records
+            if r["kind"] == "straddle_clipped"
+        )
+        or scope.get("temporal_debt_intervals")
+        != debt_block.get("pre_domain_intervals")
+    ):
+        raise SystemExit(
+            f"us-tariff-panel payload at {source} has a temporal-debt "
+            "account that does not reproduce the committed reference"
+        )
+    universe = {
+        (interval.hts10, interval.country_census, probe.isoformat())
+        for interval, probe in covered_units(intervals)
+    }
+    if comparison != len(universe):
+        raise SystemExit(
+            f"us-tariff-panel payload at {source} declares {comparison} "
+            f"comparison units; the committed reference derives "
+            f"{len(universe)}"
+        )
+    universe_by_hts: dict[str, int] = {}
+    for hts, _country, _probe in universe:
+        universe_by_hts[hts] = universe_by_hts.get(hts, 0) + 1
+    if family_units_by_hts != universe_by_hts:
+        raise SystemExit(
+            f"us-tariff-panel payload at {source} has per-HTS case-family "
+            "unit totals that do not reproduce the reference-derived "
+            "universe"
+        )
     for row in mismatches:
-        cells = mismatch_family_cells.get(str(row.get("hts_number"))) or []
+        coordinate = (
+            str(row.get("hts_number")),
+            str(row.get("country_census")),
+            str(row.get("probe_date")),
+        )
+        if coordinate not in universe:
+            raise SystemExit(
+                f"us-tariff-panel payload at {source} has a mismatch row "
+                f"({row.get('case_id')}) outside the reference-derived "
+                "comparison universe"
+            )
+        # The covering family must reproduce the row, vector for vector:
+        # same diverging-slot set, same per-slot values, same totals. A
+        # row detached from (or contradicting) its family ledger entry is
+        # rejected (#448 review round 4).
+        cells = mismatch_family_cells.get(coordinate[0]) or []
+        row_slots = row.get("slots") or {}
         if not any(
-            row.get("country_census") in countries
-            and row.get("probe_date") in probes
-            for countries, probes in cells
+            coordinate[1] in countries
+            and coordinate[2] in probes
+            and set(row_slots)
+            == {
+                slot
+                for slot in expected
+                if abs(axiom[slot] - expected[slot]) > 1e-12
+            }
+            and all(
+                delta.get("axiom") == axiom[slot]
+                and delta.get("yale") == expected[slot]
+                for slot, delta in row_slots.items()
+            )
+            and row.get("left") == axiom.get("total")
+            and row.get("right") == expected.get("total")
+            for countries, probes, expected, axiom in cells
         ):
             raise SystemExit(
                 f"us-tariff-panel payload at {source} has a mismatch row "
-                f"({row.get('case_id')}) with no covering non-matching "
-                "case family"
+                f"({row.get('case_id')}) with no non-matching case family "
+                "reproducing its slot deltas and totals"
             )
 
 
@@ -3083,14 +3238,46 @@ def _run_us_tariff_panel(runner: dict, output: Path) -> None:
             text=True,
             check=True,
         ).stdout
-        _validate_us_tariff_panel_payload(json.loads(text), f"HEAD:{committed}")
+        head_payload = json.loads(text)
+        _validate_us_tariff_panel_payload(head_payload, f"HEAD:{committed}")
         runner["_reemitted_report"] = True
+        # Source stamp: the published provenance must say WHOSE numbers
+        # these are — the committed report's identity and original
+        # generation time — or the re-emission presents as freshly
+        # generated on every surface that only reads generated_at
+        # (sol stack review F6).
+        runner["_reemitted_source"] = {
+            "path": str(committed),
+            "generated_at": (head_payload.get("provenance") or {}).get(
+                "generated_at"
+            ),
+        }
         print(
             f"us-tariff-panel generation unavailable ({reason}); "
             f"reusing HEAD:{committed}."
         )
         output.write_text(text)
         return
+    # Record what will actually run (same env-override honesty as the T0
+    # grid runner: the generator honors RULESPEC_US_CHECKOUT and
+    # AXIOM_RULES_ENGINE_BINARY). The executable is resolved with the SAME
+    # semantics the generator's exec uses (bare name -> PATH only, relative
+    # path -> the generator's working directory) and its bytes are hashed
+    # BEFORE the generator runs — hashing after execution would let a
+    # swapped binary be labelled with the wrong identity, and an
+    # exists()-first probe would hash a same-named cwd file PATH execution
+    # never touches (#448 review rounds 3 and 4). The sha256 is the
+    # VERIFIABLE engine identity; the enclosing checkout's HEAD (recorded
+    # below) labels the checkout, not the build, and can postdate the
+    # binary.
+    checkout, _ = _us_tariff_panel_env()
+    runner.setdefault("parameters", {})["rulespec_roots"] = [str(checkout)]
+    engine_binary = _us_tariff_panel_engine_binary()
+    engine_binary_sha256 = (
+        hashlib.sha256(engine_binary.read_bytes()).hexdigest()
+        if engine_binary is not None
+        else None
+    )
     # Launched leg: the generator writes to a run-private path (never a
     # shared slot a previous run could have populated), and the payload is
     # validated before provenance stamping — exit 0 alone does not prove a
@@ -3118,36 +3305,15 @@ def _run_us_tariff_panel(runner: dict, output: Path) -> None:
     _validate_us_tariff_panel_payload(
         json.loads(text), "the generator's run-private output"
     )
-    # Record what actually ran (same env-override honesty as the T0 grid
-    # runner: the generator honors RULESPEC_US_CHECKOUT and
-    # AXIOM_RULES_ENGINE_BINARY). The engine binary is resolved exactly the
-    # way the adapter resolves it, so conventional-path runs (no env
-    # override) record the engine identity too. A bare command name is
-    # resolved via PATH (never treated as cwd-relative), and the sha256 of
-    # the executable bytes is recorded as the VERIFIABLE engine identity —
-    # the enclosing checkout's HEAD (below) labels the checkout, not the
-    # build, and can postdate the binary (#448 review round 3).
-    checkout, composition = _us_tariff_panel_env()
-    runner.setdefault("parameters", {})["rulespec_roots"] = [str(checkout)]
-    from axiom_oracles.adapters.axiom.runner import _resolve_binary_path
-
-    binary = _resolve_binary_path(None, composition)
-    if binary.exists():
-        resolved = binary.resolve()
-    else:
-        which = shutil.which(str(binary))
-        resolved = Path(which).resolve() if which else None
-    if resolved is not None and resolved.is_file():
-        runner["parameters"]["engine_binary"] = str(resolved)
-        runner["parameters"]["engine_binary_sha256"] = hashlib.sha256(
-            resolved.read_bytes()
-        ).hexdigest()
+    if engine_binary is not None:
+        runner["parameters"]["engine_binary"] = str(engine_binary)
+        runner["parameters"]["engine_binary_sha256"] = engine_binary_sha256
         # Only claim an enclosing repo when the executable actually lives
         # under that repo's cargo target/ directory — never by fixed
         # parent-depth arithmetic on an arbitrary install path.
-        for ancestor in resolved.parents:
+        for ancestor in engine_binary.parents:
             if (ancestor / ".git").exists():
-                if resolved.is_relative_to(ancestor / "target"):
+                if engine_binary.is_relative_to(ancestor / "target"):
                     runner["axiom_rules_repo"] = str(ancestor)
                 break
     output.write_text(text)
@@ -4513,9 +4679,17 @@ def _slim_report_for_dashboard(report: dict) -> dict:
     kept_mismatches = mismatches[:_DASHBOARD_MAX_MISMATCHES]
     kept_ids = {m.get("case_id") for m in kept_mismatches}
     slim["mismatches"] = kept_mismatches
-    slim["cases"] = [
-        case for case in cases if case.get("case_id") in kept_ids
-    ][:_DASHBOARD_MAX_CASE_ROWS]
+    # Case rows are only dropped when THEY breach the cap. Filtering them
+    # by retained mismatch ids whenever the mismatch list is truncated
+    # silently discarded ledgers whose case rows are aggregates with their
+    # own id scheme (the us-tariff-panel family ledger shipped 0/73 rows —
+    # #448 review round 4).
+    if len(cases) > _DASHBOARD_MAX_CASE_ROWS:
+        slim["cases"] = [
+            case for case in cases if case.get("case_id") in kept_ids
+        ][:_DASHBOARD_MAX_CASE_ROWS]
+    else:
+        slim["cases"] = cases
     slim["dashboard_truncation"] = {
         "total_mismatches": len(mismatches),
         "shown_mismatches": len(kept_mismatches),
@@ -4563,7 +4737,18 @@ def _write_dashboard_report(report: dict, filename: str) -> None:
     target = DASHBOARD_DATA_DIR / filename
     slim = _slim_report_for_dashboard(strip_heavy_case_metadata(report))
     truncation = slim.get("dashboard_truncation")
-    target.write_text(json.dumps(slim, indent=2, sort_keys=True))
+    # Atomic publish: the dashboard is fetched by the UI and read by tests —
+    # it must never be observable as partially written JSON (#448 review
+    # round 4).
+    dash_fd, dash_name = tempfile.mkstemp(
+        dir=DASHBOARD_DATA_DIR, prefix=f".{filename}.", suffix=".tmp"
+    )
+    try:
+        with os.fdopen(dash_fd, "w") as fh:
+            fh.write(json.dumps(slim, indent=2, sort_keys=True))
+        os.replace(dash_name, target)
+    finally:
+        Path(dash_name).unlink(missing_ok=True)
     print(f"Wrote dashboard report: {target}")
     if truncation:
         print(
