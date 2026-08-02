@@ -45,6 +45,10 @@ def build() -> dict:
     return {"schema": "axiom.dashboard_overview.v1", "sources": sources, "reports": reports}
 
 
+def _serialize(bundle: dict) -> str:
+    return json.dumps(bundle, sort_keys=True) + "\n"
+
+
 def main() -> int:
     check = "--check" in sys.argv
     bundle = build()
@@ -52,17 +56,20 @@ def main() -> int:
         if not OUT.exists():
             print("overview.json missing; run scripts/generate_dashboard_overview.py")
             return 1
-        committed = json.loads(OUT.read_text())
-        if committed != bundle:
+        # Byte-exact against the canonical serialization this script would
+        # write. Parsed-value equality was not type-strict — Python's
+        # `1 == True` accepted a numeric-to-boolean bundle edit (sol stack
+        # review r5).
+        if OUT.read_text() != _serialize(bundle):
             print(
-                "overview.json is stale (bundle content differs from a "
-                "fresh rebuild of the committed reports); "
-                "run scripts/generate_dashboard_overview.py"
+                "overview.json is stale (bytes differ from the canonical "
+                "serialization of a fresh rebuild of the committed "
+                "reports); run scripts/generate_dashboard_overview.py"
             )
             return 1
         print(f"overview OK: {len(bundle['reports'])} reports bundled")
         return 0
-    OUT.write_text(json.dumps(bundle, sort_keys=True) + "\n")
+    OUT.write_text(_serialize(bundle))
     size = OUT.stat().st_size / 1e6
     print(f"wrote overview.json: {len(bundle['reports'])} reports, {size:.1f} MB")
     return 0

@@ -4760,16 +4760,18 @@ def _write_dashboard_report(
         == merged_summary.get("mismatch_count")
     )
     slim_summary = slim.get("summary")
+    slim_is_premerged = (
+        isinstance(slim_summary, dict)
+        and isinstance(slim_summary.get("dispositioned"), dict)
+        and "stored_mismatch_example_count" in slim_summary
+    )
     if full_report_path is not None:
         # The pointer contract mirrors the consumer's
         # (apply_dispositions._resolve_source_pointer): a repo-relative
         # path under reports/. A custom --output-dir can publish the full
         # report outside the repository — or inside it but outside
         # reports/ — where the consumer would reject (or never resolve)
-        # the pointer. Emitting a pointer the validator is guaranteed to
-        # refuse would fail every subsequent --check, so binding is
-        # skipped and the block stays pointer-free instead (sol stack
-        # reviews r3 + r4).
+        # the pointer (sol stack reviews r3 + r4).
         try:
             source_rel = (
                 full_report_path.resolve()
@@ -4779,13 +4781,28 @@ def _write_dashboard_report(
         except ValueError:
             source_rel = None
         if source_rel is None or not source_rel.startswith("reports/"):
+            if slim_is_premerged:
+                # A premerged-slim copy is only ever trusted through its
+                # source binding (or, for suites committing no full
+                # report, its pointer-free provenance). When the full
+                # report goes to a non-canonical location the copy can
+                # be neither pointer-bound nor left pointer-free —
+                # apply_dispositions.py --check is guaranteed to flag it
+                # either way once the suite commits any full report (sol
+                # stack review r5). Canonical artifacts move together: a
+                # run publishing its full report elsewhere does not
+                # update the committed dashboard copy at all.
+                print(
+                    f"Dashboard copy {filename} NOT updated: full report "
+                    f"published outside reports/ ({full_report_path}); a "
+                    "premerged dashboard copy cannot be source-bound to it"
+                )
+                return
             full_report_path = None
     if (
         full_report_path is not None
         and merged_is_complete
-        and isinstance(slim_summary, dict)
-        and isinstance(slim_summary.get("dispositioned"), dict)
-        and "stored_mismatch_example_count" in slim_summary
+        and slim_is_premerged
     ):
         from axiom_oracles.comparison.dispositions import assignment_digest
 

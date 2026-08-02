@@ -83,6 +83,21 @@ def test_edited_bundle_itself_fails_check(tmp_path, monkeypatch):
     assert _run(module, monkeypatch, "--check") == 1
 
 
+def test_numeric_to_boolean_bundle_edit_fails_check(tmp_path, monkeypatch):
+    """Python's `1 == True`: parsed-value equality accepted a type-only
+    bundle edit (sol stack review r5). The byte-exact check must not."""
+    module, data = _seed(tmp_path, monkeypatch)
+    assert _run(module, monkeypatch) == 0
+    out = data / "overview.json"
+    text = out.read_text()
+    mutated = text.replace('"mismatch_count": 1', '"mismatch_count": true')
+    assert mutated != text
+    out.write_text(mutated)
+    # the parsed values still compare equal — the defective pre-r5 check
+    assert json.loads(mutated) == json.loads(text)
+    assert _run(module, monkeypatch, "--check") == 1
+
+
 def test_missing_bundle_fails_check(tmp_path, monkeypatch):
     module, _ = _seed(tmp_path, monkeypatch)
     assert _run(module, monkeypatch, "--check") == 1
