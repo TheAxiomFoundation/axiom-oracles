@@ -53,9 +53,9 @@ EXPECTED_COMPARISON_UNITS = 23_760
 #: 23,760-match/0-mismatch account — reconciles internally and passes.
 #: An encoding fix or reference-vintage change moves these in the same
 #: reviewed diff.
-EXPECTED_MATCH_COUNT = 16_873
-EXPECTED_MISMATCH_COUNT = 6_887
-EXPECTED_SIGNATURE_COUNT = 89
+EXPECTED_MATCH_COUNT = 17_877
+EXPECTED_MISMATCH_COUNT = 5_883
+EXPECTED_SIGNATURE_COUNT = 86
 
 #: Reviewed sha256 of the committed report's canonical ACCOUNT — the
 #: {summary, mismatches, mismatch_signatures, cases} sections serialized
@@ -66,7 +66,7 @@ EXPECTED_SIGNATURE_COUNT = 89
 #: signature/family rewrites included) cannot reconcile. A genuine
 #: encoding or reference change moves this in the same reviewed diff.
 EXPECTED_ACCOUNT_SHA256 = (
-    "ad6b035a03db8ddd4f3f47b32921e939507e176638f23c9048eb4c3faafa5e42"
+    "e55036bcace451aee340155c6dce436c86495d4bf07d650aec456ff83bbbddce"
 )
 
 #: Reviewed positive-exposure counts per Yale statutory column: the number

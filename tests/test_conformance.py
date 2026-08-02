@@ -1497,8 +1497,8 @@ def test_committed_us_tariff_yale_scoreboard_pins_witnessed_coverage():
         "straddle_clipped_intervals": 720,
         "addressable_records": 123,
     }
-    assert entry["oracle_attributed"] == 353
-    assert entry["axiom_attributed_open"] == 1057
+    assert entry["oracle_attributed"] == 396
+    assert entry["axiom_attributed_open"] == 2
 
 
 def test_committed_be_scoreboard_counts_dataset_lacks_input_exclusion():

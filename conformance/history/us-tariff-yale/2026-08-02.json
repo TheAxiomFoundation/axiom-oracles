@@ -8,7 +8,7 @@
   "covered_pct": 66.6667,
   "excluded": 2,
   "unexplained_total": 0,
-  "axiom_attributed_open": 1057,
+  "axiom_attributed_open": 2,
   "temporal_debt": {
     "pre_domain_intervals": 28800,
     "straddle_clipped_intervals": 720,
