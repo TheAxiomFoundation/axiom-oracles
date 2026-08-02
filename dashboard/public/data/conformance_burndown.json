@@ -182,6 +182,16 @@
         "axiom_attributed_open": 0,
         "gap": 0,
         "conformant": true
+      },
+      {
+        "date": "2026-08-02",
+        "in_scope": 23,
+        "covered": 23,
+        "uncovered": 0,
+        "unexplained": 0,
+        "axiom_attributed_open": 0,
+        "gap": 0,
+        "conformant": true
       }
     ],
     "uk": [
@@ -364,6 +374,16 @@
         "axiom_attributed_open": 0,
         "gap": 0,
         "conformant": true
+      },
+      {
+        "date": "2026-08-02",
+        "in_scope": 21,
+        "covered": 21,
+        "uncovered": 0,
+        "unexplained": 0,
+        "axiom_attributed_open": 0,
+        "gap": 0,
+        "conformant": true
       }
     ],
     "uk-pe": [
@@ -536,6 +556,16 @@
         "axiom_attributed_open": 0,
         "gap": 0,
         "conformant": true
+      },
+      {
+        "date": "2026-08-02",
+        "in_scope": 23,
+        "covered": 23,
+        "uncovered": 0,
+        "unexplained": 0,
+        "axiom_attributed_open": 0,
+        "gap": 0,
+        "conformant": true
       }
     ],
     "us-pe": [
@@ -691,6 +721,16 @@
       },
       {
         "date": "2026-08-01",
+        "in_scope": 127,
+        "covered": 36,
+        "uncovered": 91,
+        "unexplained": 244,
+        "axiom_attributed_open": 0,
+        "gap": 335,
+        "conformant": false
+      },
+      {
+        "date": "2026-08-02",
         "in_scope": 127,
         "covered": 36,
         "uncovered": 91,
