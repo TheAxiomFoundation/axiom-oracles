@@ -720,6 +720,15 @@ def build_freshness() -> dict:
                 "affected_repos": entry.get("repos", []),
                 "ran_against": ran_against,
                 "unstamped": provenance.get("generated_at") is None,
+                # Re-emission honesty (sol stack review F6): for a
+                # skip-capable lane that reused the committed report,
+                # generated_at dates the RE-EMISSION, not the numbers.
+                # Without this flag (plus the source stamp dating the
+                # actual numbers, when the lane recorded one), a
+                # permanently re-emitting lane presents as freshly run on
+                # every freshness surface.
+                "reemitted": bool(provenance.get("reemitted_report")),
+                "reemitted_from": provenance.get("reemitted_from"),
             }
         )
 

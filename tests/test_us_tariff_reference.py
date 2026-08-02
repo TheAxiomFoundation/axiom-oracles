@@ -79,7 +79,7 @@ EXPECTED_SNAPSHOT_SHA256 = (
 #: reviewed diff (the _assert_exporter_pin checks below remain as a
 #: readable first-line diagnostic for WHICH pin drifted).
 EXPECTED_EXPORTER_SHA256 = (
-    "21eb6c562bdc3df53a49641b2785e1982fa9e473934b38f0e63047eb5ad19402"
+    "97086c88292eb339fa01abe07167062956bd570c732a3609a9ebb923760705dd"
 )
 
 #: Reviewed extract schema: the spine plus the COMPLETE statutory-column
