@@ -915,18 +915,28 @@ export default function OraclesV2() {
               <h1 className="v2-thesis">
                 Axiom never grades its own work —{" "}
                 <em>{compactCount(totals.households)}</em> households checked
-                against <em>{oracles.length}</em> independent engines,{" "}
-                <em style={{ color: rateColor(totals.rate) }}>
-                  {formatAgreementRate(totals.rate, totals.mismatches)}
-                </em>{" "}
-                agreement.
+                against <em>{oracles.length}</em> independent engines, every
+                disagreement tracked in the open.
               </h1>
               <p
                 className="v2-hero-sub"
-                title={`${compactCount(totals.checks)} concept-level checks behind the agreement rate${crossChecks > 0 ? ` · ${crossChecks} oracle-vs-oracle arbitration runs` : ""}`}
+                title={`${compactCount(totals.checks)} concept-level checks behind these figures${crossChecks > 0 ? ` · ${crossChecks} oracle-vs-oracle arbitration runs` : ""}`}
               >
-                Every disagreement is triaged in the open — dispositioned,
-                filed upstream, or kept visibly open until someone acts.
+                Of <em>{compactCount(totals.checks)}</em> checks,{" "}
+                <em>{totals.mismatches.toLocaleString()}</em> disagreed —{" "}
+                <em>
+                  {(totals.mismatches - totals.unexplained).toLocaleString()}
+                </em>{" "}
+                carry a documented disposition (filed upstream, or tracked to
+                an open Axiom issue) and{" "}
+                <em
+                  style={{
+                    color: rateColor(totals.unexplained === 0 ? 100 : 0),
+                  }}
+                >
+                  {totals.unexplained.toLocaleString()}
+                </em>{" "}
+                remain in open triage. None are carried silently.
               </p>
             </section>
 

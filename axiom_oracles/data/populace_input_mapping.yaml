@@ -1678,6 +1678,22 @@ mappings:
   # age-tiered per-dependent maximum; child care is not observable in the ECPS
   # slice feeding the composed program and only reduces countable EARNED income,
   # so it takes 0 for the (predominantly unearned-income) TANF caseload.
+  # (Predates the CHILDCARE_EXPENSES household fact below — candidate for the
+  # same real feed once the DE cap tiers are composed.)
   - match: { kind: exact, value: child_care_expenses }
     scope: household
     source: { kind: constant, value: 0 }
+
+  # AL TANF Appendix N §2 step-2 deduction: child care or care of an
+  # incapacitated adult, deducted from gross earnings after the 20% work
+  # expense. Fed from the populace CHILDCARE_EXPENSES household fact (the
+  # SPM-unit annual childcare_expenses PolicyEngine's own
+  # al_tanf_countable_earned_income reads at MONTH period), so both engines
+  # see the same observed spending. Closes rulespec-us#1184 / the 3
+  # al-tanf-ecps axiom-attributed rows.
+  - match: { kind: exact, value: child_or_incapacitated_adult_care_expenses }
+    scope: household
+    source:
+      kind: derived
+      transform: monthly
+      from_facts: [CHILDCARE_EXPENSES]

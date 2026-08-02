@@ -4121,6 +4121,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "se-zero-counterfactual-27222-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/433"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -4137,6 +4142,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 34.5,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "nc-se-flat-netting-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 333.0,
       "parent": null,
@@ -4153,6 +4163,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "se-zero-counterfactual-27250-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/433"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -4169,6 +4184,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "se-zero-counterfactual-27256-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/433"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -4185,6 +4205,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 289.8000183105469,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ssi-and-tanf-zero-counterfactual-27266",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 546.0,
       "parent": null,
@@ -4201,6 +4226,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 17.100006103515625,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "se-zero-counterfactual-27288",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/433"
+      },
       "kind": "amount_difference",
       "left": 298.0,
       "parent": null,
@@ -4217,6 +4247,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -37.29998779296875,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-medical-imputation-counterfactual-27289",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+      },
       "kind": "amount_difference",
       "left": 24.0,
       "parent": null,
@@ -4254,6 +4289,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 52.20001220703125,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "nc-se-flat-netting-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 704.0,
       "parent": null,
@@ -4270,6 +4310,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -51.49993896484375,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-medical-imputation-counterfactual-27362",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+      },
       "kind": "amount_difference",
       "left": 167.0,
       "parent": null,
@@ -4286,6 +4331,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 221.70001220703125,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "nc-se-flat-netting-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 889.0,
       "parent": null,
@@ -4323,6 +4373,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 52.15999984741211,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "nc-se-flat-netting-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 76.0,
       "parent": null,
@@ -4339,6 +4394,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 46.300048828125,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "nc-se-flat-netting-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 206.0,
       "parent": null,
@@ -4355,6 +4415,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 239.50001525878906,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-endogenous-ssi-counterfactual-27568",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/436"
+      },
       "kind": "amount_difference",
       "left": 296.0,
       "parent": null,
@@ -4371,6 +4436,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "se-zero-counterfactual-27574-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/433"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -4513,6 +4583,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 24.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "nc-se-flat-netting-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 24.0,
       "parent": null,
@@ -4529,6 +4604,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "nc-se-flat-netting-2026-07-30-eligibility-left",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -4545,6 +4625,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 359.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "nc-se-flat-netting-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 359.0,
       "parent": null,
@@ -4603,6 +4688,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 37.5,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "se-zero-counterfactual-27796",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/433"
+      },
       "kind": "amount_difference",
       "left": 298.0,
       "parent": null,
@@ -4640,6 +4730,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 140.60000610351562,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "nc-se-flat-netting-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 395.0,
       "parent": null,
@@ -4698,6 +4793,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 24.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "se-zero-counterfactual-27882",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/433"
+      },
       "kind": "amount_difference",
       "left": 24.0,
       "parent": null,
@@ -4714,6 +4814,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 153.60009765625,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "nc-se-flat-netting-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 230.0,
       "parent": null,
@@ -4793,6 +4898,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 85.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "nc-se-flat-netting-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 85.0,
       "parent": null,
@@ -4809,6 +4919,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 87.5,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "nc-se-flat-netting-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 228.0,
       "parent": null,
@@ -4825,6 +4940,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 20.4000244140625,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-28003",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 1421.0,
       "parent": null,
@@ -4862,6 +4982,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 15.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-28023",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 1421.0,
       "parent": null,
@@ -4878,6 +5003,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 15.4000244140625,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-28066",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 944.0,
       "parent": null,
@@ -4894,6 +5024,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 108.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "nc-se-flat-netting-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 108.0,
       "parent": null,
@@ -4931,6 +5066,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 8.0999755859375,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-28105",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 546.0,
       "parent": null,
@@ -4968,6 +5108,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 235.50001525878906,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-endogenous-ssi-counterfactual-28183",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/436"
+      },
       "kind": "amount_difference",
       "left": 298.0,
       "parent": null,
@@ -4984,6 +5129,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 161.1599998474121,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-endogenous-ssi-counterfactual-28191",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/436"
+      },
       "kind": "amount_difference",
       "left": 185.0,
       "parent": null,
@@ -5000,6 +5150,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 119.60003662109375,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "nc-se-flat-netting-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 552.0,
       "parent": null,
@@ -5037,6 +5192,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 15.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-28293",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 1421.0,
       "parent": null,
@@ -5053,6 +5213,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "se-zero-counterfactual-28309-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/433"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -5069,6 +5234,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 127.15999984741211,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "nc-se-flat-netting-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 151.0,
       "parent": null,
@@ -5085,6 +5255,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 74.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "nc-se-flat-netting-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 74.0,
       "parent": null,
@@ -5101,6 +5276,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "nc-se-flat-netting-2026-07-30-eligibility-left",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -5117,6 +5297,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 387.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "nc-se-flat-netting-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 387.0,
       "parent": null,
@@ -5154,6 +5339,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 319.9000244140625,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "nc-se-flat-netting-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 366.0,
       "parent": null,
@@ -5170,6 +5360,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 48.15999984741211,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-endogenous-ssi-counterfactual-28392",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/436"
+      },
       "kind": "amount_difference",
       "left": 72.0,
       "parent": null,
@@ -5223,6 +5418,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 95.60000610351562,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "nc-se-flat-netting-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 216.0,
       "parent": null,
@@ -5239,6 +5439,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 546.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "nc-negative-se-loss-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 546.0,
       "parent": null,
@@ -5255,6 +5460,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "nc-negative-se-loss-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -5271,6 +5481,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 24.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-fallback-path-divergence-67163",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/437"
+      },
       "kind": "amount_difference",
       "left": 24.0,
       "parent": null,
@@ -5287,6 +5502,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 452.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-fallback-path-divergence-69566",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/437"
+      },
       "kind": "amount_difference",
       "left": 452.0,
       "parent": null,
@@ -5303,6 +5523,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 298.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-fallback-path-divergence-71509",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/437"
+      },
       "kind": "amount_difference",
       "left": 298.0,
       "parent": null,
@@ -5319,6 +5544,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 150.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-fallback-path-divergence-72572",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/437"
+      },
       "kind": "amount_difference",
       "left": 150.0,
       "parent": null,
@@ -5335,6 +5565,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 546.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-fallback-path-divergence-74116",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/437"
+      },
       "kind": "amount_difference",
       "left": 546.0,
       "parent": null,
@@ -5400,18 +5635,18 @@
     "dispositioned": {
       "counts": {
         "axiom_encoding_gap": 10,
-        "bridge_artifact": 11,
+        "bridge_artifact": 58,
         "explained_residual": 0,
         "unexplained": 0,
         "upstream_engine_gap": 6
       },
       "dispositions_file": "dispositions/nc-snap-ecps.yaml",
       "expired_entries": [],
-      "explained_rate": 98.408846,
+      "explained_rate": 99.676375,
       "orphaned_entries": [],
       "raw_match_rate": 97.950378,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 49
+      "unexplained_count": 2
     },
     "error_count": 0,
     "errors_by_engine": [],
