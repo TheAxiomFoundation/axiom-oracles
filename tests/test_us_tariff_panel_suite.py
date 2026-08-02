@@ -45,6 +45,20 @@ REFERENCE_DIR = REPO_ROOT / REFERENCE_DIRNAME
 #: diff (the reference-side EXPECTED_* pin pattern).
 EXPECTED_COMPARISON_UNITS = 23_760
 
+#: Reviewed OUTCOME pins for the committed artifacts (#448 review round 3):
+#: without these, an artifact relabelling mismatches as matches — or a
+#: 23,760-match/0-mismatch account — reconciles internally and passes.
+#: An encoding fix or reference-vintage change moves these in the same
+#: reviewed diff.
+EXPECTED_MATCH_COUNT = 16_873
+EXPECTED_MISMATCH_COUNT = 6_887
+EXPECTED_SIGNATURE_COUNT = 89
+
+#: Reviewed dashboard truncation cap (run_comparison._DASHBOARD_MAX_MISMATCHES)
+#: — the dashboard copy must carry EXACTLY min(cap, mismatch_count) rows, not
+#: any self-declared prefix length.
+DASHBOARD_MAX_MISMATCHES = 1_000
+
 #: TEST-OWNED copy of the reviewed slot -> (engine concept, Yale statutory
 #: columns) mapping (design memo §4). Deliberately NOT derived from the
 #: production ``AUTHORITY_SLOTS`` — the synthetic-value and row-verification
@@ -338,10 +352,17 @@ def test_committed_report_reconciles_counts_rows_and_signatures() -> None:
     )
     summary = report["summary"]
     assert summary["comparison_count"] == EXPECTED_COMPARISON_UNITS
+    # Reviewed outcome pins: internal reconciliation alone cannot prove
+    # fullness (a relabelled or all-match account reconciles too).
+    assert summary["match_count"] == EXPECTED_MATCH_COUNT
+    assert summary["mismatch_count"] == EXPECTED_MISMATCH_COUNT
     assert (
         summary["match_count"] + summary["mismatch_count"]
         == summary["comparison_count"]
     )
+    # The per-slot ledger must carry the ENTIRE reviewed slot universe —
+    # deleting an authority from summary.slots must not pass.
+    assert set(summary["slots"]) == set(REVIEWED_AUTHORITY_SLOTS) | {"total"}
     rows = report["mismatches"]
     assert len(rows) == summary["mismatch_count"]
     row_ids = {row["case_id"] for row in rows}
@@ -360,6 +381,12 @@ def test_committed_report_reconciles_counts_rows_and_signatures() -> None:
     rebuilt_signatures: dict[tuple, set[str]] = {}
     row_slot_tally: dict[str, int] = {}
     for row in rows:
+        # The unit identity is BOUND to the cell coordinates (test-owned
+        # format) — arbitrary unique ids cannot stand in for real units.
+        assert row["case_id"] == (
+            f"panel-{row['hts_number']}-{row['country_census']}-"
+            f"{row['probe_date']}"
+        )
         probe = date.fromisoformat(row["probe_date"])
         hits = [
             interval
@@ -387,6 +414,13 @@ def test_committed_report_reconciles_counts_rows_and_signatures() -> None:
         slots = row["slots"]
         assert slots, f"{row['case_id']}: mismatch row with no diverging slots"
         assert (row["kind"] == "total_difference") == ("total" in slots)
+        if "total" not in slots:
+            # component_difference means the components cancelled in the
+            # total: the top-level totals must actually agree.
+            assert abs(row["left"] - row["right"]) <= 1e-12, (
+                f"{row['case_id']}: component_difference row with a "
+                "diverging total"
+            )
         for slot, delta in slots.items():
             if slot == "total":
                 expected_slot = expected_total
@@ -417,6 +451,7 @@ def test_committed_report_reconciles_counts_rows_and_signatures() -> None:
     # row-level deltas — same keys, same memberships, correct kind/concept
     # per the test-owned mapping.
     signatures = report["mismatch_signatures"]
+    assert len(signatures) == EXPECTED_SIGNATURE_COUNT
     reported_signatures: dict[tuple, set[str]] = {}
     for signature in signatures:
         key = (
@@ -462,6 +497,45 @@ def test_committed_report_reconciles_counts_rows_and_signatures() -> None:
         if kind_tally[kind]
     ]
 
+    # The complete case-family ledger must reconcile against the summary
+    # and the mismatch rows: every unit lives in a family, each family's
+    # match flag equals its own vector agreement, non-matching family
+    # units total exactly the mismatch count, and every mismatch row is
+    # covered by a non-matching family cell.
+    families = report["cases"]
+    family_units = 0
+    family_mismatch_units = 0
+    mismatch_family_cells: dict[str, list[tuple[set, set]]] = {}
+    for family in families:
+        assert set(family["expected"]) == set(family["axiom"]) == (
+            set(REVIEWED_AUTHORITY_SLOTS) | {"total"}
+        )
+        vectors_agree = all(
+            abs(family["axiom"][slot] - family["expected"][slot]) <= 1e-12
+            for slot in family["expected"]
+        )
+        assert family["match"] == vectors_agree, (
+            f"{family['case_id']}: match flag contradicts its own vectors"
+        )
+        assert family["unit_count"] > 0
+        family_units += family["unit_count"]
+        if not vectors_agree:
+            family_mismatch_units += family["unit_count"]
+            mismatch_family_cells.setdefault(
+                family["hts_number"], []
+            ).append(
+                (set(family["countries"]), set(family["probe_dates"]))
+            )
+    assert family_units == summary["comparison_count"]
+    assert family_mismatch_units == summary["mismatch_count"]
+    for row in rows:
+        cells = mismatch_family_cells.get(row["hts_number"]) or []
+        assert any(
+            row["country_census"] in countries
+            and row["probe_date"] in probes
+            for countries, probes in cells
+        ), f"{row['case_id']}: no covering non-matching case family"
+
     # The dashboard copy: identical core accounting and signatures; its
     # mismatch rows must be the DETERMINISTIC PREFIX of the full rows
     # (complete row objects, not just matching IDs), truncated only via
@@ -477,6 +551,11 @@ def test_committed_report_reconciles_counts_rows_and_signatures() -> None:
         assert dash_summary[key] == summary[key]
     assert dashboard["mismatch_signatures"] == signatures
     dash_rows = dashboard["mismatches"]
+    # Exactly the reviewed cap — a shorter self-declared prefix (1 row with
+    # matching shown_mismatches) must not pass.
+    assert len(dash_rows) == min(
+        DASHBOARD_MAX_MISMATCHES, summary["mismatch_count"]
+    )
     assert [
         {k: v for k, v in row.items() if k != "disposition"}
         for row in dash_rows
