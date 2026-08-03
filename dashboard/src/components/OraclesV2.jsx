@@ -509,12 +509,8 @@ function OracleRecord({ oracle, onOpenProgram, onBrowseHouseholds }) {
 
   return (
     <section className="card-flat v2-dossier">
-      <div
-        className={`v2-scope${regions.length > 1 ? "" : " v2-scope-bare"}`}
-        role="group"
-        aria-label="Scope"
-      >
-        {regions.length > 1 &&
+      <div className="v2-scope" role="group" aria-label="Scope">
+        {regions.length > 1 ? (
           [null, ...regions].map((r) => (
             <button
               key={r ?? "all"}
@@ -525,7 +521,12 @@ function OracleRecord({ oracle, onOpenProgram, onBrowseHouseholds }) {
             >
               {r ? REGION_LABELS[r] || r : "All countries"}
             </button>
-          ))}
+          ))
+        ) : (
+          <span className="mono v2-dossier-colhead v2-scope-label">
+            Program alignment against {engineLabel(oracle.id)}
+          </span>
+        )}
         <input
           className="input-pill v2-scope-search"
           type="search"
@@ -557,9 +558,11 @@ function OracleRecord({ oracle, onOpenProgram, onBrowseHouseholds }) {
 
       <div className="v2-record-stack">
         <div className="v2-dossier-col">
-          <div className="mono v2-dossier-colhead">
-            Program alignment against {engineLabel(oracle.id)}
-          </div>
+          {regions.length > 1 && (
+            <div className="mono v2-dossier-colhead">
+              Program alignment against {engineLabel(oracle.id)}
+            </div>
+          )}
           {alignmentRows.length === 0 && (
             <p className="v2-empty">No programs in this scope.</p>
           )}

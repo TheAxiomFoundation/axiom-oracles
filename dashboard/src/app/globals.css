@@ -1224,11 +1224,11 @@ body {
   margin-left: auto;
   width: 200px;
 }
-/* Single-country oracles render no region chips; without them the
-   auto-margin would strand the search + program filter in a right-aligned
-   band above the column headings. Keep the toolbar left-aligned instead. */
-.v2-scope-bare .v2-scope-search {
-  margin-left: 0;
+/* Single-country oracles render no region chips; the section heading
+   fills the toolbar's left side instead, so the row reads heading-left /
+   filters-right like the multi-country records. */
+.v2-scope-label {
+  padding-bottom: 0;
 }
 
 /* clickable household rows expand into the inputs / evidence panel */
