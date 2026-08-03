@@ -1447,6 +1447,38 @@ def test_scoreboard_witness_accepts_any_positive_output_var():
     assert board.conformant is True
 
 
+def test_scoreboard_exclusion_invalidated_by_nonzero_live_exposure():
+    """The enforced re-inclusion tripwire (sol closing review F1): an excluded
+    policy whose output column shows nonzero exposure in ANY live report is an
+    invalidated exclusion — it blocks conformance until re-included. This is
+    sol's exact counterfactual: before the invariant, nonzero exposure on an
+    excluded column still scored conformant."""
+    universe = _universe([
+        _in_scope(id="tx:a", oracle_policy_name="a", suite="suite-a",
+                  output_vars=("x_s",)),
+        _in_scope(id="tx:c", oracle_policy_name="c", suite=None,
+                  in_scope=False, exclusion_reason="technical",
+                  output_vars=("z_s",)),
+    ])
+    # Dormant exclusion: zero exposure — conformant holds.
+    report = _report("suite-a", comparisons=5, matches=5)
+    report["scope"] = {"column_exposure": {"x_s": 5, "z_s": 0}}
+    board, scores = score_jurisdiction(universe, [report])
+    assert board.conformant is True
+    assert board.invalid_exclusions == []
+    by_name = {s.oracle_policy_name: s for s in scores}
+    assert by_name["c"].status == "excluded:technical"
+
+    # The reference wakes the column up: exclusion invalidated, verdict blocked.
+    report["scope"] = {"column_exposure": {"x_s": 5, "z_s": 7}}
+    board, scores = score_jurisdiction(universe, [report])
+    assert board.conformant is False
+    assert board.invalid_exclusions == ["c"]
+    assert any("re-inclusion required" in r for r in board.blocking_reasons)
+    by_name = {s.oracle_policy_name: s for s in scores}
+    assert by_name["c"].status == "excluded:INVALID-nonzero-exposure"
+
+
 def test_scoreboard_without_exposure_basis_keeps_presence_coverage():
     """Reports with no scope.column_exposure (other jurisdictions) keep the
     presence-only coverage rule — the witness gate never fires blind."""

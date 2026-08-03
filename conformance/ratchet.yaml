@@ -28,4 +28,4 @@ ratchets:
   covered_min: 10
   unexplained_max: 0
   axiom_attributed_open_max: 0
-  policies_in_scope: 12
+  policies_in_scope: 10

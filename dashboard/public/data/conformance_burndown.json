@@ -803,13 +803,13 @@
       },
       {
         "date": "2026-08-03",
-        "in_scope": 12,
-        "covered": 8,
-        "uncovered": 4,
+        "in_scope": 10,
+        "covered": 10,
+        "uncovered": 0,
         "unexplained": 0,
-        "axiom_attributed_open": 2,
-        "gap": 6,
-        "conformant": false
+        "axiom_attributed_open": 0,
+        "gap": 0,
+        "conformant": true
       }
     ]
   }

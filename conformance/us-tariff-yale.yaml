@@ -61,12 +61,12 @@ policies:
       - rate_other
       - net_other
     exclusion_reason: technical
-    note: Residual ch99 classifier bucket in the reference; statutory_rate_other is identically zero
-      across the full panel at pin c4307e51 (verified empirically over every line x country x interval;
-      the suite's scope.column_exposure re-derives this count on every refresh). There is no statutory
-      surface to witness or compare. Re-inclusion tripwire — any refresh in which column_exposure for
-      this column goes nonzero invalidates this exclusion and the policy returns to scope with a
-      witness requirement.
+    note: Dormant residual bucket — the reference's ch99 classifier catch-all, carrying no statutory instrument
+      of its own. statutory_rate_other is zero across the entire committed extract (68,400 rows, sha in
+      yale_panel_provenance.json), and a review-time sweep of the full source panel corroborated zero
+      everywhere at pin c4307e51 (corroborated, not committed). Enforced tripwire — the scoreboard fails
+      closed if the live report ever records nonzero column_exposure for an excluded policy's output column,
+      forcing re-inclusion before any conformant verdict.
   - id: us-tariff-yale:rate_301_cs
     oracle_policy_name: rate_301_cs
     oracle_policy_type: content_split
@@ -77,12 +77,12 @@ policies:
       - rate_301_cs
       - net_301_cs
     exclusion_reason: technical
-    note: China semiconductor §301 layer; the reference's product list for this layer is empty at pin
-      c4307e51, so statutory_rate_301_cs is identically zero across the full panel (verified
-      empirically over every line x country x interval; scope.column_exposure re-derives the count on
-      every refresh). Nothing to witness or compare at this vintage. Re-inclusion tripwire — any
-      refresh in which column_exposure for this column goes nonzero invalidates this exclusion and the
-      policy returns to scope with a witness requirement.
+    note: 'Dormant forward infrastructure, zero by construction at this pin: the reference defines rate_301_cs
+      as a generic content-split slot whose driving list is empty in baseline (config/policy_params.yaml
+      section_301_content_split_codes: [] — their comment: "EMPTY in baseline => rate_301_cs is all-zero
+      everywhere"). No statutory action rides the column at c4307e51. Enforced tripwire — the scoreboard
+      fails closed if the live report ever records nonzero column_exposure for an excluded policy''s output
+      column, forcing re-inclusion before any conformant verdict.'
   - id: us-tariff-yale:section_122
     oracle_policy_name: section_122
     oracle_policy_type: content_split
@@ -105,10 +105,10 @@ policies:
       - rate_section_201
       - net_section_201
     suite: us-tariff-panel
-    note: Compared against the encoded section_201_component_rate (rulespec-us#1200). The reference
-      carries a flat 14.5% proxy past Proclamation 10339's staged-table end (2026-02-06); our side is
-      a proved zero grounded in the staged table, quota change, and HTS expiry note — every
-      positive-exposure unit is an explained residual on that mechanism.
+    note: Compared against the encoded section_201_component_rate (rulespec-us#1200). The reference carries
+      a flat 14.5% proxy past Proclamation 10339's staged-table end (2026-02-06); our side is a proved
+      zero grounded in the staged table, quota change, and HTS expiry note — every positive-exposure unit
+      is an explained residual on that mechanism.
   - id: us-tariff-yale:section_232
     oracle_policy_name: section_232
     oracle_policy_type: primary

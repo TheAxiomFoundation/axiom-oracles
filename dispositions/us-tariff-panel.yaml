@@ -1,6 +1,6 @@
 # Burned down 2026-08-03 (lane E) against the rulespec-us#1200 witness-line
-# checkout (unpinnable local content checkout; report provenance carries
-# sha: null): the covered slice grew 3->5 HTS-10 lines (2203000030 beer,
+# encode, finalized against post-merge main (report provenance pins rulespec
+# dbf09f44e): the covered slice grew 3->5 HTS-10 lines (2203000030 beer,
 # 8541420010 solar PV cells) and the IEEPA termination fix (EO 14389:
 # active versions end 2026-02-19, proved-zero 2026-02-20..2026-02-23)
 # flipped every ieepa-scotus-timing signature to matching, so those
@@ -7806,6 +7806,9 @@ entries:
     sources:
     - reference/us-tariff-panel/yale_panel_provenance.json
   expires_on_source_change: true
+  selector_binding:
+    units: 7755
+    abs_difference_sum: 1124.475
 - id: "7601103000-s122-0v10--s122-metal-exclusion"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -12300,6 +12303,9 @@ entries:
     sources:
     - reference/us-tariff-panel/yale_panel_provenance.json
   expires_on_source_change: true
+  selector_binding:
+    units: 4465
+    abs_difference_sum: 446.5
 - id: "2203000030-s232-0v50--s232-beer-aluminum-content-basis"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -14251,6 +14257,9 @@ entries:
     sources:
     - reference/us-tariff-panel/yale_panel_provenance.json
   expires_on_source_change: true
+  selector_binding:
+    units: 1912
+    abs_difference_sum: 956.0
 - id: "7601103000-ieepa-0v10--ieepa-metals-exclusion"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -14556,6 +14565,9 @@ entries:
     sources:
     - reference/us-tariff-panel/yale_panel_provenance.json
   expires_on_source_change: true
+  selector_binding:
+    units: 278
+    abs_difference_sum: 27.8
 - id: "7202111000-mfn-6p5v1p4--mfn-column2-reference-gap"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -14714,6 +14726,9 @@ entries:
     sources:
     - reference/us-tariff-panel/yale_panel_provenance.json
   expires_on_source_change: true
+  selector_binding:
+    units: 132
+    abs_difference_sum: 6.732
 - id: "8541420010-mfn-35v0+s201-0v14p5--mfn-column2-reference-gap+s201-solar-safeguard-expiry"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -14893,6 +14908,9 @@ entries:
     sources:
     - reference/us-tariff-panel/yale_panel_provenance.json
   expires_on_source_change: true
+  selector_binding:
+    units: 132
+    abs_difference_sum: 27.06
 - id: "9506624040-mfn-30v0--mfn-column2-reference-gap"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -15051,6 +15069,9 @@ entries:
     sources:
     - reference/us-tariff-panel/yale_panel_provenance.json
   expires_on_source_change: true
+  selector_binding:
+    units: 132
+    abs_difference_sum: 39.6
 - id: "7601103000-ieepa-0v15--ieepa-metals-exclusion"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -15150,6 +15171,9 @@ entries:
     sources:
     - reference/us-tariff-panel/yale_panel_provenance.json
   expires_on_source_change: true
+  selector_binding:
+    units: 72
+    abs_difference_sum: 10.8
 - id: "7601103000-ieepa-0v12p4--ieepa-metals-exclusion"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -15237,6 +15261,9 @@ entries:
     sources:
     - reference/us-tariff-panel/yale_panel_provenance.json
   expires_on_source_change: true
+  selector_binding:
+    units: 60
+    abs_difference_sum: 7.44
 - id: "7601103000-mfn-18p5v2p6+s122-0v10--mfn-column2-reference-gap+s122-metal-exclusion"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -15334,6 +15361,9 @@ entries:
     sources:
     - reference/us-tariff-panel/yale_panel_provenance.json
   expires_on_source_change: true
+  selector_binding:
+    units: 57
+    abs_difference_sum: 3.363
 - id: "7601103000-mfn-18p5v2p6--mfn-column2-reference-gap"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -15396,6 +15426,9 @@ entries:
     sources:
     - reference/us-tariff-panel/yale_panel_provenance.json
   expires_on_source_change: true
+  selector_binding:
+    units: 36
+    abs_difference_sum: 5.724
 - id: "7202111000-mfn-0v1p4--mfn-fta-preference-layer"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -15453,6 +15486,9 @@ entries:
     sources:
     - reference/us-tariff-panel/yale_panel_provenance.json
   expires_on_source_change: true
+  selector_binding:
+    units: 33
+    abs_difference_sum: 0.462
 - id: "7601103000-mfn-0v2p6+s122-0v10--mfn-fta-preference-layer+s122-metal-exclusion"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -15509,6 +15545,9 @@ entries:
     sources:
     - reference/us-tariff-panel/yale_panel_provenance.json
   expires_on_source_change: true
+  selector_binding:
+    units: 19
+    abs_difference_sum: 2.394
 - id: "7601103000-mfn-70v2p6+s122-0v10--mfn-column2-reference-gap+s122-metal-exclusion"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -15571,6 +15610,9 @@ entries:
     sources:
     - reference/us-tariff-panel/yale_panel_provenance.json
   expires_on_source_change: true
+  selector_binding:
+    units: 19
+    abs_difference_sum: 10.906
 - id: "7601103000-ieepa-0v19--ieepa-metals-exclusion"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -15610,6 +15652,9 @@ entries:
     sources:
     - reference/us-tariff-panel/yale_panel_provenance.json
   expires_on_source_change: true
+  selector_binding:
+    units: 12
+    abs_difference_sum: 2.28
 - id: "7601103000-mfn-0v2p6--mfn-fta-preference-layer"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -15646,6 +15691,9 @@ entries:
     sources:
     - reference/us-tariff-panel/yale_panel_provenance.json
   expires_on_source_change: true
+  selector_binding:
+    units: 12
+    abs_difference_sum: 0.312
 - id: "7601103000-mfn-70v2p6--mfn-column2-reference-gap"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -15686,6 +15734,9 @@ entries:
     sources:
     - reference/us-tariff-panel/yale_panel_provenance.json
   expires_on_source_change: true
+  selector_binding:
+    units: 12
+    abs_difference_sum: 8.088
 - id: "7601103000-ieepa-0v25--ieepa-metals-exclusion"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -15723,6 +15774,9 @@ entries:
     sources:
     - reference/us-tariff-panel/yale_panel_provenance.json
   expires_on_source_change: true
+  selector_binding:
+    units: 10
+    abs_difference_sum: 2.5
 - id: "2203000030-s232-0v25--s232-beer-aluminum-content-basis"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -15771,6 +15825,9 @@ entries:
     sources:
     - reference/us-tariff-panel/yale_panel_provenance.json
   expires_on_source_change: true
+  selector_binding:
+    units: 8
+    abs_difference_sum: 2.0
 - id: "7601103000-ieepa-0v20--ieepa-metals-exclusion"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -15806,6 +15863,9 @@ entries:
     sources:
     - reference/us-tariff-panel/yale_panel_provenance.json
   expires_on_source_change: true
+  selector_binding:
+    units: 8
+    abs_difference_sum: 1.6
 - id: "7601103000-ieepa-0v30--ieepa-metals-exclusion"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -15841,6 +15901,9 @@ entries:
     sources:
     - reference/us-tariff-panel/yale_panel_provenance.json
   expires_on_source_change: true
+  selector_binding:
+    units: 8
+    abs_difference_sum: 2.4
 - id: "7601103000-ieepa-0v10+mfn-18p5v2p6--ieepa-metals-exclusion+mfn-column2-reference-gap"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -15885,6 +15948,9 @@ entries:
     sources:
     - reference/us-tariff-panel/yale_panel_provenance.json
   expires_on_source_change: true
+  selector_binding:
+    units: 6
+    abs_difference_sum: 0.354
 - id: "7601103000-ieepa-0v35--ieepa-metals-exclusion"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -15916,6 +15982,9 @@ entries:
     sources:
     - reference/us-tariff-panel/yale_panel_provenance.json
   expires_on_source_change: true
+  selector_binding:
+    units: 4
+    abs_difference_sum: 1.4
 - id: "7601103000-ieepa-0v40--ieepa-metals-exclusion"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -15947,6 +16016,9 @@ entries:
     sources:
     - reference/us-tariff-panel/yale_panel_provenance.json
   expires_on_source_change: true
+  selector_binding:
+    units: 4
+    abs_difference_sum: 1.6
 - id: "7601103000-ieepa-10v20--ieepa-metals-exclusion"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -15978,6 +16050,9 @@ entries:
     sources:
     - reference/us-tariff-panel/yale_panel_provenance.json
   expires_on_source_change: true
+  selector_binding:
+    units: 4
+    abs_difference_sum: 0.4
 - id: "7601103000-ieepa-0v10+mfn-70v2p6--ieepa-metals-exclusion+mfn-column2-reference-gap"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -16020,6 +16095,9 @@ entries:
     sources:
     - reference/us-tariff-panel/yale_panel_provenance.json
   expires_on_source_change: true
+  selector_binding:
+    units: 2
+    abs_difference_sum: 1.148
 - id: "7601103000-ieepa-0v12p4+mfn-0v2p6--ieepa-metals-exclusion+mfn-fta-preference-layer"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -16058,6 +16136,9 @@ entries:
     sources:
     - reference/us-tariff-panel/yale_panel_provenance.json
   expires_on_source_change: true
+  selector_binding:
+    units: 2
+    abs_difference_sum: 0.3
 - id: "7601103000-ieepa-0v18--ieepa-metals-exclusion"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -16087,6 +16168,9 @@ entries:
     sources:
     - reference/us-tariff-panel/yale_panel_provenance.json
   expires_on_source_change: true
+  selector_binding:
+    units: 2
+    abs_difference_sum: 0.36
 - id: "7601103000-ieepa-0v41--ieepa-metals-exclusion"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -16116,6 +16200,9 @@ entries:
     sources:
     - reference/us-tariff-panel/yale_panel_provenance.json
   expires_on_source_change: true
+  selector_binding:
+    units: 2
+    abs_difference_sum: 0.82
 - id: "7601103000-ieepa-0v50--ieepa-metals-exclusion"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -16145,3 +16232,6 @@ entries:
     sources:
     - reference/us-tariff-panel/yale_panel_provenance.json
   expires_on_source_change: true
+  selector_binding:
+    units: 2
+    abs_difference_sum: 1.0

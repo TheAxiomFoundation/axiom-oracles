@@ -103,6 +103,10 @@ class JurisdictionScoreboard:
     #: Human-readable reasons the predicate is not yet satisfied (empty when
     #: conformant) — so a reader sees *why*, not just a red badge.
     blocking_reasons: list[str] = field(default_factory=list)
+    #: Excluded policies invalidated by nonzero live exposure on their output
+    #: columns (the enforced re-inclusion tripwire; sol closing review F1).
+    #: Non-empty blocks conformance.
+    invalid_exclusions: list[str] = field(default_factory=list)
 
     def to_summary(self) -> dict:
         return asdict(self)
@@ -195,10 +199,30 @@ def score_jurisdiction(
     #: policy's covering-report stats; only the headline dedupes.
     covered_report_suites: set[str] = set()
 
+    #: Excluded policies whose output columns the reference DOES exercise in a
+    #: live report (sol closing review F1): an exclusion grounded in "the
+    #: reference never exercises this column" is invalidated the moment any
+    #: covering report records nonzero exposure for one of its output vars.
+    #: This is the enforced re-inclusion tripwire — it blocks conformance
+    #: until the universe row returns to scope with a witness requirement.
+    invalid_exclusions: list[str] = []
+
     for policy in universe.policies:
         if not policy.in_scope:
             reason = policy.exclusion_reason or "unspecified"
             excluded_by_reason[reason] = excluded_by_reason.get(reason, 0) + 1
+            exclusion_violated = False
+            if policy.output_vars:
+                for report in suite_index.values():
+                    exposure = (report.get("scope") or {}).get("column_exposure")
+                    if isinstance(exposure, dict) and any(
+                        (exposure.get(var) or 0) > 0
+                        for var in policy.output_vars
+                    ):
+                        exclusion_violated = True
+                        break
+            if exclusion_violated:
+                invalid_exclusions.append(policy.oracle_policy_name)
             policy_scores.append(
                 PolicyScore(
                     id=policy.id,
@@ -208,7 +232,11 @@ def score_jurisdiction(
                     suite=None,
                     covered=False,
                     note=policy.note,
-                    status=f"excluded:{reason}",
+                    status=(
+                        "excluded:INVALID-nonzero-exposure"
+                        if exclusion_violated
+                        else f"excluded:{reason}"
+                    ),
                 )
             )
             continue
@@ -338,15 +366,26 @@ def score_jurisdiction(
     in_scope = len(universe.in_scope())
     covered_pct = _round(100 * covered / in_scope) if in_scope else 0.0
 
-    # The exact predicate.
+    # The exact predicate. An invalidated exclusion (nonzero live exposure on
+    # an excluded policy's output column) blocks conformance outright — the
+    # excluded row must return to scope and earn a witness before any
+    # conformant verdict.
     predicate_covered = covered == in_scope
     conformant = (
         predicate_covered
         and unexplained_total == 0
         and axiom_attributed_open == 0
+        and not invalid_exclusions
     )
 
     blocking_reasons: list[str] = []
+    if invalid_exclusions:
+        blocking_reasons.append(
+            f"{len(invalid_exclusions)} excluded polic"
+            f"{'y is' if len(invalid_exclusions) == 1 else 'ies are'} "
+            "invalidated by nonzero live exposure on their output columns "
+            "(re-inclusion required): " + ", ".join(sorted(invalid_exclusions))
+        )
     if not predicate_covered:
         blocking_reasons.append(
             f"{in_scope - covered} of {in_scope} in-scope policies are not "
@@ -385,5 +424,6 @@ def score_jurisdiction(
         unwitnessed_policies=unwitnessed_policies,
         temporal_debt=temporal_debt,
         blocking_reasons=blocking_reasons,
+        invalid_exclusions=sorted(invalid_exclusions),
     )
     return scoreboard, policy_scores
