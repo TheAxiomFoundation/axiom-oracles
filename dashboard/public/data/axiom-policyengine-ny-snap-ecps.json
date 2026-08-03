@@ -10114,6 +10114,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -10130,6 +10135,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -10146,6 +10156,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -10162,6 +10177,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -10178,6 +10198,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -45.399993896484375,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-medical-imputation-counterfactual-4756",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+      },
       "kind": "amount_difference",
       "left": 24.0,
       "parent": null,
@@ -10194,6 +10219,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 56.100006103515625,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "se-zero-counterfactual-4757",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/433"
+      },
       "kind": "amount_difference",
       "left": 546.0,
       "parent": null,
@@ -10210,6 +10240,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -67.29998779296875,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-medical-imputation-counterfactual-4766",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+      },
       "kind": "amount_difference",
       "left": 24.0,
       "parent": null,
@@ -10226,6 +10261,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 277.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-se-flat-netting-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 277.0,
       "parent": null,
@@ -10242,6 +10282,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-se-flat-netting-2026-07-30-eligibility-left",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -10258,6 +10303,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 24.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-disability-projection-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/435"
+      },
       "kind": "amount_difference",
       "left": 24.0,
       "parent": null,
@@ -10274,6 +10324,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-disability-projection-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/435"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -10290,6 +10345,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -332.5999755859375,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -10306,6 +10366,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -10338,6 +10403,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 94.199951171875,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-4814",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 1571.0,
       "parent": null,
@@ -10354,6 +10424,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 540.5000610351562,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-se-flat-netting-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 1374.0,
       "parent": null,
@@ -10370,6 +10445,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-disability-projection-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/435"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -10386,6 +10466,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 86.70001220703125,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-4829",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 638.0,
       "parent": null,
@@ -10402,6 +10487,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "se-zero-counterfactual-4830-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/433"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -10439,6 +10529,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -103.89996337890625,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -10455,6 +10550,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -10471,6 +10571,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 355.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-se-flat-netting-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 594.0,
       "parent": null,
@@ -10487,6 +10592,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -10503,6 +10613,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -10519,6 +10634,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 91.29998779296875,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-4956",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 956.0,
       "parent": null,
@@ -10535,6 +10655,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 89.0999755859375,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-4982",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 811.0,
       "parent": null,
@@ -10551,6 +10676,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 40.20001220703125,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-5002",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 536.0,
       "parent": null,
@@ -10567,6 +10697,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 431.4000244140625,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-se-flat-netting-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 649.0,
       "parent": null,
@@ -10604,6 +10739,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 37.5,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-5064",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 634.0,
       "parent": null,
@@ -10620,6 +10760,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 67.10000610351562,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-5084",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 526.0,
       "parent": null,
@@ -10636,6 +10781,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 24.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-disability-projection-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/435"
+      },
       "kind": "amount_difference",
       "left": 24.0,
       "parent": null,
@@ -10652,6 +10802,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-disability-projection-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/435"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -10668,6 +10823,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-disability-projection-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/435"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -10684,6 +10844,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 28.79998779296875,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-5103",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 805.0,
       "parent": null,
@@ -10716,6 +10881,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -130.59999084472656,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -10732,6 +10902,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -10748,6 +10923,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 19.79998779296875,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-5184",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 785.0,
       "parent": null,
@@ -10780,6 +10960,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 90.60000610351562,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-fallback-ssi-counterfactual-5212",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/437"
+      },
       "kind": "amount_difference",
       "left": 298.0,
       "parent": null,
@@ -10796,6 +10981,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -283.9999694824219,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -10812,6 +11002,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -10828,6 +11023,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 284.4000244140625,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "se-zero-counterfactual-5234",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/433"
+      },
       "kind": "amount_difference",
       "left": 1571.0,
       "parent": null,
@@ -10844,6 +11044,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 24.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-disability-projection-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/435"
+      },
       "kind": "amount_difference",
       "left": 24.0,
       "parent": null,
@@ -10860,6 +11065,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-disability-projection-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/435"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -10876,6 +11086,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 244.199951171875,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-5239",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 1421.0,
       "parent": null,
@@ -10892,6 +11107,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -349.3999938964844,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -10908,6 +11128,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -10924,6 +11149,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 165.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-disability-projection-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/435"
+      },
       "kind": "amount_difference",
       "left": 165.0,
       "parent": null,
@@ -10940,6 +11170,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-disability-projection-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/435"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -10956,6 +11191,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 24.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-negative-se-loss-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 24.0,
       "parent": null,
@@ -10972,6 +11212,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-negative-se-loss-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -10988,6 +11233,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 35.100006103515625,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-disability-projection-2026-07-30-benefit-amount",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/435"
+      },
       "kind": "amount_difference",
       "left": 494.0,
       "parent": null,
@@ -11004,6 +11254,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -57.09999084472656,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-medical-imputation-counterfactual-5275",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+      },
       "kind": "amount_difference",
       "left": 24.0,
       "parent": null,
@@ -11020,6 +11275,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 85.70001220703125,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-se-flat-netting-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 228.0,
       "parent": null,
@@ -11036,6 +11296,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 184.5,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-5287",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 994.0,
       "parent": null,
@@ -11052,6 +11317,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 251.1599998474121,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-se-flat-netting-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 275.0,
       "parent": null,
@@ -11068,6 +11338,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 52.79998779296875,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-se-flat-netting-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 450.0,
       "parent": null,
@@ -11084,6 +11359,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 358.9000244140625,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-disability-projection-2026-07-30-benefit-amount",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/435"
+      },
       "kind": "amount_difference",
       "left": 774.0,
       "parent": null,
@@ -11100,6 +11380,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -183.39996337890625,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -11116,6 +11401,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -11132,6 +11422,10 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-pe-annual-eligibility-aggregation-2026-07-30"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -11148,6 +11442,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 200.0999755859375,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "se-zero-counterfactual-5434",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/433"
+      },
       "kind": "amount_difference",
       "left": 785.0,
       "parent": null,
@@ -11164,6 +11463,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 34.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-se-flat-netting-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 34.0,
       "parent": null,
@@ -11180,6 +11484,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-se-flat-netting-2026-07-30-eligibility-left",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -11196,6 +11505,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 24.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-disability-projection-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/435"
+      },
       "kind": "amount_difference",
       "left": 24.0,
       "parent": null,
@@ -11212,6 +11526,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-disability-projection-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/435"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -11228,6 +11547,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 40.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-5447",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 701.0,
       "parent": null,
@@ -11244,6 +11568,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -76.60000610351562,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-medical-imputation-counterfactual-5461",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+      },
       "kind": "amount_difference",
       "left": 201.0,
       "parent": null,
@@ -11276,6 +11605,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -76.29998779296875,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-medical-imputation-counterfactual-5471",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+      },
       "kind": "amount_difference",
       "left": 57.0,
       "parent": null,
@@ -11292,6 +11626,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-medical-imputation-counterfactual-5492",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -11308,6 +11647,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-medical-imputation-counterfactual-5492-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -11324,6 +11668,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 84.0999755859375,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-5494",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 633.0,
       "parent": null,
@@ -11340,6 +11689,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 24.20001220703125,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-5528",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 1036.0,
       "parent": null,
@@ -11356,6 +11710,10 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-pe-annual-eligibility-aggregation-2026-07-30"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -11372,6 +11730,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 24.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-disability-projection-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/435"
+      },
       "kind": "amount_difference",
       "left": 24.0,
       "parent": null,
@@ -11388,6 +11751,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-disability-projection-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/435"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -11404,6 +11772,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 546.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-disability-projection-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/435"
+      },
       "kind": "amount_difference",
       "left": 546.0,
       "parent": null,
@@ -11420,6 +11793,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-disability-projection-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/435"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -11436,6 +11814,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -118.699951171875,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -11452,6 +11835,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -11468,6 +11856,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -11484,6 +11877,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -11500,6 +11898,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 24.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-disability-projection-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/435"
+      },
       "kind": "amount_difference",
       "left": 24.0,
       "parent": null,
@@ -11516,6 +11919,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-disability-projection-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/435"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -11532,6 +11940,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -99.39999389648438,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -11548,6 +11961,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -11564,6 +11982,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 115.79998779296875,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-5691",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 785.0,
       "parent": null,
@@ -11580,6 +12003,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 348.300048828125,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-se-flat-netting-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 608.0,
       "parent": null,
@@ -11596,6 +12024,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 94.29998779296875,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-5704",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 1061.0,
       "parent": null,
@@ -11612,6 +12045,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -11628,6 +12066,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -11644,6 +12087,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -75.89999389648438,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-medical-imputation-counterfactual-5713",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+      },
       "kind": "amount_difference",
       "left": 46.0,
       "parent": null,
@@ -11660,6 +12108,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 673.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-se-flat-netting-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 673.0,
       "parent": null,
@@ -11676,6 +12129,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-se-flat-netting-2026-07-30-eligibility-left",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -11692,6 +12150,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -277.5999755859375,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -11708,6 +12171,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -11724,6 +12192,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -186.39996337890625,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -11740,6 +12213,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -11756,6 +12234,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 59.79998779296875,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-se-flat-netting-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 445.0,
       "parent": null,
@@ -11772,6 +12255,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -28.899993896484375,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -11788,6 +12276,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -11804,6 +12297,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -76.29998779296875,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-medical-imputation-counterfactual-5777",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+      },
       "kind": "amount_difference",
       "left": 27.0,
       "parent": null,
@@ -11820,6 +12318,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 82.9000244140625,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-5779",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 594.0,
       "parent": null,
@@ -11836,6 +12339,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 349.4000244140625,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-se-flat-netting-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 709.0,
       "parent": null,
@@ -11852,6 +12360,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 81.0999755859375,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-5805",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 690.0,
       "parent": null,
@@ -11868,6 +12381,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -394.89990234375,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -11884,6 +12402,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -11900,6 +12423,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 82.800048828125,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-5826",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 694.0,
       "parent": null,
@@ -11916,6 +12444,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 438.4000244140625,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-se-flat-netting-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 623.0,
       "parent": null,
@@ -11932,6 +12465,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 78.60000610351562,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-5860",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 525.0,
       "parent": null,
@@ -11948,6 +12486,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 31.5,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-5863",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 772.0,
       "parent": null,
@@ -11964,6 +12507,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -204.5999755859375,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -11980,6 +12528,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -11996,6 +12549,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 39.29998779296875,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-5920",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 850.0,
       "parent": null,
@@ -12012,6 +12570,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 339.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-se-flat-netting-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 339.0,
       "parent": null,
@@ -12028,6 +12591,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-se-flat-netting-2026-07-30-eligibility-left",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -12044,6 +12612,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 19.20001220703125,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-se-flat-netting-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 162.0,
       "parent": null,
@@ -12060,6 +12633,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -409.5999755859375,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -12076,6 +12654,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -12092,6 +12675,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 409.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-se-flat-netting-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 409.0,
       "parent": null,
@@ -12108,6 +12696,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-se-flat-netting-2026-07-30-eligibility-left",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -12124,6 +12717,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 194.4000244140625,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-5965",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 994.0,
       "parent": null,
@@ -12140,6 +12738,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -51.399993896484375,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -12156,6 +12759,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -12172,6 +12780,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -12188,6 +12801,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -12204,6 +12822,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 143.0999755859375,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "se-zero-counterfactual-5995",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/433"
+      },
       "kind": "amount_difference",
       "left": 785.0,
       "parent": null,
@@ -12220,6 +12843,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -106.79998779296875,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -12236,6 +12864,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -12252,6 +12885,10 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-pe-annual-eligibility-aggregation-2026-07-30"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -12268,6 +12905,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 22.300003051757812,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-disability-projection-2026-07-30-benefit-amount",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/435"
+      },
       "kind": "amount_difference",
       "left": 263.0,
       "parent": null,
@@ -12284,6 +12926,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 170.10000610351562,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-se-flat-netting-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 279.0,
       "parent": null,
@@ -12300,6 +12947,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 24.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-se-flat-netting-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 24.0,
       "parent": null,
@@ -12316,6 +12968,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-se-flat-netting-2026-07-30-eligibility-left",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -12332,6 +12989,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 24.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "se-zero-counterfactual-6096",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/433"
+      },
       "kind": "amount_difference",
       "left": 24.0,
       "parent": null,
@@ -12348,6 +13010,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "se-zero-counterfactual-6096-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/433"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -12364,6 +13031,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 8.20001220703125,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-se-flat-netting-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 134.0,
       "parent": null,
@@ -12380,6 +13052,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -7.899993896484375,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-medical-imputation-counterfactual-6111",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+      },
       "kind": "amount_difference",
       "left": 24.0,
       "parent": null,
@@ -12412,6 +13089,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -258.5999755859375,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -12428,6 +13110,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -12444,6 +13131,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 83.9000244140625,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-6166",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 948.0,
       "parent": null,
@@ -12460,6 +13152,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 99.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-fallback-ssi-counterfactual-6167",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/437"
+      },
       "kind": "amount_difference",
       "left": 298.0,
       "parent": null,
@@ -12476,6 +13173,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -40.899993896484375,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -12492,6 +13194,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -12508,6 +13215,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 24.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-se-flat-netting-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 24.0,
       "parent": null,
@@ -12524,6 +13236,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-se-flat-netting-2026-07-30-eligibility-left",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -12540,6 +13257,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-endogenous-ssi-counterfactual-6220-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/436"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -12556,6 +13278,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 219.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "se-zero-counterfactual-6242",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/433"
+      },
       "kind": "amount_difference",
       "left": 785.0,
       "parent": null,
@@ -12572,6 +13299,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 83.800048828125,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-6258",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 737.0,
       "parent": null,
@@ -12588,6 +13320,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -58.39996337890625,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -12604,6 +13341,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -12620,6 +13362,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -256.5999755859375,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -12636,6 +13383,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -12652,6 +13404,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -12668,6 +13425,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -12684,6 +13446,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 239.9000244140625,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "se-zero-counterfactual-6375",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/433"
+      },
       "kind": "amount_difference",
       "left": 781.0,
       "parent": null,
@@ -12700,6 +13467,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -148.0999755859375,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -12716,6 +13488,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -12732,6 +13509,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -99.5999755859375,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -12748,6 +13530,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -12764,6 +13551,10 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-pe-annual-eligibility-aggregation-2026-07-30"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -12780,6 +13571,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -126.0999755859375,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -12796,6 +13592,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -12812,6 +13613,10 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-pe-annual-eligibility-aggregation-2026-07-30"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -12828,6 +13633,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 96.60000610351562,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "se-zero-counterfactual-6576",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/433"
+      },
       "kind": "amount_difference",
       "left": 546.0,
       "parent": null,
@@ -12844,6 +13654,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 206.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-se-flat-netting-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 206.0,
       "parent": null,
@@ -12860,6 +13675,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-se-flat-netting-2026-07-30-eligibility-left",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -12876,6 +13696,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -50.399993896484375,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -12892,6 +13717,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -12908,6 +13738,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -132.5,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -12924,6 +13759,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -12940,6 +13780,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -19.599990844726562,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-medical-imputation-counterfactual-6668",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+      },
       "kind": "amount_difference",
       "left": 24.0,
       "parent": null,
@@ -12956,6 +13801,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 319.4000244140625,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-se-flat-netting-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 517.0,
       "parent": null,
@@ -12988,6 +13838,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -211.89996337890625,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -13004,6 +13859,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -13057,6 +13917,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -16.5999755859375,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-medical-imputation-counterfactual-6799",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+      },
       "kind": "amount_difference",
       "left": 24.0,
       "parent": null,
@@ -13094,6 +13959,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 142.20001220703125,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-se-flat-netting-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 706.0,
       "parent": null,
@@ -13110,6 +13980,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -13126,6 +14001,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -13142,6 +14022,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 181.1599998474121,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-negative-se-loss-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 205.0,
       "parent": null,
@@ -13158,6 +14043,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -26.199981689453125,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -13174,6 +14064,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -13190,6 +14085,10 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-pe-annual-eligibility-aggregation-2026-07-30"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -13222,6 +14121,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -153.99993896484375,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -13238,6 +14142,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -13254,6 +14163,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 277.800048828125,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "se-zero-counterfactual-7010",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/433"
+      },
       "kind": "amount_difference",
       "left": 1183.0,
       "parent": null,
@@ -13270,6 +14184,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -41.399993896484375,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -13286,6 +14205,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -13302,6 +14226,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 296.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-se-flat-netting-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 296.0,
       "parent": null,
@@ -13318,6 +14247,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-se-flat-netting-2026-07-30-eligibility-left",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -13334,6 +14268,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 183.9000244140625,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-7043",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 1183.0,
       "parent": null,
@@ -13350,6 +14289,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 24.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-se-flat-netting-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 24.0,
       "parent": null,
@@ -13366,6 +14310,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-se-flat-netting-2026-07-30-eligibility-left",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -13382,6 +14331,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-disability-projection-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/435"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -13398,6 +14352,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 24.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-disability-projection-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/435"
+      },
       "kind": "amount_difference",
       "left": 24.0,
       "parent": null,
@@ -13414,6 +14373,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-disability-projection-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/435"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -13430,6 +14394,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -150.99993896484375,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -13446,6 +14415,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -13462,6 +14436,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 24.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-disability-projection-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/435"
+      },
       "kind": "amount_difference",
       "left": 24.0,
       "parent": null,
@@ -13478,6 +14457,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-disability-projection-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/435"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -13494,6 +14478,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 184.800048828125,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-se-flat-netting-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 337.0,
       "parent": null,
@@ -13510,6 +14499,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -88.49996948242188,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -13526,6 +14520,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -13542,6 +14541,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 169.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-se-flat-netting-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 169.0,
       "parent": null,
@@ -13558,6 +14562,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-se-flat-netting-2026-07-30-eligibility-left",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -13574,6 +14583,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 108.70001220703125,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-se-flat-netting-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 520.0,
       "parent": null,
@@ -13590,6 +14604,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -215.199951171875,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -13606,6 +14625,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ny-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -13622,6 +14646,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 329.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-disability-projection-2026-07-30-benefit-amount",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/435"
+      },
       "kind": "amount_difference",
       "left": 1402.0,
       "parent": null,
@@ -13638,6 +14667,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 22.20001220703125,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-7236",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 546.0,
       "parent": null,
@@ -13654,6 +14688,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -168.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-medical-imputation-counterfactual-7251",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+      },
       "kind": "amount_difference",
       "left": 204.0,
       "parent": null,
@@ -13707,6 +14746,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 546.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-negative-se-loss-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 546.0,
       "parent": null,
@@ -13723,6 +14767,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-negative-se-loss-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -13755,6 +14804,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 298.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-fallback-path-divergence-65858",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/437"
+      },
       "kind": "amount_difference",
       "left": 298.0,
       "parent": null,
@@ -13771,6 +14825,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 546.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-negative-se-loss-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 546.0,
       "parent": null,
@@ -13787,6 +14846,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-negative-se-loss-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -13835,6 +14899,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 67.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-fallback-path-divergence-67172",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/437"
+      },
       "kind": "amount_difference",
       "left": 67.0,
       "parent": null,
@@ -13851,6 +14920,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 298.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-fallback-path-divergence-68345",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/437"
+      },
       "kind": "amount_difference",
       "left": 298.0,
       "parent": null,
@@ -13867,6 +14941,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 546.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-negative-se-loss-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 546.0,
       "parent": null,
@@ -13883,6 +14962,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-negative-se-loss-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -13899,6 +14983,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 298.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-fallback-path-divergence-69388",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/437"
+      },
       "kind": "amount_difference",
       "left": 298.0,
       "parent": null,
@@ -13915,6 +15004,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 298.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-fallback-path-divergence-69553",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/437"
+      },
       "kind": "amount_difference",
       "left": 298.0,
       "parent": null,
@@ -13931,6 +15025,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 546.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-fallback-path-divergence-70457",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/437"
+      },
       "kind": "amount_difference",
       "left": 546.0,
       "parent": null,
@@ -13947,6 +15046,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 274.1599998474121,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-fallback-path-divergence-70930",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/437"
+      },
       "kind": "amount_difference",
       "left": 298.0,
       "parent": null,
@@ -13963,6 +15067,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 529.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-fallback-path-divergence-71420",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/437"
+      },
       "kind": "amount_difference",
       "left": 529.0,
       "parent": null,
@@ -13979,6 +15088,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 298.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-negative-se-loss-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 298.0,
       "parent": null,
@@ -13995,6 +15109,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-negative-se-loss-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -14011,6 +15130,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 170.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-fallback-path-divergence-72370",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/437"
+      },
       "kind": "amount_difference",
       "left": 170.0,
       "parent": null,
@@ -14027,6 +15151,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 546.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-negative-se-loss-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 546.0,
       "parent": null,
@@ -14043,6 +15172,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-negative-se-loss-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -14091,19 +15225,19 @@
     "comparison_count": 6374,
     "dispositioned": {
       "counts": {
-        "axiom_encoding_gap": 5,
-        "bridge_artifact": 0,
+        "axiom_encoding_gap": 85,
+        "bridge_artifact": 148,
         "explained_residual": 0,
         "unexplained": 0,
         "upstream_engine_gap": 0
       },
       "dispositions_file": "dispositions/ny-snap-ecps.yaml",
       "expired_entries": [],
-      "explained_rate": 96.15626,
+      "explained_rate": 98.478193,
       "orphaned_entries": [],
       "raw_match_rate": 96.15626,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 240
+      "unexplained_count": 12
     },
     "error_count": 0,
     "errors_by_engine": [],

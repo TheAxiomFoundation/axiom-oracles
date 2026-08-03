@@ -6874,6 +6874,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -6890,6 +6895,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -6927,6 +6937,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-28690",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -6943,6 +6958,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-28690-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -7001,6 +7021,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -7017,6 +7042,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -7033,6 +7063,10 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "sc-pe-annual-eligibility-aggregation-2026-07-30"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -7091,6 +7125,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -7107,6 +7146,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -7123,6 +7167,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -7139,6 +7188,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -7155,6 +7209,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -7171,6 +7230,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -7187,6 +7251,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -7203,6 +7272,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -7240,6 +7314,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -7256,6 +7335,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -7272,6 +7356,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 16.70001220703125,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-28773",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 714.0,
       "parent": null,
@@ -7330,6 +7419,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -7346,6 +7440,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -7362,6 +7461,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -7378,6 +7482,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -7436,6 +7545,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -7452,6 +7566,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -7468,6 +7587,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -7484,6 +7608,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -7500,6 +7629,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -7516,6 +7650,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -7532,6 +7671,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -7548,6 +7692,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -7606,6 +7755,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 235.50001525878906,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-fallback-ssi-counterfactual-28876",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/437"
+      },
       "kind": "amount_difference",
       "left": 298.0,
       "parent": null,
@@ -7622,6 +7776,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -7638,6 +7797,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -7654,6 +7818,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -7670,6 +7839,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -7791,6 +7965,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -7807,6 +7986,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -7844,6 +8028,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -7860,6 +8049,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -7876,6 +8070,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 10.20001220703125,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-28965",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 321.0,
       "parent": null,
@@ -7934,6 +8133,10 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 21.15999984741211,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "endogenous-income-stack-counterfactual-28997"
+      },
       "kind": "amount_difference",
       "left": 45.0,
       "parent": null,
@@ -7971,6 +8174,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -7987,6 +8195,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -8003,6 +8216,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 16.5,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-29028",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 854.0,
       "parent": null,
@@ -8019,6 +8237,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 9.4000244140625,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-29038",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 432.0,
       "parent": null,
@@ -8098,6 +8321,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -8114,6 +8342,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -8130,6 +8363,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -8146,6 +8384,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -8162,6 +8405,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -8178,6 +8426,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -8194,6 +8447,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 109.4000244140625,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-29094",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 1059.0,
       "parent": null,
@@ -8210,6 +8468,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -8226,6 +8489,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -8242,6 +8510,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 8.70001220703125,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-29124",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 785.0,
       "parent": null,
@@ -8258,6 +8531,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -41.5999755859375,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-29141",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -8274,6 +8552,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-29141-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -8332,6 +8615,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -8348,6 +8636,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -8380,6 +8673,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 191.5999755859375,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-29175",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 957.0,
       "parent": null,
@@ -8480,6 +8778,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -8496,6 +8799,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -8554,6 +8862,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -8570,6 +8883,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -8691,6 +9009,10 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 56.70001220703125,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "endogenous-income-stack-counterfactual-29298"
+      },
       "kind": "amount_difference",
       "left": 439.0,
       "parent": null,
@@ -8749,6 +9071,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -8765,6 +9092,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -8865,6 +9197,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -8881,6 +9218,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -8897,6 +9239,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -8913,6 +9260,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -8971,6 +9323,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -8987,6 +9344,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -9045,6 +9407,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -9061,6 +9428,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -9077,6 +9449,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -9093,6 +9470,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -9109,6 +9491,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 241.50001525878906,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-fallback-ssi-counterfactual-29377",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/437"
+      },
       "kind": "amount_difference",
       "left": 298.0,
       "parent": null,
@@ -9146,6 +9533,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 7.800018310546875,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-29388",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 282.0,
       "parent": null,
@@ -9162,6 +9554,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 25.5,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-29397",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 823.0,
       "parent": null,
@@ -9178,6 +9575,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -9194,6 +9596,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -9210,6 +9617,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -9226,6 +9638,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -9347,6 +9764,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -9363,6 +9785,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -9400,6 +9827,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 131.70001220703125,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-29465",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 1153.0,
       "parent": null,
@@ -9521,6 +9953,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -9537,6 +9974,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -9553,6 +9995,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -9569,6 +10016,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -9585,6 +10037,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -9601,6 +10058,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -9617,6 +10079,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -9633,6 +10100,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -9712,6 +10184,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -9728,6 +10205,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -9828,6 +10310,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -9844,6 +10331,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -9860,6 +10352,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -9876,6 +10373,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -9892,6 +10394,10 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "sc-pe-annual-eligibility-aggregation-2026-07-30"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -9908,6 +10414,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 7.5,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-29671",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 410.0,
       "parent": null,
@@ -9924,6 +10435,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 235.50001525878906,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-fallback-ssi-counterfactual-29673",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/437"
+      },
       "kind": "amount_difference",
       "left": 298.0,
       "parent": null,
@@ -10024,6 +10540,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -23.84000015258789,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -10040,6 +10561,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "sc-bbce-tail-2026-07-30-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -10156,6 +10682,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 126.29998779296875,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-29754",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 955.0,
       "parent": null,
@@ -10172,6 +10703,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 7.70001220703125,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "tanf-zero-counterfactual-29764",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 745.0,
       "parent": null,
@@ -10241,19 +10777,19 @@
     "comparison_count": 2566,
     "dispositioned": {
       "counts": {
-        "axiom_encoding_gap": 42,
-        "bridge_artifact": 29,
+        "axiom_encoding_gap": 126,
+        "bridge_artifact": 53,
         "explained_residual": 0,
         "unexplained": 0,
         "upstream_engine_gap": 4
       },
       "dispositions_file": "dispositions/sc-snap-ecps.yaml",
       "expired_entries": [],
-      "explained_rate": 94.076383,
+      "explained_rate": 95.011691,
       "orphaned_entries": [],
       "raw_match_rate": 92.790335,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 110
+      "unexplained_count": 2
     },
     "error_count": 0,
     "errors_by_engine": [],

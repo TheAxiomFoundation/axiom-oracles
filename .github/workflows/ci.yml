@@ -79,6 +79,9 @@ jobs:
       - name: Conformance ratchets (covered up; unexplained/axiom-gap down)
         run: uv run scripts/conformance_ratchet.py --check
 
+      - name: Unexplained publication gate (per-suite ceilings only fall)
+        run: uv run scripts/unexplained_ratchet.py --check
+
       - name: Validate conformance burn-down series is up to date
         run: uv run scripts/conformance_burndown.py --check
 

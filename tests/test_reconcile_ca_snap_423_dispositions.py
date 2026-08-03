@@ -178,8 +178,10 @@ def test_repository_reconciles_exact_partition_and_current_compact_schema():
     current_partition = current["partition"]
     assert current_partition["base_rows"] == 345
     assert current_partition["vanished"]["count"] == 192
-    assert current_partition["current_but_dropped"]["count"] == 22
-    assert current_partition["reclassified"]["count"] == 0
+    # 22/0 at the #423 transition; the 2026-08 residual-tail triage covered
+    # 21 of the dropped identities with new dispositions.
+    assert current_partition["current_but_dropped"]["count"] == 1
+    assert current_partition["reclassified"]["count"] == 21
     assert current_partition["kept"]["count"] == 131
     assert len(current_partition["drifted_rows"]) == 22
     assert (
@@ -198,11 +200,13 @@ def test_repository_reconciles_exact_partition_and_current_compact_schema():
         current_partition["retired_drifted_rows_sha256"]
         == reconciliation.EXPECTED_RETIRED_DRIFT_ROWS_SHA256
     )
-    assert current_partition["reclassified_replacements"] == {
-        "counts": reconciliation.EXPECTED_RECLASSIFIED_REPLACEMENTS,
-        "rows_sha256": reconciliation.EXPECTED_RECLASSIFIED_ROWS_SHA256,
-        "rows": [],
-    }
+    assert current_partition["reclassified_replacements"]["counts"] == (
+        reconciliation.EXPECTED_RECLASSIFIED_REPLACEMENTS
+    )
+    assert current_partition["reclassified_replacements"]["rows_sha256"] == (
+        reconciliation.EXPECTED_RECLASSIFIED_ROWS_SHA256
+    )
+    assert len(current_partition["reclassified_replacements"]["rows"]) == 21
     assert current["retained_pin_movement"]["moved"]["count"] == 115
     assert current["retained_pin_movement"]["unchanged"]["count"] == 16
     assert current["retained_pin_movement"]["requested_month_evidence"] == {
@@ -211,10 +215,10 @@ def test_repository_reconciles_exact_partition_and_current_compact_schema():
         "rows_sha256": (reconciliation.EXPECTED_KEPT_REQUESTED_MONTH_ROWS_SHA256),
     }
     assert current["report"]["mismatches"] == 529
-    assert current["source_dispositions"]["expanded_rows"] == 288
+    assert current["source_dispositions"]["expanded_rows"] == 510
     assert current["compact"]["cases"] == 7101
     assert current["compact"]["mismatches"] == 529
-    assert current["compact"]["annotated"] == 288
+    assert current["compact"]["annotated"] == 510
 
     snapshot = receipt["rejected_pub275_exposure_snapshot"]
     snapshot_partition = snapshot["partition"]
