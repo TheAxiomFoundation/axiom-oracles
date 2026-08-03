@@ -509,7 +509,11 @@ function OracleRecord({ oracle, onOpenProgram, onBrowseHouseholds }) {
 
   return (
     <section className="card-flat v2-dossier">
-      <div className="v2-scope" role="group" aria-label="Scope">
+      <div
+        className={`v2-scope${regions.length > 1 ? "" : " v2-scope-bare"}`}
+        role="group"
+        aria-label="Scope"
+      >
         {regions.length > 1 &&
           [null, ...regions].map((r) => (
             <button
