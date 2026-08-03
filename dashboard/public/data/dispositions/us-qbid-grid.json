@@ -1,0 +1,23 @@
+{
+ "suite": "us-qbid-grid",
+ "updated": "2026-07-25",
+ "entries": [
+  {
+   "id": "qbid-floor-uses-all-qbi-instead-of-active-business-qbi",
+   "concept": "us:policies/income_tax/qualified_business_income_deduction_pipeline#federal_qualified_business_income_deduction",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "PE-US 1.767.3 has the correct 2026 $400-at-$1,000 deduction-floor parameters, but qualified_business_income_deduction.py lines 20-34 calculates the floor from total qualified_business_income plus sstb_qualified_business_income. It exposes no separate aggregate of QBI from active qualified trades or businesses. This fixture has $300,000 of QBI but an active-business QBI aggregate of zero, so section 199A(i)'s active-business minimum is inapplicable and the wage/UBIA-limited lawful result is zero; PE returns its $400 floor.",
+   "cases": [
+    "qbid-above-nowages"
+   ],
+   "arithmetic": [
+    {
+     "expression": "400 - 0",
+     "equals": 400
+    }
+   ],
+   "linked_issue": "https://github.com/PolicyEngine/policyengine-us/issues/9150"
+  }
+ ]
+}

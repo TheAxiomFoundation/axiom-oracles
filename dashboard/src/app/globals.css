@@ -1224,6 +1224,12 @@ body {
   margin-left: auto;
   width: 200px;
 }
+/* Single-country oracles render no region chips; the section heading
+   fills the toolbar's left side instead, so the row reads heading-left /
+   filters-right like the multi-country records. */
+.v2-scope-label {
+  padding-bottom: 0;
+}
 
 /* clickable household rows expand into the inputs / evidence panel */
 .v2-hht-click {

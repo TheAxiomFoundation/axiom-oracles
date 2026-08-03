@@ -86,6 +86,17 @@ const ORACLE_IDENTITY = {
 const REGION_LABELS = { us: "US", ca: "CA", uk: "UK", be: "BE", de: "DE", dk: "DK" };
 
 /**
+ * Oracles hidden from every dashboard surface (roster, hero totals, program
+ * census, household drill) without touching their data or dispositions.
+ * TAXSIM is parked here until its comparison surface is rebuilt — the full
+ * mismatch rows are not yet persisted (axiom-oracles#439), so most of its
+ * open residuals cannot be triaged. The unexplained publication ratchet
+ * still gates its reports at the data level regardless of UI visibility.
+ * Delete an entry to restore the oracle.
+ */
+const HIDDEN_ORACLES = new Set(["taxsim"]);
+
+/**
  * The unit of counting is the household case: one household compared once,
  * no matter how many concepts (liability, CTC, EITC, …) that comparison
  * covers — component concepts roll up into their parent, and a household's
@@ -510,7 +521,7 @@ function OracleRecord({ oracle, onOpenProgram, onBrowseHouseholds }) {
   return (
     <section className="card-flat v2-dossier">
       <div className="v2-scope" role="group" aria-label="Scope">
-        {regions.length > 1 &&
+        {regions.length > 1 ? (
           [null, ...regions].map((r) => (
             <button
               key={r ?? "all"}
@@ -521,7 +532,12 @@ function OracleRecord({ oracle, onOpenProgram, onBrowseHouseholds }) {
             >
               {r ? REGION_LABELS[r] || r : "All countries"}
             </button>
-          ))}
+          ))
+        ) : (
+          <span className="mono v2-dossier-colhead v2-scope-label">
+            Program alignment against {engineLabel(oracle.id)}
+          </span>
+        )}
         <input
           className="input-pill v2-scope-search"
           type="search"
@@ -553,9 +569,11 @@ function OracleRecord({ oracle, onOpenProgram, onBrowseHouseholds }) {
 
       <div className="v2-record-stack">
         <div className="v2-dossier-col">
-          <div className="mono v2-dossier-colhead">
-            Program alignment against {engineLabel(oracle.id)}
-          </div>
+          {regions.length > 1 && (
+            <div className="mono v2-dossier-colhead">
+              Program alignment against {engineLabel(oracle.id)}
+            </div>
+          )}
           {alignmentRows.length === 0 && (
             <p className="v2-empty">No programs in this scope.</p>
           )}
@@ -631,10 +649,16 @@ export default function OraclesV2() {
     const verification = data.reports.filter(
       (r) =>
         isAxiomPair(r) &&
+        !HIDDEN_ORACLES.has(otherOracle(r)) &&
         suiteMeta(r.suite).kind !== "diagnostic" &&
         (r.aggregates || []).length > 0,
     );
-    const crossChecks = data.reports.filter((r) => !isAxiomPair(r)).length;
+    const crossChecks = data.reports.filter(
+      (r) =>
+        !isAxiomPair(r) &&
+        !HIDDEN_ORACLES.has(r.engines?.left) &&
+        !HIDDEN_ORACLES.has(r.engines?.right),
+    ).length;
 
     const byOracle = new Map();
     for (const report of verification) {
@@ -816,7 +840,6 @@ export default function OraclesV2() {
               />
             </a>
             <a href={`${BASE_PATH}/`} className="brand-title">
-              <span className="brand-eyebrow">Interactive</span>
               <span className="brand-name">Oracles</span>
             </a>
           </span>
@@ -912,22 +935,15 @@ export default function OraclesV2() {
           /* ── Level 1 · the overview ── */
           <>
             <section className="v2-hero">
-              <h1 className="v2-thesis">
+              <h1
+                className="v2-thesis"
+                title={`${compactCount(totals.checks)} concept-level checks behind these figures${crossChecks > 0 ? ` · ${crossChecks} oracle-vs-oracle arbitration runs` : ""}`}
+              >
                 Axiom never grades its own work —{" "}
                 <em>{compactCount(totals.households)}</em> households checked
-                against <em>{oracles.length}</em> independent engines,{" "}
-                <em style={{ color: rateColor(totals.rate) }}>
-                  {formatAgreementRate(totals.rate, totals.mismatches)}
-                </em>{" "}
-                agreement.
+                against <em>{oracles.length}</em> independent engines, every
+                disagreement tracked in the open.
               </h1>
-              <p
-                className="v2-hero-sub"
-                title={`${compactCount(totals.checks)} concept-level checks behind the agreement rate${crossChecks > 0 ? ` · ${crossChecks} oracle-vs-oracle arbitration runs` : ""}`}
-              >
-                Every disagreement is triaged in the open — dispositioned,
-                filed upstream, or kept visibly open until someone acts.
-              </p>
             </section>
 
             <section className="v2-section">

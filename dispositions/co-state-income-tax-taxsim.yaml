@@ -1,6 +1,6 @@
 schema: axiom_oracles.dispositions.v1
 suite: co-state-income-tax-taxsim
-updated: '2026-07-27'
+updated: '2026-07-30'
 entries:
 - id: taxsim-co-flat-30-8-filing-status-offset
   concept: us:tax/state-income-tax#liability
@@ -619,3 +619,45 @@ entries:
       tolerance: 0.05
   linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
   expires_on_source_change: true
+- id: co-state-open-rows-axiom-pe-divergent
+  concept: us:tax/state-income-tax#liability
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-135552
+    - ecps-tax-unit-135799
+    - ecps-tax-unit-135880
+    - ecps-tax-unit-136208
+    - ecps-tax-unit-136404
+    - ecps-tax-unit-58696
+    - ecps-tax-unit-59285
+  disposition: unexplained
+  evidence:
+    mechanism: 'Documented open investigation - these seven rows are exactly the
+      state-lane residuals where the vintage-class triangulation FAILS:
+      every one of these case ids appears in the 31-row axiom-vs-PE
+      mismatch set for the same population, so axiom''s own Colorado value
+      is unconfirmed and the rows cannot be attributed to TAXSIM. idtl=2
+      reruns of the pinned binary reproduce six of the seven TAXSIM values
+      to the cent (135552, a -425K self-employment-loss unit, does not
+      reproduce from the persisted input row) and decompose them as staxbc
+      - sctc - sptcr - 0.5 x v25: known TAXSIM-side ingredients include
+      the childless-EITC coupling (58696: Colorado EITC 332.00 = 0.5 x
+      664 childless v25 vs axiom 3,498.59 = 0.5 x 6,997.18), the mstat=1-
+      with-dependents head-of-household standard-deduction projection
+      (136208: v13 24,150 vs axiom single 16,100) and TAXSIM''s automatic
+      itemization of its computed state income tax (59285: v17 18,352.57
+      with v13 0) - but the axiom-vs-PE divergence on the same units must
+      be triaged first.'
+    arithmetic:
+    - expression: 0.5 * 664.0
+      equals: 332.0
+    - expression: 974.42 - 1657.5 - 20.6
+      equals: -703.68
+    - expression: 10317.46 - 37.82
+      equals: 10279.64
+      tolerance: 0.02
+    sources:
+    - dashboard/public/data/axiom-policyengine-co-state-income-tax-ecps.json
+  expires_on_source_change: true
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
