@@ -912,32 +912,15 @@ export default function OraclesV2() {
           /* ── Level 1 · the overview ── */
           <>
             <section className="v2-hero">
-              <h1 className="v2-thesis">
+              <h1
+                className="v2-thesis"
+                title={`${compactCount(totals.checks)} concept-level checks behind these figures${crossChecks > 0 ? ` · ${crossChecks} oracle-vs-oracle arbitration runs` : ""}`}
+              >
                 Axiom never grades its own work —{" "}
                 <em>{compactCount(totals.households)}</em> households checked
                 against <em>{oracles.length}</em> independent engines, every
                 disagreement tracked in the open.
               </h1>
-              <p
-                className="v2-hero-sub"
-                title={`${compactCount(totals.checks)} concept-level checks behind these figures${crossChecks > 0 ? ` · ${crossChecks} oracle-vs-oracle arbitration runs` : ""}`}
-              >
-                Of <em>{compactCount(totals.checks)}</em> checks,{" "}
-                <em>{totals.mismatches.toLocaleString()}</em> disagreed —{" "}
-                <em>
-                  {(totals.mismatches - totals.unexplained).toLocaleString()}
-                </em>{" "}
-                carry a documented disposition (filed upstream, or tracked to
-                an open Axiom issue) and{" "}
-                <em
-                  style={{
-                    color: rateColor(totals.unexplained === 0 ? 100 : 0),
-                  }}
-                >
-                  {totals.unexplained.toLocaleString()}
-                </em>{" "}
-                remain in open triage. None are carried silently.
-              </p>
             </section>
 
             <section className="v2-section">
