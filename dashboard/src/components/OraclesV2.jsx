@@ -86,6 +86,17 @@ const ORACLE_IDENTITY = {
 const REGION_LABELS = { us: "US", ca: "CA", uk: "UK", be: "BE", de: "DE", dk: "DK" };
 
 /**
+ * Oracles hidden from every dashboard surface (roster, hero totals, program
+ * census, household drill) without touching their data or dispositions.
+ * TAXSIM is parked here until its comparison surface is rebuilt — the full
+ * mismatch rows are not yet persisted (axiom-oracles#439), so most of its
+ * open residuals cannot be triaged. The unexplained publication ratchet
+ * still gates its reports at the data level regardless of UI visibility.
+ * Delete an entry to restore the oracle.
+ */
+const HIDDEN_ORACLES = new Set(["taxsim"]);
+
+/**
  * The unit of counting is the household case: one household compared once,
  * no matter how many concepts (liability, CTC, EITC, …) that comparison
  * covers — component concepts roll up into their parent, and a household's
@@ -638,10 +649,16 @@ export default function OraclesV2() {
     const verification = data.reports.filter(
       (r) =>
         isAxiomPair(r) &&
+        !HIDDEN_ORACLES.has(otherOracle(r)) &&
         suiteMeta(r.suite).kind !== "diagnostic" &&
         (r.aggregates || []).length > 0,
     );
-    const crossChecks = data.reports.filter((r) => !isAxiomPair(r)).length;
+    const crossChecks = data.reports.filter(
+      (r) =>
+        !isAxiomPair(r) &&
+        !HIDDEN_ORACLES.has(r.engines?.left) &&
+        !HIDDEN_ORACLES.has(r.engines?.right),
+    ).length;
 
     const byOracle = new Map();
     for (const report of verification) {
