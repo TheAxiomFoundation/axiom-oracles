@@ -139,8 +139,11 @@ REVIEWED_AUTHORITY_SLOTS: dict[str, tuple[str | None, tuple[str, ...]]] = {
         ("statutory_rate_s301fl",),
     ),
     "china_semiconductor_section_301": (None, ("statutory_rate_301_cs",)),
-    "section_338": (None, ("statutory_rate_s338",)),
-    "section_201": (None, ("statutory_rate_section_201",)),
+    "section_338": (f"{_C}#section_338_component_rate", ("statutory_rate_s338",)),
+    "section_201": (
+        f"{_C}#section_201_component_rate",
+        ("statutory_rate_section_201",),
+    ),
     "other": (None, ("statutory_rate_other",)),
 }
 REVIEWED_TOTAL = f"{_C}#us_tariff_total_ad_valorem_rate"

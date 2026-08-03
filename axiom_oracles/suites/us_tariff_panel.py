@@ -43,6 +43,8 @@ S232_ALUMINUM = f"{COMPOSITION_MODULE}#section_232_aluminum_component_rate"
 CHINA_301 = f"{COMPOSITION_MODULE}#china_section_301_component_rate"
 BRAZIL_301 = f"{COMPOSITION_MODULE}#brazil_section_301_component_rate"
 FORCED_LABOR_301 = f"{COMPOSITION_MODULE}#forced_labor_section_301_component_rate"
+S201 = f"{COMPOSITION_MODULE}#section_201_component_rate"
+S338 = f"{COMPOSITION_MODULE}#section_338_component_rate"
 TOTAL = f"{COMPOSITION_MODULE}#us_tariff_total_ad_valorem_rate"
 
 OUTPUTS: tuple[str, ...] = (
@@ -53,6 +55,8 @@ OUTPUTS: tuple[str, ...] = (
     CHINA_301,
     BRAZIL_301,
     FORCED_LABOR_301,
+    S201,
+    S338,
     TOTAL,
 )
 
@@ -88,9 +92,14 @@ AUTHORITY_SLOTS: dict[str, tuple[str | None, tuple[str, ...]]] = {
     "china_section_301": (CHINA_301, ("statutory_rate_301",)),
     "brazil_section_301": (BRAZIL_301, ("statutory_rate_s301br",)),
     "forced_labor_section_301": (FORCED_LABOR_301, ("statutory_rate_s301fl",)),
+    # No counterpart encoded (None): statutory_rate_301_cs and
+    # statutory_rate_other are identically zero across the entire Yale panel
+    # spine (verified over all 12 lines x all countries x all intervals
+    # during lane E witness selection), so no covered line can exercise
+    # them; the column_exposure witness keeps any covered claim honest.
     "china_semiconductor_section_301": (None, ("statutory_rate_301_cs",)),
-    "section_338": (None, ("statutory_rate_s338",)),
-    "section_201": (None, ("statutory_rate_section_201",)),
+    "section_338": (S338, ("statutory_rate_s338",)),
+    "section_201": (S201, ("statutory_rate_section_201",)),
     "other": (None, ("statutory_rate_other",)),
 }
 
