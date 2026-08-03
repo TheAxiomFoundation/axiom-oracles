@@ -60,9 +60,9 @@
     {
       "id": "us-tariff-yale:other",
       "oracle_policy_name": "other",
-      "in_scope": true,
-      "exclusion_reason": null,
-      "suite": "us-tariff-panel",
+      "in_scope": false,
+      "exclusion_reason": "technical",
+      "suite": null,
       "covered": false,
       "comparisons": null,
       "matches": null,
@@ -72,15 +72,15 @@
       "axiom_attributed_open": null,
       "oracle_attributed": null,
       "bridge_artifacts": null,
-      "note": "Residual authority bucket; no encoded Axiom counterpart, compared against an implicit 0 \u2014 an honest mismatch surface, never a silent drop.",
-      "status": "unwitnessed"
+      "note": "Residual ch99 classifier bucket in the reference; statutory_rate_other is identically zero across the full panel at pin c4307e51 (verified empirically over every line x country x interval; the suite's scope.column_exposure re-derives this count on every refresh). There is no statutory surface to witness or compare. Re-inclusion tripwire \u2014 any refresh in which column_exposure for this column goes nonzero invalidates this exclusion and the policy returns to scope with a witness requirement.",
+      "status": "excluded:technical"
     },
     {
       "id": "us-tariff-yale:rate_301_cs",
       "oracle_policy_name": "rate_301_cs",
-      "in_scope": true,
-      "exclusion_reason": null,
-      "suite": "us-tariff-panel",
+      "in_scope": false,
+      "exclusion_reason": "technical",
+      "suite": null,
       "covered": false,
       "comparisons": null,
       "matches": null,
@@ -90,8 +90,8 @@
       "axiom_attributed_open": null,
       "oracle_attributed": null,
       "bridge_artifacts": null,
-      "note": "China semiconductor \u00a7301 layer; no encoded Axiom counterpart yet, so the suite compares this column against an implicit 0 \u2014 an honest mismatch surface, never a silent drop.",
-      "status": "unwitnessed"
+      "note": "China semiconductor \u00a7301 layer; the reference's product list for this layer is empty at pin c4307e51, so statutory_rate_301_cs is identically zero across the full panel (verified empirically over every line x country x interval; scope.column_exposure re-derives the count on every refresh). Nothing to witness or compare at this vintage. Re-inclusion tripwire \u2014 any refresh in which column_exposure for this column goes nonzero invalidates this exclusion and the policy returns to scope with a witness requirement.",
+      "status": "excluded:technical"
     },
     {
       "id": "us-tariff-yale:section_122",

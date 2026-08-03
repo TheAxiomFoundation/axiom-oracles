@@ -9401,6 +9401,9 @@
   },
   "engines": {
     "axiom": "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate",
+    "versions": {
+      "axiom_rules_engine": "0.1.0"
+    },
     "yale_statutory": "Yale Budget Lab tariff-rate-tracker statutory panel (legal-date mode; committed covered-slice extract)"
   },
   "errors": [],
@@ -74617,15 +74620,17 @@
   "population": "yale-panel-covered-slice",
   "provenance": {
     "engine": {
-      "binary": "/private/tmp/laneE-test/axiom-rules-engine/target/release/axiom-rules-engine",
+      "axiom_rules_engine_sha": "ffd8213271947b0189a9dd61a055c1e0e78908a0",
+      "axiom_rules_engine_version": "0.1.0",
+      "binary": "/Users/maxghenis/TheAxiomFoundation/_tariff-t0/wt-engine/target/release/axiom-rules-engine",
       "binary_sha256": "674ca6e70afdccb59c3d6847933bc24b4590105e49db54790f2dcd0bdbbe32d7"
     },
-    "generated_at": "2026-08-03T04:31:38Z",
+    "generated_at": "2026-08-03T20:47:10Z",
     "generated_by": "scripts/run_comparison.py::us-tariff-panel",
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": null
+        "sha": "dbf09f44eddd00b7ad5520f89371ebe8fdf0b7df"
       }
     ],
     "run_kind": "manual",
@@ -76651,7 +76656,7 @@
       "schema_version": "axiom_oracles.dispositions.v1",
       "source_report": {
         "path": "reports/axiom-yale-us-tariff-panel-all-2026-08-03.json",
-        "sha256": "15b5c77ac922fdd9a08f97ec3c82cda13c072233e68cafa021b6d2b666fd297a"
+        "sha256": "e02a71b73fea566f535e5160bf808ba3983f0a59d36034924770765636e2ebd5"
       },
       "unexplained_count": 0
     },

@@ -56,25 +56,33 @@ policies:
     oracle_policy_type: additive
     output_vars:
       - statutory_rate_other
-    in_scope: true
+    in_scope: false
     internal_only_vars:
       - rate_other
       - net_other
-    suite: us-tariff-panel
-    note: Residual authority bucket; no encoded Axiom counterpart, compared against an implicit 0 — an
-      honest mismatch surface, never a silent drop.
+    exclusion_reason: technical
+    note: Residual ch99 classifier bucket in the reference; statutory_rate_other is identically zero
+      across the full panel at pin c4307e51 (verified empirically over every line x country x interval;
+      the suite's scope.column_exposure re-derives this count on every refresh). There is no statutory
+      surface to witness or compare. Re-inclusion tripwire — any refresh in which column_exposure for
+      this column goes nonzero invalidates this exclusion and the policy returns to scope with a
+      witness requirement.
   - id: us-tariff-yale:rate_301_cs
     oracle_policy_name: rate_301_cs
     oracle_policy_type: content_split
     output_vars:
       - statutory_rate_301_cs
-    in_scope: true
+    in_scope: false
     internal_only_vars:
       - rate_301_cs
       - net_301_cs
-    suite: us-tariff-panel
-    note: China semiconductor §301 layer; no encoded Axiom counterpart yet, so the suite compares this
-      column against an implicit 0 — an honest mismatch surface, never a silent drop.
+    exclusion_reason: technical
+    note: China semiconductor §301 layer; the reference's product list for this layer is empty at pin
+      c4307e51, so statutory_rate_301_cs is identically zero across the full panel (verified
+      empirically over every line x country x interval; scope.column_exposure re-derives the count on
+      every refresh). Nothing to witness or compare at this vintage. Re-inclusion tripwire — any
+      refresh in which column_exposure for this column goes nonzero invalidates this exclusion and the
+      policy returns to scope with a witness requirement.
   - id: us-tariff-yale:section_122
     oracle_policy_name: section_122
     oracle_policy_type: content_split
@@ -97,8 +105,10 @@ policies:
       - rate_section_201
       - net_section_201
     suite: us-tariff-panel
-    note: No encoded Axiom counterpart yet; the suite compares this column against an implicit 0 — an
-      honest mismatch surface, never a silent drop.
+    note: Compared against the encoded section_201_component_rate (rulespec-us#1200). The reference
+      carries a flat 14.5% proxy past Proclamation 10339's staged-table end (2026-02-06); our side is
+      a proved zero grounded in the staged table, quota change, and HTS expiry note — every
+      positive-exposure unit is an explained residual on that mechanism.
   - id: us-tariff-yale:section_232
     oracle_policy_name: section_232
     oracle_policy_type: primary
@@ -156,8 +166,9 @@ policies:
       - rate_s338
       - net_s338
     suite: us-tariff-panel
-    note: No encoded Axiom counterpart yet; the suite compares this column against an implicit 0 — an
-      honest mismatch surface, never a silent drop.
+    note: Compared against the encoded section_338_component_rate (rulespec-us#1200; Canadian beer 50%
+      effective 2026-08-19 per Proclamation 11046 with the note 51(a) exception path). Witnessed with
+      zero mismatches including the positive-exposure units.
   - id: us-tariff-yale:stacking_outputs
     oracle_policy_name: stacking_outputs
     oracle_policy_type: output_framing

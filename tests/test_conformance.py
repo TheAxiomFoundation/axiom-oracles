@@ -958,13 +958,17 @@ def test_us_tariff_yale_universe_pin_matches_reference_provenance():
 
 
 def test_us_tariff_yale_scope_decisions():
-    """12 statutory-surface rows in scope on the us-tariff-panel suite, each
-    with a note; the Swiss framework metadata and stacking/framing outputs are
-    excluded as technical (effective-layer machinery, no statutory surface)."""
+    """10 statutory-surface rows in scope on the us-tariff-panel suite, each
+    with a note. Four rows are excluded as technical: the Swiss framework
+    metadata and stacking/framing outputs (effective-layer machinery, no
+    statutory surface), plus the two authority columns the reference never
+    exercises with a nonzero rate at pin c4307e51 (other, rate_301_cs) —
+    each of those carries an explicit re-inclusion tripwire keyed to the
+    suite's per-refresh column_exposure derivation."""
     universe = parse_universe(CONFORMANCE_DIR / "us-tariff-yale.yaml")
     in_scope = [p for p in universe.policies if p.in_scope]
     excluded = universe.excluded()
-    assert len(in_scope) == 12
+    assert len(in_scope) == 10
     for row in in_scope:
         assert row.suite == "us-tariff-panel", row.oracle_policy_name
         assert row.note, row.oracle_policy_name
@@ -976,10 +980,19 @@ def test_us_tariff_yale_scope_decisions():
     assert {p.oracle_policy_name for p in excluded} == {
         "swiss_framework",
         "stacking_outputs",
+        "other",
+        "rate_301_cs",
     }
     for row in excluded:
         assert row.exclusion_reason == "technical"
         assert row.note, row.oracle_policy_name
+    # The zero-exposure exclusions must state their re-inclusion tripwire —
+    # narrowing the universe without one is the failure mode the sol stack
+    # review's F3 witness gate exists to prevent.
+    for name in ("other", "rate_301_cs"):
+        row = next(p for p in excluded if p.oracle_policy_name == name)
+        assert "tripwire" in row.note, name
+        assert "column_exposure" in row.note, name
 
 
 @pytest.mark.skipif(
@@ -1476,20 +1489,24 @@ def test_scoreboard_surfaces_temporal_debt_from_covered_reports():
 
 
 def test_committed_us_tariff_yale_scoreboard_pins_witnessed_coverage():
-    """The live us-tariff-yale verdict: 10 of 12 witnessed-covered — the two
+    """The live us-tariff-yale verdict: CONFORMANT — 10 of 10 in-scope
+    policies witnessed-covered, unexplained 0, axiom-attributed 0. The two
     authorities the reference never exercises with a positive rate (301_cs,
-    other) are honestly uncovered, and the temporal-debt account rides the
-    summary (sol stack review F3/F4)."""
+    other) are excluded-with-reason under the technical class with explicit
+    re-inclusion tripwires (universe test above), and the temporal-debt
+    account rides the summary (sol stack review F3/F4)."""
     scoreboard = json.loads((CONFORMANCE_DIR / "scoreboard.json").read_text())
     entry = {j["jurisdiction"]: j for j in scoreboard["jurisdictions"]}[
         "us-tariff-yale"
     ]
-    assert entry["policies_in_scope"] == 12
+    assert entry["policies_in_scope"] == 10
     assert entry["covered"] == 10
-    assert entry["covered_pct"] == 83.3333
-    assert entry["conformant"] is False
-    assert entry["uncovered_policies"] == ["other", "rate_301_cs"]
-    assert entry["unwitnessed_policies"] == entry["uncovered_policies"]
+    assert entry["covered_pct"] == 100.0
+    assert entry["excluded"] == 4
+    assert entry["excluded_by_reason"] == {"technical": 4}
+    assert entry["conformant"] is True
+    assert entry["uncovered_policies"] == []
+    assert entry["unwitnessed_policies"] == []
     assert entry["temporal_debt"] == {
         "pre_domain_intervals": 48000,
         "straddle_clipped_intervals": 1200,
