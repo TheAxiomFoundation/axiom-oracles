@@ -221,6 +221,20 @@ PY
   regenerate_derived
   verify_derived
 
+  # Publication gate — unlike the conformance ratchet (an alarm that fires on
+  # main AFTER an honest regression lands), the per-suite unexplained ratchet
+  # stops the regression from publishing at all: a rerun that surfaces NEW
+  # unexplained disagreements leaves the previous, fully-accounted-for report
+  # live until someone triages (dispositions/<suite>.yaml or the known-causes
+  # registry). Retrying cannot help — a regression is not contention — so
+  # fail the leg loudly instead of looping.
+  if ! "$PYTHON" scripts/unexplained_ratchet.py --check; then
+    echo "REFUSED: this refresh raises an unexplained-mismatch ceiling" \
+      "(conformance/unexplained-ratchet.yaml). Triage the new" \
+      "disagreements, then rerun; the previous report stays published." >&2
+    exit 1
+  fi
+
   git add -A -- "${derived_paths[@]}"
   if git diff --cached --quiet; then
     echo "nothing to commit for $suite after regeneration (attempt $attempt)"
