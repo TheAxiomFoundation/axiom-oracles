@@ -790,3 +790,82 @@ def test_panel_dashboard_block_is_bound_to_committed_full_report() -> None:
         DISPOSITIONS_DIR / "us-tariff-panel.yaml", repo_root=REPO_ROOT
     )
     assert module._premerged_block_problems(slim_path, slim, doc) == []
+
+
+def test_selector_binding_violation_expires_entry_and_unclassifies_rows():
+    """expires_on_source_change made real for selector entries (sol closing
+    review F4): a selector_binding records the selected population's unit
+    count and summed |difference|; a source change that moves any selected
+    value violates the binding, EXPIRES the entry, and returns its rows to
+    unexplained. This is sol's exact counterfactual — before the binding, an
+    in-memory value mutation stayed classified with zero unexplained."""
+    entry = {
+        "id": "sel-bound",
+        "concept": "x:y#z",
+        "case_selector": {"case_id_prefix": "panel-a-"},
+        "kind": "value",
+        "disposition": "explained_residual",
+        "evidence": {"mechanism": "test"},
+        "expires_on_source_change": True,
+    }
+    report = {
+        "schema_version": "axiom.comparison_report.v2",
+        "summary": {
+            "comparison_count": 4,
+            "match_count": 2,
+            "mismatch_count": 2,
+        },
+        "mismatches": [
+            {"case_id": "panel-a-1", "concept": "x:y#z", "kind": "value",
+             "left": 0.0, "right": 0.145, "difference": -0.145},
+            {"case_id": "panel-a-2", "concept": "x:y#z", "kind": "value",
+             "left": 0.0, "right": 0.145, "difference": -0.145},
+        ],
+    }
+    from axiom_oracles.comparison.dispositions import (
+        apply_dispositions,
+        selected_rows_sha256,
+    )
+
+    entry["selector_binding"] = {
+        "units": 2,
+        "rows_sha256": selected_rows_sha256(report["mismatches"]),
+    }
+    merged = apply_dispositions(report, {"entries": [entry]})
+    block = merged["summary"]["dispositioned"]
+    assert block["unexplained_count"] == 0
+    assert block["expired_entries"] == []
+    assert "binding_violated_entries" not in block
+    assert merged["mismatches"][0]["disposition"]["id"] == "sel-bound"
+
+    # Sol's mutation: one selected row's value drifts (.145 -> .89).
+    mutated = json.loads(json.dumps(report))
+    mutated["mismatches"][1]["right"] = 0.99
+    mutated["mismatches"][1]["difference"] = -0.89
+    merged = apply_dispositions(mutated, {"entries": [entry]})
+    block = merged["summary"]["dispositioned"]
+    assert block["expired_entries"] == ["sel-bound"]
+    assert block["binding_violated_entries"] == ["sel-bound"]
+    assert block["unexplained_count"] == 2
+    assert all("disposition" not in row for row in merged["mismatches"])
+
+    # Sol r2 finding 2: a sign flip preserves unit count and |difference|
+    # aggregates — the per-row digest must still trip.
+    flipped = json.loads(json.dumps(report))
+    flipped["mismatches"][1]["left"] = 0.145
+    flipped["mismatches"][1]["right"] = 0.0
+    flipped["mismatches"][1]["difference"] = 0.145
+    merged = apply_dispositions(flipped, {"entries": [entry]})
+    block = merged["summary"]["dispositioned"]
+    assert block["expired_entries"] == ["sel-bound"]
+    assert block["binding_violated_entries"] == ["sel-bound"]
+    assert block["unexplained_count"] == 2
+
+    # Vacuity: unit-count drift alone (a selected row vanishing) also trips.
+    shrunk = json.loads(json.dumps(report))
+    shrunk["mismatches"] = shrunk["mismatches"][:1]
+    shrunk["summary"]["mismatch_count"] = 1
+    merged = apply_dispositions(shrunk, {"entries": [entry]})
+    assert merged["summary"]["dispositioned"]["expired_entries"] == [
+        "sel-bound"
+    ]

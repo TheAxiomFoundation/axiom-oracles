@@ -17,7 +17,9 @@
   "covered_lines": [
     "7202111000",
     "7601103000",
-    "9506624040"
+    "9506624040",
+    "2203000030",
+    "8541420010"
   ],
   "columns": [
     "hts10",
@@ -39,7 +41,7 @@
     "statutory_rate_section_201",
     "statutory_rate_other"
   ],
-  "extract_rows": 41040,
+  "extract_rows": 68400,
   "countries": [
     "1000",
     "1010",
@@ -286,6 +288,6 @@
   "extract_revisions": 57,
   "valid_from_range": ["2025-01-01", "2026-11-10"],
   "valid_until_range": ["2025-02-03", "2026-12-31"],
-  "extract_sha256": "331d92d9ce30067e26c93d3f9f55b18af5e3b53a6846cbbc0f7652ecc1bd96c3",
-  "extracted_at": "2026-08-02T00:29:43-0400"
+  "extract_sha256": "add5540f497ba2788eb963d58d0e1ca06352026c96f9e14ddb931abbf69d3da5",
+  "extracted_at": "2026-08-02T23:21:10-0400"
 }

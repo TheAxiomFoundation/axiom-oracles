@@ -23,7 +23,8 @@
       "uncovered_policies": [],
       "unwitnessed_policies": [],
       "temporal_debt": null,
-      "blocking_reasons": []
+      "blocking_reasons": [],
+      "invalid_exclusions": []
     },
     {
       "jurisdiction": "uk",
@@ -50,7 +51,8 @@
       "uncovered_policies": [],
       "unwitnessed_policies": [],
       "temporal_debt": null,
-      "blocking_reasons": []
+      "blocking_reasons": [],
+      "invalid_exclusions": []
     },
     {
       "jurisdiction": "uk-pe",
@@ -71,7 +73,8 @@
       "uncovered_policies": [],
       "unwitnessed_policies": [],
       "temporal_debt": null,
-      "blocking_reasons": []
+      "blocking_reasons": [],
+      "invalid_exclusions": []
     },
     {
       "jurisdiction": "us-pe",
@@ -189,45 +192,33 @@
       "blocking_reasons": [
         "91 of 127 in-scope policies are not covered by a live suite: ak_atap, al_income_tax, alternative_minimum_tax, ar_income_tax, ar_tea, az_income_tax, ca_income_tax, co_income_tax, ct_income_tax, ct_tfa, dc_income_tax, dc_tanf, de_income_tax, fl_tca, foreign_tax_credit, ga_income_tax, hi_income_tax, hi_tanf, high_efficiency_electric_home_rebate, ia_fip, ia_income_tax, id_income_tax, id_tafi, il_income_tax, il_tanf, in_income_tax, in_tanf, ks_income_tax, ky_income_tax, ky_ktap, la_fitap, la_income_tax, ma_income_tax, ma_tafdc, md_income_tax, md_tca, me_income_tax, me_tanf, mi_fip, mi_income_tax, mn_income_tax, mo_income_tax, mo_tanf, ms_income_tax, ms_tanf, mt_income_tax, mt_tanf, nc_tanf, nd_income_tax, nd_tanf, ne_adc, ne_income_tax, new_clean_vehicle_credit, nh_fanf, nj_income_tax, nj_wfnj, nm_income_tax, nm_works, nv_tanf, ny_income_tax, oh_income_tax, oh_owf, ok_income_tax, ok_tanf, or_income_tax, or_tanf, pa_income_tax, pa_tanf, residential_clean_energy_credit, residential_efficiency_electrification_rebate, ri_income_tax, ri_works, sc_income_tax, sc_tanf, sd_tanf, taxable_income, tn_ff, tx_tanf, used_clean_vehicle_credit, ut_fep, ut_income_tax, va_income_tax, va_tanf, vt_income_tax, vt_reach_up, wa_income_tax, wi_income_tax, wi_works, wv_income_tax, wv_works, wy_power",
         "19 unexplained mismatch(es) across covered suites"
-      ]
+      ],
+      "invalid_exclusions": []
     },
     {
       "jurisdiction": "us-tariff-yale",
       "oracle": "tariff-rate-tracker_c4307e514196618afcbf88cf7fd33746417eeabf/statutory_panel",
-      "policies_in_scope": 12,
-      "covered": 8,
-      "covered_pct": 66.6667,
-      "excluded": 2,
+      "policies_in_scope": 10,
+      "covered": 10,
+      "covered_pct": 100.0,
+      "excluded": 4,
       "excluded_by_reason": {
-        "technical": 2
+        "technical": 4
       },
       "unexplained_total": 0,
-      "axiom_attributed_open": 2,
-      "oracle_attributed": 396,
+      "axiom_attributed_open": 0,
+      "oracle_attributed": 8283,
       "bridge_artifacts": 0,
-      "conformant": false,
-      "uncovered_policies": [
-        "other",
-        "rate_301_cs",
-        "section_201",
-        "section_338"
-      ],
-      "unwitnessed_policies": [
-        "other",
-        "rate_301_cs",
-        "section_201",
-        "section_338"
-      ],
+      "conformant": true,
+      "uncovered_policies": [],
+      "unwitnessed_policies": [],
       "temporal_debt": {
-        "pre_domain_intervals": 28800,
-        "straddle_clipped_intervals": 720,
-        "addressable_records": 123
+        "pre_domain_intervals": 48000,
+        "straddle_clipped_intervals": 1200,
+        "addressable_records": 205
       },
-      "blocking_reasons": [
-        "4 of 12 in-scope policies are not covered by a live suite: other, rate_301_cs, section_201, section_338",
-        "4 of those have a report but no positive-exposure witness \u2014 the reference never exercises their output columns with a nonzero rate: other, rate_301_cs, section_201, section_338",
-        "2 open Axiom-attributed encoding gap(s)"
-      ]
+      "blocking_reasons": [],
+      "invalid_exclusions": []
     }
   ]
 }

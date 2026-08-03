@@ -958,13 +958,17 @@ def test_us_tariff_yale_universe_pin_matches_reference_provenance():
 
 
 def test_us_tariff_yale_scope_decisions():
-    """12 statutory-surface rows in scope on the us-tariff-panel suite, each
-    with a note; the Swiss framework metadata and stacking/framing outputs are
-    excluded as technical (effective-layer machinery, no statutory surface)."""
+    """10 statutory-surface rows in scope on the us-tariff-panel suite, each
+    with a note. Four rows are excluded as technical: the Swiss framework
+    metadata and stacking/framing outputs (effective-layer machinery, no
+    statutory surface), plus the two authority columns the reference never
+    exercises with a nonzero rate at pin c4307e51 (other, rate_301_cs) —
+    each of those carries an explicit re-inclusion tripwire keyed to the
+    suite's per-refresh column_exposure derivation."""
     universe = parse_universe(CONFORMANCE_DIR / "us-tariff-yale.yaml")
     in_scope = [p for p in universe.policies if p.in_scope]
     excluded = universe.excluded()
-    assert len(in_scope) == 12
+    assert len(in_scope) == 10
     for row in in_scope:
         assert row.suite == "us-tariff-panel", row.oracle_policy_name
         assert row.note, row.oracle_policy_name
@@ -976,10 +980,19 @@ def test_us_tariff_yale_scope_decisions():
     assert {p.oracle_policy_name for p in excluded} == {
         "swiss_framework",
         "stacking_outputs",
+        "other",
+        "rate_301_cs",
     }
     for row in excluded:
         assert row.exclusion_reason == "technical"
         assert row.note, row.oracle_policy_name
+    # The zero-exposure exclusions must state their re-inclusion tripwire —
+    # narrowing the universe without one is the failure mode the sol stack
+    # review's F3 witness gate exists to prevent.
+    for name in ("other", "rate_301_cs"):
+        row = next(p for p in excluded if p.oracle_policy_name == name)
+        assert "tripwire" in row.note, name
+        assert "column_exposure" in row.note, name
 
 
 @pytest.mark.skipif(
@@ -1434,6 +1447,49 @@ def test_scoreboard_witness_accepts_any_positive_output_var():
     assert board.conformant is True
 
 
+def test_scoreboard_exclusion_invalidated_by_nonzero_live_exposure():
+    """The enforced re-inclusion tripwire (sol closing review F1): an excluded
+    policy whose output column shows nonzero exposure in ANY live report is an
+    invalidated exclusion — it blocks conformance until re-included. This is
+    sol's exact counterfactual: before the invariant, nonzero exposure on an
+    excluded column still scored conformant."""
+    universe = _universe([
+        _in_scope(id="tx:a", oracle_policy_name="a", suite="suite-a",
+                  output_vars=("x_s",)),
+        _in_scope(id="tx:c", oracle_policy_name="c", suite=None,
+                  in_scope=False, exclusion_reason="technical",
+                  output_vars=("z_s",)),
+    ])
+    # Dormant exclusion: zero exposure — conformant holds.
+    report = _report("suite-a", comparisons=5, matches=5)
+    report["scope"] = {"column_exposure": {"x_s": 5, "z_s": 0}}
+    board, scores = score_jurisdiction(universe, [report])
+    assert board.conformant is True
+    assert board.invalid_exclusions == []
+    by_name = {s.oracle_policy_name: s for s in scores}
+    assert by_name["c"].status == "excluded:technical"
+
+    # The reference wakes the column up: exclusion invalidated, verdict blocked.
+    report["scope"] = {"column_exposure": {"x_s": 5, "z_s": 7}}
+    board, scores = score_jurisdiction(universe, [report])
+    assert board.conformant is False
+    assert board.invalid_exclusions == ["c"]
+    assert any("re-inclusion required" in r for r in board.blocking_reasons)
+    by_name = {s.oracle_policy_name: s for s in scores}
+    assert by_name["c"].status == "excluded:INVALID-nonzero-exposure"
+
+    # Order independence (sol r2 finding 1): a zero-exposure duplicate of the
+    # same suite must never shadow the nonzero report, in either order.
+    zero_dup = _report("suite-a", comparisons=5, matches=5)
+    zero_dup["scope"] = {"column_exposure": {"x_s": 5, "z_s": 0}}
+    nonzero = _report("suite-a", comparisons=5, matches=5)
+    nonzero["scope"] = {"column_exposure": {"x_s": 5, "z_s": 7}}
+    for ordering in ([zero_dup, nonzero], [nonzero, zero_dup]):
+        board, _ = score_jurisdiction(universe, ordering)
+        assert board.conformant is False, "duplicate-suite order bypass"
+        assert board.invalid_exclusions == ["c"]
+
+
 def test_scoreboard_without_exposure_basis_keeps_presence_coverage():
     """Reports with no scope.column_exposure (other jurisdictions) keep the
     presence-only coverage rule — the witness gate never fires blind."""
@@ -1476,29 +1532,31 @@ def test_scoreboard_surfaces_temporal_debt_from_covered_reports():
 
 
 def test_committed_us_tariff_yale_scoreboard_pins_witnessed_coverage():
-    """The live us-tariff-yale verdict: 8 of 12 witnessed-covered — the four
+    """The live us-tariff-yale verdict: CONFORMANT — 10 of 10 in-scope
+    policies witnessed-covered, unexplained 0, axiom-attributed 0. The two
     authorities the reference never exercises with a positive rate (301_cs,
-    s338, section_201, other) are honestly uncovered, and the temporal-debt
+    other) are excluded-with-reason under the technical class with explicit
+    re-inclusion tripwires (universe test above), and the temporal-debt
     account rides the summary (sol stack review F3/F4)."""
     scoreboard = json.loads((CONFORMANCE_DIR / "scoreboard.json").read_text())
     entry = {j["jurisdiction"]: j for j in scoreboard["jurisdictions"]}[
         "us-tariff-yale"
     ]
-    assert entry["policies_in_scope"] == 12
-    assert entry["covered"] == 8
-    assert entry["covered_pct"] == 66.6667
-    assert entry["conformant"] is False
-    assert entry["uncovered_policies"] == [
-        "other", "rate_301_cs", "section_201", "section_338",
-    ]
-    assert entry["unwitnessed_policies"] == entry["uncovered_policies"]
+    assert entry["policies_in_scope"] == 10
+    assert entry["covered"] == 10
+    assert entry["covered_pct"] == 100.0
+    assert entry["excluded"] == 4
+    assert entry["excluded_by_reason"] == {"technical": 4}
+    assert entry["conformant"] is True
+    assert entry["uncovered_policies"] == []
+    assert entry["unwitnessed_policies"] == []
     assert entry["temporal_debt"] == {
-        "pre_domain_intervals": 28800,
-        "straddle_clipped_intervals": 720,
-        "addressable_records": 123,
+        "pre_domain_intervals": 48000,
+        "straddle_clipped_intervals": 1200,
+        "addressable_records": 205,
     }
-    assert entry["oracle_attributed"] == 396
-    assert entry["axiom_attributed_open"] == 2
+    assert entry["oracle_attributed"] == 8283
+    assert entry["axiom_attributed_open"] == 0
 
 
 def test_committed_be_scoreboard_counts_dataset_lacks_input_exclusion():

@@ -42,20 +42,20 @@ from axiom_oracles.suites.us_tariff_panel import (
 REPO_ROOT = Path(__file__).resolve().parents[1]
 REFERENCE_DIR = REPO_ROOT / REFERENCE_DIRNAME
 
-#: Reviewed universe size: 12,240 covered intervals probed at both clipped
+#: Reviewed universe size: 20,400 covered intervals probed at both clipped
 #: endpoints, deduplicated where clipping collapses an interval to one day.
 #: A Yale pin bump or coverage burn-up changes this in the same reviewed
 #: diff (the reference-side EXPECTED_* pin pattern).
-EXPECTED_COMPARISON_UNITS = 23_760
+EXPECTED_COMPARISON_UNITS = 39_600
 
 #: Reviewed OUTCOME pins for the committed artifacts (#448 review round 3):
 #: without these, an artifact relabelling mismatches as matches — or a
 #: 23,760-match/0-mismatch account — reconciles internally and passes.
 #: An encoding fix or reference-vintage change moves these in the same
 #: reviewed diff.
-EXPECTED_MATCH_COUNT = 17_877
-EXPECTED_MISMATCH_COUNT = 5_883
-EXPECTED_SIGNATURE_COUNT = 86
+EXPECTED_MATCH_COUNT = 24_400
+EXPECTED_MISMATCH_COUNT = 15_200
+EXPECTED_SIGNATURE_COUNT = 87
 
 #: Reviewed sha256 of the committed report's canonical ACCOUNT — the
 #: {summary, mismatches, mismatch_signatures, cases} sections serialized
@@ -66,29 +66,29 @@ EXPECTED_SIGNATURE_COUNT = 86
 #: signature/family rewrites included) cannot reconcile. A genuine
 #: encoding or reference change moves this in the same reviewed diff.
 EXPECTED_ACCOUNT_SHA256 = (
-    "e55036bcace451aee340155c6dce436c86495d4bf07d650aec456ff83bbbddce"
+    "0a326bcd9e1f47ac95d49d9877b9ae9054f648cc40409757deb3d6be24f26d62"
 )
 
 #: Reviewed positive-exposure counts per Yale statutory column: the number
 #: of comparison units whose REFERENCE value for the column is positive.
 #: This is the witness basis for the conformance scoreboard's covered
 #: verdicts (sol stack review F3): a policy whose columns are 0 everywhere
-#: in the covered slice (301_cs, s338, section_201, other) is exercised by
-#: NOTHING — "covered" for it is vacuous, and the scoreboard must say
-#: uncovered. A Yale pin bump or coverage burn-up moves these in the same
-#: reviewed diff.
+#: in the covered slice (301_cs, other) is exercised by NOTHING —
+#: "covered" for it is vacuous, and the scoreboard must say uncovered.
+#: A Yale pin bump or coverage burn-up moves these in the same reviewed
+#: diff.
 EXPECTED_COLUMN_EXPOSURE = {
     "statutory_base_rate": 15_840,
-    "statutory_rate_232": 7_920,
-    "statutory_rate_ieepa_recip": 954,
-    "statutory_rate_ieepa_fent": 24,
-    "statutory_rate_301": 99,
+    "statutory_rate_232": 9_840,
+    "statutory_rate_ieepa_recip": 1_906,
+    "statutory_rate_ieepa_fent": 40,
+    "statutory_rate_301": 165,
     "statutory_rate_301_cs": 0,
-    "statutory_rate_s301fl": 860,
-    "statutory_rate_s301br": 12,
-    "statutory_rate_s338": 0,
-    "statutory_rate_s122": 9_120,
-    "statutory_rate_section_201": 0,
+    "statutory_rate_s301fl": 2_580,
+    "statutory_rate_s301br": 36,
+    "statutory_rate_s338": 6,
+    "statutory_rate_s122": 18_240,
+    "statutory_rate_section_201": 7_887,
     "statutory_rate_other": 0,
 }
 
@@ -97,10 +97,10 @@ EXPECTED_COLUMN_EXPOSURE = {
 #: the boundary (probed, but their pre-domain days are unaudited). Every
 #: unit is addressable via scope.temporal_debt.records; these totals move
 #: only with a domain burn-down or Yale pin bump, in the same reviewed diff.
-EXPECTED_PRE_DOMAIN_INTERVALS = 28_800
-EXPECTED_STRADDLE_CLIPPED_INTERVALS = 720
-EXPECTED_PRE_DOMAIN_RECORD_GROUPS = 120
-EXPECTED_STRADDLE_RECORD_GROUPS = 3
+EXPECTED_PRE_DOMAIN_INTERVALS = 48_000
+EXPECTED_STRADDLE_CLIPPED_INTERVALS = 1_200
+EXPECTED_PRE_DOMAIN_RECORD_GROUPS = 200
+EXPECTED_STRADDLE_RECORD_GROUPS = 5
 
 #: Reviewed dashboard truncation cap (run_comparison._DASHBOARD_MAX_MISMATCHES)
 #: — the dashboard copy must carry EXACTLY min(cap, mismatch_count) rows, not
@@ -139,8 +139,11 @@ REVIEWED_AUTHORITY_SLOTS: dict[str, tuple[str | None, tuple[str, ...]]] = {
         ("statutory_rate_s301fl",),
     ),
     "china_semiconductor_section_301": (None, ("statutory_rate_301_cs",)),
-    "section_338": (None, ("statutory_rate_s338",)),
-    "section_201": (None, ("statutory_rate_section_201",)),
+    "section_338": (f"{_C}#section_338_component_rate", ("statutory_rate_s338",)),
+    "section_201": (
+        f"{_C}#section_201_component_rate",
+        ("statutory_rate_section_201",),
+    ),
     "other": (None, ("statutory_rate_other",)),
 }
 REVIEWED_TOTAL = f"{_C}#us_tariff_total_ad_valorem_rate"
@@ -777,9 +780,9 @@ def test_panel_stays_on_the_manual_ci_lane() -> None:
 
 def test_column_exposure_matches_the_reviewed_pin(reference) -> None:
     """Positive-exposure counts, derived independently of the suite helper,
-    must equal the reviewed pin — and so must the helper. The four
-    zero-exposure columns are the reason 301_cs/s338/s201/other CANNOT be
-    covered by this suite: no unit ever exercises them."""
+    must equal the reviewed pin — and so must the helper. The two
+    zero-exposure columns are the reason 301_cs/other CANNOT be covered by
+    this suite: no unit ever exercises them."""
     intervals, _ = reference
     units = covered_units(intervals)
     derived = {column: 0 for column in YALE_STATUTORY_COLUMNS}
@@ -793,8 +796,6 @@ def test_column_exposure_matches_the_reviewed_pin(reference) -> None:
         c for c, n in EXPECTED_COLUMN_EXPOSURE.items() if n == 0
     ] == [
         "statutory_rate_301_cs",
-        "statutory_rate_s338",
-        "statutory_rate_section_201",
         "statutory_rate_other",
     ]
 
