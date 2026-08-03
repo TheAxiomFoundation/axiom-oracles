@@ -1476,29 +1476,27 @@ def test_scoreboard_surfaces_temporal_debt_from_covered_reports():
 
 
 def test_committed_us_tariff_yale_scoreboard_pins_witnessed_coverage():
-    """The live us-tariff-yale verdict: 8 of 12 witnessed-covered — the four
+    """The live us-tariff-yale verdict: 10 of 12 witnessed-covered — the two
     authorities the reference never exercises with a positive rate (301_cs,
-    s338, section_201, other) are honestly uncovered, and the temporal-debt
-    account rides the summary (sol stack review F3/F4)."""
+    other) are honestly uncovered, and the temporal-debt account rides the
+    summary (sol stack review F3/F4)."""
     scoreboard = json.loads((CONFORMANCE_DIR / "scoreboard.json").read_text())
     entry = {j["jurisdiction"]: j for j in scoreboard["jurisdictions"]}[
         "us-tariff-yale"
     ]
     assert entry["policies_in_scope"] == 12
-    assert entry["covered"] == 8
-    assert entry["covered_pct"] == 66.6667
+    assert entry["covered"] == 10
+    assert entry["covered_pct"] == 83.3333
     assert entry["conformant"] is False
-    assert entry["uncovered_policies"] == [
-        "other", "rate_301_cs", "section_201", "section_338",
-    ]
+    assert entry["uncovered_policies"] == ["other", "rate_301_cs"]
     assert entry["unwitnessed_policies"] == entry["uncovered_policies"]
     assert entry["temporal_debt"] == {
-        "pre_domain_intervals": 28800,
-        "straddle_clipped_intervals": 720,
-        "addressable_records": 123,
+        "pre_domain_intervals": 48000,
+        "straddle_clipped_intervals": 1200,
+        "addressable_records": 205,
     }
-    assert entry["oracle_attributed"] == 396
-    assert entry["axiom_attributed_open"] == 2
+    assert entry["oracle_attributed"] == 8283
+    assert entry["axiom_attributed_open"] == 0
 
 
 def test_committed_be_scoreboard_counts_dataset_lacks_input_exclusion():
