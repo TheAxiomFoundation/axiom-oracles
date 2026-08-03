@@ -51,7 +51,7 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-08-03T10:13:26Z",
+    "generated_at": "2026-08-03T15:25:13Z",
     "generated_by": "scripts/run_comparison.py::uk-attendance-allowance-pe",
     "oracle": {
       "name": "policyengine",
@@ -60,7 +60,7 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-uk",
-        "sha": "c046e91567b3f12a1646ab293c1dbb7e280f4ddd"
+        "sha": "5d489fe2882ba0a56217b3f47630b360abb67d18"
       }
     ],
     "run_kind": "affected-rerun",
