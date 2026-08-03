@@ -74625,7 +74625,7 @@
       "binary": "/Users/maxghenis/TheAxiomFoundation/_tariff-t0/wt-engine/target/release/axiom-rules-engine",
       "binary_sha256": "674ca6e70afdccb59c3d6847933bc24b4590105e49db54790f2dcd0bdbbe32d7"
     },
-    "generated_at": "2026-08-03T21:40:25Z",
+    "generated_at": "2026-08-03T22:33:09Z",
     "generated_by": "scripts/run_comparison.py::us-tariff-panel",
     "rulespecs": [
       {
@@ -76656,7 +76656,7 @@
       "schema_version": "axiom_oracles.dispositions.v1",
       "source_report": {
         "path": "reports/axiom-yale-us-tariff-panel-all-2026-08-03.json",
-        "sha256": "86c233be1d7857e6ce6be28c889285204f9bd76eadac6eb9b21f37cf88009e89"
+        "sha256": "6a346b17a07a87030a1994fb11d0872ecd61e681e085babeedd580a3f7cb22e5"
       },
       "unexplained_count": 0
     },
