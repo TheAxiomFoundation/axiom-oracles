@@ -202,8 +202,8 @@
         "technical": 2
       },
       "unexplained_total": 0,
-      "axiom_attributed_open": 1057,
-      "oracle_attributed": 353,
+      "axiom_attributed_open": 2,
+      "oracle_attributed": 396,
       "bridge_artifacts": 0,
       "conformant": false,
       "uncovered_policies": [
@@ -226,7 +226,7 @@
       "blocking_reasons": [
         "4 of 12 in-scope policies are not covered by a live suite: other, rate_301_cs, section_201, section_338",
         "4 of those have a report but no positive-exposure witness \u2014 the reference never exercises their output columns with a nonzero rate: other, rate_301_cs, section_201, section_338",
-        "1057 open Axiom-attributed encoding gap(s)"
+        "2 open Axiom-attributed encoding gap(s)"
       ]
     }
   ]

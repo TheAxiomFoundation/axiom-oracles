@@ -1,6 +1,6 @@
 {
   "schema": "axiom_oracles.conformance_snapshot.v1",
-  "date": "2026-08-02",
+  "date": "2026-08-03",
   "jurisdiction": "us-tariff-yale",
   "oracle": "tariff-rate-tracker_c4307e514196618afcbf88cf7fd33746417eeabf/statutory_panel",
   "policies_in_scope": 12,
