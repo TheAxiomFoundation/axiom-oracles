@@ -44,20 +44,27 @@ BASE_DISPOSITIONS_SHA256 = (
 )
 EXPECTED_BASE_ROWS = 345
 EXPECTED_CURRENT_MISMATCHES = 529
-EXPECTED_EXPANDED_DISPOSITIONS = 288
+# 288 at the #423 transition; 510 after the 2026-08 residual-tail triage
+# added 174 verified CA entries (see dispositions/ca-snap-ecps.yaml classes
+# dated 2026-07-30/08-02 and axiom-oracles#433/#436/#437/#441).
+EXPECTED_EXPANDED_DISPOSITIONS = 510
+# At the #423 transition: vanished 192 / current_but_dropped 22 /
+# reclassified 0 / kept 131. The 2026-08 residual-tail triage added CA
+# entries covering 21 of the 22 dropped identities, moving them to
+# reclassified; 1 identity remains honestly uncovered.
 EXPECTED_PARTITION_COUNTS = {
     "vanished": 192,
-    "current_but_dropped": 22,
-    "reclassified": 0,
+    "current_but_dropped": 1,
+    "reclassified": 21,
     "kept": 131,
 }
 EXPECTED_PARTITION_DIGESTS = {
     "vanished": ("f968139b4cc46e2a2d95ce08d7ae97bfa3e446f7d8558a524fa3527bdb45f618"),
     "current_but_dropped": (
-        "c4115d13add7504d41939a2e580fb0dab5b04c0cfa73cea1ffcb002dcdadcecd"
+        "925caea321fd0250cfb08356142f2f83a5bba5b84d18badd426cd029e85a5b3d"
     ),
     "reclassified": (
-        "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+        "a4d9b070b740a2a55d47f088974a4060f085e84e2f9392166a8e3c78ddf860af"
     ),
     "kept": ("2cfc51bf11031bd398cc7cd27e568f8a321df35eb9006d1acd86db112851cba3"),
 }
@@ -125,7 +132,7 @@ EXPECTED_DRIFT_ROWS_SHA256 = (
     "fa54f6fdf05592da62c3c03b74264a4dfb7d9828e4f33ea169e75fc033ad3a51"
 )
 EXPECTED_ACTIVE_DRIFT_ROWS_SHA256 = (
-    "fa54f6fdf05592da62c3c03b74264a4dfb7d9828e4f33ea169e75fc033ad3a51"
+    "a922d6e84e4b8cf6dc207ee3318bc4653787d725678ee844652506117c73a090"
 )
 EXPECTED_RETIRED_DRIFT_IDENTITY_SHA256 = (
     "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
@@ -134,9 +141,59 @@ EXPECTED_RETIRED_DRIFT_ROWS_SHA256 = (
     "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
 )
 EXPECTED_RECLASSIFIED_ROWS_SHA256 = (
-    "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    "9bbe925e5bf1f733bebcb8a75da917587f103bafdb80a9f81368edc2fa82bdeb"
 )
-EXPECTED_RECLASSIFIED_REPLACEMENTS: dict[str, int] = {}
+# Drift-receipt rows whose identity the 2026-08 residual-tail triage covered
+# with a new schema-validated disposition (third receipt exit alongside
+# active and retired). Their per-row drift evidence stays pinned below.
+EXPECTED_RECLASSIFIED_DRIFT_IDS = frozenset(
+    {
+        "ca-362-medical-input-ecps-57453-benefit",
+        "ca-362-period-ecps-57313-benefit",
+        "ca-362-period-self-employment-tanf-ecps-57027-benefit",
+        "ca-362-period-self-employment-tanf-ecps-58088-benefit",
+        "ca-362-period-self-employment-tanf-ecps-60409-benefit",
+        "ca-362-self-employment-ecps-58987-benefit",
+        "ca-362-self-employment-ecps-59016-benefit",
+        "ca-362-self-employment-ecps-59103-benefit",
+        "ca-362-self-employment-ecps-59173-benefit",
+        "ca-362-self-employment-ecps-60319-benefit",
+        "ca-362-self-employment-ecps-60859-benefit",
+        "ca-362-self-employment-tanf-ecps-56991-benefit",
+        "ca-362-self-employment-tanf-ecps-57529-benefit",
+        "ca-362-self-employment-tanf-ecps-57845-benefit",
+        "ca-362-self-employment-tanf-ecps-57891-benefit",
+        "ca-362-self-employment-tanf-ecps-60756-benefit",
+        "ca-362-self-employment-tanf-ecps-60777-benefit",
+        "ca-362-self-employment-tanf-ecps-60978-benefit",
+        "ca-362-self-employment-tanf-ecps-61251-benefit",
+        "ca-362-self-employment-tanf-ecps-61495-benefit",
+        "ca-362-tanf-ecps-62327-benefit",
+    }
+)
+EXPECTED_RECLASSIFIED_DRIFT_ROWS_SHA256 = "2c4fd5ef79882590de507c3ad93beef46958058f514736af961356dfd3527174"
+# The 2026-08 residual-tail triage entries that absorbed the 21 formerly
+# current_but_dropped identities (per-row verified; see each entry's
+# evidence in dispositions/ca-snap-ecps.yaml).
+EXPECTED_RECLASSIFIED_REPLACEMENTS: dict[str, int] = {
+    "ca-bbce-tail-2026-07-30-benefit": 5,
+    "ca-negative-se-loss-2026-07-30-benefit": 1,
+    "pe-fallback-path-divergence-58987": 1,
+    "pe-medical-imputation-counterfactual-57453": 1,
+    "tanf-zero-counterfactual-56991": 1,
+    "tanf-zero-counterfactual-57027": 1,
+    "tanf-zero-counterfactual-57529": 1,
+    "tanf-zero-counterfactual-57845": 1,
+    "tanf-zero-counterfactual-57891": 1,
+    "tanf-zero-counterfactual-58088": 1,
+    "tanf-zero-counterfactual-60409": 1,
+    "tanf-zero-counterfactual-60756": 1,
+    "tanf-zero-counterfactual-60777": 1,
+    "tanf-zero-counterfactual-60978": 1,
+    "tanf-zero-counterfactual-61251": 1,
+    "tanf-zero-counterfactual-61495": 1,
+    "tanf-zero-counterfactual-62327": 1,
+}
 REJECTED_SNAPSHOT_ACTIVE_DRIFT_ROWS_SHA256 = (
     "ae82ff8f1ddc915403bb318acb1f3d393454ff7fc61a913025d9575d708d84ff"
 )
@@ -306,6 +363,8 @@ LIVE_RECEIPT_EXPECTATIONS: dict[str, Any] = {
     "active_drift_rows_sha256": EXPECTED_ACTIVE_DRIFT_ROWS_SHA256,
     "retired_drift_identity_sha256": EXPECTED_RETIRED_DRIFT_IDENTITY_SHA256,
     "retired_drift_rows_sha256": EXPECTED_RETIRED_DRIFT_ROWS_SHA256,
+    "reclassified_drift_ids": EXPECTED_RECLASSIFIED_DRIFT_IDS,
+    "reclassified_drift_rows_sha256": EXPECTED_RECLASSIFIED_DRIFT_ROWS_SHA256,
 }
 REJECTED_SNAPSHOT_RECEIPT_EXPECTATIONS: dict[str, Any] = {
     "reclassified_replacements": REJECTED_SNAPSHOT_RECLASSIFIED_REPLACEMENTS,
@@ -314,6 +373,12 @@ REJECTED_SNAPSHOT_RECEIPT_EXPECTATIONS: dict[str, Any] = {
     "active_drift_rows_sha256": REJECTED_SNAPSHOT_ACTIVE_DRIFT_ROWS_SHA256,
     "retired_drift_identity_sha256": (REJECTED_SNAPSHOT_RETIRED_DRIFT_IDENTITY_SHA256),
     "retired_drift_rows_sha256": REJECTED_SNAPSHOT_RETIRED_DRIFT_ROWS_SHA256,
+    # At the frozen snapshot no drift row had been reclassified yet; the
+    # empty-rows digest keeps the snapshot receipt byte-stable.
+    "reclassified_drift_ids": frozenset(),
+    "reclassified_drift_rows_sha256": (
+        "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    ),
 }
 
 BENEFIT_CONCEPT = "us:statutes/7/2014/u#snap_benefit"
@@ -1413,15 +1478,30 @@ def _partition_receipt(
     drifted_rows = []
     active_drifted_rows = []
     retired_drifted_rows = []
+    reclassified_drifted_rows = []
     dropped_by_id = {entry["id"]: entry for entry in partitions["current_but_dropped"]}
     vanished_by_id = {entry["id"]: entry for entry in partitions["vanished"]}
+    reclassified_by_id = {entry["id"]: entry for entry in partitions["reclassified"]}
     dropped_ids = set(dropped_by_id)
     retired_ids = set(retired_current_drift_pins)
+    # A drift row leaves the active receipt one of two ways: its identity
+    # vanishes from the report (retired), or a later triage covers the
+    # identity with a new schema-validated disposition (reclassified —
+    # the 2026-08 residual-tail entries). Both exits stay receipted.
+    reclassified_drift_ids = set(expectations["reclassified_drift_ids"])
     _require(
-        dropped_ids | retired_ids == set(REQUESTED_MONTH_DRIFT_PINS)
-        and dropped_ids.isdisjoint(retired_ids),
+        dropped_ids | retired_ids | reclassified_drift_ids
+        == set(REQUESTED_MONTH_DRIFT_PINS)
+        and dropped_ids.isdisjoint(retired_ids)
+        and dropped_ids.isdisjoint(reclassified_drift_ids)
+        and retired_ids.isdisjoint(reclassified_drift_ids),
         "requested-month drift receipt ids differ from the active and retired "
         "drift partitions",
+    )
+    _require(
+        reclassified_drift_ids <= set(reclassified_by_id),
+        "reclassified drift receipt ids are not all in the reclassified "
+        "partition",
     )
     _require(
         retired_ids <= set(vanished_by_id),
@@ -1437,7 +1517,13 @@ def _partition_receipt(
     )
     for entry_id in sorted(REQUESTED_MONTH_DRIFT_PINS):
         retired = entry_id in retired_ids
-        entry = vanished_by_id[entry_id] if retired else dropped_by_id[entry_id]
+        reclassified = entry_id in reclassified_drift_ids
+        if retired:
+            entry = vanished_by_id[entry_id]
+        elif reclassified:
+            entry = reclassified_by_id[entry_id]
+        else:
+            entry = dropped_by_id[entry_id]
         key = _identity(entry)
         literal_base_pin = _pin(entry.get("pinned") or {})
         requested_month_pin = REQUESTED_MONTH_DRIFT_PINS[entry_id]
@@ -1459,6 +1545,8 @@ def _partition_receipt(
         drifted_rows.append({**evidence, "current_pin": current_pin})
         if retired:
             retired_drifted_rows.append(evidence)
+        elif reclassified:
+            reclassified_drifted_rows.append({**evidence, "current_pin": current_pin})
         else:
             active_drifted_rows.append({**evidence, "current_pin": current_pin})
     drift_rows_digest = _json_rows_digest(drifted_rows)
@@ -1480,6 +1568,16 @@ def _partition_receipt(
         "retired drift-row receipt digest mismatch: "
         f"expected {expected_retired_drift_rows_sha256}, "
         f"got {retired_drift_rows_digest}",
+    )
+    expected_reclassified_drift_rows_sha256 = expectations[
+        "reclassified_drift_rows_sha256"
+    ]
+    reclassified_drift_rows_digest = _json_rows_digest(reclassified_drifted_rows)
+    _require(
+        reclassified_drift_rows_digest == expected_reclassified_drift_rows_sha256,
+        "reclassified drift-row receipt digest mismatch: "
+        f"expected {expected_reclassified_drift_rows_sha256}, "
+        f"got {reclassified_drift_rows_digest}",
     )
 
     movement_output: dict[str, Any] = {}
