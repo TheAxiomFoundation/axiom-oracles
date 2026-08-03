@@ -804,11 +804,11 @@
       {
         "date": "2026-08-03",
         "in_scope": 12,
-        "covered": 10,
-        "uncovered": 2,
+        "covered": 8,
+        "uncovered": 4,
         "unexplained": 0,
-        "axiom_attributed_open": 0,
-        "gap": 2,
+        "axiom_attributed_open": 2,
+        "gap": 6,
         "conformant": false
       }
     ]
