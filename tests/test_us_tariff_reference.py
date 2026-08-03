@@ -48,7 +48,9 @@ EXPECTED_YALE_COMMIT = "c4307e514196618afcbf88cf7fd33746417eeabf"
 #: durable: the exporter's check against the previous provenance stamp can
 #: be bypassed by editing/deleting the (mutable) stamp before a refresh,
 #: but this constant only changes in reviewed code.
-REVIEWED_COVERED_LINES = frozenset({"7202111000", "7601103000", "9506624040"})
+REVIEWED_COVERED_LINES = frozenset(
+    {"7202111000", "7601103000", "9506624040", "2203000030", "8541420010"}
+)
 
 #: The reviewed country dimension of the Yale panel (240 Schedule C census
 #: codes). A pin bump that changes the upstream country universe must edit
@@ -66,7 +68,7 @@ EXPECTED_COUNTRY_SET_SHA256 = (
 #: these pins in the same reviewed diff — CI accepts no other bytes, so a
 #: restamped provenance cannot certify an altered or narrowed reference.
 EXPECTED_EXTRACT_SHA256 = (
-    "331d92d9ce30067e26c93d3f9f55b18af5e3b53a6846cbbc0f7652ecc1bd96c3"
+    "add5540f497ba2788eb963d58d0e1ca06352026c96f9e14ddb931abbf69d3da5"
 )
 EXPECTED_SNAPSHOT_SHA256 = (
     "ad7d599359d14c7d1d5977cf6b2331b85e25592bc51e594aae140c78a29204a5"
