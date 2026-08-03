@@ -823,7 +823,6 @@ export default function OraclesV2() {
               />
             </a>
             <a href={`${BASE_PATH}/`} className="brand-title">
-              <span className="brand-eyebrow">Interactive</span>
               <span className="brand-name">Oracles</span>
             </a>
           </span>
