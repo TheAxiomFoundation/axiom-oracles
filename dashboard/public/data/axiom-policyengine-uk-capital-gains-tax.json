@@ -99,7 +99,7 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-08-03T04:08:12Z",
+    "generated_at": "2026-08-03T15:27:46Z",
     "generated_by": "scripts/run_comparison.py::uk-capital-gains-tax",
     "oracle": {
       "name": "policyengine",
@@ -108,7 +108,7 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-uk",
-        "sha": "117f759ab656b3013900c0df87b0fb780535476b"
+        "sha": "5d489fe2882ba0a56217b3f47630b360abb67d18"
       }
     ],
     "run_kind": "affected-rerun",
