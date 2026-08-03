@@ -358,22 +358,25 @@ def _validate_entry(
             )
         if not isinstance(selector_binding, dict) or set(
             selector_binding
-        ) != {"units", "abs_difference_sum"}:
+        ) != {"units", "rows_sha256"}:
             errors.append(
                 f"{label} `selector_binding` must be a mapping with exactly "
-                "the keys `units` and `abs_difference_sum`"
+                "the keys `units` and `rows_sha256`"
             )
         else:
             if not isinstance(selector_binding["units"], int):
                 errors.append(
                     f"{label} selector_binding.units must be an integer"
                 )
-            if not isinstance(
-                selector_binding["abs_difference_sum"], int | float
+            rows_sha = selector_binding["rows_sha256"]
+            if not (
+                isinstance(rows_sha, str)
+                and len(rows_sha) == 64
+                and all(c in "0123456789abcdef" for c in rows_sha)
             ):
                 errors.append(
-                    f"{label} selector_binding.abs_difference_sum must be "
-                    "a number"
+                    f"{label} selector_binding.rows_sha256 must be a "
+                    "64-char lowercase hex sha256"
                 )
 
     pinned = entry.get("pinned")
@@ -508,6 +511,29 @@ def dispositions_path_for_suite(
     return candidate if candidate.exists() else None
 
 
+def selected_rows_sha256(rows: list[dict]) -> str:
+    """Canonical digest of a selected mismatch population.
+
+    Sorted by case id; each row contributes its identity plus the exact
+    ``left``/``right``/signed ``difference`` values, so any value movement —
+    sign flips, balanced multi-row swaps, anything that preserves aggregates —
+    changes the digest (sol closing review r2 finding 2).
+    """
+    canonical = sorted(
+        [
+            str(row.get("case_id")),
+            str(row.get("concept")),
+            json.dumps(row.get("left"), sort_keys=True),
+            json.dumps(row.get("right"), sort_keys=True),
+            json.dumps(row.get("difference"), sort_keys=True),
+        ]
+        for row in rows
+    )
+    return hashlib.sha256(
+        json.dumps(canonical, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
+
+
 def _pin_matches(pinned: dict | None, row: dict) -> bool:
     if not pinned:
         return True
@@ -582,7 +608,9 @@ def apply_dispositions(
     applied_rows = 0
     entry_applied = {str(entry.get("id")): 0 for entry in entries}
     entry_pin_failed = {str(entry.get("id")): 0 for entry in entries}
-    entry_abs_diff_sum = {str(entry.get("id")): 0.0 for entry in entries}
+    entry_selected_rows: dict[str, list[dict]] = {
+        str(entry.get("id")): [] for entry in entries
+    }
     entry_by_id = {str(entry.get("id")): entry for entry in entries}
 
     # Pass 1 — tentative assignment. Rows are matched to their winning entry
@@ -601,18 +629,17 @@ def apply_dispositions(
                 continue
             winner = entry_id
             entry_applied[entry_id] += 1
-            diff = row.get("difference")
-            if isinstance(diff, int | float):
-                entry_abs_diff_sum[entry_id] += abs(float(diff))
+            entry_selected_rows[entry_id].append(row)
             break
         row_winner.append(winner)
 
-    # Selector-binding validation (sol closing review F4): an entry whose
-    # binding no longer matches its live selected population — unit count or
-    # summed |difference| drifted — has its declared mechanism basis changed
-    # by a source change. Per ``expires_on_source_change`` semantics the
-    # entry EXPIRES and its rows return to unexplained; the drift can never
-    # ride an old classification.
+    # Selector-binding validation (sol closing review F4, hardened in r2):
+    # the binding pins a canonical per-row digest of the selected population
+    # — identity plus left/right/signed difference — so ANY value movement,
+    # including sign flips and balanced multi-row changes that preserve
+    # aggregates, violates it. Per ``expires_on_source_change`` semantics a
+    # violated entry EXPIRES and its rows return to unexplained; drift can
+    # never ride an old classification.
     binding_violated: set[str] = set()
     for entry in entries:
         entry_id = str(entry.get("id"))
@@ -620,11 +647,11 @@ def apply_dispositions(
         if not binding or entry_applied[entry_id] == 0:
             continue
         units_match = entry_applied[entry_id] == binding["units"]
-        sum_match = (
-            abs(entry_abs_diff_sum[entry_id] - float(binding["abs_difference_sum"]))
-            <= 1e-9
+        digest_match = (
+            selected_rows_sha256(entry_selected_rows[entry_id])
+            == binding["rows_sha256"]
         )
-        if not (units_match and sum_match):
+        if not (units_match and digest_match):
             binding_violated.add(entry_id)
 
     # Pass 2 — annotate, skipping entries whose binding was violated.

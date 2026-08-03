@@ -1478,6 +1478,17 @@ def test_scoreboard_exclusion_invalidated_by_nonzero_live_exposure():
     by_name = {s.oracle_policy_name: s for s in scores}
     assert by_name["c"].status == "excluded:INVALID-nonzero-exposure"
 
+    # Order independence (sol r2 finding 1): a zero-exposure duplicate of the
+    # same suite must never shadow the nonzero report, in either order.
+    zero_dup = _report("suite-a", comparisons=5, matches=5)
+    zero_dup["scope"] = {"column_exposure": {"x_s": 5, "z_s": 0}}
+    nonzero = _report("suite-a", comparisons=5, matches=5)
+    nonzero["scope"] = {"column_exposure": {"x_s": 5, "z_s": 7}}
+    for ordering in ([zero_dup, nonzero], [nonzero, zero_dup]):
+        board, _ = score_jurisdiction(universe, ordering)
+        assert board.conformant is False, "duplicate-suite order bypass"
+        assert board.invalid_exclusions == ["c"]
+
 
 def test_scoreboard_without_exposure_basis_keeps_presence_coverage():
     """Reports with no scope.column_exposure (other jurisdictions) keep the

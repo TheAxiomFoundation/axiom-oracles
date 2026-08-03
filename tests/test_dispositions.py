@@ -807,7 +807,6 @@ def test_selector_binding_violation_expires_entry_and_unclassifies_rows():
         "disposition": "explained_residual",
         "evidence": {"mechanism": "test"},
         "expires_on_source_change": True,
-        "selector_binding": {"units": 2, "abs_difference_sum": 0.29},
     }
     report = {
         "schema_version": "axiom.comparison_report.v2",
@@ -823,8 +822,15 @@ def test_selector_binding_violation_expires_entry_and_unclassifies_rows():
              "left": 0.0, "right": 0.145, "difference": -0.145},
         ],
     }
-    from axiom_oracles.comparison.dispositions import apply_dispositions
+    from axiom_oracles.comparison.dispositions import (
+        apply_dispositions,
+        selected_rows_sha256,
+    )
 
+    entry["selector_binding"] = {
+        "units": 2,
+        "rows_sha256": selected_rows_sha256(report["mismatches"]),
+    }
     merged = apply_dispositions(report, {"entries": [entry]})
     block = merged["summary"]["dispositioned"]
     assert block["unexplained_count"] == 0
@@ -842,6 +848,18 @@ def test_selector_binding_violation_expires_entry_and_unclassifies_rows():
     assert block["binding_violated_entries"] == ["sel-bound"]
     assert block["unexplained_count"] == 2
     assert all("disposition" not in row for row in merged["mismatches"])
+
+    # Sol r2 finding 2: a sign flip preserves unit count and |difference|
+    # aggregates — the per-row digest must still trip.
+    flipped = json.loads(json.dumps(report))
+    flipped["mismatches"][1]["left"] = 0.145
+    flipped["mismatches"][1]["right"] = 0.0
+    flipped["mismatches"][1]["difference"] = 0.145
+    merged = apply_dispositions(flipped, {"entries": [entry]})
+    block = merged["summary"]["dispositioned"]
+    assert block["expired_entries"] == ["sel-bound"]
+    assert block["binding_violated_entries"] == ["sel-bound"]
+    assert block["unexplained_count"] == 2
 
     # Vacuity: unit-count drift alone (a selected row vanishing) also trips.
     shrunk = json.loads(json.dumps(report))

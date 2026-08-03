@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
-"""Stamp selector_binding aggregates into a suite's disposition entries.
+"""Stamp selector_binding digests into a suite's disposition entries.
 
 For every ``case_selector`` entry in ``dispositions/<suite>.yaml``, replay the
 merge against the committed FULL report and record the selected population's
-aggregate — ``units`` (row count) and ``abs_difference_sum`` (summed absolute
-difference) — as the entry's ``selector_binding``. The merge validates the
-binding on every subsequent application: a source change that moves any
-selected row's values expires the entry and returns its rows to unexplained
-(``expires_on_source_change`` made real for selector entries; sol closing
-review F4).
+``units`` (row count) and ``rows_sha256`` — a canonical per-row digest over
+identity, left, right, and signed difference — as the entry's
+``selector_binding``. The merge validates the binding on every application: a
+source change that moves ANY selected row's values (including sign flips and
+balanced multi-row changes that preserve aggregates) expires the entry and
+returns its rows to unexplained (``expires_on_source_change`` made real for
+selector entries; sol closing review F4, hardened in r2).
 
 Run after any legitimate refresh that changes selected values, in the same
 commit as the refreshed report:
@@ -32,6 +33,7 @@ sys.path.insert(0, str(REPO))
 from axiom_oracles.comparison.dispositions import (  # noqa: E402
     _entry_selects_row,
     _pin_matches,
+    selected_rows_sha256,
 )
 
 
@@ -59,7 +61,7 @@ def main() -> int:
     entries = data.get("entries") or []
 
     applied: dict[str, int] = {}
-    sums: dict[str, float] = {}
+    selected: dict[str, list[dict]] = {}
     for row in report.get("mismatches") or []:
         for entry in entries:
             if not _entry_selects_row(entry, row):
@@ -68,9 +70,7 @@ def main() -> int:
                 continue
             entry_id = str(entry.get("id"))
             applied[entry_id] = applied.get(entry_id, 0) + 1
-            diff = row.get("difference")
-            if isinstance(diff, int | float):
-                sums[entry_id] = sums.get(entry_id, 0.0) + abs(float(diff))
+            selected.setdefault(entry_id, []).append(row)
             break
 
     # Textual insertion — the committed file is hand-formatted (block-scalar
@@ -96,7 +96,7 @@ def main() -> int:
         binding_block = (
             "  selector_binding:\n"
             f"    units: {applied[entry_id]}\n"
-            f"    abs_difference_sum: {round(sums.get(entry_id, 0.0), 9)}\n"
+            f"    rows_sha256: {selected_rows_sha256(selected[entry_id])}\n"
         )
         # Locate this entry's block: from its `- id: <entry_id>` line to the
         # next top-level entry or EOF.

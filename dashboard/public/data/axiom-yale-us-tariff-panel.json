@@ -74619,18 +74619,18 @@
   ],
   "population": "yale-panel-covered-slice",
   "provenance": {
-    "engine": {},
-    "generated_at": "2026-08-03T21:21:08Z",
-    "generated_by": "scripts/run_comparison.py::us-tariff-panel",
-    "reemitted_from": {
-      "generated_at": "2026-08-03T20:47:10Z",
-      "path": "reports/axiom-yale-us-tariff-panel-all-2026-08-03.json"
+    "engine": {
+      "axiom_rules_engine_sha": "ffd8213271947b0189a9dd61a055c1e0e78908a0",
+      "axiom_rules_engine_version": "0.1.0",
+      "binary": "/Users/maxghenis/TheAxiomFoundation/_tariff-t0/wt-engine/target/release/axiom-rules-engine",
+      "binary_sha256": "674ca6e70afdccb59c3d6847933bc24b4590105e49db54790f2dcd0bdbbe32d7"
     },
-    "reemitted_report": true,
+    "generated_at": "2026-08-03T21:40:25Z",
+    "generated_by": "scripts/run_comparison.py::us-tariff-panel",
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": null
+        "sha": "dbf09f44eddd00b7ad5520f89371ebe8fdf0b7df"
       }
     ],
     "run_kind": "manual",
@@ -76656,7 +76656,7 @@
       "schema_version": "axiom_oracles.dispositions.v1",
       "source_report": {
         "path": "reports/axiom-yale-us-tariff-panel-all-2026-08-03.json",
-        "sha256": "4bc1f94221c1a5f7ba5e232c31aaf84be299c50ce2cf68f3a955d8b83bc12086"
+        "sha256": "86c233be1d7857e6ce6be28c889285204f9bd76eadac6eb9b21f37cf88009e89"
       },
       "unexplained_count": 0
     },

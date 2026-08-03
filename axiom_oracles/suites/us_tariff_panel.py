@@ -93,8 +93,8 @@ AUTHORITY_SLOTS: dict[str, tuple[str | None, tuple[str, ...]]] = {
     "brazil_section_301": (BRAZIL_301, ("statutory_rate_s301br",)),
     "forced_labor_section_301": (FORCED_LABOR_301, ("statutory_rate_s301fl",)),
     # No counterpart encoded (None): statutory_rate_301_cs and
-    # statutory_rate_other are identically zero across the entire Yale panel
-    # spine (verified over all 12 lines x all countries x all intervals
+    # statutory_rate_other are identically zero across the committed extract
+    # (verified over the covered lines x all countries x all intervals
     # during lane E witness selection), so no covered line can exercise
     # them; the column_exposure witness keeps any covered claim honest.
     "china_semiconductor_section_301": (None, ("statutory_rate_301_cs",)),

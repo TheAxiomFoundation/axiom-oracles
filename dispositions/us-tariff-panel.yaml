@@ -7808,7 +7808,7 @@ entries:
   expires_on_source_change: true
   selector_binding:
     units: 7755
-    abs_difference_sum: 1124.475
+    rows_sha256: 84e49befab766f0ffe645851b5be6cd05c0a9f421e6f2cfe84aea7ba17581978
 - id: "7601103000-s122-0v10--s122-metal-exclusion"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -12305,7 +12305,7 @@ entries:
   expires_on_source_change: true
   selector_binding:
     units: 4465
-    abs_difference_sum: 446.5
+    rows_sha256: e294f60006fadb8c98cb4bdb7404db310d49bc8bda98eeac5354863a6909a08b
 - id: "2203000030-s232-0v50--s232-beer-aluminum-content-basis"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -14259,7 +14259,7 @@ entries:
   expires_on_source_change: true
   selector_binding:
     units: 1912
-    abs_difference_sum: 956.0
+    rows_sha256: eb35503520b0a091162628c0e96a4078570dc9f79447e37b798268da846523b0
 - id: "7601103000-ieepa-0v10--ieepa-metals-exclusion"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -14567,7 +14567,7 @@ entries:
   expires_on_source_change: true
   selector_binding:
     units: 278
-    abs_difference_sum: 27.8
+    rows_sha256: 2d60fbc0c1e4467d80c62d13096717ba615b8729bb510e3f125d838a8bd59373
 - id: "7202111000-mfn-6p5v1p4--mfn-column2-reference-gap"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -14728,7 +14728,7 @@ entries:
   expires_on_source_change: true
   selector_binding:
     units: 132
-    abs_difference_sum: 6.732
+    rows_sha256: f884f0bf5895236b4b0ec2dfbdb4838c2d9a2899807c6367f7a6dc62aededaa7
 - id: "8541420010-mfn-35v0+s201-0v14p5--mfn-column2-reference-gap+s201-solar-safeguard-expiry"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -14910,7 +14910,7 @@ entries:
   expires_on_source_change: true
   selector_binding:
     units: 132
-    abs_difference_sum: 27.06
+    rows_sha256: 298fefc8566c9d98cd4af31bd5c96f08cda4ae730720cda47b4aec004a49a14f
 - id: "9506624040-mfn-30v0--mfn-column2-reference-gap"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -15071,7 +15071,7 @@ entries:
   expires_on_source_change: true
   selector_binding:
     units: 132
-    abs_difference_sum: 39.6
+    rows_sha256: 6a6450fa505dc1e18a60aa70b2b658a5939100304fbc3c2d20cee346c87d0e21
 - id: "7601103000-ieepa-0v15--ieepa-metals-exclusion"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -15173,7 +15173,7 @@ entries:
   expires_on_source_change: true
   selector_binding:
     units: 72
-    abs_difference_sum: 10.8
+    rows_sha256: 86c2e8244b74ab1bb91169dd566e7ff754918c161c0ce5e4d1b7531ade7daf60
 - id: "7601103000-ieepa-0v12p4--ieepa-metals-exclusion"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -15263,7 +15263,7 @@ entries:
   expires_on_source_change: true
   selector_binding:
     units: 60
-    abs_difference_sum: 7.44
+    rows_sha256: c6aaa2e824d40cb315615da08ae3281e5364c7a623e679df0ed0cfc6f930e9cc
 - id: "7601103000-mfn-18p5v2p6+s122-0v10--mfn-column2-reference-gap+s122-metal-exclusion"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -15363,7 +15363,7 @@ entries:
   expires_on_source_change: true
   selector_binding:
     units: 57
-    abs_difference_sum: 3.363
+    rows_sha256: fadabe3a14fc00e87283aa493e3de561c578230129361d9e262207a260330710
 - id: "7601103000-mfn-18p5v2p6--mfn-column2-reference-gap"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -15428,7 +15428,7 @@ entries:
   expires_on_source_change: true
   selector_binding:
     units: 36
-    abs_difference_sum: 5.724
+    rows_sha256: e8ff42d02f54f6a346bb5e9d750af00d691ff1d93692239498f9f9a09779f38b
 - id: "7202111000-mfn-0v1p4--mfn-fta-preference-layer"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -15488,7 +15488,7 @@ entries:
   expires_on_source_change: true
   selector_binding:
     units: 33
-    abs_difference_sum: 0.462
+    rows_sha256: ef7a4780ce1a756698d7431776772178a350cce1163ae824fe39e7ccc2af88f3
 - id: "7601103000-mfn-0v2p6+s122-0v10--mfn-fta-preference-layer+s122-metal-exclusion"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -15547,7 +15547,7 @@ entries:
   expires_on_source_change: true
   selector_binding:
     units: 19
-    abs_difference_sum: 2.394
+    rows_sha256: edb146aa3ce06330cc2010fac38ab45ea2cc9356ad2d1564073890c52c468943
 - id: "7601103000-mfn-70v2p6+s122-0v10--mfn-column2-reference-gap+s122-metal-exclusion"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -15612,7 +15612,7 @@ entries:
   expires_on_source_change: true
   selector_binding:
     units: 19
-    abs_difference_sum: 10.906
+    rows_sha256: 95374d300ec2d7a0f962041e7153ff2fee89e5e9c348d0be4ea50f5ee40a5ff2
 - id: "7601103000-ieepa-0v19--ieepa-metals-exclusion"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -15654,7 +15654,7 @@ entries:
   expires_on_source_change: true
   selector_binding:
     units: 12
-    abs_difference_sum: 2.28
+    rows_sha256: bd6aa20610fd4624f24c73b704f762b07dc1a21bf3245e8609edbdc92bc45beb
 - id: "7601103000-mfn-0v2p6--mfn-fta-preference-layer"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -15693,7 +15693,7 @@ entries:
   expires_on_source_change: true
   selector_binding:
     units: 12
-    abs_difference_sum: 0.312
+    rows_sha256: dba8520630d03499e9e2dfd3e5e96a14ba81917fd0fa86032b9b325e9ce1d819
 - id: "7601103000-mfn-70v2p6--mfn-column2-reference-gap"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -15736,7 +15736,7 @@ entries:
   expires_on_source_change: true
   selector_binding:
     units: 12
-    abs_difference_sum: 8.088
+    rows_sha256: 62c237ef40bc76963f3610c7a4be3b380ebd60924c0807e670f2b7c3c5dab349
 - id: "7601103000-ieepa-0v25--ieepa-metals-exclusion"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -15776,7 +15776,7 @@ entries:
   expires_on_source_change: true
   selector_binding:
     units: 10
-    abs_difference_sum: 2.5
+    rows_sha256: 8273c144002cbde596a9063947a97166dbec8f2d5e980da1351eb072b3238b4b
 - id: "2203000030-s232-0v25--s232-beer-aluminum-content-basis"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -15827,7 +15827,7 @@ entries:
   expires_on_source_change: true
   selector_binding:
     units: 8
-    abs_difference_sum: 2.0
+    rows_sha256: b6492a6bea31e1dd8efe4d0a2df5b0f12417a363c5db3cb44adfdf1787c5f9e9
 - id: "7601103000-ieepa-0v20--ieepa-metals-exclusion"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -15865,7 +15865,7 @@ entries:
   expires_on_source_change: true
   selector_binding:
     units: 8
-    abs_difference_sum: 1.6
+    rows_sha256: fcd1ecf94eda51e5148028825e0158cbe22fee686a015259192607dbfce00529
 - id: "7601103000-ieepa-0v30--ieepa-metals-exclusion"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -15903,7 +15903,7 @@ entries:
   expires_on_source_change: true
   selector_binding:
     units: 8
-    abs_difference_sum: 2.4
+    rows_sha256: 405ab37726eebc992c8f4d6a1392d10eba20c7b4f93404142d813093f3a2cd95
 - id: "7601103000-ieepa-0v10+mfn-18p5v2p6--ieepa-metals-exclusion+mfn-column2-reference-gap"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -15950,7 +15950,7 @@ entries:
   expires_on_source_change: true
   selector_binding:
     units: 6
-    abs_difference_sum: 0.354
+    rows_sha256: 9d585a397a3f4d537f6dcae99a6a287a9332a5db54a121fd3ae70a77c545ab37
 - id: "7601103000-ieepa-0v35--ieepa-metals-exclusion"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -15984,7 +15984,7 @@ entries:
   expires_on_source_change: true
   selector_binding:
     units: 4
-    abs_difference_sum: 1.4
+    rows_sha256: 65449e21436c30b4c89c263ebcab3ce49c7c98cc14d76ebf02b64ceb67c114b4
 - id: "7601103000-ieepa-0v40--ieepa-metals-exclusion"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -16018,7 +16018,7 @@ entries:
   expires_on_source_change: true
   selector_binding:
     units: 4
-    abs_difference_sum: 1.6
+    rows_sha256: 3275251137840bc87826c897bf486558f1ea4db7bc58fc7b8bb9aa0a2cc93180
 - id: "7601103000-ieepa-10v20--ieepa-metals-exclusion"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -16052,7 +16052,7 @@ entries:
   expires_on_source_change: true
   selector_binding:
     units: 4
-    abs_difference_sum: 0.4
+    rows_sha256: d60c7b7be5ce38699e15215d73c25af48239ac4026ef37cd07af9c570e9ae844
 - id: "7601103000-ieepa-0v10+mfn-70v2p6--ieepa-metals-exclusion+mfn-column2-reference-gap"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -16097,7 +16097,7 @@ entries:
   expires_on_source_change: true
   selector_binding:
     units: 2
-    abs_difference_sum: 1.148
+    rows_sha256: 440fe78135f41a954fb21a2fe70afaf0a019e4d4b6eca4c63622308d86252fb8
 - id: "7601103000-ieepa-0v12p4+mfn-0v2p6--ieepa-metals-exclusion+mfn-fta-preference-layer"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -16138,7 +16138,7 @@ entries:
   expires_on_source_change: true
   selector_binding:
     units: 2
-    abs_difference_sum: 0.3
+    rows_sha256: 3b7851e788b5710dc0a0d4f0c540d8e39334cba8420e7b1e29f8aaac8c2c8993
 - id: "7601103000-ieepa-0v18--ieepa-metals-exclusion"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -16170,7 +16170,7 @@ entries:
   expires_on_source_change: true
   selector_binding:
     units: 2
-    abs_difference_sum: 0.36
+    rows_sha256: 21e688420f2c163443a19853ede645dd03edc4660761ec78c963f83ec2788b6d
 - id: "7601103000-ieepa-0v41--ieepa-metals-exclusion"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -16202,7 +16202,7 @@ entries:
   expires_on_source_change: true
   selector_binding:
     units: 2
-    abs_difference_sum: 0.82
+    rows_sha256: d98083c7b2f8ef9c2e6e965fe8504586850b96c4d338fefddf8bd506a738dcf3
 - id: "7601103000-ieepa-0v50--ieepa-metals-exclusion"
   concept: "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate"
   kind: total_difference
@@ -16234,4 +16234,4 @@ entries:
   expires_on_source_change: true
   selector_binding:
     units: 2
-    abs_difference_sum: 1.0
+    rows_sha256: 709507ec23410f5f7edfaee9ee0743c112ef42df9c2963af460c7ed18f45c344

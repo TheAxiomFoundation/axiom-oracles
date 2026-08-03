@@ -5,8 +5,10 @@ comparison reports (what Axiom actually matches) into one per-jurisdiction verdi
 against an exact predicate:
 
     conformant  ⇔  covered == in_scope
-                    AND unexplained_total == 0
-                    AND axiom_attributed_open == 0
+                   AND unexplained_total == 0
+                   AND axiom_attributed_open == 0
+                   AND no invalidated exclusions (nonzero live exposure on an
+                       excluded policy's output column blocks the verdict)
 
 "Covered" is decided from *live evidence*, not intent: an in-scope policy counts
 as covered only when its named suite has a committed comparison report present
@@ -184,6 +186,9 @@ def score_jurisdiction(
 ) -> tuple[JurisdictionScoreboard, list[PolicyScore]]:
     """Compute the scoreboard + per-policy drill-down for one jurisdiction."""
     suite_index = _report_suite_index(reports)
+    #: The raw, uncollapsed report list — exclusion-tripwire scans must see
+    #: every report, order-independently (sol closing review r2 finding 1).
+    all_reports = list(reports)
 
     policy_scores: list[PolicyScore] = []
     excluded_by_reason: dict[str, int] = {}
@@ -211,9 +216,12 @@ def score_jurisdiction(
         if not policy.in_scope:
             reason = policy.exclusion_reason or "unspecified"
             excluded_by_reason[reason] = excluded_by_reason.get(reason, 0) + 1
+            # Scan EVERY raw report, not the collapsed suite index — a
+            # zero-exposure duplicate must never shadow a nonzero one
+            # (order-independence; sol closing review r2 finding 1).
             exclusion_violated = False
             if policy.output_vars:
-                for report in suite_index.values():
+                for report in all_reports:
                     exposure = (report.get("scope") or {}).get("column_exposure")
                     if isinstance(exposure, dict) and any(
                         (exposure.get(var) or 0) > 0
