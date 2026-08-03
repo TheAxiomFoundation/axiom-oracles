@@ -195,38 +195,33 @@
       "jurisdiction": "us-tariff-yale",
       "oracle": "tariff-rate-tracker_c4307e514196618afcbf88cf7fd33746417eeabf/statutory_panel",
       "policies_in_scope": 12,
-      "covered": 8,
-      "covered_pct": 66.6667,
+      "covered": 10,
+      "covered_pct": 83.3333,
       "excluded": 2,
       "excluded_by_reason": {
         "technical": 2
       },
       "unexplained_total": 0,
-      "axiom_attributed_open": 2,
-      "oracle_attributed": 396,
+      "axiom_attributed_open": 0,
+      "oracle_attributed": 8283,
       "bridge_artifacts": 0,
       "conformant": false,
       "uncovered_policies": [
         "other",
-        "rate_301_cs",
-        "section_201",
-        "section_338"
+        "rate_301_cs"
       ],
       "unwitnessed_policies": [
         "other",
-        "rate_301_cs",
-        "section_201",
-        "section_338"
+        "rate_301_cs"
       ],
       "temporal_debt": {
-        "pre_domain_intervals": 28800,
-        "straddle_clipped_intervals": 720,
-        "addressable_records": 123
+        "pre_domain_intervals": 48000,
+        "straddle_clipped_intervals": 1200,
+        "addressable_records": 205
       },
       "blocking_reasons": [
-        "4 of 12 in-scope policies are not covered by a live suite: other, rate_301_cs, section_201, section_338",
-        "4 of those have a report but no positive-exposure witness \u2014 the reference never exercises their output columns with a nonzero rate: other, rate_301_cs, section_201, section_338",
-        "2 open Axiom-attributed encoding gap(s)"
+        "2 of 12 in-scope policies are not covered by a live suite: other, rate_301_cs",
+        "2 of those have a report but no positive-exposure witness \u2014 the reference never exercises their output columns with a nonzero rate: other, rate_301_cs"
       ]
     }
   ]
