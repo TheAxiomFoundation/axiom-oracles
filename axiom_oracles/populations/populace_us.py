@@ -438,11 +438,49 @@ class PopulaceUsCaseLoader:
             )
             for concept, pe_variable in _PERSON_NON_WAGE_VARIABLES.items()
         }
+        # TANF is SPM-unit-level and, like person-level SSI above, simulated by
+        # PolicyEngine on the populace rather than reported. Capture each
+        # unit's amount exactly once — on the unit's first member — so
+        # sum-over-people projections carry the unit total, and the
+        # PolicyEngine adapter can hand the same value back as a `tanf` input
+        # instead of letting PE re-simulate an income the Axiom side never saw.
+        person_spm_unit_ids = _calculate_values(
+            sim,
+            "person_spm_unit_id",
+            period,
+            map_to="person",
+            default=None,
+            size=size,
+        )
+        spm_unit_ids = _calculate_values(
+            sim, "spm_unit_id", period, default=None, size=0
+        )
+        spm_unit_tanf = _calculate_values(
+            sim, "tanf", period, default=0, size=len(spm_unit_ids)
+        )
+        tanf_by_spm_unit = {
+            _clean_id(unit_id): float(_clean_number(amount))
+            for unit_id, amount in zip(spm_unit_ids, spm_unit_tanf, strict=False)
+            if unit_id is not None
+        }
 
         people_by_household: dict[int | str, list[_PersonRow]] = defaultdict(list)
+        seen_spm_units: set[int | str] = set()
         for index, household_id in enumerate(household_ids):
             key = _clean_id(household_id)
             person_id = person_ids[index]
+            person_non_wage = {
+                concept: float(_clean_number(values[index]))
+                for concept, values in non_wage_income.items()
+            }
+            person_spm_unit = person_spm_unit_ids[index]
+            if person_spm_unit is not None:
+                spm_key = _clean_id(person_spm_unit)
+                if spm_key not in seen_spm_units:
+                    seen_spm_units.add(spm_key)
+                    unit_tanf = tanf_by_spm_unit.get(spm_key, 0.0)
+                    if unit_tanf:
+                        person_non_wage[Concepts.TANF_BENEFITS] = unit_tanf
             people_by_household[key].append(
                 _PersonRow(
                     person_id=(
@@ -465,10 +503,7 @@ class PopulaceUsCaseLoader:
                     blind=bool(blind[index]),
                     veteran=bool(veteran[index]),
                     benefits_medicaid=bool(medicaid[index]),
-                    non_wage_income={
-                        concept: float(_clean_number(values[index]))
-                        for concept, values in non_wage_income.items()
-                    },
+                    non_wage_income=person_non_wage,
                 )
             )
         return people_by_household

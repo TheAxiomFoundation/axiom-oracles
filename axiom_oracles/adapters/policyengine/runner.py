@@ -363,6 +363,7 @@ class PolicyEngineRunner(EngineAdapter):
             value = case.fact(concept)
             if value is not None:
                 spm_unit_inputs[pe_variable] = {year: float(value)}
+        spm_unit_inputs["tanf"] = {year: _case_spm_unit_tanf(person_entities)}
 
         return {
             "people": people,
@@ -422,6 +423,7 @@ class PolicyEngineRunner(EngineAdapter):
             value = case.fact(concept)
             if value is not None:
                 spm_unit_inputs[pe_variable] = float(value)
+        spm_unit_inputs["tanf"] = _case_spm_unit_tanf(person_entities)
 
         return {
             "people": people,
@@ -630,6 +632,7 @@ class PolicyEngineRunner(EngineAdapter):
                 {"marital_unit_id": marital_unit_id, "marital_unit_weight": weight}
             )
             family_rows.append({"family_id": family_id, "family_weight": weight})
+            person_entities = list(case.entities_of_kind("person"))
             spm_unit_row: dict[str, Any] = {
                 "spm_unit_id": spm_unit_id,
                 "spm_unit_weight": weight,
@@ -640,6 +643,11 @@ class PolicyEngineRunner(EngineAdapter):
                 value = case.fact(concept)
                 if value is not None:
                     spm_unit_row[pe_variable] = float(value)
+            # Pin TANF to the case's own amount (captured per unit on the
+            # populace, 0 when the case declares none) so PE budgets the same
+            # welfare income the case carries instead of re-simulating state
+            # TANF the counterpart engine never saw.
+            spm_unit_row["tanf"] = _case_spm_unit_tanf(person_entities)
             spm_unit_rows.append(spm_unit_row)
             tax_unit_row: dict[str, Any] = {
                 "tax_unit_id": tax_unit_id,
@@ -654,7 +662,6 @@ class PolicyEngineRunner(EngineAdapter):
             tax_unit_rows.append(tax_unit_row)
 
             person_ids = []
-            person_entities = list(case.entities_of_kind("person"))
             head, spouse = _tax_filers(person_entities)
             for person_index, entity in enumerate(person_entities):
                 person_id = _namespaced_entity_id(
@@ -789,6 +796,21 @@ class PolicyEngineRunner(EngineAdapter):
         if mapped:
             return mapped
         return list(requested)
+
+
+def _case_spm_unit_tanf(person_entities: Sequence[Entity]) -> float:
+    """Unit-level TANF a case carries, summed over its people.
+
+    The populace captures each SPM unit's PolicyEngine-simulated TANF once, on
+    the unit's first member (``Concepts.TANF_BENEFITS``). Handing the sum back
+    to PE as the ``tanf`` input — 0 when the case declares none — keeps both
+    engines budgeting identical welfare income; without it PE re-simulates
+    state TANF that the counterpart engine never saw.
+    """
+    return sum(
+        float(entity.fact(Concepts.TANF_BENEFITS, 0) or 0)
+        for entity in person_entities
+    )
 
 
 def _namespaced_entity_id(prefix: str, entity_id: str) -> str:
