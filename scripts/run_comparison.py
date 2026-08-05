@@ -938,7 +938,7 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
         # run). Matches the pin the runner installs into its isolated env.
         if "taxcalc" in engines:
             oracle["taxcalc"] = "6.7.1"
-    elif runner_type == "federal-tax-liability-grid":
+    elif runner_type in ("federal-tax-liability-grid", "snap-abawd-boundary-grid"):
         pins = _resolve_pe_oracle_pins(params)
         oracle = {
             "name": "policyengine",
@@ -2512,6 +2512,152 @@ def _run_federal_tax_liability_grid(runner: dict, output: Path) -> None:
     subprocess.run(cmd, check=True, cwd=REPO_ROOT)
 
 
+# The one file the ABAWD boundary generator reads from the rulespec tree;
+# its bytes are verified against HEAD's copy below, so no working-tree
+# trick (including skip-worktree-hidden edits, which git status does not
+# show) can run modified law under a clean commit identity.
+_ABAWD_FIXTURE_RELPATH = "us/regulations/7-cfr/273/24.test.yaml"
+
+
+def _rulespec_checkout_unclean_reason(
+    root: Path,
+    verify_files: tuple[str, ...] = (_ABAWD_FIXTURE_RELPATH,),
+) -> str | None:
+    """Why a floating (unpinned) rulespec root cannot be trusted, or None.
+
+    The ABAWD boundary generator reads fixture bytes straight from the tree
+    while provenance records ``git rev-parse HEAD``, so a dirty or non-git
+    tree could run modified law under a clean commit identity.  Beyond the
+    porcelain check, the files the generator actually consumes are compared
+    byte-for-byte against ``HEAD``'s copies — ``git status`` stays silent
+    about modifications hidden behind ``skip-worktree``, and the byte
+    identity of the consumed law is the property that matters.  A root that
+    fails any check is rejected and the runner falls back to a fresh clone.
+    """
+
+    try:
+        inside = subprocess.run(
+            ["git", "-C", str(root), "rev-parse", "--is-inside-work-tree"],
+            capture_output=True,
+            text=True,
+        )
+    except OSError:
+        return "git is unavailable to verify it"
+    if inside.returncode != 0 or inside.stdout.strip() != "true":
+        return "not a git work tree, so provenance cannot record a real SHA"
+    status = subprocess.run(
+        ["git", "-C", str(root), "status", "--porcelain"],
+        capture_output=True,
+        text=True,
+    )
+    if status.returncode != 0:
+        return "git status failed"
+    if status.stdout.strip():
+        return "working tree is dirty, so fixture bytes would not match HEAD"
+    for relpath in verify_files:
+        committed = subprocess.run(
+            ["git", "-C", str(root), "show", f"HEAD:{relpath}"],
+            capture_output=True,
+        )
+        if committed.returncode != 0:
+            return f"HEAD does not carry {relpath}"
+        try:
+            on_disk = (root / relpath).read_bytes()
+        except OSError:
+            return f"{relpath} is unreadable in the work tree"
+        if on_disk != committed.stdout:
+            return (
+                f"{relpath} differs from HEAD's copy "
+                "(a skip-worktree-hidden edit?)"
+            )
+    return None
+
+
+def _run_snap_abawd_boundary_grid(runner: dict, output: Path) -> None:
+    """Run the SNAP ABAWD post-P.L. 119-21 statute-boundary grid.
+
+    Same contract as the federal tax-liability grids: the Axiom leg replays
+    the rulespec-us 7 CFR 273.24 companion fixture (engine-verified in
+    rulespec-us CI), the PolicyEngine leg builds fresh person-level monthly
+    simulations under the reviewed 2026 oracle stack, and a missing fixture or
+    unavailable PolicyEngine wheel fails the run instead of replaying
+    committed evidence.  Unlike those grids the rulespec snapshot is
+    deliberately unpinned: each run clones rulespec-us main (or reads the
+    materialized CI checkout) and stamps its real HEAD into provenance, so the
+    affected-rerun sweep re-runs the boundary matrix whenever rulespec-us
+    moves and the generator's pinned legal expectations turn an encoding
+    regression at the statute boundaries into a loud failure.
+    """
+    params = runner["parameters"]
+    required_pins = {
+        "policyengine_version": "4.18.9",
+        "policyengine_us_version": "1.767.3",
+        "policyengine_core_version": "3.30.3",
+    }
+    incorrect_pins = {
+        key: params.get(key)
+        for key, expected in required_pins.items()
+        if params.get(key) != expected
+    }
+    if incorrect_pins:
+        expected = ", ".join(
+            f"{key}={version}" for key, version in required_pins.items()
+        )
+        raise SystemExit(
+            "snap-abawd-boundary-grid requires the reviewed 2026 oracle "
+            f"stack ({expected}); received {incorrect_pins}"
+        )
+    raw_roots = params.get("rulespec_roots") or []
+    if not isinstance(raw_roots, list) or not raw_roots:
+        raise SystemExit(
+            "snap-abawd-boundary-grid requires runner.parameters.rulespec_roots"
+        )
+    roots = []
+    for raw_root in raw_roots:
+        expanded = _expand_path(str(raw_root))
+        if not expanded.exists():
+            continue
+        reason = _rulespec_checkout_unclean_reason(expanded)
+        if reason is None:
+            roots.append(expanded)
+        else:
+            print(f"Ignoring rulespec root {expanded}: {reason}")
+    if not roots:
+        remote = params.get("rulespec_remote")
+        if not remote:
+            attempted = ", ".join(str(_expand_path(root)) for root in raw_roots)
+            raise SystemExit(
+                "rulespec_roots: no configured path is a clean checkout "
+                f"({attempted}) and no rulespec_remote fallback is declared"
+            )
+        roots = [_ensure_rulespec_us_checkout(str(remote))]
+    # Record exactly the checkouts that ran — never a configured-but-rejected
+    # path — so the provenance stamper identifies the tree the fixture bytes
+    # actually came from.
+    params["rulespec_roots"] = [str(root) for root in roots]
+    _verify_federal_rulespec_snapshot(params, roots)
+    pins = _resolve_pe_oracle_pins(params)
+    generator = REPO_ROOT / "scripts" / "generate_snap_abawd_boundary.py"
+    cmd = [
+        "uv",
+        "run",
+        "--python",
+        str(params.get("python", "3.13")),
+        "--no-project",
+        *(arg for pin in pins for arg in ("--with", pin)),
+        "python",
+        str(generator),
+        *(
+            arg
+            for root in roots
+            for arg in ("--rulespec-root", str(root))
+        ),
+        "--output",
+        str(output),
+    ]
+    subprocess.run(cmd, check=True, cwd=REPO_ROOT)
+
+
 def _run_uk_council_tax_reduction_grid(runner: dict, output: Path) -> None:
     """Council Tax Reduction grid: rulespec-uk pension-age scheme vs PolicyEngine-UK.
 
@@ -3551,6 +3697,7 @@ RUNNERS = {
     "euromod-synthetic-compare": _run_euromod_synthetic_compare,
     "federal-tax-liability-grid": _run_federal_tax_liability_grid,
     "gettsim-synthetic-compare": _run_gettsim_synthetic_compare,
+    "snap-abawd-boundary-grid": _run_snap_abawd_boundary_grid,
     "snap-qc-compare": _run_snap_qc_compare,
     "spsm-ca-compare": _run_spsm_ca_compare,
     "state-income-tax-liability-grid": _run_state_income_tax_liability_grid,

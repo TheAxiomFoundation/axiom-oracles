@@ -260,6 +260,8 @@ ratchets:
   unexplained_max: 0
 - suite: us-seca-grid
   unexplained_max: 0
+- suite: us-snap-abawd-grid
+  unexplained_max: 0
 - suite: ut-snap-ecps
   unexplained_max: 0
 - suite: wa-tanf-ecps

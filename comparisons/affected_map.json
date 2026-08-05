@@ -1487,6 +1487,15 @@
       "source": "comparisons/us-seca-grid.yaml"
     },
     {
+      "suite": "us-snap-abawd-grid",
+      "name": "us-snap-abawd-grid",
+      "report": "axiom-policyengine-us-snap-abawd-grid.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/us-snap-abawd-grid.yaml"
+    },
+    {
       "suite": "us-tariff",
       "name": "us-tariff",
       "report": "axiom-usitc-us-tariff.json",
