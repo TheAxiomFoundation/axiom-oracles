@@ -2512,6 +2512,85 @@ def _run_federal_tax_liability_grid(runner: dict, output: Path) -> None:
     subprocess.run(cmd, check=True, cwd=REPO_ROOT)
 
 
+def _run_snap_abawd_boundary_grid(runner: dict, output: Path) -> None:
+    """Run the SNAP ABAWD post-P.L. 119-21 statute-boundary grid.
+
+    Same contract as the federal tax-liability grids: the Axiom leg replays
+    the rulespec-us 7 CFR 273.24 companion fixture (engine-verified in
+    rulespec-us CI), the PolicyEngine leg builds fresh person-level monthly
+    simulations under the reviewed 2026 oracle stack, and a missing fixture or
+    unavailable PolicyEngine wheel fails the run instead of replaying
+    committed evidence.  Unlike those grids the rulespec snapshot is
+    deliberately unpinned: each run clones rulespec-us main (or reads the
+    materialized CI checkout) and stamps its real HEAD into provenance, so the
+    affected-rerun sweep re-runs the boundary matrix whenever rulespec-us
+    moves and the generator's pinned legal expectations turn an encoding
+    regression at the statute boundaries into a loud failure.
+    """
+    params = runner["parameters"]
+    required_pins = {
+        "policyengine_version": "4.18.9",
+        "policyengine_us_version": "1.767.3",
+        "policyengine_core_version": "3.30.3",
+    }
+    incorrect_pins = {
+        key: params.get(key)
+        for key, expected in required_pins.items()
+        if params.get(key) != expected
+    }
+    if incorrect_pins:
+        expected = ", ".join(
+            f"{key}={version}" for key, version in required_pins.items()
+        )
+        raise SystemExit(
+            "snap-abawd-boundary-grid requires the reviewed 2026 oracle "
+            f"stack ({expected}); received {incorrect_pins}"
+        )
+    raw_roots = params.get("rulespec_roots") or []
+    if not isinstance(raw_roots, list) or not raw_roots:
+        raise SystemExit(
+            "snap-abawd-boundary-grid requires runner.parameters.rulespec_roots"
+        )
+    roots = [
+        expanded
+        for raw_root in raw_roots
+        if (expanded := _expand_path(str(raw_root))).exists()
+    ]
+    if not roots:
+        remote = params.get("rulespec_remote")
+        if not remote:
+            attempted = ", ".join(str(_expand_path(root)) for root in raw_roots)
+            raise SystemExit(
+                "rulespec_roots: no configured path exists "
+                f"({attempted}) and no rulespec_remote fallback is declared"
+            )
+        roots = [_ensure_rulespec_us_checkout(str(remote))]
+        # Record the checkout that actually ran so the provenance stamper
+        # reads the clone's exact SHA rather than the absent CI path.
+        params["rulespec_roots"] = [str(roots[0])]
+    _verify_federal_rulespec_snapshot(params, roots)
+    pins = _resolve_pe_oracle_pins(params)
+    generator = REPO_ROOT / "scripts" / "generate_snap_abawd_boundary.py"
+    cmd = [
+        "uv",
+        "run",
+        "--python",
+        str(params.get("python", "3.13")),
+        "--no-project",
+        *(arg for pin in pins for arg in ("--with", pin)),
+        "python",
+        str(generator),
+        *(
+            arg
+            for root in roots
+            for arg in ("--rulespec-root", str(root))
+        ),
+        "--output",
+        str(output),
+    ]
+    subprocess.run(cmd, check=True, cwd=REPO_ROOT)
+
+
 def _run_uk_council_tax_reduction_grid(runner: dict, output: Path) -> None:
     """Council Tax Reduction grid: rulespec-uk pension-age scheme vs PolicyEngine-UK.
 
@@ -3551,6 +3630,7 @@ RUNNERS = {
     "euromod-synthetic-compare": _run_euromod_synthetic_compare,
     "federal-tax-liability-grid": _run_federal_tax_liability_grid,
     "gettsim-synthetic-compare": _run_gettsim_synthetic_compare,
+    "snap-abawd-boundary-grid": _run_snap_abawd_boundary_grid,
     "snap-qc-compare": _run_snap_qc_compare,
     "spsm-ca-compare": _run_spsm_ca_compare,
     "state-income-tax-liability-grid": _run_state_income_tax_liability_grid,

@@ -161,6 +161,33 @@ the canonical `rulespec_remote` so the affected-rerun map retains the
 `rulespec-us` dependency and CI can clone it when the development root is
 absent.
 
+### `snap-abawd-boundary-grid`
+
+Runs the SNAP ABAWD post-P.L. 119-21 statute-boundary grid
+(`scripts/generate_snap_abawd_boundary.py`) — the behavioral companion to the
+PR #400 structural closure warning on the 2015(o)(3) / 273.24 divergence. The
+Axiom leg replays the nine July 2026 boundary cases from the rulespec-us
+`us/regulations/7-cfr/273/24.test.yaml` companion fixture (engine-verified in
+rulespec-us CI) and fails closed unless each replayed verdict equals the
+pinned legal expectation and each case still zeroes every unrelated
+exception; the PolicyEngine leg builds fresh person-level monthly simulations
+under the reviewed 2026 oracle stack and verifies the oracle's own
+exempted-age brackets flip at the 2025-07-04 effective date before trusting
+its verdicts.
+
+Unlike the federal tax grids the rulespec snapshot is deliberately unpinned:
+each run clones rulespec-us main (or reads the materialized CI checkout) and
+stamps its real HEAD into provenance, so the affected-rerun sweep re-runs the
+matrix whenever rulespec-us moves — encoding drift at the boundaries fails
+the generator loudly, and oracle drift surfaces as report mismatches gated by
+the unexplained ratchet.
+
+Required `parameters`: `rulespec_roots` (with a `rulespec_remote` fallback for
+runners where no checkout is materialized), `policyengine_version: 4.18.9`,
+`policyengine_us_version: 1.767.3`, and `policyengine_core_version: 3.30.3`.
+The runner rejects missing or different pins. Optional `parameters`: `python`
+(defaults to `3.13`).
+
 ### `snap-qc-compare`
 
 Replays USDA SNAP Quality Control public-use reviews through the Axiom RuleSpec
