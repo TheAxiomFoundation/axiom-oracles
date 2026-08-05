@@ -65,9 +65,14 @@ implements 2015(o)(3)(C) upstream in ``meets_snap_work_requirements_person``
 (routing any member of an SPM unit containing a child under 14 around the
 ABAWD test entirely), so its ABAWD composite is expected to stay false on the
 child-13 case while Axiom's direct exception holds.  That single residual is
-classified in ``dispositions/us-snap-abawd-grid.yaml``;
-``meets_snap_work_requirements_person`` is carried per case as a diagnostic so
-the routing is visible in the report.
+classified in ``dispositions/us-snap-abawd-grid.yaml`` and proven causally on
+every run by the age-64 child-routing probe: with the general age-60
+exemption holding, the person-level composite flips True -> False as the
+household child crosses the age-14 boundary while the ABAWD composite stays
+false on both sides — observable only if the child exception is applied
+upstream.  The probe outcome is recorded under
+``engine_bindings.policyengine.child_routing_probe`` and
+``meets_snap_work_requirements_person`` is carried per case as a diagnostic.
 
 Run through the registry so the reviewed PolicyEngine pins and dashboard
 provenance are applied:
@@ -132,6 +137,7 @@ PE_DIAGNOSTIC_VARIABLES = (
     "meets_snap_work_requirements_person",
     "meets_snap_general_work_requirements",
     "is_snap_abawd_hr1_in_effect",
+    "is_in_snap_abawd_waived_area",
 )
 
 # Exception facts local to the 273.24 module; every fixture case must assign
@@ -157,6 +163,25 @@ NEGATIVE_CONSTRUCTION = {
     "member_regained_abawd_eligibility": False,
     "member_has_additional_three_month_abawd_eligibility": False,
 }
+
+# 7 CFR 273.7 facts that can carry the compared exception through the
+# 2015(o)(3)(D) arm: the module's statutory (d)(2) predicate reads exactly
+# these.  A fixture case that assigns any of them non-inert could hold a
+# positive verdict through a smuggled general exemption while the age, child,
+# or Indian boundary under test silently regresses, so the validation pins
+# them false / zero whenever they appear.
+D2_BOOLEAN_FACTS = (
+    "member_subject_to_and_complying_with_title_iv_work_requirement",
+    "member_receiving_or_applying_for_unemployment_compensation_and_complying",
+    "member_responsible_for_dependent_child_under_six_or_incapacitated_person",
+    "member_student_enrolled_at_least_half_time_and_student_eligible",
+    "member_regular_participant_in_drug_or_alcohol_treatment",
+    "member_age_16_or_17_is_not_household_head_or_attends_school_or_training_half_time",
+)
+D2_ZERO_FACTS = (
+    "member_weekly_work_hours",
+    "member_weekly_wages",
+)
 
 # All cases run in a state that adopted the P.L. 119-21 criteria on the
 # federal effective date (California, Hawaii, and Alaska carry delayed
@@ -271,6 +296,47 @@ def _module_input(name: str) -> str:
     return f"{MODULE}#input.{name}"
 
 
+def _general_input(name: str) -> str:
+    return f"{GENERAL_MODULE}#input.{name}"
+
+
+def _expected_module_inputs(case: BoundaryCase) -> dict[str, Any]:
+    """The exact 7 CFR 273.24 input surface the boundary construction pins.
+
+    Every case assigns the member age, the youngest-child age, the waiver,
+    and the five exception booleans (the case's own flag true, every other
+    false); negative cases additionally assign the full downstream
+    construction.  The map is exact in both directions — a module-local
+    input the construction does not expect is rejected rather than silently
+    accepted, so a regrown or new exception-bearing fact cannot carry a
+    verdict unvalidated.
+    """
+
+    own_flag = {
+        "indian_or_urban_indian_excepted": "member_is_indian_or_urban_indian",
+        "california_indian_excepted": "member_is_california_indian",
+    }.get(case.case_id)
+    expected: dict[str, Any] = {
+        "member_age": case.age,
+        "member_youngest_dependent_child_age": (
+            case.child_age if case.child_age is not None else 0
+        ),
+        "member_covered_by_abawd_time_limit_waiver": False,
+    }
+    # The five exception booleans; the age arms ride member_age and the
+    # child arm rides the responsibility flag plus the youngest-child age.
+    for fact in EXCEPTION_FACTS:
+        if fact == (
+            "member_is_parent_or_household_member_responsible_for_dependent_child"
+        ):
+            expected[fact] = case.child_age is not None
+        else:
+            expected[fact] = fact == own_flag
+    if not case.expected_exception:
+        expected.update(NEGATIVE_CONSTRUCTION)
+    return expected
+
+
 def _fixture_file(roots: list[Path]) -> Path:
     candidates = [root / FIXTURE_PATH for root in roots]
     matches = [path for path in candidates if path.is_file()]
@@ -320,8 +386,11 @@ def _validate_fixture_case(case: BoundaryCase, record: Mapping[str, Any]) -> Non
     """Fail closed unless the fixture case still pins the §2015(o)(3) boundary.
 
     Verdict drift is a comparison mismatch, but construction drift — a case
-    that stops zeroing the unrelated exceptions or the downstream branches —
-    would silently turn the matrix vacuous, so the construction is exact.
+    that stops zeroing the unrelated exceptions or the downstream branches,
+    grows a new exception-bearing fact, or arms a 273.7 general exemption
+    that flows through the (o)(3)(D) statutory (d)(2) predicate — would
+    silently shift what the matrix measures, so the module-local input map
+    is exact in both directions and every (d)(2) carrier must be inert.
     """
 
     if record.get("period") != VALIDATION_PERIOD:
@@ -342,30 +411,58 @@ def _validate_fixture_case(case: BoundaryCase, record: Mapping[str, Any]) -> Non
             "module must not re-grow the input silently"
         )
 
-    _require_input(case, inputs, "member_age", case.age)
-    _require_input(case, inputs, "member_covered_by_abawd_time_limit_waiver", False)
-    _require_input(
-        case,
-        inputs,
-        "member_is_parent_or_household_member_responsible_for_dependent_child",
-        case.child_age is not None,
+    module_prefix = f"{MODULE}#input."
+    general_prefix = f"{GENERAL_MODULE}#input."
+    unknown_modules = sorted(
+        key
+        for key in inputs
+        if not key.startswith(module_prefix) and not key.startswith(general_prefix)
     )
-    if case.child_age is not None:
-        _require_input(
-            case, inputs, "member_youngest_dependent_child_age", case.child_age
+    if unknown_modules:
+        raise ValueError(
+            f"{SUITE}: case {case.case_id!r} assigns inputs outside the "
+            f"273.24/273.7 surface: {unknown_modules}; the boundary "
+            "construction does not know they are inert"
         )
-    indian_facts = {
-        "indian_or_urban_indian_excepted": "member_is_indian_or_urban_indian",
-        "california_indian_excepted": "member_is_california_indian",
+
+    observed_module = {
+        key[len(module_prefix):]: value
+        for key, value in inputs.items()
+        if key.startswith(module_prefix)
     }
-    own_flag = indian_facts.get(case.case_id)
-    for fact in EXCEPTION_FACTS:
-        if fact == "member_is_parent_or_household_member_responsible_for_dependent_child":
-            continue
-        _require_input(case, inputs, fact, fact == own_flag)
-    if not case.expected_exception:
-        for fact, expected in NEGATIVE_CONSTRUCTION.items():
-            _require_input(case, inputs, fact, expected)
+    expected_module = _expected_module_inputs(case)
+    for name, expected in expected_module.items():
+        _require_input(case, inputs, name, expected)
+    unexpected = sorted(set(observed_module) - set(expected_module))
+    if unexpected:
+        raise ValueError(
+            f"{SUITE}: case {case.case_id!r} assigns 273.24 inputs the "
+            f"boundary construction does not pin: {unexpected}"
+        )
+
+    member_age_key = _general_input("member_age")
+    if member_age_key in inputs and inputs[member_age_key] != case.age:
+        raise ValueError(
+            f"{SUITE}: case {case.case_id!r} assigns {member_age_key} = "
+            f"{inputs[member_age_key]!r}; the boundary construction requires "
+            f"{case.age!r}"
+        )
+    for fact in D2_BOOLEAN_FACTS:
+        key = _general_input(fact)
+        if key in inputs and inputs[key] is not False:
+            raise ValueError(
+                f"{SUITE}: case {case.case_id!r} arms the 2015(d)(2) carrier "
+                f"{key} = {inputs[key]!r}; every (d)(2) exemption must stay "
+                "inert or it could hold the compared exception itself"
+            )
+    for fact in D2_ZERO_FACTS:
+        key = _general_input(fact)
+        if key in inputs and inputs[key] != 0:
+            raise ValueError(
+                f"{SUITE}: case {case.case_id!r} arms the 2015(d)(2) carrier "
+                f"{key} = {inputs[key]!r}; the zero-work construction "
+                "requires 0"
+            )
 
 
 def _replayed_verdicts(
@@ -400,7 +497,63 @@ def _replayed_verdicts(
         for concept, value in verdicts.items()
         if concept in AXIOM_DIAGNOSTIC_OUTPUTS
     }
+    _pin_replayed_diagnostics(case, diagnostics)
     return compared, diagnostics
+
+
+def _pin_replayed_diagnostics(
+    case: BoundaryCase,
+    diagnostics: Mapping[str, bool],
+) -> None:
+    """The replayed downstream chain must agree with the boundary construction.
+
+    These are construction-level truths, not comparison outcomes: with the
+    waiver false the time-limit-inapplicable judgment IS the exception
+    verdict; with zero work, exhausted months, and no regain, a failed
+    exception must flow to time-limit ineligibility and work-requirement
+    ineligibility; and the (d)(2) predicate must stay inert.  A fixture that
+    flips any of these has changed what the matrix measures, so the replay
+    fails rather than carrying the flipped value into the report.
+    """
+
+    def pin(concept: str, expected: bool, *, required: bool = False) -> None:
+        if concept not in diagnostics:
+            if required:
+                raise ValueError(
+                    f"{SUITE}: case {case.case_id!r} no longer asserts "
+                    f"{concept}; the boundary construction requires it"
+                )
+            return
+        actual = diagnostics[concept]
+        if actual is not expected:
+            raise ValueError(
+                f"{SUITE}: case {case.case_id!r} replays {concept} = "
+                f"{actual}, but the boundary construction implies "
+                f"{expected}"
+            )
+
+    pin(
+        f"{MODULE}#snap_member_abawd_time_limit_inapplicable",
+        case.expected_exception,
+        required=True,
+    )
+    pin(
+        f"{GENERAL_MODULE}#snap_member_statutory_work_registration_exemption_applies",
+        False,
+    )
+    pin(
+        f"{MODULE}#snap_member_abawd_time_limit_eligible",
+        case.expected_exception,
+    )
+    if not case.expected_exception:
+        pin(f"{MODULE}#snap_member_work_requirement_eligible", False)
+        pin(f"{MODULE}#snap_member_work_requirement_ineligible", True)
+    if case.child_age is not None:
+        pin(
+            f"{MODULE}#snap_member_abawd_responsible_for_dependent_child_under_fourteen",
+            case.child_age < 14,
+            required=True,
+        )
 
 
 def _axiom_values(
@@ -480,6 +633,7 @@ def _verify_pe_parameters(tax_benefit_system: Any) -> None:
     at = tax_benefit_system.parameters
     post = at(f"{VALIDATION_PERIOD}-01").gov.usda.snap.work_requirements.abawd
     pre = at("2025-06-01").gov.usda.snap.work_requirements.abawd
+    general = at(f"{VALIDATION_PERIOD}-01").gov.usda.snap.work_requirements.general
     checks = [
         ("in_effect at 2026-07", post.in_effect, True),
         ("in_effect at 2025-06", pre.in_effect, False),
@@ -492,6 +646,14 @@ def _verify_pe_parameters(tax_benefit_system: Any) -> None:
         ("exempted at age 66", bool(post.age_threshold.exempted.calc(66)), True),
         ("pre-HR1 exempted at age 55", bool(pre.age_threshold.exempted.calc(55)), True),
         ("pre-HR1 former-foster age", pre.age_threshold.former_foster_care, 24),
+        # Reduction premises: the ABAWD work-activity arm needs 20 weekly
+        # hours (so the zeroed hours input cannot satisfy it), and the
+        # child-routing probe's age-64 pair relies on the general age-60
+        # exemption holding at 64 but not below 60.
+        ("abawd weekly hours threshold", post.weekly_hours_threshold, 20),
+        ("general exempted at age 59", bool(general.age_threshold.exempted.calc(59)), False),
+        ("general exempted at age 64", bool(general.age_threshold.exempted.calc(64)), True),
+        ("general dependent-care age", general.age_threshold.caring_dependent_child, 6),
     ]
     for label, actual, expected in checks:
         if actual != expected:
@@ -501,9 +663,85 @@ def _verify_pe_parameters(tax_benefit_system: Any) -> None:
             )
 
 
+def _check_case_reduction_premises(
+    case_id: str,
+    diagnostics: Mapping[str, bool],
+) -> None:
+    """The reduction argument only holds under HR1 with no area waiver."""
+
+    if not diagnostics["is_snap_abawd_hr1_in_effect"]:
+        raise RuntimeError(
+            f"{SUITE}: case {case_id!r} evaluated with HR1 not in effect; "
+            "the post-P.L. 119-21 boundary comparison is meaningless"
+        )
+    if diagnostics["is_in_snap_abawd_waived_area"]:
+        raise RuntimeError(
+            f"{SUITE}: case {case_id!r} evaluated inside a waived area; the "
+            "waiver arm would carry the composite regardless of the "
+            "exception under test"
+        )
+
+
+def _check_child_routing_probe(probe: Mapping[str, Mapping[str, bool]]) -> None:
+    """The probe must observe PolicyEngine's upstream child routing causally.
+
+    At age 64 the general age-60 exemption holds, so the person-level
+    composite flips True -> False as the household child crosses the age-14
+    boundary if and only if the child under 14 routes the member around the
+    ABAWD test — while the ABAWD composite itself stays false on both sides
+    (the exception is implemented upstream of it).  This is the observable
+    evidence behind the dependent-child disposition; a PolicyEngine release
+    that moves or drops the routing fails here instead of silently changing
+    what the residual means.
+    """
+
+    expected = {
+        "child_13": {
+            "meets_snap_work_requirements_person": True,
+            "meets_snap_abawd_work_requirements": False,
+            "meets_snap_general_work_requirements": True,
+        },
+        "child_14": {
+            "meets_snap_work_requirements_person": False,
+            "meets_snap_abawd_work_requirements": False,
+            "meets_snap_general_work_requirements": True,
+        },
+    }
+    if probe != expected:
+        raise RuntimeError(
+            f"{SUITE}: the age-64 child-routing probe observed {probe!r}, "
+            f"expected {expected!r}; PolicyEngine's upstream dependent-child "
+            "routing has moved and the child-13 disposition no longer "
+            "describes it"
+        )
+
+
+def _run_child_routing_probe(simulation_cls: Any) -> dict[str, dict[str, bool]]:
+    probe: dict[str, dict[str, bool]] = {}
+    for label, child_age in (("child_13", 13), ("child_14", 14)):
+        case = BoundaryCase(
+            case_id=f"probe_{label}",
+            description="child-routing probe",
+            age=64,
+            expected_exception=child_age < 14,
+            child_age=child_age,
+        )
+        simulation = simulation_cls(situation=_pe_situation(case))
+        probe[label] = {
+            variable: bool(simulation.calculate(variable, VALIDATION_PERIOD)[0])
+            for variable in (
+                "meets_snap_work_requirements_person",
+                "meets_snap_abawd_work_requirements",
+                "meets_snap_general_work_requirements",
+            )
+        }
+    _check_child_routing_probe(probe)
+    return probe
+
+
 def _pe_values(
     cases: tuple[BoundaryCase, ...],
-) -> tuple[dict[str, bool], dict[str, dict[str, bool]]]:
+) -> tuple[dict[str, bool], dict[str, dict[str, bool]], dict[str, dict[str, bool]]]:
     actual_versions = {
         "policyengine": distribution_version("policyengine"),
         "policyengine_core": distribution_version("policyengine-core"),
@@ -538,7 +776,9 @@ def _pe_values(
             )
             for variable in PE_DIAGNOSTIC_VARIABLES
         }
-    return values, diagnostics
+        _check_case_reduction_premises(case.case_id, diagnostics[case.case_id])
+    probe = _run_child_routing_probe(Simulation)
+    return values, diagnostics, probe
 
 
 def _assert_non_vacuous(
@@ -568,6 +808,7 @@ def _build_report(
     module_inputs: Mapping[str, Mapping[str, Any]],
     policyengine: Mapping[str, bool],
     pe_diagnostics: Mapping[str, Mapping[str, bool]],
+    child_routing_probe: Mapping[str, Mapping[str, bool]] | None = None,
 ) -> dict[str, Any]:
     cases: list[dict[str, Any]] = []
     mismatches: list[dict[str, Any]] = []
@@ -592,6 +833,11 @@ def _build_report(
                     # PolicyEngine's hours input defaults to full-time;
                     # zeroed to mirror the fixture's zero-work construction.
                     "weekly_hours_worked_before_lsr": 0,
+                    **(
+                        {"is_snap_abawd_indian_exempt": True}
+                        if case.indian
+                        else {}
+                    ),
                     **({"was_in_foster_care": True} if case.pe_foster else {}),
                 },
                 "state_code": PE_STATE,
@@ -602,9 +848,9 @@ def _build_report(
             "axiom_diagnostics": dict(axiom_diagnostics[case.case_id]),
             "policyengine_diagnostics": dict(pe_diagnostics[case.case_id]),
         }
-        cases.append(case_report)
+        case_mismatches = []
         if not matched:
-            mismatches.append(
+            case_mismatches.append(
                 {
                     "case_id": case.case_id,
                     "concept": AXIOM_OUTPUT,
@@ -616,6 +862,11 @@ def _build_report(
                     "right": pe_value,
                 }
             )
+        # Mirrored per case so the weekly workflow's nested
+        # `case.mismatches` count agrees with the top-level list.
+        case_report["mismatches"] = list(case_mismatches)
+        cases.append(case_report)
+        mismatches.extend(case_mismatches)
     comparison_count = len(cases)
     mismatch_count = len(mismatches)
     match_rate = 100.0 * match_count / comparison_count
@@ -656,6 +907,15 @@ def _build_report(
                 "outputs": [PE_OUTPUT],
                 "diagnostic_outputs": list(PE_DIAGNOSTIC_VARIABLES),
                 "boundary": PE_BOUNDARY,
+                # Observable evidence for the dependent-child disposition:
+                # at age 64 the person-level composite flips with the
+                # child-13/14 boundary while the ABAWD composite stays
+                # false, proving the exception is applied upstream of it.
+                "child_routing_probe": (
+                    {k: dict(v) for k, v in child_routing_probe.items()}
+                    if child_routing_probe
+                    else {}
+                ),
             },
         },
         "case_count": comparison_count,
@@ -700,7 +960,7 @@ def generate(roots: list[Path]) -> dict[str, Any]:
     if not roots:
         raise ValueError("at least one --rulespec-root is required")
     axiom, axiom_diagnostics, module_inputs = _axiom_values(roots)
-    policyengine, pe_diagnostics = _pe_values(CASES)
+    policyengine, pe_diagnostics, child_routing_probe = _pe_values(CASES)
     _assert_non_vacuous(axiom, policyengine)
     return _build_report(
         axiom,
@@ -708,6 +968,7 @@ def generate(roots: list[Path]) -> dict[str, Any]:
         module_inputs,
         policyengine,
         pe_diagnostics,
+        child_routing_probe,
     )
 
 

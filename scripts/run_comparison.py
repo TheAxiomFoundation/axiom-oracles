@@ -938,7 +938,7 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
         # run). Matches the pin the runner installs into its isolated env.
         if "taxcalc" in engines:
             oracle["taxcalc"] = "6.7.1"
-    elif runner_type == "federal-tax-liability-grid":
+    elif runner_type in ("federal-tax-liability-grid", "snap-abawd-boundary-grid"):
         pins = _resolve_pe_oracle_pins(params)
         oracle = {
             "name": "policyengine",
@@ -2512,6 +2512,37 @@ def _run_federal_tax_liability_grid(runner: dict, output: Path) -> None:
     subprocess.run(cmd, check=True, cwd=REPO_ROOT)
 
 
+def _rulespec_checkout_unclean_reason(root: Path) -> str | None:
+    """Why a floating (unpinned) rulespec root cannot be trusted, or None.
+
+    The ABAWD boundary generator reads fixture bytes straight from the tree
+    while provenance records ``git rev-parse HEAD``, so a dirty or non-git
+    tree could run modified law under a clean commit identity.  Such a root
+    is rejected here and the runner falls back to a fresh clone.
+    """
+
+    try:
+        inside = subprocess.run(
+            ["git", "-C", str(root), "rev-parse", "--is-inside-work-tree"],
+            capture_output=True,
+            text=True,
+        )
+    except OSError:
+        return "git is unavailable to verify it"
+    if inside.returncode != 0 or inside.stdout.strip() != "true":
+        return "not a git work tree, so provenance cannot record a real SHA"
+    status = subprocess.run(
+        ["git", "-C", str(root), "status", "--porcelain"],
+        capture_output=True,
+        text=True,
+    )
+    if status.returncode != 0:
+        return "git status failed"
+    if status.stdout.strip():
+        return "working tree is dirty, so fixture bytes would not match HEAD"
+    return None
+
+
 def _run_snap_abawd_boundary_grid(runner: dict, output: Path) -> None:
     """Run the SNAP ABAWD post-P.L. 119-21 statute-boundary grid.
 
@@ -2551,17 +2582,22 @@ def _run_snap_abawd_boundary_grid(runner: dict, output: Path) -> None:
         raise SystemExit(
             "snap-abawd-boundary-grid requires runner.parameters.rulespec_roots"
         )
-    roots = [
-        expanded
-        for raw_root in raw_roots
-        if (expanded := _expand_path(str(raw_root))).exists()
-    ]
+    roots = []
+    for raw_root in raw_roots:
+        expanded = _expand_path(str(raw_root))
+        if not expanded.exists():
+            continue
+        reason = _rulespec_checkout_unclean_reason(expanded)
+        if reason is None:
+            roots.append(expanded)
+        else:
+            print(f"Ignoring rulespec root {expanded}: {reason}")
     if not roots:
         remote = params.get("rulespec_remote")
         if not remote:
             attempted = ", ".join(str(_expand_path(root)) for root in raw_roots)
             raise SystemExit(
-                "rulespec_roots: no configured path exists "
+                "rulespec_roots: no configured path is a clean checkout "
                 f"({attempted}) and no rulespec_remote fallback is declared"
             )
         roots = [_ensure_rulespec_us_checkout(str(remote))]

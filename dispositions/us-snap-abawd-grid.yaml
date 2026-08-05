@@ -21,12 +21,19 @@ entries:
         ABAWD test entirely, and meets_snap_abawd_work_requirements notes the
         in-formula duplicate "has been removed" as dead code. The ABAWD
         composite therefore stays false on the child-13 case even though
-        PolicyEngine applies the exception at the person level. The
-        behavioral boundary itself is still cross-checked: the child-14 row
-        matches (no exception on that basis for either engine), so the
-        13-to-14 flip is pinned on the Axiom side and PolicyEngine's
-        dependent age-14 threshold parameter is verified by the generator's
-        oracle-parameter check before any verdict is trusted.
+        PolicyEngine applies the exception at the person level. The routing
+        is proven causally on every run, not asserted from source: the
+        generator's age-64 child-routing probe observes the person-level
+        composite flip true-to-false as the household child crosses the
+        age-14 boundary while the ABAWD composite stays false on both sides
+        (recorded under engine_bindings.policyengine.child_routing_probe in
+        the committed report) — an observation only possible if the child
+        exception is applied upstream of the compared composite. The
+        child-14 row of the matrix itself matches (no exception on that
+        basis for either engine), and PolicyEngine's dependent age-14
+        threshold parameter is verified before any verdict is trusted; a
+        PolicyEngine release that moves or drops the routing fails the
+        probe instead of silently changing what this residual means.
       upstream_url: https://github.com/PolicyEngine/policyengine-us/blob/master/policyengine_us/variables/gov/usda/snap/eligibility/work_requirements/meets_snap_work_requirements_person.py
     expires_on_source_change: true
     pinned:

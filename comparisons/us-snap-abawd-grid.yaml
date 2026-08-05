@@ -34,7 +34,10 @@
 # 14 routes the person around the ABAWD test entirely), so the ABAWD
 # composite stays false on the child-13 case while Axiom's direct exception
 # holds.  That single residual is classified in
-# dispositions/us-snap-abawd-grid.yaml, and
+# dispositions/us-snap-abawd-grid.yaml and proven causally on every run by
+# the generator's age-64 child-routing probe (person-level composite flips
+# with the child-13/14 boundary while the ABAWD composite stays false;
+# recorded under engine_bindings.policyengine.child_routing_probe), and
 # meets_snap_work_requirements_person is carried per case as a diagnostic so
 # the routing stays visible.
 #

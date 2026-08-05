@@ -49,36 +49,20 @@ GENERATOR = _load_generator()
 
 def _valid_record(case) -> dict:
     """Build a fixture record satisfying the boundary construction."""
-    inputs: dict[str, object] = {
-        GENERATOR._module_input("member_age"): case.age,
-        GENERATOR._module_input("member_covered_by_abawd_time_limit_waiver"): False,
+    inputs = {
+        GENERATOR._module_input(name): value
+        for name, value in GENERATOR._expected_module_inputs(case).items()
     }
-    own_flag = {
-        "indian_or_urban_indian_excepted": "member_is_indian_or_urban_indian",
-        "california_indian_excepted": "member_is_california_indian",
-    }.get(case.case_id)
-    for fact in GENERATOR.EXCEPTION_FACTS:
-        if fact == (
-            "member_is_parent_or_household_member_responsible_for_dependent_child"
-        ):
-            inputs[GENERATOR._module_input(fact)] = case.child_age is not None
-        else:
-            inputs[GENERATOR._module_input(fact)] = fact == own_flag
-    if case.child_age is not None:
-        inputs[GENERATOR._module_input("member_youngest_dependent_child_age")] = (
-            case.child_age
-        )
-    if not case.expected_exception:
-        for fact, expected in GENERATOR.NEGATIVE_CONSTRUCTION.items():
-            inputs[GENERATOR._module_input(fact)] = expected
+    verdict = "holds" if case.expected_exception else "not_holds"
     outputs = {
-        GENERATOR.AXIOM_OUTPUT: (
-            "holds" if case.expected_exception else "not_holds"
-        ),
-        f"{GENERATOR.MODULE}#snap_member_abawd_time_limit_inapplicable": (
-            "holds" if case.expected_exception else "not_holds"
-        ),
+        GENERATOR.AXIOM_OUTPUT: verdict,
+        f"{GENERATOR.MODULE}#snap_member_abawd_time_limit_inapplicable": verdict,
     }
+    if case.child_age is not None:
+        outputs[
+            f"{GENERATOR.MODULE}"
+            "#snap_member_abawd_responsible_for_dependent_child_under_fourteen"
+        ] = "holds" if case.child_age < 14 else "not_holds"
     return {
         "name": case.case_id,
         "period": GENERATOR.VALIDATION_PERIOD,
@@ -177,6 +161,102 @@ def test_regrown_former_foster_fact_fails_closed():
     ] = True
     with pytest.raises(ValueError, match="former-foster"):
         GENERATOR._validate_fixture_case(case, record)
+
+
+def test_smuggled_d2_general_exemption_fails_closed():
+    case = _case("age_65_excepted_under_usda_operational_reading")
+    record = _valid_record(case)
+    record["input"][
+        GENERATOR._general_input(
+            "member_regular_participant_in_drug_or_alcohol_treatment"
+        )
+    ] = True
+    with pytest.raises(ValueError, match="d\\)\\(2\\) carrier"):
+        GENERATOR._validate_fixture_case(case, record)
+
+
+def test_nonzero_general_work_hours_fails_closed():
+    case = _case("age_66_excepted_under_either_reading")
+    record = _valid_record(case)
+    record["input"][GENERATOR._general_input("member_weekly_work_hours")] = 30
+    with pytest.raises(ValueError, match="zero-work construction"):
+        GENERATOR._validate_fixture_case(case, record)
+
+
+def test_unpinned_new_module_input_fails_closed():
+    case = _case("indian_or_urban_indian_excepted")
+    record = _valid_record(case)
+    record["input"][GENERATOR._module_input("member_new_exception_fact")] = True
+    with pytest.raises(ValueError, match="does not pin"):
+        GENERATOR._validate_fixture_case(case, record)
+
+
+def test_input_outside_known_modules_fails_closed():
+    case = _case("age_55_subject_to_time_limit_post_hr1")
+    record = _valid_record(case)
+    record["input"]["us:regulations/7-cfr/273/8#input.member_resource_test"] = True
+    with pytest.raises(ValueError, match="outside the 273.24/273.7 surface"):
+        GENERATOR._validate_fixture_case(case, record)
+
+
+def test_flipped_downstream_diagnostic_fails_closed():
+    case = _case("age_23_no_exception_post_hr1")
+    record = _valid_record(case)
+    record["output"][
+        f"{GENERATOR.MODULE}#snap_member_abawd_time_limit_inapplicable"
+    ] = "holds"
+    with pytest.raises(ValueError, match="boundary construction implies"):
+        GENERATOR._replayed_verdicts(case, record)
+
+
+def test_dropped_required_diagnostic_fails_closed():
+    case = _case("age_55_subject_to_time_limit_post_hr1")
+    record = _valid_record(case)
+    del record["output"][
+        f"{GENERATOR.MODULE}#snap_member_abawd_time_limit_inapplicable"
+    ]
+    with pytest.raises(ValueError, match="no longer asserts"):
+        GENERATOR._replayed_verdicts(case, record)
+
+
+def test_child_routing_probe_rejects_moved_routing():
+    healthy = {
+        "child_13": {
+            "meets_snap_work_requirements_person": True,
+            "meets_snap_abawd_work_requirements": False,
+            "meets_snap_general_work_requirements": True,
+        },
+        "child_14": {
+            "meets_snap_work_requirements_person": False,
+            "meets_snap_abawd_work_requirements": False,
+            "meets_snap_general_work_requirements": True,
+        },
+    }
+    GENERATOR._check_child_routing_probe(healthy)
+    dropped_routing = {
+        label: dict(values) for label, values in healthy.items()
+    }
+    # If PolicyEngine dropped the upstream routing, the age-64 child-13
+    # member would fail the person composite like the child-14 one.
+    dropped_routing["child_13"]["meets_snap_work_requirements_person"] = False
+    with pytest.raises(RuntimeError, match="child-routing probe"):
+        GENERATOR._check_child_routing_probe(dropped_routing)
+
+
+def test_reduction_premises_reject_pre_hr1_or_waived_evaluation():
+    healthy = {
+        "is_snap_abawd_hr1_in_effect": True,
+        "is_in_snap_abawd_waived_area": False,
+    }
+    GENERATOR._check_case_reduction_premises("age_55", healthy)
+    with pytest.raises(RuntimeError, match="HR1 not in effect"):
+        GENERATOR._check_case_reduction_premises(
+            "age_55", {**healthy, "is_snap_abawd_hr1_in_effect": False}
+        )
+    with pytest.raises(RuntimeError, match="waived area"):
+        GENERATOR._check_case_reduction_premises(
+            "age_55", {**healthy, "is_in_snap_abawd_waived_area": True}
+        )
 
 
 def test_verdict_off_the_statute_boundary_fails_closed():

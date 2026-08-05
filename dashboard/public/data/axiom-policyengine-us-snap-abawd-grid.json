@@ -53,9 +53,11 @@
         "state_code": "TX"
       },
       "matched": true,
+      "mismatches": [],
       "period": "2026-07",
       "policyengine": false,
       "policyengine_diagnostics": {
+        "is_in_snap_abawd_waived_area": false,
         "is_snap_abawd_hr1_in_effect": true,
         "meets_snap_general_work_requirements": false,
         "meets_snap_work_requirements_person": false
@@ -97,9 +99,11 @@
         "state_code": "TX"
       },
       "matched": true,
+      "mismatches": [],
       "period": "2026-07",
       "policyengine": false,
       "policyengine_diagnostics": {
+        "is_in_snap_abawd_waived_area": false,
         "is_snap_abawd_hr1_in_effect": true,
         "meets_snap_general_work_requirements": true,
         "meets_snap_work_requirements_person": false
@@ -131,9 +135,11 @@
         "state_code": "TX"
       },
       "matched": true,
+      "mismatches": [],
       "period": "2026-07",
       "policyengine": true,
       "policyengine_diagnostics": {
+        "is_in_snap_abawd_waived_area": false,
         "is_snap_abawd_hr1_in_effect": true,
         "meets_snap_general_work_requirements": true,
         "meets_snap_work_requirements_person": true
@@ -164,9 +170,11 @@
         "state_code": "TX"
       },
       "matched": true,
+      "mismatches": [],
       "period": "2026-07",
       "policyengine": true,
       "policyengine_diagnostics": {
+        "is_in_snap_abawd_waived_area": false,
         "is_snap_abawd_hr1_in_effect": true,
         "meets_snap_general_work_requirements": true,
         "meets_snap_work_requirements_person": true
@@ -207,9 +215,11 @@
         "state_code": "TX"
       },
       "matched": true,
+      "mismatches": [],
       "period": "2026-07",
       "policyengine": false,
       "policyengine_diagnostics": {
+        "is_in_snap_abawd_waived_area": false,
         "is_snap_abawd_hr1_in_effect": true,
         "meets_snap_general_work_requirements": false,
         "meets_snap_work_requirements_person": false
@@ -235,14 +245,17 @@
           "member_youngest_dependent_child_age": 0
         },
         "policyengine_only": {
+          "is_snap_abawd_indian_exempt": true,
           "weekly_hours_worked_before_lsr": 0
         },
         "state_code": "TX"
       },
       "matched": true,
+      "mismatches": [],
       "period": "2026-07",
       "policyengine": true,
       "policyengine_diagnostics": {
+        "is_in_snap_abawd_waived_area": false,
         "is_snap_abawd_hr1_in_effect": true,
         "meets_snap_general_work_requirements": false,
         "meets_snap_work_requirements_person": false
@@ -268,14 +281,17 @@
           "member_youngest_dependent_child_age": 0
         },
         "policyengine_only": {
+          "is_snap_abawd_indian_exempt": true,
           "weekly_hours_worked_before_lsr": 0
         },
         "state_code": "TX"
       },
       "matched": true,
+      "mismatches": [],
       "period": "2026-07",
       "policyengine": true,
       "policyengine_diagnostics": {
+        "is_in_snap_abawd_waived_area": false,
         "is_snap_abawd_hr1_in_effect": true,
         "meets_snap_general_work_requirements": false,
         "meets_snap_work_requirements_person": false
@@ -308,9 +324,25 @@
         "state_code": "TX"
       },
       "matched": false,
+      "mismatches": [
+        {
+          "case_id": "abawd_exception_applies_to_responsible_adult_with_child_under_fourteen",
+          "concept": "us:regulations/7-cfr/273/24#snap_member_abawd_exception_applies",
+          "engines": [
+            "axiom",
+            "policyengine"
+          ],
+          "kind": "judgment_difference",
+          "left": true,
+          "left_engine": "axiom",
+          "right": false,
+          "right_engine": "policyengine"
+        }
+      ],
       "period": "2026-07",
       "policyengine": false,
       "policyengine_diagnostics": {
+        "is_in_snap_abawd_waived_area": false,
         "is_snap_abawd_hr1_in_effect": true,
         "meets_snap_general_work_requirements": false,
         "meets_snap_work_requirements_person": false
@@ -351,9 +383,11 @@
         "state_code": "TX"
       },
       "matched": true,
+      "mismatches": [],
       "period": "2026-07",
       "policyengine": false,
       "policyengine_diagnostics": {
+        "is_in_snap_abawd_waived_area": false,
         "is_snap_abawd_hr1_in_effect": true,
         "meets_snap_general_work_requirements": false,
         "meets_snap_work_requirements_person": false
@@ -393,10 +427,23 @@
     },
     "policyengine": {
       "boundary": "Person-level ABAWD composite at 2026-07; reduces to the 2015(o)(3) exception set under this grid's zero-work, months-exhausted, no-waiver construction (dependent-child exception handled upstream, see dispositions)",
+      "child_routing_probe": {
+        "child_13": {
+          "meets_snap_abawd_work_requirements": false,
+          "meets_snap_general_work_requirements": true,
+          "meets_snap_work_requirements_person": true
+        },
+        "child_14": {
+          "meets_snap_abawd_work_requirements": false,
+          "meets_snap_general_work_requirements": true,
+          "meets_snap_work_requirements_person": false
+        }
+      },
       "diagnostic_outputs": [
         "meets_snap_work_requirements_person",
         "meets_snap_general_work_requirements",
-        "is_snap_abawd_hr1_in_effect"
+        "is_snap_abawd_hr1_in_effect",
+        "is_in_snap_abawd_waived_area"
       ],
       "outputs": [
         "meets_snap_abawd_work_requirements"
@@ -434,8 +481,14 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-08-05T20:34:20Z",
+    "generated_at": "2026-08-05T21:08:27Z",
     "generated_by": "scripts/run_comparison.py::us-snap-abawd-grid",
+    "oracle": {
+      "name": "policyengine",
+      "policyengine_core": "3.30.3",
+      "policyengine_package": "policyengine==4.18.9",
+      "policyengine_us": "1.767.3"
+    },
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-us",
