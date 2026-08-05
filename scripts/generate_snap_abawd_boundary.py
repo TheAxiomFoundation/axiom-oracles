@@ -183,6 +183,34 @@ D2_ZERO_FACTS = (
     "member_weekly_wages",
 )
 
+# The complete 7 CFR 273.7 input surface the nine boundary cases may touch.
+# Everything here is either constrained above, pinned by its own check, or
+# provably inert for the compared exception (compliance facts only make the
+# general requirement PASS, and the general requirement is not an
+# (o)(3)(D) carrier).  An input outside this list is a module change the
+# construction has not reasoned about, so it fails closed.
+GENERAL_ALLOWED_INPUTS = frozenset(
+    D2_BOOLEAN_FACTS
+    + D2_ZERO_FACTS
+    + (
+        "member_age",
+        # The (d)(2) wages arm reads wages >= rate * 30; the rate must stay
+        # positive or a zeroed rate makes 0 >= 0 hold with zero wages.
+        "federal_or_state_minimum_wage",
+        "member_physically_or_mentally_unfit_for_employment",
+        "migrant_or_seasonal_farmworker_under_contract_to_begin_employment_within_30_days",
+        "alaska_subsistence_hunts_or_fishes_30_hours_weekly",
+        "member_snap_work_requirements_waived_due_to_pending_ssi_joint_application",
+        "member_registered_for_work_or_registered_by_state",
+        "member_participated_in_snap_et_if_assigned",
+        "member_participated_in_workfare_if_assigned",
+        "member_provided_employment_status_or_availability_information",
+        "member_reported_to_referred_suitable_employer_if_referred",
+        "member_accepted_bona_fide_suitable_employment_offer_if_offered",
+        "member_voluntarily_quit_or_reduced_work_below_30_hours_without_good_cause",
+    )
+)
+
 # All cases run in a state that adopted the P.L. 119-21 criteria on the
 # federal effective date (California, Hawaii, and Alaska carry delayed
 # state-level ``hr1_in_effect`` parameters).
@@ -440,12 +468,33 @@ def _validate_fixture_case(case: BoundaryCase, record: Mapping[str, Any]) -> Non
             f"boundary construction does not pin: {unexpected}"
         )
 
+    unknown_general = sorted(
+        key[len(general_prefix):]
+        for key in inputs
+        if key.startswith(general_prefix)
+        and key[len(general_prefix):] not in GENERAL_ALLOWED_INPUTS
+    )
+    if unknown_general:
+        raise ValueError(
+            f"{SUITE}: case {case.case_id!r} assigns 273.7 inputs the "
+            f"boundary construction has not reasoned about: {unknown_general}"
+        )
     member_age_key = _general_input("member_age")
     if member_age_key in inputs and inputs[member_age_key] != case.age:
         raise ValueError(
             f"{SUITE}: case {case.case_id!r} assigns {member_age_key} = "
             f"{inputs[member_age_key]!r}; the boundary construction requires "
             f"{case.age!r}"
+        )
+    minimum_wage_key = _general_input("federal_or_state_minimum_wage")
+    if minimum_wage_key in inputs and not (
+        isinstance(inputs[minimum_wage_key], (int, float))
+        and inputs[minimum_wage_key] > 0
+    ):
+        raise ValueError(
+            f"{SUITE}: case {case.case_id!r} assigns {minimum_wage_key} = "
+            f"{inputs[minimum_wage_key]!r}; the rate must stay positive or "
+            "the (d)(2) wages arm holds vacuously at zero wages"
         )
     for fact in D2_BOOLEAN_FACTS:
         key = _general_input(fact)
@@ -540,6 +589,12 @@ def _pin_replayed_diagnostics(
     pin(
         f"{GENERAL_MODULE}#snap_member_statutory_work_registration_exemption_applies",
         False,
+    )
+    # The general age exemption is pure age under this construction (no
+    # case is under 16), so a flipped replay marks a 273.7 boundary move.
+    pin(
+        f"{GENERAL_MODULE}#snap_member_general_work_requirement_exempt",
+        case.age >= 60,
     )
     pin(
         f"{MODULE}#snap_member_abawd_time_limit_eligible",

@@ -219,6 +219,73 @@ def test_dropped_required_diagnostic_fails_closed():
         GENERATOR._replayed_verdicts(case, record)
 
 
+def test_zeroed_minimum_wage_rate_fails_closed():
+    # The (d)(2) wages arm reads wages >= rate * 30; a zeroed rate would
+    # make it hold vacuously at zero wages.
+    case = _case("age_65_excepted_under_usda_operational_reading")
+    record = _valid_record(case)
+    record["input"][GENERATOR._general_input("member_weekly_wages")] = 0
+    record["input"][
+        GENERATOR._general_input("federal_or_state_minimum_wage")
+    ] = 0
+    with pytest.raises(ValueError, match="rate must stay positive"):
+        GENERATOR._validate_fixture_case(case, record)
+
+
+def test_unknown_general_module_input_fails_closed():
+    case = _case("age_64_subject_despite_general_work_exemption")
+    record = _valid_record(case)
+    record["input"][GENERATOR._general_input("member_new_d2_route")] = True
+    with pytest.raises(ValueError, match="has not reasoned about"):
+        GENERATOR._validate_fixture_case(case, record)
+
+
+def test_flipped_general_age_exemption_diagnostic_fails_closed():
+    case = _case("age_64_subject_despite_general_work_exemption")
+    record = _valid_record(case)
+    record["output"][
+        f"{GENERATOR.GENERAL_MODULE}#snap_member_general_work_requirement_exempt"
+    ] = "not_holds"
+    with pytest.raises(ValueError, match="boundary construction implies"):
+        GENERATOR._replayed_verdicts(case, record)
+
+
+def test_checkout_guard_rejects_skip_worktree_hidden_edit(tmp_path):
+    import subprocess
+
+    runner = _load_runner()
+    relpath = runner._ABAWD_FIXTURE_RELPATH
+    repo = tmp_path / "rulespec-us"
+    fixture = repo / relpath
+    fixture.parent.mkdir(parents=True)
+    fixture.write_text("- name: canonical\n")
+    env = {"GIT_AUTHOR_NAME": "t", "GIT_AUTHOR_EMAIL": "t@t", "GIT_COMMITTER_NAME": "t", "GIT_COMMITTER_EMAIL": "t@t", "PATH": "/usr/bin:/bin:/usr/local/bin"}
+    for cmd in (
+        ["git", "init", "-q"],
+        ["git", "add", "-A"],
+        ["git", "commit", "-q", "-m", "seed"],
+    ):
+        subprocess.run(cmd, cwd=repo, check=True, env=env)
+    assert runner._rulespec_checkout_unclean_reason(repo) is None
+    fixture.write_text("- name: tampered\n")
+    subprocess.run(
+        ["git", "update-index", "--skip-worktree", relpath],
+        cwd=repo,
+        check=True,
+        env=env,
+    )
+    porcelain = subprocess.run(
+        ["git", "status", "--porcelain"],
+        cwd=repo,
+        capture_output=True,
+        text=True,
+        env=env,
+    )
+    assert porcelain.stdout.strip() == ""  # the hidden edit git status misses
+    reason = runner._rulespec_checkout_unclean_reason(repo)
+    assert reason is not None and "differs from HEAD" in reason
+
+
 def test_child_routing_probe_rejects_moved_routing():
     healthy = {
         "child_13": {

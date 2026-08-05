@@ -2512,13 +2512,27 @@ def _run_federal_tax_liability_grid(runner: dict, output: Path) -> None:
     subprocess.run(cmd, check=True, cwd=REPO_ROOT)
 
 
-def _rulespec_checkout_unclean_reason(root: Path) -> str | None:
+# The one file the ABAWD boundary generator reads from the rulespec tree;
+# its bytes are verified against HEAD's copy below, so no working-tree
+# trick (including skip-worktree-hidden edits, which git status does not
+# show) can run modified law under a clean commit identity.
+_ABAWD_FIXTURE_RELPATH = "us/regulations/7-cfr/273/24.test.yaml"
+
+
+def _rulespec_checkout_unclean_reason(
+    root: Path,
+    verify_files: tuple[str, ...] = (_ABAWD_FIXTURE_RELPATH,),
+) -> str | None:
     """Why a floating (unpinned) rulespec root cannot be trusted, or None.
 
     The ABAWD boundary generator reads fixture bytes straight from the tree
     while provenance records ``git rev-parse HEAD``, so a dirty or non-git
-    tree could run modified law under a clean commit identity.  Such a root
-    is rejected here and the runner falls back to a fresh clone.
+    tree could run modified law under a clean commit identity.  Beyond the
+    porcelain check, the files the generator actually consumes are compared
+    byte-for-byte against ``HEAD``'s copies — ``git status`` stays silent
+    about modifications hidden behind ``skip-worktree``, and the byte
+    identity of the consumed law is the property that matters.  A root that
+    fails any check is rejected and the runner falls back to a fresh clone.
     """
 
     try:
@@ -2540,6 +2554,22 @@ def _rulespec_checkout_unclean_reason(root: Path) -> str | None:
         return "git status failed"
     if status.stdout.strip():
         return "working tree is dirty, so fixture bytes would not match HEAD"
+    for relpath in verify_files:
+        committed = subprocess.run(
+            ["git", "-C", str(root), "show", f"HEAD:{relpath}"],
+            capture_output=True,
+        )
+        if committed.returncode != 0:
+            return f"HEAD does not carry {relpath}"
+        try:
+            on_disk = (root / relpath).read_bytes()
+        except OSError:
+            return f"{relpath} is unreadable in the work tree"
+        if on_disk != committed.stdout:
+            return (
+                f"{relpath} differs from HEAD's copy "
+                "(a skip-worktree-hidden edit?)"
+            )
     return None
 
 
@@ -2601,9 +2631,10 @@ def _run_snap_abawd_boundary_grid(runner: dict, output: Path) -> None:
                 f"({attempted}) and no rulespec_remote fallback is declared"
             )
         roots = [_ensure_rulespec_us_checkout(str(remote))]
-        # Record the checkout that actually ran so the provenance stamper
-        # reads the clone's exact SHA rather than the absent CI path.
-        params["rulespec_roots"] = [str(roots[0])]
+    # Record exactly the checkouts that ran — never a configured-but-rejected
+    # path — so the provenance stamper identifies the tree the fixture bytes
+    # actually came from.
+    params["rulespec_roots"] = [str(root) for root in roots]
     _verify_federal_rulespec_snapshot(params, roots)
     pins = _resolve_pe_oracle_pins(params)
     generator = REPO_ROOT / "scripts" / "generate_snap_abawd_boundary.py"
