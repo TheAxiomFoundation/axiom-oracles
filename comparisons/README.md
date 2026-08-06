@@ -48,6 +48,15 @@ complete missing SHAs from the affected map plus the checkout the run actually
 resolved; skip-capable lanes (euromod/gettsim/snap-qc) are deliberately
 excluded so a re-emitted report is never stamped fresh.
 
+A suite that pins one reviewed rulespec snapshot
+(`rulespec_upstream_sha`/`rulespec_upstream_tree` in its parameters — the
+federal tax grids) is judged against the PIN instead of the repo's moving
+HEAD: the map generator copies the pin into the entry (`pinned: {repo:
+sha}`), the selector treats `recorded == pin` as fresh, and the suite goes
+stale exactly when a deliberate re-pin PR changes the pin. Judging a pinned
+suite against HEAD would re-select it every sweep forever, since its report
+can only ever stamp the pinned SHA.
+
 ## How to add a new comparison
 
 Drop a new `<name>.yaml` in this directory matching the schema below. The
@@ -119,8 +128,17 @@ Required runner keys: `axiom_encode_repo`, `axiom_rules_repo`,
 
 ### `axiom-encode-uk-efrs-compare`
 
-Invokes `axiom-encode uk-efrs-compare` via `uv run` with the pinned
-PolicyEngine UK stack. Supports either one `surface` or a `surfaces` list; the
+Invokes `axiom-encode uk-populace-compare` (renamed from `uk-efrs-compare` in
+the encoder's ECPS→Populace hard cut, axiom-encode #1108; no alias survives
+on axiom-encode main — the runner type keeps the old name so existing suite
+YAMLs stay valid) via `uv run` with the pinned PolicyEngine UK stack. The
+subcommand's implementation is this repo's own
+`axiom_oracles.bridges.efrs_uk` module, re-exported by axiom-encode; the
+runner overlays this checkout's bridge over the encoder's pinned
+axiom-oracles dependency via `PYTHONPATH` (uv rejects a second URL for a
+pinned package), so suite runs validate the current oracle code — this was
+the "pointing it at the in-repo package" follow-up. Supports either
+one `surface` or a `surfaces` list; the
 runner merges multi-surface JSON output before adapting it to the dashboard.
 When `parameters.axiom_program` is declared, the runner first composes that
 `axiom-programs` spec and passes the composed RuleSpec file as the Universal
@@ -160,6 +178,16 @@ RuleSpec checkout. Configs using development-worktree roots should also declare
 the canonical `rulespec_remote` so the affected-rerun map retains the
 `rulespec-us` dependency and CI can clone it when the development root is
 absent.
+
+When `rulespec_upstream_sha`/`rulespec_upstream_tree` pin the reviewed
+snapshot, a configured root is used only if it IS that snapshot (clean, tree
+equal to the pin); otherwise the runner materializes the pinned revision in a
+scratch clone (`git fetch` of the pinned SHA — reachable from main — then a
+detached checkout) and verifies it before running. Previously the runner
+cloned main HEAD and died on "pinned federal rulespec snapshot tree mismatch"
+on every sweep after upstream moved. The affected-rerun selector judges these
+suites against the pin, not HEAD (see above), so a green refresh settles them
+until the next deliberate re-pin.
 
 ### `snap-abawd-boundary-grid`
 

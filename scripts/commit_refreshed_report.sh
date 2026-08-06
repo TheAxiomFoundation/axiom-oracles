@@ -45,7 +45,7 @@
 #
 # Usage: scripts/commit_refreshed_report.sh <suite-name> <branch>
 # Env:   PYTHON            interpreter for the regeneration scripts (python3)
-#        MAX_ATTEMPTS      push attempts before failing loudly     (20)
+#        MAX_ATTEMPTS      push attempts before failing loudly     (60)
 #        PUSH_RETRY_DELAY  seconds between attempts (default: growing + jitter)
 
 set -euo pipefail
@@ -53,7 +53,12 @@ set -euo pipefail
 suite="${1:?usage: commit_refreshed_report.sh <suite-name> <branch>}"
 branch="${2:?usage: commit_refreshed_report.sh <suite-name> <branch>}"
 PYTHON="${PYTHON:-python3}"
-MAX_ATTEMPTS="${MAX_ATTEMPTS:-20}"
+# 60 attempts, not 20: with 40+ sibling legs each pushing within the same
+# sweep, a leg's vulnerable window (fetch → regenerate → push) is comparable
+# to the herd's inter-push gap, and legs that had completed their comparison
+# were observed losing 20 straight races (#337). The affected-rerun job
+# timeout still bounds the loop.
+MAX_ATTEMPTS="${MAX_ATTEMPTS:-60}"
 
 cd "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
@@ -254,7 +259,9 @@ re-pinned here."
   fi
   echo "push rejected (attempt $attempt/$MAX_ATTEMPTS): a sibling job" \
     "advanced $branch; rebuilding on the new tip" >&2
-  sleep "${PUSH_RETRY_DELAY:-$((attempt * 3 + RANDOM % 10))}"
+  # Growing delay with wide jitter to decorrelate the herd — synchronized
+  # retries were losing to each other far more than a Poisson model predicts.
+  sleep "${PUSH_RETRY_DELAY:-$((attempt * 4 + RANDOM % 25))}"
 done
 
 if [ -z "$push_landed" ]; then

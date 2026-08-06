@@ -3,6 +3,14 @@ title: Colorado SNAP — Axiom vs PolicyEngine
 description: Compares the Colorado SNAP benefit amount produced by Axiom RuleSpec
   (rules-us-co/policies/cdhs/snap/fy-2026-benefit-calculation) against PolicyEngine
   on the Enhanced CPS, filtered to Colorado households.
+# Not CI-runnable while engine-main x rulespec-us-main is broken
+# (rulespec-us#1049/#1050 -- canonical-path root scan; removed plural
+# corpus_citation_paths) and the snap_populace bridge input projection lags the
+# monorepo encoding vintage (axiom-oracles#335). Manual lane only; drop this
+# marker when the upstream chain lands (axiom-oracles#455 tracks the
+# flip-back).
+ci: manual
+
 runner:
   type: axiom-encode-snap-ecps-compare
   axiom_encode_repo: $HOME/axiom-encode
