@@ -182,22 +182,41 @@ def build_plan(config: dict, repos: list[str], workspace: Path) -> list[dict]:
     return actions
 
 
+def _git_clone_command(slug: str, dest: Path) -> list[str]:
+    """A plain-git clone command; token-authenticated when GH_TOKEN is set.
+
+    The URL may embed the token, so it must never be printed or echoed —
+    callers log only the slug and destination.
+    """
+    token = os.environ.get("GH_TOKEN") or os.environ.get("GITHUB_TOKEN")
+    if token:
+        url = f"https://x-access-token:{token}@github.com/{slug}.git"
+    else:
+        url = f"https://github.com/{slug}.git"
+    return ["git", "clone", "--depth", "1", "--quiet", url, str(dest)]
+
+
 def _clone(slug: str, dest: Path) -> None:
     dest.parent.mkdir(parents=True, exist_ok=True)
-    if shutil.which("gh"):
-        cmd = ["gh", "repo", "clone", slug, str(dest), "--", "--depth", "1", "--quiet"]
-    else:
-        cmd = [
-            "git",
-            "clone",
-            "--depth",
-            "1",
-            "--quiet",
-            f"https://github.com/{slug}.git",
-            str(dest),
-        ]
     print(f"cloning {slug} -> {dest}")
-    subprocess.run(cmd, check=True)
+    if shutil.which("gh"):
+        gh_cmd = [
+            "gh", "repo", "clone", slug, str(dest), "--", "--depth", "1", "--quiet",
+        ]
+        result = subprocess.run(gh_cmd)
+        if result.returncode == 0:
+            return
+        # gh occasionally fails instantly with no diagnostic under a busy
+        # matrix (observed: the same clone succeeds in sibling legs of the
+        # same run). Fall back to plain git with the same token rather than
+        # failing the leg on CLI flakiness.
+        print(
+            f"gh repo clone failed (exit {result.returncode}); "
+            "retrying with git",
+            file=sys.stderr,
+        )
+        shutil.rmtree(dest, ignore_errors=True)
+    subprocess.run(_git_clone_command(slug, dest), check=True)
 
 
 def execute(actions: list[dict]) -> None:

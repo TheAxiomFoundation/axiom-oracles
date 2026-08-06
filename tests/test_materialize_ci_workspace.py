@@ -123,9 +123,11 @@ def test_plan_is_empty_on_a_materialized_workspace(tmp_path):
 
 def test_plan_provides_uk_official_alias(tmp_path):
     """#300: the efrs suites resolve $HOME/rulespec-uk-official — the alias
-    points at the pristine rulespec-uk clone — plus the axiom-programs
-    compose-spec checkout and the dataset cache dir the runner resolves
-    fatally before populating."""
+    points at the pristine rulespec-uk clone — plus the dataset cache dir the
+    runner resolves fatally before populating. uk-tax-benefits-efrs no longer
+    declares the composed-UC program (all its surfaces are source-path), so
+    its plan must NOT drag in the axiom-programs checkout or the compose
+    venv."""
     mcw = _load()
     config = _real_config("uk-tax-benefits-efrs")
     repos = mcw.mapped_repos(_real_map(), "uk-tax-benefits-efrs")
@@ -136,14 +138,28 @@ def test_plan_provides_uk_official_alias(tmp_path):
         tmp_path / "TheAxiomFoundation" / "rulespec-uk"
     )
     cloned = {a["repo"] for a in actions if a["kind"] == "clone"}
-    assert "TheAxiomFoundation/axiom-programs" in cloned
-    assert links[str(tmp_path / "axiom-programs")] == str(
-        tmp_path / "TheAxiomFoundation" / "axiom-programs"
-    )
+    assert "TheAxiomFoundation/axiom-programs" not in cloned
+    assert _kinds(actions).isdisjoint({"compose-venv"})
     mkdirs = {a["path"] for a in actions if a["kind"] == "mkdir"}
     assert (
         str(tmp_path / "axiom-oracles" / ".axiom" / "policyengine-data") in mkdirs
     )
+
+
+def test_plan_provides_compose_stack_for_composed_uc_suite(tmp_path):
+    """The composed-UC suite (uk-universal-credit-efrs) is the one that needs
+    the axiom-programs compose-spec checkout and the compose venv."""
+    mcw = _load()
+    config = _real_config("uk-universal-credit-efrs")
+    repos = mcw.mapped_repos(_real_map(), "uk-universal-credit-efrs")
+    actions = mcw.build_plan(config, repos, tmp_path)
+    cloned = {a["repo"] for a in actions if a["kind"] == "clone"}
+    assert "TheAxiomFoundation/axiom-programs" in cloned
+    links = {a["link"]: a["target"] for a in actions if a["kind"] == "symlink"}
+    assert links[str(tmp_path / "axiom-programs")] == str(
+        tmp_path / "TheAxiomFoundation" / "axiom-programs"
+    )
+    assert "compose-venv" in _kinds(actions)
 
 
 def test_real_failing_suites_produce_working_plans(tmp_path):
@@ -243,3 +259,55 @@ def test_compile_with_engine_reports_primary_error_when_fallback_also_fails():
     assert "legacy boom" in message
     assert calls[0][1] == "compile-composed"
     assert calls[1][1] == "compile"
+
+
+def test_clone_falls_back_to_git_when_gh_fails(monkeypatch, tmp_path, capsys):
+    """gh occasionally fails instantly with no diagnostic under a busy matrix
+    (a restored-sweep leg died on exactly this); the clone must retry with
+    plain git using the same token — without ever printing the token URL."""
+    import subprocess as sp
+
+    mcw = _load()
+    dest = tmp_path / "org" / "axiom-compose"
+    monkeypatch.setenv("GH_TOKEN", "sekret-token")
+    monkeypatch.setattr(mcw.shutil, "which", lambda _name: "/usr/bin/gh")
+    calls = []
+
+    def fake_run(cmd, check=False):
+        calls.append(cmd)
+        if cmd[0] == "gh":
+            return sp.CompletedProcess(cmd, 1)
+        dest.mkdir(parents=True, exist_ok=True)
+        return sp.CompletedProcess(cmd, 0)
+
+    monkeypatch.setattr(mcw.subprocess, "run", fake_run)
+
+    mcw._clone("TheAxiomFoundation/axiom-compose", dest)
+
+    assert calls[0][0] == "gh"
+    assert calls[1][0] == "git"
+    assert calls[1][-1] == str(dest)
+    assert any("x-access-token:sekret-token@" in arg for arg in calls[1])
+    out = capsys.readouterr()
+    assert "sekret-token" not in out.out
+    assert "sekret-token" not in out.err
+    assert "retrying with git" in out.err
+
+
+def test_clone_uses_gh_when_it_succeeds(monkeypatch, tmp_path):
+    import subprocess as sp
+
+    mcw = _load()
+    dest = tmp_path / "org" / "rulespec-us"
+    monkeypatch.setattr(mcw.shutil, "which", lambda _name: "/usr/bin/gh")
+    calls = []
+
+    def fake_run(cmd, check=False):
+        calls.append(cmd)
+        return sp.CompletedProcess(cmd, 0)
+
+    monkeypatch.setattr(mcw.subprocess, "run", fake_run)
+
+    mcw._clone("TheAxiomFoundation/rulespec-us", dest)
+
+    assert [c[0] for c in calls] == ["gh"]
