@@ -40,6 +40,15 @@ description: >-
   EITC, CTC, CDCC, AMT, employee-side FICA+SECA, and Colorado state income
   tax — over Colorado Enhanced CPS tax units at the 2026 law year.
 
+# Not CI-runnable while engine-main x rulespec-us-main is broken: composed-root
+# staging fails the engine's canonical-path scan (non-canonical filenames in
+# us-la/us-nh/us-nj/us -- rulespec-us#1049) before any comparison runs;
+# rulespec-us#1050 (removed plural corpus_citation_paths) and -- for the
+# composed program lanes -- axiom-compose#29 and axiom-oracles#335 queue
+# behind it. Manual lane only; drop this marker when the upstream chain lands
+# (axiom-oracles#455 tracks the flip-back).
+ci: manual
+
 runner:
   type: axiom-oracles-compare
   axiom_rules_repo: $HOME/axiom-rules

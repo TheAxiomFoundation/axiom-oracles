@@ -45,7 +45,7 @@ runner:
     relative_tolerance: 0.0
     rulespec_remote: https://github.com/TheAxiomFoundation/rulespec-us.git
     rulespec_roots:
-      - /private/tmp/oracle-rerun/rulespec-us
+      - $HOME/TheAxiomFoundation/rulespec-us
     rulespec_upstream_sha: ae64af2740340a40d04ed3c652254f53e62fab61
     rulespec_upstream_tree: 40e08f7dbaa88a70660006f3a5a32bfa283ebd85
 
