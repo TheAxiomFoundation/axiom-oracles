@@ -311,3 +311,28 @@ def test_clone_uses_gh_when_it_succeeds(monkeypatch, tmp_path):
     mcw._clone("TheAxiomFoundation/rulespec-us", dest)
 
     assert [c[0] for c in calls] == ["gh"]
+
+
+def test_clone_double_failure_never_leaks_the_token(monkeypatch, tmp_path, capsys):
+    import subprocess as sp
+
+    import pytest as _pytest
+
+    mcw = _load()
+    dest = tmp_path / "org" / "axiom-compose"
+    monkeypatch.setenv("GH_TOKEN", "sekret-token")
+    monkeypatch.setattr(mcw.shutil, "which", lambda _name: "/usr/bin/gh")
+    monkeypatch.setattr(
+        mcw.subprocess,
+        "run",
+        lambda cmd, check=False: sp.CompletedProcess(cmd, 1),
+    )
+
+    with _pytest.raises(SystemExit) as exc:
+        mcw._clone("TheAxiomFoundation/axiom-compose", dest)
+
+    message = str(exc.value)
+    assert "TheAxiomFoundation/axiom-compose" in message
+    assert "sekret-token" not in message
+    out = capsys.readouterr()
+    assert "sekret-token" not in out.out + out.err

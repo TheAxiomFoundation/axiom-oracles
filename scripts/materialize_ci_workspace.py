@@ -216,7 +216,11 @@ def _clone(slug: str, dest: Path) -> None:
             file=sys.stderr,
         )
         shutil.rmtree(dest, ignore_errors=True)
-    subprocess.run(_git_clone_command(slug, dest), check=True)
+    # No check=True: a CalledProcessError would embed the token-bearing URL
+    # in its repr (Actions masks the secret, but don't rely on it).
+    result = subprocess.run(_git_clone_command(slug, dest))
+    if result.returncode != 0:
+        raise SystemExit(f"git clone of {slug} failed (exit {result.returncode})")
 
 
 def execute(actions: list[dict]) -> None:
