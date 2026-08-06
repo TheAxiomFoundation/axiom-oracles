@@ -80,7 +80,7 @@ runner:
     policyengine_core_version: "3.30.3"
     rulespec_remote: https://github.com/TheAxiomFoundation/rulespec-us.git
     rulespec_roots:
-      - /private/tmp/oracle-rerun/rulespec-us
+      - $HOME/TheAxiomFoundation/rulespec-us
 
 artifacts:
   report_basename: axiom-policyengine-us-snap-abawd-grid

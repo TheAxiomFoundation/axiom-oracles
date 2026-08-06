@@ -2224,10 +2224,26 @@ def compare_uk_efrs(
             and universal_credit_program is not None
         ):
             program = universal_credit_program.resolve()
+            if not program.exists():
+                raise SystemExit(
+                    f"{selected_surface} RuleSpec not found: {program}"
+                )
         else:
-            program = resolved_rulespec_root / spec.program
-        if not program.exists():
-            raise SystemExit(f"{selected_surface} RuleSpec not found: {program}")
+            # rulespec-uk moved its content under a top-level ``uk/``
+            # jurisdiction directory (canonical-layout cut, 2026-06-12).
+            # Surface specs keep layout-relative paths, so resolve the
+            # canonical location first and fall back to the pre-cut flat
+            # layout for older checkouts.
+            candidates = (
+                resolved_rulespec_root / "uk" / spec.program,
+                resolved_rulespec_root / spec.program,
+            )
+            program = next((c for c in candidates if c.exists()), None)
+            if program is None:
+                raise SystemExit(
+                    f"{selected_surface} RuleSpec not found at any of: "
+                    + ", ".join(str(c) for c in candidates)
+                )
         request = build_axiom_request(
             pe_data=pe_data,
             year=year,

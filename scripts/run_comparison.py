@@ -1267,7 +1267,17 @@ def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
 
 
 def _run_axiom_encode_uk_efrs_compare(runner: dict, output: Path) -> None:
-    """`axiom-encode uk-efrs-compare` via uv run with the pinned PE UK stack."""
+    """`axiom-encode uk-populace-compare` via uv run with the pinned PE UK stack.
+
+    The encoder renamed the subcommand from ``uk-efrs-compare`` in its
+    ECPS→Populace rename (axiom-encode #1108 hard cut; no alias survives on
+    axiom-encode main). The runner type keeps the old name so existing suite
+    YAMLs stay valid — same convention as ``axiom-encode-tax-ecps-compare``.
+    The implementation behind the subcommand is this repo's own
+    ``axiom_oracles.bridges.efrs_uk`` (axiom-encode re-exports it); the
+    runner overlays THIS checkout's bridge over the encoder's pinned
+    axiom-oracles dependency so suite runs validate the current oracle code.
+    """
     axiom_encode_repo = _resolve_path(runner["axiom_encode_repo"], "axiom_encode_repo")
     axiom_rules_repo = _resolve_path(runner["axiom_rules_repo"], "axiom_rules_repo")
     rulespec_root = _resolve_path(runner["rulespec_root"], "rulespec_root")
@@ -1308,7 +1318,7 @@ def _run_axiom_encode_uk_efrs_compare(runner: dict, output: Path) -> None:
             str(axiom_encode_repo),
             *pe_pins,
             "axiom-encode",
-            "uk-efrs-compare",
+            "uk-populace-compare",
             "--rulespec-root",
             str(rulespec_root),
             "--axiom-rules-engine-path",
@@ -1344,6 +1354,19 @@ def _run_axiom_encode_uk_efrs_compare(runner: dict, output: Path) -> None:
             flush=True,
         )
         started = time.perf_counter()
+        # Overlay THIS checkout's bridge over the encoder's pinned
+        # axiom-oracles dependency: the subcommand is a thin re-export of
+        # axiom_oracles.bridges.efrs_uk, and this repo's suite runs must
+        # validate the current oracle code, not a stale pin (the follow-up
+        # comparisons/README.md's runner section calls out). A second
+        # --with-editable cannot express this — uv rejects two URLs for one
+        # package — so the overlay rides PYTHONPATH, which precedes
+        # site-packages on sys.path.
+        env = os.environ.copy()
+        env["PYTHONPATH"] = os.pathsep.join(
+            [str(REPO_ROOT)]
+            + ([env["PYTHONPATH"]] if env.get("PYTHONPATH") else [])
+        )
         try:
             result = subprocess.run(
                 cmd,
@@ -1351,6 +1374,7 @@ def _run_axiom_encode_uk_efrs_compare(runner: dict, output: Path) -> None:
                 cwd=REPO_ROOT,
                 capture_output=True,
                 text=True,
+                env=env,
             )
         except subprocess.CalledProcessError as exc:
             if exc.stdout:
@@ -2253,12 +2277,31 @@ def _run_gettsim_synthetic_compare(runner: dict, output: Path) -> None:
     output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
 
 
-def _resolve_state_income_tax_grid_repos() -> tuple[Path, Path]:
-    """Resolve and verify the exact clean repos used by the state grid."""
+def _resolve_state_income_tax_grid_repos(
+    params: dict | None = None,
+) -> tuple[Path, Path]:
+    """Resolve and verify the exact clean repos used by the state grid.
 
-    rulespec_root = Path(
-        os.environ.get("RULESPEC_US_REPO", REPO_ROOT.parent / "rulespec-us")
-    ).expanduser().resolve()
+    rulespec-us resolution order: the ``RULESPEC_US_REPO`` environment
+    variable (explicit operator intent), then the suite YAML's
+    ``rulespec_roots`` first existing path (the supervised-layout path
+    ``materialize_ci_workspace.py`` guarantees in CI — the sibling default
+    below points at ``$GITHUB_WORKSPACE`` on a CI runner, where no checkout
+    exists), then the supervised sibling checkout.
+    """
+
+    rulespec_root: Path | None = None
+    env_root = os.environ.get("RULESPEC_US_REPO")
+    if env_root:
+        rulespec_root = Path(env_root).expanduser().resolve()
+    else:
+        for raw_root in (params or {}).get("rulespec_roots") or []:
+            candidate = _expand_path(str(raw_root))
+            if candidate.is_dir():
+                rulespec_root = candidate
+                break
+    if rulespec_root is None:
+        rulespec_root = (REPO_ROOT.parent / "rulespec-us").resolve()
     axiom_rules_repo = Path(
         os.environ.get(
             "AXIOM_RULES_REPO", REPO_ROOT.parent / "axiom-rules-engine"
@@ -2286,6 +2329,7 @@ def _resolve_state_income_tax_grid_repos() -> tuple[Path, Path]:
                 f"state income-tax grid {label} repo has working-tree changes: "
                 f"{repo}"
             )
+    _ensure_engine_binary(axiom_rules_repo, kind="release")
     binary = (
         axiom_rules_repo / "target" / "release" / "axiom-rules-engine"
     )
@@ -2310,7 +2354,7 @@ def _run_state_income_tax_liability_grid(runner: dict, output: Path) -> None:
     unavailable; committed numerical reports are never silently reused.
     """
     params = runner["parameters"]
-    rulespec_root, axiom_rules_repo = _resolve_state_income_tax_grid_repos()
+    rulespec_root, axiom_rules_repo = _resolve_state_income_tax_grid_repos(params)
     # The config object is shared with the outer provenance stamper. Record the
     # exact paths that actually execute, so a successful grid can never replace
     # generator provenance with a null RuleSpec SHA or empty engine block.
@@ -2349,6 +2393,40 @@ def _run_state_income_tax_liability_grid(runner: dict, output: Path) -> None:
 
 
 _VERIFIED_RULESPEC_UPSTREAM_SHA = "_verified_rulespec_upstream_sha"
+
+
+def _pinned_snapshot_unusable_reason(root: Path, upstream_tree: str) -> str | None:
+    """Why an existing checkout cannot serve a pinned snapshot, or None.
+
+    Usable means: a git work tree, clean, with ``HEAD^{tree}`` equal to the
+    pinned upstream tree — the same three properties
+    ``_verify_federal_rulespec_snapshot`` later enforces, checked here
+    non-fatally so a non-matching checkout falls through to pinned-revision
+    materialization instead of failing the leg.
+    """
+    try:
+        status = subprocess.run(
+            ["git", "-C", str(root), "status", "--porcelain"],
+            capture_output=True,
+            text=True,
+            check=True,
+        ).stdout
+        local_tree = subprocess.run(
+            ["git", "-C", str(root), "rev-parse", "HEAD^{tree}"],
+            capture_output=True,
+            text=True,
+            check=True,
+        ).stdout.strip()
+    except (OSError, subprocess.CalledProcessError):
+        return "not a verifiable git work tree"
+    if status.strip():
+        return "working tree is dirty"
+    if local_tree != upstream_tree:
+        return (
+            f"tree {local_tree[:12]} does not match the pinned snapshot "
+            f"tree {upstream_tree[:12]}"
+        )
+    return None
 
 
 def _verify_federal_rulespec_snapshot(
@@ -2474,7 +2552,35 @@ def _run_federal_tax_liability_grid(runner: dict, output: Path) -> None:
         for raw_root in raw_roots
         if (expanded := _expand_path(str(raw_root))).exists()
     ]
-    if not roots:
+    upstream_sha = str(params.get("rulespec_upstream_sha") or "").strip()
+    upstream_tree = str(params.get("rulespec_upstream_tree") or "").strip()
+    if upstream_sha and upstream_tree:
+        # A pinned grid replays the reviewed snapshot, so an existing checkout
+        # is usable only when it IS that snapshot (clean, HEAD^{tree} equal to
+        # the pin). Anything else — typically a development or CI-materialized
+        # checkout at current main — is set aside and the pinned revision is
+        # materialized in a scratch clone instead of failing the leg. The
+        # affected-rerun previously died here on every rulespec-us push
+        # ("pinned federal rulespec snapshot tree mismatch").
+        matching = []
+        for root in roots:
+            reason = _pinned_snapshot_unusable_reason(root, upstream_tree)
+            if reason is None:
+                matching.append(root)
+            else:
+                print(f"Ignoring rulespec root {root}: {reason}")
+        roots = matching
+        if not roots:
+            remote = params.get("rulespec_remote")
+            if not remote:
+                raise SystemExit(
+                    "no configured rulespec_roots path holds the pinned "
+                    f"snapshot tree {upstream_tree[:12]} and no "
+                    "rulespec_remote fallback is declared"
+                )
+            roots = [_ensure_rulespec_us_checkout(str(remote), upstream_sha)]
+            params["rulespec_roots"] = [str(roots[0])]
+    elif not roots:
         remote = params.get("rulespec_remote")
         if not remote:
             attempted = ", ".join(str(_expand_path(root)) for root in raw_roots)
@@ -3812,7 +3918,15 @@ def _ensure_engine_binary(repo: Path, *, kind: str) -> None:
     subprocess.run(cmd, check=True, cwd=repo)
 
 
-def _ensure_rulespec_us_checkout(remote: str) -> Path:
+def _ensure_rulespec_us_checkout(remote: str, revision: str | None = None) -> Path:
+    """Fresh scratch clone of rulespec-us, optionally at a pinned revision.
+
+    Without ``revision`` this is a depth-1 clone of the default branch. With
+    one, the exact commit is fetched into the shallow clone and checked out
+    detached — GitHub serves any commit reachable from a branch, so a pinned
+    upstream-main snapshot stays materializable after main moves past it. An
+    unreachable revision (e.g. a rewritten history) fails the run loudly.
+    """
     workspace = Path(tempfile.mkdtemp(prefix="oracle-compare."))
     target = workspace / "rulespec-us"
     print(f"Cloning rulespec-us into {target}...")
@@ -3820,6 +3934,18 @@ def _ensure_rulespec_us_checkout(remote: str) -> Path:
         ["git", "clone", "--depth", "1", "--quiet", remote, str(target)],
         check=True,
     )
+    if revision:
+        print(f"Materializing pinned rulespec-us revision {revision[:12]}...")
+        subprocess.run(
+            ["git", "-C", str(target), "fetch", "--depth", "1", "--quiet",
+             "origin", revision],
+            check=True,
+        )
+        subprocess.run(
+            ["git", "-C", str(target), "checkout", "--detach", "--quiet",
+             revision],
+            check=True,
+        )
     return target
 
 
