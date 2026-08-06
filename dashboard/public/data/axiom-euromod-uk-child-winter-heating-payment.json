@@ -168,7 +168,7 @@
       "axiom_rules_engine_sha": "8625230d6936c1fc22207f8ebe101f5f17715732",
       "axiom_rules_engine_version": "0.2.0"
     },
-    "generated_at": "2026-08-05T20:04:31Z",
+    "generated_at": "2026-08-06T03:49:53Z",
     "generated_by": "scripts/run_comparison.py::uk-child-winter-heating-payment-ukmod",
     "oracle": {
       "euromod_country": "UK",
