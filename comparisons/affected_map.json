@@ -1344,7 +1344,7 @@
     },
     {
       "suite": "uk-universal-credit-efrs",
-      "name": "uk-universal-credit-efrs",
+      "name": null,
       "report": "axiom-policyengine-uk-universal-credit-efrs.json",
       "repos": [
         "TheAxiomFoundation/rulespec-uk"
