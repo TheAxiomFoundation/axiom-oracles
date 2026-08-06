@@ -164,6 +164,12 @@ jobs:
         env:
           AXIOM_ENCODE_REPO: ${{ github.workspace }}/axiom-encode
           AXIOM_RULES_REPO: ${{ github.workspace }}/axiom-rules
+          # Pinned Populace artifacts: the UK one lives in a private HF repo
+          # (policyengine/populace-uk-private), and the public US one is
+          # rate-limited unauthenticated. Empty until the org
+          # HUGGING_FACE_TOKEN is restored and shared to this repo
+          # (policyengine-uk#1816) — harmless meanwhile.
+          HF_TOKEN: ${{ secrets.HUGGING_FACE_TOKEN }}
         working-directory: axiom-oracles
         run: |
           # The runner configs reference $HOME/axiom-encode etc.; symlink the

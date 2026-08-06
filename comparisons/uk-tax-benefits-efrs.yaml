@@ -15,6 +15,18 @@ description: >-
   their own surfaces and suites. Per-surface history:
   docs/uk-coverage-matrix.md.
 
+# Not CI-runnable: the pinned Populace UK artifact lives in the PRIVATE
+# Hugging Face repo policyengine/populace-uk-private, and the runner has no
+# HF credential -- the leg dies on `Failed to download pinned Populace UK
+# artifact ...: 401 Client Error` (verified in run 31073838536, 2026-08-06,
+# after the subcommand/layout/compose fixes landed; every other blocker is
+# cleared and the same chain passes locally with a credentialed HF cache).
+# The workflows already pass HF_TOKEN from the org HUGGING_FACE_TOKEN
+# secret; that secret is currently broken org-wide (policyengine-uk#1816,
+# fix = org owners). Drop this marker when the org token is restored and
+# shared to this repo (axiom-oracles#455 tracks the flip-back).
+ci: manual
+
 runner:
   type: axiom-encode-uk-efrs-compare
   axiom_encode_repo: $HOME/axiom-encode
