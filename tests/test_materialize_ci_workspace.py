@@ -273,8 +273,8 @@ def test_clone_falls_back_to_git_when_gh_fails(monkeypatch, tmp_path, capsys):
     monkeypatch.setattr(mcw.shutil, "which", lambda _name: "/usr/bin/gh")
     calls = []
 
-    def fake_run(cmd, check=False):
-        calls.append(cmd)
+    def fake_run(cmd, check=False, env=None):
+        calls.append((cmd, env))
         if cmd[0] == "gh":
             return sp.CompletedProcess(cmd, 1)
         dest.mkdir(parents=True, exist_ok=True)
@@ -284,10 +284,16 @@ def test_clone_falls_back_to_git_when_gh_fails(monkeypatch, tmp_path, capsys):
 
     mcw._clone("TheAxiomFoundation/axiom-compose", dest)
 
-    assert calls[0][0] == "gh"
-    assert calls[1][0] == "git"
-    assert calls[1][-1] == str(dest)
-    assert any("x-access-token:sekret-token@" in arg for arg in calls[1])
+    assert calls[0][0][0] == "gh"
+    git_cmd, git_env = calls[1]
+    assert git_cmd[0] == "git"
+    assert git_cmd[-1] == str(dest)
+    # The token must ride the process-scoped GIT_CONFIG_* env — never the
+    # command line, where it would also persist as the clone's remote URL.
+    assert "https://github.com/TheAxiomFoundation/axiom-compose.git" in git_cmd
+    assert not any("sekret-token" in arg for arg in git_cmd)
+    assert git_env["GIT_CONFIG_KEY_0"] == "http.extraHeader"
+    assert git_env["GIT_CONFIG_VALUE_0"].startswith("Authorization: Basic ")
     out = capsys.readouterr()
     assert "sekret-token" not in out.out
     assert "sekret-token" not in out.err
@@ -302,7 +308,7 @@ def test_clone_uses_gh_when_it_succeeds(monkeypatch, tmp_path):
     monkeypatch.setattr(mcw.shutil, "which", lambda _name: "/usr/bin/gh")
     calls = []
 
-    def fake_run(cmd, check=False):
+    def fake_run(cmd, check=False, env=None):
         calls.append(cmd)
         return sp.CompletedProcess(cmd, 0)
 
@@ -325,7 +331,7 @@ def test_clone_double_failure_never_leaks_the_token(monkeypatch, tmp_path, capsy
     monkeypatch.setattr(
         mcw.subprocess,
         "run",
-        lambda cmd, check=False: sp.CompletedProcess(cmd, 1),
+        lambda cmd, check=False, env=None: sp.CompletedProcess(cmd, 1),
     )
 
     with _pytest.raises(SystemExit) as exc:

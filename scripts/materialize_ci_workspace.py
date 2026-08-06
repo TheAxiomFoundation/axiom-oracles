@@ -33,6 +33,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import base64
 import json
 import os
 import shutil
@@ -182,18 +183,27 @@ def build_plan(config: dict, repos: list[str], workspace: Path) -> list[dict]:
     return actions
 
 
-def _git_clone_command(slug: str, dest: Path) -> list[str]:
-    """A plain-git clone command; token-authenticated when GH_TOKEN is set.
+def _git_clone_invocation(slug: str, dest: Path) -> tuple[list[str], dict]:
+    """A plain-git clone command plus its environment.
 
-    The URL may embed the token, so it must never be printed or echoed —
-    callers log only the slug and destination.
+    Authentication rides a process-scoped ``http.extraHeader`` passed through
+    ``GIT_CONFIG_*`` environment variables — never the URL. That keeps the
+    token out of the command line AND out of the clone's persisted
+    ``remote.origin.url`` (a token-bearing URL would survive in
+    ``<dest>/.git/config`` for later workflow steps to read).
     """
-    token = os.environ.get("GH_TOKEN") or os.environ.get("GITHUB_TOKEN")
+    cmd = [
+        "git", "clone", "--depth", "1", "--quiet",
+        f"https://github.com/{slug}.git", str(dest),
+    ]
+    env = os.environ.copy()
+    token = env.get("GH_TOKEN") or env.get("GITHUB_TOKEN")
     if token:
-        url = f"https://x-access-token:{token}@github.com/{slug}.git"
-    else:
-        url = f"https://github.com/{slug}.git"
-    return ["git", "clone", "--depth", "1", "--quiet", url, str(dest)]
+        basic = base64.b64encode(f"x-access-token:{token}".encode()).decode()
+        env["GIT_CONFIG_COUNT"] = "1"
+        env["GIT_CONFIG_KEY_0"] = "http.extraHeader"
+        env["GIT_CONFIG_VALUE_0"] = f"Authorization: Basic {basic}"
+    return cmd, env
 
 
 def _clone(slug: str, dest: Path) -> None:
@@ -216,9 +226,8 @@ def _clone(slug: str, dest: Path) -> None:
             file=sys.stderr,
         )
         shutil.rmtree(dest, ignore_errors=True)
-    # No check=True: a CalledProcessError would embed the token-bearing URL
-    # in its repr (Actions masks the secret, but don't rely on it).
-    result = subprocess.run(_git_clone_command(slug, dest))
+    cmd, env = _git_clone_invocation(slug, dest)
+    result = subprocess.run(cmd, env=env)
     if result.returncode != 0:
         raise SystemExit(f"git clone of {slug} failed (exit {result.returncode})")
 
