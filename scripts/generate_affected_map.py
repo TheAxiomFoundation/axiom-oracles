@@ -113,6 +113,47 @@ def _concept_prefix(concept: str) -> str | None:
     return head or None
 
 
+def pinned_repos_for_registry_config(config: dict) -> dict[str, str]:
+    """``{repo_slug: sha}`` for a suite pinning one rulespec snapshot.
+
+    A pinned grid (``rulespec_upstream_sha`` + ``rulespec_upstream_tree`` in
+    its parameters) replays the reviewed snapshot regardless of where the
+    repo's main has moved, so the affected-rerun selector must judge its
+    freshness against the PIN, not against main's HEAD — otherwise the suite
+    is re-selected on every sweep forever (its report can only ever stamp the
+    pinned SHA). The pin is attributed to the repos named by the suite's
+    checkout-path/remote signals; anything other than exactly one repo is a
+    config error and fails loudly rather than guessing.
+    """
+    runner = config.get("runner") or {}
+    params = runner.get("parameters") or {}
+    sha = str(params.get("rulespec_upstream_sha") or "").strip()
+    if not sha:
+        return {}
+    repos: set[str] = set()
+    remote = runner.get("rulespec_remote") or params.get("rulespec_remote")
+    if remote:
+        slug = _repo_from_remote(str(remote))
+        if slug:
+            repos.add(slug)
+    root = runner.get("rulespec_root") or params.get("rulespec_root")
+    if root:
+        slug = _repo_from_path(str(root))
+        if slug:
+            repos.add(slug)
+    for entry in params.get("rulespec_roots") or runner.get("rulespec_roots") or []:
+        slug = _repo_from_path(str(entry))
+        if slug:
+            repos.add(slug)
+    if len(repos) != 1:
+        raise SystemExit(
+            f"suite {config.get('name')!r} declares rulespec_upstream_sha but "
+            f"its checkout signals name {sorted(repos) or 'no'} rulespec "
+            "repos; a pin needs exactly one"
+        )
+    return {repos.pop(): sha}
+
+
 def repos_for_registry_config(config: dict) -> set[str]:
     repos: set[str] = set()
     runner = config.get("runner") or {}
@@ -280,24 +321,30 @@ def build_map() -> dict:
             continue
         suite = (config.get("dashboard") or {}).get("suite", config["name"])
         report = (config.get("dashboard") or {}).get("filename")
-        entries.append(
-            {
-                "suite": suite,
-                # The run_comparison.py registry name — what the CI rerun
-                # matrix must dispatch. Often equal to `suite`, but not always
-                # (e.g. dashboard suite `uk-benefit-cap` runs under registry
-                # name `uk-benefit-cap-ukmod`); dispatching the dashboard
-                # suite key crashes the leg with "unknown comparison".
-                # A suite declaring `ci: manual` cannot run in CI at all
-                # (e.g. or/ut SNAP: the encoder's snap-populace-compare has no
-                # jurisdiction config for them yet) — emit null so the
-                # selector and the weekly matrix leave it to the manual lane.
-                "name": None if config.get("ci") == "manual" else config["name"],
-                "report": report,
-                "repos": sorted(repos_for_registry_config(config)),
-                "source": f"comparisons/{path.name}",
-            }
-        )
+        entry = {
+            "suite": suite,
+            # The run_comparison.py registry name — what the CI rerun
+            # matrix must dispatch. Often equal to `suite`, but not always
+            # (e.g. dashboard suite `uk-benefit-cap` runs under registry
+            # name `uk-benefit-cap-ukmod`); dispatching the dashboard
+            # suite key crashes the leg with "unknown comparison".
+            # A suite declaring `ci: manual` cannot run in CI at all
+            # (e.g. or/ut SNAP: the encoder's snap-populace-compare has no
+            # jurisdiction config for them yet) — emit null so the
+            # selector and the weekly matrix leave it to the manual lane.
+            "name": None if config.get("ci") == "manual" else config["name"],
+            "report": report,
+            "repos": sorted(repos_for_registry_config(config)),
+            "source": f"comparisons/{path.name}",
+        }
+        pinned = pinned_repos_for_registry_config(config)
+        if pinned:
+            # Freshness for these repos is judged against the pin, not HEAD
+            # (see select_affected_suites.py) — a pinned grid's report can
+            # only ever stamp the pinned SHA, so comparing to a moving HEAD
+            # would re-select it every sweep forever.
+            entry["pinned"] = pinned
+        entries.append(entry)
 
     entries.sort(key=lambda e: (e["suite"], e.get("source", "")))
     return {

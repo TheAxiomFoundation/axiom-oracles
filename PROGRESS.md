@@ -1498,3 +1498,1198 @@ residual), #229 (small-suite grounding).
 ### Next
 
 - Handoff the committed local re-review ledger and `REVIEW-REPORT.md`.
+
+---
+
+## Spine Chunk 1 oracle build — SALT + itemized deductions — 2026-07-29
+
+### State
+
+- Worktree: `axiom-oracles/_worktrees/chunk1-oracle`.
+- Branch: `fed-parity/chunk1-oracle-suites`.
+- Starting point: local `origin/main`
+  `f8ea6027984b9da73c6f4b58d15a20b450181ac4` (tree
+  `27d02d523547c23a5a29d38a98babe90021420b6`).
+- Scope: add the `us-salt-deduction-grid` and
+  `us-itemized-taxable-income-deductions-grid` oracle suites specified by
+  `SPINE-PLAN.md`, adopt exactly their two `us-pe` rows, and regenerate the
+  dependent conformance/dashboard artifacts.
+- Constraints: local commits only; no push or GitHub writes; expected values
+  must come from the engine-verified RuleSpec PR #1177 companions;
+  `WORKER-REPORT.md` remains untracked.
+
+### Done
+
+- Verified the source checkout was clean and the requested branch/worktree did
+  not already exist.
+- Created this branch and worktree directly from the recorded local
+  `origin/main`.
+- Began read-only inspection of the binding plan, RuleSpec companion evidence,
+  generator contracts, and regeneration pipeline.
+
+### Next
+
+- Pin the exact RuleSpec PR #1177 head SHA/tree and transcribe the two verified
+  companion case inventories into generator configs.
+- Implement the generator, tests, bridge mappings, conformance rows, and
+  evidence-rich divergence dispositions in coherent committed steps.
+- Run real PolicyEngine generation on the declared stack, then the full
+  regeneration and `--check` gate chain.
+
+### Checkpoint — runner and registry implementation
+
+#### State
+
+- RuleSpec PR #1177 is pinned at
+  `f4cc1b88d1efd8dcca25058695dc1735c0fbb3de` (tree
+  `3388c508f2d565f3c067d3f9beb4bfd03182b9b1`) through the two comparison
+  registries.
+- Both federal configs, their complete adopted case inventories, their strict
+  fixture contracts, the SALT output bridge, itemized diagnostic
+  reconciliation, and all seven reviewed mapping rows are implemented.
+
+#### Done
+
+- Added explicit HOH and surviving-spouse situations and confirmed live PE
+  simulations return filing-status enum values `0, 1, 2, 3, 4`.
+- Added missing/extra/nonnumeric bridge rejection, compared-output separation,
+  RuleSpec domain/only-input closure, undeclared PE-override rejection, and a
+  fresh-Simulation-per-case test.
+- Corrected the SALT builder after exact-stack measurement proved
+  `real_estate_taxes` is a Person input in PE-US 1.767.3; the implementation
+  error was fixed rather than dispositioned.
+- The focused generator suite passes all 32 tests under Python 3.13 with
+  PolicyEngine 4.18.9, PE-US 1.767.3, and Core 3.30.3. Ruff and
+  `git diff --check` pass.
+
+#### Next
+
+- Commit the runner/registry step, then commit measured per-case evidence and
+  dashboard reports separately.
+- Regenerate the adoption/scoreboard chain and run every available
+  `--check` gate before final handoff.
+
+### Checkpoint — measured divergence evidence
+
+#### State
+
+- The two reports were generated from the clean pinned RuleSpec snapshot with
+  Python 3.13, PolicyEngine 4.18.9, PE-US 1.767.3, and Core 3.30.3.
+- Every raw mismatch belongs to a pre-registered §6.1/§6.2 divergence class;
+  there are no boundary or unexplained implementation mismatches.
+
+#### Done
+
+- SALT measured `13/16` raw matches. Exact Axiom/PE values are:
+  low-AGI ceiling `10000/5000`, §911 MAGI add-back `38900/40400`, and
+  personal-property tax `4000/0`.
+- Itemized deductions measured `15/17` raw matches. Exact Axiom/PE finals are:
+  other-deduction §68 base `50000/47297.296875` (PE reduction
+  `2702.702392578125`) and rational-rate probe
+  `9459459.45945946/9459460` (PE reduction `540540.5`).
+- Added one evidence-rich, source-expiring disposition per mismatching case,
+  retaining a literal placeholder (since replaced with the filed issue URLs, policyengine-us#9167-#9171) for the main lane to fill after filing
+  upstream issues. Both suites validate at 100% explained parity with zero
+  orphaned, expired, or unexplained entries.
+- Emitted the two declared dashboard reports with RuleSpec and engine
+  provenance and confirmed `apply_dispositions.py --check`.
+
+#### Next
+
+- Commit the measured evidence/reports.
+- Adopt exactly the two requested conformance rows, execute the ordered full
+  regeneration chain, and prove write/check parity.
+
+### Checkpoint — refreshed pin, adoption, and derived-data parity
+
+#### State
+
+- A final upstream audit found RuleSpec PR #1177 had advanced after the first
+  evidence run. The authoritative pin is now
+  `345c22030642cbd37a9fe46877591a8e1df5af7e` (tree
+  `40e08f7dbaa88a70660006f3a5a32bfa283ebd85`) in both comparison registries
+  and both regenerated reports.
+- The two adopted companion files are byte-unchanged between the earlier
+  signed head and this repaired/re-signed head, and all five measured values
+  reproduced exactly.
+
+#### Done
+
+- Adopted only `us-pe:salt_deduction` and
+  `us-pe:itemized_taxable_income_deductions`. Their notes state the 2026 exact
+  engine stack, `16/16` and `16/17` nonzero counts, completed-return
+  boundaries, explicit exclusions, and named placeholder issue
+  placeholders.
+- Ran the full ordered write chain: dispositions, grids, affected map,
+  vacuous/freshness gate, dated scoreboard snapshot, ratchet, burn-down, and
+  dashboard overview. No grid file changed.
+- Ran all eight check forms successfully: 85 disposition files; 174 affected
+  suites / 183 edges; 138 oracle-backed configs; 217 suites / 34 executable
+  surfaces; 4 scoreboard jurisdictions / 3 conformant; no ratchet regression;
+  4 burn-down series / 57 points; 218 overview reports.
+- Focused exact-stack validation passes: 33 generator tests and 81 conformance
+  tests with 2 unrelated skips. The broader validation pass previously
+  completed 716 additional relevant tests with 2 unrelated skips. Ruff and
+  `git diff --check` pass.
+- US-PE coverage rises from 34 to 36 rows. Only the two requested detail rows
+  change; unexplained and Axiom-attributed-open counts do not increase.
+
+#### Next
+
+- Commit the conformance and derived adoption artifacts.
+- Perform one final live-pin/containment audit, write the untracked
+  `WORKER-REPORT.md`, append the closing ledger entry, and hand off without
+  pushing.
+
+### Checkpoint — final-review test closure
+
+#### State
+
+- Final review found no numerical, mapping, disposition, provenance, or
+  containment defect, but identified two missing direct assertions in the
+  generator tests.
+- Both test gaps are now closed before the adoption commit.
+
+#### Done
+
+- Replaced the self-referential Chunk 1 fixture test with a durable comparison:
+  all 33 committed report `axiom_fixture_inputs` mappings are checked against
+  the applicable exact fixture validator and RuleSpec input contract.
+- Added a live exact-stack test that invokes both Chunk 1 PE parameter
+  validators and independently asserts the complete §5 expected mappings:
+  SALT sources/caps/thresholds/rate/floors/flags and itemized aggregate,
+  applicability flags, five thresholds, and stored OBBBA rate.
+- Exact-stack validation now passes 34 generator tests and 81 conformance tests
+  with 2 unrelated skips. Ruff and `git diff --check` pass.
+- Re-ran all eight read-only derived-data gates successfully: dispositions,
+  grids, affected map, vacuous gate, scoreboard, ratchet, burn-down, and
+  dashboard overview.
+
+#### Next
+
+- Commit the adoption artifacts and closed test contract.
+- Complete the final live-pin/containment audit, append the closing ledger
+  entry, and write the untracked worker report.
+
+### Checkpoint — worker closeout
+
+#### State
+
+- The complete implementation is committed through `3cf99290`.
+- The branch contains only the 26 intended ledger, generator, suite,
+  disposition, mapping, conformance, test, history, and dashboard paths
+  relative to `origin/main`.
+- Both comparison registries and both reports pin live RuleSpec branch
+  `fed-parity/chunk1-salt-itemized` at
+  `345c22030642cbd37a9fe46877591a8e1df5af7e` (tree
+  `40e08f7dbaa88a70660006f3a5a32bfa283ebd85`); the external worktree and its
+  local origin ref agree exactly.
+
+#### Done
+
+- Final targeted review passed the two repaired test requirements and reported
+  no remaining blocker.
+- Reconfirmed raw/dispositioned results of SALT `13/16 -> 16/16` and itemized
+  `15/17 -> 17/17`, with all five mismatches tied to their pre-registered,
+  source-expiring evidence entries.
+- Reconfirmed all eight derived-data gates, exact-stack focused tests, Ruff,
+  diff hygiene, live pin, and changed-path containment.
+- No corpus citation path changed, so the conditional citation census is not
+  applicable; this repository exposes no citation-census command.
+- No branch was pushed and no GitHub write was made.
+
+#### Next
+
+- Main lane: file the five upstream PolicyEngine issues from the measured
+  evidence and replace each literal placeholder with its issue URL (done: policyengine-us#9167-#9171).
+- Review and merge this local branch through the campaign's authorized main
+  lane. No worker implementation step remains.
+
+## 2026-07-28 main-lane closeout: issues filed, placeholders resolved (chunk1-oracle)
+
+- State: review round 1 findings repaired on the main lane.
+- Done: filed policyengine-us#9167 (simulation taxable-income ceiling),
+  #9168 (AGI vs section 164(b)(7)(B)(iv) MAGI phaseout), #9169
+  (personal-property-tax source omission), #9170 (section 68 proxy base),
+  #9171 (truncated 2/37 rate); corrected #9168's repro entity binding and
+  statutory subsection and #9170's pinned-arithmetic statement after the
+  blind review verified both mechanisms; remapped the two shifted SALT
+  evidence URLs (magi->9168, personal-property->9169); added
+  evidence.upstream_url and the local comparison YAML source to all five
+  dispositions per the us-qbid-grid model; replaced the five literal
+  literals in conformance/us-pe.yaml adoption notes and regenerated the
+  detail copies; full check battery green.
+- Next: round-2 blind re-review, then merge after rulespec-us#1177 per the
+  section 9 pairing order.
+
+## 2026-07-30 ca-snap-ecps BBCE rerun
+
+### State
+
+- In progress on `data/ca-snap-bbce-rerun`, isolated at
+  `_worktrees/ca-snap-rerun` from `origin/main` (`e1374eb3`).
+- Scope is limited to the `ca-snap-ecps` rerun, exact disposition
+  re-validation, residual reclassification, permitted regenerated shared
+  artifacts and count notes, this ledger, and an untracked worker report.
+
+### Done
+
+- Created the requested worktree and branch without pushing or making GitHub
+  writes.
+- Recorded the pre-rerun baseline: 529 raw mismatches, comprising 157
+  encoding, 111 bridge, 20 upstream, and 241 unexplained cases.
+
+### Next
+
+- Inspect the committed replay/builder and validation machinery, provision
+  the declared PolicyEngine stack and a registry-backed `rulespec-us`
+  checkout at `edc62ea56`, then rerun and revalidate every disposition.
+
+### 2026-07-30 baseline disposition audit
+
+#### State
+
+- The pre-rerun disposition evidence is reproduced and pinned; exact-stack
+  checkout provisioning remains in progress.
+
+#### Done
+
+- Ran both committed #423 audit entry points with literal base ref
+  `819f370bf0346e4a6a8dfb1c8c4f0d873d6d0340`; the reconciler and builder
+  dispatch both passed.
+- Confirmed 133 source disposition entries expanding to 288 classified rows:
+  two BBCE selectors covering 157 encoding rows plus 131 individually pinned
+  #362 rows (111 bridge and 20 upstream).
+- Confirmed the earlier #423 transition receipt independently: 192 historical
+  rows vanished, 22 materially drifted and were dropped, and 131 were kept.
+- Identified that the #423 scripts deliberately pin the 529-row baseline and
+  therefore serve as the pre-rerun receipt; post-BBCE validation must compare
+  each live identity and pin without altering those containment-excluded
+  scripts.
+- A sandbox restriction prevents `uv` from initializing its default cache
+  under `~/.cache/uv`; subsequent isolated runs will use a task-specific
+  writable cache under `/private/tmp`.
+
+#### Next
+
+- Materialize clean temporary RuleSpec and engine inputs, run the registry
+  suite at the declared PolicyEngine versions, and produce an exhaustive
+  vanished/materially-changed/exact disposition partition.
+
+### 2026-07-30 exact rerun and BBCE boundary audit
+
+#### State
+
+- The full 7,101-case rerun and exhaustive disposition audit are complete.
+- The two obsolete BBCE encoding selectors are being replaced with
+  source-expiring bridge selectors; the 131 exact singleton dispositions are
+  unchanged.
+
+#### Done
+
+- Ran all 14,202 comparisons with PolicyEngine 4.18.9,
+  PolicyEngine-US 1.767.3, and PolicyEngine-Core 3.30.3 against a clean,
+  detached `rulespec-us` checkout at
+  `edc62ea566a617cf5b9c3b620f712b73c6767c94`.
+- Used the clean legacy engine source at
+  `e19f1b7573c74512f20a6b71a0c55dbbf333d41b` because the current engine's
+  fail-closed root validator rejects the exact merged RuleSpec tree's
+  pre-existing noncanonical `us/statutes/42/1437c–1.test.yaml` filename.
+  The legacy source and rebuilt binary agree, so provenance is honest.
+- Confirmed the raw outcome did not shrink: 529 mismatches across 404 unique
+  cases, with all 529 identities and left/right/difference values exact
+  against the pre-rerun report.
+- Revalidated every existing disposition row. The 288-row partition is:
+  0 vanished, 0 materially changed above 0.005, 157 numerically exact but
+  semantically invalidated BBCE rows flagged for reclassification, and 131
+  exact singleton rows kept. The audit receipt is
+  `/private/tmp/ca-snap-bbce-disposition-revalidation.json` with SHA-256
+  `47f3926399f2b5f407f1fd2b0e69eda109b549656177aa6604fadda073ceea2e`.
+- Proved the residual mechanism at the compiled input boundary: both
+  Household/Judgment inputs `household_was_issued_pub_275` and
+  `household_has_online_access_to_pub_275` are absent from the populace
+  mapping and therefore default to false. This prevents
+  `calfresh_mce_status_conferred` and both MCE waivers despite the merged
+  encode being present and reachable.
+- Ran a 79-household counterfactual that changed only
+  `household_was_issued_pub_275` to true. All 79 households then received MCE
+  status and all 157 affected rows matched PolicyEngine within their declared
+  tolerances (79/79 eligibility and 78/78 benefit, zero errors). The receipt
+  is `/private/tmp/ca-snap-bbce-pub275-counterfactual.json` with SHA-256
+  `d9a2c4f785474b92e675f0e742f8dd023341097ac7f141b77bc95d5ae42c484a`.
+- The first counterfactual receipt attempt read Axiom outputs under the
+  dashboard concept IDs rather than the adapter's local target keys and
+  therefore recorded null lookups. It was overwritten by the corrected,
+  successful receipt above and is not evidence.
+- The default `uv` cache was sandbox-inaccessible; a local-clone hardlink
+  attempt also failed under the filesystem boundary, and a cleanup command
+  containing `rm -rf` was rejected before execution. No repository data was
+  removed. The successful run used the already cached exact Python
+  environment, offline dataset caches, writable temporary artifacts, and
+  cyclic garbage collection left enabled to avoid the prior late-batch
+  memory kill.
+- GitNexus graph-query tools were unavailable in this session, so the boundary
+  trace was confirmed directly from the compiled input manifest, adapter
+  source, mapping table, RuleSpec formulas, and the all-household
+  counterfactual.
+
+#### Next
+
+- Apply the bridge reclassification, regenerate the CA and shared derived
+  artifacts, commit the coherent data step, then run the full check battery.
+
+### 2026-07-30 CA artifact reclassification checkpoint
+
+#### State
+
+- The rerun report, source/served dispositions, and compact CA case artifacts
+  are regenerated and internally consistent.
+
+#### Done
+
+- Replaced the two obsolete RuleSpec encoding selectors with two PUB 275
+  population-input bridge selectors while preserving their exact 79
+  eligibility and 78 benefit case lists.
+- The post-rerun taxonomy is 0 encoding rows / 0 cases, 268 bridge rows / 189
+  cases, 20 upstream rows / 10 cases, and 241 unexplained rows / 205 cases.
+  Raw mismatch volume remains 529 rows / 404 cases.
+- Confirmed zero expired and zero orphaned CA dispositions. The compact case
+  artifacts contain all 529 mismatches, exactly 288 annotations, and zero
+  silent classifications.
+- Passed the focused disposition unit suite (19 tests), CA case-artifact
+  parity, CA source/served disposition parity, the repository-wide
+  disposition join check, and diff whitespace validation.
+
+#### Next
+
+- Commit the coherent CA data step, refresh the permitted shared scoreboard,
+  ratchet, burn-down, history, freshness, affected-map, and overview
+  artifacts, then run the full chain checks.
+
+### 2026-07-30 shared artifact checkpoint
+
+#### State
+
+- All permitted shared artifacts derived from the CA report are refreshed and
+  pass their dedicated staleness checks.
+
+#### Done
+
+- Rebuilt the affected map (no content change), freshness register,
+  conformance scoreboard and US-PE detail mirrors, dated 2026-07-30 US-PE
+  history snapshot, ratchet, burn-down, and dashboard overview.
+- The scoreboard now records the CA SNAP transition as
+  `axiom_attributed_open: 157 -> 0` and `bridge_artifacts: 111 -> 268` for the
+  policy row. Across US-PE the bridge total is 3,582 -> 3,739 while the
+  unexplained total remains 244.
+- Tightened the US-PE ratchet's Axiom-attributed-open ceiling from 157 to 0;
+  the live ratchet check passes.
+- Passed affected-map, vacuous/freshness, scoreboard, ratchet, burn-down, and
+  dashboard-overview checks. No citation-bearing corpus path changed, so the
+  conditional citation census is not applicable.
+
+#### Next
+
+- Commit the shared regeneration, run the complete repository check battery,
+  repair any in-scope drift, then write the untracked worker report and final
+  closing ledger entry.
+
+### 2026-07-30 validation and worker closeout
+
+#### State
+
+- The requested CA rerun, disposition re-validation, reclassification,
+  artifact regeneration, and permitted shared rollups are complete.
+- The branch remains local and unpushed. The final untracked
+  `WORKER-REPORT.md` will be written after this closing ledger commit so it can
+  quote the final head SHA.
+
+#### Done
+
+- Passed every targeted CA chain gate: source and served dispositions, compact
+  case artifacts (529 rows, 288 annotations, zero silent classifications),
+  disposition unit tests, and report/disposition consistency.
+- Passed the full derived-data gates for dispositions, grids, boundary cases,
+  affected map, vacuous/freshness, dashboard overview, scoreboard, ratchet,
+  and burn-down. The conformance-universe check passed UK and BE; UK-PE and
+  US-PE were clean no-op/unverified because the general repository
+  environment has package pins newer than those registry lanes. The CA rerun
+  itself used the exact declared US pins.
+- Passed comparison-registry loading, rule verification (21,859 rules; 99.6%
+  grounded; 97.8% manifest-backed; 34/130 executable surfaces), the state-tax
+  populace contract, 73 targeted state-tax/mapping tests, lockfile-exact Ruff
+  0.15.12, and `git diff --check`.
+- The full pytest run collected 2,386 tests and finished with 2,306 passed, 70
+  skipped, 10 failed, and 104 warnings. Two failures reproduce unchanged on an
+  archived `origin/main`: the sandboxed `npx esbuild` test cannot resolve the
+  npm registry, and an unrelated federal-grid test expects commit
+  `345c2203` while the unchanged config pins equivalent tree commit
+  `ae64af27`.
+- The other eight full-pytest failures are the historical #423 CA
+  reconciliation tests. Their excluded helper script hard-pins the prior
+  report's RuleSpec SHA and assumes every compact annotation includes a
+  `linked_issue`; the required post-rerun report instead honestly pins
+  `edc62ea56`, and the new bridge selectors intentionally have no fabricated
+  issue URL. With only those two expectations normalized in memory, all 14
+  reconciliation tests pass. The committed #423 `--base-ref
+  819f370bf0346e4a6a8dfb1c8c4f0d873d6d0340 --check` receipts passed before
+  the rerun and remain the historical baseline; the new exhaustive receipt
+  supersedes them for live values.
+- Repository-wide case/disposition artifact sweeps also report 138 and 16
+  unrelated stale/missing diagnostics respectively. Archived `origin/main`
+  reproduces the same case log byte-for-byte and the same disposition
+  diagnostics apart from absolute paths. Targeted `ca-snap-ecps` checks pass,
+  and containment forbids regenerating unrelated suites.
+- Confirmed the tracked diff is limited to `PROGRESS.md`, CA SNAP report,
+  source/served dispositions, compact CA case chunks/index, and the permitted
+  US-PE scoreboard/detail/history/ratchet/burn-down/freshness/overview
+  derivatives. The original 97,116-byte `PROGRESS.md` prefix is byte-exact.
+  No row note changed because the CA unexplained count remains 241, and no
+  citation-bearing corpus path changed.
+- Confirmed the exact checkout at `edc62ea566a617cf5b9c3b620f712b73c6767c94`
+  and the honest engine source at
+  `e19f1b7573c74512f20a6b71a0c55dbbf333d41b` are clean. No push or GitHub
+  write was made.
+
+#### Next
+
+- Write the untracked worker report with the final head SHA and hand the local
+  branch back for review. No further in-scope implementation remains.
+
+### 2026-07-30 PUB 275 bridge follow-up start
+
+#### State
+
+- Follow-up work begins from local branch head
+  `3c694c77f4b63c89fbac478cbdaa629317d4ec2a`; the branch remains unpushed.
+- The legal/administrative character of PUB 275 issuance and online access is
+  undecided pending review of the retained pinned CDSS authority.
+
+#### Done
+
+- Read the predecessor's untracked `WORKER-REPORT.md` before beginning work.
+- Confirmed the predecessor's 529-row baseline taxonomy: encoding 0, bridge
+  268, upstream 20, and unexplained 241.
+- Recorded the required containment, exact PolicyEngine stack, current
+  RuleSpec-origin requirement, frozen #423 guard repair, and no-push/no-GitHub
+  constraints.
+
+#### Next
+
+- Read ACL 14-56, ACL 15-42, and ACL 14-56E from the pinned corpus and decide
+  from their controlling text whether the bridge may lawfully bind PUB 275 as
+  a statewide administrative fact.
+
+### 2026-07-30 PUB 275 retained-authority determination
+
+#### State
+
+- The PUB 275 issuance/access disjunction is a statewide administrative fact
+  for the modeled California CalFresh application and certification process,
+  not a synthetic-household characteristic. The CA population bridge may
+  therefore bind the administrative trigger true.
+- The authority was read from the clean detached corpus checkout at
+  `8af592162231e9de748ba6b98792b426ad4fe8b7`.
+
+#### Done
+
+- ACL 14-56 page 3 states: “A household comes into the CWD and receives an
+  application packet (or completes an online application). Included in the
+  application packet (or on a linked website) is the PUB 275 (Family Planning
+  brochure).” Page 4 repeats the same statewide delivery mechanism for an
+  over-income household and says MCE still fails “even though the household
+  has received the PUB 275.” The controlling retained citation paths are
+  `us-ca/guidance/cdss/acl-2014-14-56/page-3` and
+  `us-ca/guidance/cdss/acl-2014-14-56/page-4`.
+- ACL 14-56 page 6 makes the administration mandatory: “CWDs shall document
+  that a household has been given the ‘Family Planning – PUB 275’ brochure
+  and is an MCE household.” It also requires corrective benefits if
+  implementation did not cover “all NACF applicants and continuing cases.”
+- ACL 15-42 page 2 later restates the operative route: households at or below
+  200 percent FPL “must be conferred MCE status if they are issued or have
+  online access to the TANF-funded ‘Family Planning – PUB 275’ brochure and
+  meet all other conditions of eligibility for CalFresh.” The retained
+  citation path is `us-ca/guidance/cdss/acl-2015-15-42/page-2`.
+- ACL 14-56E says its corrected language is limited to the impacted
+  paragraphs and must be read with ACL 14-56. Its page-2 correction preserves
+  immediate implementation by all counties for all NACF households, corrects
+  the inclusive boundary to “at or less than 200 percent,” and does not alter
+  the application-packet/online-link delivery mechanism.
+- “Receipt of the PUB 275, in and of itself, does not confer MCE status”
+  (`us-ca/guidance/cdss/acl-2014-14-56/page-3`) rejects sufficiency, not
+  statewide delivery. Gross income, household/member exclusions, and the
+  remaining CalFresh conditions still control; page 4 proves the distinction
+  by giving the brochure to an over-income household that is nevertheless
+  denied MCE.
+- The bridge convention will bind only
+  `household_was_issued_pub_275 = true`. The RuleSpec consumes issuance OR
+  online access, so this represents the guaranteed administrative delivery
+  disjunction without claiming that every household used the same online
+  channel or actually read the brochure.
+
+#### Next
+
+- Add the exact CA PUB 275 constant and a focused mapping guard, then run the
+  targeted mapping tests before committing the bridge implementation.
+
+### 2026-07-30 PUB 275 bridge implementation
+
+#### State
+
+- The CA-only population bridge now supplies the statewide PUB 275
+  administrative issuance fact; no comparison artifacts have yet been
+  regenerated from it.
+
+#### Done
+
+- Added an exact mapping for
+  `us-ca:policies/cdss/snap/modified-categorical-eligibility#input.household_was_issued_pub_275`
+  to constant `true`, with the retained ACL 14-56 and ACL 15-42 citation paths
+  and the sufficiency/distribution distinction recorded beside the mapping.
+- Left `household_has_online_access_to_pub_275` unmapped. The encoded
+  disjunction needs only one administrative limb, and the bridge does not
+  assert a household-specific online channel.
+- Added a focused test that requires issuance to resolve true and requires
+  online access to remain unmapped.
+- Passed all 14 population-mapping loader tests under Python 3.13.9.
+- The worktree has no `.venv`; the first relative `.venv/bin/python` test
+  command did not start. The successful run used the existing repository
+  environment at `/Users/maxghenis/TheAxiomFoundation/axiom-oracles/.venv`.
+
+#### Next
+
+- Verify the detached RuleSpec checkout at current local `origin/main`, run
+  the complete `ca-snap-ecps` comparison on the declared PolicyEngine stack,
+  and classify the resulting mismatch identities before changing
+  dispositions.
+
+### 2026-07-30 compiled-slot bridge correction
+
+#### State
+
+- The bridge rule is corrected to the exact bare slot name emitted by the
+  composed CA program. The full rerun has not started evaluating cases.
+
+#### Done
+
+- Inspected the actual compiled input leaf and confirmed
+  `enumerate_inputs()` sees bare `household_was_issued_pub_275`; input-record
+  qualification occurs only after mapping resolution.
+- Replaced the ineffective absolute-name match with the narrow bare exact
+  match and changed the focused test to use the actual compiled slot shape.
+- The first full-run launch stopped in offline dependency resolution before
+  loading or evaluating any cases because the task-local uv resolver could
+  not locate its cached Plotly 5.24.1 wheel.
+
+#### Next
+
+- Re-run the focused bridge test, commit this correction, then use the
+  predecessor's read-only exact-package overlay to launch the full comparison
+  without network resolution.
+
+### 2026-07-30 exact-stack PUB 275 rerun
+
+#### State
+
+- The complete 7,101-case comparison finished with no execution errors.
+- The honest raw result is 1,058 mismatches, not the 372 that a simple
+  subtraction of the predecessor's 157 PUB 275 bridge rows would have
+  predicted. The 735 newly exposed rows are being traced before they receive
+  any disposition.
+
+#### Done
+
+- Ran against the clean detached RuleSpec-US checkout at current local
+  `origin/main`, SHA `edc62ea566a617cf5b9c3b620f712b73c6767c94`, using
+  PolicyEngine 4.18.9, PolicyEngine-US 1.767.3, and PolicyEngine-core 3.30.3.
+- Used the clean legacy rules engine at
+  `e19f1b757524f5656281b7b2dc328f5ac411cb36`; the current engine cannot compile
+  a pre-existing en-dash path in the pinned RuleSpec tree.
+- Completed 14,202 comparisons across 7,101 cases with zero errors:
+  13,144 matched and 1,058 mismatched. The mismatch rows comprise 640 benefit
+  amounts and 418 eligibility booleans, spanning 670 unique cases.
+- Wrote the raw diagnostic output to
+  `/private/tmp/ca-snap-pub275-followup-raw.json`
+  (`f1192e19aa89a2cb5e3e06bd96ed737b4d79335ec759bad9bf549eb5a13c2451`)
+  and the suite-adapted candidate report to
+  `/private/tmp/ca-snap-pub275-followup-adapted.json`
+  (`86e9d996e5f74a1796bb2e4de046b746c80c707dc7a8f0c4d1f318def702e52f`).
+- Compared row identities with the predecessor's committed 529-row report:
+  206 old rows vanished (including all 157 PUB 275 bridge-attributed rows),
+  323 persisted, and 735 new rows appeared. The vanished set contains the 157
+  bridge rows and 49 formerly unexplained rows; the new set contains 375
+  benefit amounts and 360 Axiom-only eligibility rows.
+- The first normal task-runner attempt made no case evaluations because its
+  isolated uv resolver tried to fetch Plotly 5.24.1 while network access is
+  disabled. The successful launch used the already-cached, read-only exact
+  package overlay and the same in-memory data-certification shim as the
+  predecessor.
+
+#### Next
+
+- Trace the 735 newly exposed rows through PolicyEngine's TANF non-cash and
+  SNAP categorical-eligibility tests, then update dispositions only where the
+  causal evidence supports a specific taxonomy.
+
+### 2026-07-30 causal classification and dispositions
+
+#### State
+
+- All 1,058 mismatch rows now have an honest post-bridge taxonomy: 0 encoding,
+  121 bridge, 745 upstream, and 192 unexplained.
+- The CA disposition source selects 866 live rows with no expired or orphaned
+  entries. Generated reports, cases, and shared artifacts are not yet updated.
+
+#### Done
+
+- Replayed the 735 newly exposed rows on the declared exact stack. For 353
+  paired cases, two eligibility-only cases, and 15 benefit-only cases,
+  changing only PolicyEngine's extra TANF non-cash net-income test to true
+  clears exactly 723 rows. Their sorted row-identity receipt is
+  `862c27d5068e3ccbff79b52876fa19f23e63a0d38e3ed6763b375e8e3bd437bd`.
+- Classified the two `ecps-69070` rows as an upstream threshold-
+  parameterization gap. Retained ACIN I-46-25 Attachment I sets the
+  two-person MCE limit to `$3,526`; Axiom's `$3,525.29` passes that table,
+  while PolicyEngine divides by an unrounded monthly poverty guideline and
+  obtains ratio `2.0001626`, which fails its exact `<= 2` gate.
+- Classified eight negative-self-employment rows as bridge artifacts. Axiom's
+  generic synthetic income permits losses to offset other earned income;
+  PolicyEngine floors SNAP self-employment income after expenses at zero.
+- Classified `ecps-58498` benefit as the TANF bridge half of a documented
+  interaction: neither zeroing the population-only TANF amount nor waiving
+  PolicyEngine's extra net test closes the row alone, but both together yield
+  `$184.90` versus Axiom's `$184`, within the unchanged `$7` tolerance.
+- Classified `ecps-68027` benefit as population-adapter batch contamination.
+  The production 100-household slice reports PolicyEngine net income
+  `$274,757.41` and benefit zero; direct and independent 377-case evaluation
+  of the same household reports `$62.10`, matching Axiom's `$62`. It is the
+  only newly exposed row whose production right value differs from the
+  independent causal-diagnostic baseline.
+- Applied the new and retained dispositions to the complete candidate report:
+  121 bridge and 745 upstream rows are selected, 192 remain unexplained, and
+  no disposition entry is expired or orphaned.
+
+#### Next
+
+- Install the complete candidate report, regenerate the CA disposition/case
+  artifacts and shared conformance derivatives, then update the frozen #423
+  provenance guards for the new RuleSpec SHA and explicit reclassification
+  partition.
+
+### 2026-07-30 complete CA artifact regeneration
+
+#### State
+
+- The checked-in CA dashboard, disposition artifact, and all 15 case chunks
+  now represent the complete 1,058-row rerun. Shared conformance derivatives
+  and the #423 guards remain to be refreshed.
+
+#### Done
+
+- Installed the complete 7,101-case candidate as the ignored full report used
+  by the artifact generators.
+- Regenerated the dashboard copy without dropping the 58 rows above its usual
+  1,000-mismatch cap: all 1,058 mismatch rows are stored, with 670 mismatching
+  case rows. The dashboard records both totals explicitly.
+- Regenerated the 141-entry disposition artifact and all 15 compact case
+  chunks. The case check finds 1,058 mismatch rows, 866 annotated rows, and
+  zero silent classifications.
+- Passed the repository-wide disposition join check, the focused disposition
+  artifact check, the focused case artifact check, and an explicit dashboard
+  completeness/taxonomy assertion.
+
+#### Next
+
+- Refresh shared conformance artifacts and rewrite the frozen #423
+  reconciliation guard so it preserves its historical receipts while
+  recognizing the 41 rows reclassified by the new upstream selectors.
+
+### 2026-07-30 shared conformance regeneration
+
+#### State
+
+- The permitted shared conformance, freshness, history, ratchet, burn-down,
+  and overview artifacts now reflect the complete CA rerun and pass their
+  dedicated staleness checks.
+
+#### Done
+
+- Updated the CA SNAP universe note from 241 to 192 unexplained rows, then
+  regenerated the scoreboard and US-PE detail mirrors, the dated 2026-07-30
+  history snapshot, ratchet, burn-down, freshness register, and dashboard
+  overview. The affected map regenerated byte-identically.
+- The CA policy row now records 13,144 matches, raw parity 92.550345%,
+  explained parity 98.648078%, 192 unexplained rows, 745 upstream rows, and
+  121 bridge rows.
+- The aggregate US-PE totals now record 195 unexplained rows, 17,422
+  oracle-attributed rows, and 3,592 bridge artifacts. The unexplained ratchet
+  tightened from 244 to 195 without loosening any other invariant.
+- Passed affected-map, vacuous/freshness, scoreboard, ratchet, burn-down, and
+  dashboard-overview checks.
+
+#### Next
+
+- Update the eight frozen #423 guard expectations without weakening any
+  assertion, retaining the complete historical drift receipt and adding an
+  exact receipt for the 41 reclassified rows.
+
+### 2026-07-30 frozen #423 guard repair
+
+#### State
+
+- The historical #423 and #362 reconciliation guards now pass against the
+  complete rerun without weakening their frozen evidence.
+
+#### Done
+
+- Updated the exact report, expanded-disposition, and RuleSpec provenance
+  expectations to 1,058 rows, 866 annotations, and
+  `edc62ea566a617cf5b9c3b620f712b73c6767c94`.
+- Replaced the old three-way #423 partition with an exact four-way partition:
+  156 vanished, 17 current-but-dropped, 41 reclassified, and 131 kept. Every
+  partition retains its count and identity digest.
+- Added a strict receipt for the 41 reclassified rows. It binds their current
+  pins and exact replacement selectors: 20 paired eligibility, 20 paired
+  benefit, and one benefit-only row, with receipt SHA-256
+  `e70a713f5610eb393432df046fc8386c43cde3255769f9547ce939674b46373e`.
+- Preserved the original complete 22-row requested-month drift receipt and
+  its `fa54f6fd...` digest. Seventeen rows remain live; the five rows that
+  vanished retain explicit frozen last-observed current pins, plus separate
+  active, retired-identity, and retired-evidence digests.
+- Made expected report annotations follow the production rule that
+  `linked_issue` is present only when truthy; no assertion was removed.
+- Added equal-count replacement-swap and retired-pin tamper tests. All 16
+  focused #423 tests, the live #423 `--check`, the dependent #362 `--check`,
+  Ruff check/format, and diff whitespace validation pass.
+
+#### Next
+
+- Run the full repository test suite, confirm the two already-reproduced
+  origin/main failures are the only remaining failures, then perform final
+  containment and append-only ledger audits.
+
+### 2026-07-30 final validation and follow-up closeout
+
+#### State
+
+- The PUB 275 bridge gap, exact-stack rerun, causal reclassification, artifact
+  chain, and frozen provenance guards are complete. The branch remains local
+  and unpushed.
+- The required untracked `WORKER-REPORT-FOLLOWUP.md` will be written after
+  this closing ledger commit so it can quote the final branch head.
+
+#### Done
+
+- Passed the full `--check` chain for dispositions, CA case and disposition
+  artifacts, grids, boundary cases, affected map, vacuous/freshness,
+  dashboard overview, conformance universe and compositions, scoreboard,
+  ratchet, burn-down, #423 reconciliation, and the dependent #362 builder.
+- The conformance-universe command exited successfully and verified the
+  applicable UK/BE surfaces. It explicitly left US/UK external-checkout
+  enforcement unverified because the general environments are newer than
+  their registry pins; the CA rerun itself used the required exact
+  PolicyEngine 4.18.9 / US 1.767.3 / core 3.30.3 stack.
+- Passed comparison-registry validation (4,752 exact and 498 prefix
+  bindings), rule verification (21,859 rules; 99.6% grounded; 97.8%
+  manifest-backed; 34/130 executable surfaces), the 43-jurisdiction
+  state-tax population contract, 184 focused tests with three skips, all 16
+  #423 tests, Ruff lint, and diff whitespace validation.
+- The full repository suite completed in 289.07 seconds with 2,317 passed, 70
+  skipped, 2 failed, and 104 warnings. The prior eight #423 failures are
+  fixed. The two remaining failures reproduce on local `origin/main`
+  `e1374eb30c582639f8f71f9bf9c22ba93b6e36f4`, and their tests/configs are
+  byte-identical here:
+  - `tests/test_dashboard_loader.py::test_loader_equivalence`: sandboxed
+    `npx esbuild` cannot resolve the npm registry (`ENOTFOUND`).
+  - `tests/test_federal_tax_liability_generator.py::test_every_live_federal_grid_pins_its_reviewed_rulespec_snapshot`:
+    the unchanged itemized-grid config pins commit `ae64af27...` while the
+    frozen test expects `345c2203...`; both resolve to tree
+    `40e08f7dbaa88a70660006f3a5a32bfa283ebd85`.
+- Confirmed changed-path containment: only the CA bridge mapping/test, CA SNAP
+  report/disposition/case artifacts, permitted shared generated artifacts,
+  provenance guards/tests, conformance ledger, and `PROGRESS.md` changed.
+  The original 108,448-byte `PROGRESS.md` prefix is byte-exact; this follow-up
+  appended 312 lines before this entry and deleted none.
+- Sandbox/tooling disclosures:
+  - The worktree has no local `.venv`; tests used the existing parent
+    repository environment.
+  - The first task-local uv rerun stopped before case evaluation because the
+    offline resolver could not fetch Plotly 5.24.1. The successful rerun used
+    the already-cached exact-package overlay.
+  - The current rules engine could not compile an unrelated pre-existing
+    en-dash RuleSpec path, so the run used the clean compatible engine at
+    `e19f1b7573c74512f20a6b71a0c55dbbf333d41b`.
+  - A final attempt to launch lockfile Ruff 0.15.12 through uv could not
+    initialize the read-only cache outside the writable sandbox
+    (`Operation not permitted`). Installed Ruff 0.15.0 passed lint and the
+    changed guard files' format check; its repository-wide formatter differs
+    from the pinned baseline and was not used to rewrite unrelated files.
+
+#### Next
+
+- Commit this closing ledger entry, write the untracked follow-up worker
+  report with the final head SHA and complete before/after/legal/guard
+  findings, and hand the local branch back without pushing or making GitHub
+  writes.
+
+### 2026-07-30 defensive repair 2 audit kickoff
+
+#### State
+
+- Repairing PR #432 locally from pushed head
+  `eee181a30885626b1c85c4273badb732d7840ba3`; no push or GitHub write is
+  authorized.
+- The blind review at commit `6a4af70ec` is accepted. Its two blockers are
+  the unconditional PUB 275 issuance binding and six stale served disposition
+  rows.
+- The pre-existing untracked `WORKER-REPORT.md` and
+  `WORKER-REPORT-FOLLOWUP.md` are preserved unchanged.
+
+#### Done
+
+- Read the blind review before inspecting or changing the repair worktree.
+- Confirmed the branch initially matched
+  `origin/data/ca-snap-bbce-rerun` and had no tracked worktree changes.
+- Fixed the repair invariants: retain the eight repaired frozen #423
+  provenance guards, retain the 157-row encoding-to-bridge reclassification,
+  retain PolicyEngine-US issue references #9175 and #9176, preserve the frozen
+  partition and 22-row drift receipt, and make no tolerance change.
+- Attempted a read-only local GitNexus status check; `npx` produced no output
+  and was stopped after its sandbox/offline-sensitive startup hung. Source
+  tracing will therefore use the repository's checked-in generators and
+  assertions directly.
+
+#### Next
+
+- Remove the universal `household_was_issued_pub_275` bridge binding while
+  leaving both PUB 275 household facts unmapped, then update the mapping
+  contract and conformance ledger to describe the honest residual.
+- Re-run the declared PolicyEngine stack, regenerate dependent artifacts,
+  correct the six stale served rows, and run the full unchanged check battery.
+
+### 2026-07-30 PUB 275 binding removal
+
+#### State
+
+- Both `household_was_issued_pub_275` and
+  `household_has_online_access_to_pub_275` are now deliberately unmapped.
+- PUB 275 issuance or online access is a household administrative fact that
+  the Enhanced-CPS population does not carry. Neither the population encode
+  nor the oracle may assume it.
+- The expected consequence is accepted: the 157 PUB 275 rows return as
+  bridge-attributed residuals, while the 735 rows exposed only by the
+  unsupported true binding disappear. The exact rerun is still pending.
+
+#### Done
+
+- Removed the complete exact-match constant-true bridge rule for
+  `household_was_issued_pub_275`; no substitute or composite assumption was
+  added.
+- Replaced the positive mapping test with a negative contract requiring both
+  household-specific PUB 275 leaves to remain absent from the loaded
+  population mapping.
+- Passed all 14 focused population-mapping loader tests.
+- Recorded the only two principled resolutions for this residual: use a
+  population source that carries household PUB 275 issuance/access, or have
+  PolicyEngine model the same household gate. Until one occurs, the gap is a
+  visible bridge residual rather than manufactured eligibility.
+
+#### Next
+
+- Re-run all 7,101 California cases on PolicyEngine 4.18.9,
+  PolicyEngine-US 1.767.3, and PolicyEngine-Core 3.30.3, then verify the raw
+  and attributed taxonomy.
+- Preserve the correct 157-row encoding-to-bridge classification and both
+  independently valid upstream issue references; describe #9175 as a known
+  divergence that the corrected bridge may no longer expose.
+
+### 2026-07-30 stale served-disposition repair
+
+#### State
+
+- The served CA disposition artifact now exactly reflects its YAML source.
+- This checkpoint validates blocker 2 against the pre-rerun 1,058-row
+  artifact state; the corrected-PUB-275 rerun will regenerate the final
+  smaller artifact chain.
+
+#### Done
+
+- Regenerated `dashboard/public/data/dispositions/ca-snap-ecps.json` from
+  `dispositions/ca-snap-ecps.yaml`; no served JSON field was hand-edited.
+- Corrected exactly six stale `linked_issue` fields:
+  - `ca-mce-pe-extra-net-test-paired-eligibility`
+  - `ca-mce-pe-extra-net-test-paired-benefit`
+  - `ca-mce-pe-extra-net-test-eligibility-only`
+  - `ca-mce-pe-extra-net-test-benefit-only`
+  - `ca-mce-acin-threshold-pe-eligibility`
+  - `ca-mce-acin-threshold-pe-benefit`
+- The first four now serve PolicyEngine-US issue #9175 instead of the
+  superseded net-test source blob; the final two now serve issue #9176
+  instead of the superseded gross-test source blob.
+- Passed the unchanged disposition-artifact `--check`, frozen #423
+  reconciliation `--check`, and dependent #362 builder `--check` with
+  literal base `819f370bf0346e4a6a8dfb1c8c4f0d873d6d0340`.
+
+#### Next
+
+- Perform the exact corrected-premise rerun and replace the unsupported
+  binding's 1,058-row artifact state with the honest 529-row state.
+- Revalidate the same three entry points after all final artifact and ledger
+  regeneration.
+
+### 2026-07-30 exact corrected-premise replay
+
+#### State
+
+- The complete corrected-premise comparison is finished and verified in
+  temporary output. No tracked data artifact has yet been replaced from it.
+- The exact result is 529 raw mismatches across 404 cases: 0 encoding, 268
+  bridge, 20 upstream, and 241 unexplained after the accepted dispositions
+  are applied.
+
+#### Done
+
+- Replayed 7,101 California households and 14,202 comparisons with zero
+  execution errors, 13,673 matches, and 529 mismatches on PolicyEngine
+  4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3.
+- Used the clean RuleSpec-US checkout
+  `edc62ea566a617cf5b9c3b620f712b73c6767c94` and clean compatible engine
+  `e19f1b7573c74512f20a6b71a0c55dbbf333d41b`. The composed and compiled
+  inputs have SHA-256
+  `03166c96d74382dae2fef348ee6ab8c05ea92e5b855555db0ba60b473700910d`
+  and
+  `c1d2c5bdac8d03e137d569d50791654981a219699557018ccd151273b8a0bb23`;
+  both are byte-identical to the accepted reviewer replay inputs.
+- Verified the runtime import paths and report stamps resolve the declared
+  three PolicyEngine versions. The certified cached Populace dataset was used
+  in offline mode.
+- Verified every mismatch identity and numerical/boolean payload against the
+  accepted 529-row report after stripping only dispositions. Both sorted
+  lists have SHA-256
+  `6b629ae7fdfe5a9cf628591e045dc3d2d69fd17f07051e2f8b295012effc3251`.
+- Verified all 404 mismatching case payloads exactly, with SHA-256
+  `59aa74fdb551291cc5ac5c18087a070c15663fd1ca7c8553f2ae754c189bcb6f`.
+  Eligibility tolerance remains zero; benefit tolerance remains $7; both
+  relative tolerances remain zero.
+- Saved the raw replay at `/private/tmp/ca-snap-repair2-raw.json`, SHA-256
+  `fe63c28f0e3ead5c8cedc169d4c81c874911e82e533901b6ed54623d735f2bc7`.
+- An initial partial launch was stopped at batch 34 because it omitted the
+  registry's explicit `--report-suite ca-snap-ecps` metadata argument. It
+  wrote no tracked artifact and supplied no accepted evidence. The corrected
+  complete launch included the argument and used the prior cyclic-GC
+  safeguard.
+- A direct offline `uv run` probe could not resolve cached Plotly 5.24.1 even
+  though the exact extracted archive was present. The successful run used
+  the previously verified read-only exact-package overlay instead of network
+  resolution.
+
+#### Next
+
+- Restore the two 157-row PUB 275 bridge selectors, remove the ten
+  binding-exposed selectors, and regenerate the canonical report, served
+  dispositions, and compact case artifacts from this verified replay.
+- Refresh conformance derivatives and implement a two-era #423 audit: the
+  honest live 529-row state plus the separately hash-pinned accepted
+  binding-era snapshot preserving the 156/17/41/131 and 22-row receipts.
+
+### 2026-07-30 honest CA artifact regeneration
+
+#### State
+
+- The canonical CA report, source/served dispositions, and all compact case
+  artifacts now represent the verified 529-row corrected-premise replay.
+- Shared conformance derivatives and the two-era frozen-history guard remain
+  to be updated.
+
+#### Done
+
+- Restored the two accepted PUB 275 bridge selectors covering 79 eligibility
+  and 78 benefit rows, and removed the ten selectors covering the 735 rows
+  exposed only by the unsupported issuance binding.
+- Preserved all 131 other disposition entries structurally unchanged. The
+  live source has 133 entries expanding to 288 rows, with zero expired and
+  zero orphaned entries.
+- Stated in both PUB 275 served mechanisms that the Enhanced-CPS population
+  carries neither household issuance nor online-access fact, and that the
+  residual can be resolved only by a population source carrying one of those
+  facts or by PolicyEngine modeling the same household gate.
+- Regenerated the dashboard report from the exact replay. After normalizing
+  only `provenance.generated_at`, it is byte-equivalent as parsed JSON to the
+  accepted 529-row report. It stores all 529 mismatches and all 404
+  mismatching case rows while retaining the full 7,101-case count.
+- Regenerated all 15 compact case chunks and their index. The complete case
+  artifact is byte-identical to the accepted 529-row artifact.
+- Regenerated the served disposition JSON from source. The artifact contains
+  the explicit corrected PUB 275 resolution text and exact YAML parity.
+- Confirmed the final live taxonomy: raw 529, encoding 0, bridge 268,
+  upstream 20, unexplained 241; raw parity 96.275173%, explained parity
+  98.303056%.
+- Passed the repository-wide disposition join check, focused CA case
+  artifact check (529 mismatches, 288 annotated, zero silent), focused served
+  artifact check (133 entries), and diff whitespace validation.
+
+#### Next
+
+- Update the US-PE conformance ledger to the corrected counts while retaining
+  PolicyEngine-US issues #9175 and #9176 as independently verified, currently
+  unexposed upstream findings.
+- Regenerate scoreboard, history, ratchet, burn-down, freshness, and overview
+  derivatives, then commit the shared conformance step.
+
+### 2026-07-30 corrected conformance ledger and rollups
+
+#### State
+
+- The conformance ledger and all permitted shared derivatives now reflect the
+  honest 529-row CA state.
+- The strengthened #423/#362 historical guard is the remaining implementation
+  step before the full unchanged check battery.
+
+#### Done
+
+- Updated the canonical US-PE SNAP ledger note to 241 CA unexplained rows and
+  recorded plainly that PUB 275 issuance/online access is a household
+  administrative fact absent from Enhanced CPS, both facts remain unmapped,
+  and neither the population encode nor the oracle assumes them.
+- Recorded the only principled resolutions in the canonical ledger: a
+  population source carrying household PUB 275 issuance/access, or
+  PolicyEngine modeling the same household gate.
+- Retained direct links to PolicyEngine-US issues #9175 and #9176 in the
+  canonical ledger. Both are independently verified divergences on the pinned
+  stack; the corrected bridge cannot currently expose them because the
+  household MCE gate is unobserved. They are not represented as orphan live
+  dispositions.
+- Regenerated US-PE detail and dashboard mirror, the 2026-07-30 history
+  snapshot, scoreboard and mirror, burn-down, freshness, and dashboard
+  overview. US-PE now records 244 unexplained, 16,697 oracle-attributed, and
+  3,739 bridge rows; CA records 13,673 matches, 241 unexplained, 20 upstream,
+  and 268 bridge.
+- Returned the US-PE conformance ratchet ceiling from 195 to 244 because 195
+  was tightened from the rejected universal-issuance premise. This restores
+  the honest generated count; it does not change the $7 benefit tolerance,
+  zero eligibility tolerance, zero relative tolerances, or the 0.005
+  historical movement threshold.
+- Passed conformance universe, composition, scoreboard, ratchet, burn-down,
+  vacuous/freshness, and overview checks. UK and BE universes verified.
+  UK-PE and US-PE were explicit clean no-ops because the available external
+  checkouts are newer than their registry pins.
+
+#### Next
+
+- Refactor the #423 reconciliation into separate live and immutable-snapshot
+  audits, preserving every strengthened assertion, the reviewed
+  156/17/41/131 partition, the `e70a713f...` replacement receipt, and the full
+  `fa54f6fd...` 22-row drift receipt.
+- Update and extend the focused tests without deleting or weakening an
+  assertion, then make both #423 and dependent #362 entry points pass.
+
+### 2026-07-30 two-era #423/#362 defensive guard
+
+#### State
+
+- The live artifact audit now guards the honest 529-row state, while an
+  immutable rejected-premise snapshot separately preserves the accepted
+  binding-era evidence and all six corrected served links.
+- Focused implementation tests are green; the full unchanged check and test
+  battery remains to be run.
+
+#### Done
+
+- Updated the live #423 partition guard to 192 vanished, 22
+  current-but-dropped, zero reclassified, and 131 kept rows. All 22 reviewed
+  drift identities are now active current-but-dropped rows; the full
+  `fa54f6fd...` drift receipt and the 115/16 retained-pin receipt are
+  unchanged.
+- Hash-pinned rejected snapshot commit
+  `c1084c2339ccc4bc41776f71b059fbabe8732916` and its exact source
+  (`c68761bf...`), canonical report (`d2e095a5...`), and served disposition
+  (`443a8fde...`) blobs. The snapshot replays the accepted 1,058/866 state,
+  156/17/41/131 partition, `e70a713f...` 41-row reclassification receipt,
+  and 17-active/5-retired split of the same 22-row receipt.
+- Explicitly pinned the four #9175 and two #9176 corrected URLs through the
+  source `evidence.upstream_url` to served `linked_issue` transformation.
+  Source, report, and served byte-hash tamper tests make this immutable proof
+  fail closed.
+- Bumped the deterministic reconciliation receipt to v2 with distinctly
+  labeled `current` and `rejected_pub275_exposure_snapshot` sections, avoiding
+  any use of the rejected rows as current evidence.
+- Preserved the compact current-artifact, equal-count partition swap,
+  reclassified selector swap, kept-pin, active drift-pin, and retired
+  drift-pin tamper assertions. Snapshot-only assertions were retargeted to the
+  snapshot instead of removed.
+- Passed 40 focused tests covering mapping, #423 reconciliation, and #362
+  dispatch; passed focused Ruff and whitespace validation; and ran both the
+  standalone #423 checker and its complete two-era receipt successfully.
+
+#### Next
+
+- Run the complete artifact, conformance, #423, and #362 `--check` battery,
+  then the full test and lint suites.
+- Audit commit containment, unchanged tolerances, append-only progress
+  history, and final worktree state before writing the untracked repair
+  report.
+
+### 2026-07-30 defensive repair 2 final validation
+
+#### State
+
+- The requested defensive correctness and completeness repair is complete on
+  the local branch. No push or GitHub write was made.
+- The tracked worktree is clean before this closing ledger append. The two
+  pre-existing untracked worker reports remain untouched; the required
+  untracked `WORKER-REPORT-REPAIR2.md` will be written after this entry is
+  committed so it can name the final head.
+
+#### Done
+
+- Passed the complete read-only chain for disposition joins, focused CA case
+  and served artifacts, grids, boundary cases, affected map,
+  vacuous/freshness, dashboard overview, conformance universes and
+  compositions, scoreboard, ratchet, burn-down, frozen #423 reconciliation,
+  and dependent #362 dispatch. All three checks that failed the accepted blind
+  review are green without assertion or tolerance changes.
+- Passed comparison-registry loading, the 21,859-rule verification guard
+  (99.6% grounded, 97.8% manifest-backed, 34/130 executable surfaces), and the
+  43-jurisdiction state-tax Populace contract.
+- Reconfirmed the exact replay environment from the retained local evidence:
+  PolicyEngine 4.18.9, PolicyEngine-US 1.767.3, core 3.30.3, and Plotly
+  5.24.1; RuleSpec commit `edc62ea566a617cf5b9c3b620f712b73c6767c94`;
+  compiled hash `c1d2c5bd...`; composed hash `03166c96...`; and raw report hash
+  `fe63c28f...`.
+- Passed 40 focused repair tests and the full repair-specific subsets. The
+  full repository run collected 2,392 tests and completed in 263.35 seconds
+  with 2,320 passed, 70 skipped, two failed, and 104 warnings. Both failures
+  are unchanged, unrelated baseline/environment failures:
+  - `test_dashboard_loader.py::test_loader_equivalence` cannot resolve
+    `registry.npmjs.org` for sandboxed `npx esbuild` (`ENOTFOUND`).
+  - `test_federal_tax_liability_generator.py::test_every_live_federal_grid_pins_its_reviewed_rulespec_snapshot`
+    compares unchanged commits `345c2203...` and `ae64af27...`, which resolve
+    to the same tree `40e08f7d...`.
+- Passed repository-wide Ruff 0.15.12 lint and changed guard-file format
+  checks. The optional repository-wide format check reports 202 pre-existing
+  files; the changed mapping test was already unformatted at accepted start
+  `eee181a`, and this repair did not broaden it with mechanical rewrites.
+- Independently confirmed 31 changed paths, all within the repair whitelist.
+  Every repair commit appends a State/Done/Next section to `PROGRESS.md`; each
+  prior ledger blob is an exact byte prefix of its successor. Benefit
+  tolerance remains 7, eligibility tolerance 0, both relative tolerances 0,
+  and historical movement threshold 0.005.
+- Reconfirmed both exact historical receipts: honest live partition
+  192/22/0/131 and rejected snapshot partition 156/17/41/131, each closing
+  over all 345 base rows and the same 22-row `fa54f6fd...` drift receipt.
+- Sandbox/tooling disclosures: the worktree has no local virtualenv, so the
+  existing parent environment was used; offline dependency resolution could
+  not fetch cached Plotly through a fresh uv solve, so the exact cached
+  package overlay was used; the current rules engine rejected an unrelated
+  pre-existing en-dash RuleSpec path, so compatible engine commit
+  `e19f1b75...` compiled the byte-identical accepted program; GitNexus query
+  tools were unavailable and its CLI could not complete offline, so the
+  required debugging workflow used direct source/Git inspection; process
+  enumeration was denied by the sandbox; and npm network resolution caused
+  the disclosed dashboard-loader test failure.
+
+#### Next
+
+- Commit this closing append, write the untracked
+  `WORKER-REPORT-REPAIR2.md` with the final head SHA, and hand the local branch
+  back without pushing.

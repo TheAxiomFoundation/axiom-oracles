@@ -1,5 +1,6 @@
 import importlib.util
 import json
+import os
 import subprocess
 from pathlib import Path
 from types import SimpleNamespace
@@ -534,9 +535,11 @@ def test_uk_efrs_runner_merges_universal_credit_surfaces(monkeypatch, tmp_path):
         run_comparison, "_ensure_engine_binary", lambda *_args, **_kwargs: None
     )
 
-    def fake_run(cmd, *, check, cwd=None, capture_output=None, text=None):
+    def fake_run(cmd, *, check, cwd=None, capture_output=None, text=None, env=None):
         del check, cwd, capture_output, text
         calls.append(cmd)
+        assert env is not None
+        assert str(run_comparison.REPO_ROOT) in env["PYTHONPATH"].split(os.pathsep)
         surface = cmd[cmd.index("--surface") + 1]
         payload = {
             "compared_persons": 2,
@@ -586,7 +589,7 @@ def test_uk_efrs_runner_merges_universal_credit_surfaces(monkeypatch, tmp_path):
 
     assert len(calls) == 2
     assert calls[0][:4] == ["uv", "run", "--python", "3.13"]
-    assert "uk-efrs-compare" in calls[0]
+    assert "uk-populace-compare" in calls[0]  # renamed subcommand (#1108)
     assert "policyengine[uk]==4.11.0" not in calls[0]
     assert "policyengine-uk==2.88.56" in calls[0]
     assert "--rulespec-root" in calls[0]
@@ -622,11 +625,15 @@ def test_uk_efrs_runner_composes_universal_credit_program(monkeypatch, tmp_path)
         run_comparison, "_ensure_engine_binary", lambda *_args, **_kwargs: None
     )
 
-    def fake_run(cmd, *, check, cwd=None, capture_output=None, text=None):
+    def fake_run(cmd, *, check, cwd=None, capture_output=None, text=None, env=None):
         del check, cwd, capture_output, text
         calls.append(cmd)
-        if "uk-efrs-compare" not in cmd:
+        if "uk-populace-compare" not in cmd:
             return subprocess.CompletedProcess(cmd, 0)
+        # The runner overlays this checkout's bridge over the encoder's
+        # axiom-oracles pin via PYTHONPATH.
+        assert env is not None
+        assert str(run_comparison.REPO_ROOT) in env["PYTHONPATH"].split(os.pathsep)
         payload = {
             "compared_persons": 1,
             "compared_benunits": 1,
@@ -672,7 +679,7 @@ def test_uk_efrs_runner_composes_universal_credit_program(monkeypatch, tmp_path)
         "-o",
         str(composed.resolve()),
     ]
-    assert "uk-efrs-compare" in calls[1]
+    assert "uk-populace-compare" in calls[1]  # renamed subcommand (#1108)
     assert "--universal-credit-program" in calls[1]
     assert str(composed.resolve()) in calls[1]
 
@@ -1098,6 +1105,20 @@ def test_snap_residual_suites_pin_reviewed_policyengine_stack(state):
     )
 
 
+def test_ri_income_tax_grid_pins_reviewed_policyengine_stack():
+    config = yaml.safe_load(
+        (COMPARISONS_DIR / "ri-income-tax-liability.yaml").read_text()
+    )
+    params = config["runner"]["parameters"]
+    run_comparison = load_run_comparison_module()
+
+    assert run_comparison._resolve_pe_oracle_pins(params) == (
+        "policyengine==4.18.9",
+        "policyengine-us==1.784.4",
+        "policyengine-core==3.30.3",
+    )
+
+
 def _euromod_be_registry_configs() -> list[dict]:
     configs: list[dict] = []
     for path in sorted(COMPARISONS_DIR.glob("*.yaml")):
@@ -1451,7 +1472,7 @@ def test_state_income_tax_grid_generation_fails_closed(monkeypatch, tmp_path):
     monkeypatch.setattr(
         run_comparison,
         "_resolve_state_income_tax_grid_repos",
-        lambda: (rulespec, engine),
+        lambda _params=None: (rulespec, engine),
     )
 
     def unavailable(*_args, **_kwargs):
@@ -1480,14 +1501,14 @@ def test_state_income_tax_grid_exposes_actual_repos_to_provenance(
     monkeypatch.setattr(
         run_comparison,
         "_resolve_state_income_tax_grid_repos",
-        lambda: (rulespec, engine),
+        lambda _params=None: (rulespec, engine),
     )
     source = (
         tmp_path
         / "dashboard"
         / "public"
         / "data"
-        / "axiom-policyengine-taxsim-ut-income-tax-liability.json"
+        / "axiom-policyengine-taxsim-ri-income-tax-liability.json"
     )
     source.parent.mkdir(parents=True)
     source.write_text('{"fresh": true}\n')
@@ -1498,7 +1519,14 @@ def test_state_income_tax_grid_exposes_actual_repos_to_provenance(
         return subprocess.CompletedProcess(cmd, 0)
 
     monkeypatch.setattr(run_comparison.subprocess, "run", generated)
-    runner = {"parameters": {"state": "UT"}}
+    runner = {
+        "parameters": {
+            "state": "RI",
+            "policyengine_version": "4.18.9",
+            "policyengine_us_version": "1.784.4",
+            "policyengine_core_version": "3.30.3",
+        }
+    }
     output = tmp_path / "out.json"
 
     run_comparison._run_state_income_tax_liability_grid(runner, output)
@@ -1508,7 +1536,399 @@ def test_state_income_tax_grid_exposes_actual_repos_to_provenance(
     cmd, check, cwd, env = calls[0]
     assert check is True
     assert cwd == tmp_path
-    assert cmd[-2:] == ["--state", "UT"]
+    assert cmd[-2:] == ["--state", "RI"]
+    assert "policyengine==4.18.9" in cmd
+    assert "policyengine-us==1.784.4" in cmd
+    assert "policyengine-core==3.30.3" in cmd
+    assert run_comparison._PE_ORACLE_PINS[1] not in cmd
     assert env["RULESPEC_US_REPO"] == str(rulespec)
     assert env["AXIOM_RULES_REPO"] == str(engine)
     assert json.loads(output.read_text()) == {"fresh": True}
+
+
+# ---------------------------------------------------------------------------
+# _write_dashboard_report source binding: the pointer contract must mirror
+# the consumer's (repo-relative AND under reports/) — sol stack reviews
+# r3–r6. A premerged-slim copy is only ever trusted through its source
+# binding, so when the full report goes to a non-canonical location the
+# committed dashboard copy is NOT updated at all: pointer-emitting OR
+# pointer-free, apply_dispositions.py --check is guaranteed to flag a
+# premerged copy that cannot be re-derived from a committed full report.
+# Consumer acceptance of the canonical emitted shape is pinned on the
+# real artifacts by test_dispositions.py::
+# test_panel_dashboard_block_is_bound_to_committed_full_report.
+# ---------------------------------------------------------------------------
+
+_SENTINEL = '{"sentinel": true}'
+
+
+def _premerged_panel_report() -> dict:
+    """A merged report large enough to be slimmed into a premerged copy."""
+    n = 1001  # crosses _DASHBOARD_MAX_MISMATCHES so the slim is premerged
+    return {
+        "suite": "t-suite",
+        "schema_version": "axiom.comparison_report.v2.1",
+        "summary": {
+            "mismatch_count": n,
+            "dispositioned": {"explained_rate": 1.0, "unexplained_count": 0},
+        },
+        "mismatches": [
+            {"case_id": f"c{i}", "concept": "x", "disposition": None}
+            for i in range(n)
+        ],
+        "cases": [],
+    }
+
+
+def _write_dashboard_with_full_report_at(tmp_path, monkeypatch, full_path):
+    """Returns the dashboard copy's path; it starts as a sentinel so tests
+    can distinguish 'updated' from 'left untouched'."""
+    run_comparison = load_run_comparison_module()
+    repo = tmp_path / "repo"
+    dashboard = repo / "dashboard" / "public" / "data"
+    dashboard.mkdir(parents=True)
+    monkeypatch.setattr(run_comparison, "REPO_ROOT", repo)
+    monkeypatch.setattr(run_comparison, "DASHBOARD_DATA_DIR", dashboard)
+    monkeypatch.setattr(run_comparison, "_merge_dispositions", lambda r: r)
+    target = dashboard / "t-suite.json"
+    target.write_text(_SENTINEL)
+    full = repo / full_path if not full_path.is_absolute() else full_path
+    full.parent.mkdir(parents=True, exist_ok=True)
+    full.write_text(json.dumps(_premerged_panel_report()))
+    run_comparison._write_dashboard_report(
+        _premerged_panel_report(), "t-suite.json", full_report_path=full
+    )
+    return target
+
+
+def test_dashboard_binding_emitted_for_reports_dir_source(tmp_path, monkeypatch):
+    target = _write_dashboard_with_full_report_at(
+        tmp_path, monkeypatch, Path("reports/t-suite-full.json")
+    )
+    slim = json.loads(target.read_text())
+    assert "stored_mismatch_example_count" in slim["summary"]  # premerged
+    block = slim["summary"]["dispositioned"]
+    assert block["source_report"]["path"] == "reports/t-suite-full.json"
+    assert len(block["source_report"]["sha256"]) == 64
+    assert len(block["assignment_sha256"]) == 64
+
+
+def test_dashboard_not_updated_for_in_repo_source_outside_reports(
+    tmp_path, monkeypatch, capsys
+):
+    """In-repo but outside reports/: an unbindable premerged copy would be
+    flagged by the consumer whether or not it carries a pointer, so the
+    committed dashboard copy must be left untouched (sol r5)."""
+    target = _write_dashboard_with_full_report_at(
+        tmp_path, monkeypatch, Path("custom-out/t-suite-full.json")
+    )
+    assert target.read_text() == _SENTINEL
+    assert "NOT updated" in capsys.readouterr().out
+
+
+def test_dashboard_not_updated_for_source_outside_repo(
+    tmp_path, monkeypatch, capsys
+):
+    target = _write_dashboard_with_full_report_at(
+        tmp_path, monkeypatch, tmp_path / "elsewhere" / "t-suite-full.json"
+    )
+    assert target.read_text() == _SENTINEL
+    assert "NOT updated" in capsys.readouterr().out
+
+
+def test_dashboard_still_updated_for_unbindable_non_premerged_copy(
+    tmp_path, monkeypatch
+):
+    """A small report slims to a FULL dashboard copy (no truncation, no
+    stored_mismatch_example_count): the consumer re-merges it directly and
+    never needs a pointer, so a non-canonical full-report location does
+    not block the dashboard write."""
+    run_comparison = load_run_comparison_module()
+    repo = tmp_path / "repo"
+    dashboard = repo / "dashboard" / "public" / "data"
+    dashboard.mkdir(parents=True)
+    monkeypatch.setattr(run_comparison, "REPO_ROOT", repo)
+    monkeypatch.setattr(run_comparison, "DASHBOARD_DATA_DIR", dashboard)
+    monkeypatch.setattr(run_comparison, "_merge_dispositions", lambda r: r)
+    small = {
+        "suite": "t-suite",
+        "summary": {"mismatch_count": 1},
+        "mismatches": [{"case_id": "c0", "concept": "x"}],
+        "cases": [],
+    }
+    full = tmp_path / "elsewhere" / "t-suite-full.json"
+    full.parent.mkdir(parents=True)
+    full.write_text(json.dumps(small))
+    run_comparison._write_dashboard_report(
+        small, "t-suite.json", full_report_path=full
+    )
+    slim = json.loads((dashboard / "t-suite.json").read_text())
+    assert "stored_mismatch_example_count" not in slim.get("summary", {})
+    assert "dispositioned" not in slim.get("summary", {})
+
+
+def test_dashboard_still_updated_for_case_only_truncated_copy(
+    tmp_path, monkeypatch
+):
+    """Case-only overflow also writes stored_mismatch_example_count, but the
+    consumer (apply_dispositions._is_premerged_slim_report) only treats a
+    copy as premerged when stored < mismatch_count. The producer must use
+    the same predicate: a copy whose mismatch sample is complete is
+    re-merged directly by the consumer and never needs a pointer, so a
+    non-canonical full-report location must not block its dashboard write
+    (sol stack review r6: 1 mismatch / 1,001 cases skipped publication)."""
+    run_comparison = load_run_comparison_module()
+    repo = tmp_path / "repo"
+    dashboard = repo / "dashboard" / "public" / "data"
+    dashboard.mkdir(parents=True)
+    monkeypatch.setattr(run_comparison, "REPO_ROOT", repo)
+    monkeypatch.setattr(run_comparison, "DASHBOARD_DATA_DIR", dashboard)
+    monkeypatch.setattr(run_comparison, "_merge_dispositions", lambda r: r)
+    report = {
+        "suite": "t-suite",
+        "schema_version": "axiom.comparison_report.v2.1",
+        "summary": {
+            "mismatch_count": 1,
+            "dispositioned": {"explained_rate": 1.0, "unexplained_count": 0},
+        },
+        "mismatches": [{"case_id": "c0", "concept": "x", "disposition": None}],
+        "cases": [{"case_id": f"c{i}"} for i in range(1001)],
+    }
+    full = tmp_path / "elsewhere" / "t-suite-full.json"
+    full.parent.mkdir(parents=True)
+    full.write_text(json.dumps(report))
+    run_comparison._write_dashboard_report(
+        report, "t-suite.json", full_report_path=full
+    )
+    slim = json.loads((dashboard / "t-suite.json").read_text())
+    # every mismatch row survives the trim: stored == mismatch_count
+    assert slim["summary"]["stored_mismatch_example_count"] == 1
+    assert slim["summary"]["mismatch_count"] == 1
+    # published, and pointer-free — the consumer re-merges it directly
+    assert "source_report" not in slim["summary"]["dispositioned"]
+
+
+# --- state grid rulespec resolution + pinned federal snapshots (#455) --------
+
+
+def _git_init_clean(path, gitignore=None):
+    path.mkdir(parents=True, exist_ok=True)
+    subprocess.run(["git", "init", "--quiet", str(path)], check=True)
+    if gitignore is not None:
+        (path / ".gitignore").write_text(gitignore)
+        git = ["git", "-C", str(path), "-c", "user.name=t", "-c", "user.email=t@t"]
+        subprocess.run([*git, "add", "-A"], check=True)
+        subprocess.run([*git, "commit", "--quiet", "-m", "init"], check=True)
+    return path
+
+
+def test_state_income_tax_grid_resolver_prefers_suite_rulespec_roots(
+    monkeypatch, tmp_path
+):
+    """CI shape: no env override and no sibling checkout — the suite YAML's
+    rulespec_roots (the path materialize_ci_workspace.py guarantees) wins."""
+    run_comparison = load_run_comparison_module()
+    monkeypatch.setattr(
+        run_comparison, "REPO_ROOT", tmp_path / "workspace" / "axiom-oracles"
+    )
+    monkeypatch.delenv("RULESPEC_US_REPO", raising=False)
+    rulespec = _git_init_clean(tmp_path / "TheAxiomFoundation" / "rulespec-us")
+    engine = _git_init_clean(tmp_path / "engine", gitignore="target/\n")
+    monkeypatch.setenv("AXIOM_RULES_REPO", str(engine))
+    built = []
+    monkeypatch.setattr(
+        run_comparison,
+        "_ensure_engine_binary",
+        lambda repo, *, kind: built.append((repo, kind)),
+    )
+    binary = engine / "target" / "release" / "axiom-rules-engine"
+    binary.parent.mkdir(parents=True)
+    binary.write_text("")
+    params = {"rulespec_roots": [str(tmp_path / "missing"), str(rulespec)]}
+
+    root, rules = run_comparison._resolve_state_income_tax_grid_repos(params)
+
+    assert root == rulespec.resolve()
+    assert rules == engine.resolve()
+    assert built == [(engine.resolve(), "release")]
+
+
+def test_state_income_tax_grid_resolver_env_overrides_suite_roots(
+    monkeypatch, tmp_path
+):
+    run_comparison = load_run_comparison_module()
+    monkeypatch.setattr(
+        run_comparison, "REPO_ROOT", tmp_path / "workspace" / "axiom-oracles"
+    )
+    env_root = _git_init_clean(tmp_path / "env-root" / "rulespec-us")
+    other = _git_init_clean(tmp_path / "TheAxiomFoundation" / "rulespec-us")
+    engine = _git_init_clean(tmp_path / "engine", gitignore="target/\n")
+    monkeypatch.setenv("RULESPEC_US_REPO", str(env_root))
+    monkeypatch.setenv("AXIOM_RULES_REPO", str(engine))
+    monkeypatch.setattr(
+        run_comparison, "_ensure_engine_binary", lambda repo, *, kind: None
+    )
+    binary = engine / "target" / "release" / "axiom-rules-engine"
+    binary.parent.mkdir(parents=True)
+    binary.write_text("")
+    params = {"rulespec_roots": [str(other)]}
+
+    root, _rules = run_comparison._resolve_state_income_tax_grid_repos(params)
+
+    assert root == env_root.resolve()
+
+
+def test_pinned_snapshot_unusable_reason(tmp_path):
+    run_comparison = load_run_comparison_module()
+    repo = tmp_path / "rulespec-us"
+    repo.mkdir()
+    assert run_comparison._pinned_snapshot_unusable_reason(repo, "0" * 40)
+    subprocess.run(["git", "init", "--quiet", str(repo)], check=True)
+    (repo / "a.txt").write_text("law\n")
+    git = ["git", "-C", str(repo), "-c", "user.name=t", "-c", "user.email=t@t"]
+    subprocess.run([*git, "add", "-A"], check=True)
+    subprocess.run([*git, "commit", "--quiet", "-m", "one"], check=True)
+    tree = subprocess.run(
+        ["git", "-C", str(repo), "rev-parse", "HEAD^{tree}"],
+        capture_output=True,
+        text=True,
+        check=True,
+    ).stdout.strip()
+
+    assert run_comparison._pinned_snapshot_unusable_reason(repo, tree) is None
+    mismatch = run_comparison._pinned_snapshot_unusable_reason(repo, "0" * 40)
+    assert "does not match" in mismatch
+    (repo / "a.txt").write_text("edited\n")
+    assert "dirty" in run_comparison._pinned_snapshot_unusable_reason(repo, tree)
+
+
+def test_ensure_rulespec_us_checkout_materializes_pinned_revision(tmp_path):
+    """The pinned SHA — no longer the remote's HEAD — is fetched and checked
+    out detached, emulating GitHub's reachable-SHA fetch on the test remote."""
+    run_comparison = load_run_comparison_module()
+    remote = tmp_path / "remote"
+    subprocess.run(["git", "init", "--quiet", str(remote)], check=True)
+    git = ["git", "-C", str(remote), "-c", "user.name=t", "-c", "user.email=t@t"]
+    (remote / "law.yaml").write_text("v1\n")
+    subprocess.run([*git, "add", "-A"], check=True)
+    subprocess.run([*git, "commit", "--quiet", "-m", "one"], check=True)
+    pinned_sha = subprocess.run(
+        ["git", "-C", str(remote), "rev-parse", "HEAD"],
+        capture_output=True,
+        text=True,
+        check=True,
+    ).stdout.strip()
+    (remote / "law.yaml").write_text("v2\n")
+    subprocess.run([*git, "add", "-A"], check=True)
+    subprocess.run([*git, "commit", "--quiet", "-m", "two"], check=True)
+    subprocess.run(
+        ["git", "-C", str(remote), "config", "uploadpack.allowAnySHA1InWant", "true"],
+        check=True,
+    )
+
+    target = run_comparison._ensure_rulespec_us_checkout(
+        remote.as_uri(), pinned_sha
+    )
+
+    head = subprocess.run(
+        ["git", "-C", str(target), "rev-parse", "HEAD"],
+        capture_output=True,
+        text=True,
+        check=True,
+    ).stdout.strip()
+    assert head == pinned_sha
+    assert (target / "law.yaml").read_text() == "v1\n"
+    assert target.name == "rulespec-us"
+
+
+def test_federal_grid_materializes_pin_when_configured_root_mismatches(
+    monkeypatch, tmp_path
+):
+    """A configured root at the wrong tree no longer kills the leg — the
+    pinned revision is materialized in a scratch clone instead."""
+    run_comparison = load_run_comparison_module()
+    stale_root = tmp_path / "rulespec-us"
+    stale_root.mkdir()
+    monkeypatch.setattr(
+        run_comparison,
+        "_pinned_snapshot_unusable_reason",
+        lambda root, tree: "tree mismatch (test)",
+    )
+    pinned_clone = tmp_path / "scratch" / "rulespec-us"
+    pinned_clone.mkdir(parents=True)
+    calls = []
+
+    def fake_checkout(remote, revision=None):
+        calls.append((remote, revision))
+        return pinned_clone
+
+    monkeypatch.setattr(
+        run_comparison, "_ensure_rulespec_us_checkout", fake_checkout
+    )
+    verified = []
+    monkeypatch.setattr(
+        run_comparison,
+        "_verify_federal_rulespec_snapshot",
+        lambda params, roots: verified.append([str(r) for r in roots]),
+    )
+    monkeypatch.setattr(
+        run_comparison.subprocess,
+        "run",
+        lambda cmd, *, check, cwd: subprocess.CompletedProcess(cmd, 0),
+    )
+    params = {
+        "policy": "qualified_business_income_deduction",
+        "policyengine_version": "4.18.9",
+        "policyengine_us_version": "1.767.3",
+        "policyengine_core_version": "3.30.3",
+        "rulespec_roots": [str(stale_root)],
+        "rulespec_remote": "https://example.test/rulespec-us.git",
+        "rulespec_upstream_sha": "a" * 40,
+        "rulespec_upstream_tree": "b" * 40,
+    }
+
+    run_comparison._run_federal_tax_liability_grid(
+        {"parameters": params}, tmp_path / "out.json"
+    )
+
+    assert calls == [("https://example.test/rulespec-us.git", "a" * 40)]
+    assert params["rulespec_roots"] == [str(pinned_clone)]
+    assert verified == [[str(pinned_clone)]]
+
+
+def test_federal_grid_accepts_configured_root_matching_pin(monkeypatch, tmp_path):
+    run_comparison = load_run_comparison_module()
+    good_root = tmp_path / "rulespec-us"
+    good_root.mkdir()
+    monkeypatch.setattr(
+        run_comparison, "_pinned_snapshot_unusable_reason", lambda root, tree: None
+    )
+    monkeypatch.setattr(
+        run_comparison,
+        "_ensure_rulespec_us_checkout",
+        lambda *_a, **_k: pytest.fail("must not clone when the root matches"),
+    )
+    monkeypatch.setattr(
+        run_comparison, "_verify_federal_rulespec_snapshot", lambda params, roots: None
+    )
+    monkeypatch.setattr(
+        run_comparison.subprocess,
+        "run",
+        lambda cmd, *, check, cwd: subprocess.CompletedProcess(cmd, 0),
+    )
+    params = {
+        "policy": "qualified_business_income_deduction",
+        "policyengine_version": "4.18.9",
+        "policyengine_us_version": "1.767.3",
+        "policyengine_core_version": "3.30.3",
+        "rulespec_roots": [str(good_root)],
+        "rulespec_remote": "https://example.test/rulespec-us.git",
+        "rulespec_upstream_sha": "a" * 40,
+        "rulespec_upstream_tree": "b" * 40,
+    }
+
+    run_comparison._run_federal_tax_liability_grid(
+        {"parameters": params}, tmp_path / "out.json"
+    )
+
+    assert params["rulespec_roots"] == [str(good_root)]

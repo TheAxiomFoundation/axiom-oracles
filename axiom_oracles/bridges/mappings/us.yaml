@@ -4900,6 +4900,40 @@ mappings:
     candidate_priority: P4
     rationale: ACL 14-63 denial/discontinuance judgment for zero-benefit CE/MCE households of three or more; PolicyEngine's is_snap_eligible and snap_normal_allotment are downstream outcomes, not this denial predicate.
 
+  - legal_id: us:policies/income_tax/taxable_income_pipeline#taxable_income_pipeline_verified_domain_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    entity: tax_unit
+    period: year
+    comparison: decision
+    candidate_priority: P4
+    rationale: This RuleSpec judgment fail-closes the taxable-income composition unless the filing status, section 63(c)(6) standard-deduction eligibility, imported component domains, completed worksheet boundaries, itemization election, and nonnegative amount constraints all hold. PolicyEngine-US 1.767.3 exposes no one-to-one judgment for that legal-domain contract.
+
+  - legal_id: us:policies/income_tax/taxable_income_pipeline#federal_taxable_income
+    country: us
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: taxable_income
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    candidate_priority: P1
+    rationale: Both companion-asserted outputs are annual TaxUnit federal taxable income, floored at zero after subtracting section 151 exemptions and the selected taxable-income deductions from adjusted gross income. The 14-case grid binds all five filing statuses and the resolved election at this direct shared boundary.
+
+  - legal_id: us:policies/income_tax/taxable_income_pipeline#federal_taxable_income_deductions
+    country: us
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: taxable_income_deductions
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    candidate_priority: P1
+    rationale: Both companion-asserted outputs are the annual TaxUnit total of the election-selected 2026 below-line deduction inventory. The oracle binds the same resolved itemization election and completed component boundaries, while independently deriving the standard and senior deductions in PolicyEngine-US 1.767.3.
+
   - legal_id: us-ca:policies/cdss/snap/fy-2026-benefit-calculation#shelter_costs
     country: us
     program: snap
@@ -8334,6 +8368,86 @@ mappings:
     period: year
     comparison: boolean
     rationale: Same section 67 miscellaneous-itemized-deduction availability switch, stored in PE as boolean parameter data (its reference cites 26 USC 67); not_holds for a 2026 individual matches the parameter's false value under current law.
+
+  - legal_id: us:policies/income_tax/salt_deduction_pipeline#salt_deduction_pipeline_verified_domain_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    entity: tax_unit
+    period: year
+    comparison: decision
+    candidate_priority: P4
+    rationale: This RuleSpec judgment fail-closes the SALT composition unless filing status is one of the five statutory categories, every completed personal-tax amount is nonnegative and excludes business, section 212, capitalized, refunded, and nondeductible taxes, and the section 911 relation is complete. PolicyEngine-US 1.767.3 exposes no one-to-one judgment for that legal-domain contract.
+
+  - legal_id: us:policies/income_tax/salt_deduction_pipeline#federal_section_911_exclusion_for_salt_magi
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: foreign_earned_income_exclusion
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    candidate_priority: P4
+    rationale: PolicyEngine-US 1.767.3 exposes the adjacent TaxUnit/year foreign_earned_income_exclusion variable, but this RuleSpec output is a domain-guarded aggregate over an explicit complete Person relation used specifically for section 164(b)(7) MAGI. It is retained only as a candidate diagnostic and bridge input for the SALT grid, not as an unconditional one-to-one oracle mapping.
+
+  - legal_id: us:policies/income_tax/salt_deduction_pipeline#federal_salt_deduction
+    country: us
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: salt_deduction
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    candidate_priority: P1
+    rationale: Both outputs are the annual TaxUnit section 164 personal SALT deduction after the applicable cap and 2026 MAGI phaseout. PolicyEngine-US 1.767.3's taxable-income ceiling, omission of personal-property tax from its source list, and use of AGI instead of statutory modified AGI are implementation divergences on this shared quantity and are preserved as case-specific oracle evidence.
+
+  - legal_id: us:policies/income_tax/itemized_taxable_income_deductions_pipeline#itemized_taxable_income_deductions_verified_domain_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    entity: tax_unit
+    period: year
+    comparison: decision
+    candidate_priority: P4
+    rationale: This RuleSpec judgment fail-closes the bounded six-component itemized aggregate unless the taxpayer is an individual, all five filing statuses and completed-component constraints hold, miscellaneous deductions are zero under section 67(h), the SALT subdomain holds, no other component is included, and section 68 ordering is satisfied. PolicyEngine-US 1.767.3 exposes no equivalent aggregate legal-domain judgment.
+
+  - legal_id: us:policies/income_tax/itemized_taxable_income_deductions_pipeline#itemized_deductions_otherwise_allowable_after_other_limitations
+    country: us
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: total_itemized_taxable_income_deductions
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    candidate_priority: P1
+    rationale: Both outputs are the annual TaxUnit aggregate of charitable, interest, SALT, medical, casualty, and miscellaneous itemized deductions after their own limitations and before section 68. The RuleSpec composition accepts those amounts as completed legal components, matching PolicyEngine-US 1.767.3's exact six-variable itemized_deductions aggregate inventory.
+
+  - legal_id: us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_section_68_reduction
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: itemized_taxable_income_deductions_reduction
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    candidate_priority: P4
+    rationale: PolicyEngine-US 1.767.3 exposes the adjacent itemized_taxable_income_deductions_reduction diagnostic, but derives its OBBBA section 68 base from AGI minus exemptions and stores a truncated rate rather than consuming the completed statutory taxable-income-without-section-68 scalar used by RuleSpec. This candidate is diagnostic-only and must never be supplied as an oracle input or treated as an independently adopted comparison.
+
+  - legal_id: us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_itemized_taxable_income_deductions
+    country: us
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: itemized_taxable_income_deductions
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    candidate_priority: P1
+    rationale: Both outputs are the annual TaxUnit six-component itemized taxable-income deduction aggregate after section 68. PolicyEngine-US 1.767.3's non-equivalent section 68 base and truncated-rate behavior are implementation divergences on this shared final quantity and remain visible in the itemized grid rather than changing the mapping boundary.
 
   - legal_id: us:policies/income_tax/savers_credit_pipeline#federal_savers_credit
     country: us

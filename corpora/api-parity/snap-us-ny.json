@@ -1,0 +1,51 @@
+{
+  "id": "snap-us-ny-family-1",
+  "description": "New York SNAP canonical two-person household on the corpus-direct OTDA composition.",
+  "axiom_request": {
+    "program_id": "snap",
+    "jurisdiction": "us-ny",
+    "household": {
+      "period": "2026-01",
+      "people": {
+        "person_1": {
+          "age": 42
+        },
+        "person_2": {
+          "age": 9
+        }
+      },
+      "spm_units": {
+        "unit_1": {
+          "household_size": 2,
+          "snap_gross_monthly_income": 1200,
+          "shelter_costs": 900
+        }
+      }
+    },
+    "variables": [
+      "snap_benefit_amount",
+      "snap_net_income",
+      "snap_gross_monthly_income"
+    ]
+  },
+  "expected_axiom_outputs": {
+    "snap_benefit_amount": 478,
+    "snap_net_income": 226.5,
+    "snap_gross_monthly_income": 1200
+  },
+  "trace_variables": [
+    "snap_gross_monthly_income",
+    "snap_standard_deduction",
+    "snap_excess_shelter_deduction_for_net_income",
+    "snap_net_income",
+    "snap_maximum_allotment",
+    "snap_benefit_amount"
+  ],
+  "notes": [
+    "Canonical values are monthly. Convenience input shelter_costs is treated as total shelter costs for this Axiom case.",
+    "The New York corpus-direct composition keeps cents in net income: excess shelter is 525 and net income 226.5, matching PolicyEngine's 226.5 for the same household. The allotment rounds to 478 either way."
+  ],
+  "tolerance": {
+    "amount": 0.01
+  }
+}

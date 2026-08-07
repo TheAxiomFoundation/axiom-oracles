@@ -1,0 +1,1217 @@
+{
+  "aggregates": [
+    {
+      "compared": 16,
+      "comparison": "amount",
+      "comparison_count": 16,
+      "concept": "us:policies/income_tax/salt_deduction_pipeline#federal_salt_deduction",
+      "left_positive_rate": 100.0,
+      "match_count": 13,
+      "match_rate": 81.25,
+      "matched": 13,
+      "mismatch_count": 3,
+      "mismatched": 3,
+      "right_positive_rate": 93.75
+    }
+  ],
+  "case_count": 16,
+  "cases": [
+    {
+      "axiom": 10000.0,
+      "axiom_bridge_outputs": {
+        "us:policies/income_tax/salt_deduction_pipeline#federal_section_911_exclusion_for_salt_magi": 0.0
+      },
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/salt_deduction_pipeline#input.adjusted_gross_income": 100000,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_are_net_of_refunds": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_acquisition_capitalized_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_business_and_section_212_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_nondeductible_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.filing_status": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.real_estate_taxes": 2000,
+        "us:policies/income_tax/salt_deduction_pipeline#input.section_911_exclusion_relation_includes_every_tax_unit_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_personal_property_tax": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_sales_or_income_tax": 8000,
+        "us:policies/income_tax/salt_deduction_pipeline#relation.salt_section_911_individual_of_tax_unit": [
+          {
+            "us:statutes/26/911/a#input.election_made_for_foreign_earned_income": false,
+            "us:statutes/26/911/a#input.election_made_for_housing_cost_amount": false,
+            "us:statutes/26/911/a#input.foreign_earned_income_of_individual": 0,
+            "us:statutes/26/911/a#input.housing_cost_amount_of_individual": 0,
+            "us:statutes/26/911/a#input.individual_is_qualified_individual": false
+          }
+        ],
+        "us:statutes/26/931#input.amounts_paid_for_services_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/931#input.bona_fide_resident_of_specified_possession_during_entire_taxable_year": false,
+        "us:statutes/26/931#input.income_derived_from_sources_within_specified_possessions": 0,
+        "us:statutes/26/931#input.income_effectively_connected_with_trade_or_business_within_specified_possessions": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency_attributable_to_period_before_change": 0,
+        "us:statutes/26/933#input.bona_fide_resident_of_puerto_rico_years_before_change": 0,
+        "us:statutes/26/933#input.income_derived_from_sources_within_puerto_rico": 0,
+        "us:statutes/26/933#input.individual_changes_residence_from_puerto_rico_during_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_bona_fide_resident_of_puerto_rico_during_entire_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_citizen_of_united_states": false,
+        "us:statutes/26/933#input.puerto_rico_source_income_attributable_to_puerto_rican_residence_period_before_change": 0
+      },
+      "case_id": "salt-single-base",
+      "concept": "us:policies/income_tax/salt_deduction_pipeline#federal_salt_deduction",
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "adjusted_gross_income": 100000,
+        "real_estate_taxes": 2000,
+        "section_911_exclusions": [
+          0
+        ],
+        "state_and_local_personal_property_tax": 0,
+        "state_and_local_sales_or_income_tax": 8000
+      },
+      "match": true,
+      "policyengine": 10000.0,
+      "policyengine_components": {
+        "adjusted_gross_income": 100000.0,
+        "exemptions": 0.0,
+        "foreign_earned_income_exclusion": 0.0,
+        "salt": 10000.0,
+        "salt_cap": 40400.0,
+        "salt_deduction": 10000.0
+      },
+      "scenario_id": "salt-single-base"
+    },
+    {
+      "axiom": 40400.0,
+      "axiom_bridge_outputs": {
+        "us:policies/income_tax/salt_deduction_pipeline#federal_section_911_exclusion_for_salt_magi": 0.0
+      },
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/salt_deduction_pipeline#input.adjusted_gross_income": 100000,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_are_net_of_refunds": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_acquisition_capitalized_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_business_and_section_212_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_nondeductible_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.filing_status": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.real_estate_taxes": 10000,
+        "us:policies/income_tax/salt_deduction_pipeline#input.section_911_exclusion_relation_includes_every_tax_unit_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_personal_property_tax": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_sales_or_income_tax": 30400,
+        "us:policies/income_tax/salt_deduction_pipeline#relation.salt_section_911_individual_of_tax_unit": [
+          {
+            "us:statutes/26/911/a#input.election_made_for_foreign_earned_income": false,
+            "us:statutes/26/911/a#input.election_made_for_housing_cost_amount": false,
+            "us:statutes/26/911/a#input.foreign_earned_income_of_individual": 0,
+            "us:statutes/26/911/a#input.housing_cost_amount_of_individual": 0,
+            "us:statutes/26/911/a#input.individual_is_qualified_individual": false
+          }
+        ],
+        "us:statutes/26/931#input.amounts_paid_for_services_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/931#input.bona_fide_resident_of_specified_possession_during_entire_taxable_year": false,
+        "us:statutes/26/931#input.income_derived_from_sources_within_specified_possessions": 0,
+        "us:statutes/26/931#input.income_effectively_connected_with_trade_or_business_within_specified_possessions": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency_attributable_to_period_before_change": 0,
+        "us:statutes/26/933#input.bona_fide_resident_of_puerto_rico_years_before_change": 0,
+        "us:statutes/26/933#input.income_derived_from_sources_within_puerto_rico": 0,
+        "us:statutes/26/933#input.individual_changes_residence_from_puerto_rico_during_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_bona_fide_resident_of_puerto_rico_during_entire_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_citizen_of_united_states": false,
+        "us:statutes/26/933#input.puerto_rico_source_income_attributable_to_puerto_rican_residence_period_before_change": 0
+      },
+      "case_id": "salt-single-at-cap",
+      "concept": "us:policies/income_tax/salt_deduction_pipeline#federal_salt_deduction",
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "adjusted_gross_income": 100000,
+        "real_estate_taxes": 10000,
+        "section_911_exclusions": [
+          0
+        ],
+        "state_and_local_personal_property_tax": 0,
+        "state_and_local_sales_or_income_tax": 30400
+      },
+      "match": true,
+      "policyengine": 40400.0,
+      "policyengine_components": {
+        "adjusted_gross_income": 100000.0,
+        "exemptions": 0.0,
+        "foreign_earned_income_exclusion": 0.0,
+        "salt": 40400.0,
+        "salt_cap": 40400.0,
+        "salt_deduction": 40400.0
+      },
+      "scenario_id": "salt-single-at-cap"
+    },
+    {
+      "axiom": 40400.0,
+      "axiom_bridge_outputs": {
+        "us:policies/income_tax/salt_deduction_pipeline#federal_section_911_exclusion_for_salt_magi": 0.0
+      },
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/salt_deduction_pipeline#input.adjusted_gross_income": 100000,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_are_net_of_refunds": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_acquisition_capitalized_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_business_and_section_212_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_nondeductible_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.filing_status": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.real_estate_taxes": 10000,
+        "us:policies/income_tax/salt_deduction_pipeline#input.section_911_exclusion_relation_includes_every_tax_unit_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_personal_property_tax": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_sales_or_income_tax": 40000,
+        "us:policies/income_tax/salt_deduction_pipeline#relation.salt_section_911_individual_of_tax_unit": [
+          {
+            "us:statutes/26/911/a#input.election_made_for_foreign_earned_income": false,
+            "us:statutes/26/911/a#input.election_made_for_housing_cost_amount": false,
+            "us:statutes/26/911/a#input.foreign_earned_income_of_individual": 0,
+            "us:statutes/26/911/a#input.housing_cost_amount_of_individual": 0,
+            "us:statutes/26/911/a#input.individual_is_qualified_individual": false
+          }
+        ],
+        "us:statutes/26/931#input.amounts_paid_for_services_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/931#input.bona_fide_resident_of_specified_possession_during_entire_taxable_year": false,
+        "us:statutes/26/931#input.income_derived_from_sources_within_specified_possessions": 0,
+        "us:statutes/26/931#input.income_effectively_connected_with_trade_or_business_within_specified_possessions": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency_attributable_to_period_before_change": 0,
+        "us:statutes/26/933#input.bona_fide_resident_of_puerto_rico_years_before_change": 0,
+        "us:statutes/26/933#input.income_derived_from_sources_within_puerto_rico": 0,
+        "us:statutes/26/933#input.individual_changes_residence_from_puerto_rico_during_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_bona_fide_resident_of_puerto_rico_during_entire_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_citizen_of_united_states": false,
+        "us:statutes/26/933#input.puerto_rico_source_income_attributable_to_puerto_rican_residence_period_before_change": 0
+      },
+      "case_id": "salt-single-over-cap",
+      "concept": "us:policies/income_tax/salt_deduction_pipeline#federal_salt_deduction",
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "adjusted_gross_income": 100000,
+        "real_estate_taxes": 10000,
+        "section_911_exclusions": [
+          0
+        ],
+        "state_and_local_personal_property_tax": 0,
+        "state_and_local_sales_or_income_tax": 40000
+      },
+      "match": true,
+      "policyengine": 40400.0,
+      "policyengine_components": {
+        "adjusted_gross_income": 100000.0,
+        "exemptions": 0.0,
+        "foreign_earned_income_exclusion": 0.0,
+        "salt": 50000.0,
+        "salt_cap": 40400.0,
+        "salt_deduction": 40400.0
+      },
+      "scenario_id": "salt-single-over-cap"
+    },
+    {
+      "axiom": 40400.0,
+      "axiom_bridge_outputs": {
+        "us:policies/income_tax/salt_deduction_pipeline#federal_section_911_exclusion_for_salt_magi": 0.0
+      },
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/salt_deduction_pipeline#input.adjusted_gross_income": 150000,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_are_net_of_refunds": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_acquisition_capitalized_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_business_and_section_212_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_nondeductible_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.filing_status": 1,
+        "us:policies/income_tax/salt_deduction_pipeline#input.real_estate_taxes": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.section_911_exclusion_relation_includes_every_tax_unit_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_personal_property_tax": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_sales_or_income_tax": 50000,
+        "us:policies/income_tax/salt_deduction_pipeline#relation.salt_section_911_individual_of_tax_unit": [
+          {
+            "us:statutes/26/911/a#input.election_made_for_foreign_earned_income": false,
+            "us:statutes/26/911/a#input.election_made_for_housing_cost_amount": false,
+            "us:statutes/26/911/a#input.foreign_earned_income_of_individual": 0,
+            "us:statutes/26/911/a#input.housing_cost_amount_of_individual": 0,
+            "us:statutes/26/911/a#input.individual_is_qualified_individual": false
+          }
+        ],
+        "us:statutes/26/931#input.amounts_paid_for_services_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/931#input.bona_fide_resident_of_specified_possession_during_entire_taxable_year": false,
+        "us:statutes/26/931#input.income_derived_from_sources_within_specified_possessions": 0,
+        "us:statutes/26/931#input.income_effectively_connected_with_trade_or_business_within_specified_possessions": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency_attributable_to_period_before_change": 0,
+        "us:statutes/26/933#input.bona_fide_resident_of_puerto_rico_years_before_change": 0,
+        "us:statutes/26/933#input.income_derived_from_sources_within_puerto_rico": 0,
+        "us:statutes/26/933#input.individual_changes_residence_from_puerto_rico_during_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_bona_fide_resident_of_puerto_rico_during_entire_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_citizen_of_united_states": false,
+        "us:statutes/26/933#input.puerto_rico_source_income_attributable_to_puerto_rican_residence_period_before_change": 0
+      },
+      "case_id": "salt-joint-cap",
+      "concept": "us:policies/income_tax/salt_deduction_pipeline#federal_salt_deduction",
+      "difference": 0.0,
+      "filing_status": "joint",
+      "inputs": {
+        "adjusted_gross_income": 150000,
+        "real_estate_taxes": 0,
+        "section_911_exclusions": [
+          0
+        ],
+        "state_and_local_personal_property_tax": 0,
+        "state_and_local_sales_or_income_tax": 50000
+      },
+      "match": true,
+      "policyengine": 40400.0,
+      "policyengine_components": {
+        "adjusted_gross_income": 150000.0,
+        "exemptions": 0.0,
+        "foreign_earned_income_exclusion": 0.0,
+        "salt": 50000.0,
+        "salt_cap": 40400.0,
+        "salt_deduction": 40400.0
+      },
+      "scenario_id": "salt-joint-cap"
+    },
+    {
+      "axiom": 40400.0,
+      "axiom_bridge_outputs": {
+        "us:policies/income_tax/salt_deduction_pipeline#federal_section_911_exclusion_for_salt_magi": 0.0
+      },
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/salt_deduction_pipeline#input.adjusted_gross_income": 150000,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_are_net_of_refunds": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_acquisition_capitalized_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_business_and_section_212_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_nondeductible_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.filing_status": 3,
+        "us:policies/income_tax/salt_deduction_pipeline#input.real_estate_taxes": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.section_911_exclusion_relation_includes_every_tax_unit_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_personal_property_tax": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_sales_or_income_tax": 50000,
+        "us:policies/income_tax/salt_deduction_pipeline#relation.salt_section_911_individual_of_tax_unit": [
+          {
+            "us:statutes/26/911/a#input.election_made_for_foreign_earned_income": false,
+            "us:statutes/26/911/a#input.election_made_for_housing_cost_amount": false,
+            "us:statutes/26/911/a#input.foreign_earned_income_of_individual": 0,
+            "us:statutes/26/911/a#input.housing_cost_amount_of_individual": 0,
+            "us:statutes/26/911/a#input.individual_is_qualified_individual": false
+          }
+        ],
+        "us:statutes/26/931#input.amounts_paid_for_services_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/931#input.bona_fide_resident_of_specified_possession_during_entire_taxable_year": false,
+        "us:statutes/26/931#input.income_derived_from_sources_within_specified_possessions": 0,
+        "us:statutes/26/931#input.income_effectively_connected_with_trade_or_business_within_specified_possessions": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency_attributable_to_period_before_change": 0,
+        "us:statutes/26/933#input.bona_fide_resident_of_puerto_rico_years_before_change": 0,
+        "us:statutes/26/933#input.income_derived_from_sources_within_puerto_rico": 0,
+        "us:statutes/26/933#input.individual_changes_residence_from_puerto_rico_during_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_bona_fide_resident_of_puerto_rico_during_entire_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_citizen_of_united_states": false,
+        "us:statutes/26/933#input.puerto_rico_source_income_attributable_to_puerto_rican_residence_period_before_change": 0
+      },
+      "case_id": "salt-hoh-cap",
+      "concept": "us:policies/income_tax/salt_deduction_pipeline#federal_salt_deduction",
+      "difference": 0.0,
+      "filing_status": "head_of_household",
+      "inputs": {
+        "adjusted_gross_income": 150000,
+        "real_estate_taxes": 0,
+        "section_911_exclusions": [
+          0
+        ],
+        "state_and_local_personal_property_tax": 0,
+        "state_and_local_sales_or_income_tax": 50000
+      },
+      "match": true,
+      "policyengine": 40400.0,
+      "policyengine_components": {
+        "adjusted_gross_income": 150000.0,
+        "exemptions": 0.0,
+        "foreign_earned_income_exclusion": 0.0,
+        "salt": 50000.0,
+        "salt_cap": 40400.0,
+        "salt_deduction": 40400.0
+      },
+      "scenario_id": "salt-hoh-cap"
+    },
+    {
+      "axiom": 40400.0,
+      "axiom_bridge_outputs": {
+        "us:policies/income_tax/salt_deduction_pipeline#federal_section_911_exclusion_for_salt_magi": 0.0
+      },
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/salt_deduction_pipeline#input.adjusted_gross_income": 150000,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_are_net_of_refunds": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_acquisition_capitalized_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_business_and_section_212_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_nondeductible_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.filing_status": 4,
+        "us:policies/income_tax/salt_deduction_pipeline#input.real_estate_taxes": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.section_911_exclusion_relation_includes_every_tax_unit_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_personal_property_tax": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_sales_or_income_tax": 50000,
+        "us:policies/income_tax/salt_deduction_pipeline#relation.salt_section_911_individual_of_tax_unit": [
+          {
+            "us:statutes/26/911/a#input.election_made_for_foreign_earned_income": false,
+            "us:statutes/26/911/a#input.election_made_for_housing_cost_amount": false,
+            "us:statutes/26/911/a#input.foreign_earned_income_of_individual": 0,
+            "us:statutes/26/911/a#input.housing_cost_amount_of_individual": 0,
+            "us:statutes/26/911/a#input.individual_is_qualified_individual": false
+          }
+        ],
+        "us:statutes/26/931#input.amounts_paid_for_services_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/931#input.bona_fide_resident_of_specified_possession_during_entire_taxable_year": false,
+        "us:statutes/26/931#input.income_derived_from_sources_within_specified_possessions": 0,
+        "us:statutes/26/931#input.income_effectively_connected_with_trade_or_business_within_specified_possessions": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency_attributable_to_period_before_change": 0,
+        "us:statutes/26/933#input.bona_fide_resident_of_puerto_rico_years_before_change": 0,
+        "us:statutes/26/933#input.income_derived_from_sources_within_puerto_rico": 0,
+        "us:statutes/26/933#input.individual_changes_residence_from_puerto_rico_during_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_bona_fide_resident_of_puerto_rico_during_entire_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_citizen_of_united_states": false,
+        "us:statutes/26/933#input.puerto_rico_source_income_attributable_to_puerto_rican_residence_period_before_change": 0
+      },
+      "case_id": "salt-surviving-cap",
+      "concept": "us:policies/income_tax/salt_deduction_pipeline#federal_salt_deduction",
+      "difference": 0.0,
+      "filing_status": "surviving_spouse",
+      "inputs": {
+        "adjusted_gross_income": 150000,
+        "real_estate_taxes": 0,
+        "section_911_exclusions": [
+          0
+        ],
+        "state_and_local_personal_property_tax": 0,
+        "state_and_local_sales_or_income_tax": 50000
+      },
+      "match": true,
+      "policyengine": 40400.0,
+      "policyengine_components": {
+        "adjusted_gross_income": 150000.0,
+        "exemptions": 0.0,
+        "foreign_earned_income_exclusion": 0.0,
+        "salt": 50000.0,
+        "salt_cap": 40400.0,
+        "salt_deduction": 40400.0
+      },
+      "scenario_id": "salt-surviving-cap"
+    },
+    {
+      "axiom": 20200.0,
+      "axiom_bridge_outputs": {
+        "us:policies/income_tax/salt_deduction_pipeline#federal_section_911_exclusion_for_salt_magi": 0.0
+      },
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/salt_deduction_pipeline#input.adjusted_gross_income": 100000,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_are_net_of_refunds": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_acquisition_capitalized_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_business_and_section_212_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_nondeductible_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.filing_status": 2,
+        "us:policies/income_tax/salt_deduction_pipeline#input.real_estate_taxes": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.section_911_exclusion_relation_includes_every_tax_unit_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_personal_property_tax": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_sales_or_income_tax": 25000,
+        "us:policies/income_tax/salt_deduction_pipeline#relation.salt_section_911_individual_of_tax_unit": [
+          {
+            "us:statutes/26/911/a#input.election_made_for_foreign_earned_income": false,
+            "us:statutes/26/911/a#input.election_made_for_housing_cost_amount": false,
+            "us:statutes/26/911/a#input.foreign_earned_income_of_individual": 0,
+            "us:statutes/26/911/a#input.housing_cost_amount_of_individual": 0,
+            "us:statutes/26/911/a#input.individual_is_qualified_individual": false
+          }
+        ],
+        "us:statutes/26/931#input.amounts_paid_for_services_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/931#input.bona_fide_resident_of_specified_possession_during_entire_taxable_year": false,
+        "us:statutes/26/931#input.income_derived_from_sources_within_specified_possessions": 0,
+        "us:statutes/26/931#input.income_effectively_connected_with_trade_or_business_within_specified_possessions": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency_attributable_to_period_before_change": 0,
+        "us:statutes/26/933#input.bona_fide_resident_of_puerto_rico_years_before_change": 0,
+        "us:statutes/26/933#input.income_derived_from_sources_within_puerto_rico": 0,
+        "us:statutes/26/933#input.individual_changes_residence_from_puerto_rico_during_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_bona_fide_resident_of_puerto_rico_during_entire_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_citizen_of_united_states": false,
+        "us:statutes/26/933#input.puerto_rico_source_income_attributable_to_puerto_rican_residence_period_before_change": 0
+      },
+      "case_id": "salt-mfs-cap",
+      "concept": "us:policies/income_tax/salt_deduction_pipeline#federal_salt_deduction",
+      "difference": 0.0,
+      "filing_status": "separate",
+      "inputs": {
+        "adjusted_gross_income": 100000,
+        "real_estate_taxes": 0,
+        "section_911_exclusions": [
+          0
+        ],
+        "state_and_local_personal_property_tax": 0,
+        "state_and_local_sales_or_income_tax": 25000
+      },
+      "match": true,
+      "policyengine": 20200.0,
+      "policyengine_components": {
+        "adjusted_gross_income": 100000.0,
+        "exemptions": 0.0,
+        "foreign_earned_income_exclusion": 0.0,
+        "salt": 25000.0,
+        "salt_cap": 20200.0,
+        "salt_deduction": 20200.0
+      },
+      "scenario_id": "salt-mfs-cap"
+    },
+    {
+      "axiom": 40400.0,
+      "axiom_bridge_outputs": {
+        "us:policies/income_tax/salt_deduction_pipeline#federal_section_911_exclusion_for_salt_magi": 0.0
+      },
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/salt_deduction_pipeline#input.adjusted_gross_income": 505000,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_are_net_of_refunds": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_acquisition_capitalized_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_business_and_section_212_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_nondeductible_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.filing_status": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.real_estate_taxes": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.section_911_exclusion_relation_includes_every_tax_unit_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_personal_property_tax": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_sales_or_income_tax": 50000,
+        "us:policies/income_tax/salt_deduction_pipeline#relation.salt_section_911_individual_of_tax_unit": [
+          {
+            "us:statutes/26/911/a#input.election_made_for_foreign_earned_income": false,
+            "us:statutes/26/911/a#input.election_made_for_housing_cost_amount": false,
+            "us:statutes/26/911/a#input.foreign_earned_income_of_individual": 0,
+            "us:statutes/26/911/a#input.housing_cost_amount_of_individual": 0,
+            "us:statutes/26/911/a#input.individual_is_qualified_individual": false
+          }
+        ],
+        "us:statutes/26/931#input.amounts_paid_for_services_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/931#input.bona_fide_resident_of_specified_possession_during_entire_taxable_year": false,
+        "us:statutes/26/931#input.income_derived_from_sources_within_specified_possessions": 0,
+        "us:statutes/26/931#input.income_effectively_connected_with_trade_or_business_within_specified_possessions": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency_attributable_to_period_before_change": 0,
+        "us:statutes/26/933#input.bona_fide_resident_of_puerto_rico_years_before_change": 0,
+        "us:statutes/26/933#input.income_derived_from_sources_within_puerto_rico": 0,
+        "us:statutes/26/933#input.individual_changes_residence_from_puerto_rico_during_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_bona_fide_resident_of_puerto_rico_during_entire_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_citizen_of_united_states": false,
+        "us:statutes/26/933#input.puerto_rico_source_income_attributable_to_puerto_rican_residence_period_before_change": 0
+      },
+      "case_id": "salt-single-phaseout-start",
+      "concept": "us:policies/income_tax/salt_deduction_pipeline#federal_salt_deduction",
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "adjusted_gross_income": 505000,
+        "real_estate_taxes": 0,
+        "section_911_exclusions": [
+          0
+        ],
+        "state_and_local_personal_property_tax": 0,
+        "state_and_local_sales_or_income_tax": 50000
+      },
+      "match": true,
+      "policyengine": 40400.0,
+      "policyengine_components": {
+        "adjusted_gross_income": 505000.0,
+        "exemptions": 0.0,
+        "foreign_earned_income_exclusion": 0.0,
+        "salt": 50000.0,
+        "salt_cap": 40400.0,
+        "salt_deduction": 40400.0
+      },
+      "scenario_id": "salt-single-phaseout-start"
+    },
+    {
+      "axiom": 40399.7,
+      "axiom_bridge_outputs": {
+        "us:policies/income_tax/salt_deduction_pipeline#federal_section_911_exclusion_for_salt_magi": 0.0
+      },
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/salt_deduction_pipeline#input.adjusted_gross_income": 505001,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_are_net_of_refunds": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_acquisition_capitalized_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_business_and_section_212_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_nondeductible_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.filing_status": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.real_estate_taxes": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.section_911_exclusion_relation_includes_every_tax_unit_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_personal_property_tax": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_sales_or_income_tax": 50000,
+        "us:policies/income_tax/salt_deduction_pipeline#relation.salt_section_911_individual_of_tax_unit": [
+          {
+            "us:statutes/26/911/a#input.election_made_for_foreign_earned_income": false,
+            "us:statutes/26/911/a#input.election_made_for_housing_cost_amount": false,
+            "us:statutes/26/911/a#input.foreign_earned_income_of_individual": 0,
+            "us:statutes/26/911/a#input.housing_cost_amount_of_individual": 0,
+            "us:statutes/26/911/a#input.individual_is_qualified_individual": false
+          }
+        ],
+        "us:statutes/26/931#input.amounts_paid_for_services_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/931#input.bona_fide_resident_of_specified_possession_during_entire_taxable_year": false,
+        "us:statutes/26/931#input.income_derived_from_sources_within_specified_possessions": 0,
+        "us:statutes/26/931#input.income_effectively_connected_with_trade_or_business_within_specified_possessions": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency_attributable_to_period_before_change": 0,
+        "us:statutes/26/933#input.bona_fide_resident_of_puerto_rico_years_before_change": 0,
+        "us:statutes/26/933#input.income_derived_from_sources_within_puerto_rico": 0,
+        "us:statutes/26/933#input.individual_changes_residence_from_puerto_rico_during_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_bona_fide_resident_of_puerto_rico_during_entire_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_citizen_of_united_states": false,
+        "us:statutes/26/933#input.puerto_rico_source_income_attributable_to_puerto_rican_residence_period_before_change": 0
+      },
+      "case_id": "salt-single-phaseout-plus-one",
+      "concept": "us:policies/income_tax/salt_deduction_pipeline#federal_salt_deduction",
+      "difference": 0.000781249997089617,
+      "filing_status": "single",
+      "inputs": {
+        "adjusted_gross_income": 505001,
+        "real_estate_taxes": 0,
+        "section_911_exclusions": [
+          0
+        ],
+        "state_and_local_personal_property_tax": 0,
+        "state_and_local_sales_or_income_tax": 50000
+      },
+      "match": true,
+      "policyengine": 40399.69921875,
+      "policyengine_components": {
+        "adjusted_gross_income": 505001.0,
+        "exemptions": 0.0,
+        "foreign_earned_income_exclusion": 0.0,
+        "salt": 50000.0,
+        "salt_cap": 40399.69921875,
+        "salt_deduction": 40399.69921875
+      },
+      "scenario_id": "salt-single-phaseout-plus-one"
+    },
+    {
+      "axiom": 11900.0,
+      "axiom_bridge_outputs": {
+        "us:policies/income_tax/salt_deduction_pipeline#federal_section_911_exclusion_for_salt_magi": 0.0
+      },
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/salt_deduction_pipeline#input.adjusted_gross_income": 600000,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_are_net_of_refunds": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_acquisition_capitalized_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_business_and_section_212_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_nondeductible_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.filing_status": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.real_estate_taxes": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.section_911_exclusion_relation_includes_every_tax_unit_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_personal_property_tax": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_sales_or_income_tax": 50000,
+        "us:policies/income_tax/salt_deduction_pipeline#relation.salt_section_911_individual_of_tax_unit": [
+          {
+            "us:statutes/26/911/a#input.election_made_for_foreign_earned_income": false,
+            "us:statutes/26/911/a#input.election_made_for_housing_cost_amount": false,
+            "us:statutes/26/911/a#input.foreign_earned_income_of_individual": 0,
+            "us:statutes/26/911/a#input.housing_cost_amount_of_individual": 0,
+            "us:statutes/26/911/a#input.individual_is_qualified_individual": false
+          }
+        ],
+        "us:statutes/26/931#input.amounts_paid_for_services_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/931#input.bona_fide_resident_of_specified_possession_during_entire_taxable_year": false,
+        "us:statutes/26/931#input.income_derived_from_sources_within_specified_possessions": 0,
+        "us:statutes/26/931#input.income_effectively_connected_with_trade_or_business_within_specified_possessions": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency_attributable_to_period_before_change": 0,
+        "us:statutes/26/933#input.bona_fide_resident_of_puerto_rico_years_before_change": 0,
+        "us:statutes/26/933#input.income_derived_from_sources_within_puerto_rico": 0,
+        "us:statutes/26/933#input.individual_changes_residence_from_puerto_rico_during_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_bona_fide_resident_of_puerto_rico_during_entire_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_citizen_of_united_states": false,
+        "us:statutes/26/933#input.puerto_rico_source_income_attributable_to_puerto_rican_residence_period_before_change": 0
+      },
+      "case_id": "salt-single-phaseout-mid",
+      "concept": "us:policies/income_tax/salt_deduction_pipeline#federal_salt_deduction",
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "adjusted_gross_income": 600000,
+        "real_estate_taxes": 0,
+        "section_911_exclusions": [
+          0
+        ],
+        "state_and_local_personal_property_tax": 0,
+        "state_and_local_sales_or_income_tax": 50000
+      },
+      "match": true,
+      "policyengine": 11900.0,
+      "policyengine_components": {
+        "adjusted_gross_income": 600000.0,
+        "exemptions": 0.0,
+        "foreign_earned_income_exclusion": 0.0,
+        "salt": 50000.0,
+        "salt_cap": 11900.0,
+        "salt_deduction": 11900.0
+      },
+      "scenario_id": "salt-single-phaseout-mid"
+    },
+    {
+      "axiom": 10000.0,
+      "axiom_bridge_outputs": {
+        "us:policies/income_tax/salt_deduction_pipeline#federal_section_911_exclusion_for_salt_magi": 0.0
+      },
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/salt_deduction_pipeline#input.adjusted_gross_income": 607000,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_are_net_of_refunds": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_acquisition_capitalized_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_business_and_section_212_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_nondeductible_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.filing_status": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.real_estate_taxes": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.section_911_exclusion_relation_includes_every_tax_unit_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_personal_property_tax": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_sales_or_income_tax": 50000,
+        "us:policies/income_tax/salt_deduction_pipeline#relation.salt_section_911_individual_of_tax_unit": [
+          {
+            "us:statutes/26/911/a#input.election_made_for_foreign_earned_income": false,
+            "us:statutes/26/911/a#input.election_made_for_housing_cost_amount": false,
+            "us:statutes/26/911/a#input.foreign_earned_income_of_individual": 0,
+            "us:statutes/26/911/a#input.housing_cost_amount_of_individual": 0,
+            "us:statutes/26/911/a#input.individual_is_qualified_individual": false
+          }
+        ],
+        "us:statutes/26/931#input.amounts_paid_for_services_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/931#input.bona_fide_resident_of_specified_possession_during_entire_taxable_year": false,
+        "us:statutes/26/931#input.income_derived_from_sources_within_specified_possessions": 0,
+        "us:statutes/26/931#input.income_effectively_connected_with_trade_or_business_within_specified_possessions": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency_attributable_to_period_before_change": 0,
+        "us:statutes/26/933#input.bona_fide_resident_of_puerto_rico_years_before_change": 0,
+        "us:statutes/26/933#input.income_derived_from_sources_within_puerto_rico": 0,
+        "us:statutes/26/933#input.individual_changes_residence_from_puerto_rico_during_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_bona_fide_resident_of_puerto_rico_during_entire_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_citizen_of_united_states": false,
+        "us:statutes/26/933#input.puerto_rico_source_income_attributable_to_puerto_rican_residence_period_before_change": 0
+      },
+      "case_id": "salt-single-floor",
+      "concept": "us:policies/income_tax/salt_deduction_pipeline#federal_salt_deduction",
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "adjusted_gross_income": 607000,
+        "real_estate_taxes": 0,
+        "section_911_exclusions": [
+          0
+        ],
+        "state_and_local_personal_property_tax": 0,
+        "state_and_local_sales_or_income_tax": 50000
+      },
+      "match": true,
+      "policyengine": 10000.0,
+      "policyengine_components": {
+        "adjusted_gross_income": 607000.0,
+        "exemptions": 0.0,
+        "foreign_earned_income_exclusion": 0.0,
+        "salt": 50000.0,
+        "salt_cap": 10000.0,
+        "salt_deduction": 10000.0
+      },
+      "scenario_id": "salt-single-floor"
+    },
+    {
+      "axiom": 5950.0,
+      "axiom_bridge_outputs": {
+        "us:policies/income_tax/salt_deduction_pipeline#federal_section_911_exclusion_for_salt_magi": 0.0
+      },
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/salt_deduction_pipeline#input.adjusted_gross_income": 300000,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_are_net_of_refunds": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_acquisition_capitalized_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_business_and_section_212_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_nondeductible_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.filing_status": 2,
+        "us:policies/income_tax/salt_deduction_pipeline#input.real_estate_taxes": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.section_911_exclusion_relation_includes_every_tax_unit_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_personal_property_tax": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_sales_or_income_tax": 30000,
+        "us:policies/income_tax/salt_deduction_pipeline#relation.salt_section_911_individual_of_tax_unit": [
+          {
+            "us:statutes/26/911/a#input.election_made_for_foreign_earned_income": false,
+            "us:statutes/26/911/a#input.election_made_for_housing_cost_amount": false,
+            "us:statutes/26/911/a#input.foreign_earned_income_of_individual": 0,
+            "us:statutes/26/911/a#input.housing_cost_amount_of_individual": 0,
+            "us:statutes/26/911/a#input.individual_is_qualified_individual": false
+          }
+        ],
+        "us:statutes/26/931#input.amounts_paid_for_services_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/931#input.bona_fide_resident_of_specified_possession_during_entire_taxable_year": false,
+        "us:statutes/26/931#input.income_derived_from_sources_within_specified_possessions": 0,
+        "us:statutes/26/931#input.income_effectively_connected_with_trade_or_business_within_specified_possessions": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency_attributable_to_period_before_change": 0,
+        "us:statutes/26/933#input.bona_fide_resident_of_puerto_rico_years_before_change": 0,
+        "us:statutes/26/933#input.income_derived_from_sources_within_puerto_rico": 0,
+        "us:statutes/26/933#input.individual_changes_residence_from_puerto_rico_during_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_bona_fide_resident_of_puerto_rico_during_entire_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_citizen_of_united_states": false,
+        "us:statutes/26/933#input.puerto_rico_source_income_attributable_to_puerto_rican_residence_period_before_change": 0
+      },
+      "case_id": "salt-mfs-phaseout-mid",
+      "concept": "us:policies/income_tax/salt_deduction_pipeline#federal_salt_deduction",
+      "difference": 0.0,
+      "filing_status": "separate",
+      "inputs": {
+        "adjusted_gross_income": 300000,
+        "real_estate_taxes": 0,
+        "section_911_exclusions": [
+          0
+        ],
+        "state_and_local_personal_property_tax": 0,
+        "state_and_local_sales_or_income_tax": 30000
+      },
+      "match": true,
+      "policyengine": 5950.0,
+      "policyengine_components": {
+        "adjusted_gross_income": 300000.0,
+        "exemptions": 0.0,
+        "foreign_earned_income_exclusion": 0.0,
+        "salt": 30000.0,
+        "salt_cap": 5950.0,
+        "salt_deduction": 5950.0
+      },
+      "scenario_id": "salt-mfs-phaseout-mid"
+    },
+    {
+      "axiom": 5000.0,
+      "axiom_bridge_outputs": {
+        "us:policies/income_tax/salt_deduction_pipeline#federal_section_911_exclusion_for_salt_magi": 0.0
+      },
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/salt_deduction_pipeline#input.adjusted_gross_income": 310000,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_are_net_of_refunds": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_acquisition_capitalized_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_business_and_section_212_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_nondeductible_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.filing_status": 2,
+        "us:policies/income_tax/salt_deduction_pipeline#input.real_estate_taxes": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.section_911_exclusion_relation_includes_every_tax_unit_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_personal_property_tax": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_sales_or_income_tax": 30000,
+        "us:policies/income_tax/salt_deduction_pipeline#relation.salt_section_911_individual_of_tax_unit": [
+          {
+            "us:statutes/26/911/a#input.election_made_for_foreign_earned_income": false,
+            "us:statutes/26/911/a#input.election_made_for_housing_cost_amount": false,
+            "us:statutes/26/911/a#input.foreign_earned_income_of_individual": 0,
+            "us:statutes/26/911/a#input.housing_cost_amount_of_individual": 0,
+            "us:statutes/26/911/a#input.individual_is_qualified_individual": false
+          }
+        ],
+        "us:statutes/26/931#input.amounts_paid_for_services_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/931#input.bona_fide_resident_of_specified_possession_during_entire_taxable_year": false,
+        "us:statutes/26/931#input.income_derived_from_sources_within_specified_possessions": 0,
+        "us:statutes/26/931#input.income_effectively_connected_with_trade_or_business_within_specified_possessions": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency_attributable_to_period_before_change": 0,
+        "us:statutes/26/933#input.bona_fide_resident_of_puerto_rico_years_before_change": 0,
+        "us:statutes/26/933#input.income_derived_from_sources_within_puerto_rico": 0,
+        "us:statutes/26/933#input.individual_changes_residence_from_puerto_rico_during_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_bona_fide_resident_of_puerto_rico_during_entire_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_citizen_of_united_states": false,
+        "us:statutes/26/933#input.puerto_rico_source_income_attributable_to_puerto_rican_residence_period_before_change": 0
+      },
+      "case_id": "salt-mfs-floor",
+      "concept": "us:policies/income_tax/salt_deduction_pipeline#federal_salt_deduction",
+      "difference": 0.0,
+      "filing_status": "separate",
+      "inputs": {
+        "adjusted_gross_income": 310000,
+        "real_estate_taxes": 0,
+        "section_911_exclusions": [
+          0
+        ],
+        "state_and_local_personal_property_tax": 0,
+        "state_and_local_sales_or_income_tax": 30000
+      },
+      "match": true,
+      "policyengine": 5000.0,
+      "policyengine_components": {
+        "adjusted_gross_income": 310000.0,
+        "exemptions": 0.0,
+        "foreign_earned_income_exclusion": 0.0,
+        "salt": 30000.0,
+        "salt_cap": 5000.0,
+        "salt_deduction": 5000.0
+      },
+      "scenario_id": "salt-mfs-floor"
+    },
+    {
+      "axiom": 10000.0,
+      "axiom_bridge_outputs": {
+        "us:policies/income_tax/salt_deduction_pipeline#federal_section_911_exclusion_for_salt_magi": 0.0
+      },
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/salt_deduction_pipeline#input.adjusted_gross_income": 5000,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_are_net_of_refunds": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_acquisition_capitalized_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_business_and_section_212_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_nondeductible_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.filing_status": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.real_estate_taxes": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.section_911_exclusion_relation_includes_every_tax_unit_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_personal_property_tax": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_sales_or_income_tax": 10000,
+        "us:policies/income_tax/salt_deduction_pipeline#relation.salt_section_911_individual_of_tax_unit": [
+          {
+            "us:statutes/26/911/a#input.election_made_for_foreign_earned_income": false,
+            "us:statutes/26/911/a#input.election_made_for_housing_cost_amount": false,
+            "us:statutes/26/911/a#input.foreign_earned_income_of_individual": 0,
+            "us:statutes/26/911/a#input.housing_cost_amount_of_individual": 0,
+            "us:statutes/26/911/a#input.individual_is_qualified_individual": false
+          }
+        ],
+        "us:statutes/26/931#input.amounts_paid_for_services_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/931#input.bona_fide_resident_of_specified_possession_during_entire_taxable_year": false,
+        "us:statutes/26/931#input.income_derived_from_sources_within_specified_possessions": 0,
+        "us:statutes/26/931#input.income_effectively_connected_with_trade_or_business_within_specified_possessions": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency_attributable_to_period_before_change": 0,
+        "us:statutes/26/933#input.bona_fide_resident_of_puerto_rico_years_before_change": 0,
+        "us:statutes/26/933#input.income_derived_from_sources_within_puerto_rico": 0,
+        "us:statutes/26/933#input.individual_changes_residence_from_puerto_rico_during_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_bona_fide_resident_of_puerto_rico_during_entire_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_citizen_of_united_states": false,
+        "us:statutes/26/933#input.puerto_rico_source_income_attributable_to_puerto_rican_residence_period_before_change": 0
+      },
+      "case_id": "salt-low-agi-engine-cap",
+      "concept": "us:policies/income_tax/salt_deduction_pipeline#federal_salt_deduction",
+      "difference": 5000.0,
+      "filing_status": "single",
+      "inputs": {
+        "adjusted_gross_income": 5000,
+        "real_estate_taxes": 0,
+        "section_911_exclusions": [
+          0
+        ],
+        "state_and_local_personal_property_tax": 0,
+        "state_and_local_sales_or_income_tax": 10000
+      },
+      "match": false,
+      "policyengine": 5000.0,
+      "policyengine_components": {
+        "adjusted_gross_income": 5000.0,
+        "exemptions": 0.0,
+        "foreign_earned_income_exclusion": 0.0,
+        "salt": 10000.0,
+        "salt_cap": 40400.0,
+        "salt_deduction": 5000.0
+      },
+      "scenario_id": "salt-low-agi-engine-cap"
+    },
+    {
+      "axiom": 38900.0,
+      "axiom_bridge_outputs": {
+        "us:policies/income_tax/salt_deduction_pipeline#federal_section_911_exclusion_for_salt_magi": 10000.0
+      },
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/salt_deduction_pipeline#input.adjusted_gross_income": 500000,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_are_net_of_refunds": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_acquisition_capitalized_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_business_and_section_212_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_nondeductible_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.filing_status": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.real_estate_taxes": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.section_911_exclusion_relation_includes_every_tax_unit_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_personal_property_tax": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_sales_or_income_tax": 50000,
+        "us:policies/income_tax/salt_deduction_pipeline#relation.salt_section_911_individual_of_tax_unit": [
+          {
+            "us:statutes/26/911/a#input.election_made_for_foreign_earned_income": true,
+            "us:statutes/26/911/a#input.election_made_for_housing_cost_amount": false,
+            "us:statutes/26/911/a#input.foreign_earned_income_of_individual": 4000,
+            "us:statutes/26/911/a#input.housing_cost_amount_of_individual": 0,
+            "us:statutes/26/911/a#input.individual_is_qualified_individual": true
+          },
+          {
+            "us:statutes/26/911/a#input.election_made_for_foreign_earned_income": true,
+            "us:statutes/26/911/a#input.election_made_for_housing_cost_amount": false,
+            "us:statutes/26/911/a#input.foreign_earned_income_of_individual": 6000,
+            "us:statutes/26/911/a#input.housing_cost_amount_of_individual": 0,
+            "us:statutes/26/911/a#input.individual_is_qualified_individual": true
+          }
+        ],
+        "us:statutes/26/931#input.amounts_paid_for_services_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/931#input.bona_fide_resident_of_specified_possession_during_entire_taxable_year": false,
+        "us:statutes/26/931#input.income_derived_from_sources_within_specified_possessions": 0,
+        "us:statutes/26/931#input.income_effectively_connected_with_trade_or_business_within_specified_possessions": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency_attributable_to_period_before_change": 0,
+        "us:statutes/26/933#input.bona_fide_resident_of_puerto_rico_years_before_change": 0,
+        "us:statutes/26/933#input.income_derived_from_sources_within_puerto_rico": 0,
+        "us:statutes/26/933#input.individual_changes_residence_from_puerto_rico_during_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_bona_fide_resident_of_puerto_rico_during_entire_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_citizen_of_united_states": false,
+        "us:statutes/26/933#input.puerto_rico_source_income_attributable_to_puerto_rican_residence_period_before_change": 0
+      },
+      "case_id": "salt-magi-911-addback",
+      "concept": "us:policies/income_tax/salt_deduction_pipeline#federal_salt_deduction",
+      "difference": -1500.0,
+      "filing_status": "single",
+      "inputs": {
+        "adjusted_gross_income": 500000,
+        "real_estate_taxes": 0,
+        "section_911_exclusions": [
+          4000,
+          6000
+        ],
+        "state_and_local_personal_property_tax": 0,
+        "state_and_local_sales_or_income_tax": 50000
+      },
+      "match": false,
+      "policyengine": 40400.0,
+      "policyengine_components": {
+        "adjusted_gross_income": 500000.0,
+        "exemptions": 0.0,
+        "foreign_earned_income_exclusion": 10000.0,
+        "salt": 50000.0,
+        "salt_cap": 40400.0,
+        "salt_deduction": 40400.0
+      },
+      "scenario_id": "salt-magi-911-addback"
+    },
+    {
+      "axiom": 4000.0,
+      "axiom_bridge_outputs": {
+        "us:policies/income_tax/salt_deduction_pipeline#federal_section_911_exclusion_for_salt_magi": 0.0
+      },
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/salt_deduction_pipeline#input.adjusted_gross_income": 100000,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_are_net_of_refunds": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_acquisition_capitalized_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_business_and_section_212_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_nondeductible_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.filing_status": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.real_estate_taxes": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.section_911_exclusion_relation_includes_every_tax_unit_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_personal_property_tax": 4000,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_sales_or_income_tax": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#relation.salt_section_911_individual_of_tax_unit": [
+          {
+            "us:statutes/26/911/a#input.election_made_for_foreign_earned_income": false,
+            "us:statutes/26/911/a#input.election_made_for_housing_cost_amount": false,
+            "us:statutes/26/911/a#input.foreign_earned_income_of_individual": 0,
+            "us:statutes/26/911/a#input.housing_cost_amount_of_individual": 0,
+            "us:statutes/26/911/a#input.individual_is_qualified_individual": false
+          }
+        ],
+        "us:statutes/26/931#input.amounts_paid_for_services_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/931#input.bona_fide_resident_of_specified_possession_during_entire_taxable_year": false,
+        "us:statutes/26/931#input.income_derived_from_sources_within_specified_possessions": 0,
+        "us:statutes/26/931#input.income_effectively_connected_with_trade_or_business_within_specified_possessions": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency_attributable_to_period_before_change": 0,
+        "us:statutes/26/933#input.bona_fide_resident_of_puerto_rico_years_before_change": 0,
+        "us:statutes/26/933#input.income_derived_from_sources_within_puerto_rico": 0,
+        "us:statutes/26/933#input.individual_changes_residence_from_puerto_rico_during_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_bona_fide_resident_of_puerto_rico_during_entire_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_citizen_of_united_states": false,
+        "us:statutes/26/933#input.puerto_rico_source_income_attributable_to_puerto_rican_residence_period_before_change": 0
+      },
+      "case_id": "salt-personal-property-tax-probe",
+      "concept": "us:policies/income_tax/salt_deduction_pipeline#federal_salt_deduction",
+      "difference": 4000.0,
+      "filing_status": "single",
+      "inputs": {
+        "adjusted_gross_income": 100000,
+        "real_estate_taxes": 0,
+        "section_911_exclusions": [
+          0
+        ],
+        "state_and_local_personal_property_tax": 4000,
+        "state_and_local_sales_or_income_tax": 0
+      },
+      "match": false,
+      "policyengine": 0.0,
+      "policyengine_components": {
+        "adjusted_gross_income": 100000.0,
+        "exemptions": 0.0,
+        "foreign_earned_income_exclusion": 0.0,
+        "salt": 0.0,
+        "salt_cap": 40400.0,
+        "salt_deduction": 0.0
+      },
+      "scenario_id": "salt-personal-property-tax-probe"
+    }
+  ],
+  "concept": "us:policies/income_tax/salt_deduction_pipeline#federal_salt_deduction",
+  "concepts": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "State and local tax deduction",
+      "id": "us:policies/income_tax/salt_deduction_pipeline#federal_salt_deduction",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0.0,
+      "tolerance": 0.01
+    }
+  ],
+  "engine_bindings": {
+    "axiom": {
+      "bridge_outputs": {
+        "us:policies/income_tax/salt_deduction_pipeline#federal_section_911_exclusion_for_salt_magi": "foreign_earned_income_exclusion"
+      },
+      "diagnostic_outputs": {},
+      "fixture": "us/policies/income_tax/salt_deduction_pipeline.test.yaml",
+      "module": "us:policies/income_tax/salt_deduction_pipeline",
+      "output": "us:policies/income_tax/salt_deduction_pipeline#federal_salt_deduction",
+      "outputs": [
+        "us:policies/income_tax/salt_deduction_pipeline#federal_salt_deduction"
+      ],
+      "supplemental_fixtures": []
+    },
+    "policyengine": {
+      "boundary": "TaxUnit section 164 personal SALT component after the 2026 cap, phaseout, and PolicyEngine's simulation-only AGI ceiling",
+      "comparison_bindings": [
+        {
+          "comparison": "amount",
+          "concept": "us:policies/income_tax/salt_deduction_pipeline#federal_salt_deduction",
+          "mapping_type": "direct_variable",
+          "variable": "salt_deduction"
+        }
+      ],
+      "diagnostic_outputs": [
+        "salt",
+        "salt_cap",
+        "adjusted_gross_income",
+        "exemptions",
+        "foreign_earned_income_exclusion",
+        "salt_deduction"
+      ],
+      "outputs": [
+        "salt_deduction"
+      ]
+    }
+  },
+  "engines": {
+    "left": "axiom",
+    "right": "policyengine",
+    "versions": {
+      "policyengine": "4.18.9",
+      "policyengine_core": "3.30.3",
+      "policyengine_us": "1.767.3"
+    }
+  },
+  "mismatches": [
+    {
+      "case_id": "salt-low-agi-engine-cap",
+      "concept": "us:policies/income_tax/salt_deduction_pipeline#federal_salt_deduction",
+      "difference": 5000.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "salt-low-agi-engine-cap"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 10000.0,
+      "left_engine": "axiom",
+      "right": 5000.0,
+      "right_engine": "policyengine"
+    },
+    {
+      "case_id": "salt-magi-911-addback",
+      "concept": "us:policies/income_tax/salt_deduction_pipeline#federal_salt_deduction",
+      "difference": -1500.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "salt-magi-omits-section-911-addback"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 38900.0,
+      "left_engine": "axiom",
+      "right": 40400.0,
+      "right_engine": "policyengine"
+    },
+    {
+      "case_id": "salt-personal-property-tax-probe",
+      "concept": "us:policies/income_tax/salt_deduction_pipeline#federal_salt_deduction",
+      "difference": 4000.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "salt-aggregate-omits-personal-property-tax"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 4000.0,
+      "left_engine": "axiom",
+      "right": 0.0,
+      "right_engine": "policyengine"
+    }
+  ],
+  "population": "case-grid",
+  "provenance": {
+    "engine": {},
+    "generated_at": "2026-08-06T04:14:59Z",
+    "generated_by": "scripts/run_comparison.py::us-salt-deduction-grid",
+    "oracle": {
+      "name": "policyengine",
+      "policyengine_core": "3.30.3",
+      "policyengine_package": "policyengine==4.18.9",
+      "policyengine_us": "1.767.3"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-us",
+        "sha": "ae64af2740340a40d04ed3c652254f53e62fab61"
+      }
+    ],
+    "run_kind": "affected-rerun",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "scenario_count": 16,
+  "schema_version": "axiom.comparison_report.v2.1",
+  "suite": "us-salt-deduction-grid",
+  "summary": {
+    "axiom_vs_policyengine_match_rate": 81.25,
+    "comparison_count": 16,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 3
+      },
+      "dispositions_file": "dispositions/us-salt-deduction-grid.yaml",
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 81.25,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": {},
+    "match_count": 13,
+    "mismatch_count": 3,
+    "mismatches_by_concept": [
+      {
+        "count": 3,
+        "value": "us:policies/income_tax/salt_deduction_pipeline#federal_salt_deduction"
+      }
+    ],
+    "mismatches_by_kind": [
+      {
+        "count": 3,
+        "value": "amount_difference"
+      }
+    ],
+    "mismatches_by_scenario": {}
+  },
+  "tolerance": {
+    "absolute": 0.01,
+    "relative": 0.0
+  },
+  "validation_year": 2026
+}

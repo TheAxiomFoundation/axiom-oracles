@@ -41,6 +41,7 @@ SEED_DIRS = (
     "conformance",
     "dispositions",
     "docs",
+    "reference",
     "reports",
 )
 SEED_DATA = "dashboard/public/data"
@@ -78,6 +79,12 @@ def seed_repo(tmp_path_factory: pytest.TempPathFactory) -> Path:
     for d in SEED_DIRS:
         shutil.copytree(REPO_ROOT / d, seed / d, ignore=ignore)
     shutil.copytree(REPO_ROOT / SEED_DATA, seed / SEED_DATA, ignore=ignore)
+    # The unexplained publication gate scopes out kind:"diagnostic" suites via
+    # the dashboard's suite table; without it, nyc-synthetic (a diagnostic
+    # suite the gate must ignore) would trip the fixture's ratchet.
+    suites_table = Path("dashboard/src/utils/suites.js")
+    (seed / suites_table).parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(REPO_ROOT / suites_table, seed / suites_table)
     for md in REPO_ROOT.glob("*.md"):  # dispositions evidence (e.g. PROGRESS.md)
         shutil.copy2(md, seed / md.name)
     _git(seed, "init", "-q", "-b", "main")

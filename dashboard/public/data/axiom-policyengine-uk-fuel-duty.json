@@ -141,12 +141,12 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-26T19:47:03Z",
+    "generated_at": "2026-08-07T13:47:22Z",
     "generated_by": "scripts/run_comparison.py::uk-fuel-duty",
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-uk",
-        "sha": "e60b12676343ecf87047494e5f0dbf11c1e33031"
+        "sha": "5bac44f1f3248c2afae9ee268f4cffa7a6381e99"
       }
     ],
     "run_kind": "affected-rerun",

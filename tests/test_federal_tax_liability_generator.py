@@ -38,6 +38,22 @@ def _load_runner():
     return module
 
 
+def _fixture_contract_inputs(generator, validator, case):
+    """Return the exact fixture mapping enforced by a config validator."""
+    captured = {}
+    original = generator._require_exact_fixture_values
+
+    def capture(**kwargs):
+        captured.update(kwargs)
+
+    generator._require_exact_fixture_values = capture
+    try:
+        validator(case, {})
+    finally:
+        generator._require_exact_fixture_values = original
+    return captured["expected"]
+
+
 def test_every_live_federal_grid_pins_its_reviewed_rulespec_snapshot():
     legacy_snapshot = (
         "3373e8411f7e141fd50879e3de964386f606f7f6",
@@ -47,6 +63,14 @@ def test_every_live_federal_grid_pins_its_reviewed_rulespec_snapshot():
         "dcbae4344c522b4ad8004169316266cbc153186f",
         "7ee3ca44edd11cdaaf5d074a6a2a6c32d2f25dfb",
     )
+    chunk1_snapshot = (
+        "ae64af2740340a40d04ed3c652254f53e62fab61",
+        "40e08f7dbaa88a70660006f3a5a32bfa283ebd85",
+    )
+    chunk1_configs = {
+        "us-itemized-taxable-income-deductions-grid.yaml",
+        "us-salt-deduction-grid.yaml",
+    }
     federal_configs = []
     for path in sorted((REPO_ROOT / "comparisons").glob("*.yaml")):
         config = yaml.safe_load(path.read_text())
@@ -55,11 +79,12 @@ def test_every_live_federal_grid_pins_its_reviewed_rulespec_snapshot():
             continue
         federal_configs.append(path.name)
         parameters = runner["parameters"]
-        expected = (
-            savers_snapshot
-            if path.name == "us-savers-grid.yaml"
-            else legacy_snapshot
-        )
+        if path.name in chunk1_configs:
+            expected = chunk1_snapshot
+        elif path.name == "us-savers-grid.yaml":
+            expected = savers_snapshot
+        else:
+            expected = legacy_snapshot
         assert (
             parameters["rulespec_upstream_sha"],
             parameters["rulespec_upstream_tree"],
@@ -69,24 +94,28 @@ def test_every_live_federal_grid_pins_its_reviewed_rulespec_snapshot():
         "us-aca-ptc-grid.yaml",
         "us-additional-medicare-grid.yaml",
         "us-elderly-disabled-grid.yaml",
+        "us-itemized-taxable-income-deductions-grid.yaml",
         "us-llc-grid.yaml",
         "us-niit-grid.yaml",
         "us-qbid-grid.yaml",
+        "us-salt-deduction-grid.yaml",
         "us-savers-grid.yaml",
         "us-seca-grid.yaml",
     ]
 
 
-def test_all_eight_contract_grids_are_explicit_and_independent():
+def test_all_ten_contract_grids_are_explicit_and_independent():
     generator = _load_generator()
 
     assert set(generator.POLICIES) == {
         "aca_ptc",
         "additional_medicare_tax",
         "elderly_disabled_credit",
+        "itemized_taxable_income_deductions",
         "lifetime_learning_credit",
         "net_investment_income_tax",
         "qualified_business_income_deduction",
+        "salt_deduction",
         "savers_credit",
         "self_employment_tax",
     }
@@ -202,6 +231,43 @@ def test_all_eight_contract_grids_are_explicit_and_independent():
             "llc-aggregate-cap",
             "llc-liability-cap-diagnostic",
         ],
+        "salt_deduction": [
+            "salt-single-base",
+            "salt-single-at-cap",
+            "salt-single-over-cap",
+            "salt-joint-cap",
+            "salt-hoh-cap",
+            "salt-surviving-cap",
+            "salt-mfs-cap",
+            "salt-single-phaseout-start",
+            "salt-single-phaseout-plus-one",
+            "salt-single-phaseout-mid",
+            "salt-single-floor",
+            "salt-mfs-phaseout-mid",
+            "salt-mfs-floor",
+            "salt-low-agi-engine-cap",
+            "salt-magi-911-addback",
+            "salt-personal-property-tax-probe",
+        ],
+        "itemized_taxable_income_deductions": [
+            "itemized-zero",
+            "itemized-charity-only",
+            "itemized-interest-only",
+            "itemized-salt-only",
+            "itemized-medical-only",
+            "itemized-casualty-completed",
+            "itemized-mixed",
+            "itemized-68-single-at",
+            "itemized-68-single-plus-one",
+            "itemized-68-single-income-lesser",
+            "itemized-68-single-deduction-lesser",
+            "itemized-68-hoh-at",
+            "itemized-68-joint-at",
+            "itemized-68-surviving-at",
+            "itemized-68-mfs-at",
+            "itemized-68-other-deduction-base",
+            "itemized-68-rational-rate",
+        ],
     }
     for key, expected in expected_case_ids.items():
         assert [case.case_id for case in generator.POLICIES[key].cases] == expected
@@ -243,6 +309,636 @@ def test_policyengine_bindings_match_the_reviewed_output_boundaries():
     assert generator.POLICIES["lifetime_learning_credit"].pe_output_variables == (
         "lifetime_learning_credit",
     )
+    assert generator.POLICIES["salt_deduction"].pe_output_variables == (
+        "salt_deduction",
+    )
+    assert generator.POLICIES[
+        "itemized_taxable_income_deductions"
+    ].pe_output_variables == ("itemized_taxable_income_deductions",)
+
+
+def test_chunk1_configs_bind_only_reviewed_bridge_diagnostics_and_inputs():
+    generator = _load_generator()
+    salt = generator.POLICIES["salt_deduction"]
+    itemized = generator.POLICIES["itemized_taxable_income_deductions"]
+
+    assert salt.axiom_bridge_outputs == {
+        (
+            "us:policies/income_tax/salt_deduction_pipeline"
+            "#federal_section_911_exclusion_for_salt_magi"
+        ): "foreign_earned_income_exclusion",
+    }
+    assert salt.axiom_diagnostic_outputs == {}
+    assert salt.rulespec_only_inputs == (
+        (
+            "us:policies/income_tax/salt_deduction_pipeline"
+            "#input.state_and_local_personal_property_tax"
+        ),
+    )
+    assert set(salt.rulespec_domain_inputs) == {
+        (
+            "us:policies/income_tax/salt_deduction_pipeline#input."
+            "completed_personal_tax_amounts_exclude_business_and_section_212_taxes"
+        ),
+        (
+            "us:policies/income_tax/salt_deduction_pipeline#input."
+            "completed_personal_tax_amounts_exclude_acquisition_capitalized_taxes"
+        ),
+        (
+            "us:policies/income_tax/salt_deduction_pipeline#input."
+            "completed_personal_tax_amounts_are_net_of_refunds"
+        ),
+        (
+            "us:policies/income_tax/salt_deduction_pipeline#input."
+            "completed_personal_tax_amounts_exclude_nondeductible_taxes"
+        ),
+        (
+            "us:policies/income_tax/salt_deduction_pipeline#input."
+            "section_911_exclusion_relation_includes_every_tax_unit_individual"
+        ),
+    }
+    assert itemized.axiom_bridge_outputs == {}
+    assert itemized.axiom_diagnostic_outputs == {
+        (
+            "us:policies/income_tax/"
+            "itemized_taxable_income_deductions_pipeline"
+            "#itemized_deductions_otherwise_allowable_after_other_limitations"
+        ): "total_itemized_taxable_income_deductions",
+        (
+            "us:policies/income_tax/"
+            "itemized_taxable_income_deductions_pipeline"
+            "#federal_section_68_reduction"
+        ): "itemized_taxable_income_deductions_reduction",
+    }
+    assert itemized.rulespec_only_inputs == (
+        ("us:statutes/26/68#input.taxable_income_determined_without_section_68"),
+    )
+    assert set(itemized.rulespec_domain_inputs) == {
+        *salt.rulespec_domain_inputs,
+        (
+            "us:policies/income_tax/"
+            "itemized_taxable_income_deductions_pipeline"
+            "#input.taxpayer_is_individual"
+        ),
+        (
+            "us:policies/income_tax/"
+            "itemized_taxable_income_deductions_pipeline"
+            "#input.no_other_component_in_pe_six_item_itemized_aggregate"
+        ),
+    }
+    assert "foreign_earned_income_exclusion" in salt.pe_input_variables
+    assert (
+        "itemized_taxable_income_deductions_reduction"
+        not in itemized.pe_input_variables
+    )
+    generator._validate_policy_config(salt)
+    generator._validate_policy_config(itemized)
+
+
+@pytest.mark.parametrize(
+    ("config_key", "validator_name"),
+    [
+        ("salt_deduction", "_validate_salt_fixture"),
+        (
+            "itemized_taxable_income_deductions",
+            "_validate_itemized_fixture",
+        ),
+    ],
+)
+def test_chunk1_fixture_contract_matches_every_adopted_case_exactly(
+    config_key,
+    validator_name,
+):
+    generator = _load_generator()
+    config = generator.POLICIES[config_key]
+    validator = getattr(generator, validator_name)
+    report = json.loads(
+        (
+            REPO_ROOT
+            / "dashboard"
+            / "public"
+            / "data"
+            / f"axiom-policyengine-{config.suite}.json"
+        ).read_text()
+    )
+    report_cases = {case["case_id"]: case for case in report["cases"]}
+    assert set(report_cases) == {case.case_id for case in config.cases}
+
+    for case in config.cases:
+        exact_inputs = report_cases[case.case_id]["axiom_fixture_inputs"]
+        validator(case, exact_inputs)
+        generator._validate_rulespec_input_contract(
+            config,
+            case,
+            exact_inputs,
+        )
+        for key, expected in config.rulespec_domain_inputs.items():
+            assert exact_inputs[key] is expected
+        for key in config.rulespec_only_inputs:
+            assert key in exact_inputs
+
+    if config_key == "salt_deduction":
+        personal_property = config.rulespec_only_inputs[0]
+        assert {
+            case.case_id: report_cases[case.case_id]["axiom_fixture_inputs"][
+                personal_property
+            ]
+            for case in config.cases
+            if report_cases[case.case_id]["axiom_fixture_inputs"][personal_property]
+        } == {"salt-personal-property-tax-probe": 4_000}
+    else:
+        section_68_base = config.rulespec_only_inputs[0]
+        assert all(
+            report_cases[case.case_id]["axiom_fixture_inputs"][section_68_base]
+            == case.inputs["taxable_income_determined_without_section_68"]
+            for case in config.cases
+        )
+
+
+def test_chunk1_fixture_contract_rejects_missing_and_unexpected_inputs():
+    generator = _load_generator()
+    salt = generator.POLICIES["salt_deduction"]
+    case = salt.cases[0]
+    exact_inputs = _fixture_contract_inputs(
+        generator,
+        generator._validate_salt_fixture,
+        case,
+    )
+    domain_input = next(iter(salt.rulespec_domain_inputs))
+    rulespec_only_input = salt.rulespec_only_inputs[0]
+
+    missing_domain = dict(exact_inputs)
+    missing_domain.pop(domain_input)
+    with pytest.raises(ValueError, match="is missing input"):
+        generator._validate_rulespec_input_contract(
+            salt,
+            case,
+            missing_domain,
+        )
+
+    wrong_domain = dict(exact_inputs)
+    wrong_domain[domain_input] = False
+    with pytest.raises(ValueError, match="expected True"):
+        generator._validate_rulespec_input_contract(
+            salt,
+            case,
+            wrong_domain,
+        )
+
+    missing_rulespec_only = dict(exact_inputs)
+    missing_rulespec_only.pop(rulespec_only_input)
+    with pytest.raises(ValueError, match="missing RuleSpec-only input"):
+        generator._validate_rulespec_input_contract(
+            salt,
+            case,
+            missing_rulespec_only,
+        )
+
+    unexpected = {**exact_inputs, "us:test#input.unreviewed": 0}
+    with pytest.raises(ValueError, match="unexpected inputs"):
+        generator._validate_salt_fixture(case, unexpected)
+
+    itemized = generator.POLICIES["itemized_taxable_income_deductions"]
+    itemized_case = itemized.cases[0]
+    itemized_inputs = _fixture_contract_inputs(
+        generator,
+        generator._validate_itemized_fixture,
+        itemized_case,
+    )
+    itemized_inputs.pop(itemized.rulespec_only_inputs[0])
+    with pytest.raises(ValueError, match="missing RuleSpec-only input"):
+        generator._validate_rulespec_input_contract(
+            itemized,
+            itemized_case,
+            itemized_inputs,
+        )
+
+
+def test_salt_bridge_requires_the_exact_numeric_axiom_output():
+    generator = _load_generator()
+    config = generator.POLICIES["salt_deduction"]
+    case = config.cases[0]
+    bridge_output = next(iter(config.axiom_bridge_outputs))
+
+    situation = config.pe_situation(case, {bridge_output: 125.5})
+    assert (
+        situation["tax_units"]["tax_unit"]["foreign_earned_income_exclusion"][2026]
+        == 125.5
+    )
+    assert (
+        situation["people"]["head"]["real_estate_taxes"][2026]
+        == (case.inputs["real_estate_taxes"])
+    )
+    assert "real_estate_taxes" not in situation["tax_units"]["tax_unit"]
+
+    with pytest.raises(ValueError, match="missing=.*federal_section_911"):
+        config.pe_situation(case, {})
+    with pytest.raises(ValueError, match="unexpected=.*unreviewed"):
+        config.pe_situation(
+            case,
+            {bridge_output: 0, "us:test#unreviewed": 0},
+        )
+    with pytest.raises(ValueError, match="must be numeric"):
+        config.pe_situation(case, {bridge_output: "0"})
+    with pytest.raises(ValueError, match="must be numeric"):
+        config.pe_situation(case, {bridge_output: False})
+
+    itemized = generator.POLICIES["itemized_taxable_income_deductions"]
+    with pytest.raises(ValueError, match="unexpected=.*unreviewed"):
+        itemized.pe_situation(
+            itemized.cases[0],
+            {"us:test#unreviewed": 0},
+        )
+
+
+def test_policy_config_rejects_compared_output_as_bridge_and_pe_overrides():
+    generator = _load_generator()
+    config = generator.POLICIES["salt_deduction"]
+    bridge_output = next(iter(config.axiom_bridge_outputs))
+    case = config.cases[0]
+
+    with pytest.raises(
+        ValueError,
+        match="compared Axiom outputs cannot also be bridge",
+    ):
+        generator._validate_policy_config(
+            replace(
+                config,
+                axiom_bridge_outputs={
+                    config.axiom_output: "foreign_earned_income_exclusion"
+                },
+            )
+        )
+
+    situation = config.pe_situation(case, {bridge_output: 0})
+    situation["tax_units"]["tax_unit"]["unreviewed_override"] = {2026: 1}
+    with pytest.raises(ValueError, match="undeclared PolicyEngine overrides"):
+        generator._validate_pe_situation_inputs(
+            config,
+            case,
+            situation,
+        )
+
+    situation = config.pe_situation(case, {bridge_output: 0})
+    situation["tax_units"]["tax_unit"].pop("foreign_earned_income_exclusion")
+    with pytest.raises(ValueError, match="omits PolicyEngine bridge inputs"):
+        generator._validate_pe_situation_inputs(
+            config,
+            case,
+            situation,
+        )
+
+
+def test_chunk1_policyengine_situations_preserve_all_filing_status_enums():
+    generator = _load_generator()
+    policyengine_us = pytest.importorskip("policyengine_us")
+    config = generator.POLICIES["salt_deduction"]
+    bridge_output = next(iter(config.axiom_bridge_outputs))
+    expected = {
+        "single": 0,
+        "joint": 1,
+        "separate": 2,
+        "head_of_household": 3,
+        "surviving_spouse": 4,
+    }
+    observed = {}
+
+    for filing_status, expected_enum in expected.items():
+        case = next(
+            candidate
+            for candidate in config.cases
+            if candidate.filing_status == filing_status
+        )
+        situation = config.pe_situation(case, {bridge_output: 0})
+        if filing_status == "head_of_household":
+            assert (
+                situation["tax_units"]["tax_unit"]["filing_status"][2026]
+                == "HEAD_OF_HOUSEHOLD"
+            )
+        if filing_status == "surviving_spouse":
+            assert (
+                situation["tax_units"]["tax_unit"]["filing_status"][2026]
+                == "SURVIVING_SPOUSE"
+            )
+        simulation = policyengine_us.Simulation(situation=situation)
+        observed[filing_status] = int(simulation.calculate("filing_status", 2026)[0])
+        assert observed[filing_status] == expected_enum
+
+    assert observed == expected
+    assert set(observed.values()) == {0, 1, 2, 3, 4}
+
+
+def test_chunk1_policyengine_parameter_validators_assert_exact_2026_values(
+    monkeypatch,
+):
+    generator = _load_generator()
+    policyengine_us = pytest.importorskip("policyengine_us")
+    salt = generator.POLICIES["salt_deduction"]
+    bridge_output = next(iter(salt.axiom_bridge_outputs))
+    situation = salt.pe_situation(salt.cases[0], {bridge_output: 0})
+    tax_benefit_system = policyengine_us.Simulation(
+        situation=situation
+    ).tax_benefit_system
+    captured = {}
+    original = generator._verify_parameter_values
+
+    def capture(label, actual, expected):
+        captured[label] = (actual, expected)
+        original(label, actual, expected)
+
+    monkeypatch.setattr(generator, "_verify_parameter_values", capture)
+    salt.pe_parameter_validator(tax_benefit_system)
+    generator.POLICIES[
+        "itemized_taxable_income_deductions"
+    ].pe_parameter_validator(tax_benefit_system)
+
+    salt_expected = {
+        "sources": [
+            "state_and_local_sales_or_income_tax",
+            "real_estate_taxes",
+        ],
+        "cap.SINGLE": 40_400,
+        "cap.JOINT": 40_400,
+        "cap.SEPARATE": 20_200,
+        "cap.HEAD_OF_HOUSEHOLD": 40_400,
+        "cap.SURVIVING_SPOUSE": 40_400,
+        "phase_out.threshold.SINGLE": 505_000,
+        "phase_out.threshold.JOINT": 505_000,
+        "phase_out.threshold.SEPARATE": 252_500,
+        "phase_out.threshold.HEAD_OF_HOUSEHOLD": 505_000,
+        "phase_out.threshold.SURVIVING_SPOUSE": 505_000,
+        "phase_out.rate": 0.3,
+        "phase_out.floor.amount.SINGLE": 10_000,
+        "phase_out.floor.amount.JOINT": 10_000,
+        "phase_out.floor.amount.SEPARATE": 5_000,
+        "phase_out.floor.amount.HEAD_OF_HOUSEHOLD": 10_000,
+        "phase_out.floor.amount.SURVIVING_SPOUSE": 10_000,
+        "phase_out.in_effect": True,
+        "phase_out.floor.applies": True,
+        "simulation.limit_itemized_deductions_to_taxable_income": True,
+        "simulation.branch_to_determine_itemization": True,
+    }
+    itemized_expected = {
+        "itemized_deductions": [
+            "charitable_deduction",
+            "interest_deduction",
+            "salt_deduction",
+            "medical_expense_deduction",
+            "casualty_loss_deduction",
+            "misc_deduction",
+        ],
+        "limitation.applies": True,
+        "limitation.obbb.applies": True,
+        "top_threshold.SINGLE": 640_600,
+        "top_threshold.JOINT": 768_700,
+        "top_threshold.SEPARATE": 384_350,
+        "top_threshold.HEAD_OF_HOUSEHOLD": 640_600,
+        "top_threshold.SURVIVING_SPOUSE": 768_700,
+        "limitation.obbb.rate": 0.05405405,
+    }
+    assert captured == {
+        "us-salt-deduction-grid": (salt_expected, salt_expected),
+        "us-itemized-taxable-income-deductions-grid": (
+            itemized_expected,
+            itemized_expected,
+        ),
+    }
+
+
+def test_policyengine_values_creates_a_fresh_simulation_per_case(monkeypatch):
+    generator = _load_generator()
+    policyengine_us = pytest.importorskip("policyengine_us")
+    original = generator.POLICIES["additional_medicare_tax"]
+    config = replace(
+        original,
+        cases=original.cases[:2],
+        pe_output_variables=("test_output",),
+        pe_diagnostic_variables=(),
+        pe_parameter_validator=None,
+        pe_situation=lambda case, bridge_outputs: {
+            "case_id": case.case_id,
+            "bridge_outputs": dict(bridge_outputs),
+        },
+    )
+    created = []
+
+    class FakeSimulation:
+        def __init__(self, *, situation):
+            self.situation = situation
+            created.append(self)
+
+        def calculate(self, variable, year):
+            assert variable == "test_output"
+            assert year == 2026
+            return [len(created)]
+
+    monkeypatch.setattr(
+        generator,
+        "distribution_version",
+        lambda distribution: generator.ENGINE_VERSIONS[distribution.replace("-", "_")],
+    )
+    monkeypatch.setattr(policyengine_us, "Simulation", FakeSimulation)
+    bridge_values = {case.case_id: {} for case in config.cases}
+
+    totals, components = generator._policyengine_values(
+        config,
+        bridge_values,
+    )
+
+    assert len(created) == len(config.cases)
+    assert len({id(simulation) for simulation in created}) == len(config.cases)
+    assert [simulation.situation for simulation in created] == [
+        {"case_id": case.case_id, "bridge_outputs": {}} for case in config.cases
+    ]
+    assert totals == {
+        config.cases[0].case_id: 1,
+        config.cases[1].case_id: 2,
+    }
+    assert components == {
+        config.cases[0].case_id: {"test_output": 1},
+        config.cases[1].case_id: {"test_output": 2},
+    }
+
+
+def test_axiom_bridge_and_itemized_diagnostics_are_extracted_and_reported(
+    tmp_path,
+):
+    generator = _load_generator()
+    period = {
+        "period_kind": "tax_year",
+        "start": "2026-01-01",
+        "end": "2026-12-31",
+    }
+
+    salt = generator.POLICIES["salt_deduction"]
+    salt_case = salt.cases[0]
+    salt_bridge = next(iter(salt.axiom_bridge_outputs))
+    salt_config = replace(
+        salt,
+        cases=(salt_case,),
+        fixture_path=Path("salt.test.yaml"),
+    )
+    salt_fixture = tmp_path / salt_config.fixture_path
+    salt_fixture.write_text(
+        yaml.safe_dump(
+            [
+                {
+                    "name": salt_case.case_id,
+                    "period": period,
+                    "input": _fixture_contract_inputs(
+                        generator,
+                        generator._validate_salt_fixture,
+                        salt_case,
+                    ),
+                    "output": {
+                        salt.axiom_output: 10_000,
+                        salt_bridge: 1_250,
+                    },
+                }
+            ],
+            sort_keys=False,
+        )
+    )
+    (
+        path,
+        values,
+        fixture_inputs,
+        bridge_values,
+        diagnostic_values,
+    ) = generator._axiom_values(salt_config, [tmp_path])
+    assert path == salt_fixture
+    assert values == {salt_case.case_id: 10_000}
+    assert bridge_values == {salt_case.case_id: {salt_bridge: 1_250.0}}
+    assert diagnostic_values == {salt_case.case_id: {}}
+    salt_report = generator._build_report(
+        salt_config,
+        axiom=values,
+        fixture_inputs=fixture_inputs,
+        policyengine=values,
+        policyengine_components={salt_case.case_id: {"salt_deduction": 10_000}},
+        axiom_bridge_values=bridge_values,
+        axiom_diagnostic_values=diagnostic_values,
+    )
+    assert salt_report["cases"][0]["axiom_bridge_outputs"] == {salt_bridge: 1_250.0}
+    assert salt_report["engine_bindings"]["axiom"]["bridge_outputs"] == {
+        salt_bridge: "foreign_earned_income_exclusion"
+    }
+
+    itemized = generator.POLICIES["itemized_taxable_income_deductions"]
+    itemized_case = next(
+        case for case in itemized.cases if case.case_id == "itemized-68-single-at"
+    )
+    itemized_config = replace(
+        itemized,
+        cases=(itemized_case,),
+        fixture_path=Path("itemized.test.yaml"),
+    )
+    itemized_outputs = {
+        itemized.axiom_output: 50_000,
+        **{
+            output: 50_000 if "otherwise_allowable" in output else 0
+            for output in itemized.axiom_diagnostic_outputs
+        },
+    }
+    itemized_fixture = tmp_path / itemized_config.fixture_path
+    itemized_fixture.write_text(
+        yaml.safe_dump(
+            [
+                {
+                    "name": itemized_case.case_id,
+                    "period": period,
+                    "input": _fixture_contract_inputs(
+                        generator,
+                        generator._validate_itemized_fixture,
+                        itemized_case,
+                    ),
+                    "output": itemized_outputs,
+                }
+            ],
+            sort_keys=False,
+        )
+    )
+    (
+        _path,
+        itemized_values,
+        itemized_inputs,
+        itemized_bridges,
+        itemized_diagnostics,
+    ) = generator._axiom_values(itemized_config, [tmp_path])
+    assert itemized_bridges == {itemized_case.case_id: {}}
+    assert itemized_diagnostics == {
+        itemized_case.case_id: {
+            output: float(value)
+            for output, value in itemized_outputs.items()
+            if output in itemized.axiom_diagnostic_outputs
+        }
+    }
+    itemized_report = generator._build_report(
+        itemized_config,
+        axiom=itemized_values,
+        fixture_inputs=itemized_inputs,
+        policyengine=itemized_values,
+        policyengine_components={
+            itemized_case.case_id: {
+                "itemized_taxable_income_deductions": 50_000,
+                "total_itemized_taxable_income_deductions": 50_000,
+                "itemized_taxable_income_deductions_reduction": 0,
+            }
+        },
+        axiom_bridge_values=itemized_bridges,
+        axiom_diagnostic_values=itemized_diagnostics,
+    )
+    assert (
+        itemized_report["cases"][0]["axiom_diagnostics"]
+        == (itemized_diagnostics[itemized_case.case_id])
+    )
+    assert itemized_report["cases"][0]["diagnostic_reconciliation"] == [
+        {
+            "axiom_output": output,
+            "policyengine_variable": pe_variable,
+            "axiom": itemized_diagnostics[itemized_case.case_id][output],
+            "policyengine": (50_000.0 if pe_variable.startswith("total_") else 0.0),
+            "difference": 0.0,
+        }
+        for output, pe_variable in itemized.axiom_diagnostic_outputs.items()
+    ]
+
+
+def test_axiom_bridge_extraction_rejects_missing_and_nonnumeric_outputs(
+    tmp_path,
+):
+    generator = _load_generator()
+    original = generator.POLICIES["salt_deduction"]
+    case = original.cases[0]
+    bridge_output = next(iter(original.axiom_bridge_outputs))
+    config = replace(
+        original,
+        cases=(case,),
+        fixture_path=Path("salt-bridge-invalid.test.yaml"),
+    )
+    fixture = tmp_path / config.fixture_path
+    record = {
+        "name": case.case_id,
+        "period": {
+            "period_kind": "tax_year",
+            "start": "2026-01-01",
+            "end": "2026-12-31",
+        },
+        "input": _fixture_contract_inputs(
+            generator,
+            generator._validate_salt_fixture,
+            case,
+        ),
+        "output": {config.axiom_output: 10_000},
+    }
+    fixture.write_text(yaml.safe_dump([record], sort_keys=False))
+    with pytest.raises(ValueError, match="has no output.*section_911"):
+        generator._axiom_values(config, [tmp_path])
+
+    record["output"][bridge_output] = "not-a-number"
+    fixture.write_text(yaml.safe_dump([record], sort_keys=False))
+    with pytest.raises(ValueError, match="must be numeric"):
+        generator._axiom_values(config, [tmp_path])
 
 
 def test_savers_grid_fails_closed_on_unmapped_noncomparable_or_wrong_target():
@@ -295,21 +991,28 @@ def test_savers_grid_fails_closed_on_unmapped_noncomparable_or_wrong_target():
     generator._assert_registry_comparable_bindings(savers)
 
 
-def test_committed_savers_report_scores_only_registry_comparable_bindings():
+def test_committed_registry_audited_reports_score_only_comparable_bindings():
     generator = _load_generator()
     registry = generator.load_policyengine_registry()
     expected = {
+        "us-itemized-taxable-income-deductions-grid": {
+            (
+                "us:policies/income_tax/"
+                "itemized_taxable_income_deductions_pipeline"
+                "#federal_itemized_taxable_income_deductions"
+            )
+        },
+        "us-salt-deduction-grid": {
+            "us:policies/income_tax/salt_deduction_pipeline#federal_salt_deduction"
+        },
         "us-savers-grid": {
-            "us:policies/income_tax/savers_credit_pipeline"
-            "#federal_savers_credit"
+            "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit"
         },
     }
     for suite, expected_concepts in expected.items():
         report = json.loads(
             (
-                REPO_ROOT
-                / "dashboard/public/data"
-                / f"axiom-policyengine-{suite}.json"
+                REPO_ROOT / "dashboard/public/data" / f"axiom-policyengine-{suite}.json"
             ).read_text()
         )
         scored = {
@@ -317,15 +1020,14 @@ def test_committed_savers_report_scores_only_registry_comparable_bindings():
             for aggregate in report["aggregates"]
             if aggregate["comparison_count"] > 0
         }
-        bindings = report["engine_bindings"]["policyengine"][
-            "comparison_bindings"
-        ]
+        bindings = report["engine_bindings"]["policyengine"]["comparison_bindings"]
         assert scored == expected_concepts
         assert len(bindings) == len(scored)
         assert {binding["concept"] for binding in bindings} == scored
-        assert sum(
-            aggregate["comparison_count"] for aggregate in report["aggregates"]
-        ) == report["summary"]["comparison_count"]
+        assert (
+            sum(aggregate["comparison_count"] for aggregate in report["aggregates"])
+            == report["summary"]["comparison_count"]
+        )
         for binding in bindings:
             mapping = registry.mapping_for_legal_id(
                 binding["concept"],
@@ -338,11 +1040,9 @@ def test_committed_savers_report_scores_only_registry_comparable_bindings():
             if mapping.policyengine_parameter:
                 assert binding["parameter"] == mapping.policyengine_parameter
             if mapping.parameter_key_input:
-                assert (
-                    binding["parameter_key_input"]
-                    == mapping.parameter_key_input
-                )
+                assert binding["parameter_key_input"] == mapping.parameter_key_input
                 assert binding["parameter_key_map"] == mapping.parameter_key_map
+
 
 def test_aca_grid_pins_prior_year_fpl_dollars_and_enrolled_premium():
     generator = _load_generator()
@@ -433,8 +1133,7 @@ def test_qbid_fixture_binding_matches_merged_pipeline_surface(monkeypatch):
     generator._validate_qbid_fixture(cases["qbid-phasein"], {})
 
     pipeline = (
-        "us:policies/income_tax/"
-        "qualified_business_income_deduction_pipeline#input."
+        "us:policies/income_tax/qualified_business_income_deduction_pipeline#input."
     )
     statute = "us:statutes/26/199A#input."
     capital_gain = "us:statutes/26/1/h#input."
@@ -463,10 +1162,7 @@ def test_qbid_fixture_binding_matches_merged_pipeline_surface(monkeypatch):
             "trades_or_businesses"
         ),
         f"{statute}qualified_production_activities_income",
-        (
-            f"{statute}"
-            "taxpayer_is_specified_agricultural_or_horticultural_cooperative"
-        ),
+        (f"{statute}taxpayer_is_specified_agricultural_or_horticultural_cooperative"),
         f"{statute}cooperative_w2_wages",
         (
             f"{capital_gain}"
@@ -530,13 +1226,11 @@ def test_savers_grid_has_matching_b_minus_one_probe_at_all_nine_boundaries():
     cases = {case.case_id: case for case in config.cases}
     fixture = yaml.safe_load(
         (
-            REPO_ROOT
-            / "comparisons/fixtures/us-savers-grid-boundary-probes.yaml"
+            REPO_ROOT / "comparisons/fixtures/us-savers-grid-boundary-probes.yaml"
         ).read_text()
     )
     outputs = {
-        record["name"]: record["output"][config.axiom_output]
-        for record in fixture
+        record["name"]: record["output"][config.axiom_output] for record in fixture
     }
     expected = {
         "single-one-below-50-percent-limit": (24_249, 1_000),
@@ -671,6 +1365,8 @@ def test_additional_medicare_fixture_enforces_wage_only_person_boundary():
             case,
             stale_flat_fixture,
         )
+
+
 def test_axiom_fixture_is_resolved_only_from_supplied_roots(tmp_path):
     generator = _load_generator()
     original = generator.POLICIES["net_investment_income_tax"]
@@ -702,15 +1398,20 @@ def test_axiom_fixture_is_resolved_only_from_supplied_roots(tmp_path):
         )
     )
 
-    path, values, fixture_inputs = generator._axiom_values(
-        config,
-        [tmp_path],
-    )
+    (
+        path,
+        values,
+        fixture_inputs,
+        bridge_values,
+        diagnostic_values,
+    ) = generator._axiom_values(config, [tmp_path])
 
     assert path == fixture
     assert values["niit-under"] == 100
     assert values["niit-rental"] == 600
     assert fixture_inputs["niit-single-mixed"] == {"us:policies/test#income": 2}
+    assert bridge_values == {case.case_id: {} for case in config.cases}
+    assert diagnostic_values == {case.case_id: {} for case in config.cases}
 
 
 def test_non_vacuous_guard_requires_a_nonzero_matching_case():

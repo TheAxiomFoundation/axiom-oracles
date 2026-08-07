@@ -20,7 +20,12 @@ ratchets:
   axiom_attributed_open_max: 0
   policies_in_scope: 23
 - jurisdiction: us-pe
-  covered_min: 34
-  unexplained_max: 244
-  axiom_attributed_open_max: 157
+  covered_min: 36
+  unexplained_max: 19
+  axiom_attributed_open_max: 0
   policies_in_scope: 127
+- jurisdiction: us-tariff-yale
+  covered_min: 10
+  unexplained_max: 0
+  axiom_attributed_open_max: 0
+  policies_in_scope: 10

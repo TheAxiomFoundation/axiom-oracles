@@ -34,6 +34,44 @@ def _current_inputs():
     )
 
 
+def _rejected_snapshot_inputs():
+    snapshot_document, snapshot_entries, _digest = (
+        reconciliation._load_rejected_snapshot_dispositions()
+    )
+    expanded = reconciliation._expanded_dispositions(
+        snapshot_entries,
+        expected_rows=reconciliation.REJECTED_SNAPSHOT_EXPANDED_DISPOSITIONS,
+        label="rejected PUB 275 snapshot",
+    )
+    report_raw = reconciliation._git_show(
+        reconciliation.REJECTED_SNAPSHOT_COMMIT,
+        reconciliation._relative(reconciliation.CURRENT_REPORT_PATH),
+    )
+    report, report_by_identity, cases_by_id, _report_digest = (
+        reconciliation._load_and_validate_report(
+            expanded,
+            raw=report_raw,
+            expected_mismatches=reconciliation.REJECTED_SNAPSHOT_MISMATCHES,
+            expected_sha256=reconciliation.REJECTED_SNAPSHOT_REPORT_SHA256,
+            label="rejected PUB 275 snapshot CA report",
+        )
+    )
+    snapshot_issue_by_id = {
+        entry["id"]: entry
+        for entry in snapshot_entries
+        if entry["id"].startswith("ca-362-")
+    }
+    return (
+        snapshot_document,
+        snapshot_entries,
+        expanded,
+        report,
+        report_by_identity,
+        cases_by_id,
+        snapshot_issue_by_id,
+    )
+
+
 def test_literal_base_ref_is_hash_pinned_and_has_345_issue_rows():
     commit, document, entries = reconciliation._load_base_dispositions(BASE_REF)
 
@@ -66,6 +104,42 @@ def test_literal_base_hash_rejects_byte_drift(monkeypatch):
         reconciliation._load_base_dispositions(BASE_REF)
 
 
+@pytest.mark.parametrize(
+    ("relative_path", "message"),
+    [
+        (
+            reconciliation.BASE_DISPOSITIONS_RELATIVE_PATH,
+            "rejected PUB 275 snapshot source sha256 mismatch",
+        ),
+        (
+            reconciliation._relative(reconciliation.CURRENT_REPORT_PATH),
+            "rejected PUB 275 snapshot CA report sha256 mismatch",
+        ),
+        (
+            reconciliation._relative(reconciliation.SERVED_DISPOSITIONS_PATH),
+            "rejected PUB 275 snapshot served CA dispositions sha256 mismatch",
+        ),
+    ],
+)
+def test_rejected_snapshot_hashes_reject_byte_drift(
+    monkeypatch,
+    relative_path,
+    message,
+):
+    original_git_show = reconciliation._git_show
+
+    def tampered_git_show(commit, path):
+        raw = original_git_show(commit, path)
+        if commit == reconciliation.REJECTED_SNAPSHOT_COMMIT and path == relative_path:
+            return raw + b"\n"
+        return raw
+
+    monkeypatch.setattr(reconciliation, "_git_show", tampered_git_show)
+
+    with pytest.raises(reconciliation.ReconciliationError, match=message):
+        reconciliation.check_reconciliation(BASE_REF)
+
+
 @pytest.mark.parametrize("base_ref", ["", "   ", "--not-a-ref"])
 def test_literal_base_ref_rejects_unsafe_values(base_ref):
     with pytest.raises(
@@ -93,39 +167,112 @@ def test_report_runtime_provenance_is_pinned():
 def test_repository_reconciles_exact_partition_and_current_compact_schema():
     receipt = reconciliation.check_reconciliation(BASE_REF)
 
+    assert receipt["schema"] == "axiom_oracles.ca_snap_423_reconciliation.v2"
     assert receipt["base"] == {
         "commit": BASE_REF,
         "path": "dispositions/ca-snap-ecps.yaml",
         "sha256": reconciliation.BASE_DISPOSITIONS_SHA256,
         "identity_sha256": reconciliation.EXPECTED_BASE_IDENTITY_DIGEST,
     }
-    partition = receipt["partition"]
-    assert partition["base_rows"] == 345
-    assert partition["vanished"]["count"] == 192
-    assert partition["current_but_dropped"]["count"] == 22
-    assert partition["kept"]["count"] == 131
-    assert len(partition["drifted_rows"]) == 22
+    current = receipt["current"]
+    current_partition = current["partition"]
+    assert current_partition["base_rows"] == 345
+    assert current_partition["vanished"]["count"] == 192
+    # 22/0 at the #423 transition; the 2026-08 residual-tail triage covered
+    # 21 of the dropped identities with new dispositions.
+    assert current_partition["current_but_dropped"]["count"] == 1
+    assert current_partition["reclassified"]["count"] == 21
+    assert current_partition["kept"]["count"] == 131
+    assert len(current_partition["drifted_rows"]) == 22
     assert (
-        partition["drift_evidence_trace_sha256"]
+        current_partition["drift_evidence_trace_sha256"]
         == reconciliation.REQUESTED_MONTH_TRACE_SHA256
     )
-    assert partition["drifted_rows_sha256"] == reconciliation.EXPECTED_DRIFT_ROWS_SHA256
-    assert receipt["retained_pin_movement"]["moved"]["count"] == 115
-    assert receipt["retained_pin_movement"]["unchanged"]["count"] == 16
-    assert receipt["retained_pin_movement"]["requested_month_evidence"] == {
+    assert (
+        current_partition["drifted_rows_sha256"]
+        == reconciliation.EXPECTED_DRIFT_ROWS_SHA256
+    )
+    assert (
+        current_partition["active_drifted_rows_sha256"]
+        == reconciliation.EXPECTED_ACTIVE_DRIFT_ROWS_SHA256
+    )
+    assert (
+        current_partition["retired_drifted_rows_sha256"]
+        == reconciliation.EXPECTED_RETIRED_DRIFT_ROWS_SHA256
+    )
+    assert current_partition["reclassified_replacements"]["counts"] == (
+        reconciliation.EXPECTED_RECLASSIFIED_REPLACEMENTS
+    )
+    assert current_partition["reclassified_replacements"]["rows_sha256"] == (
+        reconciliation.EXPECTED_RECLASSIFIED_ROWS_SHA256
+    )
+    assert len(current_partition["reclassified_replacements"]["rows"]) == 21
+    assert current["retained_pin_movement"]["moved"]["count"] == 115
+    assert current["retained_pin_movement"]["unchanged"]["count"] == 16
+    assert current["retained_pin_movement"]["requested_month_evidence"] == {
         "count": 131,
         "trace_sha256": reconciliation.REQUESTED_MONTH_TRACE_SHA256,
         "rows_sha256": (reconciliation.EXPECTED_KEPT_REQUESTED_MONTH_ROWS_SHA256),
     }
-    assert receipt["current"]["report"]["mismatches"] == 529
-    assert receipt["current"]["source_dispositions"]["expanded_rows"] == 288
-    assert receipt["current"]["compact"]["cases"] == 7101
-    assert receipt["current"]["compact"]["mismatches"] == 529
-    assert receipt["current"]["compact"]["annotated"] == 288
+    assert current["report"]["mismatches"] == 529
+    assert current["source_dispositions"]["expanded_rows"] == 510
+    assert current["compact"]["cases"] == 7101
+    assert current["compact"]["mismatches"] == 529
+    assert current["compact"]["annotated"] == 510
 
-    # This old benefit identity vanished even though the household now has an
-    # unrelated eligibility mismatch.  The partition is identity-level.
-    assert "ca-362-self-employment-ecps-58241-benefit" in partition["vanished"]["ids"]
+    snapshot = receipt["rejected_pub275_exposure_snapshot"]
+    snapshot_partition = snapshot["partition"]
+    assert snapshot["commit"] == reconciliation.REJECTED_SNAPSHOT_COMMIT
+    assert snapshot["report"] == {
+        "path": "dashboard/public/data/axiom-policyengine-ca-snap-ecps.json",
+        "sha256": reconciliation.REJECTED_SNAPSHOT_REPORT_SHA256,
+        "mismatches": 1058,
+    }
+    assert snapshot["source_dispositions"]["sha256"] == (
+        reconciliation.REJECTED_SNAPSHOT_SOURCE_SHA256
+    )
+    assert snapshot["source_dispositions"]["entries"] == 141
+    assert snapshot["source_dispositions"]["expanded_rows"] == 866
+    assert snapshot["served_dispositions"]["sha256"] == (
+        reconciliation.REJECTED_SNAPSHOT_SERVED_SHA256
+    )
+    assert snapshot["served_dispositions"]["corrected_issue_links"] == (
+        reconciliation.REJECTED_SNAPSHOT_CORRECTED_LINKS
+    )
+    assert snapshot_partition["vanished"]["count"] == 156
+    assert snapshot_partition["current_but_dropped"]["count"] == 17
+    assert snapshot_partition["reclassified"]["count"] == 41
+    assert snapshot_partition["kept"]["count"] == 131
+    assert len(snapshot_partition["drifted_rows"]) == 22
+    assert (
+        snapshot_partition["drifted_rows_sha256"]
+        == reconciliation.EXPECTED_DRIFT_ROWS_SHA256
+    )
+    assert snapshot_partition["active_drifted_rows_sha256"] == (
+        reconciliation.REJECTED_SNAPSHOT_ACTIVE_DRIFT_ROWS_SHA256
+    )
+    assert snapshot_partition["retired_drifted_rows_sha256"] == (
+        reconciliation.REJECTED_SNAPSHOT_RETIRED_DRIFT_ROWS_SHA256
+    )
+    assert snapshot_partition["reclassified_replacements"]["counts"] == (
+        reconciliation.REJECTED_SNAPSHOT_RECLASSIFIED_REPLACEMENTS
+    )
+    assert snapshot_partition["reclassified_replacements"]["rows_sha256"] == (
+        reconciliation.REJECTED_SNAPSHOT_RECLASSIFIED_ROWS_SHA256
+    )
+    assert len(snapshot_partition["reclassified_replacements"]["rows"]) == 41
+    assert snapshot["retained_pin_movement"] == current["retained_pin_movement"]
+
+    # The invalid PUB 275 exposure made this literal #423 identity look
+    # reclassified. In the honest live run it correctly vanishes.
+    assert (
+        "ca-362-self-employment-ecps-58241-benefit"
+        in snapshot_partition["reclassified"]["ids"]
+    )
+    assert (
+        "ca-362-self-employment-ecps-58241-benefit"
+        in current_partition["vanished"]["ids"]
+    )
 
 
 def test_equal_count_partition_swap_fails_identity_digest():
@@ -133,7 +280,7 @@ def test_equal_count_partition_swap_fails_identity_digest():
     (
         _current_document,
         _current_entries,
-        _expanded,
+        expanded,
         _report,
         report_by_identity,
         _cases_by_id,
@@ -143,12 +290,15 @@ def test_equal_count_partition_swap_fails_identity_digest():
         base_entries,
         report_by_identity,
         current_issue_by_id,
+        expanded,
     )
     kept = partitions["kept"][0]
     dropped = partitions["current_but_dropped"][0]
 
     tampered = dict(current_issue_by_id)
+    tampered_expanded = dict(expanded)
     del tampered[kept["id"]]
+    del tampered_expanded[reconciliation._identity(kept)]
     tampered[dropped["id"]] = dropped
 
     with pytest.raises(
@@ -159,6 +309,62 @@ def test_equal_count_partition_swap_fails_identity_digest():
             base_entries,
             report_by_identity,
             tampered,
+            tampered_expanded,
+        )
+
+
+def test_reclassified_receipt_rejects_equal_count_replacement_swap():
+    (
+        _snapshot_document,
+        _snapshot_entries,
+        expanded,
+        _report,
+        report_by_identity,
+        _cases_by_id,
+        current_issue_by_id,
+    ) = _rejected_snapshot_inputs()
+    _commit, _document, base_entries = reconciliation._load_base_dispositions(BASE_REF)
+    partitions = reconciliation._partition_base_entries(
+        base_entries,
+        report_by_identity,
+        current_issue_by_id,
+        expanded,
+        expected_counts=reconciliation.REJECTED_SNAPSHOT_PARTITION_COUNTS,
+        expected_digests=reconciliation.REJECTED_SNAPSHOT_PARTITION_DIGESTS,
+        era_label="rejected PUB 275 snapshot",
+    )
+    paired = next(
+        entry
+        for entry in partitions["reclassified"]
+        if expanded[reconciliation._identity(entry)]["id"]
+        == "ca-mce-pe-extra-net-test-paired-benefit"
+    )
+    benefit_only = next(
+        entry
+        for entry in partitions["reclassified"]
+        if expanded[reconciliation._identity(entry)]["id"]
+        == "ca-mce-pe-extra-net-test-benefit-only"
+    )
+    paired_key = reconciliation._identity(paired)
+    benefit_only_key = reconciliation._identity(benefit_only)
+    tampered_expanded = dict(expanded)
+    tampered_expanded[paired_key] = deepcopy(expanded[paired_key])
+    tampered_expanded[benefit_only_key] = deepcopy(expanded[benefit_only_key])
+    tampered_expanded[paired_key]["id"], tampered_expanded[benefit_only_key]["id"] = (
+        tampered_expanded[benefit_only_key]["id"],
+        tampered_expanded[paired_key]["id"],
+    )
+
+    with pytest.raises(
+        reconciliation.ReconciliationError,
+        match="reclassified replacement receipt digest mismatch",
+    ):
+        reconciliation._partition_receipt(
+            partitions,
+            report_by_identity,
+            current_issue_by_id,
+            tampered_expanded,
+            expectations=reconciliation.REJECTED_SNAPSHOT_RECEIPT_EXPECTATIONS,
         )
 
 
@@ -234,7 +440,7 @@ def test_compact_checker_requires_merged_only_vanished_households(case_id):
     (
         _current_document,
         _current_entries,
-        _expanded,
+        expanded,
         report,
         report_by_identity,
         cases_by_id,
@@ -245,6 +451,7 @@ def test_compact_checker_requires_merged_only_vanished_households(case_id):
         base_entries,
         report_by_identity,
         current_issue_by_id,
+        expanded,
     )
     _index, rows, _receipt = reconciliation._load_compact_rows(
         report,
@@ -280,6 +487,7 @@ def test_kept_requested_month_digest_rejects_self_consistent_pin_tampering():
         base_entries,
         report_by_identity,
         current_issue_by_id,
+        expanded,
     )
     target = partitions["kept"][0]
     entry_id = target["id"]
@@ -320,6 +528,7 @@ def test_full_drift_receipt_digest_catches_current_pin_tampering():
         base_entries,
         report_by_identity,
         current_issue_by_id,
+        expanded,
     )
     target = partitions["current_but_dropped"][0]
     key = reconciliation._identity(target)
@@ -336,4 +545,45 @@ def test_full_drift_receipt_digest_catches_current_pin_tampering():
             tampered_report,
             current_issue_by_id,
             expanded,
+        )
+
+
+def test_full_drift_receipt_digest_catches_retired_pin_tampering():
+    (
+        _snapshot_document,
+        _snapshot_entries,
+        expanded,
+        _report,
+        report_by_identity,
+        _cases_by_id,
+        current_issue_by_id,
+    ) = _rejected_snapshot_inputs()
+    _commit, _document, base_entries = reconciliation._load_base_dispositions(BASE_REF)
+    partitions = reconciliation._partition_base_entries(
+        base_entries,
+        report_by_identity,
+        current_issue_by_id,
+        expanded,
+        expected_counts=reconciliation.REJECTED_SNAPSHOT_PARTITION_COUNTS,
+        expected_digests=reconciliation.REJECTED_SNAPSHOT_PARTITION_DIGESTS,
+        era_label="rejected PUB 275 snapshot",
+    )
+    tampered = deepcopy(reconciliation.REJECTED_SNAPSHOT_RETIRED_CURRENT_DRIFT_PINS)
+    entry_id = sorted(tampered)[0]
+    tampered[entry_id]["right"] += 1
+    tampered_expectations = deepcopy(
+        reconciliation.REJECTED_SNAPSHOT_RECEIPT_EXPECTATIONS
+    )
+    tampered_expectations["retired_current_drift_pins"] = tampered
+
+    with pytest.raises(
+        reconciliation.ReconciliationError,
+        match="full drift-row receipt digest mismatch",
+    ):
+        reconciliation._partition_receipt(
+            partitions,
+            report_by_identity,
+            current_issue_by_id,
+            expanded,
+            expectations=tampered_expectations,
         )

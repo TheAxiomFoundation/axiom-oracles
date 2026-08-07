@@ -1,6 +1,6 @@
 schema: axiom_oracles.dispositions.v1
 suite: co-tax-intersection-taxsim
-updated: '2026-07-27'
+updated: '2026-07-30'
 entries:
 - id: taxsim-2026-ctc-child-credit-machinery-absent
   concept: us:tax/federal-income-tax#ctc
@@ -1142,63 +1142,6 @@ entries:
       tolerance: 15.0
   expires_on_source_change: true
   linked_issue: https://github.com/TheAxiomFoundation/axiom-encode/issues/1213
-- id: taxsim-blindness-63f-extension-standard_deduction
-  concept: us:tax/federal-income-tax#standard_deduction
-  kind: amount_difference
-  case_selector:
-    case_ids:
-    - ecps-tax-unit-135487
-    - ecps-tax-unit-135503
-    - ecps-tax-unit-135628
-    - ecps-tax-unit-135642
-    - ecps-tax-unit-135669
-    - ecps-tax-unit-135725
-    - ecps-tax-unit-135783
-    - ecps-tax-unit-135801
-    - ecps-tax-unit-135805
-    - ecps-tax-unit-135959
-    - ecps-tax-unit-135984
-    - ecps-tax-unit-136279
-    - ecps-tax-unit-58412
-    - ecps-tax-unit-58689
-    - ecps-tax-unit-58748
-    - ecps-tax-unit-58922
-    - ecps-tax-unit-59089
-    - ecps-tax-unit-59103
-    - ecps-tax-unit-59198
-  disposition: explained_residual
-  evidence:
-    mechanism: 'TAXSIM''s input schema has no blindness column, so the 63(f) additional
-
-      standard deduction axiom applies from ECPS-observed blind facts ($2,050
-
-      single / $1,650 married per blind filer or spouse, 2026) has no TAXSIM
-
-      counterpart. Extension of the original class to newly verified rows:
-
-      each selected row''s difference equals the case''s blind member count
-
-      times the filing-status increment, verified against the loaded ECPS
-
-      blind facts; taxable/tax/liability rows are the same delta propagated
-
-      (chain rows selected only when blindness is the case''s sole leaf
-
-      divergence and the downstream delta is bounded by the top marginal rate
-
-      on the increment).'
-    arithmetic:
-    - expression: 1 * 1650
-      equals: 1650.0
-      tolerance: 1.0
-    - expression: 1 * 2050
-      equals: 2050.0
-      tolerance: 1.0
-    - expression: 1 * 1650
-      equals: 1650.0
-      tolerance: 1.0
-  expires_on_source_change: true
-  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
 - id: taxsim-blindness-63f-extension-taxable_income
   concept: us:tax/federal-income-tax#taxable_income
   kind: amount_difference
@@ -1210,6 +1153,7 @@ entries:
     - ecps-tax-unit-135725
     - ecps-tax-unit-135783
     - ecps-tax-unit-135805
+    - ecps-tax-unit-136157
     - ecps-tax-unit-136279
     - ecps-tax-unit-59089
     - ecps-tax-unit-59103
@@ -1253,9 +1197,11 @@ entries:
     case_ids:
     - ecps-tax-unit-135487
     - ecps-tax-unit-135503
+    - ecps-tax-unit-135642
     - ecps-tax-unit-135725
     - ecps-tax-unit-135783
     - ecps-tax-unit-135805
+    - ecps-tax-unit-136157
     - ecps-tax-unit-59103
   disposition: explained_residual
   evidence:
@@ -2087,6 +2033,7 @@ entries:
     - ecps-tax-unit-135749
     - ecps-tax-unit-135802
     - ecps-tax-unit-135854
+    - ecps-tax-unit-136113
     - ecps-tax-unit-136340
     - ecps-tax-unit-136450
     - ecps-tax-unit-58686
@@ -2366,6 +2313,7 @@ entries:
   case_selector:
     case_ids:
     - ecps-tax-unit-135563
+    - ecps-tax-unit-135614
     - ecps-tax-unit-136109
     - ecps-tax-unit-154974
     - ecps-tax-unit-155907
@@ -2376,6 +2324,7 @@ entries:
     - ecps-tax-unit-161318
     - ecps-tax-unit-164214
     - ecps-tax-unit-58558
+    - ecps-tax-unit-58712
     - ecps-tax-unit-58805
     - ecps-tax-unit-59148
     - ecps-tax-unit-59163
@@ -2407,3 +2356,278 @@ entries:
       tolerance: 0.6
   linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
   expires_on_source_change: true
+- id: taxsim-co-refundable-credit-vintage-intersection-echo
+  concept: us:tax/state-income-tax#liability
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-135472
+    - ecps-tax-unit-135485
+    - ecps-tax-unit-135571
+    - ecps-tax-unit-135586
+    - ecps-tax-unit-135602
+    - ecps-tax-unit-135603
+    - ecps-tax-unit-135627
+    - ecps-tax-unit-135628
+    - ecps-tax-unit-135629
+    - ecps-tax-unit-135642
+    - ecps-tax-unit-135689
+    - ecps-tax-unit-135735
+    - ecps-tax-unit-135739
+    - ecps-tax-unit-135782
+    - ecps-tax-unit-135885
+    - ecps-tax-unit-135944
+    - ecps-tax-unit-135958
+    - ecps-tax-unit-135959
+    - ecps-tax-unit-135966
+    - ecps-tax-unit-136009
+    - ecps-tax-unit-136038
+    - ecps-tax-unit-136157
+    - ecps-tax-unit-58403
+    - ecps-tax-unit-58456
+    - ecps-tax-unit-58488
+    - ecps-tax-unit-58501
+    - ecps-tax-unit-58504
+    - ecps-tax-unit-58643
+    - ecps-tax-unit-58652
+    - ecps-tax-unit-58676
+    - ecps-tax-unit-58809
+    - ecps-tax-unit-58890
+    - ecps-tax-unit-59031
+  disposition: upstream_engine_gap
+  evidence:
+    mechanism: 'Intersection-lane echo of the triangulated TAXSIM Colorado
+      refundable-credit vintage divergence: on every selected row the
+      intersection state-liability difference equals, to within five cents,
+      the difference already dispositioned as taxsim-co-refundable-credit-
+      vintage for the identical tax unit in the co-state-income-tax-taxsim
+      suite (where axiom equals PolicyEngine on the same unit - none of these
+      case ids appears in the 31-row axiom-vs-PE mismatch set for the same
+      1,201-unit population). Delta equality across the two lanes proves the
+      intersection row carries the same TAXSIM-side state credit-stack
+      divergence, not a new intersection artifact, even where the unit also
+      has a dispositioned federal-side residual.'
+    arithmetic:
+    - expression: -363.8327580786133 - -363.8327580786133
+      equals: 0.0
+    - expression: -3634.178891139685 - -3634.178891139685
+      equals: 0.0
+    - expression: 935.5416982543948 - 935.5416982543948
+      equals: 0.0
+    sources:
+    - dispositions/co-state-income-tax-taxsim.yaml
+    - dashboard/public/data/axiom-policyengine-co-state-income-tax-ecps.json
+  expires_on_source_change: true
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
+- id: taxsim-2026-credit-machinery-liability-refundable-arm-zero-tbc
+  concept: us:tax/federal-income-tax#liability
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-135544
+    - ecps-tax-unit-135777
+    - ecps-tax-unit-135802
+    - ecps-tax-unit-135854
+    - ecps-tax-unit-135895
+    - ecps-tax-unit-136113
+    - ecps-tax-unit-136128
+    - ecps-tax-unit-58455
+    - ecps-tax-unit-58482
+    - ecps-tax-unit-58624
+    - ecps-tax-unit-58696
+    - ecps-tax-unit-58896
+  disposition: upstream_engine_gap
+  evidence:
+    mechanism: 'Liability face of the dispositioned TAXSIM 2026 credit-machinery
+      gaps on zero-net-pre-credit-tax rows, verified per row against the
+      pinned binary (cdate 2026-05-21) rerun with idtl=2 on the persisted
+      input rows: TAXSIM v28 is fully absorbed by its v22 (500 x depx path)
+      and fiitax equals -(v25 childless-schedule EITC), while axiom
+      liability equals -(axiom EITC + min(1,700 x qualifying children,
+      axiom refundable-capped CTC)). On all twelve rows
+      L_liab - (-(L_eitc + ACTC)) = 0.00 exactly, i.e. the whole
+      difference is the sum of the already-dispositioned EITC-schedule and
+      CTC/ACTC machinery gaps; no independent liability-level
+      disagreement.'
+    arithmetic:
+    - expression: -(4427.0 + 1700) - -4.09
+      equals: -6122.91
+    - expression: -(8084.00202265625 + 3313.1994140625)
+      equals: -11397.20143671875
+    - expression: -(6997.184375 + 1700) - -664.0
+      equals: -8033.184375
+  expires_on_source_change: true
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
+- id: taxsim-2026-ctc-machinery-liability-nonrefundable-multiples
+  concept: us:tax/federal-income-tax#liability
+  case_id: ecps-tax-unit-135994
+  kind: amount_difference
+  disposition: upstream_engine_gap
+  evidence:
+    mechanism: 'Nonrefundable-arm liability face of the dispositioned TAXSIM 2026
+      child-credit machinery gap: the federal liability difference equals
+      -(2,200 - 500) x 3 qualifying children exactly - axiom applies the
+      enacted 26 USC 24 credit (3 x 2,200 nonrefundable, liability
+      sufficient to absorb it) while TAXSIM v22 carries only the 500 x
+      depx other-dependent path (v22 = 1,500 on the idtl=2 rerun of the
+      pinned binary against the persisted input row). Same mechanism as
+      taxsim-2026-ctc-child-credit-machinery-absent, surfacing at the
+      liability bucket because the ctc bucket compares the
+      refundable-capped value.'
+    arithmetic:
+    - expression: -(2200 - 500) * 3
+      equals: -5100.00060616932
+      tolerance: 0.005
+  expires_on_source_change: true
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
+  pinned:
+    left: 9022.03939383068
+    right: 14122.04
+- id: taxsim-qbid-rental-convention-tbc-bracket-chain
+  concept: us:tax/federal-income-tax#tax_before_credits
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-135472
+    - ecps-tax-unit-135485
+    - ecps-tax-unit-135689
+    - ecps-tax-unit-135735
+    - ecps-tax-unit-135782
+    - ecps-tax-unit-135885
+    - ecps-tax-unit-136009
+    - ecps-tax-unit-58423
+    - ecps-tax-unit-58456
+    - ecps-tax-unit-58488
+    - ecps-tax-unit-58501
+    - ecps-tax-unit-58504
+    - ecps-tax-unit-58652
+    - ecps-tax-unit-58676
+    - ecps-tax-unit-58897
+    - ecps-tax-unit-59031
+  disposition: bridge_artifact
+  evidence:
+    mechanism: 'Chain propagation of the dispositioned QBID rental-convention
+      taxable-income class (taxsim-qbid-rental-convention-taxable-income)
+      into the tax-before-credits bucket: on every selected row the case''s
+      taxable_income row is claimed by that class and the
+      tax-before-credits difference equals exactly one statutory 2026
+      bracket rate (10/12/22/24 per cent) times the taxable-income
+      difference, within $0.60 - ordinary-bracket propagation of the same
+      convention delta, no independent tax computation disagreement.'
+    arithmetic:
+    - expression: 0.22 * -16909.85
+      equals: -3720.17
+      tolerance: 0.01
+    - expression: 0.24 * -10596.84
+      equals: -2543.24
+      tolerance: 0.01
+    - expression: 0.12 * -6171.87
+      equals: -740.63
+      tolerance: 0.01
+  expires_on_source_change: true
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
+- id: taxsim-blindness-63f-taxable-income-zero-floor
+  concept: us:tax/federal-income-tax#taxable_income
+  case_id: ecps-tax-unit-58922
+  kind: amount_difference
+  disposition: explained_residual
+  evidence:
+    mechanism: 'Blindness 63(f) class member whose axiom taxable income floors at
+      zero: TAXSIM (no blindness column) computes taxable income 997.52
+      under the 16,100 single standard deduction, while axiom''s 18,150
+      (16,100 + 2,050 blind increment, the case''s dispositioned
+      standard_deduction row) exceeds AGI, so axiom taxable income clamps
+      to 0 and the difference equals -997.52, the truncated remainder of
+      the same 63(f) increment rather than a whole multiple.'
+    arithmetic:
+    - expression: 997.52 - 2050
+      equals: -1052.48
+    - expression: 0 - 997.52
+      equals: -997.52
+  expires_on_source_change: true
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
+  pinned:
+    left: 0.0
+    right: 997.52
+- id: taxsim-blindness-63f-plus-qbid-floor-taxable-income
+  concept: us:tax/federal-income-tax#taxable_income
+  case_id: ecps-tax-unit-135801
+  kind: amount_difference
+  disposition: explained_residual
+  evidence:
+    mechanism: 'Compound of two dispositioned mechanisms on one row: the 63(f)
+      blindness increment (2,050 single, the case''s dispositioned
+      standard_deduction row) plus the H.R.1 section 70105 QBID minimum
+      deduction of 400 that the bridge grants on the case''s 8,860 of
+      rental (otherprop) income while TAXSIM applies no QBID to otherprop
+      (the dispositioned QBID rental convention). The taxable-income
+      difference equals -(2,050 + 400) within a cent.'
+    arithmetic:
+    - expression: -(2050 + 400)
+      equals: -2450.004131469701
+      tolerance: 0.01
+  expires_on_source_change: true
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
+  pinned:
+    left: 361507.0558685303
+    right: 363957.06
+- id: axiom-seca-chain-drift-taxable-income-propagation
+  concept: us:tax/federal-income-tax#taxable_income
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-135603
+    - ecps-tax-unit-135627
+    - ecps-tax-unit-135628
+    - ecps-tax-unit-135629
+    - ecps-tax-unit-135739
+    - ecps-tax-unit-135944
+    - ecps-tax-unit-58403
+    - ecps-tax-unit-58988
+  disposition: axiom_encoding_gap
+  evidence:
+    mechanism: 'AGI-side propagation of the fingerprinted SECA chain drift: every
+      selected row''s tax unit carries self-employment income and its
+      employee_fica row is already classified under
+      axiom-seca-chain-drift-pending-triage, so the half-SECA above-the-
+      line deduction and the QBI base both inherit the same axiom-side
+      drift and no clean single-mechanism arithmetic fits (135628
+      additionally compounds its dispositioned 1,650 blindness increment).
+      Classified on the axiom side pending the same pull-one-case triage
+      as the parent class; not counted as explained.'
+  expires_on_source_change: true
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
+- id: axiom-seca-chain-drift-tbc-bracket-propagation
+  concept: us:tax/federal-income-tax#tax_before_credits
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-135603
+    - ecps-tax-unit-135627
+    - ecps-tax-unit-135628
+    - ecps-tax-unit-135629
+    - ecps-tax-unit-135739
+    - ecps-tax-unit-135944
+    - ecps-tax-unit-58403
+  disposition: axiom_encoding_gap
+  evidence:
+    mechanism: 'Bracket-rate propagation of the SECA-chain-contaminated
+      taxable-income rows (axiom-seca-chain-drift-taxable-income-
+      propagation) into tax before credits: on every selected row the
+      tax-before-credits difference equals exactly one statutory 2026
+      bracket rate (10/12/22/24/37 per cent) times the case''s
+      taxable-income difference, within $0.60 - pure propagation, no
+      independent divergence. Classified axiom-side with the parent SECA
+      drift class; not counted as explained.'
+    arithmetic:
+    - expression: 0.12 * -1732.10
+      equals: -207.85
+      tolerance: 0.01
+    - expression: 0.1 * -1205.81
+      equals: -120.58
+      tolerance: 0.01
+    - expression: 0.37 * 2074.13
+      equals: 767.42
+      tolerance: 0.01
+  expires_on_source_change: true
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304

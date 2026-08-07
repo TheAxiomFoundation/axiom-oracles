@@ -223,6 +223,12 @@ jobs:
           AXIOM_RULES_REPO: ${{ github.workspace }}/axiom-rules
           # Stamp the refreshed report as an affected-rerun (provenance.run_kind).
           AXIOM_ORACLES_RUN_KIND: affected-rerun
+          # Pinned Populace artifacts: the UK one lives in a private HF repo
+          # (policyengine/populace-uk-private), and the public US one is
+          # rate-limited unauthenticated. Empty until the org
+          # HUGGING_FACE_TOKEN is restored and shared to this repo
+          # (policyengine-uk#1816) — harmless meanwhile.
+          HF_TOKEN: ${{ secrets.HUGGING_FACE_TOKEN }}
         working-directory: axiom-oracles
         run: |
           ln -sfn "$AXIOM_ENCODE_REPO" "$HOME/axiom-encode"

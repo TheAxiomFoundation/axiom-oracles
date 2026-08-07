@@ -1,0 +1,57 @@
+# Federal itemized taxable-income deductions — Axiom vs PolicyEngine-US, tax
+# year 2026.
+#
+# Axiom boundary: the engine-verified RuleSpec companion supplies all 17
+# adopted cases and the lawful federal_itemized_taxable_income_deductions
+# expected value. The bounded aggregate contains the same six completed
+# charitable, interest, SALT, medical, casualty, and miscellaneous components
+# as PE-US, then applies section 68 to a completed
+# taxable_income_determined_without_section_68 scalar.
+#
+# PolicyEngine binding: compare itemized_taxable_income_deductions directly and
+# bind the six completed components. PE-US derives its section 68 proxy from
+# AGI minus exemptions; the completed lawful scalar is therefore a
+# RuleSpec-only fixture input. federal_section_68_reduction is reconciled
+# against itemized_taxable_income_deductions_reduction only as a diagnostic and
+# is never supplied to PolicyEngine.
+#
+# RuleSpec: rulespec-us PR #1177 merge commit ae64af2740340a40d04ed3c652254f53e62fab61
+# (tree 40e08f7dbaa88a70660006f3a5a32bfa283ebd85).
+# PolicyEngine source pin: policyengine-us 1.767.3.
+#
+# Run locally:
+#   uv run python scripts/run_comparison.py us-itemized-taxable-income-deductions-grid --summary
+
+name: us-itemized-taxable-income-deductions-grid
+title: Federal itemized taxable-income deductions — Axiom vs PolicyEngine
+description: >-
+  Compares the lawful 2026 six-component itemized taxable-income deduction
+  aggregate after section 68 against PolicyEngine-US on 17 engine-verified
+  companion cases across all five filing statuses, preserving the
+  pre-registered section 68 source divergences as case-specific evidence.
+
+runner:
+  type: federal-tax-liability-grid
+  parameters:
+    policy: itemized_taxable_income_deductions
+    period: "2026"
+    concept: >-
+      us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_itemized_taxable_income_deductions
+    python: "3.13"
+    policyengine_version: "4.18.9"
+    policyengine_us_version: "1.767.3"
+    policyengine_core_version: "3.30.3"
+    tolerance: 0.01
+    relative_tolerance: 0.0
+    rulespec_remote: https://github.com/TheAxiomFoundation/rulespec-us.git
+    rulespec_roots:
+      - $HOME/TheAxiomFoundation/rulespec-us
+    rulespec_upstream_sha: ae64af2740340a40d04ed3c652254f53e62fab61
+    rulespec_upstream_tree: 40e08f7dbaa88a70660006f3a5a32bfa283ebd85
+
+artifacts:
+  report_basename: axiom-policyengine-us-itemized-taxable-income-deductions-grid
+
+dashboard:
+  filename: axiom-policyengine-us-itemized-taxable-income-deductions-grid.json
+  suite: us-itemized-taxable-income-deductions-grid

@@ -3,8 +3,11 @@
 
 This checker is deliberately read-only.  It resolves an explicit ``--base-ref``
 to a commit, reads the disposition source from that commit with ``git show``,
-and reconciles all 345 issue-#362 rows against the committed requested-month
-report and its source and served disposition artifacts.
+and reconciles all 345 issue-#362 rows against the honest current report and
+its source, served, and compact artifacts.  It separately replays a hash-pinned
+snapshot of the rejected PUB 275 exposure so the frozen #423 partition,
+22-row drift receipt, and six corrected served links remain guarded without
+reintroducing the invalid population binding.
 
 The compact case artifacts intentionally use their current ``id/r/h/m``
 schema.  They are validated against every canonical mismatch row; this checker
@@ -41,18 +44,77 @@ BASE_DISPOSITIONS_SHA256 = (
 )
 EXPECTED_BASE_ROWS = 345
 EXPECTED_CURRENT_MISMATCHES = 529
-EXPECTED_EXPANDED_DISPOSITIONS = 288
+# 288 at the #423 transition; 510 after the 2026-08 residual-tail triage
+# added 174 verified CA entries (see dispositions/ca-snap-ecps.yaml classes
+# dated 2026-07-30/08-02 and axiom-oracles#433/#436/#437/#441).
+EXPECTED_EXPANDED_DISPOSITIONS = 510
+# At the #423 transition: vanished 192 / current_but_dropped 22 /
+# reclassified 0 / kept 131. The 2026-08 residual-tail triage added CA
+# entries covering 21 of the 22 dropped identities, moving them to
+# reclassified; 1 identity remains honestly uncovered.
 EXPECTED_PARTITION_COUNTS = {
     "vanished": 192,
-    "current_but_dropped": 22,
+    "current_but_dropped": 1,
+    "reclassified": 21,
     "kept": 131,
 }
 EXPECTED_PARTITION_DIGESTS = {
     "vanished": ("f968139b4cc46e2a2d95ce08d7ae97bfa3e446f7d8558a524fa3527bdb45f618"),
     "current_but_dropped": (
-        "c4115d13add7504d41939a2e580fb0dab5b04c0cfa73cea1ffcb002dcdadcecd"
+        "925caea321fd0250cfb08356142f2f83a5bba5b84d18badd426cd029e85a5b3d"
+    ),
+    "reclassified": (
+        "a4d9b070b740a2a55d47f088974a4060f085e84e2f9392166a8e3c78ddf860af"
     ),
     "kept": ("2cfc51bf11031bd398cc7cd27e568f8a321df35eb9006d1acd86db112851cba3"),
+}
+REJECTED_SNAPSHOT_COMMIT = "c1084c2339ccc4bc41776f71b059fbabe8732916"
+REJECTED_SNAPSHOT_SOURCE_SHA256 = (
+    "c68761bf21c80df448ecd36545175d2e7dd97ffc790abf6e36b921b6c4054a99"
+)
+REJECTED_SNAPSHOT_REPORT_SHA256 = (
+    "d2e095a5ab737f12c50c64b82d90f87377790b646382390cc0f1ab5286c26073"
+)
+REJECTED_SNAPSHOT_SERVED_SHA256 = (
+    "443a8fde62070325c73c4c0e96f07eb92e978c91bf32d96cd3c9384fef2ba546"
+)
+REJECTED_SNAPSHOT_MISMATCHES = 1058
+REJECTED_SNAPSHOT_EXPANDED_DISPOSITIONS = 866
+REJECTED_SNAPSHOT_PARTITION_COUNTS = {
+    "vanished": 156,
+    "current_but_dropped": 17,
+    "reclassified": 41,
+    "kept": 131,
+}
+REJECTED_SNAPSHOT_PARTITION_DIGESTS = {
+    "vanished": ("af843e621a8b2b2a56a4f9c7236be8daa48dfae4f4274b4c1644c037433585ed"),
+    "current_but_dropped": (
+        "bb4c55a9f6a95881471aaa80dd99e3ced7fcbb7a7e09a0481c52983f250e49e3"
+    ),
+    "reclassified": (
+        "23b5b69fbe4e4ca601b00c34c3bb1dc38ec0317c23a18624e36e6a50918b3e3b"
+    ),
+    "kept": ("2cfc51bf11031bd398cc7cd27e568f8a321df35eb9006d1acd86db112851cba3"),
+}
+REJECTED_SNAPSHOT_CORRECTED_LINKS = {
+    "ca-mce-pe-extra-net-test-paired-eligibility": (
+        "https://github.com/PolicyEngine/policyengine-us/issues/9175"
+    ),
+    "ca-mce-pe-extra-net-test-paired-benefit": (
+        "https://github.com/PolicyEngine/policyengine-us/issues/9175"
+    ),
+    "ca-mce-pe-extra-net-test-eligibility-only": (
+        "https://github.com/PolicyEngine/policyengine-us/issues/9175"
+    ),
+    "ca-mce-pe-extra-net-test-benefit-only": (
+        "https://github.com/PolicyEngine/policyengine-us/issues/9175"
+    ),
+    "ca-mce-acin-threshold-pe-eligibility": (
+        "https://github.com/PolicyEngine/policyengine-us/issues/9176"
+    ),
+    "ca-mce-acin-threshold-pe-benefit": (
+        "https://github.com/PolicyEngine/policyengine-us/issues/9176"
+    ),
 }
 EXPECTED_BASE_IDENTITY_DIGEST = (
     "77036d3f70198c2c0c56ffa7e608e8d752338e26152e183ef01351eb48d584f8"
@@ -69,6 +131,86 @@ EXPECTED_MOVEMENT_DIGESTS = {
 EXPECTED_DRIFT_ROWS_SHA256 = (
     "fa54f6fdf05592da62c3c03b74264a4dfb7d9828e4f33ea169e75fc033ad3a51"
 )
+EXPECTED_ACTIVE_DRIFT_ROWS_SHA256 = (
+    "a922d6e84e4b8cf6dc207ee3318bc4653787d725678ee844652506117c73a090"
+)
+EXPECTED_RETIRED_DRIFT_IDENTITY_SHA256 = (
+    "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+)
+EXPECTED_RETIRED_DRIFT_ROWS_SHA256 = (
+    "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+)
+EXPECTED_RECLASSIFIED_ROWS_SHA256 = (
+    "9bbe925e5bf1f733bebcb8a75da917587f103bafdb80a9f81368edc2fa82bdeb"
+)
+# Drift-receipt rows whose identity the 2026-08 residual-tail triage covered
+# with a new schema-validated disposition (third receipt exit alongside
+# active and retired). Their per-row drift evidence stays pinned below.
+EXPECTED_RECLASSIFIED_DRIFT_IDS = frozenset(
+    {
+        "ca-362-medical-input-ecps-57453-benefit",
+        "ca-362-period-ecps-57313-benefit",
+        "ca-362-period-self-employment-tanf-ecps-57027-benefit",
+        "ca-362-period-self-employment-tanf-ecps-58088-benefit",
+        "ca-362-period-self-employment-tanf-ecps-60409-benefit",
+        "ca-362-self-employment-ecps-58987-benefit",
+        "ca-362-self-employment-ecps-59016-benefit",
+        "ca-362-self-employment-ecps-59103-benefit",
+        "ca-362-self-employment-ecps-59173-benefit",
+        "ca-362-self-employment-ecps-60319-benefit",
+        "ca-362-self-employment-ecps-60859-benefit",
+        "ca-362-self-employment-tanf-ecps-56991-benefit",
+        "ca-362-self-employment-tanf-ecps-57529-benefit",
+        "ca-362-self-employment-tanf-ecps-57845-benefit",
+        "ca-362-self-employment-tanf-ecps-57891-benefit",
+        "ca-362-self-employment-tanf-ecps-60756-benefit",
+        "ca-362-self-employment-tanf-ecps-60777-benefit",
+        "ca-362-self-employment-tanf-ecps-60978-benefit",
+        "ca-362-self-employment-tanf-ecps-61251-benefit",
+        "ca-362-self-employment-tanf-ecps-61495-benefit",
+        "ca-362-tanf-ecps-62327-benefit",
+    }
+)
+EXPECTED_RECLASSIFIED_DRIFT_ROWS_SHA256 = "2c4fd5ef79882590de507c3ad93beef46958058f514736af961356dfd3527174"
+# The 2026-08 residual-tail triage entries that absorbed the 21 formerly
+# current_but_dropped identities (per-row verified; see each entry's
+# evidence in dispositions/ca-snap-ecps.yaml).
+EXPECTED_RECLASSIFIED_REPLACEMENTS: dict[str, int] = {
+    "ca-bbce-tail-2026-07-30-benefit": 5,
+    "ca-negative-se-loss-2026-07-30-benefit": 1,
+    "pe-fallback-path-divergence-58987": 1,
+    "pe-medical-imputation-counterfactual-57453": 1,
+    "tanf-zero-counterfactual-56991": 1,
+    "tanf-zero-counterfactual-57027": 1,
+    "tanf-zero-counterfactual-57529": 1,
+    "tanf-zero-counterfactual-57845": 1,
+    "tanf-zero-counterfactual-57891": 1,
+    "tanf-zero-counterfactual-58088": 1,
+    "tanf-zero-counterfactual-60409": 1,
+    "tanf-zero-counterfactual-60756": 1,
+    "tanf-zero-counterfactual-60777": 1,
+    "tanf-zero-counterfactual-60978": 1,
+    "tanf-zero-counterfactual-61251": 1,
+    "tanf-zero-counterfactual-61495": 1,
+    "tanf-zero-counterfactual-62327": 1,
+}
+REJECTED_SNAPSHOT_ACTIVE_DRIFT_ROWS_SHA256 = (
+    "ae82ff8f1ddc915403bb318acb1f3d393454ff7fc61a913025d9575d708d84ff"
+)
+REJECTED_SNAPSHOT_RETIRED_DRIFT_IDENTITY_SHA256 = (
+    "5ea7cdca69cc1c8dc2c9676aa3d87513ea1678de9382982b74f6a38c2c6a72d4"
+)
+REJECTED_SNAPSHOT_RETIRED_DRIFT_ROWS_SHA256 = (
+    "2d9580a3fd58a5b05a54042758bc110c27d7279bc1e07206037c0572d3b07232"
+)
+REJECTED_SNAPSHOT_RECLASSIFIED_ROWS_SHA256 = (
+    "e70a713f5610eb393432df046fc8386c43cde3255769f9547ce939674b46373e"
+)
+REJECTED_SNAPSHOT_RECLASSIFIED_REPLACEMENTS = {
+    "ca-mce-pe-extra-net-test-paired-eligibility": 20,
+    "ca-mce-pe-extra-net-test-paired-benefit": 20,
+    "ca-mce-pe-extra-net-test-benefit-only": 1,
+}
 EXPECTED_KEPT_REQUESTED_MONTH_ROWS_SHA256 = (
     "06524b90f0fd49fac9e2856c73d5ee787df4190003ba7e56b0a71d47f160e0f3"
 )
@@ -187,6 +329,57 @@ REQUESTED_MONTH_DRIFT_PINS = {
         "difference": 215.1599998474121,
     },
 }
+REJECTED_SNAPSHOT_RETIRED_CURRENT_DRIFT_PINS = {
+    "ca-362-self-employment-ecps-59016-benefit": {
+        "left": 0.0,
+        "right": 88.29998779296875,
+        "difference": -88.29998779296875,
+    },
+    "ca-362-self-employment-ecps-59103-benefit": {
+        "left": 0.0,
+        "right": 23.84000015258789,
+        "difference": -23.84000015258789,
+    },
+    "ca-362-self-employment-ecps-59173-benefit": {
+        "left": 0.0,
+        "right": 277.79998779296875,
+        "difference": -277.79998779296875,
+    },
+    "ca-362-self-employment-ecps-60319-benefit": {
+        "left": 0.0,
+        "right": 94.29998779296875,
+        "difference": -94.29998779296875,
+    },
+    "ca-362-self-employment-ecps-60859-benefit": {
+        "left": 0.0,
+        "right": 286.89996337890625,
+        "difference": -286.89996337890625,
+    },
+}
+LIVE_RECEIPT_EXPECTATIONS: dict[str, Any] = {
+    "reclassified_replacements": EXPECTED_RECLASSIFIED_REPLACEMENTS,
+    "reclassified_rows_sha256": EXPECTED_RECLASSIFIED_ROWS_SHA256,
+    "retired_current_drift_pins": {},
+    "active_drift_rows_sha256": EXPECTED_ACTIVE_DRIFT_ROWS_SHA256,
+    "retired_drift_identity_sha256": EXPECTED_RETIRED_DRIFT_IDENTITY_SHA256,
+    "retired_drift_rows_sha256": EXPECTED_RETIRED_DRIFT_ROWS_SHA256,
+    "reclassified_drift_ids": EXPECTED_RECLASSIFIED_DRIFT_IDS,
+    "reclassified_drift_rows_sha256": EXPECTED_RECLASSIFIED_DRIFT_ROWS_SHA256,
+}
+REJECTED_SNAPSHOT_RECEIPT_EXPECTATIONS: dict[str, Any] = {
+    "reclassified_replacements": REJECTED_SNAPSHOT_RECLASSIFIED_REPLACEMENTS,
+    "reclassified_rows_sha256": REJECTED_SNAPSHOT_RECLASSIFIED_ROWS_SHA256,
+    "retired_current_drift_pins": REJECTED_SNAPSHOT_RETIRED_CURRENT_DRIFT_PINS,
+    "active_drift_rows_sha256": REJECTED_SNAPSHOT_ACTIVE_DRIFT_ROWS_SHA256,
+    "retired_drift_identity_sha256": (REJECTED_SNAPSHOT_RETIRED_DRIFT_IDENTITY_SHA256),
+    "retired_drift_rows_sha256": REJECTED_SNAPSHOT_RETIRED_DRIFT_ROWS_SHA256,
+    # At the frozen snapshot no drift row had been reclassified yet; the
+    # empty-rows digest keeps the snapshot receipt byte-stable.
+    "reclassified_drift_ids": frozenset(),
+    "reclassified_drift_rows_sha256": (
+        "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    ),
+}
 
 BENEFIT_CONCEPT = "us:statutes/7/2014/u#snap_benefit"
 ELIGIBILITY_CONCEPT = "us:statutes/7/2014/o#snap_eligible"
@@ -210,7 +403,7 @@ EXPECTED_ORACLE_PROVENANCE = {
 EXPECTED_RULESPECS = [
     {
         "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": "c13cdf7dda5948e7a86ff0c317872f93743a2084",
+        "sha": "edc62ea566a617cf5b9c3b620f712b73c6767c94",
     }
 ]
 MOVEMENT_THRESHOLD = 0.005
@@ -372,8 +565,10 @@ def _yaml_document(raw: bytes, label: str) -> dict[str, Any]:
     return document
 
 
-def _json_document(path: Path, label: str) -> tuple[dict[str, Any], str]:
-    raw = path.read_bytes()
+def _json_bytes_document(
+    raw: bytes,
+    label: str,
+) -> tuple[dict[str, Any], str]:
     try:
         document = json.loads(raw)
     except json.JSONDecodeError as exc:
@@ -381,6 +576,10 @@ def _json_document(path: Path, label: str) -> tuple[dict[str, Any], str]:
     if not isinstance(document, dict):
         raise ReconciliationError(f"{label} root must be an object")
     return document, _sha256(raw)
+
+
+def _json_document(path: Path, label: str) -> tuple[dict[str, Any], str]:
+    return _json_bytes_document(path.read_bytes(), label)
 
 
 def _validate_disposition_document(
@@ -477,6 +676,46 @@ def _load_current_dispositions() -> tuple[
     return document, entries, _sha256(raw)
 
 
+def _load_rejected_snapshot_dispositions() -> tuple[
+    dict[str, Any],
+    list[dict[str, Any]],
+    str,
+]:
+    raw = _git_show(REJECTED_SNAPSHOT_COMMIT, BASE_DISPOSITIONS_RELATIVE_PATH)
+    digest = _sha256(raw)
+    _require(
+        digest == REJECTED_SNAPSHOT_SOURCE_SHA256,
+        "rejected PUB 275 snapshot source sha256 mismatch: "
+        f"expected {REJECTED_SNAPSHOT_SOURCE_SHA256}, got {digest}",
+    )
+    document = _yaml_document(raw, "rejected PUB 275 snapshot dispositions")
+    entries = _validate_disposition_document(
+        document,
+        label="rejected PUB 275 snapshot dispositions",
+    )
+    entries_by_id = {entry["id"]: entry for entry in entries}
+    for entry_id, expected_link in REJECTED_SNAPSHOT_CORRECTED_LINKS.items():
+        entry = entries_by_id.get(entry_id)
+        _require(
+            entry is not None,
+            f"rejected PUB 275 snapshot lacks corrected row {entry_id}",
+        )
+        assert entry is not None
+        evidence = entry.get("evidence") or {}
+        _require(
+            isinstance(evidence, dict),
+            f"rejected PUB 275 snapshot row {entry_id} has invalid evidence",
+        )
+        assert isinstance(evidence, dict)
+        actual_link = entry.get("linked_issue") or evidence.get("upstream_url")
+        _require(
+            actual_link == expected_link,
+            f"rejected PUB 275 snapshot row {entry_id} does not retain "
+            f"corrected issue link {expected_link}",
+        )
+    return document, entries, digest
+
+
 def _selected_case_ids(entry: dict[str, Any]) -> list[str]:
     direct = entry.get("case_id")
     selector = entry.get("case_selector")
@@ -510,6 +749,9 @@ def _selected_case_ids(entry: dict[str, Any]) -> list[str]:
 
 def _expanded_dispositions(
     entries: list[dict[str, Any]],
+    *,
+    expected_rows: int = EXPECTED_EXPANDED_DISPOSITIONS,
+    label: str = "current",
 ) -> dict[Identity, dict[str, Any]]:
     expanded: dict[Identity, dict[str, Any]] = {}
     for entry in entries:
@@ -517,23 +759,25 @@ def _expanded_dispositions(
             key = (case_id, entry["concept"], entry["kind"])
             _require(
                 key not in expanded,
-                f"current dispositions cover identity {key!r} more than once",
+                f"{label} dispositions cover identity {key!r} more than once",
             )
             expanded[key] = entry
     _require(
-        len(expanded) == EXPECTED_EXPANDED_DISPOSITIONS,
-        "current dispositions must expand to "
-        f"{EXPECTED_EXPANDED_DISPOSITIONS} rows, got {len(expanded)}",
+        len(expanded) == expected_rows,
+        f"{label} dispositions must expand to "
+        f"{expected_rows} rows, got {len(expanded)}",
     )
     return expanded
 
 
 def _expected_report_note(entry: dict[str, Any]) -> dict[str, Any]:
-    return {
+    note = {
         "disposition": entry["disposition"],
         "id": entry["id"],
-        "linked_issue": entry.get("linked_issue"),
     }
+    if entry.get("linked_issue"):
+        note["linked_issue"] = entry["linked_issue"]
+    return note
 
 
 def _validate_report_provenance(report: dict[str, Any]) -> None:
@@ -559,13 +803,27 @@ def _validate_report_provenance(report: dict[str, Any]) -> None:
 
 def _load_and_validate_report(
     expanded: dict[Identity, dict[str, Any]],
+    *,
+    raw: bytes | None = None,
+    expected_mismatches: int = EXPECTED_CURRENT_MISMATCHES,
+    expected_sha256: str | None = None,
+    label: str = "current CA report",
 ) -> tuple[
     dict[str, Any],
     dict[Identity, dict[str, Any]],
     dict[str, dict[str, Any]],
     str,
 ]:
-    report, digest = _json_document(CURRENT_REPORT_PATH, "current CA report")
+    report, digest = (
+        _json_document(CURRENT_REPORT_PATH, label)
+        if raw is None
+        else _json_bytes_document(raw, label)
+    )
+    if expected_sha256 is not None:
+        _require(
+            digest == expected_sha256,
+            f"{label} sha256 mismatch: expected {expected_sha256}, got {digest}",
+        )
     _require(
         report.get("schema_version") == "axiom.comparison_report.v2.1",
         "current CA report schema does not match",
@@ -639,9 +897,8 @@ def _load_and_validate_report(
     _require(isinstance(summary, dict), "current CA report summary is missing")
     assert isinstance(summary, dict)
     _require(
-        len(mismatches) == EXPECTED_CURRENT_MISMATCHES,
-        "current CA report must contain "
-        f"{EXPECTED_CURRENT_MISMATCHES} mismatches, got {len(mismatches)}",
+        len(mismatches) == expected_mismatches,
+        f"{label} must contain {expected_mismatches} mismatches, got {len(mismatches)}",
     )
     _require(
         summary.get("mismatch_count") == len(mismatches),
@@ -737,23 +994,33 @@ def _served_entry(entry: dict[str, Any]) -> dict[str, Any]:
 def _validate_served_dispositions(
     source_document: dict[str, Any],
     entries: list[dict[str, Any]],
+    *,
+    raw: bytes | None = None,
+    expected_sha256: str | None = None,
+    label: str = "served CA dispositions",
 ) -> str:
-    served, digest = _json_document(
-        SERVED_DISPOSITIONS_PATH,
-        "served CA dispositions",
+    served, digest = (
+        _json_document(SERVED_DISPOSITIONS_PATH, label)
+        if raw is None
+        else _json_bytes_document(raw, label)
     )
+    if expected_sha256 is not None:
+        _require(
+            digest == expected_sha256,
+            f"{label} sha256 mismatch: expected {expected_sha256}, got {digest}",
+        )
     _require(
         served.get("suite") == SUITE,
-        "served CA dispositions suite does not match",
+        f"{label} suite does not match",
     )
     _require(
         served.get("updated") == source_document.get("updated"),
-        "served CA dispositions updated date drifted",
+        f"{label} updated date drifted",
     )
     expected = [_served_entry(entry) for entry in entries]
     _require(
         served.get("entries") == expected,
-        "served CA dispositions do not exactly match compacted source entries",
+        f"{label} do not exactly match compacted source entries",
     )
     return digest
 
@@ -1021,10 +1288,16 @@ def _partition_base_entries(
     base_entries: list[dict[str, Any]],
     report_by_identity: dict[Identity, dict[str, Any]],
     current_issue_by_id: dict[str, dict[str, Any]],
+    expanded: dict[Identity, dict[str, Any]],
+    *,
+    expected_counts: dict[str, int] = EXPECTED_PARTITION_COUNTS,
+    expected_digests: dict[str, str] = EXPECTED_PARTITION_DIGESTS,
+    era_label: str = "current honest",
 ) -> dict[str, list[dict[str, Any]]]:
     partitions: dict[str, list[dict[str, Any]]] = {
         "vanished": [],
         "current_but_dropped": [],
+        "reclassified": [],
         "kept": [],
     }
     for entry in base_entries:
@@ -1041,27 +1314,30 @@ def _partition_base_entries(
                 f"current entry {entry_id} is not a current mismatch",
             )
             partitions["kept"].append(entry)
-        elif key in report_by_identity:
-            partitions["current_but_dropped"].append(entry)
-        else:
+        elif key not in report_by_identity:
             partitions["vanished"].append(entry)
+        elif key in expanded:
+            partitions["reclassified"].append(entry)
+        else:
+            partitions["current_but_dropped"].append(entry)
 
     total = sum(len(entries) for entries in partitions.values())
     _require(
         total == EXPECTED_BASE_ROWS,
         f"partition closes to {total}, expected {EXPECTED_BASE_ROWS}",
     )
-    for label, entries in partitions.items():
-        expected_count = EXPECTED_PARTITION_COUNTS[label]
+    for partition_label, entries in partitions.items():
+        expected_count = expected_counts[partition_label]
         _require(
             len(entries) == expected_count,
-            f"{label} count is {len(entries)}, expected {expected_count}",
+            f"{era_label} {partition_label} count is {len(entries)}, "
+            f"expected {expected_count}",
         )
         digest = _identity_digest(entries)
-        expected_digest = EXPECTED_PARTITION_DIGESTS[label]
+        expected_digest = expected_digests[partition_label]
         _require(
             digest == expected_digest,
-            f"{label} identity digest mismatch: "
+            f"{era_label} {partition_label} identity digest mismatch: "
             f"expected {expected_digest}, got {digest}",
         )
     return partitions
@@ -1072,7 +1348,17 @@ def _partition_receipt(
     report_by_identity: dict[Identity, dict[str, Any]],
     current_issue_by_id: dict[str, dict[str, Any]],
     expanded: dict[Identity, dict[str, Any]],
+    *,
+    expectations: dict[str, Any] = LIVE_RECEIPT_EXPECTATIONS,
 ) -> tuple[dict[str, Any], dict[str, Any]]:
+    expected_reclassified_replacements = expectations["reclassified_replacements"]
+    expected_reclassified_rows_sha256 = expectations["reclassified_rows_sha256"]
+    retired_current_drift_pins = expectations["retired_current_drift_pins"]
+    expected_active_drift_rows_sha256 = expectations["active_drift_rows_sha256"]
+    expected_retired_drift_identity_sha256 = expectations[
+        "retired_drift_identity_sha256"
+    ]
+    expected_retired_drift_rows_sha256 = expectations["retired_drift_rows_sha256"]
     movement: dict[str, list[dict[str, Any]]] = {
         "moved": [],
         "unchanged": [],
@@ -1145,6 +1431,42 @@ def _partition_receipt(
                 f"{label} entry {entry['id']} remains disposition-covered",
             )
 
+    reclassified_rows = []
+    replacement_counts: dict[str, int] = {}
+    for entry in partitions["reclassified"]:
+        key = _identity(entry)
+        replacement = expanded.get(key)
+        _require(
+            replacement is not None,
+            f"reclassified entry {entry['id']} lacks replacement coverage",
+        )
+        assert replacement is not None
+        replacement_id = replacement["id"]
+        replacement_counts[replacement_id] = (
+            replacement_counts.get(replacement_id, 0) + 1
+        )
+        reclassified_rows.append(
+            {
+                **_identity_record(entry),
+                "current_pin": _pin(report_by_identity[key]),
+                "replacement_disposition_id": replacement_id,
+            }
+        )
+    _require(
+        replacement_counts == expected_reclassified_replacements,
+        "reclassified replacement selector counts drifted: "
+        f"expected {expected_reclassified_replacements}, "
+        f"got {replacement_counts}",
+    )
+    reclassified_rows.sort(key=lambda row: row["id"])
+    reclassified_rows_digest = _json_rows_digest(reclassified_rows)
+    _require(
+        reclassified_rows_digest == expected_reclassified_rows_sha256,
+        "reclassified replacement receipt digest mismatch: "
+        f"expected {expected_reclassified_rows_sha256}, "
+        f"got {reclassified_rows_digest}",
+    )
+
     partition_output: dict[str, Any] = {"base_rows": EXPECTED_BASE_ROWS}
     for label, entries in partitions.items():
         partition_output[label] = {
@@ -1154,37 +1476,108 @@ def _partition_receipt(
         }
 
     drifted_rows = []
-    dropped_ids = {entry["id"] for entry in partitions["current_but_dropped"]}
+    active_drifted_rows = []
+    retired_drifted_rows = []
+    reclassified_drifted_rows = []
+    dropped_by_id = {entry["id"]: entry for entry in partitions["current_but_dropped"]}
+    vanished_by_id = {entry["id"]: entry for entry in partitions["vanished"]}
+    reclassified_by_id = {entry["id"]: entry for entry in partitions["reclassified"]}
+    dropped_ids = set(dropped_by_id)
+    retired_ids = set(retired_current_drift_pins)
+    # A drift row leaves the active receipt one of two ways: its identity
+    # vanishes from the report (retired), or a later triage covers the
+    # identity with a new schema-validated disposition (reclassified —
+    # the 2026-08 residual-tail entries). Both exits stay receipted.
+    reclassified_drift_ids = set(expectations["reclassified_drift_ids"])
     _require(
-        dropped_ids == set(REQUESTED_MONTH_DRIFT_PINS),
-        "requested-month drift receipt ids differ from the dropped partition",
+        dropped_ids | retired_ids | reclassified_drift_ids
+        == set(REQUESTED_MONTH_DRIFT_PINS)
+        and dropped_ids.isdisjoint(retired_ids)
+        and dropped_ids.isdisjoint(reclassified_drift_ids)
+        and retired_ids.isdisjoint(reclassified_drift_ids),
+        "requested-month drift receipt ids differ from the active and retired "
+        "drift partitions",
     )
-    for entry in sorted(
-        partitions["current_but_dropped"],
-        key=lambda item: item["id"],
-    ):
-        current = report_by_identity[_identity(entry)]
+    _require(
+        reclassified_drift_ids <= set(reclassified_by_id),
+        "reclassified drift receipt ids are not all in the reclassified "
+        "partition",
+    )
+    _require(
+        retired_ids <= set(vanished_by_id),
+        "retired drift receipt ids are not all in the vanished partition",
+    )
+    retired_entries = [vanished_by_id[entry_id] for entry_id in sorted(retired_ids)]
+    retired_identity_digest = _identity_digest(retired_entries)
+    _require(
+        retired_identity_digest == expected_retired_drift_identity_sha256,
+        "retired drift identity digest mismatch: "
+        f"expected {expected_retired_drift_identity_sha256}, "
+        f"got {retired_identity_digest}",
+    )
+    for entry_id in sorted(REQUESTED_MONTH_DRIFT_PINS):
+        retired = entry_id in retired_ids
+        reclassified = entry_id in reclassified_drift_ids
+        if retired:
+            entry = vanished_by_id[entry_id]
+        elif reclassified:
+            entry = reclassified_by_id[entry_id]
+        else:
+            entry = dropped_by_id[entry_id]
+        key = _identity(entry)
         literal_base_pin = _pin(entry.get("pinned") or {})
-        requested_month_pin = REQUESTED_MONTH_DRIFT_PINS[entry["id"]]
-        current_pin = _pin(current)
+        requested_month_pin = REQUESTED_MONTH_DRIFT_PINS[entry_id]
+        current_pin = (
+            retired_current_drift_pins[entry_id]
+            if retired
+            else _pin(report_by_identity[key])
+        )
         _require(
             _pin_moved(requested_month_pin, current_pin),
-            f"dropped entry {entry['id']} did not materially drift from "
+            f"drift entry {entry_id} did not materially drift from "
             "requested-month evidence",
         )
-        drifted_rows.append(
-            {
-                **_identity_record(entry),
-                "literal_base_pin": literal_base_pin,
-                "requested_month_pin": requested_month_pin,
-                "current_pin": current_pin,
-            }
-        )
+        evidence = {
+            **_identity_record(entry),
+            "literal_base_pin": literal_base_pin,
+            "requested_month_pin": requested_month_pin,
+        }
+        drifted_rows.append({**evidence, "current_pin": current_pin})
+        if retired:
+            retired_drifted_rows.append(evidence)
+        elif reclassified:
+            reclassified_drifted_rows.append({**evidence, "current_pin": current_pin})
+        else:
+            active_drifted_rows.append({**evidence, "current_pin": current_pin})
     drift_rows_digest = _json_rows_digest(drifted_rows)
     _require(
         drift_rows_digest == EXPECTED_DRIFT_ROWS_SHA256,
         "full drift-row receipt digest mismatch: "
         f"expected {EXPECTED_DRIFT_ROWS_SHA256}, got {drift_rows_digest}",
+    )
+    active_drift_rows_digest = _json_rows_digest(active_drifted_rows)
+    _require(
+        active_drift_rows_digest == expected_active_drift_rows_sha256,
+        "active drift-row receipt digest mismatch: "
+        f"expected {expected_active_drift_rows_sha256}, "
+        f"got {active_drift_rows_digest}",
+    )
+    retired_drift_rows_digest = _json_rows_digest(retired_drifted_rows)
+    _require(
+        retired_drift_rows_digest == expected_retired_drift_rows_sha256,
+        "retired drift-row receipt digest mismatch: "
+        f"expected {expected_retired_drift_rows_sha256}, "
+        f"got {retired_drift_rows_digest}",
+    )
+    expected_reclassified_drift_rows_sha256 = expectations[
+        "reclassified_drift_rows_sha256"
+    ]
+    reclassified_drift_rows_digest = _json_rows_digest(reclassified_drifted_rows)
+    _require(
+        reclassified_drift_rows_digest == expected_reclassified_drift_rows_sha256,
+        "reclassified drift-row receipt digest mismatch: "
+        f"expected {expected_reclassified_drift_rows_sha256}, "
+        f"got {reclassified_drift_rows_digest}",
     )
 
     movement_output: dict[str, Any] = {}
@@ -1202,9 +1595,16 @@ def _partition_receipt(
     return (
         {
             **partition_output,
+            "reclassified_replacements": {
+                "counts": replacement_counts,
+                "rows_sha256": reclassified_rows_digest,
+                "rows": reclassified_rows,
+            },
             "drift_evidence_trace_sha256": REQUESTED_MONTH_TRACE_SHA256,
             "drifted_rows_sha256": drift_rows_digest,
             "drifted_rows": drifted_rows,
+            "active_drifted_rows_sha256": active_drift_rows_digest,
+            "retired_drifted_rows_sha256": retired_drift_rows_digest,
         },
         movement_output,
     )
@@ -1238,6 +1638,12 @@ def check_reconciliation(base_ref: str) -> dict[str, Any]:
     """Validate the complete reconciliation and return a deterministic receipt."""
 
     base_commit, _base_document, base_entries = _load_base_dispositions(base_ref)
+    snapshot_commit = _resolve_base_ref(REJECTED_SNAPSHOT_COMMIT)
+    _require(
+        snapshot_commit == REJECTED_SNAPSHOT_COMMIT,
+        "rejected PUB 275 snapshot commit did not resolve exactly",
+    )
+
     (
         current_document,
         current_entries,
@@ -1279,6 +1685,7 @@ def check_reconciliation(base_ref: str) -> dict[str, Any]:
         base_entries,
         report_by_identity,
         current_issue_by_id,
+        expanded,
     )
     _validate_partition_compact_evidence(partitions, compact_rows)
     partition_receipt, movement_receipt = _partition_receipt(
@@ -1288,8 +1695,79 @@ def check_reconciliation(base_ref: str) -> dict[str, Any]:
         expanded,
     )
 
+    (
+        snapshot_document,
+        snapshot_entries,
+        snapshot_dispositions_digest,
+    ) = _load_rejected_snapshot_dispositions()
+    snapshot_expanded = _expanded_dispositions(
+        snapshot_entries,
+        expected_rows=REJECTED_SNAPSHOT_EXPANDED_DISPOSITIONS,
+        label="rejected PUB 275 snapshot",
+    )
+    snapshot_report_raw = _git_show(
+        snapshot_commit,
+        _relative(CURRENT_REPORT_PATH),
+    )
+    (
+        _snapshot_report,
+        snapshot_report_by_identity,
+        _snapshot_cases_by_id,
+        snapshot_report_digest,
+    ) = _load_and_validate_report(
+        snapshot_expanded,
+        raw=snapshot_report_raw,
+        expected_mismatches=REJECTED_SNAPSHOT_MISMATCHES,
+        expected_sha256=REJECTED_SNAPSHOT_REPORT_SHA256,
+        label="rejected PUB 275 snapshot CA report",
+    )
+    snapshot_served_raw = _git_show(
+        snapshot_commit,
+        _relative(SERVED_DISPOSITIONS_PATH),
+    )
+    snapshot_served_digest = _validate_served_dispositions(
+        snapshot_document,
+        snapshot_entries,
+        raw=snapshot_served_raw,
+        expected_sha256=REJECTED_SNAPSHOT_SERVED_SHA256,
+        label="rejected PUB 275 snapshot served CA dispositions",
+    )
+
+    snapshot_issue_entries = [
+        entry for entry in snapshot_entries if str(entry["id"]).startswith("ca-362-")
+    ]
+    snapshot_issue_by_id = {entry["id"]: entry for entry in snapshot_issue_entries}
+    _require(
+        len(snapshot_issue_by_id) == REJECTED_SNAPSHOT_PARTITION_COUNTS["kept"],
+        "rejected PUB 275 snapshot source must contain exactly "
+        f"{REJECTED_SNAPSHOT_PARTITION_COUNTS['kept']} ca-362 entries",
+    )
+    _require(
+        set(snapshot_issue_by_id) <= base_ids,
+        "rejected PUB 275 snapshot contains a ca-362 id outside the literal base",
+    )
+    snapshot_partitions = _partition_base_entries(
+        base_entries,
+        snapshot_report_by_identity,
+        snapshot_issue_by_id,
+        snapshot_expanded,
+        expected_counts=REJECTED_SNAPSHOT_PARTITION_COUNTS,
+        expected_digests=REJECTED_SNAPSHOT_PARTITION_DIGESTS,
+        era_label="rejected PUB 275 snapshot",
+    )
+    (
+        snapshot_partition_receipt,
+        snapshot_movement_receipt,
+    ) = _partition_receipt(
+        snapshot_partitions,
+        snapshot_report_by_identity,
+        snapshot_issue_by_id,
+        snapshot_expanded,
+        expectations=REJECTED_SNAPSHOT_RECEIPT_EXPECTATIONS,
+    )
+
     return {
-        "schema": "axiom_oracles.ca_snap_423_reconciliation.v1",
+        "schema": "axiom_oracles.ca_snap_423_reconciliation.v2",
         "suite": SUITE,
         "base": {
             "commit": base_commit,
@@ -1315,9 +1793,35 @@ def check_reconciliation(base_ref: str) -> dict[str, Any]:
                 "entries": len(current_entries),
             },
             "compact": compact_receipt,
+            "partition": partition_receipt,
+            "retained_pin_movement": movement_receipt,
         },
-        "partition": partition_receipt,
-        "retained_pin_movement": movement_receipt,
+        "rejected_pub275_exposure_snapshot": {
+            "commit": snapshot_commit,
+            "reason": (
+                "The snapshot manufactured household PUB 275 issuance by "
+                "binding an unobserved administrative fact to true."
+            ),
+            "report": {
+                "path": _relative(CURRENT_REPORT_PATH),
+                "sha256": snapshot_report_digest,
+                "mismatches": len(snapshot_report_by_identity),
+            },
+            "source_dispositions": {
+                "path": _relative(CURRENT_DISPOSITIONS_PATH),
+                "sha256": snapshot_dispositions_digest,
+                "entries": len(snapshot_entries),
+                "expanded_rows": len(snapshot_expanded),
+            },
+            "served_dispositions": {
+                "path": _relative(SERVED_DISPOSITIONS_PATH),
+                "sha256": snapshot_served_digest,
+                "entries": len(snapshot_entries),
+                "corrected_issue_links": REJECTED_SNAPSHOT_CORRECTED_LINKS,
+            },
+            "partition": snapshot_partition_receipt,
+            "retained_pin_movement": snapshot_movement_receipt,
+        },
     }
 
 
