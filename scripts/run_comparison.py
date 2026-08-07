@@ -768,11 +768,14 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
     # HEAD only if it survives; a fresh --depth 1 clone is main's tip).
     rulespec_paths: list[str] = []
     for entry in params.get("rulespec_roots") or runner.get("rulespec_roots") or []:
-        rulespec_paths.append(str(entry))
+        # _expand_path honors AXIOM_RULESPEC_US_ROOT: the recorded SHA must
+        # come from the checkout the run actually resolved, not the
+        # developer's convention-path checkout.
+        rulespec_paths.append(str(_expand_path(entry)))
     for key in ("rulespec_root",):
         val = runner.get(key) or params.get(key)
         if val:
-            rulespec_paths.append(str(val))
+            rulespec_paths.append(str(_expand_path(val)))
     # The EUROMOD/UKMOD synthetic lane points `axiom_rulespec_repo_roots` at the
     # whole org directory and names the model country; the encoded rules live in
     # that country's `rulespec-<cc>` repo under the roots dir, so resolve it
