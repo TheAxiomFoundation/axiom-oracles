@@ -33,6 +33,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import base64
 import json
 import os
 import shutil
@@ -182,22 +183,53 @@ def build_plan(config: dict, repos: list[str], workspace: Path) -> list[dict]:
     return actions
 
 
+def _git_clone_invocation(slug: str, dest: Path) -> tuple[list[str], dict]:
+    """A plain-git clone command plus its environment.
+
+    Authentication rides a process-scoped ``http.extraHeader`` passed through
+    ``GIT_CONFIG_*`` environment variables — never the URL. That keeps the
+    token out of the command line AND out of the clone's persisted
+    ``remote.origin.url`` (a token-bearing URL would survive in
+    ``<dest>/.git/config`` for later workflow steps to read).
+    """
+    cmd = [
+        "git", "clone", "--depth", "1", "--quiet",
+        f"https://github.com/{slug}.git", str(dest),
+    ]
+    env = os.environ.copy()
+    token = env.get("GH_TOKEN") or env.get("GITHUB_TOKEN")
+    if token:
+        basic = base64.b64encode(f"x-access-token:{token}".encode()).decode()
+        env["GIT_CONFIG_COUNT"] = "1"
+        env["GIT_CONFIG_KEY_0"] = "http.extraHeader"
+        env["GIT_CONFIG_VALUE_0"] = f"Authorization: Basic {basic}"
+    return cmd, env
+
+
 def _clone(slug: str, dest: Path) -> None:
     dest.parent.mkdir(parents=True, exist_ok=True)
-    if shutil.which("gh"):
-        cmd = ["gh", "repo", "clone", slug, str(dest), "--", "--depth", "1", "--quiet"]
-    else:
-        cmd = [
-            "git",
-            "clone",
-            "--depth",
-            "1",
-            "--quiet",
-            f"https://github.com/{slug}.git",
-            str(dest),
-        ]
     print(f"cloning {slug} -> {dest}")
-    subprocess.run(cmd, check=True)
+    if shutil.which("gh"):
+        gh_cmd = [
+            "gh", "repo", "clone", slug, str(dest), "--", "--depth", "1", "--quiet",
+        ]
+        result = subprocess.run(gh_cmd)
+        if result.returncode == 0:
+            return
+        # gh occasionally fails instantly with no diagnostic under a busy
+        # matrix (observed: the same clone succeeds in sibling legs of the
+        # same run). Fall back to plain git with the same token rather than
+        # failing the leg on CLI flakiness.
+        print(
+            f"gh repo clone failed (exit {result.returncode}); "
+            "retrying with git",
+            file=sys.stderr,
+        )
+        shutil.rmtree(dest, ignore_errors=True)
+    cmd, env = _git_clone_invocation(slug, dest)
+    result = subprocess.run(cmd, env=env)
+    if result.returncode != 0:
+        raise SystemExit(f"git clone of {slug} failed (exit {result.returncode})")
 
 
 def execute(actions: list[dict]) -> None:

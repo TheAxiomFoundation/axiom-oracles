@@ -14,6 +14,7 @@ import hashlib
 from importlib.metadata import PackageNotFoundError, version
 import math
 from pathlib import Path
+import struct
 import subprocess
 from typing import Any, Callable, Iterable, Mapping
 from urllib.parse import urlparse
@@ -46,8 +47,103 @@ DISPOSITION_NO_BROAD_PIT = "not_applicable_no_broad_pit"
 DISPOSITION_NONPOSITIVE_WEIGHT = "excluded_nonpositive_weight"
 DISPOSITION_UNKNOWN_GEOGRAPHY = "excluded_unknown_geography"
 
+CT_ORDINARY_TAX_DERIVED_TARGET = (
+    "ct_resident_ordinary_tax_before_personal_credit_derived"
+)
+DC_JOINT_SCHEDULE_BEFORE_CREDITS_TARGET = (
+    "dc_income_tax_before_credits_joint"
+)
+KS_K40ES_SCHEDULE_BEFORE_CREDITS_REVIEWED_TARGET = (
+    "ks_k40es_schedule_before_credits_reviewed"
+)
+IL_INCOME_TAX_BEFORE_NONREFUNDABLE_CREDITS_TARGET = (
+    "il_income_tax_before_non_refundable_credits"
+)
+IL_ANNUAL_BEFORE_CREDIT_PROGRAM = (
+    "us-il:policies/income_tax/pilot_liability_pipeline"
+)
+IL_ANNUAL_BEFORE_CREDIT_OUTPUT = (
+    f"{IL_ANNUAL_BEFORE_CREDIT_PROGRAM}#il_pit_pilot_income_tax_liability"
+)
+IL_REVIEWED_INPUTS = {
+    (
+        f"{IL_ANNUAL_BEFORE_CREDIT_PROGRAM}#input."
+        "il_pit_pilot_state_taxable_income"
+    ): "il_taxable_income",
+    (
+        f"{IL_ANNUAL_BEFORE_CREDIT_PROGRAM}#input."
+        "il_pit_pilot_recapture_of_investment_credit"
+    ): "recapture_of_investment_credit",
+}
+MN_BASIC_TAX_RAW_TARGET = "mn_basic_tax"
+MN_BASIC_TAX_PRECISION_STABLE_TARGET = "mn_basic_tax_precision_stable"
+IN_AGI_TAX_TARGET = "in_agi_tax"
+IN_AGI_TAX_PROGRAM = "us-in:policies/income_tax/pilot_liability_pipeline"
+IN_AGI_TAX_OUTPUT = (
+    f"{IN_AGI_TAX_PROGRAM}#in_pit_pilot_income_tax_liability"
+)
+IN_AGI_TAX_INPUT = (
+    f"{IN_AGI_TAX_PROGRAM}#input."
+    "in_pit_pilot_indiana_adjusted_gross_income"
+)
+IN_AGI_TAX_UPSTREAM = "in_agi"
+IN_AGI_TAX_2026_RATE = 0.0295
+PA_BEFORE_FORGIVENESS_TARGET = "pa_income_tax_before_forgiveness"
+PA_BEFORE_FORGIVENESS_PROGRAM = (
+    "us-pa:policies/income_tax/pilot_liability_pipeline"
+)
+PA_BEFORE_FORGIVENESS_OUTPUT = (
+    f"{PA_BEFORE_FORGIVENESS_PROGRAM}#pa_pit_pilot_income_tax_liability"
+)
+PA_BEFORE_FORGIVENESS_INPUT = (
+    f"{PA_BEFORE_FORGIVENESS_PROGRAM}#input."
+    "pa_pit_pilot_state_taxable_income"
+)
+PA_ADJUSTED_TAXABLE_INCOME = "pa_adjusted_taxable_income"
+PA_2026_RATE = 0.0307
+SC_BEFORE_NONREFUNDABLE_CREDITS_TARGET = (
+    "sc_income_tax_before_non_refundable_credits"
+)
+SC_BEFORE_NONREFUNDABLE_CREDITS_PROGRAM = (
+    "us-sc:policies/income_tax/pilot_liability_pipeline"
+)
+SC_BEFORE_NONREFUNDABLE_CREDITS_OUTPUT = (
+    f"{SC_BEFORE_NONREFUNDABLE_CREDITS_PROGRAM}"
+    "#sc_pit_pilot_income_tax_liability"
+)
+SC_BEFORE_NONREFUNDABLE_CREDITS_INPUT = (
+    f"{SC_BEFORE_NONREFUNDABLE_CREDITS_PROGRAM}#input."
+    "sc_pit_pilot_state_taxable_income"
+)
+SC_TAXABLE_INCOME = "sc_taxable_income"
+OH_NONBUSINESS_BEFORE_CREDITS_DERIVED_TARGET = (
+    "oh_nonbusiness_income_tax_before_non_refundable_credits_derived"
+)
+NY_MAIN_INCOME_TAX_TARGET = "ny_main_income_tax"
+UT_RESIDENT_BEFORE_CREDITS_DERIVED_TARGET = (
+    "ut_resident_income_tax_before_credits_derived"
+)
+_REVIEWED_ROUTE_BOOLEAN_INPUTS_BY_STATE = {
+    "CT": frozenset(
+        {
+            "us-ct:policies/income_tax/"
+            "2026_resident_ordinary_tax_before_personal_credit#input."
+            "ct_pit_2026_is_full_year_connecticut_resident_return",
+        }
+    ),
+    "UT": frozenset(
+        {
+            "us-ut:policies/income_tax/"
+            "2026_full_year_resident_before_credit_schedule#input."
+            "ut_pit_2026_is_full_year_utah_resident_return",
+            "us-ut:policies/income_tax/"
+            "2026_full_year_resident_before_credit_schedule#input."
+            "ut_pit_2026_federal_and_utah_filing_units_are_aligned",
+        }
+    ),
+}
+
 _REVIEWED_PERSON_SUM_VARIABLES_BY_STATE = {
-    "DE": frozenset({"de_taxable_income_joint"}),
     "HI": frozenset({"long_term_capital_gains"}),
     "KY": frozenset({"ky_taxable_income_indiv", "ky_taxable_income_joint"}),
     "MT": frozenset(
@@ -64,6 +160,8 @@ _REVIEWED_PERSON_SUM_VARIABLES_BY_STATE = {
 # sources, and therefore remain separate from the upstream-boundary allowlist.
 _REVIEWED_PERSON_TARGETS_BY_STATE = {
     "AR": frozenset({"ar_income_tax_before_non_refundable_credits_indiv"}),
+    "DE": frozenset({"de_income_tax_before_non_refundable_credits_indv"}),
+    "MS": frozenset({"ms_income_tax_before_credits_joint"}),
 }
 
 # Exact categorical facts used to establish that a legally distinct branch is
@@ -104,16 +202,12 @@ _REVIEWED_PERSON_INPUT_SLOTS_BY_STATE = {
         {
             "us-de:policies/income_tax/pilot_liability_pipeline#input."
             "de_pit_pilot_supplied_separate_taxable_income",
-            "us-de:policies/income_tax/pilot_liability_pipeline#input."
-            "de_pit_pilot_taxpayer_is_included",
         }
     ),
     "MS": frozenset(
         {
-            "us-ms:policies/income_tax/pilot_liability_pipeline#input."
-            "ms_pit_pilot_supplied_taxable_income_indiv",
-            "us-ms:policies/income_tax/pilot_liability_pipeline#input."
-            "ms_pit_pilot_supplied_taxable_income_joint",
+            "us-ms:policies/income_tax/2026_section_27_7_5_schedule#input."
+            "ms_pit_2026_supplied_taxable_income",
         }
     ),
 }
@@ -127,21 +221,9 @@ _REVIEWED_PERSON_TAX_UNIT_RELATIONS_BY_STATE = {
         "us-dc:policies/income_tax/pilot_liability_pipeline#relation."
         "dc_pit_pilot_taxpayer_of_tax_unit": ("TaxUnit", "Person"),
     },
-    "DE": {
-        "us-de:policies/income_tax/pilot_liability_pipeline#relation."
-        "de_pit_pilot_taxpayer_of_tax_unit": ("Person", "TaxUnit"),
-    },
-    "MS": {
-        "us-ms:policies/income_tax/pilot_liability_pipeline#relation."
-        "ms_pit_pilot_person_of_tax_unit": ("Person", "TaxUnit"),
-    },
 }
 
-# Mississippi's source-backed schedule applies to every related Person's two
-# completed-return taxable-income candidates. Unlike the staged DE/DC modules,
-# it has no filer-role inclusion predicate: zero/nonfiling Person candidates
-# remain exact zero inputs and relation membership is the certified raw link.
-_REVIEWED_ALL_PERSON_RELATION_STATES = frozenset({"MS"})
+_REVIEWED_ALL_PERSON_RELATION_STATES = frozenset()
 
 # Exact upstream PolicyEngine Person roles used to identify filers for the
 # staged DE/DC separate-return candidates. Raw Person-to-TaxUnit links remain
@@ -152,11 +234,6 @@ _REVIEWED_PERSON_FILER_ROLE_VARIABLES = {
         "DC",
         "us-dc:policies/income_tax/pilot_liability_pipeline#input."
         "dc_pit_pilot_taxpayer_is_included",
-    ): ("is_tax_unit_head", "is_tax_unit_spouse"),
-    (
-        "DE",
-        "us-de:policies/income_tax/pilot_liability_pipeline#input."
-        "de_pit_pilot_taxpayer_is_included",
     ): ("is_tax_unit_head", "is_tax_unit_spouse"),
 }
 
@@ -460,6 +537,211 @@ def runtime_provenance(*, rulespec_root: Path, axiom_rules_path: Path) -> dict[s
     }
 
 
+def _mn_basic_tax_parameter_scales(
+    *,
+    sim: Any,
+    year: int,
+) -> dict[str, tuple[tuple[float, ...], tuple[float, ...]]]:
+    """Read the exact active scales used by PolicyEngine's mn_basic_tax."""
+
+    tax_benefit_system = getattr(sim, "tax_benefit_system", None)
+    variables = getattr(tax_benefit_system, "variables", None)
+    variable = (
+        variables.get(MN_BASIC_TAX_RAW_TARGET)
+        if isinstance(variables, Mapping)
+        else None
+    )
+    if (
+        variable is None
+        or getattr(variable, "name", None) != MN_BASIC_TAX_RAW_TARGET
+        or getattr(getattr(variable, "entity", None), "key", None) != "tax_unit"
+        or str(getattr(variable, "definition_period", "")) != "year"
+        or getattr(variable, "value_type", None) is not float
+        or not getattr(variable, "formulas", None)
+    ):
+        raise StateTaxPopulationRoutingError(
+            "MN: mn_basic_tax class metadata or active formula schema drifted"
+        )
+
+    try:
+        rates_node = (
+            tax_benefit_system.parameters(year)
+            .gov.states.mn.tax.income.rates
+        )
+    except (AttributeError, KeyError, TypeError) as exc:
+        raise StateTaxPopulationRoutingError(
+            "MN: mn_basic_tax active marginal-rate parameter path is unavailable"
+        ) from exc
+
+    scale_names = {
+        "SINGLE": "single",
+        "SEPARATE": "separate",
+        "JOINT": "joint",
+        "SURVIVING_SPOUSE": "surviving_spouse",
+        "HEAD_OF_HOUSEHOLD": "head_of_household",
+    }
+    scales: dict[str, tuple[tuple[float, ...], tuple[float, ...]]] = {}
+    for status, scale_name in scale_names.items():
+        scale = getattr(rates_node, scale_name, None)
+        try:
+            thresholds = tuple(float(value) for value in scale.thresholds)
+            rates = tuple(float(value) for value in scale.rates)
+        except (AttributeError, TypeError, ValueError) as exc:
+            raise StateTaxPopulationRoutingError(
+                f"MN: mn_basic_tax {scale_name} marginal-rate scale is unavailable"
+            ) from exc
+        if (
+            len(thresholds) != 4
+            or len(rates) != 4
+            or thresholds[0] != 0
+            or any(not math.isfinite(value) for value in (*thresholds, *rates))
+            or any(
+                upper <= lower
+                for lower, upper in zip(
+                    thresholds,
+                    thresholds[1:],
+                    strict=False,
+                )
+            )
+            or any(rate < 0 for rate in rates)
+        ):
+            raise StateTaxPopulationRoutingError(
+                f"MN: mn_basic_tax {scale_name} marginal-rate scale schema drifted"
+            )
+        scales[status] = (thresholds, rates)
+    return scales
+
+
+def _mn_scale_tax(
+    taxable_income: float,
+    *,
+    thresholds: tuple[float, ...],
+    rates: tuple[float, ...],
+) -> float:
+    taxable = max(0.0, taxable_income)
+    result = 0.0
+    for index, (threshold, rate) in enumerate(
+        zip(thresholds, rates, strict=True)
+    ):
+        if index + 1 == len(thresholds):
+            width = max(0.0, taxable - threshold)
+        else:
+            width = min(
+                max(0.0, taxable - threshold),
+                thresholds[index + 1] - threshold,
+            )
+        result += width * rate
+    return result
+
+
+def _precision_stable_mn_basic_tax(
+    *,
+    sim: Any,
+    year: int,
+    expected_count: int,
+) -> list[float]:
+    """Recover mn_basic_tax in float64 and prove equivalence to its raw output.
+
+    PolicyEngine stores money variables as binary32. At the extreme synthetic
+    values present in Populace, one-half binary32 ULP can exceed the campaign's
+    $1 structural tolerance. This projection reads only mn_basic_tax's own
+    active PolicyEngine class, upstreams, and marginal scales. It fails closed
+    unless the published raw output is the correctly rounded binary32 result.
+    """
+
+    raw_values = _array_values(
+        sim.calculate(MN_BASIC_TAX_RAW_TARGET, period=year)
+    )
+    taxable_values = _array_values(
+        sim.calculate("mn_taxable_income", period=year)
+    )
+    filing_status_result = sim.calculate("filing_status", period=year)
+    expected_statuses = {
+        "SINGLE",
+        "SEPARATE",
+        "JOINT",
+        "SURVIVING_SPOUSE",
+        "HEAD_OF_HOUSEHOLD",
+    }
+    possible_values = getattr(filing_status_result, "possible_values", None)
+    if possible_values is not None and {
+        member.name for member in possible_values
+    } != expected_statuses:
+        raise StateTaxPopulationRoutingError(
+            "MN: filing_status enum schema drifted"
+        )
+    filing_status_values = (
+        list(filing_status_result.decode_to_str())
+        if callable(getattr(filing_status_result, "decode_to_str", None))
+        else _array_values(filing_status_result)
+    )
+    cardinalities = (
+        len(raw_values),
+        len(taxable_values),
+        len(filing_status_values),
+    )
+    if any(length != expected_count for length in cardinalities):
+        raise StateTaxPopulationRoutingError(
+            "MN: precision-stable basic-tax inputs returned "
+            f"{', '.join(str(length) for length in cardinalities)} rows for "
+            f"{expected_count} tax units"
+        )
+
+    scales = _mn_basic_tax_parameter_scales(sim=sim, year=year)
+    recovered_values: list[float] = []
+    for raw_value, taxable_value, status_value in zip(
+        raw_values,
+        taxable_values,
+        filing_status_values,
+        strict=True,
+    ):
+        raw = _finite_number(raw_value, label=MN_BASIC_TAX_RAW_TARGET)
+        taxable = _finite_number(taxable_value, label="mn_taxable_income")
+        status = str(status_value)
+        if status not in scales:
+            raise StateTaxPopulationRoutingError(
+                "MN: filing_status returned an unsupported value "
+                f"{status!r} for mn_basic_tax"
+            )
+        if raw < 0:
+            raise StateTaxPopulationRoutingError(
+                "MN: mn_basic_tax must be nonnegative"
+            )
+        thresholds, rates = scales[status]
+        recovered = _mn_scale_tax(
+            taxable,
+            thresholds=thresholds,
+            rates=rates,
+        )
+        if not math.isfinite(recovered) or recovered < 0:
+            raise StateTaxPopulationRoutingError(
+                "MN: recovered mn_basic_tax must be finite and nonnegative"
+            )
+
+        try:
+            correctly_rounded_binary32 = struct.unpack(
+                ">f",
+                struct.pack(">f", recovered),
+            )[0]
+        except (OverflowError, struct.error) as exc:
+            raise StateTaxPopulationRoutingError(
+                "MN: recovered mn_basic_tax cannot be represented as finite "
+                "IEEE-754 binary32"
+            ) from exc
+        if not math.isfinite(correctly_rounded_binary32):
+            raise StateTaxPopulationRoutingError(
+                "MN: recovered mn_basic_tax cannot be represented as finite "
+                "IEEE-754 binary32"
+            )
+        if raw != correctly_rounded_binary32:
+            raise StateTaxPopulationRoutingError(
+                "MN: raw mn_basic_tax does not equal the correctly rounded "
+                "IEEE-754 binary32 result"
+            )
+        recovered_values.append(recovered)
+    return recovered_values
+
+
 def validate_campaign_dataset_identity(
     identity: Mapping[str, Any],
     *,
@@ -526,9 +808,10 @@ def calculate_policyengine_targets(
         )
     _require_columns(raw_tax_units, {"tax_unit_id"}, "tax_unit")
     tax_unit_ids = [_clean_id(value) for value in raw_tax_units["tax_unit_id"]]
+    route_rows = tuple(routes)
     selected_states = {
         route.state
-        for route in routes
+        for route in route_rows
         if route.disposition == DISPOSITION_READY and route.state is not None
     }
     if microsimulation_factory is None:
@@ -545,6 +828,772 @@ def calculate_policyengine_targets(
     targets: dict[str, dict[int | str, float]] = {}
     for state in sorted(selected_states):
         jurisdiction = resolved_contract.by_state()[state]
+        if state == "IN":
+            _validate_indiana_runtime_contract(jurisdiction)
+            _validate_indiana_policyengine_runtime(sim=sim, year=year)
+        if state == "PA":
+            _validate_pennsylvania_runtime_contract(jurisdiction)
+            _validate_pennsylvania_policyengine_runtime(sim=sim, year=year)
+        if state == "SC":
+            _validate_south_carolina_runtime_contract(jurisdiction)
+            _validate_south_carolina_policyengine_runtime(sim=sim, year=year)
+        if state == "IL":
+            _validate_illinois_runtime_contract(jurisdiction)
+        if (
+            state == "CA"
+            and jurisdiction.policyengine_target
+            == "ca_mental_health_services_tax"
+        ):
+            modeled_ids = [
+                _clean_id(value)
+                for value in _array_values(
+                    sim.calculate("tax_unit_id", period=year)
+                )
+            ]
+            values = _array_values(
+                sim.calculate(
+                    jurisdiction.policyengine_target,
+                    period=year,
+                )
+            )
+            if (
+                len(modeled_ids) != len(tax_unit_ids)
+                or len(values) != len(tax_unit_ids)
+            ):
+                raise StateTaxPopulationRoutingError(
+                    "CA: PolicyEngine Behavioral Health Services Tax target "
+                    f"returned {len(modeled_ids)} IDs and {len(values)} values "
+                    f"for {len(tax_unit_ids)} tax units"
+                )
+            _reject_duplicate_ids(tax_unit_ids, "CA source tax_unit_id")
+            _reject_duplicate_ids(
+                modeled_ids, "CA PolicyEngine tax_unit_id"
+            )
+            if modeled_ids != tax_unit_ids:
+                raise StateTaxPopulationRoutingError(
+                    "CA: PolicyEngine tax_unit_id order does not match the "
+                    "certified source tax-unit order"
+                )
+            reviewed = [
+                _finite_number(
+                    value,
+                    label=jurisdiction.policyengine_target,
+                )
+                for value in values
+            ]
+            if any(value < 0 for value in reviewed):
+                raise StateTaxPopulationRoutingError(
+                    "CA: ca_mental_health_services_tax must be nonnegative"
+                )
+            targets[state] = dict(
+                zip(tax_unit_ids, reviewed, strict=True)
+            )
+            continue
+        if state == "MN":
+            if (
+                jurisdiction.policyengine_target
+                != MN_BASIC_TAX_PRECISION_STABLE_TARGET
+            ):
+                raise StateTaxPopulationRoutingError(
+                    "MN: reviewed 2026 schedule runner requires the exact "
+                    "mn_basic_tax_precision_stable target"
+                )
+            modeled_ids = [
+                _clean_id(value)
+                for value in _array_values(
+                    sim.calculate("tax_unit_id", period=year)
+                )
+            ]
+            if len(modeled_ids) != len(tax_unit_ids):
+                raise StateTaxPopulationRoutingError(
+                    "MN: PolicyEngine basic-tax target returned "
+                    f"{len(modeled_ids)} IDs for "
+                    f"{len(tax_unit_ids)} tax units"
+                )
+            _reject_duplicate_ids(tax_unit_ids, "MN source tax_unit_id")
+            _reject_duplicate_ids(
+                modeled_ids, "MN PolicyEngine tax_unit_id"
+            )
+            if modeled_ids != tax_unit_ids:
+                raise StateTaxPopulationRoutingError(
+                    "MN: PolicyEngine tax_unit_id order does not match the "
+                    "certified source tax-unit order"
+                )
+            reviewed = _precision_stable_mn_basic_tax(
+                sim=sim,
+                year=year,
+                expected_count=len(tax_unit_ids),
+            )
+            targets[state] = dict(
+                zip(tax_unit_ids, reviewed, strict=True)
+            )
+            continue
+        if (
+            state == "CT"
+            and jurisdiction.policyengine_target == CT_ORDINARY_TAX_DERIVED_TARGET
+        ):
+            after_credit = _array_values(
+                sim.calculate("ct_income_tax_after_personal_credits", period=year)
+            )
+            credit_rate = _array_values(
+                sim.calculate("ct_personal_credit_rate", period=year)
+            )
+            if len(after_credit) != len(tax_unit_ids) or len(credit_rate) != len(
+                tax_unit_ids
+            ):
+                raise StateTaxPopulationRoutingError(
+                    "CT: PolicyEngine ordinary-tax recovery inputs returned "
+                    f"{len(after_credit)} and {len(credit_rate)} rows for "
+                    f"{len(tax_unit_ids)} tax units"
+                )
+            recovered: list[float] = []
+            for after_value, rate_value in zip(
+                after_credit, credit_rate, strict=True
+            ):
+                after = _finite_number(
+                    after_value, label="ct_income_tax_after_personal_credits"
+                )
+                rate = _finite_number(
+                    rate_value, label="ct_personal_credit_rate"
+                )
+                if after < 0 or not 0 <= rate < 1:
+                    raise StateTaxPopulationRoutingError(
+                        "CT: ordinary-tax recovery requires nonnegative "
+                        "after-credit tax and a personal-credit rate in [0, 1)"
+                    )
+                recovered.append(after / (1 - rate))
+            targets[state] = dict(
+                zip(tax_unit_ids, recovered, strict=True)
+            )
+            continue
+        if state == "DC":
+            if (
+                jurisdiction.policyengine_target
+                != DC_JOINT_SCHEDULE_BEFORE_CREDITS_TARGET
+            ):
+                raise StateTaxPopulationRoutingError(
+                    "DC: reviewed schedule runner requires the exact "
+                    "dc_income_tax_before_credits_joint target"
+                )
+            modeled_ids = [
+                _clean_id(value)
+                for value in _array_values(
+                    sim.calculate("tax_unit_id", period=year)
+                )
+            ]
+            taxable_income = _array_values(
+                sim.calculate("dc_taxable_income_joint", period=year)
+            )
+            before_credits = _array_values(
+                sim.calculate(
+                    DC_JOINT_SCHEDULE_BEFORE_CREDITS_TARGET,
+                    period=year,
+                )
+            )
+            cardinalities = (
+                len(modeled_ids),
+                len(taxable_income),
+                len(before_credits),
+            )
+            if any(length != len(tax_unit_ids) for length in cardinalities):
+                raise StateTaxPopulationRoutingError(
+                    "DC: PolicyEngine joint-method schedule inputs returned "
+                    f"{', '.join(str(length) for length in cardinalities)} rows "
+                    f"for {len(tax_unit_ids)} tax units"
+                )
+            _reject_duplicate_ids(tax_unit_ids, "DC source tax_unit_id")
+            _reject_duplicate_ids(
+                modeled_ids, "DC PolicyEngine tax_unit_id"
+            )
+            if modeled_ids != tax_unit_ids:
+                raise StateTaxPopulationRoutingError(
+                    "DC: PolicyEngine tax_unit_id order does not match the "
+                    "certified source tax-unit order"
+                )
+            reviewed: list[float] = []
+            for taxable_value, tax_value in zip(
+                taxable_income,
+                before_credits,
+                strict=True,
+            ):
+                taxable = _finite_number(
+                    taxable_value, label="dc_taxable_income_joint"
+                )
+                tax = _finite_number(
+                    tax_value,
+                    label=DC_JOINT_SCHEDULE_BEFORE_CREDITS_TARGET,
+                )
+                if tax < 0:
+                    raise StateTaxPopulationRoutingError(
+                        "DC: reviewed joint-method schedule requires "
+                        "nonnegative before-credit tax"
+                    )
+                reviewed.append(tax)
+            targets[state] = dict(
+                zip(tax_unit_ids, reviewed, strict=True)
+            )
+            continue
+        if (
+            state == "KS"
+            and jurisdiction.policyengine_target
+            == KS_K40ES_SCHEDULE_BEFORE_CREDITS_REVIEWED_TARGET
+        ):
+            modeled_ids = [
+                _clean_id(value)
+                for value in _array_values(
+                    sim.calculate("tax_unit_id", period=year)
+                )
+            ]
+            taxable_income = _array_values(
+                sim.calculate("ks_taxable_income", period=year)
+            )
+            joint_schedule = _array_values(
+                sim.calculate("tax_unit_is_joint", period=year)
+            )
+            adjusted_gross_income = _array_values(
+                sim.calculate("ks_agi", period=year)
+            )
+            before_credits = _array_values(
+                sim.calculate("ks_income_tax_before_credits", period=year)
+            )
+            cardinalities = (
+                len(modeled_ids),
+                len(taxable_income),
+                len(joint_schedule),
+                len(adjusted_gross_income),
+                len(before_credits),
+            )
+            if any(length != len(tax_unit_ids) for length in cardinalities):
+                raise StateTaxPopulationRoutingError(
+                    "KS: PolicyEngine K-40ES target inputs returned "
+                    f"{', '.join(str(length) for length in cardinalities)} rows "
+                    f"for {len(tax_unit_ids)} tax units"
+                )
+            _reject_duplicate_ids(tax_unit_ids, "KS source tax_unit_id")
+            _reject_duplicate_ids(
+                modeled_ids, "KS PolicyEngine tax_unit_id"
+            )
+            if modeled_ids != tax_unit_ids:
+                raise StateTaxPopulationRoutingError(
+                    "KS: PolicyEngine tax_unit_id order does not match the "
+                    "certified source tax-unit order"
+                )
+            reviewed: list[float] = []
+            for taxable_value, joint_value, agi_value, tax_value in zip(
+                taxable_income,
+                joint_schedule,
+                adjusted_gross_income,
+                before_credits,
+                strict=True,
+            ):
+                taxable = _finite_number(
+                    taxable_value, label="ks_taxable_income"
+                )
+                _strict_boolean(
+                    joint_value, label="tax_unit_is_joint"
+                )
+                _finite_number(agi_value, label="ks_agi")
+                tax = _finite_number(
+                    tax_value, label="ks_income_tax_before_credits"
+                )
+                if taxable < 0 or tax < 0:
+                    raise StateTaxPopulationRoutingError(
+                        "KS: reviewed K-40ES target requires nonnegative "
+                        "taxable income and before-credit tax"
+                    )
+                if taxable > 0 and tax == 0:
+                    raise StateTaxPopulationRoutingError(
+                        "KS: PolicyEngine's separate AGI gate suppressed a "
+                        "positive K-40ES schedule domain"
+                    )
+                reviewed.append(tax)
+            targets[state] = dict(
+                zip(tax_unit_ids, reviewed, strict=True)
+            )
+            continue
+        if state == "IL":
+            _require_policyengine_tax_unit_year_money_variable(
+                sim,
+                state="IL",
+                variable=IL_INCOME_TAX_BEFORE_NONREFUNDABLE_CREDITS_TARGET,
+            )
+            modeled_ids = [
+                _clean_id(value)
+                for value in _array_values(
+                    sim.calculate("tax_unit_id", period=year)
+                )
+            ]
+            values = _array_values(
+                sim.calculate(
+                    IL_INCOME_TAX_BEFORE_NONREFUNDABLE_CREDITS_TARGET,
+                    period=year,
+                )
+            )
+            if (
+                len(modeled_ids) != len(tax_unit_ids)
+                or len(values) != len(tax_unit_ids)
+            ):
+                raise StateTaxPopulationRoutingError(
+                    "IL: PolicyEngine annual-before-credit target returned "
+                    f"{len(modeled_ids)} IDs and {len(values)} values for "
+                    f"{len(tax_unit_ids)} tax units"
+                )
+            _reject_duplicate_ids(tax_unit_ids, "IL source tax_unit_id")
+            _reject_duplicate_ids(
+                modeled_ids, "IL PolicyEngine tax_unit_id"
+            )
+            if modeled_ids != tax_unit_ids:
+                raise StateTaxPopulationRoutingError(
+                    "IL: PolicyEngine tax_unit_id order does not match the "
+                    "certified source tax-unit order"
+                )
+            reviewed = [
+                _finite_number(
+                    value,
+                    label=IL_INCOME_TAX_BEFORE_NONREFUNDABLE_CREDITS_TARGET,
+                )
+                for value in values
+            ]
+            if any(value < 0 for value in reviewed):
+                raise StateTaxPopulationRoutingError(
+                    "IL: il_income_tax_before_non_refundable_credits must be "
+                    "nonnegative"
+                )
+            targets[state] = dict(
+                zip(tax_unit_ids, reviewed, strict=True)
+            )
+            continue
+        if state == "IN":
+            modeled_ids = [
+                _clean_id(value)
+                for value in _array_values(
+                    sim.calculate("tax_unit_id", period=year)
+                )
+            ]
+            agi_values = _array_values(
+                sim.calculate(IN_AGI_TAX_UPSTREAM, period=year)
+            )
+            tax_values = _array_values(
+                sim.calculate(IN_AGI_TAX_TARGET, period=year)
+            )
+            cardinalities = (
+                len(modeled_ids),
+                len(agi_values),
+                len(tax_values),
+            )
+            if any(length != len(tax_unit_ids) for length in cardinalities):
+                raise StateTaxPopulationRoutingError(
+                    "IN: PolicyEngine AGI-tax target inputs returned "
+                    f"{', '.join(str(length) for length in cardinalities)} rows "
+                    f"for {len(tax_unit_ids)} tax units"
+                )
+            _reject_duplicate_ids(tax_unit_ids, "IN source tax_unit_id")
+            _reject_duplicate_ids(
+                modeled_ids, "IN PolicyEngine tax_unit_id"
+            )
+            if modeled_ids != tax_unit_ids:
+                raise StateTaxPopulationRoutingError(
+                    "IN: PolicyEngine tax_unit_id order does not match the "
+                    "certified source tax-unit order"
+                )
+            reviewed: list[float] = []
+            for agi_value, tax_value in zip(
+                agi_values, tax_values, strict=True
+            ):
+                agi = _finite_number(agi_value, label=IN_AGI_TAX_UPSTREAM)
+                tax = _finite_number(tax_value, label=IN_AGI_TAX_TARGET)
+                if tax < 0:
+                    raise StateTaxPopulationRoutingError(
+                        "IN: in_agi_tax must be nonnegative"
+                    )
+                if agi <= 0 and tax != 0:
+                    raise StateTaxPopulationRoutingError(
+                        "IN: nonpositive in_agi must produce exactly zero "
+                        "in_agi_tax"
+                    )
+                if agi > 0 and tax <= 0:
+                    raise StateTaxPopulationRoutingError(
+                        "IN: positive in_agi must produce positive in_agi_tax"
+                    )
+                reviewed.append(tax)
+            targets[state] = dict(
+                zip(tax_unit_ids, reviewed, strict=True)
+            )
+            continue
+        if state == "PA":
+            modeled_ids = [
+                _clean_id(value)
+                for value in _array_values(
+                    sim.calculate("tax_unit_id", period=year)
+                )
+            ]
+            taxable_values = _array_values(
+                sim.calculate(PA_ADJUSTED_TAXABLE_INCOME, period=year)
+            )
+            tax_values = _array_values(
+                sim.calculate(PA_BEFORE_FORGIVENESS_TARGET, period=year)
+            )
+            cardinalities = (
+                len(modeled_ids),
+                len(taxable_values),
+                len(tax_values),
+            )
+            if any(length != len(tax_unit_ids) for length in cardinalities):
+                raise StateTaxPopulationRoutingError(
+                    "PA: PolicyEngine before-forgiveness target inputs returned "
+                    f"{', '.join(str(length) for length in cardinalities)} rows "
+                    f"for {len(tax_unit_ids)} tax units"
+                )
+            _reject_duplicate_ids(tax_unit_ids, "PA source tax_unit_id")
+            _reject_duplicate_ids(
+                modeled_ids, "PA PolicyEngine tax_unit_id"
+            )
+            if modeled_ids != tax_unit_ids:
+                raise StateTaxPopulationRoutingError(
+                    "PA: PolicyEngine tax_unit_id order does not match the "
+                    "certified source tax-unit order"
+                )
+            selected_ids = {
+                route.tax_unit_id
+                for route in route_rows
+                if route.state == "PA"
+                and route.disposition == DISPOSITION_READY
+            }
+            reviewed: list[float] = []
+            selected_taxable: list[float] = []
+            selected_tax: list[float] = []
+            for tax_unit_id, taxable_value, tax_value in zip(
+                tax_unit_ids,
+                taxable_values,
+                tax_values,
+                strict=True,
+            ):
+                taxable = _finite_number(
+                    taxable_value,
+                    label=PA_ADJUSTED_TAXABLE_INCOME,
+                )
+                tax = _finite_number(
+                    tax_value,
+                    label=PA_BEFORE_FORGIVENESS_TARGET,
+                )
+                if tax_unit_id in selected_ids:
+                    if taxable < 0:
+                        raise StateTaxPopulationRoutingError(
+                            "PA: every selected pa_adjusted_taxable_income "
+                            "value must be nonnegative"
+                        )
+                    if tax < 0:
+                        raise StateTaxPopulationRoutingError(
+                            "PA: pa_income_tax_before_forgiveness must be "
+                            "nonnegative for every selected tax unit"
+                        )
+                    if taxable == 0 and tax != 0:
+                        raise StateTaxPopulationRoutingError(
+                            "PA: zero pa_adjusted_taxable_income must produce "
+                            "exactly zero pa_income_tax_before_forgiveness"
+                        )
+                    if taxable > 0 and tax <= 0:
+                        raise StateTaxPopulationRoutingError(
+                            "PA: positive pa_adjusted_taxable_income must "
+                            "produce positive pa_income_tax_before_forgiveness"
+                        )
+                    selected_taxable.append(taxable)
+                    selected_tax.append(tax)
+                reviewed.append(tax)
+            if not selected_taxable:
+                raise StateTaxPopulationRoutingError(
+                    "PA: before-forgiveness promotion requires selected tax "
+                    "units"
+                )
+            if not any(value == 0 for value in selected_taxable) or not any(
+                value > 0 for value in selected_taxable
+            ):
+                raise StateTaxPopulationRoutingError(
+                    "PA: selected pa_adjusted_taxable_income must include both "
+                    "zero and positive witnesses"
+                )
+            if not any(value == 0 for value in selected_tax) or not any(
+                value > 0 for value in selected_tax
+            ):
+                raise StateTaxPopulationRoutingError(
+                    "PA: selected pa_income_tax_before_forgiveness must include "
+                    "both zero and positive witnesses"
+                )
+            targets[state] = dict(
+                zip(tax_unit_ids, reviewed, strict=True)
+            )
+            continue
+        if state == "SC":
+            modeled_ids = [
+                _clean_id(value)
+                for value in _array_values(
+                    sim.calculate("tax_unit_id", period=year)
+                )
+            ]
+            taxable_values = _array_values(
+                sim.calculate(SC_TAXABLE_INCOME, period=year)
+            )
+            tax_values = _array_values(
+                sim.calculate(
+                    SC_BEFORE_NONREFUNDABLE_CREDITS_TARGET,
+                    period=year,
+                )
+            )
+            cardinalities = (
+                len(modeled_ids),
+                len(taxable_values),
+                len(tax_values),
+            )
+            if any(length != len(tax_unit_ids) for length in cardinalities):
+                raise StateTaxPopulationRoutingError(
+                    "SC: PolicyEngine before-nonrefundable-credits target "
+                    "inputs returned "
+                    f"{', '.join(str(length) for length in cardinalities)} rows "
+                    f"for {len(tax_unit_ids)} tax units"
+                )
+            _reject_duplicate_ids(tax_unit_ids, "SC source tax_unit_id")
+            _reject_duplicate_ids(
+                modeled_ids, "SC PolicyEngine tax_unit_id"
+            )
+            if modeled_ids != tax_unit_ids:
+                raise StateTaxPopulationRoutingError(
+                    "SC: PolicyEngine tax_unit_id order does not match the "
+                    "certified source tax-unit order"
+                )
+            selected_ids = {
+                route.tax_unit_id
+                for route in route_rows
+                if route.state == "SC"
+                and route.disposition == DISPOSITION_READY
+            }
+            reviewed: list[float] = []
+            selected_taxable: list[float] = []
+            selected_tax: list[float] = []
+            for tax_unit_id, taxable_value, tax_value in zip(
+                tax_unit_ids,
+                taxable_values,
+                tax_values,
+                strict=True,
+            ):
+                taxable = _finite_number(
+                    taxable_value,
+                    label=SC_TAXABLE_INCOME,
+                )
+                tax = _finite_number(
+                    tax_value,
+                    label=SC_BEFORE_NONREFUNDABLE_CREDITS_TARGET,
+                )
+                if tax_unit_id in selected_ids:
+                    if taxable < 0:
+                        raise StateTaxPopulationRoutingError(
+                            "SC: every selected sc_taxable_income value must "
+                            "be nonnegative"
+                        )
+                    if tax < 0:
+                        raise StateTaxPopulationRoutingError(
+                            "SC: tax before nonrefundable credits must be "
+                            "nonnegative for every selected tax unit"
+                        )
+                    if taxable == 0 and tax != 0:
+                        raise StateTaxPopulationRoutingError(
+                            "SC: zero sc_taxable_income must produce exactly "
+                            "zero tax before nonrefundable credits"
+                        )
+                    if taxable > 0 and tax <= 0:
+                        raise StateTaxPopulationRoutingError(
+                            "SC: positive sc_taxable_income must produce "
+                            "positive tax before nonrefundable credits"
+                        )
+                    selected_taxable.append(taxable)
+                    selected_tax.append(tax)
+                reviewed.append(tax)
+            if not selected_taxable:
+                raise StateTaxPopulationRoutingError(
+                    "SC: before-nonrefundable-credits promotion requires "
+                    "selected tax units"
+                )
+            if not any(value == 0 for value in selected_taxable) or not any(
+                value > 0 for value in selected_taxable
+            ):
+                raise StateTaxPopulationRoutingError(
+                    "SC: selected sc_taxable_income must include both zero "
+                    "and positive witnesses"
+                )
+            if not any(value == 0 for value in selected_tax) or not any(
+                value > 0 for value in selected_tax
+            ):
+                raise StateTaxPopulationRoutingError(
+                    "SC: selected tax before nonrefundable credits must "
+                    "include both zero and positive witnesses"
+                )
+            targets[state] = dict(
+                zip(tax_unit_ids, reviewed, strict=True)
+            )
+            continue
+        if (
+            state == "OH"
+            and jurisdiction.policyengine_target
+            == OH_NONBUSINESS_BEFORE_CREDITS_DERIVED_TARGET
+        ):
+            modeled_ids = [
+                _clean_id(value)
+                for value in _array_values(
+                    sim.calculate("tax_unit_id", period=year)
+                )
+            ]
+            taxable_income = _array_values(
+                sim.calculate("oh_taxable_income", period=year)
+            )
+            before_credits = _array_values(
+                sim.calculate(
+                    "oh_income_tax_before_non_refundable_credits",
+                    period=year,
+                )
+            )
+            if not (
+                len(modeled_ids)
+                == len(taxable_income)
+                == len(before_credits)
+                == len(tax_unit_ids)
+            ):
+                raise StateTaxPopulationRoutingError(
+                    "OH: PolicyEngine threshold-corrected target inputs returned "
+                    f"{len(modeled_ids)}, {len(taxable_income)}, and "
+                    f"{len(before_credits)} rows for {len(tax_unit_ids)} tax units"
+                )
+            _reject_duplicate_ids(tax_unit_ids, "OH source tax_unit_id")
+            _reject_duplicate_ids(modeled_ids, "OH PolicyEngine tax_unit_id")
+            if modeled_ids != tax_unit_ids:
+                raise StateTaxPopulationRoutingError(
+                    "OH: PolicyEngine tax_unit_id order does not match the "
+                    "certified source tax-unit order"
+                )
+            try:
+                threshold_value = (
+                    sim.tax_benefit_system.parameters(year)
+                    .gov.states.oh.tax.income.agi_threshold
+                )
+            except (AttributeError, KeyError) as exc:
+                raise StateTaxPopulationRoutingError(
+                    "OH: PolicyEngine does not expose the reviewed Ohio "
+                    "no-tax threshold parameter"
+                ) from exc
+            threshold = _finite_number(
+                threshold_value,
+                label="gov.states.oh.tax.income.agi_threshold",
+            )
+            if threshold < 0:
+                raise StateTaxPopulationRoutingError(
+                    "OH: gov.states.oh.tax.income.agi_threshold must be "
+                    "nonnegative"
+                )
+            derived: list[float] = []
+            for taxable_value, tax_value in zip(
+                taxable_income, before_credits, strict=True
+            ):
+                taxable = _finite_number(
+                    taxable_value, label="oh_taxable_income"
+                )
+                tax = _finite_number(
+                    tax_value,
+                    label="oh_income_tax_before_non_refundable_credits",
+                )
+                if taxable < 0 or tax < 0:
+                    raise StateTaxPopulationRoutingError(
+                        "OH: threshold-corrected target requires nonnegative "
+                        "taxable income and before-credit tax"
+                    )
+                # Ohio Rev. Code section 5747.02(A)(3)(c) imposes no tax when
+                # the nonbusiness-income balance is equal to or below this
+                # threshold. PolicyEngine-US 1.752.2 uses a strict comparison
+                # in oh_income_tax_exempt, so gate its otherwise published
+                # schedule result with the authoritative parameter boundary.
+                derived.append(0.0 if taxable <= threshold else tax)
+            targets[state] = dict(
+                zip(tax_unit_ids, derived, strict=True)
+            )
+            continue
+        if state == "NY":
+            if jurisdiction.policyengine_target != NY_MAIN_INCOME_TAX_TARGET:
+                raise StateTaxPopulationRoutingError(
+                    "NY: reviewed section 601 main-schedule runner requires "
+                    "the exact ny_main_income_tax target"
+                )
+            modeled_ids = [
+                _clean_id(value)
+                for value in _array_values(
+                    sim.calculate("tax_unit_id", period=year)
+                )
+            ]
+            values = _array_values(
+                sim.calculate(NY_MAIN_INCOME_TAX_TARGET, period=year)
+            )
+            if (
+                len(modeled_ids) != len(tax_unit_ids)
+                or len(values) != len(tax_unit_ids)
+            ):
+                raise StateTaxPopulationRoutingError(
+                    "NY: PolicyEngine section 601 main-schedule target "
+                    f"returned {len(modeled_ids)} IDs and {len(values)} values "
+                    f"for {len(tax_unit_ids)} tax units"
+                )
+            _reject_duplicate_ids(tax_unit_ids, "NY source tax_unit_id")
+            _reject_duplicate_ids(
+                modeled_ids, "NY PolicyEngine tax_unit_id"
+            )
+            if modeled_ids != tax_unit_ids:
+                raise StateTaxPopulationRoutingError(
+                    "NY: PolicyEngine tax_unit_id order does not match the "
+                    "certified source tax-unit order"
+                )
+            reviewed = [
+                _finite_number(value, label=NY_MAIN_INCOME_TAX_TARGET)
+                for value in values
+            ]
+            if any(value < 0 for value in reviewed):
+                raise StateTaxPopulationRoutingError(
+                    "NY: ny_main_income_tax must be nonnegative"
+                )
+            targets[state] = dict(
+                zip(tax_unit_ids, reviewed, strict=True)
+            )
+            continue
+        if (
+            state == "UT"
+            and jurisdiction.policyengine_target
+            == UT_RESIDENT_BEFORE_CREDITS_DERIVED_TARGET
+        ):
+            before_credits = _array_values(
+                sim.calculate("ut_income_tax_before_credits", period=year)
+            )
+            exemptions = _array_values(
+                sim.calculate("ut_income_tax_exempt", period=year)
+            )
+            if len(before_credits) != len(tax_unit_ids) or len(exemptions) != len(
+                tax_unit_ids
+            ):
+                raise StateTaxPopulationRoutingError(
+                    "UT: PolicyEngine exemption-aware target inputs returned "
+                    f"{len(before_credits)} and {len(exemptions)} rows for "
+                    f"{len(tax_unit_ids)} tax units"
+                )
+            derived: list[float] = []
+            for tax_value, exemption_value in zip(
+                before_credits, exemptions, strict=True
+            ):
+                tax = _finite_number(
+                    tax_value, label="ut_income_tax_before_credits"
+                )
+                if tax < 0:
+                    raise StateTaxPopulationRoutingError(
+                        "UT: ut_income_tax_before_credits must be nonnegative"
+                    )
+                exempt = _strict_boolean(
+                    exemption_value, label="ut_income_tax_exempt"
+                )
+                derived.append(0.0 if exempt else tax)
+            targets[state] = dict(zip(tax_unit_ids, derived, strict=True))
+            continue
         comparison_aggregation = getattr(
             jurisdiction,
             "comparison_aggregation",
@@ -642,6 +1691,44 @@ def calculate_policyengine_projection_inputs(
     projections: dict[str, dict[str, dict[int | str, float | bool]]] = {}
     for state in sorted(selected_states):
         jurisdiction = resolved_contract.by_state()[state]
+        if state == "IN":
+            _validate_indiana_runtime_contract(jurisdiction)
+            _validate_indiana_policyengine_runtime(sim=sim, year=year)
+        if state == "PA":
+            _validate_pennsylvania_runtime_contract(jurisdiction)
+            _validate_pennsylvania_policyengine_runtime(sim=sim, year=year)
+        if state == "SC":
+            _validate_south_carolina_runtime_contract(jurisdiction)
+            _validate_south_carolina_policyengine_runtime(sim=sim, year=year)
+        if state == "IL":
+            _validate_illinois_runtime_contract(jurisdiction)
+            for variable in IL_REVIEWED_INPUTS.values():
+                _require_policyengine_tax_unit_year_money_variable(
+                    sim,
+                    state="IL",
+                    variable=variable,
+                )
+        if state in {"IL", "IN", "NY", "PA", "SC"}:
+            modeled_ids = [
+                _clean_id(value)
+                for value in _array_values(
+                    sim.calculate("tax_unit_id", period=year)
+                )
+            ]
+            if len(modeled_ids) != len(tax_unit_ids):
+                raise StateTaxPopulationRoutingError(
+                    f"{state}: PolicyEngine projection identity returned "
+                    f"{len(modeled_ids)} IDs for {len(tax_unit_ids)} tax units"
+                )
+            _reject_duplicate_ids(
+                modeled_ids,
+                f"{state} PolicyEngine projection tax_unit_id",
+            )
+            if modeled_ids != tax_unit_ids:
+                raise StateTaxPopulationRoutingError(
+                    f"{state}: PolicyEngine projection tax_unit_id order does not "
+                    "match the certified source tax-unit order"
+                )
         _validate_runtime_relations(
             state=state,
             relations=jurisdiction.relations,
@@ -781,6 +1868,26 @@ def calculate_policyengine_projection_inputs(
                     tax_unit_id: slot.constant_value for tax_unit_id in tax_unit_ids
                 }
                 continue
+            if slot.source_kind == "raw_populace":
+                reviewed_slots = _REVIEWED_ROUTE_BOOLEAN_INPUTS_BY_STATE.get(
+                    state, frozenset()
+                )
+                if slot.slot not in reviewed_slots:
+                    raise StateTaxPopulationRoutingError(
+                        f"{state}: runtime projector does not support raw "
+                        f"Populace source for {slot.slot}"
+                    )
+                ready_state_ids = {
+                    route.tax_unit_id
+                    for route in route_rows
+                    if route.state == state
+                    and route.disposition == DISPOSITION_READY
+                }
+                state_inputs[slot.slot] = {
+                    tax_unit_id: tax_unit_id in ready_state_ids
+                    for tax_unit_id in tax_unit_ids
+                }
+                continue
             source_variables = slot.policyengine_variables or (
                 (slot.policyengine_variable,) if slot.policyengine_variable else ()
             )
@@ -895,6 +2002,67 @@ def calculate_policyengine_projection_inputs(
                     projected = [
                         _projection_scalar(value, label=variable) for value in values
                     ]
+                if (
+                    state == "IL"
+                    and variable in IL_REVIEWED_INPUTS.values()
+                    and any(value < 0 for value in projected)
+                ):
+                    raise StateTaxPopulationRoutingError(
+                        f"IL: reviewed boundary {variable!r} must be nonnegative"
+                    )
+                if (
+                    state == "PA"
+                    and variable == PA_ADJUSTED_TAXABLE_INCOME
+                ):
+                    selected_ids = {
+                        route.tax_unit_id
+                        for route in route_rows
+                        if route.state == "PA"
+                        and route.disposition == DISPOSITION_READY
+                    }
+                    selected_values = [
+                        value
+                        for tax_unit_id, value in zip(
+                            tax_unit_ids,
+                            projected,
+                            strict=True,
+                        )
+                        if tax_unit_id in selected_ids
+                    ]
+                    if not selected_values:
+                        raise StateTaxPopulationRoutingError(
+                            "PA: projection requires selected tax units"
+                        )
+                    if any(value < 0 for value in selected_values):
+                        raise StateTaxPopulationRoutingError(
+                            "PA: every selected pa_adjusted_taxable_income "
+                            "boundary must be nonnegative"
+                        )
+                if state == "SC" and variable == SC_TAXABLE_INCOME:
+                    selected_ids = {
+                        route.tax_unit_id
+                        for route in route_rows
+                        if route.state == "SC"
+                        and route.disposition == DISPOSITION_READY
+                    }
+                    selected_values = [
+                        value
+                        for tax_unit_id, value in zip(
+                            tax_unit_ids,
+                            projected,
+                            strict=True,
+                        )
+                        if tax_unit_id in selected_ids
+                    ]
+                    if not selected_values:
+                        raise StateTaxPopulationRoutingError(
+                            "SC: projection requires selected tax units"
+                        )
+                    if any(value < 0 for value in selected_values):
+                        raise StateTaxPopulationRoutingError(
+                            "SC: every selected sc_taxable_income boundary "
+                            "must be nonnegative"
+                        )
             state_inputs[slot.slot] = dict(
                 zip(tax_unit_ids, projected, strict=True)
             )
@@ -1519,6 +2687,606 @@ def _finite_number(value: Any, *, label: str) -> float:
     return number
 
 
+def _validate_illinois_runtime_contract(jurisdiction: Any) -> None:
+    """Fail closed if the bounded Illinois annual-before-credit contract drifts."""
+
+    if (
+        jurisdiction.policyengine_target
+        != IL_INCOME_TAX_BEFORE_NONREFUNDABLE_CREDITS_TARGET
+    ):
+        raise StateTaxPopulationRoutingError(
+            "IL: reviewed annual-before-credit runner requires the exact "
+            "il_income_tax_before_non_refundable_credits target"
+        )
+    if (
+        jurisdiction.program != IL_ANNUAL_BEFORE_CREDIT_PROGRAM
+        or jurisdiction.output != IL_ANNUAL_BEFORE_CREDIT_OUTPUT
+    ):
+        raise StateTaxPopulationRoutingError(
+            "IL: reviewed annual-before-credit runner requires the exact "
+            "canonical RuleSpec program and output"
+        )
+    actual_inputs = {
+        slot.slot: (
+            slot.policyengine_variable,
+            slot.source_kind,
+            slot.policyengine_relationship,
+        )
+        for slot in jurisdiction.inputs
+    }
+    expected_inputs = {
+        slot: (variable, "pe_upstream_boundary", "upstream")
+        for slot, variable in IL_REVIEWED_INPUTS.items()
+    }
+    if actual_inputs != expected_inputs or jurisdiction.relations:
+        raise StateTaxPopulationRoutingError(
+            "IL: reviewed annual-before-credit runner requires exactly the "
+            "completed taxable-income and investment-credit-recapture "
+            "upstream boundaries and no relations"
+        )
+
+
+def _validate_indiana_runtime_contract(jurisdiction: Any) -> None:
+    """Fail closed if the canonical Indiana AGI-tax contract drifts."""
+
+    if jurisdiction.policyengine_target != IN_AGI_TAX_TARGET:
+        raise StateTaxPopulationRoutingError(
+            "IN: reviewed AGI-tax runner requires the exact in_agi_tax target"
+        )
+    if (
+        jurisdiction.program != IN_AGI_TAX_PROGRAM
+        or jurisdiction.output != IN_AGI_TAX_OUTPUT
+    ):
+        raise StateTaxPopulationRoutingError(
+            "IN: reviewed AGI-tax runner requires the exact canonical "
+            "RuleSpec program and output"
+        )
+    actual_inputs = {
+        slot.slot: (
+            slot.source_kind,
+            slot.status,
+            slot.policyengine_variable,
+            slot.policyengine_variables,
+            slot.policyengine_relationship,
+            slot.policyengine_transform,
+            slot.constant_value,
+        )
+        for slot in jurisdiction.inputs
+    }
+    expected_inputs = {
+        IN_AGI_TAX_INPUT: (
+            "pe_upstream_boundary",
+            "ready",
+            IN_AGI_TAX_UPSTREAM,
+            (),
+            "upstream",
+            None,
+            None,
+        )
+    }
+    if actual_inputs != expected_inputs or jurisdiction.relations:
+        raise StateTaxPopulationRoutingError(
+            "IN: reviewed AGI-tax runner requires exactly the completed "
+            "Indiana adjusted-gross-income upstream boundary and no relations"
+        )
+
+
+def _validate_indiana_policyengine_runtime(*, sim: Any, year: int) -> None:
+    """Prove the active PolicyEngine target retains its reviewed 2026 shape."""
+
+    for variable in (IN_AGI_TAX_TARGET, IN_AGI_TAX_UPSTREAM):
+        _require_policyengine_tax_unit_year_money_variable(
+            sim,
+            state="IN",
+            variable=variable,
+        )
+    try:
+        target_definition = sim.tax_benefit_system.variables[
+            IN_AGI_TAX_TARGET
+        ]
+        upstream_definition = sim.tax_benefit_system.variables[
+            IN_AGI_TAX_UPSTREAM
+        ]
+        formula = target_definition.get_formula(year)
+        rate_value = (
+            sim.tax_benefit_system.parameters(year)
+            .gov.states["in"].tax.income.agi_rate
+        )
+    except (AttributeError, KeyError, TypeError) as exc:
+        raise StateTaxPopulationRoutingError(
+            "IN: active 2026 in_agi_tax formula, dependency, or rate schema "
+            "drifted"
+        ) from exc
+    if formula is None or getattr(upstream_definition, "formulas", None):
+        raise StateTaxPopulationRoutingError(
+            "IN: active 2026 in_agi_tax formula must depend on the reviewed "
+            "formula-free in_agi upstream boundary"
+        )
+    rate = _finite_number(
+        rate_value,
+        label="gov.states.in.tax.income.agi_rate",
+    )
+    if rate != IN_AGI_TAX_2026_RATE:
+        raise StateTaxPopulationRoutingError(
+            "IN: active 2026 Indiana AGI-tax rate must be exactly 0.0295; "
+            f"got {rate!r}"
+        )
+
+    class FormulaParameters:
+        def __init__(self) -> None:
+            self.accesses: list[str] = []
+            self.calls: list[int] = []
+
+        def __call__(self, period: int) -> FormulaParameters:
+            self.calls.append(period)
+            return self
+
+        @property
+        def gov(self) -> FormulaParameters:
+            self.accesses.append("gov")
+            return self
+
+        @property
+        def states(self) -> FormulaParameters:
+            self.accesses.append("states")
+            return self
+
+        def __getitem__(self, key: str) -> FormulaParameters:
+            self.accesses.append(f"states[{key}]")
+            if key != "in":
+                raise KeyError(key)
+            return self
+
+        @property
+        def tax(self) -> FormulaParameters:
+            self.accesses.append("tax")
+            return self
+
+        @property
+        def income(self) -> FormulaParameters:
+            self.accesses.append("income")
+            return self
+
+        @property
+        def agi_rate(self) -> float:
+            self.accesses.append("agi_rate")
+            return rate
+
+    for agi, expected in (
+        (-100.0, 0.0),
+        (100.0, 100.0 * IN_AGI_TAX_2026_RATE),
+    ):
+        tax_unit_calls: list[tuple[str, int]] = []
+
+        def tax_unit(variable: str, period: int) -> float:
+            tax_unit_calls.append((variable, period))
+            if variable != IN_AGI_TAX_UPSTREAM:
+                raise KeyError(variable)
+            return agi
+
+        parameters = FormulaParameters()
+        try:
+            result = _finite_number(
+                formula(tax_unit, year, parameters),
+                label="IN active in_agi_tax formula probe",
+            )
+        except (AttributeError, KeyError, TypeError) as exc:
+            raise StateTaxPopulationRoutingError(
+                "IN: active 2026 in_agi_tax formula dependency path drifted"
+            ) from exc
+        if (
+            result != expected
+            or tax_unit_calls != [(IN_AGI_TAX_UPSTREAM, year)]
+            or parameters.calls != [year]
+            or parameters.accesses
+            != [
+                "gov",
+                "states",
+                "states[in]",
+                "tax",
+                "income",
+                "agi_rate",
+            ]
+        ):
+            raise StateTaxPopulationRoutingError(
+                "IN: active 2026 in_agi_tax formula must read exactly in_agi "
+                "and gov.states.in.tax.income.agi_rate and apply the "
+                "nonnegative floor"
+            )
+
+
+def _validate_pennsylvania_runtime_contract(jurisdiction: Any) -> None:
+    """Fail closed if the canonical Pennsylvania PIT contract drifts."""
+
+    if jurisdiction.policyengine_target != PA_BEFORE_FORGIVENESS_TARGET:
+        raise StateTaxPopulationRoutingError(
+            "PA: reviewed before-forgiveness runner requires the exact "
+            "pa_income_tax_before_forgiveness target"
+        )
+    if (
+        jurisdiction.program != PA_BEFORE_FORGIVENESS_PROGRAM
+        or jurisdiction.output != PA_BEFORE_FORGIVENESS_OUTPUT
+    ):
+        raise StateTaxPopulationRoutingError(
+            "PA: reviewed before-forgiveness runner requires the exact "
+            "canonical RuleSpec program and output"
+        )
+    actual_inputs = {
+        slot.slot: (
+            slot.source_kind,
+            slot.status,
+            slot.policyengine_variable,
+            slot.policyengine_variables,
+            slot.policyengine_relationship,
+            slot.policyengine_transform,
+            slot.constant_value,
+        )
+        for slot in jurisdiction.inputs
+    }
+    expected_inputs = {
+        PA_BEFORE_FORGIVENESS_INPUT: (
+            "pe_upstream_boundary",
+            "ready",
+            PA_ADJUSTED_TAXABLE_INCOME,
+            (),
+            "upstream",
+            None,
+            None,
+        )
+    }
+    if actual_inputs != expected_inputs or jurisdiction.relations:
+        raise StateTaxPopulationRoutingError(
+            "PA: reviewed before-forgiveness runner requires exactly the "
+            "completed Pennsylvania adjusted-taxable-income upstream boundary "
+            "and no relations"
+        )
+
+
+def _validate_pennsylvania_policyengine_runtime(*, sim: Any, year: int) -> None:
+    """Prove the active PolicyEngine target retains its reviewed 2026 shape."""
+
+    for variable in (
+        PA_BEFORE_FORGIVENESS_TARGET,
+        PA_ADJUSTED_TAXABLE_INCOME,
+    ):
+        _require_policyengine_tax_unit_year_money_variable(
+            sim,
+            state="PA",
+            variable=variable,
+        )
+    try:
+        target_definition = sim.tax_benefit_system.variables[
+            PA_BEFORE_FORGIVENESS_TARGET
+        ]
+        formula = target_definition.get_formula(year)
+        rate_value = (
+            sim.tax_benefit_system.parameters(year)
+            .gov.states.pa.tax.income.rate
+        )
+    except (AttributeError, KeyError, TypeError) as exc:
+        raise StateTaxPopulationRoutingError(
+            "PA: active 2026 before-forgiveness formula, dependency, or rate "
+            "schema drifted"
+        ) from exc
+    if formula is None:
+        raise StateTaxPopulationRoutingError(
+            "PA: active 2026 pa_income_tax_before_forgiveness formula is "
+            "unavailable"
+        )
+    rate = _finite_number(
+        rate_value,
+        label="gov.states.pa.tax.income.rate",
+    )
+    if rate != PA_2026_RATE:
+        raise StateTaxPopulationRoutingError(
+            "PA: active 2026 Pennsylvania income-tax rate must be exactly "
+            f"0.0307; got {rate!r}"
+        )
+
+    class FormulaParameters:
+        def __init__(self) -> None:
+            self.accesses: list[str] = []
+            self.calls: list[int] = []
+
+        def __call__(self, period: int) -> FormulaParameters:
+            self.calls.append(period)
+            return self
+
+        @property
+        def gov(self) -> FormulaParameters:
+            self.accesses.append("gov")
+            return self
+
+        @property
+        def states(self) -> FormulaParameters:
+            self.accesses.append("states")
+            return self
+
+        @property
+        def pa(self) -> FormulaParameters:
+            self.accesses.append("pa")
+            return self
+
+        @property
+        def tax(self) -> FormulaParameters:
+            self.accesses.append("tax")
+            return self
+
+        @property
+        def income(self) -> FormulaParameters:
+            self.accesses.append("income")
+            return self
+
+        @property
+        def rate(self) -> float:
+            self.accesses.append("rate")
+            return rate
+
+    for taxable_income in (-100.0, 0.0, 100.0):
+        tax_unit_calls: list[tuple[str, int]] = []
+
+        def tax_unit(variable: str, period: int) -> float:
+            tax_unit_calls.append((variable, period))
+            if variable != PA_ADJUSTED_TAXABLE_INCOME:
+                raise KeyError(variable)
+            return taxable_income
+
+        parameters = FormulaParameters()
+        try:
+            result = _finite_number(
+                formula(tax_unit, year, parameters),
+                label="PA active before-forgiveness formula probe",
+            )
+        except (AttributeError, KeyError, TypeError) as exc:
+            raise StateTaxPopulationRoutingError(
+                "PA: active 2026 before-forgiveness formula dependency path "
+                "drifted"
+            ) from exc
+        expected = taxable_income * PA_2026_RATE
+        if (
+            result != expected
+            or tax_unit_calls != [(PA_ADJUSTED_TAXABLE_INCOME, year)]
+            or parameters.calls != [year]
+            or parameters.accesses
+            != [
+                "gov",
+                "states",
+                "pa",
+                "tax",
+                "income",
+                "rate",
+            ]
+        ):
+            raise StateTaxPopulationRoutingError(
+                "PA: active 2026 before-forgiveness formula must read exactly "
+                "pa_adjusted_taxable_income and "
+                "gov.states.pa.tax.income.rate"
+            )
+
+
+def _validate_south_carolina_runtime_contract(jurisdiction: Any) -> None:
+    """Fail closed if the canonical South Carolina PIT contract drifts."""
+
+    if (
+        jurisdiction.policyengine_target
+        != SC_BEFORE_NONREFUNDABLE_CREDITS_TARGET
+    ):
+        raise StateTaxPopulationRoutingError(
+            "SC: reviewed runner requires the exact "
+            "sc_income_tax_before_non_refundable_credits target"
+        )
+    if (
+        jurisdiction.program != SC_BEFORE_NONREFUNDABLE_CREDITS_PROGRAM
+        or jurisdiction.output != SC_BEFORE_NONREFUNDABLE_CREDITS_OUTPUT
+    ):
+        raise StateTaxPopulationRoutingError(
+            "SC: reviewed runner requires the exact canonical RuleSpec "
+            "program and before-nonrefundable-credits output"
+        )
+    actual_inputs = {
+        slot.slot: (
+            slot.source_kind,
+            slot.status,
+            slot.policyengine_variable,
+            slot.policyengine_variables,
+            slot.policyengine_relationship,
+            slot.policyengine_transform,
+            slot.constant_value,
+        )
+        for slot in jurisdiction.inputs
+    }
+    expected_inputs = {
+        SC_BEFORE_NONREFUNDABLE_CREDITS_INPUT: (
+            "pe_upstream_boundary",
+            "ready",
+            SC_TAXABLE_INCOME,
+            (),
+            "upstream",
+            None,
+            None,
+        )
+    }
+    if actual_inputs != expected_inputs or jurisdiction.relations:
+        raise StateTaxPopulationRoutingError(
+            "SC: reviewed runner requires exactly the completed South "
+            "Carolina taxable-income upstream boundary and no relations"
+        )
+
+
+def _south_carolina_2026_schedule(taxable_income: float) -> float:
+    if taxable_income < 30_000:
+        return taxable_income * 0.0199
+    return taxable_income * 0.0521 - 966
+
+
+def _validate_south_carolina_policyengine_runtime(
+    *,
+    sim: Any,
+    year: int,
+) -> None:
+    """Prove the active PolicyEngine target retains its reviewed 2026 shape."""
+
+    if year != 2026:
+        raise StateTaxPopulationRoutingError(
+            "SC: reviewed before-nonrefundable-credits schedule is 2026 only"
+        )
+    for variable in (
+        SC_BEFORE_NONREFUNDABLE_CREDITS_TARGET,
+        SC_TAXABLE_INCOME,
+    ):
+        _require_policyengine_tax_unit_year_money_variable(
+            sim,
+            state="SC",
+            variable=variable,
+        )
+    try:
+        target_definition = sim.tax_benefit_system.variables[
+            SC_BEFORE_NONREFUNDABLE_CREDITS_TARGET
+        ]
+        formula = target_definition.get_formula(year)
+        rates = (
+            sim.tax_benefit_system.parameters(year)
+            .gov.states.sc.tax.income.rates
+        )
+    except (AttributeError, KeyError, TypeError) as exc:
+        raise StateTaxPopulationRoutingError(
+            "SC: active 2026 formula, dependency, or rates schema drifted"
+        ) from exc
+    if formula is None or not callable(getattr(rates, "calc", None)):
+        raise StateTaxPopulationRoutingError(
+            "SC: active 2026 formula and marginal-rate schedule are required"
+        )
+
+    probes = (0.0, 1.0, 29_999.0, 30_000.0, 30_001.0, 100_000.0)
+    for taxable_income in probes:
+        actual = _finite_number(
+            rates.calc(taxable_income),
+            label="gov.states.sc.tax.income.rates",
+        )
+        expected = _south_carolina_2026_schedule(taxable_income)
+        if actual != expected:
+            raise StateTaxPopulationRoutingError(
+                "SC: active 2026 marginal-rate schedule must retain the "
+                "reviewed 1.99% / 5.21%-minus-$966 boundary; "
+                f"at {taxable_income!r}, got {actual!r}"
+            )
+
+    class FormulaRates:
+        def __init__(self) -> None:
+            self.calls: list[float] = []
+
+        def calc(self, taxable_income: float) -> float:
+            self.calls.append(taxable_income)
+            return _south_carolina_2026_schedule(taxable_income)
+
+    class FormulaParameters:
+        def __init__(self) -> None:
+            self.accesses: list[str] = []
+            self.calls: list[int] = []
+            self.reviewed_rates = FormulaRates()
+
+        def __call__(self, period: int) -> FormulaParameters:
+            self.calls.append(period)
+            return self
+
+        @property
+        def gov(self) -> FormulaParameters:
+            self.accesses.append("gov")
+            return self
+
+        @property
+        def states(self) -> FormulaParameters:
+            self.accesses.append("states")
+            return self
+
+        @property
+        def sc(self) -> FormulaParameters:
+            self.accesses.append("sc")
+            return self
+
+        @property
+        def tax(self) -> FormulaParameters:
+            self.accesses.append("tax")
+            return self
+
+        @property
+        def income(self) -> FormulaParameters:
+            self.accesses.append("income")
+            return self
+
+        @property
+        def rates(self) -> FormulaRates:
+            self.accesses.append("rates")
+            return self.reviewed_rates
+
+    for taxable_income in probes:
+        tax_unit_calls: list[tuple[str, int]] = []
+
+        def tax_unit(variable: str, period: int) -> float:
+            tax_unit_calls.append((variable, period))
+            if variable != SC_TAXABLE_INCOME:
+                raise KeyError(variable)
+            return taxable_income
+
+        parameters = FormulaParameters()
+        try:
+            result = _finite_number(
+                formula(tax_unit, year, parameters),
+                label="SC active before-nonrefundable-credits formula probe",
+            )
+        except (AttributeError, KeyError, TypeError) as exc:
+            raise StateTaxPopulationRoutingError(
+                "SC: active 2026 formula dependency path drifted"
+            ) from exc
+        expected = _south_carolina_2026_schedule(taxable_income)
+        if (
+            result != expected
+            or tax_unit_calls != [(SC_TAXABLE_INCOME, year)]
+            or parameters.calls != [year]
+            or parameters.accesses
+            != ["gov", "states", "sc", "tax", "income", "rates"]
+            or parameters.reviewed_rates.calls != [taxable_income]
+        ):
+            raise StateTaxPopulationRoutingError(
+                "SC: active 2026 formula must read exactly sc_taxable_income "
+                "and gov.states.sc.tax.income.rates.calc"
+            )
+
+
+def _require_policyengine_tax_unit_year_money_variable(
+    sim: Any,
+    *,
+    state: str,
+    variable: str,
+) -> None:
+    """Require the reviewed PolicyEngine variable's exact accounting schema."""
+
+    try:
+        definition = sim.tax_benefit_system.variables[variable]
+    except (AttributeError, KeyError, TypeError) as exc:
+        raise StateTaxPopulationRoutingError(
+            f"{state}: PolicyEngine variable {variable!r} is missing reviewed "
+            "schema metadata"
+        ) from exc
+    entity = getattr(getattr(definition, "entity", None), "key", None)
+    period = str(getattr(definition, "definition_period", "")).lower()
+    value_type = getattr(definition, "value_type", None)
+    unit = getattr(definition, "unit", None)
+    if (
+        entity != "tax_unit"
+        or period != "year"
+        or value_type is not float
+        or unit != "currency-USD"
+    ):
+        value_type_name = getattr(value_type, "__name__", repr(value_type))
+        raise StateTaxPopulationRoutingError(
+            f"{state}: PolicyEngine variable {variable!r} must use the reviewed "
+            "TaxUnit/year/currency-USD float schema; got "
+            f"entity={entity!r}, period={period!r}, "
+            f"value_type={value_type_name!r}, unit={unit!r}"
+        )
+
+
 def _projection_scalar(value: Any, *, label: str) -> float | bool:
     if hasattr(value, "item"):
         value = value.item()
@@ -1594,6 +3362,7 @@ def _apply_projection_transform(
         # completed-return line-10 boundary's fail-closed nonnegative domain.
         return max(0.0, min(net_gain, long_term))
     if transform in {
+        "filing_status_is_single",
         "filing_status_is_separate",
         "filing_status_joint_or_surviving_spouse",
         "filing_status_joint_surviving_spouse_or_head",
@@ -1612,6 +3381,8 @@ def _apply_projection_transform(
             )
         if transform == "filing_status_joint_or_surviving_spouse":
             return value in {"JOINT", "SURVIVING_SPOUSE"}
+        if transform == "filing_status_is_single":
+            return value == "SINGLE"
         if transform == "filing_status_is_separate":
             return value == "SEPARATE"
         if transform == "filing_status_is_head_of_household":

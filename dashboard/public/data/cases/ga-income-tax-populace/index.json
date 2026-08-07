@@ -9,7 +9,7 @@
   "right": "policyengine"
  },
  "mismatch_concepts": [
-  "us-ga:policies/income_tax/pilot_liability_pipeline#ga_pit_pilot_income_tax_liability"
+  "us-ga:policies/income_tax/2026_annual_tax_before_nonrefundable_credits#ga_pit_2026_annual_tax_before_nonrefundable_credits"
  ],
  "source": "state-tax-populace-campaign"
 }

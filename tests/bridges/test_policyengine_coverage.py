@@ -502,13 +502,15 @@ outputs:
         country="us",
     )
     assert final_mapping.match_type == "exact"
-    assert (
-        registry.mapping_for_legal_id(
-            "us-ks:programs/tanf/fy-2026#ks_tanf_extra",
-            country="us",
-        )
-        is None
+    fallback = registry.mapping_for_legal_id(
+        "us-ks:programs/tanf/fy-2026#ks_tanf_extra",
+        country="us",
     )
+    assert fallback is not None
+    assert fallback.legal_id == "us-ks:"
+    assert fallback.match_type == "prefix"
+    assert fallback.mapping_type == "not_comparable"
+    assert fallback.candidate_priority == "P4"
 
 
 def test_policyengine_coverage_classifies_new_york_tanf_program_output(tmp_path):

@@ -1,0 +1,57 @@
+# Federal state and local tax deduction — Axiom vs PolicyEngine-US, tax year
+# 2026.
+#
+# Axiom boundary: the engine-verified RuleSpec companion supplies all 16
+# adopted cases and the lawful federal_salt_deduction expected value. The grid
+# covers all five filing statuses, the 2026 section 164(b)(7) cap, phaseout,
+# floor, MFS halving, section 911 MAGI add-back, PolicyEngine's low-AGI
+# simulation ceiling, and a completed personal-property-tax probe.
+#
+# PolicyEngine binding: compare salt_deduction directly. Bind the completed
+# state_and_local_sales_or_income_tax and real_estate_taxes inputs rather than
+# synthesizing state liability, and bridge the companion's guarded
+# federal_section_911_exclusion_for_salt_magi output to PE-US
+# foreign_earned_income_exclusion. The personal-property amount has no
+# independently representable input in PE-US 1.767.3 and remains a
+# RuleSpec-only fixture input.
+#
+# RuleSpec: rulespec-us PR #1177 merge commit ae64af2740340a40d04ed3c652254f53e62fab61
+# (tree 40e08f7dbaa88a70660006f3a5a32bfa283ebd85).
+# PolicyEngine source pin: policyengine-us 1.767.3.
+#
+# Run locally:
+#   uv run python scripts/run_comparison.py us-salt-deduction-grid --summary
+
+name: us-salt-deduction-grid
+title: Federal SALT deduction — Axiom vs PolicyEngine
+description: >-
+  Compares the lawful 2026 section 164 personal SALT deduction against
+  PolicyEngine-US on 16 engine-verified companion cases across all five filing
+  statuses, preserving the three pre-registered PE source divergences as
+  case-specific evidence.
+
+runner:
+  type: federal-tax-liability-grid
+  parameters:
+    policy: salt_deduction
+    period: "2026"
+    concept: >-
+      us:policies/income_tax/salt_deduction_pipeline#federal_salt_deduction
+    python: "3.13"
+    policyengine_version: "4.18.9"
+    policyengine_us_version: "1.767.3"
+    policyengine_core_version: "3.30.3"
+    tolerance: 0.01
+    relative_tolerance: 0.0
+    rulespec_remote: https://github.com/TheAxiomFoundation/rulespec-us.git
+    rulespec_roots:
+      - $HOME/TheAxiomFoundation/rulespec-us
+    rulespec_upstream_sha: ae64af2740340a40d04ed3c652254f53e62fab61
+    rulespec_upstream_tree: 40e08f7dbaa88a70660006f3a5a32bfa283ebd85
+
+artifacts:
+  report_basename: axiom-policyengine-us-salt-deduction-grid
+
+dashboard:
+  filename: axiom-policyengine-us-salt-deduction-grid.json
+  suite: us-salt-deduction-grid

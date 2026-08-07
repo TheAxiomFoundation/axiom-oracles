@@ -7,6 +7,17 @@ MODULE = (
     "us-al:policies/income_tax/"
     "2026_section_40_18_5_schedule_before_credits"
 )
+EXPECTED_OUTPUTS = {
+    "al_pit_2026_section_40_18_5_first_rate",
+    "al_pit_2026_section_40_18_5_second_rate",
+    "al_pit_2026_section_40_18_5_third_rate",
+    "al_pit_2026_section_40_18_5_nonjoint_first_bracket_ceiling",
+    "al_pit_2026_section_40_18_5_nonjoint_second_bracket_ceiling",
+    "al_pit_2026_section_40_18_5_joint_first_bracket_ceiling",
+    "al_pit_2026_section_40_18_5_joint_second_bracket_ceiling",
+    "al_pit_2026_section_40_18_5_taxable_income_boundary",
+    "al_pit_2026_section_40_18_5_schedule_before_credits",
+}
 
 
 def _mapping(rule: str):
@@ -15,6 +26,19 @@ def _mapping(rule: str):
     assert mapping is not None
     assert mapping.match_type == "exact"
     return mapping
+
+
+def test_alabama_schedule_mapping_inventory_is_exactly_complete():
+    registry = load_policyengine_registry()
+    prefix = f"{MODULE}#"
+    mapped_names = {
+        legal_id.removeprefix(prefix)
+        for legal_id in registry.mappings_by_legal_id
+        if legal_id.startswith(prefix)
+    }
+
+    assert len(mapped_names) == 9
+    assert mapped_names == EXPECTED_OUTPUTS
 
 
 def test_alabama_public_schedule_has_exact_pre_credit_target():
@@ -75,3 +99,23 @@ def test_alabama_private_parameters_and_boundary_are_exact():
     )
     assert boundary.mapping_type == "direct_variable"
     assert boundary.policyengine_variable == "al_taxable_income"
+
+
+def test_alabama_exact_schedule_overrides_broad_state_fallback():
+    registry = load_policyengine_registry()
+    exact = registry.mapping_for_legal_id(
+        f"{MODULE}#al_pit_2026_section_40_18_5_schedule_before_credits",
+        country="us",
+    )
+    broad_fallback = registry.mapping_for_legal_id(
+        f"{MODULE}#unmapped_diagnostic",
+        country="us",
+    )
+
+    assert exact is not None
+    assert exact.match_type == "exact"
+    assert exact.mapping_type == "direct_variable"
+    assert broad_fallback is not None
+    assert broad_fallback.match_type == "prefix"
+    assert broad_fallback.mapping_type == "not_comparable"
+    assert broad_fallback.candidate_priority == "P4"

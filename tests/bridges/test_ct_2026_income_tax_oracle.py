@@ -13,6 +13,15 @@ RULESPEC_RELATIVE_PATH = Path(
     "us-ct/policies/income_tax/2026_resident_liability_source_hold.yaml"
 )
 EXPECTED_OUTPUT_COUNT = 17
+CANONICAL_MODULE = (
+    "us-ct:policies/income_tax/"
+    "2026_resident_ordinary_tax_before_personal_credit"
+)
+CANONICAL_RULESPEC_RELATIVE_PATH = Path(
+    "us-ct/policies/income_tax/"
+    "2026_resident_ordinary_tax_before_personal_credit.yaml"
+)
+CANONICAL_OUTPUT_COUNT = 45
 
 
 def _module_mappings():
@@ -25,21 +34,35 @@ def _module_mappings():
     }
 
 
-def _rulespec_path() -> Path | None:
+def _canonical_module_mappings():
+    registry = load_policyengine_registry()
+    prefix = f"{CANONICAL_MODULE}#"
+    return {
+        legal_id.removeprefix(prefix): mapping
+        for legal_id, mapping in registry.mappings_by_legal_id.items()
+        if legal_id.startswith(prefix)
+    }
+
+
+def _configured_rulespec_path(relative_path: Path) -> Path | None:
     repo_root = Path(__file__).resolve().parents[2]
     candidates = [
-        repo_root.parent / "rulespec-us" / RULESPEC_RELATIVE_PATH,
-        repo_root / ".rulespec-us" / RULESPEC_RELATIVE_PATH,
+        repo_root.parent / "rulespec-us" / relative_path,
+        repo_root / ".rulespec-us" / relative_path,
     ]
     configured_root = os.environ.get("AXIOM_RULESPEC_ROOT")
     if configured_root:
         configured = Path(configured_root).expanduser()
         candidates = [
-            configured / RULESPEC_RELATIVE_PATH,
-            configured / "rulespec-us" / RULESPEC_RELATIVE_PATH,
+            configured / relative_path,
+            configured / "rulespec-us" / relative_path,
             *candidates,
         ]
     return next((path for path in candidates if path.is_file()), None)
+
+
+def _rulespec_path() -> Path | None:
+    return _configured_rulespec_path(RULESPEC_RELATIVE_PATH)
 
 
 def _rulespec_output_names(path: Path) -> set[str]:
@@ -95,6 +118,58 @@ def test_ct_2026_core_uses_exact_tax_not_comparable_mappings() -> None:
         assert mapping.program == "tax", output_name
         assert mapping.mapping_type == "not_comparable", output_name
         assert mapping.rationale
+
+
+def test_ct_2026_canonical_mappings_match_the_rulespec_output_set() -> None:
+    rulespec_path = _configured_rulespec_path(CANONICAL_RULESPEC_RELATIVE_PATH)
+    if rulespec_path is None:
+        pytest.skip("rulespec-us checkout is not available")
+
+    output_names = _rulespec_output_names(rulespec_path)
+    assert len(output_names) == CANONICAL_OUTPUT_COUNT
+    assert set(_canonical_module_mappings()) == output_names
+
+
+def test_ct_2026_canonical_mapping_types_are_exact_and_complete() -> None:
+    mappings = _canonical_module_mappings()
+    assert len(mappings) == CANONICAL_OUTPUT_COUNT
+    assert {
+        mapping.mapping_type for mapping in mappings.values()
+    } == {
+        "not_comparable",
+        "parameter_value",
+        "direct_variable",
+        "derived_expression",
+    }
+    assert sum(
+        mapping.mapping_type == "not_comparable"
+        for mapping in mappings.values()
+    ) == 3
+    assert sum(
+        mapping.mapping_type == "parameter_value"
+        for mapping in mappings.values()
+    ) == 36
+    assert sum(
+        mapping.mapping_type == "direct_variable"
+        for mapping in mappings.values()
+    ) == 4
+    assert sum(
+        mapping.mapping_type == "derived_expression"
+        for mapping in mappings.values()
+    ) == 2
+    assert all(mapping.match_type == "exact" for mapping in mappings.values())
+    assert all(mapping.program == "tax" for mapping in mappings.values())
+
+
+def test_ct_2026_canonical_public_total_uses_exact_pe_recovery() -> None:
+    mapping = _canonical_module_mappings()[
+        "ct_pit_2026_resident_ordinary_tax_before_personal_credit"
+    ]
+    assert mapping.mapping_type == "derived_expression"
+    assert mapping.expression == (
+        "ct_income_tax_after_personal_credits / "
+        "(1 - ct_personal_credit_rate)"
+    )
 
 
 @pytest.mark.parametrize("program", [None, "tax"])

@@ -20,20 +20,12 @@ ratchets:
   axiom_attributed_open_max: 0
   policies_in_scope: 23
 - jurisdiction: us-pe
-  # 2026-07-26: Alabama's stale pilot suite was retired after canonical
-  # RuleSpec review established only the section 40-18-5 schedule-before-
-  # credits surface. The full 1,632-unit Populace comparison remains as
-  # narrow evidence, but it no longer falsely promotes final al_income_tax
-  # to covered. Re-pin this floor at the truthful 33-policy baseline.
-  covered_min: 33
-  # 2026-07-26: the az/ca SNAP migration off the legacy encoder harness
-  # (matched by construction, no comparison information) surfaced
-  # California's real residual surface: 684 mismatches over 7,101
-  # households (axiom-oracles#362). 243 are per-row verified as the
-  # CalFresh BBCE modeling boundary and dispositioned axiom_encoding_gap
-  # against rulespec-us#1098 (hence axiom_attributed_open_max below);
-  # 441 remain unexplained pending PE-side decomposition. Both axes
-  # resume falling from here.
-  unexplained_max: 441
-  axiom_attributed_open_max: 243
+  covered_min: 36
+  unexplained_max: 19
+  axiom_attributed_open_max: 0
   policies_in_scope: 127
+- jurisdiction: us-tariff-yale
+  covered_min: 10
+  unexplained_max: 0
+  axiom_attributed_open_max: 0
+  policies_in_scope: 10

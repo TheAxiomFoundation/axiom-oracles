@@ -1975,7 +1975,7 @@ concepts:
       policyengine: is_ssi_recipient_for_medicaid
 
   us-wa:regulations/388#wa_tanf_benefit:
-    description: WA TANF benefit (annualized)
+    description: WA TANF monthly benefit
     category: cash
     comparison: amount
     # Both sides: max(0, payment standard - countable income) with the
@@ -1985,67 +1985,67 @@ concepts:
     tolerance: 25
     priority: high
     targets:
-      axiom: wa_tanf_annual_benefit
+      axiom: wa_tanf_monthly_benefit
       policyengine: wa_tanf
 
   us-al:policies/dhr/tanf#al_tanf_benefit:
-    description: AL TANF (Family Assistance) benefit (annualized)
+    description: AL TANF (Family Assistance) monthly benefit
     category: cash
     comparison: amount
     tolerance: 25
     priority: high
     targets:
-      axiom: al_tanf_annual_benefit
+      axiom: al_tanf_monthly_benefit
       policyengine: al_tanf
 
   us-ga:policies/dfcs/tanf#ga_tanf_benefit:
-    description: GA TANF benefit (annualized)
+    description: GA TANF monthly benefit
     category: cash
     comparison: amount
     tolerance: 25
     priority: high
     targets:
-      axiom: ga_tanf_annual_benefit
+      axiom: ga_tanf_monthly_benefit
       policyengine: ga_tanf
 
   us-de:regulations/title-16/4000-financial-responsibility#de_tanf_benefit:
-    description: DE TANF benefit (annualized)
+    description: DE TANF monthly benefit
     category: cash
     comparison: amount
     tolerance: 25
     priority: high
     targets:
-      axiom: de_tanf_annual_benefit
+      axiom: de_tanf_monthly_benefit
       policyengine: de_tanf
 
   us-ks:policies/dcf/keesm#ks_tanf_maximum_benefit:
-    description: KS TANF maximum benefit standard (annualized)
+    description: KS TANF monthly maximum benefit standard
     category: cash
     comparison: amount
     tolerance: 25
     priority: high
     targets:
-      axiom: ks_tanf_annual_maximum_benefit
+      axiom: ks_tanf_monthly_maximum_benefit
       policyengine: ks_tanf_maximum_benefit
 
   us-az:policies/des/faa5#az_tanf_benefit:
-    description: AZ Cash Assistance benefit (annualized)
+    description: AZ Cash Assistance monthly benefit
     category: cash
     comparison: amount
     tolerance: 25
     priority: high
     targets:
-      axiom: az_tanf_annual_cash_benefit
+      axiom: az_tanf_monthly_cash_benefit
       policyengine: az_tanf
 
   us-mn:policies/dhs/combined-manual#mn_mfip_benefit:
-    description: MN MFIP cash benefit (annualized)
+    description: MN MFIP monthly cash benefit
     category: cash
     comparison: amount
     tolerance: 25
     priority: high
     targets:
-      axiom: mn_mfip_annual_cash_benefit
+      axiom: mn_mfip_monthly_cash_benefit
       policyengine: mn_mfip
 
   us-ca:policies/cdss/calworks#ca_tanf_benefit:
@@ -2069,7 +2069,7 @@ concepts:
       policyengine: co_tanf
 
   us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit:
-    description: NY TANF benefit (annualized)
+    description: NY TANF monthly benefit
     category: cash
     comparison: amount
     # Both sides compute max(0, need standard - countable income) monthly.
@@ -2079,20 +2079,21 @@ concepts:
     tolerance: 25
     priority: high
     targets:
-      axiom: ny_tanf_annual_benefit
+      axiom: ny_tanf_benefit
       policyengine: ny_tanf
 
   us:statutes/42/1382#ssi_benefit:
-    description: SSI annual benefit amount
+    description: SSI monthly benefit amount
     category: cash
     comparison: amount
-    # PolicyEngine's `ssi` is person-level annual dollars; the composed
-    # us/ssi program emits ssi_annual_benefit on the same shape. Keep a
-    # $25/year tolerance to absorb monthly-vs-annual rounding.
+    # PolicyEngine's `ssi` is person-level monthly dollars; the composed
+    # us/ssi program emits ssi_monthly_benefit on the same household-aggregate
+    # shape. Keep the suite's existing literal tolerance during the period
+    # reconciliation so the runner correction is not masked by a threshold edit.
     tolerance: 25
     priority: high
     targets:
-      axiom: ssi_annual_benefit
+      axiom: ssi_monthly_benefit
       policyengine: ssi
 
   us:statutes/7/2014/o#snap_eligible:
@@ -2307,18 +2308,17 @@ concepts:
       policyengine: va_income_tax_before_non_refundable_credits
       taxsim: siitax
 
-  us-ut:policies/income_tax/pilot_liability_pipeline#ut_pit_pilot_income_tax_liability:
-    description: Utah individual income tax liability (resident wage earner; Utah Code 59-10-104 flat 4.45 per cent on Utah taxable income, before the 59-10-1018 taxpayer credit)
+  us-ut:policies/income_tax/2026_full_year_resident_before_credit_schedule#ut_pit_2026_resident_income_tax_before_credits:
+    description: Utah full-year-resident income tax before credits, including the section 59-10-104.1 exemption gate
     category: tax
     comparison: amount
-    # Compared against PolicyEngine ut_income_tax_before_credits, the pure
-    # 59-10-104 flat tax; the pipeline reproduces it exactly. The before-
-    # non-refundable variable nets the phased-out 59-10-1018 taxpayer credit that
-    # this flat core excludes. Against TAXSIM 2024 every case diverges by the
-    # 4.55-vs-4.45 rate vintage plus TAXSIM's inclusion of the taxpayer credit,
-    # dispositioned in dispositions/ut-income-tax-liability.yaml. The tight
-    # absolute tolerance catches structural rate errors.
-    tolerance: 1
+    # PolicyEngine publishes the section 59-10-104 pre-credit amount and the
+    # section 59-10-104.1 exemption separately. The reviewed derived target
+    # combines them; direct comparison to ut_income_tax_before_credits would
+    # silently omit the statutory exemption. TAXSIM siitax remains supplemental
+    # because it is a downstream final-tax surface that includes credits.
+    tolerance: 0.01
+    relative_tolerance: 0.0000001
     priority: high
     locales: [US-UT]
     scope:
@@ -2326,11 +2326,11 @@ concepts:
       geoid: US
     targets:
       axiom:
-        name: ut_pit_pilot_income_tax_liability
+        name: ut_pit_2026_resident_income_tax_before_credits
         scope:
           type: country
           geoid: US
-      policyengine: ut_income_tax_before_credits
+      policyengine: ut_resident_income_tax_before_credits_derived
       taxsim: siitax
 
   us-al:policies/income_tax/2026_section_40_18_5_schedule_before_credits#al_pit_2026_section_40_18_5_schedule_before_credits:
@@ -2426,14 +2426,14 @@ concepts:
           geoid: US
       policyengine: ne_income_tax_before_credits
       taxsim: siitax
-  us-de:policies/income_tax/pilot_liability_pipeline#de_pit_pilot_income_tax_liability:
-    description: Delaware section 1102(a)(14) schedule tax before nonrefundable credits, selecting between aggregate separate-return and combined-return taxable-income candidates
+  us-de:policies/income_tax/pilot_liability_pipeline#de_pit_pilot_separate_schedule_tax:
+    description: Delaware section 1102(a)(14) individual schedule component before nonrefundable credits, summed from Person to TaxUnit only for Populace comparison accounting
     category: tax
     comparison: amount
-    # Compared against PolicyEngine's unit-level tax before nonrefundable credits,
-    # the exact analog of the encoded schedule and strict lower-pre-credit-tax
-    # branch selector. Later Delaware targets subtract credits outside this core.
-    tolerance: 1
+    # Compared against PolicyEngine's Person-grain individual schedule before
+    # nonrefundable credits. Filing-method selection, combined-return
+    # computation, credits, payments, and final liability are outside this core.
+    tolerance: 0.01
     priority: high
     locales: [US-DE]
     scope:
@@ -2441,12 +2441,11 @@ concepts:
       geoid: US
     targets:
       axiom:
-        name: de_pit_pilot_income_tax_liability
+        name: de_pit_pilot_separate_schedule_tax
         scope:
           type: country
           geoid: US
-      policyengine: de_income_tax_before_non_refundable_credits_unit
-      taxsim: siitax
+      policyengine: de_income_tax_before_non_refundable_credits_indv
   us-md:policies/income_tax/pilot_liability_pipeline#md_pit_pilot_income_tax_liability:
     description: Maryland STATE income tax liability (resident wage earner; the section 10-105 graduated state tax on Maryland taxable income; the county income tax is a separate PolicyEngine variable, excluded)
     category: tax
@@ -2519,29 +2518,6 @@ concepts:
           geoid: US
       policyengine: mn_income_tax_before_refundable_credits
       taxsim: siitax
-  us-ct:policies/income_tax/pilot_liability_pipeline#ct_pit_pilot_income_tax_liability:
-    description: Connecticut income tax liability before refundable credits (complete section 12-700 schedules, phaseout and recapture, personal credit, AMT, and ordered property-tax/stillborn nonrefundable credits)
-    category: tax
-    comparison: amount
-    # Compared against PolicyEngine ct_income_tax_before_refundable_credits, the
-    # exact analog of the complete encoded schedule, phaseout/recapture, personal
-    # credit, AMT, and ordered nonrefundable-credit pipeline. Against TAXSIM 2024,
-    # differences from the 2024-to-2026 indexation and credit scope are
-    # dispositioned rather than absorbed into the national contract tolerance.
-    tolerance: 1
-    priority: high
-    locales: [US-CT]
-    scope:
-      type: country
-      geoid: US
-    targets:
-      axiom:
-        name: ct_pit_pilot_income_tax_liability
-        scope:
-          type: country
-          geoid: US
-      policyengine: ct_income_tax_before_refundable_credits
-      taxsim: siitax
   us-co:policies/income_tax/pilot_liability_pipeline#co_pit_pilot_income_tax_liability:
     description: Colorado C.R.S. section 39-22-104(1.7)(c) individual-income base tax before section 39-22-627 temporary rate adjustments and all credits
     category: tax
@@ -2592,17 +2568,14 @@ concepts:
           geoid: US
       policyengine: az_income_tax
       taxsim: siitax
-  us-ga:policies/income_tax/pilot_liability_pipeline#ga_pit_pilot_income_tax_liability:
-    description: Georgia individual income tax liability (resident wage earner; the O.C.G.A. 48-7-20 flat 4.99 per cent tax on Georgia taxable net income = AGI less the section 48-7-27 standard deduction)
+  us-ga:policies/income_tax/2026_annual_tax_before_nonrefundable_credits#ga_pit_2026_annual_tax_before_nonrefundable_credits:
+    description: Georgia tax-year-2026 annual O.C.G.A. 48-7-20 tax before nonrefundable credits (the flat 4.99 per cent rate on caller-completed Georgia taxable net income)
     category: tax
     comparison: amount
     # Compared against PolicyEngine ga_income_tax_before_non_refundable_credits,
-    # the exact 48-7-20 flat-tax analog (equals the final ga_income_tax on this
-    # childless grid — no 48-7-29 / low-income / CDCC credits active); the
-    # pipeline reproduces it to the cent across the grid. Against TAXSIM 2024
-    # every case diverges by the 5.39-to-4.99 rate step-down plus the HB463
-    # standard-deduction vintage, dispositioned in
-    # dispositions/ga-income-tax-liability.yaml.
+    # with PolicyEngine ga_taxable_income projected only as the distinct direct
+    # upstream completed-taxable-net-income boundary. RuleSpec applies no
+    # filing-status, deduction, exemption, exclusion, or credit construction.
     tolerance: 1
     priority: high
     locales: [US-GA]
@@ -2611,12 +2584,11 @@ concepts:
       geoid: US
     targets:
       axiom:
-        name: ga_pit_pilot_income_tax_liability
+        name: ga_pit_2026_annual_tax_before_nonrefundable_credits
         scope:
           type: country
           geoid: US
       policyengine: ga_income_tax_before_non_refundable_credits
-      taxsim: siitax
   us-mi:policies/income_tax/pilot_liability_pipeline#mi_pit_pilot_income_tax_liability:
     description: Michigan individual income tax liability (resident wage earner; the MCL 206.51(1) flat 4.25 per cent tax on Michigan taxable income = AGI less the section 206.30 personal exemptions)
     category: tax
@@ -2761,7 +2733,8 @@ concepts:
     description: Montana individual income tax liability (complete 2026 ordinary and net-long-term-capital-gain schedules)
     category: tax
     comparison: amount
-    tolerance: 1
+    tolerance: 0.01
+    relative_tolerance: 0.0000001
     priority: high
     locales: [US-MT]
     scope:
@@ -2990,6 +2963,7 @@ concepts:
     category: tax
     comparison: amount
     tolerance: 0.01
+    relative_tolerance: 0.0000001
     priority: high
     locales: [US-AR]
     scope: {type: country, geoid: US}
@@ -2998,20 +2972,19 @@ concepts:
         name: ar_pit_pilot_income_tax_before_non_refundable_credits_indiv
         scope: {type: country, geoid: US}
       policyengine: ar_income_tax_before_non_refundable_credits_indiv
-  us-ms:policies/income_tax/pilot_liability_pipeline#ms_pit_pilot_income_tax_liability:
-    description: Mississippi section 27-7-5 schedule tax before credits, after the lower separate-or-joint candidate comparison
+  us-ms:policies/income_tax/2026_section_27_7_5_schedule#ms_pit_2026_section_27_7_5_schedule_tax:
+    description: Mississippi tax-year-2026 section 27-7-5 Person-grain schedule tax on caller-completed taxable income
     category: tax
     comparison: amount
-    tolerance: 1
+    tolerance: 0.01
     priority: high
     locales: [US-MS]
     scope: {type: country, geoid: US}
     targets:
       axiom:
-        name: ms_pit_pilot_income_tax_liability
+        name: ms_pit_2026_section_27_7_5_schedule_tax
         scope: {type: country, geoid: US}
-      policyengine: ms_income_tax_before_credits_unit
-      taxsim: siitax
+      policyengine: ms_income_tax_before_credits_joint
   us-wv:policies/income_tax/pilot_liability_pipeline#wv_pit_pilot_income_tax_liability:
     description: West Virginia individual income tax liability (2026 section 11-21-4J ordinary resident wage-earner core)
     category: tax

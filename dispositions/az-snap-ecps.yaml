@@ -1,6 +1,6 @@
 schema: axiom_oracles.dispositions.v1
 suite: az-snap-ecps
-updated: '2026-07-27'
+updated: '2026-07-28'
 entries:
 - id: az-composition-missing-eligibility-module-eligibility
   concept: us:statutes/7/2014/o#snap_eligible
@@ -315,14 +315,21 @@ entries:
     - ecps-71335
   disposition: axiom_encoding_gap
   evidence:
-    mechanism: "The compiled us-az/snap/fy-2026 program's snap_eligible binds the\n\
-      derived rule na_budgetary_unit_is_eligible, whose defining module (us-\naz/policies/des/faa5/na-eligibility-and-benefit-determination)\
-      \ is not in\nthe composition's import set \u2014 so axiom-side eligibility\
-      \ evaluates\nconstant-false for every Arizona household, and every PE-eligible\n\
-      household mismatches one-directionally (income projection verified NOT\nthe\
-      \ cause: AZ-vocabulary income slots map and carry correct values).\nComposition\
-      \ wiring bug, rulespec-us#1116; every selected row carries the\nexact one-directional\
-      \ signature the bug predicts."
+    mechanism: |-
+      The compiled us-az/snap/fy-2026 program's snap_eligible binds
+      na_budgetary_unit_is_eligible as an input because its defining module
+      (us-az/policies/des/faa5/na-eligibility-and-benefit-determination) is
+      absent from the composition's import set. Axiom eligibility therefore
+      evaluates false for every Arizona household while every selected
+      PolicyEngine household is eligible. Income projection was separately
+      ruled out: Arizona-vocabulary income slots map and carry correct values.
+      Composition wiring bug, rulespec-us#1116.
+
+      Revalidated after requested-month regeneration with PolicyEngine
+      4.18.9 / US 1.767.3 / core 3.30.3. The compiled program still contains
+      na_budgetary_unit_is_eligible only as an input, and all 306 selected
+      eligibility rows retain the exact false/true signature. The selected
+      case set is unchanged from the annualized-period report.
   linked_issue: https://github.com/TheAxiomFoundation/rulespec-us/issues/1116
   expires_on_source_change: true
 - id: az-composition-missing-eligibility-module-benefit
@@ -623,13 +630,22 @@ entries:
     - ecps-71335
   disposition: axiom_encoding_gap
   evidence:
-    mechanism: "The compiled us-az/snap/fy-2026 program's snap_eligible binds the\n\
-      derived rule na_budgetary_unit_is_eligible, whose defining module (us-\naz/policies/des/faa5/na-eligibility-and-benefit-determination)\
-      \ is not in\nthe composition's import set \u2014 so axiom-side eligibility\
-      \ evaluates\nconstant-false for every Arizona household, and every PE-eligible\n\
-      household mismatches one-directionally (income projection verified NOT\nthe\
-      \ cause: AZ-vocabulary income slots map and carry correct values).\nComposition\
-      \ wiring bug, rulespec-us#1116; every selected row carries the\nexact one-directional\
-      \ signature the bug predicts."
+    mechanism: |-
+      The compiled us-az/snap/fy-2026 program's snap_eligible binds
+      na_budgetary_unit_is_eligible as an input because its defining module
+      (us-az/policies/des/faa5/na-eligibility-and-benefit-determination) is
+      absent from the composition's import set. Axiom eligibility therefore
+      evaluates false for every Arizona household while every selected
+      PolicyEngine household is eligible. Income projection was separately
+      ruled out: Arizona-vocabulary income slots map and carry correct values.
+      Composition wiring bug, rulespec-us#1116.
+
+      Revalidated after requested-month regeneration with PolicyEngine
+      4.18.9 / US 1.767.3 / core 3.30.3. All 291 selected amount rows retain
+      Axiom benefit 0, a positive PolicyEngine January benefit, and a paired
+      eligibility-right-only row from the same wiring defect. PolicyEngine
+      amounts now range from 23.84000015258789 to 1512.0999755859375; all 291
+      amounts moved from the annualized-period report, but no selected case
+      vanished and the causal signature is unchanged.
   linked_issue: https://github.com/TheAxiomFoundation/rulespec-us/issues/1116
   expires_on_source_change: true

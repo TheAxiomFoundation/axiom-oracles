@@ -9,7 +9,7 @@
   "right": "policyengine"
  },
  "mismatch_concepts": [
-  "us-ct:policies/income_tax/pilot_liability_pipeline#ct_pit_pilot_income_tax_liability"
+  "us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_resident_ordinary_tax_before_personal_credit"
  ],
  "source": "state-tax-populace-campaign"
 }

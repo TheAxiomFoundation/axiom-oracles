@@ -19,6 +19,15 @@ description: >-
   Populace US validation population.
 documentation: docs/federal-income-tax-comparison.md
 
+# Not CI-runnable: the axiom leg's engine-main compile of rulespec-us main is
+# blocked by rulespec-us#1049/#1050 (canonical-path root scan; removed plural
+# corpus_citation_paths), and the 2026-08-05 sweeps additionally saw the hosted
+# runner receive a shutdown signal minutes into the PolicyEngine outputs pass
+# in consecutive runs -- consistent with runner memory limits at sample_size 0.
+# Manual lane only; re-verify both before dropping this marker
+# (axiom-oracles#455 tracks the flip-back).
+ci: manual
+
 runner:
   type: axiom-encode-tax-ecps-compare
   axiom_encode_repo: $HOME/axiom-encode

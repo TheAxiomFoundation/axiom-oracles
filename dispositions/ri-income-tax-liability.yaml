@@ -1,100 +1,156 @@
 schema: axiom_oracles.dispositions.v1
 suite: ri-income-tax-liability
-updated: "2026-07-15"
+updated: '2026-07-27'
 entries:
-  - id: ri-pe-2026-uprating-single-30000
-    concept: us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability
-    case_id: ri-single-30000
-    kind: policyengine_amount_difference
-    disposition: axiom_encoding_gap
-    evidence:
-      mechanism: >-
-        The Axiom leg evaluates the fixtures' completed Rhode Island taxable income, which deducts $350 (single) / $700 (married) more than PolicyEngine's 2026-projected standard deduction plus exemption ($10,900 + $5,200 single); the residual is exactly that gap at each case's bracket rates. Rhode Island's official 2026 indexed amounts are not yet reflected by either side. Actionable upstream: regenerate the rulespec-us companion fixtures via the encoder once official 2026 amounts publish; not fixable in this repo.
-      arithmetic:
-        - expression: "521.25 - 508.125"
-          equals: 13.125
-          tolerance: 0.02
-    expires_on_source_change: true
-    pinned:
-      left: 508.125
-      right: 521.25
-  - id: ri-pe-2026-uprating-single-60000
-    concept: us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability
-    case_id: ri-single-60000
-    kind: policyengine_amount_difference
-    disposition: axiom_encoding_gap
-    evidence:
-      mechanism: >-
-        The Axiom leg evaluates the fixtures' completed Rhode Island taxable income, which deducts $350 (single) / $700 (married) more than PolicyEngine's 2026-projected standard deduction plus exemption ($10,900 + $5,200 single); the residual is exactly that gap at each case's bracket rates. Rhode Island's official 2026 indexed amounts are not yet reflected by either side. Actionable upstream: regenerate the rulespec-us companion fixtures via the encoder once official 2026 amounts publish; not fixable in this repo.
-      arithmetic:
-        - expression: "1646.25 - 1633.125"
-          equals: 13.125
-          tolerance: 0.02
-    expires_on_source_change: true
-    pinned:
-      left: 1633.125
-      right: 1646.25
-  - id: ri-pe-2026-uprating-single-150000
-    concept: us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability
-    case_id: ri-single-150000
-    kind: policyengine_amount_difference
-    disposition: axiom_encoding_gap
-    evidence:
-      mechanism: >-
-        The Axiom leg evaluates the fixtures' completed Rhode Island taxable income, which deducts $350 (single) / $700 (married) more than PolicyEngine's 2026-projected standard deduction plus exemption ($10,900 + $5,200 single); the residual is exactly that gap at each case's bracket rates. Rhode Island's official 2026 indexed amounts are not yet reflected by either side. Actionable upstream: regenerate the rulespec-us companion fixtures via the encoder once official 2026 amounts publish; not fixable in this repo.
-      arithmetic:
-        - expression: "5561.25 - 5523.125"
-          equals: 38.125
-          tolerance: 0.02
-    expires_on_source_change: true
-    pinned:
-      left: 5523.125
-      right: 5561.25
-  - id: ri-pe-2026-uprating-married-60000
-    concept: us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability
-    case_id: ri-married-60000
-    kind: policyengine_amount_difference
-    disposition: axiom_encoding_gap
-    evidence:
-      mechanism: >-
-        The Axiom leg evaluates the fixtures' completed Rhode Island taxable income, which deducts $350 (single) / $700 (married) more than PolicyEngine's 2026-projected standard deduction plus exemption ($10,900 + $5,200 single); the residual is exactly that gap at each case's bracket rates. Rhode Island's official 2026 indexed amounts are not yet reflected by either side. Actionable upstream: regenerate the rulespec-us companion fixtures via the encoder once official 2026 amounts publish; not fixable in this repo.
-      arithmetic:
-        - expression: "1042.5 - 1016.25"
-          equals: 26.25
-          tolerance: 0.02
-    expires_on_source_change: true
-    pinned:
-      left: 1016.25
-      right: 1042.5
-  - id: ri-pe-2026-uprating-married-120000
-    concept: us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability
-    case_id: ri-married-120000
-    kind: policyengine_amount_difference
-    disposition: axiom_encoding_gap
-    evidence:
-      mechanism: >-
-        The Axiom leg evaluates the fixtures' completed Rhode Island taxable income, which deducts $350 (single) / $700 (married) more than PolicyEngine's 2026-projected standard deduction plus exemption ($10,900 + $5,200 single); the residual is exactly that gap at each case's bracket rates. Rhode Island's official 2026 indexed amounts are not yet reflected by either side. Actionable upstream: regenerate the rulespec-us companion fixtures via the encoder once official 2026 amounts publish; not fixable in this repo.
-      arithmetic:
-        - expression: "3371.5 - 3316.75"
-          equals: 54.75
-          tolerance: 0.02
-    expires_on_source_change: true
-    pinned:
-      left: 3316.75
-      right: 3371.5
-  - id: ri-pe-2026-uprating-married-300000
-    concept: us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability
-    case_id: ri-married-300000
-    kind: policyengine_amount_difference
-    disposition: axiom_encoding_gap
-    evidence:
-      mechanism: >-
-        The Axiom leg evaluates the fixtures' completed Rhode Island taxable income, which deducts $350 (single) / $700 (married) more than PolicyEngine's 2026-projected standard deduction plus exemption ($10,900 + $5,200 single); the residual is exactly that gap at each case's bracket rates. Rhode Island's official 2026 indexed amounts are not yet reflected by either side. Actionable upstream: regenerate the rulespec-us companion fixtures via the encoder once official 2026 amounts publish; not fixable in this repo.
-      arithmetic:
-        - expression: "14918.5400390625 - 14837.52"
-          equals: 81.02
-          tolerance: 0.02
-    expires_on_source_change: true
-    pinned:
-      left: 14837.52
-      right: 14918.5400390625
+- id: ri-pe-2026-uprating-single-30000
+  concept: us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability
+  case_id: ri-single-30000
+  kind: policyengine_amount_difference
+  disposition: axiom_encoding_gap
+  evidence:
+    mechanism: 'The Axiom leg evaluates the fixtures'' completed Rhode Island taxable
+      income, which deducts $350 (single) / $700 (married) more than PolicyEngine''s
+      2026-projected standard deduction plus exemption ($10,900 + $5,200 single);
+      the residual is exactly that gap at each case''s bracket rates. Rhode Island''s
+      official 2026 indexed amounts are not yet reflected by either side. Actionable
+      upstream: regenerate the rulespec-us companion fixtures via the encoder once
+      official 2026 amounts publish; not fixable in this repo.'
+    arithmetic:
+    - expression: 521.25 - 508.125
+      equals: 13.125
+      tolerance: 0.02
+  expires_on_source_change: true
+  pinned:
+    left: 508.125
+    right: 521.25
+- id: ri-pe-2026-uprating-single-60000
+  concept: us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability
+  case_id: ri-single-60000
+  kind: policyengine_amount_difference
+  disposition: axiom_encoding_gap
+  evidence:
+    mechanism: 'The Axiom leg evaluates the fixtures'' completed Rhode Island taxable
+      income, which deducts $350 (single) / $700 (married) more than PolicyEngine''s
+      2026-projected standard deduction plus exemption ($10,900 + $5,200 single);
+      the residual is exactly that gap at each case''s bracket rates. Rhode Island''s
+      official 2026 indexed amounts are not yet reflected by either side. Actionable
+      upstream: regenerate the rulespec-us companion fixtures via the encoder once
+      official 2026 amounts publish; not fixable in this repo.'
+    arithmetic:
+    - expression: 1646.25 - 1633.125
+      equals: 13.125
+      tolerance: 0.02
+  expires_on_source_change: true
+  pinned:
+    left: 1633.125
+    right: 1646.25
+- id: ri-pe-2026-uprating-single-150000
+  concept: us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability
+  case_id: ri-single-150000
+  kind: policyengine_amount_difference
+  disposition: axiom_encoding_gap
+  evidence:
+    mechanism: 'The Axiom leg evaluates the fixtures'' completed Rhode Island taxable
+      income, which deducts $350 (single) / $700 (married) more than PolicyEngine''s
+      2026-projected standard deduction plus exemption ($10,900 + $5,200 single);
+      the residual is exactly that gap at each case''s bracket rates. Rhode Island''s
+      official 2026 indexed amounts are not yet reflected by either side. Actionable
+      upstream: regenerate the rulespec-us companion fixtures via the encoder once
+      official 2026 amounts publish; not fixable in this repo.'
+    arithmetic:
+    - expression: 5561.25 - 5523.125
+      equals: 38.125
+      tolerance: 0.02
+  expires_on_source_change: true
+  pinned:
+    left: 5523.125
+    right: 5561.25
+- id: ri-pe-2026-uprating-married-60000
+  concept: us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability
+  case_id: ri-married-60000
+  kind: policyengine_amount_difference
+  disposition: axiom_encoding_gap
+  evidence:
+    mechanism: 'The Axiom leg evaluates the fixtures'' completed Rhode Island taxable
+      income, which deducts $350 (single) / $700 (married) more than PolicyEngine''s
+      2026-projected standard deduction plus exemption ($10,900 + $5,200 single);
+      the residual is exactly that gap at each case''s bracket rates. Rhode Island''s
+      official 2026 indexed amounts are not yet reflected by either side. Actionable
+      upstream: regenerate the rulespec-us companion fixtures via the encoder once
+      official 2026 amounts publish; not fixable in this repo.'
+    arithmetic:
+    - expression: 1042.5 - 1016.25
+      equals: 26.25
+      tolerance: 0.02
+  expires_on_source_change: true
+  pinned:
+    left: 1016.25
+    right: 1042.5
+- id: ri-pe-2026-uprating-married-120000
+  concept: us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability
+  case_id: ri-married-120000
+  kind: policyengine_amount_difference
+  disposition: axiom_encoding_gap
+  evidence:
+    mechanism: 'The Axiom leg evaluates the fixtures'' completed Rhode Island taxable
+      income, which deducts $350 (single) / $700 (married) more than PolicyEngine''s
+      2026-projected standard deduction plus exemption ($10,900 + $5,200 single);
+      the residual is exactly that gap at each case''s bracket rates. Rhode Island''s
+      official 2026 indexed amounts are not yet reflected by either side. Actionable
+      upstream: regenerate the rulespec-us companion fixtures via the encoder once
+      official 2026 amounts publish; not fixable in this repo.'
+    arithmetic:
+    - expression: 3371.5 - 3316.75
+      equals: 54.75
+      tolerance: 0.02
+  expires_on_source_change: true
+  pinned:
+    left: 3316.75
+    right: 3371.5
+- id: ri-pe-2026-uprating-married-300000
+  concept: us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability
+  case_id: ri-married-300000
+  kind: policyengine_amount_difference
+  disposition: axiom_encoding_gap
+  evidence:
+    mechanism: 'The Axiom leg evaluates the fixtures'' completed Rhode Island taxable
+      income, which deducts $350 (single) / $700 (married) more than PolicyEngine''s
+      2026-projected standard deduction plus exemption ($10,900 + $5,200 single);
+      the residual is exactly that gap at each case''s bracket rates. Rhode Island''s
+      official 2026 indexed amounts are not yet reflected by either side. Actionable
+      upstream: regenerate the rulespec-us companion fixtures via the encoder once
+      official 2026 amounts publish; not fixable in this repo.'
+    arithmetic:
+    - expression: 14918.5400390625 - 14837.52
+      equals: 81.02
+      tolerance: 0.02
+  expires_on_source_change: true
+  pinned:
+    left: 14837.52
+    right: 14918.5400390625
+- id: ri-uprating-vintage-flat-deltas
+  concept: us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ri-single-30000
+    - ri-single-60000
+  disposition: explained_residual
+  evidence:
+    mechanism: "Parameter uprating vintage between the legs: the axiom program carries\n\
+      FY2026-uprated RI parameters while the oracle leg's parameter set holds\n\
+      the prior vintage, producing income-invariant flat deltas within each\nfiling\
+      \ band (the fingerprint: identical differences across the grid's\nincome levels\
+      \ \u2014 e.g. Washington's flat \\$163.92 equals the 7 percent\nrate times\
+      \ the \\$2,342 capital-gains standard-deduction vintage gap, PE\n278,000 vs\
+      \ axiom's uprated value). Favors the encoded 2026 truth;\nresolves when the\
+      \ oracle's parameters uprate."
+    arithmetic:
+    - expression: '-13.12'
+      equals: -13.12
+      tolerance: 0.05
+    - expression: '-4.61'
+      equals: -4.61
+      tolerance: 0.05
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/315
+  expires_on_source_change: true

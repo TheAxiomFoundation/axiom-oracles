@@ -26,10 +26,15 @@ A suite is selected when, for any affected repo:
 * the report has no provenance at all (never stamped → must run), or
 * the report ran against a null/unknown SHA for that repo (can't prove fresh
   → run), or
-* the recorded SHA differs from the repo's current HEAD (rules moved → run).
+* the recorded SHA differs from the repo's current HEAD (rules moved → run) —
+  unless the map entry pins that repo (``pinned: {repo: sha}``, emitted for
+  suites declaring ``rulespec_upstream_sha``): a pinned suite replays one
+  reviewed snapshot, so it is judged against the PIN instead and goes stale
+  only when the pin itself changes.
 
 A suite whose every affected repo's HEAD equals what its report already ran
-against is fresh and skipped. ``--force-all`` bypasses the staleness logic and
+against (or whose pin equals what it ran against, for pinned repos) is fresh
+and skipped. ``--force-all`` bypasses the staleness logic and
 selects every mapped entry (the workflow's force_all input) — the same
 validation, filtering, and dispatch rules apply, so the two workflow paths
 cannot drift.
@@ -139,8 +144,24 @@ def select(
                 }
             )
             continue
+        pinned = entry.get("pinned") or {}
         reasons: list[str] = []
         for repo in repos:
+            pin = pinned.get(repo)
+            if pin is not None:
+                # A pinned suite replays one reviewed snapshot; its report can
+                # only ever stamp the pinned SHA, so freshness is judged
+                # against the PIN, not the repo's moving HEAD. It goes stale
+                # exactly when the pin changes (a deliberate re-pin PR) or the
+                # report predates pin stamping.
+                recorded = ran_against.get(repo)
+                if recorded is None:
+                    reasons.append(f"{repo}: report ran against unknown SHA")
+                elif recorded != pin:
+                    reasons.append(
+                        f"{repo}: {recorded[:12]} → pin {pin[:12]}"
+                    )
+                continue
             head = heads.get(repo)
             if head is None:
                 # HEAD unknown (repo not queried) — cannot prove staleness, so

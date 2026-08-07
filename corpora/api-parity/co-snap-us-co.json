@@ -1,0 +1,253 @@
+{
+  "id": "co-snap-us-co-family-1",
+  "description": "Colorado SNAP canonical two-person household.",
+  "axiom_request": {
+    "program_id": "co-snap",
+    "jurisdiction": "us-co",
+    "household": {
+      "people": {
+        "person_1": {
+          "age": 42
+        },
+        "person_2": {
+          "age": 9
+        }
+      },
+      "spm_units": {
+        "unit_1": {
+          "household_size": 2,
+          "snap_gross_monthly_income": 1200,
+          "shelter_costs": 900
+        }
+      }
+    },
+    "variables": [
+      "snap_benefit_amount",
+      "snap_net_income"
+    ]
+  },
+  "expected_axiom_outputs": {
+    "snap_benefit_amount": 478,
+    "snap_net_income": 226
+  },
+  "trace_variables": [
+    "gross_income",
+    "snap_standard_deduction",
+    "snap_earned_income_deduction",
+    "snap_net_income_pre_shelter",
+    "snap_standard_utility_allowance",
+    "shelter_costs",
+    "excess_shelter_deduction",
+    "snap_net_income",
+    "snap_maximum_allotment",
+    "snap_household_food_contribution",
+    "snap_benefit_amount"
+  ],
+  "notes": [
+    "Canonical values are monthly. Convenience input shelter_costs is treated as total shelter costs for this Axiom case.",
+    "Utility allowance outputs are requested separately so client parity tools can identify whether another engine adds them by default.",
+    "The Colorado corpus-direct composition rounds the excess shelter deduction to whole dollars (floor(x + 0.5) in us:regulations/7-cfr/273/10#snap_excess_shelter_cost as composed for Colorado): excess shelter is 525 and net income 226. PolicyEngine keeps cents (524.5 / 226.5), so the external comparison shows a fifty-cent net-income delta by design; the rounding question is tracked in rulespec-us#1167."
+  ],
+  "external_comparisons": [
+    {
+      "id": "co-snap-policyengine-current",
+      "engine": "policyengine",
+      "description": "PolicyEngine current comparison for the Colorado SNAP canonical two-person household.",
+      "request": {
+        "country_id": "us",
+        "version": "current",
+        "household": {
+          "households": {
+            "household": {
+              "members": ["adult", "child"],
+              "state_code_str": {
+                "2026": "CO"
+              }
+            }
+          },
+          "people": {
+            "adult": {
+              "age": {
+                "2026": 42
+              },
+              "employment_income": {
+                "2026": 14400
+              }
+            },
+            "child": {
+              "age": {
+                "2026": 9
+              }
+            }
+          },
+          "spm_units": {
+            "spm_unit": {
+              "members": ["adult", "child"],
+              "snap": {
+                "2026": null
+              },
+              "snap_net_income": {
+                "2026": null
+              },
+              "snap_assets": {
+                "2026": 0
+              },
+              "housing_cost": {
+                "2026": 10800
+              },
+              "snap_standard_utility_allowance": {
+                "2026": null
+              },
+              "snap_utility_allowance": {
+                "2026": null
+              },
+              "snap_gross_income": {
+                "2026": null
+              },
+              "snap_standard_deduction": {
+                "2026": null
+              },
+              "snap_earned_income_deduction": {
+                "2026": null
+              },
+              "snap_net_income_pre_shelter": {
+                "2026": null
+              },
+              "snap_excess_shelter_expense_deduction": {
+                "2026": null
+              },
+              "snap_max_allotment": {
+                "2026": null
+              },
+              "snap_expected_contribution": {
+                "2026": null
+              }
+            }
+          },
+          "tax_units": {
+            "tax_unit": {
+              "members": ["adult", "child"]
+            }
+          }
+        }
+      },
+      "mappings": [
+        {
+          "axiom_variable": "snap_benefit_amount",
+          "external_path": "result.spm_units.spm_unit.snap.2026",
+          "transform": "annual_to_monthly"
+        },
+        {
+          "axiom_variable": "snap_net_income",
+          "external_path": "result.spm_units.spm_unit.snap_net_income.2026",
+          "transform": "annual_to_monthly"
+        }
+      ],
+      "trace_mappings": [
+        {
+          "label": "Gross income",
+          "axiom_variable": "gross_income",
+          "external_variable": "snap_gross_income",
+          "external_paths": ["result.spm_units.spm_unit.snap_gross_income.2026"],
+          "transform": "annual_to_monthly"
+        },
+        {
+          "label": "Standard deduction",
+          "axiom_variable": "snap_standard_deduction",
+          "external_variable": "snap_standard_deduction",
+          "external_paths": [
+            "result.spm_units.spm_unit.snap_standard_deduction.2026"
+          ],
+          "transform": "annual_to_monthly"
+        },
+        {
+          "label": "Earned income deduction",
+          "axiom_variable": "snap_earned_income_deduction",
+          "external_variable": "snap_earned_income_deduction",
+          "external_paths": [
+            "result.spm_units.spm_unit.snap_earned_income_deduction.2026"
+          ],
+          "transform": "annual_to_monthly"
+        },
+        {
+          "label": "Net income before shelter",
+          "axiom_variable": "snap_net_income_pre_shelter",
+          "external_variable": "snap_net_income_pre_shelter",
+          "external_paths": [
+            "result.spm_units.spm_unit.snap_net_income_pre_shelter.2026"
+          ],
+          "transform": "annual_to_monthly"
+        },
+        {
+          "label": "Utility allowance",
+          "axiom_variable": "snap_standard_utility_allowance",
+          "external_variable": "snap_utility_allowance",
+          "external_paths": [
+            "result.spm_units.spm_unit.snap_utility_allowance.2026"
+          ],
+          "transform": "annual_to_monthly"
+        },
+        {
+          "label": "Shelter costs used",
+          "axiom_variable": "shelter_costs",
+          "external_variable": "housing_cost + snap_utility_allowance",
+          "external_paths": [
+            "result.spm_units.spm_unit.housing_cost.2026",
+            "result.spm_units.spm_unit.snap_utility_allowance.2026"
+          ],
+          "transform": "annual_to_monthly_sum"
+        },
+        {
+          "label": "Excess shelter deduction",
+          "axiom_variable": "excess_shelter_deduction",
+          "external_variable": "snap_excess_shelter_expense_deduction",
+          "external_paths": [
+            "result.spm_units.spm_unit.snap_excess_shelter_expense_deduction.2026"
+          ],
+          "transform": "annual_to_monthly"
+        },
+        {
+          "label": "Net income",
+          "axiom_variable": "snap_net_income",
+          "external_variable": "snap_net_income",
+          "external_paths": ["result.spm_units.spm_unit.snap_net_income.2026"],
+          "transform": "annual_to_monthly"
+        },
+        {
+          "label": "Maximum allotment",
+          "axiom_variable": "snap_maximum_allotment",
+          "external_variable": "snap_max_allotment",
+          "external_paths": ["result.spm_units.spm_unit.snap_max_allotment.2026"],
+          "transform": "annual_to_monthly"
+        },
+        {
+          "label": "Expected contribution",
+          "axiom_variable": "snap_household_food_contribution",
+          "external_variable": "snap_expected_contribution",
+          "external_paths": [
+            "result.spm_units.spm_unit.snap_expected_contribution.2026"
+          ],
+          "transform": "annual_to_monthly"
+        },
+        {
+          "label": "Benefit amount",
+          "axiom_variable": "snap_benefit_amount",
+          "external_variable": "snap",
+          "external_paths": ["result.spm_units.spm_unit.snap.2026"],
+          "transform": "annual_to_monthly"
+        }
+      ],
+      "notes": [
+        "PolicyEngine employment_income is annual, so this request sends $14,400 to represent $1,200/month.",
+        "PolicyEngine housing_cost is annual in the 2026 request, so this request sends $10,800 to represent $900/month.",
+        "PolicyEngine current adds the Colorado SNAP utility allowance in this case; the Axiom canonical case treats shelter_costs as the total shelter input and has zero utility allowance outputs."
+      ],
+      "tolerance": {
+        "amount": 0.01
+      }
+    }
+  ],
+  "tolerance": {
+    "amount": 0.01
+  }
+}

@@ -6,7 +6,7 @@
    "comparison_count": 1632,
    "components": [],
    "concept": "us-al:policies/income_tax/2026_section_40_18_5_schedule_before_credits#al_pit_2026_section_40_18_5_schedule_before_credits",
-   "description": "Alabama Code section 40-18-5 schedule before nonrefundable credits over every routed tax unit in the pinned US Populace",
+   "description": "Alabama Code section 40-18-5 schedule before credits, computed from caller-supplied completed Alabama taxable income and the reviewed joint-or-surviving-spouse schedule classifier, over every routed tax unit in the pinned US Populace",
    "match_count": 1632,
    "match_rate": 100.0,
    "matched": 1632,
@@ -28,7 +28,8 @@
  "mismatches": [],
  "population": "populace-us",
  "provenance": {
-  "campaign_report": "state-tax-populace-campaign-al-2026-section-40-18-5.json",
+  "branch_diagnostics": null,
+  "campaign_report": "state-tax-populace-campaign-al-2026-07-27.json",
   "dataset_identity": {
    "built_with": "1.729.0",
    "country": "us",
@@ -37,8 +38,17 @@
    "sha256": "16be6338f9d0",
    "source": "pinned"
   },
+  "generated_at": "2026-07-27T08:20:36Z",
+  "generated_by": "scripts/emit_populace_campaign_artifacts.py::al-income-tax-populace",
   "max_absolute_difference": 0.20000000018626451,
   "relative_tolerance": 1e-07,
+  "rulespecs": [
+   {
+    "repo": "TheAxiomFoundation/rulespec-us",
+    "sha": "eb654b6d7a5ae7f48e6e1a5d0ca365dbdb0ee53c"
+   }
+  ],
+  "run_kind": "manual",
   "runtime_provenance": {
    "axiom_engine": {
     "commit": "ffd8213271947b0189a9dd61a055c1e0e78908a0",
@@ -51,11 +61,12 @@
     "policyengine-us": "1.752.2"
    },
    "rulespec": {
-    "commit": "1f9e440d5ad465c174aad4c6a2a9e1127cf66b76",
+    "commit": "eb654b6d7a5ae7f48e6e1a5d0ca365dbdb0ee53c",
     "repository": "TheAxiomFoundation/rulespec-us",
     "working_tree": "clean"
    }
   },
+  "schema": "axiom_oracles.provenance.v1",
   "tolerance": 0.01,
   "weighted_compared_tax_units": 2571800.23285324
  },

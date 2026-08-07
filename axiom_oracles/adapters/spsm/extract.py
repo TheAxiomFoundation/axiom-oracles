@@ -76,14 +76,24 @@ def _detect_values_start(lines: list[str]) -> int:
 
 
 def _parse_values(line: str, values_start: int) -> list[float] | None:
-    tail = line[values_start:]
+    # Values are whitespace-separated within the value region. Fixed-cell
+    # slicing is WRONG here: values wider than the 8-character cell
+    # (8-digit incomes — a real $11.6M ECPS filer) overflow leftward into
+    # the separator space, and slicing split "11670672" into 1167067 and
+    # 2, manufacturing mismatches out of perfect agreement. Back off one
+    # character so a one-column overflow stays inside the region, then
+    # split on whitespace.
+    start = values_start
+    # Extend left only across digit overflow (an 8-digit value's leading
+    # digit sits one column left of the cell boundary); never across the
+    # dot-padded description.
+    while start > 0 and line[start - 1 : start].isdigit():
+        start -= 1
+    tail = line[start:]
     if not tail.strip():
         return None
     values: list[float] = []
-    for offset in range(0, len(tail.rstrip()), _VALUE_CELL):
-        token = tail[offset : offset + _VALUE_CELL].strip()
-        if not token:
-            continue
+    for token in tail.split():
         try:
             values.append(float(token))
         except ValueError:

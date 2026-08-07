@@ -1,0 +1,91 @@
+{
+ "suite": "md-tca-payments",
+ "updated": "2026-07-30",
+ "entries": [
+  {
+   "id": "md-tca-im-26-13-hh1",
+   "concept": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@1",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "Maryland FIA Information Memo 26-13 (released 2026-03-04, effective 2026-01-01, supersedes IM 25-12) sets the Allowable TCA Monthly Payment for household size 1 at $348; the primary PDF was fetched and its FIP schedule table verified directly. Axiom encodes the IM 26-13 schedule ($348). PolicyEngine's gov/states/md/tca/maximum_benefit/main.yaml ends at the IM 25-12 schedule effective 2025-01-01 ($339 for size 1), so the 2026 comparison returns the superseded 2025 value. The gap is exactly the IM 26-13 increase for this household size. No PolicyEngine issue tracks the 2026 update yet.",
+   "cases": [
+    "md-tca-payments-allowable_tca_monthly_payment_by_household_size"
+   ],
+   "arithmetic": [
+    {
+     "expression": "348 - 339",
+     "equals": 9.0
+    }
+   ],
+   "linked_issue": "https://github.com/PolicyEngine/policyengine-us/issues/9181"
+  },
+  {
+   "id": "md-tca-im-26-13-hh3",
+   "concept": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@3",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "Maryland FIA IM 26-13 (effective 2026-01-01, verified against the primary PDF's FIP schedule) sets the size-3 Allowable TCA Monthly Payment at $773, which Axiom encodes. PolicyEngine's md/tca maximum_benefit table ends at the IM 25-12 value effective 2025-01-01 ($753), so it serves the superseded schedule for 2026. No PolicyEngine issue tracks the 2026 update yet.",
+   "cases": [
+    "md-tca-payments-allowable_tca_monthly_payment_by_household_size"
+   ],
+   "arithmetic": [
+    {
+     "expression": "773 - 753",
+     "equals": 20.0
+    }
+   ],
+   "linked_issue": "https://github.com/PolicyEngine/policyengine-us/issues/9181"
+  },
+  {
+   "id": "md-tca-im-26-13-hh6",
+   "concept": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@6",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "Maryland FIA IM 26-13 (effective 2026-01-01, verified against the primary PDF's FIP schedule) sets the size-6 Allowable TCA Monthly Payment at $1,180, which Axiom encodes. PolicyEngine's md/tca maximum_benefit table ends at the IM 25-12 value effective 2025-01-01 ($1,149), so it serves the superseded schedule for 2026. No PolicyEngine issue tracks the 2026 update yet.",
+   "cases": [
+    "md-tca-payments-allowable_tca_monthly_payment_by_household_size"
+   ],
+   "arithmetic": [
+    {
+     "expression": "1180 - 1149",
+     "equals": 31.0
+    }
+   ],
+   "linked_issue": "https://github.com/PolicyEngine/policyengine-us/issues/9181"
+  },
+  {
+   "id": "md-tca-im-26-13-hh10",
+   "concept": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@10",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "Maryland FIA IM 26-13 (effective 2026-01-01, verified against the primary PDF's FIP schedule) sets the size-10 Allowable TCA Monthly Payment at $1,701, which Axiom encodes. PolicyEngine's md/tca maximum_benefit table ends at the IM 25-12 value effective 2025-01-01 ($1,656), so it serves the superseded schedule for 2026. No PolicyEngine issue tracks the 2026 update yet.",
+   "cases": [
+    "md-tca-payments-allowable_tca_monthly_payment_by_household_size"
+   ],
+   "arithmetic": [
+    {
+     "expression": "1701 - 1656",
+     "equals": 45.0
+    }
+   ],
+   "linked_issue": "https://github.com/PolicyEngine/policyengine-us/issues/9181"
+  },
+  {
+   "id": "md-tca-im-26-13-hh21",
+   "concept": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@21",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "Maryland FIA IM 26-13 (effective 2026-01-01, verified against the primary PDF's FIP schedule) sets the size-21 Allowable TCA Monthly Payment at $3,269, which Axiom encodes. PolicyEngine's md/tca maximum_benefit table ends at the IM 25-12 value effective 2025-01-01 ($3,183), so it serves the superseded schedule for 2026. No PolicyEngine issue tracks the 2026 update yet.",
+   "cases": [
+    "md-tca-payments-allowable_tca_monthly_payment_by_household_size"
+   ],
+   "arithmetic": [
+    {
+     "expression": "3269 - 3183",
+     "equals": 86.0
+    }
+   ],
+   "linked_issue": "https://github.com/PolicyEngine/policyengine-us/issues/9181"
+  }
+ ]
+}

@@ -1,0 +1,543 @@
+{
+  "aggregates": [
+    {
+      "compared": 9,
+      "comparison": "judgment",
+      "comparison_count": 9,
+      "concept": "us:regulations/7-cfr/273/24#snap_member_abawd_exception_applies",
+      "left_positive_rate": 55.55555555555556,
+      "match_count": 8,
+      "match_rate": 88.88888888888889,
+      "matched": 8,
+      "mismatch_count": 1,
+      "mismatched": 1,
+      "right_positive_rate": 44.44444444444444
+    }
+  ],
+  "case_count": 9,
+  "cases": [
+    {
+      "axiom": false,
+      "axiom_diagnostics": {
+        "us:regulations/7-cfr/273/24#snap_member_abawd_time_limit_eligible": false,
+        "us:regulations/7-cfr/273/24#snap_member_abawd_time_limit_inapplicable": false,
+        "us:regulations/7-cfr/273/24#snap_member_work_requirement_eligible": false,
+        "us:regulations/7-cfr/273/24#snap_member_work_requirement_ineligible": true,
+        "us:regulations/7-cfr/273/7#snap_member_general_work_requirement_eligible": true
+      },
+      "case_id": "age_55_subject_to_time_limit_post_hr1",
+      "concept": "us:regulations/7-cfr/273/24#snap_member_abawd_exception_applies",
+      "description": "Age 55 is inside the post-P.L. 119-21 18-64 band; the FRA-era 55+ age exception no longer applies",
+      "inputs": {
+        "module_inputs": {
+          "member_abawd_monthly_work_hours": 0,
+          "member_abawd_weekly_work_hours": 0,
+          "member_age": 55,
+          "member_combines_work_and_work_program_20_hours_weekly": false,
+          "member_covered_by_abawd_time_limit_waiver": false,
+          "member_has_additional_three_month_abawd_eligibility": false,
+          "member_is_california_indian": false,
+          "member_is_indian_or_urban_indian": false,
+          "member_is_parent_or_household_member_responsible_for_dependent_child": false,
+          "member_is_pregnant": false,
+          "member_medically_certified_physically_or_mentally_unfit_for_employment": false,
+          "member_participates_in_abawd_work_program_20_hours_weekly": false,
+          "member_participates_in_abawd_workfare_program": false,
+          "member_regained_abawd_eligibility": false,
+          "member_youngest_dependent_child_age": 0,
+          "snap_abawd_countable_months_in_three_year_period": 4
+        },
+        "policyengine_only": {
+          "weekly_hours_worked_before_lsr": 0
+        },
+        "state_code": "TX"
+      },
+      "matched": true,
+      "mismatches": [],
+      "period": "2026-07",
+      "policyengine": false,
+      "policyengine_diagnostics": {
+        "is_in_snap_abawd_waived_area": false,
+        "is_snap_abawd_hr1_in_effect": true,
+        "meets_snap_general_work_requirements": false,
+        "meets_snap_work_requirements_person": false
+      }
+    },
+    {
+      "axiom": false,
+      "axiom_diagnostics": {
+        "us:regulations/7-cfr/273/24#snap_member_abawd_time_limit_eligible": false,
+        "us:regulations/7-cfr/273/24#snap_member_abawd_time_limit_inapplicable": false,
+        "us:regulations/7-cfr/273/7#snap_member_general_work_requirement_exempt": true,
+        "us:regulations/7-cfr/273/7#snap_member_statutory_work_registration_exemption_applies": false
+      },
+      "case_id": "age_64_subject_despite_general_work_exemption",
+      "concept": "us:regulations/7-cfr/273/24#snap_member_abawd_exception_applies",
+      "description": "Age 64 is ABAWD-subject although the 7 CFR 273.7(b)(1)(i) age-60 general work exemption holds; 2015(o)(3)(D) reaches only the statutory (d)(2) exemptions",
+      "inputs": {
+        "module_inputs": {
+          "member_abawd_monthly_work_hours": 0,
+          "member_abawd_weekly_work_hours": 0,
+          "member_age": 64,
+          "member_combines_work_and_work_program_20_hours_weekly": false,
+          "member_covered_by_abawd_time_limit_waiver": false,
+          "member_has_additional_three_month_abawd_eligibility": false,
+          "member_is_california_indian": false,
+          "member_is_indian_or_urban_indian": false,
+          "member_is_parent_or_household_member_responsible_for_dependent_child": false,
+          "member_is_pregnant": false,
+          "member_medically_certified_physically_or_mentally_unfit_for_employment": false,
+          "member_participates_in_abawd_work_program_20_hours_weekly": false,
+          "member_participates_in_abawd_workfare_program": false,
+          "member_regained_abawd_eligibility": false,
+          "member_youngest_dependent_child_age": 0,
+          "snap_abawd_countable_months_in_three_year_period": 4
+        },
+        "policyengine_only": {
+          "weekly_hours_worked_before_lsr": 0
+        },
+        "state_code": "TX"
+      },
+      "matched": true,
+      "mismatches": [],
+      "period": "2026-07",
+      "policyengine": false,
+      "policyengine_diagnostics": {
+        "is_in_snap_abawd_waived_area": false,
+        "is_snap_abawd_hr1_in_effect": true,
+        "meets_snap_general_work_requirements": true,
+        "meets_snap_work_requirements_person": false
+      }
+    },
+    {
+      "axiom": true,
+      "axiom_diagnostics": {
+        "us:regulations/7-cfr/273/24#snap_member_abawd_time_limit_eligible": true,
+        "us:regulations/7-cfr/273/24#snap_member_abawd_time_limit_inapplicable": true
+      },
+      "case_id": "age_65_excepted_under_usda_operational_reading",
+      "concept": "us:regulations/7-cfr/273/24#snap_member_abawd_exception_applies",
+      "description": "Age 65 is excepted under the USDA operational reading of 'under 18, or over 65' (FNS OBBBA ABAWD memorandum, 2025-10-03); the literal statutory wording is recorded in the module proof metadata",
+      "inputs": {
+        "module_inputs": {
+          "member_age": 65,
+          "member_covered_by_abawd_time_limit_waiver": false,
+          "member_is_california_indian": false,
+          "member_is_indian_or_urban_indian": false,
+          "member_is_parent_or_household_member_responsible_for_dependent_child": false,
+          "member_is_pregnant": false,
+          "member_medically_certified_physically_or_mentally_unfit_for_employment": false,
+          "member_youngest_dependent_child_age": 0
+        },
+        "policyengine_only": {
+          "weekly_hours_worked_before_lsr": 0
+        },
+        "state_code": "TX"
+      },
+      "matched": true,
+      "mismatches": [],
+      "period": "2026-07",
+      "policyengine": true,
+      "policyengine_diagnostics": {
+        "is_in_snap_abawd_waived_area": false,
+        "is_snap_abawd_hr1_in_effect": true,
+        "meets_snap_general_work_requirements": true,
+        "meets_snap_work_requirements_person": true
+      }
+    },
+    {
+      "axiom": true,
+      "axiom_diagnostics": {
+        "us:regulations/7-cfr/273/24#snap_member_abawd_time_limit_inapplicable": true
+      },
+      "case_id": "age_66_excepted_under_either_reading",
+      "concept": "us:regulations/7-cfr/273/24#snap_member_abawd_exception_applies",
+      "description": "Age 66 is excepted under either boundary reading",
+      "inputs": {
+        "module_inputs": {
+          "member_age": 66,
+          "member_covered_by_abawd_time_limit_waiver": false,
+          "member_is_california_indian": false,
+          "member_is_indian_or_urban_indian": false,
+          "member_is_parent_or_household_member_responsible_for_dependent_child": false,
+          "member_is_pregnant": false,
+          "member_medically_certified_physically_or_mentally_unfit_for_employment": false,
+          "member_youngest_dependent_child_age": 0
+        },
+        "policyengine_only": {
+          "weekly_hours_worked_before_lsr": 0
+        },
+        "state_code": "TX"
+      },
+      "matched": true,
+      "mismatches": [],
+      "period": "2026-07",
+      "policyengine": true,
+      "policyengine_diagnostics": {
+        "is_in_snap_abawd_waived_area": false,
+        "is_snap_abawd_hr1_in_effect": true,
+        "meets_snap_general_work_requirements": true,
+        "meets_snap_work_requirements_person": true
+      }
+    },
+    {
+      "axiom": false,
+      "axiom_diagnostics": {
+        "us:regulations/7-cfr/273/24#snap_member_abawd_time_limit_eligible": false,
+        "us:regulations/7-cfr/273/24#snap_member_abawd_time_limit_inapplicable": false
+      },
+      "case_id": "age_23_no_exception_post_hr1",
+      "concept": "us:regulations/7-cfr/273/24#snap_member_abawd_exception_applies",
+      "description": "Age 23 with former-foster history: the FRA former-foster-youth exception ended 2025-07-04.  The PolicyEngine leg sets was_in_foster_care TRUE to prove the retired input no longer flips the verdict; the Axiom module encodes the repeal by carrying no former-foster fact",
+      "inputs": {
+        "module_inputs": {
+          "member_abawd_monthly_work_hours": 0,
+          "member_abawd_weekly_work_hours": 0,
+          "member_age": 23,
+          "member_combines_work_and_work_program_20_hours_weekly": false,
+          "member_covered_by_abawd_time_limit_waiver": false,
+          "member_has_additional_three_month_abawd_eligibility": false,
+          "member_is_california_indian": false,
+          "member_is_indian_or_urban_indian": false,
+          "member_is_parent_or_household_member_responsible_for_dependent_child": false,
+          "member_is_pregnant": false,
+          "member_medically_certified_physically_or_mentally_unfit_for_employment": false,
+          "member_participates_in_abawd_work_program_20_hours_weekly": false,
+          "member_participates_in_abawd_workfare_program": false,
+          "member_regained_abawd_eligibility": false,
+          "member_youngest_dependent_child_age": 0,
+          "snap_abawd_countable_months_in_three_year_period": 4
+        },
+        "policyengine_only": {
+          "was_in_foster_care": true,
+          "weekly_hours_worked_before_lsr": 0
+        },
+        "state_code": "TX"
+      },
+      "matched": true,
+      "mismatches": [],
+      "period": "2026-07",
+      "policyengine": false,
+      "policyengine_diagnostics": {
+        "is_in_snap_abawd_waived_area": false,
+        "is_snap_abawd_hr1_in_effect": true,
+        "meets_snap_general_work_requirements": false,
+        "meets_snap_work_requirements_person": false
+      }
+    },
+    {
+      "axiom": true,
+      "axiom_diagnostics": {
+        "us:regulations/7-cfr/273/24#snap_member_abawd_time_limit_inapplicable": true
+      },
+      "case_id": "indian_or_urban_indian_excepted",
+      "concept": "us:regulations/7-cfr/273/24#snap_member_abawd_exception_applies",
+      "description": "Qualifying Indian or Urban Indian, 2015(o)(3)(F)",
+      "inputs": {
+        "module_inputs": {
+          "member_age": 40,
+          "member_covered_by_abawd_time_limit_waiver": false,
+          "member_is_california_indian": false,
+          "member_is_indian_or_urban_indian": true,
+          "member_is_parent_or_household_member_responsible_for_dependent_child": false,
+          "member_is_pregnant": false,
+          "member_medically_certified_physically_or_mentally_unfit_for_employment": false,
+          "member_youngest_dependent_child_age": 0
+        },
+        "policyengine_only": {
+          "is_snap_abawd_indian_exempt": true,
+          "weekly_hours_worked_before_lsr": 0
+        },
+        "state_code": "TX"
+      },
+      "matched": true,
+      "mismatches": [],
+      "period": "2026-07",
+      "policyengine": true,
+      "policyengine_diagnostics": {
+        "is_in_snap_abawd_waived_area": false,
+        "is_snap_abawd_hr1_in_effect": true,
+        "meets_snap_general_work_requirements": false,
+        "meets_snap_work_requirements_person": false
+      }
+    },
+    {
+      "axiom": true,
+      "axiom_diagnostics": {
+        "us:regulations/7-cfr/273/24#snap_member_abawd_time_limit_inapplicable": true
+      },
+      "case_id": "california_indian_excepted",
+      "concept": "us:regulations/7-cfr/273/24#snap_member_abawd_exception_applies",
+      "description": "California Indian, 2015(o)(3)(G); PolicyEngine folds (F) and (G) into the single is_snap_abawd_indian_exempt input",
+      "inputs": {
+        "module_inputs": {
+          "member_age": 40,
+          "member_covered_by_abawd_time_limit_waiver": false,
+          "member_is_california_indian": true,
+          "member_is_indian_or_urban_indian": false,
+          "member_is_parent_or_household_member_responsible_for_dependent_child": false,
+          "member_is_pregnant": false,
+          "member_medically_certified_physically_or_mentally_unfit_for_employment": false,
+          "member_youngest_dependent_child_age": 0
+        },
+        "policyengine_only": {
+          "is_snap_abawd_indian_exempt": true,
+          "weekly_hours_worked_before_lsr": 0
+        },
+        "state_code": "TX"
+      },
+      "matched": true,
+      "mismatches": [],
+      "period": "2026-07",
+      "policyengine": true,
+      "policyengine_diagnostics": {
+        "is_in_snap_abawd_waived_area": false,
+        "is_snap_abawd_hr1_in_effect": true,
+        "meets_snap_general_work_requirements": false,
+        "meets_snap_work_requirements_person": false
+      }
+    },
+    {
+      "axiom": true,
+      "axiom_diagnostics": {
+        "us:regulations/7-cfr/273/24#snap_member_abawd_responsible_for_dependent_child_under_fourteen": true,
+        "us:regulations/7-cfr/273/24#snap_member_abawd_time_limit_eligible": true,
+        "us:regulations/7-cfr/273/24#snap_member_abawd_time_limit_inapplicable": true
+      },
+      "case_id": "abawd_exception_applies_to_responsible_adult_with_child_under_fourteen",
+      "concept": "us:regulations/7-cfr/273/24#snap_member_abawd_exception_applies",
+      "description": "Responsibility for a dependent child aged 13 \u2014 under the 2015(o)(3)(C) age-14 boundary",
+      "inputs": {
+        "module_inputs": {
+          "member_age": 30,
+          "member_covered_by_abawd_time_limit_waiver": false,
+          "member_is_california_indian": false,
+          "member_is_indian_or_urban_indian": false,
+          "member_is_parent_or_household_member_responsible_for_dependent_child": true,
+          "member_is_pregnant": false,
+          "member_medically_certified_physically_or_mentally_unfit_for_employment": false,
+          "member_youngest_dependent_child_age": 13
+        },
+        "policyengine_only": {
+          "weekly_hours_worked_before_lsr": 0
+        },
+        "state_code": "TX"
+      },
+      "matched": false,
+      "mismatches": [
+        {
+          "case_id": "abawd_exception_applies_to_responsible_adult_with_child_under_fourteen",
+          "concept": "us:regulations/7-cfr/273/24#snap_member_abawd_exception_applies",
+          "engines": [
+            "axiom",
+            "policyengine"
+          ],
+          "kind": "judgment_difference",
+          "left": true,
+          "left_engine": "axiom",
+          "right": false,
+          "right_engine": "policyengine"
+        }
+      ],
+      "period": "2026-07",
+      "policyengine": false,
+      "policyengine_diagnostics": {
+        "is_in_snap_abawd_waived_area": false,
+        "is_snap_abawd_hr1_in_effect": true,
+        "meets_snap_general_work_requirements": false,
+        "meets_snap_work_requirements_person": false
+      }
+    },
+    {
+      "axiom": false,
+      "axiom_diagnostics": {
+        "us:regulations/7-cfr/273/24#snap_member_abawd_responsible_for_dependent_child_under_fourteen": false,
+        "us:regulations/7-cfr/273/24#snap_member_abawd_time_limit_eligible": false,
+        "us:regulations/7-cfr/273/24#snap_member_abawd_time_limit_inapplicable": false
+      },
+      "case_id": "abawd_no_exception_for_dependent_child_aged_fourteen",
+      "concept": "us:regulations/7-cfr/273/24#snap_member_abawd_exception_applies",
+      "description": "Responsibility for a dependent child aged 14 \u2014 at the 2015(o)(3)(C) boundary, no exception on that basis",
+      "inputs": {
+        "module_inputs": {
+          "member_abawd_monthly_work_hours": 0,
+          "member_abawd_weekly_work_hours": 0,
+          "member_age": 30,
+          "member_combines_work_and_work_program_20_hours_weekly": false,
+          "member_covered_by_abawd_time_limit_waiver": false,
+          "member_has_additional_three_month_abawd_eligibility": false,
+          "member_is_california_indian": false,
+          "member_is_indian_or_urban_indian": false,
+          "member_is_parent_or_household_member_responsible_for_dependent_child": true,
+          "member_is_pregnant": false,
+          "member_medically_certified_physically_or_mentally_unfit_for_employment": false,
+          "member_participates_in_abawd_work_program_20_hours_weekly": false,
+          "member_participates_in_abawd_workfare_program": false,
+          "member_regained_abawd_eligibility": false,
+          "member_youngest_dependent_child_age": 14,
+          "snap_abawd_countable_months_in_three_year_period": 4
+        },
+        "policyengine_only": {
+          "weekly_hours_worked_before_lsr": 0
+        },
+        "state_code": "TX"
+      },
+      "matched": true,
+      "mismatches": [],
+      "period": "2026-07",
+      "policyengine": false,
+      "policyengine_diagnostics": {
+        "is_in_snap_abawd_waived_area": false,
+        "is_snap_abawd_hr1_in_effect": true,
+        "meets_snap_general_work_requirements": false,
+        "meets_snap_work_requirements_person": false
+      }
+    }
+  ],
+  "concept": "us:regulations/7-cfr/273/24#snap_member_abawd_exception_applies",
+  "concepts": [
+    {
+      "category": "benefits",
+      "comparison": "judgment",
+      "components": [],
+      "description": "SNAP ABAWD post-P.L. 119-21 boundaries \u2014 Axiom vs PolicyEngine",
+      "id": "us:regulations/7-cfr/273/24#snap_member_abawd_exception_applies",
+      "parent": null,
+      "priority": "high"
+    }
+  ],
+  "engine_bindings": {
+    "axiom": {
+      "diagnostic_outputs": [
+        "us:regulations/7-cfr/273/24#snap_member_abawd_time_limit_inapplicable",
+        "us:regulations/7-cfr/273/24#snap_member_abawd_time_limit_eligible",
+        "us:regulations/7-cfr/273/24#snap_member_abawd_responsible_for_dependent_child_under_fourteen",
+        "us:regulations/7-cfr/273/24#snap_member_work_requirement_eligible",
+        "us:regulations/7-cfr/273/24#snap_member_work_requirement_ineligible",
+        "us:regulations/7-cfr/273/7#snap_member_general_work_requirement_eligible",
+        "us:regulations/7-cfr/273/7#snap_member_general_work_requirement_exempt",
+        "us:regulations/7-cfr/273/7#snap_member_statutory_work_registration_exemption_applies"
+      ],
+      "fixture": "us/regulations/7-cfr/273/24.test.yaml",
+      "module": "us:regulations/7-cfr/273/24",
+      "output": "us:regulations/7-cfr/273/24#snap_member_abawd_exception_applies",
+      "outputs": [
+        "us:regulations/7-cfr/273/24#snap_member_abawd_exception_applies"
+      ]
+    },
+    "policyengine": {
+      "boundary": "Person-level ABAWD composite at 2026-07; reduces to the 2015(o)(3) exception set under this grid's zero-work, months-exhausted, no-waiver construction (dependent-child exception handled upstream, see dispositions)",
+      "child_routing_probe": {
+        "child_13": {
+          "meets_snap_abawd_work_requirements": false,
+          "meets_snap_general_work_requirements": true,
+          "meets_snap_work_requirements_person": true
+        },
+        "child_14": {
+          "meets_snap_abawd_work_requirements": false,
+          "meets_snap_general_work_requirements": true,
+          "meets_snap_work_requirements_person": false
+        }
+      },
+      "diagnostic_outputs": [
+        "meets_snap_work_requirements_person",
+        "meets_snap_general_work_requirements",
+        "is_snap_abawd_hr1_in_effect",
+        "is_in_snap_abawd_waived_area"
+      ],
+      "outputs": [
+        "meets_snap_abawd_work_requirements"
+      ]
+    }
+  },
+  "engines": {
+    "left": "axiom",
+    "right": "policyengine",
+    "versions": {
+      "policyengine": "4.18.9",
+      "policyengine_core": "3.30.3",
+      "policyengine_us": "1.767.3"
+    }
+  },
+  "mismatches": [
+    {
+      "case_id": "abawd_exception_applies_to_responsible_adult_with_child_under_fourteen",
+      "concept": "us:regulations/7-cfr/273/24#snap_member_abawd_exception_applies",
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "dependent-child-exception-upstream-placement"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "judgment_difference",
+      "left": true,
+      "left_engine": "axiom",
+      "right": false,
+      "right_engine": "policyengine"
+    }
+  ],
+  "population": "case-grid",
+  "provenance": {
+    "engine": {},
+    "generated_at": "2026-08-06T04:14:44Z",
+    "generated_by": "scripts/run_comparison.py::us-snap-abawd-grid",
+    "oracle": {
+      "name": "policyengine",
+      "policyengine_core": "3.30.3",
+      "policyengine_package": "policyengine==4.18.9",
+      "policyengine_us": "1.767.3"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-us",
+        "sha": "ede07e9b820c7fc441b0c0787332e381e031074b"
+      }
+    ],
+    "run_kind": "affected-rerun",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "scenario_count": 9,
+  "schema_version": "axiom.comparison_report.v2.1",
+  "suite": "us-snap-abawd-grid",
+  "summary": {
+    "axiom_vs_policyengine_match_rate": 88.88888888888889,
+    "comparison_count": 9,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 1,
+        "unexplained": 0,
+        "upstream_engine_gap": 0
+      },
+      "dispositions_file": "dispositions/us-snap-abawd-grid.yaml",
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 88.888889,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": {},
+    "match_count": 8,
+    "mismatch_count": 1,
+    "mismatches_by_concept": [
+      {
+        "count": 1,
+        "value": "us:regulations/7-cfr/273/24#snap_member_abawd_exception_applies"
+      }
+    ],
+    "mismatches_by_kind": [
+      {
+        "count": 1,
+        "value": "judgment_difference"
+      }
+    ],
+    "mismatches_by_scenario": {}
+  },
+  "validation_period": "2026-07",
+  "validation_year": 2026
+}

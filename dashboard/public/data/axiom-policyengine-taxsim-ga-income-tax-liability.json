@@ -1,123 +1,19 @@
 {
   "case_count": 6,
-  "cases": [
-    {
-      "axiom": 748.5,
-      "axiom_vs_policyengine": {
-        "difference": 0.0,
-        "match": true
-      },
-      "axiom_vs_taxsim_2024": {
-        "difference": 28.299999999999955,
-        "match": false
-      },
-      "case_id": "ga-single-30000",
-      "concept": "us-ga:policies/income_tax/pilot_liability_pipeline#ga_pit_pilot_income_tax_liability",
-      "employment_income": 30000.0,
-      "filing_status": "single",
-      "policyengine": 748.5,
-      "taxsim_2024": 720.2
-    },
-    {
-      "axiom": 2245.5,
-      "axiom_vs_policyengine": {
-        "difference": 0.0,
-        "match": true
-      },
-      "axiom_vs_taxsim_2024": {
-        "difference": -91.69999999999982,
-        "match": false
-      },
-      "case_id": "ga-single-60000",
-      "concept": "us-ga:policies/income_tax/pilot_liability_pipeline#ga_pit_pilot_income_tax_liability",
-      "employment_income": 60000.0,
-      "filing_status": "single",
-      "policyengine": 2245.5,
-      "taxsim_2024": 2337.2
-    },
-    {
-      "axiom": 6736.5,
-      "axiom_vs_policyengine": {
-        "difference": 0.0,
-        "match": true
-      },
-      "axiom_vs_taxsim_2024": {
-        "difference": -451.6999999999998,
-        "match": false
-      },
-      "case_id": "ga-single-150000",
-      "concept": "us-ga:policies/income_tax/pilot_liability_pipeline#ga_pit_pilot_income_tax_liability",
-      "employment_income": 150000.0,
-      "filing_status": "single",
-      "policyengine": 6736.5,
-      "taxsim_2024": 7188.2
-    },
-    {
-      "axiom": 1497.0,
-      "axiom_vs_policyengine": {
-        "difference": 0.0,
-        "match": true
-      },
-      "axiom_vs_taxsim_2024": {
-        "difference": 56.59999999999991,
-        "match": false
-      },
-      "case_id": "ga-married-60000",
-      "concept": "us-ga:policies/income_tax/pilot_liability_pipeline#ga_pit_pilot_income_tax_liability",
-      "employment_income": 60000.0,
-      "filing_status": "married",
-      "policyengine": 1497.0,
-      "taxsim_2024": 1440.4
-    },
-    {
-      "axiom": 4491.0,
-      "axiom_vs_policyengine": {
-        "difference": 0.0,
-        "match": true
-      },
-      "axiom_vs_taxsim_2024": {
-        "difference": -183.39999999999964,
-        "match": false
-      },
-      "case_id": "ga-married-120000",
-      "concept": "us-ga:policies/income_tax/pilot_liability_pipeline#ga_pit_pilot_income_tax_liability",
-      "employment_income": 120000.0,
-      "filing_status": "married",
-      "policyengine": 4491.0,
-      "taxsim_2024": 4674.4
-    },
-    {
-      "axiom": 13473.0,
-      "axiom_vs_policyengine": {
-        "difference": 0.0,
-        "match": true
-      },
-      "axiom_vs_taxsim_2024": {
-        "difference": -903.3999999999996,
-        "match": false
-      },
-      "case_id": "ga-married-300000",
-      "concept": "us-ga:policies/income_tax/pilot_liability_pipeline#ga_pit_pilot_income_tax_liability",
-      "employment_income": 300000.0,
-      "filing_status": "married",
-      "policyengine": 13473.0,
-      "taxsim_2024": 14376.4
-    }
-  ],
-  "concept": "us-ga:policies/income_tax/pilot_liability_pipeline#ga_pit_pilot_income_tax_liability",
+  "concept": "us-ga:policies/income_tax/2026_annual_tax_before_nonrefundable_credits#ga_pit_2026_annual_tax_before_nonrefundable_credits",
   "engines": {
-    "axiom": "us-ga:policies/income_tax/pilot_liability_pipeline",
+    "axiom": "us-ga:policies/income_tax/2026_annual_tax_before_nonrefundable_credits",
     "policyengine": "ga_income_tax_before_non_refundable_credits",
     "taxsim": "siitax"
   },
   "mismatches": [
     {
       "case_id": "ga-single-30000",
-      "concept": "us-ga:policies/income_tax/pilot_liability_pipeline#ga_pit_pilot_income_tax_liability",
-      "difference": 28.299999999999955,
+      "concept": "us-ga:policies/income_tax/2026_annual_tax_before_nonrefundable_credits#ga_pit_2026_annual_tax_before_nonrefundable_credits",
+      "difference": -167.01,
       "disposition": {
         "disposition": "explained_residual",
-        "id": "ga-taxsim-2024-rate-and-deduction-vintage-single-30000"
+        "id": "ga-taxsim-2-30-0-2026-model-vintage-single-30000"
       },
       "engines": [
         "axiom",
@@ -126,16 +22,16 @@
       "kind": "amount_difference",
       "left": 748.5,
       "left_engine": "axiom",
-      "right": 720.2,
+      "right": 915.51,
       "right_engine": "taxsim"
     },
     {
       "case_id": "ga-single-60000",
-      "concept": "us-ga:policies/income_tax/pilot_liability_pipeline#ga_pit_pilot_income_tax_liability",
-      "difference": -91.69999999999982,
+      "concept": "us-ga:policies/income_tax/2026_annual_tax_before_nonrefundable_credits#ga_pit_2026_annual_tax_before_nonrefundable_credits",
+      "difference": -227.01000000000022,
       "disposition": {
         "disposition": "explained_residual",
-        "id": "ga-taxsim-2024-rate-and-deduction-vintage-single-60000"
+        "id": "ga-taxsim-2-30-0-2026-model-vintage-single-60000"
       },
       "engines": [
         "axiom",
@@ -144,16 +40,16 @@
       "kind": "amount_difference",
       "left": 2245.5,
       "left_engine": "axiom",
-      "right": 2337.2,
+      "right": 2472.51,
       "right_engine": "taxsim"
     },
     {
       "case_id": "ga-single-150000",
-      "concept": "us-ga:policies/income_tax/pilot_liability_pipeline#ga_pit_pilot_income_tax_liability",
-      "difference": -451.6999999999998,
+      "concept": "us-ga:policies/income_tax/2026_annual_tax_before_nonrefundable_credits#ga_pit_2026_annual_tax_before_nonrefundable_credits",
+      "difference": -407.0100000000002,
       "disposition": {
         "disposition": "explained_residual",
-        "id": "ga-taxsim-2024-rate-and-deduction-vintage-single-150000"
+        "id": "ga-taxsim-2-30-0-2026-model-vintage-single-150000"
       },
       "engines": [
         "axiom",
@@ -162,16 +58,16 @@
       "kind": "amount_difference",
       "left": 6736.5,
       "left_engine": "axiom",
-      "right": 7188.2,
+      "right": 7143.51,
       "right_engine": "taxsim"
     },
     {
       "case_id": "ga-married-60000",
-      "concept": "us-ga:policies/income_tax/pilot_liability_pipeline#ga_pit_pilot_income_tax_liability",
-      "difference": 56.59999999999991,
+      "concept": "us-ga:policies/income_tax/2026_annual_tax_before_nonrefundable_credits#ga_pit_2026_annual_tax_before_nonrefundable_credits",
+      "difference": -334.02,
       "disposition": {
         "disposition": "explained_residual",
-        "id": "ga-taxsim-2024-rate-and-deduction-vintage-married-60000"
+        "id": "ga-taxsim-2-30-0-2026-model-vintage-married-60000"
       },
       "engines": [
         "axiom",
@@ -180,16 +76,16 @@
       "kind": "amount_difference",
       "left": 1497.0,
       "left_engine": "axiom",
-      "right": 1440.4,
+      "right": 1831.02,
       "right_engine": "taxsim"
     },
     {
       "case_id": "ga-married-120000",
-      "concept": "us-ga:policies/income_tax/pilot_liability_pipeline#ga_pit_pilot_income_tax_liability",
-      "difference": -183.39999999999964,
+      "concept": "us-ga:policies/income_tax/2026_annual_tax_before_nonrefundable_credits#ga_pit_2026_annual_tax_before_nonrefundable_credits",
+      "difference": -454.02000000000044,
       "disposition": {
         "disposition": "explained_residual",
-        "id": "ga-taxsim-2024-rate-and-deduction-vintage-married-120000"
+        "id": "ga-taxsim-2-30-0-2026-model-vintage-married-120000"
       },
       "engines": [
         "axiom",
@@ -198,16 +94,16 @@
       "kind": "amount_difference",
       "left": 4491.0,
       "left_engine": "axiom",
-      "right": 4674.4,
+      "right": 4945.02,
       "right_engine": "taxsim"
     },
     {
       "case_id": "ga-married-300000",
-      "concept": "us-ga:policies/income_tax/pilot_liability_pipeline#ga_pit_pilot_income_tax_liability",
-      "difference": -903.3999999999996,
+      "concept": "us-ga:policies/income_tax/2026_annual_tax_before_nonrefundable_credits#ga_pit_2026_annual_tax_before_nonrefundable_credits",
+      "difference": -814.0200000000004,
       "disposition": {
         "disposition": "explained_residual",
-        "id": "ga-taxsim-2024-rate-and-deduction-vintage-married-300000"
+        "id": "ga-taxsim-2-30-0-2026-model-vintage-married-300000"
       },
       "engines": [
         "axiom",
@@ -216,29 +112,28 @@
       "kind": "amount_difference",
       "left": 13473.0,
       "left_engine": "axiom",
-      "right": 14376.4,
+      "right": 14287.02,
       "right_engine": "taxsim"
     }
   ],
   "population": "case-grid",
   "provenance": {
-    "engine": {},
-    "generated_at": "2026-07-26T19:44:24Z",
-    "generated_by": "scripts/run_comparison.py::ga-income-tax-liability",
+    "generated_at": "2026-07-27T04:43:09Z",
+    "generated_by": "scripts/generate_state_income_tax_liability.py::ga-income-tax-liability",
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": "44aeb361553ab0cf25d1de2a759acc759707c3ce"
+        "sha": "cd11c24d6536f0f8aa866650ea0987117df72cbc"
       }
     ],
-    "run_kind": "affected-rerun",
+    "run_kind": "manual",
     "schema": "axiom_oracles.provenance.v1"
   },
   "schema_version": "axiom.comparison_report.v2.1",
   "suite": "ga-income-tax-liability",
   "summary": {
     "axiom_vs_policyengine_match_rate": 100.0,
-    "axiom_vs_taxsim_2024_match_rate": 0.0,
+    "axiom_vs_taxsim_match_rate": 0.0,
     "comparison_count": 12,
     "dispositioned": {
       "counts": {
@@ -259,12 +154,116 @@
     "match_count": 6,
     "mismatch_count": 6,
     "policyengine_matches": 6,
-    "taxsim_2024_matches": 0
+    "taxsim_matches": 0
   },
-  "taxsim_law_year": 2024,
+  "taxsim_law_year": 2026,
   "tolerance": {
     "absolute": 1.0,
     "relative": 0.0
   },
-  "validation_year": 2026
+  "validation_year": 2026,
+  "cases": [
+    {
+      "axiom": 748.5,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "axiom_vs_taxsim": {
+        "difference": -167.01,
+        "match": false
+      },
+      "case_id": "ga-single-30000",
+      "concept": "us-ga:policies/income_tax/2026_annual_tax_before_nonrefundable_credits#ga_pit_2026_annual_tax_before_nonrefundable_credits",
+      "employment_income": 30000.0,
+      "filing_status": "single",
+      "policyengine": 748.5,
+      "taxsim": 915.51
+    },
+    {
+      "axiom": 2245.5,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "axiom_vs_taxsim": {
+        "difference": -227.01000000000022,
+        "match": false
+      },
+      "case_id": "ga-single-60000",
+      "concept": "us-ga:policies/income_tax/2026_annual_tax_before_nonrefundable_credits#ga_pit_2026_annual_tax_before_nonrefundable_credits",
+      "employment_income": 60000.0,
+      "filing_status": "single",
+      "policyengine": 2245.5,
+      "taxsim": 2472.51
+    },
+    {
+      "axiom": 6736.5,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "axiom_vs_taxsim": {
+        "difference": -407.0100000000002,
+        "match": false
+      },
+      "case_id": "ga-single-150000",
+      "concept": "us-ga:policies/income_tax/2026_annual_tax_before_nonrefundable_credits#ga_pit_2026_annual_tax_before_nonrefundable_credits",
+      "employment_income": 150000.0,
+      "filing_status": "single",
+      "policyengine": 6736.5,
+      "taxsim": 7143.51
+    },
+    {
+      "axiom": 1497.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "axiom_vs_taxsim": {
+        "difference": -334.02,
+        "match": false
+      },
+      "case_id": "ga-married-60000",
+      "concept": "us-ga:policies/income_tax/2026_annual_tax_before_nonrefundable_credits#ga_pit_2026_annual_tax_before_nonrefundable_credits",
+      "employment_income": 60000.0,
+      "filing_status": "married",
+      "policyengine": 1497.0,
+      "taxsim": 1831.02
+    },
+    {
+      "axiom": 4491.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "axiom_vs_taxsim": {
+        "difference": -454.02000000000044,
+        "match": false
+      },
+      "case_id": "ga-married-120000",
+      "concept": "us-ga:policies/income_tax/2026_annual_tax_before_nonrefundable_credits#ga_pit_2026_annual_tax_before_nonrefundable_credits",
+      "employment_income": 120000.0,
+      "filing_status": "married",
+      "policyengine": 4491.0,
+      "taxsim": 4945.02
+    },
+    {
+      "axiom": 13473.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "axiom_vs_taxsim": {
+        "difference": -814.0200000000004,
+        "match": false
+      },
+      "case_id": "ga-married-300000",
+      "concept": "us-ga:policies/income_tax/2026_annual_tax_before_nonrefundable_credits#ga_pit_2026_annual_tax_before_nonrefundable_credits",
+      "employment_income": 300000.0,
+      "filing_status": "married",
+      "policyengine": 13473.0,
+      "taxsim": 14287.02
+    }
+  ]
 }

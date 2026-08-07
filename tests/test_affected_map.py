@@ -134,6 +134,54 @@ def test_build_map_is_deterministic_and_check_passes():
     assert committed == first + "\n"
 
 
+def test_campaign_projection_suite_is_manual_and_rulespec_affected():
+    gam = _load("generate_affected_map.py")
+    entries = gam.campaign_projection_suite_entries(
+        {
+            "rulespec_repos": ["TheAxiomFoundation/rulespec-us"],
+            "suites": [
+                {
+                    "suite": "ct-income-tax-populace",
+                    "report": "axiom-policyengine-ct-income-tax-populace.json",
+                },
+                {
+                    "suite": "ga-income-tax-populace",
+                    "report": "axiom-policyengine-ga-income-tax-populace.json",
+                },
+                {
+                    "suite": "ms-income-tax-populace",
+                    "report": "axiom-policyengine-ms-income-tax-populace.json",
+                }
+            ],
+        },
+        Path("state-income-tax-populace.yaml"),
+    )
+
+    assert entries == [
+        {
+            "suite": "ct-income-tax-populace",
+            "name": None,
+            "report": "axiom-policyengine-ct-income-tax-populace.json",
+            "repos": ["TheAxiomFoundation/rulespec-us"],
+            "source": "comparisons/state-income-tax-populace.yaml",
+        },
+        {
+            "suite": "ga-income-tax-populace",
+            "name": None,
+            "report": "axiom-policyengine-ga-income-tax-populace.json",
+            "repos": ["TheAxiomFoundation/rulespec-us"],
+            "source": "comparisons/state-income-tax-populace.yaml",
+        },
+        {
+            "suite": "ms-income-tax-populace",
+            "name": None,
+            "report": "axiom-policyengine-ms-income-tax-populace.json",
+            "repos": ["TheAxiomFoundation/rulespec-us"],
+            "source": "comparisons/state-income-tax-populace.yaml",
+        },
+    ]
+
+
 def test_check_detects_drift(tmp_path, monkeypatch, capsys):
     """NEGATIVE: a stale committed map makes --check fail."""
     gam = _load("generate_affected_map.py")
@@ -326,7 +374,9 @@ def test_github_format_emits_output_lines(monkeypatch, capsys):
     present."""
     sel = _load("select_affected_suites.py")
     monkeypatch.setattr(
-        sel.sys, "argv", ["select_affected_suites.py", "--force-all", "--format", "github"]
+        sel.sys,
+        "argv",
+        ["select_affected_suites.py", "--force-all", "--format", "github"],
     )
     assert sel.main() == 0
     out = capsys.readouterr().out.splitlines()
@@ -379,17 +429,22 @@ def test_every_runnable_map_name_resolves_in_the_registry():
 
 
 def test_ci_manual_registry_suite_emits_null_name():
-    """A registry suite declaring `ci: manual` (or/ut SNAP — the encoder's
-    snap-populace-compare has no jurisdiction config for them, #296) must be
-    routed to the manual lane exactly like a parameter suite: `name: null`,
-    excluded from both the 6-hourly rerun matrix and the weekly matrix."""
+    """A registry suite declaring `ci: manual` must be routed to the manual
+    lane exactly like a parameter suite: `name: null`, excluded from both the
+    6-hourly rerun matrix and the weekly matrix. or/ut SNAP carry the marker
+    for a missing encoder jurisdiction config (#296/#336); the engine-main ×
+    rulespec-us-main suites carry it while the upstream chain is broken
+    (#455)."""
     gen = _load("generate_affected_map.py")
     entries = {e["suite"]: e for e in gen.build_map()["suites"]}
     assert entries["or-snap-ecps"]["name"] is None
     assert entries["ut-snap-ecps"]["name"] is None
-    # The sibling supported-jurisdiction suites stay dispatchable.
-    assert entries["az-snap-ecps"]["name"] == "az-snap-ecps"
-    assert entries["co-snap-ecps"]["name"] == "co-snap-ecps"
+    # The engine-main × rulespec-us-main suites are manual until the #455
+    # upstream chain lands.
+    assert entries["az-snap-ecps"]["name"] is None
+    assert entries["co-snap-ecps"]["name"] is None
+    # A dispatchable registry suite keeps its name (UK lane, unaffected).
+    assert entries["uk-benefit-cap"]["name"] == "uk-benefit-cap-ukmod"
 
 
 def test_direct_oracle_pair_suites_carry_no_rulespec_dependency():
@@ -401,4 +456,102 @@ def test_direct_oracle_pair_suites_carry_no_rulespec_dependency():
     entries = {e["suite"]: e for e in gen.build_map()["suites"]}
     assert entries["taxcalc-fiit-ecps"]["repos"] == []
     # An axiom-sided compare over the same concept space keeps its mapping.
-    assert "TheAxiomFoundation/rulespec-us" in entries["co-state-income-tax-taxsim"]["repos"]
+    assert (
+        "TheAxiomFoundation/rulespec-us"
+        in entries["co-state-income-tax-taxsim"]["repos"]
+    )
+
+
+# --- pinned-suite freshness (#455 lane: pinned grids vs moving HEAD) ---------
+
+
+def test_pinned_repos_for_registry_config():
+    gen = _load("generate_affected_map.py")
+    config = {
+        "name": "us-x-grid",
+        "runner": {
+            "type": "federal-tax-liability-grid",
+            "parameters": {
+                "rulespec_remote": (
+                    "https://github.com/TheAxiomFoundation/rulespec-us.git"
+                ),
+                "rulespec_roots": ["$HOME/TheAxiomFoundation/rulespec-us"],
+                "rulespec_upstream_sha": "c" * 40,
+                "rulespec_upstream_tree": "d" * 40,
+            },
+        },
+    }
+    assert gen.pinned_repos_for_registry_config(config) == {
+        "TheAxiomFoundation/rulespec-us": "c" * 40
+    }
+    config["runner"]["parameters"].pop("rulespec_upstream_sha")
+    assert gen.pinned_repos_for_registry_config(config) == {}
+
+
+def test_pinned_repos_ambiguity_fails_loudly():
+    gen = _load("generate_affected_map.py")
+    config = {
+        "name": "bad",
+        "runner": {
+            "parameters": {
+                "rulespec_upstream_sha": "c" * 40,
+                "rulespec_roots": ["$HOME/rulespec-us", "$HOME/rulespec-uk"],
+            }
+        },
+    }
+    with pytest.raises(SystemExit):
+        gen.pinned_repos_for_registry_config(config)
+
+
+def test_selector_pinned_repo_judged_against_pin_not_head():
+    """A pinned grid's report stamps the pin; HEAD movement must not select it."""
+    sel = _load("select_affected_suites.py")
+    aff = {
+        "suites": [
+            {
+                "suite": "s1",
+                "name": "s1",
+                "repos": ["owner/rulespec-us"],
+                "pinned": {"owner/rulespec-us": "ppp"},
+            }
+        ]
+    }
+    heads = {"owner/rulespec-us": "bbb"}  # main moved past the pin
+    reports = {"s1": _report("s1", [{"repo": "owner/rulespec-us", "sha": "ppp"}])}
+    assert sel.select(aff, heads, reports) == []
+
+
+def test_selector_pinned_repo_stale_when_pin_changes():
+    """A deliberate re-pin PR is exactly what makes a pinned suite stale."""
+    sel = _load("select_affected_suites.py")
+    aff = {
+        "suites": [
+            {
+                "suite": "s1",
+                "name": "s1",
+                "repos": ["owner/rulespec-us"],
+                "pinned": {"owner/rulespec-us": "qqq"},
+            }
+        ]
+    }
+    heads = {"owner/rulespec-us": "qqq"}
+    reports = {"s1": _report("s1", [{"repo": "owner/rulespec-us", "sha": "ppp"}])}
+    selected = sel.select(aff, heads, reports)
+    assert [s["suite"] for s in selected] == ["s1"]
+    assert "pin" in selected[0]["reason"]
+
+
+def test_selector_pinned_repo_unknown_sha_still_selected():
+    sel = _load("select_affected_suites.py")
+    aff = {
+        "suites": [
+            {
+                "suite": "s1",
+                "name": "s1",
+                "repos": ["owner/rulespec-us"],
+                "pinned": {"owner/rulespec-us": "qqq"},
+            }
+        ]
+    }
+    reports = {"s1": _report("s1", [{"repo": "owner/rulespec-us", "sha": None}])}
+    assert [s["suite"] for s in sel.select(aff, {}, reports)] == ["s1"]

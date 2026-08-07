@@ -80,7 +80,7 @@ policies:
     in_scope: true
     suite: al-tanf-ecps
     note: Covered by al-tanf-ecps — Alabama Family Assistance (al_tanf) vs PE-2026 at population scale
-      (1444/1444 match, 0 unexplained).
+      after requested-month regeneration (1441/1444 match, 3 unexplained).
   - id: us-pe:alternative_minimum_tax
     oracle_policy_name: alternative_minimum_tax
     oracle_policy_type: rules
@@ -236,9 +236,11 @@ policies:
       - ct_income_tax
     in_scope: true
     suite: null
-    note: The ct-income-tax-liability grid and full-Populace campaign validate only ct_income_tax_before_refundable_credits.
-      Final ct_income_tax additionally subtracts refundable ct_eitc; 90 of 951 routed units differ from
-      the narrow target.
+    note: The ct-income-tax-populace campaign validates only the canonical full-year-resident
+      ordinary section 12-700 tax before the personal credit, recovered exactly from
+      ct_income_tax_after_personal_credits and ct_personal_credit_rate. It does not claim
+      the personal credit, alternative minimum tax, property-tax or stillborn credits,
+      refundable ct_eitc, payments, refunds, or final ct_income_tax.
   - id: us-pe:ct_tfa
     oracle_policy_name: ct_tfa
     oracle_policy_type: rules
@@ -278,9 +280,12 @@ policies:
       - de_income_tax
     in_scope: true
     suite: null
-    note: The de-income-tax-liability grid and full-Populace campaign validate only de_income_tax_before_non_refundable_credits_unit.
-      Final de_income_tax also applies personal, aged-personal, child-care, nonrefundable-EITC, and refundable-EITC
-      credits; 839 of 936 routed units differ from the narrow target.
+    note: The state-tax Populace campaign validates only the narrower Delaware section 1102(a)(14)
+      individual schedule component de_income_tax_before_non_refundable_credits_indv at Person grain
+      and sums both sides to TaxUnit only for accounting. It does not validate filing-method selection,
+      combined-return computation, personal, aged-personal, child-care, nonrefundable-EITC, or
+      refundable-EITC credits, payments, or final de_income_tax. The stale six-case broad-liability
+      grid has been retired.
   - id: us-pe:de_tanf
     oracle_policy_name: de_tanf
     oracle_policy_type: rules
@@ -574,7 +579,23 @@ policies:
     output_vars:
       - itemized_taxable_income_deductions
     in_scope: true
-    suite: null
+    suite: us-itemized-taxable-income-deductions-grid
+    note: >-
+      The us-itemized-taxable-income-deductions-grid suite compares 17
+      engine-verified 2026 RuleSpec companion cases (16 nonzero) across all
+      five filing statuses with PE-US 1.767.3 under PolicyEngine 4.18.9 and
+      Core 3.30.3. It binds the same six completed post-entitlement,
+      post-limitation components and keeps the completed lawful
+      taxable-income-without-section-68 scalar RuleSpec-only because PE derives
+      a non-equivalent AGI-minus-exemptions proxy. This aggregate-only boundary
+      does not certify component entitlement, substantiation, components
+      outside PE's six-item inventory, miscellaneous deductions above zero, or
+      the section 63(e) itemization election. The section 68 wrong-base and
+      truncated-rate cases remain visible as source divergences carried only
+      by evidence-backed per-case dispositions; their upstream issues
+      are itemized-68-other-deduction-base=policyengine-us#9170 and
+      itemized-68-rational-rate=policyengine-us#9171. Suite coverage does not assert
+      raw equality on those cases.
   - id: us-pe:ks_income_tax
     oracle_policy_name: ks_income_tax
     oracle_policy_type: rules
@@ -761,9 +782,10 @@ policies:
     in_scope: true
     suite: null
     note: Broad final ms_income_tax remains uncovered. The ms-income-tax-liability artifact and state-tax
-      Populace campaign validate only the narrower section 27-7-5 schedule-before-credits surface against
-      PolicyEngine ms_income_tax_before_credits_unit; they do not encode or validate every credit needed
-      for final Mississippi liability.
+      Populace campaign validate only the narrower Person-grain section 27-7-5 schedule-before-credits
+      surface against PolicyEngine ms_income_tax_before_credits_joint, summed to TaxUnit only for
+      comparison. They do not choose a filing method or encode every credit needed for final Mississippi
+      liability.
   - id: us-pe:ms_tanf
     oracle_policy_name: ms_tanf
     oracle_policy_type: rules
@@ -1080,26 +1102,47 @@ policies:
     output_vars:
       - salt_deduction
     in_scope: true
-    suite: null
+    suite: us-salt-deduction-grid
+    note: >-
+      The us-salt-deduction-grid suite compares 16 nonzero, engine-verified
+      2026 RuleSpec companion cases across all five filing statuses with PE-US
+      1.767.3 under PolicyEngine 4.18.9 and Core 3.30.3. It binds completed
+      elected personal income-or-sales tax and real-estate tax directly and
+      bridges the guarded section 911 amount to PE-US
+      foreign_earned_income_exclusion. The completed-return boundary excludes
+      business and section 212 taxes, acquisition-capitalized taxes, refunds,
+      nondeductible taxes, state-liability synthesis, and any unlisted
+      section 911 individual; personal-property tax remains RuleSpec-only.
+      The low-AGI simulation ceiling, omitted personal-property-tax source,
+      and AGI-instead-of-statutory-MAGI cases remain visible as source
+      divergences carried only by evidence-backed per-case dispositions.
+      Their upstream issues are
+      salt-low-agi-engine-cap=policyengine-us#9167,
+      salt-magi-911-addback=policyengine-us#9168, and
+      salt-personal-property-tax-probe=policyengine-us#9169. Suite coverage does not
+      assert raw equality on those cases.
   - id: us-pe:savers_credit
     oracle_policy_name: savers_credit
     oracle_policy_type: rules
     output_vars:
       - savers_credit
     in_scope: true
-    suite: null
+    suite: us-savers-grid
     note: >-
-      Coverage withdrawn because the Saver's Credit pipeline and companion
-      fixture were split out of rulespec-us PR #1004 and are absent from
-      canonical main. Reinstatement is pending the Notice 2025-67 corpus chain
-      tracked at https://github.com/TheAxiomFoundation/axiom-corpus/issues/506.
-      Historical boundary evidence, not live coverage, is preserved at
+      The us-savers-grid suite compares Axiom's pre-section-26 section 25B
+      amount with its reviewed direct PE-US target, savers_credit_potential, on
+      34 fixture-bound tax-year-2026 cases. It does not compare PE's
+      liability-limited public credit. The grid covers all five filing
+      statuses, every exact Notice 2025-67 tier ceiling plus B-1 and B+1,
+      per-person contribution caps, the section 25B(e) section 911 add-back,
+      and the age/student/dependent screens. The raw report is 23/34. All 11
+      differences remain the exact-ceiling cases explained by
       https://github.com/PolicyEngine/policyengine-us/issues/9151: PE-US
-      1.767.3 stores Notice 2025-67's correct 2026 tier values, but PolicyEngine
-      Core 3.30.3's right-exclusive scale digitization treats the published
-      $24,250 single-filer inclusive 50% maximum as the 20% tier's lower bound.
-      At $24,250 AGI and $2,000 contributions, the statutory amount is
-      $2,000 * 50% = $1,000 while PE returns $2,000 * 20% = $400.
+      1.767.3 carries the correct values, but Core 3.30.3 digitizes equality
+      into the next tier despite section 25B(b)'s inclusive ceilings. The
+      dispositioned report is 100% explained. The section 911 case's observed
+      match is cancellation between PE's omitted add-back and #9151, not
+      evidence of add-back parity.
   - id: us-pe:sc_income_tax
     oracle_policy_name: sc_income_tax
     oracle_policy_type: rules
@@ -1143,10 +1186,18 @@ policies:
     in_scope: true
     suite: ca-snap-ecps
     note: SNAP is one national PE-US variable (snap). Covered by ca-snap-ecps, the largest of 11 state-scoped
-      SNAP suites validating the same snap surface vs PE-2026 (CA/AZ/CO/NY/OR/UT match to the cent; AL/MA/NC/SC/TN
-      carry residuals 79/404/118/206/89 not yet dispositioned). The row registers the canonical largest-population
-      suite; the other ten corroborate and their residuals are tracked for disposition — the scoreboard
-      scores one suite per row, not silently dropped.
+      SNAP suites validating the same snap surface vs PE-2026. The ten month-scoped suites regenerated on
+      PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3 retain AL/AZ/CA/FL/GA/MA/NC/NY/SC/TN
+      unexplained counts of 40/0/241/774/75/92/49/240/110/43 after evidence-backed dispositions. For CA,
+      PUB 275 issuance or online access is a household administrative fact absent from Enhanced CPS; both
+      facts remain unmapped, and neither the population encode nor the oracle assumes them, leaving 157
+      bridge-attributed residual rows. Resolving them requires a population source carrying household PUB
+      275 issuance/access or PolicyEngine modeling the same household gate. PolicyEngine-US issues
+      https://github.com/PolicyEngine/policyengine-us/issues/9175 and
+      https://github.com/PolicyEngine/policyengine-us/issues/9176 remain independently verified divergences
+      on the pinned stack, but the corrected bridge cannot currently expose them because the household MCE
+      gate is unobserved. The row registers the canonical largest-population suite; the other ten corroborate
+      and their residuals remain tracked — the scoreboard scores one suite per row, not silently dropped.
   - id: us-pe:social_security
     oracle_policy_name: social_security
     oracle_policy_type: rules
@@ -1179,8 +1230,8 @@ policies:
       - ssi
     in_scope: true
     suite: ssi-ecps
-    note: Covered by ssi-ecps — SSI benefit (42 USC 1382) vs PE-2026 at population scale; residuals undispositioned
-      (counted unexplained).
+    note: Covered by ssi-ecps — SSI benefit (42 USC 1382) vs PE-2026 at population scale; all 2,990
+      requested-month residuals are evidence-backed bridge artifacts (0 unexplained).
   - id: us-pe:standard_deduction
     oracle_policy_name: standard_deduction
     oracle_policy_type: rules

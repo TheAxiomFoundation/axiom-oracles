@@ -1,0 +1,32 @@
+schema: axiom_oracles.dispositions.v1
+suite: md-income-tax-liability
+updated: '2026-07-27'
+entries:
+- id: md-uprating-vintage-flat-deltas
+  concept: us-md:policies/income_tax/pilot_liability_pipeline#md_pit_pilot_income_tax_liability
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - md-married-120000
+    - md-married-60000
+    - md-single-30000
+    - md-single-60000
+  disposition: explained_residual
+  evidence:
+    mechanism: "Parameter uprating vintage between the legs: the axiom program carries\n\
+      FY2026-uprated MD parameters while the oracle leg's parameter set holds\n\
+      the prior vintage, producing income-invariant flat deltas within each\nfiling\
+      \ band (the fingerprint: identical differences across the grid's\nincome levels\
+      \ \u2014 e.g. Washington's flat \\$163.92 equals the 7 percent\nrate times\
+      \ the \\$2,342 capital-gains standard-deduction vintage gap, PE\n278,000 vs\
+      \ axiom's uprated value). Favors the encoded 2026 truth;\nresolves when the\
+      \ oracle's parameters uprate."
+    arithmetic:
+    - expression: '8.54'
+      equals: 8.54
+      tolerance: 0.05
+    - expression: '13.12'
+      equals: 13.12
+      tolerance: 0.05
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/315
+  expires_on_source_change: true
