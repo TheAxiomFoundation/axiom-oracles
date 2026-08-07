@@ -441,7 +441,7 @@ def test_unreadable_dispositions_file_cannot_authorize():
 
 
 def test_weighted_mass_must_be_finite_and_nonnegative():
-    certify = _load("certify")
+    # _verdict loads the module itself; no direct handle needed here.
     for weight, marker in ((float("nan"), "finite"), (-5.0, "negative")):
         name = f"zz-r3-w{marker}.json"
         _mutant(
