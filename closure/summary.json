@@ -1,0 +1,54 @@
+{
+  "schema": "axiom_oracles.closure.summary.v1",
+  "program": "us-co/snap",
+  "roots": [
+    {
+      "root": "state-10-ccr-2506-1",
+      "total": 290,
+      "by_status": {
+        "encoded": 281,
+        "excluded": 9,
+        "pending": 0
+      },
+      "by_reason": {
+        "container_heading": 9
+      },
+      "pins_sha256": "74b2a711428ec4d616cf3ebd34a3f9b3c94fa8bc25edade6e1ef4786de8923f8",
+      "pending_max": 0
+    },
+    {
+      "root": "us-7-cfr-273",
+      "total": 39,
+      "by_status": {
+        "encoded": 2,
+        "excluded": 14,
+        "pending": 23
+      },
+      "by_reason": {
+        "container_heading": 9,
+        "procedural_no_point_in_time_effect": 5
+      },
+      "pins_sha256": "2289e476f50a34413233bce156e3130e5e50081ac90d1a99a8efc4372ecd2c71",
+      "pending_max": 23
+    },
+    {
+      "root": "us-7-usc-51",
+      "total": 827,
+      "by_status": {
+        "encoded": 16,
+        "excluded": 544,
+        "pending": 267
+      },
+      "by_reason": {
+        "container_heading": 1,
+        "no_household_computation": 478,
+        "operationalized_by": 6,
+        "procedural_no_point_in_time_effect": 56,
+        "reserved": 3
+      },
+      "pins_sha256": "a17d59b35eb848dcaa0aa8bfbdccfd315c1b3349e0273b3098e787158e0e43a1",
+      "pending_max": 267
+    }
+  ],
+  "closed": false
+}
