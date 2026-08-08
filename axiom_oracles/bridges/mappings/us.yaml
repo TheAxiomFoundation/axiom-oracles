@@ -32424,6 +32424,47 @@ mappings:
     comparison: money
     rationale: Both outputs apply Delaware Code title 30 section 1102(a)(14)'s tax-year-2026 schedule to one Person's completed Delaware taxable income before nonrefundable credits. This mapping excludes filing-method selection, combined-return computation, TaxUnit aggregation, credits, payments, and final liability.
 
+  # The strict-cutover candidate still carries the earlier narrow TaxUnit
+  # pipeline. It accepts completed taxable income and the selected bracket as
+  # caller-supplied boundaries, so only its final before-credit amount shares a
+  # one-to-one PolicyEngine surface. These exact records intentionally override
+  # the broad us-ms fallback below.
+  - legal_id: us-ms:policies/income_tax/pilot_liability_pipeline#ms_pit_pilot_taxable_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: ms_taxable_income_joint
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    candidate_priority: P4
+    rationale: This RuleSpec output normalizes one caller-supplied completed Mississippi taxable-income amount at TaxUnit/year. PolicyEngine's adjacent ms_taxable_income_joint target and its individual-filing counterpart are separate Person-grain constructed candidates, so neither is a one-to-one generic TaxUnit taxable-income boundary.
+
+  - legal_id: us-ms:policies/income_tax/pilot_liability_pipeline#ms_pit_pilot_schedule_tax
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: ms_income_tax_before_credits_unit
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    candidate_priority: P4
+    rationale: This RuleSpec output is an intermediate computed from caller-supplied bracket base, floor, and marginal rate before the pipeline's final nonnegativity guard. PolicyEngine exposes the adjacent final TaxUnit before-credit result after selecting and aggregating its Person-grain filing-method candidates, not this supplied-schedule intermediate.
+
+  - legal_id: us-ms:policies/income_tax/pilot_liability_pipeline#ms_pit_pilot_income_tax_liability
+    country: us
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: ms_income_tax_before_credits_unit
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    candidate_priority: P1
+    rationale: Both outputs are the annual TaxUnit Mississippi individual income tax before credits. The RuleSpec pipeline consumes completed taxable income and the selected current-law bracket as explicit inputs, while PolicyEngine constructs and selects its filing-method-specific Person candidates; this mapping adopts only the shared final before-credit amount, not PolicyEngine's taxable-income construction or filing-method selection.
+
   # Mississippi's canonical TY2026 section 27-7-5 surface applies the enacted
   # Person-grain schedule to one caller-completed Mississippi taxable-income
   # amount. It does not select a filing method, construct taxable income,
