@@ -7,7 +7,6 @@ import {
   formatAgreementRate,
   mismatchKindLabel,
 } from "../utils/format";
-import { rateColor } from "../utils/colors";
 import {
   US_STATE_NAMES,
   suiteMeta,
@@ -97,7 +96,7 @@ function VerdictCard({ report }) {
   return (
     <article
       className="pp-verdict-card"
-      style={{ "--verdict": rateColor(metric.rate) }}
+
     >
       <div className="pp-verdict-who">
         <span className="pp-verdict-oracle">vs {engineLabel(oracle)}</span>
@@ -119,7 +118,6 @@ function VerdictCard({ report }) {
           metric.explainedRate - metric.rate >= 0.05 && (
             <div
               className="mono pp-verdict-rate"
-              style={{ color: rateColor(metric.explainedRate) }}
               title="Counting mismatches with schema-validated dispositions as explained"
             >
               {formatPct(metric.explainedRate, 1)}
@@ -249,7 +247,7 @@ function ConceptTable({ programReports }) {
             </span>
             <span
               className="mono pp-concept-rate"
-              style={{ color: rateColor(agg.match_rate) }}
+
             >
               {formatPct(agg.match_rate, 1)}
             </span>

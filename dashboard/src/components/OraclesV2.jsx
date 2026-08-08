@@ -10,7 +10,6 @@ import {
   formatPct,
   mismatchKindLabel,
 } from "../utils/format";
-import { rateColor } from "../utils/colors";
 import ProgramPage from "./ProgramPage";
 import DispositionNote from "./DispositionNote";
 import HouseholdsView from "./Households";
@@ -406,10 +405,7 @@ function ProgRow({ p, onOpenProgram }) {
         <span className="v2-prog-unit"> households</span>
       </span>
       <span className="mono v2-prog-rate">
-        <span
-          className="v2-prog-rate-box"
-          style={{ "--rc": rateColor(p.rate) }}
-        >
+        <span className="v2-prog-rate-part">
           {formatAgreementRate(p.rate, p.mismatches)}
           <span className="v2-prog-unit"> agree</span>
         </span>
@@ -417,8 +413,7 @@ function ProgRow({ p, onOpenProgram }) {
           p.rate != null &&
           p.explainedRate - p.rate >= 0.05 && (
             <span
-              className="v2-prog-rate-box"
-              style={{ "--rc": rateColor(p.explainedRate) }}
+              className="v2-prog-rate-part"
               title="Counting disagreements with schema-validated dispositions as explained"
             >
               {formatPct(p.explainedRate, 1)}

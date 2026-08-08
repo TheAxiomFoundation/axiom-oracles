@@ -1350,19 +1350,13 @@ body {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  gap: 7px;
+  gap: 12px;
   flex-shrink: 0;
   font-variant-numeric: tabular-nums;
 }
-.v2-prog-rate-box {
-  display: inline-block;
-  padding: 2px 7px;
-  line-height: 1.5;
-  border-radius: 7px;
-  color: var(--rc);
-  background: color-mix(in srgb, var(--rc) 9%, var(--paper-elevated));
-  border: 1px solid color-mix(in srgb, var(--rc) 26%, var(--hairline));
+.v2-prog-rate-part {
   white-space: nowrap;
+  color: var(--ink-soft);
 }
 
 .v2-ledger {
