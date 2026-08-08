@@ -1320,7 +1320,7 @@ body {
   border: none;
   border-top: 1px solid var(--hairline);
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 34px 78px auto;
+  grid-template-columns: minmax(0, 1fr) 34px 78px 132px;
   align-items: center;
   gap: 14px;
   padding: 9px 0;
@@ -1369,18 +1369,21 @@ body {
 }
 .v2-prog-head {
   position: sticky;
-  top: 71px;
+  top: 70px;
   z-index: 5;
   background: var(--paper-elevated);
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 34px 78px auto;
+  grid-template-columns: minmax(0, 1fr) 34px 78px 132px;
+  align-items: end;
   gap: 14px;
-  padding: 8px 0 6px;
+  padding: 10px 0 6px;
   border-bottom: 1px solid var(--hairline-strong);
   font-size: 9.5px;
+  font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--ink-mute);
+  line-height: 1;
 }
 .v2-prog-head-right {
   text-align: right;
