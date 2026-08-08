@@ -303,6 +303,12 @@ a.cite:hover {
   color: var(--ink-mute);
 }
 
+.pp-verdict-rates {
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  flex-wrap: wrap;
+}
 .pp-verdict-rate {
   font-size: 30px;
   font-weight: 650;
@@ -1326,6 +1332,11 @@ body {
   color: var(--ink-soft);
 }
 
+.v2-prog-explained {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 0.02em;
+}
 .v2-prog-checks {
   font-size: 11px;
   color: var(--ink-mute);

@@ -7,6 +7,7 @@ import { causeFor, countUnexplained } from "../utils/programs";
 import {
   engineLabel,
   formatAgreementRate,
+  formatPct,
   mismatchKindLabel,
 } from "../utils/format";
 import { rateColor } from "../utils/colors";
@@ -410,6 +411,17 @@ function ProgRow({ p, onOpenProgram }) {
       >
         {formatAgreementRate(p.rate, p.mismatches)}
         <span className="v2-prog-unit"> agree</span>
+        {p.explainedRate != null &&
+          p.rate != null &&
+          p.explainedRate - p.rate >= 0.05 && (
+            <span
+              className="v2-prog-explained"
+              style={{ color: rateColor(p.explainedRate) }}
+              title="Counting disagreements with schema-validated dispositions as explained"
+            >
+              {formatPct(p.explainedRate, 1)} explained
+            </span>
+          )}
       </span>
     </button>
   );
@@ -420,7 +432,7 @@ const programKeyOf = (suite) => {
   return `${meta.family}__${meta.jurisdiction}`;
 };
 
-function OracleRecord({ oracle, onOpenProgram, onBrowseHouseholds }) {
+function OracleRecord({ oracle, knownCauses, onOpenProgram, onBrowseHouseholds }) {
   // One filter bar scopes the whole record: country chips + program select
   // apply to the alignment census, the discrepancy classes, and the
   // household browser alike.
@@ -452,6 +464,7 @@ function OracleRecord({ oracle, onOpenProgram, onBrowseHouseholds }) {
           region: meta.region,
           total: 0,
           mismatches: 0,
+          unexplained: 0,
           households: 0,
         });
       }
@@ -459,15 +472,18 @@ function OracleRecord({ oracle, onOpenProgram, onBrowseHouseholds }) {
       const m = reportMetric(report);
       entry.total += m.total;
       entry.mismatches += m.mismatches;
+      entry.unexplained += countUnexplained([report], knownCauses || []);
       entry.households += reportHouseholds(report);
     }
     return [...byProgram.values()]
       .map((p) => ({
         ...p,
         rate: p.total > 0 ? ((p.total - p.mismatches) / p.total) * 100 : null,
+        explainedRate:
+          p.total > 0 ? ((p.total - p.unexplained) / p.total) * 100 : null,
       }))
       .sort((a, b) => a.label.localeCompare(b.label));
-  }, [regionScoped]);
+  }, [regionScoped, knownCauses]);
 
   // A stale program selection (after a scope change) falls back to all.
   const activeProgram = programRows.some((p) => p.key === program)
@@ -721,6 +737,7 @@ export default function OraclesV2() {
           jurisdiction: meta.jurisdiction,
           total: 0,
           mismatches: 0,
+          unexplained: 0,
           households: 0,
           oracles: new Set(),
         });
@@ -729,12 +746,15 @@ export default function OraclesV2() {
       const m = reportMetric(report);
       entry.total += m.total;
       entry.mismatches += m.mismatches;
+      entry.unexplained += countUnexplained([report], data.knownCauses || []);
       entry.households += reportHouseholds(report);
       entry.oracles.add(otherOracle(report));
     }
     return [...byProgram.values()].map((p) => ({
       ...p,
       rate: p.total > 0 ? ((p.total - p.mismatches) / p.total) * 100 : null,
+      explainedRate:
+        p.total > 0 ? ((p.total - p.unexplained) / p.total) * 100 : null,
     }));
   }, [model]);
 
@@ -922,6 +942,7 @@ export default function OraclesV2() {
             <OracleRecord
               key={routeOracle.id}
               oracle={routeOracle}
+              knownCauses={data.knownCauses || []}
               onOpenProgram={(key) => navigate({ program: key })}
               onBrowseHouseholds={() =>
                 navigate({ view: "households", oracle: routeOracle.id })
