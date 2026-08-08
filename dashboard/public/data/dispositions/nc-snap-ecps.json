@@ -1,6 +1,6 @@
 {
  "suite": "nc-snap-ecps",
- "updated": "2026-07-30",
+ "updated": "2026-08-07",
  "entries": [
   {
    "id": "nc-bbce-gross-band-snap_eligible",
@@ -740,6 +740,68 @@
     }
    ],
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+  },
+  {
+   "id": "se-loss-netting-counterfactual-28618",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month replay on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 389.0 versus January PolicyEngine 92.89990234375) on the batch, original-batch, and single-case paths. The previously unexplained 1237.76/month earned-surface gap is exactly the self-employment loss netting: the 29-year-old member carries Enhanced CPS self-employment income -24755.29/year, the bridge's flat 0.6 netting fed axiom snap_gross_monthly_earned_income (9738.40 + 61108.64 + 0.6 x -24755.29)/12 = 4666.16 (persisted 4666.16), while PolicyEngine floors SNAP self-employment income at zero and counts (9738.40 + 61108.64)/12 = 5903.92; the gap 0.6 x 24755.29/12 = 1237.76 reconciles to the cent. Both engines stay eligible via the 200-percent-FPL categorical screen; PolicyEngine pays 1421 - 0.3 x floor(4427.23) = 92.90 on its floored surface, axiom pays 1421 - ceil(0.3 x 3437.26) = 389.00 on its netted surface. Feeding PolicyEngine the bridge-netted earned surface (member 5 employment_income 61108.64 + 0.6 x -24755.29, self-employment zeroed) in the direct requested-month simulation produces January SNAP 389.90; its absolute delta from Axiom, 0.90, is within the $7 suite tolerance.",
+   "cases": [
+    "ecps-28618"
+   ],
+   "arithmetic": [
+    {
+     "expression": "(9738.40234375 + 61108.63671875) / 12",
+     "equals": 5903.9199
+    },
+    {
+     "expression": "(9738.40234375 + 61108.63671875 + 0.6 * (-24755.287109375)) / 12",
+     "equals": 4666.1556
+    },
+    {
+     "expression": "0.6 * 24755.287109375 / 12",
+     "equals": 1237.7644
+    },
+    {
+     "expression": "1421.0 - 0.3 * 4427.0",
+     "equals": 92.9
+    },
+    {
+     "expression": "389.89990234375 - 389.0",
+     "equals": 0.9
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/433"
+  },
+  {
+   "id": "pe-unprojected-dividend-se-netting-counterfactual-74179",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month replay on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed January zero reproduces bit-exact on the batch, original-batch, and single-case paths. Three projection gaps stack, the dividend omission dominating: (1) the bridge composes axiom's unearned surface without qualified dividends - axiom persisted snap_total_monthly_unearned_income (10244.91 + 4299.87 + 10089.54)/12 = 2052.86 while PolicyEngine counts (191716.17 + 10244.91 + 4299.87 + 10089.54)/12 = 18029.21, which fails the 1763.00 two-person net limit for this elderly household, so PolicyEngine is January-ineligible with zero benefit; (2) the self-employment loss netting (axiom-oracles#433) fed axiom snap_gross_monthly_earned_income 0.6 x -10307.94/12 = -515.40 (persisted -515.40) while PolicyEngine floors it at zero; (3) PolicyEngine imputes a 370.80 excess medical expense deduction the bridge never projects. On its netted, dividend-free surface axiom computes net income 328.46 and pays 447.00. Forcing qualified_dividend_income and the imputed medical deduction to zero and feeding PolicyEngine the bridge-netted earned surface in the direct requested-month simulation produces January SNAP 447.90; its absolute delta from Axiom, 0.90, is within the $7 suite tolerance.",
+   "cases": [
+    "ecps-74179"
+   ],
+   "arithmetic": [
+    {
+     "expression": "(191716.171875 + 10244.9140625 + 4299.86572265625 + 10089.541015625) / 12",
+     "equals": 18029.2077
+    },
+    {
+     "expression": "(10244.9140625 + 4299.86572265625 + 10089.541015625) / 12",
+     "equals": 2052.8601
+    },
+    {
+     "expression": "0.6 * (-10307.939453125) / 12",
+     "equals": -515.397
+    },
+    {
+     "expression": "447.8999938964844 - 447.0",
+     "equals": 0.9
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
   }
  ]
 }

@@ -76,6 +76,11 @@ const ORACLE_IDENTITY = {
     what: "The Atlanta Fed's Policy Rules Database of US safety-net program rules.",
     url: "https://www.atlantafed.org/economic-mobility-and-resilience/advancing-careers-for-low-income-families/policy-rules-database",
   },
+  "snap-qc": {
+    org: "USDA Food and Nutrition Service",
+    what: "SNAP Quality Control microdata — the USDA's annual audit sample of real SNAP cases, re-verified case by case by state reviewers. Administrative records of benefits actually issued, not a simulation.",
+    url: "https://snapqcdata.us",
+  },
   spsm: {
     org: "Statistics Canada",
     what: "SPSD/M — Statistics Canada's Social Policy Simulation Database and Model, the reference Canadian tax–transfer microsimulation, run under licence over its synthetic database. Results carry the SPSD/M licence attribution; per-household evidence stays local.",
@@ -359,14 +364,6 @@ function OracleCard({ oracle, selected, onSelect }) {
         className="v2-card-stats"
         title={`${oracle.checks.toLocaleString()} individual checks across these households`}
       >
-        <Stat
-          value={
-            <span style={{ color: rateColor(oracle.rate) }}>
-              {formatAgreementRate(oracle.rate, oracle.mismatches)}
-            </span>
-          }
-          label="agreement"
-        />
         <Stat value={oracle.households.toLocaleString()} label="households" />
         <Stat value={oracle.programs.size} label="programs" />
       </div>

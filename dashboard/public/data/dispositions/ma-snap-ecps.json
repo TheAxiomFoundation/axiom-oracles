@@ -1,6 +1,6 @@
 {
  "suite": "ma-snap-ecps",
- "updated": "2026-07-30",
+ "updated": "2026-08-07",
  "entries": [
   {
    "id": "ma-bbce-gross-band-snap_eligible",
@@ -1067,6 +1067,81 @@
     }
    ],
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+  },
+  {
+   "id": "pe-usda-disabled-surface-counterfactual-3161",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month replay on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 546.0 versus January PolicyEngine 324.8999938964844) on the batch, original-batch, and single-case paths. The engines evaluate different disability surfaces: the bridge projects the Enhanced CPS is_disabled fact of the 28-year-old member into axiom's member_medically_certified_physically_or_mentally_unfit_for_employment and snap_member_is_elderly_or_disabled inputs (populace_input_mapping.yaml physically_or_mentally_unfit_for_employment and elderly_or_disabled rules), so axiom applies the uncapped elderly/disabled excess shelter deduction (persisted 1751.00, net income 0, benefit 546.00), while PolicyEngine's has_usda_elderly_disabled evaluates False on the identical situation (its 7 CFR 271.2 definition keys on disability-benefit receipt, which the projection never supplies), capping the January shelter deduction at 744.00: net income 2050.2314 - 209 - 359.3346 - 744 = 737.8969, expected contribution 0.3 x floor(737.8969) = 221.10, benefit 546 - 221.10 = 324.90. Forcing has_usda_elderly_disabled to True in the direct requested-month simulation produces January SNAP 546.0; its absolute delta from Axiom, 0.0, is within the $7 suite tolerance.",
+   "cases": [
+    "ecps-3161"
+   ],
+   "arithmetic": [
+    {
+     "expression": "2050.2314 - 209.0 - 359.3346 - 744.0",
+     "equals": 737.8968
+    },
+    {
+     "expression": "546.0 - 0.3 * 737.0",
+     "equals": 324.9
+    },
+    {
+     "expression": "546.0 - 546.0",
+     "equals": 0.0
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+  },
+  {
+   "id": "se-loss-netting-dividend-75035-benefit",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month replay on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed January zero reproduces bit-exact on the batch, original-batch, and single-case paths. Two projection gaps stack, the self-employment loss netting dominating: the bridge fed axiom snap_gross_monthly_earned_income (154566.72 + 0.6 x -241871.33)/12 = 786.99 (persisted 786.99) while PolicyEngine floors SNAP self-employment income at zero and counts January earned income 154566.72/12 = 12880.56; the bridge also omitted qualified dividends from axiom's unearned surface (axiom 11827.70/12 = 985.64 vs PolicyEngine (9472.00+11827.70)/12 = 1774.98). PolicyEngine's gross income 14655.54 fails the 2292.00 two-person gross limit, so it is January-ineligible with zero benefit; axiom's netted surface passes (gross 1772.63) and pays 347.00. Feeding PolicyEngine the bridge-netted earned surface with qualified_dividend_income zeroed in the direct requested-month simulation produces January SNAP 347.40 (eligible True); its absolute delta from Axiom, 0.40, is within the $7 suite tolerance.",
+   "cases": [
+    "ecps-75035"
+   ],
+   "arithmetic": [
+    {
+     "expression": "(154566.71875 + 0.6 * (-241871.328125)) / 12",
+     "equals": 786.9935
+    },
+    {
+     "expression": "154566.71875 / 12",
+     "equals": 12880.5599
+    },
+    {
+     "expression": "11827.6962890625 / 12",
+     "equals": 985.6414
+    },
+    {
+     "expression": "347.3999938964844 - 347.0",
+     "equals": 0.4
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/433"
+  },
+  {
+   "id": "se-loss-netting-dividend-75035-eligibility",
+   "concept": "us:statutes/7/2014/o#snap_eligible",
+   "kind": "eligibility_left_only",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month replay on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. Companion eligibility row of se-loss-netting-dividend-75035-benefit: the committed PolicyEngine ineligibility reproduces bit-exact on the batch, original-batch, and single-case paths. The bridge fed axiom the loss-netted earned surface (154566.72 + 0.6 x -241871.33)/12 = 786.99 while PolicyEngine floors self-employment at zero, so PolicyEngine's January gross income 12880.56 + 1774.98 = 14655.54 exceeds the 2292.00 two-person gross limit by 12363.53 and it is ineligible, while axiom's netted gross 1772.63 passes and axiom is eligible. Feeding PolicyEngine the bridge-netted earned surface with qualified_dividend_income zeroed flips the direct requested-month simulation to eligible (January SNAP 347.40), matching axiom.",
+   "cases": [
+    "ecps-75035"
+   ],
+   "arithmetic": [
+    {
+     "expression": "12880.559895833334 + 1774.97509765625 - 2292.0",
+     "equals": 12363.535
+    },
+    {
+     "expression": "(154566.71875 + 0.6 * (-241871.328125)) / 12 + 11827.6962890625 / 12",
+     "equals": 1772.635
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/433"
   }
  ]
 }

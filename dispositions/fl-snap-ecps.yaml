@@ -1,6 +1,6 @@
 schema: axiom_oracles.dispositions.v1
 suite: fl-snap-ecps
-updated: '2026-07-30'
+updated: '2026-08-07'
 entries:
 - id: fl-bbce-gross-band-snap_eligible
   concept: us:statutes/7/2014/o#snap_eligible
@@ -2234,3 +2234,138 @@ entries:
     left: 785.0
     right: 176.89996337890625
     difference: 608.1000366210938
+- id: pe-unprojected-dividend-counterfactual-2026-08-07
+  concept: us:statutes/7/2014/u#snap_benefit
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-66103
+    - ecps-67174
+    - ecps-67836
+    - ecps-68087
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/438
+  evidence:
+    mechanism: 'Exact-household requested-month replay on PolicyEngine 4.18.9 / PolicyEngine-US
+      1.767.3 / PolicyEngine-Core 3.30.3. Contrary to the non-reproducibility hypothesis in
+      axiom-oracles#438, each committed January zero reproduces bit-exact on every harness path:
+      the batch dataset path replayed over the suite''s original 100-case batch slice, a mixed
+      13-case batch, and the single-case fallback all return January SNAP 0.0, and take-up is
+      ruled out (takes_up_snap_if_eligible replays True; the requested-month situation path
+      carries no dataset, so the take-up factor never applies). The actual mechanism is an
+      unearned-income projection gap: the populace bridge composes axiom''s
+      snap_total_monthly_unearned_income from the DIVIDEND_INCOME fact, which is empty on these
+      Enhanced CPS records, and never maps QUALIFIED_DIVIDEND_INCOME
+      (axiom_oracles/data/populace_input_mapping.yaml), while the PolicyEngine runner projects
+      each member''s qualified_dividend_income input and PolicyEngine counts dividends in SNAP
+      unearned income per 7 CFR 273.9(b)(2)(v). The engines therefore price different unearned
+      surfaces: PolicyEngine is January-ineligible on the dividend-inclusive surface and pays 0,
+      axiom pays on the dividend-free surface. Per-row: ecps-66103 PE unearned
+      (14993.26+77561.88)/12=7712.93 vs axiom 1249.44, axiom 209.00; ecps-67174 PE
+      (14101.15+6896529.50)/12=575885.89 vs axiom 1175.10, axiom 231.00; ecps-67836 PE
+      (2820.23+71959.22)/12=6231.62 vs axiom 235.02, axiom 546.00; ecps-68087 PE
+      (3367.01+81763.88+67.64)/12=7099.88 vs axiom 286.22, axiom 546.00. Forcing
+      qualified_dividend_income to zero in the direct requested-month simulation returns every
+      row to axiom within the $7 suite tolerance: 209.20 (delta 0.20), 231.40 (delta 0.40),
+      546.00 (delta 0.00), 546.00 (delta 0.00).'
+    arithmetic:
+    - expression: (14993.259765625 + 77561.8828125) / 12
+      equals: 7712.9285
+    - expression: 14993.259765625 / 12
+      equals: 1249.4383
+    - expression: 209.1999969482422 - 209.0
+      equals: 0.2
+      tolerance: 0.001
+    - expression: 546.0 - 546.0
+      equals: 0.0
+    sources:
+    - dashboard/public/data/axiom-policyengine-fl-snap-ecps.json
+    - axiom_oracles/data/populace_input_mapping.yaml
+    - axiom_oracles/adapters/policyengine/runner.py
+    - https://github.com/PolicyEngine/policyengine-us/blob/1.767.3/policyengine_us/parameters/gov/usda/snap/income/sources/unearned.yaml
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(b)(2)
+  expires_on_source_change: true
+- id: pe-unprojected-dividend-medical-counterfactual-69935
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-69935
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/438
+  evidence:
+    mechanism: 'Exact-household requested-month replay on PolicyEngine 4.18.9 / PolicyEngine-US
+      1.767.3 / PolicyEngine-Core 3.30.3. Contrary to the non-reproducibility hypothesis in
+      axiom-oracles#438, the committed January zero reproduces bit-exact on the original-batch,
+      mixed-batch, and single-case paths, and take-up is ruled out (takes_up_snap_if_eligible
+      replays True; the requested-month situation path carries no dataset). Same
+      dividend-projection gap as the grouped fl entry, elderly variant: PolicyEngine January
+      unearned (13583.14+4550414.00+4973.997+23086.16+33075.66)/12 = 385427.75 fails the net
+      test (elderly household skips the gross test) and pays 0, while the bridge projected
+      axiom the dividend-free surface (13583.14+4973.997+23086.16+33075.66)/12 = 6226.58
+      (persisted snap_total_monthly_unearned_income 6226.58) on which axiom pays 36.00.
+      PolicyEngine additionally imputes a 370.80 excess medical expense deduction the bridge
+      never projects (axiom-oracles#362 class). Forcing qualified_dividend_income and the
+      imputed medical deduction to zero in the direct requested-month simulation produces
+      January SNAP 36.60; its absolute delta from Axiom, 0.60, is within the $7 suite
+      tolerance.'
+    arithmetic:
+    - expression: (13583.14453125 + 4550414.0 + 4973.9970703125 + 23086.15625 + 33075.66015625) / 12
+      equals: 385427.7465
+    - expression: (13583.14453125 + 4973.9970703125 + 23086.15625 + 33075.66015625) / 12
+      equals: 6226.5798
+    - expression: 36.5999755859375 - 36.0
+      equals: 0.6
+      tolerance: 0.001
+    sources:
+    - dashboard/public/data/axiom-policyengine-fl-snap-ecps.json
+    - axiom_oracles/data/populace_input_mapping.yaml
+    - axiom_oracles/adapters/policyengine/runner.py
+    - https://github.com/PolicyEngine/policyengine-us/blob/1.767.3/policyengine_us/parameters/gov/usda/snap/income/sources/unearned.yaml
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(b)(2)
+  expires_on_source_change: true
+  pinned:
+    left: 36.0
+    right: 0.0
+    difference: 36.0
+- id: pe-unprojected-dividend-se-netting-counterfactual-70907
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-70907
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/438
+  evidence:
+    mechanism: 'Exact-household requested-month replay on PolicyEngine 4.18.9 / PolicyEngine-US
+      1.767.3 / PolicyEngine-Core 3.30.3. Contrary to the non-reproducibility hypothesis in
+      axiom-oracles#438, the committed January zero reproduces bit-exact on the original-batch,
+      mixed-batch, and single-case paths, and take-up is ruled out (takes_up_snap_if_eligible
+      replays True; the requested-month situation path carries no dataset). Two projection gaps
+      stack: (1) the dividend gap of the grouped fl entry - PolicyEngine January unearned
+      (13698.26+165453.69)/12 = 14929.33 fails the 1696.00 gross limit and pays 0, while axiom
+      received the dividend-free 13698.26/12 = 1141.52; (2) the self-employment loss netting of
+      axiom-oracles#433 - the bridge fed axiom snap_gross_monthly_earned_income 0.6 x
+      (-4355.85)/12 = -217.79 (persisted -217.79) while PolicyEngine floors SNAP self-employment
+      income at zero. On its netted, dividend-free surface axiom computes net income 14.73 and
+      pays 293.00. Forcing qualified_dividend_income to zero and feeding PolicyEngine the
+      bridge-netted earned surface (employment_income 0.6 x -4355.85, self-employment zeroed)
+      in the direct requested-month simulation produces January SNAP 293.80; its absolute delta
+      from Axiom, 0.80, is within the $7 suite tolerance.'
+    arithmetic:
+    - expression: (13698.2568359375 + 165453.6875) / 12
+      equals: 14929.3287
+    - expression: 13698.2568359375 / 12
+      equals: 1141.5214
+    - expression: 0.6 * (-4355.84814453125) / 12
+      equals: -217.7924
+    - expression: 293.79998779296875 - 293.0
+      equals: 0.8
+      tolerance: 0.001
+    sources:
+    - dashboard/public/data/axiom-policyengine-fl-snap-ecps.json
+    - axiom_oracles/data/populace_input_mapping.yaml
+    - axiom_oracles/adapters/policyengine/runner.py
+    - https://github.com/TheAxiomFoundation/axiom-oracles/issues/433
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(b)(2)
+  expires_on_source_change: true
+  pinned:
+    left: 293.0
+    right: 0.0
+    difference: 293.0

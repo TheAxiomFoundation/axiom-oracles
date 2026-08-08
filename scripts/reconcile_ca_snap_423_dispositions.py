@@ -44,27 +44,27 @@ BASE_DISPOSITIONS_SHA256 = (
 )
 EXPECTED_BASE_ROWS = 345
 EXPECTED_CURRENT_MISMATCHES = 529
-# 288 at the #423 transition; 510 after the 2026-08 residual-tail triage
-# added 174 verified CA entries (see dispositions/ca-snap-ecps.yaml classes
-# dated 2026-07-30/08-02 and axiom-oracles#433/#436/#437/#441).
-EXPECTED_EXPANDED_DISPOSITIONS = 510
+# 288 at the #423 transition; 510 after the 2026-08-02 residual-tail triage;
+# 525 after the 2026-08-07 final-19 triage (E/D-surface drift, CalWORKs
+# stack, fallback path-mix — axiom-oracles#435/#397/#438/#462).
+EXPECTED_EXPANDED_DISPOSITIONS = 525
 # At the #423 transition: vanished 192 / current_but_dropped 22 /
 # reclassified 0 / kept 131. The 2026-08 residual-tail triage added CA
 # entries covering 21 of the 22 dropped identities, moving them to
 # reclassified; 1 identity remains honestly uncovered.
 EXPECTED_PARTITION_COUNTS = {
     "vanished": 192,
-    "current_but_dropped": 1,
-    "reclassified": 21,
+    "current_but_dropped": 0,
+    "reclassified": 22,
     "kept": 131,
 }
 EXPECTED_PARTITION_DIGESTS = {
     "vanished": ("f968139b4cc46e2a2d95ce08d7ae97bfa3e446f7d8558a524fa3527bdb45f618"),
     "current_but_dropped": (
-        "925caea321fd0250cfb08356142f2f83a5bba5b84d18badd426cd029e85a5b3d"
+        "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     ),
     "reclassified": (
-        "a4d9b070b740a2a55d47f088974a4060f085e84e2f9392166a8e3c78ddf860af"
+        "c4115d13add7504d41939a2e580fb0dab5b04c0cfa73cea1ffcb002dcdadcecd"
     ),
     "kept": ("2cfc51bf11031bd398cc7cd27e568f8a321df35eb9006d1acd86db112851cba3"),
 }
@@ -132,7 +132,7 @@ EXPECTED_DRIFT_ROWS_SHA256 = (
     "fa54f6fdf05592da62c3c03b74264a4dfb7d9828e4f33ea169e75fc033ad3a51"
 )
 EXPECTED_ACTIVE_DRIFT_ROWS_SHA256 = (
-    "a922d6e84e4b8cf6dc207ee3318bc4653787d725678ee844652506117c73a090"
+    "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
 )
 EXPECTED_RETIRED_DRIFT_IDENTITY_SHA256 = (
     "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
@@ -141,7 +141,7 @@ EXPECTED_RETIRED_DRIFT_ROWS_SHA256 = (
     "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
 )
 EXPECTED_RECLASSIFIED_ROWS_SHA256 = (
-    "9bbe925e5bf1f733bebcb8a75da917587f103bafdb80a9f81368edc2fa82bdeb"
+    "2d8fd205b8c4f6190de4074b0d449bde0f1ff2615ddaed944605241c1c32226c"
 )
 # Drift-receipt rows whose identity the 2026-08 residual-tail triage covered
 # with a new schema-validated disposition (third receipt exit alongside
@@ -168,15 +168,17 @@ EXPECTED_RECLASSIFIED_DRIFT_IDS = frozenset(
         "ca-362-self-employment-tanf-ecps-60978-benefit",
         "ca-362-self-employment-tanf-ecps-61251-benefit",
         "ca-362-self-employment-tanf-ecps-61495-benefit",
+        "ca-362-tanf-ecps-60816-benefit",
         "ca-362-tanf-ecps-62327-benefit",
     }
 )
-EXPECTED_RECLASSIFIED_DRIFT_ROWS_SHA256 = "2c4fd5ef79882590de507c3ad93beef46958058f514736af961356dfd3527174"
+EXPECTED_RECLASSIFIED_DRIFT_ROWS_SHA256 = "fa54f6fdf05592da62c3c03b74264a4dfb7d9828e4f33ea169e75fc033ad3a51"
 # The 2026-08 residual-tail triage entries that absorbed the 21 formerly
 # current_but_dropped identities (per-row verified; see each entry's
 # evidence in dispositions/ca-snap-ecps.yaml).
 EXPECTED_RECLASSIFIED_REPLACEMENTS: dict[str, int] = {
     "ca-bbce-tail-2026-07-30-benefit": 5,
+    "ca-fallback-path-mix-2026-08-07-ecps-60816": 1,
     "ca-negative-se-loss-2026-07-30-benefit": 1,
     "pe-fallback-path-divergence-58987": 1,
     "pe-medical-imputation-counterfactual-57453": 1,

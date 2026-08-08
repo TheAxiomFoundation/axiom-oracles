@@ -5381,6 +5381,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 296.10009765625,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "se-loss-netting-counterfactual-28618",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/433"
+      },
       "kind": "amount_difference",
       "left": 389.0,
       "parent": null,
@@ -5586,6 +5591,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 447.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-unprojected-dividend-se-netting-counterfactual-74179",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+      },
       "kind": "amount_difference",
       "left": 447.0,
       "parent": null,
@@ -5635,18 +5645,18 @@
     "dispositioned": {
       "counts": {
         "axiom_encoding_gap": 10,
-        "bridge_artifact": 58,
+        "bridge_artifact": 60,
         "explained_residual": 0,
         "unexplained": 0,
         "upstream_engine_gap": 6
       },
       "dispositions_file": "dispositions/nc-snap-ecps.yaml",
       "expired_entries": [],
-      "explained_rate": 99.676375,
+      "explained_rate": 99.730313,
       "orphaned_entries": [],
       "raw_match_rate": 97.950378,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 2
+      "unexplained_count": 0
     },
     "error_count": 0,
     "errors_by_engine": [],

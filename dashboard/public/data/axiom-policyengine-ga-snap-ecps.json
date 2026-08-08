@@ -9561,6 +9561,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -298.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "ga-pe-lone-minor-child-earnings-benefit",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-us/issues/9157"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -9577,6 +9582,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "ga-pe-lone-minor-child-earnings-eligibility",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-us/issues/9157"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -9635,6 +9645,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -166.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "ga-pe-lone-minor-child-earnings-benefit",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-us/issues/9157"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -9651,6 +9666,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "ga-pe-lone-minor-child-earnings-eligibility",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-us/issues/9157"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -9667,6 +9687,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -10.5,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-extraction-endogenous-ssi-29878",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/437"
+      },
       "kind": "amount_difference",
       "left": 163.0,
       "parent": null,
@@ -11668,6 +11693,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 204.10003662109375,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ga-negative-se-loss-2026-08-07-30605",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 318.0,
       "parent": null,
@@ -12272,6 +12302,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -51.69999694824219,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ga-shelter-name-drift-2026-08-07-min-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/440"
+      },
       "kind": "amount_difference",
       "left": 24.0,
       "parent": null,
@@ -12728,6 +12763,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 142.50001525878906,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-extraction-endogenous-ssi-31013",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/437"
+      },
       "kind": "amount_difference",
       "left": 199.0,
       "parent": null,
@@ -12786,6 +12826,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -127.29998779296875,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ga-shelter-name-drift-2026-08-07-min-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/440"
+      },
       "kind": "amount_difference",
       "left": 24.0,
       "parent": null,
@@ -13977,6 +14022,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 368.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-extraction-qualified-dividend-67847",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/437"
+      },
       "kind": "amount_difference",
       "left": 368.0,
       "parent": null,
@@ -14035,6 +14085,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -215.89999389648438,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ga-shelter-name-drift-2026-08-07-asset-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/440"
+      },
       "kind": "amount_difference",
       "left": 91.0,
       "parent": null,
@@ -14051,6 +14106,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": -146.39999389648438,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ga-shelter-name-drift-2026-08-07-asset-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/440"
+      },
       "kind": "amount_difference",
       "left": 132.0,
       "parent": null,
@@ -14184,18 +14244,18 @@
     "dispositioned": {
       "counts": {
         "axiom_encoding_gap": 170,
-        "bridge_artifact": 61,
+        "bridge_artifact": 69,
         "explained_residual": 0,
         "unexplained": 0,
-        "upstream_engine_gap": 0
+        "upstream_engine_gap": 4
       },
       "dispositions_file": "dispositions/ga-snap-ecps.yaml",
       "expired_entries": [],
-      "explained_rate": 95.150237,
+      "explained_rate": 95.466526,
       "orphaned_entries": [],
       "raw_match_rate": 93.542435,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 14
+      "unexplained_count": 2
     },
     "error_count": 0,
     "errors_by_engine": [],

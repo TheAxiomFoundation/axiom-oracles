@@ -8657,6 +8657,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 231.29998779296875,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-endogenous-ssi-counterfactual-29149",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/436"
+      },
       "kind": "amount_difference",
       "left": 994.0,
       "parent": null,
@@ -10624,6 +10629,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 138.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-usda-disabled-surface-counterfactual-29732",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+      },
       "kind": "amount_difference",
       "left": 138.0,
       "parent": null,
@@ -10778,18 +10788,18 @@
     "dispositioned": {
       "counts": {
         "axiom_encoding_gap": 126,
-        "bridge_artifact": 53,
+        "bridge_artifact": 55,
         "explained_residual": 0,
         "unexplained": 0,
         "upstream_engine_gap": 4
       },
       "dispositions_file": "dispositions/sc-snap-ecps.yaml",
       "expired_entries": [],
-      "explained_rate": 95.011691,
+      "explained_rate": 95.089634,
       "orphaned_entries": [],
       "raw_match_rate": 92.790335,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 2
+      "unexplained_count": 0
     },
     "error_count": 0,
     "errors_by_engine": [],
