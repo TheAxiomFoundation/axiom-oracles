@@ -405,22 +405,24 @@ function ProgRow({ p, onOpenProgram }) {
         {p.households.toLocaleString()}
         <span className="v2-prog-unit"> households</span>
       </span>
-      <span
-        className="mono v2-prog-rate"
-        style={{ color: rateColor(p.rate) }}
-      >
-        {formatAgreementRate(p.rate, p.mismatches)}
-        <span className="v2-prog-unit"> agree</span>
+      <span className="mono v2-prog-rate">
+        <span
+          className="v2-prog-rate-box"
+          style={{ "--rc": rateColor(p.rate) }}
+        >
+          {formatAgreementRate(p.rate, p.mismatches)}
+          <span className="v2-prog-unit"> agree</span>
+        </span>
         {p.explainedRate != null &&
           p.rate != null &&
           p.explainedRate - p.rate >= 0.05 && (
             <span
-              className="v2-prog-explained-chip"
-              title="Every remaining disagreement carries a schema-validated disposition"
+              className="v2-prog-rate-box"
+              style={{ "--rc": rateColor(p.explainedRate) }}
+              title="Counting disagreements with schema-validated dispositions as explained"
             >
-              {p.explainedRate >= 99.95
-                ? "✓ fully explained"
-                : `${formatPct(p.explainedRate, 1)} explained`}
+              {formatPct(p.explainedRate, 1)}
+              <span className="v2-prog-unit"> explained</span>
             </span>
           )}
       </span>

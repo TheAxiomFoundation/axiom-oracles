@@ -1345,23 +1345,22 @@ body {
 }
 
 .v2-prog-rate {
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 600;
-  text-align: right;
-  white-space: nowrap;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 6px;
   font-variant-numeric: tabular-nums;
 }
-.v2-prog-explained-chip {
+.v2-prog-rate-box {
   display: inline-block;
-  margin-left: 8px;
-  padding: 1px 7px;
-  border-radius: 999px;
-  background: var(--good-bg);
-  color: var(--good);
-  font-size: 9.5px;
-  font-weight: 600;
-  letter-spacing: 0.03em;
-  vertical-align: 1px;
+  padding: 2px 8px;
+  border-radius: 7px;
+  color: var(--rc);
+  background: color-mix(in srgb, var(--rc) 9%, var(--paper-elevated));
+  border: 1px solid color-mix(in srgb, var(--rc) 26%, var(--hairline));
+  white-space: nowrap;
 }
 
 .v2-ledger {
