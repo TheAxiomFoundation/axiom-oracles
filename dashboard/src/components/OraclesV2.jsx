@@ -359,14 +359,6 @@ function OracleCard({ oracle, selected, onSelect }) {
         className="v2-card-stats"
         title={`${oracle.checks.toLocaleString()} individual checks across these households`}
       >
-        <Stat
-          value={
-            <span style={{ color: rateColor(oracle.rate) }}>
-              {formatAgreementRate(oracle.rate, oracle.mismatches)}
-            </span>
-          }
-          label="agreement"
-        />
         <Stat value={oracle.households.toLocaleString()} label="households" />
         <Stat value={oracle.programs.size} label="programs" />
       </div>
