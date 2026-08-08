@@ -378,17 +378,6 @@ function OracleCard({ oracle, selected, onSelect }) {
 
 const REGION_ORDER = ["us", "ca", "uk", "be", "de", "dk"];
 
-function ProgHeader() {
-  return (
-    <div className="mono v2-prog-head" aria-hidden="true">
-      <span>program</span>
-      <span />
-      <span className="v2-prog-head-right">households</span>
-      <span className="v2-prog-head-right">verdict</span>
-    </div>
-  );
-}
-
 function ProgRow({ p, onOpenProgram }) {
   return (
     <button
@@ -604,7 +593,6 @@ function OracleRecord({ oracle, knownCauses, onOpenProgram, onBrowseHouseholds }
             <p className="v2-empty">No programs in this scope.</p>
           )}
           <div className="v2-prog-grid">
-            <ProgHeader />
             {alignmentRows.map((p) => (
               <ProgRow key={p.key} p={p} onOpenProgram={onOpenProgram} />
             ))}
@@ -1043,8 +1031,7 @@ export default function OraclesV2() {
                   </p>
                 )}
                 <div className="v2-prog-grid">
-                  <ProgHeader />
-                  {censusRows.map((p) => (
+                        {censusRows.map((p) => (
                     <ProgRow
                       key={p.key}
                       p={p}
