@@ -409,8 +409,10 @@ function ProgRow({ p, onOpenProgram }) {
         className="mono v2-prog-rate"
         style={{ color: rateColor(p.rate) }}
       >
-        {formatAgreementRate(p.rate, p.mismatches)}
-        <span className="v2-prog-unit"> agree</span>
+        <span className="v2-prog-rate-line">
+          {formatAgreementRate(p.rate, p.mismatches)}
+          <span className="v2-prog-unit"> agree</span>
+        </span>
         {p.explainedRate != null &&
           p.rate != null &&
           p.explainedRate - p.rate >= 0.05 && (

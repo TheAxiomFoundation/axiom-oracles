@@ -305,9 +305,14 @@ a.cite:hover {
 
 .pp-verdict-rates {
   display: flex;
-  align-items: baseline;
-  gap: 18px;
-  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 22px;
+}
+.pp-verdict-rates .pp-verdict-rate {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  white-space: nowrap;
 }
 .pp-verdict-rate {
   font-size: 30px;
@@ -1333,9 +1338,9 @@ body {
 }
 
 .v2-prog-explained {
-  display: block;
   font-size: 10px;
   letter-spacing: 0.02em;
+  white-space: nowrap;
 }
 .v2-prog-checks {
   font-size: 11px;
@@ -1346,8 +1351,14 @@ body {
 .v2-prog-rate {
   font-size: 12px;
   font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
   text-align: right;
   font-variant-numeric: tabular-nums;
+}
+.v2-prog-rate-line {
+  white-space: nowrap;
 }
 
 .v2-ledger {
