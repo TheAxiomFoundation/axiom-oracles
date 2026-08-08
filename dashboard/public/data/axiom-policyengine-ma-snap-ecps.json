@@ -14404,6 +14404,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 221.10000610351562,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-usda-disabled-surface-counterfactual-3161",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+      },
       "kind": "amount_difference",
       "left": 546.0,
       "parent": null,
@@ -15197,6 +15202,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 347.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "se-loss-netting-dividend-75035-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/433"
+      },
       "kind": "amount_difference",
       "left": 347.0,
       "parent": null,
@@ -15213,6 +15223,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "se-loss-netting-dividend-75035-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/433"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -15262,18 +15277,18 @@
     "dispositioned": {
       "counts": {
         "axiom_encoding_gap": 206,
-        "bridge_artifact": 52,
+        "bridge_artifact": 55,
         "explained_residual": 0,
         "unexplained": 0,
         "upstream_engine_gap": 2
       },
       "dispositions_file": "dispositions/ma-snap-ecps.yaml",
       "expired_entries": [],
-      "explained_rate": 93.596814,
+      "explained_rate": 93.688725,
       "orphaned_entries": [],
       "raw_match_rate": 91.942402,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 3
+      "unexplained_count": 0
     },
     "error_count": 0,
     "errors_by_engine": [],

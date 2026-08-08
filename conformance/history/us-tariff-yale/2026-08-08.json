@@ -1,0 +1,18 @@
+{
+  "schema": "axiom_oracles.conformance_snapshot.v1",
+  "date": "2026-08-08",
+  "jurisdiction": "us-tariff-yale",
+  "oracle": "tariff-rate-tracker_c4307e514196618afcbf88cf7fd33746417eeabf/statutory_panel",
+  "policies_in_scope": 10,
+  "covered": 10,
+  "covered_pct": 100.0,
+  "excluded": 4,
+  "unexplained_total": 0,
+  "axiom_attributed_open": 0,
+  "temporal_debt": {
+    "pre_domain_intervals": 48000,
+    "straddle_clipped_intervals": 1200,
+    "addressable_records": 205
+  },
+  "conformant": true
+}

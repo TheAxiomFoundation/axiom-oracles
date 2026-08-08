@@ -1,6 +1,6 @@
 schema: axiom_oracles.dispositions.v1
 suite: ny-snap-ecps
-updated: '2026-07-30'
+updated: '2026-08-07'
 entries:
 - id: ny-bbce-gross-band-snap_eligible
   concept: us:statutes/7/2014/o#snap_eligible
@@ -2439,3 +2439,376 @@ entries:
     - axiom_oracles/data/populace_input_mapping.yaml
     - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.11(a)
   expires_on_source_change: true
+- id: ny-disability-hheod-counterfactual-4813
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-4813
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/435
+  evidence:
+    mechanism: 'Disability-surface projection asymmetry (axiom-oracles#435, the ny-disability-projection
+      class) verified with an explicit counterfactual on the pinned stack (PolicyEngine 4.18.9
+      / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3). The committed batch adapter replayed
+      over the same Case projection reproduces the report pin bit-exact (240.39999389648438),
+      and the January decomposition reconciles it: has_usda_elderly_disabled is False (PolicyEngine
+      requires disability-program receipt), so the excess-shelter deduction is capped at 744.00
+      and net income is 192.43 (298 - 0.3 x 192 = 240.40). The persisted Axiom surface carries
+      snap_member_is_elderly_or_disabled for the 56-year-old with the ECPS is_disabled flag,
+      so Axiom applies the uncapped shelter deduction (1383) and zeroes net income (benefit
+      298 = maximum allotment). Forcing has_usda_elderly_disabled to True in the same direct
+      January simulation produces January SNAP 298.0; its absolute delta from Axiom, 0.0,
+      is within the unchanged suite tolerance 7.0.'
+    arithmetic:
+    - expression: 298.0 - 0.3 * 192.0 - 240.39999389648438
+      equals: 6.103515630684342e-06
+      tolerance: 1.0e-09
+    - expression: 298.0 - 298.0
+      equals: 0.0
+      tolerance: 1.0e-06
+    sources:
+    - dashboard/public/data/axiom-policyengine-ny-snap-ecps.json
+    - axiom_oracles/data/populace_input_mapping.yaml
+    - https://github.com/TheAxiomFoundation/axiom-oracles/issues/435
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(d)(6)(ii)
+  expires_on_source_change: true
+  pinned:
+    left: 298.0
+    right: 240.39999389648438
+    difference: 57.600006103515625
+- id: ny-disability-hheod-counterfactual-5469
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-5469
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/435
+  evidence:
+    mechanism: 'Disability-surface projection asymmetry (axiom-oracles#435, the ny-disability-projection
+      class) verified with an explicit counterfactual on the pinned stack (PolicyEngine 4.18.9
+      / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3). The committed batch adapter replayed
+      over the same Case projection reproduces the report pin bit-exact (141.6999969482422),
+      and the January decomposition reconciles it: has_usda_elderly_disabled is False, so
+      the excess-shelter deduction is capped at 744.00 and net income is 521.47 (298 - 0.3
+      x 521 = 141.70). The persisted Axiom surface carries snap_member_is_elderly_or_disabled
+      for the 33-year-old with the ECPS is_disabled flag, so Axiom applies the gross-test
+      exemption and the uncapped shelter deduction (1373) and zeroes net income (benefit 298
+      = maximum allotment). Forcing has_usda_elderly_disabled to True in the same direct January
+      simulation produces January SNAP 298.0; its absolute delta from Axiom, 0.0, is within
+      the unchanged suite tolerance 7.0.'
+    arithmetic:
+    - expression: 298.0 - 0.3 * 521.0 - 141.6999969482422
+      equals: 3.0517578295530257e-06
+      tolerance: 1.0e-09
+    - expression: 298.0 - 298.0
+      equals: 0.0
+      tolerance: 1.0e-06
+    sources:
+    - dashboard/public/data/axiom-policyengine-ny-snap-ecps.json
+    - axiom_oracles/data/populace_input_mapping.yaml
+    - https://github.com/TheAxiomFoundation/axiom-oracles/issues/435
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(d)(6)(ii)
+  expires_on_source_change: true
+  pinned:
+    left: 298.0
+    right: 141.6999969482422
+    difference: 156.3000030517578
+- id: ny-disability-hheod-counterfactual-6134
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-6134
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/435
+  evidence:
+    mechanism: 'Disability-surface projection asymmetry (axiom-oracles#435, the ny-disability-projection
+      class) verified with an explicit counterfactual on the pinned stack (PolicyEngine 4.18.9
+      / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3). The committed batch adapter replayed
+      over the same Case projection reproduces the report pin bit-exact (0.0): with has_usda_elderly_disabled
+      False the January household fails the gross test and every categorical screen and PolicyEngine
+      pays nothing, while the persisted Axiom surface carries snap_member_is_elderly_or_disabled
+      for the 46-year-old with the ECPS is_disabled flag, unlocking New York''s 200-percent-FPL
+      elderly/disabled categorical path (ny_snap_categorically_eligible True) and the benefit
+      103 = 1183 - roundup(0.3 x 3596.95) = 1183 - 1080. Forcing has_usda_elderly_disabled
+      to True in the same direct January simulation flips PolicyEngine eligible with January
+      SNAP 104.199951171875; its absolute delta from Axiom, 1.199951171875, is within the
+      unchanged suite tolerance 7.0.'
+    arithmetic:
+    - expression: 1183.0 - 1080.0 - 103.0
+      equals: 0.0
+      tolerance: 1.0e-06
+    - expression: 104.199951171875 - 103.0
+      equals: 1.199951171875
+      tolerance: 1.0e-06
+    sources:
+    - dashboard/public/data/axiom-policyengine-ny-snap-ecps.json
+    - axiom_oracles/data/populace_input_mapping.yaml
+    - https://github.com/TheAxiomFoundation/axiom-oracles/issues/435
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(d)(6)(ii)
+  expires_on_source_change: true
+  pinned:
+    left: 103.0
+    right: 0.0
+    difference: 103.0
+- id: ny-disability-hheod-counterfactual-7277
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-7277
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/435
+  evidence:
+    mechanism: 'Disability-surface projection asymmetry (axiom-oracles#435, the ny-disability-projection
+      class) verified with an explicit counterfactual on the pinned stack (PolicyEngine 4.18.9
+      / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3). The committed batch adapter replayed
+      over the same Case projection reproduces the report pin bit-exact (622.2999877929688),
+      and the January decomposition reconciles it: has_usda_elderly_disabled is False, so
+      the excess-shelter deduction is capped at 744.00 and net income is 1239.88 (994 - 0.3
+      x 1239 = 622.30). The persisted Axiom surface carries snap_member_is_elderly_or_disabled
+      for the 45/49-year-old members with the ECPS is_disabled flag, so Axiom applies the
+      uncapped shelter deduction (4911) and zeroes net income (benefit 994 = maximum allotment).
+      Forcing has_usda_elderly_disabled to True in the same direct January simulation produces
+      January SNAP 994.0; its absolute delta from Axiom, 0.0, is within the unchanged suite
+      tolerance 7.0.'
+    arithmetic:
+    - expression: 994.0 - 0.3 * 1239.0 - 622.2999877929688
+      equals: 1.2207031204525265e-05
+      tolerance: 1.0e-09
+    - expression: 994.0 - 994.0
+      equals: 0.0
+      tolerance: 1.0e-06
+    sources:
+    - dashboard/public/data/axiom-policyengine-ny-snap-ecps.json
+    - axiom_oracles/data/populace_input_mapping.yaml
+    - https://github.com/TheAxiomFoundation/axiom-oracles/issues/435
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(d)(6)(ii)
+  expires_on_source_change: true
+  pinned:
+    left: 994.0
+    right: 622.2999877929688
+    difference: 371.70001220703125
+- id: ny-negative-se-loss-2026-08-07-benefit
+  concept: us:statutes/7/2014/u#snap_benefit
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-6798
+    - ecps-7001
+    - ecps-66401
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+  evidence:
+    mechanism: 'Self-employment loss pass-through (the ny-negative-se-loss class), the wages-plus-loss
+      variant: the projection''s flat 0.6 self-employment netting (axiom_oracles/data/populace_input_mapping.yaml)
+      passes Enhanced CPS self-employment losses through into Axiom''s snap_gross_monthly_earned_income
+      alongside wages, while PolicyEngine floors SNAP self-employment income at zero (snap_self_employment_income_after_expense_deduction
+      takes max(., 0)) and counts full monthly wages. Verified per-row on the pinned stack
+      (PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3): the committed
+      batch adapter replayed over the same Case projections reproduces every report pin bit-exact
+      (138.6999969482422 / 0.0 / 0.0), the January PolicyEngine SNAP earned income equals
+      monthly wages exactly (ecps-6798: 1435.32 = 17223.814453125/12; ecps-7001: 6948.90 =
+      83386.7578125/12; ecps-66401: 2985.65 = 35827.76953125/12), and the persisted Axiom
+      earned input equals (wages + 0.6 x self-employment loss)/12 on every row (1178.30 /
+      4054.02 / 2167.23). The loss-netted Axiom surface passes its income tests and awards
+      230 / 637 / 309 while the floored PolicyEngine surface pays 138.70 (higher January net
+      income), 0 (eligible with zero allotment at net 4780.44), and 0 (January-ineligible:
+      gross 2992.84 fails the standard and categorical screens that Axiom''s 2174.42 passes).
+      Same unequal-cross-program-input mechanism as the committed ny-negative-se-loss-2026-07-30
+      entries (axiom-oracles#397 linkage).'
+    upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+    arithmetic:
+    - expression: (17223.814453125 + 0.6 * -5140.44189453125) / 12 - 1178.3
+      equals: -0.004223632812454525
+    - expression: (83386.7578125 + 0.6 * -57897.609375) / 12 - 4054.02
+      equals: -0.003984374999618012
+    - expression: (35827.76953125 + 0.6 * -16368.25) / 12 - 2167.23
+      equals: 0.00496093750007276
+    sources:
+    - dashboard/public/data/axiom-policyengine-ny-snap-ecps.json
+    - axiom_oracles/data/populace_input_mapping.yaml
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.11(a)
+  expires_on_source_change: true
+- id: ny-negative-se-loss-2026-08-07-eligibility-66401
+  concept: us:statutes/7/2014/o#snap_eligible
+  case_id: ecps-66401
+  kind: eligibility_left_only
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+  evidence:
+    mechanism: 'Self-employment loss pass-through (the ny-negative-se-loss class), eligibility
+      leg of the ecps-66401 amount row: the projection''s flat 0.6 self-employment netting
+      feeds Axiom earned income (35827.76953125 + 0.6 x -16368.25)/12 = 2167.23, which passes
+      the composed program''s gross test (2174.42 total against the 2215 limit for two), while
+      PolicyEngine floors the loss and counts monthly wages 2985.65, failing the January standard
+      and categorical income screens (gross 2992.84). Verified per-row on the pinned stack
+      (PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3): the committed
+      batch adapter replayed over the same Case projection reproduces the eligibility pin
+      (Axiom True versus PolicyEngine False) and the direct January simulation is ineligible
+      on the floored surface. Same unequal-cross-program-input mechanism as the committed
+      ny-negative-se-loss-2026-07-30 entries (axiom-oracles#397 linkage).'
+    upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+    arithmetic:
+    - expression: (35827.76953125 + 0.6 * -16368.25) / 12 - 2167.23
+      equals: 0.00496093750007276
+    sources:
+    - dashboard/public/data/axiom-policyengine-ny-snap-ecps.json
+    - axiom_oracles/data/populace_input_mapping.yaml
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.11(a)
+  expires_on_source_change: true
+  pinned:
+    left: true
+    right: false
+- id: pe-fallback-negative-se-loss-65322
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-65322
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/437
+  evidence:
+    mechanism: 'Exact-household requested-month replay on PolicyEngine 4.18.9 / PolicyEngine-US
+      1.767.3 / PolicyEngine-Core 3.30.3. The committed PolicyEngine value for this row reproduces
+      bit-exact only through the comparison runner''s single-case fallback path (PolicyEngineRunner.run_case
+      -> policyengine household calculator: January SNAP 0.0, ineligible, vs report pin 0.0);
+      the batch dataset path - the suite''s primary evaluation path, fed the identical Case
+      inputs - returns January SNAP 23.84000015258789 (the one-to-two-person minimum allotment),
+      so the committed row reflects harness path divergence rather than an engine rule difference
+      (axiom-oracles#437 class). The residual against Axiom on either path is the self-employment
+      loss pass-through: the projection''s flat 0.6 netting feeds Axiom earned income 0.6
+      x (-21779.2421875)/12 = -1088.96 while PolicyEngine floors the loss at zero, so Axiom''s
+      net income is 1077.21 (benefit 222 = 546 - roundup(0.3 x 1077.21) = 546 - 324) while
+      the floored PolicyEngine surface fails the net test and pays at most the minimum allotment
+      (same mechanism as the committed ny-negative-se-loss-2026-07-30 entries, axiom-oracles#397).'
+    upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+    arithmetic:
+    - expression: 0.6 * -21779.2421875 / 12 - -1088.96
+      equals: -0.0021093749999181455
+    - expression: 546.0 - 324.0 - 222.0
+      equals: 0.0
+      tolerance: 1.0e-06
+    sources:
+    - dashboard/public/data/axiom-policyengine-ny-snap-ecps.json
+    - axiom_oracles/adapters/policyengine/runner.py
+    - axiom_oracles/data/populace_input_mapping.yaml
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.11(a)
+  expires_on_source_change: true
+  pinned:
+    left: 222.0
+    right: 0.0
+    difference: 222.0
+- id: pe-extraction-endogenous-ssi-5196
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-5196
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/437
+  evidence:
+    mechanism: 'Exact-household requested-month replay on PolicyEngine 4.18.9 / PolicyEngine-US
+      1.767.3 / PolicyEngine-Core 3.30.3. The committed batch adapter replayed over the same
+      Case projection reproduces the report pin bit-exact (257.5). The batch path''s month-defined
+      snap value comes from the runner''s requested-month extraction simulation (PolicyEngineRunner._requested_period_values
+      -> _build_situation_from_cases), which leaves SSI endogenous while the batch dataset
+      leg zero-fills it and the Axiom projection receives none: for this single 67-year-old
+      with 14.87 monthly unearned income the extraction imputes January SSI 994.00 (the 2026
+      federal benefit rate), lifting January unearned income to 1008.87 and net income to
+      135.72 (257.5 = 298 - 0.3 x 135). The same January simulation with the ssi input forced
+      to zero returns 298.0; its absolute delta from Axiom''s 298 (maximum allotment at net
+      income zero), 0.0, is within the unchanged suite tolerance 7.0. Same imputation-behavior
+      inconsistency between harness legs as axiom-oracles#437 and the committed pe-fallback-ssi-counterfactual
+      entries, surfacing on the requested-month extraction leg instead of the fallback.'
+    arithmetic:
+    - expression: 1008.8685302734375 - 994.0 - 14.8685302734375
+      equals: 0.0
+      tolerance: 1.0e-06
+    - expression: 298.0 - 0.3 * 135.0 - 257.5
+      equals: 0.0
+      tolerance: 1.0e-06
+    - expression: 298.0 - 298.0
+      equals: 0.0
+      tolerance: 1.0e-06
+    sources:
+    - dashboard/public/data/axiom-policyengine-ny-snap-ecps.json
+    - axiom_oracles/adapters/policyengine/runner.py
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(b)(2)(i)
+  expires_on_source_change: true
+  pinned:
+    left: 298.0
+    right: 257.5
+    difference: 40.5
+- id: pe-extraction-endogenous-ssi-6692
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-6692
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/437
+  evidence:
+    mechanism: 'Exact-household requested-month replay on PolicyEngine 4.18.9 / PolicyEngine-US
+      1.767.3 / PolicyEngine-Core 3.30.3. The committed batch adapter replayed over the same
+      Case projection reproduces the report pin bit-exact (254.5). The batch path''s month-defined
+      snap value comes from the runner''s requested-month extraction simulation, which leaves
+      SSI endogenous while the batch dataset leg zero-fills it and the Axiom projection receives
+      none: for this single 69-year-old with 978.96 monthly social security the extraction
+      imputes January SSI 35.04 = 994 - (978.96 - 20), topping January unearned income to
+      exactly the 1014.00 SSI guarantee (994 federal benefit rate + 20 general income disregard)
+      and producing net income 145.50 (254.5 = 298 - 0.3 x 145). The same January simulation
+      with the ssi input forced to zero returns 270.3999938964844; its absolute delta from
+      Axiom''s 270 (= 298 - roundup(0.3 x 92.96) = 298 - 28), 0.3999938964844, is within
+      the unchanged suite tolerance 7.0. Same imputation-behavior inconsistency between harness
+      legs as axiom-oracles#437 and the committed pe-fallback-ssi-counterfactual entries,
+      surfacing on the requested-month extraction leg instead of the fallback.'
+    arithmetic:
+    - expression: 994.0 - (978.9614868164062 - 20.0) - 35.03851318359375
+      equals: 0.0
+      tolerance: 1.0e-06
+    - expression: 298.0 - 0.3 * 145.0 - 254.5
+      equals: 0.0
+      tolerance: 1.0e-06
+    - expression: 270.3999938964844 - 270.0
+      equals: 0.399993896484375
+      tolerance: 1.0e-06
+    sources:
+    - dashboard/public/data/axiom-policyengine-ny-snap-ecps.json
+    - axiom_oracles/adapters/policyengine/runner.py
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(b)(2)(i)
+  expires_on_source_change: true
+  pinned:
+    left: 270.0
+    right: 254.5
+    difference: 15.5
+- id: pe-extraction-endogenous-ssi-5104
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-5104
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/437
+  evidence:
+    mechanism: 'Exact-household requested-month replay on PolicyEngine 4.18.9 / PolicyEngine-US
+      1.767.3 / PolicyEngine-Core 3.30.3. The committed batch adapter replayed over the same
+      Case projection reproduces the report pin bit-exact (351.1999816894531). Two stacked
+      bridge mechanisms reconcile the residual completely. First, the requested-month extraction
+      simulation that supplies the batch path''s month-defined snap value leaves SSI endogenous
+      (the dataset leg zero-fills it; the Axiom projection receives none) and imputes January
+      SSI 517.04 for the 67/68-year-old couple, producing net income 1446.09 (351.2 = 785
+      - 0.3 x 1446); with the ssi input forced to zero the same January simulation returns
+      584.0 (axiom-oracles#437 class, as in the committed pe-fallback-ssi-counterfactual
+      entries). Second, the remaining 584 - 668 = -84 against Axiom is the flat self-employment
+      netting asymmetry of the committed ny-se-flat-netting-2026-07-30 class: PolicyEngine
+      counts gross self-employment (January earned income (6468.0224609375 + 7034.2890625)/12
+      = 1125.19) while the persisted Axiom input is wage-plus-0.6-netted (890.72), a gap of
+      0.4 x monthly self-employment; Axiom''s benefit reconciles from its own surface as 668
+      = 785 - roundup(0.3 x 389.58) = 785 - 117 (axiom-oracles#397 linkage).'
+    upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+    arithmetic:
+    - expression: 785.0 - 0.3 * 1446.0 - 351.1999816894531
+      equals: 1.8310546863631316e-05
+      tolerance: 1.0e-09
+    - expression: (6468.0224609375 + 7034.2890625) / 12 - 890.72 - 0.4 * 7034.2890625 / 12
+      equals: -0.0036751302083928294
+    - expression: 785.0 - 117.0 - 668.0
+      equals: 0.0
+      tolerance: 1.0e-06
+    sources:
+    - dashboard/public/data/axiom-policyengine-ny-snap-ecps.json
+    - axiom_oracles/adapters/policyengine/runner.py
+    - axiom_oracles/data/populace_input_mapping.yaml
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(b)(2)(i)
+  expires_on_source_change: true
+  pinned:
+    left: 668.0
+    right: 351.1999816894531
+    difference: 316.8000183105469

@@ -1,6 +1,6 @@
 {
  "suite": "ca-snap-ecps",
- "updated": "2026-07-30",
+ "updated": "2026-08-07",
  "entries": [
   {
    "id": "ca-bbce-pub275-bridge-snap_eligible",
@@ -5294,6 +5294,124 @@
    ],
    "arithmetic": [],
    "linked_issue": null
+  },
+  {
+   "id": "ca-usda-ed-surface-drift-2026-08-07-eligibility",
+   "concept": "us:statutes/7/2014/o#snap_eligible",
+   "kind": "eligibility_left_only",
+   "disposition": "bridge_artifact",
+   "mechanism": "Elderly/disabled surface drift in the population bridge: the projection maps the composed program's snap_member_is_elderly_or_disabled input from the populace demographic surface (age >= 60 OR the survey disabled flag - the elderly_or_disabled transform in populace_input_mapping.yaml), while PolicyEngine receives the same is_disabled person input but derives its SNAP elderly/disabled status (has_usda_elderly_disabled) from USDA-qualifying benefit receipt per 7 CFR 271.2, which none of these households have - verified False per-row on the pinned stack (PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3). Axiom therefore treats each household as elderly/disabled - waiving the 130% gross income screen (7 CFR 273.9(a)(2)) and applying the uncapped excess-shelter deduction plus the $663 CalFresh heating/cooling SUA - so the net-income test passes on these very-high-shelter households and a benefit pays, while PolicyEngine applies the standard gross screen at January earned income 3,550.99-4,556.71/month and reports ineligible (meets_snap_gross_income_test False; committed False/0.0 reproduced exactly on the committed batch path: full 7,101-case CA replay, batches of 5,000, request list exactly [snap, is_snap_eligible]). The engines received materially different elderly/disabled surfaces from the harness - a population-bridge input artifact, not an engine or encoding defect (Axiom's arithmetic on the fed surface reconciles to the dollar; see the companion benefit class). A dedicated tracking issue for the elderly/disabled-surface netting in the Populace bridge still needs filing.",
+   "cases": [
+    "ecps-57912",
+    "ecps-58676",
+    "ecps-60545",
+    "ecps-61658",
+    "ecps-62891"
+   ],
+   "arithmetic": [],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/435"
+  },
+  {
+   "id": "ca-usda-ed-surface-drift-2026-08-07-benefit",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Companion benefit rows of ca-usda-ed-surface-drift-2026-08-07-eligibility: Axiom pays 24-612 while PolicyEngine reports 0.0 (ineligible under the gross screen it applies because has_usda_elderly_disabled is False on its benefit-receipt surface). Axiom's committed value reconciles to the dollar for every selected row from the projected surface alone: monthly earned = wages/12 (no self-employment facts on any selected case), 20% earned deduction, standard deduction by unit size (209/223/261), shelter = rent/12 + $663 CalFresh SUA with the elderly/disabled UNCAPPED excess-shelter deduction, benefit = max_allotment - 0.3 x net rounded down (ecps-57912 33, ecps-61658 298 at net 0, ecps-60545 147, ecps-62891 612, ecps-58676 24 = the rounded $24 minimum allotment for a 1-person unit whose raw computation goes negative but whose net income passes the 100% FPL net test). Arithmetic below shows the ecps-57912 and ecps-62891 chains (floor of 33.683 -> 33; floor of 612.758 -> 612) and the January gross income PolicyEngine screens (3,648.20 for ecps-57912). Committed PolicyEngine zeros reproduce exactly on the pinned stack via the committed batch path. Same bridge-input class as the eligibility entry; not an Axiom encoding defect.",
+   "cases": [
+    "ecps-57912",
+    "ecps-58676",
+    "ecps-60545",
+    "ecps-61658",
+    "ecps-62891"
+   ],
+   "arithmetic": [
+    {
+     "expression": "(3644.37 + 3.84 - 0.2*3644.37 - 209) - (30257.379/12 + 663 - (3644.37 + 3.84 - 0.2*3644.37 - 209)/2)",
+     "equals": 881.056
+    },
+    {
+     "expression": "298 - 0.3*881.056",
+     "equals": 33.683
+    },
+    {
+     "expression": "(4191.02 + 948.99 - 0.2*4191.02 - 261) - (41968.82/12 + 663 - (4191.02 + 948.99 - 0.2*4191.02 - 261)/2)",
+     "equals": 1900.807
+    },
+    {
+     "expression": "1183 - 0.3*1900.807",
+     "equals": 612.758
+    },
+    {
+     "expression": "43732.4/12 + 46.04/12",
+     "equals": 3648.203
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/435"
+  },
+  {
+   "id": "ca-ed-shelter-calworks-stack-2026-08-07-benefit",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Two stacked population-bridge input differences on both-eligible households (Axiom pays 691-1,183, PolicyEngine 401.00-708.10; committed PolicyEngine values reproduce exactly on the pinned stack - 708.10/543.40/523.40 on the committed batch path and 401.00 for ecps-62026 on the requested-month January replay). (1) Elderly/disabled surface drift (same mechanism as ca-usda-ed-surface-drift-2026-08-07): Axiom's projected surface flags each household elderly/disabled from the survey disabled flag, uncapping the excess-shelter deduction on top of the $663 SUA, while PolicyEngine's has_usda_elderly_disabled is False and its shelter deduction stays at the $744 cap. (2) Unequal TANF surface (the axiom-oracles#397 cross-program-input class): PolicyEngine computes CalWORKs endogenously and counts it in snap_unearned_income (annual ca_tanf 10,911.86 / 5,531.65 / 8,778.41 / 7,756.75 = January unearned 909.32 / 460.97 / 731.53 / 646.40), while the projection feeds Axiom's unearned-income input the populace TANF_BENEFITS fact, which is zero for all four households. Axiom's committed value reconciles to the dollar from the fed surface: net 0 -> max allotment for ecps-57335 (1,183) and ecps-60285 (785, including its 140.92/month projected dependent-care deduction), floor(930.744) = 930 for ecps-58805, floor(691.601) = 691 for ecps-62026. The ecps-62026 decomposition below shows the engines' January net-income gap equals endogenous CalWORKs plus the shelter-cap delta to within a cent. Bridge input inequality, not an engine or encoding defect.",
+   "cases": [
+    "ecps-57335",
+    "ecps-58805",
+    "ecps-60285",
+    "ecps-62026"
+   ],
+   "arithmetic": [
+    {
+     "expression": "(18895.03 + 1.15)/12 - 209",
+     "equals": 1365.682
+    },
+    {
+     "expression": "1365.68 - (12890.265/12 + 663 - 1365.68/2)",
+     "equals": 311.331
+    },
+    {
+     "expression": "785 - 0.3*311.331",
+     "equals": 691.601
+    },
+    {
+     "expression": "(1280.93 - 311.33) - 7756.75/12 - (1054.35 - 731.15)",
+     "equals": 0.004
+    },
+    {
+     "expression": "994 - 0.3*((2510.06 - 0.2*2510.06 - 223) - (21644.604/12 + 663 - (2510.06 - 0.2*2510.06 - 223)/2))",
+     "equals": 930.744
+    },
+    {
+     "expression": "10911.86/12",
+     "equals": 909.322
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+  },
+  {
+   "id": "ca-fallback-path-mix-2026-08-07-ecps-60816",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Committed PolicyEngine benefit 0.0 is NOT the committed batch path's value but equals the runner's deterministic single-case fallback (run_case / calculate_household) exactly on the pinned stack (PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3): the full-committed-path replay (7,101 CA cases, batches of 5,000, request list exactly [snap, is_snap_eligible]) pays 283.90 for January with is_snap_eligible True (matching the committed True), while run_case returns exactly 0.0 / eligible True - the calculate_household situation invites endogenous income imputation that the explicit-zero batch dataset suppresses, zeroing the January benefit. The committed run's batch evidently bisected into the fallback for this case (the _run_case_batch exception path), so the committed row mixes replay paths - a harness determinism artifact of the same class as axiom-oracles#438, not an engine or encoding defect. The Axiom side reconciles to the dollar from the fed surface (earned 34,985.92/12 = 2,915.49, 20% earned deduction, 223 standard deduction, no excess shelter at 56.37 rent + 663 SUA against half of net 2,109.39: floor(361.183) = 361), and the batch-path PolicyEngine gap from Axiom is exactly the endogenous CalWORKs January unearned income 258.25 (the #397 class): 994 - 710.1 = 283.90.",
+   "cases": [
+    "ecps-60816"
+   ],
+   "arithmetic": [
+    {
+     "expression": "994 - 0.3*2109.39 - 361.183",
+     "equals": 0.0
+    },
+    {
+     "expression": "(2367.65 - 2109.39) - 3099.04/12",
+     "equals": 0.007
+    },
+    {
+     "expression": "994 - 710.1",
+     "equals": 283.9
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/438"
   }
  ]
 }

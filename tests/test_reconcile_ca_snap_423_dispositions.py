@@ -180,8 +180,8 @@ def test_repository_reconciles_exact_partition_and_current_compact_schema():
     assert current_partition["vanished"]["count"] == 192
     # 22/0 at the #423 transition; the 2026-08 residual-tail triage covered
     # 21 of the dropped identities with new dispositions.
-    assert current_partition["current_but_dropped"]["count"] == 1
-    assert current_partition["reclassified"]["count"] == 21
+    assert current_partition["current_but_dropped"]["count"] == 0
+    assert current_partition["reclassified"]["count"] == 22
     assert current_partition["kept"]["count"] == 131
     assert len(current_partition["drifted_rows"]) == 22
     assert (
@@ -206,7 +206,7 @@ def test_repository_reconciles_exact_partition_and_current_compact_schema():
     assert current_partition["reclassified_replacements"]["rows_sha256"] == (
         reconciliation.EXPECTED_RECLASSIFIED_ROWS_SHA256
     )
-    assert len(current_partition["reclassified_replacements"]["rows"]) == 21
+    assert len(current_partition["reclassified_replacements"]["rows"]) == 22
     assert current["retained_pin_movement"]["moved"]["count"] == 115
     assert current["retained_pin_movement"]["unchanged"]["count"] == 16
     assert current["retained_pin_movement"]["requested_month_evidence"] == {
@@ -215,10 +215,10 @@ def test_repository_reconciles_exact_partition_and_current_compact_schema():
         "rows_sha256": (reconciliation.EXPECTED_KEPT_REQUESTED_MONTH_ROWS_SHA256),
     }
     assert current["report"]["mismatches"] == 529
-    assert current["source_dispositions"]["expanded_rows"] == 510
+    assert current["source_dispositions"]["expanded_rows"] == 525
     assert current["compact"]["cases"] == 7101
     assert current["compact"]["mismatches"] == 529
-    assert current["compact"]["annotated"] == 510
+    assert current["compact"]["annotated"] == 525
 
     snapshot = receipt["rejected_pub275_exposure_snapshot"]
     snapshot_partition = snapshot["partition"]
@@ -292,14 +292,17 @@ def test_equal_count_partition_swap_fails_identity_digest():
         current_issue_by_id,
         expanded,
     )
+    # current_but_dropped emptied at the 2026-08-07 final-19 triage; the
+    # equal-count swap now trades a kept entry against a reclassified one
+    # (kept and reclassified counts both stay constant; only membership —
+    # and therefore the identity digests — changes).
     kept = partitions["kept"][0]
-    dropped = partitions["current_but_dropped"][0]
+    reclassified = partitions["reclassified"][0]
 
     tampered = dict(current_issue_by_id)
     tampered_expanded = dict(expanded)
     del tampered[kept["id"]]
-    del tampered_expanded[reconciliation._identity(kept)]
-    tampered[dropped["id"]] = dropped
+    tampered[reclassified["id"]] = reclassified
 
     with pytest.raises(
         reconciliation.ReconciliationError,
@@ -530,7 +533,11 @@ def test_full_drift_receipt_digest_catches_current_pin_tampering():
         current_issue_by_id,
         expanded,
     )
-    target = partitions["current_but_dropped"][0]
+    # Every remaining drift row is reclassified (dropped emptied 2026-08-07);
+    # tampering a reclassified row's current pin is caught first by the
+    # reclassified replacement receipt, which reads the same report pins the
+    # full drift receipt does.
+    target = partitions["reclassified"][0]
     key = reconciliation._identity(target)
     tampered_report = deepcopy(report_by_identity)
     tampered_report[key]["left"] += 1
@@ -538,7 +545,7 @@ def test_full_drift_receipt_digest_catches_current_pin_tampering():
 
     with pytest.raises(
         reconciliation.ReconciliationError,
-        match="full drift-row receipt digest mismatch",
+        match="reclassified replacement receipt digest mismatch",
     ):
         reconciliation._partition_receipt(
             partitions,

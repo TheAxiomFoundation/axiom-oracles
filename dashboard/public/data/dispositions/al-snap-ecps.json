@@ -1,6 +1,6 @@
 {
  "suite": "al-snap-ecps",
- "updated": "2026-07-30",
+ "updated": "2026-08-07",
  "entries": [
   {
    "id": "al-bbce-gross-band-snap_eligible",
@@ -720,6 +720,35 @@
    ],
    "arithmetic": [],
    "linked_issue": null
+  },
+  {
+   "id": "pe-unprojected-dividend-medical-counterfactual-69224",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month replay on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed January zero reproduces bit-exact on the batch, original-batch, and single-case paths. The engines price different unearned surfaces: the populace bridge composes axiom's snap_total_monthly_unearned_income from the DIVIDEND_INCOME fact, which is empty on this Enhanced CPS record, and never maps QUALIFIED_DIVIDEND_INCOME (9636583.00/year here), so axiom received (28.78 + 59293.22)/12 = 4943.50 (persisted 4943.50) and pays 298 - ceil(0.3 x 878.50) = 298 - 264 = 34.00 for this single 71-year-old, while PolicyEngine counts dividends in SNAP unearned income per 7 CFR 273.9(b)(2)(v): January unearned (9636583.00 + 28.78 + 59293.22)/12 = 807992.08 fails the 1305.00 net limit (elderly household skips the gross test), leaving PolicyEngine ineligible with zero benefit. PolicyEngine additionally imputes a 175.00 excess medical expense deduction the bridge never projects. Forcing qualified_dividend_income and the imputed medical deduction to zero in the direct requested-month simulation produces January SNAP 34.60; its absolute delta from Axiom, 0.60, is within the $7 suite tolerance.",
+   "cases": [
+    "ecps-69224"
+   ],
+   "arithmetic": [
+    {
+     "expression": "(9636583.0 + 28.777849197387695 + 59293.22265625) / 12",
+     "equals": 807992.0834
+    },
+    {
+     "expression": "(28.777849197387695 + 59293.22265625) / 12",
+     "equals": 4943.5
+    },
+    {
+     "expression": "298.0 - 264.0",
+     "equals": 34.0
+    },
+    {
+     "expression": "34.5999755859375 - 34.0",
+     "equals": 0.6
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
   }
  ]
 }

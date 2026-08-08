@@ -1,6 +1,6 @@
 schema: axiom_oracles.dispositions.v1
 suite: sc-snap-ecps
-updated: '2026-07-30'
+updated: '2026-08-07'
 entries:
 - id: sc-bbce-gross-band-snap_eligible
   concept: us:statutes/7/2014/o#snap_eligible
@@ -1920,3 +1920,83 @@ entries:
     - dashboard/public/data/axiom-policyengine-sc-snap-ecps.json
     - axiom_oracles/adapters/policyengine/runner.py
   expires_on_source_change: true
+- id: pe-endogenous-ssi-counterfactual-29149
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-29149
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/436
+  evidence:
+    mechanism: 'Exact-household requested-month replay on PolicyEngine 4.18.9 / PolicyEngine-US
+      1.767.3 / PolicyEngine-Core 3.30.3. The committed January value 762.7000122070312
+      reproduces bit-exact when the case is replayed inside its original 100-case suite batch
+      (sc batch 4); the same Case replayed alone (or in a different batch composition) returns
+      725.5 - the batch-composition path divergence documented in axiom-oracles#437. Either
+      way the driver is endogenously imputed SSI the bridge never projects to axiom
+      (axiom-oracles#436 class): the 65-year-old Medicaid-covered head carries no income facts,
+      the SC projection persisted no earned or unearned input, and axiom prices a zero-income
+      four-person household at the 994.00 maximum allotment, while PolicyEngine''s direct
+      requested-month path imputes January ssi 994.00 into SNAP unearned income. The committed
+      value reconciles as 994 - 0.3 x floor(994.00 - 223.00) = 994 - 0.3 x 771 = 762.70; the
+      single-case path additionally counts the 43-year-old''s qualified dividends 1488.21/12 =
+      124.02 (net 895.02, floor 895, benefit 725.50). Forcing ssi to zero in the direct
+      requested-month simulation produces January SNAP 994.0; its absolute delta from Axiom,
+      0.0, is within the $7 suite tolerance.'
+    arithmetic:
+    - expression: 994.0 - 0.3 * 771.0
+      equals: 762.7
+    - expression: 994.0 - 0.3 * 895.0
+      equals: 725.5
+    - expression: 994.0 - 994.0
+      equals: 0.0
+    sources:
+    - dashboard/public/data/axiom-policyengine-sc-snap-ecps.json
+    - axiom_oracles/adapters/policyengine/runner.py
+    - https://github.com/TheAxiomFoundation/axiom-oracles/issues/437
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(b)(2)(i)
+  expires_on_source_change: true
+  pinned:
+    left: 994.0
+    right: 762.7000122070312
+    difference: 231.29998779296875
+- id: pe-usda-disabled-surface-counterfactual-29732
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-29732
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/362
+  evidence:
+    mechanism: 'Exact-household requested-month replay on PolicyEngine 4.18.9 / PolicyEngine-US
+      1.767.3 / PolicyEngine-Core 3.30.3. The committed January zero reproduces bit-exact on
+      the batch, original-batch, and single-case paths. The engines evaluate different
+      disability surfaces: the bridge projects the Enhanced CPS is_disabled facts of the
+      31- and 35-year-old members into axiom''s
+      member_physically_or_mentally_unfit_for_employment and snap_member_is_elderly_or_disabled
+      inputs, so axiom treats the household as elderly/disabled, skips the gross income test,
+      passes the net test (net 2155.56 against the 2221.00 three-person limit) and pays
+      785 - ceil(0.3 x 2155.56) = 785 - 647 = 138.00, while PolicyEngine''s
+      has_usda_elderly_disabled evaluates False on the identical situation (its 7 CFR 271.2
+      definition keys on disability-benefit receipt, which the projection never supplies), so
+      the January gross test applies and fails - gross 2954.56 exceeds the 2888.00 three-person
+      limit by 66.56 - leaving PolicyEngine ineligible with zero benefit. Forcing
+      has_usda_elderly_disabled to True in the direct requested-month simulation produces
+      January SNAP 138.80 (eligible True); its absolute delta from Axiom, 0.80, is within the
+      $7 suite tolerance.'
+    arithmetic:
+    - expression: 2954.5632 - 2888.0
+      equals: 66.5632
+    - expression: 785.0 - 647.0
+      equals: 138.0
+    - expression: 138.79998779296875 - 138.0
+      equals: 0.8
+      tolerance: 0.001
+    sources:
+    - dashboard/public/data/axiom-policyengine-sc-snap-ecps.json
+    - axiom_oracles/data/populace_input_mapping.yaml
+    - axiom_oracles/adapters/policyengine/runner.py
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-271#p-271.2(Elderly%20or%20disabled%20member)
+  expires_on_source_change: true
+  pinned:
+    left: 138.0
+    right: 0.0
+    difference: 138.0
