@@ -13,7 +13,7 @@
       "artifact": "conformance/exercise-census.json",
       "claim": "exercise census",
       "mode": "computed",
-      "sha256": "fcddd7fcca3fef0a8142c3cc7aec546efc5d00dba3ee49a628be4778e1acbabd"
+      "sha256": "3e5c6be6ca4b3ba6547601b0aae26596e691be2421ee65d892e14c3c21a9c9af"
     },
     {
       "artifact": "dashboard/public/data/axiom-policyengine-co-snap-ecps.json",
@@ -31,7 +31,7 @@
       "artifact": "dashboard/public/data/axiom-snapqc-co-snap.json",
       "claim": "suite:co-snap-qc",
       "mode": "computed",
-      "sha256": "bec51317ab72394dd232ae2afd3a4bdaac0d29783a9aa0611f5ba86f9c4fee9d"
+      "sha256": "36a8cc6fd0dc678a76f6d933137ec72b66ffe24d695ddba6f297b941e7868958"
     }
   ],
   "period": "2026-01",
@@ -126,7 +126,7 @@
           "contested_reports": [],
           "per_case_evidence_committed": false,
           "report": "dashboard/public/data/axiom-snapqc-co-snap.json",
-          "report_sha256": "bec51317ab72394dd232ae2afd3a4bdaac0d29783a9aa0611f5ba86f9c4fee9d",
+          "report_sha256": "36a8cc6fd0dc678a76f6d933137ec72b66ffe24d695ddba6f297b941e7868958",
           "varied_fields": 0
         }
       },
