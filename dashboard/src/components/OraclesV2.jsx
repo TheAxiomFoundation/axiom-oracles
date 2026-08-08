@@ -409,20 +409,22 @@ function ProgRow({ p, onOpenProgram }) {
         className="mono v2-prog-rate"
         style={{ color: rateColor(p.rate) }}
       >
-        <span className="v2-prog-rate-line">
-          {formatAgreementRate(p.rate, p.mismatches)}
-          <span className="v2-prog-unit"> agree</span>
-        </span>
+        {formatAgreementRate(p.rate, p.mismatches)}
+        <span className="v2-prog-unit"> agree</span>
         {p.explainedRate != null &&
           p.rate != null &&
           p.explainedRate - p.rate >= 0.05 && (
-            <span
-              className="v2-prog-explained"
-              style={{ color: rateColor(p.explainedRate) }}
-              title="Counting disagreements with schema-validated dispositions as explained"
-            >
-              {formatPct(p.explainedRate, 1)} explained
-            </span>
+            <>
+              <span className="v2-prog-sep"> · </span>
+              <span
+                className="v2-prog-explained"
+                style={{ color: rateColor(p.explainedRate) }}
+                title="Counting disagreements with schema-validated dispositions as explained"
+              >
+                {formatPct(p.explainedRate, 1)}
+                <span className="v2-prog-unit"> explained</span>
+              </span>
+            </>
           )}
       </span>
     </button>
