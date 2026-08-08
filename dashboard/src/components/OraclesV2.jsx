@@ -414,17 +414,14 @@ function ProgRow({ p, onOpenProgram }) {
         {p.explainedRate != null &&
           p.rate != null &&
           p.explainedRate - p.rate >= 0.05 && (
-            <>
-              <span className="v2-prog-sep"> · </span>
-              <span
-                className="v2-prog-explained"
-                style={{ color: rateColor(p.explainedRate) }}
-                title="Counting disagreements with schema-validated dispositions as explained"
-              >
-                {formatPct(p.explainedRate, 1)}
-                <span className="v2-prog-unit"> explained</span>
-              </span>
-            </>
+            <span
+              className="v2-prog-explained-chip"
+              title="Every remaining disagreement carries a schema-validated disposition"
+            >
+              {p.explainedRate >= 99.95
+                ? "✓ fully explained"
+                : `${formatPct(p.explainedRate, 1)} explained`}
+            </span>
           )}
       </span>
     </button>

@@ -1337,9 +1337,7 @@ body {
   color: var(--ink-soft);
 }
 
-.v2-prog-explained {
-  white-space: nowrap;
-}
+
 .v2-prog-checks {
   font-size: 11px;
   color: var(--ink-mute);
@@ -1353,9 +1351,17 @@ body {
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
 }
-.v2-prog-sep {
-  color: var(--ink-mute);
-  font-weight: 400;
+.v2-prog-explained-chip {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: var(--good-bg);
+  color: var(--good);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  vertical-align: 1px;
 }
 
 .v2-ledger {
