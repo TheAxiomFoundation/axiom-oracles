@@ -7,9 +7,9 @@ import { causeFor, countUnexplained } from "../utils/programs";
 import {
   engineLabel,
   formatAgreementRate,
+  formatPct,
   mismatchKindLabel,
 } from "../utils/format";
-import { rateColor } from "../utils/colors";
 import ProgramPage from "./ProgramPage";
 import DispositionNote from "./DispositionNote";
 import HouseholdsView from "./Households";
@@ -404,12 +404,26 @@ function ProgRow({ p, onOpenProgram }) {
         {p.households.toLocaleString()}
         <span className="v2-prog-unit"> households</span>
       </span>
-      <span
-        className="mono v2-prog-rate"
-        style={{ color: rateColor(p.rate) }}
-      >
-        {formatAgreementRate(p.rate, p.mismatches)}
-        <span className="v2-prog-unit"> agree</span>
+      <span className="mono v2-prog-rate">
+        <span className="v2-prog-rate-part">
+          <span className="v2-prog-rate-value">
+            {formatAgreementRate(p.rate, p.mismatches)}
+          </span>
+          <span className="v2-prog-unit">agree</span>
+        </span>
+        {p.explainedRate != null &&
+          p.rate != null &&
+          p.explainedRate - p.rate >= 0.05 && (
+            <span
+              className="v2-prog-rate-part"
+              title="Counting disagreements with schema-validated dispositions as explained"
+            >
+              <span className="v2-prog-rate-value">
+                {formatPct(p.explainedRate, 1)}
+              </span>
+              <span className="v2-prog-unit">explained</span>
+            </span>
+          )}
       </span>
     </button>
   );
@@ -420,7 +434,7 @@ const programKeyOf = (suite) => {
   return `${meta.family}__${meta.jurisdiction}`;
 };
 
-function OracleRecord({ oracle, onOpenProgram, onBrowseHouseholds }) {
+function OracleRecord({ oracle, knownCauses, onOpenProgram, onBrowseHouseholds }) {
   // One filter bar scopes the whole record: country chips + program select
   // apply to the alignment census, the discrepancy classes, and the
   // household browser alike.
@@ -452,6 +466,7 @@ function OracleRecord({ oracle, onOpenProgram, onBrowseHouseholds }) {
           region: meta.region,
           total: 0,
           mismatches: 0,
+          unexplained: 0,
           households: 0,
         });
       }
@@ -459,15 +474,18 @@ function OracleRecord({ oracle, onOpenProgram, onBrowseHouseholds }) {
       const m = reportMetric(report);
       entry.total += m.total;
       entry.mismatches += m.mismatches;
+      entry.unexplained += countUnexplained([report], knownCauses || []);
       entry.households += reportHouseholds(report);
     }
     return [...byProgram.values()]
       .map((p) => ({
         ...p,
         rate: p.total > 0 ? ((p.total - p.mismatches) / p.total) * 100 : null,
+        explainedRate:
+          p.total > 0 ? ((p.total - p.unexplained) / p.total) * 100 : null,
       }))
       .sort((a, b) => a.label.localeCompare(b.label));
-  }, [regionScoped]);
+  }, [regionScoped, knownCauses]);
 
   // A stale program selection (after a scope change) falls back to all.
   const activeProgram = programRows.some((p) => p.key === program)
@@ -721,6 +739,7 @@ export default function OraclesV2() {
           jurisdiction: meta.jurisdiction,
           total: 0,
           mismatches: 0,
+          unexplained: 0,
           households: 0,
           oracles: new Set(),
         });
@@ -729,12 +748,15 @@ export default function OraclesV2() {
       const m = reportMetric(report);
       entry.total += m.total;
       entry.mismatches += m.mismatches;
+      entry.unexplained += countUnexplained([report], data.knownCauses || []);
       entry.households += reportHouseholds(report);
       entry.oracles.add(otherOracle(report));
     }
     return [...byProgram.values()].map((p) => ({
       ...p,
       rate: p.total > 0 ? ((p.total - p.mismatches) / p.total) * 100 : null,
+      explainedRate:
+        p.total > 0 ? ((p.total - p.unexplained) / p.total) * 100 : null,
     }));
   }, [model]);
 
@@ -922,6 +944,7 @@ export default function OraclesV2() {
             <OracleRecord
               key={routeOracle.id}
               oracle={routeOracle}
+              knownCauses={data.knownCauses || []}
               onOpenProgram={(key) => navigate({ program: key })}
               onBrowseHouseholds={() =>
                 navigate({ view: "households", oracle: routeOracle.id })
@@ -1008,7 +1031,7 @@ export default function OraclesV2() {
                   </p>
                 )}
                 <div className="v2-prog-grid">
-                  {censusRows.map((p) => (
+                        {censusRows.map((p) => (
                     <ProgRow
                       key={p.key}
                       p={p}

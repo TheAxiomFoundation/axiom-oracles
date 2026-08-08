@@ -303,6 +303,17 @@ a.cite:hover {
   color: var(--ink-mute);
 }
 
+.pp-verdict-rates {
+  display: flex;
+  align-items: flex-start;
+  gap: 36px;
+}
+.pp-verdict-rates .pp-verdict-rate {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  white-space: nowrap;
+}
 .pp-verdict-rate {
   font-size: 30px;
   font-weight: 650;
@@ -1309,10 +1320,10 @@ body {
   border: none;
   border-top: 1px solid var(--hairline);
   display: grid;
-  grid-template-columns: 1fr 34px 90px 64px;
+  grid-template-columns: minmax(0, 1fr) 34px 78px 132px;
   align-items: center;
-  gap: 10px;
-  padding: 7px 0;
+  gap: 14px;
+  padding: 9px 0;
   text-align: left;
   cursor: pointer;
 }
@@ -1326,6 +1337,7 @@ body {
   color: var(--ink-soft);
 }
 
+
 .v2-prog-checks {
   font-size: 11px;
   color: var(--ink-mute);
@@ -1333,10 +1345,27 @@ body {
 }
 
 .v2-prog-rate {
+  font-size: 11px;
+  font-weight: 600;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+.v2-prog-rate-part {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
+  min-width: 58px;
+  white-space: nowrap;
+  color: var(--ink-soft);
+}
+.v2-prog-rate-value {
   font-size: 12px;
   font-weight: 600;
-  text-align: right;
-  font-variant-numeric: tabular-nums;
 }
 
 .v2-ledger {
