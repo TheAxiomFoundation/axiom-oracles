@@ -378,6 +378,17 @@ function OracleCard({ oracle, selected, onSelect }) {
 
 const REGION_ORDER = ["us", "ca", "uk", "be", "de", "dk"];
 
+function ProgHeader() {
+  return (
+    <div className="mono v2-prog-head" aria-hidden="true">
+      <span>program</span>
+      <span />
+      <span className="v2-prog-head-right">households</span>
+      <span className="v2-prog-head-right">verdict</span>
+    </div>
+  );
+}
+
 function ProgRow({ p, onOpenProgram }) {
   return (
     <button
@@ -406,8 +417,10 @@ function ProgRow({ p, onOpenProgram }) {
       </span>
       <span className="mono v2-prog-rate">
         <span className="v2-prog-rate-part">
-          {formatAgreementRate(p.rate, p.mismatches)}
-          <span className="v2-prog-unit"> agree</span>
+          <span className="v2-prog-rate-value">
+            {formatAgreementRate(p.rate, p.mismatches)}
+          </span>
+          <span className="v2-prog-unit">agree</span>
         </span>
         {p.explainedRate != null &&
           p.rate != null &&
@@ -416,8 +429,10 @@ function ProgRow({ p, onOpenProgram }) {
               className="v2-prog-rate-part"
               title="Counting disagreements with schema-validated dispositions as explained"
             >
-              {formatPct(p.explainedRate, 1)}
-              <span className="v2-prog-unit"> explained</span>
+              <span className="v2-prog-rate-value">
+                {formatPct(p.explainedRate, 1)}
+              </span>
+              <span className="v2-prog-unit">explained</span>
             </span>
           )}
       </span>
@@ -589,6 +604,7 @@ function OracleRecord({ oracle, knownCauses, onOpenProgram, onBrowseHouseholds }
             <p className="v2-empty">No programs in this scope.</p>
           )}
           <div className="v2-prog-grid">
+            <ProgHeader />
             {alignmentRows.map((p) => (
               <ProgRow key={p.key} p={p} onOpenProgram={onOpenProgram} />
             ))}
@@ -1027,6 +1043,7 @@ export default function OraclesV2() {
                   </p>
                 )}
                 <div className="v2-prog-grid">
+                  <ProgHeader />
                   {censusRows.map((p) => (
                     <ProgRow
                       key={p.key}
