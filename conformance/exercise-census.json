@@ -6736,7 +6736,7 @@
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
       "report": "dashboard/public/data/axiom-policyengine-uk-council-tax-reduction.json",
-      "report_sha256": "b67354c8fa9b1948f7f687dc78ef53c081478ac4968031afb550080699cc2589",
+      "report_sha256": "d67f9eecd8279ca5d5a36377cd1fd904ae4f2d045a0587412f476fe45463817c",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
