@@ -6987,7 +6987,7 @@
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
       "report": "dashboard/public/data/axiom-euromod-uk-income-tax-scottish.json",
-      "report_sha256": "73645d07d7bb662c147b35e6a535efbb17cfa30760b133cc317225d698f29dd0",
+      "report_sha256": "39b78887f2216655a494f55748a555611afcca6bab8eecd80664811ef61ee837",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
