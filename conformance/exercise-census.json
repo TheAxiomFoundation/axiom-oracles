@@ -720,7 +720,7 @@
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
       "report": "dashboard/public/data/axiom-euromod-be-article-51-forfait.json",
-      "report_sha256": "69b26e1bc9ee52e680474cab47d7d8baf3c3ca32a11ac617dc4850afb998469b",
+      "report_sha256": "e24eae4047be9f1fbcb3ab514b0d8108fe9f5be1f311d9553d6375f89f70a112",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
