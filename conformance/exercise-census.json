@@ -7175,7 +7175,7 @@
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
       "report": "dashboard/public/data/axiom-euromod-uk-self-employed-nic.json",
-      "report_sha256": "319670e242415eea3e562139b71e5afd3a30266bf47204b612a21ac65b350eba",
+      "report_sha256": "919dc18b581cee4039d06e803b8451bc00d7e5a20555d742a9d8fc2876ec5723",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
