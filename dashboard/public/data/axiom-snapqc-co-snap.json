@@ -215,7 +215,7 @@
   "population": "snap-qc-puf",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-08-09T19:10:40Z",
+    "generated_at": "2026-08-10T03:01:10Z",
     "generated_by": "scripts/run_comparison.py::co-snap-qc",
     "oracle": {
       "fiscal_year": 2024,
@@ -223,8 +223,13 @@
       "sha256": "0f3230a4318307d3088382546095eebfde03e781da6f65c9eac7f077bd4263f4",
       "url": "https://snapqcdata.net/sites/default/files/2026-05/qcfy2024_csv.zip"
     },
-    "reemitted_report": true,
-    "run_kind": "affected-rerun",
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-us",
+        "sha": "6a52ca15aa436cab6dfec67c6e460e9f3e9485fb"
+      }
+    ],
+    "run_kind": "manual",
     "schema": "axiom_oracles.provenance.v1"
   },
   "schema_version": "axiom.comparison_report.v2.1",
@@ -258,7 +263,7 @@
     "match_rate": 100,
     "mismatch_count": 0,
     "provenance": {
-      "axiom_binary": "/Users/maxghenis/TheAxiomFoundation/axiom-rules-engine/target/debug/axiom-rules-engine",
+      "axiom_binary": "/Users/maxghenis/TheAxiomFoundation/axiom-rules-engine/target/release/axiom-rules-engine",
       "fiscal_year": 2024,
       "overlay": {
         "file_sha256": {
@@ -286,7 +291,6 @@
           "us:policies/usda/snap/fy-2026-cola/maximum-allotments": "us:policies/usda/snap/fy-2024-cola/maximum-allotments"
         },
         "overlay": "us-co-snap-fy2024",
-        "overlay_root": "/var/folders/9l/_wztzgbx7mgc7l1r0416cy7m0000gn/T/snap-qc-overlay-5so30vcs/rulespec-us-main-snapqc",
         "patches": [
           {
             "file": "us-co/regulations/10-ccr-2506-1/4.407.31.yaml",
@@ -336,7 +340,7 @@
           "us/regulations/7-cfr/273/9.yaml": 1,
           "us/statutes/7/2017/a.yaml": 3
         },
-        "rulespec_root": "/Users/maxghenis/TheAxiomFoundation/_worktrees/rulespec-us-main-snapqc",
+        "rulespec_root": "/Users/maxghenis/TheAxiomFoundation/rulespec-us",
         "schema": "axiom_oracles.rulespec_overlay.v1"
       },
       "period": "2026-01",
@@ -347,7 +351,7 @@
         "sha256": "0f3230a4318307d3088382546095eebfde03e781da6f65c9eac7f077bd4263f4",
         "url": "https://snapqcdata.net/sites/default/files/2026-05/qcfy2024_csv.zip"
       },
-      "rulespec_root": "/Users/maxghenis/TheAxiomFoundation/_worktrees/rulespec-us-main-snapqc"
+      "rulespec_root": "/Users/maxghenis/TheAxiomFoundation/rulespec-us"
     },
     "stages": [],
     "weighted": {

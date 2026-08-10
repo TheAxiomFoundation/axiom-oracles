@@ -645,11 +645,7 @@
       "inline_cases_not_counted": 922,
       "reconciliation": "cardinality",
       "report": "dashboard/public/data/axiom-snapqc-az-snap.json",
-<<<<<<< HEAD
-      "report_sha256": "193558e293329cbde37c49b4fe480d64d48f734c02e50a85643abd14f9250d5f",
-=======
       "report_sha256": "a3ee6a56b573993b328022c62b4b0859f1891b9610b8d8e1e04650afbe9ea146",
->>>>>>> origin/main
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -820,11 +816,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-be-article-51-forfait.json",
-<<<<<<< HEAD
-      "report_sha256": "19a12a0714817a040886feb287b484bcccd4c261a9c3a2c88b43baa8cc579e00",
-=======
       "report_sha256": "2d16bfb97b64db9fa487cfcb8454f9556b9aad5ce09672b614d8783b45e3bce5",
->>>>>>> origin/main
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -1549,11 +1541,7 @@
       "inline_cases_not_counted": 3,
       "reconciliation": "cardinality",
       "report": "dashboard/public/data/axiom-euromod-be-marital-quotient.json",
-<<<<<<< HEAD
-      "report_sha256": "e01a3a820f7f15b5d7523bb899d5eaf175920f72baf8a8a9ca3182146715f416",
-=======
       "report_sha256": "e39b6554d1ec5755cd06bf7216d27ad3915217e9c032935668aa1df025ab52b4",
->>>>>>> origin/main
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -2827,11 +2815,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "cardinality",
       "report": "dashboard/public/data/axiom-snapqc-co-snap.json",
-<<<<<<< HEAD
-      "report_sha256": "29289e73121e4adf2c25fb38a753f9d12c06eabd2564c9e2d7866a8871b732c4",
-=======
-      "report_sha256": "0e9445912cee51e3fef041c2f77a23957432ea5100fc620295923fd051105c9a",
->>>>>>> origin/main
+      "report_sha256": "a786bd1620907f7edc1a0a1bef485e450f0362bf4a2ddb4f30e9329c4bdf67ec",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -3357,11 +3341,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-dk-child-youth-benefit.json",
-<<<<<<< HEAD
-      "report_sha256": "058e443573c725f4e3057a9e2008e516577f668fb526252c0f6d762be3604865",
-=======
       "report_sha256": "4d58332410cf73e4f3e37b5d0c35863c23d4386e9fb6b8b6298c0acf6e650579",
->>>>>>> origin/main
       "varied_fields": 2,
       "verdict_concepts": {}
     },
@@ -3987,11 +3967,7 @@
       "inline_cases_not_counted": 945,
       "reconciliation": "cardinality",
       "report": "dashboard/public/data/axiom-snapqc-ga-snap.json",
-<<<<<<< HEAD
-      "report_sha256": "2e8db32e41a49509dc135140e3612d00a986d3ae5e0c1cc673cd7599399e11d7",
-=======
       "report_sha256": "90e50fb817f8f32c5bcafa30c70b95fca7a0f4b05ec4ee2fe475bc06ffbd7751",
->>>>>>> origin/main
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -7545,11 +7521,7 @@
       "inline_cases_not_counted": 906,
       "reconciliation": "cardinality",
       "report": "dashboard/public/data/axiom-snapqc-tx-snap.json",
-<<<<<<< HEAD
-      "report_sha256": "21a345477facb01b3e5f4b50dacfd2fabd0a77cc7cb278283e79c180ac772886",
-=======
       "report_sha256": "6478930340f065f8e356874c38bd2e4350355536d836524d36ec1a863a4833ed",
->>>>>>> origin/main
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -7618,11 +7590,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-policyengine-uk-attendance-allowance-pe.json",
-<<<<<<< HEAD
-      "report_sha256": "f948350ca372874f5fa55ca2d06f3dacbe4c28e191b5d30fd3fb0be96e1cc14c",
-=======
       "report_sha256": "83d1c5e0416f2de4afc6f8bfad8302b7629757c7930fbfd6d752500f619fe946",
->>>>>>> origin/main
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -7687,11 +7655,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-uk-benefit-cap.json",
-<<<<<<< HEAD
-      "report_sha256": "2d5802ee79216c004c45a438bfb5c773e99dfbdcb3d70ccd97b99fa1dbcf85b9",
-=======
       "report_sha256": "9716e6bb6a5d5581ddf81c848bbe849f4911a363b4b42c4d9c153b2f1e7f31d7",
->>>>>>> origin/main
       "varied_fields": 6,
       "verdict_concepts": {}
     },
@@ -7732,11 +7696,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-uk-best-start-foods.json",
-<<<<<<< HEAD
-      "report_sha256": "5c66336acef2d11d8bd12cde94af1b4cac8cb1136c8a73c84998cbec5a5a4572",
-=======
       "report_sha256": "8a07a66bd32ce19c4bd6f7095a04229fcfc434e9f26d3df0000c644e72f0437d",
->>>>>>> origin/main
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -7821,11 +7781,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-uk-child-benefit.json",
-<<<<<<< HEAD
-      "report_sha256": "267d16994c1c890cc0648c61274bbff9a983d3378b9dfda5fd3881426cdffccf",
-=======
       "report_sha256": "107dd80d950ef782e4195797bc0fbb6672347a23576b52841cee508f60d6de28",
->>>>>>> origin/main
       "varied_fields": 2,
       "verdict_concepts": {}
     },
@@ -7892,11 +7848,7 @@
       "inline_cases_not_counted": 2,
       "reconciliation": "cardinality",
       "report": "dashboard/public/data/axiom-euromod-uk-contribution-based-jsa.json",
-<<<<<<< HEAD
-      "report_sha256": "c71be3aed513064131e9fbb09c001734f9d84e46c0ad0794deb98f91e81e0018",
-=======
       "report_sha256": "4f9ce23ffe36dd3ee8f931db7bf17dc29086453d5a717c813aef3904ce417323",
->>>>>>> origin/main
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -7957,11 +7909,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-uk-employer-nic.json",
-<<<<<<< HEAD
-      "report_sha256": "4670a830ca12747728c8134ba79cefd4a37fbc42f11c0b78a5168112186ea373",
-=======
       "report_sha256": "9438c9f4f5fe803dfc0a3d477ad01b337f51e35ec7dc48a89ff85fe0b1a6dca1",
->>>>>>> origin/main
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -8022,11 +7970,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-uk-healthy-start.json",
-<<<<<<< HEAD
-      "report_sha256": "cdd1f6ef2399cb4bcbeb9433cc58aa5ed092fa13c4b7c58a9e8c9d823b7f8a9b",
-=======
       "report_sha256": "31acc3f3121ed77cea664f13be086b902af52a68eca3308e16365790ef318726",
->>>>>>> origin/main
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -8101,11 +8045,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-uk-income-tax-dividend.json",
-<<<<<<< HEAD
-      "report_sha256": "1fe76145b75dc847598fbd17b8eae238dd0ef2439e441477518a8d66cb6338be",
-=======
       "report_sha256": "289daa0bcfc4db4f6f2270b9a1f136bfafc19bee3f2d086c82d1f9ce76c2dd90",
->>>>>>> origin/main
       "varied_fields": 2,
       "verdict_concepts": {}
     },
@@ -8247,11 +8187,7 @@
       "inline_cases_not_counted": 12,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-policyengine-uk-lbtt-ltt.json",
-<<<<<<< HEAD
-      "report_sha256": "1bcb8bb788aecc1acb0be868eecbd186f71f765a279cad0f72dccd855ab77a5d",
-=======
       "report_sha256": "77ab55fe338dcce310f7288aaf71c1bb7e195f54001787bd1693a16c38955d64",
->>>>>>> origin/main
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -8292,11 +8228,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-uk-maternity-allowance.json",
-<<<<<<< HEAD
-      "report_sha256": "9004224e7ccb1428d320961bddec59dbe43d63fcbe8a5007090519a29d0e6c5f",
-=======
       "report_sha256": "cc151f31a491cd3fcb28f79d9a538355bbc2b980047d2bf694bfe76ef3f20576",
->>>>>>> origin/main
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -8322,11 +8254,7 @@
       "inline_cases_not_counted": 12,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-uk-pension-credit.json",
-<<<<<<< HEAD
-      "report_sha256": "69b946adebf6110b5307cffc38e2179d1a8128918063dc1c0822c95c0c203052",
-=======
       "report_sha256": "5dfb2355ac20abd91fe3bf667dc4aaf0302193f4b342a10c47c16d83c90f316e",
->>>>>>> origin/main
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -8367,11 +8295,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-uk-personal-allowance.json",
-<<<<<<< HEAD
-      "report_sha256": "f6db80fbba2884212bdd54cb25ba4503b6b065bc57843188b03926951f8fb168",
-=======
       "report_sha256": "87e3f1e7d81bd920bb5cc183f5a1379d60c1466aa04d48190bdbd10c5bb76c55",
->>>>>>> origin/main
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -8397,11 +8321,7 @@
       "inline_cases_not_counted": 1,
       "reconciliation": "cardinality",
       "report": "dashboard/public/data/axiom-euromod-uk-scottish-carer-supplement.json",
-<<<<<<< HEAD
-      "report_sha256": "819b7a37c04f67bd47c234ab931c4928c5acc3f2f2481e7ca97ccbe089aa74b7",
-=======
       "report_sha256": "577f518db30958b61d2334f0a737b6743e4b1f7e328473c84008add00b7d298b",
->>>>>>> origin/main
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -8427,11 +8347,7 @@
       "inline_cases_not_counted": 4,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-uk-scottish-child-payment.json",
-<<<<<<< HEAD
-      "report_sha256": "b5af07bdc54a4d58d5a01a91cc26caef250c8bb6ead5b2b8657c2890010bac4f",
-=======
       "report_sha256": "7cc85b3aa970b3ea803addd84734f1f4016434009b4a845dc357eac30ef3423a",
->>>>>>> origin/main
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -8472,11 +8388,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-uk-self-employed-nic.json",
-<<<<<<< HEAD
-      "report_sha256": "81b2b5616b79d1eb41ea538646085aa077e52be61282a3830634c395962dc367",
-=======
       "report_sha256": "80d9ef67d860e1a04e3486192db8a6d3ec00138a0af64774e07da1871b073c3f",
->>>>>>> origin/main
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -8641,11 +8553,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-policyengine-uk-tax-free-childcare-pe.json",
-<<<<<<< HEAD
-      "report_sha256": "1861d8bbc88617a9f8bd38ad1529709b645e4b58c4b953cb94be307d68eccbb0",
-=======
       "report_sha256": "2907249dcd618b2d6f2152b6956127e0e4abbbb22eb76c6d44fd161075b4c222",
->>>>>>> origin/main
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -8812,11 +8720,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-policyengine-uk-winter-fuel-payment-pe.json",
-<<<<<<< HEAD
-      "report_sha256": "35b503a983326335868940f17d4d4cdc397f287d009661aacb06bac8d21c6e90",
-=======
       "report_sha256": "8ccaaf6141cc4454ed1cc15ff61239d8c66701ffde2f88d34b43bd5efade4e17",
->>>>>>> origin/main
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -9118,11 +9022,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-policyengine-us-snap-abawd-grid.json",
-<<<<<<< HEAD
-      "report_sha256": "af75a97c2290a1599c6493530b1946d75056d1c453d92de5c5d2bcde62f4298d",
-=======
       "report_sha256": "d2ca7026d2f4883d8dbb30317ac57ad5c6c7637f7455b18f6e4cf14806c56438",
->>>>>>> origin/main
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -9148,11 +9048,7 @@
       "inline_cases_not_counted": 40,
       "reconciliation": "cardinality",
       "report": "dashboard/public/data/axiom-usitc-us-tariff.json",
-<<<<<<< HEAD
-      "report_sha256": "91b105ec600d28072bbed91b425894079ca75bfedc68b80a0c71825f700723c1",
-=======
       "report_sha256": "c846c14a9510c631b5b0c0090c22a149592b363170b88dc488b6aa31eac06315",
->>>>>>> origin/main
       "varied_fields": 0,
       "verdict_concepts": {}
     },
