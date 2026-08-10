@@ -355,7 +355,7 @@
       "axiom_rules_engine_sha": "dc7eb90d2cfcf6b7ecf68ada226112a8ac444350",
       "axiom_rules_engine_version": "0.2.1"
     },
-    "generated_at": "2026-08-09T19:10:39Z",
+    "generated_at": "2026-08-10T02:43:21Z",
     "generated_by": "scripts/run_comparison.py::uk-worker-nic-ukmod",
     "oracle": {
       "euromod_country": "UK",
