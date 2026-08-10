@@ -67,6 +67,12 @@ STATE_RULES = {
             ("state_income_tax", None),
         ),
     ],
+    "ar": [
+        (
+            r"^policies/income_tax/pilot_liability_pipeline\.yaml$",
+            ("state_income_tax", None),
+        ),
+    ],
     "az": [
         (r"^policies/des/ccap/", ("childcare_assistance", None)),
         (r"^policies/des/faa5/(ca-|two-parent)", ("tanf", None)),
@@ -81,6 +87,10 @@ STATE_RULES = {
         (r"^(policies/cdss/snap|regulations/mpp/)", ("snap", None)),
         (r"^policies/cdss/calworks/", ("tanf", None)),
         (r"^regulations/cdss/eas/49/", ("state_ssi_supplement", None)),
+        (
+            r"^policies/income_tax/pilot_liability_pipeline\.yaml$",
+            ("state_income_tax", None),
+        ),
     ],
     "co": [
         (r"^(policies/cdhs/snap|regulations/10-ccr-2506-1/)", ("snap", None)),
@@ -93,6 +103,19 @@ STATE_RULES = {
         (
             r"^policies/income_tax/"
             r"2026_resident_ordinary_tax_before_personal_credit\.yaml$",
+            ("state_income_tax", None),
+        ),
+    ],
+    "dc": [
+        (
+            r"^policies/income_tax/"
+            r"2026_section_47_1806_03_schedule_before_credits\.yaml$",
+            ("state_income_tax", None),
+        ),
+    ],
+    "de": [
+        (
+            r"^policies/income_tax/pilot_liability_pipeline\.yaml$",
             ("state_income_tax", None),
         ),
     ],
@@ -110,13 +133,47 @@ STATE_RULES = {
     ],
     "il": [
         (r"^(policies/dhs/csmm/|statutes/320/)", ("state_ssi_supplement", None)),
+        (
+            r"^policies/income_tax/pilot_liability_pipeline\.yaml$",
+            ("state_income_tax", None),
+        ),
     ],
-    "ks": [(r"^policies/dcf/keesm/", ("tanf", None))],
+    "in": [
+        (
+            r"^policies/income_tax/pilot_liability_pipeline\.yaml$",
+            ("state_income_tax", None),
+        ),
+    ],
+    "ks": [
+        (r"^policies/dcf/keesm/", ("tanf", None)),
+        (
+            r"^policies/income_tax/"
+            r"2026_k40es_schedule_before_credits\.yaml$",
+            ("state_income_tax", None),
+        ),
+    ],
     "ky": [(r"^policies/income_tax/", ("state_income_tax", None))],
     "mi": [(r"^policies/mdhhs/", ("state_ssi_supplement", None))],
     "mn": [
         (r"^policies/dhs/combined-manual/0020", ("state_ssi_supplement", None)),
         (r"^policies/dhs/combined-manual/0022", ("tanf", None)),
+        (
+            r"^policies/income_tax/pilot_liability_pipeline\.yaml$",
+            ("state_income_tax", None),
+        ),
+    ],
+    "mt": [
+        (
+            r"^policies/income_tax/pilot_liability_pipeline\.yaml$",
+            ("state_income_tax", None),
+        ),
+    ],
+    "ms": [
+        (
+            r"^policies/income_tax/"
+            r"2026_section_27_7_5_schedule\.yaml$",
+            ("state_income_tax", None),
+        ),
     ],
     "ga": [
         (r"^policies/cms/", ("medicaid_chip_bhp_thresholds", None)),
@@ -137,11 +194,33 @@ STATE_RULES = {
     "ny": [
         (r"^(policies/otda/snap|regulations/18-nycrr/387)", ("snap", None)),
         (r"^(policies/otda/tanf|regulations/18-nycrr/385)", ("tanf", None)),
+        (
+            r"^policies/income_tax/pilot_liability_pipeline\.yaml$",
+            ("state_income_tax", None),
+        ),
         (r"^policies/tax/", ("state_income_tax", None)),
         (r"^statutes/NYC", ("nyc_income_tax", "NYC")),
     ],
+    "oh": [
+        (
+            r"^policies/income_tax/pilot_liability_pipeline\.yaml$",
+            ("state_income_tax", None),
+        ),
+    ],
+    "pa": [
+        (
+            r"^policies/income_tax/pilot_liability_pipeline\.yaml$",
+            ("state_income_tax", None),
+        ),
+    ],
     "or": [(r"^policies/odhs/", ("snap", None))],
-    "sc": [(r"^(policies/dss/snap|regulations/114/)", ("snap", None))],
+    "sc": [
+        (r"^(policies/dss/snap|regulations/114/)", ("snap", None)),
+        (
+            r"^policies/income_tax/pilot_liability_pipeline\.yaml$",
+            ("state_income_tax", None),
+        ),
+    ],
     "tn": [
         (r"^policies/dhs/snap/", ("snap", None)),
         (r"^regulations/1240-01/", ("snap", None)),

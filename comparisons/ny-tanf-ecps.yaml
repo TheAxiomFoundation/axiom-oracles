@@ -9,9 +9,17 @@ description: >-
   disregards) against PolicyEngine's ny_tanf on Enhanced CPS households in
   New York. Known parameter divergences the suite is expected to surface:
   the encoded state plan's 62% earned income disregard vs PolicyEngine's
-  50%, and different local-agency shelter maximum schedules. Refresh the
-  rulespec root after pulling ~/rulespec-us with:
-  rsync -a --delete --exclude .axiom ~/rulespec-us/us-ny/ ~/.axiom-oracles/roots/rulespec-us-ny/
+  50%, and different local-agency shelter maximum schedules. Uses the
+  canonical rulespec-us monorepo checkout.
+
+# Not CI-runnable while engine-main x rulespec-us-main is broken: composed-root
+# staging fails the engine's canonical-path scan (non-canonical filenames in
+# us-la/us-nh/us-nj/us -- rulespec-us#1049) before any comparison runs;
+# rulespec-us#1050 (removed plural corpus_citation_paths) and -- for the
+# composed program lanes -- axiom-compose#29 and axiom-oracles#335 queue
+# behind it. Manual lane only; drop this marker when the upstream chain lands
+# (axiom-oracles#455 tracks the flip-back).
+ci: manual
 
 runner:
   type: axiom-oracles-compare
@@ -28,14 +36,18 @@ runner:
     sample_size: 0
     period: 2026-01
     population: enhanced-cps
+    python: "3.13"
+    policyengine_version: "4.18.9"
+    policyengine_us_version: "1.767.3"
+    policyengine_core_version: "3.30.3"
     jurisdiction_fips: "36"
     axiom_compose_binary: $HOME/axiom-compose/.venv/bin/axiom-compose
     axiom_program: $HOME/axiom-oracles/programs/us-ny/tanf/fy-2026.yaml
     axiom_composed_program: /tmp/ny-tanf-composed.yaml
     axiom_compiled_program: /tmp/ny-tanf-compiled.json
-    axiom_rulespec_repo_roots: $HOME/.axiom-oracles/roots
+    axiom_rulespec_repo_roots: $HOME/rulespec-us
     rulespec_roots:
-      - $HOME/.axiom-oracles/roots/rulespec-us-ny
+      - $HOME/rulespec-us
 
 artifacts:
   report_basename: axiom-policyengine-ny-tanf-ecps

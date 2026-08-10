@@ -6,16 +6,16 @@
 # compares the composed MAXIMUM benefit against PolicyEngine's
 # ks_tanf_maximum_benefit — which resolves the long-deferred question of
 # whether the encoded basic+shelter composition matches PolicyEngine's
-# single combined table (it equals basic + shelter group V at 100%).
+# single combined table (the Axiom bridge fixes shelter group I at 100%).
 
 program: us-ks/tanf
 period: 2026-01
 
 outputs:
-  - ks_tanf_annual_maximum_benefit
+  - ks_tanf_monthly_maximum_benefit
 
 acknowledged_incomplete:
-  - ks_tanf_annual_maximum_benefit
+  - ks_tanf_monthly_maximum_benefit
 
 scope:
   state:
@@ -29,6 +29,16 @@ transformations:
     source: axiom-oracles ECPS projection household membership
 
   - pattern: derived_formula
+    name: ks_tanf_monthly_maximum_benefit
+    effective_from: '2026-01-01'
+    entity: Household
+    dtype: Money
+    period: Month
+    unit: USD
+    source: axiom-oracles programs/us-ks/tanf program output
+    formula: ks_tanf_maximum_benefit
+
+  - pattern: derived_formula
     name: ks_tanf_annual_maximum_benefit
     effective_from: '2026-01-01'
     entity: Household
@@ -36,4 +46,4 @@ transformations:
     period: Year
     unit: USD
     source: axiom-oracles programs/us-ks/tanf program output
-    formula: ks_tanf_maximum_benefit * 12
+    formula: ks_tanf_monthly_maximum_benefit * 12

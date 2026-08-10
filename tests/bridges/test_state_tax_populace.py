@@ -27,8 +27,17 @@ def _state(document: dict, state: str) -> dict:
 
 
 def _first_input(document: dict) -> tuple[dict, dict]:
-    jurisdiction = next(item for item in document["jurisdictions"] if item["inputs"])
-    return jurisdiction, jurisdiction["inputs"][0]
+    jurisdiction = next(
+        item
+        for item in document["jurisdictions"]
+        if any(slot["source_kind"] == "blocked" for slot in item["inputs"])
+    )
+    slot = next(
+        slot
+        for slot in jurisdiction["inputs"]
+        if slot["source_kind"] == "blocked"
+    )
+    return jurisdiction, slot
 
 
 def test_packaged_contract_has_exact_campaign_inventory() -> None:
@@ -36,8 +45,14 @@ def test_packaged_contract_has_exact_campaign_inventory() -> None:
 
     assert len(contract.jurisdictions) == 43
     assert set(contract.by_state()) == EXPECTED_STATE_CODES
-    assert sum(len(item.inputs) for item in contract.jurisdictions) == 155
-    assert sum(len(item.relations) for item in contract.jurisdictions) == 2
+    assert (
+        sum(len(item.inputs) for item in contract.jurisdictions)
+        == EXPECTED_EXPLICIT_INPUT_COUNT
+    )
+    assert (
+        sum(len(item.relations) for item in contract.jurisdictions)
+        == EXPECTED_EXPLICIT_RELATION_COUNT
+    )
     assert len({item.program for item in contract.jurisdictions}) == 43
     assert len({item.output for item in contract.jurisdictions}) == 43
     assert len({item.policyengine_target for item in contract.jurisdictions}) == 43
@@ -114,20 +129,131 @@ def test_contract_pins_arkansas_person_aggregation_surface() -> None:
         validate_state_tax_populace_contract(document)
 
 
+def test_contract_pins_kansas_canonical_k40es_surface() -> None:
+    kansas = load_state_tax_populace_contract().by_state()["KS"]
+    module = "us-ks:policies/income_tax/2026_k40es_schedule_before_credits"
+
+    assert kansas.program == module
+    assert kansas.output == (
+        f"{module}#ks_pit_2026_k40es_schedule_before_credits"
+    )
+    assert (
+        kansas.policyengine_target
+        == "ks_k40es_schedule_before_credits_reviewed"
+    )
+    assert (kansas.tolerance, kansas.relative_tolerance) == (0.01, 1e-7)
+    assert [slot.slot for slot in kansas.inputs] == [
+        f"{module}#input.ks_pit_2026_k40es_completed_taxable_income",
+        f"{module}#input.ks_pit_2026_k40es_married_joint_schedule_applies",
+    ]
+    assert [slot.policyengine_variable for slot in kansas.inputs] == [
+        "ks_taxable_income",
+        "tax_unit_is_joint",
+    ]
+
+
+def test_contract_pins_california_bhst_component_surface() -> None:
+    california = load_state_tax_populace_contract().by_state()["CA"]
+    module = "us-ca:policies/income_tax/pilot_liability_pipeline"
+
+    assert california.program == module
+    assert california.output == (
+        f"{module}#ca_pit_pilot_behavioral_health_services_tax"
+    )
+    assert california.policyengine_target == "ca_mental_health_services_tax"
+    assert (
+        california.policyengine_target
+        != "ca_income_tax_before_refundable_credits"
+    )
+    assert (california.tolerance, california.relative_tolerance) == (
+        0.01,
+        1e-7,
+    )
+    assert [slot.slot for slot in california.inputs] == [
+        f"{module}#input.ca_pit_pilot_supplied_completed_taxable_income"
+    ]
+    assert [slot.policyengine_variable for slot in california.inputs] == [
+        "ca_taxable_income"
+    ]
+
+
+def test_contract_pins_minnesota_2026_schedule_surface() -> None:
+    minnesota = load_state_tax_populace_contract().by_state()["MN"]
+    module = "us-mn:policies/income_tax/pilot_liability_pipeline"
+
+    assert minnesota.program == module
+    assert minnesota.output == f"{module}#mn_pit_pilot_schedule_tax"
+    assert minnesota.policyengine_target == "mn_basic_tax_precision_stable"
+    assert (
+        minnesota.policyengine_target
+        not in {"mn_basic_tax", "mn_income_tax_before_refundable_credits"}
+    )
+    assert (minnesota.tolerance, minnesota.relative_tolerance) == (1.0, 0.0)
+    assert [slot.slot for slot in minnesota.inputs] == [
+        f"{module}#input.mn_pit_pilot_state_taxable_income",
+        f"{module}#input.mn_pit_pilot_filing_status_joint_or_surviving_spouse",
+        f"{module}#input.mn_pit_pilot_filing_status_separate",
+        f"{module}#input.mn_pit_pilot_filing_status_head_of_household",
+    ]
+    assert [slot.source_kind for slot in minnesota.inputs] == [
+        "pe_upstream_boundary",
+        "derived",
+        "derived",
+        "derived",
+    ]
+    assert [slot.policyengine_variable for slot in minnesota.inputs] == [
+        "mn_taxable_income",
+        "filing_status",
+        "filing_status",
+        "filing_status",
+    ]
+    assert [slot.policyengine_transform for slot in minnesota.inputs] == [
+        None,
+        "filing_status_joint_or_surviving_spouse",
+        "filing_status_is_separate",
+        "filing_status_is_head_of_household",
+    ]
+
+
+def test_contract_pins_dc_canonical_joint_method_schedule() -> None:
+    district = load_state_tax_populace_contract().by_state()["DC"]
+    module = (
+        "us-dc:policies/income_tax/"
+        "2026_section_47_1806_03_schedule_before_credits"
+    )
+
+    assert district.program == module
+    assert district.output == (
+        f"{module}#dc_pit_2026_section_47_1806_03_schedule_before_credits"
+    )
+    assert district.policyengine_target == "dc_income_tax_before_credits_joint"
+    assert district.policyengine_target != "dc_income_tax_before_credits"
+    assert (district.tolerance, district.relative_tolerance) == (0.01, 1e-7)
+    assert [slot.slot for slot in district.inputs] == [
+        f"{module}#input."
+        "dc_pit_2026_section_47_1806_03_completed_joint_method_taxable_income"
+    ]
+    assert [slot.policyengine_variable for slot in district.inputs] == [
+        "dc_taxable_income_joint"
+    ]
+
+
 def test_packaged_contract_has_reviewed_ready_states() -> None:
     contract = load_state_tax_populace_contract()
     summary = readiness_summary(contract)
 
     assert summary == {
         "jurisdiction_count": 43,
-        "ready_count": 29,
-        "blocked_count": 14,
+        "ready_count": 32,
+        "blocked_count": 11,
         "ready_states": [
             "AL",
             "AR",
             "AZ",
+            "CA",
             "CO",
             "CT",
+            "DC",
             "DE",
             "GA",
             "HI",
@@ -138,6 +264,7 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
             "KY",
             "LA",
             "MI",
+            "MN",
             "MS",
             "MT",
             "NC",
@@ -159,8 +286,10 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
                 "AL",
                 "AZ",
                 "AR",
+                "CA",
                 "CO",
                 "CT",
+                "DC",
                 "DE",
                 "GA",
                 "HI",
@@ -171,6 +300,7 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
                 "KY",
                 "LA",
                 "MI",
+                "MN",
                 "MS",
                 "MT",
                 "NC",
@@ -188,8 +318,8 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
             }
         ),
         "explicit_input_count": EXPECTED_EXPLICIT_INPUT_COUNT,
-        "explicit_relation_count": EXPECTED_EXPLICIT_RELATION_COUNT,
-        "blocked_input_count": EXPECTED_EXPLICIT_INPUT_COUNT - 62,
+            "explicit_relation_count": EXPECTED_EXPLICIT_RELATION_COUNT,
+            "blocked_input_count": EXPECTED_EXPLICIT_INPUT_COUNT - 67,
         "blocked_relation_count": 0,
     }
     assert "NH" not in contract.by_state()
@@ -197,9 +327,11 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
         "AL": ["al_taxable_income"],
         "AZ": ["az_taxable_income"],
         "AR": ["ar_taxable_income_indiv"],
-            "CT": ["ct_taxable_income", "ct_agi"],
+        "CA": ["ca_taxable_income"],
+        "CT": ["ct_taxable_income", "ct_agi"],
         "CO": ["co_taxable_income"],
-        "DE": ["de_taxable_income_indv", "de_files_separately"],
+        "DC": ["dc_taxable_income_joint"],
+        "DE": ["de_taxable_income_indv"],
         "GA": ["ga_taxable_income"],
         "HI": ["hi_taxable_income"],
         "IL": ["il_taxable_income", "recapture_of_investment_credit"],
@@ -212,14 +344,15 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
         "KS": ["ks_taxable_income", "tax_unit_is_joint"],
         "LA": ["la_taxable_income"],
         "MI": ["mi_taxable_income"],
-        "MS": ["ms_taxable_income_indiv", "ms_taxable_income_joint"],
+        "MN": ["mn_taxable_income"],
+        "MS": ["ms_taxable_income_joint"],
         "NC": ["nc_taxable_income"],
         "NM": ["nm_taxable_income"],
         "OH": ["oh_taxable_income"],
         "OK": ["ok_taxable_income"],
         "PA": ["pa_adjusted_taxable_income"],
         "SC": ["sc_taxable_income"],
-        "UT": ["ut_taxable_income"],
+        "UT": ["ut_taxable_income", "ut_income_tax_exempt"],
         "VA": ["va_taxable_income"],
         "VT": ["vt_normal_income_tax", "adjusted_gross_income"],
         "WV": ["wv_taxable_income"],
@@ -299,54 +432,74 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
         "filing_status_is_head_of_household",
         "filing_status_joint_or_surviving_spouse",
     ]
-    de = contract.by_state()["DE"]
-    assert de.policyengine_target == (
-        "de_income_tax_before_non_refundable_credits_unit"
+    ny = contract.by_state()["NY"]
+    assert ny.program == "us-ny:policies/income_tax/pilot_liability_pipeline"
+    assert ny.output == f"{ny.program}#ny_pit_pilot_main_income_tax"
+    assert ny.policyengine_target == "ny_main_income_tax"
+    assert (ny.tolerance, ny.relative_tolerance) == (2.25, 1e-7)
+    assert [item.policyengine_variable for item in ny.inputs] == [
+        "ny_taxable_income",
+        "filing_status",
+        "filing_status",
+    ]
+    assert [item.policyengine_transform for item in ny.inputs] == [
+        None,
+        "filing_status_joint_or_surviving_spouse",
+        "filing_status_is_head_of_household",
+    ]
+    assert "supplemental tax" in ny.evidence
+    assert "rounded cumulative bases" in ny.evidence
+    il = contract.by_state()["IL"]
+    assert il.program == "us-il:policies/income_tax/pilot_liability_pipeline"
+    assert il.output == f"{il.program}#il_pit_pilot_income_tax_liability"
+    assert il.policyengine_target == (
+        "il_income_tax_before_non_refundable_credits"
     )
+    assert (il.tolerance, il.relative_tolerance) == (1.0, 0.0)
+    assert [item.policyengine_variable for item in il.inputs] == [
+        "il_taxable_income",
+        "recapture_of_investment_credit",
+    ]
+    assert all(
+        item.source_kind == "pe_upstream_boundary" for item in il.inputs
+    )
+    assert "4.95% rate" in il.evidence
+    assert "2,332 positive-weight" in il.evidence
+    assert "all 2,332 positive-weight routed Illinois TaxUnits" in il.evidence
+    assert "Every population row had zero recapture" in il.evidence
+    assert "positive_taxable_income_with_recapture fixture" in il.evidence
+    assert "rather than synthesized population input" in il.inputs[1].evidence
+    de = contract.by_state()["DE"]
+    assert de.output == (
+        "us-de:policies/income_tax/pilot_liability_pipeline#"
+        "de_pit_pilot_separate_schedule_tax"
+    )
+    assert (
+        de.policyengine_target
+        == "de_income_tax_before_non_refundable_credits_indv"
+    )
+    assert de.comparison_aggregation == "person_sum_to_tax_unit"
     assert (de.tolerance, de.relative_tolerance) == (0.01, 1e-7)
     assert [item.slot for item in de.inputs] == [
         "us-de:policies/income_tax/pilot_liability_pipeline#input."
         "de_pit_pilot_supplied_separate_taxable_income",
-        "us-de:policies/income_tax/pilot_liability_pipeline#input."
-        "de_pit_pilot_taxpayer_is_included",
-        "us-de:policies/income_tax/pilot_liability_pipeline#input."
-        "de_pit_pilot_supplied_combined_taxable_income",
-        "us-de:policies/income_tax/pilot_liability_pipeline#input."
-        "de_pit_pilot_files_separately",
     ]
-    de_derived = [item for item in de.inputs if item.source_kind == "derived"]
-    assert [
-        (
-            item.policyengine_variable,
-            item.policyengine_variables,
-            item.policyengine_transform,
-        )
-        for item in de_derived
-    ] == [
-        (
-            None,
-            ("is_tax_unit_head", "is_tax_unit_spouse"),
-            "person_filer_role_or",
-        ),
-        ("de_taxable_income_joint", (), "person_sum_to_tax_unit"),
-    ]
-    assert [item.slot for item in de.relations] == [
-        "us-de:policies/income_tax/pilot_liability_pipeline#relation."
-        "de_pit_pilot_taxpayer_of_tax_unit"
-    ]
-    assert de.relations[0].source_kind == "raw_populace"
+    assert de.inputs[0].policyengine_variable == "de_taxable_income_indv"
+    assert de.inputs[0].source_kind == "pe_upstream_boundary"
+    assert de.relations == ()
     ms = contract.by_state()["MS"]
+    assert ms.program == (
+        "us-ms:policies/income_tax/2026_section_27_7_5_schedule"
+    )
+    assert ms.output == (
+        f"{ms.program}#ms_pit_2026_section_27_7_5_schedule_tax"
+    )
+    assert ms.policyengine_target == "ms_income_tax_before_credits_joint"
+    assert ms.comparison_aggregation == "person_sum_to_tax_unit"
     assert [item.slot for item in ms.inputs] == [
-        "us-ms:policies/income_tax/pilot_liability_pipeline#input."
-        "ms_pit_pilot_supplied_taxable_income_indiv",
-        "us-ms:policies/income_tax/pilot_liability_pipeline#input."
-        "ms_pit_pilot_supplied_taxable_income_joint",
+        f"{ms.program}#input.ms_pit_2026_supplied_taxable_income"
     ]
-    assert [item.slot for item in ms.relations] == [
-        "us-ms:policies/income_tax/pilot_liability_pipeline#relation."
-        "ms_pit_pilot_person_of_tax_unit"
-    ]
-    assert ms.relations[0].source_kind == "raw_populace"
+    assert ms.relations == ()
     assert contract.by_state()["VT"].relations == ()
     hi = contract.by_state()["HI"]
     assert hi.policyengine_target == "hi_income_tax_before_non_refundable_credits"
@@ -500,7 +653,10 @@ def test_contract_rejects_incomplete_explicit_slot_inventory() -> None:
     jurisdiction, _ = _first_input(document)
     jurisdiction["inputs"].pop()
 
-    with pytest.raises(StateTaxPopulaceContractError, match="exactly 155"):
+    with pytest.raises(
+        StateTaxPopulaceContractError,
+        match=f"exactly {EXPECTED_EXPLICIT_INPUT_COUNT}",
+    ):
         validate_state_tax_populace_contract(document)
 
 
@@ -689,7 +845,8 @@ def test_contract_rejects_unknown_source_kind_and_inconsistent_status() -> None:
 
 def test_contract_rejects_declared_readiness_that_ignores_blocked_slots() -> None:
     document = _document()
-    _state(document, "CA")["status"] = "ready"
+    jurisdiction, _ = _first_input(document)
+    jurisdiction["status"] = "ready"
 
     with pytest.raises(StateTaxPopulaceContractError, match="slot-derived status"):
         validate_state_tax_populace_contract(document)

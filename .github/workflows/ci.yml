@@ -11,6 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Closure's pending-only-falls gate derives its immutable floor from
+          # committed ancestor universes, so a shallow checkout is insufficient.
+          fetch-depth: 0
 
       - uses: actions/setup-python@v5
         with:
@@ -50,6 +54,11 @@ jobs:
       - name: Program certificates recompute clean
         run: uv run python scripts/certify.py --check
 
+      - name: Validate served SNAP case-explorer parity
+        run: |
+          uv run scripts/emit_case_artifacts.py --check al-snap-ecps ma-snap-ecps nc-snap-ecps sc-snap-ecps tn-snap-ecps
+          uv run scripts/emit_disposition_artifacts.py --check al-snap-ecps ma-snap-ecps nc-snap-ecps sc-snap-ecps tn-snap-ecps
+
       - name: Validate canonical case grids are up to date
         run: uv run scripts/extract_grids.py --check
 
@@ -72,6 +81,9 @@ jobs:
         # universes stand alone); enforces determinism when they are present.
         run: uv run scripts/generate_conformance_universe.py --all --check
 
+      - name: Validate closure universes (pinned inventories + pending ratchet)
+        run: uv run scripts/closure_universe.py --check
+
       - name: Validate conformance program compositions (drift vs suites)
         # Derived from the committed suites (no external checkout needed), so
         # this always bites: a covered suite whose runnable-program composition
@@ -83,6 +95,9 @@ jobs:
 
       - name: Conformance ratchets (covered up; unexplained/axiom-gap down)
         run: uv run scripts/conformance_ratchet.py --check
+
+      - name: Unexplained publication gate (per-suite ceilings only fall)
+        run: uv run scripts/unexplained_ratchet.py --check
 
       - name: Validate conformance burn-down series is up to date
         run: uv run scripts/conformance_burndown.py --check

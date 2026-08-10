@@ -223,7 +223,10 @@
   ],
   "engines": {
     "left": "euromod",
-    "right": "axiom"
+    "right": "axiom",
+    "versions": {
+      "axiom_rules_engine": "0.2.0"
+    }
   },
   "errors": [],
   "locales": [
@@ -237,10 +240,10 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "68d65229632e371b96d8eb25c704c1977a2b7ed3",
-      "axiom_rules_engine_version": "0.1.0"
+      "axiom_rules_engine_sha": "8625230d6936c1fc22207f8ebe101f5f17715732",
+      "axiom_rules_engine_version": "0.2.0"
     },
-    "generated_at": "2026-07-27T04:12:10Z",
+    "generated_at": "2026-08-07T13:47:02Z",
     "generated_by": "scripts/run_comparison.py::be-capital-income-tax",
     "oracle": {
       "euromod_country": "BE",
@@ -249,6 +252,7 @@
       "euromod_system": "BE_2025",
       "name": "euromod"
     },
+    "reemitted_report": true,
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-be",

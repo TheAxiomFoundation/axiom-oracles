@@ -1,0 +1,1938 @@
+{
+  "aggregates": [
+    {
+      "compared": 34,
+      "comparison": "amount",
+      "comparison_count": 34,
+      "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+      "left_positive_rate": 82.3529411764706,
+      "match_count": 23,
+      "match_rate": 67.6470588235294,
+      "matched": 23,
+      "mismatch_count": 11,
+      "mismatched": 11,
+      "right_positive_rate": 73.52941176470588
+    }
+  ],
+  "case_count": 34,
+  "cases": [
+    {
+      "axiom": 1000.0,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/savers_credit_pipeline#input.adjusted_gross_income": 24249,
+        "us:policies/income_tax/savers_credit_pipeline#input.filing_status": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_qualified_retirement_savings_contributions": 2000,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_911_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_931_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_933_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_qualified_retirement_savings_contributions": 0
+      },
+      "case_id": "single-one-below-50-percent-limit",
+      "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "adjusted_gross_income": 24249,
+        "first_threshold": 24250,
+        "primary_age": 30,
+        "primary_contributions": 2000,
+        "primary_is_dependent": false,
+        "primary_is_student": false,
+        "second_threshold": 26250,
+        "section_911_excluded_income": 0,
+        "section_931_excluded_income": 0,
+        "section_933_excluded_income": 0,
+        "spouse_age": 30,
+        "spouse_contributions": 0,
+        "spouse_is_dependent": false,
+        "spouse_is_student": false,
+        "third_threshold": 40250
+      },
+      "match": true,
+      "policyengine": 1000.0,
+      "policyengine_components": {
+        "savers_credit": 814.9000244140625,
+        "savers_credit_credit_limit": 814.9000244140625,
+        "savers_credit_potential": 1000.0
+      },
+      "scenario_id": "single-one-below-50-percent-limit"
+    },
+    {
+      "axiom": 1000.0,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/savers_credit_pipeline#input.adjusted_gross_income": 24250,
+        "us:policies/income_tax/savers_credit_pipeline#input.filing_status": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_qualified_retirement_savings_contributions": 2000,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_911_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_931_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_933_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_qualified_retirement_savings_contributions": 0
+      },
+      "case_id": "single-at-50-percent-limit-inclusive",
+      "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+      "difference": 600.0,
+      "filing_status": "single",
+      "inputs": {
+        "adjusted_gross_income": 24250,
+        "first_threshold": 24250,
+        "primary_age": 30,
+        "primary_contributions": 2000,
+        "primary_is_dependent": false,
+        "primary_is_student": false,
+        "second_threshold": 26250,
+        "section_911_excluded_income": 0,
+        "section_931_excluded_income": 0,
+        "section_933_excluded_income": 0,
+        "spouse_age": 30,
+        "spouse_contributions": 0,
+        "spouse_is_dependent": false,
+        "spouse_is_student": false,
+        "third_threshold": 40250
+      },
+      "match": false,
+      "policyengine": 400.0,
+      "policyengine_components": {
+        "savers_credit": 400.0,
+        "savers_credit_credit_limit": 815.0,
+        "savers_credit_potential": 400.0
+      },
+      "scenario_id": "single-at-50-percent-limit-inclusive"
+    },
+    {
+      "axiom": 400.0,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/savers_credit_pipeline#input.adjusted_gross_income": 24251,
+        "us:policies/income_tax/savers_credit_pipeline#input.filing_status": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_qualified_retirement_savings_contributions": 2000,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_911_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_931_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_933_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_qualified_retirement_savings_contributions": 0
+      },
+      "case_id": "single-one-over-50-percent-limit",
+      "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "adjusted_gross_income": 24251,
+        "first_threshold": 24250,
+        "primary_age": 30,
+        "primary_contributions": 2000,
+        "primary_is_dependent": false,
+        "primary_is_student": false,
+        "second_threshold": 26250,
+        "section_911_excluded_income": 0,
+        "section_931_excluded_income": 0,
+        "section_933_excluded_income": 0,
+        "spouse_age": 30,
+        "spouse_contributions": 0,
+        "spouse_is_dependent": false,
+        "spouse_is_student": false,
+        "third_threshold": 40250
+      },
+      "match": true,
+      "policyengine": 400.0,
+      "policyengine_components": {
+        "savers_credit": 400.0,
+        "savers_credit_credit_limit": 815.0999755859375,
+        "savers_credit_potential": 400.0
+      },
+      "scenario_id": "single-one-over-50-percent-limit"
+    },
+    {
+      "axiom": 400.0,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/savers_credit_pipeline#input.adjusted_gross_income": 26249,
+        "us:policies/income_tax/savers_credit_pipeline#input.filing_status": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_qualified_retirement_savings_contributions": 2000,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_911_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_931_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_933_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_qualified_retirement_savings_contributions": 0
+      },
+      "case_id": "single-one-below-20-percent-limit",
+      "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "adjusted_gross_income": 26249,
+        "first_threshold": 24250,
+        "primary_age": 30,
+        "primary_contributions": 2000,
+        "primary_is_dependent": false,
+        "primary_is_student": false,
+        "second_threshold": 26250,
+        "section_911_excluded_income": 0,
+        "section_931_excluded_income": 0,
+        "section_933_excluded_income": 0,
+        "spouse_age": 30,
+        "spouse_contributions": 0,
+        "spouse_is_dependent": false,
+        "spouse_is_student": false,
+        "third_threshold": 40250
+      },
+      "match": true,
+      "policyengine": 400.0,
+      "policyengine_components": {
+        "savers_credit": 400.0,
+        "savers_credit_credit_limit": 1014.9000244140625,
+        "savers_credit_potential": 400.0
+      },
+      "scenario_id": "single-one-below-20-percent-limit"
+    },
+    {
+      "axiom": 400.0,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/savers_credit_pipeline#input.adjusted_gross_income": 26250,
+        "us:policies/income_tax/savers_credit_pipeline#input.filing_status": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_qualified_retirement_savings_contributions": 2000,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_911_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_931_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_933_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_qualified_retirement_savings_contributions": 0
+      },
+      "case_id": "single-at-20-percent-limit-inclusive",
+      "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+      "difference": 200.0,
+      "filing_status": "single",
+      "inputs": {
+        "adjusted_gross_income": 26250,
+        "first_threshold": 24250,
+        "primary_age": 30,
+        "primary_contributions": 2000,
+        "primary_is_dependent": false,
+        "primary_is_student": false,
+        "second_threshold": 26250,
+        "section_911_excluded_income": 0,
+        "section_931_excluded_income": 0,
+        "section_933_excluded_income": 0,
+        "spouse_age": 30,
+        "spouse_contributions": 0,
+        "spouse_is_dependent": false,
+        "spouse_is_student": false,
+        "third_threshold": 40250
+      },
+      "match": false,
+      "policyengine": 200.0,
+      "policyengine_components": {
+        "savers_credit": 200.0,
+        "savers_credit_credit_limit": 1015.0,
+        "savers_credit_potential": 200.0
+      },
+      "scenario_id": "single-at-20-percent-limit-inclusive"
+    },
+    {
+      "axiom": 200.0,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/savers_credit_pipeline#input.adjusted_gross_income": 26251,
+        "us:policies/income_tax/savers_credit_pipeline#input.filing_status": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_qualified_retirement_savings_contributions": 2000,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_911_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_931_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_933_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_qualified_retirement_savings_contributions": 0
+      },
+      "case_id": "single-one-over-20-percent-limit",
+      "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "adjusted_gross_income": 26251,
+        "first_threshold": 24250,
+        "primary_age": 30,
+        "primary_contributions": 2000,
+        "primary_is_dependent": false,
+        "primary_is_student": false,
+        "second_threshold": 26250,
+        "section_911_excluded_income": 0,
+        "section_931_excluded_income": 0,
+        "section_933_excluded_income": 0,
+        "spouse_age": 30,
+        "spouse_contributions": 0,
+        "spouse_is_dependent": false,
+        "spouse_is_student": false,
+        "third_threshold": 40250
+      },
+      "match": true,
+      "policyengine": 200.0,
+      "policyengine_components": {
+        "savers_credit": 200.0,
+        "savers_credit_credit_limit": 1015.0999755859375,
+        "savers_credit_potential": 200.0
+      },
+      "scenario_id": "single-one-over-20-percent-limit"
+    },
+    {
+      "axiom": 200.0,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/savers_credit_pipeline#input.adjusted_gross_income": 40249,
+        "us:policies/income_tax/savers_credit_pipeline#input.filing_status": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_qualified_retirement_savings_contributions": 2000,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_911_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_931_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_933_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_qualified_retirement_savings_contributions": 0
+      },
+      "case_id": "single-one-below-10-percent-limit",
+      "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "adjusted_gross_income": 40249,
+        "first_threshold": 24250,
+        "primary_age": 30,
+        "primary_contributions": 2000,
+        "primary_is_dependent": false,
+        "primary_is_student": false,
+        "second_threshold": 26250,
+        "section_911_excluded_income": 0,
+        "section_931_excluded_income": 0,
+        "section_933_excluded_income": 0,
+        "spouse_age": 30,
+        "spouse_contributions": 0,
+        "spouse_is_dependent": false,
+        "spouse_is_student": false,
+        "third_threshold": 40250
+      },
+      "match": true,
+      "policyengine": 200.0,
+      "policyengine_components": {
+        "savers_credit": 200.0,
+        "savers_credit_credit_limit": 2649.8798828125,
+        "savers_credit_potential": 200.0
+      },
+      "scenario_id": "single-one-below-10-percent-limit"
+    },
+    {
+      "axiom": 200.0,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/savers_credit_pipeline#input.adjusted_gross_income": 40250,
+        "us:policies/income_tax/savers_credit_pipeline#input.filing_status": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_qualified_retirement_savings_contributions": 2000,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_911_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_931_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_933_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_qualified_retirement_savings_contributions": 0
+      },
+      "case_id": "single-at-10-percent-limit-inclusive",
+      "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+      "difference": 200.0,
+      "filing_status": "single",
+      "inputs": {
+        "adjusted_gross_income": 40250,
+        "first_threshold": 24250,
+        "primary_age": 30,
+        "primary_contributions": 2000,
+        "primary_is_dependent": false,
+        "primary_is_student": false,
+        "second_threshold": 26250,
+        "section_911_excluded_income": 0,
+        "section_931_excluded_income": 0,
+        "section_933_excluded_income": 0,
+        "spouse_age": 30,
+        "spouse_contributions": 0,
+        "spouse_is_dependent": false,
+        "spouse_is_student": false,
+        "third_threshold": 40250
+      },
+      "match": false,
+      "policyengine": 0.0,
+      "policyengine_components": {
+        "savers_credit": 0.0,
+        "savers_credit_credit_limit": 2650.0,
+        "savers_credit_potential": 0.0
+      },
+      "scenario_id": "single-at-10-percent-limit-inclusive"
+    },
+    {
+      "axiom": 0.0,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/savers_credit_pipeline#input.adjusted_gross_income": 40251,
+        "us:policies/income_tax/savers_credit_pipeline#input.filing_status": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_qualified_retirement_savings_contributions": 2000,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_911_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_931_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_933_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_qualified_retirement_savings_contributions": 0
+      },
+      "case_id": "single-one-over-10-percent-limit",
+      "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "adjusted_gross_income": 40251,
+        "first_threshold": 24250,
+        "primary_age": 30,
+        "primary_contributions": 2000,
+        "primary_is_dependent": false,
+        "primary_is_student": false,
+        "second_threshold": 26250,
+        "section_911_excluded_income": 0,
+        "section_931_excluded_income": 0,
+        "section_933_excluded_income": 0,
+        "spouse_age": 30,
+        "spouse_contributions": 0,
+        "spouse_is_dependent": false,
+        "spouse_is_student": false,
+        "third_threshold": 40250
+      },
+      "match": true,
+      "policyengine": 0.0,
+      "policyengine_components": {
+        "savers_credit": 0.0,
+        "savers_credit_credit_limit": 2650.1201171875,
+        "savers_credit_potential": 0.0
+      },
+      "scenario_id": "single-one-over-10-percent-limit"
+    },
+    {
+      "axiom": 1000.0,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/savers_credit_pipeline#input.adjusted_gross_income": 48499,
+        "us:policies/income_tax/savers_credit_pipeline#input.filing_status": 1,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_qualified_retirement_savings_contributions": 2000,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_911_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_931_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_933_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_qualified_retirement_savings_contributions": 0
+      },
+      "case_id": "joint-one-below-50-percent-limit",
+      "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+      "difference": 0.0,
+      "filing_status": "joint",
+      "inputs": {
+        "adjusted_gross_income": 48499,
+        "first_threshold": 48500,
+        "primary_age": 30,
+        "primary_contributions": 2000,
+        "primary_is_dependent": false,
+        "primary_is_student": false,
+        "second_threshold": 52500,
+        "section_911_excluded_income": 0,
+        "section_931_excluded_income": 0,
+        "section_933_excluded_income": 0,
+        "spouse_age": 30,
+        "spouse_contributions": 0,
+        "spouse_is_dependent": false,
+        "spouse_is_student": false,
+        "third_threshold": 80500
+      },
+      "match": true,
+      "policyengine": 1000.0,
+      "policyengine_components": {
+        "savers_credit": 1000.0,
+        "savers_credit_credit_limit": 1629.9000244140625,
+        "savers_credit_potential": 1000.0
+      },
+      "scenario_id": "joint-one-below-50-percent-limit"
+    },
+    {
+      "axiom": 1000.0,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/savers_credit_pipeline#input.adjusted_gross_income": 48500,
+        "us:policies/income_tax/savers_credit_pipeline#input.filing_status": 1,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_qualified_retirement_savings_contributions": 2000,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_911_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_931_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_933_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_qualified_retirement_savings_contributions": 0
+      },
+      "case_id": "joint-at-50-percent-limit-inclusive",
+      "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+      "difference": 600.0,
+      "filing_status": "joint",
+      "inputs": {
+        "adjusted_gross_income": 48500,
+        "first_threshold": 48500,
+        "primary_age": 30,
+        "primary_contributions": 2000,
+        "primary_is_dependent": false,
+        "primary_is_student": false,
+        "second_threshold": 52500,
+        "section_911_excluded_income": 0,
+        "section_931_excluded_income": 0,
+        "section_933_excluded_income": 0,
+        "spouse_age": 30,
+        "spouse_contributions": 0,
+        "spouse_is_dependent": false,
+        "spouse_is_student": false,
+        "third_threshold": 80500
+      },
+      "match": false,
+      "policyengine": 400.0,
+      "policyengine_components": {
+        "savers_credit": 400.0,
+        "savers_credit_credit_limit": 1630.0,
+        "savers_credit_potential": 400.0
+      },
+      "scenario_id": "joint-at-50-percent-limit-inclusive"
+    },
+    {
+      "axiom": 400.0,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/savers_credit_pipeline#input.adjusted_gross_income": 48501,
+        "us:policies/income_tax/savers_credit_pipeline#input.filing_status": 1,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_qualified_retirement_savings_contributions": 2000,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_911_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_931_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_933_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_qualified_retirement_savings_contributions": 0
+      },
+      "case_id": "joint-one-over-50-percent-limit",
+      "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+      "difference": 0.0,
+      "filing_status": "joint",
+      "inputs": {
+        "adjusted_gross_income": 48501,
+        "first_threshold": 48500,
+        "primary_age": 30,
+        "primary_contributions": 2000,
+        "primary_is_dependent": false,
+        "primary_is_student": false,
+        "second_threshold": 52500,
+        "section_911_excluded_income": 0,
+        "section_931_excluded_income": 0,
+        "section_933_excluded_income": 0,
+        "spouse_age": 30,
+        "spouse_contributions": 0,
+        "spouse_is_dependent": false,
+        "spouse_is_student": false,
+        "third_threshold": 80500
+      },
+      "match": true,
+      "policyengine": 400.0,
+      "policyengine_components": {
+        "savers_credit": 400.0,
+        "savers_credit_credit_limit": 1630.0999755859375,
+        "savers_credit_potential": 400.0
+      },
+      "scenario_id": "joint-one-over-50-percent-limit"
+    },
+    {
+      "axiom": 400.0,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/savers_credit_pipeline#input.adjusted_gross_income": 52499,
+        "us:policies/income_tax/savers_credit_pipeline#input.filing_status": 1,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_qualified_retirement_savings_contributions": 2000,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_911_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_931_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_933_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_qualified_retirement_savings_contributions": 0
+      },
+      "case_id": "joint-one-below-20-percent-limit",
+      "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+      "difference": 0.0,
+      "filing_status": "joint",
+      "inputs": {
+        "adjusted_gross_income": 52499,
+        "first_threshold": 48500,
+        "primary_age": 30,
+        "primary_contributions": 2000,
+        "primary_is_dependent": false,
+        "primary_is_student": false,
+        "second_threshold": 52500,
+        "section_911_excluded_income": 0,
+        "section_931_excluded_income": 0,
+        "section_933_excluded_income": 0,
+        "spouse_age": 30,
+        "spouse_contributions": 0,
+        "spouse_is_dependent": false,
+        "spouse_is_student": false,
+        "third_threshold": 80500
+      },
+      "match": true,
+      "policyengine": 400.0,
+      "policyengine_components": {
+        "savers_credit": 400.0,
+        "savers_credit_credit_limit": 2029.9000244140625,
+        "savers_credit_potential": 400.0
+      },
+      "scenario_id": "joint-one-below-20-percent-limit"
+    },
+    {
+      "axiom": 400.0,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/savers_credit_pipeline#input.adjusted_gross_income": 52500,
+        "us:policies/income_tax/savers_credit_pipeline#input.filing_status": 1,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_qualified_retirement_savings_contributions": 2000,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_911_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_931_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_933_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_qualified_retirement_savings_contributions": 0
+      },
+      "case_id": "joint-at-20-percent-limit-inclusive",
+      "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+      "difference": 200.0,
+      "filing_status": "joint",
+      "inputs": {
+        "adjusted_gross_income": 52500,
+        "first_threshold": 48500,
+        "primary_age": 30,
+        "primary_contributions": 2000,
+        "primary_is_dependent": false,
+        "primary_is_student": false,
+        "second_threshold": 52500,
+        "section_911_excluded_income": 0,
+        "section_931_excluded_income": 0,
+        "section_933_excluded_income": 0,
+        "spouse_age": 30,
+        "spouse_contributions": 0,
+        "spouse_is_dependent": false,
+        "spouse_is_student": false,
+        "third_threshold": 80500
+      },
+      "match": false,
+      "policyengine": 200.0,
+      "policyengine_components": {
+        "savers_credit": 200.0,
+        "savers_credit_credit_limit": 2030.0,
+        "savers_credit_potential": 200.0
+      },
+      "scenario_id": "joint-at-20-percent-limit-inclusive"
+    },
+    {
+      "axiom": 200.0,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/savers_credit_pipeline#input.adjusted_gross_income": 52501,
+        "us:policies/income_tax/savers_credit_pipeline#input.filing_status": 1,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_qualified_retirement_savings_contributions": 2000,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_911_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_931_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_933_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_qualified_retirement_savings_contributions": 0
+      },
+      "case_id": "joint-one-over-20-percent-limit",
+      "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+      "difference": 0.0,
+      "filing_status": "joint",
+      "inputs": {
+        "adjusted_gross_income": 52501,
+        "first_threshold": 48500,
+        "primary_age": 30,
+        "primary_contributions": 2000,
+        "primary_is_dependent": false,
+        "primary_is_student": false,
+        "second_threshold": 52500,
+        "section_911_excluded_income": 0,
+        "section_931_excluded_income": 0,
+        "section_933_excluded_income": 0,
+        "spouse_age": 30,
+        "spouse_contributions": 0,
+        "spouse_is_dependent": false,
+        "spouse_is_student": false,
+        "third_threshold": 80500
+      },
+      "match": true,
+      "policyengine": 200.0,
+      "policyengine_components": {
+        "savers_credit": 200.0,
+        "savers_credit_credit_limit": 2030.0999755859375,
+        "savers_credit_potential": 200.0
+      },
+      "scenario_id": "joint-one-over-20-percent-limit"
+    },
+    {
+      "axiom": 200.0,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/savers_credit_pipeline#input.adjusted_gross_income": 80499,
+        "us:policies/income_tax/savers_credit_pipeline#input.filing_status": 1,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_qualified_retirement_savings_contributions": 2000,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_911_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_931_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_933_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_qualified_retirement_savings_contributions": 0
+      },
+      "case_id": "joint-one-below-10-percent-limit",
+      "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+      "difference": 0.0,
+      "filing_status": "joint",
+      "inputs": {
+        "adjusted_gross_income": 80499,
+        "first_threshold": 48500,
+        "primary_age": 30,
+        "primary_contributions": 2000,
+        "primary_is_dependent": false,
+        "primary_is_student": false,
+        "second_threshold": 52500,
+        "section_911_excluded_income": 0,
+        "section_931_excluded_income": 0,
+        "section_933_excluded_income": 0,
+        "spouse_age": 30,
+        "spouse_contributions": 0,
+        "spouse_is_dependent": false,
+        "spouse_is_student": false,
+        "third_threshold": 80500
+      },
+      "match": true,
+      "policyengine": 200.0,
+      "policyengine_components": {
+        "savers_credit": 200.0,
+        "savers_credit_credit_limit": 5299.8798828125,
+        "savers_credit_potential": 200.0
+      },
+      "scenario_id": "joint-one-below-10-percent-limit"
+    },
+    {
+      "axiom": 200.0,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/savers_credit_pipeline#input.adjusted_gross_income": 80500,
+        "us:policies/income_tax/savers_credit_pipeline#input.filing_status": 1,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_qualified_retirement_savings_contributions": 2000,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_911_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_931_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_933_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_qualified_retirement_savings_contributions": 0
+      },
+      "case_id": "joint-at-10-percent-limit-inclusive",
+      "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+      "difference": 200.0,
+      "filing_status": "joint",
+      "inputs": {
+        "adjusted_gross_income": 80500,
+        "first_threshold": 48500,
+        "primary_age": 30,
+        "primary_contributions": 2000,
+        "primary_is_dependent": false,
+        "primary_is_student": false,
+        "second_threshold": 52500,
+        "section_911_excluded_income": 0,
+        "section_931_excluded_income": 0,
+        "section_933_excluded_income": 0,
+        "spouse_age": 30,
+        "spouse_contributions": 0,
+        "spouse_is_dependent": false,
+        "spouse_is_student": false,
+        "third_threshold": 80500
+      },
+      "match": false,
+      "policyengine": 0.0,
+      "policyengine_components": {
+        "savers_credit": 0.0,
+        "savers_credit_credit_limit": 5300.0,
+        "savers_credit_potential": 0.0
+      },
+      "scenario_id": "joint-at-10-percent-limit-inclusive"
+    },
+    {
+      "axiom": 0.0,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/savers_credit_pipeline#input.adjusted_gross_income": 80501,
+        "us:policies/income_tax/savers_credit_pipeline#input.filing_status": 1,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_qualified_retirement_savings_contributions": 2000,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_911_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_931_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_933_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_qualified_retirement_savings_contributions": 0
+      },
+      "case_id": "joint-one-over-10-percent-limit",
+      "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+      "difference": 0.0,
+      "filing_status": "joint",
+      "inputs": {
+        "adjusted_gross_income": 80501,
+        "first_threshold": 48500,
+        "primary_age": 30,
+        "primary_contributions": 2000,
+        "primary_is_dependent": false,
+        "primary_is_student": false,
+        "second_threshold": 52500,
+        "section_911_excluded_income": 0,
+        "section_931_excluded_income": 0,
+        "section_933_excluded_income": 0,
+        "spouse_age": 30,
+        "spouse_contributions": 0,
+        "spouse_is_dependent": false,
+        "spouse_is_student": false,
+        "third_threshold": 80500
+      },
+      "match": true,
+      "policyengine": 0.0,
+      "policyengine_components": {
+        "savers_credit": 0.0,
+        "savers_credit_credit_limit": 5300.1201171875,
+        "savers_credit_potential": 0.0
+      },
+      "scenario_id": "joint-one-over-10-percent-limit"
+    },
+    {
+      "axiom": 1000.0,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/savers_credit_pipeline#input.adjusted_gross_income": 36374,
+        "us:policies/income_tax/savers_credit_pipeline#input.filing_status": 3,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_qualified_retirement_savings_contributions": 2000,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_911_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_931_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_933_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_qualified_retirement_savings_contributions": 0
+      },
+      "case_id": "head-of-household-one-below-50-percent-limit",
+      "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+      "difference": 0.0,
+      "filing_status": "head_of_household",
+      "inputs": {
+        "adjusted_gross_income": 36374,
+        "first_threshold": 36375,
+        "primary_age": 30,
+        "primary_contributions": 2000,
+        "primary_is_dependent": false,
+        "primary_is_student": false,
+        "second_threshold": 39375,
+        "section_911_excluded_income": 0,
+        "section_931_excluded_income": 0,
+        "section_933_excluded_income": 0,
+        "spouse_age": 30,
+        "spouse_contributions": 0,
+        "spouse_is_dependent": false,
+        "spouse_is_student": false,
+        "third_threshold": 60375
+      },
+      "match": true,
+      "policyengine": 1000.0,
+      "policyengine_components": {
+        "savers_credit": 1000.0,
+        "savers_credit_credit_limit": 1222.4000244140625,
+        "savers_credit_potential": 1000.0
+      },
+      "scenario_id": "head-of-household-one-below-50-percent-limit"
+    },
+    {
+      "axiom": 1000.0,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/savers_credit_pipeline#input.adjusted_gross_income": 36375,
+        "us:policies/income_tax/savers_credit_pipeline#input.filing_status": 3,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_qualified_retirement_savings_contributions": 2000,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_911_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_931_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_933_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_qualified_retirement_savings_contributions": 0
+      },
+      "case_id": "head-of-household-at-50-percent-limit-inclusive",
+      "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+      "difference": 600.0,
+      "filing_status": "head_of_household",
+      "inputs": {
+        "adjusted_gross_income": 36375,
+        "first_threshold": 36375,
+        "primary_age": 30,
+        "primary_contributions": 2000,
+        "primary_is_dependent": false,
+        "primary_is_student": false,
+        "second_threshold": 39375,
+        "section_911_excluded_income": 0,
+        "section_931_excluded_income": 0,
+        "section_933_excluded_income": 0,
+        "spouse_age": 30,
+        "spouse_contributions": 0,
+        "spouse_is_dependent": false,
+        "spouse_is_student": false,
+        "third_threshold": 60375
+      },
+      "match": false,
+      "policyengine": 400.0,
+      "policyengine_components": {
+        "savers_credit": 400.0,
+        "savers_credit_credit_limit": 1222.5,
+        "savers_credit_potential": 400.0
+      },
+      "scenario_id": "head-of-household-at-50-percent-limit-inclusive"
+    },
+    {
+      "axiom": 400.0,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/savers_credit_pipeline#input.adjusted_gross_income": 36376,
+        "us:policies/income_tax/savers_credit_pipeline#input.filing_status": 3,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_qualified_retirement_savings_contributions": 2000,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_911_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_931_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_933_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_qualified_retirement_savings_contributions": 0
+      },
+      "case_id": "head-of-household-one-over-50-percent-limit",
+      "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+      "difference": 0.0,
+      "filing_status": "head_of_household",
+      "inputs": {
+        "adjusted_gross_income": 36376,
+        "first_threshold": 36375,
+        "primary_age": 30,
+        "primary_contributions": 2000,
+        "primary_is_dependent": false,
+        "primary_is_student": false,
+        "second_threshold": 39375,
+        "section_911_excluded_income": 0,
+        "section_931_excluded_income": 0,
+        "section_933_excluded_income": 0,
+        "spouse_age": 30,
+        "spouse_contributions": 0,
+        "spouse_is_dependent": false,
+        "spouse_is_student": false,
+        "third_threshold": 60375
+      },
+      "match": true,
+      "policyengine": 400.0,
+      "policyengine_components": {
+        "savers_credit": 400.0,
+        "savers_credit_credit_limit": 1222.5999755859375,
+        "savers_credit_potential": 400.0
+      },
+      "scenario_id": "head-of-household-one-over-50-percent-limit"
+    },
+    {
+      "axiom": 400.0,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/savers_credit_pipeline#input.adjusted_gross_income": 39374,
+        "us:policies/income_tax/savers_credit_pipeline#input.filing_status": 3,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_qualified_retirement_savings_contributions": 2000,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_911_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_931_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_933_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_qualified_retirement_savings_contributions": 0
+      },
+      "case_id": "head-of-household-one-below-20-percent-limit",
+      "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+      "difference": 0.0,
+      "filing_status": "head_of_household",
+      "inputs": {
+        "adjusted_gross_income": 39374,
+        "first_threshold": 36375,
+        "primary_age": 30,
+        "primary_contributions": 2000,
+        "primary_is_dependent": false,
+        "primary_is_student": false,
+        "second_threshold": 39375,
+        "section_911_excluded_income": 0,
+        "section_931_excluded_income": 0,
+        "section_933_excluded_income": 0,
+        "spouse_age": 30,
+        "spouse_contributions": 0,
+        "spouse_is_dependent": false,
+        "spouse_is_student": false,
+        "third_threshold": 60375
+      },
+      "match": true,
+      "policyengine": 400.0,
+      "policyengine_components": {
+        "savers_credit": 400.0,
+        "savers_credit_credit_limit": 1522.4000244140625,
+        "savers_credit_potential": 400.0
+      },
+      "scenario_id": "head-of-household-one-below-20-percent-limit"
+    },
+    {
+      "axiom": 400.0,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/savers_credit_pipeline#input.adjusted_gross_income": 39375,
+        "us:policies/income_tax/savers_credit_pipeline#input.filing_status": 3,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_qualified_retirement_savings_contributions": 2000,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_911_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_931_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_933_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_qualified_retirement_savings_contributions": 0
+      },
+      "case_id": "head-of-household-at-20-percent-limit-inclusive",
+      "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+      "difference": 200.0,
+      "filing_status": "head_of_household",
+      "inputs": {
+        "adjusted_gross_income": 39375,
+        "first_threshold": 36375,
+        "primary_age": 30,
+        "primary_contributions": 2000,
+        "primary_is_dependent": false,
+        "primary_is_student": false,
+        "second_threshold": 39375,
+        "section_911_excluded_income": 0,
+        "section_931_excluded_income": 0,
+        "section_933_excluded_income": 0,
+        "spouse_age": 30,
+        "spouse_contributions": 0,
+        "spouse_is_dependent": false,
+        "spouse_is_student": false,
+        "third_threshold": 60375
+      },
+      "match": false,
+      "policyengine": 200.0,
+      "policyengine_components": {
+        "savers_credit": 200.0,
+        "savers_credit_credit_limit": 1522.5,
+        "savers_credit_potential": 200.0
+      },
+      "scenario_id": "head-of-household-at-20-percent-limit-inclusive"
+    },
+    {
+      "axiom": 200.0,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/savers_credit_pipeline#input.adjusted_gross_income": 39376,
+        "us:policies/income_tax/savers_credit_pipeline#input.filing_status": 3,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_qualified_retirement_savings_contributions": 2000,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_911_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_931_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_933_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_qualified_retirement_savings_contributions": 0
+      },
+      "case_id": "head-of-household-one-over-20-percent-limit",
+      "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+      "difference": 0.0,
+      "filing_status": "head_of_household",
+      "inputs": {
+        "adjusted_gross_income": 39376,
+        "first_threshold": 36375,
+        "primary_age": 30,
+        "primary_contributions": 2000,
+        "primary_is_dependent": false,
+        "primary_is_student": false,
+        "second_threshold": 39375,
+        "section_911_excluded_income": 0,
+        "section_931_excluded_income": 0,
+        "section_933_excluded_income": 0,
+        "spouse_age": 30,
+        "spouse_contributions": 0,
+        "spouse_is_dependent": false,
+        "spouse_is_student": false,
+        "third_threshold": 60375
+      },
+      "match": true,
+      "policyengine": 200.0,
+      "policyengine_components": {
+        "savers_credit": 200.0,
+        "savers_credit_credit_limit": 1522.5999755859375,
+        "savers_credit_potential": 200.0
+      },
+      "scenario_id": "head-of-household-one-over-20-percent-limit"
+    },
+    {
+      "axiom": 200.0,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/savers_credit_pipeline#input.adjusted_gross_income": 60374,
+        "us:policies/income_tax/savers_credit_pipeline#input.filing_status": 3,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_qualified_retirement_savings_contributions": 2000,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_911_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_931_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_933_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_qualified_retirement_savings_contributions": 0
+      },
+      "case_id": "head-of-household-one-below-10-percent-limit",
+      "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+      "difference": 0.0,
+      "filing_status": "head_of_household",
+      "inputs": {
+        "adjusted_gross_income": 60374,
+        "first_threshold": 36375,
+        "primary_age": 30,
+        "primary_contributions": 2000,
+        "primary_is_dependent": false,
+        "primary_is_student": false,
+        "second_threshold": 39375,
+        "section_911_excluded_income": 0,
+        "section_931_excluded_income": 0,
+        "section_933_excluded_income": 0,
+        "spouse_age": 30,
+        "spouse_contributions": 0,
+        "spouse_is_dependent": false,
+        "spouse_is_student": false,
+        "third_threshold": 60375
+      },
+      "match": true,
+      "policyengine": 200.0,
+      "policyengine_components": {
+        "savers_credit": 200.0,
+        "savers_credit_credit_limit": 3992.8798828125,
+        "savers_credit_potential": 200.0
+      },
+      "scenario_id": "head-of-household-one-below-10-percent-limit"
+    },
+    {
+      "axiom": 200.0,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/savers_credit_pipeline#input.adjusted_gross_income": 60375,
+        "us:policies/income_tax/savers_credit_pipeline#input.filing_status": 3,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_qualified_retirement_savings_contributions": 2000,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_911_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_931_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_933_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_qualified_retirement_savings_contributions": 0
+      },
+      "case_id": "head-of-household-at-10-percent-limit-inclusive",
+      "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+      "difference": 200.0,
+      "filing_status": "head_of_household",
+      "inputs": {
+        "adjusted_gross_income": 60375,
+        "first_threshold": 36375,
+        "primary_age": 30,
+        "primary_contributions": 2000,
+        "primary_is_dependent": false,
+        "primary_is_student": false,
+        "second_threshold": 39375,
+        "section_911_excluded_income": 0,
+        "section_931_excluded_income": 0,
+        "section_933_excluded_income": 0,
+        "spouse_age": 30,
+        "spouse_contributions": 0,
+        "spouse_is_dependent": false,
+        "spouse_is_student": false,
+        "third_threshold": 60375
+      },
+      "match": false,
+      "policyengine": 0.0,
+      "policyengine_components": {
+        "savers_credit": 0.0,
+        "savers_credit_credit_limit": 3993.0,
+        "savers_credit_potential": 0.0
+      },
+      "scenario_id": "head-of-household-at-10-percent-limit-inclusive"
+    },
+    {
+      "axiom": 0.0,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/savers_credit_pipeline#input.adjusted_gross_income": 60376,
+        "us:policies/income_tax/savers_credit_pipeline#input.filing_status": 3,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_qualified_retirement_savings_contributions": 2000,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_911_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_931_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_933_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_qualified_retirement_savings_contributions": 0
+      },
+      "case_id": "head-of-household-one-over-10-percent-limit",
+      "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+      "difference": 0.0,
+      "filing_status": "head_of_household",
+      "inputs": {
+        "adjusted_gross_income": 60376,
+        "first_threshold": 36375,
+        "primary_age": 30,
+        "primary_contributions": 2000,
+        "primary_is_dependent": false,
+        "primary_is_student": false,
+        "second_threshold": 39375,
+        "section_911_excluded_income": 0,
+        "section_931_excluded_income": 0,
+        "section_933_excluded_income": 0,
+        "spouse_age": 30,
+        "spouse_contributions": 0,
+        "spouse_is_dependent": false,
+        "spouse_is_student": false,
+        "third_threshold": 60375
+      },
+      "match": true,
+      "policyengine": 0.0,
+      "policyengine_components": {
+        "savers_credit": 0.0,
+        "savers_credit_credit_limit": 3993.1201171875,
+        "savers_credit_potential": 0.0
+      },
+      "scenario_id": "head-of-household-one-over-10-percent-limit"
+    },
+    {
+      "axiom": 1000.0,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/savers_credit_pipeline#input.adjusted_gross_income": 24250,
+        "us:policies/income_tax/savers_credit_pipeline#input.filing_status": 2,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_qualified_retirement_savings_contributions": 2000,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_911_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_931_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_933_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_qualified_retirement_savings_contributions": 2000
+      },
+      "case_id": "married-filing-separately-uses-all-other-limits",
+      "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+      "difference": 600.0,
+      "filing_status": "separate",
+      "inputs": {
+        "adjusted_gross_income": 24250,
+        "first_threshold": 24250,
+        "primary_age": 30,
+        "primary_contributions": 2000,
+        "primary_is_dependent": false,
+        "primary_is_student": false,
+        "second_threshold": 26250,
+        "section_911_excluded_income": 0,
+        "section_931_excluded_income": 0,
+        "section_933_excluded_income": 0,
+        "spouse_age": 30,
+        "spouse_contributions": 2000,
+        "spouse_is_dependent": false,
+        "spouse_is_student": false,
+        "third_threshold": 40250
+      },
+      "match": false,
+      "policyengine": 400.0,
+      "policyengine_components": {
+        "savers_credit": 400.0,
+        "savers_credit_credit_limit": 815.0,
+        "savers_credit_potential": 400.0
+      },
+      "scenario_id": "married-filing-separately-uses-all-other-limits"
+    },
+    {
+      "axiom": 1000.0,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/savers_credit_pipeline#input.adjusted_gross_income": 24250,
+        "us:policies/income_tax/savers_credit_pipeline#input.filing_status": 4,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_qualified_retirement_savings_contributions": 2000,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_911_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_931_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_933_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_qualified_retirement_savings_contributions": 0
+      },
+      "case_id": "surviving-spouse-uses-all-other-limits",
+      "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+      "difference": 600.0,
+      "filing_status": "surviving_spouse",
+      "inputs": {
+        "adjusted_gross_income": 24250,
+        "first_threshold": 24250,
+        "primary_age": 30,
+        "primary_contributions": 2000,
+        "primary_is_dependent": false,
+        "primary_is_student": false,
+        "second_threshold": 26250,
+        "section_911_excluded_income": 0,
+        "section_931_excluded_income": 0,
+        "section_933_excluded_income": 0,
+        "spouse_age": 30,
+        "spouse_contributions": 0,
+        "spouse_is_dependent": false,
+        "spouse_is_student": false,
+        "third_threshold": 40250
+      },
+      "match": false,
+      "policyengine": 400.0,
+      "policyengine_components": {
+        "savers_credit": 0.0,
+        "savers_credit_credit_limit": 0.0,
+        "savers_credit_potential": 400.0
+      },
+      "scenario_id": "surviving-spouse-uses-all-other-limits"
+    },
+    {
+      "axiom": 400.0,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/savers_credit_pipeline#input.adjusted_gross_income": 24250,
+        "us:policies/income_tax/savers_credit_pipeline#input.filing_status": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_qualified_retirement_savings_contributions": 2000,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_911_excluded_income": 1,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_931_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_933_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_qualified_retirement_savings_contributions": 0
+      },
+      "case_id": "section-911-add-back-crosses-inclusive-limit",
+      "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+      "diagnostic_note": "Observed match is cancellation, not section 911 parity: PolicyEngine omits the section 25B(e) add-back while PolicyEngine #9151 moves exact $24,250 into the 20-percent tier.",
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "adjusted_gross_income": 24250,
+        "first_threshold": 24250,
+        "primary_age": 30,
+        "primary_contributions": 2000,
+        "primary_is_dependent": false,
+        "primary_is_student": false,
+        "second_threshold": 26250,
+        "section_911_excluded_income": 1,
+        "section_931_excluded_income": 0,
+        "section_933_excluded_income": 0,
+        "spouse_age": 30,
+        "spouse_contributions": 0,
+        "spouse_is_dependent": false,
+        "spouse_is_student": false,
+        "third_threshold": 40250
+      },
+      "match": true,
+      "policyengine": 400.0,
+      "policyengine_components": {
+        "savers_credit": 400.0,
+        "savers_credit_credit_limit": 815.0,
+        "savers_credit_potential": 400.0
+      },
+      "scenario_id": "section-911-add-back-crosses-inclusive-limit"
+    },
+    {
+      "axiom": 2000.0,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/savers_credit_pipeline#input.adjusted_gross_income": 40000,
+        "us:policies/income_tax/savers_credit_pipeline#input.filing_status": 1,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_qualified_retirement_savings_contributions": 5000,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_911_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_931_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_933_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_qualified_retirement_savings_contributions": 5000
+      },
+      "case_id": "joint-separate-cap-for-each-spouse",
+      "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+      "difference": 0.0,
+      "filing_status": "joint",
+      "inputs": {
+        "adjusted_gross_income": 40000,
+        "first_threshold": 48500,
+        "primary_age": 30,
+        "primary_contributions": 5000,
+        "primary_is_dependent": false,
+        "primary_is_student": false,
+        "second_threshold": 52500,
+        "section_911_excluded_income": 0,
+        "section_931_excluded_income": 0,
+        "section_933_excluded_income": 0,
+        "spouse_age": 30,
+        "spouse_contributions": 5000,
+        "spouse_is_dependent": false,
+        "spouse_is_student": false,
+        "third_threshold": 80500
+      },
+      "match": true,
+      "policyengine": 2000.0,
+      "policyengine_components": {
+        "savers_credit": 780.0,
+        "savers_credit_credit_limit": 780.0,
+        "savers_credit_potential": 2000.0
+      },
+      "scenario_id": "joint-separate-cap-for-each-spouse"
+    },
+    {
+      "axiom": 0.0,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/savers_credit_pipeline#input.adjusted_gross_income": 20000,
+        "us:policies/income_tax/savers_credit_pipeline#input.filing_status": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_age_at_close_of_taxable_year": 17,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_qualified_retirement_savings_contributions": 2000,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_911_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_931_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_933_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_qualified_retirement_savings_contributions": 0
+      },
+      "case_id": "age-screen",
+      "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "adjusted_gross_income": 20000,
+        "first_threshold": 24250,
+        "primary_age": 17,
+        "primary_contributions": 2000,
+        "primary_is_dependent": false,
+        "primary_is_student": false,
+        "second_threshold": 26250,
+        "section_911_excluded_income": 0,
+        "section_931_excluded_income": 0,
+        "section_933_excluded_income": 0,
+        "spouse_age": 30,
+        "spouse_contributions": 0,
+        "spouse_is_dependent": false,
+        "spouse_is_student": false,
+        "third_threshold": 40250
+      },
+      "match": true,
+      "policyengine": 0.0,
+      "policyengine_components": {
+        "savers_credit": 0.0,
+        "savers_credit_credit_limit": 0.0,
+        "savers_credit_potential": 0.0
+      },
+      "scenario_id": "age-screen"
+    },
+    {
+      "axiom": 0.0,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/savers_credit_pipeline#input.adjusted_gross_income": 20000,
+        "us:policies/income_tax/savers_credit_pipeline#input.filing_status": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_is_student_under_section_152_f_2": true,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_qualified_retirement_savings_contributions": 2000,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_911_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_931_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_933_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_qualified_retirement_savings_contributions": 0
+      },
+      "case_id": "student-screen",
+      "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "adjusted_gross_income": 20000,
+        "first_threshold": 24250,
+        "primary_age": 30,
+        "primary_contributions": 2000,
+        "primary_is_dependent": false,
+        "primary_is_student": true,
+        "second_threshold": 26250,
+        "section_911_excluded_income": 0,
+        "section_931_excluded_income": 0,
+        "section_933_excluded_income": 0,
+        "spouse_age": 30,
+        "spouse_contributions": 0,
+        "spouse_is_dependent": false,
+        "spouse_is_student": false,
+        "third_threshold": 40250
+      },
+      "match": true,
+      "policyengine": 0.0,
+      "policyengine_components": {
+        "savers_credit": 0.0,
+        "savers_credit_credit_limit": 390.0,
+        "savers_credit_potential": 0.0
+      },
+      "scenario_id": "student-screen"
+    },
+    {
+      "axiom": 0.0,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/savers_credit_pipeline#input.adjusted_gross_income": 20000,
+        "us:policies/income_tax/savers_credit_pipeline#input.filing_status": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_may_be_claimed_as_dependent_by_another_taxpayer": true,
+        "us:policies/income_tax/savers_credit_pipeline#input.primary_qualified_retirement_savings_contributions": 2000,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_911_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_931_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.section_933_excluded_income": 0,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_age_at_close_of_taxable_year": 30,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_is_student_under_section_152_f_2": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_may_be_claimed_as_dependent_by_another_taxpayer": false,
+        "us:policies/income_tax/savers_credit_pipeline#input.spouse_qualified_retirement_savings_contributions": 0
+      },
+      "case_id": "dependent-screen",
+      "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "adjusted_gross_income": 20000,
+        "first_threshold": 24250,
+        "primary_age": 30,
+        "primary_contributions": 2000,
+        "primary_is_dependent": true,
+        "primary_is_student": false,
+        "second_threshold": 26250,
+        "section_911_excluded_income": 0,
+        "section_931_excluded_income": 0,
+        "section_933_excluded_income": 0,
+        "spouse_age": 30,
+        "spouse_contributions": 0,
+        "spouse_is_dependent": false,
+        "spouse_is_student": false,
+        "third_threshold": 40250
+      },
+      "match": true,
+      "policyengine": 0.0,
+      "policyengine_components": {
+        "savers_credit": 0.0,
+        "savers_credit_credit_limit": 1990.0,
+        "savers_credit_potential": 0.0
+      },
+      "scenario_id": "dependent-screen"
+    }
+  ],
+  "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+  "concepts": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Saver's credit before section 26",
+      "id": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0.0,
+      "tolerance": 0.01
+    }
+  ],
+  "engine_bindings": {
+    "axiom": {
+      "fixture": "us/policies/income_tax/savers_credit_pipeline.test.yaml",
+      "module": "us:policies/income_tax/savers_credit_pipeline",
+      "output": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+      "outputs": [
+        "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit"
+      ],
+      "supplemental_fixtures": [
+        "comparisons/fixtures/us-savers-grid-boundary-probes.yaml"
+      ]
+    },
+    "policyengine": {
+      "boundary": "TaxUnit section 25B amount before section 26, mapped directly to PE's pre-section-26 potential-credit surface",
+      "comparison_bindings": [
+        {
+          "comparison": "amount",
+          "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+          "mapping_type": "direct_variable",
+          "variable": "savers_credit_potential"
+        }
+      ],
+      "diagnostic_outputs": [
+        "savers_credit",
+        "savers_credit_credit_limit"
+      ],
+      "outputs": [
+        "savers_credit_potential"
+      ]
+    }
+  },
+  "engines": {
+    "left": "axiom",
+    "right": "policyengine",
+    "versions": {
+      "policyengine": "4.18.9",
+      "policyengine_core": "3.30.3",
+      "policyengine_us": "1.767.3"
+    }
+  },
+  "mismatches": [
+    {
+      "case_id": "single-at-50-percent-limit-inclusive",
+      "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+      "difference": 600.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "inclusive-tier-ceilings-enter-next-policyengine-bracket-at-equality"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 1000.0,
+      "left_engine": "axiom",
+      "right": 400.0,
+      "right_engine": "policyengine"
+    },
+    {
+      "case_id": "single-at-20-percent-limit-inclusive",
+      "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+      "difference": 200.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "inclusive-tier-ceilings-enter-next-policyengine-bracket-at-equality"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 400.0,
+      "left_engine": "axiom",
+      "right": 200.0,
+      "right_engine": "policyengine"
+    },
+    {
+      "case_id": "single-at-10-percent-limit-inclusive",
+      "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+      "difference": 200.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "inclusive-tier-ceilings-enter-next-policyengine-bracket-at-equality"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 200.0,
+      "left_engine": "axiom",
+      "right": 0.0,
+      "right_engine": "policyengine"
+    },
+    {
+      "case_id": "joint-at-50-percent-limit-inclusive",
+      "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+      "difference": 600.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "inclusive-tier-ceilings-enter-next-policyengine-bracket-at-equality"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 1000.0,
+      "left_engine": "axiom",
+      "right": 400.0,
+      "right_engine": "policyengine"
+    },
+    {
+      "case_id": "joint-at-20-percent-limit-inclusive",
+      "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+      "difference": 200.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "inclusive-tier-ceilings-enter-next-policyengine-bracket-at-equality"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 400.0,
+      "left_engine": "axiom",
+      "right": 200.0,
+      "right_engine": "policyengine"
+    },
+    {
+      "case_id": "joint-at-10-percent-limit-inclusive",
+      "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+      "difference": 200.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "inclusive-tier-ceilings-enter-next-policyengine-bracket-at-equality"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 200.0,
+      "left_engine": "axiom",
+      "right": 0.0,
+      "right_engine": "policyengine"
+    },
+    {
+      "case_id": "head-of-household-at-50-percent-limit-inclusive",
+      "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+      "difference": 600.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "inclusive-tier-ceilings-enter-next-policyengine-bracket-at-equality"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 1000.0,
+      "left_engine": "axiom",
+      "right": 400.0,
+      "right_engine": "policyengine"
+    },
+    {
+      "case_id": "head-of-household-at-20-percent-limit-inclusive",
+      "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+      "difference": 200.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "inclusive-tier-ceilings-enter-next-policyengine-bracket-at-equality"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 400.0,
+      "left_engine": "axiom",
+      "right": 200.0,
+      "right_engine": "policyengine"
+    },
+    {
+      "case_id": "head-of-household-at-10-percent-limit-inclusive",
+      "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+      "difference": 200.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "inclusive-tier-ceilings-enter-next-policyengine-bracket-at-equality"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 200.0,
+      "left_engine": "axiom",
+      "right": 0.0,
+      "right_engine": "policyengine"
+    },
+    {
+      "case_id": "married-filing-separately-uses-all-other-limits",
+      "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+      "difference": 600.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "inclusive-tier-ceilings-enter-next-policyengine-bracket-at-equality"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 1000.0,
+      "left_engine": "axiom",
+      "right": 400.0,
+      "right_engine": "policyengine"
+    },
+    {
+      "case_id": "surviving-spouse-uses-all-other-limits",
+      "concept": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit",
+      "difference": 600.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "inclusive-tier-ceilings-enter-next-policyengine-bracket-at-equality"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 1000.0,
+      "left_engine": "axiom",
+      "right": 400.0,
+      "right_engine": "policyengine"
+    }
+  ],
+  "population": "case-grid",
+  "provenance": {
+    "engine": {},
+    "generated_at": "2026-07-28T16:29:31Z",
+    "generated_by": "scripts/run_comparison.py::us-savers-grid",
+    "oracle": {
+      "name": "policyengine",
+      "policyengine_core": "3.30.3",
+      "policyengine_package": "policyengine==4.18.9",
+      "policyengine_us": "1.767.3"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-us",
+        "sha": "dcbae4344c522b4ad8004169316266cbc153186f"
+      }
+    ],
+    "run_kind": "manual",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "scenario_count": 34,
+  "schema_version": "axiom.comparison_report.v2.1",
+  "suite": "us-savers-grid",
+  "summary": {
+    "axiom_vs_policyengine_match_rate": 67.6470588235294,
+    "comparison_count": 34,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 11
+      },
+      "dispositions_file": "dispositions/us-savers-grid.yaml",
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 67.647059,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": {},
+    "match_count": 23,
+    "mismatch_count": 11,
+    "mismatches_by_concept": [
+      {
+        "count": 11,
+        "value": "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit"
+      }
+    ],
+    "mismatches_by_kind": [
+      {
+        "count": 11,
+        "value": "amount_difference"
+      }
+    ],
+    "mismatches_by_scenario": {}
+  },
+  "tolerance": {
+    "absolute": 0.01,
+    "relative": 0.0
+  },
+  "validation_year": 2026
+}

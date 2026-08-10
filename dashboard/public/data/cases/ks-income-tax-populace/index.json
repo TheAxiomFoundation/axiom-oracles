@@ -9,7 +9,7 @@
   "right": "policyengine"
  },
  "mismatch_concepts": [
-  "us-ks:policies/income_tax/pilot_liability_pipeline#ks_pit_pilot_income_tax_liability"
+  "us-ks:policies/income_tax/2026_k40es_schedule_before_credits#ks_pit_2026_k40es_schedule_before_credits"
  ],
  "source": "state-tax-populace-campaign"
 }

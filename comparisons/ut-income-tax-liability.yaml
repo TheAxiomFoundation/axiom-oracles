@@ -1,26 +1,32 @@
-# Utah composed income-tax liability — Axiom pipeline vs PolicyEngine and TAXSIM
-# on a modest case grid. The Axiom side is the composed rulespec-us pipeline
-# us-ut/policies/income_tax/pilot_liability_pipeline, evaluated through the axiom
-# rules engine (its liabilities are the engine-verified companion-test fixtures).
-# Utah is a single flat rate (Utah Code 59-10-104(2): 4.45% for 2026 under
-# H.B. 106 of 2025) on Utah taxable income, before the 59-10-1018 taxpayer credit.
+# Utah canonical full-year-resident before-credit schedule — Axiom vs an exact
+# PolicyEngine-derived target, with TAXSIM retained as a supplemental downstream
+# final-tax comparison. The Axiom surface applies Utah Code 59-10-104's 4.45%
+# rate for 2026 and honors the separate section 59-10-104.1 exemption.
 #
-# PolicyEngine runs at the 2026 validation year against ut_income_tax_before_credits
-# (the pure flat tax). TAXSIM runs at the 2026 validation year; the
-# 2024-to-2026 rate vintage and TAXSIM's inclusion of the taxpayer credit are
-# recorded in dispositions/ut-income-tax-liability.yaml rather than absorbed by
-# tolerance.
+# PolicyEngine's comparison target is derived as
+# ut_income_tax_before_credits * (1 - ut_income_tax_exempt). A direct mapping to
+# ut_income_tax_before_credits is forbidden because it omits the exemption.
+# TAXSIM siitax includes downstream credits and is not treated as an exact
+# semantic peer.
 #
 # Run locally:
 #   uv run python scripts/run_comparison.py ut-income-tax-liability
 
 name: ut-income-tax-liability
-title: Utah income tax liability — Axiom vs PolicyEngine and TAXSIM
+title: Utah resident income tax before credits — Axiom vs PolicyEngine and TAXSIM
 description: >-
-  Compares the composed Utah income-tax liability pipeline encoded in Axiom
-  RuleSpec (us-ut/policies/income_tax/pilot_liability_pipeline) against
-  PolicyEngine (ut_income_tax_before_credits) at 2026 and TAXSIM (siitax) at 2026
-  on a modest grid of single and married filers.
+  Compares the canonical exemption-aware Utah full-year-resident tax-before-
+  credits RuleSpec surface against a reviewed derived PolicyEngine target at
+  2026. TAXSIM siitax is supplemental because it includes downstream credits.
+
+# Not CI-runnable while engine-main x rulespec-us-main is broken: the engine's
+# canonical-path root scan rejects the whole tree (non-canonical filenames in
+# us-la/us-nh/us-nj/us -- rulespec-us#1049), and the state pipelines carry the
+# removed plural `corpus_citation_paths` schema (rulespec-us#1050; 176 files
+# across every jurisdiction as of 2026-08-05). Every dispatched leg fails
+# before producing a report. Manual lane only; drop this marker when both land
+# upstream (axiom-oracles#455 tracks the flip-back).
+ci: manual
 
 runner:
   type: state-income-tax-liability-grid

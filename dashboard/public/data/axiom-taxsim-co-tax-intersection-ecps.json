@@ -40390,6 +40390,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -5449.083360595701,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 22381.4166394043,
       "parent": "us:tax/federal-income-tax#liability",
@@ -40716,6 +40721,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -9120.538997617186,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 1859.0310023828124,
       "parent": "us:tax/federal-income-tax#liability",
@@ -40837,6 +40847,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -196.97133247375314,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 72405.46866752625,
       "parent": "us:tax/federal-income-tax#liability",
@@ -41000,6 +41015,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -202.2196544265753,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 18249.260345573424,
       "parent": "us:tax/federal-income-tax#liability",
@@ -41205,6 +41225,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -2276.9549481201175,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 42400.125051879884,
       "parent": "us:tax/federal-income-tax#liability",
@@ -41637,6 +41662,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -76.15980329513513,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 16079.080196704865,
       "parent": "us:tax/federal-income-tax#liability",
@@ -41795,6 +41825,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -49.896562499998254,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 24854.5634375,
       "parent": "us:tax/federal-income-tax#liability",
@@ -42121,6 +42156,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -1274.6610205078123,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 9855.698979492188,
       "parent": "us:tax/federal-income-tax#liability",
@@ -42232,6 +42272,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -940.6602079773002,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-fiitax-surtax-scope-liability",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 37117.1697920227,
       "parent": null,
@@ -42264,6 +42309,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -235.5715380859383,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 8960.278461914062,
       "parent": "us:tax/federal-income-tax#liability",
@@ -42496,6 +42546,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -511.03899009704764,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 121043.29100990295,
       "parent": "us:tax/federal-income-tax#liability",
@@ -43065,6 +43120,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -1027.9244400399803,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 16909.09555996002,
       "parent": "us:tax/federal-income-tax#liability",
@@ -43228,6 +43288,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -5422.428220703125,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 13034.441779296874,
       "parent": "us:tax/federal-income-tax#liability",
@@ -43466,6 +43531,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -178.58916015625073,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 21050.13083984375,
       "parent": "us:tax/federal-income-tax#liability",
@@ -43503,6 +43573,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -17.496105255126167,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 11588.633894744873,
       "parent": "us:tax/federal-income-tax#liability",
@@ -44760,6 +44835,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -474.7079088698665,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 62595.832091130134,
       "parent": "us:tax/federal-income-tax#liability",
@@ -44860,6 +44940,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -1883.043749999997,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 83761.24625,
       "parent": "us:tax/federal-income-tax#liability",
@@ -45002,6 +45087,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -15.756628906245169,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 54631.34337109375,
       "parent": "us:tax/federal-income-tax#liability",
@@ -45228,6 +45318,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -62.004903564453116,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 894.2350964355469,
       "parent": "us:tax/federal-income-tax#liability",
@@ -45265,6 +45360,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -653.2127600097665,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 25524.747239990233,
       "parent": "us:tax/federal-income-tax#liability",
@@ -45407,6 +45507,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -5838.781939497071,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 7373.8280605029295,
       "parent": "us:tax/federal-income-tax#liability",
@@ -45734,6 +45839,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -2140.9722656250015,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-fiitax-surtax-scope-liability",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 42809.277734375,
       "parent": null,
@@ -46103,6 +46213,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -5840.918691406245,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 55107.14130859375,
       "parent": "us:tax/federal-income-tax#liability",
@@ -46203,6 +46318,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -2963.9735079743587,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 30820.48649202564,
       "parent": "us:tax/federal-income-tax#liability",
@@ -46324,6 +46444,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -18.37999999999738,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 37316.23,
       "parent": "us:tax/federal-income-tax#liability",
@@ -46361,6 +46486,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -4796.2362291015625,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 8186.083770898437,
       "parent": "us:tax/federal-income-tax#liability",
@@ -46587,6 +46717,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -2029.783203125,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 38504.926796875,
       "parent": "us:tax/federal-income-tax#liability",
@@ -47839,6 +47974,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -5525.1171875,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 44723.6028125,
       "parent": "us:tax/federal-income-tax#liability",
@@ -47897,6 +48037,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -275.7524999999987,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 22979.3675,
       "parent": "us:tax/federal-income-tax#liability",
@@ -48144,6 +48289,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -110.30665363104345,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 24197.613346368955,
       "parent": "us:tax/federal-income-tax#liability",
@@ -48635,6 +48785,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -6299.903437500005,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 44000.1465625,
       "parent": "us:tax/federal-income-tax#liability",
@@ -49689,6 +49844,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -215.1937304687499,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 6034.26626953125,
       "parent": "us:tax/federal-income-tax#liability",
@@ -49968,6 +50128,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -21.719525878905188,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 15543.240474121094,
       "parent": "us:tax/federal-income-tax#liability",
@@ -50005,6 +50170,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -936.2737500000003,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 22460.59625,
       "parent": "us:tax/federal-income-tax#liability",
@@ -50927,6 +51097,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -853.5342382812487,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 29060.37576171875,
       "parent": "us:tax/federal-income-tax#liability",
@@ -51127,6 +51302,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -265.71005371093634,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 236696.66994628907,
       "parent": "us:tax/federal-income-tax#liability",
@@ -51227,6 +51407,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -65.65208808898933,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 14262.84791191101,
       "parent": "us:tax/federal-income-tax#liability",
@@ -51523,6 +51708,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -52.52184028625925,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 49627.01815971374,
       "parent": "us:tax/federal-income-tax#liability",
@@ -51581,6 +51771,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -26.257968750000146,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 7527.12203125,
       "parent": "us:tax/federal-income-tax#liability",
@@ -51739,6 +51934,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -42.402430725098384,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 23047.907569274903,
       "parent": "us:tax/federal-income-tax#liability",
@@ -51797,6 +51997,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -4948.3040234375,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 39835.7659765625,
       "parent": "us:tax/federal-income-tax#liability",
@@ -52055,6 +52260,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -50.57165296172752,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 46151.19834703827,
       "parent": "us:tax/federal-income-tax#liability",
@@ -52623,6 +52833,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -371.0700770263684,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 16162.489922973633,
       "parent": "us:tax/federal-income-tax#liability",
@@ -52897,6 +53112,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1347.393828124994,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-fiitax-surtax-scope-liability",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 35229.696171875,
       "parent": null,
@@ -53088,6 +53308,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -71.85523464202925,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 12345.46476535797,
       "parent": "us:tax/federal-income-tax#liability",
@@ -53146,6 +53371,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -504.23677307128673,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 73509.92322692872,
       "parent": "us:tax/federal-income-tax#liability",
@@ -53620,6 +53850,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -47.26831542968284,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 54001.511684570316,
       "parent": "us:tax/federal-income-tax#liability",
@@ -53747,6 +53982,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -2431.903014868167,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 20980.426985131835,
       "parent": "us:tax/federal-income-tax#liability",
@@ -54089,6 +54329,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -1342.0143359374997,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 38149.6556640625,
       "parent": "us:tax/federal-income-tax#liability",
@@ -54389,6 +54634,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -627.5294335937506,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 15953.19056640625,
       "parent": "us:tax/federal-income-tax#liability",
@@ -54510,6 +54760,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -1065.2989646439182,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 4760.2310353560815,
       "parent": "us:tax/federal-income-tax#liability",
@@ -55020,6 +55275,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -24.946250000000873,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 40820.60375,
       "parent": "us:tax/federal-income-tax#liability",
@@ -55141,6 +55401,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -1340.6258593749953,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 75937.294140625,
       "parent": "us:tax/federal-income-tax#liability",
@@ -55757,6 +56022,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -690.8315049743615,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 37432.438495025635,
       "parent": "us:tax/federal-income-tax#liability",
@@ -56295,6 +56565,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -126.98493652343677,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 13805.845063476563,
       "parent": "us:tax/federal-income-tax#liability",
@@ -56332,6 +56607,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -366.43777343750116,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 39141.4722265625,
       "parent": "us:tax/federal-income-tax#liability",
@@ -56411,6 +56691,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -4808.96884765625,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 10380.10115234375,
       "parent": "us:tax/federal-income-tax#liability",
@@ -56828,6 +57113,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -13892.353242187499,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 81488.2467578125,
       "parent": "us:tax/federal-income-tax#liability",
@@ -56886,6 +57176,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -202.21910159912113,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 15479.180898400879,
       "parent": "us:tax/federal-income-tax#liability",
@@ -57049,6 +57344,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -264.7902862548799,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-fiitax-surtax-scope-liability",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 44003.95971374512,
       "parent": null,
@@ -57102,6 +57402,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -4727.25211892954,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 11332.75788107046,
       "parent": "us:tax/federal-income-tax#liability",
@@ -57387,6 +57692,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -3760.012318678151,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 7887.097681321849,
       "parent": "us:tax/federal-income-tax#liability",
@@ -57445,6 +57755,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -2353.7083203125003,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 25425.5016796875,
       "parent": "us:tax/federal-income-tax#liability",
@@ -57766,6 +58081,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -49.894731054688236,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 7059.625268945312,
       "parent": "us:tax/federal-income-tax#liability",
@@ -57782,6 +58102,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -10572.976733398438,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 9630.763266601563,
       "parent": "us:tax/federal-income-tax#liability",
@@ -58187,6 +58512,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -14624.316875000004,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 53406.233125,
       "parent": "us:tax/federal-income-tax#liability",
@@ -58398,6 +58728,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -162.82564453124905,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 15948.13435546875,
       "parent": "us:tax/federal-income-tax#liability",
@@ -58619,6 +58954,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -2428.907265624999,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 43209.632734375,
       "parent": "us:tax/federal-income-tax#liability",
@@ -58940,6 +59280,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -990.0944531249988,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 70980.035546875,
       "parent": "us:tax/federal-income-tax#liability",
@@ -59040,6 +59385,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -6211.336913452193,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 346718.9930865478,
       "parent": "us:tax/federal-income-tax#liability",
@@ -59266,6 +59616,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -17054.19066015625,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "capgains-worksheet-bucket-routing-tbc-postdividendfix",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 77381.38933984375,
       "parent": "us:tax/federal-income-tax#liability",
@@ -59335,7 +59690,7 @@
     "dispositioned": {
       "counts": {
         "axiom_encoding_gap": 298,
-        "bridge_artifact": 159,
+        "bridge_artifact": 328,
         "explained_residual": 351,
         "unexplained": 0,
         "upstream_engine_gap": 686
@@ -59344,11 +59699,11 @@
       "expired_entries": [
         "taxsim-blindness-63f-extension-standard_deduction"
       ],
-      "explained_rate": 90.80766,
+      "explained_rate": 92.214821,
       "orphaned_entries": [],
       "raw_match_rate": 80.849292,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 806
+      "unexplained_count": 637
     },
     "error_count": 0,
     "errors_by_engine": [],

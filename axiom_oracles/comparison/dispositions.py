@@ -81,6 +81,7 @@ counts cover the full row set.
 from __future__ import annotations
 
 import ast
+import hashlib
 import json
 from pathlib import Path
 
@@ -113,6 +114,7 @@ _ENTRY_KEYS = {
     "linked_issue",
     "expires_on_source_change",
     "pinned",
+    "selector_binding",
     "notes",
 }
 _EVIDENCE_KEYS = {"mechanism", "arithmetic", "upstream_url", "sources"}
@@ -348,6 +350,35 @@ def _validate_entry(
             f"{label} needs `expires_on_source_change` as a boolean"
         )
 
+    selector_binding = entry.get("selector_binding")
+    if selector_binding is not None:
+        if case_selector is None:
+            errors.append(
+                f"{label} `selector_binding` requires a `case_selector`"
+            )
+        if not isinstance(selector_binding, dict) or set(
+            selector_binding
+        ) != {"units", "rows_sha256"}:
+            errors.append(
+                f"{label} `selector_binding` must be a mapping with exactly "
+                "the keys `units` and `rows_sha256`"
+            )
+        else:
+            if not isinstance(selector_binding["units"], int):
+                errors.append(
+                    f"{label} selector_binding.units must be an integer"
+                )
+            rows_sha = selector_binding["rows_sha256"]
+            if not (
+                isinstance(rows_sha, str)
+                and len(rows_sha) == 64
+                and all(c in "0123456789abcdef" for c in rows_sha)
+            ):
+                errors.append(
+                    f"{label} selector_binding.rows_sha256 must be a "
+                    "64-char lowercase hex sha256"
+                )
+
     pinned = entry.get("pinned")
     if pinned is not None:
         if case_id is None:
@@ -480,6 +511,29 @@ def dispositions_path_for_suite(
     return candidate if candidate.exists() else None
 
 
+def selected_rows_sha256(rows: list[dict]) -> str:
+    """Canonical digest of a selected mismatch population.
+
+    Sorted by case id; each row contributes its identity plus the exact
+    ``left``/``right``/signed ``difference`` values, so any value movement —
+    sign flips, balanced multi-row swaps, anything that preserves aggregates —
+    changes the digest (sol closing review r2 finding 2).
+    """
+    canonical = sorted(
+        [
+            str(row.get("case_id")),
+            str(row.get("concept")),
+            json.dumps(row.get("left"), sort_keys=True),
+            json.dumps(row.get("right"), sort_keys=True),
+            json.dumps(row.get("difference"), sort_keys=True),
+        ]
+        for row in rows
+    )
+    return hashlib.sha256(
+        json.dumps(canonical, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
+
+
 def _pin_matches(pinned: dict | None, row: dict) -> bool:
     if not pinned:
         return True
@@ -554,20 +608,61 @@ def apply_dispositions(
     applied_rows = 0
     entry_applied = {str(entry.get("id")): 0 for entry in entries}
     entry_pin_failed = {str(entry.get("id")): 0 for entry in entries}
+    entry_selected_rows: dict[str, list[dict]] = {
+        str(entry.get("id")): [] for entry in entries
+    }
+    entry_by_id = {str(entry.get("id")): entry for entry in entries}
 
-    annotated_mismatches = []
-    for row in report.get("mismatches") or []:
-        annotated = dict(row)
+    # Pass 1 — tentative assignment. Rows are matched to their winning entry
+    # but not yet annotated, so selector-level value bindings can be checked
+    # against the FULL selected population before any annotation lands.
+    row_winner: list[str | None] = []
+    source_rows = list(report.get("mismatches") or [])
+    for row in source_rows:
+        winner = None
         for entry in entries:
-            if not _entry_selects_row(entry, annotated):
+            if not _entry_selects_row(entry, row):
                 continue
             entry_id = str(entry.get("id"))
-            if not _pin_matches(entry.get("pinned"), annotated):
+            if not _pin_matches(entry.get("pinned"), row):
                 entry_pin_failed[entry_id] += 1
                 continue
+            winner = entry_id
+            entry_applied[entry_id] += 1
+            entry_selected_rows[entry_id].append(row)
+            break
+        row_winner.append(winner)
+
+    # Selector-binding validation (sol closing review F4, hardened in r2):
+    # the binding pins a canonical per-row digest of the selected population
+    # — identity plus left/right/signed difference — so ANY value movement,
+    # including sign flips and balanced multi-row changes that preserve
+    # aggregates, violates it. Per ``expires_on_source_change`` semantics a
+    # violated entry EXPIRES and its rows return to unexplained; drift can
+    # never ride an old classification.
+    binding_violated: set[str] = set()
+    for entry in entries:
+        entry_id = str(entry.get("id"))
+        binding = entry.get("selector_binding")
+        if not binding or entry_applied[entry_id] == 0:
+            continue
+        units_match = entry_applied[entry_id] == binding["units"]
+        digest_match = (
+            selected_rows_sha256(entry_selected_rows[entry_id])
+            == binding["rows_sha256"]
+        )
+        if not (units_match and digest_match):
+            binding_violated.add(entry_id)
+
+    # Pass 2 — annotate, skipping entries whose binding was violated.
+    annotated_mismatches = []
+    for row, winner in zip(source_rows, row_winner):
+        annotated = dict(row)
+        if winner is not None and winner not in binding_violated:
+            entry = entry_by_id[winner]
             disposition_kind = entry["disposition"]
             annotation = {
-                "id": entry_id,
+                "id": winner,
                 "disposition": disposition_kind,
             }
             if entry.get("linked_issue"):
@@ -575,14 +670,15 @@ def apply_dispositions(
             annotated["disposition"] = annotation
             counts[disposition_kind] += 1
             applied_rows += 1
-            entry_applied[entry_id] += 1
-            break
         annotated_mismatches.append(annotated)
 
     expired = []
     orphaned = []
     for entry in entries:
         entry_id = str(entry.get("id"))
+        if entry_id in binding_violated:
+            expired.append(entry_id)
+            continue
         if entry_applied[entry_id] > 0:
             continue
         if entry.get("expires_on_source_change"):
@@ -608,11 +704,52 @@ def apply_dispositions(
         "expired_entries": expired,
         "orphaned_entries": orphaned,
     }
+    if binding_violated:
+        summary["dispositioned"]["binding_violated_entries"] = sorted(
+            binding_violated
+        )
     merged["summary"] = summary
     merged["mismatches"] = annotated_mismatches
     if report.get("schema_version") == "axiom.comparison_report.v2":
         merged["schema_version"] = DISPOSITIONED_REPORT_SCHEMA_VERSION
     return merged
+
+
+def assignment_digest(report: dict) -> str:
+    """SHA-256 over the complete per-row disposition assignment.
+
+    Serializes ``[case_id, concept, entry_id | None, disposition | None]``
+    for EVERY mismatch row of a merged report as a canonically sorted JSON
+    list and hashes it. Aggregate counts cannot distinguish two entries of
+    equal cardinality swapping disposition classes; this digest can, so a
+    premerged-slim dashboard block that embeds it is bound to the exact
+    row-level assignment a fresh merge over the full report produces (sol
+    stack review r2, F2 residual). A sorted LIST — never a mapping keyed
+    by case_id — because a case validly carries one mismatch row per
+    concept, and a map would let same-case rows overwrite each other,
+    hiding count-preserving reclassifications among them (sol stack
+    review r3).
+    """
+
+    assignment: list[list[str | None]] = []
+    for row in report.get("mismatches") or []:
+        annotation = row.get("disposition")
+        entry_id, disposition = (
+            (str(annotation.get("id")), str(annotation.get("disposition")))
+            if isinstance(annotation, dict)
+            else (None, None)
+        )
+        assignment.append(
+            [
+                str(row.get("case_id")),
+                str(row.get("concept")),
+                entry_id,
+                disposition,
+            ]
+        )
+    assignment.sort(key=lambda item: [part or "" for part in item])
+    payload = json.dumps(assignment, separators=(",", ":"))
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
 
 def apply_dispositions_from_dir(

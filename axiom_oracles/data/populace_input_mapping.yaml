@@ -1470,10 +1470,10 @@ mappings:
 
   # ---------------------------------------------------------------------
   # KS TANF (us-ks/tanf program) — KEESM 7410 budgetary standards.
-  # PolicyEngine 1.752's combined payment-standard table equals the KEESM
-  # basic allowance plus shelter group I (92) at the table-I (100%)
-  # percentage, so the comparison fixes group I and a day-1 full month.
-  # (Earlier PE releases used group IV/V's 135 — version-sensitive.)
+  # The Axiom projection fixes shelter group I and a day-1 full month.
+  # PolicyEngine 1.767.3 instead derives the county group; Douglas, Harvey,
+  # and Johnson ECPS rows resolve to group IV, producing a visible $43
+  # bridge residual at each household size. Keep the projection explicit.
   # ---------------------------------------------------------------------
 
   - match: { kind: suffix, value: assistance_plan_person_count }
@@ -1678,6 +1678,22 @@ mappings:
   # age-tiered per-dependent maximum; child care is not observable in the ECPS
   # slice feeding the composed program and only reduces countable EARNED income,
   # so it takes 0 for the (predominantly unearned-income) TANF caseload.
+  # (Predates the CHILDCARE_EXPENSES household fact below — candidate for the
+  # same real feed once the DE cap tiers are composed.)
   - match: { kind: exact, value: child_care_expenses }
     scope: household
     source: { kind: constant, value: 0 }
+
+  # AL TANF Appendix N §2 step-2 deduction: child care or care of an
+  # incapacitated adult, deducted from gross earnings after the 20% work
+  # expense. Fed from the populace CHILDCARE_EXPENSES household fact (the
+  # SPM-unit annual childcare_expenses PolicyEngine's own
+  # al_tanf_countable_earned_income reads at MONTH period), so both engines
+  # see the same observed spending. Closes rulespec-us#1184 / the 3
+  # al-tanf-ecps axiom-attributed rows.
+  - match: { kind: exact, value: child_or_incapacitated_adult_care_expenses }
+    scope: household
+    source:
+      kind: derived
+      transform: monthly
+      from_facts: [CHILDCARE_EXPENSES]

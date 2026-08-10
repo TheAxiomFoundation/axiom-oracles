@@ -43,10 +43,10 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from axiom_oracles.evidence import validate_suite_evidence  # noqa: E402
 from axiom_oracles.comparison.dispositions import (  # noqa: E402
     validate_dispositions,
 )
+from axiom_oracles.evidence import validate_suite_evidence  # noqa: E402
 
 DATA_DIR = REPO_ROOT / "dashboard" / "public" / "data"
 CENSUS_PATH = REPO_ROOT / "conformance" / "exercise-census.json"
@@ -699,7 +699,6 @@ def build_certificate(program: str, spec: dict) -> dict:
         )
 
     attested = spec.get("attested") or {}
-
     # The single public predicate (adopted from the 2026-07-26 design review):
     # "certified" is reserved for the conjunction of all four verdicts holding
     # in computed mode with no open defects. closed and executable are attested
@@ -730,9 +729,7 @@ def build_certificate(program: str, spec: dict) -> dict:
     premises_computed = closed_computed and exec_computed
     if not premises_computed:
         certified_state = "unavailable"
-    elif (
-        conformant and exercise_complete and not blockers and closed_true and exec_true
-    ):
+    elif conformant and exercise_complete and not blockers and closed_true and exec_true:
         certified_state = "yes"
     else:
         certified_state = "no"
@@ -755,14 +752,9 @@ def build_certificate(program: str, spec: dict) -> dict:
             "conformant": {
                 "value": conformant,
                 "mode": "computed",
-                "reference_legs": [
-                    leg for leg in legs if leg["oracle_type"] == "reference"
-                ],
+                "reference_legs": [leg for leg in legs if leg["oracle_type"] == "reference"],
                 "reality_legs": [
-                    {
-                        **leg,
-                        "note": "reality-oracle disagreements are leads, not defects",
-                    }
+                    {**leg, "note": "reality-oracle disagreements are leads, not defects"}
                     for leg in reality_legs
                 ],
                 "reality_leads": reality_leads,

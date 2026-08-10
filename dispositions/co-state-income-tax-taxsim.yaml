@@ -1,6 +1,6 @@
 schema: axiom_oracles.dispositions.v1
 suite: co-state-income-tax-taxsim
-updated: '2026-07-27'
+updated: '2026-07-30'
 entries:
 - id: taxsim-co-flat-30-8-filing-status-offset
   concept: us:tax/state-income-tax#liability
@@ -139,14 +139,22 @@ entries:
     - ecps-tax-unit-59332
   disposition: upstream_engine_gap
   evidence:
-    mechanism: "Triangulated TAXSIM-side divergence: on every selected row axiom\
-      \ and\nPolicyEngine agree on Colorado liability to the cent (the household\
-      \ is\nabsent from the axiom-vs-PE mismatch set for the same population) while\n\
-      TAXSIM reports a flat lower liability \u2014 exactly \\$30.80 for married-\n\
-      joint filers and \\$20.70 for single filers, across all income levels. A\n\
-      flat per-filing-status offset in TAXSIM's Colorado module (consistent\nwith\
-      \ a TABOR-mechanism vintage difference), not a rules disagreement on\nthe\
-      \ axiom side."
+    mechanism: 'Triangulated TAXSIM-side divergence: on every selected row axiom
+      and
+
+      PolicyEngine agree on Colorado liability to the cent (the household is
+
+      absent from the axiom-vs-PE mismatch set for the same population) while
+
+      TAXSIM reports a flat lower liability — exactly \$30.80 for married-
+
+      joint filers and \$20.70 for single filers, across all income levels. A
+
+      flat per-filing-status offset in TAXSIM''s Colorado module (consistent
+
+      with a TABOR-mechanism vintage difference), not a rules disagreement on
+
+      the axiom side.'
     arithmetic:
     - expression: '30.80'
       equals: 30.8
@@ -192,17 +200,464 @@ entries:
     - ecps-tax-unit-59138
   disposition: upstream_engine_gap
   evidence:
-    mechanism: "Triangulated TAXSIM-side divergence: on every selected row axiom\
-      \ and\nPolicyEngine agree on Colorado liability to the cent (the household\
-      \ is\nabsent from the axiom-vs-PE mismatch set for the same population) while\n\
-      TAXSIM reports a flat lower liability \u2014 exactly \\$30.80 for married-\n\
-      joint filers and \\$20.70 for single filers, across all income levels. A\n\
-      flat per-filing-status offset in TAXSIM's Colorado module (consistent\nwith\
-      \ a TABOR-mechanism vintage difference), not a rules disagreement on\nthe\
-      \ axiom side."
+    mechanism: 'Triangulated TAXSIM-side divergence: on every selected row axiom
+      and
+
+      PolicyEngine agree on Colorado liability to the cent (the household is
+
+      absent from the axiom-vs-PE mismatch set for the same population) while
+
+      TAXSIM reports a flat lower liability — exactly \$30.80 for married-
+
+      joint filers and \$20.70 for single filers, across all income levels. A
+
+      flat per-filing-status offset in TAXSIM''s Colorado module (consistent
+
+      with a TABOR-mechanism vintage difference), not a rules disagreement on
+
+      the axiom side.'
     arithmetic:
     - expression: '20.70'
       equals: 20.7
       tolerance: 0.05
   linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/315
   expires_on_source_change: true
+- id: taxsim-co-refundable-credit-vintage
+  concept: us:tax/state-income-tax#liability
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-135468
+    - ecps-tax-unit-135472
+    - ecps-tax-unit-135476
+    - ecps-tax-unit-135479
+    - ecps-tax-unit-135485
+    - ecps-tax-unit-135487
+    - ecps-tax-unit-135492
+    - ecps-tax-unit-135499
+    - ecps-tax-unit-135503
+    - ecps-tax-unit-135511
+    - ecps-tax-unit-135514
+    - ecps-tax-unit-135515
+    - ecps-tax-unit-135523
+    - ecps-tax-unit-135527
+    - ecps-tax-unit-135530
+    - ecps-tax-unit-135542
+    - ecps-tax-unit-135544
+    - ecps-tax-unit-135560
+    - ecps-tax-unit-135567
+    - ecps-tax-unit-135568
+    - ecps-tax-unit-135571
+    - ecps-tax-unit-135575
+    - ecps-tax-unit-135582
+    - ecps-tax-unit-135585
+    - ecps-tax-unit-135586
+    - ecps-tax-unit-135588
+    - ecps-tax-unit-135590
+    - ecps-tax-unit-135593
+    - ecps-tax-unit-135596
+    - ecps-tax-unit-135602
+    - ecps-tax-unit-135603
+    - ecps-tax-unit-135623
+    - ecps-tax-unit-135627
+    - ecps-tax-unit-135628
+    - ecps-tax-unit-135629
+    - ecps-tax-unit-135638
+    - ecps-tax-unit-135641
+    - ecps-tax-unit-135642
+    - ecps-tax-unit-135651
+    - ecps-tax-unit-135653
+    - ecps-tax-unit-135656
+    - ecps-tax-unit-135661
+    - ecps-tax-unit-135674
+    - ecps-tax-unit-135675
+    - ecps-tax-unit-135684
+    - ecps-tax-unit-135687
+    - ecps-tax-unit-135689
+    - ecps-tax-unit-135693
+    - ecps-tax-unit-135698
+    - ecps-tax-unit-135699
+    - ecps-tax-unit-135712
+    - ecps-tax-unit-135716
+    - ecps-tax-unit-135722
+    - ecps-tax-unit-135725
+    - ecps-tax-unit-135735
+    - ecps-tax-unit-135739
+    - ecps-tax-unit-135749
+    - ecps-tax-unit-135750
+    - ecps-tax-unit-135751
+    - ecps-tax-unit-135759
+    - ecps-tax-unit-135768
+    - ecps-tax-unit-135777
+    - ecps-tax-unit-135782
+    - ecps-tax-unit-135783
+    - ecps-tax-unit-135795
+    - ecps-tax-unit-135802
+    - ecps-tax-unit-135803
+    - ecps-tax-unit-135804
+    - ecps-tax-unit-135805
+    - ecps-tax-unit-135814
+    - ecps-tax-unit-135824
+    - ecps-tax-unit-135826
+    - ecps-tax-unit-135845
+    - ecps-tax-unit-135854
+    - ecps-tax-unit-135855
+    - ecps-tax-unit-135871
+    - ecps-tax-unit-135876
+    - ecps-tax-unit-135881
+    - ecps-tax-unit-135885
+    - ecps-tax-unit-135895
+    - ecps-tax-unit-135903
+    - ecps-tax-unit-135904
+    - ecps-tax-unit-135912
+    - ecps-tax-unit-135922
+    - ecps-tax-unit-135927
+    - ecps-tax-unit-135933
+    - ecps-tax-unit-135944
+    - ecps-tax-unit-135949
+    - ecps-tax-unit-135956
+    - ecps-tax-unit-135958
+    - ecps-tax-unit-135959
+    - ecps-tax-unit-135961
+    - ecps-tax-unit-135966
+    - ecps-tax-unit-135968
+    - ecps-tax-unit-135970
+    - ecps-tax-unit-135985
+    - ecps-tax-unit-135990
+    - ecps-tax-unit-135999
+    - ecps-tax-unit-136009
+    - ecps-tax-unit-136010
+    - ecps-tax-unit-136022
+    - ecps-tax-unit-136024
+    - ecps-tax-unit-136038
+    - ecps-tax-unit-136045
+    - ecps-tax-unit-136046
+    - ecps-tax-unit-136048
+    - ecps-tax-unit-136052
+    - ecps-tax-unit-136053
+    - ecps-tax-unit-136072
+    - ecps-tax-unit-136091
+    - ecps-tax-unit-136095
+    - ecps-tax-unit-136107
+    - ecps-tax-unit-136109
+    - ecps-tax-unit-136113
+    - ecps-tax-unit-136128
+    - ecps-tax-unit-136142
+    - ecps-tax-unit-136157
+    - ecps-tax-unit-136162
+    - ecps-tax-unit-136163
+    - ecps-tax-unit-136169
+    - ecps-tax-unit-136182
+    - ecps-tax-unit-136183
+    - ecps-tax-unit-136198
+    - ecps-tax-unit-136211
+    - ecps-tax-unit-136212
+    - ecps-tax-unit-136213
+    - ecps-tax-unit-136214
+    - ecps-tax-unit-136217
+    - ecps-tax-unit-136221
+    - ecps-tax-unit-136232
+    - ecps-tax-unit-136242
+    - ecps-tax-unit-136246
+    - ecps-tax-unit-136249
+    - ecps-tax-unit-136266
+    - ecps-tax-unit-136277
+    - ecps-tax-unit-136288
+    - ecps-tax-unit-136293
+    - ecps-tax-unit-136310
+    - ecps-tax-unit-136312
+    - ecps-tax-unit-136316
+    - ecps-tax-unit-136324
+    - ecps-tax-unit-136327
+    - ecps-tax-unit-136335
+    - ecps-tax-unit-136340
+    - ecps-tax-unit-136343
+    - ecps-tax-unit-136347
+    - ecps-tax-unit-136356
+    - ecps-tax-unit-136371
+    - ecps-tax-unit-136377
+    - ecps-tax-unit-136384
+    - ecps-tax-unit-136388
+    - ecps-tax-unit-136390
+    - ecps-tax-unit-136399
+    - ecps-tax-unit-136403
+    - ecps-tax-unit-136408
+    - ecps-tax-unit-136417
+    - ecps-tax-unit-136423
+    - ecps-tax-unit-136425
+    - ecps-tax-unit-136427
+    - ecps-tax-unit-136428
+    - ecps-tax-unit-136429
+    - ecps-tax-unit-136430
+    - ecps-tax-unit-136435
+    - ecps-tax-unit-136436
+    - ecps-tax-unit-136450
+    - ecps-tax-unit-136460
+    - ecps-tax-unit-136461
+    - ecps-tax-unit-136463
+    - ecps-tax-unit-136470
+    - ecps-tax-unit-136473
+    - ecps-tax-unit-136478
+    - ecps-tax-unit-154480
+    - ecps-tax-unit-154504
+    - ecps-tax-unit-154519
+    - ecps-tax-unit-154577
+    - ecps-tax-unit-154579
+    - ecps-tax-unit-154724
+    - ecps-tax-unit-154973
+    - ecps-tax-unit-155073
+    - ecps-tax-unit-155340
+    - ecps-tax-unit-155406
+    - ecps-tax-unit-155431
+    - ecps-tax-unit-155678
+    - ecps-tax-unit-156147
+    - ecps-tax-unit-156275
+    - ecps-tax-unit-156467
+    - ecps-tax-unit-156651
+    - ecps-tax-unit-156922
+    - ecps-tax-unit-157013
+    - ecps-tax-unit-157259
+    - ecps-tax-unit-157289
+    - ecps-tax-unit-157317
+    - ecps-tax-unit-157637
+    - ecps-tax-unit-157868
+    - ecps-tax-unit-157956
+    - ecps-tax-unit-158403
+    - ecps-tax-unit-158573
+    - ecps-tax-unit-158993
+    - ecps-tax-unit-159140
+    - ecps-tax-unit-159221
+    - ecps-tax-unit-159366
+    - ecps-tax-unit-160235
+    - ecps-tax-unit-160366
+    - ecps-tax-unit-160520
+    - ecps-tax-unit-160885
+    - ecps-tax-unit-161153
+    - ecps-tax-unit-161178
+    - ecps-tax-unit-161318
+    - ecps-tax-unit-161870
+    - ecps-tax-unit-161979
+    - ecps-tax-unit-162207
+    - ecps-tax-unit-162440
+    - ecps-tax-unit-163020
+    - ecps-tax-unit-163066
+    - ecps-tax-unit-163130
+    - ecps-tax-unit-163389
+    - ecps-tax-unit-164195
+    - ecps-tax-unit-164248
+    - ecps-tax-unit-164548
+    - ecps-tax-unit-164633
+    - ecps-tax-unit-58337
+    - ecps-tax-unit-58354
+    - ecps-tax-unit-58358
+    - ecps-tax-unit-58362
+    - ecps-tax-unit-58369
+    - ecps-tax-unit-58371
+    - ecps-tax-unit-58403
+    - ecps-tax-unit-58411
+    - ecps-tax-unit-58414
+    - ecps-tax-unit-58417
+    - ecps-tax-unit-58423
+    - ecps-tax-unit-58455
+    - ecps-tax-unit-58456
+    - ecps-tax-unit-58458
+    - ecps-tax-unit-58465
+    - ecps-tax-unit-58472
+    - ecps-tax-unit-58482
+    - ecps-tax-unit-58488
+    - ecps-tax-unit-58499
+    - ecps-tax-unit-58501
+    - ecps-tax-unit-58503
+    - ecps-tax-unit-58504
+    - ecps-tax-unit-58507
+    - ecps-tax-unit-58510
+    - ecps-tax-unit-58521
+    - ecps-tax-unit-58541
+    - ecps-tax-unit-58566
+    - ecps-tax-unit-58571
+    - ecps-tax-unit-58574
+    - ecps-tax-unit-58583
+    - ecps-tax-unit-58587
+    - ecps-tax-unit-58592
+    - ecps-tax-unit-58594
+    - ecps-tax-unit-58596
+    - ecps-tax-unit-58610
+    - ecps-tax-unit-58617
+    - ecps-tax-unit-58624
+    - ecps-tax-unit-58626
+    - ecps-tax-unit-58629
+    - ecps-tax-unit-58633
+    - ecps-tax-unit-58634
+    - ecps-tax-unit-58637
+    - ecps-tax-unit-58643
+    - ecps-tax-unit-58645
+    - ecps-tax-unit-58652
+    - ecps-tax-unit-58658
+    - ecps-tax-unit-58660
+    - ecps-tax-unit-58662
+    - ecps-tax-unit-58664
+    - ecps-tax-unit-58675
+    - ecps-tax-unit-58676
+    - ecps-tax-unit-58679
+    - ecps-tax-unit-58686
+    - ecps-tax-unit-58697
+    - ecps-tax-unit-58705
+    - ecps-tax-unit-58723
+    - ecps-tax-unit-58731
+    - ecps-tax-unit-58747
+    - ecps-tax-unit-58755
+    - ecps-tax-unit-58764
+    - ecps-tax-unit-58774
+    - ecps-tax-unit-58775
+    - ecps-tax-unit-58784
+    - ecps-tax-unit-58785
+    - ecps-tax-unit-58788
+    - ecps-tax-unit-58789
+    - ecps-tax-unit-58790
+    - ecps-tax-unit-58809
+    - ecps-tax-unit-58818
+    - ecps-tax-unit-58839
+    - ecps-tax-unit-58842
+    - ecps-tax-unit-58847
+    - ecps-tax-unit-58852
+    - ecps-tax-unit-58857
+    - ecps-tax-unit-58860
+    - ecps-tax-unit-58871
+    - ecps-tax-unit-58877
+    - ecps-tax-unit-58890
+    - ecps-tax-unit-58896
+    - ecps-tax-unit-58898
+    - ecps-tax-unit-58903
+    - ecps-tax-unit-58908
+    - ecps-tax-unit-58913
+    - ecps-tax-unit-58931
+    - ecps-tax-unit-58942
+    - ecps-tax-unit-58948
+    - ecps-tax-unit-58950
+    - ecps-tax-unit-58954
+    - ecps-tax-unit-58957
+    - ecps-tax-unit-58968
+    - ecps-tax-unit-58974
+    - ecps-tax-unit-58981
+    - ecps-tax-unit-58986
+    - ecps-tax-unit-59000
+    - ecps-tax-unit-59002
+    - ecps-tax-unit-59014
+    - ecps-tax-unit-59017
+    - ecps-tax-unit-59030
+    - ecps-tax-unit-59031
+    - ecps-tax-unit-59032
+    - ecps-tax-unit-59040
+    - ecps-tax-unit-59051
+    - ecps-tax-unit-59063
+    - ecps-tax-unit-59070
+    - ecps-tax-unit-59074
+    - ecps-tax-unit-59088
+    - ecps-tax-unit-59089
+    - ecps-tax-unit-59091
+    - ecps-tax-unit-59103
+    - ecps-tax-unit-59115
+    - ecps-tax-unit-59119
+    - ecps-tax-unit-59127
+    - ecps-tax-unit-59131
+    - ecps-tax-unit-59145
+    - ecps-tax-unit-59146
+    - ecps-tax-unit-59153
+    - ecps-tax-unit-59166
+    - ecps-tax-unit-59171
+    - ecps-tax-unit-59187
+    - ecps-tax-unit-59189
+    - ecps-tax-unit-59195
+    - ecps-tax-unit-59202
+    - ecps-tax-unit-59203
+    - ecps-tax-unit-59210
+    - ecps-tax-unit-59214
+    - ecps-tax-unit-59217
+    - ecps-tax-unit-59219
+    - ecps-tax-unit-59223
+    - ecps-tax-unit-59225
+    - ecps-tax-unit-59243
+    - ecps-tax-unit-59245
+    - ecps-tax-unit-59247
+    - ecps-tax-unit-59264
+    - ecps-tax-unit-59266
+    - ecps-tax-unit-59270
+    - ecps-tax-unit-59297
+    - ecps-tax-unit-59316
+    - ecps-tax-unit-59330
+    - ecps-tax-unit-59335
+    - ecps-tax-unit-59338
+    - ecps-tax-unit-59341
+  disposition: upstream_engine_gap
+  evidence:
+    mechanism: 'Triangulated TAXSIM-side divergence in Colorado''s refundable credit
+
+      stack (mirror of taxsim-co-refundable-credit-vintage in the
+
+      intersection suite): on every selected row axiom and PolicyEngine
+
+      agree on Colorado liability to the cent (the tax unit is absent from
+
+      the complete 31-row axiom-vs-PE mismatch set over the same 1,201-unit
+
+      population), while TAXSIM departs. idtl=2 decomposition on the shared
+
+      tax units locates the divergence in TAXSIM''s state credit columns
+
+      (sctc family-affordability/CTC, srebate) - its 2026-05-21 Colorado
+
+      module carries a different family-affordability-credit vintage and
+
+      couples its Colorado EITC to its broken 2026 federal credit
+
+      machinery. Deltas are heterogeneous because the credit stack varies
+
+      per household; the per-row proof is the axiom==PE agreement.'
+    arithmetic:
+    - expression: -5430.53 - -8472.33
+      equals: 3041.8
+      tolerance: 0.05
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
+  expires_on_source_change: true
+- id: co-state-open-rows-axiom-pe-divergent
+  concept: us:tax/state-income-tax#liability
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-135552
+    - ecps-tax-unit-135799
+    - ecps-tax-unit-135880
+    - ecps-tax-unit-136208
+    - ecps-tax-unit-136404
+    - ecps-tax-unit-58696
+    - ecps-tax-unit-59285
+  disposition: unexplained
+  evidence:
+    mechanism: 'Documented open investigation - these seven rows are exactly the
+      state-lane residuals where the vintage-class triangulation FAILS:
+      every one of these case ids appears in the 31-row axiom-vs-PE
+      mismatch set for the same population, so axiom''s own Colorado value
+      is unconfirmed and the rows cannot be attributed to TAXSIM. idtl=2
+      reruns of the pinned binary reproduce six of the seven TAXSIM values
+      to the cent (135552, a -425K self-employment-loss unit, does not
+      reproduce from the persisted input row) and decompose them as staxbc
+      - sctc - sptcr - 0.5 x v25: known TAXSIM-side ingredients include
+      the childless-EITC coupling (58696: Colorado EITC 332.00 = 0.5 x
+      664 childless v25 vs axiom 3,498.59 = 0.5 x 6,997.18), the mstat=1-
+      with-dependents head-of-household standard-deduction projection
+      (136208: v13 24,150 vs axiom single 16,100) and TAXSIM''s automatic
+      itemization of its computed state income tax (59285: v17 18,352.57
+      with v13 0) - but the axiom-vs-PE divergence on the same units must
+      be triaged first.'
+    arithmetic:
+    - expression: 0.5 * 664.0
+      equals: 332.0
+    - expression: 974.42 - 1657.5 - 20.6
+      equals: -703.68
+    - expression: 10317.46 - 37.82
+      equals: 10279.64
+      tolerance: 0.02
+    sources:
+    - dashboard/public/data/axiom-policyengine-co-state-income-tax-ecps.json
+  expires_on_source_change: true
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304

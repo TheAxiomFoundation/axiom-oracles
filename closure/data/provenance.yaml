@@ -1,0 +1,40 @@
+schema: axiom_oracles.closure.provenance.v1
+as_of: '2026-07-27'
+snapshots:
+  - file: cfr-273.jsonl
+    source_repo: https://github.com/TheAxiomFoundation/axiom-corpus.git
+    source_ref: origin/main@bf97b17baebfdf12601f7c23697524bf5adcdaed
+    source_path: data/corpus/provisions/us/regulation/2026-07-15-title-7-part-273.jsonl
+    sha256: 57dd752844884c36999ff701c1057406a026b57be44d144dc484fdfbed56b9c9
+    extraction: >-
+      Byte-for-byte copy of the committed provision projection, whose rows resolve
+      by exact citation_path to every item in the matching inventory (1 part, 8
+      subparts, and 30 sections).
+  - file: usc-51.jsonl
+    source_repo: https://github.com/TheAxiomFoundation/axiom-corpus.git
+    source_ref: origin/main@bf97b17baebfdf12601f7c23697524bf5adcdaed
+    source_path: >-
+      data/corpus/provisions/us/statute/2026-07-21-snap-chapter-51-title-7-title-7.jsonl
+    sha256: 8e47350b82ff737a75195fad710f07b97a7d10c86be749a6c3aff9e928add686
+    extraction: >-
+      Byte-for-byte copy of the committed provision projection, whose rows resolve
+      by exact citation_path to every item in the matching inventory (1 title, 34
+      sections, 230 subsections, and 562 paragraphs).
+  - file: co-provisions.jsonl
+    source_repo: https://github.com/TheAxiomFoundation/axiom-corpus.git
+    source_ref: origin/main@bf97b17baebfdf12601f7c23697524bf5adcdaed
+    source_path: >-
+      data/corpus/provisions/us-co/regulation/2026-07-16-10-ccr-2506-1.jsonl
+    sha256: a0b3492973e1d87d62237aee457157413d65725667ab6e285cc8aa4285e9880b
+    extraction: >-
+      Byte-for-byte copy of the committed provision projection, whose rows resolve
+      by exact citation_path to every item in the matching inventory (1 document
+      and 289 sections).
+  - file: rulespec-us-files.txt
+    source_repo: https://github.com/TheAxiomFoundation/rulespec-us.git
+    source_ref: origin/main@1158ba5b248c3cbbfe1768357f03ca43c8b3618e
+    source_path: .
+    sha256: 7b54fb97d15ab5e1dc5905ee6d2931f3143941720e7534a77dced02cbf3b2768
+    extraction: >-
+      Recursive repository file inventory emitted by git ls-tree -r --name-only
+      at the pinned source ref.

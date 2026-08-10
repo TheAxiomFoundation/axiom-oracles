@@ -15,15 +15,30 @@ description: >-
   their own surfaces and suites. Per-surface history:
   docs/uk-coverage-matrix.md.
 
+# Not CI-runnable: the pinned Populace UK artifact lives in the PRIVATE
+# Hugging Face repo policyengine/populace-uk-private, and the runner has no
+# HF credential -- the leg dies on `Failed to download pinned Populace UK
+# artifact ...: 401 Client Error` (verified in run 31073838536, 2026-08-06,
+# after the subcommand/layout/compose fixes landed; every other blocker is
+# cleared and the same chain passes locally with a credentialed HF cache).
+# The workflows already pass HF_TOKEN from the org HUGGING_FACE_TOKEN
+# secret; that secret is currently broken org-wide (policyengine-uk#1816,
+# fix = org owners). Drop this marker when the org token is restored and
+# shared to this repo (axiom-oracles#455 tracks the flip-back).
+ci: manual
+
 runner:
   type: axiom-encode-uk-efrs-compare
   axiom_encode_repo: $HOME/axiom-encode
   axiom_rules_repo: $HOME/axiom-rules-engine
   rulespec_root: $HOME/rulespec-uk-official
   parameters:
-    axiom_compose_binary: $HOME/axiom-compose/.venv/bin/axiom-compose
-    axiom_program: $HOME/axiom-programs/uk/universal-credit/fy-2026-27.yaml
-    axiom_composed_program: /tmp/uk-universal-credit-fy-2026-27-composed.yaml
+    # No axiom_program/axiom_compose_binary here: every surface below is a
+    # source-path surface, and the composed Universal Credit program is only
+    # consumed by UC surfaces (uk-universal-credit-efrs). Declaring it made
+    # the CI leg build the axiom-compose venv — an extra private-repo clone
+    # and venv build the comparison never used (it failed the first restored
+    # sweep on exactly that dead dependency).
     rulespec_roots:
       - $HOME/rulespec-uk-official
     data_folder: $HOME/axiom-oracles/.axiom/policyengine-data

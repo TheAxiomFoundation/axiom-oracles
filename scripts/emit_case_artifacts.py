@@ -27,10 +27,12 @@ Row shape (kept deliberately small):
 Usage:
     .venv/bin/python scripts/emit_case_artifacts.py            # all suites
     .venv/bin/python scripts/emit_case_artifacts.py <suite>...  # named suites
+    .venv/bin/python scripts/emit_case_artifacts.py --check <suite>...
 """
 
 from __future__ import annotations
 
+import argparse
 import glob
 import json
 import re
@@ -470,15 +472,283 @@ def dashboard_suites() -> dict[str, dict]:
     return out
 
 
-def main() -> None:
+def _load_served_rows(suite: str, index: dict) -> tuple[list[dict], list[str]]:
+    """Load exactly the chunks declared by an artifact index."""
+    problems: list[str] = []
+    out_dir = OUT_ROOT / suite
+    declared_chunks = index.get("chunks")
+    if not isinstance(declared_chunks, int) or declared_chunks < 0:
+        return [], [f"{suite}: index.chunks must be a non-negative integer"]
+    expected_names = {f"chunk-{i}.json" for i in range(declared_chunks)}
+    actual_names = {path.name for path in out_dir.glob("chunk-*.json")}
+    if actual_names != expected_names:
+        missing = sorted(expected_names - actual_names)
+        stale = sorted(actual_names - expected_names)
+        problems.append(
+            f"{suite}: chunk file set drift (missing={missing}, stale={stale})"
+        )
+    chunk_size = index.get("chunk_size")
+    if not isinstance(chunk_size, int) or chunk_size <= 0:
+        problems.append(f"{suite}: index.chunk_size must be a positive integer")
+        chunk_size = CHUNK_SIZE
+
+    rows: list[dict] = []
+    for name in sorted(expected_names, key=lambda item: int(item[6:-5])):
+        path = out_dir / name
+        if not path.exists():
+            continue
+        try:
+            chunk = json.loads(path.read_text())
+        except (OSError, json.JSONDecodeError) as exc:
+            problems.append(f"{suite}: cannot read {name}: {exc}")
+            continue
+        if not isinstance(chunk, list):
+            problems.append(f"{suite}: {name} is not a JSON array")
+            continue
+        if len(chunk) > chunk_size:
+            problems.append(
+                f"{suite}: {name} has {len(chunk)} rows, above chunk_size "
+                f"{chunk_size}"
+            )
+        rows.extend(chunk)
+    return rows, problems
+
+
+def _canonical_mismatch_payloads(
+    report: dict,
+) -> tuple[dict[tuple[str, str], dict], list[str]]:
+    payloads: dict[tuple[str, str], dict] = {}
+    problems: list[str] = []
+    for raw in report.get("mismatches") or []:
+        normalized = normalize_mismatch(raw)
+        case_id = normalized.get("case_id")
+        concept = normalized.get("concept")
+        if case_id is None or concept is None:
+            problems.append("canonical mismatch is missing case_id/concept")
+            continue
+        key = (str(case_id), str(concept))
+        if key in payloads:
+            problems.append(f"canonical duplicate mismatch identity {key}")
+            continue
+        disposition = raw.get("disposition") or {}
+        payloads[key] = {
+            "l": normalized.get("left"),
+            "x": normalized.get("right"),
+            "d": normalized.get("difference"),
+            "e": disposition.get("disposition"),
+        }
+    return payloads, problems
+
+
+def _served_mismatch_payloads(
+    rows: list[dict],
+) -> tuple[dict[tuple[str, str], dict], list[str]]:
+    payloads: dict[tuple[str, str], dict] = {}
+    problems: list[str] = []
+    seen_case_ids: set[str] = set()
+    for row in rows:
+        case_id = row.get("id")
+        if case_id is None:
+            problems.append("served case row is missing id")
+            continue
+        case_key = str(case_id)
+        if case_key in seen_case_ids:
+            problems.append(f"served duplicate case id {case_key}")
+        seen_case_ids.add(case_key)
+        mismatches = row.get("m") or []
+        if not isinstance(mismatches, list):
+            problems.append(f"served case {case_key} has non-list m")
+            continue
+        for mismatch in mismatches:
+            concept = mismatch.get("c")
+            if concept is None:
+                problems.append(
+                    f"served mismatch for case {case_key} is missing concept"
+                )
+                continue
+            key = (case_key, str(concept))
+            if key in payloads:
+                problems.append(f"served duplicate mismatch identity {key}")
+                continue
+            payloads[key] = {
+                "l": mismatch.get("l"),
+                "x": mismatch.get("x"),
+                "d": mismatch.get("d"),
+                "e": mismatch.get("e"),
+            }
+    return payloads, problems
+
+
+def check_suite_artifacts(
+    suite: str,
+    dashboard_config: dict,
+) -> tuple[list[str], dict[str, int]]:
+    """Compare committed compact artifacts to the complete canonical report."""
+    problems: list[str] = []
+    basename = dashboard_config["basename"]
+    report = dashboard_report(basename)
+    if report is None:
+        return [f"{suite}: canonical dashboard report is missing"], {}
+    if not mismatches_complete(report):
+        stored = len(report.get("mismatches") or [])
+        declared = (report.get("summary") or {}).get("mismatch_count")
+        return [
+            f"{suite}: canonical mismatch list is incomplete "
+            f"({stored}/{declared}); compact parity is uncheckable"
+        ], {}
+
+    out_dir = OUT_ROOT / suite
+    index_path = out_dir / "index.json"
+    if not index_path.exists():
+        return [f"{suite}: case-artifact index.json is missing"], {}
+    try:
+        index = json.loads(index_path.read_text())
+    except (OSError, json.JSONDecodeError) as exc:
+        return [f"{suite}: cannot read case-artifact index.json: {exc}"], {}
+    if not isinstance(index, dict):
+        return [f"{suite}: case-artifact index is not a JSON object"], {}
+
+    rows, load_problems = _load_served_rows(suite, index)
+    problems.extend(load_problems)
+    if index.get("suite") != suite:
+        problems.append(
+            f"{suite}: index suite is {index.get('suite')!r}, expected {suite!r}"
+        )
+    if index.get("count") != len(rows):
+        problems.append(
+            f"{suite}: index count {index.get('count')} != {len(rows)} served rows"
+        )
+    if index.get("engines") != report.get("engines"):
+        problems.append(f"{suite}: index engines drift from canonical report")
+
+    total_cases = report.get("case_count") or report.get("compared_tax_units")
+    if index.get("total_cases") != total_cases:
+        problems.append(
+            f"{suite}: index total_cases {index.get('total_cases')} != "
+            f"canonical {total_cases}"
+        )
+
+    canonical, canonical_problems = _canonical_mismatch_payloads(report)
+    served, served_problems = _served_mismatch_payloads(rows)
+    problems.extend(f"{suite}: {item}" for item in canonical_problems)
+    problems.extend(f"{suite}: {item}" for item in served_problems)
+
+    canonical_keys = set(canonical)
+    served_keys = set(served)
+    missing = sorted(canonical_keys - served_keys)
+    obsolete = sorted(served_keys - canonical_keys)
+    if missing:
+        problems.append(
+            f"{suite}: {len(missing)} canonical mismatch row(s) missing; "
+            f"examples={missing[:5]}"
+        )
+    if obsolete:
+        problems.append(
+            f"{suite}: {len(obsolete)} obsolete served mismatch row(s); "
+            f"examples={obsolete[:5]}"
+        )
+
+    shared = canonical_keys & served_keys
+    wrong_annotations = sorted(
+        key for key in shared if canonical[key]["e"] != served[key]["e"]
+    )
+    silent = [
+        key
+        for key in wrong_annotations
+        if canonical[key]["e"] is None and served[key]["e"] is not None
+    ]
+    if wrong_annotations:
+        problems.append(
+            f"{suite}: {len(wrong_annotations)} served annotation(s) differ "
+            f"from canonical ({len(silent)} silent classifications); "
+            f"examples={wrong_annotations[:5]}"
+        )
+    value_drift = sorted(
+        key
+        for key in shared
+        if any(canonical[key][field] != served[key][field] for field in ("l", "x", "d"))
+    )
+    if value_drift:
+        problems.append(
+            f"{suite}: {len(value_drift)} served mismatch value row(s) drift; "
+            f"examples={value_drift[:5]}"
+        )
+
+    concepts = sorted({key[1] for key in canonical})
+    if index.get("mismatch_concepts") != concepts:
+        problems.append(f"{suite}: index mismatch_concepts drift from canonical")
+    unique_mismatch_cases = len({key[0] for key in canonical})
+    if index.get("partial") == "mismatch-only":
+        expected_rows = unique_mismatch_cases
+    else:
+        expected_rows = total_cases
+    if index.get("count") != expected_rows:
+        problems.append(
+            f"{suite}: index count {index.get('count')} != expected "
+            f"{expected_rows} for artifact mode"
+        )
+
+    return problems, {
+        "cases": len(rows),
+        "mismatches": len(canonical),
+        "annotated": sum(payload["e"] is not None for payload in canonical.values()),
+        "silent": len(silent),
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--check",
+        action="store_true",
+        help=(
+            "Fail if committed chunks differ from complete canonical dashboard "
+            "mismatch rows; does not read ignored reports/ or write files."
+        ),
+    )
+    parser.add_argument("suite", nargs="*", help="Suite slug(s) to emit or check.")
+    args = parser.parse_args()
+
     suites = dashboard_suites()
-    wanted = sys.argv[1:] or sorted(suites)
+    if args.suite:
+        wanted = args.suite
+    elif args.check:
+        wanted = sorted(suite for suite in suites if (OUT_ROOT / suite).exists())
+    else:
+        wanted = sorted(suites)
+
+    if args.check:
+        all_problems: list[str] = []
+        checked = 0
+        mismatch_rows = 0
+        annotated_rows = 0
+        for suite in wanted:
+            if suite not in suites:
+                all_problems.append(f"{suite}: unknown suite")
+                continue
+            problems, stats = check_suite_artifacts(suite, suites[suite])
+            all_problems.extend(problems)
+            if stats:
+                checked += 1
+                mismatch_rows += stats["mismatches"]
+                annotated_rows += stats["annotated"]
+        if all_problems:
+            for problem in all_problems:
+                print(f"case-artifacts FAILED: {problem}", file=sys.stderr)
+            return 1
+        print(
+            f"case-artifacts OK: {checked} suites, {mismatch_rows} mismatch "
+            f"rows, {annotated_rows} annotated, 0 silent classifications"
+        )
+        return 0
+
     for suite in wanted:
         if suite not in suites:
             print(f"skip {suite}: unknown suite")
             continue
         print(emit_suite(suite, suites[suite]))
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

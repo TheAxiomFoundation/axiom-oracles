@@ -87,29 +87,26 @@ Person identity, ordering, cardinality, and every TaxUnit link; evaluates both
 each side to TaxUnit only for comparison and population accounting. This does
 not relabel the component as broad final Arkansas liability, and the exact
 aggregation mode, Axiom output, and PolicyEngine target are state-allowlisted.
-Delaware validates certified Person identity,
-order, cardinality, and every TaxUnit link before projecting separate taxable
-income at Person grain, summing the combined taxable-income candidate to
-TaxUnit, and emitting raw relation membership for every Person linked by the
-certified `person_tax_unit_id` column. An explicit reviewed Boolean-OR of
-PolicyEngine's upstream `is_tax_unit_head` and `is_tax_unit_spouse` roles
-controls inclusion inside `sum_where`; zero-filer units validly aggregate to
-zero. The pinned engine's current aggregation lowering reads the related Person
-from runtime tuple slot 0 and current TaxUnit from slot 1, so the adapter emits
-`(Person, TaxUnit)` pending an engine/RuleSpec follow-up to preserve declared
-relation argument labels. Montana's projector is likewise state- and
-variable-specific:
+Delaware now follows the same narrow Person-schedule pattern: the runner
+validates certified Person identity, ordering, cardinality, and every TaxUnit
+link; projects only completed `de_taxable_income_indv`; evaluates the distinct
+`de_pit_pilot_separate_schedule_tax` and
+`de_income_tax_before_non_refundable_credits_indv` outputs at Person grain; and
+sums both sides to TaxUnit only for comparison and population accounting. It
+does not consume `de_files_separately`, compute the combined-return candidate,
+or claim filing-method selection, credits, payments, or final TaxUnit
+liability. Montana's projector is likewise state- and variable-specific:
 it verifies the certified Person IDs and order, rejects duplicate or missing
 members and unknown tax-unit links, and only then sums the allowlisted Montana
 taxable-income, long-term-gain, and short-term-gain arrays to TaxUnit. The net
 long-term amount is reconstructed as `max(0, min(sum(LTCG), sum(LTCG) +
 sum(STCG)))`; no generic Person-to-TaxUnit transform is exposed.
-Mississippi projects both completed-return taxable-income candidates at Person
-grain after the same fail-closed identity and membership checks. It emits the
-certified raw `(Person, TaxUnit)` relation for every member, independently
-applies section 27-7-5's zero band and rate to both candidate sets, aggregates
-both sets, and selects the separate total only when strictly lower. It never
-uses PolicyEngine's candidate tax amounts or `ms_files_separately` selector.
+Mississippi projects the completed-return joint/default taxable-income boundary
+at Person grain after the same fail-closed identity and membership checks. It
+applies section 27-7-5's zero band and rate to every Person and sums both Axiom
+and PolicyEngine Person results to TaxUnit only for comparison and population
+accounting. It does not reconstruct or consume `ms_files_separately`, choose
+between joint and separate filing methods, or claim final-return liability.
 Hawaii uses the same fail-closed Person identity and membership projector only
 for the source-required sum of `long_term_capital_gains`; taxable income, net
 capital gain, and filing status remain TaxUnit-grain upstream boundaries. The

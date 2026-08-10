@@ -1,0 +1,1486 @@
+# axiom_oracles.closure.universe.v1 — generated facts + committed review classifications.
+# citation, heading, and baseline encoded/pending status come from the pinned
+# closure data. Excluded reason/basis, corrected encoded_by paths, and notes
+# are human-reviewed overlays preserved by scripts/closure_universe.py.
+schema: axiom_oracles.closure.universe.v1
+program: us-co/snap
+root: state-10-ccr-2506-1
+provenance:
+  source_file: co-provisions.jsonl
+  source_repo: https://github.com/TheAxiomFoundation/axiom-corpus.git
+  source_ref: origin/main@bf97b17baebfdf12601f7c23697524bf5adcdaed
+  source_sha256: a0b3492973e1d87d62237aee457157413d65725667ab6e285cc8aa4285e9880b
+  rulespec_file: rulespec-us-files.txt
+  rulespec_repo: https://github.com/TheAxiomFoundation/rulespec-us.git
+  rulespec_ref: origin/main@1158ba5b248c3cbbfe1768357f03ca43c8b3618e
+  rulespec_sha256: 7b54fb97d15ab5e1dc5905ee6d2931f3143941720e7534a77dced02cbf3b2768
+ratchet:
+  pins_sha256: 74b2a711428ec4d616cf3ebd34a3f9b3c94fa8bc25edade6e1ef4786de8923f8
+  pending_max: 0
+provisions:
+  - citation: us-co/regulation/10-ccr-2506-1
+    heading: 10 CCR 2506-1 RULE MANUAL VOLUME 4, SNAP
+    status: excluded
+    reason: container_heading
+    basis: 'The corpus row is the document node itself (kind=document), not a provision: its body is zero-length
+      and all regulatory content is carried by its 289 child sections, every one of which is separately
+      classified in this universe. Verifiable from the pinned provisions file: the record with this citation_path
+      has kind ''document'' and an empty body.'
+  - citation: us-co/regulation/10-ccr-2506-1/4.000
+    heading: SNAP
+    status: excluded
+    reason: container_heading
+    basis: The source record is only the heading “SNAP” and has no body of its own; its sole child, 4.000.1,
+      begins “Able-Bodied Adult Without Dependents (ABAWD)” means an individual and carries the content.
+  - citation: us-co/regulation/10-ccr-2506-1/4.000.1
+    heading: SNAP DEFINITIONS
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.000.1.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.100
+    heading: SNAP INTRODUCTION
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.100.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.110
+    heading: USE OF THE SNAP MANUAL
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.110.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.120
+    heading: PURPOSE OF SNAP
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.120.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.130
+    heading: USING SNAP BENEFITS
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.130.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.130.1
+    heading: WHERE HOUSEHOLDS CAN USE SNAP BENEFITS
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.130.1.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.130.2
+    heading: ELIGIBLE FOODS
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.130.2.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.140
+    heading: CONFIDENTIALITY
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.140.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.150
+    heading: RIGHT AND OPPORTUNITY TO REGISTER TO VOTE
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.150.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.150.1
+    heading: Transmittal of Voter Registration Records
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.150.1.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.150.2
+    heading: Confidentiality of Voter Registration Records
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.150.2.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.160
+    heading: COMPLAINT REQUIREMENTS
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.160.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.160.1
+    heading: State Department and Local Office Responsibility
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.160.1.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.160.2
+    heading: Non-Discrimination Complaint Requirements
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.160.2.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.160.21
+    heading: Discrimination Complaint Procedure
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.160.21.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.160.22
+    heading: Disposition of Discrimination Complaints
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.160.22.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.200
+    heading: APPLICATIONS AND RECERTIFICATIONS
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.200.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.201
+    heading: APPLICATION PROCESSING
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.201.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.202
+    heading: FILING AN APPLICATION
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.202.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.202.1
+    heading: Public Assistance (PA) Applications and Processing
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.202.1.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.202.2
+    heading: Application Filing by Ineligible Individuals
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.202.2.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.202.3
+    heading: SSI Households Submitting SNAP Applications to the Social Security Administration
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.202.3.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.202.31
+    heading: SSI Telephone Applications and Recertifications Completed by the SSA
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.202.31.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.202.32
+    heading: SSI and SNAP Joint Processing
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.202.32.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.202.33
+    heading: Out Stationing Eligibility Technicians in SSA Offices
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.202.33.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.203
+    heading: HEAD OF HOUSEHOLD AND AUTHORIZED REPRESENTATIVES
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.203.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.203.1
+    heading: Designating a Head of Household
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.203.1.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.203.2
+    heading: Designating Authorized Representatives
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.203.2.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.203.21
+    heading: Individuals Who Cannot Be an Authorized Representative
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.203.21.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.203.22
+    heading: Disqualification of an Authorized Representative
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.203.22.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.203.3
+    heading: Emergency Authorized Representatives
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.203.3.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.204
+    heading: Interviews
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.204.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.205
+    heading: Application Processing Standards
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.205.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.205.1
+    heading: Processing Standards for Expedited Service
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.205.1.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.205.11
+    heading: Special Provisions for Expedite Service
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.205.11.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.205.2
+    heading: Normal Processing Standards
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.205.2.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.205.3
+    heading: Delays in Processing Beyond Thirty (30) Days
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.205.3.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.205.31
+    heading: Delays Caused by the Household
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.205.31.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.205.32
+    heading: Delays Caused by the Local Office
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.205.32.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.205.4
+    heading: Delays in Processing Beyond Sixty (60) Days
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.205.4.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.206
+    heading: CATEGORIES OF ELIGIBILITY
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.206.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.207
+    heading: AUTHORIZING BENEFITS
+    status: excluded
+    reason: container_heading
+    basis: The source record is only the heading “AUTHORIZING BENEFITS” and has no body of its own; children
+      4.207.1–4.207.3 carry the rules, beginning “All households shall be placed on an issuance schedule”
+      and continuing through proration and benefit allotment.
+  - citation: us-co/regulation/10-ccr-2506-1/4.207.1
+    heading: Newly-Certified and Ongoing Households
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.207.1.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.207.2
+    heading: Initial Month Allotment Prorating
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.207.2.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.207.3
+    heading: Benefit Allotment
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.207.3.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.208
+    heading: CERTIFICATION PERIODS
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.208.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.208.1
+    heading: Certification Period Guidelines [Rev. eff. 4/1/16]
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.208.1.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.208.2
+    heading: Classification of Households as PA or Non-PA
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.208.2.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.209
+    heading: RECERTIFICATION PROCESS REQUIREMENTS
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.209.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.209.1
+    heading: Recertification Processing Standards and Timeframes
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.209.1.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.210
+    heading: PERIODIC REPORTING REQUIREMENTS
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.210.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.300
+    heading: NON-FINANCIAL ELIGIBILITY CRITERIA
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.300.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.301
+    heading: IDENTITY OF APPLICANT
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.301.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.302
+    heading: SOCIAL SECURITY NUMBER REQUIREMENT
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.302.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.303
+    heading: RESIDENCY REQUIREMENT
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.303.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.304
+    heading: HOUSEHOLD COMPOSITION
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.304.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.304.1
+    heading: MANDATORY HOUSEHOLD MEMBERS
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.304.1.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.304.2
+    heading: Children in Shared Custody Arrangements
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.304.2.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.304.3
+    heading: Optional Household Members
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.304.3.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.304.31
+    heading: Non-Household Members
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.304.31.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.304.32
+    heading: Established Residence Separate and Apart
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.304.32.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.304.4
+    heading: Persons Disqualified or Ineligible to Participate in SNAP
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.304.4.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.304.41
+    heading: EXEMPTIONS FROM THE BOARDING HOUSE AND INSTITUTION PROHIBITIONS
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.304.41.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.305
+    heading: CITIZENSHIP AND NON-CITIZENSHIP STATUS
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.305.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.305.1
+    heading: Non-Citizens Ineligible for Participation in SNAP
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.305.1.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.305.2
+    heading: Households Containing a Sponsored Non-Citizen Member
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.305.2.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.305.3
+    heading: Reporting Undocumented Non-Citizens
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.305.3.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.306
+    heading: STUDENT ELIGIBILITY
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.306.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.306.1
+    heading: Student Exemption Criteria
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.306.1.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.307
+    heading: STRIKER ELIGIBILITY
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.307.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.307.1
+    heading: Households Not Affected by the Striker Provisions
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.307.1.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.308
+    heading: VOLUNTARY QUIT
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.308.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.308.1
+    heading: Good Cause for Quitting or Reducing Work Hours
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.308.1.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.309
+    heading: HOUSEHOLDS WITH SPECIAL CIRCUMSTANCES
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.309.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.309.1
+    heading: Dining Facilities and Homeless Meal Providers
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.309.1.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.309.2
+    heading: Shelters for Battered Women and Children
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.309.2.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.309.21
+    heading: Residents of Shelters for Battered Women and Children
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.309.21.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.309.3
+    heading: Drug and Alcohol Treatment and Rehabilitation Centers (Center)
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.309.3.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.309.31
+    heading: Responsibilities of the Center
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.309.31.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.309.4
+    heading: Residents of Group Living Arrangements
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.309.4.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.309.41
+    heading: Responsibilities of Group Living Arrangements
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.309.41.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.309.42
+    heading: Disqualification of the Group Living Arrangements
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.309.42.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.310
+    heading: GENERAL WORK REQUIREMENTS
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.310.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.310.1
+    heading: Work Requirements and Verification
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.310.1.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.310.2
+    heading: Informing the Household of General Work Requirements
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.310.2.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.310.3
+    heading: General Work Requirement Exemptions
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.310.3.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.310.4
+    heading: Changes in Exemption Status
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.310.4.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.310.5
+    heading: Voluntary Quit
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.310.5.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.310.6
+    heading: Suitable Employment
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.310.6.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.310.7
+    heading: Good Cause for Voluntary Quit and Suitable Employment
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.310.7.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.310.8
+    heading: Level Sanction Periods
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.310.8.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.311
+    heading: ABAWD WORK REQUIREMENTS
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.311.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.311.1
+    heading: ABAWD Exemptions
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.311.1.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.311.2
+    heading: Changes in ABAWD Exemption Status
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.311.2.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.311.3
+    heading: ABAWD Time Limits
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.311.3.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.312
+    heading: Employment First (EF)
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.312.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.312.1
+    heading: County Administration Requirements for EF
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.312.1.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.313
+    heading: Colorado Workfare Program
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.313.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.313.1
+    heading: County Administration Requirements for Workfare
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.313.1.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.400
+    heading: FINANCIAL ELIGIBILITY CRITERIA
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.400.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.401
+    heading: Income Eligibility Standards
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.401.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.401.1
+    heading: Gross Income Limits
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.401.1.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.401.2
+    heading: Net Income Levels
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.401.2.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.402
+    heading: HOUSEHOLD INCOME ELIGIBILITY
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.402.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.402.1
+    heading: Prospective Budgeting
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.402.1.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.402.2
+    heading: Averaging Income
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.402.2.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.403
+    heading: COUNTABLE EARNED INCOME
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.403.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.403.1
+    heading: Self-Employment
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.403.1.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.403.11
+    heading: Determining Monthly Income from Self-Employment
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.403.11.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.403.12
+    heading: Averaging Self-Employment Income
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.403.12.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.403.2
+    heading: Boarder Income
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.403.2.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.403.3
+    heading: School Employee Income
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.403.3.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.404
+    heading: Countable Unearned Income
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.404.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.405
+    heading: Exempt Income
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.405.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.405.1
+    heading: Loans and Reimbursements to Students
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.405.1.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.405.2
+    heading: Income Excluded by Other Federal Statutes
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.405.2.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.406
+    heading: HOUSEHOLDS DESTITUTE OF INCOME
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.406.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.406.1
+    heading: Income Calculation When Destitute of Income
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.406.1.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.407
+    heading: DEDUCTIONS AND EXCLUSIONS FROM INCOME
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.407.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.407.1
+    heading: Standard Deduction
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.407.1.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.407.2
+    heading: Earned Income Deduction
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.407.2.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.407.3
+    heading: Excess Shelter Deduction
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.407.3.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.407.31
+    heading: Four-Tiered Mandatory Standard Utility Allowance
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.407.31.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.407.4
+    heading: Dependent Care Deduction
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.407.4.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.407.5
+    heading: Child Support Expense Exclusion
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.407.5.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.407.6
+    heading: Excess Medical Deduction
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.407.6.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.407.61
+    heading: Determining Monthly Medical Expenses
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.407.61.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.408
+    heading: RESOURCE ELIGIBILITY STANDARDS
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.408.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.408.1
+    heading: Determining the Value of Resources
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.408.1.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.408.2
+    heading: Transfer of Resources
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.408.2.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.409
+    heading: COUNTABLE RESOURCES
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.409.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.410
+    heading: EXEMPT RESOURCES
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.410.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.411
+    heading: TREATMENT OF INCOME AND RESOURCES OF DISQUALIFIED, SANCTIONED, AND NON-
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.411.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.411.1
+    heading: Treatment of Income and Resources of Disqualified and/or Sanctioned Members
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.411.1.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.411.2
+    heading: Treatment of Income and Resources of Other Non-Household Members
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.411.2.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.500
+    heading: VERIFICATION AND DOCUMENTATION
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.500.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.501
+    heading: Prudent Person Principle
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.501.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.502
+    heading: VERIFICATION REQUIREMENTS AT APPLICATION, RECERTIFICATION, AND PERIODIC
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.502.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.503
+    heading: Case Documentation
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.503.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.504
+    heading: Sources of Verification
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.504.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.504.1
+    heading: Documentary Evidence
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.504.1.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.504.2
+    heading: Collateral Contacts
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.504.2.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.504.3
+    heading: Home Visits
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.504.3.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.504.4
+    heading: Systematic Alien Verification Entitlement (SAVE)
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.504.4.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.504.5
+    heading: Colorado Income Eligibility Verification System (IEVS)
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.504.5.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.504.6
+    heading: Information Considered Verified Upon Receipt
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.504.6.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.504.61
+    heading: Information Not Considered Verified Upon Receipt (VUR)
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.504.61.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.505
+    heading: VERIFICATION OF NON-FINANCIAL INFORMATION
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.505.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.505.1
+    heading: Verification of Identity
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.505.1.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.505.2
+    heading: Verification of Social Security Numbers (SSN)
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.505.2.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.505.3
+    heading: Verification of Residency
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.505.3.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.505.4
+    heading: Verification of Household Composition
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.505.4.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.505.5
+    heading: Verification of U.S. Citizenship
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.505.5.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.505.51
+    heading: Verification of Questionable Citizenship
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.505.51.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.505.6
+    heading: Verification of Non-citizen Status
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.505.6.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.505.61
+    heading: Verification of SSA Forty (40) Work Quarters
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.505.61.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.505.7
+    heading: Verification of Non-citizen Sponsorship
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.505.7.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.505.8
+    heading: Verification of Disqualified Member Data
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.505.8.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.506
+    heading: VERIFICATION OF INCOME
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.506.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.507
+    heading: VERIFICATION OF EXPENSES
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.507.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.601
+    heading: GENERAL REQUIREMENTS FOR REPORTING CHANGES
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.601.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.602
+    heading: WHEN CHANGES ARE CONSIDERED REPORTED
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.602.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.603
+    heading: HOUSEHOLD RESPONSIBILITY TO REPORT CHANGES
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.603.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.604
+    heading: ACTION ON REPORTED CHANGES
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.604.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.604.1
+    heading: Verification of Reported Changes
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.604.1.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.605
+    heading: FAILURE TO REPORT CHANGES
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.605.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.606
+    heading: PUBLIC ASSISTANCE (PA) HOUSEHOLD CHANGES
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.606.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.607
+    heading: MASS CHANGES
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.607.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.608
+    heading: ADVANCE NOTICE OF ADVERSE ACTION
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.608.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.608.1
+    heading: Changes Not Requiring Advance Notice of Adverse Action
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.608.1.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.609
+    heading: TRANSITIONAL SNAP (T-SNAP)
+    status: excluded
+    reason: container_heading
+    basis: The source record is only the heading “TRANSITIONAL SNAP (T-SNAP)” and has no body of its own;
+      children 4.609.1–4.609.6 carry the content, beginning “Households that receive SNAP and Colorado
+      Works (CW) basic cash assistance.”
+  - citation: us-co/regulation/10-ccr-2506-1/4.609.1
+    heading: GENERAL ELIGIBILITY GUIDELINES
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.609.1.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.609.2
+    heading: HOUSEHOLD CHANGES DURING THE TRANSITIONAL PERIOD [Rev. eff. 2/1/16]
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.609.2.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.609.3
+    heading: CLOSING THE TRANSITIONAL PERIOD [Rev. eff. 2/1/16]
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.609.3.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.609.4
+    heading: HOUSEHOLDS WHO RETURN TO COLORADO WORKS (CW) DURING THE TRANSITIONAL
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.609.4.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.609.5
+    heading: HOUSEHOLDS WHO REAPPLY FOR SNAP DURING THE TRANSITIONAL PERIOD [Rev. eff.
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.609.5.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.609.6
+    heading: TRANSITIONAL NOTICE REQUIREMENTS
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.609.6.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.610
+    heading: REINSTATEMENT OF BENEFITS
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.610.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.700
+    heading: SNAP BENEFIT ISSUANCE
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.700.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.701
+    heading: PROVIDING BENEFITS TO PARTICIPANTS
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.701.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.701.2
+    heading: EBT Cards
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.701.2.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.702
+    heading: RESTORATION OF LOST BENEFITS
+    status: excluded
+    reason: container_heading
+    basis: The source record is only the heading “RESTORATION OF LOST BENEFITS” and has no body of its
+      own; children 4.702.1–4.702.4 carry the rules, beginning “To be eligible for restored benefits.”
+  - citation: us-co/regulation/10-ccr-2506-1/4.702.1
+    heading: Eligibility for Restoration of Lost Benefits
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.702.1.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.702.2
+    heading: Disputed Benefits
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.702.2.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.702.3
+    heading: Lost Benefits Due to Fraud Reversal
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.702.3.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.702.4
+    heading: Errors by the SSA Office
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.702.4.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.703
+    heading: CALCULATING LOST BENEFITS
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.703.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.704
+    heading: METHOD OF RESTORATION
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.704.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.705
+    heading: WHEN AN INCREASE TO SNAP BENEFITS SHOULD NOT BE ISSUED
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.705.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.706
+    heading: REPLACEMENT ISSUANCES TO HOUSEHOLDS DUE TO MISFORTUNE
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.706.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.706.1
+    heading: Disaster and Replacement Allotments
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.706.1.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.706.2
+    heading: Replacement of EBT Cards Lost in the Mail or Stolen Prior to Receipt by the Household
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.706.2.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.706.3
+    heading: Request for Replacement Issuances after Receipt of EBT Card
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.706.3.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.706.4
+    heading: Authorized Number of Replacement Issuances
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.706.4.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.707
+    heading: SNAP ISSUANCE AND ACCOUNTABILITY
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.707.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.707.1
+    heading: Security Procedures
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.707.1.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.707.2
+    heading: Security Program and Types of Prevention of Theft
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.707.2.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.707.21
+    heading: Reporting a Robbery or Burglary
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.707.21.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.707.3
+    heading: EBT Requisition
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.707.3.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.707.4
+    heading: Designated Personnel and Receiving Locations
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.707.4.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.707.5
+    heading: Inventory Records
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.707.5.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.707.6
+    heading: Benefit Issuance Locations and Storage Facilities
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.707.6.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.707.61
+    heading: Contracting or Delegating Issuance Responsibilities
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.707.61.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.707.7
+    heading: Monitoring of EBT Card Issuers
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.707.7.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.707.8
+    heading: Division of Issuance Responsibilities
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.707.8.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.707.81
+    heading: Issuance of EBT Cards
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.707.81.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.707.82
+    heading: Issuance Reconciliation
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.707.82.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.707.83
+    heading: Issuance Record Retention and Forms Security
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.707.83.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.707.84
+    heading: Control of Issuance Documents
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.707.84.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.707.9
+    heading: Issuance Methods
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.707.9.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.707.91
+    heading: Mail Issuance
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.707.91.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.708
+    heading: INVENTORY VERIFICATION
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.708.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.708.1
+    heading: EBT Card Responsibility and Liability
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.708.1.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.708.2
+    heading: Inventory Reporting to The State Department
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.708.2.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.708.3
+    heading: State Monthly EBT Card Accountability
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.708.3.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.708.4
+    heading: Issuance Reconciliation Reporting
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.708.4.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.708.5
+    heading: Destruction of Unusable EBT Cards Returned by Households
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.708.5.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.708.6
+    heading: Undeliverable or Returned EBT Cards
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.708.6.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.708.7
+    heading: EBT Cards Returned Because of Involuntary Termination or Death
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.708.7.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.708.8
+    heading: State EBT Card Issuance and Participation Reporting
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.708.8.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.709
+    heading: COLORADO ELECTRONIC BENEFIT TRANSFER SYSTEM (CO/EBTS) AND PROCESSING
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.709.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.709.1
+    heading: Card/PIN Issuance Accountability
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.709.1.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.709.2
+    heading: EBT Card Replacement
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.709.2.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.800
+    heading: CLAIMS, APPEAL PROCESS, AND FRAUD
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.800.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.801
+    heading: CLAIMS AGAINST HOUSEHOLDS
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.801.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.801.1
+    heading: Classification of Claims
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.801.1.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.801.2
+    heading: Establishing Claims Against Households
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.801.2.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.801.3
+    heading: Calculating the Amount of a Claim
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.801.3.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.801.4
+    heading: Collecting Payments on Claims
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.801.4.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.801.41
+    heading: Methods of Collecting Payment on Claims
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.801.41.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.801.42
+    heading: Criteria for Suspending Collection Action [Rev. eff. 1/1/16]
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.801.42.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.801.43
+    heading: Criteria for Terminating Collection Action [Rev. eff. 1/1/16]
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.801.43.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.801.5
+    heading: Claims Discharged Through Bankruptcy
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.801.5.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.801.6
+    heading: Interstate Claims Collection
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.801.6.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.801.7
+    heading: County Retention of Recoveries
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.801.7.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.801.8
+    heading: Submission of Claim Payment Activity to USDA, FNS
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.801.8.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.802
+    heading: APPEAL PROCESS
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.802.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.802.1
+    heading: Time Period for Requesting an Appeal
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.802.1.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.802.2
+    heading: Continuation of Benefits Pending Final Agency Decision
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.802.2.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.802.21
+    heading: Households Disputing Restoration of Lost Benefits
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.802.21.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.802.3
+    heading: Rights During an Appeal
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.802.3.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.802.4
+    heading: Local Office Responsibility During an Appeal
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.802.4.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.802.5
+    heading: Local-Level Dispute Resolution Conferences (DRC)
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.802.5.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.802.51
+    heading: Management of Local-Level Dispute Resolution Conference (DRC)
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.802.51.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.802.6
+    heading: STATE-LEVEL FAIR HEARINGS
+    status: excluded
+    reason: container_heading
+    basis: The PDF shows only “4.802.6 STATE-LEVEL FAIR HEARINGS,” immediately followed by child “4.802.61
+      MANAGEMENT OF STATE-LEVEL HEARINGS” and “A. Scheduling”; the heading has no body of its own.
+  - citation: us-co/regulation/10-ccr-2506-1/4.802.61
+    heading: MANAGEMENT OF STATE-LEVEL HEARINGS
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.802.61.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.802.62
+    heading: Hearing Denials or Dismissals
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.802.62.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.802.63
+    heading: State-Level Hearing Decisions
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.802.63.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.803
+    heading: IPV AND FRAUD [Rev. eff. 1/1/16]
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.803.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.803.1
+    heading: Documenting and Reporting IPV/Fraud to the State Department
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.803.1.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.803.2
+    heading: Determination of an IPV /Fraud
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.803.2.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.803.3
+    heading: Time Period and Types of Disqualifications [Rev. eff. 1/1/16]
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.803.3.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.803.4
+    heading: Pursuing Disqualifications for IPV/Fraud [Rev. eff. 1/1/16]
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.803.4.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.803.41
+    heading: Waiver of Administrative Disqualification Hearing [Rev. eff. 1/1/16]
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.803.41.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.803.42
+    heading: Scheduling an Administrative Disqualification Hearing for IPV
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.803.42.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.803.43
+    heading: Notifying a Household of an IPV Administrative Disqualification Hearing
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.803.43.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.803.44
+    heading: Participation While Awaiting an Administrative Disqualification Hearing
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.803.44.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.803.45
+    heading: Administrative Disqualification Hearing (ADH) Procedures
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.803.45.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.803.5
+    heading: Local-Level IPV Hearings
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.803.5.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.803.6
+    heading: State-Level Administrative Disqualification Hearing
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.803.6.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.803.7
+    heading: Notification of Final Administrative Disqualification Hearing Decision
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.803.7.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.804
+    heading: COURT ACTION
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.804.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.804.1
+    heading: Disqualification Consent Agreement (DCA)
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.804.1.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.900
+    heading: ADMINISTRATIVE PROCEDURES
+    status: excluded
+    reason: container_heading
+    basis: The PDF shows only “4.900 ADMINISTRATIVE PROCEDURES,” immediately followed by child “4.901
+      ADMINISTRATION OF SNAP” and the substantive rule “SNAP shall be administered in every county of
+      the state”; the heading has no body of its own.
+  - citation: us-co/regulation/10-ccr-2506-1/4.901
+    heading: ADMINISTRATION OF SNAP
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.901.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.901.1
+    heading: Compliance with State Department
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.901.1.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.902
+    heading: COUNTY ADMINISTRATION REQUIREMENTS
+    status: excluded
+    reason: container_heading
+    basis: The source record is only the heading “COUNTY ADMINISTRATION REQUIREMENTS” and has no body
+      of its own; its eight citation-prefixed children carry the content, beginning “Local offices shall
+      ensure that adequate locations and hours of operation exist.”
+  - citation: us-co/regulation/10-ccr-2506-1/4.902.1
+    heading: Local SNAP Office
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.902.1.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.902.2
+    heading: Phone Directory Listings
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.902.2.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.902.3
+    heading: Certification Personnel and Facilities Requirements
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.902.3.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.902.31
+    heading: Bilingual Staff, Interpreter, and Translator Requirements
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.902.31.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.902.32
+    heading: Restrictions on Staff
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.902.32.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.902.4
+    heading: Local Office Case Review Responsibilities
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.902.4.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.902.5
+    heading: Retention of Case Records
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.902.5.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.902.6
+    heading: Non-Discrimination Complaint Requirements
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.902.6.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.903
+    heading: STATE ADMINISTRATION RESPONSIBILITIES
+    status: excluded
+    reason: container_heading
+    basis: The source record is only the heading “STATE ADMINISTRATION RESPONSIBILITIES” and has no body
+      of its own; its ten citation-prefixed children carry the content, including “The State Department
+      is responsible for supervising the administration of SNAP.”
+  - citation: us-co/regulation/10-ccr-2506-1/4.903.1
+    heading: Information Available to the Public
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.903.1.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.903.2
+    heading: Reporting Lawsuits
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.903.2.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.903.3
+    heading: Management Evaluations (ME)
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.903.3.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.903.31
+    heading: Frequency of ME Reviews
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.903.31.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.903.32
+    heading: Compliance Action for ME Reviews
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.903.32.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.903.4
+    heading: Quality Assurance (QA) Reviews
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.903.4.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.903.41
+    heading: QA Review Procedures
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.903.41.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.903.42
+    heading: Refusal to Cooperate with QA Review
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.903.42.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.903.43
+    heading: QA Findings and Required Responses
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.903.43.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.903.44
+    heading: Federal QA Reviews
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.903.44.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.904
+    heading: OUTREACH
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.904.yaml
+  - citation: us-co/regulation/10-ccr-2506-1/4.905
+    heading: D-SNAP
+    status: encoded
+    encoded_by:
+      - us-co/regulations/10-ccr-2506-1/4.905.yaml

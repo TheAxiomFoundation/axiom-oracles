@@ -1,0 +1,49 @@
+schema: axiom_oracles.dispositions.v1
+suite: us-savers-grid
+updated: "2026-07-28"
+entries:
+  - id: inclusive-tier-ceilings-enter-next-policyengine-bracket-at-equality
+    concept: us:policies/income_tax/savers_credit_pipeline#federal_savers_credit
+    case_selector:
+      case_ids:
+        - single-at-50-percent-limit-inclusive
+        - single-at-20-percent-limit-inclusive
+        - single-at-10-percent-limit-inclusive
+        - joint-at-50-percent-limit-inclusive
+        - joint-at-20-percent-limit-inclusive
+        - joint-at-10-percent-limit-inclusive
+        - head-of-household-at-50-percent-limit-inclusive
+        - head-of-household-at-20-percent-limit-inclusive
+        - head-of-household-at-10-percent-limit-inclusive
+        - married-filing-separately-uses-all-other-limits
+        - surviving-spouse-uses-all-other-limits
+    kind: amount_difference
+    disposition: upstream_engine_gap
+    evidence:
+      mechanism: >-
+        PE-US 1.767.3 stores Notice 2025-67's correct 2026 joint ceilings
+        ($48,500/$52,500/$80,500) and the correct filing-status adjustments.
+        They are encoded as lower bounds of the next brackets, and PolicyEngine
+        Core 3.30.3 digitizes the scale exclusively at equality. Section 25B(b)
+        and the Notice instead make every published ceiling inclusive. Thus the
+        five exact 50% ceilings return 20%, the three exact 20% ceilings return
+        10%, and the three exact 10% ceilings return zero in PolicyEngine.
+      arithmetic:
+        - expression: "2000 * 0.5"
+          equals: 1000
+        - expression: "2000 * 0.2"
+          equals: 400
+        - expression: "2000 * 0.1"
+          equals: 200
+        - expression: "1000 - 400"
+          equals: 600
+        - expression: "400 - 200"
+          equals: 200
+        - expression: "200 - 0"
+          equals: 200
+      upstream_url: https://github.com/PolicyEngine/policyengine-us/issues/9151
+      sources:
+        - https://www.irs.gov/irb/2025-49_IRB
+        - https://www.law.cornell.edu/uscode/text/26/25B#b
+        - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/parameters/gov/irs/credits/retirement_saving/rate/joint.yaml
+    expires_on_source_change: true

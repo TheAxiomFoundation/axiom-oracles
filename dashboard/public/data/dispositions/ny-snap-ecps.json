@@ -1,0 +1,1384 @@
+{
+ "suite": "ny-snap-ecps",
+ "updated": "2026-07-30",
+ "entries": [
+  {
+   "id": "ny-bbce-gross-band-snap_eligible",
+   "concept": "us:statutes/7/2014/o#snap_eligible",
+   "kind": "eligibility_right_only",
+   "disposition": "axiom_encoding_gap",
+   "mechanism": "New York's broad-based categorical eligibility (SNAP 200-percent-class\nstate option; PolicyEngine models gross screen x1.3 FPL, x2 for\nelderly/disabled households, at 2026-01 per gov/hhs/tanf/non_cash\nparameters) is not in the composed us-ny/snap/fy-2026 program, which\napplies only the standard federal tests. Every selected row is verified\nper-row against axiom's persisted output surface: household gross income\nsits inside the band above the federal 130 percent limit the composed\nprogram applies and at or below the state's BBCE screen, verified\nagainst axiom's own computed gross income and limit. Axiom-side modeling\nboundary, tracked for encoding in rulespec-us#1098. The requested-month\nregeneration preserves all five case identities and their boolean\nleft/right values exactly, so the evidence remains current.",
+   "cases": [
+    "ecps-4856",
+    "ecps-5013",
+    "ecps-6732",
+    "ecps-6813",
+    "ecps-7262"
+   ],
+   "arithmetic": [],
+   "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+  },
+  {
+   "id": "pe-medical-imputation-counterfactual-4756",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 24.0 versus January PolicyEngine 69.39999389648438), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the endogenously imputed allowable medical expenses (health insurance premiums and other medical expenses) to zero in the direct requested-month simulation produces January SNAP 23.84000015258789; its absolute delta from Axiom, 0.15999984741210938, is within the unchanged suite tolerance 7.0. Axiom receives zero medical-expense input while PolicyEngine imputes allowable medical expenses for the elderly/disabled member, feeding an excess medical deduction the bridge never projects to Axiom (axiom-oracles#362 class). Replay classifier record: class=medical.",
+   "cases": [
+    "ecps-4756"
+   ],
+   "arithmetic": [
+    {
+     "expression": "23.84000015258789 - 24.0",
+     "equals": -0.15999984741210938
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+  },
+  {
+   "id": "se-zero-counterfactual-4757",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 546.0 versus January PolicyEngine 489.8999938964844), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the self-employment income inputs to zero in the direct requested-month simulation produces January SNAP 546.0; its absolute delta from Axiom, 0.0, is within the unchanged suite tolerance 7.0. Self-employment income enters the two engines on different surfaces (the projection's flat 0.6 netting versus PolicyEngine's state expense-based treatment), and zeroing it on the PolicyEngine side closes the residual. Replay classifier record: class=self_employment.",
+   "cases": [
+    "ecps-4757"
+   ],
+   "arithmetic": [
+    {
+     "expression": "546.0 - 546.0",
+     "equals": 0.0
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/433"
+  },
+  {
+   "id": "pe-medical-imputation-counterfactual-4766",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 24.0 versus January PolicyEngine 91.29998779296875), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the endogenously imputed allowable medical expenses (health insurance premiums and other medical expenses) to zero in the direct requested-month simulation produces January SNAP 23.84000015258789; its absolute delta from Axiom, 0.15999984741210938, is within the unchanged suite tolerance 7.0. Axiom receives zero medical-expense input while PolicyEngine imputes allowable medical expenses for the elderly/disabled member, feeding an excess medical deduction the bridge never projects to Axiom (axiom-oracles#362 class). Replay classifier record: class=medical.",
+   "cases": [
+    "ecps-4766"
+   ],
+   "arithmetic": [
+    {
+     "expression": "23.84000015258789 - 24.0",
+     "equals": -0.15999984741210938
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+  },
+  {
+   "id": "tanf-zero-counterfactual-4814",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 1571.0 versus January PolicyEngine 1476.800048828125), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the aggregate and state TANF inputs to zero in the direct requested-month simulation produces January SNAP 1571.0; its absolute delta from Axiom, 0.0, is within the unchanged suite tolerance 7.0. The comparison bridge zeroes TANF on the Axiom input surface while PolicyEngine computes state TANF endogenously and counts it as SNAP unearned income (axiom-oracles#397 counterfactual class). Replay classifier record: class=tanf.",
+   "cases": [
+    "ecps-4814"
+   ],
+   "arithmetic": [
+    {
+     "expression": "1571.0 - 1571.0",
+     "equals": 0.0
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+  },
+  {
+   "id": "tanf-zero-counterfactual-4829",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 638.0 versus January PolicyEngine 551.2999877929688), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the aggregate and state TANF inputs to zero in the direct requested-month simulation produces January SNAP 638.2999877929688; its absolute delta from Axiom, 0.29998779296875, is within the unchanged suite tolerance 7.0. The comparison bridge zeroes TANF on the Axiom input surface while PolicyEngine computes state TANF endogenously and counts it as SNAP unearned income (axiom-oracles#397 counterfactual class). Replay classifier record: class=tanf.",
+   "cases": [
+    "ecps-4829"
+   ],
+   "arithmetic": [
+    {
+     "expression": "638.2999877929688 - 638.0",
+     "equals": 0.29998779296875
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+  },
+  {
+   "id": "se-zero-counterfactual-4830-eligibility",
+   "concept": "us:statutes/7/2014/o#snap_eligible",
+   "kind": "eligibility_left_only",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report's eligibility pin (Axiom True versus PolicyEngine False). Forcing the self-employment income inputs to zero in the direct requested-month simulation flips January PolicyEngine eligibility to True, matching Axiom's persisted verdict, with January SNAP 89.49993896484375. The engines price different income surfaces for this endogenous source (see the matching amount-difference class). Replay classifier record: class=self_employment.",
+   "cases": [
+    "ecps-4830"
+   ],
+   "arithmetic": [],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/433"
+  },
+  {
+   "id": "tanf-zero-counterfactual-4956",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 956.0 versus January PolicyEngine 864.7000122070312), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the aggregate and state TANF inputs to zero in the direct requested-month simulation produces January SNAP 957.4000244140625; its absolute delta from Axiom, 1.4000244140625, is within the unchanged suite tolerance 7.0. The comparison bridge zeroes TANF on the Axiom input surface while PolicyEngine computes state TANF endogenously and counts it as SNAP unearned income (axiom-oracles#397 counterfactual class). Replay classifier record: class=tanf.",
+   "cases": [
+    "ecps-4956"
+   ],
+   "arithmetic": [
+    {
+     "expression": "957.4000244140625 - 956.0",
+     "equals": 1.4000244140625
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+  },
+  {
+   "id": "tanf-zero-counterfactual-4982",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 811.0 versus January PolicyEngine 721.9000244140625), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the aggregate and state TANF inputs to zero in the direct requested-month simulation produces January SNAP 812.2000122070312; its absolute delta from Axiom, 1.20001220703125, is within the unchanged suite tolerance 7.0. The comparison bridge zeroes TANF on the Axiom input surface while PolicyEngine computes state TANF endogenously and counts it as SNAP unearned income (axiom-oracles#397 counterfactual class). Replay classifier record: class=tanf.",
+   "cases": [
+    "ecps-4982"
+   ],
+   "arithmetic": [
+    {
+     "expression": "812.2000122070312 - 811.0",
+     "equals": 1.20001220703125
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+  },
+  {
+   "id": "tanf-zero-counterfactual-5002",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 536.0 versus January PolicyEngine 495.79998779296875), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the aggregate and state TANF inputs to zero in the direct requested-month simulation produces January SNAP 537.2000122070312; its absolute delta from Axiom, 1.20001220703125, is within the unchanged suite tolerance 7.0. The comparison bridge zeroes TANF on the Axiom input surface while PolicyEngine computes state TANF endogenously and counts it as SNAP unearned income (axiom-oracles#397 counterfactual class). Replay classifier record: class=tanf.",
+   "cases": [
+    "ecps-5002"
+   ],
+   "arithmetic": [
+    {
+     "expression": "537.2000122070312 - 536.0",
+     "equals": 1.20001220703125
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+  },
+  {
+   "id": "tanf-zero-counterfactual-5064",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 634.0 versus January PolicyEngine 596.5), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the aggregate and state TANF inputs to zero in the direct requested-month simulation produces January SNAP 634.9000244140625; its absolute delta from Axiom, 0.9000244140625, is within the unchanged suite tolerance 7.0. The comparison bridge zeroes TANF on the Axiom input surface while PolicyEngine computes state TANF endogenously and counts it as SNAP unearned income (axiom-oracles#397 counterfactual class). Replay classifier record: class=tanf.",
+   "cases": [
+    "ecps-5064"
+   ],
+   "arithmetic": [
+    {
+     "expression": "634.9000244140625 - 634.0",
+     "equals": 0.9000244140625
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+  },
+  {
+   "id": "tanf-zero-counterfactual-5084",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 526.0 versus January PolicyEngine 458.8999938964844), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the aggregate and state TANF inputs to zero in the direct requested-month simulation produces January SNAP 527.0; its absolute delta from Axiom, 1.0, is within the unchanged suite tolerance 7.0. The comparison bridge zeroes TANF on the Axiom input surface while PolicyEngine computes state TANF endogenously and counts it as SNAP unearned income (axiom-oracles#397 counterfactual class). Replay classifier record: class=tanf.",
+   "cases": [
+    "ecps-5084"
+   ],
+   "arithmetic": [
+    {
+     "expression": "527.0 - 526.0",
+     "equals": 1.0
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+  },
+  {
+   "id": "tanf-zero-counterfactual-5103",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 805.0 versus January PolicyEngine 776.2000122070312), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the aggregate and state TANF inputs to zero in the direct requested-month simulation produces January SNAP 806.2000122070312; its absolute delta from Axiom, 1.20001220703125, is within the unchanged suite tolerance 7.0. The comparison bridge zeroes TANF on the Axiom input surface while PolicyEngine computes state TANF endogenously and counts it as SNAP unearned income (axiom-oracles#397 counterfactual class). Replay classifier record: class=tanf.",
+   "cases": [
+    "ecps-5103"
+   ],
+   "arithmetic": [
+    {
+     "expression": "806.2000122070312 - 805.0",
+     "equals": 1.20001220703125
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+  },
+  {
+   "id": "tanf-zero-counterfactual-5184",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 785.0 versus January PolicyEngine 765.2000122070312), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the aggregate and state TANF inputs to zero in the direct requested-month simulation produces January SNAP 785.0; its absolute delta from Axiom, 0.0, is within the unchanged suite tolerance 7.0. The comparison bridge zeroes TANF on the Axiom input surface while PolicyEngine computes state TANF endogenously and counts it as SNAP unearned income (axiom-oracles#397 counterfactual class). Replay classifier record: class=tanf.",
+   "cases": [
+    "ecps-5184"
+   ],
+   "arithmetic": [
+    {
+     "expression": "785.0 - 785.0",
+     "equals": 0.0
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+  },
+  {
+   "id": "pe-fallback-ssi-counterfactual-5212",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month replay on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed PolicyEngine value for this row reproduces bit-exact only through the comparison runner's single-case fallback path (PolicyEngineRunner.run_case -> policyengine household calculator: January SNAP 207.39999389648438 vs report pin 207.39999389648438); the batch dataset path \u2014 the suite's primary evaluation path, fed the identical Case inputs \u2014 returns a different January value, so the committed row reflects harness path divergence rather than an engine rule difference. The divergence is the fallback path's endogenous SSI imputation, absent from the batch input surface and from the Axiom projection: re-running the same fallback path with the SSI input forced to zero produces January SNAP 298.0, whose absolute delta from Axiom, 0.0, is within the unchanged suite tolerance 7.0. The engines priced different income surfaces (axiom-oracles#397 endogenous-income counterfactual family; a dedicated issue for the SSI imputation and for the batch-vs-fallback path inconsistency still needs filing).",
+   "cases": [
+    "ecps-5212"
+   ],
+   "arithmetic": [
+    {
+     "expression": "298.0 - 298.0",
+     "equals": 0.0
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/437"
+  },
+  {
+   "id": "se-zero-counterfactual-5234",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 1571.0 versus January PolicyEngine 1286.5999755859375), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the self-employment income inputs to zero in the direct requested-month simulation produces January SNAP 1571.0; its absolute delta from Axiom, 0.0, is within the unchanged suite tolerance 7.0. Self-employment income enters the two engines on different surfaces (the projection's flat 0.6 netting versus PolicyEngine's state expense-based treatment), and zeroing it on the PolicyEngine side closes the residual. Replay classifier record: class=self_employment.",
+   "cases": [
+    "ecps-5234"
+   ],
+   "arithmetic": [
+    {
+     "expression": "1571.0 - 1571.0",
+     "equals": 0.0
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/433"
+  },
+  {
+   "id": "tanf-zero-counterfactual-5239",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 1421.0 versus January PolicyEngine 1176.800048828125), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the aggregate and state TANF inputs to zero in the direct requested-month simulation produces January SNAP 1421.0; its absolute delta from Axiom, 0.0, is within the unchanged suite tolerance 7.0. The comparison bridge zeroes TANF on the Axiom input surface while PolicyEngine computes state TANF endogenously and counts it as SNAP unearned income (axiom-oracles#397 counterfactual class). Replay classifier record: class=tanf.",
+   "cases": [
+    "ecps-5239"
+   ],
+   "arithmetic": [
+    {
+     "expression": "1421.0 - 1421.0",
+     "equals": 0.0
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+  },
+  {
+   "id": "pe-medical-imputation-counterfactual-5275",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 24.0 versus January PolicyEngine 81.09999084472656), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the endogenously imputed allowable medical expenses (health insurance premiums and other medical expenses) to zero in the direct requested-month simulation produces January SNAP 23.84000015258789; its absolute delta from Axiom, 0.15999984741210938, is within the unchanged suite tolerance 7.0. Axiom receives zero medical-expense input while PolicyEngine imputes allowable medical expenses for the elderly/disabled member, feeding an excess medical deduction the bridge never projects to Axiom (axiom-oracles#362 class). Replay classifier record: class=medical.",
+   "cases": [
+    "ecps-5275"
+   ],
+   "arithmetic": [
+    {
+     "expression": "23.84000015258789 - 24.0",
+     "equals": -0.15999984741210938
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+  },
+  {
+   "id": "tanf-zero-counterfactual-5287",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 994.0 versus January PolicyEngine 809.5), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the aggregate and state TANF inputs to zero in the direct requested-month simulation produces January SNAP 994.0; its absolute delta from Axiom, 0.0, is within the unchanged suite tolerance 7.0. The comparison bridge zeroes TANF on the Axiom input surface while PolicyEngine computes state TANF endogenously and counts it as SNAP unearned income (axiom-oracles#397 counterfactual class). Replay classifier record: class=tanf.",
+   "cases": [
+    "ecps-5287"
+   ],
+   "arithmetic": [
+    {
+     "expression": "994.0 - 994.0",
+     "equals": 0.0
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+  },
+  {
+   "id": "se-zero-counterfactual-5434",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 785.0 versus January PolicyEngine 584.9000244140625), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the self-employment income inputs to zero in the direct requested-month simulation produces January SNAP 785.0; its absolute delta from Axiom, 0.0, is within the unchanged suite tolerance 7.0. Self-employment income enters the two engines on different surfaces (the projection's flat 0.6 netting versus PolicyEngine's state expense-based treatment), and zeroing it on the PolicyEngine side closes the residual. Replay classifier record: class=self_employment.",
+   "cases": [
+    "ecps-5434"
+   ],
+   "arithmetic": [
+    {
+     "expression": "785.0 - 785.0",
+     "equals": 0.0
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/433"
+  },
+  {
+   "id": "tanf-zero-counterfactual-5447",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 701.0 versus January PolicyEngine 661.0), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the aggregate and state TANF inputs to zero in the direct requested-month simulation produces January SNAP 701.5; its absolute delta from Axiom, 0.5, is within the unchanged suite tolerance 7.0. The comparison bridge zeroes TANF on the Axiom input surface while PolicyEngine computes state TANF endogenously and counts it as SNAP unearned income (axiom-oracles#397 counterfactual class). Replay classifier record: class=tanf.",
+   "cases": [
+    "ecps-5447"
+   ],
+   "arithmetic": [
+    {
+     "expression": "701.5 - 701.0",
+     "equals": 0.5
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+  },
+  {
+   "id": "pe-medical-imputation-counterfactual-5461",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 201.0 versus January PolicyEngine 277.6000061035156), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the endogenously imputed allowable medical expenses (health insurance premiums and other medical expenses) to zero in the direct requested-month simulation produces January SNAP 202.0; its absolute delta from Axiom, 1.0, is within the unchanged suite tolerance 7.0. Axiom receives zero medical-expense input while PolicyEngine imputes allowable medical expenses for the elderly/disabled member, feeding an excess medical deduction the bridge never projects to Axiom (axiom-oracles#362 class). Replay classifier record: class=medical.",
+   "cases": [
+    "ecps-5461"
+   ],
+   "arithmetic": [
+    {
+     "expression": "202.0 - 201.0",
+     "equals": 1.0
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+  },
+  {
+   "id": "pe-medical-imputation-counterfactual-5471",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 57.0 versus January PolicyEngine 133.29998779296875), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the endogenously imputed allowable medical expenses (health insurance premiums and other medical expenses) to zero in the direct requested-month simulation produces January SNAP 57.69999694824219; its absolute delta from Axiom, 0.6999969482421875, is within the unchanged suite tolerance 7.0. Axiom receives zero medical-expense input while PolicyEngine imputes allowable medical expenses for the elderly/disabled member, feeding an excess medical deduction the bridge never projects to Axiom (axiom-oracles#362 class). Replay classifier record: class=medical.",
+   "cases": [
+    "ecps-5471"
+   ],
+   "arithmetic": [
+    {
+     "expression": "57.69999694824219 - 57.0",
+     "equals": 0.6999969482421875
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+  },
+  {
+   "id": "pe-medical-imputation-counterfactual-5492",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 0.0 versus January PolicyEngine 23.84000015258789), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the endogenously imputed allowable medical expenses (health insurance premiums and other medical expenses) to zero in the direct requested-month simulation produces January SNAP 0.0; its absolute delta from Axiom, 0.0, is within the unchanged suite tolerance 7.0. Axiom receives zero medical-expense input while PolicyEngine imputes allowable medical expenses for the elderly/disabled member, feeding an excess medical deduction the bridge never projects to Axiom (axiom-oracles#362 class). Replay classifier record: class=medical.",
+   "cases": [
+    "ecps-5492"
+   ],
+   "arithmetic": [
+    {
+     "expression": "0.0 - 0.0",
+     "equals": 0.0
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+  },
+  {
+   "id": "pe-medical-imputation-counterfactual-5492-eligibility",
+   "concept": "us:statutes/7/2014/o#snap_eligible",
+   "kind": "eligibility_right_only",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 0.0 versus January PolicyEngine 23.84000015258789), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the endogenously imputed allowable medical expenses (health insurance premiums and other medical expenses) to zero in the direct requested-month simulation produces January SNAP 0.0; its absolute delta from Axiom, 0.0, is within the unchanged suite tolerance 7.0. Axiom receives zero medical-expense input while PolicyEngine imputes allowable medical expenses for the elderly/disabled member, feeding an excess medical deduction the bridge never projects to Axiom (axiom-oracles#362 class). Replay classifier record: class=medical. The same intervention flips January PolicyEngine eligibility to False, matching Axiom's persisted verdict.",
+   "cases": [
+    "ecps-5492"
+   ],
+   "arithmetic": [
+    {
+     "expression": "0.0 - 0.0",
+     "equals": 0.0
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+  },
+  {
+   "id": "tanf-zero-counterfactual-5494",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 633.0 versus January PolicyEngine 548.9000244140625), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the aggregate and state TANF inputs to zero in the direct requested-month simulation produces January SNAP 633.7999877929688; its absolute delta from Axiom, 0.79998779296875, is within the unchanged suite tolerance 7.0. The comparison bridge zeroes TANF on the Axiom input surface while PolicyEngine computes state TANF endogenously and counts it as SNAP unearned income (axiom-oracles#397 counterfactual class). Replay classifier record: class=tanf.",
+   "cases": [
+    "ecps-5494"
+   ],
+   "arithmetic": [
+    {
+     "expression": "633.7999877929688 - 633.0",
+     "equals": 0.79998779296875
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+  },
+  {
+   "id": "tanf-zero-counterfactual-5528",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 1036.0 versus January PolicyEngine 1011.7999877929688), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the aggregate and state TANF inputs to zero in the direct requested-month simulation produces January SNAP 1037.0; its absolute delta from Axiom, 1.0, is within the unchanged suite tolerance 7.0. The comparison bridge zeroes TANF on the Axiom input surface while PolicyEngine computes state TANF endogenously and counts it as SNAP unearned income (axiom-oracles#397 counterfactual class). Replay classifier record: class=tanf.",
+   "cases": [
+    "ecps-5528"
+   ],
+   "arithmetic": [
+    {
+     "expression": "1037.0 - 1036.0",
+     "equals": 1.0
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+  },
+  {
+   "id": "tanf-zero-counterfactual-5691",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 785.0 versus January PolicyEngine 669.2000122070312), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the aggregate and state TANF inputs to zero in the direct requested-month simulation produces January SNAP 785.0; its absolute delta from Axiom, 0.0, is within the unchanged suite tolerance 7.0. The comparison bridge zeroes TANF on the Axiom input surface while PolicyEngine computes state TANF endogenously and counts it as SNAP unearned income (axiom-oracles#397 counterfactual class). Replay classifier record: class=tanf.",
+   "cases": [
+    "ecps-5691"
+   ],
+   "arithmetic": [
+    {
+     "expression": "785.0 - 785.0",
+     "equals": 0.0
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+  },
+  {
+   "id": "tanf-zero-counterfactual-5704",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 1061.0 versus January PolicyEngine 966.7000122070312), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the aggregate and state TANF inputs to zero in the direct requested-month simulation produces January SNAP 1061.5; its absolute delta from Axiom, 0.5, is within the unchanged suite tolerance 7.0. The comparison bridge zeroes TANF on the Axiom input surface while PolicyEngine computes state TANF endogenously and counts it as SNAP unearned income (axiom-oracles#397 counterfactual class). Replay classifier record: class=tanf.",
+   "cases": [
+    "ecps-5704"
+   ],
+   "arithmetic": [
+    {
+     "expression": "1061.5 - 1061.0",
+     "equals": 0.5
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+  },
+  {
+   "id": "pe-medical-imputation-counterfactual-5713",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 46.0 versus January PolicyEngine 121.89999389648438), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the endogenously imputed allowable medical expenses (health insurance premiums and other medical expenses) to zero in the direct requested-month simulation produces January SNAP 46.29998779296875; its absolute delta from Axiom, 0.29998779296875, is within the unchanged suite tolerance 7.0. Axiom receives zero medical-expense input while PolicyEngine imputes allowable medical expenses for the elderly/disabled member, feeding an excess medical deduction the bridge never projects to Axiom (axiom-oracles#362 class). Replay classifier record: class=medical.",
+   "cases": [
+    "ecps-5713"
+   ],
+   "arithmetic": [
+    {
+     "expression": "46.29998779296875 - 46.0",
+     "equals": 0.29998779296875
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+  },
+  {
+   "id": "pe-medical-imputation-counterfactual-5777",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 27.0 versus January PolicyEngine 103.29998779296875), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the endogenously imputed allowable medical expenses (health insurance premiums and other medical expenses) to zero in the direct requested-month simulation produces January SNAP 27.699981689453125; its absolute delta from Axiom, 0.699981689453125, is within the unchanged suite tolerance 7.0. Axiom receives zero medical-expense input while PolicyEngine imputes allowable medical expenses for the elderly/disabled member, feeding an excess medical deduction the bridge never projects to Axiom (axiom-oracles#362 class). Replay classifier record: class=medical.",
+   "cases": [
+    "ecps-5777"
+   ],
+   "arithmetic": [
+    {
+     "expression": "27.699981689453125 - 27.0",
+     "equals": 0.699981689453125
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+  },
+  {
+   "id": "tanf-zero-counterfactual-5779",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 594.0 versus January PolicyEngine 511.0999755859375), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the aggregate and state TANF inputs to zero in the direct requested-month simulation produces January SNAP 595.0999755859375; its absolute delta from Axiom, 1.0999755859375, is within the unchanged suite tolerance 7.0. The comparison bridge zeroes TANF on the Axiom input surface while PolicyEngine computes state TANF endogenously and counts it as SNAP unearned income (axiom-oracles#397 counterfactual class). Replay classifier record: class=tanf.",
+   "cases": [
+    "ecps-5779"
+   ],
+   "arithmetic": [
+    {
+     "expression": "595.0999755859375 - 594.0",
+     "equals": 1.0999755859375
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+  },
+  {
+   "id": "tanf-zero-counterfactual-5805",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 690.0 versus January PolicyEngine 608.9000244140625), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the aggregate and state TANF inputs to zero in the direct requested-month simulation produces January SNAP 690.7999877929688; its absolute delta from Axiom, 0.79998779296875, is within the unchanged suite tolerance 7.0. The comparison bridge zeroes TANF on the Axiom input surface while PolicyEngine computes state TANF endogenously and counts it as SNAP unearned income (axiom-oracles#397 counterfactual class). Replay classifier record: class=tanf.",
+   "cases": [
+    "ecps-5805"
+   ],
+   "arithmetic": [
+    {
+     "expression": "690.7999877929688 - 690.0",
+     "equals": 0.79998779296875
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+  },
+  {
+   "id": "tanf-zero-counterfactual-5826",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 694.0 versus January PolicyEngine 611.199951171875), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the aggregate and state TANF inputs to zero in the direct requested-month simulation produces January SNAP 694.5999755859375; its absolute delta from Axiom, 0.5999755859375, is within the unchanged suite tolerance 7.0. The comparison bridge zeroes TANF on the Axiom input surface while PolicyEngine computes state TANF endogenously and counts it as SNAP unearned income (axiom-oracles#397 counterfactual class). Replay classifier record: class=tanf.",
+   "cases": [
+    "ecps-5826"
+   ],
+   "arithmetic": [
+    {
+     "expression": "694.5999755859375 - 694.0",
+     "equals": 0.5999755859375
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+  },
+  {
+   "id": "tanf-zero-counterfactual-5860",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 525.0 versus January PolicyEngine 446.3999938964844), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the aggregate and state TANF inputs to zero in the direct requested-month simulation produces January SNAP 525.9000244140625; its absolute delta from Axiom, 0.9000244140625, is within the unchanged suite tolerance 7.0. The comparison bridge zeroes TANF on the Axiom input surface while PolicyEngine computes state TANF endogenously and counts it as SNAP unearned income (axiom-oracles#397 counterfactual class). Replay classifier record: class=tanf.",
+   "cases": [
+    "ecps-5860"
+   ],
+   "arithmetic": [
+    {
+     "expression": "525.9000244140625 - 525.0",
+     "equals": 0.9000244140625
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+  },
+  {
+   "id": "tanf-zero-counterfactual-5863",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 772.0 versus January PolicyEngine 740.5), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the aggregate and state TANF inputs to zero in the direct requested-month simulation produces January SNAP 772.9000244140625; its absolute delta from Axiom, 0.9000244140625, is within the unchanged suite tolerance 7.0. The comparison bridge zeroes TANF on the Axiom input surface while PolicyEngine computes state TANF endogenously and counts it as SNAP unearned income (axiom-oracles#397 counterfactual class). Replay classifier record: class=tanf.",
+   "cases": [
+    "ecps-5863"
+   ],
+   "arithmetic": [
+    {
+     "expression": "772.9000244140625 - 772.0",
+     "equals": 0.9000244140625
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+  },
+  {
+   "id": "tanf-zero-counterfactual-5920",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 850.0 versus January PolicyEngine 810.7000122070312), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the aggregate and state TANF inputs to zero in the direct requested-month simulation produces January SNAP 851.2000122070312; its absolute delta from Axiom, 1.20001220703125, is within the unchanged suite tolerance 7.0. The comparison bridge zeroes TANF on the Axiom input surface while PolicyEngine computes state TANF endogenously and counts it as SNAP unearned income (axiom-oracles#397 counterfactual class). Replay classifier record: class=tanf.",
+   "cases": [
+    "ecps-5920"
+   ],
+   "arithmetic": [
+    {
+     "expression": "851.2000122070312 - 850.0",
+     "equals": 1.20001220703125
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+  },
+  {
+   "id": "tanf-zero-counterfactual-5965",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 994.0 versus January PolicyEngine 799.5999755859375), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the aggregate and state TANF inputs to zero in the direct requested-month simulation produces January SNAP 994.0; its absolute delta from Axiom, 0.0, is within the unchanged suite tolerance 7.0. The comparison bridge zeroes TANF on the Axiom input surface while PolicyEngine computes state TANF endogenously and counts it as SNAP unearned income (axiom-oracles#397 counterfactual class). Replay classifier record: class=tanf.",
+   "cases": [
+    "ecps-5965"
+   ],
+   "arithmetic": [
+    {
+     "expression": "994.0 - 994.0",
+     "equals": 0.0
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+  },
+  {
+   "id": "se-zero-counterfactual-5995",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 785.0 versus January PolicyEngine 641.9000244140625), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the self-employment income inputs to zero in the direct requested-month simulation produces January SNAP 785.0; its absolute delta from Axiom, 0.0, is within the unchanged suite tolerance 7.0. Self-employment income enters the two engines on different surfaces (the projection's flat 0.6 netting versus PolicyEngine's state expense-based treatment), and zeroing it on the PolicyEngine side closes the residual. Replay classifier record: class=self_employment.",
+   "cases": [
+    "ecps-5995"
+   ],
+   "arithmetic": [
+    {
+     "expression": "785.0 - 785.0",
+     "equals": 0.0
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/433"
+  },
+  {
+   "id": "se-zero-counterfactual-6096",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 24.0 versus January PolicyEngine 0.0), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the self-employment income inputs to zero in the direct requested-month simulation produces January SNAP 23.84000015258789; its absolute delta from Axiom, 0.15999984741210938, is within the unchanged suite tolerance 7.0. Self-employment income enters the two engines on different surfaces (the projection's flat 0.6 netting versus PolicyEngine's state expense-based treatment), and zeroing it on the PolicyEngine side closes the residual. Replay classifier record: class=self_employment.",
+   "cases": [
+    "ecps-6096"
+   ],
+   "arithmetic": [
+    {
+     "expression": "23.84000015258789 - 24.0",
+     "equals": -0.15999984741210938
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/433"
+  },
+  {
+   "id": "se-zero-counterfactual-6096-eligibility",
+   "concept": "us:statutes/7/2014/o#snap_eligible",
+   "kind": "eligibility_left_only",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 24.0 versus January PolicyEngine 0.0), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the self-employment income inputs to zero in the direct requested-month simulation produces January SNAP 23.84000015258789; its absolute delta from Axiom, 0.15999984741210938, is within the unchanged suite tolerance 7.0. Self-employment income enters the two engines on different surfaces (the projection's flat 0.6 netting versus PolicyEngine's state expense-based treatment), and zeroing it on the PolicyEngine side closes the residual. Replay classifier record: class=self_employment. The same intervention flips January PolicyEngine eligibility to True, matching Axiom's persisted verdict.",
+   "cases": [
+    "ecps-6096"
+   ],
+   "arithmetic": [
+    {
+     "expression": "23.84000015258789 - 24.0",
+     "equals": -0.15999984741210938
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/433"
+  },
+  {
+   "id": "pe-medical-imputation-counterfactual-6111",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 24.0 versus January PolicyEngine 31.899993896484375), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the endogenously imputed allowable medical expenses (health insurance premiums and other medical expenses) to zero in the direct requested-month simulation produces January SNAP 23.84000015258789; its absolute delta from Axiom, 0.15999984741210938, is within the unchanged suite tolerance 7.0. Axiom receives zero medical-expense input while PolicyEngine imputes allowable medical expenses for the elderly/disabled member, feeding an excess medical deduction the bridge never projects to Axiom (axiom-oracles#362 class). Replay classifier record: class=medical.",
+   "cases": [
+    "ecps-6111"
+   ],
+   "arithmetic": [
+    {
+     "expression": "23.84000015258789 - 24.0",
+     "equals": -0.15999984741210938
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+  },
+  {
+   "id": "tanf-zero-counterfactual-6166",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 948.0 versus January PolicyEngine 864.0999755859375), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the aggregate and state TANF inputs to zero in the direct requested-month simulation produces January SNAP 948.4000244140625; its absolute delta from Axiom, 0.4000244140625, is within the unchanged suite tolerance 7.0. The comparison bridge zeroes TANF on the Axiom input surface while PolicyEngine computes state TANF endogenously and counts it as SNAP unearned income (axiom-oracles#397 counterfactual class). Replay classifier record: class=tanf.",
+   "cases": [
+    "ecps-6166"
+   ],
+   "arithmetic": [
+    {
+     "expression": "948.4000244140625 - 948.0",
+     "equals": 0.4000244140625
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+  },
+  {
+   "id": "pe-fallback-ssi-counterfactual-6167",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month replay on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed PolicyEngine value for this row reproduces bit-exact only through the comparison runner's single-case fallback path (PolicyEngineRunner.run_case -> policyengine household calculator: January SNAP 199.0 vs report pin 199.0); the batch dataset path \u2014 the suite's primary evaluation path, fed the identical Case inputs \u2014 returns a different January value, so the committed row reflects harness path divergence rather than an engine rule difference. The divergence is the fallback path's endogenous SSI imputation, absent from the batch input surface and from the Axiom projection: re-running the same fallback path with the SSI input forced to zero produces January SNAP 298.0, whose absolute delta from Axiom, 0.0, is within the unchanged suite tolerance 7.0. The engines priced different income surfaces (axiom-oracles#397 endogenous-income counterfactual family; a dedicated issue for the SSI imputation and for the batch-vs-fallback path inconsistency still needs filing).",
+   "cases": [
+    "ecps-6167"
+   ],
+   "arithmetic": [
+    {
+     "expression": "298.0 - 298.0",
+     "equals": 0.0
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/437"
+  },
+  {
+   "id": "pe-endogenous-ssi-counterfactual-6220-eligibility",
+   "concept": "us:statutes/7/2014/o#snap_eligible",
+   "kind": "eligibility_left_only",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report's eligibility pin (Axiom True versus PolicyEngine False). Forcing the endogenously imputed SSI input to zero in the direct requested-month simulation flips January PolicyEngine eligibility to True, matching Axiom's persisted verdict, with January SNAP 210.99993896484375. The engines price different income surfaces for this endogenous source (see the matching amount-difference class). Replay classifier record: class=ssi.",
+   "cases": [
+    "ecps-6220"
+   ],
+   "arithmetic": [],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/436"
+  },
+  {
+   "id": "se-zero-counterfactual-6242",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 785.0 versus January PolicyEngine 566.0), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the self-employment income inputs to zero in the direct requested-month simulation produces January SNAP 785.0; its absolute delta from Axiom, 0.0, is within the unchanged suite tolerance 7.0. Self-employment income enters the two engines on different surfaces (the projection's flat 0.6 netting versus PolicyEngine's state expense-based treatment), and zeroing it on the PolicyEngine side closes the residual. Replay classifier record: class=self_employment.",
+   "cases": [
+    "ecps-6242"
+   ],
+   "arithmetic": [
+    {
+     "expression": "785.0 - 785.0",
+     "equals": 0.0
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/433"
+  },
+  {
+   "id": "tanf-zero-counterfactual-6258",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 737.0 versus January PolicyEngine 653.199951171875), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the aggregate and state TANF inputs to zero in the direct requested-month simulation produces January SNAP 737.5; its absolute delta from Axiom, 0.5, is within the unchanged suite tolerance 7.0. The comparison bridge zeroes TANF on the Axiom input surface while PolicyEngine computes state TANF endogenously and counts it as SNAP unearned income (axiom-oracles#397 counterfactual class). Replay classifier record: class=tanf.",
+   "cases": [
+    "ecps-6258"
+   ],
+   "arithmetic": [
+    {
+     "expression": "737.5 - 737.0",
+     "equals": 0.5
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+  },
+  {
+   "id": "se-zero-counterfactual-6375",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 781.0 versus January PolicyEngine 541.0999755859375), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the self-employment income inputs to zero in the direct requested-month simulation produces January SNAP 785.0; its absolute delta from Axiom, 4.0, is within the unchanged suite tolerance 7.0. Self-employment income enters the two engines on different surfaces (the projection's flat 0.6 netting versus PolicyEngine's state expense-based treatment), and zeroing it on the PolicyEngine side closes the residual. Replay classifier record: class=self_employment.",
+   "cases": [
+    "ecps-6375"
+   ],
+   "arithmetic": [
+    {
+     "expression": "785.0 - 781.0",
+     "equals": 4.0
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/433"
+  },
+  {
+   "id": "se-zero-counterfactual-6576",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 546.0 versus January PolicyEngine 449.3999938964844), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the self-employment income inputs to zero in the direct requested-month simulation produces January SNAP 546.0; its absolute delta from Axiom, 0.0, is within the unchanged suite tolerance 7.0. Self-employment income enters the two engines on different surfaces (the projection's flat 0.6 netting versus PolicyEngine's state expense-based treatment), and zeroing it on the PolicyEngine side closes the residual. Replay classifier record: class=self_employment.",
+   "cases": [
+    "ecps-6576"
+   ],
+   "arithmetic": [
+    {
+     "expression": "546.0 - 546.0",
+     "equals": 0.0
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/433"
+  },
+  {
+   "id": "pe-medical-imputation-counterfactual-6668",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 24.0 versus January PolicyEngine 43.59999084472656), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the endogenously imputed allowable medical expenses (health insurance premiums and other medical expenses) to zero in the direct requested-month simulation produces January SNAP 23.84000015258789; its absolute delta from Axiom, 0.15999984741210938, is within the unchanged suite tolerance 7.0. Axiom receives zero medical-expense input while PolicyEngine imputes allowable medical expenses for the elderly/disabled member, feeding an excess medical deduction the bridge never projects to Axiom (axiom-oracles#362 class). Replay classifier record: class=medical.",
+   "cases": [
+    "ecps-6668"
+   ],
+   "arithmetic": [
+    {
+     "expression": "23.84000015258789 - 24.0",
+     "equals": -0.15999984741210938
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+  },
+  {
+   "id": "pe-medical-imputation-counterfactual-6799",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 24.0 versus January PolicyEngine 40.5999755859375), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the endogenously imputed allowable medical expenses (health insurance premiums and other medical expenses) to zero in the direct requested-month simulation produces January SNAP 23.84000015258789; its absolute delta from Axiom, 0.15999984741210938, is within the unchanged suite tolerance 7.0. Axiom receives zero medical-expense input while PolicyEngine imputes allowable medical expenses for the elderly/disabled member, feeding an excess medical deduction the bridge never projects to Axiom (axiom-oracles#362 class). Replay classifier record: class=medical.",
+   "cases": [
+    "ecps-6799"
+   ],
+   "arithmetic": [
+    {
+     "expression": "23.84000015258789 - 24.0",
+     "equals": -0.15999984741210938
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+  },
+  {
+   "id": "se-zero-counterfactual-7010",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 1183.0 versus January PolicyEngine 905.199951171875), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the self-employment income inputs to zero in the direct requested-month simulation produces January SNAP 1183.0; its absolute delta from Axiom, 0.0, is within the unchanged suite tolerance 7.0. Self-employment income enters the two engines on different surfaces (the projection's flat 0.6 netting versus PolicyEngine's state expense-based treatment), and zeroing it on the PolicyEngine side closes the residual. Replay classifier record: class=self_employment.",
+   "cases": [
+    "ecps-7010"
+   ],
+   "arithmetic": [
+    {
+     "expression": "1183.0 - 1183.0",
+     "equals": 0.0
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/433"
+  },
+  {
+   "id": "tanf-zero-counterfactual-7043",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 1183.0 versus January PolicyEngine 999.0999755859375), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the aggregate and state TANF inputs to zero in the direct requested-month simulation produces January SNAP 1183.0; its absolute delta from Axiom, 0.0, is within the unchanged suite tolerance 7.0. The comparison bridge zeroes TANF on the Axiom input surface while PolicyEngine computes state TANF endogenously and counts it as SNAP unearned income (axiom-oracles#397 counterfactual class). Replay classifier record: class=tanf.",
+   "cases": [
+    "ecps-7043"
+   ],
+   "arithmetic": [
+    {
+     "expression": "1183.0 - 1183.0",
+     "equals": 0.0
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+  },
+  {
+   "id": "tanf-zero-counterfactual-7236",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 546.0 versus January PolicyEngine 523.7999877929688), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the aggregate and state TANF inputs to zero in the direct requested-month simulation produces January SNAP 546.0; its absolute delta from Axiom, 0.0, is within the unchanged suite tolerance 7.0. The comparison bridge zeroes TANF on the Axiom input surface while PolicyEngine computes state TANF endogenously and counts it as SNAP unearned income (axiom-oracles#397 counterfactual class). Replay classifier record: class=tanf.",
+   "cases": [
+    "ecps-7236"
+   ],
+   "arithmetic": [
+    {
+     "expression": "546.0 - 546.0",
+     "equals": 0.0
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+  },
+  {
+   "id": "pe-medical-imputation-counterfactual-7251",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month counterfactual on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison adapter replayed over the same Case projection reproduces the report pin (Axiom 204.0 versus January PolicyEngine 372.0), and the unmodified direct requested-month simulation reproduces the same January value. Forcing the endogenously imputed allowable medical expenses (health insurance premiums and other medical expenses) to zero in the direct requested-month simulation produces January SNAP 205.19998168945312; its absolute delta from Axiom, 1.199981689453125, is within the unchanged suite tolerance 7.0. Axiom receives zero medical-expense input while PolicyEngine imputes allowable medical expenses for the elderly/disabled member, feeding an excess medical deduction the bridge never projects to Axiom (axiom-oracles#362 class). Replay classifier record: class=medical.",
+   "cases": [
+    "ecps-7251"
+   ],
+   "arithmetic": [
+    {
+     "expression": "205.19998168945312 - 204.0",
+     "equals": 1.199981689453125
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+  },
+  {
+   "id": "pe-fallback-path-divergence-65858",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month replay on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed PolicyEngine value for this row reproduces bit-exact only through the comparison runner's single-case fallback path (PolicyEngineRunner.run_case -> policyengine household calculator: January SNAP 0.0 vs report pin 0.0); the batch dataset path \u2014 the suite's primary evaluation path, fed the identical Case inputs \u2014 returns a different January value, so the committed row reflects harness path divergence rather than an engine rule difference. The batch-path replay of the identical Case returns January SNAP 298.0, whose absolute delta from Axiom, 0.0, is within the unchanged suite tolerance 7.0 \u2014 on the suite's primary path the engines agree. A dedicated issue for the batch-vs-fallback path inconsistency in the comparison runner still needs filing.",
+   "cases": [
+    "ecps-65858"
+   ],
+   "arithmetic": [
+    {
+     "expression": "298.0 - 298.0",
+     "equals": 0.0
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/437"
+  },
+  {
+   "id": "pe-fallback-path-divergence-67172",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month replay on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed PolicyEngine value for this row reproduces bit-exact only through the comparison runner's single-case fallback path (PolicyEngineRunner.run_case -> policyengine household calculator: January SNAP 0.0 vs report pin 0.0); the batch dataset path \u2014 the suite's primary evaluation path, fed the identical Case inputs \u2014 returns a different January value, so the committed row reflects harness path divergence rather than an engine rule difference. The batch-path replay of the identical Case returns January SNAP 67.29998779296875, whose absolute delta from Axiom, 0.29998779296875, is within the unchanged suite tolerance 7.0 \u2014 on the suite's primary path the engines agree. A dedicated issue for the batch-vs-fallback path inconsistency in the comparison runner still needs filing.",
+   "cases": [
+    "ecps-67172"
+   ],
+   "arithmetic": [
+    {
+     "expression": "67.29998779296875 - 67.0",
+     "equals": 0.29998779296875
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/437"
+  },
+  {
+   "id": "pe-fallback-path-divergence-68345",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month replay on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed PolicyEngine value for this row reproduces bit-exact only through the comparison runner's single-case fallback path (PolicyEngineRunner.run_case -> policyengine household calculator: January SNAP 0.0 vs report pin 0.0); the batch dataset path \u2014 the suite's primary evaluation path, fed the identical Case inputs \u2014 returns a different January value, so the committed row reflects harness path divergence rather than an engine rule difference. The batch-path replay of the identical Case returns January SNAP 298.0, whose absolute delta from Axiom, 0.0, is within the unchanged suite tolerance 7.0 \u2014 on the suite's primary path the engines agree. A dedicated issue for the batch-vs-fallback path inconsistency in the comparison runner still needs filing.",
+   "cases": [
+    "ecps-68345"
+   ],
+   "arithmetic": [
+    {
+     "expression": "298.0 - 298.0",
+     "equals": 0.0
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/437"
+  },
+  {
+   "id": "pe-fallback-path-divergence-69388",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month replay on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed PolicyEngine value for this row reproduces bit-exact only through the comparison runner's single-case fallback path (PolicyEngineRunner.run_case -> policyengine household calculator: January SNAP 0.0 vs report pin 0.0); the batch dataset path \u2014 the suite's primary evaluation path, fed the identical Case inputs \u2014 returns a different January value, so the committed row reflects harness path divergence rather than an engine rule difference. The batch-path replay of the identical Case returns January SNAP 298.0, whose absolute delta from Axiom, 0.0, is within the unchanged suite tolerance 7.0 \u2014 on the suite's primary path the engines agree. A dedicated issue for the batch-vs-fallback path inconsistency in the comparison runner still needs filing.",
+   "cases": [
+    "ecps-69388"
+   ],
+   "arithmetic": [
+    {
+     "expression": "298.0 - 298.0",
+     "equals": 0.0
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/437"
+  },
+  {
+   "id": "pe-fallback-path-divergence-69553",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month replay on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed PolicyEngine value for this row reproduces bit-exact only through the comparison runner's single-case fallback path (PolicyEngineRunner.run_case -> policyengine household calculator: January SNAP 0.0 vs report pin 0.0); the batch dataset path \u2014 the suite's primary evaluation path, fed the identical Case inputs \u2014 returns a different January value, so the committed row reflects harness path divergence rather than an engine rule difference. The batch-path replay of the identical Case returns January SNAP 298.0, whose absolute delta from Axiom, 0.0, is within the unchanged suite tolerance 7.0 \u2014 on the suite's primary path the engines agree. A dedicated issue for the batch-vs-fallback path inconsistency in the comparison runner still needs filing.",
+   "cases": [
+    "ecps-69553"
+   ],
+   "arithmetic": [
+    {
+     "expression": "298.0 - 298.0",
+     "equals": 0.0
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/437"
+  },
+  {
+   "id": "pe-fallback-path-divergence-70457",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month replay on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed PolicyEngine value for this row reproduces bit-exact only through the comparison runner's single-case fallback path (PolicyEngineRunner.run_case -> policyengine household calculator: January SNAP 0.0 vs report pin 0.0); the batch dataset path \u2014 the suite's primary evaluation path, fed the identical Case inputs \u2014 returns a different January value, so the committed row reflects harness path divergence rather than an engine rule difference. The batch-path replay of the identical Case returns January SNAP 546.0, whose absolute delta from Axiom, 0.0, is within the unchanged suite tolerance 7.0 \u2014 on the suite's primary path the engines agree. A dedicated issue for the batch-vs-fallback path inconsistency in the comparison runner still needs filing.",
+   "cases": [
+    "ecps-70457"
+   ],
+   "arithmetic": [
+    {
+     "expression": "546.0 - 546.0",
+     "equals": 0.0
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/437"
+  },
+  {
+   "id": "pe-fallback-path-divergence-70930",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month replay on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed PolicyEngine value for this row reproduces bit-exact only through the comparison runner's single-case fallback path (PolicyEngineRunner.run_case -> policyengine household calculator: January SNAP 23.84000015258789 vs report pin 23.84000015258789); the batch dataset path \u2014 the suite's primary evaluation path, fed the identical Case inputs \u2014 returns a different January value, so the committed row reflects harness path divergence rather than an engine rule difference. The batch-path replay of the identical Case returns January SNAP 298.0, whose absolute delta from Axiom, 0.0, is within the unchanged suite tolerance 7.0 \u2014 on the suite's primary path the engines agree. A dedicated issue for the batch-vs-fallback path inconsistency in the comparison runner still needs filing.",
+   "cases": [
+    "ecps-70930"
+   ],
+   "arithmetic": [
+    {
+     "expression": "298.0 - 298.0",
+     "equals": 0.0
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/437"
+  },
+  {
+   "id": "pe-fallback-path-divergence-71420",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month replay on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed PolicyEngine value for this row reproduces bit-exact only through the comparison runner's single-case fallback path (PolicyEngineRunner.run_case -> policyengine household calculator: January SNAP 0.0 vs report pin 0.0); the batch dataset path \u2014 the suite's primary evaluation path, fed the identical Case inputs \u2014 returns a different January value, so the committed row reflects harness path divergence rather than an engine rule difference. The batch-path replay of the identical Case returns January SNAP 529.7999877929688, whose absolute delta from Axiom, 0.79998779296875, is within the unchanged suite tolerance 7.0 \u2014 on the suite's primary path the engines agree. A dedicated issue for the batch-vs-fallback path inconsistency in the comparison runner still needs filing.",
+   "cases": [
+    "ecps-71420"
+   ],
+   "arithmetic": [
+    {
+     "expression": "529.7999877929688 - 529.0",
+     "equals": 0.79998779296875
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/437"
+  },
+  {
+   "id": "pe-fallback-path-divergence-72370",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Exact-household requested-month replay on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed PolicyEngine value for this row reproduces bit-exact only through the comparison runner's single-case fallback path (PolicyEngineRunner.run_case -> policyengine household calculator: January SNAP 0.0 vs report pin 0.0); the batch dataset path \u2014 the suite's primary evaluation path, fed the identical Case inputs \u2014 returns a different January value, so the committed row reflects harness path divergence rather than an engine rule difference. The batch-path replay of the identical Case returns January SNAP 171.10000610351562, whose absolute delta from Axiom, 1.100006103515625, is within the unchanged suite tolerance 7.0 \u2014 on the suite's primary path the engines agree. A dedicated issue for the batch-vs-fallback path inconsistency in the comparison runner still needs filing.",
+   "cases": [
+    "ecps-72370"
+   ],
+   "arithmetic": [
+    {
+     "expression": "171.10000610351562 - 170.0",
+     "equals": 1.100006103515625
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/437"
+  },
+  {
+   "id": "ny-bbce-tail-2026-07-30-eligibility",
+   "concept": "us:statutes/7/2014/o#snap_eligible",
+   "kind": "eligibility_right_only",
+   "disposition": "axiom_encoding_gap",
+   "mechanism": "New York's broad-based categorical eligibility (SNAP state option; PolicyEngine models gross screen x1.3 FPL (x1.5 with earned income, x2.0 with dependent care, x2.0 for elderly/disabled households) and no net-income test at 2026-01 per gov/hhs/tanf/non_cash parameters) is not in the composed us-ny/snap/fy-2026 program, which applies only the standard federal tests. Every selected row was verified per-row on the pinned stack (PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3): the committed comparison adapter reproduces the report values, and the direct January 2026 simulation grants PolicyEngine eligibility only via meets_snap_categorical_eligibility while the household fails the standard gross/net test(s) the composed program applies. 40 cases / 80 rows in this tail selection; sample ecps-4723 has January gross-income-to-poverty ratio 1.3976 against the federal 1.3 screen (elderly/disabled per PolicyEngine: False).",
+   "cases": [
+    "ecps-4723",
+    "ecps-4746",
+    "ecps-4807",
+    "ecps-4892",
+    "ecps-4941",
+    "ecps-5134",
+    "ecps-5219",
+    "ecps-5240",
+    "ecps-5393",
+    "ecps-5619",
+    "ecps-5633",
+    "ecps-5660",
+    "ecps-5711",
+    "ecps-5730",
+    "ecps-5735",
+    "ecps-5755",
+    "ecps-5808",
+    "ecps-5887",
+    "ecps-5960",
+    "ecps-5984",
+    "ecps-5994",
+    "ecps-6004",
+    "ecps-6164",
+    "ecps-6203",
+    "ecps-6316",
+    "ecps-6318",
+    "ecps-6331",
+    "ecps-6399",
+    "ecps-6437",
+    "ecps-6513",
+    "ecps-6648",
+    "ecps-6656",
+    "ecps-6694",
+    "ecps-6878",
+    "ecps-6947",
+    "ecps-7003",
+    "ecps-7013",
+    "ecps-7099",
+    "ecps-7126",
+    "ecps-7171"
+   ],
+   "arithmetic": [],
+   "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+  },
+  {
+   "id": "ny-bbce-tail-2026-07-30-benefit",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "axiom_encoding_gap",
+   "mechanism": "New York's broad-based categorical eligibility (SNAP state option; PolicyEngine models gross screen x1.3 FPL (x1.5 with earned income, x2.0 with dependent care, x2.0 for elderly/disabled households) and no net-income test at 2026-01 per gov/hhs/tanf/non_cash parameters) is not in the composed us-ny/snap/fy-2026 program, which applies only the standard federal tests. Every selected row was verified per-row on the pinned stack (PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3): the committed comparison adapter reproduces the report values, and the direct January 2026 simulation grants PolicyEngine eligibility only via meets_snap_categorical_eligibility while the household fails the standard gross/net test(s) the composed program applies. 40 cases / 80 rows in this tail selection; sample ecps-4723 has January gross-income-to-poverty ratio 1.3976 against the federal 1.3 screen (elderly/disabled per PolicyEngine: False).",
+   "cases": [
+    "ecps-4723",
+    "ecps-4746",
+    "ecps-4807",
+    "ecps-4892",
+    "ecps-4941",
+    "ecps-5134",
+    "ecps-5219",
+    "ecps-5240",
+    "ecps-5393",
+    "ecps-5619",
+    "ecps-5633",
+    "ecps-5660",
+    "ecps-5711",
+    "ecps-5730",
+    "ecps-5735",
+    "ecps-5755",
+    "ecps-5808",
+    "ecps-5887",
+    "ecps-5960",
+    "ecps-5984",
+    "ecps-5994",
+    "ecps-6004",
+    "ecps-6164",
+    "ecps-6203",
+    "ecps-6316",
+    "ecps-6318",
+    "ecps-6331",
+    "ecps-6399",
+    "ecps-6437",
+    "ecps-6513",
+    "ecps-6648",
+    "ecps-6656",
+    "ecps-6694",
+    "ecps-6878",
+    "ecps-6947",
+    "ecps-7003",
+    "ecps-7013",
+    "ecps-7099",
+    "ecps-7126",
+    "ecps-7171"
+   ],
+   "arithmetic": [],
+   "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+  },
+  {
+   "id": "ny-disability-projection-2026-07-30-eligibility",
+   "concept": "us:statutes/7/2014/o#snap_eligible",
+   "kind": "eligibility_left_only",
+   "disposition": "bridge_artifact",
+   "mechanism": "Disability-surface projection asymmetry, the SNAP analogue of the ssi-ecps disposition (axiom-oracles#228): the populace projection maps the Enhanced CPS is_disabled flag into Axiom's snap_member_is_elderly_or_disabled input (elderly_or_disabled transform in axiom_oracles/data/populace_input_mapping.yaml), while PolicyEngine's SNAP elderly/disabled status (has_usda_elderly_disabled) requires receipt of a disability program, which the projected input surface zeroes. Axiom therefore applies the elderly/disabled treatment (gross-test exemption and uncapped excess-shelter deduction) while PolicyEngine does not. Verified per-row on the pinned stack (PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3): the committed adapter reproduces the report values; the direct January simulation shows has_usda_elderly_disabled false while the persisted Axiom input surface carries the elderly/disabled flag for an under-60 member (13 cases / 23 rows).",
+   "cases": [
+    "ecps-4804",
+    "ecps-4822",
+    "ecps-5092",
+    "ecps-5098",
+    "ecps-5236",
+    "ecps-5241",
+    "ecps-5439",
+    "ecps-5588",
+    "ecps-5607",
+    "ecps-5636",
+    "ecps-7080",
+    "ecps-7088",
+    "ecps-7106"
+   ],
+   "arithmetic": [],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/435"
+  },
+  {
+   "id": "ny-disability-projection-2026-07-30-benefit",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Disability-surface projection asymmetry, the SNAP analogue of the ssi-ecps disposition (axiom-oracles#228): the populace projection maps the Enhanced CPS is_disabled flag into Axiom's snap_member_is_elderly_or_disabled input (elderly_or_disabled transform in axiom_oracles/data/populace_input_mapping.yaml), while PolicyEngine's SNAP elderly/disabled status (has_usda_elderly_disabled) requires receipt of a disability program, which the projected input surface zeroes. Axiom therefore applies the elderly/disabled treatment (gross-test exemption and uncapped excess-shelter deduction) while PolicyEngine does not. Verified per-row on the pinned stack (PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3): the committed adapter reproduces the report values; the direct January simulation shows has_usda_elderly_disabled false while the persisted Axiom input surface carries the elderly/disabled flag for an under-60 member (13 cases / 23 rows).",
+   "cases": [
+    "ecps-4804",
+    "ecps-5092",
+    "ecps-5236",
+    "ecps-5241",
+    "ecps-5439",
+    "ecps-5588",
+    "ecps-5607",
+    "ecps-5636",
+    "ecps-7088",
+    "ecps-7106"
+   ],
+   "arithmetic": [],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/435"
+  },
+  {
+   "id": "ny-disability-projection-2026-07-30-benefit-amount",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Disability-surface projection asymmetry, the SNAP analogue of the ssi-ecps disposition (axiom-oracles#228): the populace projection maps the Enhanced CPS is_disabled flag into Axiom's snap_member_is_elderly_or_disabled input (elderly_or_disabled transform in axiom_oracles/data/populace_input_mapping.yaml), while PolicyEngine's SNAP elderly/disabled status (has_usda_elderly_disabled) requires receipt of a disability program, which the projected input surface zeroes. Axiom therefore applies the elderly/disabled treatment (gross-test exemption and uncapped excess-shelter deduction) while PolicyEngine does not. Verified per-row on the pinned stack (PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3): the committed adapter reproduces the report values; the direct January simulation shows has_usda_elderly_disabled false while the persisted Axiom input surface carries the elderly/disabled flag for an under-60 member (4 cases / 4 rows; each benefit residual reconciles as 0.3x the net-income gap between the two surfaces within the state's 30-percent rounding).",
+   "cases": [
+    "ecps-5262",
+    "ecps-5388",
+    "ecps-6039",
+    "ecps-7177"
+   ],
+   "arithmetic": [],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/435"
+  },
+  {
+   "id": "ny-negative-se-loss-2026-07-30-eligibility",
+   "concept": "us:statutes/7/2014/o#snap_eligible",
+   "kind": "eligibility_left_only",
+   "disposition": "bridge_artifact",
+   "mechanism": "Self-employment loss pass-through: the projection's flat 0.6 self-employment netting (axiom_oracles/data/populace_input_mapping.yaml) passes Enhanced CPS self-employment losses through as negative Axiom earned income (sample ecps-5251: persisted snap_gross_monthly_earned_income -1873.56), while PolicyEngine floors SNAP self-employment income at zero (snap_self_employment_income_after_expense_deduction takes max(., 0)). Axiom's income tests pass on the loss-netted surface and it awards a benefit while PolicyEngine remains ineligible or lower. Verified per-row on the pinned stack (PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3): the committed adapter reproduces the report values, and every selected row carries a negative Axiom earned-income input while the January PolicyEngine earned income is floored at or above zero (7 cases / 13 rows). A dedicated tracking issue for the self-employment-loss netting in the Populace bridge still needs filing; axiom-oracles#397 documents the same unequal-cross-program-input policy problem (same linkage as the fl-snap-ecps se-loss-netting class).",
+   "cases": [
+    "ecps-5251",
+    "ecps-65026",
+    "ecps-66173",
+    "ecps-68913",
+    "ecps-71863",
+    "ecps-73831"
+   ],
+   "arithmetic": [],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+  },
+  {
+   "id": "ny-negative-se-loss-2026-07-30-benefit",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Self-employment loss pass-through: the projection's flat 0.6 self-employment netting (axiom_oracles/data/populace_input_mapping.yaml) passes Enhanced CPS self-employment losses through as negative Axiom earned income (sample ecps-5251: persisted snap_gross_monthly_earned_income -1873.56), while PolicyEngine floors SNAP self-employment income at zero (snap_self_employment_income_after_expense_deduction takes max(., 0)). Axiom's income tests pass on the loss-netted surface and it awards a benefit while PolicyEngine remains ineligible or lower. Verified per-row on the pinned stack (PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3): the committed adapter reproduces the report values, and every selected row carries a negative Axiom earned-income input while the January PolicyEngine earned income is floored at or above zero (7 cases / 13 rows). A dedicated tracking issue for the self-employment-loss netting in the Populace bridge still needs filing; axiom-oracles#397 documents the same unequal-cross-program-input policy problem (same linkage as the fl-snap-ecps se-loss-netting class).",
+   "cases": [
+    "ecps-5251",
+    "ecps-6904",
+    "ecps-65026",
+    "ecps-66173",
+    "ecps-68913",
+    "ecps-71863",
+    "ecps-73831"
+   ],
+   "arithmetic": [],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+  },
+  {
+   "id": "ny-pe-annual-eligibility-aggregation-2026-07-30",
+   "concept": "us:statutes/7/2014/o#snap_eligible",
+   "kind": "eligibility_right_only",
+   "disposition": "bridge_artifact",
+   "mechanism": "The comparison's PolicyEngine eligibility boolean comes from the batch output dataset's calendar-2026 aggregation, which reports eligible although the direct requested-month (2026-01) simulation is ineligible for January: the household fails the January income eligibility tests under the FY-2026 parameters while other 2026 months pass (income-limit uprating across the October fiscal-year boundary), and Axiom evaluates 2026-01 only. Verified per-row on the pinned stack (PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3): the committed adapter reproduces the annual-aggregated True while the direct January simulation returns False on every selected row (6 rows; sample ecps-5400 January gross-income-to-poverty ratio 1.5385). The January benefit is zero on both engines, so only the eligibility boolean diverges \u2014 a harness period-aggregation artifact, not an engine defect.",
+   "cases": [
+    "ecps-5400",
+    "ecps-5540",
+    "ecps-6019",
+    "ecps-6472",
+    "ecps-6575",
+    "ecps-6978"
+   ],
+   "arithmetic": [],
+   "linked_issue": null
+  },
+  {
+   "id": "ny-se-flat-netting-2026-07-30-eligibility-left",
+   "concept": "us:statutes/7/2014/o#snap_eligible",
+   "kind": "eligibility_left_only",
+   "disposition": "bridge_artifact",
+   "mechanism": "Flat self-employment netting asymmetry: the generic populace projection feeds Axiom's snap_gross_monthly_earned_income with self-employment scaled by 0.6 (axiom_oracles/data/populace_input_mapping.yaml documents the 0.6 scale as the oracle's modeled netting, calibrated against states with the 40-percent SNAP self-employment expense deduction), but New York carries gov/usda/snap/income/deductions/self_employment rate 0 with the expense-based method in PolicyEngine-US 1.767.3, so PolicyEngine counts gross self-employment while Axiom receives 60 percent of it. Verified per-row on the pinned stack (PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3): the committed adapter reproduces the report values, and January PolicyEngine SNAP earned income minus Axiom's persisted earned-income input equals 0.4x monthly self-employment within $1.00 on every selected row (28 cases / 39 rows; sample ecps-4778: 1995.3 - 1197.18 = 798.12 = 0.4 x 1995.3). Benefit residuals reconcile as 0.3x the resulting net-income gap within the 30-percent rounding; eligibility flips occur where the gross-self-employment surface fails PolicyEngine's January income tests while the netted Axiom surface passes. A dedicated tracking issue for the flat self-employment netting in the Populace bridge still needs filing; axiom-oracles#397 documents the same unequal-cross-program-input policy problem (same linkage as the fl-snap-ecps se-expense-deduction-bridge class).",
+   "cases": [
+    "ecps-4778",
+    "ecps-5437",
+    "ecps-5728",
+    "ecps-5941",
+    "ecps-5962",
+    "ecps-6092",
+    "ecps-6205",
+    "ecps-6613",
+    "ecps-7028",
+    "ecps-7079",
+    "ecps-7127"
+   ],
+   "arithmetic": [
+    {
+     "expression": "1995.30322265625 - 1197.18 - 0.4 * 1995.30322265625",
+     "equals": 0.0019335937498681233
+    },
+    {
+     "expression": "4175.14794921875 - 2505.09 - 0.4 * 4175.147786458333",
+     "equals": -0.0011653645833575865
+    },
+    {
+     "expression": "2536.40234375 - 1521.84 - 0.4 * 2536.40234375",
+     "equals": 0.0014062500000591172
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+  },
+  {
+   "id": "ny-se-flat-netting-2026-07-30-benefit",
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Flat self-employment netting asymmetry: the generic populace projection feeds Axiom's snap_gross_monthly_earned_income with self-employment scaled by 0.6 (axiom_oracles/data/populace_input_mapping.yaml documents the 0.6 scale as the oracle's modeled netting, calibrated against states with the 40-percent SNAP self-employment expense deduction), but New York carries gov/usda/snap/income/deductions/self_employment rate 0 with the expense-based method in PolicyEngine-US 1.767.3, so PolicyEngine counts gross self-employment while Axiom receives 60 percent of it. Verified per-row on the pinned stack (PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3): the committed adapter reproduces the report values, and January PolicyEngine SNAP earned income minus Axiom's persisted earned-income input equals 0.4x monthly self-employment within $1.00 on every selected row (28 cases / 39 rows; sample ecps-4778: 1995.3 - 1197.18 = 798.12 = 0.4 x 1995.3). Benefit residuals reconcile as 0.3x the resulting net-income gap within the 30-percent rounding; eligibility flips occur where the gross-self-employment surface fails PolicyEngine's January income tests while the netted Axiom surface passes. A dedicated tracking issue for the flat self-employment netting in the Populace bridge still needs filing; axiom-oracles#397 documents the same unequal-cross-program-input policy problem (same linkage as the fl-snap-ecps se-expense-deduction-bridge class).",
+   "cases": [
+    "ecps-4778",
+    "ecps-4820",
+    "ecps-4939",
+    "ecps-5009",
+    "ecps-5279",
+    "ecps-5319",
+    "ecps-5337",
+    "ecps-5437",
+    "ecps-5697",
+    "ecps-5728",
+    "ecps-5754",
+    "ecps-5803",
+    "ecps-5851",
+    "ecps-5941",
+    "ecps-5954",
+    "ecps-5962",
+    "ecps-6082",
+    "ecps-6092",
+    "ecps-6102",
+    "ecps-6205",
+    "ecps-6613",
+    "ecps-6680",
+    "ecps-6836",
+    "ecps-7028",
+    "ecps-7079",
+    "ecps-7114",
+    "ecps-7127",
+    "ecps-7128"
+   ],
+   "arithmetic": [
+    {
+     "expression": "1995.30322265625 - 1197.18 - 0.4 * 1995.30322265625",
+     "equals": 0.0019335937498681233
+    },
+    {
+     "expression": "4175.14794921875 - 2505.09 - 0.4 * 4175.147786458333",
+     "equals": -0.0011653645833575865
+    },
+    {
+     "expression": "2536.40234375 - 1521.84 - 0.4 * 2536.40234375",
+     "equals": 0.0014062500000591172
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+  }
+ ]
+}

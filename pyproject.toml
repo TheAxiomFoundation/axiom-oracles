@@ -41,7 +41,7 @@ dev = [
   "pandas>=2.2",
 ]
 policyengine = [
-  "policyengine[us]==4.18.9",
+  "policyengine[us]==5.0.0",
 ]
 taxsim = [
   "policyengine-taxsim==2.30.0",

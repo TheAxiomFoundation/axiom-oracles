@@ -23,13 +23,44 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
+import yaml
+
 from axiom_oracles.provenance import RUN_KINDS, build_provenance
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 REPORTS = REPO_ROOT / "reports"
 DASH_DATA = REPO_ROOT / "dashboard" / "public" / "data"
+POPULACE_SUITE_CONFIG = REPO_ROOT / "comparisons/state-income-tax-populace.yaml"
+RETIRED_MANIFEST_REPORTS = frozenset(
+    {
+        "axiom-policyengine-taxsim-al-income-tax-liability.json",
+        "axiom-policyengine-taxsim-de-income-tax-liability.json",
+    }
+)
 
 _DESCRIPTION_BY_OUTPUT = {
+    (
+        "us-al:policies/income_tax/"
+        "2026_section_40_18_5_schedule_before_credits"
+        "#al_pit_2026_section_40_18_5_schedule_before_credits"
+    ): (
+        "Alabama Code section 40-18-5 schedule before credits, computed from "
+        "caller-supplied completed Alabama taxable income and the reviewed "
+        "joint-or-surviving-spouse schedule classifier, over every routed tax "
+        "unit in the pinned US Populace"
+    ),
+    (
+        "us-ar:policies/income_tax/pilot_liability_pipeline"
+        "#ar_pit_pilot_income_tax_before_non_refundable_credits_indiv"
+    ): (
+        "Arkansas Act 2 of 2026 section 1 individual schedule component before "
+        "nonrefundable credits, computed from caller-supplied completed "
+        "Arkansas individual taxable income at Person grain and summed to "
+        "TaxUnit only for comparison accounting over every routed tax unit and "
+        "linked person in the pinned US Populace; this bounded suite excludes "
+        "taxable-income construction, filing-unit aggregation or method "
+        "selection, low-income tables, credits, payments, and final liability"
+    ),
     (
         "us-ct:policies/income_tax/"
         "2026_resident_ordinary_tax_before_personal_credit"
@@ -39,6 +70,37 @@ _DESCRIPTION_BY_OUTPUT = {
         "personal credit over every routed tax unit in the pinned US Populace"
     ),
     (
+        "us-ca:policies/income_tax/pilot_liability_pipeline"
+        "#ca_pit_pilot_behavioral_health_services_tax"
+    ): (
+        "California Behavioral Health Services Tax, computed as 1 percent of "
+        "caller-supplied completed California taxable income above $1 million, "
+        "over every routed tax unit in the pinned US Populace; this component "
+        "suite does not claim broad California income-tax liability"
+    ),
+    (
+        "us-dc:policies/income_tax/"
+        "2026_section_47_1806_03_schedule_before_credits"
+        "#dc_pit_2026_section_47_1806_03_schedule_before_credits"
+    ): (
+        "District of Columbia section 47-1806.03(a)(11) joint-method "
+        "schedule before credits, computed from caller-supplied completed "
+        "joint-method District taxable income, over every routed tax unit in "
+        "the pinned US Populace"
+    ),
+    (
+        "us-de:policies/income_tax/pilot_liability_pipeline"
+        "#de_pit_pilot_separate_schedule_tax"
+    ): (
+        "Delaware Code title 30 section 1102(a)(14) individual schedule "
+        "component before nonrefundable credits, computed from caller-supplied "
+        "completed Delaware taxable income at Person grain and summed to "
+        "TaxUnit only for comparison accounting over every routed tax unit and "
+        "linked person in the pinned US Populace; this bounded suite excludes "
+        "filing-method selection, combined-return computation, credits, "
+        "payments, and final liability"
+    ),
+    (
         "us-ga:policies/income_tax/"
         "2026_annual_tax_before_nonrefundable_credits"
         "#ga_pit_2026_annual_tax_before_nonrefundable_credits"
@@ -46,6 +108,132 @@ _DESCRIPTION_BY_OUTPUT = {
         "Georgia section 48-7-20 annual tax before nonrefundable credits, "
         "computed from caller-supplied completed Georgia taxable net income, "
         "over every routed tax unit in the pinned US Populace"
+    ),
+    (
+        "us-ks:policies/income_tax/2026_k40es_schedule_before_credits"
+        "#ks_pit_2026_k40es_schedule_before_credits"
+    ): (
+        "Official Kansas tax-year-2026 K-40ES joint or all-other-filer "
+        "schedule before credits, computed from caller-supplied completed "
+        "Kansas taxable income, over every routed tax unit in the pinned US "
+        "Populace"
+    ),
+    (
+        "us-il:policies/income_tax/pilot_liability_pipeline"
+        "#il_pit_pilot_income_tax_liability"
+    ): (
+        "Illinois annual individual income tax before nonrefundable credits, "
+        "computed from caller-supplied completed Illinois taxable income and "
+        "completed investment-credit recapture over every routed tax unit in "
+        "the pinned US Populace; this bounded suite excludes taxable-income "
+        "construction, credit computation, payments, and final annual "
+        "liability"
+    ),
+    (
+        "us-in:policies/income_tax/pilot_liability_pipeline"
+        "#in_pit_pilot_income_tax_liability"
+    ): (
+        "Indiana adjusted-gross-income tax before credits and excluding county "
+        "tax, computed by applying the tax-year-2026 2.95 percent state rate "
+        "to caller-supplied completed Indiana adjusted gross income over every "
+        "routed tax unit in the pinned US Populace; this bounded suite excludes "
+        "adjusted-gross-income construction, county tax, credits, payments, "
+        "and final annual liability"
+    ),
+    (
+        "us-ms:policies/income_tax/2026_section_27_7_5_schedule"
+        "#ms_pit_2026_section_27_7_5_schedule_tax"
+    ): (
+        "Mississippi section 27-7-5 Person-grain calendar-year-2026 schedule "
+        "tax, computed from caller-supplied completed Mississippi taxable "
+        "income and summed to tax units only for Populace accounting"
+    ),
+    (
+        "us-mn:policies/income_tax/pilot_liability_pipeline"
+        "#mn_pit_pilot_schedule_tax"
+    ): (
+        "Minnesota tax-year-2026 continuous graduated schedule under section "
+        "290.06, computed from caller-supplied completed Minnesota taxable net "
+        "income and reviewed filing-status classifiers over every routed tax "
+        "unit in the pinned US Populace; this schedule suite does not claim "
+        "tax-table rounding, alternative minimum tax, net investment income "
+        "tax, credits, payments, or final Minnesota liability"
+    ),
+    (
+        "us-mt:policies/income_tax/pilot_liability_pipeline"
+        "#mt_pit_pilot_income_tax_liability"
+    ): (
+        "Montana tax-year-2026 individual income tax before nonrefundable "
+        "credits under MCA 15-30-2103, computed from caller-supplied completed "
+        "Montana taxable income, its reviewed section 1222 net-long-term-"
+        "capital-gain portion, and filing-status classifiers over every routed "
+        "tax unit in the pinned US Populace; this bounded suite excludes "
+        "taxable-income construction, credits, payments, and final annual "
+        "liability"
+    ),
+    (
+        "us-ny:policies/income_tax/pilot_liability_pipeline"
+        "#ny_pit_pilot_main_income_tax"
+    ): (
+        "New York Tax Law section 601 main resident individual-income-tax "
+        "schedule, computed from caller-supplied completed New York taxable "
+        "income and strict filing-status schedule classifiers over every "
+        "routed tax unit in the pinned US Populace; this bounded suite "
+        "excludes section 601(d-5) supplemental tax, credits, local taxes, "
+        "payments, and final liability"
+    ),
+    (
+        "us-ok:policies/income_tax/pilot_liability_pipeline"
+        "#ok_pit_pilot_income_tax_liability"
+    ): (
+        "Oklahoma tax-year-2026 individual income tax before credits, computed "
+        "from caller-supplied completed Oklahoma taxable income under the "
+        "enacted single-or-separate or doubled-width joint, surviving-spouse, "
+        "and head-of-household schedule over every routed tax unit in the "
+        "pinned US Populace; this bounded suite excludes taxable-income "
+        "construction, credits, payments, and final annual liability"
+    ),
+    (
+        "us-pa:policies/income_tax/pilot_liability_pipeline"
+        "#pa_pit_pilot_income_tax_liability"
+    ): (
+        "Pennsylvania resident income tax before forgiveness, computed by "
+        "applying the tax-year-2026 3.07 percent rate to caller-supplied "
+        "completed Pennsylvania adjusted taxable income over every routed tax "
+        "unit in the pinned US Populace; the runtime fails closed unless every "
+        "selected boundary is nonnegative, and this bounded suite excludes "
+        "adjusted-taxable-income construction, forgiveness, credits, payments, "
+        "and final annual liability"
+    ),
+    (
+        "us-sc:policies/income_tax/pilot_liability_pipeline"
+        "#sc_pit_pilot_income_tax_liability"
+    ): (
+        "South Carolina tax-year-2026 individual income tax before "
+        "nonrefundable credits, computed from caller-supplied completed South "
+        "Carolina taxable income under the enacted two-bracket schedule over "
+        "every routed tax unit in the pinned US Populace; the runtime fails "
+        "closed unless every selected boundary is nonnegative, and this "
+        "bounded suite excludes taxable-income construction, nonrefundable "
+        "credits, payments, and final annual liability"
+    ),
+    (
+        "us-oh:policies/income_tax/pilot_liability_pipeline"
+        "#oh_pit_pilot_schedule_tax"
+    ): (
+        "Ohio Revised Code section 5747.02(A)(3)(c) tax-year-2026 "
+        "nonbusiness-income schedule before nonrefundable credits, computed "
+        "from caller-supplied completed Ohio taxable nonbusiness income, over "
+        "every routed tax unit in the pinned US Populace"
+    ),
+    (
+        "us-ut:policies/income_tax/"
+        "2026_full_year_resident_before_credit_schedule"
+        "#ut_pit_2026_resident_income_tax_before_credits"
+    ): (
+        "Utah section 59-10-104 full-year-resident tax before credits, "
+        "including the section 59-10-104.1 exemption gate, over every routed "
+        "tax unit in the pinned US Populace"
     ),
 }
 
@@ -189,6 +377,9 @@ def project_state(
             "relative_tolerance": entry.get("relative_tolerance"),
             "max_absolute_difference": entry.get("max_absolute_difference"),
             "weighted_compared_tax_units": entry.get("weighted_compared_tax_units"),
+            "branch_diagnostics": (
+                campaign.get("projection_diagnostics", {}).get(state)
+            ),
         }
     )
     return {
@@ -216,6 +407,58 @@ def project_state(
 
 CASES_ROOT = DASH_DATA / "cases"
 CHUNK_SIZE = 500
+
+
+def configured_populace_reports(
+    config_path: Path = POPULACE_SUITE_CONFIG,
+) -> frozenset[str]:
+    """Return every dashboard report required by the Populace suite registry."""
+
+    config = yaml.safe_load(config_path.read_text()) or {}
+    suites = config.get("suites") or []
+    reports = {
+        suite.get("report")
+        for suite in suites
+        if isinstance(suite, dict) and isinstance(suite.get("report"), str)
+    }
+    if len(reports) != len(suites):
+        raise ValueError(
+            "Populace suite registry must declare one unique report per suite"
+        )
+    return frozenset(reports)
+
+
+def reconcile_manifest_reports(
+    reports: list[str],
+    *,
+    data_dir: Path = DASH_DATA,
+    required_reports: frozenset[str] = frozenset(),
+) -> list[str]:
+    """Retire reviewed ghosts and fail closed on every other missing report.
+
+    The manifest is a load list, not a registry of intended future reports.
+    A report may be removed only through the explicit retirement allowlist.
+    Missing configured reports or missing files are publication failures.
+    """
+
+    reconciled = [
+        name for name in reports if name not in RETIRED_MANIFEST_REPORTS
+    ]
+    missing_required_entries = sorted(required_reports - set(reconciled))
+    if missing_required_entries:
+        raise ValueError(
+            "manifest is missing required configured Populace report(s): "
+            + ", ".join(missing_required_entries)
+        )
+    missing_files = sorted(
+        name for name in reconciled if not (data_dir / name).is_file()
+    )
+    if missing_files:
+        raise ValueError(
+            "manifest references unpublished dashboard report(s): "
+            + ", ".join(missing_files)
+        )
+    return reconciled
 
 
 def emit_case_chunks(state: str, entry: dict) -> str | None:
@@ -319,9 +562,12 @@ def main() -> int:
             f"{report['summary']['comparison_count']} -> {filename}"
         )
 
-    manifest["reports"] = reports
+    manifest["reports"] = reconcile_manifest_reports(
+        reports,
+        required_reports=configured_populace_reports(),
+    )
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n")
-    print(f"manifest: {len(reports)} reports")
+    print(f"manifest: {len(manifest['reports'])} reports")
     return 0
 
 

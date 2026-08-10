@@ -289,7 +289,9 @@ def _census_suite(suite: str, report: dict, report_path: Path) -> dict:
         # Compact chunk rows: i = [{n, v}], v = [{c, l, x}].
         for record in case.get("i") or []:
             if isinstance(record, dict) and record.get("n") is not None:
-                field_values[str(record["n"])].add(_canonical_value(record.get("v")))
+                field_values[str(record["n"])].add(
+                    _canonical_value(record.get("v"))
+                )
         for verdict in case.get("v") or []:
             if isinstance(verdict, dict) and verdict.get("c"):
                 concept_values[str(verdict["c"])].add(

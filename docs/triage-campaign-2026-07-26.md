@@ -186,3 +186,52 @@ Campaign 3,488 → **3,324**. Intersection unexplained 970 → 806 (fresh
   because the fix converted those rows to MATCHES.
 - Remaining 806: tbc ~370, fed liability ~300 (heavily SECA/FICA-
   correlated), amt 41, TI 66, state ~110, eitc/ctc/std tails.
+
+## Batch 14 (tbc bucket-routing extension, post-dividend-fix)
+
+Campaign 3,324 → **3,169**. Intersection 806 → 651.
+
+- capgains-worksheet-bucket-routing-tbc-postdividendfix (155,
+  bridge_artifact): the tbc-only signature — final liability agrees
+  within $15 on every row (no liability mismatch exists) with
+  ctc/eitc/cdcc/amt all compared and matched; TAXSIM idtl=2 rerun on
+  all 155 confirms axiom's tbc bucket + the preferential-rate worksheet
+  component reconstructs TAXSIM v28 exactly (22,381.42 + 5,449.08 =
+  27,830.50 = fiitax). 9 small tolerance-band tbc-only rows left raw.
+- The 134 [liability+tbc] pair cases are genuinely multi-mechanism
+  (deltas never equal) — next target, needs per-case decomposition.
+- Remaining intersection 651: pairs 268, amt-involved ~80, TI 57,
+  singles/misc rest.
+
+## Batch 15 (surtax-scope liability class + tail forensics)
+
+Campaign 3,169 → **3,155**. Intersection 651 → 637.
+
+- taxsim-fiitax-surtax-scope-liability (14, bridge_artifact): axiom's
+  liability bucket = 26 USC 6401 chapter-1 tax; TAXSIM fiitax folds in
+  NIIT (ch. 2A) + additional Medicare (ch. 2). liab_diff ==
+  -(niit+addmed) within $0.60 on every selected row, idtl=2 verified.
+- Fingerprints found but NOT yet bankable (next leads):
+  * +67.40 per filer (134.80 MFJ) on age-60+/senior rows — 8 cases,
+    driver unidentified (not Sch R phase-in, not SS worksheet — one row
+    has gssi=0).
+  * −148.1x flat remainder on ultra-high-income rows (12) after surtax
+    removal — suspiciously 0.37 × 400.4 but no QBI gate present.
+  * fed-liability-only rows (24): thousands-scale with tbc matched —
+    likely an uncompared credit (PTC-like) on the axiom side; needs
+    axiom-side credit chain dump.
+  * [amt,liability] ultra-rich (12): surtax composite holds to ~1e-4
+    relative but residual hundreds — AMT interaction detail.
+- Remaining intersection 637; next big blocks are these forensic tails
+  plus TI 57 and amt 41.
+
+## Batch 16 (state suite mirror of the refundable-credit class)
+
+Campaign 3,155 → **2,794**. co-state-income-tax-taxsim 368 → **7**
+(99.42% explained).
+
+- taxsim-co-refundable-credit-vintage mirrored into the state suite:
+  361/368 remaining rows triangulate clean against the complete 31-row
+  axiom-vs-PE mismatch set (same concept, same 1,201-unit population);
+  7 contaminated ids stay raw. Same TAXSIM sctc/srebate decomposition
+  evidence as the intersection-suite class.

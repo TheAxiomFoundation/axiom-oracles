@@ -129,12 +129,10 @@
     "axiom-policyengine-taxsim-md-income-tax-liability.json",
     "axiom-policyengine-taxsim-ut-income-tax-liability.json",
     "axiom-policyengine-taxsim-oh-income-tax-liability.json",
-    "axiom-policyengine-taxsim-de-income-tax-liability.json",
     "axiom-policyengine-taxsim-nc-income-tax-liability.json",
     "axiom-policyengine-taxsim-mi-income-tax-liability.json",
     "axiom-policyengine-taxsim-ga-income-tax-liability.json",
     "axiom-policyengine-taxsim-az-income-tax-liability.json",
-    "axiom-policyengine-taxsim-al-income-tax-liability.json",
     "axiom-policyengine-taxsim-va-income-tax-liability.json",
     "axiom-policyengine-taxsim-me-income-tax-liability.json",
     "axiom-policyengine-taxsim-mn-income-tax-liability.json",
@@ -187,7 +185,6 @@
     "axiom-policyengine-ia-income-tax-populace.json",
     "axiom-policyengine-il-income-tax-populace.json",
     "axiom-policyengine-in-income-tax-populace.json",
-    "axiom-policyengine-ks-income-tax-populace.json",
     "axiom-policyengine-la-income-tax-populace.json",
     "axiom-policyengine-mi-income-tax-populace.json",
     "axiom-policyengine-ms-income-tax-populace.json",
@@ -213,6 +210,16 @@
     "axiom-policyengine-us-elderly-disabled-grid.json",
     "axiom-policyengine-us-llc-grid.json",
     "axiom-taxsim-co-tax-intersection-ecps.json",
-    "axiom-policyengine-ky-income-tax-populace.json"
+    "axiom-policyengine-ky-income-tax-populace.json",
+    "axiom-policyengine-ks-income-tax-populace.json",
+    "axiom-policyengine-dc-income-tax-populace.json",
+    "axiom-policyengine-ca-income-tax-populace.json",
+    "axiom-policyengine-mn-income-tax-populace.json",
+    "axiom-policyengine-us-savers-grid.json",
+    "axiom-policyengine-us-salt-deduction-grid.json",
+    "axiom-policyengine-us-itemized-taxable-income-deductions-grid.json",
+    "axiom-usitc-us-tariff.json",
+    "axiom-yale-us-tariff-panel.json",
+    "axiom-policyengine-us-snap-abawd-grid.json"
   ]
 }

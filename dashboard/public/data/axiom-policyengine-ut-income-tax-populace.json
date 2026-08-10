@@ -5,8 +5,8 @@
    "comparison": "amount",
    "comparison_count": 1251,
    "components": [],
-   "concept": "us-ut:policies/income_tax/pilot_liability_pipeline#ut_pit_pilot_income_tax_liability",
-   "description": "State income tax liability over every routed tax unit in the pinned US Populace",
+   "concept": "us-ut:policies/income_tax/2026_full_year_resident_before_credit_schedule#ut_pit_2026_resident_income_tax_before_credits",
+   "description": "Utah section 59-10-104 full-year-resident tax before credits, including the section 59-10-104.1 exemption gate, over every routed tax unit in the pinned US Populace",
    "match_count": 1251,
    "match_rate": 100.0,
    "matched": 1251,
@@ -21,14 +21,20 @@
  "case_count": 1251,
  "cases": [],
  "engines": {
-  "axiom": "us-ut:policies/income_tax/pilot_liability_pipeline",
-  "policyengine": "ut_income_tax_before_credits"
+  "axiom": "us-ut:policies/income_tax/2026_full_year_resident_before_credit_schedule",
+  "policyengine": "ut_resident_income_tax_before_credits_derived"
  },
  "errors": [],
  "mismatches": [],
  "population": "populace-us",
  "provenance": {
-  "campaign_report": "state-tax-populace-campaign-2026-07-25.json",
+  "branch_diagnostics": {
+   "compared_tax_unit_count": 1251,
+   "exempt_count": 196,
+   "negative_taxable_income_count": 12,
+   "nonexempt_count": 1055
+  },
+  "campaign_report": "state-tax-populace-campaign-ut-2026-07-27.json",
   "dataset_identity": {
    "built_with": "1.729.0",
    "country": "us",
@@ -37,12 +43,21 @@
    "sha256": "16be6338f9d0",
    "source": "pinned"
   },
+  "generated_at": "2026-07-27T07:57:32Z",
+  "generated_by": "scripts/emit_populace_campaign_artifacts.py::ut-income-tax-populace",
   "max_absolute_difference": 0.5679999999701977,
-  "relative_tolerance": 0.0,
+  "relative_tolerance": 1e-07,
+  "rulespecs": [
+   {
+    "repo": "TheAxiomFoundation/rulespec-us",
+    "sha": "eb654b6d7a5ae7f48e6e1a5d0ca365dbdb0ee53c"
+   }
+  ],
+  "run_kind": "manual",
   "runtime_provenance": {
    "axiom_engine": {
-    "commit": "48797e101c093bb388be718c6f5d8fc9d9f94a7d",
-    "executable_sha256": "a181a6f1aedc16ca27f553ef54006a390919b85d7cb1efc435bc65f41aeaeef0",
+    "commit": "ffd8213271947b0189a9dd61a055c1e0e78908a0",
+    "executable_sha256": "c7eef635dadca73b51d4012fcc2f12c2f08dd82f9d505ba5228f127779a3a4e2",
     "repository": "TheAxiomFoundation/axiom-rules-engine",
     "working_tree": "clean"
    },
@@ -51,12 +66,13 @@
     "policyengine-us": "1.752.2"
    },
    "rulespec": {
-    "commit": "ca2d424fcb85ce8c3a8f4706113331710f114460",
+    "commit": "eb654b6d7a5ae7f48e6e1a5d0ca365dbdb0ee53c",
     "repository": "TheAxiomFoundation/rulespec-us",
     "working_tree": "clean"
    }
   },
-  "tolerance": 1.0,
+  "schema": "axiom_oracles.provenance.v1",
+  "tolerance": 0.01,
   "weighted_compared_tax_units": 1618502.5562431642
  },
  "schema_version": "axiom.comparison_report.v2",

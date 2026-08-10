@@ -6664,7 +6664,7 @@
   "population": "snap-qc-puf",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-27T04:12:16Z",
+    "generated_at": "2026-08-07T19:27:22Z",
     "generated_by": "scripts/run_comparison.py::az-snap-qc",
     "oracle": {
       "fiscal_year": 2024,
@@ -6672,6 +6672,7 @@
       "sha256": "0f3230a4318307d3088382546095eebfde03e781da6f65c9eac7f077bd4263f4",
       "url": "https://snapqcdata.net/sites/default/files/2026-05/qcfy2024_csv.zip"
     },
+    "reemitted_report": true,
     "run_kind": "affected-rerun",
     "schema": "axiom_oracles.provenance.v1"
   },

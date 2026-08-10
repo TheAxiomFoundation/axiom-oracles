@@ -39,7 +39,9 @@ from axiom_oracles.conformance.universe import (  # noqa: E402
     PE_UK_PROGRAM_SPINE,
     PE_US_PROGRAM_SPINE,
     PolicyEngineUniverseBackend,
+    YaleTariffUniverseBackend,
     _is_queryable_output,
+    parse_r_string_vector,
     propose_scope,
     RawPolicy,
 )
@@ -320,7 +322,9 @@ def test_propose_scope_defaults_are_conservative():
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.parametrize("jurisdiction", ["uk", "be", "uk-pe", "us-pe"])
+@pytest.mark.parametrize(
+    "jurisdiction", ["uk", "be", "uk-pe", "us-pe", "us-tariff-yale"]
+)
 def test_committed_universe_parses_and_validates(jurisdiction):
     path = CONFORMANCE_DIR / f"{jurisdiction}.yaml"
     universe = parse_universe(path)
@@ -614,7 +618,10 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
         "us-llc-grid",
         "us-niit-grid",
         "us-qbid-grid",
+        "us-savers-grid",
         "us-seca-grid",
+        "us-salt-deduction-grid",
+        "us-itemized-taxable-income-deductions-grid",
     }
     covered = {p.suite for p in universe.in_scope() if p.suite is not None}
     assert covered <= live_pe_suites
@@ -639,8 +646,46 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
         by_name["qualified_business_income_deduction"].suite
         == "us-qbid-grid"
     )
-    assert by_name["savers_credit"].suite is None
-    assert "axiom-corpus/issues/506" in by_name["savers_credit"].note
+    assert (
+        by_name["itemized_taxable_income_deductions"].suite
+        == "us-itemized-taxable-income-deductions-grid"
+    )
+    assert (
+        "all five filing statuses"
+        in by_name["itemized_taxable_income_deductions"].note
+    )
+    assert by_name["salt_deduction"].suite == "us-salt-deduction-grid"
+    assert "all five filing statuses" in by_name["salt_deduction"].note
+    chunk_one_suites = {
+        "us-salt-deduction-grid",
+        "us-itemized-taxable-income-deductions-grid",
+    }
+    assert {
+        row.oracle_policy_name: row.suite
+        for row in universe.in_scope()
+        if row.suite in chunk_one_suites
+    } == {
+        "salt_deduction": "us-salt-deduction-grid",
+        "itemized_taxable_income_deductions": (
+            "us-itemized-taxable-income-deductions-grid"
+        ),
+    }
+    assert {
+        name: by_name[name].suite
+        for name in (
+            "alternative_minimum_tax",
+            "foreign_tax_credit",
+            "taxable_income",
+        )
+    } == {
+        "alternative_minimum_tax": None,
+        "foreign_tax_credit": None,
+        "taxable_income": None,
+    }
+    assert by_name["savers_credit"].suite == "us-savers-grid"
+    assert "34 fixture-bound" in by_name["savers_credit"].note
+    assert "reviewed direct PE-US target" in by_name["savers_credit"].note
+    assert "23/34" in by_name["savers_credit"].note
     assert "policyengine-us/issues/9151" in by_name["savers_credit"].note
     assert by_name["self_employment_tax"].suite == "us-seca-grid"
     # State income-tax coverage counts only a comparison that proves the final
@@ -659,7 +704,7 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
         "az_income_tax": "az_income_tax_before_non_refundable_credits",
         "ca_income_tax": "ca_income_tax_before_refundable_credits",
         "dc_income_tax": "dc_income_tax_before_credits",
-        "de_income_tax": "de_income_tax_before_non_refundable_credits_unit",
+        "de_income_tax": "de_income_tax_before_non_refundable_credits_indv",
         "ga_income_tax": "ga_income_tax_before_non_refundable_credits",
         "hi_income_tax": "hi_income_tax_before_non_refundable_credits",
         "ia_income_tax": "ia_income_tax_before_credits",
@@ -861,6 +906,110 @@ def test_ukmod_generated_facts_match_committed_universe():
     gen = _load_script("generate_conformance_universe.py")
     universe = gen.generate_universe("uk", _UKMOD_ROOT)
     committed = parse_universe(CONFORMANCE_DIR / "uk.yaml")
+    assert serialize(universe) == serialize(committed)
+
+
+# ---------------------------------------------------------------------------
+# Yale tariff-rate-tracker backend (R-literal parser + committed universe)
+# ---------------------------------------------------------------------------
+
+_YALE_ROOT = Path.home() / "TheAxiomFoundation" / "_tariff-yale"
+
+
+def test_parse_r_string_vector_reads_literals_na_and_integers():
+    source = """
+    rate_col = c('rate_232', "rate_301", NA),
+    panel_order = c(1L, 2L, NA),
+    """
+    assert parse_r_string_vector(source, "rate_col") == [
+        "rate_232",
+        "rate_301",
+        None,
+    ]
+    assert parse_r_string_vector(source, "panel_order") == ["1", "2", None]
+
+
+def test_parse_r_string_vector_rejects_spliced_expressions():
+    """A spliced expression inside c(...) must raise: a universe fact has to be
+    a literal the parse can pin, never something re-derived by memory."""
+    source = "rate_col = c('rate_232', registry$rate_col[schema_group == 'x'])"
+    with pytest.raises(ValueError, match="non-literal"):
+        parse_r_string_vector(source, "rate_col")
+
+
+def test_parse_r_string_vector_raises_on_missing_vector():
+    with pytest.raises(ValueError, match="not found"):
+        parse_r_string_vector("other = c('a')", "rate_col")
+
+
+def test_us_tariff_yale_universe_pin_matches_reference_provenance():
+    """The universe's oracle release must equal the committed reference
+    extract's yale_commit — one pin for both surfaces, so a divergent
+    universe/extract pair cannot pass silently."""
+    universe = parse_universe(CONFORMANCE_DIR / "us-tariff-yale.yaml")
+    assert universe.oracle.backend == "yale-tariff"
+    assert universe.oracle.model == "tariff-rate-tracker"
+    provenance = json.loads(
+        (
+            REPO_ROOT / "reference" / "us-tariff-panel" / "yale_panel_provenance.json"
+        ).read_text()
+    )
+    assert universe.oracle.release == provenance["yale_commit"]
+
+
+def test_us_tariff_yale_scope_decisions():
+    """10 statutory-surface rows in scope on the us-tariff-panel suite, each
+    with a note. Four rows are excluded as technical: the Swiss framework
+    metadata and stacking/framing outputs (effective-layer machinery, no
+    statutory surface), plus the two authority columns the reference never
+    exercises with a nonzero rate at pin c4307e51 (other, rate_301_cs) —
+    each of those carries an explicit re-inclusion tripwire keyed to the
+    suite's per-refresh column_exposure derivation."""
+    universe = parse_universe(CONFORMANCE_DIR / "us-tariff-yale.yaml")
+    in_scope = [p for p in universe.policies if p.in_scope]
+    excluded = universe.excluded()
+    assert len(in_scope) == 10
+    for row in in_scope:
+        assert row.suite == "us-tariff-panel", row.oracle_policy_name
+        assert row.note, row.oracle_policy_name
+        # Every in-scope surface is a statutory_* column (pre-exemption,
+        # pre-stacking) — the comparison boundary the suite binds.
+        assert all(
+            v.startswith("statutory_") for v in row.output_vars
+        ), row.oracle_policy_name
+    assert {p.oracle_policy_name for p in excluded} == {
+        "swiss_framework",
+        "stacking_outputs",
+        "other",
+        "rate_301_cs",
+    }
+    for row in excluded:
+        assert row.exclusion_reason == "technical"
+        assert row.note, row.oracle_policy_name
+    # The zero-exposure exclusions must state their re-inclusion tripwire —
+    # narrowing the universe without one is the failure mode the sol stack
+    # review's F3 witness gate exists to prevent.
+    for name in ("other", "rate_301_cs"):
+        row = next(p for p in excluded if p.oracle_policy_name == name)
+        assert "tripwire" in row.note, name
+        assert "column_exposure" in row.note, name
+
+
+@pytest.mark.skipif(
+    not (_YALE_ROOT / "src" / "model" / "authority_registry.R").exists(),
+    reason="Yale tariff-rate-tracker checkout not present on this runner",
+)
+def test_yale_generated_facts_match_committed_universe():
+    """The committed us-tariff-yale.yaml facts must equal a fresh generation
+    from the pinned checkout (no drift)."""
+    backend = YaleTariffUniverseBackend(_YALE_ROOT)
+    if backend.pinned_commit() != parse_universe(
+        CONFORMANCE_DIR / "us-tariff-yale.yaml"
+    ).oracle.release:
+        pytest.skip("local Yale checkout is not at the pinned commit")
+    gen = _load_script("generate_conformance_universe.py")
+    universe = gen.generate_universe("us-tariff-yale", _YALE_ROOT)
+    committed = parse_universe(CONFORMANCE_DIR / "us-tariff-yale.yaml")
     assert serialize(universe) == serialize(committed)
 
 
@@ -1260,6 +1409,154 @@ def test_scoreboard_excluded_breakdown_by_reason():
     }
     # Excluded policies are never counted as covered.
     assert board.covered == 0 and board.policies_in_scope == 0
+
+
+def test_scoreboard_witness_gate_uncovers_zero_exposure_policies():
+    """A report whose exposure basis never exercises a policy's output
+    columns with a positive rate does NOT cover that policy — comparing an
+    all-zero column against an implicit 0 verifies nothing (F3)."""
+    universe = _universe([
+        _in_scope(id="tx:a", oracle_policy_name="a", suite="suite-a",
+                  output_vars=("x_s",)),
+        _in_scope(id="tx:b", oracle_policy_name="b", suite="suite-a",
+                  output_vars=("y_s",)),
+    ])
+    report = _report("suite-a", comparisons=5, matches=5)
+    report["scope"] = {"column_exposure": {"x_s": 5, "y_s": 0}}
+    board, scores = score_jurisdiction(universe, [report])
+    assert board.covered == 1 and board.policies_in_scope == 2
+    assert board.uncovered_policies == ["b"]
+    assert board.unwitnessed_policies == ["b"]
+    assert board.conformant is False
+    assert any("positive-exposure witness" in r for r in board.blocking_reasons)
+    by_name = {s.oracle_policy_name: s for s in scores}
+    assert by_name["a"].status == "conformant" and by_name["a"].covered
+    assert by_name["b"].status == "unwitnessed" and not by_name["b"].covered
+
+
+def test_scoreboard_witness_accepts_any_positive_output_var():
+    """One positive column among a policy's output_vars is a witness."""
+    universe = _universe([
+        _in_scope(id="tx:a", oracle_policy_name="a", suite="suite-a",
+                  output_vars=("y_s", "x_s")),
+    ])
+    report = _report("suite-a", comparisons=5, matches=5)
+    report["scope"] = {"column_exposure": {"x_s": 3, "y_s": 0}}
+    board, _ = score_jurisdiction(universe, [report])
+    assert board.covered == 1 and board.unwitnessed_policies == []
+    assert board.conformant is True
+
+
+def test_scoreboard_exclusion_invalidated_by_nonzero_live_exposure():
+    """The enforced re-inclusion tripwire (sol closing review F1): an excluded
+    policy whose output column shows nonzero exposure in ANY live report is an
+    invalidated exclusion — it blocks conformance until re-included. This is
+    sol's exact counterfactual: before the invariant, nonzero exposure on an
+    excluded column still scored conformant."""
+    universe = _universe([
+        _in_scope(id="tx:a", oracle_policy_name="a", suite="suite-a",
+                  output_vars=("x_s",)),
+        _in_scope(id="tx:c", oracle_policy_name="c", suite=None,
+                  in_scope=False, exclusion_reason="technical",
+                  output_vars=("z_s",)),
+    ])
+    # Dormant exclusion: zero exposure — conformant holds.
+    report = _report("suite-a", comparisons=5, matches=5)
+    report["scope"] = {"column_exposure": {"x_s": 5, "z_s": 0}}
+    board, scores = score_jurisdiction(universe, [report])
+    assert board.conformant is True
+    assert board.invalid_exclusions == []
+    by_name = {s.oracle_policy_name: s for s in scores}
+    assert by_name["c"].status == "excluded:technical"
+
+    # The reference wakes the column up: exclusion invalidated, verdict blocked.
+    report["scope"] = {"column_exposure": {"x_s": 5, "z_s": 7}}
+    board, scores = score_jurisdiction(universe, [report])
+    assert board.conformant is False
+    assert board.invalid_exclusions == ["c"]
+    assert any("re-inclusion required" in r for r in board.blocking_reasons)
+    by_name = {s.oracle_policy_name: s for s in scores}
+    assert by_name["c"].status == "excluded:INVALID-nonzero-exposure"
+
+    # Order independence (sol r2 finding 1): a zero-exposure duplicate of the
+    # same suite must never shadow the nonzero report, in either order.
+    zero_dup = _report("suite-a", comparisons=5, matches=5)
+    zero_dup["scope"] = {"column_exposure": {"x_s": 5, "z_s": 0}}
+    nonzero = _report("suite-a", comparisons=5, matches=5)
+    nonzero["scope"] = {"column_exposure": {"x_s": 5, "z_s": 7}}
+    for ordering in ([zero_dup, nonzero], [nonzero, zero_dup]):
+        board, _ = score_jurisdiction(universe, ordering)
+        assert board.conformant is False, "duplicate-suite order bypass"
+        assert board.invalid_exclusions == ["c"]
+
+
+def test_scoreboard_without_exposure_basis_keeps_presence_coverage():
+    """Reports with no scope.column_exposure (other jurisdictions) keep the
+    presence-only coverage rule — the witness gate never fires blind."""
+    universe = _universe([
+        _in_scope(id="tx:a", oracle_policy_name="a", suite="suite-a",
+                  output_vars=("x_s",)),
+    ])
+    board, _ = score_jurisdiction(
+        universe, [_report("suite-a", comparisons=5, matches=5)]
+    )
+    assert board.covered == 1
+    assert board.unwitnessed_policies == []
+    assert board.temporal_debt is None
+
+
+def test_scoreboard_surfaces_temporal_debt_from_covered_reports():
+    """A covered report's scope.temporal_debt account lands on the
+    jurisdiction summary instead of being clipped out of the story (F4)."""
+    universe = _universe([
+        _in_scope(id="tx:a", oracle_policy_name="a", suite="suite-a",
+                  output_vars=("x_s",)),
+    ])
+    report = _report("suite-a", comparisons=5, matches=5)
+    report["scope"] = {
+        "column_exposure": {"x_s": 5},
+        "temporal_debt": {
+            "pre_domain_intervals": 100,
+            "straddle_clipped_intervals": 7,
+            "records": [{"debt_id": "d1"}, {"debt_id": "d2"}],
+        },
+    }
+    board, _ = score_jurisdiction(universe, [report])
+    assert board.temporal_debt == {
+        "pre_domain_intervals": 100,
+        "straddle_clipped_intervals": 7,
+        "addressable_records": 2,
+    }
+    # Debt is surfaced, not a conformance blocker.
+    assert board.conformant is True
+
+
+def test_committed_us_tariff_yale_scoreboard_pins_witnessed_coverage():
+    """The live us-tariff-yale verdict: CONFORMANT — 10 of 10 in-scope
+    policies witnessed-covered, unexplained 0, axiom-attributed 0. The two
+    authorities the reference never exercises with a positive rate (301_cs,
+    other) are excluded-with-reason under the technical class with explicit
+    re-inclusion tripwires (universe test above), and the temporal-debt
+    account rides the summary (sol stack review F3/F4)."""
+    scoreboard = json.loads((CONFORMANCE_DIR / "scoreboard.json").read_text())
+    entry = {j["jurisdiction"]: j for j in scoreboard["jurisdictions"]}[
+        "us-tariff-yale"
+    ]
+    assert entry["policies_in_scope"] == 10
+    assert entry["covered"] == 10
+    assert entry["covered_pct"] == 100.0
+    assert entry["excluded"] == 4
+    assert entry["excluded_by_reason"] == {"technical": 4}
+    assert entry["conformant"] is True
+    assert entry["uncovered_policies"] == []
+    assert entry["unwitnessed_policies"] == []
+    assert entry["temporal_debt"] == {
+        "pre_domain_intervals": 48000,
+        "straddle_clipped_intervals": 1200,
+        "addressable_records": 205,
+    }
+    assert entry["oracle_attributed"] == 8283
+    assert entry["axiom_attributed_open"] == 0
 
 
 def test_committed_be_scoreboard_counts_dataset_lacks_input_exclusion():
