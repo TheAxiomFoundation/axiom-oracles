@@ -1555,3 +1555,1343 @@ def test_bridge_manifest_rejects_multiple_reports_for_one_suite(
     monkeypatch.setattr(bridge, "DATA_DIR", data_dir)
     errors, _findings = bridge.validate(Path("victim.yaml"), _bridge_manifest())
     assert any("multiple" in error or "ambiguous" in error for error in errors)
+
+
+# ---------------------------------------------------------------------------
+# scripts/closure_universe.py
+
+
+def _load_closure_test_helpers() -> ModuleType:
+    path = REPO_ROOT / "tests" / "test_closure_mutants.py"
+    name = "_gate_regression_closure_helpers"
+    spec = importlib.util.spec_from_file_location(name, path)
+    assert spec is not None and spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+def test_closure_scope_declares_exact_program_roots_and_module_prefixes():
+    closure = _load_script("closure_universe")
+    assert closure.PROGRAM == "us-co/snap"
+    assert [config.root for config in closure.ROOTS] == [
+        "state-10-ccr-2506-1",
+        "us-7-cfr-273",
+        "us-7-usc-51",
+    ]
+    assert {config.source_file for config in closure.ROOTS} == {
+        "co-provisions.jsonl",
+        "cfr-273.jsonl",
+        "usc-51.jsonl",
+    }
+    assert {config.module_root for config in closure.ROOTS} == {
+        "us-co/regulations/10-ccr-2506-1",
+        "us/regulations/7-cfr/273",
+        "us/statutes/7",
+    }
+
+
+def test_closure_source_loader_keeps_every_nonblank_row_kind(tmp_path: Path):
+    closure = _load_script("closure_universe")
+    config = closure.RootConfig(
+        root="synthetic",
+        source_file="source.jsonl",
+        citation_root="us/test",
+        module_root="us/tests",
+    )
+    data = tmp_path / "data"
+    data.mkdir()
+    rows = [
+        {"citation_path": f"us/test/{kind}", "heading": kind, "kind": kind}
+        for kind in ("document", "part", "subpart", "title", "section")
+    ]
+    (data / config.source_file).write_text(
+        "\n".join(json.dumps(row) for row in rows) + "\n\n"
+    )
+    errors: list[str] = []
+    loaded = closure._load_source_rows(config, data, errors)
+    assert not errors
+    assert {row["citation"] for row in loaded} == {
+        row["citation_path"] for row in rows
+    }
+
+
+@pytest.mark.parametrize(
+    ("mutation", "marker"),
+    [
+        pytest.param("missing", "could not be read", id="missing"),
+        pytest.param("invalid-json", "invalid JSON", id="json"),
+        pytest.param("non-object", "must be a JSON object", id="object"),
+        pytest.param("missing-citation", "citation_path", id="citation"),
+        pytest.param("outside-root", "outside declared root", id="root"),
+        pytest.param("duplicate", "duplicate citation_path", id="duplicate"),
+        pytest.param("heading-type", "heading", id="heading"),
+    ],
+)
+def test_closure_source_rows_fail_closed_on_shape_identity_and_heading(
+    tmp_path: Path,
+    mutation: str,
+    marker: str,
+):
+    closure = _load_script("closure_universe")
+    config = closure.RootConfig(
+        root="synthetic",
+        source_file="source.jsonl",
+        citation_root="us/test",
+        module_root="us/tests",
+    )
+    data = tmp_path / "data"
+    data.mkdir()
+    valid = {"citation_path": "us/test/a", "heading": "A"}
+    if mutation == "missing":
+        raw = None
+    elif mutation == "invalid-json":
+        raw = "{not-json\n"
+    elif mutation == "non-object":
+        raw = "[]\n"
+    elif mutation == "missing-citation":
+        raw = json.dumps({"heading": "A"}) + "\n"
+    elif mutation == "outside-root":
+        raw = json.dumps({**valid, "citation_path": "us/other/a"}) + "\n"
+    elif mutation == "duplicate":
+        raw = json.dumps(valid) + "\n" + json.dumps(valid) + "\n"
+    else:
+        raw = json.dumps({**valid, "heading": 7}) + "\n"
+    if raw is not None:
+        (data / config.source_file).write_text(raw)
+    errors: list[str] = []
+    closure._load_source_rows(config, data, errors)
+    assert any(marker in error for error in errors)
+
+
+def test_closure_missing_or_null_source_heading_becomes_empty_string(
+    tmp_path: Path,
+):
+    closure = _load_script("closure_universe")
+    config = closure.RootConfig(
+        root="synthetic",
+        source_file="source.jsonl",
+        citation_root="us/test",
+        module_root="us/tests",
+    )
+    data = tmp_path / "data"
+    data.mkdir()
+    (data / config.source_file).write_text(
+        json.dumps({"citation_path": "us/test/a"})
+        + "\n"
+        + json.dumps({"citation_path": "us/test/b", "heading": None})
+        + "\n"
+    )
+    errors: list[str] = []
+    assert closure._load_source_rows(config, data, errors) == [
+        {"citation": "us/test/a", "heading": ""},
+        {"citation": "us/test/b", "heading": ""},
+    ]
+    assert not errors
+
+
+@pytest.mark.parametrize(
+    ("mutation", "marker"),
+    [
+        pytest.param("missing", "is missing", id="missing"),
+        pytest.param("root-shape", "YAML mapping", id="root-map"),
+        pytest.param("schema", "expected schema", id="schema"),
+        pytest.param("snapshots-type", "snapshots", id="snapshot-list"),
+        pytest.param("snapshot-shape", "must be a mapping", id="snapshot-map"),
+        pytest.param("duplicate", "duplicate snapshot", id="duplicate"),
+        pytest.param("metadata", "source_repo", id="metadata"),
+        pytest.param("unsafe", "unsafe snapshot path", id="safe-path"),
+        pytest.param("sha-format", "lowercase 64-hex", id="sha-format"),
+        pytest.param("sha-drift", "sha256 mismatch", id="sha-drift"),
+        pytest.param("required", "required file", id="required-files"),
+    ],
+)
+def test_closure_provenance_validates_schema_snapshots_metadata_and_exact_bytes(
+    tmp_path: Path,
+    mutation: str,
+    marker: str,
+):
+    helpers = _load_closure_test_helpers()
+    closure_dir = helpers._write_inputs(tmp_path)
+    closure = _load_script("closure_universe")
+    provenance_path = closure_dir / "data" / "provenance.yaml"
+    document = yaml.safe_load(provenance_path.read_text())
+    if mutation == "missing":
+        provenance_path.unlink()
+    elif mutation == "root-shape":
+        document = ["not-a-mapping"]
+    elif mutation == "schema":
+        document["schema"] = "invented"
+    elif mutation == "snapshots-type":
+        document["snapshots"] = {}
+    elif mutation == "snapshot-shape":
+        document["snapshots"][0] = "not-a-map"
+    elif mutation == "duplicate":
+        document["snapshots"].append(copy.deepcopy(document["snapshots"][0]))
+    elif mutation == "metadata":
+        document["snapshots"][0]["source_repo"] = ""
+    elif mutation == "unsafe":
+        document["snapshots"][0]["file"] = "../source.jsonl"
+    elif mutation == "sha-format":
+        document["snapshots"][0]["sha256"] = "ABC"
+    elif mutation == "sha-drift":
+        source = closure_dir / "data" / document["snapshots"][0]["file"]
+        source.write_text(source.read_text() + "\n")
+    else:
+        document["snapshots"] = document["snapshots"][1:]
+    if mutation != "missing":
+        provenance_path.write_text(yaml.safe_dump(document, sort_keys=False))
+    errors: list[str] = []
+    closure._load_provenance(closure_dir / "data", errors)
+    assert any(marker in error for error in errors)
+
+
+def test_closure_pinned_tree_is_duplicate_free(tmp_path: Path):
+    closure = _load_script("closure_universe")
+    tree = tmp_path / "rulespec-us-files.txt"
+    tree.write_text("us/tests/a.yaml\nus/tests/a.yaml\n")
+    errors: list[str] = []
+    assert closure._load_tree(tree, errors) == {"us/tests/a.yaml"}
+    assert any("duplicate paths" in error for error in errors)
+
+
+@pytest.mark.parametrize(
+    ("kind", "payload", "marker"),
+    [
+        pytest.param("universe", "[", "could not be read", id="universe-yaml"),
+        pytest.param("universe", "- not-a-mapping\n", "YAML mapping", id="universe-map"),
+        pytest.param("summary", "{", "could not be read", id="summary-json"),
+        pytest.param("summary", "[]\n", "JSON object", id="summary-object"),
+    ],
+)
+def test_closure_artifact_loaders_reject_malformed_or_nonmapping_roots(
+    tmp_path: Path,
+    kind: str,
+    payload: str,
+    marker: str,
+):
+    closure = _load_script("closure_universe")
+    path = tmp_path / ("universe.yaml" if kind == "universe" else "summary.json")
+    path.write_text(payload)
+    errors: list[str] = []
+    loaded = (
+        closure._load_universe(path, errors)
+        if kind == "universe"
+        else closure._load_summary(path, errors)
+    )
+    assert loaded is None
+    assert any(marker in error for error in errors)
+
+
+@pytest.mark.parametrize(
+    ("mutation", "marker"),
+    [
+        pytest.param("schema", "expected schema", id="schema"),
+        pytest.param("program", "expected program", id="program"),
+        pytest.param("root", "expected root", id="root"),
+        pytest.param("provenance", "provenance", id="provenance"),
+        pytest.param("provenance-sha", "lowercase 64-hex", id="provenance-sha"),
+        pytest.param("ratchet", "ratchet", id="ratchet"),
+        pytest.param("ratchet-pin", "content-identity", id="ratchet-pin"),
+        pytest.param("pending-max", "pending_max", id="pending-max"),
+    ],
+)
+def test_closure_universe_artifact_validates_identity_provenance_and_ratchet(
+    tmp_path: Path,
+    mutation: str,
+    marker: str,
+):
+    helpers = _load_closure_test_helpers()
+    closure, closure_dir = helpers._generate_baseline(tmp_path)
+    config = closure.ROOTS[0]
+    path, document = helpers._load_universe(closure_dir, helpers.STATE_UNIVERSE)
+    if mutation == "schema":
+        document["schema"] = "invented"
+    elif mutation == "program":
+        document["program"] = "other"
+    elif mutation == "root":
+        document["root"] = "other"
+    elif mutation == "provenance":
+        document["provenance"] = []
+    elif mutation == "provenance-sha":
+        document["provenance"]["source_sha256"] = "bad"
+    elif mutation == "ratchet":
+        document["ratchet"] = []
+    elif mutation == "ratchet-pin":
+        document["ratchet"]["pins_sha256"] = "0" * 64
+    else:
+        document["ratchet"]["pending_max"] = True
+    errors: list[str] = []
+    closure._validate_universe(
+        document,
+        config=config,
+        path=path,
+        tree_paths=closure._load_tree(
+            closure_dir / "data" / closure.TREE_FILE, []
+        ),
+        allow_missing_pins=False,
+        allow_generated_path_drift=False,
+        errors=errors,
+    )
+    assert any(marker in error for error in errors)
+
+
+@pytest.mark.parametrize(
+    ("mutation", "marker"),
+    [
+        pytest.param("schema", "expected schema", id="schema"),
+        pytest.param("program", "expected program", id="program"),
+        pytest.param("roots-type", "roots", id="roots-list"),
+        pytest.param("duplicate-root", "duplicate root", id="duplicate-root"),
+        pytest.param("missing-root", "missing roots", id="root-inventory"),
+        pytest.param("total", "total", id="total-type"),
+        pytest.param("status", "by_status", id="status-type"),
+        pytest.param("conservation", "status counts total", id="conservation"),
+        pytest.param("reason", "reason counts", id="reason-count"),
+        pytest.param("pin", "pins_sha256", id="pin"),
+        pytest.param("pending", "pending_max", id="pending"),
+    ],
+)
+def test_closure_summary_validates_identity_inventory_counts_and_pins(
+    tmp_path: Path,
+    mutation: str,
+    marker: str,
+):
+    helpers = _load_closure_test_helpers()
+    closure, closure_dir = helpers._generate_baseline(tmp_path)
+    path = closure_dir / "summary.json"
+    document = json.loads(path.read_text())
+    row = document["roots"][0]
+    if mutation == "schema":
+        document["schema"] = "invented"
+    elif mutation == "program":
+        document["program"] = "other"
+    elif mutation == "roots-type":
+        document["roots"] = {}
+    elif mutation == "duplicate-root":
+        document["roots"].append(copy.deepcopy(row))
+    elif mutation == "missing-root":
+        document["roots"] = document["roots"][1:]
+    elif mutation == "total":
+        row["total"] = True
+    elif mutation == "status":
+        row["by_status"]["pending"] = -1
+    elif mutation == "conservation":
+        row["total"] += 1
+    elif mutation == "reason":
+        row["by_reason"] = {"": -1}
+    elif mutation == "pin":
+        row["pins_sha256"] = "bad"
+    else:
+        row["pending_max"] = False
+    errors: list[str] = []
+    closure._validate_summary_baseline(
+        document,
+        path=path,
+        allow_missing_pins=False,
+        errors=errors,
+    )
+    assert any(marker in error for error in errors)
+
+
+@pytest.mark.parametrize(
+    ("row", "tree", "marker"),
+    [
+        pytest.param("not-a-map", set(), "must be a mapping", id="mapping"),
+        pytest.param(
+            {"heading": "A", "status": "pending"},
+            set(),
+            "citation",
+            id="citation",
+        ),
+        pytest.param(
+            {"citation": "us/test/a", "heading": 1, "status": "pending"},
+            set(),
+            "heading",
+            id="heading",
+        ),
+        pytest.param(
+            {
+                "citation": "us/test/a",
+                "heading": "A",
+                "note": 1,
+                "status": "pending",
+            },
+            set(),
+            "note",
+            id="note",
+        ),
+        pytest.param(
+            {"citation": "us/test/a", "heading": "A", "status": "done"},
+            set(),
+            "must be one of",
+            id="status",
+        ),
+        pytest.param(
+            {
+                "citation": "us/test/a",
+                "heading": "A",
+                "status": "encoded",
+                "encoded_by": [],
+            },
+            set(),
+            "non-empty list",
+            id="encoded-empty",
+        ),
+        pytest.param(
+            {
+                "citation": "us/test/a",
+                "heading": "A",
+                "status": "encoded",
+                "encoded_by": ["us/tests/a.yaml", "us/tests/a.yaml"],
+            },
+            {"us/tests/a.yaml"},
+            "duplicate paths",
+            id="encoded-duplicate",
+        ),
+        pytest.param(
+            {
+                "citation": "us/test/a",
+                "heading": "A",
+                "status": "excluded",
+                "basis": "Source text.",
+            },
+            set(),
+            "reason",
+            id="excluded-reason",
+        ),
+        pytest.param(
+            {
+                "citation": "us/test/a",
+                "heading": "A",
+                "status": "pending",
+                "reason": "reserved",
+            },
+            set(),
+            "must not carry",
+            id="pending-contradiction",
+        ),
+        pytest.param(
+            {
+                "citation": "us/test/a",
+                "heading": "A",
+                "status": "encoded",
+                "encoded_by": ["us/tests/a.yaml"],
+                "basis": "contradiction",
+            },
+            {"us/tests/a.yaml"},
+            "must not carry",
+            id="encoded-contradiction",
+        ),
+        pytest.param(
+            {
+                "citation": "us/test/a",
+                "heading": "A",
+                "status": "excluded",
+                "reason": "reserved",
+                "basis": "Text says reserved.",
+                "encoded_by": ["us/tests/a.yaml"],
+            },
+            {"us/tests/a.yaml"},
+            "must not carry",
+            id="excluded-contradiction",
+        ),
+    ],
+)
+def test_closure_provision_shape_status_and_contradiction_invariants(
+    row: object,
+    tree: set[str],
+    marker: str,
+):
+    closure = _load_script("closure_universe")
+    errors: list[str] = []
+    closure._validate_provision_rows(
+        [row],
+        config=closure.RootConfig("synthetic", "source", "us/test", "us/tests"),
+        label="mutant",
+        tree_paths=tree,
+        allow_generated_path_drift=False,
+        errors=errors,
+    )
+    assert any(marker in error for error in errors)
+
+
+@pytest.mark.parametrize("mutation", ["provisions-type", "duplicate-citation"])
+def test_closure_provisions_are_a_list_with_unique_citations(mutation: str):
+    closure = _load_script("closure_universe")
+    row = {"citation": "us/test/a", "heading": "A", "status": "pending"}
+    rows: object = {} if mutation == "provisions-type" else [row, copy.deepcopy(row)]
+    errors: list[str] = []
+    closure._validate_provision_rows(
+        rows,
+        config=closure.RootConfig("synthetic", "source", "us/test", "us/tests"),
+        label="mutant",
+        tree_paths=set(),
+        allow_generated_path_drift=False,
+        errors=errors,
+    )
+    assert errors
+
+
+@pytest.mark.parametrize(
+    "path",
+    [
+        pytest.param(" us/tests/a.yaml", id="whitespace"),
+        pytest.param("/us/tests/a.yaml", id="absolute"),
+        pytest.param("us/tests/../a.yaml", id="traversal"),
+        pytest.param("us\\tests\\a.yaml", id="backslash"),
+        pytest.param("us/tests/a.json", id="extension"),
+        pytest.param("us/tests/a.test.yaml", id="test-module"),
+    ],
+)
+def test_closure_named_modules_must_be_safe_production_yaml_paths(path: str):
+    closure = _load_script("closure_universe")
+    errors: list[str] = []
+    closure._validate_encoded_by(
+        [path], label="mutant", tree_paths={path}, errors=errors
+    )
+    assert any("safe, non-test" in error for error in errors)
+
+
+@pytest.mark.xfail(
+    strict=True,
+    reason="CLOSURE-GAP-basis-grounding: any nonblank exclusion prose is accepted",
+)
+def test_closure_exclusion_basis_must_be_grounded_in_pinned_source_text():
+    closure = _load_script("closure_universe")
+    config = closure.ROOTS[0]
+    errors: list[str] = []
+    closure._validate_provision_rows(
+        [
+            {
+                "citation": f"{config.citation_root}/eligibility-formula",
+                "heading": "Eligibility amount formula",
+                "status": "excluded",
+                "reason": "no_household_computation",
+                "basis": "Reviewed.",
+            }
+        ],
+        config=config,
+        label="mutant",
+        tree_paths=set(),
+        allow_generated_path_drift=False,
+        errors=errors,
+    )
+    assert errors
+
+
+def test_closure_note_survives_while_heading_refreshes_from_pinned_source():
+    closure = _load_script("closure_universe")
+    config = closure.RootConfig("synthetic", "source", "us/test", "us/tests")
+    rows = closure._merge_provisions(
+        config,
+        [{"citation": "us/test/a", "heading": "New heading"}],
+        set(),
+        [
+            {
+                "citation": "us/test/a",
+                "heading": "Old heading",
+                "status": "pending",
+                "note": "Reviewed note.",
+            }
+        ],
+    )
+    assert rows == [
+        {
+            "citation": "us/test/a",
+            "heading": "New heading",
+            "status": "pending",
+            "note": "Reviewed note.",
+        }
+    ]
+
+
+def test_closure_join_found_module_requires_partial_coverage_statement():
+    closure = _load_script("closure_universe")
+    errors: list[str] = []
+    closure._validate_provision_rows(
+        [
+            {
+                "citation": "us/test/a",
+                "heading": "A",
+                "status": "pending",
+                "join_found_module": "us/tests/a.yaml",
+            }
+        ],
+        config=closure.RootConfig("synthetic", "source", "us/test", "us/tests"),
+        label="mutant",
+        tree_paths={"us/tests/a.yaml"},
+        allow_generated_path_drift=False,
+        errors=errors,
+    )
+    assert any("requires `partial_coverage`" in error for error in errors)
+
+
+@pytest.mark.xfail(
+    strict=True,
+    reason="CLOSURE-GAP-partial-binding: disclosure is not bound to a joined/deferred module",
+)
+def test_closure_partial_coverage_requires_present_joined_deferred_module():
+    closure = _load_script("closure_universe")
+    errors: list[str] = []
+    closure._validate_provision_rows(
+        [
+            {
+                "citation": "us/test/a",
+                "heading": "A",
+                "status": "pending",
+                "partial_coverage": "An unspecified module defers an output.",
+                "join_found_module": "us/tests/ghost.yaml",
+            }
+        ],
+        config=closure.RootConfig("synthetic", "source", "us/test", "us/tests"),
+        label="mutant",
+        tree_paths=set(),
+        allow_generated_path_drift=False,
+        errors=errors,
+    )
+    assert errors
+
+
+@pytest.mark.parametrize("mutant", ["missing-universe", "missing-summary", "stale-summary"])
+def test_closure_check_is_read_only_and_rejects_missing_or_stale_artifacts(
+    tmp_path: Path,
+    mutant: str,
+):
+    helpers = _load_closure_test_helpers()
+    closure, closure_dir = helpers._generate_baseline(tmp_path)
+    if mutant == "missing-universe":
+        target = (
+            closure_dir
+            / "universes"
+            / "us-co-snap"
+            / helpers.STATE_UNIVERSE
+        )
+        target.unlink()
+    else:
+        target = closure_dir / "summary.json"
+        if mutant == "missing-summary":
+            target.unlink()
+        else:
+            target.write_text(target.read_text() + " \n")
+    before = {
+        path: path.read_bytes()
+        for path in closure_dir.rglob("*")
+        if path.is_file()
+    }
+    assert closure.run(closure_dir, check=True) == 1
+    after = {
+        path: path.read_bytes()
+        for path in closure_dir.rglob("*")
+        if path.is_file()
+    }
+    assert after == before
+
+
+def test_closure_summary_counts_reasons_and_closed_are_exact():
+    closure = _load_script("closure_universe")
+    universes = {
+        "a": {
+            "ratchet": {"pins_sha256": "1" * 64, "pending_max": 0},
+            "provisions": [
+                {
+                    "citation": "us/test/a",
+                    "heading": "A",
+                    "status": "excluded",
+                    "reason": "reserved",
+                    "basis": "Reserved.",
+                },
+                {
+                    "citation": "us/test/b",
+                    "heading": "B",
+                    "status": "encoded",
+                    "encoded_by": ["us/tests/b.yaml"],
+                },
+            ],
+        },
+        "b": {
+            "ratchet": {"pins_sha256": "2" * 64, "pending_max": 1},
+            "provisions": [
+                {"citation": "us/test/c", "heading": "C", "status": "pending"}
+            ],
+        },
+    }
+    errors: list[str] = []
+    summary = closure._summary_document(
+        universes, tree_paths={"us/tests/b.yaml"}, errors=errors
+    )
+    assert not errors
+    assert summary["closed"] is False
+    assert summary["roots"][0]["by_status"] == {
+        "encoded": 1,
+        "excluded": 1,
+        "pending": 0,
+    }
+    assert summary["roots"][0]["by_reason"] == {"reserved": 1}
+
+
+def test_closure_generate_writes_exact_artifact_set_deterministically(tmp_path: Path):
+    helpers = _load_closure_test_helpers()
+    closure = _load_script("closure_universe")
+    closure_dir = helpers._write_inputs(tmp_path)
+    assert closure.run(closure_dir, check=False) == 0
+    paths = sorted(
+        path.relative_to(closure_dir).as_posix()
+        for path in closure_dir.rglob("*")
+        if path.is_file() and ("universes/" in path.as_posix() or path.name == "summary.json")
+    )
+    assert paths == [
+        "summary.json",
+        "universes/us-co-snap/state-10-ccr-2506-1.yaml",
+        "universes/us-co-snap/us-7-cfr-273.yaml",
+        "universes/us-co-snap/us-7-usc-51.yaml",
+    ]
+    before = {path: path.read_bytes() for path in closure_dir.rglob("*") if path.is_file()}
+    assert closure.run(closure_dir, check=False) == 0
+    after = {path: path.read_bytes() for path in closure_dir.rglob("*") if path.is_file()}
+    assert after == before
+
+
+@pytest.mark.xfail(
+    strict=True,
+    reason="CLOSURE-GAP-empty-denominator: zero pinned rows yield closed=true",
+)
+def test_closure_empty_pinned_denominator_cannot_be_closed():
+    closure = _load_script("closure_universe")
+    universes = {
+        config.root: {
+            "ratchet": {"pins_sha256": "0" * 64, "pending_max": 0},
+            "provisions": [],
+        }
+        for config in closure.ROOTS
+    }
+    errors: list[str] = []
+    summary = closure._summary_document(universes, tree_paths=set(), errors=errors)
+    assert errors or summary["closed"] is False
+
+
+def test_closure_v1_ratchet_migration_requires_both_matching_copies():
+    closure = _load_script("closure_universe")
+    config = closure.ROOTS[0]
+    provenance = {
+        "source_file": config.source_file,
+        "source_repo": "repo",
+        "source_ref": "ref",
+        "source_sha256": "1" * 64,
+        "rulespec_file": closure.TREE_FILE,
+        "rulespec_repo": "repo",
+        "rulespec_ref": "ref",
+        "rulespec_sha256": "2" * 64,
+    }
+    current = closure._pins_sha256(provenance)
+    committed = {
+        "provenance": provenance,
+        "ratchet": {"pending_max": 3},
+    }
+    summary = {"pending_max": 3}
+    errors: list[str] = []
+    baseline = closure._ratchet_baseline(
+        config,
+        committed=committed,
+        summary_row=summary,
+        current_pins=current,
+        errors=errors,
+    )
+    assert baseline == closure.RatchetBaseline(current, 3)
+    assert not errors
+
+    committed["ratchet"]["pins_sha256"] = current
+    errors = []
+    assert (
+        closure._ratchet_baseline(
+            config,
+            committed=committed,
+            summary_row=summary,
+            current_pins=current,
+            errors=errors,
+        )
+        is None
+    )
+    assert any("missing from the summary" in error for error in errors)
+
+
+def test_closure_source_pin_change_starts_new_ratchet_baseline(tmp_path: Path):
+    helpers = _load_closure_test_helpers()
+    closure, closure_dir = helpers._generate_baseline(tmp_path)
+    source = closure_dir / "data" / "co-provisions.jsonl"
+    added = helpers._provision(
+        "us-co/regulation/10-ccr-2506-1/4.101",
+        "10 CCR 2506-1 4.101",
+        version="2026-07-16-10-ccr-2506-1",
+    )
+    source.write_text(source.read_text() + json.dumps(added) + "\n")
+    helpers._update_snapshot_hash(closure_dir, "co-provisions.jsonl")
+    assert closure.main(["--generate", "--closure-dir", str(closure_dir)]) == 0
+    _path, document = helpers._load_universe(closure_dir, helpers.STATE_UNIVERSE)
+    assert document["ratchet"]["pending_max"] == 2
+
+
+def test_closure_ratchet_fingerprint_ignores_descriptive_provenance_text():
+    closure = _load_script("closure_universe")
+    first = {
+        "source_file": "source.jsonl",
+        "source_repo": "old repo",
+        "source_ref": "old ref",
+        "source_sha256": "1" * 64,
+        "rulespec_file": closure.TREE_FILE,
+        "rulespec_repo": "old repo",
+        "rulespec_ref": "old ref",
+        "rulespec_sha256": "2" * 64,
+    }
+    second = {
+        **first,
+        "source_repo": "new repo",
+        "source_ref": "new ref",
+        "rulespec_repo": "new repo",
+        "rulespec_ref": "new ref",
+    }
+    assert closure._pins_sha256(first) == closure._pins_sha256(second)
+
+
+def test_closure_rejects_shallow_checkout_for_history_ratchet(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+):
+    closure = _load_script("closure_universe")
+    closure_dir = tmp_path / "closure"
+    closure_dir.mkdir()
+
+    def git_result(_repo: Path, *args: str):
+        if args == ("rev-parse", "--show-toplevel"):
+            return subprocess.CompletedProcess(args, 0, stdout=f"{tmp_path}\n".encode())
+        if args == ("rev-parse", "--is-shallow-repository"):
+            return subprocess.CompletedProcess(args, 0, stdout=b"true\n")
+        raise AssertionError(args)
+
+    monkeypatch.setattr(closure, "_run_git", git_result)
+    errors: list[str] = []
+    assert (
+        closure._history_ratchet_baseline(
+            closure_dir,
+            closure.ROOTS[0],
+            current_pins="0" * 64,
+            errors=errors,
+        )
+        is None
+    )
+    assert any("shallow Git checkout" in error for error in errors)
+
+
+def test_closure_pending_rise_exceeding_disclosures_is_rejected():
+    closure = _load_script("closure_universe")
+    config = closure.RootConfig("synthetic", "source", "us/test", "us/tests")
+    snapshots = {
+        "source": {
+            "source_repo": "repo",
+            "source_ref": "ref",
+            "sha256": "1" * 64,
+        },
+        closure.TREE_FILE: {
+            "source_repo": "repo",
+            "source_ref": "ref",
+            "sha256": "2" * 64,
+        },
+    }
+    provenance = closure._generated_provenance(config, snapshots)
+    source_rows = [
+        {"citation": f"us/test/{name}", "heading": name} for name in ("a", "b")
+    ]
+    committed = [
+        {
+            "citation": "us/test/a",
+            "heading": "a",
+            "status": "pending",
+            "partial_coverage": "A deferred output.",
+        },
+        {"citation": "us/test/b", "heading": "b", "status": "pending"},
+    ]
+    errors: list[str] = []
+    closure._build_universe(
+        config,
+        source_rows=source_rows,
+        tree_paths={"us/tests/a.yaml"},
+        snapshots=snapshots,
+        committed_rows=committed,
+        baseline=closure.RatchetBaseline(closure._pins_sha256(provenance), 0),
+        errors=errors,
+    )
+    assert any("only 1 of the 2" in error for error in errors)
+
+
+@pytest.mark.xfail(
+    strict=True,
+    reason="CLOSURE-GAP-ratchet-disclosure: old disclosures mask unrelated reopenings",
+)
+def test_closure_existing_disclosure_cannot_mask_unrelated_pending_rise():
+    closure = _load_script("closure_universe")
+    config = closure.RootConfig("synthetic", "source", "us/test", "us/tests")
+    snapshots = {
+        "source": {"source_repo": "repo", "source_ref": "ref", "sha256": "1" * 64},
+        closure.TREE_FILE: {
+            "source_repo": "repo",
+            "source_ref": "ref",
+            "sha256": "2" * 64,
+        },
+    }
+    provenance = closure._generated_provenance(config, snapshots)
+    errors: list[str] = []
+    closure._build_universe(
+        config,
+        source_rows=[
+            {"citation": "us/test/a", "heading": "A"},
+            {"citation": "us/test/b", "heading": "B"},
+        ],
+        tree_paths={"us/tests/a.yaml"},
+        snapshots=snapshots,
+        committed_rows=[
+            {
+                "citation": "us/test/a",
+                "heading": "A",
+                "status": "pending",
+                "partial_coverage": "Old disclosed deferred output.",
+            },
+            {"citation": "us/test/b", "heading": "B", "status": "pending"},
+        ],
+        baseline=closure.RatchetBaseline(closure._pins_sha256(provenance), 1),
+        errors=errors,
+    )
+    assert errors
+
+
+def test_closure_published_universe_counts_match_reviewed_result():
+    summary = json.loads((REPO_ROOT / "closure" / "summary.json").read_text())
+    assert summary["closed"] is False
+    assert {
+        row["root"]: (row["total"], row["by_status"])
+        for row in summary["roots"]
+    } == {
+        "state-10-ccr-2506-1": (
+            290,
+            {"encoded": 281, "excluded": 9, "pending": 0},
+        ),
+        "us-7-cfr-273": (
+            39,
+            {"encoded": 2, "excluded": 14, "pending": 23},
+        ),
+        "us-7-usc-51": (
+            827,
+            {"encoded": 16, "excluded": 544, "pending": 267},
+        ),
+    }
+
+
+@pytest.mark.xfail(
+    strict=True,
+    reason="CLOSURE-GAP-source-path: provenance records but does not require source_path",
+)
+def test_closure_snapshot_provenance_requires_source_path(tmp_path: Path):
+    helpers = _load_closure_test_helpers()
+    closure_dir = helpers._write_inputs(tmp_path)
+    closure = _load_script("closure_universe")
+    path = closure_dir / "data" / "provenance.yaml"
+    document = yaml.safe_load(path.read_text())
+    for snapshot in document["snapshots"]:
+        snapshot.pop("source_path", None)
+    path.write_text(yaml.safe_dump(document, sort_keys=False))
+    errors: list[str] = []
+    closure._load_provenance(closure_dir / "data", errors)
+    assert any("source_path" in error for error in errors)
+
+
+# ---------------------------------------------------------------------------
+# scripts/merge_closure_classifications.py
+
+
+def _merge_workspace(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    *,
+    provision: dict | None = None,
+    pending_max: int = 1,
+) -> tuple[ModuleType, Path, Path, Path]:
+    merge = _load_script("merge_closure_classifications")
+    universes = tmp_path / "universes"
+    classifications = tmp_path / "classifications"
+    universes.mkdir()
+    classifications.mkdir()
+    tree = tmp_path / "rulespec-us-files.txt"
+    tree.write_text("us/tests/a.yaml\nus/tests/corrected.yaml\n")
+    if provision is None:
+        provision = {"citation": "us/test/a", "heading": "A", "status": "pending"}
+    universe = {
+        "schema": "axiom_oracles.closure_universe.v1",
+        "program": "us-co/snap",
+        "root": "synthetic",
+        "ratchet": {"pins_sha256": "0" * 64, "pending_max": pending_max},
+        "provisions": [provision],
+    }
+    universe_path = universes / "synthetic.yaml"
+    universe_path.write_text(
+        "# generated header\n" + yaml.safe_dump(universe, sort_keys=False)
+    )
+    monkeypatch.setattr(merge, "UNIVERSE_DIR", universes)
+    monkeypatch.setattr(merge, "PINNED_TREE", tree)
+    return merge, classifications, universe_path, tree
+
+
+def _write_classification(path: Path, row: object, *, root: str = "rows") -> None:
+    payload: object = {root: [row]} if root else [row]
+    path.write_text(yaml.safe_dump(payload, sort_keys=False))
+
+
+@pytest.mark.parametrize("root", ["", "rows", "provisions"])
+def test_merge_closure_accepts_list_rows_and_provisions_roots(
+    tmp_path: Path,
+    root: str,
+):
+    merge = _load_script("merge_closure_classifications")
+    path = tmp_path / "classifications.yaml"
+    row = {"citation": "us/test/a", "status": "pending"}
+    _write_classification(path, row, root=root)
+    assert merge._rows_from(path) == [row]
+
+
+@pytest.mark.xfail(
+    strict=True,
+    reason="MERGE-GAP-ingestion: malformed or citation-less rows are silently dropped",
+)
+@pytest.mark.parametrize(
+    "row",
+    [
+        pytest.param({"citaiton": "us/test/a", "status": "pending"}, id="citation"),
+        pytest.param("not-a-map", id="mapping"),
+    ],
+)
+def test_merge_closure_rejects_rows_it_cannot_ingest(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    row: object,
+):
+    merge, classifications, _universe, _tree = _merge_workspace(
+        tmp_path, monkeypatch
+    )
+    _write_classification(classifications / "mutant.yaml", row)
+    assert merge.main(["--in", str(classifications), "--dry-run"]) != 0
+
+
+def test_merge_closure_rejects_duplicate_classification_without_writing(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+):
+    merge, classifications, universe, _tree = _merge_workspace(tmp_path, monkeypatch)
+    row = {"citation": "us/test/a", "status": "pending"}
+    _write_classification(classifications / "a.yaml", row)
+    _write_classification(classifications / "b.yaml", row)
+    before = universe.read_bytes()
+    assert merge.main(["--in", str(classifications)]) == 1
+    assert universe.read_bytes() == before
+
+
+@pytest.mark.parametrize(
+    ("mutation", "marker"),
+    [
+        pytest.param("absent", "not present", id="absent-citation"),
+        pytest.param("unknown", "unknown status", id="unknown-status"),
+        pytest.param("no-reason", "without a reason", id="exclusion-reason"),
+        pytest.param("no-basis", "without a basis", id="exclusion-basis"),
+        pytest.param("taxonomy", "outside the taxonomy", id="taxonomy"),
+        pytest.param("operationalized", "absent from the pinned", id="operationalized"),
+        pytest.param("downgrade-note", "requires a note", id="downgrade-note"),
+        pytest.param("encoded-path", "absent from tree", id="encoded-path"),
+        pytest.param("pending-rise", "RAISE pending", id="pending-rise"),
+    ],
+)
+def test_merge_closure_refusals_return_nonzero_and_write_nothing(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+    mutation: str,
+    marker: str,
+):
+    provision = {"citation": "us/test/a", "heading": "A", "status": "pending"}
+    pending_max = 1
+    row: dict = {"citation": "us/test/a", "status": "excluded", "reason": "reserved", "basis": "Reserved."}
+    if mutation == "absent":
+        row["citation"] = "us/test/missing"
+    elif mutation == "unknown":
+        row["status"] = "done"
+    elif mutation == "no-reason":
+        row.pop("reason")
+    elif mutation == "no-basis":
+        row.pop("basis")
+    elif mutation == "taxonomy":
+        row["reason"] = "invented"
+    elif mutation == "operationalized":
+        row["reason"] = "operationalized_by: us/tests/ghost.yaml"
+    elif mutation == "downgrade-note":
+        provision = {
+            "citation": "us/test/a",
+            "heading": "A",
+            "status": "encoded",
+            "encoded_by": ["us/tests/a.yaml"],
+        }
+        pending_max = 1
+        row = {"citation": "us/test/a", "status": "pending"}
+    elif mutation == "encoded-path":
+        row = {
+            "citation": "us/test/a",
+            "status": "encoded",
+            "encoded_by": ["us/tests/ghost.yaml"],
+        }
+    else:
+        pending_max = 0
+        row = {"citation": "us/test/a", "status": "pending"}
+    merge, classifications, universe, _tree = _merge_workspace(
+        tmp_path,
+        monkeypatch,
+        provision=provision,
+        pending_max=pending_max,
+    )
+    _write_classification(classifications / "mutant.yaml", row)
+    before = universe.read_bytes()
+    assert merge.main(["--in", str(classifications)]) == 1
+    assert marker in capsys.readouterr().err
+    assert universe.read_bytes() == before
+
+
+@pytest.mark.xfail(
+    strict=True,
+    reason="MERGE-GAP-basis-grounding: arbitrary nonblank basis text is accepted",
+)
+def test_merge_closure_exclusion_basis_is_grounded_in_provision_text(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+):
+    merge, classifications, _universe, _tree = _merge_workspace(tmp_path, monkeypatch)
+    _write_classification(
+        classifications / "mutant.yaml",
+        {
+            "citation": "us/test/a",
+            "status": "excluded",
+            "reason": "no_household_computation",
+            "basis": "Reviewed.",
+        },
+    )
+    assert merge.main(["--in", str(classifications), "--dry-run"]) != 0
+
+
+@pytest.mark.xfail(
+    strict=True,
+    reason="MERGE-GAP-deferred-binding: downgrade note is not checked against module content",
+)
+def test_merge_closure_downgrade_requires_actual_deferred_outputs(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+):
+    provision = {
+        "citation": "us/test/a",
+        "heading": "A",
+        "status": "encoded",
+        "encoded_by": ["us/tests/a.yaml"],
+    }
+    merge, classifications, _universe, _tree = _merge_workspace(
+        tmp_path, monkeypatch, provision=provision
+    )
+    _write_classification(
+        classifications / "mutant.yaml",
+        {
+            "citation": "us/test/a",
+            "status": "pending",
+            "note": "Claims a deferred output, but no module bytes are available.",
+        },
+    )
+    assert merge.main(["--in", str(classifications), "--dry-run"]) != 0
+
+
+@pytest.mark.parametrize("action", ["exclude", "downgrade", "pending-note", "encode"])
+def test_merge_closure_successful_actions_write_reviewed_fields_and_preserve_header(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    action: str,
+):
+    provision = {"citation": "us/test/a", "heading": "A", "status": "pending"}
+    if action == "downgrade":
+        provision = {
+            "citation": "us/test/a",
+            "heading": "A",
+            "status": "encoded",
+            "encoded_by": ["us/tests/a.yaml"],
+        }
+    merge, classifications, universe, _tree = _merge_workspace(
+        tmp_path, monkeypatch, provision=provision
+    )
+    if action == "exclude":
+        row = {
+            "citation": "us/test/a",
+            "status": "excluded",
+            "reason": "operationalized_by:   us/tests/a.yaml",
+            "basis": "The provision delegates this computation.",
+        }
+    elif action == "downgrade":
+        row = {
+            "citation": "us/test/a",
+            "status": "pending",
+            "note": "  module   defers   benefit  ",
+        }
+    elif action == "pending-note":
+        row = {
+            "citation": "us/test/a",
+            "status": "pending",
+            "note": "  reviewed   later  ",
+        }
+    else:
+        row = {
+            "citation": "us/test/a",
+            "status": "encoded",
+            "encoded_by": ["us/tests/corrected.yaml"],
+        }
+    _write_classification(classifications / "review.yaml", row)
+    assert merge.main(["--in", str(classifications)]) == 0
+    assert universe.read_text().startswith("# generated header\n")
+    document = yaml.safe_load(universe.read_text())
+    result = document["provisions"][0]
+    assert document["ratchet"]["pending_max"] == 1
+    if action == "exclude":
+        assert result["status"] == "excluded"
+        assert result["reason"] == "operationalized_by: us/tests/a.yaml"
+        assert "encoded_by" not in result
+    elif action == "downgrade":
+        assert result["status"] == "pending"
+        assert result["partial_coverage"] == "module defers benefit"
+        assert "encoded_by" not in result
+    elif action == "pending-note":
+        assert result["note"] == "reviewed later"
+    else:
+        assert result["encoded_by"] == ["us/tests/corrected.yaml"]
+
+
+def test_merge_closure_dry_run_writes_nothing(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+):
+    merge, classifications, universe, _tree = _merge_workspace(tmp_path, monkeypatch)
+    _write_classification(
+        classifications / "review.yaml",
+        {
+            "citation": "us/test/a",
+            "status": "excluded",
+            "reason": "reserved",
+            "basis": "The provision is reserved.",
+        },
+    )
+    before = universe.read_bytes()
+    assert merge.main(["--in", str(classifications), "--dry-run"]) == 0
+    assert universe.read_bytes() == before
+
+
+@pytest.mark.xfail(
+    strict=True,
+    reason="MERGE-GAP-encoding-shape: empty, duplicate, or unsafe encoded_by is accepted",
+)
+@pytest.mark.parametrize(
+    "paths",
+    [
+        pytest.param([], id="empty"),
+        pytest.param(["us/tests/a.yaml", "us/tests/a.yaml"], id="duplicate"),
+        pytest.param(["../escape.yaml"], id="unsafe"),
+    ],
+)
+def test_merge_closure_rejects_invalid_encoded_by(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    paths: list[str],
+):
+    merge, classifications, _universe, tree = _merge_workspace(tmp_path, monkeypatch)
+    if paths:
+        tree.write_text(tree.read_text() + "\n".join(paths) + "\n")
+    _write_classification(
+        classifications / "mutant.yaml",
+        {"citation": "us/test/a", "status": "encoded", "encoded_by": paths},
+    )
+    assert merge.main(["--in", str(classifications), "--dry-run"]) != 0
+
+
+@pytest.mark.xfail(
+    strict=True,
+    reason="MERGE-GAP-status-invariants: encoding an excluded row leaves reason/basis",
+)
+def test_merge_closure_encoded_correction_removes_exclusion_fields(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+):
+    provision = {
+        "citation": "us/test/a",
+        "heading": "A",
+        "status": "excluded",
+        "reason": "reserved",
+        "basis": "Reserved.",
+    }
+    merge, classifications, _universe, _tree = _merge_workspace(
+        tmp_path, monkeypatch, provision=provision
+    )
+    _write_classification(
+        classifications / "mutant.yaml",
+        {
+            "citation": "us/test/a",
+            "status": "encoded",
+            "encoded_by": ["us/tests/a.yaml"],
+        },
+    )
+    assert merge.main(["--in", str(classifications), "--dry-run"]) != 0
+
+
+@pytest.mark.xfail(
+    strict=True,
+    reason="MERGE-DOC-GAP-ratchet: stale docstring says merger lowers pending_max",
+)
+def test_merge_closure_lowers_pending_max_as_docstring_promises(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+):
+    merge, classifications, universe, _tree = _merge_workspace(tmp_path, monkeypatch)
+    _write_classification(
+        classifications / "review.yaml",
+        {
+            "citation": "us/test/a",
+            "status": "excluded",
+            "reason": "reserved",
+            "basis": "The provision is reserved.",
+        },
+    )
+    assert merge.main(["--in", str(classifications)]) == 0
+    document = yaml.safe_load(universe.read_text())
+    assert document["ratchet"]["pending_max"] == 0
+
+
+def test_merge_then_closure_rejects_module_from_unpinned_tree_bytes(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+):
+    helpers = _load_closure_test_helpers()
+    closure, closure_dir = helpers._generate_baseline(tmp_path)
+    merge = _load_script("merge_closure_classifications")
+    tree = closure_dir / "data" / "rulespec-us-files.txt"
+    corrected = "us-co/regulations/10-ccr-2506-1/corrected.yaml"
+    tree.write_text(tree.read_text() + corrected + "\n")
+    classifications = tmp_path / "classifications"
+    classifications.mkdir()
+    _write_classification(
+        classifications / "review.yaml",
+        {
+            "citation": "us-co/regulation/10-ccr-2506-1/4.100",
+            "status": "encoded",
+            "encoded_by": [corrected],
+        },
+    )
+    monkeypatch.setattr(
+        merge, "UNIVERSE_DIR", closure_dir / "universes" / "us-co-snap"
+    )
+    monkeypatch.setattr(merge, "PINNED_TREE", tree)
+    assert merge.main(["--in", str(classifications)]) == 0
+    assert closure.main(["--check", "--closure-dir", str(closure_dir)]) == 1
