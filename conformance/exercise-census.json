@@ -1685,7 +1685,7 @@
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
       "report": "dashboard/public/data/axiom-euromod-be-study-allowance.json",
-      "report_sha256": "f341bf45451d64bdd10fd0c2941b21ecb8474e40b02b91cad55a426db202c0c5",
+      "report_sha256": "d8d14d45dd2c1bb9b2ab5d87e21f4ae6ade55d8af7b625fe49a07a0a96e5504c",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
