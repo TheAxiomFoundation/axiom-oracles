@@ -6625,7 +6625,7 @@
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
       "report": "dashboard/public/data/axiom-policyengine-uk-capital-gains-tax.json",
-      "report_sha256": "78519a1f3ffb5e828250665f3e39aa0f5bca2c083ae84b9cf0f43b794c2386ba",
+      "report_sha256": "e920eb896617328faf321fe50712e2a2c607dc46d6a496e3b66c4ac372f7423a",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
