@@ -947,7 +947,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-be-capital-income-tax.json",
-      "report_sha256": "19489e16609369dfe02634b2fe4c0b9bfc1a6abcb59de646338e313a74da04f1",
+      "report_sha256": "c6e3869e7a6595d8ac88d959d43529772b936ee6c0270f3c6fe84c17da8666da",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -5017,7 +5017,7 @@
       "inline_cases_not_counted": 722,
       "reconciliation": "cardinality",
       "report": "dashboard/public/data/axiom-snapqc-md-snap.json",
-      "report_sha256": "6d2dc8df2ece0ca01db655f9f98453658aef08c95db5734cfb68315710ea888f",
+      "report_sha256": "bad2387dd964fe1fdc5e07105544b77bd0c67ffb32b50155c8b14da712ffb89b",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
