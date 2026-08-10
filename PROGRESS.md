@@ -5,7 +5,7 @@
 - Branch: `autogo/gate-regression-coverage`
 - Base: latest locally available `origin/main` at `a365aac2`
 - Mode: defensive correctness and completeness audit; gate implementations are read-only
-- Current phase: delivery; implementation, traceability report, and verification are complete
+- Current phase: implementation, traceability report, and verification are complete; remote delivery is blocked by environment connectivity/authentication
 
 ## Done
 
@@ -17,8 +17,11 @@
 - Verified the focused suite: 315 passed, 46 xfailed.
 - Verified certificate, census, bridge-manifest, and closure checks against the rebased tree.
 - Ran the full suite: 2,790 passed, 35 skipped, 46 xfailed, with one unrelated npm DNS failure in the dashboard loader test.
+- Attempted both fetch and push; Git failed before contacting the remote because `github.com` could not resolve.
+- Checked the only local PR route; `gh auth status` reports the saved `MaxGhenis` token is invalid, and no GitHub connector is installed.
 
 ## Next
 
-- Push the committed branch and open a draft PR once GitHub is reachable; the latest fetch attempt failed because `github.com` could not resolve.
+- Restore GitHub DNS/network access and authenticate either Git/`gh` or the GitHub connector.
+- Push `autogo/gate-regression-coverage` and open the prepared change as a draft PR against `main`.
 - Record the draft PR URL here and push that final delivery update.
