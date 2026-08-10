@@ -8,6 +8,8 @@ own contract.  Gate implementations are deliberately never patched here.
 from __future__ import annotations
 
 import copy
+from dataclasses import FrozenInstanceError
+from functools import lru_cache
 import hashlib
 import importlib.util
 import json
@@ -2895,3 +2897,995 @@ def test_merge_then_closure_rejects_module_from_unpinned_tree_bytes(
     monkeypatch.setattr(merge, "PINNED_TREE", tree)
     assert merge.main(["--in", str(classifications)]) == 0
     assert closure.main(["--check", "--closure-dir", str(closure_dir)]) == 1
+
+
+# ---------------------------------------------------------------------------
+# origin/evidence-validator:axiom_oracles/evidence.py (read via git show)
+
+
+EVIDENCE_REFS = (
+    "origin/evidence-validator",
+    "evidence-validator",
+    "33a182ee",
+)
+
+
+def _git_branch_source(path: str) -> str:
+    for ref in EVIDENCE_REFS:
+        result = subprocess.run(
+            ["git", "show", f"{ref}:{path}"],
+            cwd=REPO_ROOT,
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        if result.returncode == 0:
+            return result.stdout
+    pytest.skip(f"evidence-validator Git object unavailable for {path}")
+
+
+@lru_cache
+def _evidence_module() -> ModuleType:
+    path = REPO_ROOT / "axiom_oracles" / "evidence.py"
+    source = path.read_text() if path.is_file() else _git_branch_source(
+        "axiom_oracles/evidence.py"
+    )
+    name = "_gate_regression_evidence"
+    module = ModuleType(name)
+    module.__file__ = str(path)
+    module.__package__ = "axiom_oracles"
+    sys.modules[name] = module
+    sys.modules["axiom_oracles.evidence"] = module
+    exec(compile(source, module.__file__, "exec"), module.__dict__)
+    return module
+
+
+def _load_evidence_branch_script(name: str) -> ModuleType:
+    _evidence_module()
+    path = REPO_ROOT / "scripts" / f"{name}.py"
+    source = _git_branch_source(f"scripts/{name}.py")
+    module_name = f"_gate_regression_evidence_branch_{name}"
+    module = ModuleType(module_name)
+    module.__file__ = str(path)
+    sys.modules[module_name] = module
+    exec(compile(source, module.__file__, "exec"), module.__dict__)
+    return module
+
+
+def _full_evidence_documents() -> tuple[dict, list[dict]]:
+    report = {
+        "schema_version": "axiom.comparison_report.v2",
+        "suite": "full-bound",
+        "case_count": 2,
+        "concepts": [
+            {
+                "id": "benefit",
+                "comparison": "amount",
+                "tolerance": 0,
+                "relative_tolerance": 0,
+            }
+        ],
+        "summary": {
+            "comparison_count": 2,
+            "match_count": 1,
+            "mismatch_count": 1,
+        },
+        "aggregates": [
+            {
+                "concept": "benefit",
+                "comparison_count": 2,
+                "comparison_weight": 2,
+                "match_count": 1,
+                "mismatch_count": 1,
+                "left_weighted_sum": 30,
+                "right_weighted_sum": 31,
+            }
+        ],
+        "mismatches": [
+            {
+                "case_id": "case-2",
+                "concept": "benefit",
+                "left": 20,
+                "right": 21,
+                "tolerance": 0,
+                "relative_tolerance": 0,
+            }
+        ],
+        "cases": [],
+    }
+    chunk = [
+        {
+            "id": "case-1",
+            "r": 100,
+            "h": {},
+            "i": [{"n": "income", "v": 10}],
+            "v": [{"c": "benefit", "l": 10, "x": 10}],
+            "m": [],
+        },
+        {
+            "id": "case-2",
+            "r": 0,
+            "h": {},
+            "i": [{"n": "income", "v": 20}],
+            "v": [],
+            "m": [{"c": "benefit", "l": 20, "x": 21, "d": 1}],
+        },
+    ]
+    return report, chunk
+
+
+def _write_full_evidence(
+    tmp_path: Path,
+) -> tuple[ModuleType, Path, Path, Path]:
+    evidence = _evidence_module()
+    report, chunk = _full_evidence_documents()
+    data_dir = tmp_path / "dashboard" / "public" / "data"
+    suite_dir = data_dir / "cases" / report["suite"]
+    suite_dir.mkdir(parents=True)
+    report_path = data_dir / "report.json"
+    chunk_path = suite_dir / "chunk-0.json"
+    index_path = suite_dir / "index.json"
+    report_path.write_text(json.dumps(report, indent=2) + "\n")
+    chunk_path.write_text(json.dumps(chunk, separators=(",", ":")) + "\n")
+    index_path.write_text(
+        json.dumps(evidence.build_chunk_index(report_path), indent=2) + "\n"
+    )
+    validated = evidence.validate_suite_evidence(report_path)
+    assert validated.binding == "bound"
+    assert validated.reconciliation == "full"
+    assert validated.valid is True
+    return evidence, report_path, chunk_path, index_path
+
+
+def _read_evidence(report_path: Path, chunk_path: Path) -> tuple[dict, list[dict]]:
+    return json.loads(report_path.read_text()), json.loads(chunk_path.read_text())
+
+
+def _write_evidence(
+    report_path: Path,
+    chunk_path: Path,
+    report: dict,
+    chunk: object,
+) -> None:
+    report_path.write_text(json.dumps(report, indent=2) + "\n")
+    chunk_path.write_text(json.dumps(chunk, separators=(",", ":")) + "\n")
+
+
+def _refresh_evidence_index(
+    evidence: ModuleType,
+    report_path: Path,
+    chunk_path: Path,
+    index_path: Path,
+    *,
+    refresh_verdict_identity: bool = True,
+) -> None:
+    index = json.loads(index_path.read_text())
+    index["report_path"], index["report_sha256"] = evidence.report_identity(
+        report_path
+    )
+    payload = json.loads(chunk_path.read_text())
+    rows = payload if isinstance(payload, list) else payload["cases"]
+    index["chunks"] = [
+        {
+            "name": chunk_path.name,
+            "sha256": evidence.sha256_path(chunk_path),
+            "cases": len(rows),
+        }
+    ]
+    index["chunk_count"] = 1
+    index["count"] = len(rows)
+    if refresh_verdict_identity:
+        result = evidence.validate_suite_evidence(report_path)
+        if result.case_verdicts_sha256 is None:
+            index.pop("case_verdicts_sha256", None)
+        else:
+            index["case_verdicts_sha256"] = result.case_verdicts_sha256
+    index_path.write_text(json.dumps(index, indent=2) + "\n")
+
+
+@pytest.mark.parametrize(
+    ("mutation", "marker"),
+    [
+        pytest.param("non-object", "report must be an object", id="report-object"),
+        pytest.param("count-missing", "summary.match_count is missing", id="count-missing"),
+        pytest.param("count-bool", "is not a non-negative integer", id="count-type"),
+        pytest.param("count-conservation", "summary counts do not conserve", id="counts-conserve"),
+        pytest.param("case-count-type", "case_count is not a non-negative integer", id="case-count-type"),
+        pytest.param("case-count-drift", "does not match 2 parsed cases", id="case-count-drift"),
+        pytest.param("chunk-envelope", "object with a cases array", id="chunk-envelope"),
+        pytest.param("inline-match-type", ".matched must be a boolean", id="inline-match-type"),
+    ],
+)
+def test_evidence_report_count_case_and_chunk_shape_mutants(
+    tmp_path: Path,
+    mutation: str,
+    marker: str,
+):
+    evidence, report_path, chunk_path, _index_path = _write_full_evidence(tmp_path)
+    report, chunk = _read_evidence(report_path, chunk_path)
+    if mutation == "non-object":
+        report_path.write_text("[]\n")
+    elif mutation == "count-missing":
+        del report["summary"]["match_count"]
+        report_path.write_text(json.dumps(report))
+    elif mutation == "count-bool":
+        report["summary"]["comparison_count"] = True
+        report_path.write_text(json.dumps(report))
+    elif mutation == "count-conservation":
+        report["summary"]["comparison_count"] = 3
+        report_path.write_text(json.dumps(report))
+    elif mutation == "case-count-type":
+        report["case_count"] = True
+        report_path.write_text(json.dumps(report))
+    elif mutation == "case-count-drift":
+        report["case_count"] = 3
+        report_path.write_text(json.dumps(report))
+    elif mutation == "chunk-envelope":
+        chunk_path.write_text(json.dumps({"cases": {}}))
+    else:
+        report["case_count"] = 3
+        report["cases"] = [{"case_id": "inline", "matched": 1}]
+        report_path.write_text(json.dumps(report))
+    result = evidence.validate_suite_evidence(report_path)
+    assert any(marker in defect for defect in result.content_defects), result.defects
+
+
+@pytest.mark.parametrize(
+    ("field", "counts", "actual"),
+    [
+        pytest.param(
+            "comparison_count",
+            {"comparison_count": 3, "match_count": 2, "mismatch_count": 1},
+            2,
+            id="comparison",
+        ),
+        pytest.param(
+            "match_count",
+            {"comparison_count": 2, "match_count": 0, "mismatch_count": 2},
+            1,
+            id="matches",
+        ),
+        pytest.param(
+            "mismatch_count",
+            {"comparison_count": 2, "match_count": 2, "mismatch_count": 0},
+            1,
+            id="mismatches",
+        ),
+    ],
+)
+def test_evidence_full_reconciliation_recomputes_each_summary_count(
+    tmp_path: Path,
+    field: str,
+    counts: dict,
+    actual: int,
+):
+    evidence, report_path, _chunk_path, _index_path = _write_full_evidence(tmp_path)
+    report = json.loads(report_path.read_text())
+    report["summary"] = counts
+    report_path.write_text(json.dumps(report))
+    result = evidence.validate_suite_evidence(report_path)
+    assert any(
+        f"summary.{field}" in defect
+        and f"parsed per-case verdicts {actual}" in defect
+        for defect in result.content_defects
+    )
+
+
+def test_evidence_cardinality_recomputes_chunk_row_count(tmp_path: Path):
+    evidence = _evidence_module()
+    data = tmp_path / "dashboard/public/data"
+    suite_dir = data / "cases/cardinality"
+    suite_dir.mkdir(parents=True)
+    report_path = data / "report.json"
+    report_path.write_text(
+        json.dumps(
+            {
+                "suite": "cardinality",
+                "case_count": 1,
+                "summary": {
+                    "comparison_count": 2,
+                    "match_count": 2,
+                    "mismatch_count": 0,
+                },
+                "cases": [],
+            }
+        )
+    )
+    (suite_dir / "chunk-0.json").write_text(
+        json.dumps([{"id": "case-1", "r": None, "h": {}, "m": []}])
+    )
+    result = evidence.validate_suite_evidence(report_path)
+    assert result.reconciliation == "cardinality"
+    assert any("parsed chunk cardinality 1" in defect for defect in result.content_defects)
+
+
+def test_evidence_zero_cases_is_an_explicit_execution_evidence_defect(
+    tmp_path: Path,
+):
+    evidence = _evidence_module()
+    data = tmp_path / "dashboard/public/data"
+    data.mkdir(parents=True)
+    report_path = data / "report.json"
+    report_path.write_text(
+        json.dumps(
+            {
+                "suite": "empty",
+                "case_count": 0,
+                "summary": {
+                    "comparison_count": 0,
+                    "match_count": 0,
+                    "mismatch_count": 0,
+                },
+                "cases": [],
+            }
+        )
+    )
+    result = evidence.validate_suite_evidence(report_path)
+    assert any(
+        "no committed per-case execution evidence" in defect
+        for defect in result.content_defects
+    )
+
+
+@pytest.mark.parametrize(
+    ("mutation", "marker"),
+    [
+        pytest.param("id-type", "case id must be", id="id-type"),
+        pytest.param("id-empty", "empty case id", id="id-empty"),
+        pytest.param("id-text-collision", "duplicate case id '1'", id="id-normalization"),
+        pytest.param("cross-source-collision", "duplicate case id", id="cross-source-id"),
+        pytest.param("missing-r", ".r is missing", id="r-missing"),
+        pytest.param("missing-h", ".h is missing", id="h-missing"),
+        pytest.param("missing-m", ".m is missing", id="m-missing"),
+        pytest.param("r-type", ".r must be a finite number or null", id="r-type"),
+        pytest.param("h-type", ".h must be an object", id="h-type"),
+        pytest.param("m-row", ".m[0] must be an object", id="m-row"),
+        pytest.param("m-values", ".m[0] is missing l, x", id="m-values"),
+        pytest.param("i-type", ".i must be an array", id="i-type"),
+        pytest.param("i-row", ".i[0] must be an object", id="i-row"),
+        pytest.param("i-value", ".i[0] is missing v", id="i-value"),
+        pytest.param("i-name", ".i[0].n must be a non-empty string", id="i-name"),
+        pytest.param("v-type", ".v must be an array", id="v-type"),
+        pytest.param("v-row", ".v[0] must be an object", id="v-row"),
+        pytest.param("v-values", ".v[0] is missing l, x", id="v-values"),
+        pytest.param("disposition", ".e must be a non-empty string", id="disposition"),
+        pytest.param("delta-missing", ".d is missing", id="delta-missing"),
+        pytest.param("delta-nonnumeric", ".d must be null", id="delta-nonnumeric"),
+        pytest.param("delta-null", ".d must be a finite number", id="delta-null"),
+        pytest.param("explicit-rate-null", ".r must equal", id="rate-null"),
+    ],
+)
+def test_evidence_compact_case_shape_and_dashboard_semantic_mutants(
+    tmp_path: Path,
+    mutation: str,
+    marker: str,
+):
+    evidence, report_path, chunk_path, _index_path = _write_full_evidence(tmp_path)
+    report, chunk = _read_evidence(report_path, chunk_path)
+    if mutation == "id-type":
+        chunk[0]["id"] = []
+    elif mutation == "id-empty":
+        chunk[0]["id"] = ""
+    elif mutation == "id-text-collision":
+        chunk[0]["id"], chunk[1]["id"] = 1, "1"
+    elif mutation == "cross-source-collision":
+        report["case_count"] = 3
+        report["cases"] = [
+            {"case_id": "case-1", "matches": [], "mismatches": []}
+        ]
+    elif mutation == "missing-r":
+        del chunk[0]["r"]
+    elif mutation == "missing-h":
+        del chunk[0]["h"]
+    elif mutation == "missing-m":
+        del chunk[0]["m"]
+    elif mutation == "r-type":
+        chunk[0]["r"] = "100"
+    elif mutation == "h-type":
+        chunk[0]["h"] = []
+    elif mutation == "m-row":
+        chunk[1]["m"] = [None]
+    elif mutation == "m-values":
+        chunk[1]["m"] = [{"c": "benefit"}]
+    elif mutation == "i-type":
+        chunk[0]["i"] = {}
+    elif mutation == "i-row":
+        chunk[0]["i"] = [None]
+    elif mutation == "i-value":
+        chunk[0]["i"] = [{"n": "income"}]
+    elif mutation == "i-name":
+        chunk[0]["i"][0]["n"] = []
+    elif mutation == "v-type":
+        chunk[0]["v"] = {}
+    elif mutation == "v-row":
+        chunk[0]["v"] = [None]
+    elif mutation == "v-values":
+        chunk[0]["v"] = [{"c": "benefit"}]
+    elif mutation == "disposition":
+        chunk[1]["m"][0]["e"] = []
+    elif mutation == "delta-missing":
+        del chunk[1]["m"][0]["d"]
+    elif mutation == "delta-nonnumeric":
+        chunk[1]["m"][0].update(l="left", x="right", d=0)
+    elif mutation == "delta-null":
+        chunk[1]["m"][0]["d"] = None
+    else:
+        chunk[0]["r"] = None
+    _write_evidence(report_path, chunk_path, report, chunk)
+    result = evidence.validate_suite_evidence(report_path)
+    assert any(marker in defect for defect in result.content_defects), result.defects
+
+
+@pytest.mark.parametrize(
+    ("mutation", "marker"),
+    [
+        pytest.param("concepts-type", "report concepts must be an array", id="concepts-type"),
+        pytest.param("concept-row", "concepts[0] must be an object", id="concept-row"),
+        pytest.param("concept-id", ".id must be a non-empty string", id="concept-id"),
+        pytest.param("concept-duplicate", "report concepts repeats", id="concept-duplicate"),
+        pytest.param("comparison-name", ".comparison must be a non-empty string", id="comparison"),
+        pytest.param("tolerance-missing", ".tolerance is missing", id="tolerance-missing"),
+        pytest.param("tolerance-invalid", "finite non-negative number", id="tolerance-invalid"),
+        pytest.param("verdict-no-rule", "has no report concept definition", id="verdict-rule"),
+        pytest.param("match-placement", "match tolerance semantics", id="match-placement"),
+        pytest.param("mismatch-placement", "mismatch tolerance semantics", id="mismatch-placement"),
+        pytest.param("aggregates-type", "report aggregates must be an array", id="aggregates-type"),
+        pytest.param("aggregate-row", "aggregates[0] must be an object", id="aggregate-row"),
+        pytest.param("aggregate-concept", ".concept must be a non-empty string", id="aggregate-concept"),
+        pytest.param("aggregate-duplicate", "aggregates repeats concept", id="aggregate-duplicate"),
+        pytest.param("aggregate-count", "is not a non-negative integer", id="aggregate-count"),
+        pytest.param("aggregate-impossible", "exceeds comparison_count", id="aggregate-impossible"),
+        pytest.param("aggregate-alias", "does not match derived verdict count", id="aggregate-alias"),
+        pytest.param("aggregate-extra", "have no stored verdicts", id="aggregate-extra"),
+        pytest.param("aggregate-missing", "have no report aggregate", id="aggregate-missing"),
+        pytest.param("aggregate-drift", "stored verdicts contain", id="aggregate-drift"),
+        pytest.param("weight-type", "comparison_weight must be a finite number", id="weight-type"),
+        pytest.param("weight-drift", "cannot be reproduced", id="weight-drift"),
+        pytest.param("aggregate-value", "must be a finite number", id="aggregate-value"),
+        pytest.param("mismatches-type", "report mismatches must be an array", id="mismatches-type"),
+        pytest.param("mismatch-row", "mismatches[0] must be an object", id="mismatch-row"),
+        pytest.param("mismatch-concept", ".concept must be a non-empty string", id="mismatch-concept"),
+        pytest.param("mismatch-values", "must carry left and right values", id="mismatch-values"),
+        pytest.param("mismatch-duplicate", "mismatches repeats case/concept", id="mismatch-duplicate"),
+        pytest.param("mismatch-extra", "have no stored mismatch verdict", id="mismatch-extra"),
+        pytest.param("mismatch-missing", "have no report mismatch row", id="mismatch-missing"),
+        pytest.param("report-disposition", "disposition must be an object", id="report-disposition"),
+        pytest.param("disposition-counts", "counts must be an object", id="disposition-counts"),
+        pytest.param("disposition-count-type", "is not a non-negative integer", id="disposition-count-type"),
+        pytest.param("disposition-count-drift", "does not match 1 report mismatch", id="disposition-count-drift"),
+    ],
+)
+def test_evidence_full_semantic_reconciliation_mutants(
+    tmp_path: Path,
+    mutation: str,
+    marker: str,
+):
+    evidence, report_path, chunk_path, _index_path = _write_full_evidence(tmp_path)
+    report, chunk = _read_evidence(report_path, chunk_path)
+    concept = report["concepts"][0]
+    aggregate = report["aggregates"][0]
+    mismatch = report["mismatches"][0]
+    if mutation == "concepts-type":
+        report["concepts"] = {}
+    elif mutation == "concept-row":
+        report["concepts"] = [None]
+    elif mutation == "concept-id":
+        concept["id"] = ""
+    elif mutation == "concept-duplicate":
+        report["concepts"].append(copy.deepcopy(concept))
+    elif mutation == "comparison-name":
+        concept["comparison"] = ""
+    elif mutation == "tolerance-missing":
+        del concept["tolerance"]
+    elif mutation == "tolerance-invalid":
+        concept["relative_tolerance"] = -1
+    elif mutation == "verdict-no-rule":
+        chunk[0]["v"][0]["c"] = "other"
+    elif mutation == "match-placement":
+        chunk[0]["v"][0]["x"] = 11
+    elif mutation == "mismatch-placement":
+        chunk[1]["m"][0].update(x=20, d=0)
+    elif mutation == "aggregates-type":
+        report["aggregates"] = {}
+    elif mutation == "aggregate-row":
+        report["aggregates"] = [None]
+    elif mutation == "aggregate-concept":
+        aggregate["concept"] = ""
+    elif mutation == "aggregate-duplicate":
+        report["aggregates"].append(copy.deepcopy(aggregate))
+    elif mutation == "aggregate-count":
+        aggregate["comparison_count"] = True
+    elif mutation == "aggregate-impossible":
+        aggregate["mismatch_count"] = 3
+    elif mutation == "aggregate-alias":
+        aggregate["compared"] = 99
+    elif mutation == "aggregate-extra":
+        report["aggregates"].append(
+            {"concept": "ghost", "comparison_count": 0, "mismatch_count": 0}
+        )
+    elif mutation == "aggregate-missing":
+        report["aggregates"] = []
+    elif mutation == "aggregate-drift":
+        aggregate["mismatch_count"] = 0
+        aggregate["match_count"] = 2
+    elif mutation == "weight-type":
+        aggregate["comparison_weight"] = "two"
+    elif mutation == "weight-drift":
+        aggregate["comparison_weight"] = 99
+    elif mutation == "aggregate-value":
+        aggregate["left_weighted_sum"] = "thirty"
+    elif mutation == "mismatches-type":
+        report["mismatches"] = {}
+    elif mutation == "mismatch-row":
+        report["mismatches"] = [None]
+    elif mutation == "mismatch-concept":
+        mismatch["concept"] = ""
+    elif mutation == "mismatch-values":
+        del mismatch["left"]
+    elif mutation == "mismatch-duplicate":
+        report["mismatches"].append(copy.deepcopy(mismatch))
+    elif mutation == "mismatch-extra":
+        mismatch["case_id"] = "ghost"
+    elif mutation == "mismatch-missing":
+        report["mismatches"] = []
+    elif mutation == "report-disposition":
+        mismatch["disposition"] = "explained_residual"
+    else:
+        mismatch["disposition"] = {
+            "id": "d-1",
+            "disposition": "explained_residual",
+        }
+        chunk[1]["m"][0]["e"] = "explained_residual"
+        if mutation == "disposition-counts":
+            counts: object = []
+        elif mutation == "disposition-count-type":
+            counts = {"explained_residual": "one"}
+        else:
+            counts = {"explained_residual": 0}
+        report["summary"]["dispositioned"] = {"counts": counts}
+    _write_evidence(report_path, chunk_path, report, chunk)
+    result = evidence.validate_suite_evidence(report_path)
+    assert any(marker in defect for defect in result.content_defects), result.defects
+
+
+@pytest.mark.xfail(
+    strict=True,
+    reason="EVIDENCE-GAP-comparison-enum: unknown kinds fall through to eligibility truthiness",
+)
+def test_evidence_unknown_comparison_kind_fails_closed():
+    evidence = _evidence_module()
+    defects: list[str] = []
+    evidence._concept_rules(
+        {
+            "concepts": [
+                {
+                    "id": "benefit",
+                    "comparison": "ammount",
+                    "tolerance": 0,
+                    "relative_tolerance": 0,
+                }
+            ]
+        },
+        defects,
+        "victim",
+    )
+    assert defects
+
+
+@pytest.mark.parametrize(
+    ("mutation", "marker"),
+    [
+        pytest.param("malformed", "not valid JSON", id="malformed"),
+        pytest.param("non-object", "must be an object", id="object"),
+        pytest.param("schema", "schema_version is not", id="schema"),
+        pytest.param("suite", "declares suite", id="suite"),
+        pytest.param("report-sha", "report_sha256 is invalid", id="report-sha"),
+        pytest.param("verdict-sha", "case_verdicts_sha256 is invalid", id="verdict-sha"),
+        pytest.param("chunks-type", "chunks must be an array", id="chunks-type"),
+        pytest.param("descriptor-row", "chunks[0] must be an object", id="descriptor-row"),
+        pytest.param("descriptor-name", ".name is invalid", id="descriptor-name"),
+        pytest.param("descriptor-duplicate", "chunk index repeats", id="descriptor-duplicate"),
+        pytest.param("descriptor-sha", ".sha256 is invalid", id="descriptor-sha"),
+        pytest.param("descriptor-cases", ".cases is not a non-negative integer", id="descriptor-cases"),
+        pytest.param("declared-extra", "names missing files", id="declared-extra"),
+        pytest.param("actual-omitted", "omits committed chunks", id="actual-omitted"),
+        pytest.param("chunk-sha", "sha256 does not match chunk index", id="chunk-sha"),
+        pytest.param("chunk-cases", "case count does not match", id="chunk-cases"),
+        pytest.param("chunk-count-type", "chunk_count is not", id="chunk-count-type"),
+        pytest.param("chunk-count-value", "chunk index chunk_count", id="chunk-count-value"),
+        pytest.param("count-type", "chunk index count is not", id="count-type"),
+        pytest.param("count-value", "chunk index count", id="count-value"),
+    ],
+)
+def test_evidence_chunk_index_shape_identity_set_and_cardinality_mutants(
+    tmp_path: Path,
+    mutation: str,
+    marker: str,
+):
+    evidence, report_path, _chunk_path, index_path = _write_full_evidence(tmp_path)
+    index = json.loads(index_path.read_text())
+    descriptor = index["chunks"][0]
+    if mutation == "malformed":
+        index_path.write_text("{bad")
+    elif mutation == "non-object":
+        index_path.write_text("[]")
+    elif mutation == "schema":
+        index["schema_version"] = "legacy"
+    elif mutation == "suite":
+        index["suite"] = "foreign"
+    elif mutation == "report-sha":
+        index["report_sha256"] = "x"
+    elif mutation == "verdict-sha":
+        index["case_verdicts_sha256"] = "x"
+    elif mutation == "chunks-type":
+        index["chunks"] = {}
+    elif mutation == "descriptor-row":
+        index["chunks"] = [None]
+    elif mutation == "descriptor-name":
+        descriptor["name"] = "../chunk-0.json"
+    elif mutation == "descriptor-duplicate":
+        index["chunks"].append(copy.deepcopy(descriptor))
+    elif mutation == "descriptor-sha":
+        descriptor["sha256"] = "x"
+    elif mutation == "descriptor-cases":
+        descriptor["cases"] = True
+    elif mutation == "declared-extra":
+        index["chunks"].append(
+            {"name": "chunk-1.json", "sha256": "0" * 64, "cases": 0}
+        )
+    elif mutation == "actual-omitted":
+        index["chunks"] = []
+    elif mutation == "chunk-sha":
+        descriptor["sha256"] = "0" * 64
+    elif mutation == "chunk-cases":
+        descriptor["cases"] = 99
+    elif mutation == "chunk-count-type":
+        index["chunk_count"] = True
+    elif mutation == "chunk-count-value":
+        index["chunk_count"] = 2
+    elif mutation == "count-type":
+        index["count"] = True
+    elif mutation == "count-value":
+        index["count"] = 99
+    if mutation not in {"malformed", "non-object"}:
+        index_path.write_text(json.dumps(index))
+    result = evidence.validate_suite_evidence(report_path)
+    assert any(marker in defect for defect in result.binding_defects), result.defects
+
+
+def test_evidence_chunk_object_cases_envelope_is_accepted(tmp_path: Path):
+    evidence, report_path, chunk_path, index_path = _write_full_evidence(tmp_path)
+    rows = json.loads(chunk_path.read_text())
+    chunk_path.write_text(json.dumps({"cases": rows}))
+    index_path.write_text(json.dumps(evidence.build_chunk_index(report_path)))
+    result = evidence.validate_suite_evidence(report_path)
+    assert (result.binding, result.reconciliation, result.valid) == (
+        "bound",
+        "full",
+        True,
+    )
+
+
+def test_evidence_compared_values_may_be_arbitrary_json(tmp_path: Path):
+    evidence, report_path, chunk_path, index_path = _write_full_evidence(tmp_path)
+    report, chunk = _read_evidence(report_path, chunk_path)
+    report.update(
+        case_count=1,
+        summary={"comparison_count": 1, "match_count": 1, "mismatch_count": 0},
+        concepts=[
+            {
+                "id": "eligibility",
+                "comparison": "eligibility",
+                "tolerance": 0,
+                "relative_tolerance": 0,
+            }
+        ],
+        aggregates=[
+            {
+                "concept": "eligibility",
+                "comparison_count": 1,
+                "comparison_weight": 1,
+                "match_count": 1,
+                "mismatch_count": 0,
+                "left_positive_weight": 1,
+                "right_positive_weight": 1,
+            }
+        ],
+        mismatches=[],
+    )
+    value = {"nested": [1, True, None]}
+    chunk = [
+        {
+            "id": "json-case",
+            "r": 100,
+            "h": {},
+            "m": [],
+            "v": [{"c": "eligibility", "l": value, "x": copy.deepcopy(value)}],
+        }
+    ]
+    _write_evidence(report_path, chunk_path, report, chunk)
+    index_path.write_text(json.dumps(evidence.build_chunk_index(report_path)))
+    assert evidence.validate_suite_evidence(report_path).valid is True
+
+
+def test_evidence_case_verdict_commitment_is_row_order_independent(tmp_path: Path):
+    evidence, report_path, chunk_path, index_path = _write_full_evidence(tmp_path)
+    before = json.loads(index_path.read_text())["case_verdicts_sha256"]
+    rows = json.loads(chunk_path.read_text())
+    chunk_path.write_text(json.dumps(list(reversed(rows))))
+    _refresh_evidence_index(
+        evidence,
+        report_path,
+        chunk_path,
+        index_path,
+        refresh_verdict_identity=False,
+    )
+    result = evidence.validate_suite_evidence(report_path)
+    assert result.case_verdicts_sha256 == before
+    assert result.binding == "bound"
+    assert result.valid is True
+
+
+def test_evidence_defects_are_partitioned_ordered_and_results_immutable(
+    tmp_path: Path,
+):
+    evidence, report_path, _chunk_path, _index_path = _write_full_evidence(tmp_path)
+    report = json.loads(report_path.read_text())
+    report["aggregates"][0]["left_weighted_sum"] = 999
+    report_path.write_text(json.dumps(report))
+    result = evidence.validate_suite_evidence(report_path)
+    assert result.content_defects and result.binding_defects
+    assert result.defects == result.content_defects + result.binding_defects
+    assert result.content_valid is result.valid is result.clean is False
+    with pytest.raises(FrozenInstanceError):
+        result.binding = "bound"
+    with pytest.raises(FrozenInstanceError):
+        result.chunks[0].cases = 99
+
+
+@pytest.mark.parametrize("surface", ["report", "chunk", "index"])
+def test_evidence_unreadable_artifacts_surface_defects(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    surface: str,
+):
+    evidence, report_path, chunk_path, index_path = _write_full_evidence(tmp_path)
+    target = {"report": report_path, "chunk": chunk_path, "index": index_path}[surface]
+    real_read_text = Path.read_text
+    real_read_bytes = Path.read_bytes
+
+    def blocked_text(path: Path, *args: object, **kwargs: object):
+        if path.resolve() == target.resolve():
+            raise PermissionError("blocked")
+        return real_read_text(path, *args, **kwargs)
+
+    def blocked_bytes(path: Path, *args: object, **kwargs: object):
+        if path.resolve() == target.resolve():
+            raise PermissionError("blocked")
+        return real_read_bytes(path, *args, **kwargs)
+
+    if surface == "chunk":
+        monkeypatch.setattr(Path, "read_bytes", blocked_bytes)
+    else:
+        monkeypatch.setattr(Path, "read_text", blocked_text)
+    result = evidence.validate_suite_evidence(report_path)
+    marker = "cannot be read" if surface == "chunk" else "not valid JSON"
+    assert any(marker in defect for defect in result.defects), result.defects
+
+
+def test_evidence_build_index_rejects_invalid_content(tmp_path: Path):
+    evidence, report_path, chunk_path, _index_path = _write_full_evidence(tmp_path)
+    rows = json.loads(chunk_path.read_text())
+    rows[0]["m"] = "not-an-array"
+    chunk_path.write_text(json.dumps(rows))
+    with pytest.raises(ValueError, match="cannot index inconsistent evidence"):
+        evidence.build_chunk_index(report_path)
+
+
+def test_evidence_build_index_recomputes_binding_and_preserves_legacy_metadata(
+    tmp_path: Path,
+):
+    evidence, report_path, _chunk_path, index_path = _write_full_evidence(tmp_path)
+    legacy = json.loads(index_path.read_text())
+    legacy.update(
+        report_path="stale",
+        report_sha256="0" * 64,
+        suite="stale",
+        count=999,
+        chunk_count=999,
+        input_slots=["income"],
+        display={"label": "legacy"},
+    )
+    index_path.write_text(json.dumps(legacy))
+    rebuilt = evidence.build_chunk_index(report_path)
+    identity, digest = evidence.report_identity(report_path)
+    assert rebuilt["report_path"] == identity
+    assert rebuilt["report_sha256"] == digest
+    assert rebuilt["suite"] == "full-bound"
+    assert rebuilt["count"] == 2
+    assert rebuilt["chunk_count"] == 1
+    assert rebuilt["input_slots"] == ["income"]
+    assert rebuilt["display"] == {"label": "legacy"}
+
+
+def test_evidence_build_index_orders_chunk_descriptors(tmp_path: Path):
+    evidence, report_path, chunk_path, index_path = _write_full_evidence(tmp_path)
+    rows = json.loads(chunk_path.read_text())
+    chunk_path.write_text(json.dumps([rows[0]]))
+    (chunk_path.parent / "chunk-1.json").write_text(json.dumps([rows[1]]))
+    index = evidence.build_chunk_index(report_path)
+    assert [row["name"] for row in index["chunks"]] == [
+        "chunk-0.json",
+        "chunk-1.json",
+    ]
+    index_path.write_text(json.dumps(index))
+    assert evidence.validate_suite_evidence(report_path).valid is True
+
+
+def test_evidence_validate_chunk_binding_infers_report_suite(tmp_path: Path):
+    evidence, report_path, _chunk_path, _index_path = _write_full_evidence(tmp_path)
+    result = evidence.validate_suite_evidence(report_path)
+    assert evidence.validate_chunk_binding(report_path, result.chunks) == (
+        "bound",
+        (),
+    )
+
+
+@pytest.mark.xfail(
+    strict=True,
+    reason="EVIDENCE-GAP-cardinality-rate: verdict-free evidence may claim r=100",
+)
+def test_evidence_cardinality_only_case_requires_unmeasured_rate(tmp_path: Path):
+    evidence = _evidence_module()
+    data = tmp_path / "dashboard/public/data"
+    suite_dir = data / "cases/cardinality"
+    suite_dir.mkdir(parents=True)
+    report_path = data / "report.json"
+    report_path.write_text(
+        json.dumps(
+            {
+                "suite": "cardinality",
+                "case_count": 1,
+                "summary": {
+                    "comparison_count": 1,
+                    "match_count": 1,
+                    "mismatch_count": 0,
+                },
+                "cases": [],
+            }
+        )
+    )
+    (suite_dir / "chunk-0.json").write_text(
+        json.dumps([{"id": "case-1", "r": 100, "h": {}, "m": []}])
+    )
+    (suite_dir / "index.json").write_text(
+        json.dumps(evidence.build_chunk_index(report_path))
+    )
+    result = evidence.validate_suite_evidence(report_path)
+    assert result.content_valid is False
+    assert any(".r" in defect and "unmeasured" in defect for defect in result.defects)
+
+
+@pytest.mark.xfail(
+    strict=True,
+    reason="EVIDENCE-GAP-cardinality-label: malformed rows can still be labelled cardinality",
+)
+def test_evidence_cardinality_label_requires_well_formed_rows(tmp_path: Path):
+    evidence = _evidence_module()
+    data = tmp_path / "dashboard/public/data"
+    suite_dir = data / "cases/cardinality"
+    suite_dir.mkdir(parents=True)
+    report_path = data / "report.json"
+    report_path.write_text(
+        json.dumps(
+            {
+                "suite": "cardinality",
+                "case_count": 1,
+                "summary": {
+                    "comparison_count": 1,
+                    "match_count": 1,
+                    "mismatch_count": 0,
+                },
+                "cases": [],
+            }
+        )
+    )
+    (suite_dir / "chunk-0.json").write_text(
+        json.dumps([{"id": "case-1", "r": 100, "m": []}])
+    )
+    result = evidence.validate_suite_evidence(report_path)
+    assert result.reconciliation == "none"
+
+
+@pytest.mark.xfail(
+    strict=True,
+    reason="EVIDENCE-DOC-GAP-inline-boolean: PR result promises a full shape the module rejects",
+)
+def test_evidence_inline_boolean_case_supports_documented_full_reconciliation(
+    tmp_path: Path,
+):
+    evidence = _evidence_module()
+    data = tmp_path / "dashboard/public/data"
+    data.mkdir(parents=True)
+    report_path = data / "report.json"
+    report_path.write_text(
+        json.dumps(
+            {
+                "suite": "inline",
+                "case_count": 1,
+                "summary": {
+                    "comparison_count": 1,
+                    "match_count": 1,
+                    "mismatch_count": 0,
+                },
+                "cases": [{"case_id": "case-1", "matched": True}],
+            }
+        )
+    )
+    result = evidence.validate_suite_evidence(report_path)
+    assert result.content_valid is True
+    assert result.reconciliation == "full"
+
+
+def test_evidence_branch_census_caps_strength_at_cardinality(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+):
+    evidence, report_path, _chunk_path, _index_path = _write_full_evidence(tmp_path)
+    census = _load_evidence_branch_script("exercise_census")
+    data_dir = report_path.parent
+    monkeypatch.setattr(census, "REPO_ROOT", tmp_path)
+    monkeypatch.setattr(census, "DATA_DIR", data_dir)
+    monkeypatch.setattr(census, "CASES_DIR", data_dir / "cases")
+    monkeypatch.setattr(census, "BRIDGED_THROUGH", {})
+    monkeypatch.setattr(census, "MANIFEST_STRICT_CLEAN", {})
+    report = json.loads(report_path.read_text())
+    row = census._census_suite(report["suite"], report, report_path)
+    assert row["binding"] == "bound"
+    assert row["reconciliation"] == "cardinality"
+    assert evidence.validate_suite_evidence(report_path).reconciliation == "full"
+
+
+def test_evidence_branch_census_keeps_legacy_unbound_index_visible(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+):
+    _evidence, report_path, _chunk_path, index_path = _write_full_evidence(tmp_path)
+    index = json.loads(index_path.read_text())
+    index["schema_version"] = "legacy"
+    index_path.write_text(json.dumps(index))
+    census = _load_evidence_branch_script("exercise_census")
+    data_dir = report_path.parent
+    monkeypatch.setattr(census, "REPO_ROOT", tmp_path)
+    monkeypatch.setattr(census, "DATA_DIR", data_dir)
+    monkeypatch.setattr(census, "CASES_DIR", data_dir / "cases")
+    monkeypatch.setattr(census, "BRIDGED_THROUGH", {})
+    monkeypatch.setattr(census, "MANIFEST_STRICT_CLEAN", {})
+    report = json.loads(report_path.read_text())
+    row = census._census_suite(report["suite"], report, report_path)
+    assert row["cases_scanned"] == 2
+    assert row["binding"] == "unbound"
+    assert row["reconciliation"] == "cardinality"
+
+
+def test_evidence_branch_certificate_cites_exact_current_index_sha(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+):
+    evidence, report_path, _chunk_path, index_path = _write_full_evidence(tmp_path)
+    certify = _load_evidence_branch_script("certify")
+    monkeypatch.setattr(certify, "REPO_ROOT", tmp_path)
+    leg, citations, _defects = certify._suite_verdict(
+        {
+            "suite": "full-bound",
+            "oracle_type": "reference",
+            "oracle": "synthetic",
+            "report": report_path.relative_to(tmp_path).as_posix(),
+        }
+    )
+    citation = next(
+        row for row in citations if row["claim"] == "case-evidence-index:full-bound"
+    )
+    assert citation["artifact"] == index_path.relative_to(tmp_path).as_posix()
+    assert citation["sha256"] == evidence.sha256_path(index_path)
+    assert leg["binding"] == "bound"
