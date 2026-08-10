@@ -42,6 +42,9 @@ jobs:
       - name: Validate mismatch dispositions
         run: uv run scripts/apply_dispositions.py --check
 
+      - name: Validate report-bound case chunk indexes
+        run: uv run python scripts/generate_chunk_indexes.py --check
+
       - name: Exercise census is current (varied/constant/bridged per suite)
         run: uv run python scripts/exercise_census.py --check
 

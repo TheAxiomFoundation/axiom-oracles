@@ -1,3 +1,551 @@
+# PROGRESS — PR #379 semantic merge of `origin/main`
+
+## State
+
+- Branch/worktree: `evidence-validator` in the existing
+  `/Users/maxghenis/TheAxiomFoundation/_worktrees/oracles-evidence` worktree.
+- Merge: `origin/main` (`7fbd812f`) is already in progress over branch HEAD
+  `a312ace1`; the merge will be completed in place and will not be aborted.
+- Scope: complete the prior runner reconciliation and, under the user's new
+  authorization, restore the branch's strict evidence-validation contracts in
+  `scripts/certify.py` and `scripts/exercise_census.py` on top of main's #375
+  state machine, count validation, disposition binding, and stray-certificate
+  rejection.
+- Constraints: keep the already staged resolutions intact, add the married
+  behavior mutant, run the requested evidence/focused/freshness checks, run no
+  population suites, edit no committed JSON reports except merge-required
+  generated output, commit the completed merge, push `origin/evidence-validator`,
+  and leave PR #379 open and unmerged.
+- Output: the launcher-designated final handoff is
+  `/Users/maxghenis/TheAxiomFoundation/_closure-sprint/out/evidence-merge.result.md`;
+  that path is outside the writable sandbox, so the final response is the
+  launcher-captured report.
+- Current status: the authorization conflict is resolved, the two-way semantic
+  reconciliation and derived regeneration are complete, every requested gate
+  is green, and merge commit `82b3e184` is clean locally. Publication is
+  externally blocked: terminal GitHub transport cannot resolve `github.com`,
+  and the connected GitHub interface rejected its first atomic blob write.
+  PR #379 remains open and unmerged at remote head `a312ace1`.
+
+## Done
+
+- Confirmed the active branch is `evidence-validator`, HEAD is `a312ace1`,
+  MERGE_HEAD is `7fbd812f`, and the merge remains in progress.
+- Confirmed the staged merge already contains the user's listed canonical
+  resolutions; the only unresolved paths are `scripts/run_comparison.py` and
+  generated `dashboard/public/data/overview.json`.
+- Located main's fail-closed `source_report`/file-SHA/assignment-SHA consumer:
+  `apply_dispositions --check` resolves a repo-relative path under `reports/`,
+  verifies exact bytes, requires a full mismatch corpus, and never falls back
+  to trusting an invalid pointer.
+- Resolved all four `run_comparison.py` hunks: main's staged/locked/UID-guarded
+  atomic publication is retained; the dashboard writer accepts both keywords;
+  main's independent case-ledger truncation fix is combined with versioned
+  case removal; and preserved skips return before slimming, binding, chunk
+  refresh, or dashboard publication.
+- Chose the preserved-skip binding explicitly: retain the prior executed full
+  report's repo-relative path, exact file SHA-256, and assignment SHA-256. The
+  skip's new `full_report_path` is ignored. A same-day collision guard keeps a
+  skip from replacing the prior full bytes when both runs share a dated path.
+- Added `tests/test_evidence_merge.py`: the valid preserved prior binding passes
+  `apply_dispositions --check`, while rebinding to the honest digest of a fresh
+  no-execution partial copy fails closed as "not a FULL report". This leaves
+  `test_certification_mutants.py` at its required 55 test functions / 65 cases.
+- Regenerated `dashboard/public/data/overview.json` from its 221 source reports,
+  resolving the only non-code conflict through the canonical generator.
+- Replayed the two migrated Colorado corpora from immutable source `6c4f17b...`
+  without engine or population execution. The merge-required `co-snap-qc`
+  index now binds main's merged report; both chunk-index checks pass.
+- Regenerated the main-format exercise census and certificate after the merge;
+  both freshness checks pass. Dispositions, overview, immutable replay, chunk
+  indexes, and bridge manifests also pass (the manifest validator reports zero
+  errors and four existing audit-debt findings).
+- Focused verification passes: 65/65 tests in `test_run_comparison.py` plus
+  `test_commit_refreshed_report.py` (427.95 seconds). The new married-behavior
+  mutant passes independently, and Ruff/compile checks pass for touched code.
+- The full required evidence command stops at 10 failures in the retained
+  certification mutant cases (56 pass including the new evidence mutant).
+  Independent review confirmed these are missing production contracts in the
+  exact-main `scripts/certify.py`, not fixture drift or runner behavior:
+  fail-closed report parsing, schema validation, derived verdict modes,
+  evidence binding/reconciliation, and census report identity are absent.
+- Confirmed there is no legitimate extension point outside the protected
+  canonical stack that can restore those contracts. Weakening tests or adding
+  a test-only hook would make the mutants dishonest. No merge commit or push
+  was made because the user required every gate to pass first.
+- Received explicit authorization to reconcile both canonical scripts rather
+  than preserve exact-main copies. Three independent read-only audits found no
+  semantic incompatibility: the merged reference corpus already validates
+  bound/full and the reality corpus bound/cardinality under the strict layer.
+- Restored strict certification through main's structure: malformed reports
+  fail closed, disposition documents receive full schema validation, report
+  and case-index evidence are SHA-bound, reference legs require bound/full
+  reconciliation, and census report identity is checked against exact registry
+  path and bytes. Main's `_count`, `_premise`, blockers, and stray-certificate
+  gate remain intact; derived premise mode is emitted last so registry input
+  cannot override it.
+- Restored the census's observation-only evidence fields: safe strict parsing,
+  byte-hashed chunk descriptors, index binding defects, and honest
+  cardinality-or-none reconciliation. It never claims full reconciliation and
+  does not globally reject unbound non-certified suites.
+- The initial reconciled gate is green: 68/68 cases across all 65 certification
+  mutant cases and three census integration cases; Ruff, Python compilation,
+  and whitespace checks pass for both touched scripts.
+- Regenerated both certified compact corpora from immutable source
+  `6c4f17b...`, regenerated their indexes through the fail-closed generic
+  generator, then regenerated census and certificate. Compact chunk/index
+  bytes were already canonical and did not change in this continuation.
+- The strict census is now 220 suites / 337 chunk descriptors: 2 bound and 218
+  unbound; 55 cardinality and 165 none. Its strict-layer delta over the staged
+  main-format artifact is +1,434/-1 lines (336,014 bytes, SHA-256
+  `3f45f6d8...cac77`).
+- The certificate's strict-layer delta is +29/-1 lines (6,866 bytes, SHA-256
+  `6b0a631a...d3c93`): it adds both case-index evidence claims, bound/full over
+  1,072 reference cases, bound/cardinality over 856 reality cases, and exact
+  census/registry report identity. The verdict remains honest and unchanged:
+  conformant=true, exercised=false, certified=unavailable.
+- Full verification is green after regeneration: all 65 certification mutant
+  cases (55 test functions), the complete 66-case evidence battery, the
+  65-case runner/refresh battery (461.36 seconds), and the 10-case
+  census/replay support battery pass.
+- All canonical checks pass: 91 dispositions files (two expired-entry notes),
+  immutable replay and versioned indexes for both certified suites, the
+  221-report overview, exercise census, certificate, and one bridge manifest
+  with zero errors and four pre-existing audit-debt findings. Ruff, compileall,
+  touched-file whitespace, and independent semantic review also pass.
+- The GitNexus skill's local analysis could not register its graph because the
+  sandbox forbids writing `~/.gitnexus/registry.json`; direct source/history
+  tracing was used as the documented fallback, and its 96 MiB partial local
+  index was removed before staging.
+- Audited the final staged merge tree: 663 paths, no unstaged/untracked files,
+  no unresolved entries, and exact parents `a312ace1` plus `7fbd812f`. Re-ran
+  the 66-case evidence battery and replay/index/overview/census/certificate
+  checks against that exact tree; all passed.
+- Created merge commit `82b3e184` with message `Merge origin/main with two-way
+  evidence reconciliation`; its body records the preserved #375 machinery and
+  restored bound execution-evidence contracts.
+- A normal `git push origin evidence-validator` failed before authentication
+  with `Could not resolve host: github.com`. The connected GitHub interface
+  independently confirmed remote head `a312ace1` and PR #379 open/unmerged,
+  then rejected the attempted atomic blob publication as `user cancelled MCP
+  tool call`. No remote blob, tree, commit, ref, or PR state was changed.
+
+## Next
+
+- When GitHub transport/write access is available, push local
+  `evidence-validator` (tip includes merge commit `82b3e184`) to origin and
+  verify the remote ref. Do not merge or otherwise change PR #379.
+
+---
+
+# PROGRESS — PR #379 round-6 residue closure
+
+## State
+
+- Branch/worktree: `evidence-validator` in the existing
+  `/Users/maxghenis/TheAxiomFoundation/_worktrees/oracles-evidence` worktree;
+  starting HEAD `336b0a1bbfc87f5609828c209a6a7076c3cf4d4a`.
+- Scope: close only the two category-(a) residues from
+  `sol-fixverify6-2026-07-27`: per-case matched-value identity and the
+  near-100 `r` semantic boundary.
+- Constraints: minimal diffs; every fix includes its killed mutant; commit
+  every coherent step; do not modify committed reports, run population
+  suites, merge PR #379, or expand into category-(b) findings.
+- Required gates: full evidence tests, census/certify mutants, census and
+  certificate freshness checks, and the relevant dashboard tests.
+- Output: a new residue-closure result file will carry the final report so
+  prior committed review/build reports remain untouched.
+- Outcome: both residues and their mutants are complete and green locally.
+  Publication is externally blocked: the ordinary GitHub transport cannot
+  resolve `github.com`, and both direct and atomic-tree GitHub connector writes
+  were rejected by its write gate. PR #379 therefore still points to its
+  pre-fix head and has not been edited or merged.
+
+## Done
+
+- Read the encoder preamble, repository-local rules search, round-6 build
+  brief/result, and the sixth verification brief/findings.
+- Confirmed the requested branch and worktree are clean and match
+  `origin/evidence-validator`.
+- Confirmed the two accepted witnesses: permuting complete matched values
+  between cases preserves aggregate totals, and `r=99.9999995` passes
+  representation tolerance while the dashboard branches on exact `r===100`.
+- Attempted the prescribed GitNexus debugging workflow; graph tools are not
+  available in this session, so direct source/caller tracing is the recorded
+  fallback.
+- Closed the matched-value identity residue without changing a committed
+  report: every `full` corpus now has a domain-separated, order-independent
+  `case_verdicts_sha256` commitment in its versioned chunk index over exact
+  `(case_id, concept, outcome, left, right)` records. Certification recomputes
+  that commitment and treats absence or drift as an unbound evidence leg.
+- Hardened the generic index generator so it cannot implicitly bless a
+  changed per-case verdict identity; only the full-corpus producer or the
+  immutable-source replay can legitimately refresh the commitment.
+- Added
+  `test_permuted_matched_case_values_must_reconcile_with_case_identity`,
+  reproducing the review's exact `ecps-spm-50666` ↔ `ecps-spm-50669` amount
+  and eligibility permutation. Aggregate/content reconciliation stays clean,
+  but the independent case identity makes the leg unbound.
+- Replayed the migrated ECPS corpus from immutable source `6c4f17b...`
+  without running an engine or population suite. Only its index gained the
+  new commitment; report and chunk bytes did not change. Regenerated the
+  certificate solely to bind the new index SHA.
+- Residue-1 gates pass: 63 certification mutants, the producer refresh test,
+  immutable replay `--check`, both chunk-index checks, certificate freshness,
+  Ruff, and diff whitespace.
+- Closed the `r` boundary residue with one cross-layer contract: `null` is
+  unmeasured, exact `100` is full agreement, and finite `[0,100)` is measured
+  non-full agreement. Evidence now applies strict bounds and exact equality at
+  derived `0/100` endpoints while retaining representation tolerance only for
+  interior fractional percentages.
+- Fresh compaction and immutable historical replay derive `r` from stored
+  match/mismatch counts, so neither trusts a near-endpoint stored rate.
+- Added `test_full_agreement_rate_must_be_exact_at_semantic_boundary` for the
+  exact `r=99.9999995` witness and extended the bounds mutant to
+  `r=100.0000005`. Added replay/emitter controls proving both normalize exact
+  endpoints.
+- Replaced both dashboard `r===100` branches with a shared tri-state helper.
+  Unmeasured rows are excluded from triangulation and no longer render as
+  agreement in the case table. The direct Node mutant pins `100 → true`,
+  `99.9999995 → false`, and `null → null`.
+- Residue-2 focused gates pass: 107 evidence/replay/producer tests, the direct
+  dashboard semantic test, immutable replay and index checks, Ruff, and diff
+  whitespace. The existing dashboard loader test cannot obtain `esbuild`
+  because network access is unavailable, and a full dashboard build cannot
+  start because `next` is not installed in this checkout; both environment
+  limits are retained for the final report.
+- Completed the clean-HEAD gate battery: 110 focused evidence/census mutants,
+  the bot no-op mutant, replay/index/census/certificate/overview freshness,
+  bridge validation (0 errors, four pre-existing findings), Ruff, compileall,
+  the direct dashboard boundary test, and cumulative whitespace all pass.
+- Wrote the requested final report to the new, committed
+  `sol-evidence-round6-residue-closure-2026-07-28-result.md`; no prior report
+  was edited.
+- Attempted a normal fast-forward push twice; both attempts failed before
+  authentication with `Could not resolve host: github.com`.
+- Found an atomic Git-data publication path through the connected GitHub
+  interface and verified the intended remote parent/tree locally. Both an
+  orchestrated blob write and a direct blob write were rejected by the
+  connector's write gate, so no partial tree, branch-ref move, or PR edit was
+  made.
+- Re-read PR #379 after validation: it remains open and unmerged at remote head
+  `336b0a1b`. The exact `Residues closed` body addition is preserved in the
+  output report for publication once GitHub write access is available.
+
+## Next
+
+- Once GitHub write access is available, push `evidence-validator`, append the
+  prepared `Residues closed` section to PR #379, and re-confirm its head is the
+  published residue closure while its state remains open and unmerged.
+
+---
+
+# PROGRESS — round-6 value-level evidence reconciliation
+
+## State
+
+- Branch: `evidence-validator`; starting HEAD
+  `627c08df3bf47b2bac1e4c5dc084e84d3a1c7f37`.
+- Outcome: category-(a) implementation and integration are complete; every
+  requested gate is green. The final ops-path copy is sandbox-blocked, so the
+  authorized in-repository fallback report is committed as `fabdf29f`.
+- Scope: implement only the round-5 category-(a) blocker and its integration:
+  aggregate value reconciliation, dashboard-semantic row validation,
+  migrated-corpus replay verification, `origin/main` merge, regeneration, and
+  the requested gates. Category-(b) QC publication and root unattended
+  regeneration remain trunk follow-ups.
+- Source:
+  `/Users/maxghenis/TheAxiomFoundation/ops/reviews/sol-fixverify5-2026-07-27/findings.md`.
+- Constraint: commit every coherent step locally and do not push. Generated
+  merge conflicts must be resolved through regeneration, never by hand.
+- Output: the requested ops result path is outside the writable sandbox; if
+  the final copy is denied, commit the report in this repository as directed.
+- Baseline: worktree is clean at the cached remote branch tip. Cached
+  `origin/main` is `0b3f5a70af0ea63728b269e7d6e7657ddbd3bb41`;
+  the branch is 102 main commits behind and 32 branch commits ahead.
+
+## Done
+
+- Read the complete round-5 verification finding and isolated its sole
+  category-(a) blocker from the explicitly excluded category-(b) follow-ups.
+- Confirmed the starting branch, worktree, remote refs, divergence, and output
+  sandbox constraint.
+- Indexed the checkout locally for impact analysis. `_aggregate_verdicts` and
+  compact-row validation are HIGH-risk boundaries because validation,
+  regeneration, index generation, certification, and refreshed-report
+  publication all depend on them; those downstream paths are in the gate set.
+- Confirmed the live ECPS aggregate values independently: amount sums are
+  37,933.0 left and 37,996.938652 right, and eligibility-positive counts are
+  186 left and 186 right. The report agrees exactly.
+- Found an honest pre-regeneration row-semantic defect: live
+  `ecps-spm-50970` stores `d = l - x = -1.700012...`, while the round-6 spec
+  requires `d = x - l = +1.700012...`. The derived compact delta must be
+  normalized during trusted replay; report aggregate values will not be tuned.
+- Located the existing synthetic full-evidence fixture, rebind helper,
+  migrated replay validator, and exact insertion points for the matched-value,
+  isolated-`d`, and isolated-`r` killed mutants.
+- Confirmed cached `origin/main` matches the verifier's exact 102-commit
+  divergence and was fetched shortly before this round. A merge simulation
+  predicts one generated conflict, `dashboard/public/data/overview.json`,
+  which must be resolved by running its generator.
+- Located the cumulative diff's four trailing-space lines in
+  `sol-evidence-validator-2026-07-27-result.md`.
+- Implemented aggregate value reconciliation across every matched and
+  mismatched verdict: amount left/right sums and eligibility left/right
+  positive weights must reproduce the report within six-decimal/IEEE
+  representation tolerance, never the looser concept tolerance.
+- Made weighted value claims fail closed unless the aggregate carries a unit
+  `comparison_weight` reproducible by the unweighted compact verdicts.
+- Bound compact dashboard semantics: numeric mismatch `d` must be `x - l`,
+  nonnumeric deltas must be null, and `r` must equal the verdict-derived match
+  rate whenever `v` makes the row outcomes complete. Every numeric `r` is
+  bounded to 0–100, and a partial row with a stored mismatch cannot claim
+  `r = 100`; QC cardinality rows with absent `v` and null `r` remain valid.
+- Changed fresh dashboard emission and trusted historical replay to derive
+  `d` from `l`/`x`; replay never trusts the historical sign convention.
+- Added durable killed mutants for matched amount `0/0 -> 999/999`, matched
+  eligibility `false/false -> true/true`, missing unit-weight evidence,
+  isolated `d` drift, and isolated `r` drift. Strengthened the shared full
+  fixture into a positive aggregate-value and row-semantics control.
+- Confirmed the tightened live validator initially failed for exactly the
+  disclosed `ecps-spm-50970` delta-sign defect; no aggregate value drift
+  surfaced.
+- Replayed the migrated ECPS and QC corpora from immutable source
+  `6c4f17bfe6dc8224ee8251401fe0247b1117a25b`. The staged replay now checks
+  37,933.0/37,996.938652 amount sums and 186/186 eligibility positives against
+  the report before writing. ECPS validates `bound/full` over 1,072 cases; QC
+  remains `bound/cardinality` over 856 cases.
+- Regenerated the ECPS binding, census, and `us-co/snap` certificate. The
+  certificate remains honest: its reference leg is clean `bound/full` with
+  2,143 matches, one explained mismatch, and zero unexplained; its reality leg
+  remains clean `bound/cardinality`.
+- Focused implementation gates pass: 103 mutant/regeneration/comparison tests,
+  Ruff, compileall, replay `--check`, chunk-index validation, census/certificate
+  freshness, and diff whitespace.
+- An independent post-fix review found no remaining category-(a) correctness
+  issue after adding fail-closed unit-weight evidence and partial-row `r`
+  checks.
+- Attempted to refresh `origin/main`; the sandbox network could not resolve
+  GitHub. The cached tip is still the verifier-pinned
+  `0b3f5a70af0ea63728b269e7d6e7657ddbd3bb41`, fetched shortly before this
+  round, so integration is explicitly pinned to that reviewed snapshot.
+- Merged cached `origin/main`. Its sole conflict was the generated
+  `dashboard/public/data/overview.json`; resolved it only by rerunning
+  `scripts/generate_dashboard_overview.py`.
+- Replayed the migrated ECPS/QC compact corpora after the merge, then
+  regenerated the exercise census and `us-co/snap` certificate so report and
+  index SHA changes from main are rebound rather than hand-edited.
+- Removed the cumulative diff's four trailing-space defects from the earlier
+  execution-validator report.
+- Completed every requested post-merge gate:
+  migrated replay `--check` verifies ECPS `bound/full` over 1,072 cases and
+  QC `bound/cardinality` over 856; chunk-index validation reports both lanes
+  OK; exercise census and certificates are up to date; the full certification
+  mutant suite passes 62 tests; and the bot's second-run no-op test passes.
+- Supplemental integration checks also pass: the regenerated overview binds
+  all 213 reports, the bridge manifest validator has zero errors (and retains
+  its four disclosed audit-debt findings), the 103-test focused semantic
+  suite passes, Ruff passes, compileall passes, and the staged diff has no
+  whitespace errors.
+- The pre-commit graph audit classifies the 138-file staged integration merge
+  as HIGH impact (413 indexed symbols, 11 affected execution processes), as
+  expected for the upstream state-tax-populace campaign. The requested
+  downstream evidence, regeneration, mutant, and no-op gates cover the
+  category-(a) changes.
+- Committed the verified upstream integration and regenerated artifacts as
+  `37058619`. Removed the untracked 84 MiB local graph index created for impact
+  analysis; the worktree was clean afterward.
+- Wrote the complete round-6 result to the in-repository fallback
+  `sol-evidence-round6-2026-07-27-result.md`.
+- Attempted the required copy to
+  `/Users/maxghenis/TheAxiomFoundation/ops/reviews/sol-evidence-round6-2026-07-27/result.md`;
+  the sandbox returned `Operation not permitted`. The committed repository
+  report is therefore the directed fallback.
+- Repeated the exact required gates from clean committed HEAD: replay,
+  validator, census, certificate, all 62 certification mutants, the bot no-op
+  test, and the cumulative whitespace check all pass.
+
+## Next
+
+- None. Verify the final bookkeeping commit leaves a clean worktree and hand
+  off; no implementation work remains.
+
+---
+
+# PROGRESS — round-5 semantic evidence reconciliation
+
+## State
+
+- Branch: `evidence-validator`; starting HEAD `651d5966c061cc2a9793a382595810355e1478af`.
+- Scope: implement only the round-4 review's Required closure plus the two
+  explicitly promoted PARTIAL items: derived-mode precedence and strict
+  disposition-document authorization.
+- Source: `/Users/maxghenis/TheAxiomFoundation/ops/reviews/sol-fixverify4-2026-07-27/findings.md`.
+- Constraint: commit every coherent step locally; do not push. The requested
+  ops result path is outside the writable sandbox, so use a committed in-repo
+  fallback report if the external write is denied.
+- Baseline: worktree was clean and matched cached `origin/evidence-validator`.
+  Fetching current `origin/main` was blocked by DNS; cached `origin/main` is
+  `abe2520193439467d5fd1ada46476fc7f05d0611`.
+
+## Done
+
+- Inspected the checkout, branch, worktrees, remotes, cached base, and the full
+  round-4 findings before implementation.
+- Confirmed the required implementation and mutant boundaries verbatim from
+  the review.
+- Implemented canonical `full` reconciliation: per-case verdict values now
+  reproduce report tolerance semantics, per-concept aggregates, the exact
+  mismatch list, unique/non-overlapping concepts, and disposition markers and
+  counts.
+- Required `full` evidence for reference conformance while retaining
+  cardinality as an honest reality-leg strength.
+- Closed the two promoted PARTIAL items: derived certificate mode wins over a
+  registry `mode`, and disposition accounting requires a valid nonempty
+  dispositions document for the same suite.
+- Added and passed the expanded 52-case certification mutant suite, including
+  foreign values, disposition drift, duplicate/overlapping concepts,
+  reference cardinality, later-malformed chunks, mode precedence, and
+  same-suite non-disposition artifacts.
+- Confirmed the strengthened validator isolates the live ECPS defect exactly:
+  `ecps-spm-50970` lacks the report's `explained_residual` compact marker.
+- Added an auditable regeneration path pinned to the migration parent
+  `6c4f17bfe6dc8224ee8251401fe0247b1117a25b`; it replays both migrated
+  Colorado corpora, projects report dispositions bidirectionally, validates
+  the complete projection, and rebuilds exact v1 bindings.
+- Regenerated both migration-touched suites through that path. ECPS now
+  validates `bound/full` over 1,072 cases and `ecps-spm-50970` carries
+  `e: explained_residual`; QC validates `bound/cardinality` over 856 cases
+  and remained byte-identical.
+- Preserved future QC `matched: false` rows as explicit compact mismatches and
+  made every skipped versioned corpus immutable, including inline-only v1.
+- Added six regeneration-path tests plus the QC-mismatch and inline-v1 skip
+  mutants. The combined mutant, regeneration, and comparison test set passes
+  all 95 tests.
+- Verified `dashboard/src/components/Households.jsx` consumes `m.e` both when
+  counting unexplained mismatches and when rendering mismatch dispositions.
+- Regenerated the exercise census and `us-co/snap` certificate from the new
+  chunk identity. The reference leg is honestly `bound/full`, clean, and has
+  one explained mismatch with zero unexplained; the reality leg remains
+  `bound/cardinality`. `conformant` remains true, while the pre-existing
+  exercise blocker keeps the overall certificate unavailable.
+- Confirmed both `exercise_census.py --check` and `certify.py --check` are
+  up to date after regeneration.
+- Final gates pass: migrated-corpus and chunk-index checks, disposition
+  consistency, census/certificate freshness, bridge validation (zero errors
+  and four pre-existing conservative findings), all 54 certification mutants,
+  41 regeneration/comparison tests, the bot no-op test, Ruff, and diff checks.
+- An independent final scope/correctness review found no actionable defect,
+  missing required mutant, scope creep, or dishonest certificate state.
+- Wrote the full result to
+  `sol-evidence-round5-2026-07-27-result.md`. Copying it to the requested ops
+  path was denied by the read-only sandbox (`Operation not permitted`), so the
+  committed in-repository report is the authorized fallback.
+
+## Next
+
+- No implementation work remains. A caller with write access to the ops
+  checkout may copy the committed fallback report to the requested output
+  path.
+
+---
+
+# PROGRESS — execution-evidence validator (#378)
+
+## State
+
+- Branch: `evidence-validator`, based on `bridge-manifests`; starting HEAD
+  `2778fa1764cc01f0cf10ad64ac89933df16b489a`.
+- Scope: add importable suite-evidence validation, versioned report/chunk
+  binding indexes, census/certificate integration, and durable synthetic
+  certification mutants.
+- Constraint: full chunk parsing is limited to certificate `PROGRAMS`; the
+  census-wide path must remain cardinality-level and fast.
+
+## Done
+
+- Verified the worktree is clean and checked out on `evidence-validator`.
+- Read issue #378, PR #368, every requested verification-history record, and
+  the current census/certificate/chunk producer paths.
+- Confirmed the blocker: arbitrary inline mappings and filename-only chunks
+  can pass certification; chunks are neither parsed nor bound to the cited
+  report; the census identity is not checked against the certificate registry.
+- Aligned with PR #368 without taking its scope: this component uses its
+  `schema_version`, `case_count`, and `comparison_count` vocabulary, while
+  leaving engine/oracle/output-surface attestation to that PR. Here,
+  `binding: bound|unbound` means only report-to-chunk identity.
+- Established reconciliation semantics from the live Colorado shapes:
+  `co-snap-ecps` supports `full` because compact `v` rows reproduce 2,143
+  matches and compact `m` rows reproduce one mismatch; `co-snap-qc` supports
+  only `cardinality` because 856 chunk rows reproduce the comparison
+  cardinality but omit per-row verdict values.
+- Found two migration constraints: all 114 existing chunk indexes use the
+  legacy integer `chunks` field expected by the dashboard loader, and both
+  Colorado reports mirror inline case IDs already present in their chunks.
+  The new indexes therefore require a loader compatibility change and the two
+  bound reports must move to chunk-authoritative case storage before strict
+  cross-source ID uniqueness can hold.
+- Implemented the importable validator and index builder in
+  `axiom_oracles/evidence.py`: strict report counts, compact/inline row shapes,
+  every-chunk parsing, global ID uniqueness, exact/full versus cardinality
+  reconciliation, and versioned report/path/SHA/chunk binding.
+- Added `scripts/generate_chunk_indexes.py`, including deterministic `--check`
+  behavior and an explicit one-time inline-mirror migration mode.
+- Added committed synthetic evidence fixtures and mutants for dummy metadata,
+  uncontested foreign chunks, duplicate IDs, malformed rows, stale report
+  hashes, and positive full/cardinality controls. Replaced the NYC-dependent
+  contested mutant with a synthetic census fixture.
+- Migrated the two Colorado dashboard reports to chunk-authoritative case
+  storage, wrote exact v1 indexes, and verified `co-snap-ecps` as
+  `bound/full` (1,072 case rows, 2,144 verdicts) and `co-snap-qc` as
+  `bound/cardinality` (856 case rows).
+- Preserved that contract across refreshes: the report slimmer clears
+  versioned inline mirrors, the artifact emitter preserves an existing
+  versioned corpus when a skip run has no full rows, and the bot/regeneration
+  paths rebuild and check indexes. The dashboard loader accepts both v1 chunk
+  descriptors and unmigrated legacy integer indexes.
+- Tightened cardinality fallback so nonempty compact mismatch evidence without
+  matched verdict rows is partial evidence (`none`), never a weaker passing
+  cardinality claim. Added a bound synthetic mutant for that shape.
+- Integrated the lightweight path into `exercise_census.py`: its existing
+  chunk read now records exact binding defects and a deliberately capped
+  `cardinality|none` reconciliation per row without aborting on legacy or
+  missing indexes.
+- Integrated strict validation into `certify.py` only for `PROGRAMS` suites.
+  Clean reference legs now require valid, bound, reconciled evidence, and the
+  certificate rejects census report-path or report-SHA divergence from its
+  registry entry.
+- Closed the refresh-time substitution path: `run_comparison.py` now emits
+  fresh compact chunks and a validated v1 index before slimming a versioned
+  report. The generic generator refuses changed identities on an existing v1
+  corpus, while skip/re-emit runs preserve the prior bound set byte-for-byte.
+- Hardened the defect boundary for unreadable/malformed nested report shapes
+  and non-standard/non-finite JSON. These inputs now produce leg/row defects
+  instead of exceptions or false cardinality passes.
+- Focused validation check: Ruff passes and
+  the combined validator/census/producer suite reports 76 passed.
+- Canonical final gates pass:
+  - `generate_chunk_indexes.py --check`: ECPS `bound/full`, QC
+    `bound/cardinality`;
+  - `exercise_census.py --check`: up to date;
+  - `certify.py --check`: up to date;
+  - `validate_bridge_manifests.py`: 0 errors, four pre-existing findings;
+  - `pytest tests/ -k "certification or commit_refreshed"`: 51 passed,
+    1,854 deselected (including the bot no-op path);
+  - Ruff, shell syntax, and `git diff --check`: clean.
+- Wrote and committed the complete verification report as
+  `sol-evidence-validator-2026-07-27-result.md`. The required external copy to
+  `ops/reviews/sol-evidence-validator-2026-07-27/result.md` was attempted and
+  denied by the read-only sandbox (`Operation not permitted`).
+
+## Next
+
+- No implementation work remains. A caller with write access to the ops
+  checkout must copy the committed fallback report to the requested output
+  path.
+
+---
+
 # PROGRESS — us-pe reconciliation (drive `unexplained_total` 23,138 → 0)
 
 Predecessor: **#224** stood up the us-pe conformance universe (measurement only,

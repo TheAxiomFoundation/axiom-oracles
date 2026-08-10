@@ -40,6 +40,14 @@ import sys
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from axiom_oracles.comparison.dispositions import (  # noqa: E402
+    validate_dispositions,
+)
+from axiom_oracles.evidence import validate_suite_evidence  # noqa: E402
+
 DATA_DIR = REPO_ROOT / "dashboard" / "public" / "data"
 CENSUS_PATH = REPO_ROOT / "conformance" / "exercise-census.json"
 OUT_DIR = REPO_ROOT / "certificates"
@@ -143,10 +151,11 @@ def _count(raw, field: str, defects: list[str], suite: str) -> int:
 
 
 def _dispositions_suite(path: Path) -> str | None:
-    """The suite a dispositions file declares, or None if unreadable.
+    """The suite a valid, nonempty dispositions file declares, else None.
 
-    Hashing a file proves which bytes were cited; only parsing it proves the
-    citation is about this suite.
+    Hashing a file proves which bytes were cited. Only full schema validation
+    proves that those bytes are a dispositions document with entries rather
+    than an unrelated same-suite artifact.
     """
     try:
         import yaml
@@ -159,7 +168,14 @@ def _dispositions_suite(path: Path) -> str | None:
         payload = yaml.safe_load(path.read_text())
     except Exception:
         return None
-    return str(payload.get("suite")) if isinstance(payload, dict) else None
+    errors = validate_dispositions(
+        payload,
+        path_label=str(path),
+        repo_root=REPO_ROOT,
+    )
+    if errors:
+        return None
+    return str(payload["suite"])
 
 
 def sha256_of(path: Path) -> str:
@@ -180,13 +196,44 @@ def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
     """
     defects: list[str] = []
     report_path = REPO_ROOT / entry["report"]
-    report = _load(report_path)
-    summary = report.get("summary") or {}
+    execution_evidence = validate_suite_evidence(report_path)
+    defects.extend(execution_evidence.defects)
+    reconciliation_sufficient = (
+        execution_evidence.reconciliation == "full"
+        if entry["oracle_type"] == "reference"
+        else execution_evidence.reconciliation != "none"
+    )
+    if (
+        entry["oracle_type"] == "reference"
+        and execution_evidence.valid
+        and execution_evidence.binding == "bound"
+        and execution_evidence.reconciliation != "full"
+    ):
+        defects.append(
+            f"{entry['suite']}: reference oracle requires full semantic "
+            f"reconciliation (got {execution_evidence.reconciliation})"
+        )
+    evidence_gate_clean = (
+        execution_evidence.valid
+        and execution_evidence.binding == "bound"
+        and reconciliation_sufficient
+    )
+    try:
+        loaded_report = _load(report_path)
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError):
+        # The validator already records the precise parse/read defect. Keep
+        # computing a defective leg so the certificate surfaces that finding
+        # instead of crashing before it can report it.
+        report = {}
+    else:
+        report = loaded_report if isinstance(loaded_report, dict) else {}
+    raw_summary = report.get("summary")
+    summary = raw_summary if isinstance(raw_summary, dict) else {}
 
     # Report identity: the artifact must claim the suite it is cited for.
     reported_suite = report.get("suite")
     accepted = {entry["suite"], *entry.get("aliases", [])}
-    if reported_suite not in accepted:
+    if not isinstance(reported_suite, str) or reported_suite not in accepted:
         defects.append(
             f"{entry['suite']}: report {entry['report']} identifies as "
             f"{reported_suite!r}, not this suite"
@@ -202,7 +249,22 @@ def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
     # Errors appear under several shapes across runners; a check that reads
     # only one key lets an errored run certify (audit finding 2). Count them
     # all, including the top-level list.
-    errors_by_engine = summary.get("errors_by_engine") or {}
+    raw_errors_by_engine = summary.get("errors_by_engine")
+    if raw_errors_by_engine is None:
+        errors_by_engine = {}
+    elif isinstance(raw_errors_by_engine, dict):
+        errors_by_engine = raw_errors_by_engine
+    else:
+        errors_by_engine = {}
+        defects.append(f"{entry['suite']}: errors_by_engine must be an object")
+    raw_errors = report.get("errors")
+    if raw_errors is None:
+        errors = []
+    elif isinstance(raw_errors, list):
+        errors = raw_errors
+    else:
+        errors = []
+        defects.append(f"{entry['suite']}: errors must be an array")
     error_count = (
         _count(summary.get("error_count"), "error_count", defects, entry["suite"])
         + _count(
@@ -212,7 +274,7 @@ def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
             _count(v, f"errors_by_engine[{k}]", defects, entry["suite"])
             for k, v in errors_by_engine.items()
         )
-        + len(report.get("errors") or [])
+        + len(errors)
     )
     if comparisons <= 0:
         defects.append(
@@ -222,14 +284,10 @@ def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
     # A positive comparison count must be backed by per-case evidence
     # somewhere: inline cases or committed chunks. Counts alone are an
     # assertion, not evidence (audit finding 2).
-    inline_cases = sum(
-        1 for c in (report.get("cases") or []) if isinstance(c, dict) and c
-    )
-    chunk_dir = REPO_ROOT / "dashboard" / "public" / "data" / "cases" / str(
-        reported_suite or entry["suite"]
-    )
-    chunk_files = sorted(chunk_dir.glob("chunk-*.json")) if chunk_dir.is_dir() else []
-    if comparisons > 0 and not inline_cases and not chunk_files:
+    raw_cases = report.get("cases")
+    inline_rows = raw_cases if isinstance(raw_cases, list) else []
+    inline_cases = sum(1 for c in inline_rows if isinstance(c, dict) and c)
+    if comparisons > 0 and not inline_cases and not execution_evidence.chunk_case_count:
         defects.append(
             f"{entry['suite']}: claims {comparisons} comparisons with no "
             "per-case evidence (no inline cases, no committed chunks)"
@@ -247,14 +305,22 @@ def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
 
     # Weighted evidence must not contradict the raw counts (a zero raw
     # mismatch count with nonzero weighted mismatch mass is hidden failure).
-    weighted = summary.get("weighted") or {}
+    raw_weighted = summary.get("weighted")
+    if raw_weighted is None:
+        weighted = {}
+    elif isinstance(raw_weighted, dict):
+        weighted = raw_weighted
+    else:
+        weighted = {}
+        defects.append(f"{entry['suite']}: weighted must be an object")
     try:
         weighted_mismatch = float(weighted.get("mismatch_weight") or 0)
     except (TypeError, ValueError):
         weighted_mismatch = 0.0
         defects.append(f"{entry['suite']}: weighted mismatch_weight is not numeric")
     if weighted_mismatch != weighted_mismatch or weighted_mismatch in (
-        float("inf"), float("-inf")
+        float("inf"),
+        float("-inf"),
     ):
         defects.append(f"{entry['suite']}: weighted mismatch_weight is not finite")
         weighted_mismatch = 0.0
@@ -276,17 +342,67 @@ def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
     #   none   — no machinery; every mismatch is unexplained by definition.
     #   inline — classifications exist with no file (generator-classified);
     #            unvalidated, so the leg is defective until migrated.
-    dispositioned = summary.get("dispositioned") or {}
-    counts = dispositioned.get("counts") or {}
-    evidence: list[dict] = [
-        {
-            "claim": f"suite:{entry['suite']}",
-            "mode": "computed",
-            "artifact": entry["report"],
-            "sha256": sha256_of(report_path),
-        }
-    ]
-    disposition_file = dispositioned.get("dispositions_file")
+    raw_dispositioned = summary.get("dispositioned")
+    if raw_dispositioned is None:
+        dispositioned = {}
+    elif isinstance(raw_dispositioned, dict):
+        dispositioned = raw_dispositioned
+    else:
+        dispositioned = {}
+        defects.append(f"{entry['suite']}: dispositioned must be an object")
+    raw_counts = dispositioned.get("counts")
+    if raw_counts is None:
+        counts = {}
+    elif isinstance(raw_counts, dict):
+        counts = raw_counts
+    else:
+        counts = {}
+        defects.append(f"{entry['suite']}: dispositioned.counts must be an object")
+    evidence: list[dict] = []
+    if execution_evidence.report_sha256 is not None:
+        evidence.append(
+            {
+                "claim": f"suite:{entry['suite']}",
+                "mode": "computed",
+                "artifact": entry["report"],
+                "sha256": execution_evidence.report_sha256,
+            }
+        )
+    if execution_evidence.suite:
+        index_path = (
+            report_path.parent / "cases" / execution_evidence.suite / "index.json"
+        )
+        if index_path.is_file():
+            try:
+                index_artifact = index_path.relative_to(REPO_ROOT).as_posix()
+            except ValueError:
+                index_artifact = index_path.as_posix()
+            try:
+                index_sha256 = sha256_of(index_path)
+            except OSError as exc:
+                defects.append(
+                    f"{entry['suite']}: case evidence index cannot be read "
+                    f"({exc.strerror or type(exc).__name__})"
+                )
+            else:
+                evidence.append(
+                    {
+                        "claim": f"case-evidence-index:{entry['suite']}",
+                        "mode": "computed",
+                        "artifact": index_artifact,
+                        "sha256": index_sha256,
+                    }
+                )
+    raw_disposition_file = dispositioned.get("dispositions_file")
+    if raw_disposition_file in (None, ""):
+        disposition_file = None
+    elif isinstance(raw_disposition_file, str):
+        disposition_file = raw_disposition_file
+    else:
+        disposition_file = None
+        defects.append(
+            f"{entry['suite']}: dispositions_file must be a repository-relative string"
+        )
     classified = sum(
         _count(v, f"counts.{k}", defects, entry["suite"]) for k, v in counts.items()
     )
@@ -319,6 +435,7 @@ def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
             # mismatches can be "explained" by another suite's file entirely
             # (audit finding 3).
             declared = _dispositions_suite(dispositions_path)
+            authorized = declared in accepted
             if declared is None:
                 # An unreadable, non-mapping, or suite-less file is not a
                 # dispositions artifact — any repository file could otherwise
@@ -332,46 +449,75 @@ def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
                     f"{entry['suite']}: {disposition_file} declares suite "
                     f"{declared!r}, which is not this suite"
                 )
-            unexplained = _count(
-                dispositioned.get("unexplained_count"),
-                "unexplained_count",
-                defects,
-                entry["suite"],
-            )
-            # counts.unexplained and unexplained_count must agree; a summary
-            # that reports both, differently, is not a reconciled aggregate.
-            counted_unexplained = _count(
-                counts.get("unexplained"),
-                "counts.unexplained",
-                defects,
-                entry["suite"],
-            )
-            if counted_unexplained != unexplained:
-                defects.append(
-                    f"{entry['suite']}: counts.unexplained "
-                    f"({counted_unexplained}) disagrees with unexplained_count "
-                    f"({unexplained})"
+            if not authorized:
+                # A same-suite label alone cannot authorize report-provided
+                # disposition counts. Diagnose their internal shape, then
+                # fail closed to the raw mismatch total.
+                reported_unexplained = _count(
+                    dispositioned.get("unexplained_count"),
+                    "unexplained_count",
+                    defects,
+                    entry["suite"],
                 )
-                unexplained = max(unexplained, counted_unexplained)
-            unknown = set(counts) - KNOWN_DISPOSITION_KINDS
-            if unknown:
-                defects.append(
-                    f"{entry['suite']}: unknown disposition kind(s) "
-                    f"{sorted(unknown)} — only {sorted(KNOWN_DISPOSITION_KINDS)} "
-                    "carry defined meaning"
+                counted_unexplained = _count(
+                    counts.get("unexplained"),
+                    "counts.unexplained",
+                    defects,
+                    entry["suite"],
                 )
-            if classified != mismatch_count:
-                defects.append(
-                    f"{entry['suite']}: disposition counts ({classified}) do "
-                    f"not conserve against mismatches ({mismatch_count})"
+                if counted_unexplained != reported_unexplained:
+                    defects.append(
+                        f"{entry['suite']}: counts.unexplained "
+                        f"({counted_unexplained}) disagrees with "
+                        f"unexplained_count ({reported_unexplained})"
+                    )
+                unexplained = mismatch_count
+            else:
+                unexplained = _count(
+                    dispositioned.get("unexplained_count"),
+                    "unexplained_count",
+                    defects,
+                    entry["suite"],
                 )
-    elif classified and classified != int(
-        dispositioned.get("unexplained_count") or 0
-    ):
-        defects.append(
-            f"{entry['suite']}: inline classifications present with no "
-            "dispositions file — unvalidated; migrate before they can explain"
+                # counts.unexplained and unexplained_count must agree; a
+                # summary that reports both, differently, is not reconciled.
+                counted_unexplained = _count(
+                    counts.get("unexplained"),
+                    "counts.unexplained",
+                    defects,
+                    entry["suite"],
+                )
+                if counted_unexplained != unexplained:
+                    defects.append(
+                        f"{entry['suite']}: counts.unexplained "
+                        f"({counted_unexplained}) disagrees with "
+                        f"unexplained_count ({unexplained})"
+                    )
+                    unexplained = max(unexplained, counted_unexplained)
+                unknown = set(counts) - KNOWN_DISPOSITION_KINDS
+                if unknown:
+                    defects.append(
+                        f"{entry['suite']}: unknown disposition kind(s) "
+                        f"{sorted(unknown)} — only "
+                        f"{sorted(KNOWN_DISPOSITION_KINDS)} carry defined meaning"
+                    )
+                if classified != mismatch_count:
+                    defects.append(
+                        f"{entry['suite']}: disposition counts ({classified}) "
+                        f"do not conserve against mismatches ({mismatch_count})"
+                    )
+    elif classified:
+        inline_unexplained = _count(
+            dispositioned.get("unexplained_count"),
+            "unexplained_count",
+            defects,
+            entry["suite"],
         )
+        if classified != inline_unexplained:
+            defects.append(
+                f"{entry['suite']}: inline classifications present with no "
+                "dispositions file — unvalidated; migrate before they can explain"
+            )
         unexplained = mismatch_count
     else:
         unexplained = mismatch_count
@@ -379,18 +525,30 @@ def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
     # Slim-report guard: when the summary claims mismatches the report body
     # does not carry and no per-case chunks exist, the aggregate cannot be
     # audited from committed evidence.
-    stored = len(report.get("mismatches") or [])
-    chunk_dir = REPO_ROOT / "dashboard" / "public" / "data" / "cases" / str(
-        reported_suite or entry["suite"]
-    )
-    if mismatch_count > stored and not chunk_dir.is_dir():
+    raw_mismatches = report.get("mismatches")
+    if raw_mismatches is None:
+        mismatch_rows = []
+    elif isinstance(raw_mismatches, list):
+        mismatch_rows = raw_mismatches
+    else:
+        mismatch_rows = []
+        defects.append(f"{entry['suite']}: mismatches must be an array")
+    stored = len(mismatch_rows)
+    if (
+        mismatch_count > stored
+        and not execution_evidence.chunk_case_count
+        and execution_evidence.reconciliation != "full"
+    ):
         defects.append(
             f"{entry['suite']}: {mismatch_count} mismatches claimed, "
             f"{stored} stored, no per-case chunks — aggregate unauditable"
         )
 
     axiom_open = _count(
-        counts.get("axiom_encoding_gap"), "counts.axiom_encoding_gap", defects, entry["suite"]
+        counts.get("axiom_encoding_gap"),
+        "counts.axiom_encoding_gap",
+        defects,
+        entry["suite"],
     )
     leg = {
         "suite": entry["suite"],
@@ -402,8 +560,13 @@ def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
         "weighted_mismatch_mass": weighted_mismatch or None,
         "unexplained": unexplained,
         "axiom_attributed_open": axiom_open,
+        "binding": execution_evidence.binding,
+        "reconciliation": execution_evidence.reconciliation,
+        "evidence_cases": execution_evidence.case_count,
         "report_defects": defects,
-        "clean": not defects and unexplained == 0 and axiom_open == 0,
+        "clean": (
+            evidence_gate_clean and not defects and unexplained == 0 and axiom_open == 0
+        ),
     }
     return leg, evidence, defects
 
@@ -419,6 +582,46 @@ def _exercise_block(
             rows[entry["suite"]] = {"status": "no census row"}
             complete = False
             continue
+
+        expected_report = entry["report"]
+        expected_path = REPO_ROOT / expected_report
+        expected_sha256: str | None
+        if expected_path.is_file():
+            try:
+                expected_sha256 = sha256_of(expected_path)
+            except OSError as exc:
+                expected_sha256 = None
+                complete = False
+                defects.append(
+                    f"{entry['suite']}: registry report {expected_report!r} "
+                    f"cannot be read ({exc.strerror or type(exc).__name__})"
+                )
+        else:
+            expected_sha256 = None
+            complete = False
+            defects.append(
+                f"{entry['suite']}: registry report {expected_report!r} "
+                "does not exist and cannot be matched to the census"
+            )
+        report_identity_matches = (
+            row.get("report") == expected_report
+            and expected_sha256 is not None
+            and row.get("report_sha256") == expected_sha256
+        )
+        if row.get("report") != expected_report:
+            complete = False
+            defects.append(
+                f"{entry['suite']}: census report path {row.get('report')!r} "
+                f"diverges from registry report {expected_report!r}"
+            )
+        if expected_sha256 is not None and row.get("report_sha256") != expected_sha256:
+            complete = False
+            defects.append(
+                f"{entry['suite']}: census report_sha256 "
+                f"{row.get('report_sha256')!r} diverges from registry report "
+                f"bytes {expected_sha256}"
+            )
+
         has_evidence = bool(row.get("evidence_fields"))
         if not has_evidence:
             complete = False
@@ -438,12 +641,17 @@ def _exercise_block(
             "cases": row.get("cases_scanned"),
             "report": row.get("report"),
             "report_sha256": row.get("report_sha256"),
+            "registry_report": expected_report,
+            "registry_report_sha256": expected_sha256,
+            "report_identity_matches_registry": report_identity_matches,
             "contested_reports": contested,
             "varied_fields": row.get("varied_fields"),
             "constant_fields": row.get("constant_fields"),
             "bridged_through": sorted((row.get("bridged_through") or {}).keys()),
             "bridge_audited": bool(row.get("bridge_audited")),
             "per_case_evidence_committed": has_evidence,
+            "binding": row.get("binding"),
+            "reconciliation": row.get("reconciliation"),
         }
         if not row.get("bridge_audited"):
             complete = False
@@ -557,12 +765,12 @@ def build_certificate(program: str, spec: dict) -> dict:
                 "suites": exercise_rows,
             },
             "closed": {
-                "mode": "computed" if closed_computed else "attested",
                 **attested.get("closed", {}),
+                "mode": "computed" if closed_computed else "attested",
             },
             "executable": {
-                "mode": "computed" if exec_computed else "attested",
                 **attested.get("executable", {}),
+                "mode": "computed" if exec_computed else "attested",
             },
         },
         "blockers": blockers,
