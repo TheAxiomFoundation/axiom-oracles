@@ -6887,7 +6887,7 @@
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
       "report": "dashboard/public/data/axiom-euromod-uk-income-tax-dividend.json",
-      "report_sha256": "25026a8452231a0b765c66384cd6cc66c3afd359100add28d8a8307324adbd44",
+      "report_sha256": "c9cc710a595c9d8aaa8d321402614c13a402716171c43bd78a6fb31bf43da4af",
       "varied_fields": 2,
       "verdict_concepts": {}
     },
