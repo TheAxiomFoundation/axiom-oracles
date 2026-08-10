@@ -93,7 +93,7 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-08-10T08:13:01Z",
+    "generated_at": "2026-08-10T13:52:36Z",
     "generated_by": "scripts/run_comparison.py::uk-business-rates",
     "oracle": {
       "name": "policyengine",
@@ -102,7 +102,7 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-uk",
-        "sha": "4f5bd03e4ab4a9c5e2957e9bb193b1e6deef1681"
+        "sha": "07cb4b61726a6e06d6d2101fc2d9404ead69b74a"
       }
     ],
     "run_kind": "affected-rerun",
