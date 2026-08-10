@@ -191,7 +191,7 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-08-10T02:49:17Z",
+    "generated_at": "2026-08-10T08:13:07Z",
     "generated_by": "scripts/run_comparison.py::uk-council-tax-reduction",
     "oracle": {
       "name": "policyengine",
@@ -200,7 +200,7 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-uk",
-        "sha": "89e587022eb016a7a79367ee749a8c466be6f95f"
+        "sha": "4f5bd03e4ab4a9c5e2957e9bb193b1e6deef1681"
       }
     ],
     "run_kind": "affected-rerun",
