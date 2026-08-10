@@ -21,9 +21,11 @@
   that path is outside the writable sandbox, so the final response is the
   launcher-captured report.
 - Current status: the authorization conflict is resolved, the two-way semantic
-  reconciliation and derived regeneration are complete, and every requested
-  gate is green. The verified merge tree is ready for its merge commit and
-  push; PR #379 will remain open and unmerged.
+  reconciliation and derived regeneration are complete, every requested gate
+  is green, and merge commit `82b3e184` is clean locally. Publication is
+  externally blocked: terminal GitHub transport cannot resolve `github.com`,
+  and the connected GitHub interface rejected its first atomic blob write.
+  PR #379 remains open and unmerged at remote head `a312ace1`.
 
 ## Done
 
@@ -115,13 +117,24 @@
   sandbox forbids writing `~/.gitnexus/registry.json`; direct source/history
   tracing was used as the documented fallback, and its 96 MiB partial local
   index was removed before staging.
+- Audited the final staged merge tree: 663 paths, no unstaged/untracked files,
+  no unresolved entries, and exact parents `a312ace1` plus `7fbd812f`. Re-ran
+  the 66-case evidence battery and replay/index/overview/census/certificate
+  checks against that exact tree; all passed.
+- Created merge commit `82b3e184` with message `Merge origin/main with two-way
+  evidence reconciliation`; its body records the preserved #375 machinery and
+  restored bound execution-evidence contracts.
+- A normal `git push origin evidence-validator` failed before authentication
+  with `Could not resolve host: github.com`. The connected GitHub interface
+  independently confirmed remote head `a312ace1` and PR #379 open/unmerged,
+  then rejected the attempted atomic blob publication as `user cancelled MCP
+  tool call`. No remote blob, tree, commit, ref, or PR state was changed.
 
 ## Next
 
-- Stage the five continuation changes, audit the final merge tree, and create
-  the merge commit with a message documenting the two-way reconciliation.
-- Push `evidence-validator` to origin, verify the remote ref, and leave PR #379
-  open and unmerged.
+- When GitHub transport/write access is available, push local
+  `evidence-validator` (tip includes merge commit `82b3e184`) to origin and
+  verify the remote ref. Do not merge or otherwise change PR #379.
 
 ---
 
