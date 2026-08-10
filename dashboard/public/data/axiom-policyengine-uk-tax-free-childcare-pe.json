@@ -51,7 +51,7 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-08-10T13:52:51Z",
+    "generated_at": "2026-08-10T19:28:57Z",
     "generated_by": "scripts/run_comparison.py::uk-tax-free-childcare-pe",
     "oracle": {
       "name": "policyengine",
@@ -60,7 +60,7 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-uk",
-        "sha": "07cb4b61726a6e06d6d2101fc2d9404ead69b74a"
+        "sha": "7755a0ecfa0e2cc8337056249d5e0caa4182adbb"
       }
     ],
     "run_kind": "affected-rerun",
