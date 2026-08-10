@@ -10387,6 +10387,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 57.600006103515625,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-disability-hheod-counterfactual-4813",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/435"
+      },
       "kind": "amount_difference",
       "left": 298.0,
       "parent": null,
@@ -10865,6 +10870,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 316.8000183105469,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-extraction-endogenous-ssi-5104",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/437"
+      },
       "kind": "amount_difference",
       "left": 668.0,
       "parent": null,
@@ -10944,6 +10954,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 40.5,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-extraction-endogenous-ssi-5196",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/437"
+      },
       "kind": "amount_difference",
       "left": 298.0,
       "parent": null,
@@ -11589,6 +11604,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 156.3000030517578,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-disability-hheod-counterfactual-5469",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/435"
+      },
       "kind": "amount_difference",
       "left": 298.0,
       "parent": null,
@@ -13073,6 +13093,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 103.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-disability-hheod-counterfactual-6134",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/435"
+      },
       "kind": "amount_difference",
       "left": 103.0,
       "parent": null,
@@ -13822,6 +13847,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 15.5,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-extraction-endogenous-ssi-6692",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/437"
+      },
       "kind": "amount_difference",
       "left": 270.0,
       "parent": null,
@@ -13901,6 +13931,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 91.30000305175781,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-negative-se-loss-2026-08-07-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 230.0,
       "parent": null,
@@ -14105,6 +14140,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 637.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-negative-se-loss-2026-08-07-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 637.0,
       "parent": null,
@@ -14730,6 +14770,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 371.70001220703125,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-disability-hheod-counterfactual-7277",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/435"
+      },
       "kind": "amount_difference",
       "left": 994.0,
       "parent": null,
@@ -14788,6 +14833,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 222.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-fallback-negative-se-loss-65322",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/437"
+      },
       "kind": "amount_difference",
       "left": 222.0,
       "parent": null,
@@ -14867,6 +14917,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 309.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-negative-se-loss-2026-08-07-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 309.0,
       "parent": null,
@@ -14883,6 +14938,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-negative-se-loss-2026-08-07-eligibility-66401",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -15226,18 +15286,18 @@
     "dispositioned": {
       "counts": {
         "axiom_encoding_gap": 85,
-        "bridge_artifact": 148,
+        "bridge_artifact": 160,
         "explained_residual": 0,
         "unexplained": 0,
         "upstream_engine_gap": 0
       },
       "dispositions_file": "dispositions/ny-snap-ecps.yaml",
       "expired_entries": [],
-      "explained_rate": 98.478193,
+      "explained_rate": 98.666457,
       "orphaned_entries": [],
       "raw_match_rate": 96.15626,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 12
+      "unexplained_count": 0
     },
     "error_count": 0,
     "errors_by_engine": [],

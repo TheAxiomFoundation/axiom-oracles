@@ -3824,6 +3824,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 34.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "pe-unprojected-dividend-medical-counterfactual-69224",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
+      },
       "kind": "amount_difference",
       "left": 34.0,
       "parent": null,
@@ -3936,18 +3941,18 @@
     "dispositioned": {
       "counts": {
         "axiom_encoding_gap": 8,
-        "bridge_artifact": 39,
+        "bridge_artifact": 40,
         "explained_residual": 0,
         "unexplained": 0,
         "upstream_engine_gap": 8
       },
       "dispositions_file": "dispositions/al-snap-ecps.yaml",
       "expired_entries": [],
-      "explained_rate": 99.688366,
+      "explained_rate": 99.722992,
       "orphaned_entries": [],
       "raw_match_rate": 98.060942,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 1
+      "unexplained_count": 0
     },
     "error_count": 0,
     "errors_by_engine": [],

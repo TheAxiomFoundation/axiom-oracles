@@ -21819,6 +21819,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 474.9000244140625,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-ed-shelter-calworks-stack-2026-08-07-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 1183.0,
       "parent": null,
@@ -22678,6 +22683,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 33.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-usda-ed-surface-drift-2026-08-07-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/435"
+      },
       "kind": "amount_difference",
       "left": 33.0,
       "parent": null,
@@ -22694,6 +22704,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-usda-ed-surface-drift-2026-08-07-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/435"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -23845,6 +23860,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 24.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-usda-ed-surface-drift-2026-08-07-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/435"
+      },
       "kind": "amount_difference",
       "left": 24.0,
       "parent": null,
@@ -23861,6 +23881,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-usda-ed-surface-drift-2026-08-07-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/435"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -24190,6 +24215,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 386.5999755859375,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-ed-shelter-calworks-stack-2026-08-07-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 930.0,
       "parent": null,
@@ -26804,6 +26834,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 261.5999755859375,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-ed-shelter-calworks-stack-2026-08-07-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 785.0,
       "parent": null,
@@ -27435,6 +27470,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 147.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-usda-ed-surface-drift-2026-08-07-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/435"
+      },
       "kind": "amount_difference",
       "left": 147.0,
       "parent": null,
@@ -27451,6 +27491,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-usda-ed-surface-drift-2026-08-07-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/435"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -28005,6 +28050,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 361.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-fallback-path-mix-2026-08-07-ecps-60816",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/438"
+      },
       "kind": "amount_difference",
       "left": 361.0,
       "parent": null,
@@ -29213,6 +29263,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 298.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-usda-ed-surface-drift-2026-08-07-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/435"
+      },
       "kind": "amount_difference",
       "left": 298.0,
       "parent": null,
@@ -29229,6 +29284,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-usda-ed-surface-drift-2026-08-07-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/435"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -29799,6 +29859,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 290.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-ed-shelter-calworks-stack-2026-08-07-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
+      },
       "kind": "amount_difference",
       "left": 691.0,
       "parent": null,
@@ -30847,6 +30912,11 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 612.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-usda-ed-surface-drift-2026-08-07-benefit",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/435"
+      },
       "kind": "amount_difference",
       "left": 612.0,
       "parent": null,
@@ -30863,6 +30933,11 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-usda-ed-surface-drift-2026-08-07-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/435"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -31583,18 +31658,18 @@
     "dispositioned": {
       "counts": {
         "axiom_encoding_gap": 0,
-        "bridge_artifact": 490,
+        "bridge_artifact": 505,
         "explained_residual": 0,
         "unexplained": 0,
         "upstream_engine_gap": 20
       },
       "dispositions_file": "dispositions/ca-snap-ecps.yaml",
       "expired_entries": [],
-      "explained_rate": 99.866216,
+      "explained_rate": 99.971835,
       "orphaned_entries": [],
       "raw_match_rate": 96.275173,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 19
+      "unexplained_count": 4
     },
     "error_count": 0,
     "errors_by_engine": [],

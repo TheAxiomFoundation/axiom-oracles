@@ -1,0 +1,18 @@
+{
+ "suite": "us-snap-abawd-grid",
+ "updated": "2026-08-05",
+ "entries": [
+  {
+   "id": "dependent-child-exception-upstream-placement",
+   "concept": "us:regulations/7-cfr/273/24#snap_member_abawd_exception_applies",
+   "kind": "judgment_difference",
+   "disposition": "explained_residual",
+   "mechanism": "Architectural placement, not a verdict disagreement. Axiom encodes the 2015(o)(3)(C) dependent-child exception (responsibility for a dependent child under 14, post-P.L. 119-21) directly inside snap_member_abawd_exception_applies, so the child-13 case holds on the compared concept. PolicyEngine 1.767.3 deliberately implements the same exception one level up: meets_snap_work_requirements_person is documented in-source as \"the single source of truth for the household-child ABAWD exception\", routing any member of an SPM unit containing a child under the post-HR1 age-14 threshold around the ABAWD test entirely, and meets_snap_abawd_work_requirements notes the in-formula duplicate \"has been removed\" as dead code. The ABAWD composite therefore stays false on the child-13 case even though PolicyEngine applies the exception at the person level. The routing is proven causally on every run, not asserted from source: the generator's age-64 child-routing probe observes the person-level composite flip true-to-false as the household child crosses the age-14 boundary while the ABAWD composite stays false on both sides (recorded under engine_bindings.policyengine.child_routing_probe in the committed report) \u2014 an observation only possible if the child exception is applied upstream of the compared composite. The child-14 row of the matrix itself matches (no exception on that basis for either engine), and PolicyEngine's dependent age-14 threshold parameter is verified before any verdict is trusted; a PolicyEngine release that moves or drops the routing fails the probe instead of silently changing what this residual means.",
+   "cases": [
+    "abawd_exception_applies_to_responsible_adult_with_child_under_fourteen"
+   ],
+   "arithmetic": [],
+   "linked_issue": "https://github.com/PolicyEngine/policyengine-us/blob/master/policyengine_us/variables/gov/usda/snap/eligibility/work_requirements/meets_snap_work_requirements_person.py"
+  }
+ ]
+}

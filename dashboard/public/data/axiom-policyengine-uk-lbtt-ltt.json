@@ -292,7 +292,7 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-08-07T19:27:44Z",
+    "generated_at": "2026-08-09T13:30:11Z",
     "generated_by": "scripts/run_comparison.py::uk-lbtt-ltt",
     "oracle": {
       "name": "policyengine",
@@ -301,7 +301,7 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-uk",
-        "sha": "ed56e4a4a7d9e7d5d977d1956c5994a0be81d057"
+        "sha": "af91402af56ff2d59ae98af2af1dea8cac51e798"
       }
     ],
     "run_kind": "affected-rerun",
