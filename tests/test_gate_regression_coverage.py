@@ -13,6 +13,7 @@ from functools import lru_cache
 import hashlib
 import importlib.util
 import json
+import math
 from pathlib import Path
 import subprocess
 import sys
@@ -1404,6 +1405,29 @@ def test_bridge_manifest_covered_by_requires_a_checkable_reference_and_reports_d
         Path("victim.yaml"), _bridge_manifest(bindings=[binding])
     )
     assert any("no covered_by entry" in error for error in errors)
+
+
+@pytest.mark.parametrize(
+    "covered_by",
+    [pytest.param(None, id="missing"), pytest.param([], id="empty"), pytest.param("report", id="scalar")],
+)
+def test_bridge_manifest_bridged_covered_by_is_a_nonempty_list(
+    monkeypatch: pytest.MonkeyPatch,
+    covered_by: object,
+):
+    binding = {
+        "kind": "bridged",
+        "dimension": "deduction",
+        "source": "oracle:deduction",
+        "mechanism": "injected",
+        "audit": "read",
+    }
+    if covered_by is not None:
+        binding["covered_by"] = covered_by
+    errors, _findings = _validate_manifest(
+        monkeypatch, _bridge_manifest(bindings=[binding])
+    )
+    assert any("covered_by as a non-empty list" in error for error in errors)
 
 
 @pytest.mark.parametrize(
@@ -3128,6 +3152,43 @@ def test_evidence_report_count_case_and_chunk_shape_mutants(
         report_path.write_text(json.dumps(report))
     result = evidence.validate_suite_evidence(report_path)
     assert any(marker in defect for defect in result.content_defects), result.defects
+
+
+@pytest.mark.parametrize("surface", ["inline", "compact"])
+def test_evidence_each_inline_and_compact_case_row_must_be_an_object(
+    tmp_path: Path,
+    surface: str,
+):
+    evidence, report_path, chunk_path, _index_path = _write_full_evidence(tmp_path)
+    report, chunk = _read_evidence(report_path, chunk_path)
+    if surface == "inline":
+        report["case_count"] = 3
+        report["cases"] = [None]
+        marker = "report cases[0] must be an object"
+    else:
+        chunk[0] = None
+        marker = "chunk-0.json row 0 must be an object"
+    _write_evidence(report_path, chunk_path, report, chunk)
+    result = evidence.validate_suite_evidence(report_path)
+    assert any(marker in defect for defect in result.content_defects)
+
+
+@pytest.mark.parametrize(
+    "suite",
+    ["", ".", "..", "../escape", "/absolute", "nested/name", "back\\slash"],
+)
+def test_evidence_suite_name_is_one_safe_path_component(suite: str):
+    evidence = _evidence_module()
+    assert evidence.is_safe_suite_name(suite) is False
+
+
+def test_evidence_numeric_representation_tolerance_boundary_is_pinned():
+    evidence = _evidence_module()
+    assert evidence._representation_matches(1.0, 1.0 + 1e-6)
+    assert not evidence._representation_matches(1.0, 1.0 + 1.1e-6)
+    large = 1e20
+    assert evidence._representation_matches(large, large + 3 * math.ulp(large))
+    assert not evidence._representation_matches(large, large + 6 * math.ulp(large))
 
 
 @pytest.mark.parametrize(
