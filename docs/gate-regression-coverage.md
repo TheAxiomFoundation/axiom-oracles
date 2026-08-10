@@ -1,8 +1,8 @@
 # Certification gate regression-coverage audit
 
-Date: 2026-08-09  
-Branch: `autogo/gate-regression-coverage`  
-Base: `origin/main@a365aac2`  
+Date: 2026-08-09
+Branch: `autogo/gate-regression-coverage`
+Base: `origin/main@a365aac2`
 Evidence-validator object: `origin/evidence-validator@33a182ee`
 
 ## Verdict
