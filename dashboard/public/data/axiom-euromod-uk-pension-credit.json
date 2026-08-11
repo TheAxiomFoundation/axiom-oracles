@@ -1393,7 +1393,7 @@
       "axiom_rules_engine_sha": "dc7eb90d2cfcf6b7ecf68ada226112a8ac444350",
       "axiom_rules_engine_version": "0.2.1"
     },
-    "generated_at": "2026-08-11T13:51:32Z",
+    "generated_at": "2026-08-11T19:32:34Z",
     "generated_by": "scripts/run_comparison.py::uk-pension-credit-ukmod",
     "oracle": {
       "euromod_country": "UK",
