@@ -7435,7 +7435,7 @@
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
       "report": "dashboard/public/data/axiom-euromod-uk-winter-fuel.json",
-      "report_sha256": "c66831d083d6b8b5c9f17e47d6a36fc3cf03fe97ea276487300d8911308a68ed",
+      "report_sha256": "988983d72f14bbe04562685fa633a0d637e34ce3271511857dc8dc35227c0b50",
       "varied_fields": 6,
       "verdict_concepts": {}
     },
