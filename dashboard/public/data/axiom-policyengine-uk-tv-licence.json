@@ -285,12 +285,12 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-08-10T19:29:05Z",
+    "generated_at": "2026-08-12T13:55:33Z",
     "generated_by": "scripts/run_comparison.py::uk-tv-licence",
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-uk",
-        "sha": "7755a0ecfa0e2cc8337056249d5e0caa4182adbb"
+        "sha": "510b4372a7cfff949a55c64bc5fadb0286a67a53"
       }
     ],
     "run_kind": "affected-rerun",
