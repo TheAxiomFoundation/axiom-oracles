@@ -1741,7 +1741,7 @@
       "evidence_source": "chunks",
       "inline_cases_not_counted": 4,
       "report": "dashboard/public/data/axiom-euromod-be-work-bonus-credit.json",
-      "report_sha256": "d596c5bb13800794f6ef9a966c80598ace4e5d424134dd0190d44c6573c9b1a4",
+      "report_sha256": "30d6059239534a808dfd106c02cc8610f2321b7fde56e5e59796b46b2b1f4b7e",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
