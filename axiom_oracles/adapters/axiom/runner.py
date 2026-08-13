@@ -250,6 +250,18 @@ class AxiomRulesRunner(EngineAdapter):
             if self._staged_roots is None:
                 self._staged_roots = StagedRootCache()
             for root in roots:
+                # A discovered root that carries none of the requested
+                # jurisdictions would stage as an empty directory, and the
+                # hard-cut engine contract rejects empty roots outright
+                # ("must contain a direct matching jurisdiction"). Skip it:
+                # sibling-jurisdiction checkouts under a shared roots dir are
+                # not part of this program's universe. (The legacy compile
+                # path tolerated them, which is why this only bites pinned
+                # post-hard-cut engines.)
+                if not any(
+                    (root / name).is_dir() for name in jurisdictions
+                ):
+                    continue
                 staged = self._staged_roots.staged(root, jurisdictions)
                 staged_roots.append(staged)
                 if not composed:

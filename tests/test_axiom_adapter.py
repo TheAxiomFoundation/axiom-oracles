@@ -1118,3 +1118,61 @@ def test_candidate_selection_sees_remapped_bare_ids(tmp_path: Path) -> None:
 
     assert result.errors == ()
     assert result.values["us:tax/oracle-bridge#state_income_tax"] == 1234.0
+
+
+def test_staging_skips_roots_without_a_requested_jurisdiction(
+    tmp_path: Path,
+) -> None:
+    """A sibling checkout carrying none of the program's jurisdictions must
+    not be staged: it stages as an empty directory, and the hard-cut engine
+    contract rejects empty roots ("must contain a direct matching
+    jurisdiction"). The legacy compile path tolerated the empties, so this
+    only bites pinned post-hard-cut engines (seen live on the dk EUROMOD
+    lane with a be sibling under the shared roots dir)."""
+    dk_root = tmp_path / "rulespec-dk"
+    (dk_root / "dk" / "statutes").mkdir(parents=True)
+    (dk_root / "dk" / "statutes" / "mod.yaml").write_text("format: rulespec/v1\n")
+    be_root = tmp_path / "rulespec-be"
+    (be_root / "be" / "statutes").mkdir(parents=True)
+    (be_root / "be" / "statutes" / "mod.yaml").write_text("format: rulespec/v1\n")
+
+    compile_calls = []
+
+    def fake_run(args, **kwargs):
+        if args[1] in ("compile", "compile-composed"):
+            compile_calls.append([str(a) for a in args])
+            return subprocess.CompletedProcess(args, 0, stdout="", stderr="")
+        return subprocess.CompletedProcess(
+            args,
+            0,
+            stdout=json.dumps(
+                {
+                    "metadata": {
+                        "requested_mode": "explain",
+                        "actual_mode": "explain",
+                    },
+                    "results": [],
+                }
+            ),
+            stderr="",
+        )
+
+    runner = AxiomRulesRunner(
+        binary_path=tmp_path / "axiom-rules",
+        program_imports=("dk:statutes/mod",),
+        generated_program_target="dk:statutes/mod",
+        rulespec_repo_roots=(dk_root, be_root),
+        subprocess_run=fake_run,
+    )
+    case = Case(
+        case_id="case-1",
+        period="2025",
+        metadata={"axiom_inputs": {}},
+    )
+
+    runner.run_cases([case], [])
+
+    assert compile_calls, "expected a compile invocation"
+    joined = " ".join(compile_calls[0])
+    assert "rulespec-dk" in joined
+    assert "rulespec-be" not in joined

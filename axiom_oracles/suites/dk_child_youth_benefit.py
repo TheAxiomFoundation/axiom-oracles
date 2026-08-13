@@ -69,6 +69,8 @@ DK_METADATA = {
 # The composed child/youth benefit pipeline (rulespec-dk). Its single-recipient
 # annual output and its Person-level inputs are addressed under this module id.
 CYB_MODULE = "dk:statutes/composed/boerne-og-ungeydelse-pipeline"
+P1_MODULE = "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1"
+P1A_MODULE = "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a"
 
 EUROMOD_TO_AXIOM_INPUT_BRIDGE = "euromod_to_axiom_input_bridge"
 
@@ -139,8 +141,8 @@ def _child_youth_benefit_case(*, child_age: int, head_annual_income: float) -> C
             EUROMOD_TO_AXIOM_INPUT_BRIDGE: {
                 "tintbto_s": {
                     "inputs": [
-                        _cyb_input("personskatteloven_section_7_income_basis"),
-                        _cyb_input(
+                        _p1a_input("personskatteloven_section_7_income_basis"),
+                        _p1a_input(
                             "personskatteloven_section_7_income_basis_after_section_14_recalculation"
                         ),
                     ]
@@ -154,16 +156,16 @@ def _child_youth_benefit_case(*, child_age: int, head_annual_income: float) -> C
 
 def _axiom_inputs(child_age: int) -> dict[str, float | bool | int]:
     return {
-        _cyb_input("child_age_years"): child_age,
-        _cyb_input("percentage_change_rounded_to_one_decimal_place"): _DK_CPI_2025,
-        _cyb_input("payment_year_has_additional_statutory_increase"): False,
-        _cyb_input(
+        _p1_input("child_age_years"): child_age,
+        _p1_input("percentage_change_rounded_to_one_decimal_place"): _DK_CPI_2025,
+        _p1_input("payment_year_has_additional_statutory_increase"): False,
+        _p1a_input(
             "total_contributions_to_qualifying_pension_accounts"
         ): 0,
-        _cyb_input(
+        _p1a_input(
             "pension_contribution_limit_under_pensionsbeskatningsloven_section_16"
         ): _DK_PENSION_CONTRIBUTION_CAP,
-        _cyb_input("person_only_taxable_part_of_year"): False,
+        _p1a_input("person_only_taxable_part_of_year"): False,
         _cyb_input(
             "current_year_income_reduction_allowance"
         ): _DK_CURRENT_YEAR_ALLOWANCE_2025,
@@ -172,6 +174,17 @@ def _axiom_inputs(child_age: int) -> dict[str, float | bool | int]:
 
 def _cyb_input(name: str) -> str:
     return f"{CYB_MODULE}#input.{name}"
+
+
+def _p1_input(name: str) -> str:
+    # Input slots resolve under their DECLARING module in the hard-cut
+    # engine's compiled program (the legacy compile aliased them under the
+    # composed module id; that aliasing is gone).
+    return f"{P1_MODULE}#input.{name}"
+
+
+def _p1a_input(name: str) -> str:
+    return f"{P1A_MODULE}#input.{name}"
 
 
 def _entities(*, child_age: int, head_annual_income: float) -> tuple[Entity, ...]:

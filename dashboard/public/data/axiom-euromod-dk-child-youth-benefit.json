@@ -29,21 +29,27 @@
       "left_engine": "euromod",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "dk:statutes/composed/boerne-og-ungeydelse-pipeline#single_recipient_annual_child_youth_benefit",
+          "left": 21168.0,
+          "right": 21168.0
+        }
+      ],
       "metadata": {
+        "axiom_all_outputs_count": 4,
         "axiom_entity": "Person",
         "axiom_entity_id": "recipient",
         "axiom_inputs": {
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.applicable_pension_contribution_cap": 61200,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.calendar_year_uses_2012_adjustment": false,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.calendar_year_uses_2013_or_later_adjustment": true,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.child_is_at_least_3_and_under_7_years_old": false,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.child_is_at_least_7_and_under_15_years_old": false,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.child_is_under_3_years_old": true,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.consumer_price_index_change_since_2009": 0.285,
           "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.current_year_income_reduction_allowance": 917000,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.middle_tax_basis": 276000.0,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.qualifying_contributions_to_age_insurance_savings_and_supplementary_lump_sum": 0,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.young_person_is_at_least_15_and_under_18_years_old": false
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1#input.child_age_years": 1,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1#input.payment_year_has_additional_statutory_increase": false,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1#input.percentage_change_rounded_to_one_decimal_place": 0.285,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.pension_contribution_limit_under_pensionsbeskatningsloven_section_16": 61200,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.person_only_taxable_part_of_year": false,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis": 276000.0,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis_after_section_14_recalculation": 276000.0,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.total_contributions_to_qualifying_pension_accounts": 0
         },
         "child_age": 1,
         "euromod_inputs": [
@@ -93,12 +99,14 @@
         "euromod_to_axiom_input_bridge": {
           "tintbto_s": {
             "inputs": [
-              "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.middle_tax_basis"
+              "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis",
+              "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis_after_section_14_recalculation"
             ]
           }
         },
         "euromod_to_axiom_input_bridge_applied": {
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.middle_tax_basis": 276000.0
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis": 276000.0,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis_after_section_14_recalculation": 276000.0
         },
         "head_annual_earnings": 300000.0,
         "household_summary": {
@@ -128,21 +136,27 @@
       "left_engine": "euromod",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "dk:statutes/composed/boerne-og-ungeydelse-pipeline#single_recipient_annual_child_youth_benefit",
+          "left": 16764.0,
+          "right": 16764.0
+        }
+      ],
       "metadata": {
+        "axiom_all_outputs_count": 4,
         "axiom_entity": "Person",
         "axiom_entity_id": "recipient",
         "axiom_inputs": {
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.applicable_pension_contribution_cap": 61200,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.calendar_year_uses_2012_adjustment": false,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.calendar_year_uses_2013_or_later_adjustment": true,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.child_is_at_least_3_and_under_7_years_old": true,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.child_is_at_least_7_and_under_15_years_old": false,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.child_is_under_3_years_old": false,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.consumer_price_index_change_since_2009": 0.285,
           "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.current_year_income_reduction_allowance": 917000,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.middle_tax_basis": 276000.0,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.qualifying_contributions_to_age_insurance_savings_and_supplementary_lump_sum": 0,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.young_person_is_at_least_15_and_under_18_years_old": false
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1#input.child_age_years": 5,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1#input.payment_year_has_additional_statutory_increase": false,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1#input.percentage_change_rounded_to_one_decimal_place": 0.285,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.pension_contribution_limit_under_pensionsbeskatningsloven_section_16": 61200,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.person_only_taxable_part_of_year": false,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis": 276000.0,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis_after_section_14_recalculation": 276000.0,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.total_contributions_to_qualifying_pension_accounts": 0
         },
         "child_age": 5,
         "euromod_inputs": [
@@ -192,12 +206,14 @@
         "euromod_to_axiom_input_bridge": {
           "tintbto_s": {
             "inputs": [
-              "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.middle_tax_basis"
+              "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis",
+              "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis_after_section_14_recalculation"
             ]
           }
         },
         "euromod_to_axiom_input_bridge_applied": {
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.middle_tax_basis": 276000.0
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis": 276000.0,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis_after_section_14_recalculation": 276000.0
         },
         "head_annual_earnings": 300000.0,
         "household_summary": {
@@ -227,21 +243,27 @@
       "left_engine": "euromod",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "dk:statutes/composed/boerne-og-ungeydelse-pipeline#single_recipient_annual_child_youth_benefit",
+          "left": 13188.0,
+          "right": 13188.0
+        }
+      ],
       "metadata": {
+        "axiom_all_outputs_count": 4,
         "axiom_entity": "Person",
         "axiom_entity_id": "recipient",
         "axiom_inputs": {
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.applicable_pension_contribution_cap": 61200,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.calendar_year_uses_2012_adjustment": false,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.calendar_year_uses_2013_or_later_adjustment": true,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.child_is_at_least_3_and_under_7_years_old": false,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.child_is_at_least_7_and_under_15_years_old": true,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.child_is_under_3_years_old": false,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.consumer_price_index_change_since_2009": 0.285,
           "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.current_year_income_reduction_allowance": 917000,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.middle_tax_basis": 276000.0,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.qualifying_contributions_to_age_insurance_savings_and_supplementary_lump_sum": 0,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.young_person_is_at_least_15_and_under_18_years_old": false
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1#input.child_age_years": 10,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1#input.payment_year_has_additional_statutory_increase": false,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1#input.percentage_change_rounded_to_one_decimal_place": 0.285,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.pension_contribution_limit_under_pensionsbeskatningsloven_section_16": 61200,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.person_only_taxable_part_of_year": false,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis": 276000.0,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis_after_section_14_recalculation": 276000.0,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.total_contributions_to_qualifying_pension_accounts": 0
         },
         "child_age": 10,
         "euromod_inputs": [
@@ -291,12 +313,14 @@
         "euromod_to_axiom_input_bridge": {
           "tintbto_s": {
             "inputs": [
-              "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.middle_tax_basis"
+              "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis",
+              "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis_after_section_14_recalculation"
             ]
           }
         },
         "euromod_to_axiom_input_bridge_applied": {
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.middle_tax_basis": 276000.0
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis": 276000.0,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis_after_section_14_recalculation": 276000.0
         },
         "head_annual_earnings": 300000.0,
         "household_summary": {
@@ -326,21 +350,27 @@
       "left_engine": "euromod",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "dk:statutes/composed/boerne-og-ungeydelse-pipeline#single_recipient_annual_child_youth_benefit",
+          "left": 13188.0,
+          "right": 13188.0
+        }
+      ],
       "metadata": {
+        "axiom_all_outputs_count": 4,
         "axiom_entity": "Person",
         "axiom_entity_id": "recipient",
         "axiom_inputs": {
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.applicable_pension_contribution_cap": 61200,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.calendar_year_uses_2012_adjustment": false,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.calendar_year_uses_2013_or_later_adjustment": true,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.child_is_at_least_3_and_under_7_years_old": false,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.child_is_at_least_7_and_under_15_years_old": false,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.child_is_under_3_years_old": false,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.consumer_price_index_change_since_2009": 0.285,
           "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.current_year_income_reduction_allowance": 917000,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.middle_tax_basis": 276000.0,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.qualifying_contributions_to_age_insurance_savings_and_supplementary_lump_sum": 0,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.young_person_is_at_least_15_and_under_18_years_old": true
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1#input.child_age_years": 16,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1#input.payment_year_has_additional_statutory_increase": false,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1#input.percentage_change_rounded_to_one_decimal_place": 0.285,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.pension_contribution_limit_under_pensionsbeskatningsloven_section_16": 61200,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.person_only_taxable_part_of_year": false,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis": 276000.0,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis_after_section_14_recalculation": 276000.0,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.total_contributions_to_qualifying_pension_accounts": 0
         },
         "child_age": 16,
         "euromod_inputs": [
@@ -390,12 +420,14 @@
         "euromod_to_axiom_input_bridge": {
           "tintbto_s": {
             "inputs": [
-              "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.middle_tax_basis"
+              "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis",
+              "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis_after_section_14_recalculation"
             ]
           }
         },
         "euromod_to_axiom_input_bridge_applied": {
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.middle_tax_basis": 276000.0
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis": 276000.0,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis_after_section_14_recalculation": 276000.0
         },
         "head_annual_earnings": 300000.0,
         "household_summary": {
@@ -425,21 +457,27 @@
       "left_engine": "euromod",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "dk:statutes/composed/boerne-og-ungeydelse-pipeline#single_recipient_annual_child_youth_benefit",
+          "left": 16704.0,
+          "right": 16704.000000000004
+        }
+      ],
       "metadata": {
+        "axiom_all_outputs_count": 4,
         "axiom_entity": "Person",
         "axiom_entity_id": "recipient",
         "axiom_inputs": {
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.applicable_pension_contribution_cap": 61200,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.calendar_year_uses_2012_adjustment": false,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.calendar_year_uses_2013_or_later_adjustment": true,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.child_is_at_least_3_and_under_7_years_old": true,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.child_is_at_least_7_and_under_15_years_old": false,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.child_is_under_3_years_old": false,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.consumer_price_index_change_since_2009": 0.285,
           "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.current_year_income_reduction_allowance": 917000,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.middle_tax_basis": 919999.9999999999,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.qualifying_contributions_to_age_insurance_savings_and_supplementary_lump_sum": 0,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.young_person_is_at_least_15_and_under_18_years_old": false
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1#input.child_age_years": 5,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1#input.payment_year_has_additional_statutory_increase": false,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1#input.percentage_change_rounded_to_one_decimal_place": 0.285,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.pension_contribution_limit_under_pensionsbeskatningsloven_section_16": 61200,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.person_only_taxable_part_of_year": false,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis": 919999.9999999999,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis_after_section_14_recalculation": 919999.9999999999,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.total_contributions_to_qualifying_pension_accounts": 0
         },
         "child_age": 5,
         "euromod_inputs": [
@@ -489,12 +527,14 @@
         "euromod_to_axiom_input_bridge": {
           "tintbto_s": {
             "inputs": [
-              "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.middle_tax_basis"
+              "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis",
+              "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis_after_section_14_recalculation"
             ]
           }
         },
         "euromod_to_axiom_input_bridge_applied": {
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.middle_tax_basis": 919999.9999999999
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis": 919999.9999999999,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis_after_section_14_recalculation": 919999.9999999999
         },
         "head_annual_earnings": 1000000.0,
         "household_summary": {
@@ -524,21 +564,27 @@
       "left_engine": "euromod",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "dk:statutes/composed/boerne-og-ungeydelse-pipeline#single_recipient_annual_child_youth_benefit",
+          "left": 11184.0,
+          "right": 11184.0
+        }
+      ],
       "metadata": {
+        "axiom_all_outputs_count": 4,
         "axiom_entity": "Person",
         "axiom_entity_id": "recipient",
         "axiom_inputs": {
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.applicable_pension_contribution_cap": 61200,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.calendar_year_uses_2012_adjustment": false,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.calendar_year_uses_2013_or_later_adjustment": true,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.child_is_at_least_3_and_under_7_years_old": true,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.child_is_at_least_7_and_under_15_years_old": false,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.child_is_under_3_years_old": false,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.consumer_price_index_change_since_2009": 0.285,
           "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.current_year_income_reduction_allowance": 917000,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.middle_tax_basis": 1196000.0,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.qualifying_contributions_to_age_insurance_savings_and_supplementary_lump_sum": 0,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.young_person_is_at_least_15_and_under_18_years_old": false
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1#input.child_age_years": 5,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1#input.payment_year_has_additional_statutory_increase": false,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1#input.percentage_change_rounded_to_one_decimal_place": 0.285,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.pension_contribution_limit_under_pensionsbeskatningsloven_section_16": 61200,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.person_only_taxable_part_of_year": false,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis": 1196000.0,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis_after_section_14_recalculation": 1196000.0,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.total_contributions_to_qualifying_pension_accounts": 0
         },
         "child_age": 5,
         "euromod_inputs": [
@@ -588,12 +634,14 @@
         "euromod_to_axiom_input_bridge": {
           "tintbto_s": {
             "inputs": [
-              "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.middle_tax_basis"
+              "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis",
+              "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis_after_section_14_recalculation"
             ]
           }
         },
         "euromod_to_axiom_input_bridge_applied": {
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.middle_tax_basis": 1196000.0
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis": 1196000.0,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis_after_section_14_recalculation": 1196000.0
         },
         "head_annual_earnings": 1300000.0,
         "household_summary": {
@@ -623,21 +671,27 @@
       "left_engine": "euromod",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "dk:statutes/composed/boerne-og-ungeydelse-pipeline#single_recipient_annual_child_youth_benefit",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
       "metadata": {
+        "axiom_all_outputs_count": 4,
         "axiom_entity": "Person",
         "axiom_entity_id": "recipient",
         "axiom_inputs": {
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.applicable_pension_contribution_cap": 61200,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.calendar_year_uses_2012_adjustment": false,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.calendar_year_uses_2013_or_later_adjustment": true,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.child_is_at_least_3_and_under_7_years_old": true,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.child_is_at_least_7_and_under_15_years_old": false,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.child_is_under_3_years_old": false,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.consumer_price_index_change_since_2009": 0.285,
           "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.current_year_income_reduction_allowance": 917000,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.middle_tax_basis": 1839999.9999999998,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.qualifying_contributions_to_age_insurance_savings_and_supplementary_lump_sum": 0,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.young_person_is_at_least_15_and_under_18_years_old": false
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1#input.child_age_years": 5,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1#input.payment_year_has_additional_statutory_increase": false,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1#input.percentage_change_rounded_to_one_decimal_place": 0.285,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.pension_contribution_limit_under_pensionsbeskatningsloven_section_16": 61200,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.person_only_taxable_part_of_year": false,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis": 1839999.9999999998,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis_after_section_14_recalculation": 1839999.9999999998,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.total_contributions_to_qualifying_pension_accounts": 0
         },
         "child_age": 5,
         "euromod_inputs": [
@@ -687,12 +741,14 @@
         "euromod_to_axiom_input_bridge": {
           "tintbto_s": {
             "inputs": [
-              "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.middle_tax_basis"
+              "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis",
+              "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis_after_section_14_recalculation"
             ]
           }
         },
         "euromod_to_axiom_input_bridge_applied": {
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.middle_tax_basis": 1839999.9999999998
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis": 1839999.9999999998,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis_after_section_14_recalculation": 1839999.9999999998
         },
         "head_annual_earnings": 2000000.0,
         "household_summary": {
@@ -735,7 +791,7 @@
     "left": "euromod",
     "right": "axiom",
     "versions": {
-      "axiom_rules_engine": "0.2.1"
+      "axiom_rules_engine": "0.1.0"
     }
   },
   "errors": [],
@@ -750,10 +806,10 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "dc7eb90d2cfcf6b7ecf68ada226112a8ac444350",
-      "axiom_rules_engine_version": "0.2.1"
+      "axiom_rules_engine_sha": "05eac9d2f89dabe5c6673176260762cef3a58f47",
+      "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-08-13T08:00:08Z",
+    "generated_at": "2026-08-13T22:11:10Z",
     "generated_by": "scripts/run_comparison.py::dk-child-youth-benefit-euromod",
     "oracle": {
       "euromod_country": "DK",
@@ -762,14 +818,13 @@
       "euromod_system": "DK_2025",
       "name": "euromod"
     },
-    "reemitted_report": true,
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-dk",
-        "sha": null
+        "sha": "75923db8b3b759133275ec12e33391fa1109244d"
       }
     ],
-    "run_kind": "affected-rerun",
+    "run_kind": "manual",
     "schema": "axiom_oracles.provenance.v1"
   },
   "schema_version": "axiom.comparison_report.v2.1",

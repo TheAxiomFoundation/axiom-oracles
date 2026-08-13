@@ -25,7 +25,13 @@ description: >-
 
 runner:
   type: euromod-synthetic-compare
-  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  # Engine parity with rulespec-dk: this checkout must be built at the engine
+  # SHA rulespec-dk validates against (05eac9d2, the toolchain-era pin), so the
+  # certified numbers come from the same engine that gates the encodings. The
+  # unpinned main clone drifted (its binary predates compile-composed, and its
+  # legacy loader cannot lower versioned derived formulas, which the §-scoped
+  # paragraf-1-a module uses).
+  axiom_rules_repo: $HOME/TheAxiomFoundation/_worktrees/axiom-rules-engine-pin
   parameters:
     suite: dk-child-youth-benefit
     population: synthetic
