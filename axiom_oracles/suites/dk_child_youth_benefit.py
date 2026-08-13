@@ -32,11 +32,12 @@ Verified EUROMOD conventions (executed against EUROMOD_RELEASES_J2.0+, DK_2025):
   the § 20-regulated bundfradrag 917000, and the 2 pct. taper rate. It is
   monthly and the adapter annualises it. The base amounts reproduce the official
   2025 Skattestyrelsen satser, which the Axiom side also reproduces from the
-  2011-niveau bases and a consumer_price_index_change_since_2009 of 0.285.
+  2011-niveau bases and a percentage_change_rounded_to_one_decimal_place of 0.285.
 
-- The engine's mellemskat income concept ``tintbto_s`` equals 0.92 x ``yem`` on
+- The engine's § 7-basis income concept ``tintbto_s`` equals 0.92 x ``yem`` on
   this dataset (no uprating; AM-bidrag 8%). The suite bridges the engine's own
-  ``tintbto_s`` into the composed module's ``middle_tax_basis`` input via
+  ``tintbto_s`` into the composed module's
+  ``personskatteloven_section_7_income_basis`` inputs via
   ``EUROMOD_TO_AXIOM_INPUT_BRIDGE`` so the Axiom taper runs on EUROMOD's own
   income base rather than a re-projected one. Both outputs are annual, so the
   bridge applies no divisor (verified: the bridged value is the annual
@@ -129,12 +130,21 @@ def _child_youth_benefit_case(*, child_age: int, head_annual_income: float) -> C
                 _adult_row(idperson=101, annual_income=head_annual_income),
                 _child_row(idperson=102, age=child_age, mother_id=101),
             ],
-            # Bridge the engine's own mellemskat basis (annual 0.92 x yem) into the
-            # composed module's middle_tax_basis input. Both are annual, so no
-            # divisor is applied; the Axiom taper then runs on EUROMOD's income
-            # base with the same 917000 bundfradrag EUROMOD DK_2025 uses.
+            # Bridge the engine's own § 7-basis income (annual 0.92 x yem, its
+            # tintbto_s) into the composed module's two § 7-basis inputs (the
+            # full-year and § 14-recalculated slots receive the same value; the
+            # part-year flag is False in every case). Both sides are annual, so
+            # no divisor is applied; the Axiom taper then runs on EUROMOD's
+            # income base with the same 917000 bundfradrag EUROMOD DK_2025 uses.
             EUROMOD_TO_AXIOM_INPUT_BRIDGE: {
-                "tintbto_s": {"inputs": [_cyb_input("middle_tax_basis")]},
+                "tintbto_s": {
+                    "inputs": [
+                        _cyb_input("personskatteloven_section_7_income_basis"),
+                        _cyb_input(
+                            "personskatteloven_section_7_income_basis_after_section_14_recalculation"
+                        ),
+                    ]
+                },
             },
         },
         entities=_entities(child_age=child_age, head_annual_income=head_annual_income),
@@ -143,32 +153,21 @@ def _child_youth_benefit_case(*, child_age: int, head_annual_income: float) -> C
 
 
 def _axiom_inputs(child_age: int) -> dict[str, float | bool | int]:
-    under_3, age_3_6, age_7_14, age_15_17 = _age_band_flags(child_age)
     return {
-        _cyb_input("child_is_under_3_years_old"): under_3,
-        _cyb_input("child_is_at_least_3_and_under_7_years_old"): age_3_6,
-        _cyb_input("child_is_at_least_7_and_under_15_years_old"): age_7_14,
-        _cyb_input("young_person_is_at_least_15_and_under_18_years_old"): age_15_17,
-        _cyb_input("consumer_price_index_change_since_2009"): _DK_CPI_2025,
-        _cyb_input("calendar_year_uses_2012_adjustment"): False,
-        _cyb_input("calendar_year_uses_2013_or_later_adjustment"): True,
+        _cyb_input("child_age_years"): child_age,
+        _cyb_input("percentage_change_rounded_to_one_decimal_place"): _DK_CPI_2025,
+        _cyb_input("payment_year_has_additional_statutory_increase"): False,
         _cyb_input(
-            "qualifying_contributions_to_age_insurance_savings_and_supplementary_lump_sum"
+            "total_contributions_to_qualifying_pension_accounts"
         ): 0,
-        _cyb_input("applicable_pension_contribution_cap"): _DK_PENSION_CONTRIBUTION_CAP,
+        _cyb_input(
+            "pension_contribution_limit_under_pensionsbeskatningsloven_section_16"
+        ): _DK_PENSION_CONTRIBUTION_CAP,
+        _cyb_input("person_only_taxable_part_of_year"): False,
         _cyb_input(
             "current_year_income_reduction_allowance"
         ): _DK_CURRENT_YEAR_ALLOWANCE_2025,
     }
-
-
-def _age_band_flags(child_age: int) -> tuple[bool, bool, bool, bool]:
-    return (
-        child_age < 3,
-        3 <= child_age < 7,
-        7 <= child_age < 15,
-        15 <= child_age < 18,
-    )
 
 
 def _cyb_input(name: str) -> str:

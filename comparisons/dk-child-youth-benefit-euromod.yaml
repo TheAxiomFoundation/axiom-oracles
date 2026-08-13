@@ -10,8 +10,9 @@ description: >-
   one-child grid — four child ages (1 / 5 / 10 / 16) at a below-threshold income
   crossing the four age bands, then age 5 across an income sweep (yem
   1.000.000 / 1.300.000 / 2.000.000) that straddles and exhausts the taper.
-  The Axiom taper runs on EUROMOD's own mellemskat basis tintbto_s (0.92 x yem)
-  bridged into the composed module's middle_tax_basis input, with the same
+  The Axiom taper runs on EUROMOD's own § 7-basis income tintbto_s (0.92 x yem)
+  bridged into the composed module's personskatteloven_section_7_income_basis
+  inputs, with the same
   917.000 kr. bundfradrag EUROMOD DK_2025 uses. The grid is single-parent by
   design: EUROMOD keeps a pre-2022 spousal income test in the DK_2022-DK_2025
   taper (euromod_issues.json euromod-dk-2025-bfachnm-pre2022-spousal-taper) and
