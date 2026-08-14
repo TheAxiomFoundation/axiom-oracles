@@ -836,7 +836,7 @@
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
       "report": "dashboard/public/data/axiom-euromod-be-capital-income-tax.json",
-      "report_sha256": "0abd102a4e1ea2f1c928cce9d8eb7528ba6edb53a794d4b4f237cdb7f303a284",
+      "report_sha256": "26e8817e028e9e621051acea1a46ff1a2d2ac199e0f01bb13643f10a328fb5b4",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -1344,7 +1344,7 @@
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
       "report": "dashboard/public/data/axiom-euromod-be-local-municipal-pit.json",
-      "report_sha256": "b210076e5d900d93c19685e97a6a82d6cee53fcb8c3fa8f5a798f3ca3992ae46",
+      "report_sha256": "2e706ead6566e71c5a321bd69ffbb9eb3b98c1d7b32a8127adeaa804c6922482",
       "varied_fields": 2,
       "verdict_concepts": {}
     },
@@ -1445,7 +1445,7 @@
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
       "report": "dashboard/public/data/axiom-euromod-be-pensioner-contributions.json",
-      "report_sha256": "421f508eaa7bf1cc26686a38b1a8b325a28a42d427602f6ce5294cdca2ffd1e7",
+      "report_sha256": "06345b8e42f8dc090d05603b973b665394797828d3309059d3caa72bb26779c2",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -1685,7 +1685,7 @@
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
       "report": "dashboard/public/data/axiom-euromod-be-study-allowance.json",
-      "report_sha256": "7703bbcdb065e79108d3ba901cbe66f50d559e685b2d4f475b2e5a68de2ba41d",
+      "report_sha256": "c3e9c7f92422f2f5660dd81d33eecd3c9548ea0b146e044a4311b8f3794f1d6b",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -2859,14 +2859,10 @@
       "bridge_audited": false,
       "bridge_declared": false,
       "bridged_through": {},
-      "cases_scanned": 8,
+      "cases_scanned": 7,
       "chunk_manifest": [],
-      "constant_fields": 6,
+      "constant_fields": 4,
       "evidence_fields": {
-        "axiom_all_outputs_count": {
-          "distinct": 1,
-          "state": "constant"
-        },
         "axiom_entity": {
           "distinct": 1,
           "state": "constant"
@@ -2884,10 +2880,6 @@
           "state": "varied"
         },
         "locale": {
-          "distinct": 1,
-          "state": "constant"
-        },
-        "qualifying_pension_contributions": {
           "distinct": 1,
           "state": "constant"
         },
@@ -2899,104 +2891,8 @@
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
       "report": "dashboard/public/data/axiom-euromod-dk-child-youth-benefit.json",
-      "report_sha256": "df1089ceb4044dd72702f9a5357ad59d27bfdd3112d051db8b01c4162a2888bb",
+      "report_sha256": "61237a997de7ed3ba05e429b40effbe2018a8733c3d969f619dd5f95951b3fd2",
       "varied_fields": 2,
-      "verdict_concepts": {}
-    },
-    "dk-child-youth-benefit-2023": {
-      "bridge_audited": false,
-      "bridge_declared": false,
-      "bridged_through": {},
-      "cases_scanned": 1,
-      "chunk_manifest": [],
-      "constant_fields": 7,
-      "evidence_fields": {
-        "axiom_all_outputs_count": {
-          "distinct": 1,
-          "state": "constant"
-        },
-        "axiom_entity": {
-          "distinct": 1,
-          "state": "constant"
-        },
-        "axiom_entity_id": {
-          "distinct": 1,
-          "state": "constant"
-        },
-        "child_age": {
-          "distinct": 1,
-          "state": "constant"
-        },
-        "head_annual_earnings": {
-          "distinct": 1,
-          "state": "constant"
-        },
-        "locale": {
-          "distinct": 1,
-          "state": "constant"
-        },
-        "scenario": {
-          "distinct": 1,
-          "state": "constant"
-        }
-      },
-      "evidence_source": "inline",
-      "inline_cases_not_counted": 0,
-      "report": "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-2023.json",
-      "report_sha256": "447ae9a3c81a1cc0d70e77e4f78e2c2d1fe8603ada8b2ed99168de3a51eebb61",
-      "varied_fields": 0,
-      "verdict_concepts": {}
-    },
-    "dk-child-youth-benefit-couple": {
-      "bridge_audited": false,
-      "bridge_declared": false,
-      "bridged_through": {},
-      "cases_scanned": 1,
-      "chunk_manifest": [],
-      "constant_fields": 9,
-      "evidence_fields": {
-        "axiom_entity": {
-          "distinct": 1,
-          "state": "constant"
-        },
-        "axiom_entity_id": {
-          "distinct": 1,
-          "state": "constant"
-        },
-        "axiom_input_records_count": {
-          "distinct": 1,
-          "state": "constant"
-        },
-        "child_age": {
-          "distinct": 1,
-          "state": "constant"
-        },
-        "comparison_level": {
-          "distinct": 1,
-          "state": "constant"
-        },
-        "head_annual_earnings": {
-          "distinct": 1,
-          "state": "constant"
-        },
-        "locale": {
-          "distinct": 1,
-          "state": "constant"
-        },
-        "scenario": {
-          "distinct": 1,
-          "state": "constant"
-        },
-        "spouse_annual_earnings": {
-          "distinct": 1,
-          "state": "constant"
-        }
-      },
-      "evidence_source": "inline",
-      "inline_cases_not_counted": 0,
-      "report": "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json",
-      "report_sha256": "5b9de6cad823c2ad26b50fa48d72c3b11b4263d628190a3abaa4c1c4ec7786e6",
-      "varied_fields": 0,
       "verdict_concepts": {}
     },
     "fiit-ecps": {
@@ -5516,7 +5412,7 @@
       "evidence_source": "chunks",
       "inline_cases_not_counted": 847,
       "report": "dashboard/public/data/axiom-snapqc-ny-snap.json",
-      "report_sha256": "b9fea0fb5f5caef980984c34a2e0761b2391fb2ac0254fcca81f231d66a388a8",
+      "report_sha256": "61ff7fb153f2ec92e93408ee4c09e09299ee05912cd8c7d145616cf2916471be",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -6663,7 +6559,7 @@
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
       "report": "dashboard/public/data/axiom-euromod-uk-benefit-cap.json",
-      "report_sha256": "8a6b4efb0cccbc5707b728113c0f95297852e024a9102df2ea7d60a54c795a44",
+      "report_sha256": "f1ef0e967edf102646ae812410e208506f32bc7c2fbff771eb7cf5743ede9916",
       "varied_fields": 6,
       "verdict_concepts": {}
     },
@@ -6769,7 +6665,7 @@
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
       "report": "dashboard/public/data/axiom-euromod-uk-child-benefit.json",
-      "report_sha256": "590ed0d7d9e95e989098008ed5b7a9f8e93fba56b10bdd468692533e89c3f455",
+      "report_sha256": "95329d761b4b76dede0b153d137cf3c82eeacf5137d2e94a93de639b493add68",
       "varied_fields": 2,
       "verdict_concepts": {}
     },
@@ -6805,7 +6701,7 @@
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
       "report": "dashboard/public/data/axiom-euromod-uk-child-winter-heating-payment.json",
-      "report_sha256": "985b826cdb426609c7551c319960c83cf7a0c1e8a11f121a5710f834adc7bf0f",
+      "report_sha256": "34f313cba04d93ae9edfed00c6d5faa8fb029c5fd9b2c0231fe912a850d35771",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -6876,7 +6772,7 @@
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
       "report": "dashboard/public/data/axiom-euromod-uk-employer-nic.json",
-      "report_sha256": "0fdbc6821587f0c55b682f79e680f4ce7a00d8c804fdd3670f355ccc1b458b8b",
+      "report_sha256": "bc2654ac20ba1971e338794aebd184af1a9cc1e14040f9cf8360fa9b4da6f521",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -6947,7 +6843,7 @@
       "evidence_source": "chunks",
       "inline_cases_not_counted": 5,
       "report": "dashboard/public/data/axiom-euromod-uk-housing-benefit.json",
-      "report_sha256": "4808474c05075f74dfe3c55775d6db706f805962e48c8b8428489d9151b70b07",
+      "report_sha256": "43a1d493c963c6b17a90fb7298158d351275ce98728a948cb086d75bd8364f44",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -6991,7 +6887,7 @@
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
       "report": "dashboard/public/data/axiom-euromod-uk-income-tax-dividend.json",
-      "report_sha256": "9ab443bf7895c6a26e9555e9f440e33afc77f8f8324f607f7203e7b43b37c8d5",
+      "report_sha256": "f9dbaca05e2edd8f2e44953b33f1f177fd8f092a78ccf92fa29f84e6830f19fa",
       "varied_fields": 2,
       "verdict_concepts": {}
     },
@@ -7011,7 +6907,7 @@
       "evidence_source": "chunks",
       "inline_cases_not_counted": 3,
       "report": "dashboard/public/data/axiom-euromod-uk-income-tax-mixed.json",
-      "report_sha256": "915357918b7c90de6ffc6b157688cf34f019498500d2213888713bcdb7804bfe",
+      "report_sha256": "e69fdceacc5fe4d72dbb641c3068738f265707b124d7a17a62fac83f05296267",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -7055,7 +6951,7 @@
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
       "report": "dashboard/public/data/axiom-euromod-uk-income-tax-savings.json",
-      "report_sha256": "8cd61594acf8edd2904dbe9b64105b14eae7dcca41259517c87f6d3a6be53878",
+      "report_sha256": "10a854349521db89dbf795603aa3fec79b6ed598a73793252edde6cefa9b6d6f",
       "varied_fields": 2,
       "verdict_concepts": {}
     },
@@ -7147,7 +7043,7 @@
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
       "report": "dashboard/public/data/axiom-euromod-uk-maternity-allowance.json",
-      "report_sha256": "0dcdb288dd8d4ca10e0a64b3dd1f847248588c32b840bfc524ed19c938a09b4a",
+      "report_sha256": "48b2cd224be2c6bb0bedd1339b2a7f8d96f3a96b82dfe77bebd613b549a5a06e",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -7167,7 +7063,7 @@
       "evidence_source": "chunks",
       "inline_cases_not_counted": 12,
       "report": "dashboard/public/data/axiom-euromod-uk-pension-credit.json",
-      "report_sha256": "f1d56046647b80ecff41d697a378808e7e34d10518b64c8805d651c27d1adb9b",
+      "report_sha256": "71b7a29540530d99de0f1f8ce7119ec148457acb470cb82242cdaab5c548ec8f",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -7383,7 +7279,7 @@
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
       "report": "dashboard/public/data/axiom-euromod-uk-sure-start-maternity-grant.json",
-      "report_sha256": "7c9185a104f109ef2ed44c087bec0935d8306bd69ee298c717c890d8dd3acce1",
+      "report_sha256": "62904035a46716692b849bdca4fd82e8175c92c44928618daf80e39eb1d9a1da",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -7539,7 +7435,7 @@
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
       "report": "dashboard/public/data/axiom-euromod-uk-winter-fuel.json",
-      "report_sha256": "45f43664ca4f653cf65bad561bf6cdcf51d8a012e549088b0c91f8e5b0b0c43f",
+      "report_sha256": "6f29997230d95d746d828950b3ed99b783432c26901d5cc2f90a06b035b2e986",
       "varied_fields": 6,
       "verdict_concepts": {}
     },
@@ -7590,7 +7486,7 @@
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
       "report": "dashboard/public/data/axiom-euromod-uk-worker-nic.json",
-      "report_sha256": "6e49a33ab72a9786a4790bcdf0e8c26d7f574855dcca27e27d447ee7be7b7c00",
+      "report_sha256": "756e6a18f7d1ce1ca7c89980c5a99de37e2a8602f39044e387e0e85910e84e6b",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
