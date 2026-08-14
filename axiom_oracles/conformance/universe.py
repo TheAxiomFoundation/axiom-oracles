@@ -492,6 +492,7 @@ def raw_to_universe_policy(
         note=note,
         comparability=comparability if in_scope else "full",
         oracle_policy_type=policy.policy_type,
+        oracle_switch=policy.switch,
         internal_only_vars=policy.internal_outputs,
     )
 

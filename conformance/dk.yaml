@@ -18,6 +18,7 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - GenPersAllowance
       - i_yiy
@@ -27,18 +28,21 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     exclusion_reason: technical
   - id: dk:IlsDef_dk
     oracle_policy_name: IlsDef_dk
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     exclusion_reason: technical
   - id: dk:IlsUDBDef_dk
     oracle_policy_name: IlsUDBDef_dk
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     exclusion_reason: technical
   - id: dk:TransLMA_dk
     oracle_policy_name: TransLMA_dk
@@ -52,6 +56,7 @@ policies:
       - bwkmcsemy_s
       - ysemwmy_s
     in_scope: false
+    oracle_switch: 'off'
     internal_only_vars:
       - lma
       - yem_a
@@ -67,6 +72,7 @@ policies:
     output_vars:
       - bfach00_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - i_it_bfa
     suite: null
@@ -76,6 +82,7 @@ policies:
     output_vars:
       - bfached_s
     in_scope: true
+    oracle_switch: 'on'
     suite: null
   - id: dk:bfachnm_dk
     oracle_policy_name: bfachnm_dk
@@ -83,6 +90,7 @@ policies:
     output_vars:
       - bfachnm_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - i_thld_base
       - i_thld_start
@@ -96,17 +104,26 @@ policies:
     output_vars:
       - bfachxp_s
     in_scope: false
+    oracle_switch: 'off'
     exclusion_reason: oracle_models_repealed_law
-    note: The DK_2025 model comment identifies this as 'Extra child benefit (abolished in Feb 2023)'.
-      The model-spine probe shows it on only in DK_2020 through DK_2022 and off in DK_2023 through DK_2025,
-      so the target system retains a switched-off historical module rather than a current-law payable
-      benefit.
+    note: >-
+      Det midlertidige børnetilskud — LOV nr 1550 af 27/12/2019 (Lov om et
+      midlertidigt børnetilskud til visse forsørgere), a statutorily TEMPORARY
+      scheme, extended by LOV nr 781 af 04/05/2021 and LOV nr 877 af
+      21/06/2022 (both »Forlængelse«; instruments verified via the
+      retsinformation.dk document-search API, 2026-08-14). The DK model
+      comment records it as 'Extra child benefit (abolished in Feb 2023)',
+      and the committed spine probe (conformance/spines/dk-DK_2025.json,
+      bfachxp_dk row) shows the switch on only in DK_2020-DK_2022 and off in
+      DK_2023-DK_2025 — the target system retains a switched-off historical
+      module, not a current-law payable benefit.
   - id: dk:bho01_dk
     oracle_policy_name: bho01_dk
     oracle_policy_type: ben
     output_vars:
       - bho01_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - i_bho
       - i_bho2
@@ -121,6 +138,7 @@ policies:
     output_vars:
       - bho02_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - i_bhoII
       - i_bhoII2
@@ -135,6 +153,7 @@ policies:
     output_vars:
       - bhtuc_s
     in_scope: true
+    oracle_switch: 'on'
     suite: null
   - id: dk:bma_dk
     oracle_policy_name: bma_dk
@@ -142,6 +161,7 @@ policies:
     output_vars:
       - bma_s
     in_scope: true
+    oracle_switch: 'off'
     internal_only_vars:
       - i_elparent_bma
       - i_elchild_bma
@@ -163,6 +183,7 @@ policies:
     output_vars:
       - bpa_s
     in_scope: true
+    oracle_switch: 'off'
     internal_only_vars:
       - i_yempv_bpa
       - i_amount_bpa
@@ -181,6 +202,7 @@ policies:
       - bsa_s
       - bsaxp_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - i_bsa3
       - i_bsa4
@@ -201,6 +223,7 @@ policies:
     output_vars:
       - bsard_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - i_ceiling
     suite: null
@@ -212,6 +235,7 @@ policies:
       - yempv_s
       - bunct_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - i_bunct
       - i_bunct_s
@@ -221,6 +245,7 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - ysemy
       - yse
@@ -234,12 +259,14 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     exclusion_reason: technical
   - id: dk:output_std_hh_dk
     oracle_policy_name: output_std_hh_dk
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'off'
     exclusion_reason: technical
   - id: dk:poa_dk
     oracle_policy_name: poa_dk
@@ -249,6 +276,7 @@ policies:
       - poa01_s
       - poa02_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - i_poa01
       - i_poa02
@@ -260,6 +288,7 @@ policies:
     output_vars:
       - stk01_s
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - i_mc_rand_1
       - i_mc_rand_2
@@ -276,12 +305,14 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     exclusion_reason: technical
   - id: dk:tco_dk
     oracle_policy_name: tco_dk
     oracle_policy_type: tax
     output_vars: []
     in_scope: false
+    oracle_switch: 'off'
     exclusion_reason: extension_not_available
     note: Commodities/consumption-tax shell, switched off in DK_2025. The public EUROMOD_RELEASES_J2.0+
       body contains definitions only, with no compute function or output, so the consumption-tax extension
@@ -293,6 +324,7 @@ policies:
       - ttbcr_s
       - tcr_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - i_tcr
     suite: null
@@ -301,6 +333,7 @@ policies:
     oracle_policy_type: tax
     output_vars: []
     in_scope: false
+    oracle_switch: n/a
     internal_only_vars:
       - n/a
     exclusion_reason: not_a_policy
@@ -313,6 +346,7 @@ policies:
       - tintbbt_s
       - tinbt_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - i_tinbt
       - i_tinbt2
@@ -322,6 +356,7 @@ policies:
     oracle_policy_type: tax
     output_vars: []
     in_scope: false
+    oracle_switch: n/a
     internal_only_vars:
       - n/a
     exclusion_reason: not_a_policy
@@ -333,6 +368,7 @@ policies:
     output_vars:
       - tintaox_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - i_tintaox
     suite: null
@@ -342,6 +378,7 @@ policies:
     output_vars:
       - tintc_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - i_tintc
     suite: null
@@ -352,6 +389,7 @@ policies:
       - tintbto_s
       - tinto_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - i_tinto
       - i_tinto2
@@ -364,6 +402,7 @@ policies:
       - ttbmu_s
       - tmu_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - i_tmu
     suite: null
@@ -374,6 +413,7 @@ policies:
       - tpr_s
       - sin01_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - i_tpr
     suite: null
@@ -385,12 +425,14 @@ policies:
       - tscpiee_s
       - tscpier_s
     in_scope: true
+    oracle_switch: 'on'
     suite: null
   - id: dk:tscpielig_dk
     oracle_policy_name: tscpielig_dk
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - i_tscpielig
       - tscpielig
@@ -401,6 +443,7 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     exclusion_reason: technical
   - id: dk:txc_dk
     oracle_policy_name: txc_dk
@@ -410,6 +453,7 @@ policies:
       - txcse_s
       - txc_s
     in_scope: true
+    oracle_switch: 'on'
     suite: null
   - id: dk:tyrui_dk
     oracle_policy_name: tyrui_dk
@@ -417,12 +461,14 @@ policies:
     output_vars:
       - tyrui_s
     in_scope: true
+    oracle_switch: 'on'
     suite: null
   - id: dk:tyruielig_dk
     oracle_policy_name: tyruielig_dk
     oracle_policy_type: tax
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - i_tyruielig
       - tyruielig
@@ -434,6 +480,7 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     exclusion_reason: technical
   - id: dk:xpp00_dk
     oracle_policy_name: xpp00_dk
@@ -441,6 +488,7 @@ policies:
     output_vars:
       - xpp00_s
     in_scope: false
+    oracle_switch: 'on'
     exclusion_reason: technical
     note: DEF tax-base helper that caps the deductible private-pension contribution used by downstream
       income-tax policies; it is not itself a distinct tax or benefit instrument.
@@ -449,6 +497,7 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: switch
     internal_only_vars:
       - yem
     exclusion_reason: technical
@@ -457,20 +506,31 @@ policies:
     oracle_policy_type: ben
     output_vars: []
     in_scope: false
+    oracle_switch: 'off'
     internal_only_vars:
       - n/a
-    exclusion_reason: oracle_models_repealed_law
-    note: COVID-19 employee compensation scheme. The model-spine probe shows it on only in DK_2020 through
-      DK_2022, then off with an n/a body in DK_2023 through DK_2025; the target system has no current
-      payable output.
+    exclusion_reason: unobservable_boundary
+    note: >-
+      No queryable output exists in the target system: the committed spine
+      probe (conformance/spines/dk-DK_2025.json, yemcomp_dk row) records an
+      empty output set with an n/a body, switch off in DK_2023-DK_2025 (on
+      only in DK_2020-DK_2022). The model labels it a COVID-19 employee
+      compensation scheme; with no output surface it cannot be compared
+      per-case regardless of its legal status, so no repeal claim is made.
   - id: dk:ysecomp_dk
     oracle_policy_name: ysecomp_dk
     oracle_policy_type: ben
     output_vars: []
     in_scope: false
+    oracle_switch: 'off'
     internal_only_vars:
       - n/a
-    exclusion_reason: oracle_models_repealed_law
-    note: COVID-19 self-employment compensation scheme. The model-spine probe shows it on only in DK_2020
-      through DK_2022, then off with an n/a body in DK_2023 through DK_2025; the target system has no
-      current payable output.
+    exclusion_reason: unobservable_boundary
+    note: >-
+      No queryable output exists in the target system: the committed spine
+      probe (conformance/spines/dk-DK_2025.json, ysecomp_dk row) records an
+      empty output set with an n/a body, switch off in DK_2023-DK_2025 (on
+      only in DK_2020-DK_2022). The model labels it a COVID-19
+      self-employment compensation scheme; with no output surface it cannot
+      be compared per-case regardless of its legal status, so no repeal
+      claim is made.

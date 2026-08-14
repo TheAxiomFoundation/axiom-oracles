@@ -37,8 +37,9 @@
         "extension_not_available": 1,
         "input_carrying": 1,
         "not_a_policy": 2,
-        "oracle_models_repealed_law": 3,
-        "technical": 15
+        "oracle_models_repealed_law": 1,
+        "technical": 15,
+        "unobservable_boundary": 2
       },
       "unexplained_total": 0,
       "axiom_attributed_open": 0,

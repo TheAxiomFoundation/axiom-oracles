@@ -39,7 +39,7 @@
           "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1#input.child_age_years": 5,
           "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1#input.payment_year_has_additional_statutory_increase": true,
           "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1#input.percentage_change_rounded_to_one_decimal_place": 0.156,
-          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.pension_contribution_limit_under_pensionsbeskatningsloven_section_16": 61200,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.pension_contribution_limit_under_pensionsbeskatningsloven_section_16": 9400,
           "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.person_only_taxable_part_of_year": false,
           "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis": 276000.0,
           "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis_after_section_14_recalculation": 276000.0,
@@ -193,9 +193,10 @@
     },
     "engine": {
       "axiom_rules_engine_sha": "05eac9d2f89dabe5c6673176260762cef3a58f47",
-      "axiom_rules_engine_version": "0.1.0"
+      "axiom_rules_engine_version": "0.1.0",
+      "binary_sha256": "079c26f4244db8c2a72fcbfb8cf88aaa5cb7c99628dc1c8d9d3b2d011e5f32a5"
     },
-    "generated_at": "2026-08-14T02:13:44Z",
+    "generated_at": "2026-08-14T12:02:27Z",
     "generated_by": "scripts/run_comparison.py::dk-child-youth-benefit-2023-euromod",
     "oracle": {
       "euromod_country": "DK",

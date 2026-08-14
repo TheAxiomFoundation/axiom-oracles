@@ -1,6 +1,6 @@
 schema: axiom_oracles.dispositions.v1
 suite: dk-child-youth-benefit
-updated: "2026-08-13"
+updated: "2026-08-14"
 entries:
   - id: euromod-dk-bfachnm-taper-pension-grossup-absent
     concept: dk:statutes/composed/boerne-og-ungeydelse-pipeline#single_recipient_annual_child_youth_benefit
@@ -10,24 +10,36 @@ entries:
     evidence:
       mechanism: >-
         Børne- og ungeydelsesloven § 1 a, stk. 4-5 caps the recipient's
-        qualifying pension contributions and converts them to a gross amount
-        by dividing by 0.6 before subtracting them from the taper basis. The
-        60000 kr. contribution is below the 61200 kr. cap, so Axiom subtracts
-        a 100000 kr. gross amount from tintbto 1196000: its basis is 1096000,
-        its excess over 917000 is 179000, and its 2 pct. reduction is 3580.
-        EUROMOD bfachnm_dk has no taper input for this contribution, so its
-        excess remains 279000 and its reduction is 5580. The missing gross-up
-        therefore lowers EUROMOD's benefit by exactly 2 pct. of 100000, or
-        2000 kr.
+        qualifying pension contributions at the pensionsbeskatningslovens
+        § 16, stk. 1 grundbeløb that applies to that recipient, and converts
+        the capped amount to a gross amount by dividing by 0.6 before
+        subtracting it from the taper basis. PBL § 16, stk. 1 sets two
+        grundbeløb: the higher one applies only from the seventh income year
+        before folkepensionsalderen; this recipient is 35, so the ORDINARY
+        2025 regulated cap of 9400 kr. applies (SKAT aldersopsparing satser;
+        the case supplies it as the § 16 cap input). Axiom caps the 60000 kr.
+        contribution at 9400, grosses it to 15666.67, and reduces its taper
+        basis accordingly: excess 263333.33, reduction 5266.67, benefit
+        11497.33. EUROMOD bfachnm_dk has no taper input for qualifying
+        contributions at all, so its excess stays 279000 and its reduction
+        5580, paying 11184. The missing gross-up lowers EUROMOD's benefit by
+        exactly 2 pct. of the 15666.67 gross amount, 313.33 kr. (An earlier
+        revision of this witness supplied the 61200 kr. within-seven-years
+        cap to this age-35 recipient — legally impossible — and overstated
+        the gap as 2000 kr.; caught in adversarial audit.)
       arithmetic:
-        - expression: "60000 / 0.6"
-          equals: 100000
-        - expression: "(1196000 - 100000 - 917000) * 0.02"
-          equals: 3580
+        - expression: "9400 / 0.6"
+          equals: 15666.666666666666
+        - expression: "(1196000 - 15666.666666666666 - 917000) * 0.02"
+          equals: 5266.666666666667
+        - expression: "16764 - 5266.666666666667"
+          equals: 11497.333333333334
         - expression: "(1196000 - 917000) * 0.02"
           equals: 5580
-        - expression: "11184 - 13184"
-          equals: -2000
+        - expression: "16764 - 5580"
+          equals: 11184
+        - expression: "11184 - 11497.333333333334"
+          equals: -313.33333333333394
       upstream_url: https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/20
       sources:
         - axiom_oracles/data/euromod_issues.json#euromod-dk-bfachnm-taper-pension-grossup-absent
@@ -35,5 +47,5 @@ entries:
     expires_on_source_change: true
     pinned:
       left: 11184
-      right: 13184
-      difference: -2000
+      right: 11497.333333333334
+      difference: -313.33333333333394

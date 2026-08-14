@@ -91,8 +91,11 @@ def test_dk_witness_reports_pin_live_outputs_and_dispositions() -> None:
     assert pension["case_id"] == ("dk-child-youth-benefit-age5-yem1300000-pension60000")
     assert (pension["left"], pension["right"], pension["difference"]) == (
         11_184,
-        13_184,
-        -2_000,
+        # Age-35 recipient: the ORDINARY PBL § 16 cap (9.400 kr. in 2025)
+        # applies, not the within-seven-years 61.200 kr. cap the first build
+        # supplied (audit finding). 16764 - 2% x (1196000 - 9400/0.6 - 917000).
+        11_497.333333333334,
+        -313.33333333333394,
     )
     assert pension["disposition"]["id"] == (
         "euromod-dk-bfachnm-taper-pension-grossup-absent"

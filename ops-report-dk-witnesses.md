@@ -143,3 +143,18 @@ Status: **SHIP-READY — all three witnesses executed and dispositioned.**
 - `750ea883f` — `dk: finalize witness reports and verification`
 - Witness 3 implementation, live reports, and this updated report are committed
   together in the final local commit; nothing was pushed.
+
+
+## Correction addendum (2026-08-14, post-audit)
+
+- The gross-up witness as first built supplied the 61.200 kr.
+  within-seven-years-of-pension-age PBL § 16 cap to an age-35 recipient —
+  legally impossible for that person (the ordinary 2025 cap is 9.400 kr.).
+  Caught in the clean-context adversarial audit of PR #473. Rerun with the
+  ordinary cap: EUROMOD 11.184 vs Axiom 11.497,33, delta −313,33 (2 pct. of
+  the 15.666,67 grossed-up capped contribution). The disposition and the
+  suite constant now carry the two-cap rule with citations.
+- The 'SHIP-READY' verdict above therefore overstated the first build; it
+  became accurate only after this correction.
+- The couple witness commit omitted from the earlier commit list:
+  e754cdebb (dk: add couple spousal-taper witness for ec-jrc 18).

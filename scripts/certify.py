@@ -136,7 +136,8 @@ PROGRAMS: dict[str, dict] = {
         # executable producers do not exist for dk (as for every program),
         # so certified is UNAVAILABLE by construction. The jurisdiction
         # scoreboard (conformance/dk.yaml) separately records the honest
-        # coverage burndown: 1 of 3 in-scope DK_2025 policies covered.
+        # full-parity burndown: 22 substantive DK_2025 policies in scope,
+        # 1 covered by this program's suites, 21 uncovered.
         "attested": {},
     },
 }

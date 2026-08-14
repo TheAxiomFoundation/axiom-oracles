@@ -409,7 +409,13 @@ def test_dk_scope_decisions_preserve_the_honest_uncovered_set():
     ) == {
         "technical": 15,
         "input_carrying": 1,
-        "oracle_models_repealed_law": 3,
+        # bfachxp keeps the repealed-law reason WITH its instrument citations
+        # (LOV nr 1550 af 27/12/2019 + the two Forlængelse acts); the two
+        # COVID compensation rows have NO queryable outputs, so they are
+        # unobservable_boundary — an exclusion the probe alone proves,
+        # with no legal claim required (audit finding).
+        "oracle_models_repealed_law": 1,
+        "unobservable_boundary": 2,
         "not_a_policy": 2,
         "extension_not_available": 1,
     }
@@ -1855,6 +1861,37 @@ def test_dk_spine_mutant_cannot_silently_drop_or_add_policy(
         )
 
     mutant_path = tmp_path / "dk-DK_2025-mutant.json"
+    mutant_path.write_text(json.dumps(mutant, indent=2) + "\n")
+    monkeypatch.setitem(
+        gen.JURISDICTIONS,
+        "dk",
+        {
+            **gen.JURISDICTIONS["dk"],
+            "spine_artifact": str(mutant_path),
+            "default_root": str(tmp_path / "model-does-not-exist"),
+            "env_roots": (),
+        },
+    )
+
+    assert gen._process("dk", check=True, model_root=None) == 1
+
+
+def test_dk_spine_mutant_switch_swap_trips_check(tmp_path, monkeypatch):
+    """NEGATIVE: a covered policy deactivating while an uncovered one
+    activates must trip --check even though the aggregate switch histogram
+    is preserved (audit finding: per-policy switches are facts, not a
+    histogram)."""
+    gen = _load_script("generate_conformance_universe.py")
+    mutant = json.loads(DK_SPINE_PATH.read_text())
+    by_name = {policy["name"]: policy for policy in mutant["policies"]}
+    covered = by_name["bfachnm_dk"]
+    uncovered = by_name["bma_dk"]
+    covered["switch"], uncovered["switch"] = (
+        uncovered["switch"],
+        covered["switch"],
+    )
+
+    mutant_path = tmp_path / "dk-DK_2025-switch-swap.json"
     mutant_path.write_text(json.dumps(mutant, indent=2) + "\n")
     monkeypatch.setitem(
         gen.JURISDICTIONS,

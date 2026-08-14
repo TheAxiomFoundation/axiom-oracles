@@ -102,9 +102,16 @@ _DK_CURRENT_YEAR_ALLOWANCE_2025 = 917_000
 # keeps the composed identity complete.
 _DK_CPI_2023 = 0.156
 _DK_CURRENT_YEAR_ALLOWANCE_2023 = 852_600
-# Pinned to the pensionsbeskatningslovens § 16, stk. 1 grundbeløb order. The
-# 2025 witness contributes 60000 kr.; every other case contributes zero.
-_DK_PENSION_CONTRIBUTION_CAP = 61_200
+# Pensionsbeskatningslovens § 16, stk. 1 (LBK nr 1243 af 2024, captured in
+# the corpus) sets TWO grundbeløb: 7.150 kr. (2010-niveau) ordinarily, and
+# 46.700 kr. (2010-niveau) only »fra og med det syvende indkomstår før det
+# indkomstår, hvor pensionsopspareren når folkepensionsalderen«. The 2025
+# regulated amounts are 9.400 kr. and 61.200 kr. respectively (SKAT,
+# aldersopsparing satser). Every adult in these grids is age 35 — decades
+# from folkepensionsalderen — so the ORDINARY cap applies. (The gross-up
+# witness previously supplied 61.200 here, which is legally impossible for
+# an age-35 recipient; caught in adversarial audit.)
+_DK_PENSION_CONTRIBUTION_CAP_ORDINARY_2025 = 9_400
 
 # EUROMOD DK demographic codes.
 _LES_INACTIVE = 7  # head labour status carried by the DK training adults
@@ -347,7 +354,7 @@ def _axiom_inputs(
         ): qualifying_pension_contributions,
         _p1a_input(
             "pension_contribution_limit_under_pensionsbeskatningsloven_section_16"
-        ): _DK_PENSION_CONTRIBUTION_CAP,
+        ): _DK_PENSION_CONTRIBUTION_CAP_ORDINARY_2025,
         _p1a_input("person_only_taxable_part_of_year"): False,
         _cyb_input("current_year_income_reduction_allowance"): (
             current_year_income_reduction_allowance
@@ -375,7 +382,7 @@ def _couple_recipient_axiom_input_records(
         _p1a_input("total_contributions_to_qualifying_pension_accounts"): 0.0,
         _p1a_input(
             "pension_contribution_limit_under_pensionsbeskatningsloven_section_16"
-        ): _DK_PENSION_CONTRIBUTION_CAP,
+        ): _DK_PENSION_CONTRIBUTION_CAP_ORDINARY_2025,
         _couple_cyb_input("current_year_income_reduction_allowance"): (
             _DK_CURRENT_YEAR_ALLOWANCE_2025
         ),
