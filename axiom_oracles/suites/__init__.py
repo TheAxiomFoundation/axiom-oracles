@@ -47,6 +47,7 @@ from .be_worker import (
 from .dk_child_youth_benefit import (
     dk_child_youth_benefit_2023_cases,
     dk_child_youth_benefit_cases,
+    dk_child_youth_benefit_couple_cases,
 )
 from .de_worker import de_worker_dual_oracle_cases
 from .nyc_basic import nyc_basic_cases
@@ -128,6 +129,7 @@ def available_suites() -> tuple[str, ...]:
         "be-pensioner-contributions",
         "dk-child-youth-benefit",
         "dk-child-youth-benefit-2023",
+        "dk-child-youth-benefit-couple",
         "de-worker-dual-oracle",
         "uk-worker-pit",
         "uk-personal-allowance",
@@ -232,6 +234,8 @@ def load_suite(name: str):
         return dk_child_youth_benefit_cases()
     if name == "dk-child-youth-benefit-2023":
         return dk_child_youth_benefit_2023_cases()
+    if name == "dk-child-youth-benefit-couple":
+        return dk_child_youth_benefit_couple_cases()
     if name == "de-worker-dual-oracle":
         return de_worker_dual_oracle_cases()
     if name == "uk-worker-pit":

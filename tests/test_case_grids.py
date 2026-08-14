@@ -70,7 +70,7 @@ def test_expected_jurisdictions_present() -> None:
         ("be", 30, 128),
         ("de", 1, 13),
         ("uk", 26, 143),
-        ("dk", 2, 9),
+        ("dk", 3, 10),
     ],
 )
 def test_grid_case_counts(jurisdiction, expected_sets, expected_cases) -> None:
@@ -616,6 +616,50 @@ def test_dk_child_youth_benefit_2023_suite_pinned() -> None:
     assert inputs[cyb + "current_year_income_reduction_allowance"] == 852_600
 
 
+def test_dk_child_youth_benefit_couple_suite_pinned() -> None:
+    assert "dk-child-youth-benefit-couple" in available_suites()
+    [case] = load_suite("dk-child-youth-benefit-couple")
+
+    assert case.case_id == ("dk-child-youth-benefit-couple-age5-yem1500000-spouse0")
+    assert case.period == "2025"
+    assert case.metadata["comparison_level"] == "household_sum"
+    assert case.metadata["axiom_result_aggregation"] == {
+        "strategy": "sum",
+        "entity_ids": ["earner", "non_earner"],
+    }
+    records = case.metadata["axiom_input_records"]
+    assert len(records) == 18
+    assert {record["entity_id"] for record in records} == {
+        "earner",
+        "non_earner",
+    }
+    assert all(record["entity"] == "Person" for record in records)
+    assert {
+        record["name"] for record in records if record["entity_id"] == "earner"
+    } == {record["name"] for record in records if record["entity_id"] == "non_earner"}
+
+    head, spouse, child = case.metadata["euromod_inputs"]
+    assert (head["idperson"], head["idpartner"], head["dms"], head["dhr"]) == (
+        101,
+        102,
+        2,
+        1,
+    )
+    assert head["yem"] == 125_000
+    assert (
+        spouse["idperson"],
+        spouse["idpartner"],
+        spouse["dms"],
+        spouse["dhr"],
+        spouse["yem"],
+    ) == (102, 101, 2, 0, 0)
+    assert (child["idperson"], child["idmother"], child["idfather"]) == (
+        103,
+        101,
+        102,
+    )
+
+
 def test_dk_child_youth_benefit_mapping_pinned() -> None:
     from axiom_oracles.comparison.mappings import mappings_by_concept
     from axiom_oracles.core.case import Concepts
@@ -626,4 +670,12 @@ def test_dk_child_youth_benefit_mapping_pinned() -> None:
     assert (
         mapping.target_for_engine("axiom")
         == "single_recipient_annual_child_youth_benefit"
+    )
+
+    couple_mapping = mappings_by_concept().get(Concepts.DK_COUPLE_CHILD_YOUTH_BENEFIT)
+    assert couple_mapping is not None, "dk couple child/youth mapping missing"
+    assert couple_mapping.target_for_engine("euromod") == "bfachnm_s"
+    assert (
+        couple_mapping.target_for_engine("axiom")
+        == "couple_recipient_annual_child_youth_benefit"
     )

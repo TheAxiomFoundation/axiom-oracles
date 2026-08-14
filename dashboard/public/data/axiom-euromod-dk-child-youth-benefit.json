@@ -945,7 +945,7 @@
       "axiom_rules_engine_sha": "05eac9d2f89dabe5c6673176260762cef3a58f47",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-08-14T01:32:12Z",
+    "generated_at": "2026-08-14T02:13:37Z",
     "generated_by": "scripts/run_comparison.py::dk-child-youth-benefit-euromod",
     "oracle": {
       "euromod_country": "DK",
@@ -957,7 +957,7 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-dk",
-        "sha": "75923db8b3b759133275ec12e33391fa1109244d"
+        "sha": "9986b6035c4e557b9b40645dfe2f3e4cffb6037c"
       }
     ],
     "run_kind": "manual",

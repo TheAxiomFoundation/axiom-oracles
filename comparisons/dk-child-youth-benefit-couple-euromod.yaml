@@ -1,0 +1,39 @@
+name: dk-child-youth-benefit-couple-euromod
+title: Denmark Couple Child and Youth Benefit — Axiom vs EUROMOD
+description: >-
+  Activates ec-jrc #18 with one DK_2025 married single-earner couple and one
+  age-5 child. Danish law since 2022 applies § 4, stk. 1 ligedeling: half of
+  each quarterly payment, rounded upward, goes to each custody holder; § 1 a
+  then tapers each holder's share on that recipient's own income. The composed
+  RuleSpec surface is per Person, so Axiom executes the earner and non-earner
+  recipient rows and the adapter sums those two executed outputs. EUROMOD's
+  adapter independently sums bfachnm_s over the household, keeping both sides
+  at the same household-total comparison level. EUROMOD DK_2022-DK_2025 retains
+  the pre-2022 spousal income test in bfachnm_dk and therefore diverges on this
+  witness. EUROMOD runs the public JRC release (EUROMOD_RELEASES_J2.0+, system
+  DK_2025, dataset DK_training_data); tintbto_s is bridged only to the earner's
+  two § 7-basis input records, while the non-earner's records remain zero.
+
+runner:
+  type: euromod-synthetic-compare
+  # Keep engine parity with the two existing DK witness comparisons.
+  axiom_rules_repo: $HOME/TheAxiomFoundation/_worktrees/axiom-rules-engine-pin
+  parameters:
+    suite: dk-child-youth-benefit-couple
+    population: synthetic
+    sample_size: 0
+    # The couple composition first takes effect 2025-05-12.
+    period: 2025-06-01
+    euromod_model_root: $HOME/Downloads/EUROMOD_J2.0/EUROMOD_RELEASES_J2.0+
+    euromod_country: DK
+    euromod_system: DK_2025
+    euromod_dataset: DK_training_data
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-dk-child-youth-benefit-couple.json
+
+artifacts:
+  report_basename: axiom-euromod-dk-child-youth-benefit-couple
+
+dashboard:
+  filename: axiom-euromod-dk-child-youth-benefit-couple.json
+  suite: dk-child-youth-benefit-couple

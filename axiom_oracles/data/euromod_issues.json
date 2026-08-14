@@ -1155,14 +1155,14 @@
       "status": "upstream_filed",
       "classification": "euromod_model_schedule_issue",
       "upstream_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/18",
-      "summary": "The Danish child and youth benefit taper policy bfachnm_dk retains a pre-2022 spousal income test in DK_2022 through DK_2025: for cohabiting and married recipients the boerne- og ungeydelsesloven § 1 a reduction is driven off a partner/couple income basis rather than the post-2022 individualized taper (each recipient tapered on their own mellemskat basis with the § 1 a ligedeling apportionment). The divergence appears only for couples; single-recipient (single-parent) households are unaffected because there is no partner income to test.",
+      "summary": "The Danish child and youth benefit taper policy bfachnm_dk retains a pre-2022 spousal income test in DK_2022 through DK_2025: for cohabiting and married recipients the boerne- og ungeydelsesloven § 1 a reduction is driven off a partner/couple income basis rather than the post-2022 individualized taper (each recipient tapered on their own mellemskat basis after § 4, stk. 1 ligedeling). The dk-child-youth-benefit-couple witness now activates the divergence: for a married couple with one age-5 child, one recipient earning 1500000 kr. and the other earning zero, EUROMOD DK_2025 executes a 7504 kr. household benefit while the current-law Axiom household sum is 8384 kr. (earner 0 plus non-earner 8384). Single-recipient households remain unaffected because there is no partner income to test.",
       "observed_with": {
         "model_root": "EUROMOD_RELEASES_J2.0+",
         "country": "DK",
         "system": "DK_2025",
         "dataset": "DK_training_data",
         "policy": "bfachnm_dk",
-        "suite": "dk-child-youth-benefit"
+        "suite": "dk-child-youth-benefit-couple"
       },
       "affected_systems": [
         "DK_2022",
@@ -1171,7 +1171,7 @@
         "DK_2025"
       ],
       "workaround": {
-        "description": "Restrict the graded dk-child-youth-benefit grid to single-parent, one-child households, where the pre-2022 spousal test and the current single-recipient § 1 a taper coincide. The Axiom pipeline models the single-recipient taper only; the § 1 a couple apportionment is future work and is excluded from the graded surface."
+        "description": "Keep the original dk-child-youth-benefit grid single-parent so its seven baseline cases retain raw parity, and disposition the explicit married single-earner dk-child-youth-benefit-couple witness as an upstream_engine_gap linked to ec-jrc issue #18. The Axiom couple pipeline executes each § 4, stk. 1 recipient separately, tapers only that recipient's own § 1 a basis, and sums the two values to the same household level as EUROMOD bfachnm_s."
       },
       "oracle_scope": "household_level",
       "counts_as_axiom_gap": false

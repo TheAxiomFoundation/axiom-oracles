@@ -1,0 +1,324 @@
+{
+  "aggregates": [
+    {
+      "category": "benefits",
+      "comparison": "amount",
+      "comparison_count": 1,
+      "comparison_weight": 1,
+      "components": [],
+      "concept": "dk:statutes/composed/boerne-og-ungeydelse-couple-pipeline#couple_recipient_annual_child_youth_benefit",
+      "description": "Denmark child and youth benefit (couple recipients, household sum)",
+      "left_weighted_sum": 7504,
+      "match_rate": 0,
+      "match_weight": 0,
+      "mismatch_count": 1,
+      "mismatch_weight": 1,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 8384,
+      "weighted_difference": -880,
+      "weighted_match_rate": 0
+    }
+  ],
+  "case_count": 1,
+  "cases": [
+    {
+      "case_id": "dk-child-youth-benefit-couple-age5-yem1500000-spouse0",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "matches": [],
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "earner",
+        "axiom_input_records_count": 18,
+        "axiom_result_aggregation": {
+          "entity_ids": [
+            "earner",
+            "non_earner"
+          ],
+          "strategy": "sum"
+        },
+        "axiom_result_aggregation_applied": {
+          "components": [
+            {
+              "entity_id": "earner",
+              "values": {
+                "couple_recipient_annual_child_youth_benefit": 0.0,
+                "dk:statutes/composed/boerne-og-ungeydelse-couple-pipeline#couple_recipient_annual_child_youth_benefit": 0.0,
+                "dk:statutes/composed/boerne-og-ungeydelse-couple-pipeline#equal_share_of_annual_child_youth_benefit": 8384.0,
+                "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1#annual_tax_free_child_or_youth_benefit": 16764.0,
+                "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1#benefit_age_band": 1,
+                "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#income_basis_for_benefit_reduction": 1380000.0,
+                "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#qualifying_pension_contributions_capped": 0.0
+              }
+            },
+            {
+              "entity_id": "non_earner",
+              "values": {
+                "couple_recipient_annual_child_youth_benefit": 8384.0,
+                "dk:statutes/composed/boerne-og-ungeydelse-couple-pipeline#couple_recipient_annual_child_youth_benefit": 8384.0,
+                "dk:statutes/composed/boerne-og-ungeydelse-couple-pipeline#equal_share_of_annual_child_youth_benefit": 8384.0,
+                "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1#annual_tax_free_child_or_youth_benefit": 16764.0,
+                "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1#benefit_age_band": 1,
+                "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#income_basis_for_benefit_reduction": 0.0,
+                "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#qualifying_pension_contributions_capped": 0.0
+              }
+            }
+          ],
+          "strategy": "sum"
+        },
+        "child_age": 5,
+        "comparison_level": "household_sum",
+        "euromod_inputs": [
+          {
+            "amrtn": 1,
+            "dag": 35,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 0,
+            "dhr": 1,
+            "dms": 2,
+            "drgur": 1,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 102,
+            "idperson": 101,
+            "les": 7,
+            "lhw": 0,
+            "liwmy": 0,
+            "liwwh": 0,
+            "loc": 5,
+            "yem": 125000.0
+          },
+          {
+            "amrtn": 1,
+            "dag": 35,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhr": 0,
+            "dms": 2,
+            "drgur": 1,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 101,
+            "idperson": 102,
+            "les": 7,
+            "lhw": 0,
+            "liwmy": 0,
+            "liwwh": 0,
+            "loc": 5,
+            "yem": 0.0
+          },
+          {
+            "amrtn": 1,
+            "dag": 5,
+            "ddi": 0,
+            "dec": 1,
+            "dgn": 1,
+            "dhr": 0,
+            "dms": 1,
+            "drgur": 1,
+            "dwt": 1000.0,
+            "idfather": 102,
+            "idmother": 101,
+            "idpartner": 0,
+            "idperson": 103,
+            "les": 0,
+            "lhw": 0,
+            "liwmy": 0,
+            "liwwh": 0,
+            "loc": 5,
+            "yem": 0.0
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "tintbto_s": {
+            "records": [
+              {
+                "entity": "Person",
+                "entity_id": "earner",
+                "name": "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis"
+              },
+              {
+                "entity": "Person",
+                "entity_id": "earner",
+                "name": "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis_after_section_14_recalculation"
+              }
+            ]
+          }
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "Person[earner]::dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis": 1380000.0,
+          "Person[earner]::dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis_after_section_14_recalculation": 1380000.0
+        },
+        "head_annual_earnings": 1500000.0,
+        "household_summary": {
+          "ages": [
+            35,
+            35,
+            5
+          ],
+          "household_size": 3,
+          "yearly_earned_income_per_person": [
+            1500000.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 1500000.0
+        },
+        "locale": "DK",
+        "scenario": "married-single-earner-couple-child-youth-benefit",
+        "scope": {
+          "geoid": "DK",
+          "type": "country"
+        },
+        "spouse_annual_earnings": 0.0
+      },
+      "mismatches": [
+        {
+          "concept": "dk:statutes/composed/boerne-og-ungeydelse-couple-pipeline#couple_recipient_annual_child_youth_benefit",
+          "description": "Denmark child and youth benefit (couple recipients, household sum)",
+          "difference": -880.0000000000018,
+          "kind": "amount_difference",
+          "left": 7503.999999999998,
+          "parent": null,
+          "relative_tolerance": 0.001,
+          "right": 8384.0,
+          "tolerance": 1
+        }
+      ],
+      "right_engine": "axiom",
+      "right_errors": []
+    }
+  ],
+  "concepts": [
+    {
+      "category": "benefits",
+      "comparison": "amount",
+      "components": [],
+      "description": "Denmark child and youth benefit (couple recipients, household sum)",
+      "id": "dk:statutes/composed/boerne-og-ungeydelse-couple-pipeline#couple_recipient_annual_child_youth_benefit",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0.001,
+      "tolerance": 1
+    }
+  ],
+  "engines": {
+    "left": "euromod",
+    "right": "axiom",
+    "versions": {
+      "axiom_rules_engine": "0.1.0"
+    }
+  },
+  "errors": [],
+  "locales": [
+    "DK"
+  ],
+  "mismatches": [
+    {
+      "ages": null,
+      "case_id": "dk-child-youth-benefit-couple-age5-yem1500000-spouse0",
+      "concept": "dk:statutes/composed/boerne-og-ungeydelse-couple-pipeline#couple_recipient_annual_child_youth_benefit",
+      "description": "Denmark child and youth benefit (couple recipients, household sum)",
+      "difference": -880.0000000000018,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "euromod-dk-bfachnm-pre2022-spousal-taper",
+        "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/18"
+      },
+      "kind": "amount_difference",
+      "left": 7503.999999999998,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0.001,
+      "right": 8384.0,
+      "scenario": "married-single-earner-couple-child-youth-benefit",
+      "tolerance": 1,
+      "yearly_earned_income": null
+    }
+  ],
+  "population": "synthetic",
+  "provenance": {
+    "dataset": {
+      "population": "synthetic",
+      "source": "config"
+    },
+    "engine": {
+      "axiom_rules_engine_sha": "05eac9d2f89dabe5c6673176260762cef3a58f47",
+      "axiom_rules_engine_version": "0.1.0"
+    },
+    "generated_at": "2026-08-14T02:39:01Z",
+    "generated_by": "scripts/run_comparison.py::dk-child-youth-benefit-couple-euromod",
+    "oracle": {
+      "euromod_country": "DK",
+      "euromod_dataset": "DK_training_data",
+      "euromod_release": "J2.0+",
+      "euromod_system": "DK_2025",
+      "name": "euromod"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-dk",
+        "sha": "9986b6035c4e557b9b40645dfe2f3e4cffb6037c"
+      }
+    ],
+    "run_kind": "manual",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "scope": null,
+  "suite": "dk-child-youth-benefit-couple",
+  "summary": {
+    "comparison_count": 1,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 1
+      },
+      "dispositions_file": "dispositions/dk-child-youth-benefit-couple.yaml",
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 0,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": [],
+    "match_count": 0,
+    "mismatch_count": 1,
+    "mismatches_by_concept": [
+      {
+        "count": 1,
+        "value": "dk:statutes/composed/boerne-og-ungeydelse-couple-pipeline#couple_recipient_annual_child_youth_benefit"
+      }
+    ],
+    "mismatches_by_kind": [
+      {
+        "count": 1,
+        "value": "amount_difference"
+      }
+    ],
+    "mismatches_by_scenario": [
+      {
+        "count": 1,
+        "value": "married-single-earner-couple-child-youth-benefit"
+      }
+    ],
+    "weighted": {
+      "comparison_weight": 1,
+      "match_rate": 0,
+      "match_weight": 0,
+      "mismatch_weight": 1
+    }
+  }
+}

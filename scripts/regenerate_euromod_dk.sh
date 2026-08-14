@@ -28,7 +28,8 @@ export EUROMOD_MODEL_ROOT EUROMOD_PYTHON DOTNET_ROOT PYTHONNET_RUNTIME \
 
 for name in \
   dk-child-youth-benefit-euromod \
-  dk-child-youth-benefit-2023-euromod; do
+  dk-child-youth-benefit-2023-euromod \
+  dk-child-youth-benefit-couple-euromod; do
   echo "== $name"
   .venv/bin/python scripts/run_comparison.py "$name" --summary || echo "!! $name failed"
 done

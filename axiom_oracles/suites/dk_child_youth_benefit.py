@@ -14,6 +14,14 @@ The separate ``dk_child_youth_benefit_2023_cases`` suite activates ec-jrc #19:
 the one-off 2023 statutory increase is 660 kr., while EUROMOD DK_2023 carries a
 600 kr. constant. Its low-income age-5 case isolates that 60 kr. parameter gap.
 
+The separate ``dk_child_youth_benefit_couple_cases`` suite activates ec-jrc
+#18 with a married single-earner couple. The current-law RuleSpec surface is
+per recipient, so the Axiom adapter executes the earner and non-earner Person
+rows separately and sums their values. EUROMOD already sums every person's
+``bfachnm_s`` to the Case/household level. The comparison therefore grades the
+same household total on both sides while preserving the two executed Axiom
+components as report evidence.
+
 Household composition is expressed as explicit EUROMOD input rows so the
 dependent-child linkage the allocation depends on is exact: EUROMOD allocates
 ``bfachnm_s`` to the dependent child row (``Allocate share_between IsDepChild``),
@@ -23,14 +31,11 @@ facts are annual (the Axiom concept convention); the DK dataset is monthly, so
 ``yem`` is supplied monthly (annual / 12) and the monthly ``bfachnm_s`` output is
 annualised by the adapter (x12).
 
-Single-recipient by design. EUROMOD implements a pre-2022 spousal income test in
-the taper for DK_2022-DK_2025 (filed upstream as ec-jrc #18,
-``euromod_issues.json`` euromod-dk-2025-bfachnm-pre2022-spousal-taper), and the
-Axiom pipeline models the single-recipient § 1 a taper only (the § 1 a couple
-apportionment is future work). The graded grid is therefore restricted to
-single-parent households, where the two sides implement the same mechanism and
-the spousal-test divergence cannot arise. Couple semantics are deliberately
-excluded from the graded surface.
+The original eight-case DK_2025 suite remains single-recipient by design, so
+its seven baseline rows still keep EUROMOD's pre-2022 spousal income test inert.
+The one-case couple suite deliberately activates that filed ec-jrc #18 gap:
+RuleSpec applies § 4, stk. 1 ligedeling and tapers each half on its recipient's
+own § 1 a basis, while EUROMOD DK_2022-DK_2025 applies the legacy spousal test.
 
 Verified EUROMOD conventions (executed against EUROMOD_RELEASES_J2.0+, DK_2025):
 
@@ -80,6 +85,7 @@ DK_METADATA = {
 # The composed child/youth benefit pipeline (rulespec-dk). Its single-recipient
 # annual output and its Person-level inputs are addressed under this module id.
 CYB_MODULE = "dk:statutes/composed/boerne-og-ungeydelse-pipeline"
+CYB_COUPLE_MODULE = "dk:statutes/composed/boerne-og-ungeydelse-couple-pipeline"
 P1_MODULE = "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1"
 P1A_MODULE = "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a"
 
@@ -104,6 +110,7 @@ _DK_PENSION_CONTRIBUTION_CAP = 61_200
 _LES_INACTIVE = 7  # head labour status carried by the DK training adults
 _LES_CHILD = 0
 _DMS_SINGLE = 1
+_DMS_MARRIED = 2
 _DEC_DEPENDENT_CHILD = 1
 _LOC = 5
 _AMRTN_OWNER = 1
@@ -152,6 +159,100 @@ def dk_child_youth_benefit_2023_cases() -> list[Case]:
             cpi_change=_DK_CPI_2023,
             payment_year_has_additional_statutory_increase=True,
             current_year_income_reduction_allowance=(_DK_CURRENT_YEAR_ALLOWANCE_2023),
+        )
+    ]
+
+
+def dk_child_youth_benefit_couple_cases() -> list[Case]:
+    """One married-couple household-sum witness for ec-jrc issue #18."""
+
+    child_age = 5
+    head_annual_income = 1_500_000.0
+    spouse_annual_income = 0.0
+    income_basis_inputs = (
+        _p1a_input("personskatteloven_section_7_income_basis"),
+        _p1a_input(
+            "personskatteloven_section_7_income_basis_after_section_14_recalculation"
+        ),
+    )
+    return [
+        Case(
+            case_id="dk-child-youth-benefit-couple-age5-yem1500000-spouse0",
+            period="2025",
+            metadata={
+                **DK_METADATA,
+                "axiom_entity_id": "earner",
+                "scenario": "married-single-earner-couple-child-youth-benefit",
+                "comparison_level": "household_sum",
+                "child_age": child_age,
+                "head_annual_earnings": head_annual_income,
+                "spouse_annual_earnings": spouse_annual_income,
+                "axiom_input_records": [
+                    *_couple_recipient_axiom_input_records(
+                        entity_id="earner",
+                        child_age=child_age,
+                        own_income_basis=0.0,
+                    ),
+                    *_couple_recipient_axiom_input_records(
+                        entity_id="non_earner",
+                        child_age=child_age,
+                        own_income_basis=0.0,
+                    ),
+                ],
+                # The RuleSpec surface is deliberately per recipient. Query
+                # both custody holders and sum only the compared output so it
+                # is level-aligned with EUROMOD's household-summed bfachnm_s.
+                "axiom_result_aggregation": {
+                    "strategy": "sum",
+                    "entity_ids": ["earner", "non_earner"],
+                },
+                "euromod_inputs": [
+                    _adult_row(
+                        idperson=101,
+                        annual_income=head_annual_income,
+                        partner_id=102,
+                        gender=0,
+                        married=True,
+                        household_responsible=True,
+                    ),
+                    _adult_row(
+                        idperson=102,
+                        annual_income=spouse_annual_income,
+                        partner_id=101,
+                        gender=1,
+                        married=True,
+                        household_responsible=False,
+                    ),
+                    _child_row(
+                        idperson=103,
+                        age=child_age,
+                        mother_id=101,
+                        father_id=102,
+                    ),
+                ],
+                # With a zero-income spouse, EUROMOD's household tintbto_s is
+                # exactly the earner's post-AM-bidrag basis. Bridge that
+                # executed value to the earner's two own-income records; the
+                # non-earner's records remain explicitly zero.
+                EUROMOD_TO_AXIOM_INPUT_BRIDGE: {
+                    "tintbto_s": {
+                        "records": [
+                            {
+                                "name": input_name,
+                                "entity": "Person",
+                                "entity_id": "earner",
+                            }
+                            for input_name in income_basis_inputs
+                        ]
+                    }
+                },
+            },
+            entities=_couple_entities(
+                child_age=child_age,
+                head_annual_income=head_annual_income,
+                spouse_annual_income=spouse_annual_income,
+            ),
+            outputs=(Concepts.DK_COUPLE_CHILD_YOUTH_BENEFIT,),
         )
     ]
 
@@ -254,8 +355,48 @@ def _axiom_inputs(
     }
 
 
+def _couple_recipient_axiom_input_records(
+    *,
+    entity_id: str,
+    child_age: int,
+    own_income_basis: float,
+) -> list[dict[str, object]]:
+    """The couple module's exact nine-input surface for one Person row."""
+
+    values: dict[str, float | bool | int] = {
+        _p1_input("child_age_years"): child_age,
+        _p1_input("percentage_change_rounded_to_one_decimal_place"): _DK_CPI_2025,
+        _p1_input("payment_year_has_additional_statutory_increase"): False,
+        _p1a_input("personskatteloven_section_7_income_basis"): own_income_basis,
+        _p1a_input(
+            "personskatteloven_section_7_income_basis_after_section_14_recalculation"
+        ): own_income_basis,
+        _p1a_input("person_only_taxable_part_of_year"): False,
+        _p1a_input("total_contributions_to_qualifying_pension_accounts"): 0.0,
+        _p1a_input(
+            "pension_contribution_limit_under_pensionsbeskatningsloven_section_16"
+        ): _DK_PENSION_CONTRIBUTION_CAP,
+        _couple_cyb_input("current_year_income_reduction_allowance"): (
+            _DK_CURRENT_YEAR_ALLOWANCE_2025
+        ),
+    }
+    return [
+        {
+            "name": name,
+            "entity": "Person",
+            "entity_id": entity_id,
+            "value": value,
+        }
+        for name, value in values.items()
+    ]
+
+
 def _cyb_input(name: str) -> str:
     return f"{CYB_MODULE}#input.{name}"
+
+
+def _couple_cyb_input(name: str) -> str:
+    return f"{CYB_COUPLE_MODULE}#input.{name}"
 
 
 def _p1_input(name: str) -> str:
@@ -298,24 +439,68 @@ def _entities(*, child_age: int, head_annual_income: float) -> tuple[Entity, ...
     )
 
 
-def _adult_row(*, idperson: int, annual_income: float) -> dict[str, float | int]:
-    """The single responsible adult: single, head, earning ``annual_income``.
+def _couple_entities(
+    *,
+    child_age: int,
+    head_annual_income: float,
+    spouse_annual_income: float,
+) -> tuple[Entity, ...]:
+    return (
+        Entity(
+            entity_id="earner",
+            kind="person",
+            facts={
+                Concepts.PERSON_AGE: 35,
+                Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
+                Concepts.YEARLY_EARNED_INCOME: head_annual_income,
+            },
+        ),
+        Entity(
+            entity_id="non_earner",
+            kind="person",
+            facts={
+                Concepts.PERSON_AGE: 35,
+                Concepts.HOUSEHOLD_RELATION: "Spouse",
+                Concepts.YEARLY_EARNED_INCOME: spouse_annual_income,
+            },
+        ),
+        Entity(
+            entity_id="child",
+            kind="person",
+            facts={
+                Concepts.PERSON_AGE: child_age,
+                Concepts.HOUSEHOLD_RELATION: "Child",
+            },
+        ),
+    )
+
+
+def _adult_row(
+    *,
+    idperson: int,
+    annual_income: float,
+    partner_id: int = 0,
+    gender: int = 0,
+    married: bool = False,
+    household_responsible: bool = True,
+) -> dict[str, float | int]:
+    """An explicit adult row with income isolated to monthly ``yem``.
 
     Every income/benefit/expense column stays 0 (the worker zero-fills the DK
-    schema); only demographics and monthly ``yem`` are set, so ``tintbto_s`` is
-    exactly 0.92 x ``yem`` and no imputed income leaks through labour-status
-    fields.
+    schema), so ``tintbto_s`` is exactly 0.92 x ``yem`` and no imputed income
+    leaks through labour-status fields. Couple rows reciprocally set
+    ``partner_id`` and use ``married=True``.
     """
 
     return {
         "idperson": idperson,
-        "idpartner": 0,
+        "idpartner": partner_id,
         "idmother": 0,
         "idfather": 0,
         "dag": 35,
-        "dgn": 0,
-        "dms": _DMS_SINGLE,
-        "dhr": 1,
+        "dgn": gender,
+        "dms": _DMS_MARRIED if married else _DMS_SINGLE,
+        "dhr": int(household_responsible),
         "dec": 0,
         "les": _LES_INACTIVE,
         "lhw": 0,
@@ -330,14 +515,20 @@ def _adult_row(*, idperson: int, annual_income: float) -> dict[str, float | int]
     }
 
 
-def _child_row(*, idperson: int, age: int, mother_id: int) -> dict[str, float | int]:
+def _child_row(
+    *,
+    idperson: int,
+    age: int,
+    mother_id: int,
+    father_id: int = 0,
+) -> dict[str, float | int]:
     """The dependent child EUROMOD allocates ``bfachnm_s`` to (IsDepChild)."""
 
     return {
         "idperson": idperson,
         "idpartner": 0,
         "idmother": mother_id,
-        "idfather": 0,
+        "idfather": father_id,
         "dag": age,
         "dgn": 1,
         "dms": _DMS_SINGLE,

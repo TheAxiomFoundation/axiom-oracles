@@ -168,3 +168,33 @@ case_sets:
         kind: person
         age: 5
         relation: Child
+  dk-child-youth-benefit-couple:
+    locale: DK
+    entity: Person
+    entity_id: earner
+    outputs:
+    - dk:statutes/composed/boerne-og-ungeydelse-couple-pipeline#couple_recipient_annual_child_youth_benefit
+    cases:
+    - id: dk-child-youth-benefit-couple-age5-yem1500000-spouse0
+      period: '2025'
+      scenario: married-single-earner-couple-child-youth-benefit
+      parameters:
+        comparison_level: household_sum
+        child_age: 5
+        head_annual_earnings: 1500000.0
+        spouse_annual_earnings: 0.0
+      entities:
+      - id: earner
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 1500000.0
+      - id: non_earner
+        kind: person
+        age: 35
+        relation: Spouse
+        yearly_earned_income: 0.0
+      - id: child
+        kind: person
+        age: 5
+        relation: Child
