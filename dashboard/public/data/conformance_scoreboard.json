@@ -42,7 +42,7 @@
       },
       "unexplained_total": 0,
       "axiom_attributed_open": 0,
-      "oracle_attributed": 0,
+      "oracle_attributed": 1,
       "bridge_artifacts": 0,
       "conformant": false,
       "uncovered_policies": [
