@@ -108,9 +108,7 @@ class Concepts:
     FEDERAL_INCOME_TAX = "us:tax/federal-income-tax#liability"
     STATE_INCOME_TAX = "us:tax/state-income-tax#liability"
     MEDICAID_ELIGIBLE = "us:programs/medicaid#eligible"
-    MEDICAID_PREGNANT_WOMEN_ELIGIBLE = (
-        "us:programs/medicaid-pregnant-women#eligible"
-    )
+    MEDICAID_PREGNANT_WOMEN_ELIGIBLE = "us:programs/medicaid-pregnant-women#eligible"
     BASIC_HEALTH_PROGRAM_ELIGIBLE = "us:programs/basic-health-program#eligible"
     CHILD_HEALTH_PLUS_ELIGIBLE = "us:programs/child-health-plus#eligible"
     WIC_ELIGIBLE = "us:statutes/42/1786#wic_eligible"
@@ -170,8 +168,7 @@ class Concepts:
     # amount, exposed as ``uc_pilot_award_amount`` by
     # ``uk/policies/universal_credit_composed_award_pipeline.yaml``.
     UK_HOUSEHOLD_UNIVERSAL_CREDIT_AWARD = (
-        "uk:policies/universal_credit_composed_award_pipeline"
-        "#uc_pilot_award_amount"
+        "uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount"
     )
     # Benefit-cap reduction of the Universal Credit award (UC Regulations 2013
     # regulation 80A/81), the monthly amount by which the section 8(1) award is
@@ -195,8 +192,7 @@ class Concepts:
     # ``wfp_pilot_award_amount`` by
     # ``uk/policies/winter_fuel_payment_composed_award_pipeline.yaml``.
     UK_HOUSEHOLD_WINTER_FUEL_PAYMENT_AWARD = (
-        "uk:policies/winter_fuel_payment_composed_award_pipeline"
-        "#wfp_pilot_award_amount"
+        "uk:policies/winter_fuel_payment_composed_award_pipeline#wfp_pilot_award_amount"
     )
     # Composed Pension Credit guarantee-credit award pipeline (rulespec-uk) that
     # wires the State Pension Credit Act 2002 section 2 standard-minimum-
@@ -206,8 +202,7 @@ class Concepts:
     # the weekly guarantee credit, exposed as ``pc_pilot_award_amount`` by
     # ``uk/policies/pension_credit_composed_award_pipeline.yaml``.
     UK_HOUSEHOLD_PENSION_CREDIT_AWARD = (
-        "uk:policies/pension_credit_composed_award_pipeline"
-        "#pc_pilot_award_amount"
+        "uk:policies/pension_credit_composed_award_pipeline#pc_pilot_award_amount"
     )
     # Composed Housing Benefit entitlement pipeline (rulespec-uk#83) that wires
     # the Housing Benefit Regulations 2006 regulation 22 applicable amount, the
@@ -219,8 +214,7 @@ class Concepts:
     # ``hb_pilot_entitlement`` by
     # ``uk/policies/housing_benefit_composed_entitlement_pipeline.yaml``.
     UK_HOUSEHOLD_HOUSING_BENEFIT_AWARD = (
-        "uk:policies/housing_benefit_composed_entitlement_pipeline"
-        "#hb_pilot_entitlement"
+        "uk:policies/housing_benefit_composed_entitlement_pipeline#hb_pilot_entitlement"
     )
     # Scottish Child Payment (rulespec-uk uk/policies/govuk/scottish-child-payment,
     # SSI 2020/351) — the devolved weekly payment for a qualifying child under 16
@@ -229,8 +223,7 @@ class Concepts:
     # (scottish_child_payment_annual_amount) grades against UKMOD's benefit-unit
     # Scottish Child Payment output bchmt_s on single-child Scotland cases.
     UK_HOUSEHOLD_SCOTTISH_CHILD_PAYMENT_AWARD = (
-        "uk:policies/govuk/scottish-child-payment"
-        "#scottish_child_payment_annual_amount"
+        "uk:policies/govuk/scottish-child-payment#scottish_child_payment_annual_amount"
     )
     # Child Winter Heating Payment (rulespec-uk
     # uk/policies/govuk/child-winter-heating-payment, SSI 2020/352) — the devolved
@@ -441,8 +434,7 @@ class Concepts:
         "#flanders_social_protection_annual_premium"
     )
     BE_FLEMISH_JOBBONUS = (
-        "be-vlg:regulations/employment/jobbonus"
-        "#flanders_jobbonus_annual_amount"
+        "be-vlg:regulations/employment/jobbonus#flanders_jobbonus_annual_amount"
     )
     BE_IMMOVABLE_WITHHOLDING_GROSS_WITH_SUPPLIED_CENTIMES = (
         "be:statutes/property_tax/gross_withholding_and_supplied_centimes"
@@ -518,20 +510,18 @@ class Concepts:
         "#belgium_capital_income_separate_tax"
     )
 
-    # Composed Denmark børne- og ungeydelse pipeline (rulespec-dk) that wires the
-    # § 1 age-band base amount (after the § 1, stk. 3 CPI regulation and the
-    # 12/24-krone rounding) and the § 1 a income taper from a supplied recipient
-    # income basis and current-year bundfradrag, so an end-to-end EUROMOD DK_2025
-    # comparison (child and youth benefit bfachnm_s) can run. Single-recipient
-    # scope: one recipient receives the full amount and the § 1 a taper runs on
-    # that recipient's own income basis. The § 1 a couple apportionment
-    # (ligedeling of the combined benefit and the separate per-parent taper) is
-    # out of scope, so the graded grid is single-parent households — which also
-    # sidesteps the pre-2022 spousal taper EUROMOD keeps in DK_2022-DK_2025
-    # (euromod_issues.json euromod-dk-2025-bfachnm-pre2022-spousal-taper).
+    # Composed Denmark børne- og ungeydelse pipelines (rulespec-dk). The
+    # original surface pays one recipient and the couple surface applies § 4,
+    # stk. 1 ligedeling plus a separate own-income § 1 a taper to each holder.
+    # The couple comparison executes both Person rows and sums their results to
+    # the household level, matching EUROMOD's bfachnm_s aggregation boundary.
     DK_CHILD_YOUTH_BENEFIT = (
         "dk:statutes/composed/boerne-og-ungeydelse-pipeline"
         "#single_recipient_annual_child_youth_benefit"
+    )
+    DK_COUPLE_CHILD_YOUTH_BENEFIT = (
+        "dk:statutes/composed/boerne-og-ungeydelse-couple-pipeline"
+        "#couple_recipient_annual_child_youth_benefit"
     )
 
     EMPLOYEE_OASDI = "us:tax/payroll#employee_oasdi"

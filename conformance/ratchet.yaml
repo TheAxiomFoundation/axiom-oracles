@@ -9,6 +9,11 @@ ratchets:
   unexplained_max: 0
   axiom_attributed_open_max: 0
   policies_in_scope: 23
+- jurisdiction: dk
+  covered_min: 1
+  unexplained_max: 0
+  axiom_attributed_open_max: 0
+  policies_in_scope: 22
 - jurisdiction: uk
   covered_min: 21
   unexplained_max: 0

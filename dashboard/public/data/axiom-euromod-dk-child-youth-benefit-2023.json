@@ -1,0 +1,267 @@
+{
+  "aggregates": [
+    {
+      "category": "benefits",
+      "comparison": "amount",
+      "comparison_count": 1,
+      "comparison_weight": 1,
+      "components": [],
+      "concept": "dk:statutes/composed/boerne-og-ungeydelse-pipeline#single_recipient_annual_child_youth_benefit",
+      "description": "Denmark child and youth benefit (single recipient)",
+      "left_weighted_sum": 15624,
+      "match_rate": 0,
+      "match_weight": 0,
+      "mismatch_count": 1,
+      "mismatch_weight": 1,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 15684,
+      "weighted_difference": -60,
+      "weighted_match_rate": 0
+    }
+  ],
+  "case_count": 1,
+  "cases": [
+    {
+      "case_id": "dk-child-youth-benefit-2023-age5-yem300000",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "matches": [],
+      "metadata": {
+        "axiom_all_outputs_count": 4,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "recipient",
+        "axiom_inputs": {
+          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.current_year_income_reduction_allowance": 852600,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1#input.child_age_years": 5,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1#input.payment_year_has_additional_statutory_increase": true,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1#input.percentage_change_rounded_to_one_decimal_place": 0.156,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.pension_contribution_limit_under_pensionsbeskatningsloven_section_16": 9400,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.person_only_taxable_part_of_year": false,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis": 276000.0,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis_after_section_14_recalculation": 276000.0,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.total_contributions_to_qualifying_pension_accounts": 0.0
+        },
+        "child_age": 5,
+        "euromod_inputs": [
+          {
+            "amrtn": 1,
+            "dag": 35,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 0,
+            "dhr": 1,
+            "dms": 1,
+            "drgur": 1,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 7,
+            "lhw": 0,
+            "liwmy": 0,
+            "liwwh": 0,
+            "loc": 5,
+            "yem": 25000.0
+          },
+          {
+            "amrtn": 1,
+            "dag": 5,
+            "ddi": 0,
+            "dec": 1,
+            "dgn": 1,
+            "dhr": 0,
+            "dms": 1,
+            "drgur": 1,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idmother": 101,
+            "idpartner": 0,
+            "idperson": 102,
+            "les": 0,
+            "lhw": 0,
+            "liwmy": 0,
+            "liwwh": 0,
+            "loc": 5,
+            "yem": 0.0
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "tintbto_s": {
+            "inputs": [
+              "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis",
+              "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis_after_section_14_recalculation"
+            ]
+          }
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis": 276000.0,
+          "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis_after_section_14_recalculation": 276000.0
+        },
+        "head_annual_earnings": 300000.0,
+        "household_summary": {
+          "ages": [
+            35,
+            5
+          ],
+          "household_size": 2,
+          "yearly_earned_income_per_person": [
+            300000.0
+          ],
+          "yearly_earned_income_total": 300000.0
+        },
+        "locale": "DK",
+        "scenario": "single-parent-child-youth-benefit-2023-supplement",
+        "scope": {
+          "geoid": "DK",
+          "type": "country"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "dk:statutes/composed/boerne-og-ungeydelse-pipeline#single_recipient_annual_child_youth_benefit",
+          "description": "Denmark child and youth benefit (single recipient)",
+          "difference": -60.0,
+          "kind": "amount_difference",
+          "left": 15624.0,
+          "parent": null,
+          "relative_tolerance": 0.001,
+          "right": 15684.0,
+          "tolerance": 1
+        }
+      ],
+      "right_engine": "axiom",
+      "right_errors": []
+    }
+  ],
+  "concepts": [
+    {
+      "category": "benefits",
+      "comparison": "amount",
+      "components": [],
+      "description": "Denmark child and youth benefit (single recipient)",
+      "id": "dk:statutes/composed/boerne-og-ungeydelse-pipeline#single_recipient_annual_child_youth_benefit",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0.001,
+      "tolerance": 1
+    }
+  ],
+  "engines": {
+    "left": "euromod",
+    "right": "axiom",
+    "versions": {
+      "axiom_rules_engine": "0.1.0"
+    }
+  },
+  "errors": [],
+  "locales": [
+    "DK"
+  ],
+  "mismatches": [
+    {
+      "ages": null,
+      "case_id": "dk-child-youth-benefit-2023-age5-yem300000",
+      "concept": "dk:statutes/composed/boerne-og-ungeydelse-pipeline#single_recipient_annual_child_youth_benefit",
+      "description": "Denmark child and youth benefit (single recipient)",
+      "difference": -60.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "euromod-dk-2023-bfachnm-supplement-600-vs-660",
+        "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/19"
+      },
+      "kind": "amount_difference",
+      "left": 15624.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0.001,
+      "right": 15684.0,
+      "scenario": "single-parent-child-youth-benefit-2023-supplement",
+      "tolerance": 1,
+      "yearly_earned_income": null
+    }
+  ],
+  "population": "synthetic",
+  "provenance": {
+    "dataset": {
+      "population": "synthetic",
+      "source": "config"
+    },
+    "engine": {
+      "axiom_rules_engine_sha": "05eac9d2f89dabe5c6673176260762cef3a58f47",
+      "axiom_rules_engine_version": "0.1.0",
+      "binary_sha256": "079c26f4244db8c2a72fcbfb8cf88aaa5cb7c99628dc1c8d9d3b2d011e5f32a5"
+    },
+    "generated_at": "2026-08-14T12:02:27Z",
+    "generated_by": "scripts/run_comparison.py::dk-child-youth-benefit-2023-euromod",
+    "oracle": {
+      "euromod_country": "DK",
+      "euromod_dataset": "DK_training_data",
+      "euromod_release": "J2.0+",
+      "euromod_system": "DK_2023",
+      "name": "euromod"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-dk",
+        "sha": "9986b6035c4e557b9b40645dfe2f3e4cffb6037c"
+      }
+    ],
+    "run_kind": "manual",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "scope": null,
+  "suite": "dk-child-youth-benefit-2023",
+  "summary": {
+    "comparison_count": 1,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 1
+      },
+      "dispositions_file": "dispositions/dk-child-youth-benefit-2023.yaml",
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 0,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": [],
+    "match_count": 0,
+    "mismatch_count": 1,
+    "mismatches_by_concept": [
+      {
+        "count": 1,
+        "value": "dk:statutes/composed/boerne-og-ungeydelse-pipeline#single_recipient_annual_child_youth_benefit"
+      }
+    ],
+    "mismatches_by_kind": [
+      {
+        "count": 1,
+        "value": "amount_difference"
+      }
+    ],
+    "mismatches_by_scenario": [
+      {
+        "count": 1,
+        "value": "single-parent-child-youth-benefit-2023-supplement"
+      }
+    ],
+    "weighted": {
+      "comparison_weight": 1,
+      "match_rate": 0,
+      "match_weight": 0,
+      "mismatch_weight": 1
+    }
+  }
+}

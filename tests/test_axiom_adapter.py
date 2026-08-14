@@ -26,7 +26,9 @@ def _isolated_rulespec_roots(monkeypatch, tmp_path):
     monkeypatch.setenv("AXIOM_RULESPEC_ROOT", str(tmp_path / "no-roots"))
 
 
-def test_axiom_runner_executes_rulespec_program_with_case_inputs(tmp_path: Path) -> None:
+def test_axiom_runner_executes_rulespec_program_with_case_inputs(
+    tmp_path: Path,
+) -> None:
     calls = []
 
     def fake_run(args, **kwargs):
@@ -34,9 +36,7 @@ def test_axiom_runner_executes_rulespec_program_with_case_inputs(tmp_path: Path)
         if args[1] in ("compile", "compile-composed"):
             return subprocess.CompletedProcess(args, 0, stdout="", stderr="")
         request = json.loads(kwargs["input"])
-        assert request["queries"][0]["outputs"] == [
-            "us:statutes/26/6401#income_tax"
-        ]
+        assert request["queries"][0]["outputs"] == ["us:statutes/26/6401#income_tax"]
         assert request["queries"][0]["period"]["period_kind"] == "tax_year"
         assert request["dataset"]["inputs"] == [
             {
@@ -109,6 +109,139 @@ def test_axiom_runner_executes_rulespec_program_with_case_inputs(tmp_path: Path)
     assert calls[1][0][1] == "run-compiled"
     assert result.errors == ()
     assert result.values == {"us:statutes/26/6401#income_tax": 750.0}
+
+
+def test_axiom_runner_sums_outputs_across_entity_queries(tmp_path: Path) -> None:
+    qualified_output = "dk:statutes/example#annual_benefit"
+
+    def fake_run(args, **kwargs):
+        if args[1] in ("compile", "compile-composed"):
+            output_path = Path(args[args.index("--output") + 1])
+            output_path.write_text(
+                json.dumps(
+                    {
+                        "program": {
+                            "derived": [
+                                {
+                                    "name": "annual_benefit",
+                                    "entity": "Person",
+                                    "expr": {
+                                        "kind": "derived",
+                                        "name": "own_reduction",
+                                    },
+                                },
+                                {
+                                    "name": "own_reduction",
+                                    "entity": "Person",
+                                    "expr": {"kind": "literal", "value": 0},
+                                },
+                            ]
+                        }
+                    }
+                )
+            )
+            return subprocess.CompletedProcess(args, 0, stdout="", stderr="")
+        request = json.loads(kwargs["input"])
+        assert [query["entity_id"] for query in request["queries"]] == [
+            "earner",
+            "non-earner",
+        ]
+        assert request["queries"][0]["outputs"] == [
+            "annual_benefit",
+            "own_reduction",
+        ]
+        return subprocess.CompletedProcess(
+            args,
+            0,
+            stdout=json.dumps(
+                {
+                    "results": [
+                        {
+                            "outputs": {
+                                "annual_benefit": {
+                                    "kind": "scalar",
+                                    "value": {"kind": "integer", "value": 0},
+                                },
+                                "own_reduction": {
+                                    "kind": "scalar",
+                                    "value": {"kind": "integer", "value": 9260},
+                                },
+                            }
+                        },
+                        {
+                            "outputs": {
+                                "annual_benefit": {
+                                    "kind": "scalar",
+                                    "value": {"kind": "integer", "value": 8384},
+                                },
+                                "own_reduction": {
+                                    "kind": "scalar",
+                                    "value": {"kind": "integer", "value": 0},
+                                },
+                            }
+                        },
+                    ]
+                }
+            ),
+            stderr="",
+        )
+
+    runner = AxiomRulesRunner(
+        program_path=tmp_path / "program.yaml",
+        binary_path=tmp_path / "axiom-rules",
+        record_all_outputs=True,
+        subprocess_run=fake_run,
+    )
+    case = Case(
+        case_id="couple",
+        period="2025",
+        metadata={
+            "axiom_entity": "Person",
+            "axiom_entity_id": "earner",
+            "axiom_input_records": [
+                {
+                    "name": "own_income",
+                    "entity": "Person",
+                    "entity_id": entity_id,
+                    "value": value,
+                }
+                for entity_id, value in (("earner", 1_380_000), ("non-earner", 0))
+            ],
+            "axiom_result_aggregation": {
+                "strategy": "sum",
+                "entity_ids": ["earner", "non-earner"],
+            },
+        },
+    )
+
+    [result] = runner.run_cases([case], [qualified_output])
+
+    assert result.errors == ()
+    assert result.values == {
+        "annual_benefit": 8384,
+        qualified_output: 8384,
+    }
+    assert result.raw["aggregation"] == {
+        "strategy": "sum",
+        "components": [
+            {
+                "entity_id": "earner",
+                "values": {
+                    "annual_benefit": 0,
+                    "own_reduction": 9260,
+                    qualified_output: 0,
+                },
+            },
+            {
+                "entity_id": "non-earner",
+                "values": {
+                    "annual_benefit": 8384,
+                    "own_reduction": 0,
+                    qualified_output: 8384,
+                },
+            },
+        ],
+    }
 
 
 def test_axiom_runner_aliases_unique_local_output_to_qualified_id(
@@ -240,24 +373,16 @@ def test_snap_co_projection_uses_repaired_colorado_income_surface() -> None:
     }
 
     assert "us:regulations/7-cfr/273/9#input.snap_gross_monthly_income" not in records
-    assert (
-        "us:statutes/7/2014/e/6/A#input.snap_monthly_household_income"
-        not in records
-    )
+    assert "us:statutes/7/2014/e/6/A#input.snap_monthly_household_income" not in records
     assert (
         "us:regulations/7-cfr/273/10#input.snap_gross_monthly_earned_income"
         not in records
     )
     assert (
-        records[
-            "us-co:regulations/10-ccr-2506-1/4.403#input."
-            "employee_wages_received"
-        ]
+        records["us-co:regulations/10-ccr-2506-1/4.403#input.employee_wages_received"]
         == 2500
     )
-    relation_names = {
-        relation["name"] for relation in case.metadata["axiom_relations"]
-    }
+    relation_names = {relation["name"] for relation in case.metadata["axiom_relations"]}
     assert "us:statutes/7/2012/j#relation.member_of_household" in relation_names
     assert "member_of_household" in relation_names
     member_records = {
@@ -300,8 +425,7 @@ def test_axiom_runner_selects_best_input_overlay_candidate(tmp_path: Path) -> No
         itemization_records = [
             record
             for record in request["dataset"]["inputs"]
-            if record["name"]
-            == "us:statutes/26/63#input."
+            if record["name"] == "us:statutes/26/63#input."
             "individual_makes_election_to_itemize_deductions_for_taxable_year"
         ]
         assert len(itemization_records) == 1
@@ -690,10 +814,7 @@ def test_axiom_runner_writes_generated_program_under_canonical_target(
                         "program": {
                             "derived": [
                                 {
-                                    "id": (
-                                        "us:tax/oracle-bridge"
-                                        "#taxable_income"
-                                    ),
+                                    "id": ("us:tax/oracle-bridge#taxable_income"),
                                     "name": "taxable_income",
                                     "expr": {"kind": "integer", "value": 0},
                                 }
@@ -763,9 +884,7 @@ def test_axiom_runner_writes_generated_program_under_canonical_target(
     )
 
     assert result.errors == ()
-    assert result.values == {
-        "us:tax/oracle-bridge#taxable_income": 0
-    }
+    assert result.values == {"us:tax/oracle-bridge#taxable_income": 0}
     assert [call[0][1] for call in calls] == ["compile-composed", "run-compiled"]
 
 
@@ -841,15 +960,12 @@ def test_cli_builds_generated_federal_tax_axiom_runner() -> None:
     assert runner.generated_program_target == US_TAX_ORACLE_BRIDGE_TARGET
     assert runner.prune_unsupported_inputs
     assert (
-        "us:policies/irs/rev-proc-2025-32/standard-deduction"
-        in US_TAX_ORACLE_IMPORTS
+        "us:policies/irs/rev-proc-2025-32/standard-deduction" in US_TAX_ORACLE_IMPORTS
     )
     assert "us:statutes/26/86" in US_TAX_ORACLE_IMPORTS
     assert "us:statutes/26/1402/a" in US_TAX_ORACLE_IMPORTS
     assert "us:statutes/26/164/f" in US_TAX_ORACLE_IMPORTS
-    generated_rule_names = {
-        rule["name"] for rule in US_TAX_ORACLE_PROGRAM_RULES
-    }
+    generated_rule_names = {rule["name"] for rule in US_TAX_ORACLE_PROGRAM_RULES}
     generated_rules_by_name = {
         rule["name"]: rule for rule in US_TAX_ORACLE_PROGRAM_RULES
     }
@@ -922,25 +1038,32 @@ def test_cli_builds_generated_tax_axiom_runner_for_state_income_tax() -> None:
         if rule["name"] != "self_employment_income"
     )
     assert runner.generated_program_target == US_TAX_ORACLE_BRIDGE_TARGET
-    generated_rule_names = {
-        rule["name"] for rule in runner.program_rules
-    }
-    generated_rules_by_name = {
-        rule["name"]: rule for rule in runner.program_rules
-    }
+    generated_rule_names = {rule["name"] for rule in runner.program_rules}
+    generated_rules_by_name = {rule["name"]: rule for rule in runner.program_rules}
     assert "self_employment_income" not in generated_rule_names
-    assert "sum_where(filer_adjusted_earnings_of_tax_unit" in (
-        generated_rules_by_name["taxable_earned_income_under_section_32"]["versions"][
-            0
-        ]["formula"]
+    assert (
+        "sum_where(filer_adjusted_earnings_of_tax_unit"
+        in (
+            generated_rules_by_name["taxable_earned_income_under_section_32"][
+                "versions"
+            ][0]["formula"]
+        )
     )
-    assert "qualified_business_income_deduction_phaseout_rate" in (
-        generated_rules_by_name["qualified_business_income_deduction_before_floor"][
-            "versions"
-        ][0]["formula"]
+    assert (
+        "qualified_business_income_deduction_phaseout_rate"
+        in (
+            generated_rules_by_name["qualified_business_income_deduction_before_floor"][
+                "versions"
+            ][0]["formula"]
+        )
     )
-    assert "sum_where(business_income_of_tax_unit" in (
-        generated_rules_by_name["qualified_business_income"]["versions"][0]["formula"]
+    assert (
+        "sum_where(business_income_of_tax_unit"
+        in (
+            generated_rules_by_name["qualified_business_income"]["versions"][0][
+                "formula"
+            ]
+        )
     )
     assert "amt_part_iii_required" in generated_rule_names
     assert "amt_tax_including_capital_gains" in generated_rule_names
@@ -950,18 +1073,25 @@ def test_cli_builds_generated_tax_axiom_runner_for_state_income_tax() -> None:
     assert "capital_gains_worksheet_line_13" in generated_rule_names
     assert "capital_gains_worksheet_line_14" in generated_rule_names
     assert "capital_gains_worksheet_line_19" in generated_rule_names
-    assert "capital_gains_tax_qualified_dividend_income" in (
-        generated_rules_by_name["capital_gains_worksheet_line_10"]["versions"][0][
-            "formula"
-        ]
+    assert (
+        "capital_gains_tax_qualified_dividend_income"
+        in (
+            generated_rules_by_name["capital_gains_worksheet_line_10"]["versions"][0][
+                "formula"
+            ]
+        )
     )
-    assert "capital_gains_worksheet_line_10 > 0" in (
-        generated_rules_by_name["amt_part_iii_required"]["versions"][0]["formula"]
+    assert (
+        "capital_gains_worksheet_line_10 > 0"
+        in (generated_rules_by_name["amt_part_iii_required"]["versions"][0]["formula"])
     )
-    assert "amt_capital_gain_line_31_tax" in (
-        generated_rules_by_name["amt_tax_including_capital_gains"]["versions"][0][
-            "formula"
-        ]
+    assert (
+        "amt_capital_gain_line_31_tax"
+        in (
+            generated_rules_by_name["amt_tax_including_capital_gains"]["versions"][0][
+                "formula"
+            ]
+        )
     )
     assert (
         "taxable_net_gain_from_dispositions_after_active_partnership_s_corporation_exception"
@@ -1013,9 +1143,7 @@ def test_output_aliases_map_qualified_requests_to_bare_artifact_ids(tmp_path):
     )
     # The bare rule stands in for the missing qualified id; two bare
     # candidates stay unaliased; an exactly-present qualified id needs none.
-    assert aliases == {
-        "us:tax/oracle-bridge#state_income_tax": "state_income_tax"
-    }
+    assert aliases == {"us:tax/oracle-bridge#state_income_tax": "state_income_tax"}
 
 
 def test_qualified_requests_never_alias_to_another_modules_output(tmp_path):
@@ -1100,10 +1228,22 @@ def test_candidate_selection_sees_remapped_bare_ids(tmp_path: Path) -> None:
         metadata={
             "axiom_inputs": {"us:statutes/26/1#input.agi": 50_000},
             "axiom_input_record_overlays": [
-                [{"name": "us:statutes/26/1#input.filing", "entity": "TaxUnit",
-                  "entity_id": "tax_unit", "value": 1}],
-                [{"name": "us:statutes/26/1#input.filing", "entity": "TaxUnit",
-                  "entity_id": "tax_unit", "value": 2}],
+                [
+                    {
+                        "name": "us:statutes/26/1#input.filing",
+                        "entity": "TaxUnit",
+                        "entity_id": "tax_unit",
+                        "value": 1,
+                    }
+                ],
+                [
+                    {
+                        "name": "us:statutes/26/1#input.filing",
+                        "entity": "TaxUnit",
+                        "entity_id": "tax_unit",
+                        "value": 2,
+                    }
+                ],
             ],
             "axiom_result_selection": {
                 "strategy": "min",
@@ -1112,9 +1252,65 @@ def test_candidate_selection_sees_remapped_bare_ids(tmp_path: Path) -> None:
         },
     )
 
-    [result] = runner.run_cases(
-        [case], ["us:tax/oracle-bridge#state_income_tax"]
-    )
+    [result] = runner.run_cases([case], ["us:tax/oracle-bridge#state_income_tax"])
 
     assert result.errors == ()
     assert result.values["us:tax/oracle-bridge#state_income_tax"] == 1234.0
+
+
+def test_staging_skips_roots_without_a_requested_jurisdiction(
+    tmp_path: Path,
+) -> None:
+    """A sibling checkout carrying none of the program's jurisdictions must
+    not be staged: it stages as an empty directory, and the hard-cut engine
+    contract rejects empty roots ("must contain a direct matching
+    jurisdiction"). The legacy compile path tolerated the empties, so this
+    only bites pinned post-hard-cut engines (seen live on the dk EUROMOD
+    lane with a be sibling under the shared roots dir)."""
+    dk_root = tmp_path / "rulespec-dk"
+    (dk_root / "dk" / "statutes").mkdir(parents=True)
+    (dk_root / "dk" / "statutes" / "mod.yaml").write_text("format: rulespec/v1\n")
+    be_root = tmp_path / "rulespec-be"
+    (be_root / "be" / "statutes").mkdir(parents=True)
+    (be_root / "be" / "statutes" / "mod.yaml").write_text("format: rulespec/v1\n")
+
+    compile_calls = []
+
+    def fake_run(args, **kwargs):
+        if args[1] in ("compile", "compile-composed"):
+            compile_calls.append([str(a) for a in args])
+            return subprocess.CompletedProcess(args, 0, stdout="", stderr="")
+        return subprocess.CompletedProcess(
+            args,
+            0,
+            stdout=json.dumps(
+                {
+                    "metadata": {
+                        "requested_mode": "explain",
+                        "actual_mode": "explain",
+                    },
+                    "results": [],
+                }
+            ),
+            stderr="",
+        )
+
+    runner = AxiomRulesRunner(
+        binary_path=tmp_path / "axiom-rules",
+        program_imports=("dk:statutes/mod",),
+        generated_program_target="dk:statutes/mod",
+        rulespec_repo_roots=(dk_root, be_root),
+        subprocess_run=fake_run,
+    )
+    case = Case(
+        case_id="case-1",
+        period="2025",
+        metadata={"axiom_inputs": {}},
+    )
+
+    runner.run_cases([case], [])
+
+    assert compile_calls, "expected a compile invocation"
+    joined = " ".join(compile_calls[0])
+    assert "rulespec-dk" in joined
+    assert "rulespec-be" not in joined
