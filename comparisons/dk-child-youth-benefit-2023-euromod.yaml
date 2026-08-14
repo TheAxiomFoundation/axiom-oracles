@@ -1,0 +1,42 @@
+name: dk-child-youth-benefit-2023-euromod
+title: Denmark 2023 Child and Youth Benefit Supplement — Axiom vs EUROMOD
+description: >-
+  Compares the 2023 age-5 annual child benefit in the composed Denmark child
+  and youth benefit pipeline against EUROMOD DK_2023 bfachnm_s for a synthetic
+  single-parent household with 300.000 kr. of annual earnings. Axiom applies
+  the official 15,6 pct. CPI change, the recurring 3,9 percentage-point
+  reduction, 12-krone rounding, and the § 1, stk. 3 one-off 660 kr. statutory
+  increase: 15.024 + 660 = 15.684. EUROMOD DK_2023 carries the pre-announcement
+  600 kr. constant and pays 15.624, activating ec-jrc #19. The logical case
+  period is 2023. The Axiom execution date is 2025-06-01 because the composed
+  oracle pipeline's first version starts 2025-05-12; the explicit 2023 CPI,
+  supplement flag, and 852.600 kr. threshold select the 2023 arithmetic, while
+  euromod_system independently selects DK_2023. EUROMOD runs the public JRC
+  release (EUROMOD_RELEASES_J2.0+, dataset DK_training_data).
+
+runner:
+  type: euromod-synthetic-compare
+  # Keep engine parity with rulespec-dk at the toolchain-era pin used by the
+  # main DK lane.
+  axiom_rules_repo: $HOME/TheAxiomFoundation/_worktrees/axiom-rules-engine-pin
+  parameters:
+    suite: dk-child-youth-benefit-2023
+    population: synthetic
+    sample_size: 0
+    # The composed output has no version before 2025-05-12. The suite's Case
+    # remains logically period 2023, but the CLI applies this executable date
+    # to Axiom; EUROMOD resolves its policy year solely from DK_2023 below.
+    period: 2025-06-01
+    euromod_model_root: $HOME/Downloads/EUROMOD_J2.0/EUROMOD_RELEASES_J2.0+
+    euromod_country: DK
+    euromod_system: DK_2023
+    euromod_dataset: DK_training_data
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-dk-child-youth-benefit-2023.json
+
+artifacts:
+  report_basename: axiom-euromod-dk-child-youth-benefit-2023
+
+dashboard:
+  filename: axiom-euromod-dk-child-youth-benefit-2023.json
+  suite: dk-child-youth-benefit-2023

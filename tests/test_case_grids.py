@@ -70,7 +70,7 @@ def test_expected_jurisdictions_present() -> None:
         ("be", 30, 128),
         ("de", 1, 13),
         ("uk", 26, 143),
-        ("dk", 1, 8),
+        ("dk", 2, 9),
     ],
 )
 def test_grid_case_counts(jurisdiction, expected_sets, expected_cases) -> None:
@@ -595,6 +595,25 @@ def test_dk_child_youth_benefit_suite_pinned() -> None:
     assert "qualifying_pension_contributions" not in {
         key for row in witness.metadata["euromod_inputs"] for key in row
     }
+
+
+def test_dk_child_youth_benefit_2023_suite_pinned() -> None:
+    assert "dk-child-youth-benefit-2023" in available_suites()
+    cases = load_suite("dk-child-youth-benefit-2023")
+    assert len(cases) == 1
+
+    case = cases[0]
+    assert case.case_id == "dk-child-youth-benefit-2023-age5-yem300000"
+    assert case.period == "2023"
+    assert case.metadata["scenario"] == (
+        "single-parent-child-youth-benefit-2023-supplement"
+    )
+    inputs = case.metadata["axiom_inputs"]
+    p1 = "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1#input."
+    cyb = "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input."
+    assert inputs[p1 + "percentage_change_rounded_to_one_decimal_place"] == 0.156
+    assert inputs[p1 + "payment_year_has_additional_statutory_increase"] is True
+    assert inputs[cyb + "current_year_income_reduction_allowance"] == 852_600
 
 
 def test_dk_child_youth_benefit_mapping_pinned() -> None:

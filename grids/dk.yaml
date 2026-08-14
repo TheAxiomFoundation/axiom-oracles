@@ -145,3 +145,26 @@ case_sets:
         kind: person
         age: 5
         relation: Child
+  dk-child-youth-benefit-2023:
+    locale: DK
+    entity: Person
+    entity_id: recipient
+    outputs:
+    - dk:statutes/composed/boerne-og-ungeydelse-pipeline#single_recipient_annual_child_youth_benefit
+    cases:
+    - id: dk-child-youth-benefit-2023-age5-yem300000
+      period: '2023'
+      scenario: single-parent-child-youth-benefit-2023-supplement
+      parameters:
+        child_age: 5
+        head_annual_earnings: 300000.0
+      entities:
+      - id: recipient
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 300000.0
+      - id: child
+        kind: person
+        age: 5
+        relation: Child

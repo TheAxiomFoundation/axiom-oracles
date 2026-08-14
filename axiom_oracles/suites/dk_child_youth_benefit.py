@@ -10,6 +10,10 @@ Seven cases keep the known EUROMOD gaps inert and match raw; an eighth witness
 activates the missing § 1 a, stk. 4-5 pension-contribution gross-up and is
 classified as an upstream engine gap (ec-jrc #20).
 
+The separate ``dk_child_youth_benefit_2023_cases`` suite activates ec-jrc #19:
+the one-off 2023 statutory increase is 660 kr., while EUROMOD DK_2023 carries a
+600 kr. constant. Its low-income age-5 case isolates that 60 kr. parameter gap.
+
 Household composition is expressed as explicit EUROMOD input rows so the
 dependent-child linkage the allocation depends on is exact: EUROMOD allocates
 ``bfachnm_s`` to the dependent child row (``Allocate share_between IsDepChild``),
@@ -87,9 +91,13 @@ EUROMOD_TO_AXIOM_INPUT_BRIDGE = "euromod_to_axiom_input_bridge"
 # personskatteloven is not yet a captured dk corpus scope.
 _DK_CPI_2025 = 0.285
 _DK_CURRENT_YEAR_ALLOWANCE_2025 = 917_000
-# Any value: the suite sets qualifying retirement contributions to 0, so the
-# § 1 a, stk. 4-5 cap never binds and the income basis equals the mellemskat
-# basis. Pinned to the pensionsbeskatningslovens § 16, stk. 1 grundbeløb order.
+# The official 2023 CPI change and § 20-regulated bundfradrag. The one-case
+# 2023 suite is below this threshold, but supplying the period-correct value
+# keeps the composed identity complete.
+_DK_CPI_2023 = 0.156
+_DK_CURRENT_YEAR_ALLOWANCE_2023 = 852_600
+# Pinned to the pensionsbeskatningslovens § 16, stk. 1 grundbeløb order. The
+# 2025 witness contributes 60000 kr.; every other case contributes zero.
 _DK_PENSION_CONTRIBUTION_CAP = 61_200
 
 # EUROMOD DK demographic codes.
@@ -131,10 +139,33 @@ def dk_child_youth_benefit_cases() -> list[Case]:
     return [*inert_cases, pension_witness]
 
 
+def dk_child_youth_benefit_2023_cases() -> list[Case]:
+    """One case isolating EUROMOD DK_2023's 600-vs-660 supplement gap."""
+
+    return [
+        _child_youth_benefit_case(
+            child_age=5,
+            head_annual_income=300_000.0,
+            case_id_prefix="dk-child-youth-benefit-2023",
+            period="2023",
+            scenario="single-parent-child-youth-benefit-2023-supplement",
+            cpi_change=_DK_CPI_2023,
+            payment_year_has_additional_statutory_increase=True,
+            current_year_income_reduction_allowance=(_DK_CURRENT_YEAR_ALLOWANCE_2023),
+        )
+    ]
+
+
 def _child_youth_benefit_case(
     *,
     child_age: int,
     head_annual_income: float,
+    case_id_prefix: str = "dk-child-youth-benefit",
+    period: str = "2025",
+    scenario: str = "single-parent-child-youth-benefit",
+    cpi_change: float = _DK_CPI_2025,
+    payment_year_has_additional_statutory_increase: bool = False,
+    current_year_income_reduction_allowance: float = (_DK_CURRENT_YEAR_ALLOWANCE_2025),
     qualifying_pension_contributions: float = 0.0,
 ) -> Case:
     contribution_suffix = (
@@ -149,18 +180,25 @@ def _child_youth_benefit_case(
     )
     return Case(
         case_id=(
-            f"dk-child-youth-benefit-age{child_age}"
+            f"{case_id_prefix}-age{child_age}"
             f"-yem{int(head_annual_income)}{contribution_suffix}"
         ),
-        period="2025",
+        period=period,
         metadata={
             **DK_METADATA,
-            "scenario": "single-parent-child-youth-benefit",
+            "scenario": scenario,
             "child_age": child_age,
             "head_annual_earnings": head_annual_income,
             **contribution_metadata,
             "axiom_inputs": _axiom_inputs(
                 child_age,
+                cpi_change=cpi_change,
+                payment_year_has_additional_statutory_increase=(
+                    payment_year_has_additional_statutory_increase
+                ),
+                current_year_income_reduction_allowance=(
+                    current_year_income_reduction_allowance
+                ),
                 qualifying_pension_contributions=(qualifying_pension_contributions),
             ),
             "euromod_inputs": [
@@ -172,7 +210,7 @@ def _child_youth_benefit_case(
             # full-year and § 14-recalculated slots receive the same value; the
             # part-year flag is False in every case). Both sides are annual, so
             # no divisor is applied; the Axiom taper then runs on EUROMOD's
-            # income base with the same 917000 bundfradrag EUROMOD DK_2025 uses.
+            # income base with the period-correct supplied bundfradrag.
             EUROMOD_TO_AXIOM_INPUT_BRIDGE: {
                 "tintbto_s": {
                     "inputs": [
@@ -192,12 +230,17 @@ def _child_youth_benefit_case(
 def _axiom_inputs(
     child_age: int,
     *,
+    cpi_change: float = _DK_CPI_2025,
+    payment_year_has_additional_statutory_increase: bool = False,
+    current_year_income_reduction_allowance: float = (_DK_CURRENT_YEAR_ALLOWANCE_2025),
     qualifying_pension_contributions: float = 0.0,
 ) -> dict[str, float | bool | int]:
     return {
         _p1_input("child_age_years"): child_age,
-        _p1_input("percentage_change_rounded_to_one_decimal_place"): _DK_CPI_2025,
-        _p1_input("payment_year_has_additional_statutory_increase"): False,
+        _p1_input("percentage_change_rounded_to_one_decimal_place"): cpi_change,
+        _p1_input("payment_year_has_additional_statutory_increase"): (
+            payment_year_has_additional_statutory_increase
+        ),
         _p1a_input(
             "total_contributions_to_qualifying_pension_accounts"
         ): qualifying_pension_contributions,
@@ -205,9 +248,9 @@ def _axiom_inputs(
             "pension_contribution_limit_under_pensionsbeskatningsloven_section_16"
         ): _DK_PENSION_CONTRIBUTION_CAP,
         _p1a_input("person_only_taxable_part_of_year"): False,
-        _cyb_input(
-            "current_year_income_reduction_allowance"
-        ): _DK_CURRENT_YEAR_ALLOWANCE_2025,
+        _cyb_input("current_year_income_reduction_allowance"): (
+            current_year_income_reduction_allowance
+        ),
     }
 
 

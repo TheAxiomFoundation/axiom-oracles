@@ -392,6 +392,15 @@
       "source": "comparisons/dk-child-youth-benefit-euromod.yaml"
     },
     {
+      "suite": "dk-child-youth-benefit-2023",
+      "name": "dk-child-youth-benefit-2023-euromod",
+      "report": "axiom-euromod-dk-child-youth-benefit-2023.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-dk"
+      ],
+      "source": "comparisons/dk-child-youth-benefit-2023-euromod.yaml"
+    },
+    {
       "suite": "fiit-ecps",
       "name": null,
       "report": "axiom-policyengine-fiit-ecps.json",

@@ -1189,13 +1189,14 @@
         "country": "DK",
         "system": "DK_2023",
         "dataset": "DK_training_data",
-        "policy": "bfachnm_dk"
+        "policy": "bfachnm_dk",
+        "suite": "dk-child-youth-benefit-2023"
       },
       "affected_systems": [
         "DK_2023"
       ],
       "workaround": {
-        "description": "Grade the suite against DK_2025 (the current validation system), which carries no 2023 one-off supplement, and record the DK_2023 600-vs-660 discrepancy here. Do not encode the 2023 supplement into the per-person derivation: the statute leaves the 660 kr. combined uplift unallocated across the stk. 1-2 amounts (rulespec-dk boerne-og-ungeydelse-satser exceptional_2023_benefit_increase is grounded but not applied), and 2023 predates the repo's 2026 validation year."
+        "description": "Run the dedicated dk-child-youth-benefit-2023 witness with the statutory 660 kr. increase supplied to Axiom and disposition EUROMOD's executed 15624-vs-15684 mismatch as an upstream_engine_gap linked to ec-jrc issue #19. The main DK_2025 lane remains unaffected because the one-off increase applies only in 2023."
       },
       "oracle_scope": "household_level",
       "counts_as_axiom_gap": false
