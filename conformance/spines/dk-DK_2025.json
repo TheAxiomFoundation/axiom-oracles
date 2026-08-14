@@ -1,0 +1,738 @@
+{
+  "schema": "axiom_oracles.euromod_spine.v1",
+  "jurisdiction": "dk",
+  "oracle": {
+    "model": "EUROMOD",
+    "release": "J2.0",
+    "country": "DK"
+  },
+  "systems": [
+    {
+      "name": "DK_2025",
+      "id": "3b6c7a66-bdd6-42d6-a090-c307631b4319"
+    }
+  ],
+  "provenance": {
+    "model_root": "/Users/maxghenis/Downloads/EUROMOD_J2.0/EUROMOD_RELEASES_J2.0+",
+    "model_release": "EUROMOD_RELEASES_J2.0+",
+    "extraction_command": "DOTNET_ROOT=$HOME/.dotnet-x64 PYTHONNET_RUNTIME=coreclr $HOME/.venvs/axiom-euromod-x64/bin/python scripts/generate_conformance_universe.py dk --extract-spine --model-root $HOME/Downloads/EUROMOD_J2.0/EUROMOD_RELEASES_J2.0+",
+    "extracted_at": "2026-08-14T01:18:51Z",
+    "sources": [
+      {
+        "path": "XMLParam/Countries/DK/DK.xml",
+        "sha256": "e866d489273bfbe1e2d8c8862d43e533c764c07c4efa5b77c429aeed82043237"
+      },
+      {
+        "path": "XMLParam/Config/VARCONFIG.xml",
+        "sha256": "aaa76278746c149225425009781424b516a000c34178d7735eb1e0a0faedab2b"
+      }
+    ]
+  },
+  "policies": [
+    {
+      "name": "ConstDef_dk",
+      "policy_type": "def",
+      "switch": "on",
+      "all_outputs": [
+        "GenPersAllowance",
+        "i_yiy"
+      ],
+      "queryable_outputs": [],
+      "internal_outputs": [
+        "GenPersAllowance",
+        "i_yiy"
+      ]
+    },
+    {
+      "name": "random_dk",
+      "policy_type": "def",
+      "switch": "on",
+      "all_outputs": [
+        "stk01_s",
+        "i_mc_rand_1",
+        "i_mc_rand_2",
+        "i_mc_rand_3",
+        "i_lmamy",
+        "i_lma2",
+        "i_lma1",
+        "i_bsa_rand"
+      ],
+      "queryable_outputs": [
+        "stk01_s"
+      ],
+      "internal_outputs": [
+        "i_mc_rand_1",
+        "i_mc_rand_2",
+        "i_mc_rand_3",
+        "i_lmamy",
+        "i_lma2",
+        "i_lma1",
+        "i_bsa_rand"
+      ]
+    },
+    {
+      "name": "IlDef_dk",
+      "policy_type": "def",
+      "switch": "on",
+      "all_outputs": [],
+      "queryable_outputs": [],
+      "internal_outputs": []
+    },
+    {
+      "name": "tudef_dk",
+      "policy_type": "def",
+      "switch": "on",
+      "all_outputs": [],
+      "queryable_outputs": [],
+      "internal_outputs": []
+    },
+    {
+      "name": "xpp00_dk",
+      "policy_type": "def",
+      "switch": "on",
+      "all_outputs": [
+        "xpp00_s"
+      ],
+      "queryable_outputs": [
+        "xpp00_s"
+      ],
+      "internal_outputs": []
+    },
+    {
+      "name": "neg_dk",
+      "policy_type": "def",
+      "switch": "on",
+      "all_outputs": [
+        "ysemy",
+        "yse",
+        "i_posInvInc",
+        "yiy",
+        "i_InvInc",
+        "yiy_o"
+      ],
+      "queryable_outputs": [],
+      "internal_outputs": [
+        "ysemy",
+        "yse",
+        "i_posInvInc",
+        "yiy",
+        "i_InvInc",
+        "yiy_o"
+      ]
+    },
+    {
+      "name": "yem_dk",
+      "policy_type": "def",
+      "switch": "switch",
+      "all_outputs": [
+        "yem"
+      ],
+      "queryable_outputs": [],
+      "internal_outputs": [
+        "yem"
+      ]
+    },
+    {
+      "name": "txc_dk",
+      "policy_type": "sic",
+      "switch": "on",
+      "all_outputs": [
+        "txcee_s",
+        "txcse_s",
+        "txc_s"
+      ],
+      "queryable_outputs": [
+        "txcee_s",
+        "txcse_s",
+        "txc_s"
+      ],
+      "internal_outputs": []
+    },
+    {
+      "name": "tscpi_dk",
+      "policy_type": "sic",
+      "switch": "on",
+      "all_outputs": [
+        "tscpi_s",
+        "tscpiee_s",
+        "tscpier_s"
+      ],
+      "queryable_outputs": [
+        "tscpi_s",
+        "tscpiee_s",
+        "tscpier_s"
+      ],
+      "internal_outputs": []
+    },
+    {
+      "name": "tyrui_dk",
+      "policy_type": "tax",
+      "switch": "on",
+      "all_outputs": [
+        "tyrui_s"
+      ],
+      "queryable_outputs": [
+        "tyrui_s"
+      ],
+      "internal_outputs": []
+    },
+    {
+      "name": "bunct_dk",
+      "policy_type": "ben",
+      "switch": "on",
+      "all_outputs": [
+        "lunmy_s",
+        "i_bunct",
+        "yempv_s",
+        "i_bunct_s",
+        "bunct_s"
+      ],
+      "queryable_outputs": [
+        "lunmy_s",
+        "yempv_s",
+        "bunct_s"
+      ],
+      "internal_outputs": [
+        "i_bunct",
+        "i_bunct_s"
+      ]
+    },
+    {
+      "name": "tintc_dk",
+      "policy_type": "tax",
+      "switch": "on",
+      "all_outputs": [
+        "i_tintc",
+        "tintc_s"
+      ],
+      "queryable_outputs": [
+        "tintc_s"
+      ],
+      "internal_outputs": [
+        "i_tintc"
+      ]
+    },
+    {
+      "name": "poa_dk",
+      "policy_type": "ben",
+      "switch": "on",
+      "all_outputs": [
+        "poa00_s",
+        "poa01_s",
+        "i_poa01",
+        "poa02_s",
+        "i_poa02",
+        "i_poa02b"
+      ],
+      "queryable_outputs": [
+        "poa00_s",
+        "poa01_s",
+        "poa02_s"
+      ],
+      "internal_outputs": [
+        "i_poa01",
+        "i_poa02",
+        "i_poa02b"
+      ]
+    },
+    {
+      "name": "tmu_dk",
+      "policy_type": "tax",
+      "switch": "on",
+      "all_outputs": [
+        "ttbmu_s",
+        "i_tmu",
+        "tmu_s"
+      ],
+      "queryable_outputs": [
+        "ttbmu_s",
+        "tmu_s"
+      ],
+      "internal_outputs": [
+        "i_tmu"
+      ]
+    },
+    {
+      "name": "tcr_dk",
+      "policy_type": "tax",
+      "switch": "on",
+      "all_outputs": [
+        "ttbcr_s",
+        "i_tcr",
+        "tcr_s"
+      ],
+      "queryable_outputs": [
+        "ttbcr_s",
+        "tcr_s"
+      ],
+      "internal_outputs": [
+        "i_tcr"
+      ]
+    },
+    {
+      "name": "thl_dk",
+      "policy_type": "tax",
+      "switch": "n/a",
+      "all_outputs": [
+        "n/a"
+      ],
+      "queryable_outputs": [],
+      "internal_outputs": [
+        "n/a"
+      ]
+    },
+    {
+      "name": "tinbt_dk",
+      "policy_type": "tax",
+      "switch": "on",
+      "all_outputs": [
+        "i_tinbt",
+        "tintbbt_s",
+        "i_tinbt2",
+        "tinbt_s"
+      ],
+      "queryable_outputs": [
+        "tintbbt_s",
+        "tinbt_s"
+      ],
+      "internal_outputs": [
+        "i_tinbt",
+        "i_tinbt2"
+      ]
+    },
+    {
+      "name": "tinmd_dk",
+      "policy_type": "tax",
+      "switch": "n/a",
+      "all_outputs": [
+        "n/a"
+      ],
+      "queryable_outputs": [],
+      "internal_outputs": [
+        "n/a"
+      ]
+    },
+    {
+      "name": "tinto_dk",
+      "policy_type": "tax",
+      "switch": "on",
+      "all_outputs": [
+        "i_tinto",
+        "i_tinto2",
+        "i_tinto3",
+        "tintbto_s",
+        "tinto_s"
+      ],
+      "queryable_outputs": [
+        "tintbto_s",
+        "tinto_s"
+      ],
+      "internal_outputs": [
+        "i_tinto",
+        "i_tinto2",
+        "i_tinto3"
+      ]
+    },
+    {
+      "name": "tpr_dk",
+      "policy_type": "tax",
+      "switch": "on",
+      "all_outputs": [
+        "i_tpr",
+        "tpr_s",
+        "sin01_s"
+      ],
+      "queryable_outputs": [
+        "tpr_s",
+        "sin01_s"
+      ],
+      "internal_outputs": [
+        "i_tpr"
+      ]
+    },
+    {
+      "name": "bfachnm_dk",
+      "policy_type": "ben",
+      "switch": "on",
+      "all_outputs": [
+        "bfachnm_s",
+        "i_thld_base",
+        "i_thld_start"
+      ],
+      "queryable_outputs": [
+        "bfachnm_s"
+      ],
+      "internal_outputs": [
+        "i_thld_base",
+        "i_thld_start"
+      ]
+    },
+    {
+      "name": "bfach00_dk",
+      "policy_type": "ben",
+      "switch": "on",
+      "all_outputs": [
+        "bfach00_s",
+        "i_it_bfa"
+      ],
+      "queryable_outputs": [
+        "bfach00_s"
+      ],
+      "internal_outputs": [
+        "i_it_bfa"
+      ]
+    },
+    {
+      "name": "bfached_dk",
+      "policy_type": "ben",
+      "switch": "on",
+      "all_outputs": [
+        "bfached_s"
+      ],
+      "queryable_outputs": [
+        "bfached_s"
+      ],
+      "internal_outputs": []
+    },
+    {
+      "name": "bho01_dk",
+      "policy_type": "ben",
+      "switch": "on",
+      "all_outputs": [
+        "i_bho",
+        "i_bho2",
+        "i_bho3",
+        "i_bho4",
+        "i_bho5",
+        "bho01_s",
+        "i_maxrent"
+      ],
+      "queryable_outputs": [
+        "bho01_s"
+      ],
+      "internal_outputs": [
+        "i_bho",
+        "i_bho2",
+        "i_bho3",
+        "i_bho4",
+        "i_bho5",
+        "i_maxrent"
+      ]
+    },
+    {
+      "name": "bho02_dk",
+      "policy_type": "ben",
+      "switch": "on",
+      "all_outputs": [
+        "i_bhoII",
+        "i_bhoII2",
+        "i_bhoII3",
+        "i_bhoII4",
+        "i_bhoII5",
+        "i_bhoII6",
+        "bho02_s"
+      ],
+      "queryable_outputs": [
+        "bho02_s"
+      ],
+      "internal_outputs": [
+        "i_bhoII",
+        "i_bhoII2",
+        "i_bhoII3",
+        "i_bhoII4",
+        "i_bhoII5",
+        "i_bhoII6"
+      ]
+    },
+    {
+      "name": "bhtuc_dk",
+      "policy_type": "ben",
+      "switch": "on",
+      "all_outputs": [
+        "bhtuc_s"
+      ],
+      "queryable_outputs": [
+        "bhtuc_s"
+      ],
+      "internal_outputs": []
+    },
+    {
+      "name": "output_std_dk",
+      "policy_type": "def",
+      "switch": "on",
+      "all_outputs": [],
+      "queryable_outputs": [],
+      "internal_outputs": []
+    },
+    {
+      "name": "output_std_hh_dk",
+      "policy_type": "def",
+      "switch": "off",
+      "all_outputs": [],
+      "queryable_outputs": [],
+      "internal_outputs": []
+    },
+    {
+      "name": "setdefault_dk",
+      "policy_type": "def",
+      "switch": "on",
+      "all_outputs": [],
+      "queryable_outputs": [],
+      "internal_outputs": []
+    },
+    {
+      "name": "uprate_dk",
+      "policy_type": "def",
+      "switch": "on",
+      "all_outputs": [],
+      "queryable_outputs": [],
+      "internal_outputs": []
+    },
+    {
+      "name": "bsa_dk",
+      "policy_type": "ben",
+      "switch": "on",
+      "all_outputs": [
+        "i_bsa3",
+        "i_bsa4",
+        "i_bsa5",
+        "i_bsa6",
+        "i_bsa7",
+        "i_bsa8",
+        "i_bsa9",
+        "n/a",
+        "bsa_s",
+        "i_bsa",
+        "i_bsa2",
+        "i_bsa12",
+        "bsaxp_s",
+        "i_bsa_sort"
+      ],
+      "queryable_outputs": [
+        "bsa_s",
+        "bsaxp_s"
+      ],
+      "internal_outputs": [
+        "i_bsa3",
+        "i_bsa4",
+        "i_bsa5",
+        "i_bsa6",
+        "i_bsa7",
+        "i_bsa8",
+        "i_bsa9",
+        "n/a",
+        "i_bsa",
+        "i_bsa2",
+        "i_bsa12",
+        "i_bsa_sort"
+      ]
+    },
+    {
+      "name": "tyruielig_dk",
+      "policy_type": "tax",
+      "switch": "on",
+      "all_outputs": [
+        "i_tyruielig",
+        "tyruielig"
+      ],
+      "queryable_outputs": [],
+      "internal_outputs": [
+        "i_tyruielig",
+        "tyruielig"
+      ]
+    },
+    {
+      "name": "tscpielig_dk",
+      "policy_type": "def",
+      "switch": "on",
+      "all_outputs": [
+        "i_tscpielig",
+        "tscpielig",
+        "i_tscpielig2"
+      ],
+      "queryable_outputs": [],
+      "internal_outputs": [
+        "i_tscpielig",
+        "tscpielig",
+        "i_tscpielig2"
+      ]
+    },
+    {
+      "name": "IlsDef_dk",
+      "policy_type": "def",
+      "switch": "on",
+      "all_outputs": [],
+      "queryable_outputs": [],
+      "internal_outputs": []
+    },
+    {
+      "name": "bsard_dk",
+      "policy_type": "ben",
+      "switch": "on",
+      "all_outputs": [
+        "i_ceiling",
+        "bsard_s"
+      ],
+      "queryable_outputs": [
+        "bsard_s"
+      ],
+      "internal_outputs": [
+        "i_ceiling"
+      ]
+    },
+    {
+      "name": "tintaox_dk",
+      "policy_type": "tax",
+      "switch": "on",
+      "all_outputs": [
+        "tintaox_s",
+        "i_tintaox"
+      ],
+      "queryable_outputs": [
+        "tintaox_s"
+      ],
+      "internal_outputs": [
+        "i_tintaox"
+      ]
+    },
+    {
+      "name": "IlsUDBDef_dk",
+      "policy_type": "def",
+      "switch": "on",
+      "all_outputs": [],
+      "queryable_outputs": [],
+      "internal_outputs": []
+    },
+    {
+      "name": "bma_dk",
+      "policy_type": "ben",
+      "switch": "off",
+      "all_outputs": [
+        "i_elparent_bma",
+        "i_elchild_bma",
+        "i_nelchildren_bma",
+        "i_ageweeks_bma",
+        "i_durweeks_bma",
+        "bma_s",
+        "i_yempv_bma",
+        "yem",
+        "bhl",
+        "bcbplcs"
+      ],
+      "queryable_outputs": [
+        "bma_s"
+      ],
+      "internal_outputs": [
+        "i_elparent_bma",
+        "i_elchild_bma",
+        "i_nelchildren_bma",
+        "i_ageweeks_bma",
+        "i_durweeks_bma",
+        "i_yempv_bma",
+        "yem",
+        "bhl",
+        "bcbplcs"
+      ]
+    },
+    {
+      "name": "bpa_dk",
+      "policy_type": "ben",
+      "switch": "off",
+      "all_outputs": [
+        "bpa_s",
+        "i_yempv_bpa",
+        "i_amount_bpa",
+        "i_elparent_bpa",
+        "bhl",
+        "yem"
+      ],
+      "queryable_outputs": [
+        "bpa_s"
+      ],
+      "internal_outputs": [
+        "i_yempv_bpa",
+        "i_amount_bpa",
+        "i_elparent_bpa",
+        "bhl",
+        "yem"
+      ]
+    },
+    {
+      "name": "ysecomp_dk",
+      "policy_type": "ben",
+      "switch": "off",
+      "all_outputs": [
+        "n/a"
+      ],
+      "queryable_outputs": [],
+      "internal_outputs": [
+        "n/a"
+      ]
+    },
+    {
+      "name": "bfachxp_dk",
+      "policy_type": "ben",
+      "switch": "off",
+      "all_outputs": [
+        "bfachxp_s"
+      ],
+      "queryable_outputs": [
+        "bfachxp_s"
+      ],
+      "internal_outputs": []
+    },
+    {
+      "name": "yemcomp_dk",
+      "policy_type": "ben",
+      "switch": "off",
+      "all_outputs": [
+        "n/a"
+      ],
+      "queryable_outputs": [],
+      "internal_outputs": [
+        "n/a"
+      ]
+    },
+    {
+      "name": "TransLMA_dk",
+      "policy_type": "def",
+      "switch": "off",
+      "all_outputs": [
+        "lma",
+        "yem_a",
+        "lhw_a",
+        "yemmy_a",
+        "lmcee_s",
+        "bwkmceemy_s",
+        "yemmwmy_s",
+        "lhwsr_s",
+        "lmcse_s",
+        "bwkmcsemy_s",
+        "ysemwmy_s"
+      ],
+      "queryable_outputs": [
+        "lmcee_s",
+        "bwkmceemy_s",
+        "yemmwmy_s",
+        "lhwsr_s",
+        "lmcse_s",
+        "bwkmcsemy_s",
+        "ysemwmy_s"
+      ],
+      "internal_outputs": [
+        "lma",
+        "yem_a",
+        "lhw_a",
+        "yemmy_a"
+      ]
+    },
+    {
+      "name": "tco_dk",
+      "policy_type": "tax",
+      "switch": "off",
+      "all_outputs": [],
+      "queryable_outputs": [],
+      "internal_outputs": []
+    }
+  ]
+}
