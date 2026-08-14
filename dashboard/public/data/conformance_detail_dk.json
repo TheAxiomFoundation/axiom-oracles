@@ -162,7 +162,7 @@
       "axiom_attributed_open": null,
       "oracle_attributed": null,
       "bridge_artifacts": null,
-      "note": "Det midlertidige b\u00f8rnetilskud \u2014 LOV nr 1550 af 27/12/2019 (Lov om et midlertidigt b\u00f8rnetilskud til visse fors\u00f8rgere), a statutorily TEMPORARY scheme, extended by LOV nr 781 af 04/05/2021 and LOV nr 877 af 21/06/2022 (both \u00bbForl\u00e6ngelse\u00ab; instruments verified via the retsinformation.dk document-search API, 2026-08-14). The DK model comment records it as 'Extra child benefit (abolished in Feb 2023)', and the committed spine probe (conformance/spines/dk-DK_2025.json, bfachxp_dk row) shows the switch on only in DK_2020-DK_2022 and off in DK_2023-DK_2025 \u2014 the target system retains a switched-off historical module, not a current-law payable benefit.",
+      "note": "Det midlertidige b\u00f8rnetilskud \u2014 LOV nr 1550 af 27/12/2019 (Lov om et midlertidigt b\u00f8rnetilskud til visse fors\u00f8rgere), a statutorily TEMPORARY scheme, extended by LOV nr 781 af 04/05/2021 and LOV nr 877 af 21/06/2022 (both Forl\u00e6ngelse; instruments verified via the retsinformation.dk document-search API, 2026-08-14). The committed DK_2025 spine shows the switch off in the target system, and the model comment records the scheme as 'Extra child benefit (abolished in Feb 2023)'; the DK_2020-DK_2022 on-history is the builder's multi-system probe record (ops report), not committed evidence. The target system retains a switched-off historical module, not a current-law payable benefit.",
       "status": "excluded:oracle_models_repealed_law"
     },
     {
@@ -774,7 +774,7 @@
       "axiom_attributed_open": null,
       "oracle_attributed": null,
       "bridge_artifacts": null,
-      "note": "No queryable output exists in the target system: the committed spine probe (conformance/spines/dk-DK_2025.json, yemcomp_dk row) records an empty output set with an n/a body, switch off in DK_2023-DK_2025 (on only in DK_2020-DK_2022). The model labels it a COVID-19 employee compensation scheme; with no output surface it cannot be compared per-case regardless of its legal status, so no repeal claim is made.",
+      "note": "No queryable output exists in the target system: the committed spine (conformance/spines/dk-DK_2025.json, yemcomp_dk row) records an empty output set with an n/a body and switch off in DK_2025. The model labels it a COVID-19 employee compensation scheme; the DK_2020-DK_2022 on-history is the builder's probe record, not committed evidence. With no output surface it cannot be compared per-case regardless of legal status, so no repeal claim is made.",
       "status": "excluded:unobservable_boundary"
     },
     {
@@ -792,7 +792,7 @@
       "axiom_attributed_open": null,
       "oracle_attributed": null,
       "bridge_artifacts": null,
-      "note": "No queryable output exists in the target system: the committed spine probe (conformance/spines/dk-DK_2025.json, ysecomp_dk row) records an empty output set with an n/a body, switch off in DK_2023-DK_2025 (on only in DK_2020-DK_2022). The model labels it a COVID-19 self-employment compensation scheme; with no output surface it cannot be compared per-case regardless of its legal status, so no repeal claim is made.",
+      "note": "No queryable output exists in the target system: the committed spine (conformance/spines/dk-DK_2025.json, ysecomp_dk row) records an empty output set with an n/a body and switch off in DK_2025. The model labels it a COVID-19 self-employment compensation scheme; the DK_2020-DK_2022 on-history is the builder's probe record, not committed evidence. With no output surface it cannot be compared per-case regardless of legal status, so no repeal claim is made.",
       "status": "excluded:unobservable_boundary"
     }
   ]

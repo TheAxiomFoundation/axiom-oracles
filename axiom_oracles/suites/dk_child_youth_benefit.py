@@ -64,9 +64,11 @@ Verified EUROMOD conventions (executed against EUROMOD_RELEASES_J2.0+, DK_2025):
   2000000). The pension witness records 60000 kr. of true qualifying
   contributions in case metadata and supplies them only to Axiom because the
   EUROMOD DK input schema exposes no value that ``bfachnm_dk`` reads for the
-  statutory deduction. EUROMOD therefore remains at 11184 while Axiom pays
-  13184. Expected outputs are only ever the executed values from the regenerate
-  run.
+  statutory deduction. The age-35 recipient gets the ORDINARY 2025 PBL § 16
+  cap (9400 kr.; the 61200 kr. cap holds only within seven income years of
+  folkepensionsalderen), so Axiom caps at 9400, grosses up to 15666.67, and
+  pays 11497.33 while EUROMOD remains at 11184 — a 313.33 kr. gap. Expected
+  outputs are only ever the executed values from the regenerate run.
 """
 
 from __future__ import annotations

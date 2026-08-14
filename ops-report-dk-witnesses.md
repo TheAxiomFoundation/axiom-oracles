@@ -31,12 +31,16 @@ Status: **SHIP-READY — all three witnesses executed and dispositioned.**
   `total_contributions_to_qualifying_pension_accounts=60000` to the § 1 a
   module. No EUROMOD column was added.
 - Executed `tintbto_s`: **1,196,000** on both bridged § 7-basis inputs.
-- Axiom: `60,000 / 0.6 = 100,000` gross-up; basis **1,096,000**; excess
-  **179,000**; reduction **3,580**; benefit **13,184**.
+- Axiom (CORRECTED post-audit — see the addendum below; the age-35 ordinary
+  PBL § 16 cap of 9,400 applies, not 61,200): `9,400 / 0.6 = 15,666.67`
+  gross-up; basis **1,180,333.33**; excess **263,333.33**; reduction
+  **5,266.67**; benefit **11,497.33**. (The first build supplied the 61,200
+  cap and paid 13,184 — legally impossible for this recipient.)
 - EUROMOD DK_2025: no contribution gross-up; excess **279,000**; reduction
   **5,580**; benefit **11,184**.
-- Executed signed report delta (`EUROMOD - Axiom`): **−2,000**; absolute gap
-  **2,000**, exactly 2 pct. of the 100,000 gross-up.
+- Executed signed report delta (`EUROMOD - Axiom`): **−313.33** (first build
+  −2,000, superseded); absolute gap **313.33**, exactly 2 pct. of the
+  15,666.67 grossed-up capped contribution.
 - Disposition ID:
   `euromod-dk-bfachnm-taper-pension-grossup-absent`;
   `upstream_engine_gap`; linked to
