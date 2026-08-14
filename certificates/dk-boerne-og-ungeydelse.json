@@ -13,7 +13,7 @@
       "artifact": "conformance/exercise-census.json",
       "claim": "exercise census",
       "mode": "computed",
-      "sha256": "fefbbe28b3ca334d08fe097080e31eec6851a242415f13e52eeb23d1298f4a11"
+      "sha256": "0fed1061d84ff4844078a50a6e748243cd0982362a885829cfa8f4a134940612"
     },
     {
       "artifact": "dashboard/public/data/axiom-euromod-dk-child-youth-benefit.json",
