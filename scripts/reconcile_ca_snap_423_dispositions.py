@@ -43,30 +43,37 @@ BASE_DISPOSITIONS_SHA256 = (
     "18cfbe28f951261142bfa3c52d0c88f6d0a3d53b77b597fcd807b4d2e9a23086"
 )
 EXPECTED_BASE_ROWS = 345
-EXPECTED_CURRENT_MISMATCHES = 529
+EXPECTED_CURRENT_MISMATCHES = 484
 # 288 at the #423 transition; 510 after the 2026-08 residual-tail triage
 # added 174 verified CA entries (see dispositions/ca-snap-ecps.yaml classes
-# dated 2026-07-30/08-02 and axiom-oracles#433/#436/#437/#441).
-EXPECTED_EXPANDED_DISPOSITIONS = 510
+# dated 2026-07-30/08-02 and axiom-oracles#433/#436/#437/#441); 493 after
+# the 2026-08-12 income-surface fixes (qualified-dividend projection,
+# situation-path income pinning) pruned 43 expired entries and 9 vanished
+# selector identities whose rows now match, and added 24 fresh-evidence
+# entries for the rerun's residual rows.
+EXPECTED_EXPANDED_DISPOSITIONS = 484
 # At the #423 transition: vanished 192 / current_but_dropped 22 /
 # reclassified 0 / kept 131. The 2026-08 residual-tail triage added CA
 # entries covering 21 of the 22 dropped identities, moving them to
 # reclassified; 1 identity remains honestly uncovered.
+# 2026-08-12 income-surface fixes: 8 kept and 2 reclassified base rows
+# healed (now matching), and 4 formerly-kept rows moved to reclassified
+# under fresh tanf-zero entries after their pinned values shifted.
 EXPECTED_PARTITION_COUNTS = {
-    "vanished": 192,
-    "current_but_dropped": 1,
-    "reclassified": 21,
-    "kept": 131,
+    "vanished": 200,
+    "current_but_dropped": 0,
+    "reclassified": 23,
+    "kept": 122,
 }
 EXPECTED_PARTITION_DIGESTS = {
-    "vanished": ("f968139b4cc46e2a2d95ce08d7ae97bfa3e446f7d8558a524fa3527bdb45f618"),
+    "vanished": ("16faf661a75baba07b85345cabc37a1d66ed728a593bef0bb44da1143313fcef"),
     "current_but_dropped": (
-        "925caea321fd0250cfb08356142f2f83a5bba5b84d18badd426cd029e85a5b3d"
+        "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     ),
     "reclassified": (
-        "a4d9b070b740a2a55d47f088974a4060f085e84e2f9392166a8e3c78ddf860af"
+        "7ea47ad2d0f54b4b5627adb3895828c13363320338ae9191d7e9556e14358a82"
     ),
-    "kept": ("2cfc51bf11031bd398cc7cd27e568f8a321df35eb9006d1acd86db112851cba3"),
+    "kept": ("dbcfdc50771b4b619289a1c2a2050047510bbe3ba8929913443cb86a526adf0a"),
 }
 REJECTED_SNAPSHOT_COMMIT = "c1084c2339ccc4bc41776f71b059fbabe8732916"
 REJECTED_SNAPSHOT_SOURCE_SHA256 = (
@@ -119,29 +126,33 @@ REJECTED_SNAPSHOT_CORRECTED_LINKS = {
 EXPECTED_BASE_IDENTITY_DIGEST = (
     "77036d3f70198c2c0c56ffa7e608e8d752338e26152e183ef01351eb48d584f8"
 )
-EXPECTED_MOVEMENT_COUNTS = {"moved": 115, "unchanged": 16}
+EXPECTED_MOVEMENT_COUNTS = {"moved": 107, "unchanged": 15}
 EXPECTED_MOVEMENT_DIGESTS = {
-    "moved": ("c1c10db5635f1cb76ccc0908c64e1caf958c1826f5f87bd1dce03809589a6bab"),
-    "unchanged": ("4ba943d873b252ba1ea84476ee669088829b327e8d9b66f1f73468efe01df475"),
+    "moved": ("a8a5cd01e09f4bac0f27bf119129f4892e9854ee848341b6c29628c15b0a1f5c"),
+    "unchanged": ("0101965bd8f991552543099f2f5a9f901237ee3cd69514d0f934cf9b315863e8"),
 }
 # These digests and explicit pins are the compact tracked receipt derived from
 # the exhaustive requested-month trace named below. The kept digest binds all
 # 131 current source/report pins; the drift map makes each of the other 22
 # requested-month-to-current movements reviewable.
 EXPECTED_DRIFT_ROWS_SHA256 = (
+    "a6690ff3f32c6907495728483ff1cd37223d0c35dca1da95df27da294b762fd4"
+)
+# Frozen rejected-snapshot full drift receipt (pre-2026-08-12).
+SNAPSHOT_DRIFT_ROWS_SHA256 = (
     "fa54f6fdf05592da62c3c03b74264a4dfb7d9828e4f33ea169e75fc033ad3a51"
 )
 EXPECTED_ACTIVE_DRIFT_ROWS_SHA256 = (
-    "a922d6e84e4b8cf6dc207ee3318bc4653787d725678ee844652506117c73a090"
-)
-EXPECTED_RETIRED_DRIFT_IDENTITY_SHA256 = (
-    "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
-)
-EXPECTED_RETIRED_DRIFT_ROWS_SHA256 = (
     "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
 )
+EXPECTED_RETIRED_DRIFT_IDENTITY_SHA256 = (
+    "429e4596e94ae9fe9c193e988754bb8a0d502811394a6dc7279ffed99d63dba7"
+)
+EXPECTED_RETIRED_DRIFT_ROWS_SHA256 = (
+    "02a37dfb01999467520c2c54a1146d8e33d62a73c30d4243ff235963f1b95d37"
+)
 EXPECTED_RECLASSIFIED_ROWS_SHA256 = (
-    "9bbe925e5bf1f733bebcb8a75da917587f103bafdb80a9f81368edc2fa82bdeb"
+    "a36ac862d96966f22dc696bac331004aba5531c1a4711e651ed0ddd6b4998c8f"
 )
 # Drift-receipt rows whose identity the 2026-08 residual-tail triage covered
 # with a new schema-validated disposition (third receipt exit alongside
@@ -153,11 +164,9 @@ EXPECTED_RECLASSIFIED_DRIFT_IDS = frozenset(
         "ca-362-period-self-employment-tanf-ecps-57027-benefit",
         "ca-362-period-self-employment-tanf-ecps-58088-benefit",
         "ca-362-period-self-employment-tanf-ecps-60409-benefit",
-        "ca-362-self-employment-ecps-58987-benefit",
         "ca-362-self-employment-ecps-59016-benefit",
         "ca-362-self-employment-ecps-59103-benefit",
         "ca-362-self-employment-ecps-59173-benefit",
-        "ca-362-self-employment-ecps-60319-benefit",
         "ca-362-self-employment-ecps-60859-benefit",
         "ca-362-self-employment-tanf-ecps-56991-benefit",
         "ca-362-self-employment-tanf-ecps-57529-benefit",
@@ -169,29 +178,36 @@ EXPECTED_RECLASSIFIED_DRIFT_IDS = frozenset(
         "ca-362-self-employment-tanf-ecps-61251-benefit",
         "ca-362-self-employment-tanf-ecps-61495-benefit",
         "ca-362-tanf-ecps-62327-benefit",
+        "ca-362-period-tanf-ecps-58946-benefit",
+        "ca-362-tanf-ecps-57173-benefit",
+        "ca-362-tanf-ecps-60816-benefit",
+        "ca-362-tanf-ecps-61665-benefit",
     }
 )
-EXPECTED_RECLASSIFIED_DRIFT_ROWS_SHA256 = "2c4fd5ef79882590de507c3ad93beef46958058f514736af961356dfd3527174"
+EXPECTED_RECLASSIFIED_DRIFT_ROWS_SHA256 = "e7de046f5716cd860b7ef4e5857621fc4b1c31d5e280b6b3c39cce2c7de81d25"
 # The 2026-08 residual-tail triage entries that absorbed the 21 formerly
 # current_but_dropped identities (per-row verified; see each entry's
 # evidence in dispositions/ca-snap-ecps.yaml).
 EXPECTED_RECLASSIFIED_REPLACEMENTS: dict[str, int] = {
-    "ca-bbce-tail-2026-07-30-benefit": 5,
+    "ca-bbce-tail-2026-07-30-benefit": 4,
     "ca-negative-se-loss-2026-07-30-benefit": 1,
-    "pe-fallback-path-divergence-58987": 1,
     "pe-medical-imputation-counterfactual-57453": 1,
     "tanf-zero-counterfactual-56991": 1,
     "tanf-zero-counterfactual-57027": 1,
+    "tanf-zero-counterfactual-57173": 1,
     "tanf-zero-counterfactual-57529": 1,
     "tanf-zero-counterfactual-57845": 1,
     "tanf-zero-counterfactual-57891": 1,
     "tanf-zero-counterfactual-58088": 1,
+    "tanf-zero-counterfactual-58946": 1,
     "tanf-zero-counterfactual-60409": 1,
     "tanf-zero-counterfactual-60756": 1,
     "tanf-zero-counterfactual-60777": 1,
+    "tanf-zero-counterfactual-60816": 1,
     "tanf-zero-counterfactual-60978": 1,
     "tanf-zero-counterfactual-61251": 1,
     "tanf-zero-counterfactual-61495": 1,
+    "tanf-zero-counterfactual-61665": 1,
     "tanf-zero-counterfactual-62327": 1,
 }
 REJECTED_SNAPSHOT_ACTIVE_DRIFT_ROWS_SHA256 = (
@@ -212,8 +228,18 @@ REJECTED_SNAPSHOT_RECLASSIFIED_REPLACEMENTS = {
     "ca-mce-pe-extra-net-test-benefit-only": 1,
 }
 EXPECTED_KEPT_REQUESTED_MONTH_ROWS_SHA256 = (
+    "00d320ba07ed43fa901c48c6d68f0869377df69caad7d7cb23d4e44cd80b9c9d"
+)
+# The frozen rejected-snapshot replay retains the pre-2026-08-12 kept
+# receipt (131 rows) and movement split.
+SNAPSHOT_KEPT_REQUESTED_MONTH_ROWS_SHA256 = (
     "06524b90f0fd49fac9e2856c73d5ee787df4190003ba7e56b0a71d47f160e0f3"
 )
+SNAPSHOT_MOVEMENT_COUNTS = {"moved": 115, "unchanged": 16}
+SNAPSHOT_MOVEMENT_DIGESTS = {
+    "moved": ("c1c10db5635f1cb76ccc0908c64e1caf958c1826f5f87bd1dce03809589a6bab"),
+    "unchanged": ("4ba943d873b252ba1ea84476ee669088829b327e8d9b66f1f73468efe01df475"),
+}
 REQUESTED_MONTH_TRACE_SHA256 = (
     "c46af9b87c8f5ad01f1909bc45e80e00b4c4a50e5b802ea4ccbe194b5954b568"
 )
@@ -356,10 +382,56 @@ REJECTED_SNAPSHOT_RETIRED_CURRENT_DRIFT_PINS = {
         "difference": -286.89996337890625,
     },
 }
+# 2026-08-12: four kept identities drifted when the income-surface fixes
+# rebuilt the report; fresh tanf-zero entries reclassify them and their
+# pre-rerun report pins are the requested-month drift evidence. Live-only —
+# the rejected-snapshot replay keeps the original 22-row receipt.
+LIVE_REQUESTED_MONTH_DRIFT_PINS: dict[str, Any] = {
+    **REQUESTED_MONTH_DRIFT_PINS,
+    "ca-362-tanf-ecps-57173-benefit": {
+        "left": 994.0,
+        "right": 824.2000122070312,
+        "difference": 169.79998779296875,
+    },
+    "ca-362-period-tanf-ecps-58946-benefit": {
+        "left": 550.0,
+        "right": 350.0,
+        "difference": 200.0,
+    },
+    "ca-362-tanf-ecps-60816-benefit": {
+        "left": 361.0,
+        "right": 0.0,
+        "difference": 361.0,
+    },
+    "ca-362-tanf-ecps-61665-benefit": {
+        "left": 785.0,
+        "right": 540.2000122070312,
+        "difference": 244.79998779296875,
+    },
+}
 LIVE_RECEIPT_EXPECTATIONS: dict[str, Any] = {
+    "requested_month_drift_pins": LIVE_REQUESTED_MONTH_DRIFT_PINS,
+    "kept_requested_month_rows_sha256": EXPECTED_KEPT_REQUESTED_MONTH_ROWS_SHA256,
+    "movement_counts": EXPECTED_MOVEMENT_COUNTS,
+    "movement_digests": EXPECTED_MOVEMENT_DIGESTS,
+    "drift_rows_sha256": EXPECTED_DRIFT_ROWS_SHA256,
     "reclassified_replacements": EXPECTED_RECLASSIFIED_REPLACEMENTS,
     "reclassified_rows_sha256": EXPECTED_RECLASSIFIED_ROWS_SHA256,
-    "retired_current_drift_pins": {},
+    # 2026-08-12 income-surface fixes healed these two drift identities
+    # (both engines now agree); their last committed report pins are the
+    # retirement evidence.
+    "retired_current_drift_pins": {
+        "ca-362-self-employment-ecps-58987-benefit": {
+            "left": 78.0,
+            "right": 23.84000015258789,
+            "difference": 54.15999984741211,
+        },
+        "ca-362-self-employment-ecps-60319-benefit": {
+            "left": 0.0,
+            "right": 94.29998779296875,
+            "difference": -94.29998779296875,
+        },
+    },
     "active_drift_rows_sha256": EXPECTED_ACTIVE_DRIFT_ROWS_SHA256,
     "retired_drift_identity_sha256": EXPECTED_RETIRED_DRIFT_IDENTITY_SHA256,
     "retired_drift_rows_sha256": EXPECTED_RETIRED_DRIFT_ROWS_SHA256,
@@ -367,6 +439,11 @@ LIVE_RECEIPT_EXPECTATIONS: dict[str, Any] = {
     "reclassified_drift_rows_sha256": EXPECTED_RECLASSIFIED_DRIFT_ROWS_SHA256,
 }
 REJECTED_SNAPSHOT_RECEIPT_EXPECTATIONS: dict[str, Any] = {
+    "requested_month_drift_pins": REQUESTED_MONTH_DRIFT_PINS,
+    "kept_requested_month_rows_sha256": SNAPSHOT_KEPT_REQUESTED_MONTH_ROWS_SHA256,
+    "movement_counts": SNAPSHOT_MOVEMENT_COUNTS,
+    "movement_digests": SNAPSHOT_MOVEMENT_DIGESTS,
+    "drift_rows_sha256": SNAPSHOT_DRIFT_ROWS_SHA256,
     "reclassified_replacements": REJECTED_SNAPSHOT_RECLASSIFIED_REPLACEMENTS,
     "reclassified_rows_sha256": REJECTED_SNAPSHOT_RECLASSIFIED_ROWS_SHA256,
     "retired_current_drift_pins": REJECTED_SNAPSHOT_RETIRED_CURRENT_DRIFT_PINS,
@@ -780,9 +857,20 @@ def _expected_report_note(entry: dict[str, Any]) -> dict[str, Any]:
     return note
 
 
-def _validate_report_provenance(report: dict[str, Any]) -> None:
+# The live report rebuilt on the 0.2.0 engine (2026-08-12 income-surface
+# fixes); the frozen rejected-snapshot replay stays on the 0.1.0-era stack.
+LIVE_EXPECTED_ENGINES = {
+    **EXPECTED_ENGINES,
+    "versions": {**EXPECTED_ENGINES["versions"], "axiom_rules_engine": "0.2.0"},
+}
+
+
+def _validate_report_provenance(
+    report: dict[str, Any],
+    expected_engines: dict[str, Any] = LIVE_EXPECTED_ENGINES,
+) -> None:
     _require(
-        report.get("engines") == EXPECTED_ENGINES,
+        report.get("engines") == expected_engines,
         "current CA report engine/runtime stack drifted",
     )
     provenance = report.get("provenance")
@@ -808,6 +896,7 @@ def _load_and_validate_report(
     expected_mismatches: int = EXPECTED_CURRENT_MISMATCHES,
     expected_sha256: str | None = None,
     label: str = "current CA report",
+    expected_engines: dict[str, Any] = LIVE_EXPECTED_ENGINES,
 ) -> tuple[
     dict[str, Any],
     dict[Identity, dict[str, Any]],
@@ -829,7 +918,7 @@ def _load_and_validate_report(
         "current CA report schema does not match",
     )
     _require(report.get("suite") == SUITE, "current CA report suite does not match")
-    _validate_report_provenance(report)
+    _validate_report_provenance(report, expected_engines)
     concepts = report.get("concepts")
     _require(isinstance(concepts, list), "current CA report concepts must be a list")
     assert isinstance(concepts, list)
@@ -1402,21 +1491,22 @@ def _partition_receipt(
 
     kept_requested_month_rows.sort(key=lambda row: row["id"])
     kept_requested_month_digest = _json_rows_digest(kept_requested_month_rows)
+    expected_kept_digest = expectations["kept_requested_month_rows_sha256"]
     _require(
-        kept_requested_month_digest == EXPECTED_KEPT_REQUESTED_MONTH_ROWS_SHA256,
+        kept_requested_month_digest == expected_kept_digest,
         "kept requested-month receipt digest mismatch: "
-        f"expected {EXPECTED_KEPT_REQUESTED_MONTH_ROWS_SHA256}, "
+        f"expected {expected_kept_digest}, "
         f"got {kept_requested_month_digest}",
     )
 
     for label, entries in movement.items():
         _require(
-            len(entries) == EXPECTED_MOVEMENT_COUNTS[label],
+            len(entries) == expectations["movement_counts"][label],
             f"{label} retained count is {len(entries)}, "
-            f"expected {EXPECTED_MOVEMENT_COUNTS[label]}",
+            f"expected {expectations['movement_counts'][label]}",
         )
         digest = _identity_digest(entries)
-        expected = EXPECTED_MOVEMENT_DIGESTS[label]
+        expected = expectations["movement_digests"][label]
         _require(
             digest == expected,
             f"{label} retained identity digest mismatch: "
@@ -1491,7 +1581,7 @@ def _partition_receipt(
     reclassified_drift_ids = set(expectations["reclassified_drift_ids"])
     _require(
         dropped_ids | retired_ids | reclassified_drift_ids
-        == set(REQUESTED_MONTH_DRIFT_PINS)
+        == set(expectations["requested_month_drift_pins"])
         and dropped_ids.isdisjoint(retired_ids)
         and dropped_ids.isdisjoint(reclassified_drift_ids)
         and retired_ids.isdisjoint(reclassified_drift_ids),
@@ -1515,7 +1605,8 @@ def _partition_receipt(
         f"expected {expected_retired_drift_identity_sha256}, "
         f"got {retired_identity_digest}",
     )
-    for entry_id in sorted(REQUESTED_MONTH_DRIFT_PINS):
+    requested_month_drift_pins = expectations["requested_month_drift_pins"]
+    for entry_id in sorted(requested_month_drift_pins):
         retired = entry_id in retired_ids
         reclassified = entry_id in reclassified_drift_ids
         if retired:
@@ -1526,7 +1617,7 @@ def _partition_receipt(
             entry = dropped_by_id[entry_id]
         key = _identity(entry)
         literal_base_pin = _pin(entry.get("pinned") or {})
-        requested_month_pin = REQUESTED_MONTH_DRIFT_PINS[entry_id]
+        requested_month_pin = requested_month_drift_pins[entry_id]
         current_pin = (
             retired_current_drift_pins[entry_id]
             if retired
@@ -1551,9 +1642,9 @@ def _partition_receipt(
             active_drifted_rows.append({**evidence, "current_pin": current_pin})
     drift_rows_digest = _json_rows_digest(drifted_rows)
     _require(
-        drift_rows_digest == EXPECTED_DRIFT_ROWS_SHA256,
+        drift_rows_digest == expectations["drift_rows_sha256"],
         "full drift-row receipt digest mismatch: "
-        f"expected {EXPECTED_DRIFT_ROWS_SHA256}, got {drift_rows_digest}",
+        f"expected {expectations['drift_rows_sha256']}, got {drift_rows_digest}",
     )
     active_drift_rows_digest = _json_rows_digest(active_drifted_rows)
     _require(
@@ -1720,6 +1811,7 @@ def check_reconciliation(base_ref: str) -> dict[str, Any]:
         expected_mismatches=REJECTED_SNAPSHOT_MISMATCHES,
         expected_sha256=REJECTED_SNAPSHOT_REPORT_SHA256,
         label="rejected PUB 275 snapshot CA report",
+        expected_engines=EXPECTED_ENGINES,
     )
     snapshot_served_raw = _git_show(
         snapshot_commit,
