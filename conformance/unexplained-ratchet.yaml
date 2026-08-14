@@ -9,7 +9,7 @@ ratchets:
 - suite: ak-atap-standards
   unexplained_max: 0
 - suite: al-snap-ecps
-  unexplained_max: 1
+  unexplained_max: 0
 - suite: al-tanf-ecps
   unexplained_max: 0
 - suite: al-tanf-payment-standards
@@ -87,7 +87,7 @@ ratchets:
 - suite: ca-federal-schedule-tax-spsm
   unexplained_max: 0
 - suite: ca-snap-ecps
-  unexplained_max: 19
+  unexplained_max: 0
 - suite: ca-snap-qc
   unexplained_max: 0
 - suite: ca-tanf-ecps
@@ -119,13 +119,13 @@ ratchets:
 - suite: fiit-ecps
   unexplained_max: 0
 - suite: fl-snap-ecps
-  unexplained_max: 6
+  unexplained_max: 0
 - suite: fl-tca-standards
   unexplained_max: 0
 - suite: ga-health-thresholds
   unexplained_max: 0
 - suite: ga-snap-ecps
-  unexplained_max: 14
+  unexplained_max: 0
 - suite: ga-snap-qc
   unexplained_max: 0
 - suite: ga-tanf-ecps
@@ -143,7 +143,7 @@ ratchets:
 - suite: lifeline-parameters
   unexplained_max: 0
 - suite: ma-snap-ecps
-  unexplained_max: 3
+  unexplained_max: 0
 - suite: md-snap-qc
   unexplained_max: 0
 - suite: md-tca-payments
@@ -159,9 +159,9 @@ ratchets:
 - suite: mn-tanf-ecps
   unexplained_max: 0
 - suite: nc-snap-ecps
-  unexplained_max: 2
+  unexplained_max: 0
 - suite: ny-snap-ecps
-  unexplained_max: 12
+  unexplained_max: 0
 - suite: ny-snap-qc
   unexplained_max: 0
 - suite: ny-tanf-ecps
@@ -173,7 +173,7 @@ ratchets:
 - suite: pell-parameters
   unexplained_max: 0
 - suite: sc-snap-ecps
-  unexplained_max: 2
+  unexplained_max: 0
 - suite: ssa-parameters
   unexplained_max: 0
 - suite: ssi-ecps
