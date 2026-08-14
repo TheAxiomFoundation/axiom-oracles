@@ -1,0 +1,476 @@
+# axiom_oracles.conformance.v1 — GENERATED universe facts + committed scope decisions.
+# Rows (policy id, oracle_policy_name, output_vars) are regenerated from the oracle
+# model spine by scripts/generate_conformance_universe.py — do NOT hand-edit those.
+# in_scope / exclusion_reason / suite / note ARE hand-authored decisions the generator
+# preserves; edit those here. CI fails if the generated facts drift from the model.
+schema: axiom_oracles.conformance.v1
+jurisdiction: dk
+oracle:
+  model: EUROMOD
+  release: J2.0
+  system: DK_2025
+  country: DK
+  backend: euromod
+  label: EUROMOD_J2.0/DK_2025
+policies:
+  - id: dk:ConstDef_dk
+    oracle_policy_name: ConstDef_dk
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    internal_only_vars:
+      - GenPersAllowance
+      - i_yiy
+    exclusion_reason: technical
+  - id: dk:IlDef_dk
+    oracle_policy_name: IlDef_dk
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    exclusion_reason: technical
+  - id: dk:IlsDef_dk
+    oracle_policy_name: IlsDef_dk
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    exclusion_reason: technical
+  - id: dk:IlsUDBDef_dk
+    oracle_policy_name: IlsUDBDef_dk
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    exclusion_reason: technical
+  - id: dk:TransLMA_dk
+    oracle_policy_name: TransLMA_dk
+    oracle_policy_type: def
+    output_vars:
+      - lmcee_s
+      - bwkmceemy_s
+      - yemmwmy_s
+      - lhwsr_s
+      - lmcse_s
+      - bwkmcsemy_s
+      - ysemwmy_s
+    in_scope: false
+    internal_only_vars:
+      - lma
+      - yem_a
+      - lhw_a
+      - yemmy_a
+    exclusion_reason: input_carrying
+    note: Labour-market-transition input transformation, switched off in DK_2025. The model comment says
+      'DO NOT SWITCH ON; ONLY WORKS WITH THE LMA ADD-ON'; it carries simulated transition inputs and is
+      not a distinct statutory tax or benefit.
+  - id: dk:bfach00_dk
+    oracle_policy_name: bfach00_dk
+    oracle_policy_type: ben
+    output_vars:
+      - bfach00_s
+    in_scope: true
+    internal_only_vars:
+      - i_it_bfa
+    suite: null
+  - id: dk:bfached_dk
+    oracle_policy_name: bfached_dk
+    oracle_policy_type: ben
+    output_vars:
+      - bfached_s
+    in_scope: true
+    suite: null
+  - id: dk:bfachnm_dk
+    oracle_policy_name: bfachnm_dk
+    oracle_policy_type: ben
+    output_vars:
+      - bfachnm_s
+    in_scope: true
+    internal_only_vars:
+      - i_thld_base
+      - i_thld_start
+    suite: dk-child-youth-benefit
+    note: The suite covers the single-recipient/single-parent domain. Couple/spousal taper cases stay
+      outside its graded surface because DK_2025 retains the pre-2022 spousal income test; see euromod-dk-2025-bfachnm-pre2022-spousal-taper.
+      The schema cannot represent a partial-domain exclusion, so this note records that carve-out.
+  - id: dk:bfachxp_dk
+    oracle_policy_name: bfachxp_dk
+    oracle_policy_type: ben
+    output_vars:
+      - bfachxp_s
+    in_scope: false
+    exclusion_reason: oracle_models_repealed_law
+    note: The DK_2025 model comment identifies this as 'Extra child benefit (abolished in Feb 2023)'.
+      The model-spine probe shows it on only in DK_2020 through DK_2022 and off in DK_2023 through DK_2025,
+      so the target system retains a switched-off historical module rather than a current-law payable
+      benefit.
+  - id: dk:bho01_dk
+    oracle_policy_name: bho01_dk
+    oracle_policy_type: ben
+    output_vars:
+      - bho01_s
+    in_scope: true
+    internal_only_vars:
+      - i_bho
+      - i_bho2
+      - i_bho3
+      - i_bho4
+      - i_bho5
+      - i_maxrent
+    suite: null
+  - id: dk:bho02_dk
+    oracle_policy_name: bho02_dk
+    oracle_policy_type: ben
+    output_vars:
+      - bho02_s
+    in_scope: true
+    internal_only_vars:
+      - i_bhoII
+      - i_bhoII2
+      - i_bhoII3
+      - i_bhoII4
+      - i_bhoII5
+      - i_bhoII6
+    suite: null
+  - id: dk:bhtuc_dk
+    oracle_policy_name: bhtuc_dk
+    oracle_policy_type: ben
+    output_vars:
+      - bhtuc_s
+    in_scope: true
+    suite: null
+  - id: dk:bma_dk
+    oracle_policy_name: bma_dk
+    oracle_policy_type: ben
+    output_vars:
+      - bma_s
+    in_scope: true
+    internal_only_vars:
+      - i_elparent_bma
+      - i_elchild_bma
+      - i_nelchildren_bma
+      - i_ageweeks_bma
+      - i_durweeks_bma
+      - i_yempv_bma
+      - yem
+      - bhl
+      - bcbplcs
+    suite: null
+    note: Statutory maternity-leave calculation with an observable bma_s output. Although switched off
+      in every DK_2007 through DK_2025 system, its body computes eligibility, duration, and a capped award;
+      the later yem/bhl adjustments are reclassification bookkeeping. Switch state is not a schema exclusion,
+      so this remains honestly uncovered.
+  - id: dk:bpa_dk
+    oracle_policy_name: bpa_dk
+    oracle_policy_type: ben
+    output_vars:
+      - bpa_s
+    in_scope: true
+    internal_only_vars:
+      - i_yempv_bpa
+      - i_amount_bpa
+      - i_elparent_bpa
+      - bhl
+      - yem
+    suite: null
+    note: Statutory paternity/parental-leave calculation with an observable bpa_s output. Although switched
+      off in every DK_2007 through DK_2025 system, its body computes eligibility and a capped award; the
+      later yem/bhl adjustments are reclassification bookkeeping. Switch state is not a schema exclusion,
+      so this remains honestly uncovered.
+  - id: dk:bsa_dk
+    oracle_policy_name: bsa_dk
+    oracle_policy_type: ben
+    output_vars:
+      - bsa_s
+      - bsaxp_s
+    in_scope: true
+    internal_only_vars:
+      - i_bsa3
+      - i_bsa4
+      - i_bsa5
+      - i_bsa6
+      - i_bsa7
+      - i_bsa8
+      - i_bsa9
+      - n/a
+      - i_bsa
+      - i_bsa2
+      - i_bsa12
+      - i_bsa_sort
+    suite: null
+  - id: dk:bsard_dk
+    oracle_policy_name: bsard_dk
+    oracle_policy_type: ben
+    output_vars:
+      - bsard_s
+    in_scope: true
+    internal_only_vars:
+      - i_ceiling
+    suite: null
+  - id: dk:bunct_dk
+    oracle_policy_name: bunct_dk
+    oracle_policy_type: ben
+    output_vars:
+      - lunmy_s
+      - yempv_s
+      - bunct_s
+    in_scope: true
+    internal_only_vars:
+      - i_bunct
+      - i_bunct_s
+    suite: null
+  - id: dk:neg_dk
+    oracle_policy_name: neg_dk
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    internal_only_vars:
+      - ysemy
+      - yse
+      - i_posInvInc
+      - yiy
+      - i_InvInc
+      - yiy_o
+    exclusion_reason: technical
+  - id: dk:output_std_dk
+    oracle_policy_name: output_std_dk
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    exclusion_reason: technical
+  - id: dk:output_std_hh_dk
+    oracle_policy_name: output_std_hh_dk
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    exclusion_reason: technical
+  - id: dk:poa_dk
+    oracle_policy_name: poa_dk
+    oracle_policy_type: ben
+    output_vars:
+      - poa00_s
+      - poa01_s
+      - poa02_s
+    in_scope: true
+    internal_only_vars:
+      - i_poa01
+      - i_poa02
+      - i_poa02b
+    suite: null
+  - id: dk:random_dk
+    oracle_policy_name: random_dk
+    oracle_policy_type: def
+    output_vars:
+      - stk01_s
+    in_scope: false
+    internal_only_vars:
+      - i_mc_rand_1
+      - i_mc_rand_2
+      - i_mc_rand_3
+      - i_lmamy
+      - i_lma2
+      - i_lma1
+      - i_bsa_rand
+    exclusion_reason: technical
+    note: DEF block assigning random numbers for Monte Carlo, labour-market, and social-assistance machinery;
+      stk01_s is an RNG output, not a statutory instrument.
+  - id: dk:setdefault_dk
+    oracle_policy_name: setdefault_dk
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    exclusion_reason: technical
+  - id: dk:tco_dk
+    oracle_policy_name: tco_dk
+    oracle_policy_type: tax
+    output_vars: []
+    in_scope: false
+    exclusion_reason: extension_not_available
+    note: Commodities/consumption-tax shell, switched off in DK_2025. The public EUROMOD_RELEASES_J2.0+
+      body contains definitions only, with no compute function or output, so the consumption-tax extension
+      needed to simulate a payable amount is not available.
+  - id: dk:tcr_dk
+    oracle_policy_name: tcr_dk
+    oracle_policy_type: tax
+    output_vars:
+      - ttbcr_s
+      - tcr_s
+    in_scope: true
+    internal_only_vars:
+      - i_tcr
+    suite: null
+  - id: dk:thl_dk
+    oracle_policy_name: thl_dk
+    oracle_policy_type: tax
+    output_vars: []
+    in_scope: false
+    internal_only_vars:
+      - n/a
+    exclusion_reason: not_a_policy
+    note: Health-contribution historical container; the DK_2025 policy switch and every function are n/a,
+      and the target system exposes no queryable output.
+  - id: dk:tinbt_dk
+    oracle_policy_name: tinbt_dk
+    oracle_policy_type: tax
+    output_vars:
+      - tintbbt_s
+      - tinbt_s
+    in_scope: true
+    internal_only_vars:
+      - i_tinbt
+      - i_tinbt2
+    suite: null
+  - id: dk:tinmd_dk
+    oracle_policy_name: tinmd_dk
+    oracle_policy_type: tax
+    output_vars: []
+    in_scope: false
+    internal_only_vars:
+      - n/a
+    exclusion_reason: not_a_policy
+    note: Medium-bracket-tax historical container; the DK_2025 policy switch and every function are n/a,
+      and the model's constants comment records that the instrument was abolished in 2010.
+  - id: dk:tintaox_dk
+    oracle_policy_name: tintaox_dk
+    oracle_policy_type: tax
+    output_vars:
+      - tintaox_s
+    in_scope: true
+    internal_only_vars:
+      - i_tintaox
+    suite: null
+  - id: dk:tintc_dk
+    oracle_policy_name: tintc_dk
+    oracle_policy_type: tax
+    output_vars:
+      - tintc_s
+    in_scope: true
+    internal_only_vars:
+      - i_tintc
+    suite: null
+  - id: dk:tinto_dk
+    oracle_policy_name: tinto_dk
+    oracle_policy_type: tax
+    output_vars:
+      - tintbto_s
+      - tinto_s
+    in_scope: true
+    internal_only_vars:
+      - i_tinto
+      - i_tinto2
+      - i_tinto3
+    suite: null
+  - id: dk:tmu_dk
+    oracle_policy_name: tmu_dk
+    oracle_policy_type: tax
+    output_vars:
+      - ttbmu_s
+      - tmu_s
+    in_scope: true
+    internal_only_vars:
+      - i_tmu
+    suite: null
+  - id: dk:tpr_dk
+    oracle_policy_name: tpr_dk
+    oracle_policy_type: tax
+    output_vars:
+      - tpr_s
+      - sin01_s
+    in_scope: true
+    internal_only_vars:
+      - i_tpr
+    suite: null
+  - id: dk:tscpi_dk
+    oracle_policy_name: tscpi_dk
+    oracle_policy_type: sic
+    output_vars:
+      - tscpi_s
+      - tscpiee_s
+      - tscpier_s
+    in_scope: true
+    suite: null
+  - id: dk:tscpielig_dk
+    oracle_policy_name: tscpielig_dk
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    internal_only_vars:
+      - i_tscpielig
+      - tscpielig
+      - i_tscpielig2
+    exclusion_reason: technical
+  - id: dk:tudef_dk
+    oracle_policy_name: tudef_dk
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    exclusion_reason: technical
+  - id: dk:txc_dk
+    oracle_policy_name: txc_dk
+    oracle_policy_type: sic
+    output_vars:
+      - txcee_s
+      - txcse_s
+      - txc_s
+    in_scope: true
+    suite: null
+  - id: dk:tyrui_dk
+    oracle_policy_name: tyrui_dk
+    oracle_policy_type: tax
+    output_vars:
+      - tyrui_s
+    in_scope: true
+    suite: null
+  - id: dk:tyruielig_dk
+    oracle_policy_name: tyruielig_dk
+    oracle_policy_type: tax
+    output_vars: []
+    in_scope: false
+    internal_only_vars:
+      - i_tyruielig
+      - tyruielig
+    exclusion_reason: technical
+    note: Internal eligibility helper explicitly documented by the model as existing for METR calculation
+      purposes; it produces no queryable tax output.
+  - id: dk:uprate_dk
+    oracle_policy_name: uprate_dk
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    exclusion_reason: technical
+  - id: dk:xpp00_dk
+    oracle_policy_name: xpp00_dk
+    oracle_policy_type: def
+    output_vars:
+      - xpp00_s
+    in_scope: false
+    exclusion_reason: technical
+    note: DEF tax-base helper that caps the deductible private-pension contribution used by downstream
+      income-tax policies; it is not itself a distinct tax or benefit instrument.
+  - id: dk:yem_dk
+    oracle_policy_name: yem_dk
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    internal_only_vars:
+      - yem
+    exclusion_reason: technical
+  - id: dk:yemcomp_dk
+    oracle_policy_name: yemcomp_dk
+    oracle_policy_type: ben
+    output_vars: []
+    in_scope: false
+    internal_only_vars:
+      - n/a
+    exclusion_reason: oracle_models_repealed_law
+    note: COVID-19 employee compensation scheme. The model-spine probe shows it on only in DK_2020 through
+      DK_2022, then off with an n/a body in DK_2023 through DK_2025; the target system has no current
+      payable output.
+  - id: dk:ysecomp_dk
+    oracle_policy_name: ysecomp_dk
+    oracle_policy_type: ben
+    output_vars: []
+    in_scope: false
+    internal_only_vars:
+      - n/a
+    exclusion_reason: oracle_models_repealed_law
+    note: COVID-19 self-employment compensation scheme. The model-spine probe shows it on only in DK_2020
+      through DK_2022, then off with an n/a body in DK_2023 through DK_2025; the target system has no
+      current payable output.
