@@ -1637,7 +1637,7 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-30T03:43:59Z",
+    "generated_at": "2026-08-06T04:14:50Z",
     "generated_by": "scripts/run_comparison.py::us-itemized-taxable-income-deductions-grid",
     "oracle": {
       "name": "policyengine",
@@ -1648,7 +1648,7 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": "ae64af274ab9a04d6ab04b4de56082f156ce8b09"
+        "sha": "ae64af2740340a40d04ed3c652254f53e62fab61"
       }
     ],
     "run_kind": "affected-rerun",

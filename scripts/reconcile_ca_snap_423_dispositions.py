@@ -177,6 +177,7 @@ EXPECTED_RECLASSIFIED_DRIFT_IDS = frozenset(
         "ca-362-self-employment-tanf-ecps-60978-benefit",
         "ca-362-self-employment-tanf-ecps-61251-benefit",
         "ca-362-self-employment-tanf-ecps-61495-benefit",
+        "ca-362-tanf-ecps-60816-benefit",
         "ca-362-tanf-ecps-62327-benefit",
         "ca-362-period-tanf-ecps-58946-benefit",
         "ca-362-tanf-ecps-57173-benefit",

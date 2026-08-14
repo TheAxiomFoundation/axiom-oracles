@@ -11,6 +11,8 @@
 #     (+ their dashboard/public/data mirrors)      conformance_scoreboard.py
 #   conformance/history/<jur>/<YYYY-MM-DD>.json    …with --snapshot (per-day)
 #   dashboard/public/data/conformance_burndown.json  conformance_burndown.py
+#   conformance/exercise-census.json               exercise_census.py
+#   certificates/*.json                            certify.py
 #   dashboard/public/data/freshness.json             check_vacuous_gate.py
 #
 # Pushing a refreshed report without regenerating these turns main red at CI's
@@ -45,7 +47,7 @@
 #
 # Usage: scripts/commit_refreshed_report.sh <suite-name> <branch>
 # Env:   PYTHON            interpreter for the regeneration scripts (python3)
-#        MAX_ATTEMPTS      push attempts before failing loudly     (20)
+#        MAX_ATTEMPTS      push attempts before failing loudly     (60)
 #        PUSH_RETRY_DELAY  seconds between attempts (default: growing + jitter)
 
 set -euo pipefail
@@ -53,16 +55,29 @@ set -euo pipefail
 suite="${1:?usage: commit_refreshed_report.sh <suite-name> <branch>}"
 branch="${2:?usage: commit_refreshed_report.sh <suite-name> <branch>}"
 PYTHON="${PYTHON:-python3}"
-MAX_ATTEMPTS="${MAX_ATTEMPTS:-20}"
+# 60 attempts, not 20: with 40+ sibling legs each pushing within the same
+# sweep, a leg's vulnerable window (fetch → regenerate → push) is comparable
+# to the herd's inter-push gap, and legs that had completed their comparison
+# were observed losing 20 straight races (#337). The affected-rerun job
+# timeout still bounds the loop.
+MAX_ATTEMPTS="${MAX_ATTEMPTS:-60}"
 
 cd "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 # Every tree holding a report or report-derived artifact this script may
 # refresh, regenerate, and commit. The EUROMOD-BE coverage rollup lives
 # outside the two data trees, so it is listed explicitly.
+#
+# certificates/ MUST be here. It was omitted when census+certify were first
+# wired in, and the failure was silent in the worst way: certify.py wrote the
+# corrected certificate, verify_derived confirmed it in the worktree, and then
+# `git add -- "${derived_paths[@]}"` skipped it — so the bot pushed a STALE
+# certificate with every command exiting 0. set -e cannot see that class of
+# bug. Anything a regenerate_derived step writes belongs in this list.
 derived_paths=(
   dashboard/public/data/
   conformance/
+  certificates/
   axiom_oracles/data/euromod_be_coverage.json
 )
 manifest="dashboard/public/data/manifest.json"
@@ -103,20 +118,33 @@ regenerate_derived() {
   "$PYTHON" scripts/conformance_burndown.py
   # Front-page single-fetch bundle (every report minus per-case rows).
   "$PYTHON" scripts/generate_dashboard_overview.py
+  # Exercise census and program certificates. Both read report bytes and
+  # per-case chunks, so a refresh moves them; without regenerating here the
+  # bot would push a tree whose census/certificate --check gates are red on
+  # main. Census runs first — certify consumes it.
+  "$PYTHON" scripts/exercise_census.py
+  "$PYTHON" scripts/certify.py
 }
 
 verify_derived() {
-  # The four staleness gates ci.yml runs on main, verbatim; a tree that fails
-  # any of them must never be pushed. conformance_ratchet.py --check is
+  # The staleness gates ci.yml runs on main, verbatim; a tree that fails any
+  # of them must never be pushed. conformance_ratchet.py --check is
   # intentionally absent — see the header. Explicitly &&-chained: this
   # function is also called in an if-condition (the fast no-op path), where
   # errexit is suppressed and bare lines would reduce the verdict to the LAST
   # gate's status, silently ignoring an earlier stale gate.
+  #
+  # validate_bridge_manifests.py is absent deliberately: it does not derive an
+  # artifact, so it cannot go stale from a refresh. Its errors are authoring
+  # mistakes for ci.yml to catch on the PR that makes them, not a reason to
+  # drop a data refresh.
   "$PYTHON" scripts/apply_dispositions.py --check &&
     "$PYTHON" scripts/check_vacuous_gate.py --check &&
     "$PYTHON" scripts/conformance_scoreboard.py --check &&
     "$PYTHON" scripts/conformance_burndown.py --check &&
-    "$PYTHON" scripts/generate_dashboard_overview.py --check
+    "$PYTHON" scripts/generate_dashboard_overview.py --check &&
+    "$PYTHON" scripts/exercise_census.py --check &&
+    "$PYTHON" scripts/certify.py --check
 }
 
 # Collect this run's PRIVATE outputs — what run_comparison.py itself wrote
@@ -254,7 +282,9 @@ re-pinned here."
   fi
   echo "push rejected (attempt $attempt/$MAX_ATTEMPTS): a sibling job" \
     "advanced $branch; rebuilding on the new tip" >&2
-  sleep "${PUSH_RETRY_DELAY:-$((attempt * 3 + RANDOM % 10))}"
+  # Growing delay with wide jitter to decorrelate the herd — synchronized
+  # retries were losing to each other far more than a Poisson model predicts.
+  sleep "${PUSH_RETRY_DELAY:-$((attempt * 4 + RANDOM % 25))}"
 done
 
 if [ -z "$push_landed" ]; then

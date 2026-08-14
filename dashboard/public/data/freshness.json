@@ -136,7 +136,7 @@
     },
     {
       "suite": "az-snap-qc",
-      "generated_at": "2026-08-04T20:07:53Z",
+      "generated_at": "2026-08-14T07:56:52Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-us",
@@ -177,7 +177,7 @@
     },
     {
       "suite": "be-article-51-forfait",
-      "generated_at": "2026-08-04T15:04:01Z",
+      "generated_at": "2026-08-14T07:58:05Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-be"
@@ -211,7 +211,7 @@
     },
     {
       "suite": "be-capital-income-tax",
-      "generated_at": "2026-08-04T15:03:10Z",
+      "generated_at": "2026-08-14T07:56:50Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-be"
@@ -225,7 +225,7 @@
     },
     {
       "suite": "be-elderly-income-support",
-      "generated_at": "2026-08-04T20:07:54Z",
+      "generated_at": "2026-08-14T07:56:50Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-be"
@@ -329,7 +329,7 @@
     },
     {
       "suite": "be-local-municipal-pit",
-      "generated_at": "2026-08-04T20:07:52Z",
+      "generated_at": "2026-08-14T07:56:51Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-be"
@@ -343,7 +343,7 @@
     },
     {
       "suite": "be-marital-quotient",
-      "generated_at": "2026-08-04T20:07:44Z",
+      "generated_at": "2026-08-14T07:57:56Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-be"
@@ -367,7 +367,7 @@
     },
     {
       "suite": "be-pensioner-contributions",
-      "generated_at": "2026-08-04T20:07:46Z",
+      "generated_at": "2026-08-14T07:57:02Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-be"
@@ -391,7 +391,7 @@
     },
     {
       "suite": "be-regional-pit-surcharge",
-      "generated_at": "2026-08-04T20:07:45Z",
+      "generated_at": "2026-08-14T07:57:41Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-be"
@@ -435,7 +435,7 @@
     },
     {
       "suite": "be-study-allowance",
-      "generated_at": "2026-08-04T20:08:03Z",
+      "generated_at": "2026-08-14T07:57:40Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-be"
@@ -459,7 +459,7 @@
     },
     {
       "suite": "be-work-bonus-credit",
-      "generated_at": "2026-08-04T20:07:56Z",
+      "generated_at": "2026-08-14T07:56:52Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-be"
@@ -577,7 +577,7 @@
     },
     {
       "suite": "ca-snap-qc",
-      "generated_at": "2026-08-04T09:18:48Z",
+      "generated_at": "2026-08-14T07:58:12Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-us",
@@ -654,7 +654,7 @@
     },
     {
       "suite": "co-snap-qc",
-      "generated_at": "2026-08-04T15:02:56Z",
+      "generated_at": "2026-08-14T07:58:10Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-us",
@@ -831,7 +831,7 @@
     },
     {
       "suite": "dk-child-youth-benefit",
-      "generated_at": "2026-08-04T20:08:26Z",
+      "generated_at": "2026-08-14T07:57:29Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-dk"
@@ -939,7 +939,7 @@
     },
     {
       "suite": "ga-snap-qc",
-      "generated_at": "2026-08-04T20:07:50Z",
+      "generated_at": "2026-08-14T03:05:34Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-us",
@@ -1278,7 +1278,7 @@
     },
     {
       "suite": "md-snap-qc",
-      "generated_at": "2026-08-04T20:07:50Z",
+      "generated_at": "2026-08-14T07:58:18Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-us",
@@ -1659,7 +1659,7 @@
     },
     {
       "suite": "ny-snap-qc",
-      "generated_at": "2026-08-04T20:08:20Z",
+      "generated_at": "2026-08-14T07:58:16Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-us",
@@ -1965,7 +1965,7 @@
     },
     {
       "suite": "tx-snap-qc",
-      "generated_at": "2026-08-04T20:11:43Z",
+      "generated_at": "2026-08-14T07:57:22Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-us",
@@ -1990,13 +1990,13 @@
     },
     {
       "suite": "uk-attendance-allowance-pe",
-      "generated_at": "2026-08-04T15:07:39Z",
+      "generated_at": "2026-08-12T13:55:17Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-uk"
       ],
       "ran_against": {
-        "TheAxiomFoundation/rulespec-uk": "fd4028ed0f645ae4c131d04228bf434e38a4d56a"
+        "TheAxiomFoundation/rulespec-uk": "510b4372a7cfff949a55c64bc5fadb0286a67a53"
       },
       "unstamped": false,
       "reemitted": false,
@@ -2004,7 +2004,7 @@
     },
     {
       "suite": "uk-benefit-cap",
-      "generated_at": "2026-08-04T20:09:40Z",
+      "generated_at": "2026-08-14T07:56:56Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -2018,7 +2018,7 @@
     },
     {
       "suite": "uk-best-start-foods",
-      "generated_at": "2026-08-04T15:06:15Z",
+      "generated_at": "2026-08-14T07:57:19Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -2032,13 +2032,13 @@
     },
     {
       "suite": "uk-business-rates",
-      "generated_at": "2026-08-04T15:07:35Z",
+      "generated_at": "2026-08-12T13:55:27Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-uk"
       ],
       "ran_against": {
-        "TheAxiomFoundation/rulespec-uk": "fd4028ed0f645ae4c131d04228bf434e38a4d56a"
+        "TheAxiomFoundation/rulespec-uk": "510b4372a7cfff949a55c64bc5fadb0286a67a53"
       },
       "unstamped": false,
       "reemitted": false,
@@ -2046,13 +2046,13 @@
     },
     {
       "suite": "uk-capital-gains-tax",
-      "generated_at": "2026-08-04T15:07:17Z",
+      "generated_at": "2026-08-12T13:55:23Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-uk"
       ],
       "ran_against": {
-        "TheAxiomFoundation/rulespec-uk": "fd4028ed0f645ae4c131d04228bf434e38a4d56a"
+        "TheAxiomFoundation/rulespec-uk": "510b4372a7cfff949a55c64bc5fadb0286a67a53"
       },
       "unstamped": false,
       "reemitted": false,
@@ -2060,7 +2060,7 @@
     },
     {
       "suite": "uk-child-benefit",
-      "generated_at": "2026-08-04T20:09:42Z",
+      "generated_at": "2026-08-14T07:56:56Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -2074,7 +2074,7 @@
     },
     {
       "suite": "uk-child-winter-heating-payment",
-      "generated_at": "2026-08-04T20:08:30Z",
+      "generated_at": "2026-08-14T07:57:32Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -2088,7 +2088,7 @@
     },
     {
       "suite": "uk-contribution-based-jsa",
-      "generated_at": "2026-08-04T20:11:33Z",
+      "generated_at": "2026-08-14T07:58:16Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -2102,13 +2102,13 @@
     },
     {
       "suite": "uk-council-tax-reduction",
-      "generated_at": "2026-08-04T15:07:21Z",
+      "generated_at": "2026-08-12T13:55:38Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-uk"
       ],
       "ran_against": {
-        "TheAxiomFoundation/rulespec-uk": "fd4028ed0f645ae4c131d04228bf434e38a4d56a"
+        "TheAxiomFoundation/rulespec-uk": "510b4372a7cfff949a55c64bc5fadb0286a67a53"
       },
       "unstamped": false,
       "reemitted": false,
@@ -2116,7 +2116,7 @@
     },
     {
       "suite": "uk-employer-nic",
-      "generated_at": "2026-08-04T20:09:11Z",
+      "generated_at": "2026-08-14T07:56:51Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -2130,13 +2130,13 @@
     },
     {
       "suite": "uk-fuel-duty",
-      "generated_at": "2026-08-04T20:09:26Z",
+      "generated_at": "2026-08-12T13:55:28Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-uk"
       ],
       "ran_against": {
-        "TheAxiomFoundation/rulespec-uk": "fd4028ed0f645ae4c131d04228bf434e38a4d56a"
+        "TheAxiomFoundation/rulespec-uk": "510b4372a7cfff949a55c64bc5fadb0286a67a53"
       },
       "unstamped": false,
       "reemitted": false,
@@ -2144,7 +2144,7 @@
     },
     {
       "suite": "uk-healthy-start",
-      "generated_at": "2026-08-04T20:08:44Z",
+      "generated_at": "2026-08-14T07:57:00Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -2158,7 +2158,7 @@
     },
     {
       "suite": "uk-housing-benefit",
-      "generated_at": "2026-08-04T20:10:14Z",
+      "generated_at": "2026-08-14T07:56:56Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -2172,7 +2172,7 @@
     },
     {
       "suite": "uk-income-tax-dividend",
-      "generated_at": "2026-08-04T15:05:19Z",
+      "generated_at": "2026-08-14T07:58:09Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -2186,7 +2186,7 @@
     },
     {
       "suite": "uk-income-tax-mixed",
-      "generated_at": "2026-08-04T20:09:36Z",
+      "generated_at": "2026-08-14T07:56:56Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -2200,7 +2200,7 @@
     },
     {
       "suite": "uk-income-tax-savings",
-      "generated_at": "2026-08-04T15:13:59Z",
+      "generated_at": "2026-08-14T07:56:58Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -2214,7 +2214,7 @@
     },
     {
       "suite": "uk-income-tax-scottish",
-      "generated_at": "2026-08-04T20:11:10Z",
+      "generated_at": "2026-08-14T07:57:50Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -2228,13 +2228,13 @@
     },
     {
       "suite": "uk-lbtt-ltt",
-      "generated_at": "2026-08-04T20:11:04Z",
+      "generated_at": "2026-08-12T13:57:30Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-uk"
       ],
       "ran_against": {
-        "TheAxiomFoundation/rulespec-uk": "fd4028ed0f645ae4c131d04228bf434e38a4d56a"
+        "TheAxiomFoundation/rulespec-uk": "510b4372a7cfff949a55c64bc5fadb0286a67a53"
       },
       "unstamped": false,
       "reemitted": false,
@@ -2242,7 +2242,7 @@
     },
     {
       "suite": "uk-maternity-allowance",
-      "generated_at": "2026-08-04T20:09:02Z",
+      "generated_at": "2026-08-14T07:57:19Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -2256,7 +2256,7 @@
     },
     {
       "suite": "uk-pension-credit",
-      "generated_at": "2026-08-04T20:10:56Z",
+      "generated_at": "2026-08-14T07:57:32Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -2270,7 +2270,7 @@
     },
     {
       "suite": "uk-personal-allowance",
-      "generated_at": "2026-08-04T15:08:23Z",
+      "generated_at": "2026-08-14T07:57:58Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -2284,7 +2284,7 @@
     },
     {
       "suite": "uk-scottish-carer-supplement",
-      "generated_at": "2026-08-04T20:11:27Z",
+      "generated_at": "2026-08-14T07:58:07Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -2298,7 +2298,7 @@
     },
     {
       "suite": "uk-scottish-child-payment",
-      "generated_at": "2026-08-04T20:10:23Z",
+      "generated_at": "2026-08-14T07:57:19Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -2312,7 +2312,7 @@
     },
     {
       "suite": "uk-self-employed-nic",
-      "generated_at": "2026-08-04T20:11:38Z",
+      "generated_at": "2026-08-14T07:58:10Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -2326,7 +2326,7 @@
     },
     {
       "suite": "uk-statutory-maternity-pay",
-      "generated_at": "2026-08-04T20:09:23Z",
+      "generated_at": "2026-08-14T07:57:48Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -2340,7 +2340,7 @@
     },
     {
       "suite": "uk-statutory-paternity-pay",
-      "generated_at": "2026-08-04T20:08:31Z",
+      "generated_at": "2026-08-14T07:58:23Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -2354,7 +2354,7 @@
     },
     {
       "suite": "uk-sure-start-maternity-grant",
-      "generated_at": "2026-08-04T20:11:11Z",
+      "generated_at": "2026-08-14T07:57:59Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -2380,13 +2380,13 @@
     },
     {
       "suite": "uk-tax-free-childcare-pe",
-      "generated_at": "2026-08-04T20:11:09Z",
+      "generated_at": "2026-08-12T13:55:21Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-uk"
       ],
       "ran_against": {
-        "TheAxiomFoundation/rulespec-uk": "fd4028ed0f645ae4c131d04228bf434e38a4d56a"
+        "TheAxiomFoundation/rulespec-uk": "510b4372a7cfff949a55c64bc5fadb0286a67a53"
       },
       "unstamped": false,
       "reemitted": false,
@@ -2394,13 +2394,13 @@
     },
     {
       "suite": "uk-tv-licence",
-      "generated_at": "2026-08-04T15:08:43Z",
+      "generated_at": "2026-08-12T13:55:33Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-uk"
       ],
       "ran_against": {
-        "TheAxiomFoundation/rulespec-uk": "fd4028ed0f645ae4c131d04228bf434e38a4d56a"
+        "TheAxiomFoundation/rulespec-uk": "510b4372a7cfff949a55c64bc5fadb0286a67a53"
       },
       "unstamped": false,
       "reemitted": false,
@@ -2408,7 +2408,7 @@
     },
     {
       "suite": "uk-universal-credit",
-      "generated_at": "2026-08-04T20:10:53Z",
+      "generated_at": "2026-08-14T07:58:08Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -2434,13 +2434,13 @@
     },
     {
       "suite": "uk-vat",
-      "generated_at": "2026-08-04T15:10:32Z",
+      "generated_at": "2026-08-12T13:55:33Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-uk"
       ],
       "ran_against": {
-        "TheAxiomFoundation/rulespec-uk": "fd4028ed0f645ae4c131d04228bf434e38a4d56a"
+        "TheAxiomFoundation/rulespec-uk": "510b4372a7cfff949a55c64bc5fadb0286a67a53"
       },
       "unstamped": false,
       "reemitted": false,
@@ -2448,7 +2448,7 @@
     },
     {
       "suite": "uk-winter-fuel",
-      "generated_at": "2026-08-04T20:09:40Z",
+      "generated_at": "2026-08-14T07:57:24Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -2462,13 +2462,13 @@
     },
     {
       "suite": "uk-winter-fuel-payment-pe",
-      "generated_at": "2026-08-04T20:09:24Z",
+      "generated_at": "2026-08-12T13:55:30Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-uk"
       ],
       "ran_against": {
-        "TheAxiomFoundation/rulespec-uk": "fd4028ed0f645ae4c131d04228bf434e38a4d56a"
+        "TheAxiomFoundation/rulespec-uk": "510b4372a7cfff949a55c64bc5fadb0286a67a53"
       },
       "unstamped": false,
       "reemitted": false,
@@ -2476,7 +2476,7 @@
     },
     {
       "suite": "uk-worker-nic",
-      "generated_at": "2026-08-04T20:08:52Z",
+      "generated_at": "2026-08-14T07:57:07Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -2490,7 +2490,7 @@
     },
     {
       "suite": "uk-worker-pit",
-      "generated_at": "2026-08-04T15:05:23Z",
+      "generated_at": "2026-08-14T07:58:07Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -2546,13 +2546,13 @@
     },
     {
       "suite": "us-itemized-taxable-income-deductions-grid",
-      "generated_at": "2026-07-30T03:43:59Z",
+      "generated_at": "2026-08-06T04:14:50Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-us"
       ],
       "ran_against": {
-        "TheAxiomFoundation/rulespec-us": "ae64af274ab9a04d6ab04b4de56082f156ce8b09"
+        "TheAxiomFoundation/rulespec-us": "ae64af2740340a40d04ed3c652254f53e62fab61"
       },
       "unstamped": false,
       "reemitted": false,
@@ -2602,13 +2602,13 @@
     },
     {
       "suite": "us-salt-deduction-grid",
-      "generated_at": "2026-07-30T03:42:45Z",
+      "generated_at": "2026-08-06T04:14:59Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-us"
       ],
       "ran_against": {
-        "TheAxiomFoundation/rulespec-us": "ae64af274ab9a04d6ab04b4de56082f156ce8b09"
+        "TheAxiomFoundation/rulespec-us": "ae64af2740340a40d04ed3c652254f53e62fab61"
       },
       "unstamped": false,
       "reemitted": false,
@@ -2643,8 +2643,22 @@
       "reemitted_from": null
     },
     {
+      "suite": "us-snap-abawd-grid",
+      "generated_at": "2026-08-14T07:57:26Z",
+      "run_kind": "affected-rerun",
+      "affected_repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "ran_against": {
+        "TheAxiomFoundation/rulespec-us": "769eaafb89bb302ceec7f77eadb99adcaee3c7b6"
+      },
+      "unstamped": false,
+      "reemitted": false,
+      "reemitted_from": null
+    },
+    {
       "suite": "us-tariff",
-      "generated_at": "2026-08-04T20:11:21Z",
+      "generated_at": "2026-08-14T07:58:18Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-us"

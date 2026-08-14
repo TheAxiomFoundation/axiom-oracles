@@ -48,6 +48,15 @@ complete missing SHAs from the affected map plus the checkout the run actually
 resolved; skip-capable lanes (euromod/gettsim/snap-qc) are deliberately
 excluded so a re-emitted report is never stamped fresh.
 
+A suite that pins one reviewed rulespec snapshot
+(`rulespec_upstream_sha`/`rulespec_upstream_tree` in its parameters — the
+federal tax grids) is judged against the PIN instead of the repo's moving
+HEAD: the map generator copies the pin into the entry (`pinned: {repo:
+sha}`), the selector treats `recorded == pin` as fresh, and the suite goes
+stale exactly when a deliberate re-pin PR changes the pin. Judging a pinned
+suite against HEAD would re-select it every sweep forever, since its report
+can only ever stamp the pinned SHA.
+
 ## How to add a new comparison
 
 Drop a new `<name>.yaml` in this directory matching the schema below. The
@@ -119,8 +128,17 @@ Required runner keys: `axiom_encode_repo`, `axiom_rules_repo`,
 
 ### `axiom-encode-uk-efrs-compare`
 
-Invokes `axiom-encode uk-efrs-compare` via `uv run` with the pinned
-PolicyEngine UK stack. Supports either one `surface` or a `surfaces` list; the
+Invokes `axiom-encode uk-populace-compare` (renamed from `uk-efrs-compare` in
+the encoder's ECPS→Populace hard cut, axiom-encode #1108; no alias survives
+on axiom-encode main — the runner type keeps the old name so existing suite
+YAMLs stay valid) via `uv run` with the pinned PolicyEngine UK stack. The
+subcommand's implementation is this repo's own
+`axiom_oracles.bridges.efrs_uk` module, re-exported by axiom-encode; the
+runner overlays this checkout's bridge over the encoder's pinned
+axiom-oracles dependency via `PYTHONPATH` (uv rejects a second URL for a
+pinned package), so suite runs validate the current oracle code — this was
+the "pointing it at the in-repo package" follow-up. Supports either
+one `surface` or a `surfaces` list; the
 runner merges multi-surface JSON output before adapting it to the dashboard.
 When `parameters.axiom_program` is declared, the runner first composes that
 `axiom-programs` spec and passes the composed RuleSpec file as the Universal
@@ -160,6 +178,43 @@ RuleSpec checkout. Configs using development-worktree roots should also declare
 the canonical `rulespec_remote` so the affected-rerun map retains the
 `rulespec-us` dependency and CI can clone it when the development root is
 absent.
+
+When `rulespec_upstream_sha`/`rulespec_upstream_tree` pin the reviewed
+snapshot, a configured root is used only if it IS that snapshot (clean, tree
+equal to the pin); otherwise the runner materializes the pinned revision in a
+scratch clone (`git fetch` of the pinned SHA — reachable from main — then a
+detached checkout) and verifies it before running. Previously the runner
+cloned main HEAD and died on "pinned federal rulespec snapshot tree mismatch"
+on every sweep after upstream moved. The affected-rerun selector judges these
+suites against the pin, not HEAD (see above), so a green refresh settles them
+until the next deliberate re-pin.
+
+### `snap-abawd-boundary-grid`
+
+Runs the SNAP ABAWD post-P.L. 119-21 statute-boundary grid
+(`scripts/generate_snap_abawd_boundary.py`) — the behavioral companion to the
+PR #400 structural closure warning on the 2015(o)(3) / 273.24 divergence. The
+Axiom leg replays the nine July 2026 boundary cases from the rulespec-us
+`us/regulations/7-cfr/273/24.test.yaml` companion fixture (engine-verified in
+rulespec-us CI) and fails closed unless each replayed verdict equals the
+pinned legal expectation and each case still zeroes every unrelated
+exception; the PolicyEngine leg builds fresh person-level monthly simulations
+under the reviewed 2026 oracle stack and verifies the oracle's own
+exempted-age brackets flip at the 2025-07-04 effective date before trusting
+its verdicts.
+
+Unlike the federal tax grids the rulespec snapshot is deliberately unpinned:
+each run clones rulespec-us main (or reads the materialized CI checkout) and
+stamps its real HEAD into provenance, so the affected-rerun sweep re-runs the
+matrix whenever rulespec-us moves — encoding drift at the boundaries fails
+the generator loudly, and oracle drift surfaces as report mismatches gated by
+the unexplained ratchet.
+
+Required `parameters`: `rulespec_roots` (with a `rulespec_remote` fallback for
+runners where no checkout is materialized), `policyengine_version: 4.18.9`,
+`policyengine_us_version: 1.767.3`, and `policyengine_core_version: 3.30.3`.
+The runner rejects missing or different pins. Optional `parameters`: `python`
+(defaults to `3.13`).
 
 ### `snap-qc-compare`
 

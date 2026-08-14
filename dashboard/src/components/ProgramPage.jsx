@@ -7,7 +7,6 @@ import {
   formatAgreementRate,
   mismatchKindLabel,
 } from "../utils/format";
-import { rateColor } from "../utils/colors";
 import {
   US_STATE_NAMES,
   suiteMeta,
@@ -97,7 +96,7 @@ function VerdictCard({ report }) {
   return (
     <article
       className="pp-verdict-card"
-      style={{ "--verdict": rateColor(metric.rate) }}
+
     >
       <div className="pp-verdict-who">
         <span className="pp-verdict-oracle">vs {engineLabel(oracle)}</span>
@@ -110,9 +109,21 @@ function VerdictCard({ report }) {
           {meta.kind === "parameter" && " · parameter check"}
         </span>
       </div>
-      <div className="mono pp-verdict-rate">
-        {formatAgreementRate(metric.rate, metric.mismatches)}
-        <span className="pp-verdict-rate-label">agree</span>
+      <div className="pp-verdict-rates">
+        <div className="mono pp-verdict-rate">
+          {formatAgreementRate(metric.rate, metric.mismatches)}
+          <span className="pp-verdict-rate-label">agree</span>
+        </div>
+        {metric.explainedRate != null &&
+          metric.explainedRate - metric.rate >= 0.05 && (
+            <div
+              className="mono pp-verdict-rate"
+              title="Counting mismatches with schema-validated dispositions as explained"
+            >
+              {formatPct(metric.explainedRate, 1)}
+              <span className="pp-verdict-rate-label">explained</span>
+            </div>
+          )}
       </div>
       <div className="pp-verdict-subs">
         <span className="mono pp-verdict-sub">
@@ -120,15 +131,6 @@ function VerdictCard({ report }) {
             ? `${metric.mismatches.toLocaleString()} of ${metric.total.toLocaleString()} checks disagree`
             : `all ${metric.total.toLocaleString()} checks agree`}
         </span>
-        {metric.explainedRate != null &&
-          metric.explainedRate - metric.rate >= 0.05 && (
-            <span
-              className="mono pp-verdict-sub"
-              title="Counting mismatches with schema-validated dispositions as explained"
-            >
-              {formatPct(metric.explainedRate, 1)} explained
-            </span>
-          )}
         {near && near.rate - metric.rate >= 1 && (
           <span className="mono pp-verdict-sub">
             {formatPct(near.rate, 1)} within ${near.threshold}
@@ -245,7 +247,7 @@ function ConceptTable({ programReports }) {
             </span>
             <span
               className="mono pp-concept-rate"
-              style={{ color: rateColor(agg.match_rate) }}
+
             >
               {formatPct(agg.match_rate, 1)}
             </span>

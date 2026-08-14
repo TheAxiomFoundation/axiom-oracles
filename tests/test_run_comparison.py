@@ -1,5 +1,6 @@
 import importlib.util
 import json
+import os
 import subprocess
 from pathlib import Path
 from types import SimpleNamespace
@@ -534,9 +535,11 @@ def test_uk_efrs_runner_merges_universal_credit_surfaces(monkeypatch, tmp_path):
         run_comparison, "_ensure_engine_binary", lambda *_args, **_kwargs: None
     )
 
-    def fake_run(cmd, *, check, cwd=None, capture_output=None, text=None):
+    def fake_run(cmd, *, check, cwd=None, capture_output=None, text=None, env=None):
         del check, cwd, capture_output, text
         calls.append(cmd)
+        assert env is not None
+        assert str(run_comparison.REPO_ROOT) in env["PYTHONPATH"].split(os.pathsep)
         surface = cmd[cmd.index("--surface") + 1]
         payload = {
             "compared_persons": 2,
@@ -586,7 +589,7 @@ def test_uk_efrs_runner_merges_universal_credit_surfaces(monkeypatch, tmp_path):
 
     assert len(calls) == 2
     assert calls[0][:4] == ["uv", "run", "--python", "3.13"]
-    assert "uk-efrs-compare" in calls[0]
+    assert "uk-populace-compare" in calls[0]  # renamed subcommand (#1108)
     assert "policyengine[uk]==4.11.0" not in calls[0]
     assert "policyengine-uk==2.88.56" in calls[0]
     assert "--rulespec-root" in calls[0]
@@ -622,11 +625,15 @@ def test_uk_efrs_runner_composes_universal_credit_program(monkeypatch, tmp_path)
         run_comparison, "_ensure_engine_binary", lambda *_args, **_kwargs: None
     )
 
-    def fake_run(cmd, *, check, cwd=None, capture_output=None, text=None):
+    def fake_run(cmd, *, check, cwd=None, capture_output=None, text=None, env=None):
         del check, cwd, capture_output, text
         calls.append(cmd)
-        if "uk-efrs-compare" not in cmd:
+        if "uk-populace-compare" not in cmd:
             return subprocess.CompletedProcess(cmd, 0)
+        # The runner overlays this checkout's bridge over the encoder's
+        # axiom-oracles pin via PYTHONPATH.
+        assert env is not None
+        assert str(run_comparison.REPO_ROOT) in env["PYTHONPATH"].split(os.pathsep)
         payload = {
             "compared_persons": 1,
             "compared_benunits": 1,
@@ -672,7 +679,7 @@ def test_uk_efrs_runner_composes_universal_credit_program(monkeypatch, tmp_path)
         "-o",
         str(composed.resolve()),
     ]
-    assert "uk-efrs-compare" in calls[1]
+    assert "uk-populace-compare" in calls[1]  # renamed subcommand (#1108)
     assert "--universal-credit-program" in calls[1]
     assert str(composed.resolve()) in calls[1]
 
@@ -1465,7 +1472,7 @@ def test_state_income_tax_grid_generation_fails_closed(monkeypatch, tmp_path):
     monkeypatch.setattr(
         run_comparison,
         "_resolve_state_income_tax_grid_repos",
-        lambda: (rulespec, engine),
+        lambda _params=None: (rulespec, engine),
     )
 
     def unavailable(*_args, **_kwargs):
@@ -1494,7 +1501,7 @@ def test_state_income_tax_grid_exposes_actual_repos_to_provenance(
     monkeypatch.setattr(
         run_comparison,
         "_resolve_state_income_tax_grid_repos",
-        lambda: (rulespec, engine),
+        lambda _params=None: (rulespec, engine),
     )
     source = (
         tmp_path
@@ -1699,3 +1706,229 @@ def test_dashboard_still_updated_for_case_only_truncated_copy(
     assert slim["summary"]["mismatch_count"] == 1
     # published, and pointer-free — the consumer re-merges it directly
     assert "source_report" not in slim["summary"]["dispositioned"]
+
+
+# --- state grid rulespec resolution + pinned federal snapshots (#455) --------
+
+
+def _git_init_clean(path, gitignore=None):
+    path.mkdir(parents=True, exist_ok=True)
+    subprocess.run(["git", "init", "--quiet", str(path)], check=True)
+    if gitignore is not None:
+        (path / ".gitignore").write_text(gitignore)
+        git = ["git", "-C", str(path), "-c", "user.name=t", "-c", "user.email=t@t"]
+        subprocess.run([*git, "add", "-A"], check=True)
+        subprocess.run([*git, "commit", "--quiet", "-m", "init"], check=True)
+    return path
+
+
+def test_state_income_tax_grid_resolver_prefers_suite_rulespec_roots(
+    monkeypatch, tmp_path
+):
+    """CI shape: no env override and no sibling checkout — the suite YAML's
+    rulespec_roots (the path materialize_ci_workspace.py guarantees) wins."""
+    run_comparison = load_run_comparison_module()
+    monkeypatch.setattr(
+        run_comparison, "REPO_ROOT", tmp_path / "workspace" / "axiom-oracles"
+    )
+    monkeypatch.delenv("RULESPEC_US_REPO", raising=False)
+    rulespec = _git_init_clean(tmp_path / "TheAxiomFoundation" / "rulespec-us")
+    engine = _git_init_clean(tmp_path / "engine", gitignore="target/\n")
+    monkeypatch.setenv("AXIOM_RULES_REPO", str(engine))
+    built = []
+    monkeypatch.setattr(
+        run_comparison,
+        "_ensure_engine_binary",
+        lambda repo, *, kind: built.append((repo, kind)),
+    )
+    binary = engine / "target" / "release" / "axiom-rules-engine"
+    binary.parent.mkdir(parents=True)
+    binary.write_text("")
+    params = {"rulespec_roots": [str(tmp_path / "missing"), str(rulespec)]}
+
+    root, rules = run_comparison._resolve_state_income_tax_grid_repos(params)
+
+    assert root == rulespec.resolve()
+    assert rules == engine.resolve()
+    assert built == [(engine.resolve(), "release")]
+
+
+def test_state_income_tax_grid_resolver_env_overrides_suite_roots(
+    monkeypatch, tmp_path
+):
+    run_comparison = load_run_comparison_module()
+    monkeypatch.setattr(
+        run_comparison, "REPO_ROOT", tmp_path / "workspace" / "axiom-oracles"
+    )
+    env_root = _git_init_clean(tmp_path / "env-root" / "rulespec-us")
+    other = _git_init_clean(tmp_path / "TheAxiomFoundation" / "rulespec-us")
+    engine = _git_init_clean(tmp_path / "engine", gitignore="target/\n")
+    monkeypatch.setenv("RULESPEC_US_REPO", str(env_root))
+    monkeypatch.setenv("AXIOM_RULES_REPO", str(engine))
+    monkeypatch.setattr(
+        run_comparison, "_ensure_engine_binary", lambda repo, *, kind: None
+    )
+    binary = engine / "target" / "release" / "axiom-rules-engine"
+    binary.parent.mkdir(parents=True)
+    binary.write_text("")
+    params = {"rulespec_roots": [str(other)]}
+
+    root, _rules = run_comparison._resolve_state_income_tax_grid_repos(params)
+
+    assert root == env_root.resolve()
+
+
+def test_pinned_snapshot_unusable_reason(tmp_path):
+    run_comparison = load_run_comparison_module()
+    repo = tmp_path / "rulespec-us"
+    repo.mkdir()
+    assert run_comparison._pinned_snapshot_unusable_reason(repo, "0" * 40)
+    subprocess.run(["git", "init", "--quiet", str(repo)], check=True)
+    (repo / "a.txt").write_text("law\n")
+    git = ["git", "-C", str(repo), "-c", "user.name=t", "-c", "user.email=t@t"]
+    subprocess.run([*git, "add", "-A"], check=True)
+    subprocess.run([*git, "commit", "--quiet", "-m", "one"], check=True)
+    tree = subprocess.run(
+        ["git", "-C", str(repo), "rev-parse", "HEAD^{tree}"],
+        capture_output=True,
+        text=True,
+        check=True,
+    ).stdout.strip()
+
+    assert run_comparison._pinned_snapshot_unusable_reason(repo, tree) is None
+    mismatch = run_comparison._pinned_snapshot_unusable_reason(repo, "0" * 40)
+    assert "does not match" in mismatch
+    (repo / "a.txt").write_text("edited\n")
+    assert "dirty" in run_comparison._pinned_snapshot_unusable_reason(repo, tree)
+
+
+def test_ensure_rulespec_us_checkout_materializes_pinned_revision(tmp_path):
+    """The pinned SHA — no longer the remote's HEAD — is fetched and checked
+    out detached, emulating GitHub's reachable-SHA fetch on the test remote."""
+    run_comparison = load_run_comparison_module()
+    remote = tmp_path / "remote"
+    subprocess.run(["git", "init", "--quiet", str(remote)], check=True)
+    git = ["git", "-C", str(remote), "-c", "user.name=t", "-c", "user.email=t@t"]
+    (remote / "law.yaml").write_text("v1\n")
+    subprocess.run([*git, "add", "-A"], check=True)
+    subprocess.run([*git, "commit", "--quiet", "-m", "one"], check=True)
+    pinned_sha = subprocess.run(
+        ["git", "-C", str(remote), "rev-parse", "HEAD"],
+        capture_output=True,
+        text=True,
+        check=True,
+    ).stdout.strip()
+    (remote / "law.yaml").write_text("v2\n")
+    subprocess.run([*git, "add", "-A"], check=True)
+    subprocess.run([*git, "commit", "--quiet", "-m", "two"], check=True)
+    subprocess.run(
+        ["git", "-C", str(remote), "config", "uploadpack.allowAnySHA1InWant", "true"],
+        check=True,
+    )
+
+    target = run_comparison._ensure_rulespec_us_checkout(
+        remote.as_uri(), pinned_sha
+    )
+
+    head = subprocess.run(
+        ["git", "-C", str(target), "rev-parse", "HEAD"],
+        capture_output=True,
+        text=True,
+        check=True,
+    ).stdout.strip()
+    assert head == pinned_sha
+    assert (target / "law.yaml").read_text() == "v1\n"
+    assert target.name == "rulespec-us"
+
+
+def test_federal_grid_materializes_pin_when_configured_root_mismatches(
+    monkeypatch, tmp_path
+):
+    """A configured root at the wrong tree no longer kills the leg — the
+    pinned revision is materialized in a scratch clone instead."""
+    run_comparison = load_run_comparison_module()
+    stale_root = tmp_path / "rulespec-us"
+    stale_root.mkdir()
+    monkeypatch.setattr(
+        run_comparison,
+        "_pinned_snapshot_unusable_reason",
+        lambda root, tree: "tree mismatch (test)",
+    )
+    pinned_clone = tmp_path / "scratch" / "rulespec-us"
+    pinned_clone.mkdir(parents=True)
+    calls = []
+
+    def fake_checkout(remote, revision=None):
+        calls.append((remote, revision))
+        return pinned_clone
+
+    monkeypatch.setattr(
+        run_comparison, "_ensure_rulespec_us_checkout", fake_checkout
+    )
+    verified = []
+    monkeypatch.setattr(
+        run_comparison,
+        "_verify_federal_rulespec_snapshot",
+        lambda params, roots: verified.append([str(r) for r in roots]),
+    )
+    monkeypatch.setattr(
+        run_comparison.subprocess,
+        "run",
+        lambda cmd, *, check, cwd: subprocess.CompletedProcess(cmd, 0),
+    )
+    params = {
+        "policy": "qualified_business_income_deduction",
+        "policyengine_version": "4.18.9",
+        "policyengine_us_version": "1.767.3",
+        "policyengine_core_version": "3.30.3",
+        "rulespec_roots": [str(stale_root)],
+        "rulespec_remote": "https://example.test/rulespec-us.git",
+        "rulespec_upstream_sha": "a" * 40,
+        "rulespec_upstream_tree": "b" * 40,
+    }
+
+    run_comparison._run_federal_tax_liability_grid(
+        {"parameters": params}, tmp_path / "out.json"
+    )
+
+    assert calls == [("https://example.test/rulespec-us.git", "a" * 40)]
+    assert params["rulespec_roots"] == [str(pinned_clone)]
+    assert verified == [[str(pinned_clone)]]
+
+
+def test_federal_grid_accepts_configured_root_matching_pin(monkeypatch, tmp_path):
+    run_comparison = load_run_comparison_module()
+    good_root = tmp_path / "rulespec-us"
+    good_root.mkdir()
+    monkeypatch.setattr(
+        run_comparison, "_pinned_snapshot_unusable_reason", lambda root, tree: None
+    )
+    monkeypatch.setattr(
+        run_comparison,
+        "_ensure_rulespec_us_checkout",
+        lambda *_a, **_k: pytest.fail("must not clone when the root matches"),
+    )
+    monkeypatch.setattr(
+        run_comparison, "_verify_federal_rulespec_snapshot", lambda params, roots: None
+    )
+    monkeypatch.setattr(
+        run_comparison.subprocess,
+        "run",
+        lambda cmd, *, check, cwd: subprocess.CompletedProcess(cmd, 0),
+    )
+    params = {
+        "policy": "qualified_business_income_deduction",
+        "policyengine_version": "4.18.9",
+        "policyengine_us_version": "1.767.3",
+        "policyengine_core_version": "3.30.3",
+        "rulespec_roots": [str(good_root)],
+        "rulespec_remote": "https://example.test/rulespec-us.git",
+        "rulespec_upstream_sha": "a" * 40,
+        "rulespec_upstream_tree": "b" * 40,
+    }
+
+    run_comparison._run_federal_tax_liability_grid(
+        {"parameters": params}, tmp_path / "out.json"
+    )
+
+    assert params["rulespec_roots"] == [str(good_root)]

@@ -1,0 +1,67 @@
+{
+  "id": "snap-us-az-family-1",
+  "description": "Arizona SNAP canonical three-person household using package-native compiled inputs.",
+  "axiom_request": {
+    "program_id": "snap",
+    "jurisdiction": "us-az",
+    "household": {
+      "period": "2026-01",
+      "entities": {
+        "Household": {
+          "household:1": {
+            "budgetary_unit_participant_count": 3,
+            "na_budgetary_unit_is_eligible": true,
+            "na_net_income": 1442,
+            "snap_gross_monthly_earned_income": 1800,
+            "snap_total_monthly_unearned_income": 0,
+            "snap_excess_shelter_deduction_for_net_income": 0,
+            "minimum_na_allotment": 24,
+            "thrifty_food_plan_amount_for_budgetary_unit_size": 768,
+            "initial_month_proration_applies": false,
+            "prorated_initial_month_na_benefit": 0
+          }
+        }
+      }
+    },
+    "variables": [
+      "snap_benefit_amount",
+      "snap_net_income",
+      "snap_gross_monthly_income",
+      "snap_eligible",
+      "snap_excess_shelter_deduction"
+    ]
+  },
+  "expected_axiom_outputs": {
+    "snap_benefit_amount": 335.4,
+    "snap_net_income": 1442,
+    "snap_gross_monthly_income": 1800,
+    "snap_eligible": true,
+    "snap_excess_shelter_deduction": 0
+  },
+  "trace_variables": [
+    "snap_gross_monthly_income",
+    "snap_excess_shelter_deduction",
+    "snap_net_income",
+    "snap_maximum_allotment",
+    "snap_regular_month_allotment",
+    "snap_benefit_amount"
+  ],
+  "notes": [
+    "Canonical values are monthly. This Arizona SNAP case exercises the DES compiled package inputs exposed by the admitted artifact.",
+    "The Arizona package currently exposes package-native inputs rather than the broader generic SNAP household fact contract."
+  ],
+  "tolerance": {
+    "amount": 0.01
+  },
+  "known_deviation": {
+    "issue": "https://github.com/TheAxiomFoundation/axiom-api/issues/85",
+    "note": "AZ package applies the earned income deduction differently than the USDA-truth expectations: net income comes out 1231 vs 1442 and the allotment 398.70 vs 335.40. Expected values remain the legal truth; this pin records current artifact behavior so monitors alarm on change, not on the known gap.",
+    "pinned_outputs": {
+      "snap_benefit_amount": 398.7,
+      "snap_net_income": 1231,
+      "snap_gross_monthly_income": 1800,
+      "snap_eligible": true,
+      "snap_excess_shelter_deduction": 0
+    }
+  }
+}
