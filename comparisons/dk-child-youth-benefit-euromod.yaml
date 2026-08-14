@@ -10,6 +10,10 @@ description: >-
   one-child grid — four child ages (1 / 5 / 10 / 16) at a below-threshold income
   crossing the four age bands, then age 5 across an income sweep (yem
   1.000.000 / 1.300.000 / 2.000.000) that straddles and exhausts the taper.
+  Those seven cases retain raw parity. An eighth case at yem 1.300.000 records
+  60.000 kr. of qualifying pension contributions and activates ec-jrc #20:
+  Axiom applies the § 1 a, stk. 4-5 capped contribution gross-up while EUROMOD's
+  bfachnm_dk taper has no input for it.
   The Axiom taper runs on EUROMOD's own § 7-basis income tintbto_s (0.92 x yem)
   bridged into the composed module's personskatteloven_section_7_income_basis
   inputs, with the same

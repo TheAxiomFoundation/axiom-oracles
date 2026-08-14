@@ -1207,7 +1207,7 @@
       "status": "upstream_filed",
       "classification": "euromod_model_schedule_issue",
       "upstream_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/20",
-      "summary": "The boerne- og ungeydelsesloven § 1 a, stk. 4-5 reduces the taper income basis by the recipient's qualifying retirement contributions (aldersforsikring, aldersopsparing and supplerende engangssum per pensionsbeskatningslovens §§ 10 A, 12 A and 29 A), capped at the § 16, stk. 1 grundbeloeb and grossed up by dividing by 0,6. EUROMOD's bfachnm_dk taper does not apply this pension deduction/gross-up, so it tapers on the un-reduced mellemskat basis. The divergence appears only when a recipient has qualifying age-savings contributions; this suite sets those contributions to 0, so the income basis equals the mellemskat basis on both sides and the DK_2025 grid is unaffected.",
+      "summary": "The boerne- og ungeydelsesloven § 1 a, stk. 4-5 reduces the taper income basis by the recipient's qualifying retirement contributions (aldersforsikring, aldersopsparing and supplerende engangssum per pensionsbeskatningslovens §§ 10 A, 12 A and 29 A), capped at the § 16, stk. 1 grundbeloeb and grossed up by dividing by 0,6. EUROMOD's bfachnm_dk taper does not apply this pension deduction/gross-up, so it tapers on the un-reduced mellemskat basis. The dk-child-youth-benefit suite now activates the divergence with a 60000 kr. contribution witness: at tintbto 1196000 and the 917000 threshold, Axiom subtracts the 100000 gross-up and pays 13184 while EUROMOD pays 11184.",
       "observed_with": {
         "model_root": "EUROMOD_RELEASES_J2.0+",
         "country": "DK",
@@ -1222,7 +1222,7 @@
         "DK_2025"
       ],
       "workaround": {
-        "description": "Set qualifying retirement contributions to 0 in the dk-child-youth-benefit grid so the § 1 a, stk. 4-5 gross-up cap never binds and the income basis equals the mellemskat basis on both engines. The Axiom side keeps the § 1 a, stk. 4-5 deduction (rulespec-dk boerne-og-ungeydelse-indkomstaftrapning grossed_up_qualifying_retirement_contributions) so a future contributions-bearing case would expose the EUROMOD gap."
+        "description": "Keep the original seven dk-child-youth-benefit cases at zero qualifying retirement contributions so they retain raw parity, and disposition the explicit 60000 kr. contribution witness as an upstream_engine_gap linked to ec-jrc issue #20. The Axiom side applies the § 1 a, stk. 4-5 cap and gross-up; EUROMOD has no bfachnm_dk taper input for it."
       },
       "oracle_scope": "household_level",
       "counts_as_axiom_gap": false

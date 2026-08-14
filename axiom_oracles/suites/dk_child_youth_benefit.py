@@ -6,6 +6,9 @@ is reduced by a § 1 a income taper. This suite runs a single-parent, one-child
 grid against the JRC EUROMOD release's Danish system (EUROMOD_RELEASES_J2.0+,
 system DK_2025, dataset DK_training_data) and grades the composed Axiom pipeline
 ``single_recipient_annual_child_youth_benefit`` against EUROMOD's ``bfachnm_s``.
+Seven cases keep the known EUROMOD gaps inert and match raw; an eighth witness
+activates the missing § 1 a, stk. 4-5 pension-contribution gross-up and is
+classified as an upstream engine gap (ec-jrc #20).
 
 Household composition is expressed as explicit EUROMOD input rows so the
 dependent-child linkage the allocation depends on is exact: EUROMOD allocates
@@ -46,11 +49,15 @@ Verified EUROMOD conventions (executed against EUROMOD_RELEASES_J2.0+, DK_2025):
 - The EUROMOD input rows pin every income/benefit/expense column to 0 and set the
   demographics explicitly (the adapter's worker zero-fills the full DK schema and
   overlays these rows), so the head's ``tintbto_s`` is exactly 0.92 x yem and
-  ``bfachnm_s`` is exactly the statutory entitlement (verified per case in the
+  ``bfachnm_s`` is exactly the model entitlement (verified per inert case in the
   regenerate run: 21168 / 16764 / 13188 / 13188 at yem 300000 for ages
   1 / 5 / 10 / 16, then 16704 / 11184 / 0 for age 5 at yem 1000000 / 1300000 /
-  2000000). Expected outputs are only ever the executed values from the
-  regenerate run.
+  2000000). The pension witness records 60000 kr. of true qualifying
+  contributions in case metadata and supplies them only to Axiom because the
+  EUROMOD DK input schema exposes no value that ``bfachnm_dk`` reads for the
+  statutory deduction. EUROMOD therefore remains at 11184 while Axiom pays
+  13184. Expected outputs are only ever the executed values from the regenerate
+  run.
 """
 
 from __future__ import annotations
@@ -112,22 +119,50 @@ _GRID: tuple[tuple[int, float], ...] = (
 def dk_child_youth_benefit_cases() -> list[Case]:
     """Single-parent child/youth benefit cases for the EUROMOD DK_2025 oracle."""
 
-    return [
+    inert_cases = [
         _child_youth_benefit_case(child_age=age, head_annual_income=income)
         for age, income in _GRID
     ]
+    pension_witness = _child_youth_benefit_case(
+        child_age=5,
+        head_annual_income=1_300_000.0,
+        qualifying_pension_contributions=60_000.0,
+    )
+    return [*inert_cases, pension_witness]
 
 
-def _child_youth_benefit_case(*, child_age: int, head_annual_income: float) -> Case:
+def _child_youth_benefit_case(
+    *,
+    child_age: int,
+    head_annual_income: float,
+    qualifying_pension_contributions: float = 0.0,
+) -> Case:
+    contribution_suffix = (
+        f"-pension{int(qualifying_pension_contributions)}"
+        if qualifying_pension_contributions
+        else ""
+    )
+    contribution_metadata = (
+        {"qualifying_pension_contributions": (qualifying_pension_contributions)}
+        if qualifying_pension_contributions
+        else {}
+    )
     return Case(
-        case_id=f"dk-child-youth-benefit-age{child_age}-yem{int(head_annual_income)}",
+        case_id=(
+            f"dk-child-youth-benefit-age{child_age}"
+            f"-yem{int(head_annual_income)}{contribution_suffix}"
+        ),
         period="2025",
         metadata={
             **DK_METADATA,
             "scenario": "single-parent-child-youth-benefit",
             "child_age": child_age,
             "head_annual_earnings": head_annual_income,
-            "axiom_inputs": _axiom_inputs(child_age),
+            **contribution_metadata,
+            "axiom_inputs": _axiom_inputs(
+                child_age,
+                qualifying_pension_contributions=(qualifying_pension_contributions),
+            ),
             "euromod_inputs": [
                 _adult_row(idperson=101, annual_income=head_annual_income),
                 _child_row(idperson=102, age=child_age, mother_id=101),
@@ -154,14 +189,18 @@ def _child_youth_benefit_case(*, child_age: int, head_annual_income: float) -> C
     )
 
 
-def _axiom_inputs(child_age: int) -> dict[str, float | bool | int]:
+def _axiom_inputs(
+    child_age: int,
+    *,
+    qualifying_pension_contributions: float = 0.0,
+) -> dict[str, float | bool | int]:
     return {
         _p1_input("child_age_years"): child_age,
         _p1_input("percentage_change_rounded_to_one_decimal_place"): _DK_CPI_2025,
         _p1_input("payment_year_has_additional_statutory_increase"): False,
         _p1a_input(
             "total_contributions_to_qualifying_pension_accounts"
-        ): 0,
+        ): qualifying_pension_contributions,
         _p1a_input(
             "pension_contribution_limit_under_pensionsbeskatningsloven_section_16"
         ): _DK_PENSION_CONTRIBUTION_CAP,

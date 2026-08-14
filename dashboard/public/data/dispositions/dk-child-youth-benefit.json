@@ -1,0 +1,35 @@
+{
+ "suite": "dk-child-youth-benefit",
+ "updated": "2026-08-13",
+ "entries": [
+  {
+   "id": "euromod-dk-bfachnm-taper-pension-grossup-absent",
+   "concept": "dk:statutes/composed/boerne-og-ungeydelse-pipeline#single_recipient_annual_child_youth_benefit",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "B\u00f8rne- og ungeydelsesloven \u00a7 1 a, stk. 4-5 caps the recipient's qualifying pension contributions and converts them to a gross amount by dividing by 0.6 before subtracting them from the taper basis. The 60000 kr. contribution is below the 61200 kr. cap, so Axiom subtracts a 100000 kr. gross amount from tintbto 1196000: its basis is 1096000, its excess over 917000 is 179000, and its 2 pct. reduction is 3580. EUROMOD bfachnm_dk has no taper input for this contribution, so its excess remains 279000 and its reduction is 5580. The missing gross-up therefore lowers EUROMOD's benefit by exactly 2 pct. of 100000, or 2000 kr.",
+   "cases": [
+    "dk-child-youth-benefit-age5-yem1300000-pension60000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "60000 / 0.6",
+     "equals": 100000
+    },
+    {
+     "expression": "(1196000 - 100000 - 917000) * 0.02",
+     "equals": 3580
+    },
+    {
+     "expression": "(1196000 - 917000) * 0.02",
+     "equals": 5580
+    },
+    {
+     "expression": "11184 - 13184",
+     "equals": -2000
+    }
+   ],
+   "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/20"
+  }
+ ]
+}

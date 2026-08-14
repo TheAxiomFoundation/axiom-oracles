@@ -128,3 +128,20 @@ case_sets:
         kind: person
         age: 5
         relation: Child
+    - id: dk-child-youth-benefit-age5-yem1300000-pension60000
+      period: '2025'
+      scenario: single-parent-child-youth-benefit
+      parameters:
+        child_age: 5
+        head_annual_earnings: 1300000.0
+        qualifying_pension_contributions: 60000.0
+      entities:
+      - id: recipient
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 1300000.0
+      - id: child
+        kind: person
+        age: 5
+        relation: Child
