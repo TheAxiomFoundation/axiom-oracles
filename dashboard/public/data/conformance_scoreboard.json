@@ -27,6 +27,55 @@
       "invalid_exclusions": []
     },
     {
+      "jurisdiction": "dk",
+      "oracle": "EUROMOD_J2.0/DK_2025",
+      "policies_in_scope": 22,
+      "covered": 1,
+      "covered_pct": 4.5455,
+      "excluded": 22,
+      "excluded_by_reason": {
+        "extension_not_available": 1,
+        "input_carrying": 1,
+        "not_a_policy": 2,
+        "oracle_models_repealed_law": 3,
+        "technical": 15
+      },
+      "unexplained_total": 0,
+      "axiom_attributed_open": 0,
+      "oracle_attributed": 0,
+      "bridge_artifacts": 0,
+      "conformant": false,
+      "uncovered_policies": [
+        "bfach00_dk",
+        "bfached_dk",
+        "bho01_dk",
+        "bho02_dk",
+        "bhtuc_dk",
+        "bma_dk",
+        "bpa_dk",
+        "bsa_dk",
+        "bsard_dk",
+        "bunct_dk",
+        "poa_dk",
+        "tcr_dk",
+        "tinbt_dk",
+        "tintaox_dk",
+        "tintc_dk",
+        "tinto_dk",
+        "tmu_dk",
+        "tpr_dk",
+        "tscpi_dk",
+        "txc_dk",
+        "tyrui_dk"
+      ],
+      "unwitnessed_policies": [],
+      "temporal_debt": null,
+      "blocking_reasons": [
+        "21 of 22 in-scope policies are not covered by a live suite: bfach00_dk, bfached_dk, bho01_dk, bho02_dk, bhtuc_dk, bma_dk, bpa_dk, bsa_dk, bsard_dk, bunct_dk, poa_dk, tcr_dk, tinbt_dk, tintaox_dk, tintc_dk, tinto_dk, tmu_dk, tpr_dk, tscpi_dk, txc_dk, tyrui_dk"
+      ],
+      "invalid_exclusions": []
+    },
+    {
       "jurisdiction": "uk",
       "oracle": "UKMOD_PUBLIC_B2026.03/UK_2026",
       "policies_in_scope": 21,

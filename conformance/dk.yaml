@@ -141,7 +141,7 @@ policies:
     oracle_policy_type: ben
     output_vars:
       - bma_s
-    in_scope: false
+    in_scope: true
     internal_only_vars:
       - i_elparent_bma
       - i_elchild_bma
@@ -152,27 +152,28 @@ policies:
       - yem
       - bhl
       - bcbplcs
-    exclusion_reason: input_carrying
-    note: Optional maternity-leave reclassification body, switched off in every DK_2007 through DK_2025
-      system. Its functions subtract any computed amount from observed yem/bhl and reset bcbplcs; the
-      baseline model carries these leave payments in observed inputs instead of simulating a distinct
-      bma_s award.
+    suite: null
+    note: Statutory maternity-leave calculation with an observable bma_s output. Although switched off
+      in every DK_2007 through DK_2025 system, its body computes eligibility, duration, and a capped award;
+      the later yem/bhl adjustments are reclassification bookkeeping. Switch state is not a schema exclusion,
+      so this remains honestly uncovered.
   - id: dk:bpa_dk
     oracle_policy_name: bpa_dk
     oracle_policy_type: ben
     output_vars:
       - bpa_s
-    in_scope: false
+    in_scope: true
     internal_only_vars:
       - i_yempv_bpa
       - i_amount_bpa
       - i_elparent_bpa
       - bhl
       - yem
-    exclusion_reason: input_carrying
-    note: Optional paternity/parental-leave reclassification body, switched off in every DK_2007 through
-      DK_2025 system. Its functions subtract any computed amount from observed yem/bhl; the baseline model
-      carries these leave payments in observed inputs instead of simulating a distinct bpa_s award.
+    suite: null
+    note: Statutory paternity/parental-leave calculation with an observable bpa_s output. Although switched
+      off in every DK_2007 through DK_2025 system, its body computes eligibility and a capped award; the
+      later yem/bhl adjustments are reclassification bookkeeping. Switch state is not a schema exclusion,
+      so this remains honestly uncovered.
   - id: dk:bsa_dk
     oracle_policy_name: bsa_dk
     oracle_policy_type: ben
