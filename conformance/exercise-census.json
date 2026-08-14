@@ -2859,10 +2859,14 @@
       "bridge_audited": false,
       "bridge_declared": false,
       "bridged_through": {},
-      "cases_scanned": 7,
+      "cases_scanned": 8,
       "chunk_manifest": [],
-      "constant_fields": 4,
+      "constant_fields": 6,
       "evidence_fields": {
+        "axiom_all_outputs_count": {
+          "distinct": 1,
+          "state": "constant"
+        },
         "axiom_entity": {
           "distinct": 1,
           "state": "constant"
@@ -2883,6 +2887,10 @@
           "distinct": 1,
           "state": "constant"
         },
+        "qualifying_pension_contributions": {
+          "distinct": 1,
+          "state": "constant"
+        },
         "scenario": {
           "distinct": 1,
           "state": "constant"
@@ -2891,8 +2899,52 @@
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
       "report": "dashboard/public/data/axiom-euromod-dk-child-youth-benefit.json",
-      "report_sha256": "0b0cb4e9afb97bcec3fa1b4aa041e88ba22051d1df4088f74c724dd93a5c5a39",
+      "report_sha256": "9ce0214817925752a0265625487c69e7fdc98223b9f7fffa46af80d68607b110",
       "varied_fields": 2,
+      "verdict_concepts": {}
+    },
+    "dk-child-youth-benefit-2023": {
+      "bridge_audited": false,
+      "bridge_declared": false,
+      "bridged_through": {},
+      "cases_scanned": 1,
+      "chunk_manifest": [],
+      "constant_fields": 7,
+      "evidence_fields": {
+        "axiom_all_outputs_count": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity_id": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "child_age": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "head_annual_earnings": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "locale": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "scenario": {
+          "distinct": 1,
+          "state": "constant"
+        }
+      },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
+      "report": "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-2023.json",
+      "report_sha256": "90bfbd79c0eac398d884f2f27369a124a867feb2531cbd64c772451205b478d0",
+      "varied_fields": 0,
       "verdict_concepts": {}
     },
     "fiit-ecps": {
