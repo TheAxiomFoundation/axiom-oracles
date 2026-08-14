@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+from collections import Counter
 from dataclasses import replace
 from pathlib import Path
 
@@ -18,6 +19,7 @@ import pytest
 REPO_ROOT = Path(__file__).parents[1]
 SCRIPTS = REPO_ROOT / "scripts"
 CONFORMANCE_DIR = REPO_ROOT / "conformance"
+DK_SPINE_PATH = CONFORMANCE_DIR / "spines" / "dk-DK_2025.json"
 
 from axiom_oracles.conformance.loader import (  # noqa: E402
     OracleIdentity,
@@ -35,6 +37,7 @@ from axiom_oracles.conformance.schema import (  # noqa: E402
     UniversePolicy,
 )
 from axiom_oracles.conformance.universe import (  # noqa: E402
+    EUROMOD_SPINE_ARTIFACT_SCHEMA,
     EuromodUniverseBackend,
     PE_UK_PROGRAM_SPINE,
     PE_US_PROGRAM_SPINE,
@@ -298,8 +301,8 @@ def test_queryable_output_shape():
 
 
 def test_propose_scope_defaults_are_conservative():
-    # A policy with a queryable output is proposed in-scope (suite unset →
-    # invalid until a reviewer names it, so it can't pass vacuously).
+    # A policy with a queryable output is proposed in-scope and uncovered until
+    # a reviewer assigns a suite with live evidence.
     in_scope, reason = propose_scope(
         RawPolicy("bx_uk", "ben", "on", ("bx_s",), ("bx_s",), ())
     )
@@ -318,12 +321,12 @@ def test_propose_scope_defaults_are_conservative():
 
 
 # ---------------------------------------------------------------------------
-# Committed universe integrity (UK + BE)
+# Committed universe integrity
 # ---------------------------------------------------------------------------
 
 
 @pytest.mark.parametrize(
-    "jurisdiction", ["uk", "be", "uk-pe", "us-pe", "us-tariff-yale"]
+    "jurisdiction", ["uk", "be", "dk", "uk-pe", "us-pe", "us-tariff-yale"]
 )
 def test_committed_universe_parses_and_validates(jurisdiction):
     path = CONFORMANCE_DIR / f"{jurisdiction}.yaml"
@@ -332,6 +335,99 @@ def test_committed_universe_parses_and_validates(jurisdiction):
     # Every out-of-scope row carries a known reason.
     for policy in universe.excluded():
         assert policy.exclusion_reason in EXCLUSION_REASONS
+
+
+_DK_UNCOVERED = {
+    "txc_dk",
+    "tscpi_dk",
+    "tyrui_dk",
+    "bunct_dk",
+    "tintc_dk",
+    "poa_dk",
+    "tmu_dk",
+    "tcr_dk",
+    "tinbt_dk",
+    "tinto_dk",
+    "tpr_dk",
+    "bfach00_dk",
+    "bfached_dk",
+    "bho01_dk",
+    "bho02_dk",
+    "bhtuc_dk",
+    "bma_dk",
+    "bpa_dk",
+    "bsa_dk",
+    "bsard_dk",
+    "tintaox_dk",
+}
+
+
+def test_dk_spine_pins_system_release_and_switch_facts():
+    """A DK refresh cannot silently advance the system or lose model facts."""
+    spine = json.loads(DK_SPINE_PATH.read_text())
+    assert spine["schema"] == EUROMOD_SPINE_ARTIFACT_SCHEMA
+    assert {system["name"] for system in spine["systems"]} == {"DK_2025"}
+    assert spine["provenance"]["model_release"] == "EUROMOD_RELEASES_J2.0+"
+    for key in ("model_root", "extraction_command", "extracted_at", "sources"):
+        assert spine["provenance"][key], key
+
+    policies = spine["policies"]
+    assert len(policies) == 44
+    assert len({policy["name"] for policy in policies}) == 44
+    assert dict(Counter(policy["switch"] for policy in policies)) == {
+        "on": 33,
+        "off": 8,
+        "n/a": 2,
+        "switch": 1,
+    }
+
+
+def test_dk_universe_and_committed_spine_are_bijective():
+    """Every DK spine policy has one universe row and no row is invented."""
+    spine = json.loads(DK_SPINE_PATH.read_text())
+    universe = parse_universe(CONFORMANCE_DIR / "dk.yaml")
+    spine_names = Counter(policy["name"] for policy in spine["policies"])
+    universe_names = Counter(
+        policy.oracle_policy_name for policy in universe.policies
+    )
+    assert universe_names == spine_names
+    assert sum(universe_names.values()) == 44
+
+
+def test_dk_scope_decisions_preserve_the_honest_uncovered_set():
+    universe = parse_universe(CONFORMANCE_DIR / "dk.yaml")
+    uncovered = {
+        policy.oracle_policy_name
+        for policy in universe.in_scope()
+        if policy.suite is None
+    }
+    assert uncovered == _DK_UNCOVERED
+    assert len(universe.in_scope()) == 22
+    assert len(universe.excluded()) == 22
+    assert dict(
+        Counter(policy.exclusion_reason for policy in universe.excluded())
+    ) == {
+        "technical": 15,
+        "input_carrying": 1,
+        # bfachxp keeps the repealed-law reason WITH its instrument citations
+        # (LOV nr 1550 af 27/12/2019 + the two Forlængelse acts); the two
+        # COVID compensation rows have NO queryable outputs, so they are
+        # unobservable_boundary — an exclusion the probe alone proves,
+        # with no legal claim required (audit finding).
+        "oracle_models_repealed_law": 1,
+        "unobservable_boundary": 2,
+        "not_a_policy": 2,
+        "extension_not_available": 1,
+    }
+
+
+def test_dk_bfachnm_spousal_carveout_stays_documented():
+    bfachnm = parse_universe(CONFORMANCE_DIR / "dk.yaml").by_name()["bfachnm_dk"]
+    assert bfachnm.in_scope is True
+    assert bfachnm.suite == "dk-child-youth-benefit"
+    assert bfachnm.note is not None
+    assert "couple/spousal" in bfachnm.note.lower()
+    assert "euromod-dk-2025-bfachnm-pre2022-spousal-taper" in bfachnm.note
 
 
 def test_uk_universe_flags_bmu_unobservable_with_citation():
@@ -1240,6 +1336,29 @@ def test_scoreboard_not_conformant_when_a_policy_is_uncovered():
     assert any("not covered" in r for r in board.blocking_reasons)
 
 
+def test_committed_dk_scoreboard_exposes_all_21_uncovered_policies():
+    scoreboard = json.loads((CONFORMANCE_DIR / "scoreboard.json").read_text())
+    dk = next(
+        row
+        for row in scoreboard["jurisdictions"]
+        if row["jurisdiction"] == "dk"
+    )
+    assert dk["policies_in_scope"] == 22
+    assert dk["covered"] == 1
+    assert dk["covered_pct"] == 4.5455
+    assert dk["excluded"] == 22
+    assert set(dk["uncovered_policies"]) == _DK_UNCOVERED
+    assert dk["invalid_exclusions"] == []
+    assert dk["conformant"] is False
+
+    detail = json.loads((CONFORMANCE_DIR / "detail" / "dk.json").read_text())
+    by_name = {row["oracle_policy_name"]: row for row in detail["policies"]}
+    assert by_name["bfachnm_dk"]["status"] == "conformant"
+    assert {
+        name for name, row in by_name.items() if row["status"] == "uncovered"
+    } == _DK_UNCOVERED
+
+
 def test_scoreboard_covered_requires_a_live_report_not_just_a_named_suite():
     """A suite named in the universe with NO committed report is uncovered."""
     universe = _universe([
@@ -1722,6 +1841,70 @@ def test_universe_drift_check_fails_when_committed_is_edited(tmp_path):
     finally:
         path.write_text(original)
     assert rc == 1
+
+
+@pytest.mark.parametrize("mutation", ["drop_policy", "add_policy"])
+def test_dk_spine_mutant_cannot_silently_drop_or_add_policy(
+    tmp_path, monkeypatch, mutation
+):
+    """NEGATIVE: the DK artifact remains a real gate without a model checkout."""
+    gen = _load_script("generate_conformance_universe.py")
+    mutant = json.loads(DK_SPINE_PATH.read_text())
+    if mutation == "drop_policy":
+        mutant["policies"] = mutant["policies"][1:]
+    else:
+        source = next(
+            policy for policy in mutant["policies"] if policy["name"] == "txc_dk"
+        )
+        mutant["policies"].append(
+            {**source, "name": "mutant_silent_policy_dk"}
+        )
+
+    mutant_path = tmp_path / "dk-DK_2025-mutant.json"
+    mutant_path.write_text(json.dumps(mutant, indent=2) + "\n")
+    monkeypatch.setitem(
+        gen.JURISDICTIONS,
+        "dk",
+        {
+            **gen.JURISDICTIONS["dk"],
+            "spine_artifact": str(mutant_path),
+            "default_root": str(tmp_path / "model-does-not-exist"),
+            "env_roots": (),
+        },
+    )
+
+    assert gen._process("dk", check=True, model_root=None) == 1
+
+
+def test_dk_spine_mutant_switch_swap_trips_check(tmp_path, monkeypatch):
+    """NEGATIVE: a covered policy deactivating while an uncovered one
+    activates must trip --check even though the aggregate switch histogram
+    is preserved (audit finding: per-policy switches are facts, not a
+    histogram)."""
+    gen = _load_script("generate_conformance_universe.py")
+    mutant = json.loads(DK_SPINE_PATH.read_text())
+    by_name = {policy["name"]: policy for policy in mutant["policies"]}
+    covered = by_name["bfachnm_dk"]
+    uncovered = by_name["bma_dk"]
+    covered["switch"], uncovered["switch"] = (
+        uncovered["switch"],
+        covered["switch"],
+    )
+
+    mutant_path = tmp_path / "dk-DK_2025-switch-swap.json"
+    mutant_path.write_text(json.dumps(mutant, indent=2) + "\n")
+    monkeypatch.setitem(
+        gen.JURISDICTIONS,
+        "dk",
+        {
+            **gen.JURISDICTIONS["dk"],
+            "spine_artifact": str(mutant_path),
+            "default_root": str(tmp_path / "model-does-not-exist"),
+            "env_roots": (),
+        },
+    )
+
+    assert gen._process("dk", check=True, model_root=None) == 1
 
 
 def test_burndown_check_fails_on_mutated_commit():

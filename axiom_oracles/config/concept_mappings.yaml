@@ -407,6 +407,29 @@ concepts:
           type: country
           geoid: DK
 
+  dk:statutes/composed/boerne-og-ungeydelse-couple-pipeline#couple_recipient_annual_child_youth_benefit:
+    description: Denmark child and youth benefit (couple recipients, household sum)
+    category: benefits
+    comparison: amount
+    tolerance: 1
+    relative_tolerance: 0.001
+    priority: high
+    locales: [DK]
+    scope:
+      type: country
+      geoid: DK
+    targets:
+      axiom:
+        name: couple_recipient_annual_child_youth_benefit
+        scope:
+          type: country
+          geoid: DK
+      euromod:
+        name: bfachnm_s
+        scope:
+          type: country
+          geoid: DK
+
   be:statutes/property_tax/gross_withholding_and_supplied_centimes#belgium_immovable_withholding_gross_tax_after_supplied_local_centimes:
     description: Belgium immovable withholding gross tax with supplied local centimes
     category: tax

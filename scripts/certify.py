@@ -112,6 +112,42 @@ PROGRAMS: dict[str, dict] = {
             },
         },
     },
+    "dk/boerne-og-ungeydelse": {
+        "period": "2025",
+        "suites": [
+            {
+                "suite": "dk-child-youth-benefit",
+                "oracle_type": "reference",
+                "oracle": "EUROMOD J2.0+ DK_2025 (public JRC release, "
+                "DK_training_data synthetic rows; pinned engine 05eac9d2)",
+                "report": "dashboard/public/data/"
+                "axiom-euromod-dk-child-youth-benefit.json",
+            },
+            {
+                "suite": "dk-child-youth-benefit-2023",
+                "oracle_type": "reference",
+                "oracle": "EUROMOD J2.0+ DK_2023 (the ec-jrc#19 supplement "
+                "witness year)",
+                "report": "dashboard/public/data/"
+                "axiom-euromod-dk-child-youth-benefit-2023.json",
+            },
+            {
+                "suite": "dk-child-youth-benefit-couple",
+                "oracle_type": "reference",
+                "oracle": "EUROMOD J2.0+ DK_2025 couple household (the "
+                "ec-jrc#18 spousal-taper witness)",
+                "report": "dashboard/public/data/"
+                "axiom-euromod-dk-child-youth-benefit-couple.json",
+            },
+        ],
+        # No attested closed/executable claims yet: the closure and
+        # executable producers do not exist for dk (as for every program),
+        # so certified is UNAVAILABLE by construction. The jurisdiction
+        # scoreboard (conformance/dk.yaml) separately records the honest
+        # full-parity burndown: 22 substantive DK_2025 policies in scope,
+        # 1 covered by this program's suites, 21 uncovered.
+        "attested": {},
+    },
 }
 
 

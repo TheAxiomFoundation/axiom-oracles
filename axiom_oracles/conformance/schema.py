@@ -189,6 +189,11 @@ class UniversePolicy:
     #: Non-scored provenance carried for review: the policy's model ``type``
     #: (ben/tax/sic/inc/def) and switch state. Facts, regenerated from the model.
     oracle_policy_type: str | None = None
+    #: The policy's model switch state (``on``/``off``/policy-switch name),
+    #: serialized per row so a switch flip is a FACT drift the ``--check``
+    #: gate catches. A histogram alone lets a covered policy deactivate while
+    #: an uncovered one activates without tripping CI (audit finding).
+    oracle_switch: str | None = None
     #: Output variables the policy writes that are NOT in the model's variable
     #: registry (queryable set) — the evidence behind an ``unobservable_boundary``
     #: or ``technical`` classification. A fact, regenerated from the model.
@@ -285,6 +290,10 @@ class UniversePolicy:
             "output_vars": list(self.output_vars),
             "in_scope": self.in_scope,
         }
+        # Emitted only when the backend supplies it, so jurisdictions whose
+        # committed universes predate the field round-trip byte-identically.
+        if self.oracle_switch is not None:
+            row["oracle_switch"] = self.oracle_switch
         if self.internal_only_vars:
             row["internal_only_vars"] = list(self.internal_only_vars)
         if self.in_scope:

@@ -193,10 +193,11 @@ passthroughs are excluded `input_carrying` rather than carried as in-scope
    ```bash
    uv run scripts/generate_conformance_universe.py <jur>
    ```
-   Every policy appears with a *proposed* default scope that is intentionally
-   invalid until you decide it (an in-scope row with no `output_var`, or a
-   proposed `unobservable_boundary`, surfaces loudly rather than passing
-   vacuously).
+   Every policy appears with a proposed default scope. A queryable policy starts
+   as the honest `in_scope: true, suite: null` uncovered state, while an
+   unqueryable non-definition starts as `unobservable_boundary` and requires a
+   reviewed note. Either way, the new row remains visible rather than passing
+   as covered.
 3. **Author the scope decisions.** For each row set `in_scope` and either the
    covering `suite` (for a policy an Axiom suite compares) or an
    `exclusion_reason` (+ the reason-specific `note` required above). Ground each

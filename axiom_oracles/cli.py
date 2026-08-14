@@ -157,7 +157,6 @@ def cli() -> None:
     """Axiom program validation and oracle-comparison tools."""
 
 
-
 def _attach_axiom_outputs(
     cases: list[Case],
     axiom_results: list,
@@ -167,10 +166,10 @@ def _attach_axiom_outputs(
 
     In full-evidence mode the runner queries every derived rule; the values
     beyond the compared concepts' targets are the household's complete
-    computed surface (intermediates included). They land under
-    ``axiom_all_outputs`` — kept in the reports/ artifact, summarized to a
-    count in committed dashboard copies, and surfaced by the case
-    explorer's outputs panel.
+    computed surface (intermediates included). Ordinary results land under
+    ``axiom_all_outputs``. For cross-entity aggregation, intermediate values
+    are not meaningful household sums, so they remain attached to their
+    executed entity under ``axiom_result_aggregation_applied.components``.
     """
 
     compared = set(engine_targets_for_concepts(list(concept_ids), "axiom"))
@@ -180,18 +179,46 @@ def _attach_axiom_outputs(
     for case in cases:
         result = by_id.get(case.case_id)
         extras = {}
+        aggregation_applied = None
         if result is not None:
             for name, value in (result.values or {}).items():
                 if name in compared:
                     continue
                 if isinstance(value, (int, float, bool)):
                     extras[name] = value
-        if extras:
+            raw_aggregation = (
+                result.raw.get("aggregation") if isinstance(result.raw, dict) else None
+            )
+            if isinstance(raw_aggregation, dict):
+                components = []
+                for component in raw_aggregation.get("components") or []:
+                    if not isinstance(component, dict):
+                        continue
+                    component_values = component.get("values") or {}
+                    components.append(
+                        {
+                            "entity_id": component.get("entity_id"),
+                            "values": {
+                                name: value
+                                for name, value in component_values.items()
+                                if isinstance(value, (int, float, bool))
+                            },
+                        }
+                    )
+                aggregation_applied = {
+                    "strategy": raw_aggregation.get("strategy"),
+                    "components": components,
+                }
+        if extras or aggregation_applied is not None:
             metadata = dict(case.metadata)
-            metadata["axiom_all_outputs"] = extras
+            if extras:
+                metadata["axiom_all_outputs"] = extras
+            if aggregation_applied is not None:
+                metadata["axiom_result_aggregation_applied"] = aggregation_applied
             case = replace(case, metadata=metadata)
         out.append(case)
     return out
+
 
 @cli.command("coverage")
 @click.option(
@@ -219,9 +246,13 @@ def coverage_check(compiled_program: Path, target: str) -> None:
 
 
 @cli.command("sanity")
-@click.argument("fixtures_file", type=click.Path(exists=True, dir_okay=False, path_type=Path))
+@click.argument(
+    "fixtures_file", type=click.Path(exists=True, dir_okay=False, path_type=Path)
+)
 @click.option("--left", default="axiom", type=click.Choice(["axiom", "policyengine"]))
-@click.option("--right", default="policyengine", type=click.Choice(["axiom", "policyengine"]))
+@click.option(
+    "--right", default="policyengine", type=click.Choice(["axiom", "policyengine"])
+)
 @click.option("--axiom-engine-binary", type=click.Path(path_type=Path, exists=True))
 @click.option("--axiom-compiled-program", type=click.Path(path_type=Path, exists=True))
 @click.option("--jurisdiction-fips", type=str, default=None)
@@ -255,19 +286,25 @@ def sanity_check(
         click.echo("No fixtures to run.", err=True)
         sys.exit(2)
 
-    cases = [
-        fixture_to_case(f, concept=concept, period=period) for f in fixtures
-    ]
+    cases = [fixture_to_case(f, concept=concept, period=period) for f in fixtures]
     concept_ids = (concept,)
 
     left_runner = _build_runner(
-        left, "api", None, None, concept_ids,
+        left,
+        "api",
+        None,
+        None,
+        concept_ids,
         axiom_compiled_program=axiom_compiled_program,
         axiom_engine_binary=axiom_engine_binary,
         paired_engine=right,
     )
     right_runner = _build_runner(
-        right, "api", None, None, concept_ids,
+        right,
+        "api",
+        None,
+        None,
+        concept_ids,
         axiom_compiled_program=axiom_compiled_program,
         axiom_engine_binary=axiom_engine_binary,
         paired_engine=left,
@@ -275,7 +312,9 @@ def sanity_check(
 
     try:
         prepared = _prepare_cases_for_engines(
-            cases, {left, right}, concept_ids,
+            cases,
+            {left, right},
+            concept_ids,
             axiom_compiled_program=axiom_compiled_program,
             jurisdiction_fips=jurisdiction_fips,
         )
@@ -298,11 +337,16 @@ def sanity_check(
             expected = bool(fixture.expected[engine_name])
             engine_result = results_by_id.get(case.case_id)
             if engine_result is None:
-                summary.results.append(SanityResult(
-                    fixture_id=fixture.id, engine=engine_name,
-                    expected=expected, actual=None, matched=False,
-                    error="no result returned",
-                ))
+                summary.results.append(
+                    SanityResult(
+                        fixture_id=fixture.id,
+                        engine=engine_name,
+                        expected=expected,
+                        actual=None,
+                        matched=False,
+                        error="no result returned",
+                    )
+                )
                 continue
             # Engines key their output dicts differently — axiom uses bare
             # derived names (`snap_eligible`), PolicyEngine uses its
@@ -326,12 +370,16 @@ def sanity_check(
                     "engine returned no value for the requested concept "
                     f"(values={list(values)!r})"
                 )
-            summary.results.append(SanityResult(
-                fixture_id=fixture.id, engine=engine_name,
-                expected=expected, actual=actual,
-                matched=(bool(actual) == expected) if err is None else False,
-                error=err,
-            ))
+            summary.results.append(
+                SanityResult(
+                    fixture_id=fixture.id,
+                    engine=engine_name,
+                    expected=expected,
+                    actual=actual,
+                    matched=(bool(actual) == expected) if err is None else False,
+                    error=err,
+                )
+            )
 
     print_summary(summary)
     sys.exit(0 if summary.passed else 1)
@@ -576,7 +624,9 @@ def compare(
         )
         if jurisdiction_fips and _wants_snap(concepts):
             cases = [
-                case for case in cases if _household_in_jurisdiction(case, jurisdiction_fips)
+                case
+                for case in cases
+                if _household_in_jurisdiction(case, jurisdiction_fips)
             ]
         if not cases:
             raise click.ClickException(
@@ -691,7 +741,9 @@ def compare(
                 # explicit --include-case-inputs wins over the heuristic.
                 include_inputs=full_evidence,
             )
-            total_batches = (len(cases) + comparison_batch_size - 1) // comparison_batch_size
+            total_batches = (
+                len(cases) + comparison_batch_size - 1
+            ) // comparison_batch_size
             for batch_index, case_batch in enumerate(
                 _batched(cases, comparison_batch_size),
                 start=1,
@@ -921,6 +973,11 @@ def _apply_euromod_to_axiom_input_bridge(
             continue
 
         inputs = dict(case.metadata.get("axiom_inputs", {}))
+        input_records = [
+            dict(record) for record in case.metadata.get("axiom_input_records", [])
+        ]
+        inputs_changed = False
+        input_records_changed = False
         applied: dict[str, float | int | bool | str | None] = {}
         for euromod_output, axiom_inputs in bridge.items():
             value = result.values.get(str(euromod_output))
@@ -931,13 +988,28 @@ def _apply_euromod_to_axiom_input_bridge(
             for input_name in input_names:
                 inputs[str(input_name)] = value
                 applied[str(input_name)] = value
+                inputs_changed = True
+            for record_spec in _bridged_axiom_input_records(axiom_inputs):
+                input_records = _upsert_bridged_axiom_input_record(
+                    input_records,
+                    record_spec,
+                    value,
+                )
+                applied[
+                    f"{record_spec['entity']}[{record_spec['entity_id']}]::"
+                    f"{record_spec['name']}"
+                ] = value
+                input_records_changed = True
 
         if not applied:
             bridged_cases.append(case)
             continue
 
         metadata = dict(case.metadata)
-        metadata["axiom_inputs"] = inputs
+        if inputs_changed:
+            metadata["axiom_inputs"] = inputs
+        if input_records_changed:
+            metadata["axiom_input_records"] = input_records
         metadata["euromod_to_axiom_input_bridge_applied"] = applied
         bridged_cases.append(replace(case, metadata=metadata))
     return bridged_cases
@@ -954,6 +1026,72 @@ def _bridged_axiom_inputs(spec) -> tuple[str, ...]:
             return ()
         return tuple(str(input_name) for input_name in inputs)
     return tuple(str(input_name) for input_name in spec)
+
+
+def _bridged_axiom_input_records(spec) -> tuple[dict, ...]:
+    if not isinstance(spec, dict):
+        return ()
+    raw_records = spec.get("records") or spec.get("input_records")
+    if raw_records is None:
+        return ()
+    if not isinstance(raw_records, list | tuple):
+        raise RuntimeError(
+            "EUROMOD-to-Axiom bridge records must be a list of mappings."
+        )
+    records = []
+    for raw_record in raw_records:
+        if not isinstance(raw_record, dict):
+            raise RuntimeError("EUROMOD-to-Axiom bridge records must be mappings.")
+        missing = {"name", "entity", "entity_id"} - set(raw_record)
+        if missing:
+            raise RuntimeError(
+                f"EUROMOD-to-Axiom bridge record is missing {sorted(missing)}."
+            )
+        record = {
+            "name": str(raw_record["name"]),
+            "entity": str(raw_record["entity"]),
+            "entity_id": str(raw_record["entity_id"]),
+        }
+        if "interval" in raw_record:
+            if not isinstance(raw_record["interval"], dict):
+                raise RuntimeError(
+                    "EUROMOD-to-Axiom bridge record interval must be a mapping."
+                )
+            record["interval"] = dict(raw_record["interval"])
+        records.append(record)
+    return tuple(records)
+
+
+def _upsert_bridged_axiom_input_record(
+    records: list[dict],
+    record_spec: dict,
+    value,
+) -> list[dict]:
+    key = _bridged_axiom_input_record_key(record_spec)
+    updated = []
+    matched = False
+    for record in records:
+        record_key = _bridged_axiom_input_record_key(record)
+        if record_key == key:
+            updated.append({**record, "value": value})
+            matched = True
+        else:
+            updated.append(record)
+    if not matched:
+        updated.append({**record_spec, "value": value})
+    return updated
+
+
+def _bridged_axiom_input_record_key(record: dict) -> tuple[str, str, str, str]:
+    interval = record.get("interval", {})
+    if not isinstance(interval, dict):
+        raise RuntimeError("Axiom input record interval must be a mapping.")
+    return (
+        str(record.get("name", "")),
+        str(record.get("entity", "")),
+        str(record.get("entity_id", "")),
+        json.dumps(interval, sort_keys=True, separators=(",", ":")),
+    )
 
 
 def _transform_bridged_value(value, spec):
@@ -1042,26 +1180,20 @@ def _prepare_cases_for_engines(
         prepared = attach_taxsim_inputs(prepared)
     if "taxcalc" in engines:
         prepared = attach_taxcalc_inputs(prepared)
-    if (
-        "axiom" in engines
-        and axiom_program is None
-        and _wants_tax(concept_ids)
-    ):
+    if "axiom" in engines and axiom_program is None and _wants_tax(concept_ids):
         if _needs_axiom_tax_itemization_choice(concept_ids):
             # The generated state-income-tax bridge currently implements
             # Colorado. Federal taxable-income and liability comparisons also
             # need the encoded state tax for SALT/itemization resolution.
             prepared = [case for case in prepared if _is_co_household(case)]
         prepared = attach_axiom_tax_inputs(prepared)
-        if (
-            engines & {"policyengine", "taxsim"}
-            and _needs_axiom_tax_itemization_choice(concept_ids)
+        if engines & {"policyengine", "taxsim"} and _needs_axiom_tax_itemization_choice(
+            concept_ids
         ):
             prepared = attach_axiom_tax_itemization_choice(prepared)
             if set(concept_ids) == {Concepts.STATE_INCOME_TAX}:
                 prepared = [
-                    _select_axiom_state_income_tax_candidate(case)
-                    for case in prepared
+                    _select_axiom_state_income_tax_candidate(case) for case in prepared
                 ]
     if "axiom" in engines and _wants_snap(concept_ids):
         # Two paths:
@@ -1200,11 +1332,7 @@ def _build_runner(
         # (compose already resolved its imports); deriving imports from the
         # concept ids here would flip prune_unsupported_inputs and strip the
         # generic ECPS input records the artifact needs.
-        if (
-            axiom_program is None
-            and not wants_snap
-            and axiom_compiled_program is None
-        ):
+        if axiom_program is None and not wants_snap and axiom_compiled_program is None:
             if _wants_tax(concept_ids):
                 program_imports = _tax_oracle_imports_for_concepts(concept_ids)
                 generated_program_target = US_TAX_ORACLE_BRIDGE_TARGET
@@ -1304,9 +1432,7 @@ def _parse_euromod_switches(
         if not entry.strip():
             continue
         if "=" not in entry:
-            raise click.ClickException(
-                f"{env_var} entries must be name=on/off pairs."
-            )
+            raise click.ClickException(f"{env_var} entries must be name=on/off pairs.")
         name, value = entry.split("=", 1)
         normalized = value.strip().lower()
         if normalized in {"1", "true", "yes", "on"}:
