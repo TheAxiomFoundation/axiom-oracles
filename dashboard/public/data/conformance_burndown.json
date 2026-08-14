@@ -314,6 +314,18 @@
         "conformant": true
       }
     ],
+    "dk": [
+      {
+        "date": "2026-08-13",
+        "in_scope": 22,
+        "covered": 1,
+        "uncovered": 21,
+        "unexplained": 0,
+        "axiom_attributed_open": 0,
+        "gap": 21,
+        "conformant": false
+      }
+    ],
     "uk": [
       {
         "date": "2026-07-05",

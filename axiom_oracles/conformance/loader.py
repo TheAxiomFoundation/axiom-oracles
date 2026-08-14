@@ -163,6 +163,7 @@ def parse(path: str | Path) -> Universe:
                 note=row.get("note"),
                 comparability=row.get("comparability", "full"),
                 oracle_policy_type=row.get("oracle_policy_type"),
+                oracle_switch=row.get("oracle_switch"),
                 internal_only_vars=tuple(row.get("internal_only_vars") or ()),
             )
         )

@@ -10,6 +10,10 @@ description: >-
   one-child grid — four child ages (1 / 5 / 10 / 16) at a below-threshold income
   crossing the four age bands, then age 5 across an income sweep (yem
   1.000.000 / 1.300.000 / 2.000.000) that straddles and exhausts the taper.
+  Those seven cases retain raw parity. An eighth case at yem 1.300.000 records
+  60.000 kr. of qualifying pension contributions and activates ec-jrc #20:
+  Axiom applies the § 1 a, stk. 4-5 capped contribution gross-up while EUROMOD's
+  bfachnm_dk taper has no input for it.
   The Axiom taper runs on EUROMOD's own § 7-basis income tintbto_s (0.92 x yem)
   bridged into the composed module's personskatteloven_section_7_income_basis
   inputs, with the same
@@ -25,8 +29,17 @@ description: >-
 
 runner:
   type: euromod-synthetic-compare
-  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  # Engine parity with rulespec-dk: this checkout must be built at the engine
+  # SHA rulespec-dk validates against (05eac9d2, the toolchain-era pin), so the
+  # certified numbers come from the same engine that gates the encodings. The
+  # unpinned main clone drifted (its binary predates compile-composed, and its
+  # legacy loader cannot lower versioned derived formulas, which the §-scoped
+  # paragraf-1-a module uses).
+  axiom_rules_repo: $HOME/TheAxiomFoundation/_worktrees/axiom-rules-engine-pin
   parameters:
+    # Cryptographic identity of the executed engine binary (the checkout
+    # SHA alone identifies HEAD, not the built bytes; audit finding).
+    engine_binary_sha256: 079c26f4244db8c2a72fcbfb8cf88aaa5cb7c99628dc1c8d9d3b2d011e5f32a5
     suite: dk-child-youth-benefit
     population: synthetic
     sample_size: 0

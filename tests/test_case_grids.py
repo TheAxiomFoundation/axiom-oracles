@@ -70,7 +70,7 @@ def test_expected_jurisdictions_present() -> None:
         ("be", 30, 128),
         ("de", 1, 13),
         ("uk", 26, 143),
-        ("dk", 1, 7),
+        ("dk", 3, 10),
     ],
 )
 def test_grid_case_counts(jurisdiction, expected_sets, expected_cases) -> None:
@@ -256,8 +256,16 @@ def test_mixed_locale_case_set_is_rejected() -> None:
     from axiom_oracles.grids.extract import case_set_skeleton
 
     cases = [
-        Case("a", "2026", metadata={"locale": "BE", "scope": {"type": "country", "geoid": "BE"}}),
-        Case("b", "2026", metadata={"locale": "UK", "scope": {"type": "country", "geoid": "UK"}}),
+        Case(
+            "a",
+            "2026",
+            metadata={"locale": "BE", "scope": {"type": "country", "geoid": "BE"}},
+        ),
+        Case(
+            "b",
+            "2026",
+            metadata={"locale": "UK", "scope": {"type": "country", "geoid": "UK"}},
+        ),
     ]
     with pytest.raises(ValueError, match="mixes locales"):
         case_set_skeleton("mixed-locale", cases)
@@ -398,7 +406,9 @@ def test_boundary_generator_is_deterministic() -> None:
             "regeneration; run scripts/generate_boundary_cases.py"
         )
         # Determinism proper: a second independent render is byte-identical.
-        second = gen._dump(gen.build_suggestions(registry_root, (jurisdiction,))[jurisdiction])
+        second = gen._dump(
+            gen.build_suggestions(registry_root, (jurisdiction,))[jurisdiction]
+        )
         assert rendered == second
 
 
@@ -438,17 +448,31 @@ def _mapped_concept(name: str, engine: str, parameter: str, *, dtype="Money") ->
     }
 
 
-def test_uk_boundary_allowlist_surfaces_mapped_allowance_style_concepts(tmp_path) -> None:
+def test_uk_boundary_allowlist_surfaces_mapped_allowance_style_concepts(
+    tmp_path,
+) -> None:
     # #135: an "allowance"-style boundary the GLOBAL threshold regex does not
     # catch (no threshold/limit/bracket token) must be surfaced for UK once it
     # carries a parameter_value mapping. Proven against a synthetic registry so
     # the test does not depend on the live corpus mapping these yet.
     gen = _load_boundary_gen()
     for name, param in [
-        ("savings_allowance", "gov.hmrc.income_tax.allowances.personal_savings_allowance.basic"),
-        ("dividend_nil_rate_allowance", "gov.hmrc.income_tax.allowances.dividend_allowance"),
-        ("applicable_work_allowance_amount", "gov.dwp.universal_credit.means_test.work_allowance"),
-        ("prescribed_capital_limit_for_single_claimant", "gov.dwp.universal_credit.means_test.capital.limit"),
+        (
+            "savings_allowance",
+            "gov.hmrc.income_tax.allowances.personal_savings_allowance.basic",
+        ),
+        (
+            "dividend_nil_rate_allowance",
+            "gov.hmrc.income_tax.allowances.dividend_allowance",
+        ),
+        (
+            "applicable_work_allowance_amount",
+            "gov.dwp.universal_credit.means_test.work_allowance",
+        ),
+        (
+            "prescribed_capital_limit_for_single_claimant",
+            "gov.dwp.universal_credit.means_test.capital.limit",
+        ),
     ]:
         # Sanity: the global regex genuinely does NOT match these names, so the
         # allowlist is doing the work (guards against the test passing because
@@ -483,9 +507,7 @@ def test_global_threshold_regex_still_applies_to_all_jurisdictions(tmp_path) -> 
     # surfaces for both US and UK (the base behaviour is preserved).
     gen = _load_boundary_gen()
     for jurisdiction, engine in [("us", "policyengine_us"), ("uk", "policyengine_uk")]:
-        concept = _mapped_concept(
-            "income_limit", engine, "gov.x.income_limit"
-        )
+        concept = _mapped_concept("income_limit", engine, "gov.x.income_limit")
         root = _write_registry(tmp_path, jurisdiction, [concept])
         payload = gen.build_suggestions(root, (jurisdiction,))[jurisdiction]
         emitted = {
@@ -553,8 +575,89 @@ def test_suggested_case_ids_are_below_above_pairs() -> None:
 def test_dk_child_youth_benefit_suite_pinned() -> None:
     assert "dk-child-youth-benefit" in available_suites()
     cases = load_suite("dk-child-youth-benefit")
-    assert len(cases) == 7
+    assert len(cases) == 8
     assert {case.locale for case in cases} == {"DK"}
+
+    original_cases = cases[:7]
+    contribution_input = (
+        "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/"
+        "paragraf-1-a#input.total_contributions_to_qualifying_pension_accounts"
+    )
+    assert all(
+        case.metadata["axiom_inputs"][contribution_input] == 0
+        for case in original_cases
+    )
+
+    witness = cases[7]
+    assert witness.case_id == ("dk-child-youth-benefit-age5-yem1300000-pension60000")
+    assert witness.metadata["qualifying_pension_contributions"] == 60_000
+    assert witness.metadata["axiom_inputs"][contribution_input] == 60_000
+    assert "qualifying_pension_contributions" not in {
+        key for row in witness.metadata["euromod_inputs"] for key in row
+    }
+
+
+def test_dk_child_youth_benefit_2023_suite_pinned() -> None:
+    assert "dk-child-youth-benefit-2023" in available_suites()
+    cases = load_suite("dk-child-youth-benefit-2023")
+    assert len(cases) == 1
+
+    case = cases[0]
+    assert case.case_id == "dk-child-youth-benefit-2023-age5-yem300000"
+    assert case.period == "2023"
+    assert case.metadata["scenario"] == (
+        "single-parent-child-youth-benefit-2023-supplement"
+    )
+    inputs = case.metadata["axiom_inputs"]
+    p1 = "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1#input."
+    cyb = "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input."
+    assert inputs[p1 + "percentage_change_rounded_to_one_decimal_place"] == 0.156
+    assert inputs[p1 + "payment_year_has_additional_statutory_increase"] is True
+    assert inputs[cyb + "current_year_income_reduction_allowance"] == 852_600
+
+
+def test_dk_child_youth_benefit_couple_suite_pinned() -> None:
+    assert "dk-child-youth-benefit-couple" in available_suites()
+    [case] = load_suite("dk-child-youth-benefit-couple")
+
+    assert case.case_id == ("dk-child-youth-benefit-couple-age5-yem1500000-spouse0")
+    assert case.period == "2025"
+    assert case.metadata["comparison_level"] == "household_sum"
+    assert case.metadata["axiom_result_aggregation"] == {
+        "strategy": "sum",
+        "entity_ids": ["earner", "non_earner"],
+    }
+    records = case.metadata["axiom_input_records"]
+    assert len(records) == 18
+    assert {record["entity_id"] for record in records} == {
+        "earner",
+        "non_earner",
+    }
+    assert all(record["entity"] == "Person" for record in records)
+    assert {
+        record["name"] for record in records if record["entity_id"] == "earner"
+    } == {record["name"] for record in records if record["entity_id"] == "non_earner"}
+
+    head, spouse, child = case.metadata["euromod_inputs"]
+    assert (head["idperson"], head["idpartner"], head["dms"], head["dhr"]) == (
+        101,
+        102,
+        2,
+        1,
+    )
+    assert head["yem"] == 125_000
+    assert (
+        spouse["idperson"],
+        spouse["idpartner"],
+        spouse["dms"],
+        spouse["dhr"],
+        spouse["yem"],
+    ) == (102, 101, 2, 0, 0)
+    assert (child["idperson"], child["idmother"], child["idfather"]) == (
+        103,
+        101,
+        102,
+    )
 
 
 def test_dk_child_youth_benefit_mapping_pinned() -> None:
@@ -567,4 +670,12 @@ def test_dk_child_youth_benefit_mapping_pinned() -> None:
     assert (
         mapping.target_for_engine("axiom")
         == "single_recipient_annual_child_youth_benefit"
+    )
+
+    couple_mapping = mappings_by_concept().get(Concepts.DK_COUPLE_CHILD_YOUTH_BENEFIT)
+    assert couple_mapping is not None, "dk couple child/youth mapping missing"
+    assert couple_mapping.target_for_engine("euromod") == "bfachnm_s"
+    assert (
+        couple_mapping.target_for_engine("axiom")
+        == "couple_recipient_annual_child_youth_benefit"
     )
