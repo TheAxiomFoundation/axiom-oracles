@@ -768,11 +768,14 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
     # HEAD only if it survives; a fresh --depth 1 clone is main's tip).
     rulespec_paths: list[str] = []
     for entry in params.get("rulespec_roots") or runner.get("rulespec_roots") or []:
-        rulespec_paths.append(str(entry))
+        # _expand_path honors AXIOM_RULESPEC_US_ROOT: the recorded SHA must
+        # come from the checkout the run actually resolved, not the
+        # developer's convention-path checkout.
+        rulespec_paths.append(str(_expand_path(entry)))
     for key in ("rulespec_root",):
         val = runner.get(key) or params.get(key)
         if val:
-            rulespec_paths.append(str(val))
+            rulespec_paths.append(str(_expand_path(val)))
     # The EUROMOD/UKMOD synthetic lane points `axiom_rulespec_repo_roots` at the
     # whole org directory and names the model country; the encoded rules live in
     # that country's `rulespec-<cc>` repo under the roots dir, so resolve it
@@ -1823,8 +1826,8 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
     env = dict(os.environ)
     roots_env = params.get("axiom_rulespec_repo_roots")
     if roots_env:
-        env["AXIOM_RULESPEC_REPO_ROOTS"] = str(
-            _resolve_path(roots_env, "axiom_rulespec_repo_roots")
+        env["AXIOM_RULESPEC_REPO_ROOTS"] = _rulespec_repo_roots_env(
+            [str(_resolve_path(roots_env, "axiom_rulespec_repo_roots"))]
         )
     subprocess.run(cmd, check=True, cwd=REPO_ROOT, env=env)
 
@@ -1878,10 +1881,12 @@ def _ensure_composed_axiom_program(params: dict, axiom_rules_repo: Path) -> None
     compile_env = dict(os.environ)
     roots_env = params.get("axiom_rulespec_repo_roots")
     if roots_env:
-        compile_env["AXIOM_RULESPEC_REPO_ROOTS"] = str(_expand_path(roots_env))
+        compile_env["AXIOM_RULESPEC_REPO_ROOTS"] = _rulespec_repo_roots_env(
+            [str(_expand_path(roots_env))]
+        )
     elif "AXIOM_RULESPEC_REPO_ROOTS" not in compile_env and roots:
-        compile_env["AXIOM_RULESPEC_REPO_ROOTS"] = os.pathsep.join(
-            str(root.parent) for root in roots
+        compile_env["AXIOM_RULESPEC_REPO_ROOTS"] = _rulespec_repo_roots_env(
+            [str(root.parent) for root in roots]
         )
 
     # Post-hard-cut engines compile compose output via compile-composed with
@@ -2056,8 +2061,8 @@ def _run_euromod_synthetic_compare(runner: dict, output: Path) -> None:
         env["EUROMOD_CONSTANT_OVERRIDES"] = str(constant_overrides)
     roots_env = params.get("axiom_rulespec_repo_roots")
     if roots_env:
-        env["AXIOM_RULESPEC_REPO_ROOTS"] = str(
-            _expand_path(roots_env)
+        env["AXIOM_RULESPEC_REPO_ROOTS"] = _rulespec_repo_roots_env(
+            [str(_expand_path(roots_env))]
         )
     subprocess.run(cmd, check=True, cwd=REPO_ROOT, env=env)
 
@@ -3903,8 +3908,36 @@ def _resolve_path(raw: str, field: str) -> Path:
     return expanded
 
 
+def _rulespec_repo_roots_env(base_roots: list[str]) -> str:
+    """AXIOM_RULESPEC_REPO_ROOTS value honoring AXIOM_RULESPEC_US_ROOT.
+
+    With the override set, children (compile, compare) must find
+    ``rulespec-us`` at the override rather than through the developer
+    checkout under the configured root — prepend the override's parent so it
+    wins repo resolution while other repos still resolve under the
+    configured roots.
+    """
+    roots = list(base_roots)
+    override = os.environ.get("AXIOM_RULESPEC_US_ROOT")
+    if override:
+        roots.insert(0, str(Path(override).resolve().parent))
+    return os.pathsep.join(dict.fromkeys(roots))
+
+
 def _expand_path(raw: str | Path) -> Path:
-    return Path(os.path.expandvars(os.path.expanduser(str(raw)))).resolve()
+    expanded = os.path.expandvars(os.path.expanduser(str(raw)))
+    # AXIOM_RULESPEC_US_ROOT reroutes the canonical `$HOME/rulespec-us`
+    # checkout (mirroring the AXIOM_RULES_REPO / AXIOM_ENCODE_REPO overrides)
+    # so comparisons can run against a pinned clean snapshot instead of
+    # whatever branch the developer's working checkout happens to be on —
+    # `$HOME/rulespec-us` is often a symlink into an active feature worktree,
+    # and provenance must not silently record its WIP sha.
+    override = os.environ.get("AXIOM_RULESPEC_US_ROOT")
+    if override:
+        canonical = os.path.join(os.path.expanduser("~"), "rulespec-us")
+        if expanded == canonical or expanded.startswith(canonical + os.sep):
+            expanded = override + expanded[len(canonical):]
+    return Path(expanded).resolve()
 
 
 def _ensure_engine_binary(repo: Path, *, kind: str) -> None:

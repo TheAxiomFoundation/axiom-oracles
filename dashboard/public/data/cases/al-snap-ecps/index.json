@@ -517,7 +517,7 @@
   "left": "axiom",
   "right": "policyengine",
   "versions": {
-   "axiom_rules_engine": "0.1.0",
+   "axiom_rules_engine": "0.2.0",
    "policyengine": "4.18.9",
    "policyengine_core": "3.30.3",
    "policyengine_us": "1.767.3"
@@ -527,6 +527,6 @@
   "us:statutes/7/2014/o#snap_eligible",
   "us:statutes/7/2014/u#snap_benefit"
  ],
- "source": "axiom-policyengine-al-snap-ecps-0-2026-07-28.json",
+ "source": "axiom-policyengine-al-snap-ecps-0-2026-08-07.json",
  "total_cases": 1444
 }

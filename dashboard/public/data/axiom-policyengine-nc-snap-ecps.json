@@ -8,18 +8,18 @@
       "components": [],
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
-      "left_weighted_sum": 296014534.203371,
-      "match_rate": 97.033441,
-      "match_weight": 5041154.382847,
-      "mismatch_count": 55,
-      "mismatch_weight": 121007.976771,
+      "left_weighted_sum": 293984034.051297,
+      "match_rate": 97.626753,
+      "match_weight": 5041496.070831,
+      "mismatch_count": 44,
+      "mismatch_weight": 120666.288787,
       "missing_both_count": 0,
       "missing_left_count": 0,
       "missing_right_count": 0,
       "parent": null,
-      "right_weighted_sum": 291072421.040093,
-      "weighted_difference": 4942113.163278,
-      "weighted_match_rate": 97.655867
+      "right_weighted_sum": 290174986.840062,
+      "weighted_difference": 3809047.211235,
+      "weighted_match_rate": 97.662486
     },
     {
       "category": "food",
@@ -29,21 +29,21 @@
       "components": [],
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
-      "left_positive_rate": 26.7291,
-      "left_positive_weight": 1379799.561099,
-      "match_rate": 98.867314,
-      "match_weight": 4857531.829746,
-      "mismatch_count": 21,
-      "mismatch_weight": 304630.529872,
+      "left_positive_rate": 25.368252,
+      "left_positive_weight": 1309550.376757,
+      "match_rate": 98.759439,
+      "match_weight": 4787822.452419,
+      "mismatch_count": 23,
+      "mismatch_weight": 374339.9072,
       "missing_both_count": 0,
       "missing_left_count": 0,
       "missing_right_count": 0,
       "parent": null,
-      "positive_rate_difference": -2.429951,
+      "positive_rate_difference": -3.780342,
       "quality_flags": [],
-      "right_positive_rate": 29.159052,
-      "right_positive_weight": 1505237.594081,
-      "weighted_match_rate": 94.098781
+      "right_positive_rate": 29.148595,
+      "right_positive_weight": 1504697.787066,
+      "weighted_match_rate": 92.74839
     }
   ],
   "case_count": 1854,
@@ -272,6 +272,60 @@
           "relative_tolerance": 0,
           "right": 760.4000244140625,
           "tolerance": 7
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-27181",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
+      "metadata": {
+        "axiom_all_outputs_count": 38,
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 5295,
+        "axiom_relations_count": 6,
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_summary": {
+          "ages": [
+            61,
+            64
+          ],
+          "household_size": 2,
+          "yearly_earned_income_per_person": [
+            38265.85,
+            0.0
+          ],
+          "yearly_earned_income_total": 38265.85
+        },
+        "household_weight": 1326.945068359375,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "37107",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "description": "SNAP eligibility",
+          "difference": null,
+          "kind": "eligibility_right_only",
+          "left": false,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": true,
+          "tolerance": 0
         }
       ],
       "right_engine": "policyengine",
@@ -547,12 +601,12 @@
         {
           "concept": "us:statutes/7/2014/u#snap_benefit",
           "description": "SNAP benefit amount",
-          "difference": 289.8000183105469,
+          "difference": 18.79998779296875,
           "kind": "amount_difference",
-          "left": 546.0,
+          "left": 506.0,
           "parent": null,
           "relative_tolerance": 0,
-          "right": 256.1999816894531,
+          "right": 487.20001220703125,
           "tolerance": 7
         }
       ],
@@ -1056,58 +1110,6 @@
       "right_errors": []
     },
     {
-      "case_id": "ecps-27568",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 50.0,
-      "matches": [
-        {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
-          "left": true,
-          "right": true
-        }
-      ],
-      "metadata": {
-        "axiom_all_outputs_count": 38,
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 3258,
-        "axiom_relations_count": 3,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            67
-          ],
-          "household_size": 1,
-          "yearly_earned_income_per_person": [
-            0.0
-          ],
-          "yearly_earned_income_total": 0.0
-        },
-        "household_weight": 0.0013085614191368222,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "37141",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [
-        {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
-          "description": "SNAP benefit amount",
-          "difference": 239.50001525878906,
-          "kind": "amount_difference",
-          "left": 296.0,
-          "parent": null,
-          "relative_tolerance": 0,
-          "right": 56.49998474121094,
-          "tolerance": 7
-        }
-      ],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
       "case_id": "ecps-27574",
       "left_engine": "axiom",
       "left_errors": [],
@@ -1259,12 +1261,12 @@
         {
           "concept": "us:statutes/7/2014/u#snap_benefit",
           "description": "SNAP benefit amount",
-          "difference": -196.0,
+          "difference": -69.69999694824219,
           "kind": "amount_difference",
           "left": 0.0,
           "parent": null,
           "relative_tolerance": 0,
-          "right": 196.0,
+          "right": 69.69999694824219,
           "tolerance": 7
         },
         {
@@ -2062,6 +2064,60 @@
       "right_errors": []
     },
     {
+      "case_id": "ecps-27947",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
+      "metadata": {
+        "axiom_all_outputs_count": 38,
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 5295,
+        "axiom_relations_count": 6,
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_summary": {
+          "ages": [
+            75,
+            72
+          ],
+          "household_size": 2,
+          "yearly_earned_income_per_person": [
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "household_weight": 68722.6328125,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "37071",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "description": "SNAP eligibility",
+          "difference": null,
+          "kind": "eligibility_right_only",
+          "left": false,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": true,
+          "tolerance": 0
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
       "case_id": "ecps-27957",
       "left_engine": "axiom",
       "left_errors": [],
@@ -2112,63 +2168,6 @@
           "relative_tolerance": 0,
           "right": 766.0999755859375,
           "tolerance": 7
-        }
-      ],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
-      "case_id": "ecps-27962",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 0.0,
-      "matches": [],
-      "metadata": {
-        "axiom_all_outputs_count": 38,
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 3258,
-        "axiom_relations_count": 3,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            15
-          ],
-          "household_size": 1,
-          "yearly_earned_income_per_person": [
-            217027.52
-          ],
-          "yearly_earned_income_total": 217027.52
-        },
-        "household_weight": 341.0744323730469,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "37081",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [
-        {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
-          "description": "SNAP benefit amount",
-          "difference": -148.59999084472656,
-          "kind": "amount_difference",
-          "left": 0.0,
-          "parent": null,
-          "relative_tolerance": 0,
-          "right": 148.59999084472656,
-          "tolerance": 7
-        },
-        {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
-          "description": "SNAP eligibility",
-          "difference": null,
-          "kind": "eligibility_right_only",
-          "left": false,
-          "parent": null,
-          "relative_tolerance": 0,
-          "right": true,
-          "tolerance": 0
         }
       ],
       "right_engine": "policyengine",
@@ -2343,58 +2342,6 @@
           "relative_tolerance": 0,
           "right": 1400.5999755859375,
           "tolerance": 7
-        }
-      ],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
-      "case_id": "ecps-28009",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 50.0,
-      "matches": [
-        {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
-          "left": 0.0,
-          "right": 0.0
-        }
-      ],
-      "metadata": {
-        "axiom_all_outputs_count": 38,
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 3258,
-        "axiom_relations_count": 3,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            79
-          ],
-          "household_size": 1,
-          "yearly_earned_income_per_person": [
-            0.0
-          ],
-          "yearly_earned_income_total": 0.0
-        },
-        "household_weight": 0.004226177930831909,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "37171",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [
-        {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
-          "description": "SNAP eligibility",
-          "difference": null,
-          "kind": "eligibility_right_only",
-          "left": false,
-          "parent": null,
-          "relative_tolerance": 0,
-          "right": true,
-          "tolerance": 0
         }
       ],
       "right_engine": "policyengine",
@@ -2687,6 +2634,60 @@
       "right_errors": []
     },
     {
+      "case_id": "ecps-28179",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
+      "metadata": {
+        "axiom_all_outputs_count": 38,
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 5295,
+        "axiom_relations_count": 6,
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_summary": {
+          "ages": [
+            51,
+            16
+          ],
+          "household_size": 2,
+          "yearly_earned_income_per_person": [
+            41545.78,
+            0.0
+          ],
+          "yearly_earned_income_total": 41545.78
+        },
+        "household_weight": 0.11139220744371414,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "37081",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "description": "SNAP eligibility",
+          "difference": null,
+          "kind": "eligibility_right_only",
+          "left": false,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": true,
+          "tolerance": 0
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
       "case_id": "ecps-28181",
       "left_engine": "axiom",
       "left_errors": [],
@@ -2745,104 +2746,54 @@
       "right_errors": []
     },
     {
-      "case_id": "ecps-28183",
+      "case_id": "ecps-28260",
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 50.0,
       "matches": [
         {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
-          "left": true,
-          "right": true
+          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "left": 0.0,
+          "right": 0.0
         }
       ],
       "metadata": {
         "axiom_all_outputs_count": 38,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 3258,
-        "axiom_relations_count": 3,
+        "axiom_input_records_count": 5295,
+        "axiom_relations_count": 6,
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
           "ages": [
-            65
+            63,
+            62
           ],
-          "household_size": 1,
+          "household_size": 2,
           "yearly_earned_income_per_person": [
-            0.0
+            0.0,
+            5247.89
           ],
-          "yearly_earned_income_total": 0.0
+          "yearly_earned_income_total": 5247.89
         },
-        "household_weight": 0.0042742770165205,
+        "household_weight": 0.7667130827903748,
         "population": "enhanced-cps",
         "scope": {
-          "geoid": "37161",
+          "geoid": "37051",
           "type": "census_county"
         }
       },
       "mismatches": [
-        {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
-          "description": "SNAP benefit amount",
-          "difference": 235.50001525878906,
-          "kind": "amount_difference",
-          "left": 298.0,
-          "parent": null,
-          "relative_tolerance": 0,
-          "right": 62.49998474121094,
-          "tolerance": 7
-        }
-      ],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
-      "case_id": "ecps-28191",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 50.0,
-      "matches": [
         {
           "concept": "us:statutes/7/2014/o#snap_eligible",
-          "left": true,
-          "right": true
-        }
-      ],
-      "metadata": {
-        "axiom_all_outputs_count": 38,
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 3258,
-        "axiom_relations_count": 3,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            67
-          ],
-          "household_size": 1,
-          "yearly_earned_income_per_person": [
-            8746.48
-          ],
-          "yearly_earned_income_total": 8746.48
-        },
-        "household_weight": 0.032131489366292953,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "37119",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [
-        {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
-          "description": "SNAP benefit amount",
-          "difference": 161.1599998474121,
-          "kind": "amount_difference",
-          "left": 185.0,
+          "description": "SNAP eligibility",
+          "difference": null,
+          "kind": "eligibility_right_only",
+          "left": false,
           "parent": null,
           "relative_tolerance": 0,
-          "right": 23.84000015258789,
-          "tolerance": 7
+          "right": true,
+          "tolerance": 0
         }
       ],
       "right_engine": "policyengine",
@@ -3364,60 +3315,6 @@
       "right_errors": []
     },
     {
-      "case_id": "ecps-28392",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 50.0,
-      "matches": [
-        {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
-          "left": true,
-          "right": true
-        }
-      ],
-      "metadata": {
-        "axiom_all_outputs_count": 38,
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 5295,
-        "axiom_relations_count": 6,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            74,
-            75
-          ],
-          "household_size": 2,
-          "yearly_earned_income_per_person": [
-            17116.57,
-            0.0
-          ],
-          "yearly_earned_income_total": 17116.57
-        },
-        "household_weight": 0.5714733004570007,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "37147",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [
-        {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
-          "description": "SNAP benefit amount",
-          "difference": 48.15999984741211,
-          "kind": "amount_difference",
-          "left": 72.0,
-          "parent": null,
-          "relative_tolerance": 0,
-          "right": 23.84000015258789,
-          "tolerance": 7
-        }
-      ],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
       "case_id": "ecps-28618",
       "left_engine": "axiom",
       "left_errors": [],
@@ -3643,328 +3540,6 @@
       ],
       "right_engine": "policyengine",
       "right_errors": []
-    },
-    {
-      "case_id": "ecps-67163",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 50.0,
-      "matches": [
-        {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
-          "left": true,
-          "right": true
-        }
-      ],
-      "metadata": {
-        "axiom_all_outputs_count": 38,
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 5295,
-        "axiom_relations_count": 6,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            74,
-            74
-          ],
-          "household_size": 2,
-          "yearly_earned_income_per_person": [
-            0.0,
-            0.0
-          ],
-          "yearly_earned_income_total": 0.0
-        },
-        "household_weight": 0.0006792373606003821,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "37119",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [
-        {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
-          "description": "SNAP benefit amount",
-          "difference": 24.0,
-          "kind": "amount_difference",
-          "left": 24.0,
-          "parent": null,
-          "relative_tolerance": 0,
-          "right": 0.0,
-          "tolerance": 7
-        }
-      ],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
-      "case_id": "ecps-69566",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 50.0,
-      "matches": [
-        {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
-          "left": true,
-          "right": true
-        }
-      ],
-      "metadata": {
-        "axiom_all_outputs_count": 38,
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 5295,
-        "axiom_relations_count": 6,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            47,
-            47
-          ],
-          "household_size": 2,
-          "yearly_earned_income_per_person": [
-            0.0,
-            0.0
-          ],
-          "yearly_earned_income_total": 0.0
-        },
-        "household_weight": 3.821862264885567e-05,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "37063",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [
-        {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
-          "description": "SNAP benefit amount",
-          "difference": 452.0,
-          "kind": "amount_difference",
-          "left": 452.0,
-          "parent": null,
-          "relative_tolerance": 0,
-          "right": 0.0,
-          "tolerance": 7
-        }
-      ],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
-      "case_id": "ecps-71509",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 50.0,
-      "matches": [
-        {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
-          "left": true,
-          "right": true
-        }
-      ],
-      "metadata": {
-        "axiom_all_outputs_count": 38,
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 3258,
-        "axiom_relations_count": 3,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            65
-          ],
-          "household_size": 1,
-          "yearly_earned_income_per_person": [
-            0.0
-          ],
-          "yearly_earned_income_total": 0.0
-        },
-        "household_weight": 0.0011123392032459378,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "37193",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [
-        {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
-          "description": "SNAP benefit amount",
-          "difference": 298.0,
-          "kind": "amount_difference",
-          "left": 298.0,
-          "parent": null,
-          "relative_tolerance": 0,
-          "right": 0.0,
-          "tolerance": 7
-        }
-      ],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
-      "case_id": "ecps-72572",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 50.0,
-      "matches": [
-        {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
-          "left": true,
-          "right": true
-        }
-      ],
-      "metadata": {
-        "axiom_all_outputs_count": 38,
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 5295,
-        "axiom_relations_count": 6,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            47,
-            47
-          ],
-          "household_size": 2,
-          "yearly_earned_income_per_person": [
-            0.0,
-            0.0
-          ],
-          "yearly_earned_income_total": 0.0
-        },
-        "household_weight": 0.0006044800975359976,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "37037",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [
-        {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
-          "description": "SNAP benefit amount",
-          "difference": 150.0,
-          "kind": "amount_difference",
-          "left": 150.0,
-          "parent": null,
-          "relative_tolerance": 0,
-          "right": 0.0,
-          "tolerance": 7
-        }
-      ],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
-      "case_id": "ecps-74116",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 50.0,
-      "matches": [
-        {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
-          "left": true,
-          "right": true
-        }
-      ],
-      "metadata": {
-        "axiom_all_outputs_count": 38,
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 5295,
-        "axiom_relations_count": 6,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            38,
-            38
-          ],
-          "household_size": 2,
-          "yearly_earned_income_per_person": [
-            0.0,
-            0.0
-          ],
-          "yearly_earned_income_total": 0.0
-        },
-        "household_weight": 0.0006877008127048612,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "37179",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [
-        {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
-          "description": "SNAP benefit amount",
-          "difference": 546.0,
-          "kind": "amount_difference",
-          "left": 546.0,
-          "parent": null,
-          "relative_tolerance": 0,
-          "right": 0.0,
-          "tolerance": 7
-        }
-      ],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
-      "case_id": "ecps-74179",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 50.0,
-      "matches": [
-        {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
-          "left": true,
-          "right": true
-        }
-      ],
-      "metadata": {
-        "axiom_all_outputs_count": 38,
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 5295,
-        "axiom_relations_count": 6,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            68,
-            68
-          ],
-          "household_size": 2,
-          "yearly_earned_income_per_person": [
-            0.0,
-            0.0
-          ],
-          "yearly_earned_income_total": 0.0
-        },
-        "household_weight": 0.0012418964179232717,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "37085",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [
-        {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
-          "description": "SNAP benefit amount",
-          "difference": 447.0,
-          "kind": "amount_difference",
-          "left": 447.0,
-          "parent": null,
-          "relative_tolerance": 0,
-          "right": 0.0,
-          "tolerance": 7
-        }
-      ],
-      "right_engine": "policyengine",
-      "right_errors": []
     }
   ],
   "concepts": [
@@ -3992,16 +3567,16 @@
     }
   ],
   "dashboard_truncation": {
-    "shown_case_rows": 70,
-    "shown_mismatches": 76,
+    "shown_case_rows": 62,
+    "shown_mismatches": 67,
     "total_case_rows": 1854,
-    "total_mismatches": 76
+    "total_mismatches": 67
   },
   "engines": {
     "left": "axiom",
     "right": "policyengine",
     "versions": {
-      "axiom_rules_engine": "0.1.0",
+      "axiom_rules_engine": "0.2.0",
       "policyengine": "4.18.9",
       "policyengine_core": "3.30.3",
       "policyengine_us": "1.767.3"
@@ -4117,6 +3692,27 @@
     },
     {
       "ages": null,
+      "case_id": "ecps-27181",
+      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "description": "SNAP eligibility",
+      "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "nc-bbce-tail-2026-08-12-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
+      "kind": "eligibility_right_only",
+      "left": false,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": true,
+      "scenario": null,
+      "tolerance": 0,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
       "case_id": "ecps-27222",
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
@@ -4204,18 +3800,18 @@
       "case_id": "ecps-27266",
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
-      "difference": 289.8000183105469,
+      "difference": 18.79998779296875,
       "disposition": {
         "disposition": "bridge_artifact",
-        "id": "ssi-and-tanf-zero-counterfactual-27266",
+        "id": "tanf-zero-counterfactual-27266",
         "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/397"
       },
       "kind": "amount_difference",
-      "left": 546.0,
+      "left": 506.0,
       "parent": null,
       "pregnant_head": null,
       "relative_tolerance": 0,
-      "right": 256.1999816894531,
+      "right": 487.20001220703125,
       "scenario": null,
       "tolerance": 7,
       "yearly_earned_income": null
@@ -4411,27 +4007,6 @@
     },
     {
       "ages": null,
-      "case_id": "ecps-27568",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
-      "description": "SNAP benefit amount",
-      "difference": 239.50001525878906,
-      "disposition": {
-        "disposition": "bridge_artifact",
-        "id": "pe-endogenous-ssi-counterfactual-27568",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/436"
-      },
-      "kind": "amount_difference",
-      "left": 296.0,
-      "parent": null,
-      "pregnant_head": null,
-      "relative_tolerance": 0,
-      "right": 56.49998474121094,
-      "scenario": null,
-      "tolerance": 7,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
       "case_id": "ecps-27574",
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
@@ -4477,7 +4052,7 @@
       "case_id": "ecps-27597",
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
-      "difference": -196.0,
+      "difference": -69.69999694824219,
       "disposition": {
         "disposition": "upstream_engine_gap",
         "id": "pe-lone-minor-child-earnings-benefit",
@@ -4488,7 +4063,7 @@
       "parent": null,
       "pregnant_head": null,
       "relative_tolerance": 0,
-      "right": 196.0,
+      "right": 69.69999694824219,
       "scenario": null,
       "tolerance": 7,
       "yearly_earned_income": null
@@ -4831,6 +4406,27 @@
     },
     {
       "ages": null,
+      "case_id": "ecps-27947",
+      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "description": "SNAP eligibility",
+      "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "nc-bbce-tail-2026-08-12-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
+      "kind": "eligibility_right_only",
+      "left": false,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": true,
+      "scenario": null,
+      "tolerance": 0,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
       "case_id": "ecps-27957",
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
@@ -4848,48 +4444,6 @@
       "right": 766.0999755859375,
       "scenario": null,
       "tolerance": 7,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
-      "case_id": "ecps-27962",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
-      "description": "SNAP benefit amount",
-      "difference": -148.59999084472656,
-      "disposition": {
-        "disposition": "upstream_engine_gap",
-        "id": "pe-lone-minor-child-earnings-benefit",
-        "linked_issue": "https://github.com/PolicyEngine/policyengine-us/issues/9157"
-      },
-      "kind": "amount_difference",
-      "left": 0.0,
-      "parent": null,
-      "pregnant_head": null,
-      "relative_tolerance": 0,
-      "right": 148.59999084472656,
-      "scenario": null,
-      "tolerance": 7,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
-      "case_id": "ecps-27962",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
-      "description": "SNAP eligibility",
-      "difference": null,
-      "disposition": {
-        "disposition": "upstream_engine_gap",
-        "id": "pe-lone-minor-child-earnings-eligibility",
-        "linked_issue": "https://github.com/PolicyEngine/policyengine-us/issues/9157"
-      },
-      "kind": "eligibility_right_only",
-      "left": false,
-      "parent": null,
-      "pregnant_head": null,
-      "relative_tolerance": 0,
-      "right": true,
-      "scenario": null,
-      "tolerance": 0,
       "yearly_earned_income": null
     },
     {
@@ -4953,27 +4507,6 @@
       "right": 1400.5999755859375,
       "scenario": null,
       "tolerance": 7,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
-      "case_id": "ecps-28009",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
-      "description": "SNAP eligibility",
-      "difference": null,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "nc-bbce-gross-band-snap_eligible",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
-      },
-      "kind": "eligibility_right_only",
-      "left": false,
-      "parent": null,
-      "pregnant_head": null,
-      "relative_tolerance": 0,
-      "right": true,
-      "scenario": null,
-      "tolerance": 0,
       "yearly_earned_income": null
     },
     {
@@ -5083,6 +4616,27 @@
     },
     {
       "ages": null,
+      "case_id": "ecps-28179",
+      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "description": "SNAP eligibility",
+      "difference": null,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "nc-bbce-tail-2026-08-12-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
+      },
+      "kind": "eligibility_right_only",
+      "left": false,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": true,
+      "scenario": null,
+      "tolerance": 0,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
       "case_id": "ecps-28181",
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
@@ -5104,44 +4658,23 @@
     },
     {
       "ages": null,
-      "case_id": "ecps-28183",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
-      "description": "SNAP benefit amount",
-      "difference": 235.50001525878906,
+      "case_id": "ecps-28260",
+      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "description": "SNAP eligibility",
+      "difference": null,
       "disposition": {
-        "disposition": "bridge_artifact",
-        "id": "pe-endogenous-ssi-counterfactual-28183",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/436"
+        "disposition": "axiom_encoding_gap",
+        "id": "nc-bbce-tail-2026-08-12-eligibility",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-us/issues/1098"
       },
-      "kind": "amount_difference",
-      "left": 298.0,
+      "kind": "eligibility_right_only",
+      "left": false,
       "parent": null,
       "pregnant_head": null,
       "relative_tolerance": 0,
-      "right": 62.49998474121094,
+      "right": true,
       "scenario": null,
-      "tolerance": 7,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
-      "case_id": "ecps-28191",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
-      "description": "SNAP benefit amount",
-      "difference": 161.1599998474121,
-      "disposition": {
-        "disposition": "bridge_artifact",
-        "id": "pe-endogenous-ssi-counterfactual-28191",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/436"
-      },
-      "kind": "amount_difference",
-      "left": 185.0,
-      "parent": null,
-      "pregnant_head": null,
-      "relative_tolerance": 0,
-      "right": 23.84000015258789,
-      "scenario": null,
-      "tolerance": 7,
+      "tolerance": 0,
       "yearly_earned_income": null
     },
     {
@@ -5356,34 +4889,13 @@
     },
     {
       "ages": null,
-      "case_id": "ecps-28392",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
-      "description": "SNAP benefit amount",
-      "difference": 48.15999984741211,
-      "disposition": {
-        "disposition": "bridge_artifact",
-        "id": "pe-endogenous-ssi-counterfactual-28392",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/436"
-      },
-      "kind": "amount_difference",
-      "left": 72.0,
-      "parent": null,
-      "pregnant_head": null,
-      "relative_tolerance": 0,
-      "right": 23.84000015258789,
-      "scenario": null,
-      "tolerance": 7,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
       "case_id": "ecps-28618",
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
       "difference": 296.10009765625,
       "disposition": {
         "disposition": "bridge_artifact",
-        "id": "se-loss-netting-counterfactual-28618",
+        "id": "nc-se-netting-2026-08-12-28618-benefit",
         "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/433"
       },
       "kind": "amount_difference",
@@ -5479,132 +4991,6 @@
       "scenario": null,
       "tolerance": 0,
       "yearly_earned_income": null
-    },
-    {
-      "ages": null,
-      "case_id": "ecps-67163",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
-      "description": "SNAP benefit amount",
-      "difference": 24.0,
-      "disposition": {
-        "disposition": "bridge_artifact",
-        "id": "pe-fallback-path-divergence-67163",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/437"
-      },
-      "kind": "amount_difference",
-      "left": 24.0,
-      "parent": null,
-      "pregnant_head": null,
-      "relative_tolerance": 0,
-      "right": 0.0,
-      "scenario": null,
-      "tolerance": 7,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
-      "case_id": "ecps-69566",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
-      "description": "SNAP benefit amount",
-      "difference": 452.0,
-      "disposition": {
-        "disposition": "bridge_artifact",
-        "id": "pe-fallback-path-divergence-69566",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/437"
-      },
-      "kind": "amount_difference",
-      "left": 452.0,
-      "parent": null,
-      "pregnant_head": null,
-      "relative_tolerance": 0,
-      "right": 0.0,
-      "scenario": null,
-      "tolerance": 7,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
-      "case_id": "ecps-71509",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
-      "description": "SNAP benefit amount",
-      "difference": 298.0,
-      "disposition": {
-        "disposition": "bridge_artifact",
-        "id": "pe-fallback-path-divergence-71509",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/437"
-      },
-      "kind": "amount_difference",
-      "left": 298.0,
-      "parent": null,
-      "pregnant_head": null,
-      "relative_tolerance": 0,
-      "right": 0.0,
-      "scenario": null,
-      "tolerance": 7,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
-      "case_id": "ecps-72572",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
-      "description": "SNAP benefit amount",
-      "difference": 150.0,
-      "disposition": {
-        "disposition": "bridge_artifact",
-        "id": "pe-fallback-path-divergence-72572",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/437"
-      },
-      "kind": "amount_difference",
-      "left": 150.0,
-      "parent": null,
-      "pregnant_head": null,
-      "relative_tolerance": 0,
-      "right": 0.0,
-      "scenario": null,
-      "tolerance": 7,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
-      "case_id": "ecps-74116",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
-      "description": "SNAP benefit amount",
-      "difference": 546.0,
-      "disposition": {
-        "disposition": "bridge_artifact",
-        "id": "pe-fallback-path-divergence-74116",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/437"
-      },
-      "kind": "amount_difference",
-      "left": 546.0,
-      "parent": null,
-      "pregnant_head": null,
-      "relative_tolerance": 0,
-      "right": 0.0,
-      "scenario": null,
-      "tolerance": 7,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
-      "case_id": "ecps-74179",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
-      "description": "SNAP benefit amount",
-      "difference": 447.0,
-      "disposition": {
-        "disposition": "bridge_artifact",
-        "id": "pe-unprojected-dividend-se-netting-counterfactual-74179",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/362"
-      },
-      "kind": "amount_difference",
-      "left": 447.0,
-      "parent": null,
-      "pregnant_head": null,
-      "relative_tolerance": 0,
-      "right": 0.0,
-      "scenario": null,
-      "tolerance": 7,
-      "yearly_earned_income": null
     }
   ],
   "population": "enhanced-cps",
@@ -5614,10 +5000,10 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "c4b62bdb740d4149f0872783964f917e74cffe42",
-      "axiom_rules_engine_version": "0.1.0"
+      "axiom_rules_engine_sha": "8430cdea0ba6ce6c5d90cfafaa90b89e0474df76",
+      "axiom_rules_engine_version": "0.2.0"
     },
-    "generated_at": "2026-07-29T02:23:10Z",
+    "generated_at": "2026-08-07T20:34:16Z",
     "generated_by": "scripts/run_comparison.py::nc-snap-ecps",
     "oracle": {
       "name": "policyengine",
@@ -5644,41 +5030,41 @@
     "comparison_count": 3708,
     "dispositioned": {
       "counts": {
-        "axiom_encoding_gap": 10,
-        "bridge_artifact": 60,
+        "axiom_encoding_gap": 13,
+        "bridge_artifact": 50,
         "explained_residual": 0,
         "unexplained": 0,
-        "upstream_engine_gap": 6
+        "upstream_engine_gap": 4
       },
       "dispositions_file": "dispositions/nc-snap-ecps.yaml",
       "expired_entries": [],
-      "explained_rate": 99.730313,
+      "explained_rate": 99.649407,
       "orphaned_entries": [],
-      "raw_match_rate": 97.950378,
+      "raw_match_rate": 98.193096,
       "schema_version": "axiom_oracles.dispositions.v1",
       "unexplained_count": 0
     },
     "error_count": 0,
     "errors_by_engine": [],
-    "match_count": 3632,
-    "mismatch_count": 76,
+    "match_count": 3641,
+    "mismatch_count": 67,
     "mismatches_by_concept": [
       {
-        "count": 55,
+        "count": 44,
         "value": "us:statutes/7/2014/u#snap_benefit"
       },
       {
-        "count": 21,
+        "count": 23,
         "value": "us:statutes/7/2014/o#snap_eligible"
       }
     ],
     "mismatches_by_kind": [
       {
-        "count": 55,
+        "count": 44,
         "value": "amount_difference"
       },
       {
-        "count": 13,
+        "count": 15,
         "value": "eligibility_right_only"
       },
       {
@@ -5688,16 +5074,16 @@
     ],
     "mismatches_by_scenario": [
       {
-        "count": 76,
+        "count": 67,
         "value": null
       }
     ],
-    "stored_mismatch_example_count": 76,
+    "stored_mismatch_example_count": 67,
     "weighted": {
       "comparison_weight": 10324324.719237,
-      "match_rate": 95.877324,
-      "match_weight": 9898686.212594,
-      "mismatch_weight": 425638.506643
+      "match_rate": 95.205438,
+      "match_weight": 9829318.52325,
+      "mismatch_weight": 495006.195987
     }
   }
 }
