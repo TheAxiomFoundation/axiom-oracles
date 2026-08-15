@@ -89,7 +89,11 @@ All checks are green:
 
 ## Publication
 
-The ordinary `git push origin evidence-validator-land` attempt failed before
-authentication because the sandbox could not resolve `github.com`. A
-connected GitHub Git-data publication path is available and is the next step.
-PR #468 has not been merged or otherwise changed.
+Publication is externally blocked. The ordinary
+`git push origin evidence-validator-land` attempt failed before authentication
+because the sandbox could not resolve `github.com`. The connected GitHub
+interface independently confirmed PR #468 is open and unmerged at remote head
+`27e3a51fc`, but rejected the first atomic blob write as
+`user cancelled MCP tool call`. No remote blob, tree, commit, ref, or PR state
+was changed. The finished local branch must be pushed when either terminal
+GitHub transport or connected write authorization is available.

@@ -21,8 +21,9 @@
 - Final report target:
   `sol-evidence-validator-land-reconciliation-2026-08-15-result.md`.
 - Current status: reconciliation is committed and every requested gate is
-  green. Terminal publication is DNS-blocked; the connected GitHub Git-data
-  fallback and final publication receipt remain.
+  green. Publication is externally blocked: terminal transport cannot resolve
+  GitHub, and the connected GitHub interface rejected its first blob write.
+  The remote branch and PR remain unchanged.
 
 ## Done
 
@@ -74,9 +75,12 @@
 - A normal push failed before authentication with `Could not resolve host:
   github.com`. A connected GitHub Git-data interface is available as the
   publication fallback; PR #468 has not been merged or edited.
+- The connected interface confirmed PR #468 is open and unmerged at remote
+  head `27e3a51fc`, then rejected the first atomic blob write as
+  `user cancelled MCP tool call`. No remote object, ref, or PR state changed.
 
 ## Next
 
-- Commit the final result report, publish the tested tree through the connected
-  GitHub interface, verify the remote branch, then append and publish the final
-  publication receipt. Leave PR #468 unmerged.
+- When GitHub terminal transport or connected write authorization is
+  available, push `evidence-validator-land`, verify the remote ref, and leave
+  PR #468 unmerged.
