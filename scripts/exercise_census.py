@@ -86,7 +86,14 @@ def _manifest_strict_clean() -> dict[str, bool]:
         # Global collisions are a property of the SET, so a per-manifest
         # validate() cannot see them; without this a colliding manifest could
         # still report audited (round-2 audit finding 5).
-        ok = not errors and not findings and not collisions
+        # A lane counts as audited only when it has OPTED IN to strict
+        # enforcement (`strict: true`) AND is clean. Without the flag
+        # requirement a strict-clean lane could drop the opt-in — silencing
+        # future --strict CI enforcement — while its census row kept
+        # bridge_audited=true and its certificate kept exercised=true
+        # (delta-audit finding). The opt-in is part of the certified claim.
+        declared_strict = isinstance(manifest, dict) and manifest.get("strict") is True
+        ok = declared_strict and not errors and not findings and not collisions
         if isinstance(manifest, dict):
             names = [manifest.get("suite")]
             aliases = manifest.get("aliases")

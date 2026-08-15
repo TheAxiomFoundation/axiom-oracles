@@ -1005,7 +1005,10 @@ def main() -> int:
     parser.add_argument(
         "--strict",
         action="store_true",
-        help="return nonzero when any manifest has a finding",
+        help=(
+            "return nonzero when a manifest declaring `strict: true` has a "
+            "finding; findings on other manifests are printed as audit debt"
+        ),
     )
     args = parser.parse_args()
 

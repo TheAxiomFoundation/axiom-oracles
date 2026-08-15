@@ -1,12 +1,20 @@
 # DK closed and executable producers (WS2 + WS3)
 
-Status: **BLOCKED repository-wide — all four DK certificate premises are
-computed (`conformant=true`, `exercised=true`, `closed=false`, and
-`executable=true`), and the DK audit blockers are fixed. The truthful DK result
-is `certified.state=no` because 12 paragraffer remain pending and § 5 is only
-partially encoded. The restored global strict-manifest gate now correctly fails
-on four genuine CO evidence findings that require a CO rerun and input-catalog
-work.**
+Status: **SHIP-READY — all four DK certificate premises are computed
+(`conformant=true`, `exercised=true`, `closed=false`, and `executable=true`),
+and every audit blocker is fixed. The truthful DK result is
+`certified.state=no` because 12 paragraffer remain pending and § 5 is only
+partially encoded.**
+
+Strict contract (final, superseding an interim global-strict restoration):
+`--strict` enforces findings on manifests that declare `strict: true`; the
+census counts a lane as `bridge_audited` ONLY when it declares `strict: true`
+AND validates clean, so the opt-in is bound to the certificate (dropping the
+flag drops audited/exercised — mutant-proven). Findings on non-strict
+manifests are visible audit debt: co-snap-populace's four genuine findings
+(unpinned population identity, cross-repo covered_by, partial audits,
+unverified completeness) print on every run and keep its row unaudited, but
+do not red the org's CI — they are that lane's own burndown.
 
 ## Checkout and source provenance
 

@@ -775,3 +775,32 @@ def test_bridge_manifest_identity_fields_are_typed():
         # main() asks for collisions before per-manifest validation; malformed
         # aliases therefore must be harmless here too.
         vbm.global_collisions({path: manifest})
+
+
+def test_dropping_strict_opt_in_drops_bridge_audited():
+    """MUTANT (delta-audit finding): a strict-clean lane that removes or
+    falsifies its `strict: true` opt-in must LOSE bridge_audited — otherwise
+    the lane could silence future --strict enforcement while its census row
+    and certificate kept claiming audited/exercised. The opt-in is part of the
+    certified claim, so census binds it."""
+    census = _load("exercise_census")
+    baseline = census._manifest_strict_clean()
+    assert baseline.get("dk-child-youth-benifit") is None  # sanity: exact names only
+    assert baseline["dk-child-youth-benefit"] is True
+
+    path = REPO / "axiom_oracles/bridges/manifests/dk-child-youth-benefit.yaml"
+    original = path.read_text()
+    try:
+        for mutant_text in (
+            original.replace("strict: true", "strict: false"),
+            original.replace("strict: true\n", ""),
+        ):
+            assert mutant_text != original
+            path.write_text(mutant_text)
+            mutated = census._manifest_strict_clean()
+            assert mutated["dk-child-youth-benefit"] is False, (
+                "a lane without the strict opt-in must not count as audited"
+            )
+    finally:
+        path.write_text(original)
+    assert census._manifest_strict_clean()["dk-child-youth-benefit"] is True
