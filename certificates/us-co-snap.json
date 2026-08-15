@@ -31,7 +31,7 @@
       "artifact": "dashboard/public/data/axiom-snapqc-co-snap.json",
       "claim": "suite:co-snap-qc",
       "mode": "computed",
-      "sha256": "94809464cf876e63b686e3748831e976742a6486f91d4ca04e989a8cd402d8ce"
+      "sha256": "673d8e719c56551493cd87b4580f2d8bbe972dff46e524dcf72d19fc2fdad7ae"
     }
   ],
   "period": "2026-01",
@@ -126,7 +126,7 @@
           "contested_reports": [],
           "per_case_evidence_committed": false,
           "report": "dashboard/public/data/axiom-snapqc-co-snap.json",
-          "report_sha256": "94809464cf876e63b686e3748831e976742a6486f91d4ca04e989a8cd402d8ce",
+          "report_sha256": "673d8e719c56551493cd87b4580f2d8bbe972dff46e524dcf72d19fc2fdad7ae",
           "varied_fields": 0
         }
       },

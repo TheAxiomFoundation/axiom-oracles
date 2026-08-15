@@ -436,10 +436,10 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "dc7eb90d2cfcf6b7ecf68ada226112a8ac444350",
+      "axiom_rules_engine_sha": "04231ca884485be1daec9e0dd41a8a681a621fb8",
       "axiom_rules_engine_version": "0.2.1"
     },
-    "generated_at": "2026-08-14T19:26:39Z",
+    "generated_at": "2026-08-15T13:06:34Z",
     "generated_by": "scripts/run_comparison.py::be-marital-quotient",
     "oracle": {
       "euromod_country": "BE",
