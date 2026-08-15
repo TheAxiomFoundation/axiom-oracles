@@ -13,7 +13,7 @@
       "artifact": "conformance/exercise-census.json",
       "claim": "exercise census",
       "mode": "computed",
-      "sha256": "a51d8e089ba6f781f8e0948fa441062be2b7f5edb943c643c7fc86d43ac3d2a3"
+      "sha256": "1fc9cac877529befef4bb4ff52f7de5905c0668bab30b6fbe5543201db648b27"
     },
     {
       "artifact": "dashboard/public/data/axiom-euromod-dk-child-youth-benefit.json",
@@ -43,7 +43,7 @@
       "artifact": "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json",
       "claim": "suite:dk-child-youth-benefit-couple",
       "mode": "computed",
-      "sha256": "1ed4c94b53032629467cc1f19a02c860dd4a44c68f54862f969616b751a05ac3"
+      "sha256": "37dea2216dc2971dfe6488987283bcba182f85256cb1ba3963fb0386fb22bd46"
     },
     {
       "artifact": "dispositions/dk-child-youth-benefit-couple.yaml",
@@ -142,7 +142,7 @@
           "contested_reports": [],
           "per_case_evidence_committed": true,
           "report": "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json",
-          "report_sha256": "1ed4c94b53032629467cc1f19a02c860dd4a44c68f54862f969616b751a05ac3",
+          "report_sha256": "37dea2216dc2971dfe6488987283bcba182f85256cb1ba3963fb0386fb22bd46",
           "varied_fields": 0
         }
       },
