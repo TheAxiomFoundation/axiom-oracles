@@ -207,6 +207,28 @@ def _chunk_cases(suite: str) -> tuple[list[dict], list[dict]]:
 
 
 def _census_suite(suite: str, report: dict, report_path: Path) -> dict:
+    # Unified records can carry a verifier-produced experiment receipt over
+    # the engine's complete active input catalog. This is stronger than
+    # inferring inputs from case metadata and avoids inventing a bridge
+    # manifest for a harness whose measured input states are already present.
+    experiment = report.get("experiment")
+    if report.get("record_schema") == "axiom.unified_comparison_record.v1":
+        fields, bridged = _unified_experiment_fields(suite, experiment)
+        cases = [case for case in report.get("cases") or [] if isinstance(case, dict)]
+        varied = sum(field["state"] == "varied" for field in fields.values())
+        return {
+            "cases_scanned": len(cases),
+            "report": str(report_path.relative_to(REPO_ROOT)),
+            "report_sha256": hashlib.sha256(report_path.read_bytes()).hexdigest(),
+            "evidence_source": "unified-experiment-receipt",
+            "inline_cases_not_counted": 0,
+            "chunk_manifest": [],
+            "evidence_fields": fields,
+            "verdict_concepts": {},
+            "varied_fields": varied,
+            "constant_fields": len(fields) - varied,
+            "bridged_through": bridged,
+        }
     field_values: dict[str, set[str]] = defaultdict(set)
     concept_values: dict[str, set[str]] = defaultdict(set)
     scanned = 0
@@ -284,10 +306,55 @@ def _census_suite(suite: str, report: dict, report_path: Path) -> dict:
     }
 
 
+def _unified_experiment_fields(
+    suite: str, experiment: object
+) -> tuple[dict[str, dict], dict[str, str]]:
+    """Validate and normalize a unified record's measured input receipt."""
+
+    if not isinstance(experiment, dict):
+        raise ValueError(f"{suite}: unified record lacks an experiment receipt")
+    if experiment.get("schema") != "axiom.experiment_boundary_receipt.v1":
+        raise ValueError(f"{suite}: unsupported experiment receipt schema")
+    active = experiment.get("active_inputs")
+    if not isinstance(active, dict) or not active:
+        raise ValueError(f"{suite}: experiment receipt has no active inputs")
+    fields: dict[str, dict] = {}
+    for name, row in sorted(active.items()):
+        if not isinstance(row, dict):
+            raise ValueError(f"{suite}: active input {name!r} is not a mapping")
+        state = row.get("state")
+        distinct = row.get("distinct")
+        values = row.get("observed_values")
+        if state not in {"varied", "constant"}:
+            raise ValueError(f"{suite}: active input {name!r} has invalid state {state!r}")
+        if not isinstance(values, list) or not values:
+            raise ValueError(f"{suite}: active input {name!r} has no observations")
+        observed_distinct = len(set(map(str, values)))
+        expected_state = "varied" if observed_distinct > 1 else "constant"
+        if distinct != observed_distinct or state != expected_state:
+            raise ValueError(
+                f"{suite}: active input {name!r} state/count contradicts its observations"
+            )
+        fields[str(name)] = {"distinct": distinct, "state": state}
+    bridged = experiment.get("bridged_through")
+    if not isinstance(bridged, dict):
+        raise ValueError(f"{suite}: bridged_through must be a mapping")
+    return fields, {str(name): str(value) for name, value in bridged.items()}
+
+
 def build_census() -> dict:
     suites: dict[str, dict] = {}
     contested: dict[str, list[str]] = defaultdict(list)
     for suite, report, path in _iter_suite_reports():
+        # Unified records carry their own complete, verifier-produced
+        # experiment receipt and can expose several program views over one
+        # run.  Their exercise evidence is consumed directly by certify.py.
+        # Keeping it certificate-scoped prevents an unrelated unified record
+        # from changing the global-census hash in every existing program
+        # certificate (and therefore preserves those certificates' evidence
+        # identity when none of their suites changed).
+        if report.get("record_schema") == "axiom.unified_comparison_record.v1":
+            continue
         contested[suite].append(str(path.relative_to(REPO_ROOT)))
         suites[suite] = _census_suite(suite, report, path)
     # A suite claimed by more than one report is an ambiguity the census must

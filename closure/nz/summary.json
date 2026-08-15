@@ -1,0 +1,1429 @@
+{
+  "closed": false,
+  "corpus_commit": "3f7b5d985bce759cb487f1b7fd050f5cbf007d17",
+  "corpus_release": "nz-rulespec-2026-07-18",
+  "jurisdiction": "nz",
+  "pending_citations": [
+    "nz/guidance/acc/loss-of-potential-earnings",
+    "nz/guidance/acc/weekly-compensation",
+    "nz/guidance/employment-nz/parental-leave-payment-increase-2024/block-2",
+    "nz/guidance/employment-nz/parental-leave-payment-increase-2026/block-4",
+    "nz/guidance/employment-nz/parental-leave-payments/block-33",
+    "nz/guidance/ird/child-support/overview",
+    "nz/guidance/ird/child-support/types/formula-assessment/sharing-care",
+    "nz/guidance/ird/gst-calculation-guidance",
+    "nz/guidance/ird/gst-low-value-imported-goods",
+    "nz/guidance/ird/how-kiwisaver-works/block-2",
+    "nz/guidance/ird/kiwisaver-contribution-rates",
+    "nz/guidance/ird/kiwisaver-government-contribution/block-4",
+    "nz/guidance/ird/paye-deduction-tables",
+    "nz/guidance/ird/pir-rates-kiwisaver-pie",
+    "nz/guidance/ird/rwt-rates",
+    "nz/guidance/ird/student-loan-repayment-deductions",
+    "nz/guidance/studylink/ordinary-residence",
+    "nz/guidance/studylink/student-allowances",
+    "nz/regulation/regulation/public/2016/0068/regulation/13",
+    "nz/statute/act/public/2007/0097/schedule/1/part/b",
+    "nz/statute/act/public/2007/0097/subpart/rd",
+    "nz/statute/act/public/2025/0026/section/13",
+    "nz/statute/act/public/2025/0026/section/20",
+    "nz/statute/act/public/2025/0026/section/22"
+  ],
+  "pending_money_atoms": 0,
+  "programs": {
+    "nz/acc-earners-levy": {
+      "by_status": {
+        "encoded": 2,
+        "excluded": 0,
+        "pending": 0
+      },
+      "citation_root_count": 2,
+      "citations": [
+        {
+          "citation_path": "nz/regulation/regulation/public/2025/0018/regulation/4",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/regulation/regulation/public/2025/0018/regulation/5",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        }
+      ],
+      "closed": true,
+      "pending_citations": [],
+      "pending_money_atoms": 0,
+      "root_node_count": 1,
+      "root_nodes": [
+        "nz:regulations/acc/earners_levy#acc_standard_earners_levy_including_gst"
+      ],
+      "subgraph_node_count": 4
+    },
+    "nz/accommodation-supplement": {
+      "by_status": {
+        "encoded": 5,
+        "excluded": 0,
+        "pending": 0
+      },
+      "citation_root_count": 5,
+      "citations": [
+        {
+          "citation_path": "nz/regulation/regulation/public/2018/0202/regulation/17",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/regulation/regulation/public/2018/0202/regulation/18",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/regulation/regulation/public/2018/0202/regulation/19",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/statute/act/public/2018/0032/schedule/4/part/7/clause/lms118453",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/statute/act/public/2018/0032/section/65aaa",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        }
+      ],
+      "closed": true,
+      "pending_citations": [],
+      "pending_money_atoms": 0,
+      "root_node_count": 3,
+      "root_nodes": [
+        "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_rounded_weekly_payment",
+        "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_amount_before_rounding",
+        "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_qualifying_accommodation_costs"
+      ],
+      "subgraph_node_count": 30
+    },
+    "nz/income-tax": {
+      "by_status": {
+        "encoded": 8,
+        "excluded": 0,
+        "pending": 0
+      },
+      "citation_root_count": 8,
+      "citations": [
+        {
+          "citation_path": "nz/statute/act/public/2007/0097/schedule/1/part/a/clause/1",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/statute/act/public/2007/0097/section/bb-1",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/statute/act/public/2007/0097/section/bc-2",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/statute/act/public/2007/0097/section/bc-3",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/statute/act/public/2007/0097/section/bc-4",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/statute/act/public/2007/0097/section/bc-5",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/statute/act/public/2007/0097/section/bd-1",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/statute/act/public/2007/0097/section/bd-2",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        }
+      ],
+      "closed": true,
+      "pending_citations": [],
+      "pending_money_atoms": 0,
+      "root_node_count": 1,
+      "root_nodes": [
+        "nz:statutes/income_tax/schedule_1/individual_income_tax#individual_income_tax_before_credits"
+      ],
+      "subgraph_node_count": 7
+    },
+    "nz/independent-earner-tax-credit": {
+      "by_status": {
+        "encoded": 1,
+        "excluded": 0,
+        "pending": 0
+      },
+      "citation_root_count": 1,
+      "citations": [
+        {
+          "citation_path": "nz/statute/act/public/2007/0097/section/lc-13",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        }
+      ],
+      "closed": true,
+      "pending_citations": [],
+      "pending_money_atoms": 0,
+      "root_node_count": 1,
+      "root_nodes": [
+        "nz:statutes/income_tax/credits/individual_credits#independent_earner_tax_credit"
+      ],
+      "subgraph_node_count": 10
+    },
+    "nz/main-benefits": {
+      "by_status": {
+        "encoded": 7,
+        "excluded": 0,
+        "pending": 0
+      },
+      "citation_root_count": 7,
+      "citations": [
+        {
+          "citation_path": "nz/regulation/regulation/public/2026/0036/regulation/5",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/statute/act/public/2018/0032/schedule/2/definition/income-test-1",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/statute/act/public/2018/0032/schedule/2/definition/income-test-2",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/statute/act/public/2018/0032/schedule/2/definition/income-test-3",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/statute/act/public/2018/0032/schedule/2/definition/income-test-4",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/statute/act/public/2018/0032/schedule/4/part/1/clause/lms118447",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/statute/act/public/2018/0032/schedule/4/part/2/clause/lms118467",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        }
+      ],
+      "closed": true,
+      "pending_citations": [],
+      "pending_money_atoms": 0,
+      "root_node_count": 2,
+      "root_nodes": [
+        "nz:statutes/social_security/main_benefits/rates#jobseeker_support_net_weekly_payment",
+        "nz:statutes/social_security/main_benefits/rates#sole_parent_support_net_weekly_payment"
+      ],
+      "subgraph_node_count": 33
+    },
+    "nz/winter-energy-payment": {
+      "by_status": {
+        "encoded": 1,
+        "excluded": 0,
+        "pending": 0
+      },
+      "citation_root_count": 1,
+      "citations": [
+        {
+          "citation_path": "nz/statute/act/public/2018/0032/schedule/4/part/8/clause/lms118454",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        }
+      ],
+      "closed": true,
+      "pending_citations": [],
+      "pending_money_atoms": 0,
+      "root_node_count": 1,
+      "root_nodes": [
+        "nz:statutes/social_security/winter_energy_payment/core#winter_energy_payment_rate_per_winter_period"
+      ],
+      "subgraph_node_count": 3
+    },
+    "nz/working-for-families": {
+      "by_status": {
+        "encoded": 33,
+        "excluded": 0,
+        "pending": 0
+      },
+      "citation_root_count": 33,
+      "citations": [
+        {
+          "citation_path": "nz/statute/act/public/2007/0097/section/ma-4",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/statute/act/public/2007/0097/section/mb-1",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/statute/act/public/2007/0097/section/mb-10",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/statute/act/public/2007/0097/section/mb-11",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/statute/act/public/2007/0097/section/mb-12",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/statute/act/public/2007/0097/section/mb-12b",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/statute/act/public/2007/0097/section/mb-13",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/statute/act/public/2007/0097/section/mb-2",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/statute/act/public/2007/0097/section/mb-3",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/statute/act/public/2007/0097/section/mb-4",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/statute/act/public/2007/0097/section/mb-7",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/statute/act/public/2007/0097/section/mb-7b",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/statute/act/public/2007/0097/section/mb-8",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/statute/act/public/2007/0097/section/mc-10",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/statute/act/public/2007/0097/section/mc-3",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/statute/act/public/2007/0097/section/mc-5",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/statute/act/public/2007/0097/section/md-10",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/statute/act/public/2007/0097/section/md-13",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/statute/act/public/2007/0097/section/md-2",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/statute/act/public/2007/0097/section/md-3",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/statute/act/public/2007/0097/section/md-4",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/statute/act/public/2007/0097/section/md-5",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/statute/act/public/2007/0097/section/md-6",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/statute/act/public/2007/0097/section/md-7",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/statute/act/public/2007/0097/section/md-8",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/statute/act/public/2007/0097/section/md-9",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/statute/act/public/2007/0097/section/me-1",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/statute/act/public/2007/0097/section/me-3",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/statute/act/public/2007/0097/section/mg-1",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/statute/act/public/2007/0097/section/mg-2",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/statute/act/public/2007/0097/section/mg-3",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/statute/act/public/2026/0008/section/105",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        },
+        {
+          "citation_path": "nz/statute/act/public/2026/0008/section/2",
+          "reason": "exact_path_present_in_pinned_corpus_release",
+          "status": "encoded"
+        }
+      ],
+      "closed": true,
+      "pending_citations": [],
+      "pending_money_atoms": 0,
+      "root_node_count": 10,
+      "root_nodes": [
+        "nz:statutes/income_tax/family_scheme/eligibility#entitled_to_in_work_tax_credit",
+        "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_income",
+        "nz:statutes/income_tax/family_scheme/tax_credits#best_start_credit_abatement",
+        "nz:statutes/income_tax/family_scheme/tax_credits#best_start_tax_credit",
+        "nz:statutes/income_tax/family_scheme/tax_credits#best_start_tax_credit_before_abatement",
+        "nz:statutes/income_tax/family_scheme/tax_credits#family_tax_credit_after_abatement",
+        "nz:statutes/income_tax/family_scheme/tax_credits#family_tax_credit_before_abatement",
+        "nz:statutes/income_tax/family_scheme/tax_credits#in_work_tax_credit_before_abatement",
+        "nz:statutes/income_tax/family_scheme/tax_credits#minimum_family_tax_credit",
+        "nz:statutes/income_tax/family_scheme/tax_credits#wff_abatement_remaining_after_family_tax_credit"
+      ],
+      "subgraph_node_count": 72
+    }
+  },
+  "roots": [
+    {
+      "by_status": {
+        "encoded": 24,
+        "excluded": 34,
+        "pending": 10
+      },
+      "classifications": [
+        {
+          "citations": [],
+          "missing_citations": [],
+          "path": "nz/statutes/acc/weekly_compensation.test.yaml",
+          "reason": "storage_or_test_file_without_corpus_citation",
+          "status": "excluded"
+        },
+        {
+          "citations": [
+            "nz/guidance/acc/loss-of-potential-earnings",
+            "nz/guidance/acc/weekly-compensation",
+            "nz/statute/act/public/2001/0049",
+            "nz/statute/act/public/2001/0049/schedule/1/part/2/clause/32"
+          ],
+          "missing_citations": [
+            "nz/guidance/acc/loss-of-potential-earnings",
+            "nz/guidance/acc/weekly-compensation"
+          ],
+          "path": "nz/statutes/acc/weekly_compensation.yaml",
+          "reason": "citation_absent_from_pinned_corpus_release",
+          "status": "pending"
+        },
+        {
+          "citations": [],
+          "missing_citations": [],
+          "path": "nz/statutes/child_support/core_formula.test.yaml",
+          "reason": "storage_or_test_file_without_corpus_citation",
+          "status": "excluded"
+        },
+        {
+          "citations": [
+            "nz/guidance/ird/child-support/overview",
+            "nz/guidance/ird/child-support/types/formula-assessment/sharing-care",
+            "nz/statute/act/public/1991/0142/schedule/1",
+            "nz/statute/act/public/1991/0142/schedule/2",
+            "nz/statute/act/public/1991/0142/section/35a",
+            "nz/statute/act/public/1991/0142/section/4",
+            "nz/statute/act/public/1991/0142/section/40",
+            "nz/statute/act/public/1991/0142/section/5",
+            "nz/statute/act/public/1991/0142/section/72",
+            "nz/statute/act/public/1991/0142/section/8"
+          ],
+          "missing_citations": [
+            "nz/guidance/ird/child-support/overview",
+            "nz/guidance/ird/child-support/types/formula-assessment/sharing-care"
+          ],
+          "path": "nz/statutes/child_support/core_formula.yaml",
+          "reason": "citation_absent_from_pinned_corpus_release",
+          "status": "pending"
+        },
+        {
+          "citations": [],
+          "missing_citations": [],
+          "path": "nz/statutes/citizenship/by_grant.test.yaml",
+          "reason": "storage_or_test_file_without_corpus_citation",
+          "status": "excluded"
+        },
+        {
+          "citations": [
+            "nz/statute/act/public/1977/0061/section/8",
+            "nz/statute/act/public/1977/0061/section/9"
+          ],
+          "missing_citations": [],
+          "path": "nz/statutes/citizenship/by_grant.yaml",
+          "reason": "all_citations_resolve_by_exact_path",
+          "status": "encoded"
+        },
+        {
+          "citations": [],
+          "missing_citations": [],
+          "path": "nz/statutes/common/relationships.test.yaml",
+          "reason": "storage_or_test_file_without_corpus_citation",
+          "status": "excluded"
+        },
+        {
+          "citations": [
+            "nz/statute/act/public/1955/0092/schedule/2/clause/dlm5545710"
+          ],
+          "missing_citations": [],
+          "path": "nz/statutes/common/relationships.yaml",
+          "reason": "all_citations_resolve_by_exact_path",
+          "status": "encoded"
+        },
+        {
+          "citations": [],
+          "missing_citations": [],
+          "path": "nz/statutes/common/residence.test.yaml",
+          "reason": "storage_or_test_file_without_corpus_citation",
+          "status": "excluded"
+        },
+        {
+          "citations": [
+            "nz/guidance/studylink/ordinary-residence",
+            "nz/guidance/studylink/student-allowances",
+            "nz/statute/act/public/1977/0061/section/6",
+            "nz/statute/act/public/2009/0051/section/13",
+            "nz/statute/act/public/2009/0051/section/70",
+            "nz/statute/act/public/2009/0051/section/9",
+            "nz/statute/act/public/2018/0032/schedule/2/definition/ordinarily-resident-in-new-zealand",
+            "nz/statute/act/public/2018/0032/section/16"
+          ],
+          "missing_citations": [
+            "nz/guidance/studylink/ordinary-residence",
+            "nz/guidance/studylink/student-allowances"
+          ],
+          "path": "nz/statutes/common/residence.yaml",
+          "reason": "citation_absent_from_pinned_corpus_release",
+          "status": "pending"
+        },
+        {
+          "citations": [],
+          "missing_citations": [],
+          "path": "nz/statutes/gst/rate.test.yaml",
+          "reason": "storage_or_test_file_without_corpus_citation",
+          "status": "excluded"
+        },
+        {
+          "citations": [
+            "nz/guidance/ird/gst-calculation-guidance",
+            "nz/guidance/ird/gst-low-value-imported-goods",
+            "nz/statute/act/public/1985/0141/section/10",
+            "nz/statute/act/public/1985/0141/section/12",
+            "nz/statute/act/public/1985/0141/section/8"
+          ],
+          "missing_citations": [
+            "nz/guidance/ird/gst-calculation-guidance",
+            "nz/guidance/ird/gst-low-value-imported-goods"
+          ],
+          "path": "nz/statutes/gst/rate.yaml",
+          "reason": "citation_absent_from_pinned_corpus_release",
+          "status": "pending"
+        },
+        {
+          "citations": [],
+          "missing_citations": [],
+          "path": "nz/statutes/housing_restructuring/income_related_rent.test.yaml",
+          "reason": "storage_or_test_file_without_corpus_citation",
+          "status": "excluded"
+        },
+        {
+          "citations": [
+            "nz/statute/act/public/1992/0076/section/104"
+          ],
+          "missing_citations": [],
+          "path": "nz/statutes/housing_restructuring/income_related_rent.yaml",
+          "reason": "all_citations_resolve_by_exact_path",
+          "status": "encoded"
+        },
+        {
+          "citations": [],
+          "missing_citations": [],
+          "path": "nz/statutes/immigration/residence.test.yaml",
+          "reason": "storage_or_test_file_without_corpus_citation",
+          "status": "excluded"
+        },
+        {
+          "citations": [
+            "nz/statute/act/public/1977/0061/section/6",
+            "nz/statute/act/public/2009/0051/section/13",
+            "nz/statute/act/public/2009/0051/section/14",
+            "nz/statute/act/public/2009/0051/section/70",
+            "nz/statute/act/public/2018/0032/section/16"
+          ],
+          "missing_citations": [],
+          "path": "nz/statutes/immigration/residence.yaml",
+          "reason": "all_citations_resolve_by_exact_path",
+          "status": "encoded"
+        },
+        {
+          "citations": [],
+          "missing_citations": [],
+          "path": "nz/statutes/income_tax/core/income_interfaces.test.yaml",
+          "reason": "storage_or_test_file_without_corpus_citation",
+          "status": "excluded"
+        },
+        {
+          "citations": [
+            "nz/statute/act/public/2007/0097/section/bc-2",
+            "nz/statute/act/public/2007/0097/section/bc-3",
+            "nz/statute/act/public/2007/0097/section/md-10",
+            "nz/statute/act/public/2007/0097/section/md-3",
+            "nz/statute/act/public/2007/0097/section/me-1",
+            "nz/statute/act/public/2007/0097/section/me-3",
+            "nz/statute/act/public/2007/0097/section/mg-2",
+            "nz/statute/act/public/2007/0097/section/mg-3"
+          ],
+          "missing_citations": [],
+          "path": "nz/statutes/income_tax/core/income_interfaces.yaml",
+          "reason": "all_citations_resolve_by_exact_path",
+          "status": "encoded"
+        },
+        {
+          "citations": [],
+          "missing_citations": [],
+          "path": "nz/statutes/income_tax/core/taxable_income.test.yaml",
+          "reason": "storage_or_test_file_without_corpus_citation",
+          "status": "excluded"
+        },
+        {
+          "citations": [
+            "nz/statute/act/public/2007/0097/section/bb-1",
+            "nz/statute/act/public/2007/0097/section/bc-1",
+            "nz/statute/act/public/2007/0097/section/bc-2",
+            "nz/statute/act/public/2007/0097/section/bc-3",
+            "nz/statute/act/public/2007/0097/section/bc-4",
+            "nz/statute/act/public/2007/0097/section/bc-5",
+            "nz/statute/act/public/2007/0097/section/bc-6",
+            "nz/statute/act/public/2007/0097/section/bc-7",
+            "nz/statute/act/public/2007/0097/section/bc-8",
+            "nz/statute/act/public/2007/0097/section/bd-1",
+            "nz/statute/act/public/2007/0097/section/bd-2",
+            "nz/statute/act/public/2007/0097/section/ca-1",
+            "nz/statute/act/public/2007/0097/section/ca-2",
+            "nz/statute/act/public/2007/0097/section/ce-1",
+            "nz/statute/act/public/2007/0097/section/da-1",
+            "nz/statute/act/public/2007/0097/section/da-2",
+            "nz/statute/act/public/2007/0097/section/da-3",
+            "nz/statute/act/public/2007/0097/section/mb-3",
+            "nz/statute/act/public/2007/0097/section/re-1",
+            "nz/statute/act/public/2007/0097/section/re-2",
+            "nz/statute/act/public/2007/0097/section/re-3",
+            "nz/statute/act/public/2007/0097/section/re-4"
+          ],
+          "missing_citations": [],
+          "path": "nz/statutes/income_tax/core/taxable_income.yaml",
+          "reason": "all_citations_resolve_by_exact_path",
+          "status": "encoded"
+        },
+        {
+          "citations": [],
+          "missing_citations": [],
+          "path": "nz/statutes/income_tax/credits/individual_credits.test.yaml",
+          "reason": "storage_or_test_file_without_corpus_citation",
+          "status": "excluded"
+        },
+        {
+          "citations": [
+            "nz/statute/act/public/1994/0166/section/41a",
+            "nz/statute/act/public/2007/0097/section/la-7",
+            "nz/statute/act/public/2007/0097/section/lc-13",
+            "nz/statute/act/public/2007/0097/section/ld-1",
+            "nz/statute/act/public/2007/0097/section/ld-2",
+            "nz/statute/act/public/2007/0097/section/ld-3",
+            "nz/statute/act/public/2007/0097/section/ld-4",
+            "nz/statute/act/public/2007/0097/section/ld-5",
+            "nz/statute/act/public/2007/0097/section/ld-6",
+            "nz/statute/act/public/2007/0097/section/ld-7",
+            "nz/statute/act/public/2007/0097/section/ld-8"
+          ],
+          "missing_citations": [],
+          "path": "nz/statutes/income_tax/credits/individual_credits.yaml",
+          "reason": "all_citations_resolve_by_exact_path",
+          "status": "encoded"
+        },
+        {
+          "citations": [],
+          "missing_citations": [],
+          "path": "nz/statutes/income_tax/family_scheme/eligibility.test.yaml",
+          "reason": "storage_or_test_file_without_corpus_citation",
+          "status": "excluded"
+        },
+        {
+          "citations": [
+            "nz/statute/act/public/2007/0097/section/mc-10",
+            "nz/statute/act/public/2007/0097/section/mc-2",
+            "nz/statute/act/public/2007/0097/section/mc-3",
+            "nz/statute/act/public/2007/0097/section/mc-4",
+            "nz/statute/act/public/2007/0097/section/mc-5",
+            "nz/statute/act/public/2007/0097/section/mc-6",
+            "nz/statute/act/public/2007/0097/section/mc-7",
+            "nz/statute/act/public/2007/0097/section/mc-8",
+            "nz/statute/act/public/2007/0097/section/mc-9",
+            "nz/statute/act/public/2007/0097/section/md-1",
+            "nz/statute/act/public/2007/0097/section/md-4",
+            "nz/statute/act/public/2007/0097/section/md-5",
+            "nz/statute/act/public/2007/0097/section/md-6",
+            "nz/statute/act/public/2007/0097/section/md-7",
+            "nz/statute/act/public/2007/0097/section/md-8",
+            "nz/statute/act/public/2007/0097/section/md-9",
+            "nz/statute/act/public/2007/0097/section/mg-1"
+          ],
+          "missing_citations": [],
+          "path": "nz/statutes/income_tax/family_scheme/eligibility.yaml",
+          "reason": "all_citations_resolve_by_exact_path",
+          "status": "encoded"
+        },
+        {
+          "citations": [],
+          "missing_citations": [],
+          "path": "nz/statutes/income_tax/family_scheme/family_scheme_income.test.yaml",
+          "reason": "storage_or_test_file_without_corpus_citation",
+          "status": "excluded"
+        },
+        {
+          "citations": [
+            "nz/statute/act/public/2007/0097/section/mb-1",
+            "nz/statute/act/public/2007/0097/section/mb-10",
+            "nz/statute/act/public/2007/0097/section/mb-11",
+            "nz/statute/act/public/2007/0097/section/mb-12",
+            "nz/statute/act/public/2007/0097/section/mb-12b",
+            "nz/statute/act/public/2007/0097/section/mb-13",
+            "nz/statute/act/public/2007/0097/section/mb-2",
+            "nz/statute/act/public/2007/0097/section/mb-3",
+            "nz/statute/act/public/2007/0097/section/mb-4",
+            "nz/statute/act/public/2007/0097/section/mb-7",
+            "nz/statute/act/public/2007/0097/section/mb-7b",
+            "nz/statute/act/public/2007/0097/section/mb-8"
+          ],
+          "missing_citations": [],
+          "path": "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml",
+          "reason": "all_citations_resolve_by_exact_path",
+          "status": "encoded"
+        },
+        {
+          "citations": [],
+          "missing_citations": [],
+          "path": "nz/statutes/income_tax/family_scheme/tax_credits.test.yaml",
+          "reason": "storage_or_test_file_without_corpus_citation",
+          "status": "excluded"
+        },
+        {
+          "citations": [
+            "nz/statute/act/public/2007/0097/section/ma-4",
+            "nz/statute/act/public/2007/0097/section/md-1",
+            "nz/statute/act/public/2007/0097/section/md-10",
+            "nz/statute/act/public/2007/0097/section/md-13",
+            "nz/statute/act/public/2007/0097/section/md-2",
+            "nz/statute/act/public/2007/0097/section/md-3",
+            "nz/statute/act/public/2007/0097/section/me-1",
+            "nz/statute/act/public/2007/0097/section/me-3",
+            "nz/statute/act/public/2007/0097/section/mg-1",
+            "nz/statute/act/public/2007/0097/section/mg-2",
+            "nz/statute/act/public/2007/0097/section/mg-3",
+            "nz/statute/act/public/2026/0008/section/105",
+            "nz/statute/act/public/2026/0008/section/2"
+          ],
+          "missing_citations": [],
+          "path": "nz/statutes/income_tax/family_scheme/tax_credits.yaml",
+          "reason": "all_citations_resolve_by_exact_path",
+          "status": "encoded"
+        },
+        {
+          "citations": [],
+          "missing_citations": [],
+          "path": "nz/statutes/income_tax/familyboost_tax_credit/core.test.yaml",
+          "reason": "storage_or_test_file_without_corpus_citation",
+          "status": "excluded"
+        },
+        {
+          "citations": [
+            "nz/statute/act/public/2007/0097/section/mh-3",
+            "nz/statute/act/public/2007/0097/section/mh-4",
+            "nz/statute/act/public/2007/0097/section/mh-5"
+          ],
+          "missing_citations": [],
+          "path": "nz/statutes/income_tax/familyboost_tax_credit/core.yaml",
+          "reason": "all_citations_resolve_by_exact_path",
+          "status": "encoded"
+        },
+        {
+          "citations": [],
+          "missing_citations": [],
+          "path": "nz/statutes/income_tax/investment/pie.test.yaml",
+          "reason": "storage_or_test_file_without_corpus_citation",
+          "status": "excluded"
+        },
+        {
+          "citations": [
+            "nz/guidance/ird/pir-rates-kiwisaver-pie",
+            "nz/statute/act/public/2007/0097/schedule/1/part/b",
+            "nz/statute/act/public/2007/0097/section/hm-47",
+            "nz/statute/act/public/2007/0097/section/hm-6"
+          ],
+          "missing_citations": [
+            "nz/guidance/ird/pir-rates-kiwisaver-pie",
+            "nz/statute/act/public/2007/0097/schedule/1/part/b"
+          ],
+          "path": "nz/statutes/income_tax/investment/pie.yaml",
+          "reason": "citation_absent_from_pinned_corpus_release",
+          "status": "pending"
+        },
+        {
+          "citations": [],
+          "missing_citations": [],
+          "path": "nz/statutes/income_tax/schedule_1/individual_income_tax.test.yaml",
+          "reason": "storage_or_test_file_without_corpus_citation",
+          "status": "excluded"
+        },
+        {
+          "citations": [
+            "nz/statute/act/public/2007/0097/schedule/1/part/a/clause/1"
+          ],
+          "missing_citations": [],
+          "path": "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml",
+          "reason": "all_citations_resolve_by_exact_path",
+          "status": "encoded"
+        },
+        {
+          "citations": [],
+          "missing_citations": [],
+          "path": "nz/statutes/income_tax/withholding/resident_withholding_tax.test.yaml",
+          "reason": "storage_or_test_file_without_corpus_citation",
+          "status": "excluded"
+        },
+        {
+          "citations": [
+            "nz/guidance/ird/rwt-rates",
+            "nz/statute/act/public/2007/0097/schedule/1/part/b",
+            "nz/statute/act/public/2007/0097/schedule/1/part/d/clause/3",
+            "nz/statute/act/public/2007/0097/section/re-12",
+            "nz/statute/act/public/2007/0097/section/re-2"
+          ],
+          "missing_citations": [
+            "nz/guidance/ird/rwt-rates",
+            "nz/statute/act/public/2007/0097/schedule/1/part/b"
+          ],
+          "path": "nz/statutes/income_tax/withholding/resident_withholding_tax.yaml",
+          "reason": "citation_absent_from_pinned_corpus_release",
+          "status": "pending"
+        },
+        {
+          "citations": [],
+          "missing_citations": [],
+          "path": "nz/statutes/kiwisaver/contributions.test.yaml",
+          "reason": "storage_or_test_file_without_corpus_citation",
+          "status": "excluded"
+        },
+        {
+          "citations": [
+            "nz/guidance/ird/how-kiwisaver-works/block-2",
+            "nz/guidance/ird/kiwisaver-government-contribution/block-4",
+            "nz/statute/act/public/2006/0040/section/101b",
+            "nz/statute/act/public/2006/0040/section/64",
+            "nz/statute/act/public/2007/0097/section/mk-4",
+            "nz/statute/act/public/2025/0026/section/13",
+            "nz/statute/act/public/2025/0026/section/20",
+            "nz/statute/act/public/2025/0026/section/22"
+          ],
+          "missing_citations": [
+            "nz/guidance/ird/how-kiwisaver-works/block-2",
+            "nz/guidance/ird/kiwisaver-government-contribution/block-4",
+            "nz/statute/act/public/2025/0026/section/13",
+            "nz/statute/act/public/2025/0026/section/20",
+            "nz/statute/act/public/2025/0026/section/22"
+          ],
+          "path": "nz/statutes/kiwisaver/contributions.yaml",
+          "reason": "citation_absent_from_pinned_corpus_release",
+          "status": "pending"
+        },
+        {
+          "citations": [],
+          "missing_citations": [],
+          "path": "nz/statutes/new_zealand_superannuation/core.test.yaml",
+          "reason": "storage_or_test_file_without_corpus_citation",
+          "status": "excluded"
+        },
+        {
+          "citations": [
+            "nz/statute/act/public/2001/0084/schedule/1/part/1",
+            "nz/statute/act/public/2001/0084/section/11",
+            "nz/statute/act/public/2001/0084/section/12",
+            "nz/statute/act/public/2001/0084/section/4a",
+            "nz/statute/act/public/2001/0084/section/7",
+            "nz/statute/act/public/2001/0084/section/8"
+          ],
+          "missing_citations": [],
+          "path": "nz/statutes/new_zealand_superannuation/core.yaml",
+          "reason": "all_citations_resolve_by_exact_path",
+          "status": "encoded"
+        },
+        {
+          "citations": [],
+          "missing_citations": [],
+          "path": "nz/statutes/new_zealand_superannuation/special_rates.test.yaml",
+          "reason": "storage_or_test_file_without_corpus_citation",
+          "status": "excluded"
+        },
+        {
+          "citations": [
+            "nz/statute/act/public/2001/0084/schedule/1/part/1",
+            "nz/statute/act/public/2001/0084/schedule/1/part/2",
+            "nz/statute/act/public/2001/0084/section/18",
+            "nz/statute/act/public/2001/0084/section/19"
+          ],
+          "missing_citations": [],
+          "path": "nz/statutes/new_zealand_superannuation/special_rates.yaml",
+          "reason": "all_citations_resolve_by_exact_path",
+          "status": "encoded"
+        },
+        {
+          "citations": [],
+          "missing_citations": [],
+          "path": "nz/statutes/pae_ora/health_services.test.yaml",
+          "reason": "storage_or_test_file_without_corpus_citation",
+          "status": "excluded"
+        },
+        {
+          "citations": [
+            "nz/statute/act/public/2022/0030/section/14"
+          ],
+          "missing_citations": [],
+          "path": "nz/statutes/pae_ora/health_services.yaml",
+          "reason": "all_citations_resolve_by_exact_path",
+          "status": "encoded"
+        },
+        {
+          "citations": [],
+          "missing_citations": [],
+          "path": "nz/statutes/parental_leave/paid_parental_leave.test.yaml",
+          "reason": "storage_or_test_file_without_corpus_citation",
+          "status": "excluded"
+        },
+        {
+          "citations": [
+            "nz/guidance/employment-nz/parental-leave-payment-increase-2024/block-2",
+            "nz/guidance/employment-nz/parental-leave-payment-increase-2026/block-4",
+            "nz/guidance/employment-nz/parental-leave-payments/block-33",
+            "nz/regulation/regulation/public/2016/0068/regulation/13",
+            "nz/statute/act/public/1987/0129/section/2ba",
+            "nz/statute/act/public/1987/0129/section/71a",
+            "nz/statute/act/public/1987/0129/section/71b",
+            "nz/statute/act/public/1987/0129/section/71m"
+          ],
+          "missing_citations": [
+            "nz/guidance/employment-nz/parental-leave-payment-increase-2024/block-2",
+            "nz/guidance/employment-nz/parental-leave-payment-increase-2026/block-4",
+            "nz/guidance/employment-nz/parental-leave-payments/block-33",
+            "nz/regulation/regulation/public/2016/0068/regulation/13"
+          ],
+          "path": "nz/statutes/parental_leave/paid_parental_leave.yaml",
+          "reason": "citation_absent_from_pinned_corpus_release",
+          "status": "pending"
+        },
+        {
+          "citations": [],
+          "missing_citations": [],
+          "path": "nz/statutes/payroll/deductions.test.yaml",
+          "reason": "storage_or_test_file_without_corpus_citation",
+          "status": "excluded"
+        },
+        {
+          "citations": [
+            "nz/guidance/ird/kiwisaver-contribution-rates",
+            "nz/guidance/ird/paye-deduction-tables",
+            "nz/guidance/ird/student-loan-repayment-deductions",
+            "nz/regulation/regulation/public/2025/0018/regulation/4",
+            "nz/regulation/regulation/public/2025/0018/regulation/5",
+            "nz/statute/act/public/2006/0040/section/64",
+            "nz/statute/act/public/2007/0097/section/rd-3",
+            "nz/statute/act/public/2007/0097/subpart/rd",
+            "nz/statute/act/public/2011/0062/section/22"
+          ],
+          "missing_citations": [
+            "nz/guidance/ird/kiwisaver-contribution-rates",
+            "nz/guidance/ird/paye-deduction-tables",
+            "nz/guidance/ird/student-loan-repayment-deductions",
+            "nz/statute/act/public/2007/0097/subpart/rd"
+          ],
+          "path": "nz/statutes/payroll/deductions.yaml",
+          "reason": "citation_absent_from_pinned_corpus_release",
+          "status": "pending"
+        },
+        {
+          "citations": [],
+          "missing_citations": [],
+          "path": "nz/statutes/rates_rebates/rates_rebate.test.yaml",
+          "reason": "storage_or_test_file_without_corpus_citation",
+          "status": "excluded"
+        },
+        {
+          "citations": [
+            "nz/regulation/regulation/public/2024/0043/regulation/4",
+            "nz/regulation/regulation/public/2025/0063/regulation/4",
+            "nz/regulation/regulation/public/2026/0084/regulation/4",
+            "nz/statute/act/public/1973/0005/section/3",
+            "nz/statute/act/public/1973/0005/section/4",
+            "nz/statute/act/public/1973/0005/section/5"
+          ],
+          "missing_citations": [],
+          "path": "nz/statutes/rates_rebates/rates_rebate.yaml",
+          "reason": "all_citations_resolve_by_exact_path",
+          "status": "encoded"
+        },
+        {
+          "citations": [],
+          "missing_citations": [],
+          "path": "nz/statutes/social_security/accommodation_supplement/core.test.yaml",
+          "reason": "storage_or_test_file_without_corpus_citation",
+          "status": "excluded"
+        },
+        {
+          "citations": [
+            "nz/regulation/regulation/public/2018/0202/regulation/15",
+            "nz/regulation/regulation/public/2018/0202/regulation/17",
+            "nz/regulation/regulation/public/2018/0202/regulation/18",
+            "nz/regulation/regulation/public/2018/0202/regulation/19",
+            "nz/statute/act/public/2018/0032/schedule/4/part/7/clause/lms118453",
+            "nz/statute/act/public/2018/0032/section/65",
+            "nz/statute/act/public/2018/0032/section/65aaa",
+            "nz/statute/act/public/2018/0032/section/66",
+            "nz/statute/act/public/2018/0032/section/67"
+          ],
+          "missing_citations": [],
+          "path": "nz/statutes/social_security/accommodation_supplement/core.yaml",
+          "reason": "all_citations_resolve_by_exact_path",
+          "status": "encoded"
+        },
+        {
+          "citations": [],
+          "missing_citations": [],
+          "path": "nz/statutes/social_security/child_disability_allowance/core.test.yaml",
+          "reason": "storage_or_test_file_without_corpus_citation",
+          "status": "excluded"
+        },
+        {
+          "citations": [
+            "nz/regulation/regulation/public/2018/0202/regulation/49",
+            "nz/statute/act/public/2018/0032/schedule/4/part/9/clause/lms118455",
+            "nz/statute/act/public/2018/0032/section/78",
+            "nz/statute/act/public/2018/0032/section/79",
+            "nz/statute/act/public/2018/0032/section/80",
+            "nz/statute/act/public/2018/0032/section/81",
+            "nz/statute/act/public/2018/0032/section/82",
+            "nz/statute/act/public/2018/0032/section/83"
+          ],
+          "missing_citations": [],
+          "path": "nz/statutes/social_security/child_disability_allowance/core.yaml",
+          "reason": "all_citations_resolve_by_exact_path",
+          "status": "encoded"
+        },
+        {
+          "citations": [],
+          "missing_citations": [],
+          "path": "nz/statutes/social_security/disability_allowance/core.test.yaml",
+          "reason": "storage_or_test_file_without_corpus_citation",
+          "status": "excluded"
+        },
+        {
+          "citations": [
+            "nz/regulation/regulation/public/2018/0202/regulation/50",
+            "nz/regulation/regulation/public/2018/0202/regulation/51",
+            "nz/regulation/regulation/public/2018/0202/regulation/52",
+            "nz/statute/act/public/2018/0032/schedule/4/part/9/clause/lms118455",
+            "nz/statute/act/public/2018/0032/schedule/5/part/3",
+            "nz/statute/act/public/2018/0032/section/16",
+            "nz/statute/act/public/2018/0032/section/84",
+            "nz/statute/act/public/2018/0032/section/85",
+            "nz/statute/act/public/2018/0032/section/86",
+            "nz/statute/act/public/2018/0032/section/87",
+            "nz/statute/act/public/2018/0032/section/88"
+          ],
+          "missing_citations": [],
+          "path": "nz/statutes/social_security/disability_allowance/core.yaml",
+          "reason": "all_citations_resolve_by_exact_path",
+          "status": "encoded"
+        },
+        {
+          "citations": [],
+          "missing_citations": [],
+          "path": "nz/statutes/social_security/main_benefits/entitlement.test.yaml",
+          "reason": "storage_or_test_file_without_corpus_citation",
+          "status": "excluded"
+        },
+        {
+          "citations": [
+            "nz/statute/act/public/2018/0032/section/16",
+            "nz/statute/act/public/2018/0032/section/18",
+            "nz/statute/act/public/2018/0032/section/19",
+            "nz/statute/act/public/2018/0032/section/20",
+            "nz/statute/act/public/2018/0032/section/21",
+            "nz/statute/act/public/2018/0032/section/22",
+            "nz/statute/act/public/2018/0032/section/23",
+            "nz/statute/act/public/2018/0032/section/24",
+            "nz/statute/act/public/2018/0032/section/25",
+            "nz/statute/act/public/2018/0032/section/26",
+            "nz/statute/act/public/2018/0032/section/29",
+            "nz/statute/act/public/2018/0032/section/30",
+            "nz/statute/act/public/2018/0032/section/31",
+            "nz/statute/act/public/2018/0032/section/32",
+            "nz/statute/act/public/2018/0032/section/33",
+            "nz/statute/act/public/2018/0032/section/34",
+            "nz/statute/act/public/2018/0032/section/35",
+            "nz/statute/act/public/2018/0032/section/36",
+            "nz/statute/act/public/2018/0032/section/39",
+            "nz/statute/act/public/2018/0032/section/40"
+          ],
+          "missing_citations": [],
+          "path": "nz/statutes/social_security/main_benefits/entitlement.yaml",
+          "reason": "all_citations_resolve_by_exact_path",
+          "status": "encoded"
+        },
+        {
+          "citations": [],
+          "missing_citations": [],
+          "path": "nz/statutes/social_security/main_benefits/rates.test.yaml",
+          "reason": "storage_or_test_file_without_corpus_citation",
+          "status": "excluded"
+        },
+        {
+          "citations": [
+            "nz/regulation/regulation/public/2026/0036/regulation/5",
+            "nz/statute/act/public/2018/0032/schedule/2/definition/income-test-1",
+            "nz/statute/act/public/2018/0032/schedule/2/definition/income-test-2",
+            "nz/statute/act/public/2018/0032/schedule/2/definition/income-test-3",
+            "nz/statute/act/public/2018/0032/schedule/2/definition/income-test-4",
+            "nz/statute/act/public/2018/0032/schedule/4/part/1/clause/lms118447",
+            "nz/statute/act/public/2018/0032/schedule/4/part/2/clause/lms118467",
+            "nz/statute/act/public/2018/0032/schedule/4/part/3/clause/lms118466"
+          ],
+          "missing_citations": [],
+          "path": "nz/statutes/social_security/main_benefits/rates.yaml",
+          "reason": "all_citations_resolve_by_exact_path",
+          "status": "encoded"
+        },
+        {
+          "citations": [],
+          "missing_citations": [],
+          "path": "nz/statutes/social_security/orphans_unsupported_child_benefit/core.test.yaml",
+          "reason": "storage_or_test_file_without_corpus_citation",
+          "status": "excluded"
+        },
+        {
+          "citations": [
+            "nz/statute/act/public/2018/0032/schedule/3/part/3/clause/12",
+            "nz/statute/act/public/2018/0032/schedule/4/part/4/clause/lms118449",
+            "nz/statute/act/public/2018/0032/schedule/4/part/5/clause/lms118450",
+            "nz/statute/act/public/2018/0032/section/43",
+            "nz/statute/act/public/2018/0032/section/44",
+            "nz/statute/act/public/2018/0032/section/46"
+          ],
+          "missing_citations": [],
+          "path": "nz/statutes/social_security/orphans_unsupported_child_benefit/core.yaml",
+          "reason": "all_citations_resolve_by_exact_path",
+          "status": "encoded"
+        },
+        {
+          "citations": [],
+          "missing_citations": [],
+          "path": "nz/statutes/social_security/winter_energy_payment/core.test.yaml",
+          "reason": "storage_or_test_file_without_corpus_citation",
+          "status": "excluded"
+        },
+        {
+          "citations": [
+            "nz/statute/act/public/2018/0032/schedule/4/part/8/clause/lms118454",
+            "nz/statute/act/public/2018/0032/section/220",
+            "nz/statute/act/public/2018/0032/section/70",
+            "nz/statute/act/public/2018/0032/section/71",
+            "nz/statute/act/public/2018/0032/section/72",
+            "nz/statute/act/public/2018/0032/section/73",
+            "nz/statute/act/public/2018/0032/section/74",
+            "nz/statute/act/public/2018/0032/section/75"
+          ],
+          "missing_citations": [],
+          "path": "nz/statutes/social_security/winter_energy_payment/core.yaml",
+          "reason": "all_citations_resolve_by_exact_path",
+          "status": "encoded"
+        },
+        {
+          "citations": [],
+          "missing_citations": [],
+          "path": "nz/statutes/social_security/youth_young_parent_payment/core.test.yaml",
+          "reason": "storage_or_test_file_without_corpus_citation",
+          "status": "excluded"
+        },
+        {
+          "citations": [
+            "nz/statute/act/public/2018/0032/schedule/4/part/6/subpart/1",
+            "nz/statute/act/public/2018/0032/schedule/4/part/6/subpart/4",
+            "nz/statute/act/public/2018/0032/section/49",
+            "nz/statute/act/public/2018/0032/section/56"
+          ],
+          "missing_citations": [],
+          "path": "nz/statutes/social_security/youth_young_parent_payment/core.yaml",
+          "reason": "all_citations_resolve_by_exact_path",
+          "status": "encoded"
+        },
+        {
+          "citations": [],
+          "missing_citations": [],
+          "path": "nz/statutes/student_loan/repayments.test.yaml",
+          "reason": "storage_or_test_file_without_corpus_citation",
+          "status": "excluded"
+        },
+        {
+          "citations": [
+            "nz/guidance/ird/student-loan-repayment-deductions",
+            "nz/regulation/regulation/public/2023/0295/regulation/3",
+            "nz/statute/act/public/2011/0062",
+            "nz/statute/act/public/2011/0062/schedule/1",
+            "nz/statute/act/public/2011/0062/section/22"
+          ],
+          "missing_citations": [
+            "nz/guidance/ird/student-loan-repayment-deductions"
+          ],
+          "path": "nz/statutes/student_loan/repayments.yaml",
+          "reason": "citation_absent_from_pinned_corpus_release",
+          "status": "pending"
+        }
+      ],
+      "root": "nz/statutes",
+      "total_files": 68
+    },
+    {
+      "by_status": {
+        "encoded": 4,
+        "excluded": 5,
+        "pending": 1
+      },
+      "classifications": [
+        {
+          "citations": [],
+          "missing_citations": [],
+          "path": "nz/regulations/acc/earners_levy.test.yaml",
+          "reason": "storage_or_test_file_without_corpus_citation",
+          "status": "excluded"
+        },
+        {
+          "citations": [
+            "nz/regulation/regulation/public/2025/0018/regulation/4",
+            "nz/regulation/regulation/public/2025/0018/regulation/5",
+            "nz/regulation/regulation/public/2025/0018/regulation/6",
+            "nz/regulation/regulation/public/2025/0018/regulation/7",
+            "nz/regulation/regulation/public/2025/0018/regulation/8",
+            "nz/regulation/regulation/public/2025/0018/regulation/9"
+          ],
+          "missing_citations": [],
+          "path": "nz/regulations/acc/earners_levy.yaml",
+          "reason": "all_citations_resolve_by_exact_path",
+          "status": "encoded"
+        },
+        {
+          "citations": [],
+          "missing_citations": [],
+          "path": "nz/regulations/health_entitlement_cards/community_services_card/core.test.yaml",
+          "reason": "storage_or_test_file_without_corpus_citation",
+          "status": "excluded"
+        },
+        {
+          "citations": [
+            "nz/regulation/regulation/public/1993/0169/regulation/4",
+            "nz/regulation/regulation/public/1993/0169/regulation/4a",
+            "nz/regulation/regulation/public/1993/0169/regulation/5",
+            "nz/regulation/regulation/public/1993/0169/regulation/8",
+            "nz/regulation/regulation/public/1993/0169/regulation/9"
+          ],
+          "missing_citations": [],
+          "path": "nz/regulations/health_entitlement_cards/community_services_card/core.yaml",
+          "reason": "all_citations_resolve_by_exact_path",
+          "status": "encoded"
+        },
+        {
+          "citations": [],
+          "missing_citations": [],
+          "path": "nz/regulations/rma_district_plans/wellington_city/supermarket_zoning.test.yaml",
+          "reason": "storage_or_test_file_without_corpus_citation",
+          "status": "excluded"
+        },
+        {
+          "citations": [
+            "nz/district-plan/wellington-city/2024/ccz/r1",
+            "nz/district-plan/wellington-city/2024/giz/r5",
+            "nz/district-plan/wellington-city/2024/lcz/r1",
+            "nz/district-plan/wellington-city/2024/mcz/r1",
+            "nz/district-plan/wellington-city/2024/muz/r1",
+            "nz/district-plan/wellington-city/2024/muz/r13",
+            "nz/district-plan/wellington-city/2024/ncz/r1"
+          ],
+          "missing_citations": [],
+          "path": "nz/regulations/rma_district_plans/wellington_city/supermarket_zoning.yaml",
+          "reason": "all_citations_resolve_by_exact_path",
+          "status": "encoded"
+        },
+        {
+          "citations": [],
+          "missing_citations": [],
+          "path": "nz/regulations/social_security/childcare_assistance/core.test.yaml",
+          "reason": "storage_or_test_file_without_corpus_citation",
+          "status": "excluded"
+        },
+        {
+          "citations": [
+            "nz/regulation/regulation/public/2018/0202/regulation/21",
+            "nz/regulation/regulation/public/2018/0202/regulation/23",
+            "nz/regulation/regulation/public/2018/0202/regulation/24",
+            "nz/regulation/regulation/public/2018/0202/regulation/30",
+            "nz/regulation/regulation/public/2018/0202/regulation/31",
+            "nz/regulation/regulation/public/2018/0202/regulation/32",
+            "nz/regulation/regulation/public/2018/0202/regulation/33",
+            "nz/regulation/regulation/public/2018/0202/regulation/34",
+            "nz/regulation/regulation/public/2018/0202/regulation/35",
+            "nz/regulation/regulation/public/2018/0202/regulation/36",
+            "nz/regulation/regulation/public/2018/0202/regulation/38",
+            "nz/regulation/regulation/public/2018/0202/regulation/39",
+            "nz/regulation/regulation/public/2018/0202/regulation/40",
+            "nz/regulation/regulation/public/2018/0202/regulation/41",
+            "nz/regulation/regulation/public/2018/0202/regulation/42",
+            "nz/regulation/regulation/public/2018/0202/regulation/44",
+            "nz/regulation/regulation/public/2018/0202/schedule/2",
+            "nz/statute/act/public/2018/0032/section/77"
+          ],
+          "missing_citations": [],
+          "path": "nz/regulations/social_security/childcare_assistance/core.yaml",
+          "reason": "all_citations_resolve_by_exact_path",
+          "status": "encoded"
+        },
+        {
+          "citations": [],
+          "missing_citations": [],
+          "path": "nz/regulations/student_allowances/core.test.yaml",
+          "reason": "storage_or_test_file_without_corpus_citation",
+          "status": "excluded"
+        },
+        {
+          "citations": [
+            "nz/guidance/studylink/student-allowances",
+            "nz/regulation/regulation/public/1998/0277/regulation/4"
+          ],
+          "missing_citations": [
+            "nz/guidance/studylink/student-allowances"
+          ],
+          "path": "nz/regulations/student_allowances/core.yaml",
+          "reason": "citation_absent_from_pinned_corpus_release",
+          "status": "pending"
+        }
+      ],
+      "root": "nz/regulations",
+      "total_files": 10
+    },
+    {
+      "by_status": {
+        "encoded": 1,
+        "excluded": 1,
+        "pending": 0
+      },
+      "classifications": [
+        {
+          "citations": [],
+          "missing_citations": [],
+          "path": "nz/policies/common/demographics.test.yaml",
+          "reason": "storage_or_test_file_without_corpus_citation",
+          "status": "excluded"
+        },
+        {
+          "citations": [
+            "nz/statute/act/public/1977/0061/section/8"
+          ],
+          "missing_citations": [],
+          "path": "nz/policies/common/demographics.yaml",
+          "reason": "all_citations_resolve_by_exact_path",
+          "status": "encoded"
+        }
+      ],
+      "root": "nz/policies",
+      "total_files": 2
+    }
+  ],
+  "rulespec_commit": "89a7d25dc03a4d045348620283332de10b1047da",
+  "schema": "axiom_oracles.nz_closure_summary.v2",
+  "source": {
+    "artifact": "closure/nz/source.json",
+    "sha256": "a69b872fbc9fd9a98132ea5b7f5272d8be9631d3060651603b2b3c1f7cd64aea"
+  }
+}
