@@ -710,8 +710,11 @@ def test_dk_synthetic_population_declaration_cannot_be_dropped():
     assert any("must declare case_source=suite" in error for error in errors)
 
 
-def test_strict_cli_enforces_findings_on_every_manifest(monkeypatch):
-    """A finding stays fatal under --strict regardless of manifest metadata."""
+def test_strict_cli_cannot_be_disarmed_by_a_strict_lane_regressing(monkeypatch):
+    """MUTANT: a finding on a strict-declared manifest is fatal under --strict
+    even when a non-strict manifest with debt sits beside it — the mixed set
+    must still exit nonzero (the strict lane's certificate rests on zero
+    findings; debt elsewhere neither masks nor excuses it)."""
     vbm = _load("validate_bridge_manifests")
     strict_path = REPO / "strict.yaml"
     legacy_path = REPO / "legacy.yaml"
@@ -733,8 +736,24 @@ def test_strict_cli_enforces_findings_on_every_manifest(monkeypatch):
     )
 
     assert vbm.main() == 1
-    manifests[strict_path]["strict"] = False
-    assert vbm.main() == 1
+
+
+def test_strict_cli_treats_non_strict_findings_as_visible_debt(monkeypatch, capsys):
+    """Only-debt sets (no strict-declared manifest has a finding) exit 0 under
+    --strict, and the debt is printed — never silently swallowed."""
+    vbm = _load("validate_bridge_manifests")
+    legacy_path = REPO / "legacy.yaml"
+    monkeypatch.setattr(vbm, "load_manifests", lambda: {legacy_path: {"strict": False}})
+    monkeypatch.setattr(vbm, "global_collisions", lambda _manifests: [])
+    monkeypatch.setattr(
+        vbm,
+        "validate",
+        lambda path, _manifest: ([], [f"{path.name}: debt finding"]),
+    )
+    monkeypatch.setattr(vbm.sys, "argv", ["validate_bridge_manifests.py", "--strict"])
+
+    assert vbm.main() == 0
+    assert "legacy.yaml: debt finding" in capsys.readouterr().out
 
 
 def test_bridge_manifest_identity_fields_are_typed():

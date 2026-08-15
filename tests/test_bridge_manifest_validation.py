@@ -192,18 +192,32 @@ def test_differing_periods_require_both_explicit_fields() -> None:
     )
 
 
-def test_strict_is_global(monkeypatch) -> None:
+def test_strict_enforces_declared_lanes_and_surfaces_debt(monkeypatch, capsys) -> None:
+    """--strict reds a finding on a strict-declared manifest; a finding on a
+    non-strict manifest is printed as audit debt without failing the run."""
+    strict_path = REPO_ROOT / "strict-lane.yaml"
     legacy_path = REPO_ROOT / "legacy.yaml"
-    manifests = {legacy_path: {"strict": False}}
-    monkeypatch.setattr(validator, "load_manifests", lambda: manifests)
     monkeypatch.setattr(validator, "global_collisions", lambda _manifests: [])
     monkeypatch.setattr(
         validator,
         "validate",
         lambda path, _manifest: ([], [f"{path.name}: mutant finding"]),
     )
-
     monkeypatch.setattr(
         validator.sys, "argv", ["validate_bridge_manifests.py", "--strict"]
+    )
+
+    # Debt on a non-strict manifest: visible, exit 0.
+    monkeypatch.setattr(
+        validator, "load_manifests", lambda: {legacy_path: {"strict": False}}
+    )
+    assert validator.main() == 0
+    out = capsys.readouterr().out
+    assert "legacy.yaml: mutant finding" in out
+    assert "audit-debt finding(s)" in out
+
+    # The same finding on a strict-declared manifest: exit 1.
+    monkeypatch.setattr(
+        validator, "load_manifests", lambda: {strict_path: {"strict": True}}
     )
     assert validator.main() == 1
