@@ -155,7 +155,7 @@
     "left": "euromod",
     "right": "axiom",
     "versions": {
-      "axiom_rules_engine": "0.1.0"
+      "axiom_rules_engine": "0.2.1"
     }
   },
   "errors": [],
@@ -192,11 +192,11 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "05eac9d2f89dabe5c6673176260762cef3a58f47",
-      "axiom_rules_engine_version": "0.1.0",
+      "axiom_rules_engine_sha": "04231ca884485be1daec9e0dd41a8a681a621fb8",
+      "axiom_rules_engine_version": "0.2.1",
       "binary_sha256": "079c26f4244db8c2a72fcbfb8cf88aaa5cb7c99628dc1c8d9d3b2d011e5f32a5"
     },
-    "generated_at": "2026-08-14T12:02:27Z",
+    "generated_at": "2026-08-15T18:54:33Z",
     "generated_by": "scripts/run_comparison.py::dk-child-youth-benefit-2023-euromod",
     "oracle": {
       "euromod_country": "DK",
@@ -205,13 +205,14 @@
       "euromod_system": "DK_2023",
       "name": "euromod"
     },
+    "reemitted_report": true,
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-dk",
-        "sha": "9986b6035c4e557b9b40645dfe2f3e4cffb6037c"
+        "sha": null
       }
     ],
-    "run_kind": "manual",
+    "run_kind": "affected-rerun",
     "schema": "axiom_oracles.provenance.v1"
   },
   "schema_version": "axiom.comparison_report.v2.1",

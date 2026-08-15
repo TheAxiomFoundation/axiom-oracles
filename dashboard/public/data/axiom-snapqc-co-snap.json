@@ -1,359 +1,361 @@
 {
- "aggregates": [
-  {
-   "category": "income",
-   "comparison": "amount",
-   "comparison_count": 856,
-   "comparison_weight": 3663355.009217,
-   "components": [],
-   "concept": "us:regulations/7-cfr/273/10#snap_total_gross_income",
-   "description": "gross income",
-   "left_weighted_sum": 3754097513.579777,
-   "match_rate": 100,
-   "match_weight": 3663355.009217,
-   "mismatch_count": 0,
-   "mismatch_weight": 0,
-   "missing_both_count": 0,
-   "missing_left_count": 0,
-   "missing_right_count": 0,
-   "parent": null,
-   "right_weighted_sum": 3754097513.579777,
-   "weighted_difference": 0,
-   "weighted_match_rate": 100
-  },
-  {
-   "category": "deductions",
-   "comparison": "amount",
-   "comparison_count": 856,
-   "comparison_weight": 3663355.009217,
-   "components": [],
-   "concept": "us:policies/usda/snap/fy-2024-cola/deductions#snap_standard_deduction",
-   "description": "standard deduction",
-   "left_weighted_sum": 743837346.896147,
-   "match_rate": 100,
-   "match_weight": 3663355.009217,
-   "mismatch_count": 0,
-   "mismatch_weight": 0,
-   "missing_both_count": 0,
-   "missing_left_count": 0,
-   "missing_right_count": 0,
-   "parent": null,
-   "right_weighted_sum": 743837346.896147,
-   "weighted_difference": 0,
-   "weighted_match_rate": 100
-  },
-  {
-   "category": "deductions",
-   "comparison": "amount",
-   "comparison_count": 856,
-   "comparison_weight": 3663355.009217,
-   "components": [],
-   "concept": "us:regulations/7-cfr/273/10#snap_excess_shelter_deduction_for_net_income",
-   "description": "shelter deduction",
-   "left_weighted_sum": 1153326549.655538,
-   "match_rate": 100,
-   "match_weight": 3663355.009217,
-   "mismatch_count": 0,
-   "mismatch_weight": 0,
-   "missing_both_count": 0,
-   "missing_left_count": 0,
-   "missing_right_count": 0,
-   "parent": null,
-   "right_weighted_sum": 1153326549.655538,
-   "weighted_difference": 0,
-   "weighted_match_rate": 100
-  },
-  {
-   "category": "income",
-   "comparison": "amount",
-   "comparison_count": 856,
-   "comparison_weight": 3663355.009217,
-   "components": [],
-   "concept": "us:regulations/7-cfr/273/10#snap_net_monthly_income",
-   "description": "net income",
-   "left_weighted_sum": 1961004355.828671,
-   "match_rate": 100,
-   "match_weight": 3663355.009217,
-   "mismatch_count": 0,
-   "mismatch_weight": 0,
-   "missing_both_count": 0,
-   "missing_left_count": 0,
-   "missing_right_count": 0,
-   "parent": null,
-   "right_weighted_sum": 1961004355.828671,
-   "weighted_difference": 0,
-   "weighted_match_rate": 100
-  },
-  {
-   "category": "benefits",
-   "comparison": "amount",
-   "comparison_count": 856,
-   "comparison_weight": 3663355.009217,
-   "components": [],
-   "concept": "us:policies/usda/snap/fy-2024-cola/maximum-allotments#snap_maximum_allotment",
-   "description": "maximum allotment",
-   "left_weighted_sum": 1784670422.086095,
-   "match_rate": 100,
-   "match_weight": 3663355.009217,
-   "mismatch_count": 0,
-   "mismatch_weight": 0,
-   "missing_both_count": 0,
-   "missing_left_count": 0,
-   "missing_right_count": 0,
-   "parent": null,
-   "right_weighted_sum": 1784670422.086095,
-   "weighted_difference": 0,
-   "weighted_match_rate": 100
-  },
-  {
-   "category": "benefits",
-   "comparison": "amount",
-   "comparison_count": 856,
-   "comparison_weight": 3663355.009217,
-   "components": [],
-   "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
-   "description": "benefit",
-   "left_weighted_sum": 1255069797.921564,
-   "match_rate": 100,
-   "match_weight": 3663355.009217,
-   "mismatch_count": 0,
-   "mismatch_weight": 0,
-   "missing_both_count": 0,
-   "missing_left_count": 0,
-   "missing_right_count": 0,
-   "parent": null,
-   "right_weighted_sum": 1255069797.921564,
-   "weighted_difference": 0,
-   "weighted_match_rate": 100
-  }
- ],
- "case_count": 856,
- "cases": [],
- "concepts": [
-  {
-   "category": "income",
-   "comparison": "amount",
-   "components": [],
-   "description": "gross income",
-   "id": "us:regulations/7-cfr/273/10#snap_total_gross_income",
-   "parent": null,
-   "priority": "normal",
-   "relative_tolerance": 0,
-   "tolerance": 0.0
-  },
-  {
-   "category": "deductions",
-   "comparison": "amount",
-   "components": [],
-   "description": "standard deduction",
-   "id": "us:policies/usda/snap/fy-2024-cola/deductions#snap_standard_deduction",
-   "parent": null,
-   "priority": "normal",
-   "relative_tolerance": 0,
-   "tolerance": 0.0
-  },
-  {
-   "category": "deductions",
-   "comparison": "amount",
-   "components": [],
-   "description": "shelter deduction",
-   "id": "us:regulations/7-cfr/273/10#snap_excess_shelter_deduction_for_net_income",
-   "parent": null,
-   "priority": "normal",
-   "relative_tolerance": 0,
-   "tolerance": 0.0
-  },
-  {
-   "category": "income",
-   "comparison": "amount",
-   "components": [],
-   "description": "net income",
-   "id": "us:regulations/7-cfr/273/10#snap_net_monthly_income",
-   "parent": null,
-   "priority": "normal",
-   "relative_tolerance": 0,
-   "tolerance": 0.0
-  },
-  {
-   "category": "benefits",
-   "comparison": "amount",
-   "components": [],
-   "description": "maximum allotment",
-   "id": "us:policies/usda/snap/fy-2024-cola/maximum-allotments#snap_maximum_allotment",
-   "parent": null,
-   "priority": "normal",
-   "relative_tolerance": 0,
-   "tolerance": 0.0
-  },
-  {
-   "category": "benefits",
-   "comparison": "amount",
-   "components": [],
-   "description": "benefit",
-   "id": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
-   "parent": null,
-   "priority": "high",
-   "relative_tolerance": 0,
-   "tolerance": 0.0
-  }
- ],
- "engines": {
-  "left": "snap-qc",
-  "right": "axiom"
- },
- "errors": [],
- "locales": [
-  "US-CO"
- ],
- "mismatches": [],
- "population": "snap-qc-puf",
- "provenance": {
-  "engine": {},
-  "generated_at": "2026-08-10T03:14:03Z",
-  "generated_by": "scripts/run_comparison.py::co-snap-qc",
-  "oracle": {
-   "fiscal_year": 2024,
-   "name": "snap-qc",
-   "sha256": "0f3230a4318307d3088382546095eebfde03e781da6f65c9eac7f077bd4263f4",
-   "url": "https://snapqcdata.net/sites/default/files/2026-05/qcfy2024_csv.zip"
-  },
-  "rulespecs": [
-   {
-    "repo": "TheAxiomFoundation/rulespec-us",
-    "sha": "6a52ca15aa436cab6dfec67c6e460e9f3e9485fb"
-   }
+  "aggregates": [
+    {
+      "category": "income",
+      "comparison": "amount",
+      "comparison_count": 856,
+      "comparison_weight": 3663355.009217,
+      "components": [],
+      "concept": "us:regulations/7-cfr/273/10#snap_total_gross_income",
+      "description": "gross income",
+      "left_weighted_sum": 3754097513.579777,
+      "match_rate": 100,
+      "match_weight": 3663355.009217,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 3754097513.579777,
+      "weighted_difference": 0,
+      "weighted_match_rate": 100
+    },
+    {
+      "category": "deductions",
+      "comparison": "amount",
+      "comparison_count": 856,
+      "comparison_weight": 3663355.009217,
+      "components": [],
+      "concept": "us:policies/usda/snap/fy-2024-cola/deductions#snap_standard_deduction",
+      "description": "standard deduction",
+      "left_weighted_sum": 743837346.896147,
+      "match_rate": 100,
+      "match_weight": 3663355.009217,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 743837346.896147,
+      "weighted_difference": 0,
+      "weighted_match_rate": 100
+    },
+    {
+      "category": "deductions",
+      "comparison": "amount",
+      "comparison_count": 856,
+      "comparison_weight": 3663355.009217,
+      "components": [],
+      "concept": "us:regulations/7-cfr/273/10#snap_excess_shelter_deduction_for_net_income",
+      "description": "shelter deduction",
+      "left_weighted_sum": 1153326549.655538,
+      "match_rate": 100,
+      "match_weight": 3663355.009217,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 1153326549.655538,
+      "weighted_difference": 0,
+      "weighted_match_rate": 100
+    },
+    {
+      "category": "income",
+      "comparison": "amount",
+      "comparison_count": 856,
+      "comparison_weight": 3663355.009217,
+      "components": [],
+      "concept": "us:regulations/7-cfr/273/10#snap_net_monthly_income",
+      "description": "net income",
+      "left_weighted_sum": 1961004355.828671,
+      "match_rate": 100,
+      "match_weight": 3663355.009217,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 1961004355.828671,
+      "weighted_difference": 0,
+      "weighted_match_rate": 100
+    },
+    {
+      "category": "benefits",
+      "comparison": "amount",
+      "comparison_count": 856,
+      "comparison_weight": 3663355.009217,
+      "components": [],
+      "concept": "us:policies/usda/snap/fy-2024-cola/maximum-allotments#snap_maximum_allotment",
+      "description": "maximum allotment",
+      "left_weighted_sum": 1784670422.086095,
+      "match_rate": 100,
+      "match_weight": 3663355.009217,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 1784670422.086095,
+      "weighted_difference": 0,
+      "weighted_match_rate": 100
+    },
+    {
+      "category": "benefits",
+      "comparison": "amount",
+      "comparison_count": 856,
+      "comparison_weight": 3663355.009217,
+      "components": [],
+      "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
+      "description": "benefit",
+      "left_weighted_sum": 1255069797.921564,
+      "match_rate": 100,
+      "match_weight": 3663355.009217,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 1255069797.921564,
+      "weighted_difference": 0,
+      "weighted_match_rate": 100
+    }
   ],
-  "run_kind": "manual",
-  "schema": "axiom_oracles.provenance.v1"
- },
- "schema_version": "axiom.comparison_report.v2.1",
- "scope": null,
- "suite": "co-snap-qc",
- "summary": {
-  "comparison_count": 856,
-  "dispositioned": {
-   "counts": {
-    "axiom_encoding_gap": 0,
-    "bridge_artifact": 0,
-    "explained_residual": 0,
-    "unexplained": 0,
-    "upstream_engine_gap": 0
-   },
-   "dispositions_file": null,
-   "expired_entries": [],
-   "explained_rate": 100,
-   "orphaned_entries": [],
-   "raw_match_rate": 100,
-   "schema_version": "axiom_oracles.dispositions.v1",
-   "unexplained_count": 0
+  "case_count": 856,
+  "cases": [],
+  "concepts": [
+    {
+      "category": "income",
+      "comparison": "amount",
+      "components": [],
+      "description": "gross income",
+      "id": "us:regulations/7-cfr/273/10#snap_total_gross_income",
+      "parent": null,
+      "priority": "normal",
+      "relative_tolerance": 0,
+      "tolerance": 0.0
+    },
+    {
+      "category": "deductions",
+      "comparison": "amount",
+      "components": [],
+      "description": "standard deduction",
+      "id": "us:policies/usda/snap/fy-2024-cola/deductions#snap_standard_deduction",
+      "parent": null,
+      "priority": "normal",
+      "relative_tolerance": 0,
+      "tolerance": 0.0
+    },
+    {
+      "category": "deductions",
+      "comparison": "amount",
+      "components": [],
+      "description": "shelter deduction",
+      "id": "us:regulations/7-cfr/273/10#snap_excess_shelter_deduction_for_net_income",
+      "parent": null,
+      "priority": "normal",
+      "relative_tolerance": 0,
+      "tolerance": 0.0
+    },
+    {
+      "category": "income",
+      "comparison": "amount",
+      "components": [],
+      "description": "net income",
+      "id": "us:regulations/7-cfr/273/10#snap_net_monthly_income",
+      "parent": null,
+      "priority": "normal",
+      "relative_tolerance": 0,
+      "tolerance": 0.0
+    },
+    {
+      "category": "benefits",
+      "comparison": "amount",
+      "components": [],
+      "description": "maximum allotment",
+      "id": "us:policies/usda/snap/fy-2024-cola/maximum-allotments#snap_maximum_allotment",
+      "parent": null,
+      "priority": "normal",
+      "relative_tolerance": 0,
+      "tolerance": 0.0
+    },
+    {
+      "category": "benefits",
+      "comparison": "amount",
+      "components": [],
+      "description": "benefit",
+      "id": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 0.0
+    }
+  ],
+  "dashboard_truncation": {
+    "shown_case_rows": 0,
+    "shown_mismatches": 0,
+    "total_case_rows": 856,
+    "total_mismatches": 0
   },
-  "error_case_count": 0,
-  "exclusions": {
-   "by_reason": {},
-   "total_excluded": 0,
-   "total_loaded": 856
+  "engines": {
+    "left": "snap-qc",
+    "right": "axiom"
   },
-  "match_count": 856,
-  "match_rate": 100,
-  "mismatch_count": 0,
+  "errors": [],
+  "locales": [
+    "US-CO"
+  ],
+  "mismatches": [],
+  "population": "snap-qc-puf",
   "provenance": {
-   "axiom_binary": "/Users/maxghenis/TheAxiomFoundation/axiom-rules-engine/target/release/axiom-rules-engine",
-   "fiscal_year": 2024,
-   "overlay": {
-    "file_sha256": {
-     "us-co/policies/cdhs/snap/fy-2026-benefit-calculation.yaml": "1aeb049a959ce990408ff793927162417b1677dbaa699156da6460c1ba9cea96",
-     "us-co/regulations/10-ccr-2506-1/4.206.yaml": "34485b43cd50936ffe4fbeb09bd8f90ffac106694b91fb394aea2458161fa6e8",
-     "us-co/regulations/10-ccr-2506-1/4.207.2.yaml": "48a5c480c9b1e12dbf4ddf5ed23f45fcafd66070a49f857ac74cd00777919151",
-     "us-co/regulations/10-ccr-2506-1/4.207.3.yaml": "2a9ded5c9c76845879f3076f6958eff585577244fdbdfcb01d8409115c37dc17",
-     "us-co/regulations/10-ccr-2506-1/4.305.2.yaml": "eb9a0afe85c76bf6f38603e96003fb7c5fc9c019524200740c5eb1fec9d296ae",
-     "us-co/regulations/10-ccr-2506-1/4.401.1.yaml": "d8c502cbdc420acaf4d8cb4dc5540e77243259e2827e582bd05ba1e1e5517394",
-     "us-co/regulations/10-ccr-2506-1/4.401.2.yaml": "e078346cb009c129ed00c730d51cc9da6df920b89308c855589bc5fa2bd0025f",
-     "us-co/regulations/10-ccr-2506-1/4.401.yaml": "305d3af1498ec8248d49d11828723a6c76742d0c9832f8d9152770f4aede2ca0",
-     "us-co/regulations/10-ccr-2506-1/4.407.1.yaml": "908bcc422eb419b8c79e590579dacb5d36c1349fd917478d8e63d8f74fce7e46",
-     "us-co/regulations/10-ccr-2506-1/4.407.3.yaml": "58dd5c645252c39eeaaa2075384479af6f9dab941e44ecc2759eff8bc7b68a67",
-     "us-co/regulations/10-ccr-2506-1/4.407.31.yaml": "d373620707c58558261814f99709c40b1d9c423c0df2b1202e96e1702ff92131",
-     "us-co/regulations/10-ccr-2506-1/4.408.2.yaml": "4117a54e621d393bdfd98d7919d47ae896551397a0a188703356e832077cc04e",
-     "us-co/regulations/10-ccr-2506-1/4.408.yaml": "2da03ac3e36421501f90d938f62f56bdd39e871891f35eec192866971dc33b68",
-     "us/regulations/7-cfr/273/10.yaml": "b30b75666b34a4c625c480b6a243340c40994e37d5cc9334142c9fd3723ddf78",
-     "us/regulations/7-cfr/273/8.yaml": "2eb57902785375c837abb8d7a1b7326c20926b1cedd93463c64bbc0ca8981aee",
-     "us/regulations/7-cfr/273/9.yaml": "9ce1454e8d41621559d88ac8bff912e7fcf6618a54c9c48feb9de621de2baf36",
-     "us/statutes/7/2017/a.yaml": "772f90b2817a0c5f421d90288cf2e76b490fccf06b4c4ce7731350eb9de61da9"
+    "engine": {},
+    "generated_at": "2026-08-15T18:54:26Z",
+    "generated_by": "scripts/run_comparison.py::co-snap-qc",
+    "oracle": {
+      "fiscal_year": 2024,
+      "name": "snap-qc",
+      "sha256": "0f3230a4318307d3088382546095eebfde03e781da6f65c9eac7f077bd4263f4",
+      "url": "https://snapqcdata.net/sites/default/files/2026-05/qcfy2024_csv.zip"
     },
-    "module_id_rewrites": {
-     "us:policies/usda/snap/fy-2026-cola/deductions": "us:policies/usda/snap/fy-2024-cola/deductions",
-     "us:policies/usda/snap/fy-2026-cola/income-eligibility-standards": "us:policies/usda/snap/fy-2024-cola/income-eligibility-standards",
-     "us:policies/usda/snap/fy-2026-cola/maximum-allotments": "us:policies/usda/snap/fy-2024-cola/maximum-allotments"
-    },
-    "overlay": "us-co-snap-fy2024",
-    "patches": [
-     {
-      "file": "us-co/regulations/10-ccr-2506-1/4.407.31.yaml",
-      "from": "594",
-      "rule": "colorado_snap_heating_cooling_utility_allowance_amount",
-      "source": "us/guidance/usda/fns/snap-qc-fy2024-technical-documentation/page-183",
-      "to": "560"
-     },
-     {
-      "file": "us-co/regulations/10-ccr-2506-1/4.407.31.yaml",
-      "from": "377",
-      "rule": "colorado_snap_basic_utility_allowance_amount",
-      "source": "us/guidance/usda/fns/snap-qc-fy2024-technical-documentation/page-183",
-      "to": "356"
-     },
-     {
-      "file": "us-co/regulations/10-ccr-2506-1/4.407.31.yaml",
-      "from": "71",
-      "rule": "colorado_snap_one_utility_allowance_amount",
-      "source": "us/guidance/usda/fns/snap-qc-fy2024-technical-documentation/page-183",
-      "to": "67"
-     },
-     {
-      "file": "us-co/regulations/10-ccr-2506-1/4.407.31.yaml",
-      "from": "97",
-      "rule": "colorado_snap_telephone_utility_allowance_amount",
-      "source": "us/guidance/usda/fns/snap-qc-fy2024-technical-documentation/page-183",
-      "to": "91"
-     }
-    ],
-    "program": "us-co/policies/cdhs/snap/fy-2026-benefit-calculation.yaml",
-    "rewrite_counts": {
-     "us-co/policies/cdhs/snap/fy-2026-benefit-calculation.yaml": 3,
-     "us-co/regulations/10-ccr-2506-1/4.206.yaml": 4,
-     "us-co/regulations/10-ccr-2506-1/4.207.2.yaml": 1,
-     "us-co/regulations/10-ccr-2506-1/4.207.3.yaml": 2,
-     "us-co/regulations/10-ccr-2506-1/4.305.2.yaml": 3,
-     "us-co/regulations/10-ccr-2506-1/4.401.1.yaml": 3,
-     "us-co/regulations/10-ccr-2506-1/4.401.2.yaml": 2,
-     "us-co/regulations/10-ccr-2506-1/4.401.yaml": 1,
-     "us-co/regulations/10-ccr-2506-1/4.407.1.yaml": 2,
-     "us-co/regulations/10-ccr-2506-1/4.407.3.yaml": 3,
-     "us-co/regulations/10-ccr-2506-1/4.408.2.yaml": 1,
-     "us-co/regulations/10-ccr-2506-1/4.408.yaml": 2,
-     "us/regulations/7-cfr/273/10.yaml": 5,
-     "us/regulations/7-cfr/273/8.yaml": 1,
-     "us/regulations/7-cfr/273/9.yaml": 1,
-     "us/statutes/7/2017/a.yaml": 3
-    },
-    "rulespec_root": "/Users/maxghenis/TheAxiomFoundation/rulespec-us",
-    "schema": "axiom_oracles.rulespec_overlay.v1"
-   },
-   "period": "2026-01",
-   "period_rationale": "Evaluated at the nominal month 2026-01: the Colorado SNAP chain module versions are snapshot-dated to 2025-10-01, so a true FY 2024 period cannot select them until the parameter-set inversion in TheAxiomFoundation/rulespec-us#759 lands.",
-   "pins": {
-    "archive_member": "qc_pub_fy2024.csv",
-    "fiscal_year": 2024,
-    "sha256": "0f3230a4318307d3088382546095eebfde03e781da6f65c9eac7f077bd4263f4",
-    "url": "https://snapqcdata.net/sites/default/files/2026-05/qcfy2024_csv.zip"
-   },
-   "rulespec_root": "/Users/maxghenis/TheAxiomFoundation/rulespec-us"
+    "reemitted_report": true,
+    "run_kind": "affected-rerun",
+    "schema": "axiom_oracles.provenance.v1"
   },
-  "stages": [],
-  "weighted": {
-   "comparison_weight": 3663355.009217,
-   "error_case_weight": 0,
-   "match_rate": 100,
-   "match_weight": 3663355.009217,
-   "mismatch_weight": 0
+  "schema_version": "axiom.comparison_report.v2.1",
+  "scope": null,
+  "suite": "co-snap-qc",
+  "summary": {
+    "comparison_count": 856,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 0
+      },
+      "dispositions_file": null,
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 100,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_case_count": 0,
+    "exclusions": {
+      "by_reason": {},
+      "total_excluded": 0,
+      "total_loaded": 856
+    },
+    "match_count": 856,
+    "match_rate": 100,
+    "mismatch_count": 0,
+    "provenance": {
+      "axiom_binary": "/Users/maxghenis/TheAxiomFoundation/axiom-rules-engine/target/debug/axiom-rules-engine",
+      "fiscal_year": 2024,
+      "overlay": {
+        "file_sha256": {
+          "us-co/policies/cdhs/snap/fy-2026-benefit-calculation.yaml": "1aeb049a959ce990408ff793927162417b1677dbaa699156da6460c1ba9cea96",
+          "us-co/regulations/10-ccr-2506-1/4.206.yaml": "34485b43cd50936ffe4fbeb09bd8f90ffac106694b91fb394aea2458161fa6e8",
+          "us-co/regulations/10-ccr-2506-1/4.207.2.yaml": "48a5c480c9b1e12dbf4ddf5ed23f45fcafd66070a49f857ac74cd00777919151",
+          "us-co/regulations/10-ccr-2506-1/4.207.3.yaml": "2a9ded5c9c76845879f3076f6958eff585577244fdbdfcb01d8409115c37dc17",
+          "us-co/regulations/10-ccr-2506-1/4.305.2.yaml": "eb9a0afe85c76bf6f38603e96003fb7c5fc9c019524200740c5eb1fec9d296ae",
+          "us-co/regulations/10-ccr-2506-1/4.401.1.yaml": "d8c502cbdc420acaf4d8cb4dc5540e77243259e2827e582bd05ba1e1e5517394",
+          "us-co/regulations/10-ccr-2506-1/4.401.2.yaml": "e078346cb009c129ed00c730d51cc9da6df920b89308c855589bc5fa2bd0025f",
+          "us-co/regulations/10-ccr-2506-1/4.401.yaml": "305d3af1498ec8248d49d11828723a6c76742d0c9832f8d9152770f4aede2ca0",
+          "us-co/regulations/10-ccr-2506-1/4.407.1.yaml": "908bcc422eb419b8c79e590579dacb5d36c1349fd917478d8e63d8f74fce7e46",
+          "us-co/regulations/10-ccr-2506-1/4.407.3.yaml": "58dd5c645252c39eeaaa2075384479af6f9dab941e44ecc2759eff8bc7b68a67",
+          "us-co/regulations/10-ccr-2506-1/4.407.31.yaml": "d373620707c58558261814f99709c40b1d9c423c0df2b1202e96e1702ff92131",
+          "us-co/regulations/10-ccr-2506-1/4.408.2.yaml": "4117a54e621d393bdfd98d7919d47ae896551397a0a188703356e832077cc04e",
+          "us-co/regulations/10-ccr-2506-1/4.408.yaml": "2da03ac3e36421501f90d938f62f56bdd39e871891f35eec192866971dc33b68",
+          "us/regulations/7-cfr/273/10.yaml": "b30b75666b34a4c625c480b6a243340c40994e37d5cc9334142c9fd3723ddf78",
+          "us/regulations/7-cfr/273/8.yaml": "2eb57902785375c837abb8d7a1b7326c20926b1cedd93463c64bbc0ca8981aee",
+          "us/regulations/7-cfr/273/9.yaml": "9ce1454e8d41621559d88ac8bff912e7fcf6618a54c9c48feb9de621de2baf36",
+          "us/statutes/7/2017/a.yaml": "772f90b2817a0c5f421d90288cf2e76b490fccf06b4c4ce7731350eb9de61da9"
+        },
+        "module_id_rewrites": {
+          "us:policies/usda/snap/fy-2026-cola/deductions": "us:policies/usda/snap/fy-2024-cola/deductions",
+          "us:policies/usda/snap/fy-2026-cola/income-eligibility-standards": "us:policies/usda/snap/fy-2024-cola/income-eligibility-standards",
+          "us:policies/usda/snap/fy-2026-cola/maximum-allotments": "us:policies/usda/snap/fy-2024-cola/maximum-allotments"
+        },
+        "overlay": "us-co-snap-fy2024",
+        "overlay_root": "/var/folders/9l/_wztzgbx7mgc7l1r0416cy7m0000gn/T/snap-qc-overlay-5so30vcs/rulespec-us-main-snapqc",
+        "patches": [
+          {
+            "file": "us-co/regulations/10-ccr-2506-1/4.407.31.yaml",
+            "from": "594",
+            "rule": "colorado_snap_heating_cooling_utility_allowance_amount",
+            "source": "us/guidance/usda/fns/snap-qc-fy2024-technical-documentation/page-183",
+            "to": "560"
+          },
+          {
+            "file": "us-co/regulations/10-ccr-2506-1/4.407.31.yaml",
+            "from": "377",
+            "rule": "colorado_snap_basic_utility_allowance_amount",
+            "source": "us/guidance/usda/fns/snap-qc-fy2024-technical-documentation/page-183",
+            "to": "356"
+          },
+          {
+            "file": "us-co/regulations/10-ccr-2506-1/4.407.31.yaml",
+            "from": "71",
+            "rule": "colorado_snap_one_utility_allowance_amount",
+            "source": "us/guidance/usda/fns/snap-qc-fy2024-technical-documentation/page-183",
+            "to": "67"
+          },
+          {
+            "file": "us-co/regulations/10-ccr-2506-1/4.407.31.yaml",
+            "from": "97",
+            "rule": "colorado_snap_telephone_utility_allowance_amount",
+            "source": "us/guidance/usda/fns/snap-qc-fy2024-technical-documentation/page-183",
+            "to": "91"
+          }
+        ],
+        "program": "us-co/policies/cdhs/snap/fy-2026-benefit-calculation.yaml",
+        "rewrite_counts": {
+          "us-co/policies/cdhs/snap/fy-2026-benefit-calculation.yaml": 3,
+          "us-co/regulations/10-ccr-2506-1/4.206.yaml": 4,
+          "us-co/regulations/10-ccr-2506-1/4.207.2.yaml": 1,
+          "us-co/regulations/10-ccr-2506-1/4.207.3.yaml": 2,
+          "us-co/regulations/10-ccr-2506-1/4.305.2.yaml": 3,
+          "us-co/regulations/10-ccr-2506-1/4.401.1.yaml": 3,
+          "us-co/regulations/10-ccr-2506-1/4.401.2.yaml": 2,
+          "us-co/regulations/10-ccr-2506-1/4.401.yaml": 1,
+          "us-co/regulations/10-ccr-2506-1/4.407.1.yaml": 2,
+          "us-co/regulations/10-ccr-2506-1/4.407.3.yaml": 3,
+          "us-co/regulations/10-ccr-2506-1/4.408.2.yaml": 1,
+          "us-co/regulations/10-ccr-2506-1/4.408.yaml": 2,
+          "us/regulations/7-cfr/273/10.yaml": 5,
+          "us/regulations/7-cfr/273/8.yaml": 1,
+          "us/regulations/7-cfr/273/9.yaml": 1,
+          "us/statutes/7/2017/a.yaml": 3
+        },
+        "rulespec_root": "/Users/maxghenis/TheAxiomFoundation/_worktrees/rulespec-us-main-snapqc",
+        "schema": "axiom_oracles.rulespec_overlay.v1"
+      },
+      "period": "2026-01",
+      "period_rationale": "Evaluated at the nominal month 2026-01: the Colorado SNAP chain module versions are snapshot-dated to 2025-10-01, so a true FY 2024 period cannot select them until the parameter-set inversion in TheAxiomFoundation/rulespec-us#759 lands.",
+      "pins": {
+        "archive_member": "qc_pub_fy2024.csv",
+        "fiscal_year": 2024,
+        "sha256": "0f3230a4318307d3088382546095eebfde03e781da6f65c9eac7f077bd4263f4",
+        "url": "https://snapqcdata.net/sites/default/files/2026-05/qcfy2024_csv.zip"
+      },
+      "rulespec_root": "/Users/maxghenis/TheAxiomFoundation/_worktrees/rulespec-us-main-snapqc"
+    },
+    "stages": [],
+    "weighted": {
+      "comparison_weight": 3663355.009217,
+      "error_case_weight": 0,
+      "match_rate": 100,
+      "match_weight": 3663355.009217,
+      "mismatch_weight": 0
+    }
   }
- }
 }

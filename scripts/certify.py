@@ -35,8 +35,10 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.util
 import json
 import sys
+from collections import Counter
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -51,8 +53,12 @@ from axiom_oracles.evidence import validate_suite_evidence  # noqa: E402
 DATA_DIR = REPO_ROOT / "dashboard" / "public" / "data"
 CENSUS_PATH = REPO_ROOT / "conformance" / "exercise-census.json"
 OUT_DIR = REPO_ROOT / "certificates"
+if str(Path(__file__).resolve().parent) not in sys.path:
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+from nz_programs import SINGLE_PERSON_PROGRAMS  # noqa: E402
 
 SCHEMA = "axiom_oracles.program_certificate.v1"
+_NZ_REPORT_CACHE: dict | None = None
 
 #: Program registry. One entry per certified (jurisdiction, program).
 #: ``suites`` lists every comparison that bears on the program, typed.
@@ -150,6 +156,59 @@ PROGRAMS: dict[str, dict] = {
     },
 }
 
+NZ_AGGREGATION_BLOCKER = (
+    "host-side aggregation pin: rulespec-nz#108 prerequisite 2 remains open; "
+    "person/child/family aggregation is still performed by the comparison "
+    "harness because the compiled composition carries no relations. Structural "
+    "fix axiom-rules-engine#134 is not yet ratified."
+)
+NZ_ACC_LOCALITY_BLOCKER = (
+    "person-locality is not yet proven — the two-endpoint perturbation cannot "
+    "exclude conditional/default-dormant cross-person dependencies "
+    "(adversarial review S1); structural cure = axiom-rules-engine#134 stage 2 "
+    "(prototype exists on feat/unit-derivation-stage2)."
+)
+for _nz_program in (
+    "nz/acc-earners-levy",
+    "nz/accommodation-supplement",
+    "nz/income-tax",
+    "nz/independent-earner-tax-credit",
+    "nz/main-benefits",
+    "nz/winter-energy-payment",
+    "nz/working-for-families",
+):
+    PROGRAMS[_nz_program] = {
+        "period": "2026-04-01/2027-03-31",
+        "suites": [
+            {
+                "suite": "nz-treasury-incomeexplorer",
+                "view": _nz_program,
+                "oracle_type": "reference",
+                "oracle": "NZ Treasury IncomeExplorer raw emtr() at "
+                "741a6ca4f5d27b1dc00b43dc395e39ffc4040a4b (TY27_BEFU25)",
+                "report": "dashboard/public/data/nz-treasury-incomeexplorer.json",
+            }
+        ],
+        "attested_closed_receipt": "closure/nz/summary.json",
+        "attested_exercise_receipt": (
+            "comparisons/nz-treasury-incomeexplorer/source-comparison.json"
+        ),
+        "attested_executable_receipt": (
+            "dashboard/public/data/nz-treasury-incomeexplorer.json"
+        ),
+        "certified_false_when_blocked": True,
+        "blockers": (
+            [NZ_ACC_LOCALITY_BLOCKER]
+            if _nz_program in SINGLE_PERSON_PROGRAMS
+            else [NZ_AGGREGATION_BLOCKER]
+        ),
+        "single_person_attestation": (
+            "comparisons/nz-treasury-incomeexplorer/single-person-attestations.json"
+            if _nz_program in SINGLE_PERSON_PROGRAMS
+            else None
+        ),
+    }
+
 
 #: The only disposition kinds with defined meaning. An unrecognized kind in a
 #: report's counts is a defect, not a silently-ignored extra column.
@@ -222,6 +281,23 @@ def _load(path: Path) -> dict:
     return json.loads(path.read_text())
 
 
+def _rederived_nz_report() -> dict:
+    """Recompute the unified NZ report from its sha-pinned input receipt."""
+
+    global _NZ_REPORT_CACHE
+    if _NZ_REPORT_CACHE is None:
+        module_path = REPO_ROOT / "scripts" / "nz_incomeexplorer.py"
+        module_spec = importlib.util.spec_from_file_location(
+            "_certificate_nz_incomeexplorer", module_path
+        )
+        if module_spec is None or module_spec.loader is None:
+            raise ValueError("cannot load the NZ IncomeExplorer verifier")
+        module = importlib.util.module_from_spec(module_spec)
+        module_spec.loader.exec_module(module)
+        _NZ_REPORT_CACHE = module.build()
+    return _NZ_REPORT_CACHE
+
+
 def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
     """Compute one suite's conformance leg from its committed report.
 
@@ -261,9 +337,32 @@ def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
         # computing a defective leg so the certificate surfaces that finding
         # instead of crashing before it can report it.
         report = {}
+        report_loaded = False
     else:
         report = loaded_report if isinstance(loaded_report, dict) else {}
-    raw_summary = report.get("summary")
+        report_loaded = True
+    if entry["suite"] == "nz-treasury-incomeexplorer" and report_loaded:
+        if report != _rederived_nz_report():
+            raise ValueError(
+                "NZ IncomeExplorer report does not rederive from its pinned receipt"
+            )
+    view_name = entry.get("view")
+    if view_name:
+        raw_views = report.get("views")
+        if not isinstance(raw_views, dict):
+            defects.append(f"{entry['suite']}: report views must be an object")
+            raw_views = {}
+        view = raw_views.get(view_name)
+        if not isinstance(view, dict):
+            defects.append(
+                f"{entry['suite']}: report has no subgraph view {view_name!r}"
+            )
+            view = {}
+        raw_summary = view.get("summary")
+    else:
+        raw_summary = report.get("summary")
+    if raw_summary is not None and not isinstance(raw_summary, dict):
+        defects.append(f"{entry['suite']}: summary must be an object")
     summary = raw_summary if isinstance(raw_summary, dict) else {}
 
     # Report identity: the artifact must claim the suite it is cited for.
@@ -604,7 +703,223 @@ def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
             evidence_gate_clean and not defects and unexplained == 0 and axiom_open == 0
         ),
     }
+    if view_name:
+        leg["view"] = view_name
     return leg, evidence, defects
+
+
+def _closed_verdict(program: str, spec: dict, evidence: list[dict]) -> dict:
+    attested_path_string = spec.get("attested_closed_receipt")
+    if attested_path_string:
+        path = REPO_ROOT / attested_path_string
+        closure = _load(path)
+        scoped = (closure.get("programs") or {}).get(program)
+        if not isinstance(scoped, dict):
+            raise ValueError(f"NZ closure receipt has no program scope for {program}")
+        evidence.append(
+            {
+                "claim": f"closure receipt:{program}",
+                "mode": "attested",
+                "artifact": attested_path_string,
+                "sha256": sha256_of(path),
+            }
+        )
+        return {
+            "mode": "attested",
+            "status": "attested_receipt",
+            "value": scoped.get("closed") is True,
+            "downgrade_reason": (
+                "Adversarial review S4: no independently emitted requested-output "
+                "trace, root-set bijection, and monotone root/citation denominator "
+                "ratchet are all present; exact-path closure remains evidence only."
+            ),
+            "corpus_release": closure.get("corpus_release"),
+            "rulespec_commit": closure.get("rulespec_commit"),
+            "pending_citations": len(scoped.get("pending_citations") or []),
+            "pending_money_atoms": scoped.get("pending_money_atoms"),
+            "root_node_count": scoped.get("root_node_count"),
+            "root_nodes": scoped.get("root_nodes"),
+            "subgraph_node_count": scoped.get("subgraph_node_count"),
+            "citation_root_count": scoped.get("citation_root_count"),
+            "by_status": scoped.get("by_status"),
+        }
+    path_string = spec.get("computed_closed")
+    if not path_string:
+        block = (spec.get("attested") or {}).get("closed", {})
+        mode = "computed" if block.get("status") == "computed" else "attested"
+        return {**block, "mode": mode}
+    path = REPO_ROOT / path_string
+    closure = _load(path)
+    if path_string == "closure/nz/summary.json":
+        module_path = REPO_ROOT / "scripts" / "nz_closure.py"
+        module_spec = importlib.util.spec_from_file_location(
+            "_certificate_nz_closure", module_path
+        )
+        if module_spec is None or module_spec.loader is None:
+            raise ValueError("cannot load the NZ closure verifier")
+        module = importlib.util.module_from_spec(module_spec)
+        module_spec.loader.exec_module(module)
+        expected = module.build(module.load_source())
+        if closure != expected:
+            raise ValueError(
+                "closure/nz/summary.json does not rederive from its versioned input"
+            )
+        scoped = (closure.get("programs") or {}).get(program)
+        if not isinstance(scoped, dict):
+            raise ValueError(f"NZ closure has no program scope for {program}")
+    else:
+        scoped = closure
+    value = scoped.get("closed") is True
+    evidence.append(
+        {
+            "claim": f"closure census:{program}",
+            "mode": "computed",
+            "artifact": path_string,
+            "sha256": sha256_of(path),
+        }
+    )
+    return {
+        "mode": "computed",
+        "status": "computed_pass" if value else "computed_open",
+        "value": value,
+        "corpus_release": closure.get("corpus_release"),
+        "rulespec_commit": closure.get("rulespec_commit"),
+        "pending_citations": len(scoped.get("pending_citations") or []),
+        "pending_money_atoms": scoped.get("pending_money_atoms"),
+        "root_node_count": scoped.get("root_node_count"),
+        "root_nodes": scoped.get("root_nodes"),
+        "subgraph_node_count": scoped.get("subgraph_node_count"),
+        "citation_root_count": scoped.get("citation_root_count"),
+        "by_status": scoped.get("by_status"),
+    }
+
+
+def _single_person_evidence(program: str, spec: dict, evidence: list[dict]) -> None:
+    path_string = spec.get("single_person_attestation")
+    if not path_string:
+        return
+    path = REPO_ROOT / path_string
+    committed = _load(path)
+    module_path = REPO_ROOT / "scripts" / "nz_incomeexplorer.py"
+    module_spec = importlib.util.spec_from_file_location(
+        "_certificate_nz_single_person", module_path
+    )
+    if module_spec is None or module_spec.loader is None:
+        raise ValueError("cannot load the NZ single-person verifier")
+    module = importlib.util.module_from_spec(module_spec)
+    module_spec.loader.exec_module(module)
+    expected = module.build_single_person_attestations()
+    if committed != expected:
+        raise ValueError("NZ single-person attestation does not rederive")
+    row = (committed.get("programs") or {}).get(program)
+    if not isinstance(row, dict) or row.get("status") != "pass":
+        raise ValueError(f"NZ single-person attestation does not pass for {program}")
+    evidence.append(
+        {
+            "claim": f"single-person invariant:{program}",
+            "mode": "computed",
+            "artifact": path_string,
+            "sha256": sha256_of(path),
+            "limitation": (
+                "Supporting two-endpoint evidence only; it does not prove "
+                "person-locality or clear the S1 blocker."
+            ),
+        }
+    )
+
+
+def _executable_verdict(spec: dict, legs: list[dict], evidence: list[dict]) -> dict:
+    attested_path_string = spec.get("attested_executable_receipt")
+    if attested_path_string:
+        path = REPO_ROOT / attested_path_string
+        report = _load(path)
+        receipt = report.get("compiled_program") or {}
+        evidence.append(
+            {
+                "claim": "compiled-program execution receipt (commit-pinned harness)",
+                "mode": "attested",
+                "artifact": attested_path_string,
+                "sha256": sha256_of(path),
+            }
+        )
+        return {
+            "mode": "attested",
+            "status": "attested_receipt",
+            "value": True,
+            "receipt": receipt,
+            "limitation": (
+                "The generator and comparison harness lineage is commit-pinned, but "
+                "the compiled artifact bytes and an executable transcript are not "
+                "committed; metadata syntax and a digest string are not a computed "
+                "execution check (adversarial review S3)."
+            ),
+        }
+    if not spec.get("computed_executable"):
+        block = (spec.get("attested") or {}).get("executable", {})
+        mode = "computed" if block.get("status") == "computed" else "attested"
+        return {
+            **block,
+            "mode": mode,
+        }
+    raise ValueError(
+        "computed executable verdict requested without a verifier that loads and "
+        "runs committed artifact bytes"
+    )
+
+
+def _attested_exercise_verdict(spec: dict, evidence: list[dict]) -> dict:
+    path_string = spec["attested_exercise_receipt"]
+    path = REPO_ROOT / path_string
+    source = _load(path)
+    catalog = source.get("exercise_input_catalog")
+    if not isinstance(catalog, dict) or not catalog:
+        raise ValueError("NZ exercise attestation has no exercise_input_catalog")
+    state_counts = Counter(
+        row.get("state") for row in catalog.values() if isinstance(row, dict)
+    )
+    evidence.append(
+        {
+            "claim": "exercise input catalog (commit-pinned external receipt)",
+            "mode": "attested",
+            "artifact": path_string,
+            "sha256": sha256_of(path),
+        }
+    )
+    return {
+        "mode": "attested",
+        "status": "attested_receipt",
+        "value": True,
+        "receipt": {
+            "artifact": path_string,
+            "sha256": sha256_of(path),
+            "input_catalog_count": len(catalog),
+            "varied_fields": state_counts.get("varied", 0),
+            "constant_fields": state_counts.get("constant", 0),
+            "not_supplied_fields": state_counts.get("not_supplied", 0),
+        },
+        "limitation": (
+            "The harness lineage is commit-pinned, but the catalog is suite-wide "
+            "and not recomputed from committed, per-evaluation, view-scoped "
+            "request/output traces (adversarial review S2)."
+        ),
+    }
+
+
+def _nz_external_attestation_evidence(spec: dict, evidence: list[dict]) -> None:
+    if not spec.get("attested_exercise_receipt"):
+        return
+    snapshot = (
+        REPO_ROOT
+        / "comparisons/nz-treasury-incomeexplorer/treasury-emtr-snapshot-expanded.json"
+    )
+    evidence.append(
+        {
+            "claim": "Treasury oracle snapshot (commit-pinned external receipt)",
+            "mode": "attested",
+            "artifact": str(snapshot.relative_to(REPO_ROOT)),
+            "sha256": sha256_of(snapshot),
+        }
+    )
 
 
 def _exercise_block(
@@ -694,9 +1009,17 @@ def _exercise_block(
     return rows, complete
 
 
-def build_certificate(program: str, spec: dict) -> dict:
+def _exercise_census_for(spec: dict) -> tuple[dict, list[dict]]:
+    """Return the exercise rows and evidence relevant to one certificate.
+
+    Conventional suites use the committed global census. Unified records
+    carry a complete experiment receipt of their own and are recomputed from
+    that receipt here. This keeps adding an unrelated unified record from
+    invalidating every existing certificate merely by changing the global
+    census artifact's hash.
+    """
+
     census = _load(CENSUS_PATH)
-    legs = []
     evidence = [
         {
             "claim": "exercise census",
@@ -705,23 +1028,74 @@ def build_certificate(program: str, spec: dict) -> dict:
             "sha256": sha256_of(CENSUS_PATH),
         }
     ]
+    unified_entries = [
+        entry
+        for entry in spec["suites"]
+        if entry["suite"] == "nz-treasury-incomeexplorer"
+    ]
+    if not unified_entries:
+        return census, evidence
+
+    module_path = REPO_ROOT / "scripts" / "exercise_census.py"
+    module_spec = importlib.util.spec_from_file_location(
+        "_certificate_exercise_census", module_path
+    )
+    if module_spec is None or module_spec.loader is None:
+        raise ValueError("cannot load the exercise-census verifier")
+    module = importlib.util.module_from_spec(module_spec)
+    module_spec.loader.exec_module(module)
+
+    suites = dict(census.get("suites") or {})
+    for entry in unified_entries:
+        report_path = REPO_ROOT / entry["report"]
+        report = _load(report_path)
+        suites[entry["suite"]] = module._census_suite(
+            entry["suite"], report, report_path
+        )
+    census = {**census, "suites": suites}
+
+    # A certificate containing only unified suites derives no verdict from the
+    # global census, so do not cite it. The suite report evidence added by
+    # _suite_verdict sha-binds the exact experiment receipt consumed above.
+    if len(unified_entries) == len(spec["suites"]):
+        evidence = []
+    return census, evidence
+
+
+def build_certificate(program: str, spec: dict) -> dict:
+    if spec.get("attested_exercise_receipt"):
+        census, evidence = {}, []
+    else:
+        census, evidence = _exercise_census_for(spec)
+    legs = []
     all_defects: list[str] = []
     for entry in spec["suites"]:
         leg, evs, defects = _suite_verdict(entry)
         legs.append(leg)
         evidence.extend(evs)
         all_defects.extend(defects)
+    _single_person_evidence(program, spec, evidence)
+    _nz_external_attestation_evidence(spec, evidence)
 
     reference_legs = [leg for leg in legs if leg["oracle_type"] == "reference"]
     reality_legs = [leg for leg in legs if leg["oracle_type"] == "reality"]
     conformant = bool(reference_legs) and all(leg["clean"] for leg in reference_legs)
     reality_leads = sum(leg["mismatches"] for leg in reality_legs)
 
-    exercise_rows, exercise_complete = _exercise_block(
-        spec["suites"], census, all_defects
-    )
+    if spec.get("attested_exercise_receipt"):
+        exercised_block = _attested_exercise_verdict(spec, evidence)
+        exercise_complete = False
+    else:
+        exercise_rows, exercise_complete = _exercise_block(
+            spec["suites"], census, all_defects
+        )
+        exercised_block = {
+            "value": exercise_complete,
+            "mode": "computed",
+            "suites": exercise_rows,
+        }
 
-    blockers = list(all_defects)
+    blockers = [*all_defects, *(spec.get("blockers") or [])]
     for leg in reference_legs:
         if leg["unexplained"] or leg["axiom_attributed_open"]:
             blockers.append(
@@ -729,41 +1103,47 @@ def build_certificate(program: str, spec: dict) -> dict:
                 f"— disposition or fix before this leg counts"
             )
     if not exercise_complete:
-        blockers.append(
-            "exercise: census incomplete (missing per-case evidence or "
-            "unaudited bridge) for at least one suite"
-        )
+        if spec.get("attested_exercise_receipt"):
+            blockers.append(
+                "exercise: the commit-pinned, sha-bound input catalog is attested, "
+                "not computed from committed per-evaluation, view-scoped "
+                "request/output traces"
+            )
+        else:
+            blockers.append(
+                "exercise: census incomplete (missing per-case evidence or "
+                "unaudited bridge) for at least one suite"
+            )
 
-    attested = spec.get("attested") or {}
+    closed_block = _closed_verdict(program, spec, evidence)
+    executable_block = _executable_verdict(spec, legs, evidence)
     # The single public predicate (adopted from the 2026-07-26 design review):
     # "certified" is reserved for the conjunction of all four verdicts holding
-    # in computed mode with no open defects. closed and executable are attested
-    # today, so certified is necessarily false — by design, not oversight: a
-    # certificate resting on attested premises is scaffolding, and saying so
-    # is the point.
+    # in computed mode with no open defects. A certificate resting on attested
+    # premises is scaffolding, and saying so is the point.
     # A status string alone must never authorize certification: flipping two
     # registry strings to "computed" would otherwise certify while the
     # underlying values are false and the emitted mode is still attested
     # (audit finding 7). Require, per premise, that it is genuinely computed
-    # AND true. Nothing computes closed/executable yet, so `certified` is
+    # AND true. If no producer computes closed/executable, `certified` is
     # explicitly UNAVAILABLE rather than silently false — an unreachable
     # claim reported as a verdict is its own defect.
-    def _premise(name: str) -> tuple[bool, bool]:
-        """(is_computed, is_true) for an attested/computed premise.
+    def _premise(block: dict) -> tuple[bool, bool]:
+        """Return ``(is_computed, is_true)`` for an emitted premise.
 
         The mode the certificate EMITS is what a reader sees, so that is what
         must be computed — checking the registry's `status` string instead let
         a premise flip to computed while the emitted mode stayed attested
         (round-2 audit finding 3).
         """
-        block = attested.get(name) or {}
-        emitted_mode = "computed" if block.get("status") == "computed" else "attested"
-        return emitted_mode == "computed", block.get("value") is True
+        return block.get("mode") == "computed", block.get("value") is True
 
-    closed_computed, closed_true = _premise("closed")
-    exec_computed, exec_true = _premise("executable")
+    closed_computed, closed_true = _premise(closed_block)
+    exec_computed, exec_true = _premise(executable_block)
     premises_computed = closed_computed and exec_computed
-    if not premises_computed:
+    if spec.get("certified_false_when_blocked") and blockers:
+        certified_state = "no"
+    elif not premises_computed:
         certified_state = "unavailable"
     elif conformant and exercise_complete and not blockers and closed_true and exec_true:
         certified_state = "yes"
@@ -795,18 +1175,12 @@ def build_certificate(program: str, spec: dict) -> dict:
                 ],
                 "reality_leads": reality_leads,
             },
-            "exercised": {
-                "value": exercise_complete,
-                "mode": "computed",
-                "suites": exercise_rows,
-            },
+            "exercised": exercised_block,
             "closed": {
-                **attested.get("closed", {}),
-                "mode": "computed" if closed_computed else "attested",
+                **closed_block,
             },
             "executable": {
-                **attested.get("executable", {}),
-                "mode": "computed" if exec_computed else "attested",
+                **executable_block,
             },
         },
         "blockers": blockers,
@@ -818,6 +1192,13 @@ def build_certificate(program: str, spec: dict) -> dict:
             "and are scaffolding, not certification. A certification "
             "question not answerable from this document is a certificate "
             "defect to file."
+            + (
+                " NZ exercise roadmap: commit per-evaluation request/output "
+                "traces and derive exercise separately for each certificate "
+                "view and requested-output root set."
+                if spec.get("attested_exercise_receipt")
+                else ""
+            )
         ),
     }
 

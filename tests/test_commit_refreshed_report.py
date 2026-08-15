@@ -44,6 +44,7 @@ SEED_DIRS = (
     "comparisons",
     "conformance",
     "certificates",
+    "closure",
     "dispositions",
     "docs",
     "reference",

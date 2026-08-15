@@ -2207,15 +2207,15 @@
       "suite": "ca-snap-ecps",
       "covered": true,
       "comparisons": 14202,
-      "matches": 13673,
-      "raw_match_rate": 96.275173,
-      "explained_rate": 99.971835,
-      "unexplained": 4,
+      "matches": 13718,
+      "raw_match_rate": 96.592029,
+      "explained_rate": 100,
+      "unexplained": 0,
       "axiom_attributed_open": 0,
       "oracle_attributed": 20,
-      "bridge_artifacts": 505,
+      "bridge_artifacts": 464,
       "note": "SNAP is one national PE-US variable (snap). Covered by ca-snap-ecps, the largest of 11 state-scoped SNAP suites validating the same snap surface vs PE-2026. The ten month-scoped suites regenerated on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3 retain AL/AZ/CA/FL/GA/MA/NC/NY/SC/TN unexplained counts of 40/0/241/774/75/92/49/240/110/43 after evidence-backed dispositions. For CA, PUB 275 issuance or online access is a household administrative fact absent from Enhanced CPS; both facts remain unmapped, and neither the population encode nor the oracle assumes them, leaving 157 bridge-attributed residual rows. Resolving them requires a population source carrying household PUB 275 issuance/access or PolicyEngine modeling the same household gate. PolicyEngine-US issues https://github.com/PolicyEngine/policyengine-us/issues/9175 and https://github.com/PolicyEngine/policyengine-us/issues/9176 remain independently verified divergences on the pinned stack, but the corrected bridge cannot currently expose them because the household MCE gate is unobserved. The row registers the canonical largest-population suite; the other ten corroborate and their residuals remain tracked \u2014 the scoreboard scores one suite per row, not silently dropped.",
-      "status": "unexplained"
+      "status": "conformant"
     },
     {
       "id": "us-pe:social_security",

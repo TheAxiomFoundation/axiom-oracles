@@ -9,8 +9,8 @@ gains a rule — a rule without a mutant here is not yet a rule.
 import copy
 import importlib.util
 import json
-from pathlib import Path
 import shutil
+from pathlib import Path
 
 import pytest
 
@@ -456,6 +456,61 @@ def test_certified_requires_computed_true_premises_not_status_strings():
     cert = certify.build_certificate("us-co/snap", certify.PROGRAMS["us-co/snap"])
     assert cert["certified"]["state"] == "unavailable"
     assert cert["certified"]["value"] is False
+
+
+def test_nz_two_endpoint_gate_misses_conditional_default_person_dependency():
+    """S1 negative test: preserve proof that the supporting gate is insufficient."""
+    nz = _load("nz_incomeexplorer")
+    source = json.loads(nz.SOURCE_PATH.read_text())
+
+    def conditional_default_person_calculator(wage, scenario):
+        value = nz._acc_cell(wage, scenario)
+        inputs = scenario["inputs"]
+        if inputs.get("partnered") and inputs.get("gross_wage2") == 0:
+            value += nz.Decimal("1")
+        return value
+
+    # Both selected endpoints leave the dependency dormant, so the gate passes.
+    result = nz.assert_single_person_invariant(
+        source,
+        "nz/acc-earners-levy",
+        calculator=conditional_default_person_calculator,
+    )
+    assert result["status"] == "pass"
+
+    # An unsampled person 2 present at the default wage activates it.
+    baseline = next(
+        row for row in source["scenarios"]
+        if row["id"] == nz.ATTESTATION_BASELINE_SCENARIO
+    )
+    unsampled = copy.deepcopy(baseline)
+    unsampled["inputs"]["partnered"] = True
+    unsampled["inputs"]["gross_wage2"] = 0
+    wage = baseline["sampled_weekly_wages"][0]
+    assert conditional_default_person_calculator(
+        wage, unsampled
+    ) == conditional_default_person_calculator(wage, baseline) + nz.Decimal("1")
+
+
+def test_nz_unified_exercise_receipt_does_not_self_audit_a_bridge():
+    census = _load("exercise_census")
+    report_path = REPO / "dashboard/public/data/nz-treasury-incomeexplorer.json"
+    report = json.loads(report_path.read_text())
+    row = census._census_suite("nz-treasury-incomeexplorer", report, report_path)
+    assert "bridge_declared" not in row
+    assert "bridge_audited" not in row
+    assert row["evidence_source"] == "unified-experiment-receipt"
+
+
+def test_nz_attested_premises_cannot_certify():
+    certify = _load("certify")
+    for program in sorted(name for name in certify.PROGRAMS if name.startswith("nz/")):
+        certificate = certify.build_certificate(program, certify.PROGRAMS[program])
+        assert certificate["certified"]["value"] is False
+        assert certificate["certified"]["state"] == "no"
+        assert certificate["verdicts"]["exercised"]["mode"] == "attested"
+        assert certificate["verdicts"]["closed"]["mode"] == "attested"
+        assert certificate["verdicts"]["executable"]["mode"] == "attested"
 
 
 # ── Round 3: inputs from the second fix-verification ─────────────────────────
@@ -1434,3 +1489,269 @@ def test_census_report_path_and_sha_must_match_the_registry():
             is False
         )
         assert any(marker in defect for defect in defects), (field, defects)
+# ── NZ IncomeExplorer: every new certification gate gets a killed mutant ──
+
+
+def _nz_inputs(module):
+    return (
+        json.loads(module.SOURCE_PATH.read_text()),
+        json.loads(module.SNAPSHOT_PATH.read_text()),
+        json.loads(module.CLOSURES_PATH.read_text()),
+    )
+
+
+def test_nz_population_must_remain_treasurys_complete_spine():
+    nz = _load("nz_incomeexplorer")
+    source, snapshot, closures = _nz_inputs(nz)
+    source["scenarios"][0]["sampled_weekly_wages"][0] += 1
+    with pytest.raises(nz.NZRecordError, match="Treasury's complete 104-point"):
+        nz._validate_inputs(source, snapshot, closures)
+
+
+def test_nz_expired_disposition_makes_the_certificate_leg_red(tmp_path):
+    nz = _load("nz_incomeexplorer")
+    certify = _load("certify")
+    ratchet = _load("unexplained_ratchet")
+    source, snapshot, closures = _nz_inputs(nz)
+    report = nz._base_report(source, snapshot, closures)
+
+    from axiom_oracles.comparison.dispositions import (
+        apply_dispositions,
+        load_dispositions,
+    )
+
+    dispositions = load_dispositions(nz.DISPOSITIONS_PATH, repo_root=REPO)
+    report["mismatches"][0]["left"] += 1
+    report = apply_dispositions(
+        report,
+        dispositions,
+        dispositions_file="dispositions/nz-treasury-incomeexplorer.yaml",
+    )
+    assert report["summary"]["dispositioned"]["unexplained_count"] == 1
+    assert ratchet.count_unexplained(report, []) == 1
+    assert ratchet.load_ratchet()["nz-treasury-incomeexplorer"] == 0
+
+    mutant = REPO / "dashboard/public/data/zz-nz-expired-disposition.json"
+    mutant.write_text(json.dumps(report))
+    try:
+        with pytest.raises(ValueError, match="does not rederive"):
+            certify._suite_verdict(
+                {
+                    "suite": "nz-treasury-incomeexplorer",
+                    "oracle_type": "reference",
+                    "oracle": "mutant",
+                    "report": str(mutant.relative_to(REPO)),
+                }
+            )
+    finally:
+        mutant.unlink()
+
+
+def test_nz_program_is_only_a_view_of_the_unified_record():
+    certify = _load("certify")
+    _leg, _evidence, defects = certify._suite_verdict(
+        {
+            "suite": "nz-treasury-incomeexplorer",
+            "view": "nz/not-a-real-subgraph",
+            "oracle_type": "reference",
+            "oracle": "mutant",
+            "report": "dashboard/public/data/nz-treasury-incomeexplorer.json",
+        }
+    )
+    assert any("no subgraph view" in defect for defect in defects)
+
+
+def test_nz_exercise_receipt_cannot_fake_variation():
+    census = _load("exercise_census")
+    report = json.loads(
+        (REPO / "dashboard/public/data/nz-treasury-incomeexplorer.json").read_text()
+    )
+    mutant = copy.deepcopy(report["experiment"])
+    name, row = next(iter(mutant["active_inputs"].items()))
+    row["state"] = "varied" if row["state"] == "constant" else "constant"
+    with pytest.raises(ValueError, match="contradicts its observations"):
+        census._unified_experiment_fields("nz-mutant", mutant)
+
+
+def test_nz_exercise_receipt_is_certificate_scoped():
+    """Adding NZ must not invalidate unrelated certificates via a global hash."""
+
+    census = _load("exercise_census")
+    certify = _load("certify")
+    assert "nz-treasury-incomeexplorer" not in census.build_census()["suites"]
+
+    scoped, evidence = certify._exercise_census_for(
+        certify.PROGRAMS["nz/income-tax"]
+    )
+    assert "nz-treasury-incomeexplorer" in scoped["suites"]
+    assert evidence == []
+
+    dk = certify.build_certificate(
+        "dk/boerne-og-ungeydelse",
+        certify.PROGRAMS["dk/boerne-og-ungeydelse"],
+    )
+    committed = json.loads(
+        (REPO / "certificates/dk-boerne-og-ungeydelse.json").read_text()
+    )
+    assert dk == committed
+
+
+def test_nz_closure_resolves_by_exact_citation_path_only():
+    closure = _load("nz_closure")
+    source = json.loads(closure.SOURCE_PATH.read_text())
+    mutant = copy.deepcopy(source)
+    row = next(item for item in mutant["rulespec"]["files"] if item["citations"])
+    missing = "nz/acts/mutant/section-999"
+    row["citations"].append(missing)
+    row["citations"].sort()
+    summary = closure.build(mutant)
+    assert missing in summary["pending_citations"]
+    assert summary["closed"] is False
+
+
+def test_nz_subgraph_root_cannot_be_silently_dropped():
+    """MUTANT: deleting one ratified comparison root must fail closure."""
+
+    closure = _load("nz_closure")
+    source = json.loads(closure.SOURCE_PATH.read_text())
+    mutant = copy.deepcopy(source)
+    mutant["program_roots"]["nz/working-for-families"].pop()
+    with pytest.raises(closure.ClosureError, match="program root sets drifted"):
+        closure.build(mutant)
+
+
+def test_nz_subgraph_cited_path_cannot_be_silently_dropped():
+    """MUTANT: deleting a citation reached from ACC must fail its commitment."""
+
+    closure = _load("nz_closure")
+    source = json.loads(closure.SOURCE_PATH.read_text())
+    mutant = copy.deepcopy(source)
+    root_id = mutant["program_roots"]["nz/acc-earners-levy"][0]
+    node = next(
+        node
+        for row in mutant["rulespec"]["files"]
+        for node in row["nodes"]
+        if node["id"] == root_id
+    )
+    node["citations"].pop()
+    with pytest.raises(closure.ClosureError, match="cited path was dropped"):
+        closure.build(mutant)
+
+
+def test_unrelated_pending_path_does_not_red_acc_certificate_scope():
+    """MUTANT: a pending citation outside ACC must stay jurisdiction-only."""
+
+    closure = _load("nz_closure")
+    source = json.loads(closure.SOURCE_PATH.read_text())
+    mutant = copy.deepcopy(source)
+    row = next(
+        item
+        for item in mutant["rulespec"]["files"]
+        if item["path"] == "nz/statutes/income_tax/credits/individual_credits.yaml"
+    )
+    node = next(item for item in row["nodes"] if item["citations"])
+    missing = "nz/statute/act/public/mutant/section/unrelated"
+    node["citations"] = sorted([*node["citations"], missing])
+    node["citations_sha256"] = closure._list_sha256(node["citations"])
+    row["citations"] = sorted([*row["citations"], missing])
+    summary = closure.build(mutant)
+    assert missing in summary["pending_citations"]
+    assert summary["closed"] is False
+    assert summary["programs"]["nz/acc-earners-levy"]["closed"] is True
+    assert (
+        missing
+        not in summary["programs"]["nz/acc-earners-levy"]["pending_citations"]
+    )
+
+
+def test_nz_single_person_attestation_recomputes_acc_cells():
+    incomeexplorer = _load("nz_incomeexplorer")
+    source = json.loads(incomeexplorer.SOURCE_PATH.read_text())
+    row = incomeexplorer.assert_single_person_invariant(
+        source, "nz/acc-earners-levy"
+    )
+    assert row["status"] == "pass"
+    assert row["baseline_cells_sha256"] == row["perturbed_cells_sha256"]
+
+
+def test_wff_cross_person_mutant_fails_single_person_gate():
+    """MUTANT: route the perturbation gate through real WfF receipt cells."""
+
+    incomeexplorer = _load("nz_incomeexplorer")
+    source = json.loads(incomeexplorer.SOURCE_PATH.read_text())
+
+    def wff_cell(wage, scenario):
+        return incomeexplorer._rulespec_receipt_cells(
+            source, scenario["id"], "WFF_abated"
+        )[wage]
+
+    with pytest.raises(
+        incomeexplorer.NZRecordError,
+        match="non-primary-person perturbation changed program cells",
+    ):
+        incomeexplorer.assert_single_person_invariant(
+            source, "nz/working-for-families", calculator=wff_cell
+        )
+
+
+def test_nz_closure_denominator_bytes_are_pinned(tmp_path, monkeypatch):
+    closure = _load("nz_closure")
+    mutant = tmp_path / "source.json"
+    mutant.write_text(closure.SOURCE_PATH.read_text() + " ")
+    monkeypatch.setattr(closure, "SOURCE_PATH", mutant)
+    with pytest.raises(closure.ClosureError, match="review and re-pin"):
+        closure.load_source()
+
+
+def test_nz_certificate_rederives_closure_instead_of_trusting_summary(
+    tmp_path, monkeypatch
+):
+    certify = _load("certify")
+    repo = tmp_path / "repo"
+    (repo / "closure/nz").mkdir(parents=True)
+    summary = json.loads((REPO / "closure/nz/summary.json").read_text())
+    summary["closed"] = True
+    (repo / "closure/nz/summary.json").write_text(json.dumps(summary))
+    # Keep the verifier code and its own source paths rooted in the real tree;
+    # only the allegedly-computed summary is redirected to the mutant.
+    monkeypatch.setattr(certify, "REPO_ROOT", repo)
+    real_spec_from_file_location = importlib.util.spec_from_file_location
+    monkeypatch.setattr(
+        importlib.util,
+        "spec_from_file_location",
+        lambda name, path: real_spec_from_file_location(
+            name, REPO / "scripts/nz_closure.py"
+        ),
+    )
+    with pytest.raises(ValueError, match="does not rederive"):
+        certify._closed_verdict(
+            "nz/income-tax", {"computed_closed": "closure/nz/summary.json"}, []
+        )
+
+
+def test_nz_money_atom_ledger_is_a_ceiling_not_a_target():
+    closure = _load("nz_closure")
+    source = json.loads(closure.SOURCE_PATH.read_text())
+    source["pending_ledger"]["document"]["total_allowed"] = 1
+    with pytest.raises(closure.ClosureError, match="ceiling rose above zero"):
+        closure.build(source)
+
+
+def test_nz_syntax_only_executable_metadata_has_no_computed_acceptance_path():
+    certify = _load("certify")
+    with pytest.raises(ValueError, match="without a verifier"):
+        certify._executable_verdict(
+            {
+                "computed_executable": True,
+                "suites": [
+                    {
+                        "report": (
+                            "dashboard/public/data/"
+                            "nz-treasury-incomeexplorer.json"
+                        )
+                    }
+                ],
+            },
+            [{"suite": "nz-mutant"}],
+            [],
+        )
