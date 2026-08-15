@@ -29,15 +29,22 @@ Modes::
 
     uv run python scripts/certify.py            # write certificates + summary
     uv run python scripts/certify.py --check    # CI: fail on drift
+    uv run python scripts/certify.py --check --verify-producers
+                                                # integration: rerun external producers
 """
 
 from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.util
 import json
 import sys
+from functools import lru_cache
 from pathlib import Path
+from types import ModuleType
+
+import yaml
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = REPO_ROOT / "dashboard" / "public" / "data"
@@ -132,12 +139,21 @@ PROGRAMS: dict[str, dict] = {
                 "axiom-euromod-dk-child-youth-benefit-couple.json",
             },
         ],
-        # No attested closed/executable claims yet: the closure and
-        # executable producers do not exist for dk (as for every program),
-        # so certified is UNAVAILABLE by construction. The jurisdiction
-        # scoreboard (conformance/dk.yaml) separately records the honest
-        # full-parity burndown: 22 substantive DK_2025 policies in scope,
-        # 1 covered by this program's suites, 21 uncovered.
+        # DK is the first program with committed, independently checkable
+        # closed and executable producer artifacts. Ordinary certification is
+        # hermetic: it validates those receipts and their in-repo inputs. The
+        # opt-in ``--verify-producers`` integration gate additionally re-derives
+        # closure from external Git sources and recompiles/replays executable.
+        "computed": {
+            "closed": {
+                "artifact": ("conformance/closure/dk-boerne-og-ungeydelse.yaml"),
+                "producer": "scripts/closure_ledger.py",
+            },
+            "executable": {
+                "artifact": ("conformance/executable/dk-boerne-og-ungeydelse.json"),
+                "producer": "scripts/executable_reproduction.py",
+            },
+        },
         "attested": {},
     },
 }
@@ -486,7 +502,205 @@ def _exercise_block(
     return rows, complete
 
 
-def build_certificate(program: str, spec: dict) -> dict:
+def _repo_artifact_path(relative: object, *, label: str) -> Path:
+    """Resolve a configured artifact without permitting repository escape."""
+
+    if not isinstance(relative, str) or not relative:
+        raise ValueError(f"{label} requires a non-empty repository-relative artifact")
+    candidate = Path(relative)
+    if candidate.is_absolute() or ".." in candidate.parts:
+        raise ValueError(f"{label} artifact must be repository-relative: {relative!r}")
+    path = (REPO_ROOT / candidate).resolve()
+    try:
+        path.relative_to(REPO_ROOT.resolve())
+    except ValueError as exc:  # pragma: no cover - defense beyond lexical guard
+        raise ValueError(
+            f"{label} artifact escapes the repository: {relative!r}"
+        ) from exc
+    return path
+
+
+@lru_cache(maxsize=None)
+def _producer_module(relative: str) -> ModuleType:
+    """Load one in-repo producer so certification can reuse its pure validator."""
+
+    path = _repo_artifact_path(relative, label="computed producer")
+    if not path.is_file():
+        raise ValueError(f"computed producer is missing: {relative}")
+    module_name = f"_axiom_certificate_{path.stem}"
+    spec = importlib.util.spec_from_file_location(module_name, path)
+    if spec is None or spec.loader is None:  # pragma: no cover - importlib guard
+        raise ValueError(f"could not load computed producer: {relative}")
+    module = importlib.util.module_from_spec(spec)
+    # Dataclass and other runtime annotation helpers resolve their module by
+    # name while the file executes, so register it before exec_module.
+    sys.modules[module_name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+def _attested_verdict(spec: dict, name: str) -> dict:
+    """Emit the existing sha-pinned scaffolding path unchanged."""
+
+    block = dict((spec.get("attested") or {}).get(name) or {})
+    emitted_mode = "computed" if block.get("status") == "computed" else "attested"
+    return {"mode": emitted_mode, **block}
+
+
+def _closed_verdict(
+    program: str,
+    spec: dict,
+    evidence: list[dict],
+    *,
+    verify_producer: bool = False,
+) -> dict:
+    """Validate closure, optionally re-deriving it from external Git sources."""
+
+    config = (spec.get("computed") or {}).get("closed")
+    if not isinstance(config, dict):
+        return _attested_verdict(spec, "closed")
+    artifact_ref = config.get("artifact")
+    artifact_path = _repo_artifact_path(
+        artifact_ref,
+        label=f"{program} closed producer",
+    )
+    if not artifact_path.is_file():
+        return _attested_verdict(spec, "closed")
+
+    try:
+        document = yaml.safe_load(artifact_path.read_text()) or {}
+    except (OSError, UnicodeError, yaml.YAMLError) as exc:
+        raise ValueError(f"{artifact_ref} is not readable closure YAML: {exc}") from exc
+    producer = _producer_module(str(config.get("producer") or ""))
+    try:
+        summary = producer.validate_artifact(document)
+    except ValueError as exc:
+        raise ValueError(f"{artifact_ref} failed closure validation: {exc}") from exc
+    if verify_producer:
+        try:
+            verification = producer.verify_artifact(artifact_path=artifact_path)
+        except ValueError as exc:
+            raise ValueError(
+                f"{artifact_ref} closure verification crashed: {exc}"
+            ) from exc
+        if not getattr(verification, "valid", False):
+            errors = getattr(verification, "errors", ())
+            detail = (
+                "; ".join(str(error) for error in errors) or "unknown producer error"
+            )
+            raise ValueError(
+                f"{artifact_ref} failed full closure verification: {detail}"
+            )
+    if not isinstance(getattr(summary, "closed", None), bool):
+        raise ValueError(f"{artifact_ref} validator returned no closed boolean")
+    computed = document["computed"]
+    value = summary.closed
+    evidence.append(
+        {
+            "claim": f"closed:{program}",
+            "mode": "computed",
+            "artifact": str(artifact_ref),
+            "sha256": sha256_of(artifact_path),
+            "verification": "producer_artifact_validation",
+        }
+    )
+    return {
+        "mode": "computed",
+        "value": value,
+        "status": "computed_closed" if value else "computed_open",
+        "artifact": str(artifact_ref),
+        "provision_counts": computed.get("provision_counts"),
+        "boundary_frontier": computed.get("boundary_frontier"),
+        "non_encoded_reasons_complete": summary.non_encoded_reasons_complete,
+    }
+
+
+def _executable_verdict(
+    program: str,
+    spec: dict,
+    evidence: list[dict],
+    *,
+    verify_producer: bool = False,
+) -> dict:
+    """Validate execution, optionally recompiling and replaying every case."""
+
+    config = (spec.get("computed") or {}).get("executable")
+    if not isinstance(config, dict):
+        return _attested_verdict(spec, "executable")
+    artifact_ref = config.get("artifact")
+    artifact_path = _repo_artifact_path(
+        artifact_ref,
+        label=f"{program} executable producer",
+    )
+    if not artifact_path.is_file():
+        return _attested_verdict(spec, "executable")
+
+    try:
+        document = json.loads(artifact_path.read_text())
+    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        raise ValueError(
+            f"{artifact_ref} is not readable executable JSON: {exc}"
+        ) from exc
+    producer = _producer_module(str(config.get("producer") or ""))
+    try:
+        summary = producer.validate_artifact(document, repo_root=REPO_ROOT)
+    except ValueError as exc:
+        raise ValueError(f"{artifact_ref} failed executable validation: {exc}") from exc
+    if verify_producer:
+        try:
+            reproduced = producer.build_reproduction(repo_root=REPO_ROOT)
+            producer.validate_artifact(reproduced, repo_root=REPO_ROOT)
+            rendered = producer._render(reproduced)
+        except (OSError, RuntimeError, ValueError) as exc:
+            raise ValueError(
+                f"{artifact_ref} failed full executable verification: {exc}"
+            ) from exc
+        if artifact_path.read_text() != rendered:
+            raise ValueError(
+                f"{artifact_ref} failed full executable verification: "
+                "compiled/replayed artifact drifted"
+            )
+    if not isinstance(summary, dict) or not isinstance(summary.get("executable"), bool):
+        raise ValueError(f"{artifact_ref} validator returned no executable boolean")
+    value = summary["executable"]
+    evidence.append(
+        {
+            "claim": f"executable:{program}",
+            "mode": "computed",
+            "artifact": str(artifact_ref),
+            "sha256": sha256_of(artifact_path),
+            "verification": "producer_artifact_validation",
+        }
+    )
+    return {
+        "mode": "computed",
+        "value": value,
+        "status": "computed_pass" if value else "computed_fail",
+        "artifact": str(artifact_ref),
+        "case_count": summary.get("case_count"),
+        "matched_case_count": summary.get("matched_case_count"),
+        "engine_binary_sha256": (document.get("engine") or {}).get("binary_sha256"),
+        "configured_engine_sha256": (document.get("engine") or {}).get(
+            "configured_sha256"
+        ),
+        "rulespec_sha": (document.get("rulespec") or {}).get("sha"),
+        "compiled_artifacts": [
+            {
+                "program": row.get("program"),
+                "sha256": row.get("sha256"),
+            }
+            for row in document.get("compiled_artifacts") or []
+            if isinstance(row, dict)
+        ],
+    }
+
+
+def build_certificate(
+    program: str,
+    spec: dict,
+    *,
+    verify_producers: bool = False,
+) -> dict:
     census = _load(CENSUS_PATH)
     legs = []
     evidence = [
@@ -526,34 +740,31 @@ def build_certificate(program: str, spec: dict) -> dict:
             "unaudited bridge) for at least one suite"
         )
 
-    attested = spec.get("attested") or {}
     # The single public predicate (adopted from the 2026-07-26 design review):
     # "certified" is reserved for the conjunction of all four verdicts holding
-    # in computed mode with no open defects. closed and executable are attested
-    # today, so certified is necessarily false — by design, not oversight: a
-    # certificate resting on attested premises is scaffolding, and saying so
-    # is the point.
-    # A status string alone must never authorize certification: flipping two
-    # registry strings to "computed" would otherwise certify while the
-    # underlying values are false and the emitted mode is still attested
-    # (audit finding 7). Require, per premise, that it is genuinely computed
-    # AND true. Nothing computes closed/executable yet, so `certified` is
-    # explicitly UNAVAILABLE rather than silently false — an unreachable
-    # claim reported as a verdict is its own defect.
-    def _premise(name: str) -> tuple[bool, bool]:
-        """(is_computed, is_true) for an attested/computed premise.
+    # in computed mode with no open defects. DK now has the first computed
+    # closed/executable producers; the existing CO receipts deliberately stay
+    # attested scaffolding and cannot satisfy the predicate.
+    closed_block = _closed_verdict(
+        program,
+        spec,
+        evidence,
+        verify_producer=verify_producers,
+    )
+    executable_block = _executable_verdict(
+        program,
+        spec,
+        evidence,
+        verify_producer=verify_producers,
+    )
 
-        The mode the certificate EMITS is what a reader sees, so that is what
-        must be computed — checking the registry's `status` string instead let
-        a premise flip to computed while the emitted mode stayed attested
-        (round-2 audit finding 3).
-        """
-        block = attested.get(name) or {}
-        emitted_mode = "computed" if block.get("status") == "computed" else "attested"
-        return emitted_mode == "computed", block.get("value") is True
+    def _premise(block: dict) -> tuple[bool, bool]:
+        """(is_computed, is_true) from exactly what the certificate emits."""
 
-    closed_computed, closed_true = _premise("closed")
-    exec_computed, exec_true = _premise("executable")
+        return block.get("mode") == "computed", block.get("value") is True
+
+    closed_computed, closed_true = _premise(closed_block)
+    exec_computed, exec_true = _premise(executable_block)
     premises_computed = closed_computed and exec_computed
     if not premises_computed:
         certified_state = "unavailable"
@@ -572,9 +783,10 @@ def build_certificate(program: str, spec: dict) -> dict:
             "rule": "computed(conformant AND exercised AND closed AND "
             "executable) with zero open defects. A premise counts only when "
             "its mode is computed AND its value is true; attested premises "
-            "never satisfy it. state=unavailable means no producer computes "
-            "closed/executable yet, so certification is not merely withheld "
-            "but not yet offerable.",
+            "never satisfy it. state=unavailable means at least one required "
+            "premise lacks computed evidence. Once all four premise modes are "
+            "computed, state=yes requires every value true and zero blockers; "
+            "otherwise state=no.",
         },
         "verdicts": {
             "conformant": {
@@ -592,14 +804,8 @@ def build_certificate(program: str, spec: dict) -> dict:
                 "mode": "computed",
                 "suites": exercise_rows,
             },
-            "closed": {
-                "mode": "computed" if closed_computed else "attested",
-                **attested.get("closed", {}),
-            },
-            "executable": {
-                "mode": "computed" if exec_computed else "attested",
-                **attested.get("executable", {}),
-            },
+            "closed": closed_block,
+            "executable": executable_block,
         },
         "blockers": blockers,
         "evidence": evidence,
@@ -614,9 +820,14 @@ def build_certificate(program: str, spec: dict) -> dict:
     }
 
 
-def build_all() -> dict[str, dict]:
+def build_all(*, verify_producers: bool = False) -> dict[str, dict]:
     return {
-        program: build_certificate(program, spec) for program, spec in PROGRAMS.items()
+        program: build_certificate(
+            program,
+            spec,
+            verify_producers=verify_producers,
+        )
+        for program, spec in PROGRAMS.items()
     }
 
 
@@ -627,9 +838,17 @@ def _out_path(program: str) -> Path:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true")
+    parser.add_argument(
+        "--verify-producers",
+        action="store_true",
+        help=(
+            "also re-derive DK closure from external Git sources and "
+            "recompile/replay DK with the pinned engine"
+        ),
+    )
     args = parser.parse_args()
 
-    certificates = build_all()
+    certificates = build_all(verify_producers=args.verify_producers)
     if args.check:
         # An unexpected certificate is a defect, not a curiosity: certificates/
         # is inside the bot's derived_paths, so a retired or stray file there is

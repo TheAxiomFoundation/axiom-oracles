@@ -10,7 +10,9 @@ import copy
 import importlib.util
 import json
 from pathlib import Path
+from types import SimpleNamespace
 
+import pytest
 import yaml
 
 REPO = Path(__file__).resolve().parent.parent
@@ -349,6 +351,59 @@ def test_certified_requires_computed_true_premises_not_status_strings():
     cert = certify.build_certificate("us-co/snap", certify.PROGRAMS["us-co/snap"])
     assert cert["certified"]["state"] == "unavailable"
     assert cert["certified"]["value"] is False
+
+
+def test_dk_opt_in_closure_gate_requires_full_source_verification(monkeypatch):
+    """The opt-in integration gate rejects a failed full source re-derivation."""
+
+    certify = _load("certify")
+    producer = certify._producer_module("scripts/closure_ledger.py")
+    calls = []
+
+    def rejected_full_check(**kwargs):
+        calls.append(kwargs)
+        return SimpleNamespace(
+            valid=False,
+            errors=("coordinated provision-spine truncation",),
+            document=None,
+        )
+
+    monkeypatch.setattr(producer, "verify_artifact", rejected_full_check)
+    with pytest.raises(ValueError, match="failed full closure verification"):
+        certify._closed_verdict(
+            "dk/boerne-og-ungeydelse",
+            certify.PROGRAMS["dk/boerne-og-ungeydelse"],
+            [],
+            verify_producer=True,
+        )
+    assert len(calls) == 1
+
+
+def test_dk_opt_in_executable_gate_requires_full_reproduction(monkeypatch):
+    """The opt-in integration gate rejects a well-shaped forged compiled hash."""
+
+    certify = _load("certify")
+    producer = certify._producer_module("scripts/executable_reproduction.py")
+    artifact = json.loads(
+        (REPO / "conformance/executable/dk-boerne-og-ungeydelse.json").read_text()
+    )
+    reproduced = copy.deepcopy(artifact)
+    reproduced["compiled_artifacts"][0]["sha256"] = "0" * 64
+    calls = []
+
+    def forged_reproduction(**kwargs):
+        calls.append(kwargs)
+        return reproduced
+
+    monkeypatch.setattr(producer, "build_reproduction", forged_reproduction)
+    with pytest.raises(ValueError, match="compiled/replayed artifact drifted"):
+        certify._executable_verdict(
+            "dk/boerne-og-ungeydelse",
+            certify.PROGRAMS["dk/boerne-og-ungeydelse"],
+            [],
+            verify_producer=True,
+        )
+    assert len(calls) == 1
 
 
 # ── Round 3: inputs from the second fix-verification ─────────────────────────

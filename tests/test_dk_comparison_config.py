@@ -1,4 +1,8 @@
+import hashlib
 import json
+import os
+import subprocess
+import sys
 from pathlib import Path
 
 import pytest
@@ -129,8 +133,8 @@ def test_dk_witness_reports_pin_live_outputs_and_dispositions() -> None:
     ]
 
 
-def test_dk_strict_bridge_audit_flows_to_exercised_certificate() -> None:
-    """Pin all three positive bridge audits and the computed exercise verdict."""
+def test_dk_all_four_computed_premises_flow_to_certificate() -> None:
+    """Pin the bridge audits plus both producer-backed premise modes."""
     suite_names = (
         "dk-child-youth-benefit",
         "dk-child-youth-benefit-2023",
@@ -145,9 +149,55 @@ def test_dk_strict_bridge_audit_flows_to_exercised_certificate() -> None:
     certificate = json.loads(
         (REPO_ROOT / "certificates/dk-boerne-og-ungeydelse.json").read_text()
     )
-    assert certificate["verdicts"]["exercised"]["value"] is True
+    verdicts = certificate["verdicts"]
+    assert {
+        name: (block["mode"], block["value"]) for name, block in verdicts.items()
+    } == {
+        "conformant": ("computed", True),
+        "exercised": ("computed", True),
+        "closed": ("computed", False),
+        "executable": ("computed", True),
+    }
     assert not any(
         blocker.startswith("exercise:") for blocker in certificate["blockers"]
     )
     assert certificate["certified"]["value"] is False
-    assert certificate["certified"]["state"] == "unavailable"
+    assert certificate["certified"]["state"] == "no"
+
+    evidence = {row["artifact"]: row for row in certificate["evidence"]}
+    for relative in (
+        "conformance/closure/dk-boerne-og-ungeydelse.yaml",
+        "conformance/executable/dk-boerne-og-ungeydelse.json",
+    ):
+        path = REPO_ROOT / relative
+        assert evidence[relative]["mode"] == "computed"
+        assert evidence[relative]["verification"] == ("producer_artifact_validation")
+        assert (
+            evidence[relative]["sha256"]
+            == hashlib.sha256(path.read_bytes()).hexdigest()
+        )
+
+    assert (
+        "no producer computes closed/executable yet"
+        not in certificate["certified"]["rule"]
+    )
+
+
+def test_dk_certificate_artifact_check_is_hermetic(tmp_path: Path) -> None:
+    """Ordinary CI must not depend on sibling Git checkouts or a macOS engine."""
+
+    isolated_home = tmp_path / "empty-home"
+    isolated_home.mkdir()
+    env = os.environ.copy()
+    env["HOME"] = str(isolated_home)
+    process = subprocess.run(
+        [sys.executable, "scripts/certify.py", "--check"],
+        cwd=REPO_ROOT,
+        env=env,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+
+    assert process.returncode == 0, process.stderr
+    assert "certificates up to date" in process.stdout
