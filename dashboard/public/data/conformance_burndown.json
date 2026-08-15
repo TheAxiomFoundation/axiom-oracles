@@ -1286,9 +1286,9 @@
         "in_scope": 127,
         "covered": 36,
         "uncovered": 91,
-        "unexplained": 4,
+        "unexplained": 0,
         "axiom_attributed_open": 0,
-        "gap": 95,
+        "gap": 91,
         "conformant": false
       }
     ],
