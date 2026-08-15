@@ -14,6 +14,7 @@
 #     (+ their dashboard/public/data mirrors)      conformance_scoreboard.py
 #   conformance/history/<jur>/<YYYY-MM-DD>.json    …with --snapshot (per-day)
 #   dashboard/public/data/conformance_burndown.json  conformance_burndown.py
+#   dashboard/public/data/cases/*/index.json         generate_chunk_indexes.py
 #   conformance/exercise-census.json               exercise_census.py
 #   certificates/*.json                            certify.py
 #   dashboard/public/data/freshness.json             check_vacuous_gate.py
@@ -115,6 +116,12 @@ regenerate_derived() {
   # dispositions schema problem (nothing was written) — not derivation lag —
   # so under `set -e` the refresh aborts loudly with nothing pushed.
   "$PYTHON" scripts/apply_dispositions.py
+  # Certified per-case chunks are refreshed and bound by run_comparison while
+  # it still holds the full case corpus. Here the generator validates that
+  # identity (or performs an initial legacy migration); it refuses to rebind
+  # changed report/chunk identities, so stale/foreign chunks cannot inherit a
+  # new report.
+  "$PYTHON" scripts/generate_chunk_indexes.py
   # Freshness register. Write mode exits 1 when a registry config has a schema
   # problem but STILL writes freshness.json — that is a content alarm for
   # verify_derived's --check (the same arbiter ci.yml uses) to rule on, not a
@@ -161,6 +168,7 @@ verify_derived() {
     "$PYTHON" scripts/nz_closure.py --check || return
   fi
   "$PYTHON" scripts/apply_dispositions.py --check &&
+    "$PYTHON" scripts/generate_chunk_indexes.py --check &&
     "$PYTHON" scripts/check_vacuous_gate.py --check &&
     "$PYTHON" scripts/conformance_scoreboard.py --check &&
     "$PYTHON" scripts/conformance_burndown.py --check &&

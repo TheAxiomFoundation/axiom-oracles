@@ -13,13 +13,19 @@
       "artifact": "conformance/exercise-census.json",
       "claim": "exercise census",
       "mode": "computed",
-      "sha256": "1b10887a61f6aa8e696dfc6e0f8ad9f55c97cd664c0f05190e765ec3a990230a"
+      "sha256": "eca5852d9f51cbff5020e3900fea57750f7b1e18e2d0d958866715ed55c3da36"
     },
     {
       "artifact": "dashboard/public/data/axiom-policyengine-co-snap-ecps.json",
       "claim": "suite:co-snap-ecps",
       "mode": "computed",
-      "sha256": "4ce6eb95a89453a5b7c4b8e5ed7bbf48851ae6749d77587f1f1022a723595be0"
+      "sha256": "696efc8883e20afcc80ec69345b46ab88127f50f4a104757c6bc0a903a268a90"
+    },
+    {
+      "artifact": "dashboard/public/data/cases/co-snap-ecps/index.json",
+      "claim": "case-evidence-index:co-snap-ecps",
+      "mode": "computed",
+      "sha256": "b1db0d901aad3c7d159bb4b34718c6aecda40f4e5f0a2f1d60ee010e71414dea"
     },
     {
       "artifact": "dispositions/co-snap-ecps.yaml",
@@ -31,7 +37,13 @@
       "artifact": "dashboard/public/data/axiom-snapqc-co-snap.json",
       "claim": "suite:co-snap-qc",
       "mode": "computed",
-      "sha256": "e719e2c8b6e27064c307152e7b95f5975f33e8cbf5c8acc43310b20915cd5175"
+      "sha256": "0b28f5f3302c98e14900c930c9a810caadb09e88e56eb8c0594c0c2dc544fd3b"
+    },
+    {
+      "artifact": "dashboard/public/data/cases/co-snap-qc/index.json",
+      "claim": "case-evidence-index:co-snap-qc",
+      "mode": "computed",
+      "sha256": "f615f20bbd79d3bd34d2eee75f9d66e0d371d70a24bc10596eb9298ecabb1669"
     }
   ],
   "period": "2026-01",
@@ -59,13 +71,16 @@
       "reality_legs": [
         {
           "axiom_attributed_open": 0,
+          "binding": "bound",
           "clean": true,
           "comparisons": 856,
+          "evidence_cases": 856,
           "matches": 856,
           "mismatches": 0,
           "note": "reality-oracle disagreements are leads, not defects",
           "oracle": "USDA SNAP QC FY2024 administrative sample (rulespec overlay, per-patch citations in report provenance)",
           "oracle_type": "reality",
+          "reconciliation": "cardinality",
           "report_defects": [],
           "suite": "co-snap-qc",
           "unexplained": 0,
@@ -75,12 +90,15 @@
       "reference_legs": [
         {
           "axiom_attributed_open": 0,
+          "binding": "bound",
           "clean": true,
           "comparisons": 2144,
+          "evidence_cases": 1072,
           "matches": 2143,
           "mismatches": 1,
           "oracle": "policyengine-us 1.705.1 over the populace population",
           "oracle_type": "reference",
+          "reconciliation": "full",
           "report_defects": [],
           "suite": "co-snap-ecps",
           "unexplained": 0,
@@ -105,6 +123,7 @@
       "mode": "computed",
       "suites": {
         "co-snap-ecps": {
+          "binding": "bound",
           "bridge_audited": false,
           "bridged_through": [
             "dependent_care_deduction",
@@ -114,19 +133,28 @@
           "constant_fields": 1,
           "contested_reports": [],
           "per_case_evidence_committed": true,
+          "reconciliation": "none",
+          "registry_report": "dashboard/public/data/axiom-policyengine-co-snap-ecps.json",
+          "registry_report_sha256": "696efc8883e20afcc80ec69345b46ab88127f50f4a104757c6bc0a903a268a90",
           "report": "dashboard/public/data/axiom-policyengine-co-snap-ecps.json",
-          "report_sha256": "4ce6eb95a89453a5b7c4b8e5ed7bbf48851ae6749d77587f1f1022a723595be0",
+          "report_identity_matches_registry": true,
+          "report_sha256": "696efc8883e20afcc80ec69345b46ab88127f50f4a104757c6bc0a903a268a90",
           "varied_fields": 7
         },
         "co-snap-qc": {
+          "binding": "bound",
           "bridge_audited": false,
           "bridged_through": [],
           "cases": 856,
           "constant_fields": 0,
           "contested_reports": [],
           "per_case_evidence_committed": false,
+          "reconciliation": "cardinality",
+          "registry_report": "dashboard/public/data/axiom-snapqc-co-snap.json",
+          "registry_report_sha256": "0b28f5f3302c98e14900c930c9a810caadb09e88e56eb8c0594c0c2dc544fd3b",
           "report": "dashboard/public/data/axiom-snapqc-co-snap.json",
-          "report_sha256": "e719e2c8b6e27064c307152e7b95f5975f33e8cbf5c8acc43310b20915cd5175",
+          "report_identity_matches_registry": true,
+          "report_sha256": "0b28f5f3302c98e14900c930c9a810caadb09e88e56eb8c0594c0c2dc544fd3b",
           "varied_fields": 0
         }
       },

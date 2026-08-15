@@ -35,3 +35,18 @@ def test_loader_equivalence() -> None:
     )
     assert proc.returncode == 0, proc.stdout + proc.stderr
     assert "EQUIVALENT: true" in proc.stdout
+
+
+@pytest.mark.skipif(
+    shutil.which("node") is None,
+    reason="node runtime not available",
+)
+def test_dashboard_case_agreement_is_tristate_at_exact_boundary() -> None:
+    proc = subprocess.run(
+        ["node", "scripts/test-case-agreement.mjs"],
+        cwd=DASHBOARD,
+        capture_output=True,
+        text=True,
+    )
+    assert proc.returncode == 0, proc.stdout + proc.stderr
+    assert "CASE AGREEMENT SEMANTICS: true" in proc.stdout

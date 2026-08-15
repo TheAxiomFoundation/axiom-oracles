@@ -59,6 +59,39 @@ lag a bot-pushed report. The ratchet is the exception: it is never re-pinned
 by the bot — advance it deliberately with `uv run
 scripts/conformance_ratchet.py` after a genuine improvement.
 
+## Execution-evidence validation
+
+Comparison reports are aggregate views; committed case chunks are their
+execution evidence. A versioned `cases/<suite>/index.json` binds each chunk's
+name, SHA-256, and row count to the exact report path and SHA-256. A missing or
+legacy index is recorded as `binding: unbound`: it remains visible in the
+exercise census, but it cannot make a reference leg clean.
+
+Validation deliberately has two cost tiers:
+
+* `scripts/exercise_census.py` reuses its census-wide chunk pass to check
+  cardinality and index binding for every registered report. It does not run a
+  second structural/verdict scan across the full corpus.
+* `scripts/certify.py` calls `axiom_oracles.evidence.validate_suite_evidence`
+  only for the small set of suites named in its `PROGRAMS` registry. That
+  strict path parses every row, checks IDs and compact shapes, rejects
+  duplicates, and reconciles summary counts as `full`, `cardinality`, or
+  `none`.
+
+`full` means stored per-case verdicts reproduce all three summary counts.
+`cardinality` means verdict-free chunk rows reproduce only
+`comparison_count` (while the summary counts still conserve). `none` states
+that the stored shape cannot support either claim. This report/chunk binding is
+separate from execution attestation, which identifies engines and output
+surfaces.
+
+For a migrated suite, the comparison producer writes fresh chunks while it
+still holds the full case corpus, then binds the slim report to those exact
+bytes. The generic index generator may create the initial v1 index or verify an
+idempotent one; it refuses to rebind changed v1 report/chunk identities because
+aggregate counts alone cannot prove that replacement chunks came from the same
+execution.
+
 ## Universe facts are generated, not hand-invented
 
 The policy list and each policy's output variables come from parsing the
