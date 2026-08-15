@@ -366,10 +366,8 @@ class PolicyEngineRunner(EngineAdapter):
                 "is_tax_unit_head": {year: entity is head},
                 "is_tax_unit_spouse": {year: entity is spouse},
             }
-            for concept, pe_variable in _PERSON_INCOME_CONCEPT_TO_PE.items():
-                value = entity.fact(concept)
-                if value is not None:
-                    person_inputs[pe_variable] = {year: float(value)}
+            for pe_variable, value in _person_income_inputs(entity).items():
+                person_inputs[pe_variable] = {year: value}
             if entity is head:
                 for concept, pe_variable in _PERSON_CASE_CONCEPT_TO_PE.items():
                     value = case.fact(concept)
@@ -428,10 +426,7 @@ class PolicyEngineRunner(EngineAdapter):
                 "is_tax_unit_head": entity is head,
                 "is_tax_unit_spouse": entity is spouse,
             }
-            for concept, pe_variable in _PERSON_INCOME_CONCEPT_TO_PE.items():
-                value = entity.fact(concept)
-                if value is not None:
-                    person_inputs[pe_variable] = float(value)
+            person_inputs.update(_person_income_inputs(entity))
             if entity is head:
                 for concept, pe_variable in _PERSON_CASE_CONCEPT_TO_PE.items():
                     value = case.fact(concept)
@@ -865,12 +860,7 @@ class PolicyEngineRunner(EngineAdapter):
                     "is_tax_unit_head": entity is head,
                     "is_tax_unit_spouse": entity is spouse,
                 }
-                for pe_variable in _PERSON_INCOME_CONCEPT_TO_PE.values():
-                    person_row[pe_variable] = 0
-                for concept, pe_variable in _PERSON_INCOME_CONCEPT_TO_PE.items():
-                    value = entity.fact(concept)
-                    if value is not None:
-                        person_row[pe_variable] = float(value)
+                person_row.update(_person_income_inputs(entity))
                 for pe_variable in _PERSON_CASE_CONCEPT_TO_PE.values():
                     person_row[pe_variable] = 0
                 if entity is head:
@@ -960,6 +950,33 @@ class PolicyEngineRunner(EngineAdapter):
         if mapped:
             return mapped
         return list(requested)
+
+
+def _person_income_inputs(entity: Entity) -> dict[str, float]:
+    """Person income inputs, pinned for every mapped source.
+
+    Absent source facts become explicit zero inputs — matching what the batch
+    dataset bridge always did — so PolicyEngine prices the projected Case
+    surface on every evaluation path instead of imputing an endogenous award
+    (SSI, dividends, pensions, ...) that the counterpart engine never saw.
+    The requested-month situation path previously left absent sources free,
+    which made month-defined outputs and year-shaped booleans price two
+    different income surfaces for the same household.
+
+    The legacy ``dividend_income`` input is PolicyEngine's ordinary-dividends
+    aggregation alias, and both the SNAP unearned-income and IRS gross-income
+    source lists read it — so it must carry the declared qualified dividends
+    too. ``qualified_dividend_income`` stays declared separately for rate
+    treatment.
+    """
+    inputs = {
+        pe_variable: float(entity.fact(concept, 0) or 0)
+        for concept, pe_variable in _PERSON_INCOME_CONCEPT_TO_PE.items()
+    }
+    inputs["dividend_income"] = float(
+        entity.fact(Concepts.DIVIDEND_INCOME, 0) or 0
+    ) + float(entity.fact(Concepts.QUALIFIED_DIVIDEND_INCOME, 0) or 0)
+    return inputs
 
 
 def _namespaced_entity_id(prefix: str, entity_id: str) -> str:

@@ -4,7 +4,7 @@
     "exercise: census incomplete (missing per-case evidence or unaudited bridge) for at least one suite"
   ],
   "certified": {
-    "rule": "computed(conformant AND exercised AND closed AND executable) with zero open defects. A premise counts only when its mode is computed AND its value is true; attested premises never satisfy it. state=unavailable means at least one required premise lacks computed evidence. Once all four premise modes are computed, state=yes requires every value true and zero blockers; otherwise state=no.",
+    "rule": "computed(conformant AND exercised AND closed AND executable) with zero open defects. A premise counts only when its mode is computed AND its value is true; attested premises never satisfy it. state=unavailable means no producer computes closed/executable yet, so certification is not merely withheld but not yet offerable.",
     "state": "unavailable",
     "value": false
   },
@@ -13,7 +13,7 @@
       "artifact": "conformance/exercise-census.json",
       "claim": "exercise census",
       "mode": "computed",
-      "sha256": "8d948559364a150808312087527289e02d52320740078912fda887814e4f45d5"
+      "sha256": "3699f26cf3b0dc2f58d77d8d5d05d1ac23b002831d51f9c8b791ff7ebecb147f"
     },
     {
       "artifact": "dashboard/public/data/axiom-policyengine-co-snap-ecps.json",
@@ -31,7 +31,7 @@
       "artifact": "dashboard/public/data/axiom-snapqc-co-snap.json",
       "claim": "suite:co-snap-qc",
       "mode": "computed",
-      "sha256": "9d80c42c05cd0be4cb9deb0d3443ab796703e1424e09a015155c52f0090bc580"
+      "sha256": "673d8e719c56551493cd87b4580f2d8bbe972dff46e524dcf72d19fc2fdad7ae"
     }
   ],
   "period": "2026-01",
@@ -126,7 +126,7 @@
           "contested_reports": [],
           "per_case_evidence_committed": false,
           "report": "dashboard/public/data/axiom-snapqc-co-snap.json",
-          "report_sha256": "9d80c42c05cd0be4cb9deb0d3443ab796703e1424e09a015155c52f0090bc580",
+          "report_sha256": "673d8e719c56551493cd87b4580f2d8bbe972dff46e524dcf72d19fc2fdad7ae",
           "varied_fields": 0
         }
       },

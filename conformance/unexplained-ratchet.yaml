@@ -87,7 +87,7 @@ ratchets:
 - suite: ca-federal-schedule-tax-spsm
   unexplained_max: 0
 - suite: ca-snap-ecps
-  unexplained_max: 4
+  unexplained_max: 0
 - suite: ca-snap-qc
   unexplained_max: 0
 - suite: ca-tanf-ecps
@@ -129,7 +129,7 @@ ratchets:
 - suite: ga-health-thresholds
   unexplained_max: 0
 - suite: ga-snap-ecps
-  unexplained_max: 2
+  unexplained_max: 0
 - suite: ga-snap-qc
   unexplained_max: 0
 - suite: ga-tanf-ecps
