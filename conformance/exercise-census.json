@@ -6663,7 +6663,7 @@
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
       "report": "dashboard/public/data/axiom-euromod-uk-benefit-cap.json",
-      "report_sha256": "6a204091c2436f0452cb3a371f5ccf6ac467466ab98ffda9d97ef0391e8f8fc6",
+      "report_sha256": "e8777d8cae62d5b630bab36278777ef34eda1c33971b70d56c73cca940cfce2c",
       "varied_fields": 6,
       "verdict_concepts": {}
     },
