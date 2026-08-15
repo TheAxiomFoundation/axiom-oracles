@@ -20,9 +20,9 @@
   by strict evidence requirements.
 - Final report target:
   `sol-evidence-validator-land-reconciliation-2026-08-15-result.md`.
-- Current status: all conflicts are resolved and staged, the canonical
-  regeneration/check chain is green, and the requested test batteries pass.
-  The merge commit and publication remain.
+- Current status: reconciliation is committed and every requested gate is
+  green. Terminal publication is DNS-blocked; the connected GitHub Git-data
+  fallback and final publication receipt remain.
 
 ## Done
 
@@ -66,11 +66,17 @@
 - Requested batteries pass: 83/83 certification mutants, 84/84 complete
   evidence cases (the historical 66 expanded by the 18 NZ mutants), and 65/65
   runner/refresh cases in 565.35 seconds.
+- Focused Ruff/compile/whitespace checks and the 10-case census/immutable-replay
+  support battery pass.
+- Created merge commit `0e4d9a840578264bc6e862c4169cd52666d5d312`
+  with parents `511cacaa9` and `a33cadea0`; its subject and body explicitly
+  document the three-way union and the DK/NZ conformant regressions.
+- A normal push failed before authentication with `Could not resolve host:
+  github.com`. A connected GitHub Git-data interface is available as the
+  publication fallback; PR #468 has not been merged or edited.
 
 ## Next
 
-- Run final lint/compile and staged-tree audits, then create the merge commit
-  with an explicit three-way-reconciliation and DK/NZ regression message.
-- Write and commit the final result report, push
-  `origin evidence-validator-land`, verify the remote branch, and leave PR
-  #468 unmerged.
+- Commit the final result report, publish the tested tree through the connected
+  GitHub interface, verify the remote branch, then append and publish the final
+  publication receipt. Leave PR #468 unmerged.
