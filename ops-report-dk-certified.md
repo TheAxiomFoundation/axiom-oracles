@@ -1,9 +1,12 @@
 # DK closed and executable producers (WS2 + WS3)
 
-Status: **SHIP-READY — all four DK certificate premises are now computed:
-`conformant=true`, `exercised=true`, `closed=false`, and `executable=true`.
-The truthful final result is `certified.state=no` because 13 substantive
-paragraffer remain pending; it is no longer `unavailable`.**
+Status: **BLOCKED repository-wide — all four DK certificate premises are
+computed (`conformant=true`, `exercised=true`, `closed=false`, and
+`executable=true`), and the DK audit blockers are fixed. The truthful DK result
+is `certified.state=no` because 12 paragraffer remain pending and § 5 is only
+partially encoded. The restored global strict-manifest gate now correctly fails
+on four genuine CO evidence findings that require a CO rerun and input-catalog
+work.**
 
 ## Checkout and source provenance
 
@@ -18,9 +21,10 @@ paragraffer remain pending; it is no longer `unavailable`.**
   showed that its only first-parent change is
   `.github/workflows/repository-checks.yml`. The relevant `dk/statutes` bytes
   are identical between locally available `main@9986b6035c4e557b9b40645dfe2f3e4cffb6037c`
-  and the merged guard branch. Both producers therefore honestly record the
-  locally reproducible `main` commit `9986b603...`; no unavailable SHA was
-  fabricated.
+  and the merged guard branch. Both producers therefore honestly record commit
+  `9986b603...`; no unavailable SHA was fabricated. The executable receipt now
+  stores that resolved commit as both `rulespec.ref` and `rulespec.sha`, and all
+  replay paths use the recorded commit rather than mutable `main`.
 - The closure producer reads the release JSONL as an immutable tracked Git blob
   from `TheAxiomFoundation/axiom-corpus@a2e713913fb7250b28b55407c850c3c9ae3c69a3`
   (release SHA-256
@@ -41,8 +45,8 @@ Added `scripts/closure_ledger.py` and the generated/committed split at
 - RuleSpec content is read from immutable Git blobs after resolving the moving
   ref once. Direct modules must cite the matching provision body hash, and only
   the explicit `entity_not_supported` status is accepted as a classified row.
-- The ledger result is 2 encoded (§§ 1 and 1 a), 1
-  classified-with-reason (§ 4), 8 excluded-with-reason, and 13 pending.
+- The ledger result is 2 encoded (§§ 1 and 1 a), 1 partially encoded (§ 5), 1
+  classified-with-reason (§ 4), 8 excluded-with-reason, and 12 pending.
   Exclusions are limited to defensible administrative/appeal/repealed/penalty/
   public-finance/delegation/commencement provisions (§§ 4 d, 6, 6 a, 7, 9,
   12, 13, and 14); substantive provisions were not relabeled to force closure.
@@ -51,14 +55,17 @@ Added `scripts/closure_ledger.py` and the generated/committed split at
   grounded, and the 5 uncaptured frontier inputs name personskatteloven §§ 7,
   14, and 20, pensionsbeskatningsloven § 16, and Danmarks Statistik CPI.
 - `frontier.complete=true` and non-encoded reasons are complete, but
-  `pending=13`; therefore the producer correctly computes `closed=false`.
+  `partially-encoded=1` and `pending=12`; therefore the producer correctly
+  computes `closed=false`.
 - Artifact SHA-256:
-  `2f996c63efd92a84a1666b044910a050dca5f5ce7598fef6f83d08c44a021514`.
+  `2b0dc668fd560100b027685e294b80818e155f33c30c61ec3f883927c7f45dd7`.
 
 The closure mutants cover a dropped ledger row, a hidden pending row, a
 removed frontier input/grounding decision, coordinated generated-spine
 truncation, dirty and untracked corpus releases, stale/missing module source
-hashes, an unknown classification status, and mutable-ref races.
+hashes, an unknown classification status, mutable-ref races, coordinated
+proof-atom hiding, missing proof validation, fake atom paths, and fabricated
+corpus excerpts.
 
 ## WS3 — executable producer
 
@@ -74,17 +81,17 @@ Added `scripts/executable_reproduction.py` and
     `6e9c9e6b4ca8e2d6dfed5795671bc5c54ec5d83156048d7dc9b2aee02d2dfae4`.
 - The producer reconstructs the committed 8 + 1 + 1 case inputs, including the
   report's exact floating tails and the couple's two committed earner bridge
-  overlays, runs all ten cases, and compares JSON numeric values exactly.
+  overlays, runs all ten cases, and uses exact JSON numeric equality.
   All 10 reproduce, including `11497.333333333334`; `executable=true`.
 - This receipt claims the ten requested comparison cases only. It does not
   overclaim separate golden companion fixtures mentioned in the design note.
 - Artifact SHA-256:
-  `9c9f89911030f08f30fc6e9793e6dce7f45281eabd2811950f19141bd374d818`.
+  `0cb850b895d57fc29aaf290dd937a662798f529459130f70eb8cfaf3a360d1e9`.
 
-The executable mutant coherently tampers with a committed value and proves
-that `--check` reruns before turning red. Certification mutants additionally
-prove that a forged compiled-artifact hash cannot pass the opt-in full
-producer-verification gate.
+The executable mutants coherently tamper with a committed value, reject mutable
+RuleSpec refs, and prove that `--check` replays the recorded commit before
+turning red. Certification mutants additionally prove that a forged
+compiled-artifact hash cannot pass the opt-in full producer-verification gate.
 
 ## Certification wiring and result
 
@@ -115,26 +122,83 @@ path.
 
 ## Verification
 
-- Closure producer full `--check`: **up to date**, `closed=false`, 13 pending,
-  frontier complete.
-- Executable producer full `--check`: **10/10 exact**, `executable=true`.
-- Exercise census, strict bridge manifests, dispositions, ordinary hermetic
-  certificate checks, and `certify.py --check --verify-producers`: **all exit
-  0**. An empty-`HOME` regression test proves the ordinary certificate check
-  does not depend on sibling checkouts or the macOS engine. The strict bridge
-  command still prints the four pre-existing non-strict CO findings and
-  reports zero findings for all three strict DK manifests.
-- Closure mutants: **14 passed**.
-- Executable mutants: **3 passed**.
-- Full-verification certificate mutants plus the hermetic-CI regression:
-  **3 passed**.
-- Required DK/disposition selector: **107 passed, 2,513 deselected**.
+- Closure producer full `--check`: **up to date**, `closed=false`, 2 encoded,
+  1 partially encoded, 12 pending, frontier complete.
+- Executable producer full `--check`: **10/10 exact JSON numeric equality**,
+  `executable=true`; a live temporary-clone check also passed after `main` was
+  moved away from the receipt's recorded commit.
+- Exercise census, scoreboard, ordinary hermetic certificate checks, and
+  `certify.py --check --verify-producers`: **all exit 0**. Global manifest
+  `--strict` intentionally exits 1 on the four genuine CO findings; all three
+  DK manifests independently validate with zero errors and findings.
+- Focused certification, manifest, closure, and executable mutants:
+  **69 passed** after the final review cycle.
+- Required DK/disposition selector: **108 passed, 2,531 deselected**.
 - `ruff check .`: **all checks passed**.
-- `ruff format --check` on the six producer/test Python files: **all
-  formatted**. (`certify.py` retains the repository's pre-existing formatting
-  outside the edited sections to avoid unrelated churn.)
+- Newly affected closure/executable files were Ruff-formatted; `certify.py`
+  retains the repository's pre-existing formatting outside edited sections to
+  avoid unrelated churn.
 - Independent reviews found and drove fixes for corpus working-tree trust,
   RuleSpec ref races, stale source hashes, arbitrary classification statuses,
   shape-only integration verification, and accidental coupling of ordinary CI
   to an arm64 macOS engine. The post-fix producer reviews are clean; final
   integrated review is recorded before commit.
+
+## Audit fix addendum — 2026-08-15
+
+This addendum supersedes the original WS2/WS3 counts, hashes, replay semantics,
+and launch status above.
+
+- Status strings no longer promote attested registry blocks. With both producer
+  configs removed, attested `closed` and `executable` blocks carrying
+  `{status: computed, value: true}` still emit `mode=attested`, and
+  `certified.state=unavailable`.
+- Bridge bindings can target named records. The couple manifest declares the
+  two income-basis inputs as bridged only for `earner` and as explicit constant
+  zero for `non_earner`; suite mutations to `777` produce findings. Aggregate
+  constants are also checked across every record.
+- Every non-synthetic population requires `pin_required: true` plus a typed,
+  non-empty revision and full lowercase SHA-256 identity. The coordinated
+  `populace-us` / `pin_required: false` / no-identity mutant reds, as do boolean
+  pseudo-identities.
+- All three DK manifests distinguish logical and execution periods. For the
+  2023 witness those are `2023` and `2025-06-01`; the validator binds the latter
+  to `euromod-synthetic-compare`'s actual `runner.parameters.period` and rejects
+  dashboard or `year` fallbacks.
+- Corpus-root composed proof atoms now join the closure spine. Four validated
+  § 5 atoms make it `partially-encoded`, cite the couple module, and reduce
+  pending from 13 to 12 without changing `closed=false`. Atoms require
+  `proof_validation.required=true`, a real version formula path, and an excerpt
+  present in the pinned provision body.
+- The executable receipt records `ref=sha=9986b6035c4e557b9b40645dfe2f3e4cffb6037c`.
+  Generation may resolve a branch once, but validation, CLI checks, and full
+  certification replay the recorded commit.
+- Global `--strict` again returns nonzero for any finding, regardless of a
+  manifest's `strict` metadata. Its current failure is honest: CO lacks a
+  report-bound population identity, has three partial mixed-kind bindings, has
+  unverified completeness, and cites one cross-repository evidence path.
+- Executable comparison language now says “exact JSON numeric equality.” The
+  former byte-oriented wording is gone from tracked files.
+
+Regenerated artifact SHA-256s:
+
+- closure: `2b0dc668fd560100b027685e294b80818e155f33c30c61ec3f883927c7f45dd7`;
+- executable: `0cb850b895d57fc29aaf290dd937a662798f529459130f70eb8cfaf3a360d1e9`;
+- exercise census: `8d948559364a150808312087527289e02d52320740078912fda887814e4f45d5`;
+- DK certificate: `af40d0c3f19a53f65f6247f80fefe8ef097ca5259bad10cfd9e8bdcffd30519f`;
+- CO certificate, refreshed only for the census hash:
+  `58b257b719f3cd2cdad0cee8f485fea958a0279c2f125b6e555912e19e617d30`.
+
+The DK premise table remains:
+
+| premise | mode | value |
+|---|---|---:|
+| conformant | computed | true |
+| exercised | computed | true |
+| closed | computed | false |
+| executable | computed | true |
+
+The remaining repository-wide launch blocker is CO recertification. Its
+historical report dropped the population identity sidecar and does not contain
+the complete submitted input catalog, so those findings cannot be safely
+backfilled from current committed evidence.

@@ -4,6 +4,8 @@ schema: axiom_oracles.bridge_manifest.v1
 suite: dk-child-youth-benefit-2023
 program: dk/boerne-og-ungeydelse
 period: "2023"
+logical_period: "2023"
+execution_period: "2025-06-01"
 strict: true
 bridge:
   module: axiom_oracles/suites/dk_child_youth_benefit.py

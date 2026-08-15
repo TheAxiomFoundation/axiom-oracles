@@ -1943,7 +1943,7 @@ residual), #229 (small-suite grounding).
 - Confirmed the tracked diff is limited to `PROGRESS.md`, CA SNAP report,
   source/served dispositions, compact CA case chunks/index, and the permitted
   US-PE scoreboard/detail/history/ratchet/burn-down/freshness/overview
-  derivatives. The original 97,116-byte `PROGRESS.md` prefix is byte-exact.
+  derivatives. The original 97,116-byte `PROGRESS.md` prefix is byte-for-byte identical.
   No row note changed because the CA unexplained count remains 241, and no
   citation-bearing corpus path changed.
 - Confirmed the exact checkout at `edc62ea566a617cf5b9c3b620f712b73c6767c94`
@@ -2308,7 +2308,7 @@ residual), #229 (small-suite grounding).
 - Confirmed changed-path containment: only the CA bridge mapping/test, CA SNAP
   report/disposition/case artifacts, permitted shared generated artifacts,
   provenance guards/tests, conformance ledger, and `PROGRESS.md` changed.
-  The original 108,448-byte `PROGRESS.md` prefix is byte-exact; this follow-up
+  The original 108,448-byte `PROGRESS.md` prefix is byte-for-byte identical; this follow-up
   appended 312 lines before this entry and deleted none.
 - Sandbox/tooling disclosures:
   - The worktree has no local `.venv`; tests used the existing parent

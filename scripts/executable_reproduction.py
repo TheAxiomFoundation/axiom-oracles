@@ -2,15 +2,16 @@
 """Reproduce the committed Denmark child/youth-benefit Axiom values.
 
 This producer makes the executable certification premise a computed claim. It
-archives an exact ``rulespec-dk`` Git ref, compiles the two composed benefit
+archives an exact ``rulespec-dk`` Git commit, compiles the two composed benefit
 modules through the adapter's ``compile-composed`` path with the configured
 engine binary, and replays the ten committed Axiom-side comparison inputs.
 
 The committed artifact is intentionally self-validating without an external
 checkout: :func:`validate_artifact` binds it to the in-repo comparison configs,
-reports, exact case inputs, and expected values. ``--check`` additionally does
-the expensive part again: it recompiles and reruns every case, then rejects any
-byte drift in the derived artifact.
+reports, exact case inputs, and expected values using exact JSON numeric
+equality. ``--check`` additionally does the expensive part again: it archives
+the receipt's recorded commit, recompiles and reruns every case, then rejects
+any serialized drift in the derived artifact.
 
 Usage::
 
@@ -647,7 +648,9 @@ def build_reproduction(
         },
         "rulespec": {
             "repo": RULESPEC_REPO,
-            "ref": rulespec_ref,
+            # Persist the resolved commit as the replay ref. A moving branch
+            # name is only a generation-time selector, never receipt identity.
+            "ref": rulespec_sha,
             "sha": rulespec_sha,
         },
         "source_reports": _source_reports(repo_root),
@@ -709,13 +712,14 @@ def validate_artifact(
         rulespec.get("repo") == RULESPEC_REPO, f"rulespec.repo must be {RULESPEC_REPO}"
     )
     _require(
-        rulespec.get("ref") == DEFAULT_RULESPEC_REF,
-        f"rulespec.ref must be {DEFAULT_RULESPEC_REF}",
-    )
-    rulespec_sha = rulespec.get("sha")
-    _require(
-        isinstance(rulespec_sha, str) and HEX_40.fullmatch(rulespec_sha) is not None,
+        isinstance(rulespec.get("sha"), str)
+        and HEX_40.fullmatch(rulespec["sha"]) is not None,
         "rulespec.sha must be a lowercase 40-character Git SHA",
+    )
+    rulespec_sha = rulespec["sha"]
+    _require(
+        rulespec.get("ref") == rulespec_sha,
+        "rulespec.ref must equal the recorded rulespec.sha commit",
     )
 
     _require(
@@ -796,7 +800,7 @@ def validate_artifact(
         )
         _require(
             actual.get("match") is derived_match,
-            f"{case_id}: match is not derived from exact committed/reproduced values",
+            f"{case_id}: match is not derived by exact JSON numeric equality",
         )
 
     derived_summary = _summary(cases, engine_matches_pin)
@@ -814,14 +818,51 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument("--artifact", type=Path, default=OUTPUT_PATH)
     parser.add_argument("--rulespec-root", type=Path, default=DEFAULT_RULESPEC_ROOT)
-    parser.add_argument("--rulespec-ref", default=DEFAULT_RULESPEC_REF)
+    parser.add_argument(
+        "--rulespec-ref",
+        default=None,
+        help=(
+            "Generation-time RuleSpec selector (default: main). During --check, "
+            "the recorded commit is replayed; an explicit selector must resolve "
+            "to that commit."
+        ),
+    )
     parser.add_argument("--engine-binary", type=Path, default=DEFAULT_ENGINE_BINARY)
     args = parser.parse_args(argv)
+
+    artifact_path = args.artifact.expanduser()
+    committed: dict[str, Any] | None = None
+    rulespec_ref = args.rulespec_ref or DEFAULT_RULESPEC_REF
+    if args.check:
+        if not artifact_path.exists():
+            print(f"missing executable artifact: {artifact_path}", file=sys.stderr)
+            return 1
+        try:
+            committed = _read_json(artifact_path)
+            recorded_ref = committed["rulespec"]["sha"]
+            _require(
+                isinstance(recorded_ref, str)
+                and HEX_40.fullmatch(recorded_ref) is not None,
+                "rulespec.sha must be a lowercase 40-character Git SHA",
+            )
+            if args.rulespec_ref is not None:
+                selected_commit = _resolve_git_commit(
+                    args.rulespec_root.expanduser().resolve(), args.rulespec_ref
+                )
+                _require(
+                    selected_commit == recorded_ref,
+                    "--rulespec-ref resolves to a different commit than the receipt: "
+                    f"{selected_commit} != {recorded_ref}",
+                )
+            rulespec_ref = recorded_ref
+        except (KeyError, TypeError, ValueError) as exc:
+            print(f"invalid executable artifact: {exc}", file=sys.stderr)
+            return 1
 
     try:
         reproduced = build_reproduction(
             rulespec_repo=args.rulespec_root,
-            rulespec_ref=args.rulespec_ref,
+            rulespec_ref=rulespec_ref,
             engine_binary=args.engine_binary,
             repo_root=REPO_ROOT,
         )
@@ -830,13 +871,9 @@ def main(argv: list[str] | None = None) -> int:
         return 1
 
     rendered = _render(reproduced)
-    artifact_path = args.artifact.expanduser()
     if args.check:
-        if not artifact_path.exists():
-            print(f"missing executable artifact: {artifact_path}", file=sys.stderr)
-            return 1
+        assert committed is not None
         try:
-            committed = _read_json(artifact_path)
             validate_artifact(committed, repo_root=REPO_ROOT)
         except ValueError as exc:
             print(f"invalid executable artifact: {exc}", file=sys.stderr)
@@ -851,7 +888,8 @@ def main(argv: list[str] | None = None) -> int:
         summary = reproduced["summary"]
         print(
             "executable reproduction up to date: "
-            f"{summary['matched_case_count']}/{summary['case_count']} exact, "
+            f"{summary['matched_case_count']}/{summary['case_count']} exact JSON "
+            "numeric equality, "
             f"executable={str(summary['executable']).lower()}"
         )
         return 0
@@ -862,7 +900,8 @@ def main(argv: list[str] | None = None) -> int:
     print(f"wrote {artifact_path}")
     print(
         f"reproduced {summary['matched_case_count']}/{summary['case_count']} "
-        f"cases exactly; executable={str(summary['executable']).lower()}"
+        "cases with exact JSON numeric equality; "
+        f"executable={str(summary['executable']).lower()}"
     )
     return 0
 

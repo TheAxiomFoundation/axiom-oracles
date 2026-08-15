@@ -404,6 +404,7 @@ def test_dk_opt_in_executable_gate_requires_full_reproduction(monkeypatch):
             verify_producer=True,
         )
     assert len(calls) == 1
+    assert calls[0]["rulespec_ref"] == artifact["rulespec"]["sha"]
 
 
 # ── Round 3: inputs from the second fix-verification ─────────────────────────
@@ -537,22 +538,28 @@ def test_weighted_mass_must_be_finite_and_nonnegative():
 
 
 def test_certified_cannot_activate_by_flipping_status_alone():
-    """status: computed with an attested emitted mode reproduced state=yes."""
-    import copy
-
+    """Attested status strings cannot replace verified producer artifacts."""
     certify = _load("certify")
-    spec = copy.deepcopy(certify.PROGRAMS["us-co/snap"])
-    spec["attested"]["closed"].update(status="computed", value=True)
-    spec["attested"]["executable"].update(status="computed", value=True)
-    cert = certify.build_certificate("us-co/snap", spec)
-    # Mode must follow the same determination — they can no longer disagree.
-    assert cert["verdicts"]["closed"]["mode"] == "computed"
-    # And with exercised still false, the verdict is a plain no.
-    assert cert["certified"]["state"] == "no"
+    spec = copy.deepcopy(certify.PROGRAMS["dk/boerne-og-ungeydelse"])
+    spec.pop("computed")
+    spec["attested"] = {
+        "closed": {"status": "computed", "value": True},
+        "executable": {"status": "computed", "value": True},
+    }
 
-    spec2 = copy.deepcopy(spec)
-    spec2["attested"]["executable"]["value"] = False
-    assert certify.build_certificate("us-co/snap", spec2)["certified"]["state"] == "no"
+    cert = certify.build_certificate("dk/boerne-og-ungeydelse", spec)
+
+    assert cert["verdicts"]["conformant"]["mode"] == "computed"
+    assert cert["verdicts"]["conformant"]["value"] is True
+    assert cert["verdicts"]["exercised"]["mode"] == "computed"
+    assert cert["verdicts"]["exercised"]["value"] is True
+    assert cert["verdicts"]["closed"]["mode"] == "attested"
+    assert cert["verdicts"]["closed"]["value"] is True
+    assert cert["verdicts"]["executable"]["mode"] == "attested"
+    assert cert["verdicts"]["executable"]["value"] is True
+    assert cert["blockers"] == []
+    assert cert["certified"]["value"] is False
+    assert cert["certified"]["state"] == "unavailable"
 
 
 def test_covered_by_rejects_ghosts_and_absolute_paths():
@@ -703,8 +710,8 @@ def test_dk_synthetic_population_declaration_cannot_be_dropped():
     assert any("must declare case_source=suite" in error for error in errors)
 
 
-def test_strict_cli_enforces_only_opted_in_manifest_findings(monkeypatch):
-    """Legacy findings remain visible while strict-manifest findings fail."""
+def test_strict_cli_enforces_findings_on_every_manifest(monkeypatch):
+    """A finding stays fatal under --strict regardless of manifest metadata."""
     vbm = _load("validate_bridge_manifests")
     strict_path = REPO / "strict.yaml"
     legacy_path = REPO / "legacy.yaml"
@@ -719,11 +726,15 @@ def test_strict_cli_enforces_only_opted_in_manifest_findings(monkeypatch):
         "validate",
         lambda path, _manifest: ([], [f"{path.name}: mutant finding"]),
     )
-    monkeypatch.setattr(vbm.sys, "argv", ["validate_bridge_manifests.py", "--strict"])
+    monkeypatch.setattr(
+        vbm.sys,
+        "argv",
+        ["validate_bridge_manifests.py", "--strict"],
+    )
 
     assert vbm.main() == 1
     manifests[strict_path]["strict"] = False
-    assert vbm.main() == 0
+    assert vbm.main() == 1
 
 
 def test_bridge_manifest_identity_fields_are_typed():

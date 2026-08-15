@@ -6,26 +6,31 @@ comparison harness feeds the program under test: mapped, projected, bridged,
 or constant, per input. This validator keeps the declarations honest:
 
 * schema and binding-kind checks; every binding is exactly one kind and no
-  input name is bound twice;
+  input-record target is bound twice;
 * the suite (or an alias) must have a committed report — a manifest for a
   comparison that doesn't exist certifies nothing;
-* population pinning: when ``pin_required`` is true and the committed report
-  carries no dataset identity, that is a finding (charter #374, increment 3);
+* population pinning: every non-synthetic population requires
+  ``pin_required: true`` and a revision-plus-SHA identity in the committed
+  report (charter #374, increment 3);
 * suite-backed completeness: ``completeness: {status: verified, source:
   suite_cases}`` reconciles every declared input against the cases returned by
-  the suite registry, including input-record and engine-to-Axiom bridge targets;
+  the suite registry, including record-scoped values and engine-to-Axiom bridge
+  targets;
+* period honesty: the suite's logical period and the comparison config's
+  execution period are reconciled independently. Manifests must declare both
+  ``logical_period`` and ``execution_period`` when those periods differ;
 * audit debt: ``audit: partial`` entries are counted and printed — a partial
   entry is a to-do, not a certification.
 
-Findings are printed always. ``--strict`` turns findings on manifests that opt
-in with ``strict: true`` into a nonzero exit. This lets a newly audited lane
-enforce zero debt without pretending older reporting-only manifests are clean.
+Findings are printed always. ``--strict`` restores the global contract: any
+finding on any manifest produces a nonzero exit.
 """
 
 from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -34,10 +39,14 @@ import yaml
 REPO_ROOT = Path(__file__).resolve().parent.parent
 MANIFEST_DIR = REPO_ROOT / "axiom_oracles" / "bridges" / "manifests"
 DATA_DIR = REPO_ROOT / "dashboard" / "public" / "data"
+COMPARISON_DIR = REPO_ROOT / "comparisons"
 
 SCHEMA = "axiom_oracles.bridge_manifest.v1"
 KINDS = {"mapped", "projected", "bridged", "constant"}
 SUITE_CASE_INPUTS = "suite_cases"
+SHA256_PATTERN = re.compile(r"[0-9a-f]{64}")
+EUROMOD_SYNTHETIC_RUNNER = "euromod-synthetic-compare"
+YEAR_MONTH_EXECUTION_RUNNERS = {"axiom-encode-snap-ecps-compare"}
 
 
 def load_manifests() -> dict[Path, dict]:
@@ -101,6 +110,111 @@ def _report_for(suite_names: list[str]) -> tuple[str | None, dict | None]:
     return None, None
 
 
+def _json_values_equal(left: object, right: object) -> bool:
+    """Compare parsed JSON values without conflating booleans and numbers."""
+
+    if isinstance(left, bool) or isinstance(right, bool):
+        return type(left) is type(right) and left == right
+    if isinstance(left, (int, float)) and isinstance(right, (int, float)):
+        return left == right
+    if isinstance(left, list) and isinstance(right, list):
+        return len(left) == len(right) and all(
+            _json_values_equal(a, b) for a, b in zip(left, right, strict=True)
+        )
+    if isinstance(left, dict) and isinstance(right, dict):
+        return left.keys() == right.keys() and all(
+            _json_values_equal(left[key], right[key]) for key in left
+        )
+    return type(left) is type(right) and left == right
+
+
+def _valid_dataset_identity(identity: object) -> bool:
+    """Require a typed revision and the full lowercase SHA-256 digest."""
+
+    if not isinstance(identity, dict):
+        return False
+    revision = identity.get("revision")
+    sha256 = identity.get("sha256")
+    return (
+        isinstance(revision, str)
+        and bool(revision.strip())
+        and isinstance(sha256, str)
+        and SHA256_PATTERN.fullmatch(sha256) is not None
+    )
+
+
+def _comparison_execution_periods(
+    suite_names: list[str],
+) -> tuple[dict[str, str], list[str]]:
+    """Return the periods the matching comparison configs actually execute."""
+
+    periods: dict[str, str] = {}
+    issues: list[str] = []
+    claims = set(suite_names)
+    for path in sorted(COMPARISON_DIR.glob("*.yaml")):
+        try:
+            config = yaml.safe_load(path.read_text())
+        except (OSError, yaml.YAMLError) as exc:
+            issues.append(f"cannot read {path.name}: {exc}")
+            continue
+        if not isinstance(config, dict):
+            continue
+        runner = config.get("runner") or {}
+        if not isinstance(runner, dict):
+            continue
+        parameters = runner.get("parameters") or {}
+        dashboard = config.get("dashboard") or {}
+        if not isinstance(parameters, dict) or not isinstance(dashboard, dict):
+            continue
+        runner_type = runner.get("type")
+
+        if runner_type == EUROMOD_SYNTHETIC_RUNNER:
+            configured_suite = parameters.get("suite")
+            if configured_suite not in claims:
+                if dashboard.get("suite") in claims:
+                    issues.append(
+                        f"{path.name} is {EUROMOD_SYNTHETIC_RUNNER} and must bind "
+                        "the manifest through runner.parameters.suite"
+                    )
+                continue
+            raw_period = parameters.get("period")
+            if raw_period is None or (
+                isinstance(raw_period, str) and not raw_period.strip()
+            ):
+                issues.append(
+                    f"{path.name} is {EUROMOD_SYNTHETIC_RUNNER} for suite "
+                    f"{configured_suite!r} but lacks required "
+                    "runner.parameters.period"
+                )
+                continue
+        else:
+            configured_suite = parameters.get("suite") or dashboard.get("suite")
+            if configured_suite not in claims:
+                continue
+            raw_period = parameters.get("period")
+            if (
+                raw_period is None
+                and runner_type in YEAR_MONTH_EXECUTION_RUNNERS
+                and parameters.get("year") is not None
+            ):
+                year = str(parameters["year"])
+                month = parameters.get("month")
+                raw_period = f"{year}-{int(month):02d}" if month is not None else year
+            if raw_period is None:
+                issues.append(
+                    f"{path.name} matches suite {configured_suite!r} but runner "
+                    f"type {runner_type!r} does not declare an execution period"
+                )
+                continue
+
+        try:
+            config_label = str(path.relative_to(REPO_ROOT))
+        except ValueError:
+            config_label = str(path)
+        periods[config_label] = str(raw_period)
+    return periods, issues
+
+
 def _suite_input_catalog(
     suite: str,
 ) -> tuple[
@@ -110,6 +224,10 @@ def _suite_input_catalog(
     set[str],
     set[str],
     list[str],
+    dict[str, set[str]],
+    dict[tuple[str, str], list[object]],
+    dict[tuple[str, str], set[str]],
+    dict[str, dict[str, list[object]]],
 ]:
     """Return the input surface declared by the cases the suite actually runs.
 
@@ -118,10 +236,11 @@ def _suite_input_catalog(
     entity-addressed ``axiom_input_records``. Engine-to-Axiom bridge targets are
     inputs too even when they are absent from the pre-bridge flat mapping.
 
-    Returns ``(inputs, bridged, bridge_sources, varied, periods, issues)``.
-    ``varied`` is only a one-way check: a constant binding cannot cover values
-    that demonstrably vary, while a mapped binding may legitimately have one
-    observed value in a one-case witness.
+    The final four return values retain record identity: records observed for
+    each input, their pre-bridge values, bridge sources by record, and values by
+    case. ``varied`` remains the aggregate value check used by older callers.
+    A mapped binding may legitimately have one observed value in a one-case
+    witness; repeated invariant values across a multi-case suite are constants.
     """
     from axiom_oracles.suites import load_suite
 
@@ -135,18 +254,44 @@ def _suite_input_catalog(
             set(),
             set(),
             [f"suite registry load failed: {exc}"],
+            {},
+            {},
+            {},
+            {},
         )
     if not cases:
-        return set(), set(), {}, set(), set(), ["suite registry returned no cases"]
+        return (
+            set(),
+            set(),
+            {},
+            set(),
+            set(),
+            ["suite registry returned no cases"],
+            {},
+            {},
+            {},
+            {},
+        )
 
     inputs: set[str] = set()
     bridged: set[str] = set()
     bridge_sources: dict[str, set[str]] = {}
     periods: set[str] = set()
     observed: dict[str, set[str]] = {}
+    records_by_input: dict[str, set[str]] = {}
+    record_values: dict[tuple[str, str], list[object]] = {}
+    record_bridge_sources: dict[tuple[str, str], set[str]] = {}
+    case_values: dict[str, dict[str, list[object]]] = {}
     issues: list[str] = []
 
-    def observe(name: object, value: object, where: str) -> None:
+    def observe(
+        name: object,
+        value: object,
+        where: str,
+        *,
+        case_id: str,
+        record_id: object | None = None,
+    ) -> None:
         if not isinstance(name, str) or not name:
             issues.append(f"{where} has a missing/non-string input name")
             return
@@ -154,14 +299,35 @@ def _suite_input_catalog(
         observed.setdefault(name, set()).add(
             json.dumps(value, sort_keys=True, default=str)
         )
+        case_values.setdefault(name, {}).setdefault(case_id, []).append(value)
+        if record_id is not None:
+            if not isinstance(record_id, str) or not record_id:
+                issues.append(f"{where} has a missing/non-string entity_id")
+                return
+            records_by_input.setdefault(name, set()).add(record_id)
+            record_values.setdefault((name, record_id), []).append(value)
 
-    def bridge_target(name: object, source: str, where: str) -> None:
+    def bridge_target(
+        name: object,
+        source: str,
+        where: str,
+        *,
+        record_id: object | None = None,
+    ) -> None:
         if not isinstance(name, str) or not name:
             issues.append(f"{where} has a missing/non-string bridge target name")
             return
         inputs.add(name)
         bridged.add(name)
         bridge_sources.setdefault(name, set()).add(source)
+        if record_id is not None:
+            if not isinstance(record_id, str) or not record_id:
+                issues.append(
+                    f"{where} has a missing/non-string bridge target entity_id"
+                )
+                return
+            records_by_input.setdefault(name, set()).add(record_id)
+            record_bridge_sources.setdefault((name, record_id), set()).add(source)
 
     for case in cases:
         case_id = str(getattr(case, "case_id", "?"))
@@ -182,7 +348,12 @@ def _suite_input_catalog(
                 issues.append(f"case {case_id} axiom_inputs is not a mapping")
             else:
                 for input_name, value in flat.items():
-                    observe(input_name, value, f"case {case_id} axiom_inputs")
+                    observe(
+                        input_name,
+                        value,
+                        f"case {case_id} axiom_inputs",
+                        case_id=case_id,
+                    )
 
         records = metadata.get("axiom_input_records")
         if records is not None:
@@ -200,6 +371,8 @@ def _suite_input_catalog(
                         record.get("name"),
                         record.get("value"),
                         f"case {case_id} axiom_input_records[{index}]",
+                        case_id=case_id,
+                        record_id=record.get("entity_id"),
                     )
 
         bridge = metadata.get("euromod_to_axiom_input_bridge")
@@ -233,11 +406,32 @@ def _suite_input_catalog(
                             issues.append(f"{where} records[{index}] is not a mapping")
                             continue
                         bridge_target(
-                            record.get("name"), source, f"{where} records[{index}]"
+                            record.get("name"),
+                            source,
+                            f"{where} records[{index}]",
+                            record_id=record.get("entity_id"),
                         )
 
+    for input_record in record_bridge_sources:
+        if input_record not in record_values:
+            input_name, record_id = input_record
+            issues.append(
+                f"bridge targets absent input record {input_name!r} / {record_id!r}"
+            )
+
     varied = {name for name, values in observed.items() if len(values) > 1}
-    return inputs, bridged, bridge_sources, varied, periods, issues
+    return (
+        inputs,
+        bridged,
+        bridge_sources,
+        varied,
+        periods,
+        issues,
+        records_by_input,
+        record_values,
+        record_bridge_sources,
+        case_values,
+    )
 
 
 def validate(path: Path, manifest: dict) -> tuple[list[str], list[str]]:
@@ -260,7 +454,7 @@ def validate(path: Path, manifest: dict) -> tuple[list[str], list[str]]:
     ):
         if field not in manifest:
             errors.append(f"{name}: missing required field `{field}`")
-    for field in ("suite", "program", "period"):
+    for field in ("suite", "program", "period", "logical_period", "execution_period"):
         if field in manifest and (
             not isinstance(manifest[field], str) or not manifest[field]
         ):
@@ -291,8 +485,7 @@ def validate(path: Path, manifest: dict) -> tuple[list[str], list[str]]:
         errors.append(f"{name}: bindings must be a non-empty list")
         return errors, findings
     seen_inputs: set[str] = set()
-    input_kinds: dict[str, str] = {}
-    input_sources: dict[str, object] = {}
+    binding_claims: dict[str, list[dict[str, object]]] = {}
     partial = 0
     for index, binding in enumerate(bindings):
         if not isinstance(binding, dict):
@@ -318,6 +511,32 @@ def validate(path: Path, manifest: dict) -> tuple[list[str], list[str]]:
             named = [binding["input"]]
         else:
             named = []
+        raw_records = binding.get("records")
+        record_scope: frozenset[str] | None
+        if raw_records is None:
+            record_scope = None
+        elif not isinstance(raw_records, list) or not raw_records:
+            errors.append(f"{name}: bindings[{index}] records must be a non-empty list")
+            record_scope = frozenset()
+        elif any(not isinstance(record, str) or not record for record in raw_records):
+            errors.append(
+                f"{name}: bindings[{index}] records must contain non-empty strings"
+            )
+            record_scope = frozenset()
+        else:
+            record_scope = frozenset(raw_records)
+            if len(record_scope) != len(raw_records):
+                errors.append(
+                    f"{name}: bindings[{index}] records contains a duplicate target"
+                )
+        if record_scope is not None and not named:
+            errors.append(
+                f"{name}: bindings[{index}] record scope requires explicit input(s)"
+            )
+        if kind == "constant" and record_scope is not None and "value" not in binding:
+            errors.append(
+                f"{name}: record-scoped constant binding [{index}] requires value"
+            )
         # A bridged binding may declare at dimension level: the receiving
         # inputs are enumerable audit debt, the dimension is the claim.
         if (
@@ -335,11 +554,32 @@ def validate(path: Path, manifest: dict) -> tuple[list[str], list[str]]:
                     f"{name}: bindings[{index}] has a missing/non-string input name"
                 )
                 continue
-            if input_name in seen_inputs:
-                errors.append(f"{name}: input `{input_name}` bound more than once")
             seen_inputs.add(input_name)
-            input_kinds[input_name] = kind
-            input_sources[input_name] = binding.get("source")
+            claims = binding_claims.setdefault(input_name, [])
+            for prior in claims:
+                prior_scope = prior["records"]
+                if prior_scope is None or record_scope is None:
+                    errors.append(
+                        f"{name}: input `{input_name}` has overlapping unscoped "
+                        "and record-scoped bindings"
+                    )
+                    continue
+                overlap = set(prior_scope) & set(record_scope)
+                if overlap:
+                    errors.append(
+                        f"{name}: input `{input_name}` bound more than once for "
+                        f"record(s) {sorted(overlap)}"
+                    )
+            claims.append(
+                {
+                    "index": index,
+                    "kind": kind,
+                    "source": binding.get("source"),
+                    "records": record_scope,
+                    "value": binding.get("value"),
+                    "has_value": "value" in binding,
+                }
+            )
         if kind == "bridged":
             covered_by = binding.get("covered_by")
             if not isinstance(covered_by, list) or not covered_by:
@@ -386,6 +626,17 @@ def validate(path: Path, manifest: dict) -> tuple[list[str], list[str]]:
             errors.append(
                 f"{name}: {kind} binding [{index}] requires source or source_function"
             )
+        source = binding.get("source")
+        if (
+            kind in ("mapped", "projected")
+            and isinstance(source, str)
+            and source.startswith("population:")
+            and manifest["population"].get("family") == "synthetic"
+        ):
+            errors.append(
+                f"{name}: {kind} binding [{index}] fabricates external population "
+                "provenance for a suite-enumerated synthetic population"
+            )
         if kind == "constant" and not (
             binding.get("reason")
             or binding.get("note")
@@ -401,35 +652,34 @@ def validate(path: Path, manifest: dict) -> tuple[list[str], list[str]]:
         )
     else:
         population = manifest.get("population") or {}
+        family = population.get("family")
+        if not isinstance(family, str) or not family:
+            errors.append(f"{name}: population.family must be a non-empty string")
         pin_required = population.get("pin_required")
         if not isinstance(pin_required, bool):
             errors.append(f"{name}: population.pin_required must be true|false")
-        if pin_required:
-            provenance = (report.get("provenance") or {}).get("dataset") or {}
-            identity = report.get("dataset_identity") or {}
-            pinned = bool(
-                identity.get("revision")
-                or identity.get("sha256")
-                or provenance.get("revision")
-                or provenance.get("sha256")
-            )
-            if not pinned:
-                findings.append(
-                    f"{name}: population pin required but {report_path} carries "
-                    "no dataset identity — the lane must stamp the exact "
-                    "populace revision + sha (fiit-ecps shows the pattern)"
-                )
+        report_provenance = report.get("provenance") or {}
+        if not isinstance(report_provenance, dict):
+            report_provenance = {}
+        provenance_dataset = report_provenance.get("dataset") or {}
+        if not isinstance(provenance_dataset, dict):
+            provenance_dataset = {}
+        identities = (
+            report.get("dataset_identity"),
+            report_provenance.get("dataset_identity"),
+            provenance_dataset,
+        )
+        pinned = any(_valid_dataset_identity(identity) for identity in identities)
         report_population = report.get("population")
-        provenance_population = (
-            (report.get("provenance") or {}).get("dataset") or {}
-        ).get("population")
-        if (
+        provenance_population = provenance_dataset.get("population")
+        synthetic = (
             population.get("case_source") == "suite"
-            or population.get("family") == "synthetic"
+            or family == "synthetic"
             or report_population == "synthetic"
             or provenance_population == "synthetic"
-        ):
-            if population.get("family") != "synthetic":
+        )
+        if synthetic:
+            if family != "synthetic":
                 errors.append(
                     f"{name}: population.case_source=suite requires family=synthetic"
                 )
@@ -446,6 +696,18 @@ def validate(path: Path, manifest: dict) -> tuple[list[str], list[str]]:
                 errors.append(
                     f"{name}: manifest declares a suite-enumerated synthetic "
                     f"population but {report_path} does not"
+                )
+        else:
+            if pin_required is not True:
+                findings.append(
+                    f"{name}: non-synthetic population family {family!r} requires "
+                    "pin_required=true"
+                )
+            if not pinned:
+                findings.append(
+                    f"{name}: non-synthetic population family {family!r} has no "
+                    f"revision + sha256 identity in {report_path}; revision must "
+                    "be a non-empty string and sha256 a full lowercase digest"
                 )
     if partial:
         findings.append(f"{name}: {partial} binding(s) audit=partial — audit debt")
@@ -465,6 +727,10 @@ def validate(path: Path, manifest: dict) -> tuple[list[str], list[str]]:
             varied,
             periods,
             catalog_issues,
+            records_by_input,
+            record_values,
+            record_bridge_sources,
+            case_values,
         ) = _suite_input_catalog(str(manifest["suite"]))
         errors.extend(
             f"{name}: suite input catalog: {issue}" for issue in catalog_issues
@@ -478,56 +744,215 @@ def validate(path: Path, manifest: dict) -> tuple[list[str], list[str]]:
                 f"{name}: bindings declare input(s) the suite does not feed: "
                 f"{', '.join(extra)}"
             )
-        wrong_bridge_kind = sorted(
-            input_name
-            for input_name in bridged
-            if input_kinds.get(input_name) != "bridged"
-        )
+
+        resolved_claims: dict[tuple[str, str | None], dict[str, object]] = {}
+        for input_name in sorted(catalog & seen_inputs):
+            claims = binding_claims.get(input_name, [])
+            actual_records = records_by_input.get(input_name, set())
+            if actual_records:
+                for claim in claims:
+                    scope = claim["records"]
+                    if scope is None:
+                        continue
+                    unexpected = set(scope) - actual_records
+                    if unexpected:
+                        errors.append(
+                            f"{name}: input `{input_name}` binding targets record(s) "
+                            f"the suite does not feed: {sorted(unexpected)}"
+                        )
+                for record_id in sorted(actual_records):
+                    matching = [
+                        claim
+                        for claim in claims
+                        if claim["records"] is None or record_id in claim["records"]
+                    ]
+                    if len(matching) != 1:
+                        errors.append(
+                            f"{name}: input `{input_name}` record {record_id!r} "
+                            f"must have exactly one binding, found {len(matching)}"
+                        )
+                    elif matching:
+                        resolved_claims[(input_name, record_id)] = matching[0]
+            else:
+                scoped = [claim for claim in claims if claim["records"] is not None]
+                if scoped:
+                    errors.append(
+                        f"{name}: flat input `{input_name}` cannot use record-scoped "
+                        "bindings"
+                    )
+                unscoped = [claim for claim in claims if claim["records"] is None]
+                if len(unscoped) != 1:
+                    errors.append(
+                        f"{name}: flat input `{input_name}` must have exactly one "
+                        f"binding, found {len(unscoped)}"
+                    )
+                elif unscoped:
+                    resolved_claims[(input_name, None)] = unscoped[0]
+
+        wrong_bridge_kind: list[str] = []
+        wrong_bridge_source: list[str] = []
+        phantom_bridges: list[str] = []
+        for (input_name, record_id), claim in resolved_claims.items():
+            label = input_name if record_id is None else f"{input_name}[{record_id}]"
+            if record_id is None:
+                expected_sources = (
+                    bridge_sources.get(input_name, set())
+                    if input_name in bridged
+                    else set()
+                )
+            else:
+                expected_sources = record_bridge_sources.get(
+                    (input_name, record_id), set()
+                )
+            if expected_sources:
+                if claim["kind"] != "bridged":
+                    wrong_bridge_kind.append(label)
+                source = claim["source"]
+                if not isinstance(source, str) or expected_sources != {source}:
+                    wrong_bridge_source.append(f"{label}={sorted(expected_sources)}")
+            elif claim["kind"] == "bridged":
+                phantom_bridges.append(label)
+            elif record_id is not None and input_name in bridged:
+                if claim["kind"] != "constant" or not claim["has_value"]:
+                    errors.append(
+                        f"{name}: non-bridge remainder {label} must be a "
+                        "record-scoped constant with an explicit value"
+                    )
         if wrong_bridge_kind:
             errors.append(
                 f"{name}: suite bridge target(s) must be kind=bridged: "
-                f"{', '.join(wrong_bridge_kind)}"
+                f"{', '.join(sorted(wrong_bridge_kind))}"
             )
-        wrong_bridge_source = sorted(
-            input_name
-            for input_name, expected_sources in bridge_sources.items()
-            if not isinstance(input_sources.get(input_name), str)
-            or expected_sources != {input_sources[input_name]}
-        )
         if wrong_bridge_source:
-            expected = ", ".join(
-                f"{input_name}={sorted(bridge_sources[input_name])}"
-                for input_name in wrong_bridge_source
-            )
             errors.append(
-                f"{name}: suite bridge target source mismatch; expected {expected}"
+                f"{name}: suite bridge target source mismatch; expected "
+                f"{', '.join(sorted(wrong_bridge_source))}"
             )
-        phantom_bridges = sorted(
-            input_name
-            for input_name, kind in input_kinds.items()
-            if kind == "bridged" and input_name not in bridged
-        )
         if phantom_bridges:
             errors.append(
-                f"{name}: kind=bridged input(s) are not suite bridge targets: "
-                f"{', '.join(phantom_bridges)}"
+                f"{name}: kind=bridged input record(s) are not suite bridge "
+                f"targets: {', '.join(sorted(phantom_bridges))}"
             )
+
         varied_constants = sorted(
             input_name
-            for input_name in varied
-            if input_kinds.get(input_name) == "constant"
+            for (input_name, record_id), claim in resolved_claims.items()
+            if record_id is None
+            and input_name in varied
+            and claim["kind"] == "constant"
         )
         if varied_constants:
             errors.append(
                 f"{name}: suite-varying input(s) cannot be kind=constant: "
                 f"{', '.join(varied_constants)}"
             )
-        declared_period = str(manifest.get("period"))
-        if periods != {declared_period}:
+        unscoped_record_constants = {
+            input_name
+            for (input_name, record_id), claim in resolved_claims.items()
+            if record_id is not None
+            and claim["records"] is None
+            and claim["kind"] == "constant"
+        }
+        record_varying_constants = []
+        for input_name in sorted(unscoped_record_constants):
+            values = [
+                value
+                for (
+                    observed_input,
+                    _record_id,
+                ), observed_values in record_values.items()
+                if observed_input == input_name
+                for value in observed_values
+            ]
+            if values and any(
+                not _json_values_equal(values[0], value) for value in values[1:]
+            ):
+                record_varying_constants.append(input_name)
+        if record_varying_constants:
             errors.append(
-                f"{name}: period {declared_period!r} does not match suite "
+                f"{name}: record-varying input(s) cannot use an unscoped "
+                f"kind=constant binding: {', '.join(record_varying_constants)}"
+            )
+        invariant_mapped = sorted(
+            input_name
+            for (input_name, record_id), claim in resolved_claims.items()
+            if record_id is None
+            and len(case_values.get(input_name, {})) > 1
+            and input_name not in varied
+            and claim["kind"] in ("mapped", "projected")
+        )
+        if invariant_mapped:
+            errors.append(
+                f"{name}: suite-invariant multi-case input(s) must be "
+                f"kind=constant, not mapped/projected: {', '.join(invariant_mapped)}"
+            )
+
+        for (input_name, record_id), claim in resolved_claims.items():
+            if (
+                record_id is None
+                or claim["kind"] != "constant"
+                or not claim["has_value"]
+            ):
+                continue
+            actual_values = record_values.get((input_name, record_id), [])
+            declared_value = claim["value"]
+            if not actual_values or any(
+                not _json_values_equal(declared_value, value) for value in actual_values
+            ):
+                findings.append(
+                    f"{name}: record-scoped constant {input_name}[{record_id}] "
+                    f"declares {declared_value!r}, but the suite feeds "
+                    f"{actual_values!r}"
+                )
+
+        logical_period = str(manifest.get("logical_period", manifest["period"]))
+        if "logical_period" in manifest and manifest["period"] != logical_period:
+            errors.append(
+                f"{name}: period {manifest['period']!r} must equal declared "
+                f"logical_period {logical_period!r}"
+            )
+        if periods != {logical_period}:
+            errors.append(
+                f"{name}: logical_period {logical_period!r} does not match suite "
                 f"case period(s) {sorted(periods)}"
             )
+        configured_periods, config_issues = _comparison_execution_periods(suite_names)
+        errors.extend(f"{name}: comparison config: {issue}" for issue in config_issues)
+        if not configured_periods:
+            errors.append(
+                f"{name}: no comparison config execution period found for "
+                f"suite/aliases {suite_names}"
+            )
+        else:
+            executed_values = set(configured_periods.values())
+            if len(executed_values) != 1:
+                details = ", ".join(
+                    f"{config}={period!r}"
+                    for config, period in configured_periods.items()
+                )
+                errors.append(
+                    f"{name}: comparison configs disagree on execution period: "
+                    f"{details}"
+                )
+            else:
+                configured_execution = next(iter(executed_values))
+                if configured_execution != logical_period and not {
+                    "logical_period",
+                    "execution_period",
+                }.issubset(manifest):
+                    errors.append(
+                        f"{name}: differing logical and execution periods require "
+                        "explicit logical_period and execution_period"
+                    )
+                declared_execution = str(
+                    manifest.get("execution_period", logical_period)
+                )
+                if declared_execution != configured_execution:
+                    details = ", ".join(sorted(configured_periods))
+                    errors.append(
+                        f"{name}: execution_period {declared_execution!r} does not "
+                        f"match {details} ({configured_execution!r})"
+                    )
     elif completeness == "verified":
         # A bare assertion remains forbidden. `verified` is accepted only when
         # the validator can derive and reconcile the suite's actual case input
@@ -574,7 +999,11 @@ def global_collisions(manifests: dict) -> list[str]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--strict", action="store_true")
+    parser.add_argument(
+        "--strict",
+        action="store_true",
+        help="return nonzero when any manifest has a finding",
+    )
     args = parser.parse_args()
 
     manifests = load_manifests()
@@ -584,15 +1013,10 @@ def main() -> int:
 
     all_errors: list[str] = global_collisions(manifests)
     all_findings: list[str] = []
-    strict_findings: list[str] = []
-    strict_manifests = 0
     for path, manifest in manifests.items():
         errors, findings = validate(path, manifest)
         all_errors.extend(errors)
         all_findings.extend(findings)
-        if isinstance(manifest, dict) and manifest.get("strict") is True:
-            strict_manifests += 1
-            strict_findings.extend(findings)
 
     for line in all_errors:
         print(f"ERROR   {line}", file=sys.stderr)
@@ -604,12 +1028,12 @@ def main() -> int:
     )
     if args.strict:
         print(
-            f"strict enforcement: {strict_manifests} manifest(s), "
-            f"{len(strict_findings)} finding(s)"
+            f"strict enforcement: all {len(manifests)} manifest(s), "
+            f"{len(all_findings)} finding(s)"
         )
     if all_errors:
         return 1
-    if args.strict and strict_findings:
+    if args.strict and all_findings:
         return 1
     return 0
 

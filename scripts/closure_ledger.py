@@ -58,6 +58,7 @@ PROGRAM_ID = "dk/boerne-og-ungeydelse"
 CORPUS_ROOT = "dk/statute/lbk-603-2025/boerne-og-ungeydelsesloven"
 STATUSES = (
     "encoded",
+    "partially-encoded",
     "classified-with-reason",
     "excluded-with-reason",
     "pending",
@@ -72,7 +73,16 @@ _HEADER = """# axiom_oracles.closure.ledger.v1 — GENERATED facts + committed d
 _HEX_SHA256 = re.compile(r"^[0-9a-f]{64}$")
 _HEX_GIT_SHA = re.compile(r"^[0-9a-f]{40}$")
 _IDENTIFIER = re.compile(r"\b[A-Za-z_][A-Za-z0-9_]*\b")
+_FORMULA_PROOF_PATH = re.compile(r"^versions\[(0|[1-9][0-9]*)\]\.formula$")
 _RESERVED_FORMULA_WORDS = frozenset({"and", "else", "false", "if", "not", "or", "true"})
+_PROOF_ATOM_FIELDS = (
+    "corpus_citation_path",
+    "rule",
+    "path",
+    "kind",
+    "excerpt_sha256",
+    "formula_sha256",
+)
 
 
 class ClosureLedgerError(ValueError):
@@ -88,6 +98,8 @@ class ClosureSummary:
     """Hermetically derived certificate inputs from a valid artifact."""
 
     closed: bool
+    encoded_count: int
+    partially_encoded_count: int
     pending_count: int
     frontier_complete: bool
     non_encoded_reasons_complete: bool
@@ -216,7 +228,7 @@ def _corpus_blob(path: Path, ref: str) -> tuple[str, str, bytes]:
 
 def _read_corpus_spine(
     path: Path, ref: str
-) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+) -> tuple[dict[str, Any], list[dict[str, Any]], dict[str, str]]:
     relative_path, commit, blob = _corpus_blob(path, ref)
     try:
         lines = blob.decode("utf-8").splitlines()
@@ -227,6 +239,7 @@ def _read_corpus_spine(
 
     document_row: dict[str, Any] | None = None
     provisions: list[dict[str, Any]] = []
+    provision_bodies: dict[str, str] = {}
     for line_number, line in enumerate(lines, start=1):
         if not line.strip():
             continue
@@ -271,6 +284,7 @@ def _read_corpus_spine(
                     "body_sha256": _sha256_bytes(body.encode()),
                 }
             )
+            provision_bodies[citation_path] = body
 
     if document_row is None:
         raise _SourceError(f"corpus release has no document row for {CORPUS_ROOT}")
@@ -305,7 +319,7 @@ def _read_corpus_spine(
         "citation_root": CORPUS_ROOT,
         "declared_block_count": block_count,
     }
-    return generated_source, provisions
+    return generated_source, provisions, provision_bodies
 
 
 def _formula_inputs(
@@ -361,8 +375,136 @@ def _formula_inputs(
     ]
 
 
+def _provision_proof_atoms(
+    document: Mapping[str, Any],
+    *,
+    label: str,
+    proof_validation_required: bool,
+    provision_bodies: Mapping[str, str] | None,
+) -> list[dict[str, Any]]:
+    """Return proof atoms that cite a direct provision in this corpus spine."""
+
+    rules = document.get("rules")
+    if not isinstance(rules, list):
+        return []
+    result: list[dict[str, Any]] = []
+    for rule_index, rule in enumerate(rules):
+        if not isinstance(rule, Mapping):
+            continue
+        rule_name = rule.get("name")
+        metadata = rule.get("metadata")
+        proof = metadata.get("proof") if isinstance(metadata, Mapping) else None
+        atoms = proof.get("atoms") if isinstance(proof, Mapping) else None
+        if atoms is None:
+            continue
+        if not isinstance(atoms, list):
+            raise _SourceError(
+                f"{label}: rules[{rule_index}].metadata.proof.atoms must be a list"
+            )
+        for atom_index, atom in enumerate(atoms):
+            if not isinstance(atom, Mapping):
+                raise _SourceError(
+                    f"{label}: rules[{rule_index}] proof atom {atom_index} "
+                    "must be a mapping"
+                )
+            source = atom.get("source")
+            citation = (
+                source.get("corpus_citation_path")
+                if isinstance(source, Mapping)
+                else None
+            )
+            # A corpus-root atom supports a composition as a whole. Only atoms
+            # naming a direct provision can establish atom-level partial
+            # encoding of one ledger row.
+            if not isinstance(citation, str) or not citation.startswith(
+                f"{CORPUS_ROOT}/"
+            ):
+                continue
+            if not proof_validation_required:
+                raise _SourceError(
+                    f"{label}: corpus-root composed proof atoms require "
+                    "module.proof_validation.required=true"
+                )
+            path = atom.get("path")
+            kind = atom.get("kind")
+            excerpt = source.get("excerpt")
+            if not isinstance(rule_name, str) or not rule_name.strip():
+                raise _SourceError(
+                    f"{label}: rules[{rule_index}] with a provision proof atom "
+                    "must have a name"
+                )
+            if not isinstance(path, str) or not path.strip():
+                raise _SourceError(
+                    f"{label}: rules[{rule_index}] proof atom {atom_index} "
+                    "must have a path"
+                )
+            path_match = _FORMULA_PROOF_PATH.fullmatch(path)
+            versions = rule.get("versions")
+            if path_match is None or not isinstance(versions, list):
+                raise _SourceError(
+                    f"{label}: rules[{rule_index}] proof atom {atom_index} path "
+                    f"{path!r} does not resolve to a version formula"
+                )
+            version_index = int(path_match.group(1))
+            if version_index >= len(versions):
+                raise _SourceError(
+                    f"{label}: rules[{rule_index}] proof atom {atom_index} path "
+                    f"{path!r} does not resolve to a version formula"
+                )
+            version = versions[version_index]
+            formula = version.get("formula") if isinstance(version, Mapping) else None
+            if not isinstance(formula, str) or not formula.strip():
+                raise _SourceError(
+                    f"{label}: rules[{rule_index}] proof atom {atom_index} path "
+                    f"{path!r} does not resolve to a version formula"
+                )
+            if not isinstance(kind, str) or not kind.strip():
+                raise _SourceError(
+                    f"{label}: rules[{rule_index}] proof atom {atom_index} "
+                    "must have a kind"
+                )
+            if not isinstance(excerpt, str) or not excerpt.strip():
+                raise _SourceError(
+                    f"{label}: rules[{rule_index}] proof atom {atom_index} "
+                    "must have a source excerpt"
+                )
+            provision_body = (
+                provision_bodies.get(citation)
+                if isinstance(provision_bodies, Mapping)
+                else None
+            )
+            if not isinstance(provision_body, str):
+                raise _SourceError(
+                    f"{label}: proof atom citation {citation!r} has no pinned "
+                    "corpus provision body"
+                )
+            if excerpt not in provision_body:
+                raise _SourceError(
+                    f"{label}: rules[{rule_index}] proof atom {atom_index} excerpt "
+                    f"does not occur in pinned corpus provision {citation}"
+                )
+            result.append(
+                {
+                    "rule": rule_name,
+                    "path": path,
+                    "kind": kind,
+                    "corpus_citation_path": citation,
+                    "excerpt_sha256": _sha256_bytes(excerpt.encode()),
+                    "formula_sha256": _sha256_bytes(formula.encode()),
+                }
+            )
+    result.sort(key=lambda row: tuple(row[field] for field in _PROOF_ATOM_FIELDS))
+    keys = [tuple(row[field] for field in _PROOF_ATOM_FIELDS) for row in result]
+    if len(keys) != len(set(keys)):
+        raise _SourceError(f"{label}: duplicate provision proof atoms")
+    return result
+
+
 def _read_rulespec_facts(
-    root: Path, ref: str
+    root: Path,
+    ref: str,
+    *,
+    provision_bodies: Mapping[str, str] | None = None,
 ) -> tuple[dict[str, Any], list[dict[str, Any]], list[dict[str, Any]]]:
     if not root.is_dir():
         raise _SourceError(f"rulespec checkout is missing: {root}")
@@ -431,6 +573,19 @@ def _read_rulespec_facts(
         }
         if source_citation != CORPUS_ROOT:
             entry["source_sha256"] = source_sha256
+        else:
+            proof_validation = module.get("proof_validation")
+            proof_validation_required = (
+                isinstance(proof_validation, Mapping)
+                and proof_validation.get("required") is True
+            )
+            entry["proof_validation_required"] = proof_validation_required
+            entry["proof_atoms"] = _provision_proof_atoms(
+                document,
+                label=f"{commit}:{path}",
+                proof_validation_required=proof_validation_required,
+                provision_bodies=provision_bodies,
+            )
         if module_status is not None:
             entry["status"] = module_status
         modules.append(entry)
@@ -606,11 +761,26 @@ def _derive_computed(
         if isinstance(row, Mapping) and isinstance(row.get("citation_path"), str)
     }
     direct_modules: dict[str, Mapping[str, Any]] = {}
+    atom_modules: dict[str, dict[str, int]] = {}
     for module in modules:
         if not isinstance(module, Mapping):
             continue
         citation = module.get("source_citation_path")
-        if not isinstance(citation, str) or citation == CORPUS_ROOT:
+        if not isinstance(citation, str):
+            continue
+        if citation == CORPUS_ROOT:
+            if module.get("proof_validation_required") is not True:
+                continue
+            module_path = module.get("path")
+            if not isinstance(module_path, str):
+                continue
+            for atom in module.get("proof_atoms") or []:
+                if not isinstance(atom, Mapping):
+                    continue
+                atom_citation = atom.get("corpus_citation_path")
+                if isinstance(atom_citation, str):
+                    by_module = atom_modules.setdefault(atom_citation, {})
+                    by_module[module_path] = by_module.get(module_path, 0) + 1
             continue
         if citation in direct_modules:
             errors.append(f"multiple RuleSpec modules directly join {citation}")
@@ -636,6 +806,10 @@ def _derive_computed(
             errors.append(
                 f"{citation}: committed exclusion overlaps a direct RuleSpec module"
             )
+        if citation in atom_modules and decision is not None:
+            errors.append(
+                f"{citation}: committed exclusion hides composed-module proof atoms"
+            )
         if module is not None and module.get("status") == "entity_not_supported":
             row.update(
                 {
@@ -651,6 +825,15 @@ def _derive_computed(
             and module.get("rule_count") > 0
         ):
             row.update({"status": "encoded", "encoded_by": module.get("path")})
+        elif citation in atom_modules:
+            citing_modules = sorted(atom_modules[citation])
+            row.update(
+                {
+                    "status": "partially-encoded",
+                    "partially_encoded_by": citing_modules,
+                    "proof_atom_count": sum(atom_modules[citation].values()),
+                }
+            )
         elif decision is not None:
             row.update(
                 {
@@ -669,9 +852,15 @@ def _derive_computed(
         if status in counts:
             counts[status] += 1
     counts = {"total": len(ledger), **counts}
+    partially_encoded = [
+        row["citation_path"]
+        for row in ledger
+        if row.get("status") == "partially-encoded"
+    ]
     pending = [row["citation_path"] for row in ledger if row.get("status") == "pending"]
     reasons_complete = all(
         row.get("status") == "encoded"
+        or row.get("status") == "partially-encoded"
         or row.get("status") == "pending"
         or (isinstance(row.get("reason"), str) and bool(row["reason"].strip()))
         for row in ledger
@@ -715,6 +904,7 @@ def _derive_computed(
     computed = {
         "ledger": ledger,
         "provision_counts": counts,
+        "partially_encoded": partially_encoded,
         "pending": pending,
         "boundary_frontier": {
             "parsed_input_count": len(slots_by_name),
@@ -723,7 +913,12 @@ def _derive_computed(
             "inputs": frontier,
         },
         "non_encoded_reasons_complete": reasons_complete,
-        "closed": not pending and frontier_complete and reasons_complete,
+        "closed": (
+            not pending
+            and not partially_encoded
+            and frontier_complete
+            and reasons_complete
+        ),
     }
     return computed
 
@@ -850,6 +1045,9 @@ def _generated_fact_errors(generated: Any) -> list[str]:
         direct = row.get("source_citation_path") != CORPUS_ROOT
         if direct:
             required.add("source_sha256")
+        else:
+            required.add("proof_atoms")
+            required.add("proof_validation_required")
         if set(row) not in (required, required | {"status"}):
             errors.append(f"rulespec_modules[{index}] has unexpected keys")
         if not isinstance(path, str) or not path.endswith(".yaml"):
@@ -900,6 +1098,60 @@ def _generated_fact_errors(generated: Any) -> list[str]:
             errors.append(f"rulespec_modules[{index}] has an invalid rule_count")
         if not isinstance(row.get("summary"), str) or not row["summary"].strip():
             errors.append(f"rulespec_modules[{index}] has an invalid summary")
+        proof_atoms = row.get("proof_atoms")
+        if not direct:
+            proof_validation_required = row.get("proof_validation_required")
+            if not isinstance(proof_validation_required, bool):
+                errors.append(
+                    f"rulespec_modules[{index}].proof_validation_required "
+                    "must be a boolean"
+                )
+            if not isinstance(proof_atoms, list):
+                errors.append(f"rulespec_modules[{index}].proof_atoms must be a list")
+                proof_atoms = []
+            expected_atom_keys = {
+                "rule",
+                "path",
+                "kind",
+                "corpus_citation_path",
+                "excerpt_sha256",
+                "formula_sha256",
+            }
+            for atom_index, atom in enumerate(proof_atoms):
+                label = f"rulespec_modules[{index}].proof_atoms[{atom_index}]"
+                if not isinstance(atom, Mapping):
+                    errors.append(f"{label} must be a mapping")
+                    continue
+                if set(atom) != expected_atom_keys:
+                    errors.append(f"{label} has unexpected keys")
+                for field in ("rule", "path", "kind"):
+                    if not isinstance(atom.get(field), str) or not atom[field].strip():
+                        errors.append(f"{label}.{field} must be non-empty")
+                atom_citation = atom.get("corpus_citation_path")
+                if atom_citation not in spine_citations:
+                    errors.append(f"{label} cites a provision outside the spine")
+                if not _HEX_SHA256.fullmatch(str(atom.get("excerpt_sha256", ""))):
+                    errors.append(f"{label}.excerpt_sha256 must be a full sha256")
+                if not _HEX_SHA256.fullmatch(str(atom.get("formula_sha256", ""))):
+                    errors.append(f"{label}.formula_sha256 must be a full sha256")
+            if proof_atoms and proof_validation_required is not True:
+                errors.append(
+                    f"rulespec_modules[{index}] proof atoms require "
+                    "proof_validation_required=true"
+                )
+            if all(isinstance(atom, Mapping) for atom in proof_atoms):
+                atom_keys = [
+                    tuple(str(atom.get(field, "")) for field in _PROOF_ATOM_FIELDS)
+                    for atom in proof_atoms
+                ]
+                if atom_keys != sorted(atom_keys):
+                    errors.append(
+                        f"rulespec_modules[{index}].proof_atoms are not canonical"
+                    )
+                if len(atom_keys) != len(set(atom_keys)):
+                    errors.append(
+                        f"rulespec_modules[{index}].proof_atoms contain duplicates"
+                    )
 
     module_inputs = generated.get("module_inputs")
     if not isinstance(module_inputs, list) or not module_inputs:
@@ -1030,6 +1282,8 @@ def validate_artifact(document: Mapping[str, Any]) -> ClosureSummary:
     computed = document["computed"]
     return ClosureSummary(
         closed=computed["closed"],
+        encoded_count=computed["provision_counts"]["encoded"],
+        partially_encoded_count=computed["provision_counts"]["partially-encoded"],
         pending_count=computed["provision_counts"]["pending"],
         frontier_complete=computed["boundary_frontier"]["complete"],
         non_encoded_reasons_complete=computed["non_encoded_reasons_complete"],
@@ -1046,8 +1300,12 @@ def build_artifact(
 ) -> tuple[dict[str, Any], tuple[str, ...]]:
     """Rebuild generated facts and computed claims, preserving decisions."""
 
-    corpus, spine = _read_corpus_spine(corpus_release, corpus_ref)
-    rulespec, modules, module_inputs = _read_rulespec_facts(rulespec_root, rulespec_ref)
+    corpus, spine, provision_bodies = _read_corpus_spine(corpus_release, corpus_ref)
+    rulespec, modules, module_inputs = _read_rulespec_facts(
+        rulespec_root,
+        rulespec_ref,
+        provision_bodies=provision_bodies,
+    )
     body_hashes = {row["citation_path"]: row["body_sha256"] for row in spine}
     for module in modules:
         citation = module["source_citation_path"]
@@ -1168,6 +1426,8 @@ def run(
         print(
             "closure ledger up to date: "
             f"closed={str(summary.closed).lower()}, "
+            f"encoded={summary.encoded_count}, "
+            f"partially_encoded={summary.partially_encoded_count}, "
             f"pending={summary.pending_count}, "
             f"frontier_complete={str(summary.frontier_complete).lower()}"
         )

@@ -540,11 +540,10 @@ def _producer_module(relative: str) -> ModuleType:
 
 
 def _attested_verdict(spec: dict, name: str) -> dict:
-    """Emit the existing sha-pinned scaffolding path unchanged."""
+    """Emit sha-pinned scaffolding without promoting registry status strings."""
 
     block = dict((spec.get("attested") or {}).get(name) or {})
-    emitted_mode = "computed" if block.get("status") == "computed" else "attested"
-    return {"mode": emitted_mode, **block}
+    return {**block, "mode": "attested"}
 
 
 def _closed_verdict(
@@ -648,7 +647,10 @@ def _executable_verdict(
         raise ValueError(f"{artifact_ref} failed executable validation: {exc}") from exc
     if verify_producer:
         try:
-            reproduced = producer.build_reproduction(repo_root=REPO_ROOT)
+            reproduced = producer.build_reproduction(
+                repo_root=REPO_ROOT,
+                rulespec_ref=document["rulespec"]["sha"],
+            )
             producer.validate_artifact(reproduced, repo_root=REPO_ROOT)
             rendered = producer._render(reproduced)
         except (OSError, RuntimeError, ValueError) as exc:

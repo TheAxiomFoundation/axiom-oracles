@@ -33,6 +33,16 @@ def test_committed_artifact_validates_hermetically():
         "engine_binary_matches_pin": True,
         "executable": True,
     }
+    assert document["rulespec"]["ref"] == document["rulespec"]["sha"]
+
+
+def test_hermetic_validator_rejects_a_mutable_rulespec_ref():
+    module = _load_script()
+    document = json.loads(ARTIFACT.read_text())
+    document["rulespec"]["ref"] = "main"
+
+    with pytest.raises(ValueError, match="recorded rulespec.sha commit"):
+        module.validate_artifact(document)
 
 
 def test_exact_value_comparison_is_json_type_aware():
@@ -72,6 +82,40 @@ def test_tampered_committed_value_makes_check_red(tmp_path, monkeypatch, capsys)
 
     assert module.main(["--check", "--artifact", str(mutant_path)]) == 1
     assert len(calls) == 1, "--check must rerun before rejecting committed drift"
+    assert calls[0]["rulespec_ref"] == reproduced["rulespec"]["sha"]
     assert "committed_value drifted" in capsys.readouterr().err
     with pytest.raises(ValueError, match="committed_value drifted"):
         module.validate_artifact(mutant)
+
+
+def test_check_replays_the_recorded_commit_and_accepts_that_ref(monkeypatch, capsys):
+    module = _load_script()
+    committed = json.loads(ARTIFACT.read_text())
+    recorded = committed["rulespec"]["sha"]
+    calls = []
+
+    def resolve_selected_ref(repo, ref):
+        assert ref == recorded
+        return recorded
+
+    def fake_reproduction(**kwargs):
+        calls.append(kwargs)
+        return copy.deepcopy(committed)
+
+    monkeypatch.setattr(module, "_resolve_git_commit", resolve_selected_ref)
+    monkeypatch.setattr(module, "build_reproduction", fake_reproduction)
+
+    assert (
+        module.main(
+            [
+                "--check",
+                "--artifact",
+                str(ARTIFACT),
+                "--rulespec-ref",
+                recorded,
+            ]
+        )
+        == 0
+    )
+    assert calls[0]["rulespec_ref"] == recorded
+    assert "exact JSON numeric equality" in capsys.readouterr().out

@@ -180,6 +180,56 @@ generated_facts:
       for the same reason as the single-recipient capstone: § 1 a, stk. 3
 
       regulates it by personskattelovens § 20, which is not a captured scope.'
+    proof_validation_required: true
+    proof_atoms:
+    - rule: couple_recipient_annual_child_youth_benefit
+      path: versions[0].formula
+      kind: condition
+      corpus_citation_path: dk/statute/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a
+      excerpt_sha256: 80e368c5af4df1f46c002f7eee0d682961238c66c3842f2a900e6d63a4718672
+      formula_sha256: fa55c73508fcc5154ad81d95ef83a5226e77cb01eafcaca3fefbddf8ff3fce43
+    - rule: couple_recipient_annual_child_youth_benefit
+      path: versions[0].formula
+      kind: formula
+      corpus_citation_path: dk/statute/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a
+      excerpt_sha256: 1d84cbac1147517b96a87b14327eea61daa001bfda2c5fdde937cc704dee1049
+      formula_sha256: fa55c73508fcc5154ad81d95ef83a5226e77cb01eafcaca3fefbddf8ff3fce43
+    - rule: equal_share_of_annual_child_youth_benefit
+      path: versions[0].formula
+      kind: formula
+      corpus_citation_path: dk/statute/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-4
+      excerpt_sha256: 3dee885a56012bee4740621e99dc587f7105b85fb4fbc82ad65f06271059fa42
+      formula_sha256: c63dcccd5db821ced37483153ee0a43568365d9f892472b4af77396a3835779e
+    - rule: equal_share_of_annual_child_youth_benefit
+      path: versions[0].formula
+      kind: ordering
+      corpus_citation_path: dk/statute/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-4
+      excerpt_sha256: 6470c1f6ec3638e3f9d2961af84a90ba4ec85100c06862aa48fcfcae4d7e22a2
+      formula_sha256: c63dcccd5db821ced37483153ee0a43568365d9f892472b4af77396a3835779e
+    - rule: equal_share_of_annual_child_youth_benefit
+      path: versions[0].formula
+      kind: ordering
+      corpus_citation_path: dk/statute/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-5
+      excerpt_sha256: 88ad07922c4b9095972f9e977dce0b22cb709cd4329a11ddcac1a30c8afc71ac
+      formula_sha256: c63dcccd5db821ced37483153ee0a43568365d9f892472b4af77396a3835779e
+    - rule: equal_share_of_annual_child_youth_benefit
+      path: versions[0].formula
+      kind: ordering
+      corpus_citation_path: dk/statute/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-5
+      excerpt_sha256: be0ce847f3e348409412a19fb45d187064efd385b67b7454fa026416991dfbd3
+      formula_sha256: c63dcccd5db821ced37483153ee0a43568365d9f892472b4af77396a3835779e
+    - rule: monthly_youth_benefit_payments_per_year
+      path: versions[0].formula
+      kind: parameter
+      corpus_citation_path: dk/statute/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-5
+      excerpt_sha256: be0ce847f3e348409412a19fb45d187064efd385b67b7454fa026416991dfbd3
+      formula_sha256: 6b51d431df5d7f141cbececcf79edf3dd861c3b4069f0b11661a3eefacbba918
+    - rule: quarterly_child_benefit_payments_per_year
+      path: versions[0].formula
+      kind: parameter
+      corpus_citation_path: dk/statute/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-5
+      excerpt_sha256: 88ad07922c4b9095972f9e977dce0b22cb709cd4329a11ddcac1a30c8afc71ac
+      formula_sha256: 4b227777d4dd1fc61c6f884f48641d02b4d121d3fd328cb08b5531fcacdabf8a
   - path: dk/statutes/composed/boerne-og-ungeydelse-pipeline.yaml
     module_id: dk:statutes/composed/boerne-og-ungeydelse-pipeline
     sha256: 6bd3f3b62e8e6e6e4d4a8819da419b1a14f163c5f5a40dcee2727c46239d16a9
@@ -242,6 +292,8 @@ generated_facts:
       work; the graded EUROMOD comparison is therefore restricted to single-parent
 
       households.'
+    proof_validation_required: true
+    proof_atoms: []
   - path: dk/statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a.yaml
     module_id: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a
     sha256: 99825bdd44495d059f3df7e9bdeb138cbd882839784c642710a97c53572acdc6
@@ -484,7 +536,10 @@ computed:
     citation_path: dk/statute/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-5
     heading: § 5.
     body_sha256: 6bfe19e2ed661875e80a85edf7bb20e9d0bad6d5275e4ea1b4b11f7868bd0e6d
-    status: pending
+    status: partially-encoded
+    partially_encoded_by:
+    - dk/statutes/composed/boerne-og-ungeydelse-couple-pipeline.yaml
+    proof_atom_count: 4
   - ordinal: 12
     citation_path: dk/statute/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-6
     heading: § 6.
@@ -574,9 +629,12 @@ computed:
   provision_counts:
     total: 24
     encoded: 2
+    partially-encoded: 1
     classified-with-reason: 1
     excluded-with-reason: 8
-    pending: 13
+    pending: 12
+  partially_encoded:
+  - dk/statute/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-5
   pending:
   - dk/statute/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-2
   - dk/statute/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-3
@@ -584,7 +642,6 @@ computed:
   - dk/statute/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-4-b
   - dk/statute/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-4-c
   - dk/statute/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-4-e
-  - dk/statute/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-5
   - dk/statute/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8
   - dk/statute/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-a
   - dk/statute/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-b

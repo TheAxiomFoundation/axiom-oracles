@@ -19,6 +19,7 @@ COMMITTED_ARTIFACT = (
     REPO_ROOT / "conformance" / "closure" / "dk-boerne-og-ungeydelse.yaml"
 )
 CORPUS_ROOT = "dk/statute/lbk-603-2025/boerne-og-ungeydelsesloven"
+_MISSING = object()
 
 
 def _provision_body(suffix: str) -> str:
@@ -278,21 +279,84 @@ def _commit_rulespec_change(root: Path, path: Path, message: str) -> None:
     )
 
 
+def _configure_composed_proof_atom(
+    source: dict,
+    *,
+    required: object = True,
+    atom_path: str = "versions[0].formula",
+    excerpt: str = "§ 2. Test provision body.",
+) -> None:
+    if required is _MISSING:
+        source["module"].pop("proof_validation", None)
+    else:
+        source["module"]["proof_validation"] = {"required": required}
+    source["rules"][0]["metadata"] = {
+        "proof": {
+            "atoms": [
+                {
+                    "path": atom_path,
+                    "kind": "formula",
+                    "source": {
+                        "corpus_citation_path": f"{CORPUS_ROOT}/paragraf-2",
+                        "excerpt": excerpt,
+                    },
+                }
+            ]
+        }
+    }
+
+
 def test_committed_dk_closure_artifact_is_internally_valid_and_open() -> None:
     module = _load_script()
     document = _load(COMMITTED_ARTIFACT)
     summary = module.validate_artifact(document)
 
     assert summary.closed is False
-    assert summary.pending_count == 13
+    assert summary.encoded_count == 2
+    assert summary.partially_encoded_count == 1
+    assert summary.pending_count == 12
     assert summary.frontier_complete is True
     assert document["computed"]["provision_counts"] == {
         "total": 24,
         "encoded": 2,
+        "partially-encoded": 1,
         "classified-with-reason": 1,
         "excluded-with-reason": 8,
-        "pending": 13,
+        "pending": 12,
     }
+    partial = next(
+        row
+        for row in document["computed"]["ledger"]
+        if row["citation_path"] == f"{CORPUS_ROOT}/paragraf-5"
+    )
+    assert partial == {
+        "ordinal": 11,
+        "citation_path": f"{CORPUS_ROOT}/paragraf-5",
+        "heading": "§ 5.",
+        "body_sha256": (
+            "6bfe19e2ed661875e80a85edf7bb20e9d0bad6d5275e4ea1b4b11f7868bd0e6d"
+        ),
+        "status": "partially-encoded",
+        "partially_encoded_by": [
+            "dk/statutes/composed/boerne-og-ungeydelse-couple-pipeline.yaml"
+        ],
+        "proof_atom_count": 4,
+    }
+    composed = next(
+        row
+        for row in document["generated_facts"]["rulespec_modules"]
+        if row["path"]
+        == "dk/statutes/composed/boerne-og-ungeydelse-couple-pipeline.yaml"
+    )
+    assert composed["proof_validation_required"] is True
+    section_5_atoms = [
+        atom
+        for atom in composed["proof_atoms"]
+        if atom["corpus_citation_path"] == f"{CORPUS_ROOT}/paragraf-5"
+    ]
+    assert len(section_5_atoms) == 4
+    assert all(atom["path"] == "versions[0].formula" for atom in section_5_atoms)
+    assert all("excerpt" not in atom for atom in section_5_atoms)
     assert {
         row["input"] for row in document["computed"]["boundary_frontier"]["inputs"]
     } == {
@@ -355,6 +419,45 @@ def test_check_rejects_a_pending_row_hidden_as_an_exclusion(
     assert module.main(["--check", *args]) == 1
     error = capsys.readouterr().err.lower()
     assert "ledger" in error or "computed" in error
+
+
+def test_validator_rejects_an_atom_level_partial_claim_hidden_as_pending() -> None:
+    """A proof-atom join cannot be erased by relabeling its row and counts."""
+
+    module = _load_script()
+    document = _load(COMMITTED_ARTIFACT)
+    citation = f"{CORPUS_ROOT}/paragraf-5"
+    partial = next(
+        row
+        for row in document["computed"]["ledger"]
+        if row["citation_path"] == citation
+    )
+    assert partial["status"] == "partially-encoded"
+    partial["status"] = "pending"
+    partial.pop("partially_encoded_by")
+    partial.pop("proof_atom_count")
+    counts = document["computed"]["provision_counts"]
+    counts["partially-encoded"] -= 1
+    counts["pending"] += 1
+    document["computed"]["partially_encoded"].remove(citation)
+    document["computed"]["pending"].append(citation)
+
+    with pytest.raises(module.ClosureLedgerError, match="computed"):
+        module.validate_artifact(document)
+
+
+def test_validator_rejects_duplicate_or_noncanonical_proof_atoms() -> None:
+    module = _load_script()
+    document = _load(COMMITTED_ARTIFACT)
+    composed = next(
+        row
+        for row in document["generated_facts"]["rulespec_modules"]
+        if row["source_citation_path"] == CORPUS_ROOT and row["proof_atoms"]
+    )
+    composed["proof_atoms"].append(dict(composed["proof_atoms"][0]))
+
+    with pytest.raises(module.ClosureLedgerError, match="duplicates"):
+        module.validate_artifact(document)
 
 
 def test_check_rejects_a_frontier_input_removed(
@@ -470,6 +573,107 @@ def test_full_verifier_rejects_a_coordinated_generated_spine_truncation(
     )
     assert result.valid is False
     assert any("drift" in error for error in result.errors)
+
+
+def test_full_check_rejects_a_composed_proof_atom_hidden_with_its_partial_row(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """Live atom evidence survives a coordinated generated-facts rewrite."""
+
+    module, artifact, args = _baseline(tmp_path)
+    rulespec = _path_arg(args, "--rulespec-root")
+    path = rulespec / "dk/statutes/composed/boerne-og-ungeydelse-pipeline.yaml"
+    source = yaml.safe_load(path.read_text())
+    _configure_composed_proof_atom(source)
+    path.write_text(yaml.safe_dump(source, sort_keys=False, allow_unicode=True))
+    _commit_rulespec_change(rulespec, path, "add composed provision proof atom")
+    assert module.main(["--generate", *args]) == 0
+
+    document = _load(artifact)
+    composed = next(
+        row
+        for row in document["generated_facts"]["rulespec_modules"]
+        if row["path"] == "dk/statutes/composed/boerne-og-ungeydelse-pipeline.yaml"
+    )
+    assert len(composed["proof_atoms"]) == 1
+    partial = next(
+        row
+        for row in document["computed"]["ledger"]
+        if row["citation_path"] == f"{CORPUS_ROOT}/paragraf-2"
+    )
+    assert partial["status"] == "partially-encoded"
+
+    # Coordinately hide both the generated atom and the derived partial row.
+    # Hermetic derivation cannot inspect the sibling Git blob, so only the full
+    # producer check can prove that the generated fact was erased.
+    composed["proof_atoms"] = []
+    errors: list[str] = []
+    document["computed"] = module._derive_computed(  # noqa: SLF001
+        document["generated_facts"],
+        document["committed_decisions"],
+        errors,
+    )
+    assert not errors
+    module.validate_artifact(document)
+    _write(module, artifact, document)
+
+    assert module.main(["--check", *args]) == 1
+    assert "drift" in capsys.readouterr().err.lower()
+
+
+@pytest.mark.parametrize(
+    "required",
+    [_MISSING, False],
+    ids=("missing", "false"),
+)
+def test_full_check_rejects_composed_atoms_without_required_proof_validation(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+    required: object,
+) -> None:
+    module, _, args = _baseline(tmp_path)
+    rulespec = _path_arg(args, "--rulespec-root")
+    path = rulespec / "dk/statutes/composed/boerne-og-ungeydelse-pipeline.yaml"
+    source = yaml.safe_load(path.read_text())
+    _configure_composed_proof_atom(source, required=required)
+    path.write_text(yaml.safe_dump(source, sort_keys=False, allow_unicode=True))
+    _commit_rulespec_change(rulespec, path, "mutate composed proof validation")
+
+    assert module.main(["--check", *args]) == 1
+    assert "proof_validation.required=true" in capsys.readouterr().err
+
+
+def test_full_check_rejects_a_nonresolving_composed_atom_path(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    module, _, args = _baseline(tmp_path)
+    rulespec = _path_arg(args, "--rulespec-root")
+    path = rulespec / "dk/statutes/composed/boerne-og-ungeydelse-pipeline.yaml"
+    source = yaml.safe_load(path.read_text())
+    _configure_composed_proof_atom(source, atom_path="versions[777].formula")
+    path.write_text(yaml.safe_dump(source, sort_keys=False, allow_unicode=True))
+    _commit_rulespec_change(rulespec, path, "mutate composed proof atom path")
+
+    assert module.main(["--check", *args]) == 1
+    assert "does not resolve to a version formula" in capsys.readouterr().err
+
+
+def test_full_check_rejects_a_fabricated_composed_atom_excerpt(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    module, _, args = _baseline(tmp_path)
+    rulespec = _path_arg(args, "--rulespec-root")
+    path = rulespec / "dk/statutes/composed/boerne-og-ungeydelse-pipeline.yaml"
+    source = yaml.safe_load(path.read_text())
+    _configure_composed_proof_atom(
+        source,
+        excerpt="This cadence text is absent from the pinned provision.",
+    )
+    path.write_text(yaml.safe_dump(source, sort_keys=False, allow_unicode=True))
+    _commit_rulespec_change(rulespec, path, "mutate composed proof atom excerpt")
+
+    assert module.main(["--check", *args]) == 1
+    assert "does not occur in pinned corpus provision" in capsys.readouterr().err
 
 
 def test_rulespec_ref_is_resolved_once_before_tree_reads(

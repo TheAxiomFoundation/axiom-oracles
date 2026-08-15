@@ -2955,7 +2955,7 @@
       "bridge_audited": true,
       "bridge_declared": true,
       "bridged_through": {
-        "personskatteloven_section_7_income_basis": "At input-name level both slots are bridge targets. The runner copies the executed annual household tintbto_s value, without scaling, only into the earner's two Person records. The non-earner's two records remain at their explicit constant 0; the household result then sums the separately executed recipient legs."
+        "personskatteloven_section_7_income_basis": "The runner copies the executed annual household tintbto_s value, without scaling, only into the earner's two Person records; the household result then sums the separately executed recipient legs."
       },
       "cases_scanned": 1,
       "chunk_manifest": [],

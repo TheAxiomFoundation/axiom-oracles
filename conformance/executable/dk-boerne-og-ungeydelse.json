@@ -158,7 +158,7 @@
   "generated_by": "scripts/executable_reproduction.py",
   "program": "dk/boerne-og-ungeydelse",
   "rulespec": {
-    "ref": "main",
+    "ref": "9986b6035c4e557b9b40645dfe2f3e4cffb6037c",
     "repo": "TheAxiomFoundation/rulespec-dk",
     "sha": "9986b6035c4e557b9b40645dfe2f3e4cffb6037c"
   },

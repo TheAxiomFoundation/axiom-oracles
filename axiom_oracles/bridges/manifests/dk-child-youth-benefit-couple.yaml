@@ -4,6 +4,8 @@ schema: axiom_oracles.bridge_manifest.v1
 suite: dk-child-youth-benefit-couple
 program: dk/boerne-og-ungeydelse
 period: "2025"
+logical_period: "2025"
+execution_period: "2025-06-01"
 strict: true
 bridge:
   module: axiom_oracles/suites/dk_child_youth_benefit.py
@@ -65,16 +67,27 @@ bindings:
     inputs:
       - dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis
       - dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis_after_section_14_recalculation
+    records:
+      - earner
     source: euromod:tintbto_s
-    mechanism: At input-name level both slots are bridge targets. The runner
-      copies the executed annual household tintbto_s value, without scaling,
-      only into the earner's two Person records. The non-earner's two records
-      remain at their explicit constant 0; the household result then sums the
-      separately executed recipient legs.
+    mechanism: The runner copies the executed annual household tintbto_s value,
+      without scaling, only into the earner's two Person records; the household
+      result then sums the separately executed recipient legs.
     covered_by:
       - dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json — executed earner-only bridge receipt and rulespec-dk@9986b6035c4e557b9b40645dfe2f3e4cffb6037c provenance for dk/statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a.yaml
       - dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json — pinned companion fixtures dk/statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a.test.yaml and dk/statutes/composed/boerne-og-ungeydelse-couple-pipeline.test.yaml plus the own-recipient formula in dk/statutes/composed/boerne-og-ungeydelse-couple-pipeline.yaml
       - tests/test_package_targets.py — bridge adapter fixture proving only the addressed Person record is overwritten and the other remains zero
+    audit: read
+
+  - kind: constant
+    inputs:
+      - dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis
+      - dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis_after_section_14_recalculation
+    records:
+      - non_earner
+    value: 0
+    reason: The suite initializes both non-earner income-basis records to zero,
+      and its record-scoped bridge does not address or overwrite them.
     audit: read
 
 completeness:
