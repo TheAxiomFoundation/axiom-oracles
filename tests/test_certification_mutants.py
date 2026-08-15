@@ -6,9 +6,12 @@ are the demonstrations, kept green forever. Grow this catalogue whenever a gate
 gains a rule — a rule without a mutant here is not yet a rule.
 """
 
+import copy
 import importlib.util
 import json
 from pathlib import Path
+
+import yaml
 
 REPO = Path(__file__).resolve().parent.parent
 
@@ -46,7 +49,11 @@ def test_mislabeled_report_is_a_defect():
         json.dumps(
             {
                 "suite": "someone-else",
-                "summary": {"comparison_count": 5, "match_count": 5, "mismatch_count": 0},
+                "summary": {
+                    "comparison_count": 5,
+                    "match_count": 5,
+                    "mismatch_count": 0,
+                },
             }
         )
     )
@@ -296,9 +303,12 @@ def test_scalar_aliases_are_rejected():
             "suite": "zz",
             "aliases": "victim",
             "program": "p",
+            "period": "2025",
             "population": {},
             "oracle": {},
-            "bindings": [{"kind": "constant", "group": "g", "reason": "r", "audit": "read"}],
+            "bindings": [
+                {"kind": "constant", "group": "g", "reason": "r", "audit": "read"}
+            ],
         },
     )
     assert any("must be a list" in e for e in errors)
@@ -312,9 +322,12 @@ def test_self_asserted_completeness_is_rejected():
             "schema": "axiom_oracles.bridge_manifest.v1",
             "suite": "zz",
             "program": "p",
+            "period": "2025",
             "population": {},
             "oracle": {},
-            "bindings": [{"kind": "constant", "group": "g", "reason": "r", "audit": "read"}],
+            "bindings": [
+                {"kind": "constant", "group": "g", "reason": "r", "audit": "read"}
+            ],
             "completeness": {"status": "verified"},
         },
     )
@@ -325,7 +338,10 @@ def test_covered_by_must_resolve_to_something_real():
     vbm = _load("validate_bridge_manifests")
     assert vbm._covered_by_resolves("ABCDEFGHIJKL") is False
     assert vbm._covered_by_resolves("see the other suite, TBD") is False
-    assert vbm._covered_by_resolves("dashboard/public/data/axiom-snapqc-co-snap.json") is True
+    assert (
+        vbm._covered_by_resolves("dashboard/public/data/axiom-snapqc-co-snap.json")
+        is True
+    )
 
 
 def test_certified_requires_computed_true_premises_not_status_strings():
@@ -489,6 +505,8 @@ def test_covered_by_rejects_ghosts_and_absolute_paths():
     assert vbm._covered_by_resolves("ghost-sibling/no-such/evidence.yaml") is False
     assert vbm._covered_by_resolves("/etc/passwd") is False
     assert vbm._covered_by_resolves("../../../etc/passwd") is False
+    assert vbm._covered_by_resolves(".") is False
+    assert vbm._covered_by_resolves("dashboard/public/data") is False
 
 
 def test_contested_reports_are_a_certificate_defect():
@@ -498,10 +516,177 @@ def test_contested_reports_are_a_certificate_defect():
     assert census["suites"]["nyc-synthetic"].get("contested_reports")
     defects: list[str] = []
     _rows, complete = certify._exercise_block(
-        [{"suite": "nyc-synthetic", "oracle_type": "reference", "oracle": "x",
-          "report": "dashboard/public/data/axiom-policyengine.json"}],
+        [
+            {
+                "suite": "nyc-synthetic",
+                "oracle_type": "reference",
+                "oracle": "x",
+                "report": "dashboard/public/data/axiom-policyengine.json",
+            }
+        ],
         census,
         defects,
     )
     assert complete is False
     assert any("claim this suite" in d for d in defects)
+
+
+def test_dk_manifest_dropped_suite_input_is_rejected():
+    """Suite-backed completeness must kill a manifest/input drift mutant."""
+    vbm = _load("validate_bridge_manifests")
+    path = REPO / "axiom_oracles/bridges/manifests/dk-child-youth-benefit.yaml"
+    manifest = yaml.safe_load(path.read_text())
+    target = (
+        "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/"
+        "paragraf-1-a#input.total_contributions_to_qualifying_pension_accounts"
+    )
+    manifest["bindings"] = [
+        binding for binding in manifest["bindings"] if binding.get("input") != target
+    ]
+
+    errors, _findings = vbm.validate(path, manifest)
+
+    assert any(
+        "bindings omit suite input(s)" in error and target in error for error in errors
+    )
+
+
+def test_dk_manifest_varying_input_cannot_be_declared_constant():
+    """The 0/60000 pension witness proves the contribution input is mapped."""
+    vbm = _load("validate_bridge_manifests")
+    path = REPO / "axiom_oracles/bridges/manifests/dk-child-youth-benefit.yaml"
+    manifest = copy.deepcopy(yaml.safe_load(path.read_text()))
+    target = (
+        "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/"
+        "paragraf-1-a#input.total_contributions_to_qualifying_pension_accounts"
+    )
+    [binding] = [
+        candidate
+        for candidate in manifest["bindings"]
+        if candidate.get("input") == target
+    ]
+    binding["kind"] = "constant"
+    binding["reason"] = "mutant"
+
+    errors, _findings = vbm.validate(path, manifest)
+
+    assert any(
+        "suite-varying input(s) cannot be kind=constant" in error and target in error
+        for error in errors
+    )
+
+
+def test_dk_manifest_bridge_target_cannot_change_binding_kind():
+    """The suite's tintbto target declarations make the bridged kind computed."""
+    vbm = _load("validate_bridge_manifests")
+    path = REPO / "axiom_oracles/bridges/manifests/dk-child-youth-benefit.yaml"
+    manifest = copy.deepcopy(yaml.safe_load(path.read_text()))
+    [binding] = [
+        candidate
+        for candidate in manifest["bindings"]
+        if candidate.get("dimension") == "personskatteloven_section_7_income_basis"
+    ]
+    binding["kind"] = "constant"
+    binding["reason"] = "mutant"
+
+    errors, _findings = vbm.validate(path, manifest)
+
+    assert any(
+        "suite bridge target(s) must be kind=bridged" in error for error in errors
+    )
+
+
+def test_dk_manifest_bridge_source_cannot_drift_from_tintbto():
+    """The suite names tintbto_s, so another bridge source cannot certify."""
+    vbm = _load("validate_bridge_manifests")
+    path = REPO / "axiom_oracles/bridges/manifests/dk-child-youth-benefit.yaml"
+    manifest = copy.deepcopy(yaml.safe_load(path.read_text()))
+    [binding] = [
+        candidate
+        for candidate in manifest["bindings"]
+        if candidate.get("dimension") == "personskatteloven_section_7_income_basis"
+    ]
+    binding["source"] = "euromod:garbage"
+
+    errors, _findings = vbm.validate(path, manifest)
+
+    assert any("suite bridge target source mismatch" in error for error in errors)
+
+
+def test_dk_manifest_rejects_multi_source_suite_target(monkeypatch):
+    """One manifest source cannot hide a second source introduced by suite drift."""
+    vbm = _load("validate_bridge_manifests")
+    path = REPO / "axiom_oracles/bridges/manifests/dk-child-youth-benefit.yaml"
+    manifest = yaml.safe_load(path.read_text())
+    original_catalog = vbm._suite_input_catalog
+    target = (
+        "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/"
+        "paragraf-1-a#input.personskatteloven_section_7_income_basis"
+    )
+
+    def multi_source_catalog(suite):
+        catalog = original_catalog(suite)
+        catalog[2][target].add("euromod:second_source")
+        return catalog
+
+    monkeypatch.setattr(vbm, "_suite_input_catalog", multi_source_catalog)
+    errors, _findings = vbm.validate(path, manifest)
+
+    assert any("suite bridge target source mismatch" in error for error in errors)
+
+
+def test_dk_synthetic_population_declaration_cannot_be_dropped():
+    """The committed synthetic report must force an honest population family."""
+    vbm = _load("validate_bridge_manifests")
+    path = REPO / "axiom_oracles/bridges/manifests/dk-child-youth-benefit.yaml"
+    manifest = copy.deepcopy(yaml.safe_load(path.read_text()))
+    manifest["population"] = {"pin_required": False}
+
+    errors, _findings = vbm.validate(path, manifest)
+
+    assert any("requires family=synthetic" in error for error in errors)
+    assert any("must declare case_source=suite" in error for error in errors)
+
+
+def test_strict_cli_enforces_only_opted_in_manifest_findings(monkeypatch):
+    """Legacy findings remain visible while strict-manifest findings fail."""
+    vbm = _load("validate_bridge_manifests")
+    strict_path = REPO / "strict.yaml"
+    legacy_path = REPO / "legacy.yaml"
+    manifests = {
+        strict_path: {"strict": True},
+        legacy_path: {"strict": False},
+    }
+    monkeypatch.setattr(vbm, "load_manifests", lambda: manifests)
+    monkeypatch.setattr(vbm, "global_collisions", lambda _manifests: [])
+    monkeypatch.setattr(
+        vbm,
+        "validate",
+        lambda path, _manifest: ([], [f"{path.name}: mutant finding"]),
+    )
+    monkeypatch.setattr(vbm.sys, "argv", ["validate_bridge_manifests.py", "--strict"])
+
+    assert vbm.main() == 1
+    manifests[strict_path]["strict"] = False
+    assert vbm.main() == 0
+
+
+def test_bridge_manifest_identity_fields_are_typed():
+    """Null identities and mapping aliases must be errors, never clean/crashes."""
+    vbm = _load("validate_bridge_manifests")
+    path = REPO / "axiom_oracles/bridges/manifests/dk-child-youth-benefit.yaml"
+    original = yaml.safe_load(path.read_text())
+    mutants = (
+        ("program", None, "`program` must be a non-empty string"),
+        ("oracle", None, "oracle must be a mapping"),
+        ("aliases", [{"not": "a string"}], "every alias must be"),
+    )
+
+    for field, value, expected in mutants:
+        manifest = copy.deepcopy(original)
+        manifest[field] = value
+        errors, _findings = vbm.validate(path, manifest)
+        assert any(expected in error for error in errors)
+        # main() asks for collisions before per-manifest validation; malformed
+        # aliases therefore must be harmless here too.
+        vbm.global_collisions({path: manifest})

@@ -45,8 +45,8 @@ jobs:
       - name: Exercise census is current (varied/constant/bridged per suite)
         run: uv run python scripts/exercise_census.py --check
 
-      - name: Bridge manifests validate (findings reported, errors fail)
-        run: uv run python scripts/validate_bridge_manifests.py
+      - name: Bridge manifests validate (strict-clean lanes enforce findings)
+        run: uv run python scripts/validate_bridge_manifests.py --strict
 
       - name: Program certificates recompute clean
         run: uv run python scripts/certify.py --check

@@ -5,10 +5,9 @@ import pytest
 import yaml
 
 
-COMPARISONS_DIR = Path(__file__).resolve().parent.parent / "comparisons"
-DASHBOARD_DATA_DIR = (
-    Path(__file__).resolve().parent.parent / "dashboard" / "public" / "data"
-)
+REPO_ROOT = Path(__file__).resolve().parent.parent
+COMPARISONS_DIR = REPO_ROOT / "comparisons"
+DASHBOARD_DATA_DIR = REPO_ROOT / "dashboard" / "public" / "data"
 
 
 def test_dk_2023_child_youth_benefit_registry_config_shape() -> None:
@@ -128,3 +127,27 @@ def test_dk_witness_reports_pin_live_outputs_and_dispositions() -> None:
         ("earner", 0),
         ("non_earner", 8_384),
     ]
+
+
+def test_dk_strict_bridge_audit_flows_to_exercised_certificate() -> None:
+    """Pin all three positive bridge audits and the computed exercise verdict."""
+    suite_names = (
+        "dk-child-youth-benefit",
+        "dk-child-youth-benefit-2023",
+        "dk-child-youth-benefit-couple",
+    )
+    census = json.loads((REPO_ROOT / "conformance/exercise-census.json").read_text())
+    for suite in suite_names:
+        row = census["suites"][suite]
+        assert row["bridge_declared"] is True
+        assert row["bridge_audited"] is True
+
+    certificate = json.loads(
+        (REPO_ROOT / "certificates/dk-boerne-og-ungeydelse.json").read_text()
+    )
+    assert certificate["verdicts"]["exercised"]["value"] is True
+    assert not any(
+        blocker.startswith("exercise:") for blocker in certificate["blockers"]
+    )
+    assert certificate["certified"]["value"] is False
+    assert certificate["certified"]["state"] == "unavailable"
