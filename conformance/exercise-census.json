@@ -947,7 +947,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-be-capital-income-tax.json",
-      "report_sha256": "f279965a9092adbca7842881f3707af170cd7c28232ffffc13813d4c7ce8a503",
+      "report_sha256": "244f14f86e9564402a7e8ec1a9c85e1692f1d52f465d35a10001a07e3d354257",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
