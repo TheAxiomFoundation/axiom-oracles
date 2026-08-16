@@ -57,6 +57,8 @@ BE_ROLLUP = "axiom_oracles/data/euromod_be_coverage.json"
 #: A BE report with NO dispositions file: the merge never rewrites it, but it
 #: still feeds the rollup — so perturbing it drifts the rollup and nothing else.
 BE_REPORT = "dashboard/public/data/axiom-euromod-be-article-51-forfait.json"
+NZ_INDEX = "dashboard/public/data/cases/nz-treasury-incomeexplorer/index.json"
+NZ_CHUNK = "dashboard/public/data/cases/nz-treasury-incomeexplorer/chunk-0.json"
 
 #: Hermetic git: no user/system config (no signing hooks, no identity — the
 #: script must supply the bot identity itself, exactly as on a CI runner).
@@ -121,6 +123,7 @@ def _run_script(
         env={
             **os.environ,
             **GIT_ENV,
+            "PYTHONPATH": str(clone),
             "PYTHON": sys.executable,
             "MAX_ATTEMPTS": attempts,
             "PUSH_RETRY_DELAY": "0",
@@ -168,7 +171,7 @@ def _staleness_gate(clone: Path, script: str) -> subprocess.CompletedProcess:
     return subprocess.run(
         [sys.executable, f"scripts/{script}", "--check"],
         cwd=clone,
-        env={**os.environ, **GIT_ENV},
+        env={**os.environ, **GIT_ENV, "PYTHONPATH": str(clone)},
         capture_output=True,
         text=True,
     )
@@ -183,6 +186,7 @@ def _assert_origin_tip_green(origin: Path, tmp_path: Path) -> Path:
     # Adding a gate to ci.yml means adding it here.
     for script in (
         "apply_dispositions.py",
+        "nz_incomeexplorer.py",
         "generate_chunk_indexes.py",
         "conformance_scoreboard.py",
         "conformance_burndown.py",
@@ -329,6 +333,33 @@ def test_self_heals_preexisting_staleness(origin, tmp_path):
     _assert_origin_tip_green(origin, tmp_path)
 
 
+def test_refresh_regenerates_and_stages_nz_bound_evidence(origin, tmp_path):
+    """The daily path must heal an NZ chunk/index drift and push the repair."""
+
+    broken = _clone(origin, tmp_path / "broken-nz")
+    chunk_path = broken / NZ_CHUNK
+    index_path = broken / NZ_INDEX
+    canonical_chunk = chunk_path.read_bytes()
+    canonical_index = index_path.read_bytes()
+    rows = json.loads(chunk_path.read_text())
+    row = next(item for item in rows if item["v"])
+    row["v"].pop()
+    chunk_path.write_text(json.dumps(rows, separators=(",", ":")))
+    _git(broken, "add", "--", NZ_CHUNK)
+    _git(broken, "commit", "-q", "-m", "seed stale NZ bound evidence")
+    _git(broken, "push", "-q", "origin", "HEAD:main")
+
+    stale = _clone(origin, tmp_path / "stale-nz-check")
+    assert _staleness_gate(stale, "nz_incomeexplorer.py").returncode == 1
+
+    healer = _clone(origin, tmp_path / "healer-nz")
+    result = _run_script(healer)
+    assert result.returncode == 0, result.stderr
+    verify = _assert_origin_tip_green(origin, tmp_path)
+    assert (verify / NZ_CHUNK).read_bytes() == canonical_chunk
+    assert (verify / NZ_INDEX).read_bytes() == canonical_index
+
+
 def test_racing_pusher_converges_when_remote_advances_mid_push(origin, tmp_path):
     """A sibling advances main BETWEEN this leg's rebuild and its push — the
     genuine race, made deterministic with a two-marker barrier: the hook
@@ -379,6 +410,7 @@ def test_racing_pusher_converges_when_remote_advances_mid_push(origin, tmp_path)
         env={
             **os.environ,
             **GIT_ENV,
+            "PYTHONPATH": str(clone),
             "PYTHON": sys.executable,
             "MAX_ATTEMPTS": "4",
             "PUSH_RETRY_DELAY": "0",
@@ -511,6 +543,7 @@ def test_vacuous_gate_crash_refuses_push(origin, tmp_path):
         env={
             **os.environ,
             **GIT_ENV,
+            "PYTHONPATH": str(clone),
             "PYTHON": str(wrapper),
             "MAX_ATTEMPTS": "2",
             "PUSH_RETRY_DELAY": "0",

@@ -168,6 +168,14 @@ NZ_ACC_LOCALITY_BLOCKER = (
     "(adversarial review S1); structural cure = axiom-rules-engine#134 stage 2 "
     "(prototype exists on feat/unit-derivation-stage2)."
 )
+NZ_EXERCISE_EVIDENCE_LIMITATION = (
+    "exercise denominator: committed per-evaluation traces compute each "
+    "certificate view's supplied-input variation and exact requested-output "
+    "root sets, but the 328-slot compiled-input universe (including 178 "
+    "never-supplied slots) and the 883-call capture-completeness receipt remain "
+    "commit-pinned external attestations; no committed compiled-program "
+    "artifact or in-repo harness execution derives them."
+)
 for _nz_program in (
     "nz/acc-earners-levy",
     "nz/accommodation-supplement",
@@ -190,7 +198,7 @@ for _nz_program in (
             }
         ],
         "attested_closed_receipt": "closure/nz/summary.json",
-        "attested_exercise_receipt": (
+        "attested_exercise_catalog_receipt": (
             "comparisons/nz-treasury-incomeexplorer/source-comparison.json"
         ),
         "attested_executable_receipt": (
@@ -198,9 +206,9 @@ for _nz_program in (
         ),
         "certified_false_when_blocked": True,
         "blockers": (
-            [NZ_ACC_LOCALITY_BLOCKER]
+            [NZ_ACC_LOCALITY_BLOCKER, NZ_EXERCISE_EVIDENCE_LIMITATION]
             if _nz_program in SINGLE_PERSON_PROGRAMS
-            else [NZ_AGGREGATION_BLOCKER]
+            else [NZ_AGGREGATION_BLOCKER, NZ_EXERCISE_EVIDENCE_LIMITATION]
         ),
         "single_person_attestation": (
             "comparisons/nz-treasury-incomeexplorer/single-person-attestations.json"
@@ -905,8 +913,56 @@ def _attested_exercise_verdict(spec: dict, evidence: list[dict]) -> dict:
     }
 
 
+def _attested_exercise_catalog(
+    spec: dict,
+    evidence: list[dict],
+) -> dict | None:
+    """Describe the NZ completeness boundary without promoting it to computed."""
+
+    path_string = spec.get("attested_exercise_catalog_receipt")
+    if not path_string:
+        return None
+    path = REPO_ROOT / path_string
+    source = _load(path)
+    catalog = source.get("exercise_input_catalog")
+    compiled = source.get("compiled_program")
+    if not isinstance(catalog, dict) or not isinstance(compiled, dict):
+        raise ValueError("NZ exercise completeness receipt is malformed")
+    state_counts = Counter(
+        row.get("state") for row in catalog.values() if isinstance(row, dict)
+    )
+    if len(catalog) != compiled.get("input_slots"):
+        raise ValueError("NZ exercise catalog does not match its attested denominator")
+    evidence.append(
+        {
+            "claim": "compiled input universe and capture cardinality",
+            "mode": "attested",
+            "artifact": path_string,
+            "sha256": sha256_of(path),
+        }
+    )
+    return {
+        "mode": "attested",
+        "artifact": path_string,
+        "sha256": sha256_of(path),
+        "input_count": len(catalog),
+        "supplied_input_count": (
+            state_counts.get("varied", 0) + state_counts.get("constant", 0)
+        ),
+        "not_supplied_count": state_counts.get("not_supplied", 0),
+        "expected_evaluation_count": compiled.get("engine_evaluations"),
+        "limitation": (
+            "The compiled artifact bytes, compiler-produced input enumeration, "
+            "and in-repo capture execution are not committed."
+        ),
+    }
+
+
 def _nz_external_attestation_evidence(spec: dict, evidence: list[dict]) -> None:
-    if not spec.get("attested_exercise_receipt"):
+    if not any(
+        entry.get("suite") == "nz-treasury-incomeexplorer"
+        for entry in spec.get("suites", [])
+    ):
         return
     snapshot = (
         REPO_ROOT
@@ -988,8 +1044,20 @@ def _exercise_block(
                 f"this suite ({', '.join(contested)}) — evidence is ambiguous "
                 "until one is canonical"
             )
+        view_scoped_traces = (
+            row.get("evidence_source") == "view-scoped-evaluation-traces"
+        )
+        trace_complete = (
+            row.get("trace_binding") == "bound"
+            and row.get("root_reconciliation") == "exact"
+            and bool(row.get("root_set_receipts"))
+        )
         rows[entry["suite"]] = {
-            "cases": row.get("cases_scanned"),
+            **(
+                {"evaluations": row.get("evaluations_scanned")}
+                if view_scoped_traces
+                else {"cases": row.get("cases_scanned")}
+            ),
             "report": row.get("report"),
             "report_sha256": row.get("report_sha256"),
             "registry_report": expected_report,
@@ -998,13 +1066,56 @@ def _exercise_block(
             "contested_reports": contested,
             "varied_fields": row.get("varied_fields"),
             "constant_fields": row.get("constant_fields"),
-            "bridged_through": sorted((row.get("bridged_through") or {}).keys()),
-            "bridge_audited": bool(row.get("bridge_audited")),
-            "per_case_evidence_committed": has_evidence,
-            "binding": row.get("binding"),
-            "reconciliation": row.get("reconciliation"),
+            **(
+                {}
+                if view_scoped_traces
+                else {
+                    "bridged_through": sorted(
+                        (row.get("bridged_through") or {}).keys()
+                    ),
+                    "bridge_audited": bool(row.get("bridge_audited")),
+                }
+            ),
+            **(
+                {"per_evaluation_traces_committed": has_evidence}
+                if view_scoped_traces
+                else {"per_case_evidence_committed": has_evidence}
+            ),
+            "binding": (
+                row.get("trace_binding")
+                if view_scoped_traces
+                else row.get("binding")
+            ),
+            "reconciliation": (
+                row.get("root_reconciliation")
+                if view_scoped_traces
+                else row.get("reconciliation")
+            ),
+            **(
+                {
+                    "view": row.get("view"),
+                    "trace_artifact": row.get("trace_artifact"),
+                    "trace_sha256": row.get("trace_sha256"),
+                    "trace_binding": row.get("trace_binding"),
+                    "root_reconciliation": row.get("root_reconciliation"),
+                    "requested_output_roots": row.get("requested_output_roots"),
+                    "requested_output_root_sets": row.get(
+                        "requested_output_root_sets"
+                    ),
+                    "root_set_receipts": row.get("root_set_receipts"),
+                    "capture_lineage_mode": row.get("capture_lineage_mode"),
+                }
+                if view_scoped_traces
+                else {}
+            ),
         }
-        if not row.get("bridge_audited"):
+        if view_scoped_traces and not trace_complete:
+            complete = False
+            defects.append(
+                f"{entry['suite']}: view-scoped request/output traces are not "
+                "bound with exact requested-root reconciliation"
+            )
+        elif not view_scoped_traces and not row.get("bridge_audited"):
             complete = False
     return rows, complete
 
@@ -1046,11 +1157,21 @@ def _exercise_census_for(spec: dict) -> tuple[dict, list[dict]]:
     module_spec.loader.exec_module(module)
 
     suites = dict(census.get("suites") or {})
+    unified_evidence: list[dict] = []
     for entry in unified_entries:
         report_path = REPO_ROOT / entry["report"]
         report = _load(report_path)
-        suites[entry["suite"]] = module._census_suite(
-            entry["suite"], report, report_path
+        row = module._census_suite(
+            entry["suite"], report, report_path, view=entry.get("view")
+        )
+        suites[entry["suite"]] = row
+        unified_evidence.append(
+            {
+                "claim": f"view-scoped evaluation traces:{entry.get('view')}",
+                "mode": "computed",
+                "artifact": row["trace_artifact"],
+                "sha256": row["trace_sha256"],
+            }
         )
     census = {**census, "suites": suites}
 
@@ -1058,7 +1179,9 @@ def _exercise_census_for(spec: dict) -> tuple[dict, list[dict]]:
     # global census, so do not cite it. The suite report evidence added by
     # _suite_verdict sha-binds the exact experiment receipt consumed above.
     if len(unified_entries) == len(spec["suites"]):
-        evidence = []
+        evidence = unified_evidence
+    else:
+        evidence.extend(unified_evidence)
     return census, evidence
 
 
@@ -1089,10 +1212,29 @@ def build_certificate(program: str, spec: dict) -> dict:
         exercise_rows, exercise_complete = _exercise_block(
             spec["suites"], census, all_defects
         )
+        catalog_completeness = _attested_exercise_catalog(spec, evidence)
         exercised_block = {
             "value": exercise_complete,
             "mode": "computed",
             "suites": exercise_rows,
+            **(
+                {
+                    "scope": (
+                        "supplied-input variation and exact requested-output "
+                        "root sets observed in the committed traces"
+                    ),
+                    "catalog_completeness": catalog_completeness,
+                    "capture_lineage": {
+                        "mode": "attested",
+                        "limitation": (
+                            "The external capture instrumentation and executable "
+                            "capture transcript are not committed in this repository."
+                        ),
+                    },
+                }
+                if catalog_completeness is not None
+                else {}
+            ),
         }
 
     blockers = [*all_defects, *(spec.get("blockers") or [])]
