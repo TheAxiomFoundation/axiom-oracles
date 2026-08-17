@@ -1,0 +1,127 @@
+{
+  "classification": {
+    "class_census": {},
+    "classified": 0,
+    "conservation": "PASS",
+    "engine_errors": 0,
+    "groups": {
+      "__unexplained__": {
+        "per_slot": {
+          "base": 689043,
+          "brazil_section_301": 93198,
+          "china_section_301": 31446,
+          "forced_labor_section_301": 1499038,
+          "ieepa": 38636,
+          "section_122": 1485889,
+          "section_201": 9384,
+          "section_232": 1268014,
+          "total": 4389045
+        },
+        "sample_signatures": [
+          "62801327c951f50b4ee34eb2ca4650a9d52c685f2df9f4bddf8ba54111fd99e8",
+          "1cacbcfde90b6000579bd755175e40f5af19a5a4f908141a97501c431487759f",
+          "101e45bcbda3e8c838ed1fefaf951fc7254212b00512fa155b93f394afd2c941",
+          "16839e1e8bed096c036565b2bcda293525aae50c2672f65dd99b75711d5dcd84",
+          "faa644beb7e9dadb5fba084023e5055ac1c6e394662317e084ea7920d9c658c6"
+        ],
+        "units": 9503693
+      }
+    },
+    "mismatches": 9503693,
+    "observed_signature_count": 1654848,
+    "schema": "axiom_oracles.us_tariff_schedule.classification.v1",
+    "selector_count": 0,
+    "sidecar": {
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/.cache/us-tariff-c1/classify/5b/5b886d82fa55230b46f896eca85430ebb0c8733e723fe2c3179a75985d7c965f.jsonl.gz",
+      "sha256": "5425374821a7e5101eca099e387eea98efaca9f61685ca08a3e2395d9257c41c"
+    },
+    "unexplained": 9503693
+  },
+  "column_exposure": {
+    "statutory_base_rate": 37422720,
+    "statutory_rate_232": 9188604,
+    "statutory_rate_301": 255139,
+    "statutory_rate_301_cs": 0,
+    "statutory_rate_ieepa_fent": 79332,
+    "statutory_rate_ieepa_recip": 4185469,
+    "statutory_rate_other": 0,
+    "statutory_rate_s122": 43128000,
+    "statutory_rate_s301br": 46599,
+    "statutory_rate_s301fl": 2443272,
+    "statutory_rate_s338": 0,
+    "statutory_rate_section_201": 31638
+  },
+  "conformant": false,
+  "output_summary": {
+    "axiom_total_reconciliation": {
+      "match": 16899903
+    },
+    "base": {
+      "match": 16210860,
+      "mismatch": 689043
+    },
+    "brazil_section_301": {
+      "match": 19025421,
+      "mismatch": 93198
+    },
+    "china_section_301": {
+      "match": 19087173,
+      "mismatch": 31446
+    },
+    "forced_labor_section_301": {
+      "match": 15400865,
+      "mismatch": 1499038
+    },
+    "ieepa": {
+      "match": 16861267,
+      "mismatch": 38636
+    },
+    "section_122": {
+      "match": 17632730,
+      "mismatch": 1485889
+    },
+    "section_201": {
+      "match": 19109235,
+      "mismatch": 9384
+    },
+    "section_232": {
+      "match": 17850605,
+      "mismatch": 1268014
+    },
+    "section_338": {
+      "match": 19118619
+    },
+    "total": {
+      "match": 12510858,
+      "mismatch": 4389045
+    },
+    "yale_total_reconciliation": {
+      "match": 16899903
+    }
+  },
+  "schema": "axiom.comparison_report.v2",
+  "scope": {
+    "components_only_interval_cells": 1150452,
+    "components_only_share": 0.11605131851096265,
+    "components_only_statement": "1150452 of 9913304 evaluated cells carry a non-ad-valorem statutory base and are compared on authority components only (11.6051%; components-only).",
+    "evaluated_quotient_interval_cells": 9913304,
+    "full_universe_interval_cells": 68417040,
+    "limitation": "Does not prove identical Axiom behavior for unprobed countries grouped by Yale trajectory.",
+    "trajectory_quotient_label": "lossless partition of the EXPECTED side"
+  },
+  "scoreboard": {
+    "conformant": false,
+    "derivation": "unexplained == 0 and engine_errors == 0",
+    "gate": "S1"
+  },
+  "suite": "us-tariff-schedule",
+  "summary": {
+    "engine_errors": 0,
+    "explained": 0,
+    "matches": 206607439,
+    "mismatches": 9503693,
+    "total": 216111132,
+    "unexplained": 9503693
+  },
+  "title": "US tariff full schedule \u2014 Axiom bulk path vs Yale statutory panel"
+}

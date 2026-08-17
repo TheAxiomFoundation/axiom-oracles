@@ -3,9 +3,36 @@
   "classified": 0,
   "conservation": "PASS",
   "engine_errors": 0,
+  "groups": {
+    "__unexplained__": {
+      "per_slot": {
+        "base": 689043,
+        "brazil_section_301": 93198,
+        "china_section_301": 31446,
+        "forced_labor_section_301": 1499038,
+        "ieepa": 38636,
+        "section_122": 1485889,
+        "section_201": 9384,
+        "section_232": 1268014,
+        "total": 4389045
+      },
+      "sample_signatures": [
+        "62801327c951f50b4ee34eb2ca4650a9d52c685f2df9f4bddf8ba54111fd99e8",
+        "1cacbcfde90b6000579bd755175e40f5af19a5a4f908141a97501c431487759f",
+        "101e45bcbda3e8c838ed1fefaf951fc7254212b00512fa155b93f394afd2c941",
+        "16839e1e8bed096c036565b2bcda293525aae50c2672f65dd99b75711d5dcd84",
+        "faa644beb7e9dadb5fba084023e5055ac1c6e394662317e084ea7920d9c658c6"
+      ],
+      "units": 9503693
+    }
+  },
   "mismatches": 9503693,
   "observed_signature_count": 1654848,
   "schema": "axiom_oracles.us_tariff_schedule.classification.v1",
-  "selected_signature_count": 0,
+  "selector_count": 0,
+  "sidecar": {
+    "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/.cache/us-tariff-c1/classify/5b/5b886d82fa55230b46f896eca85430ebb0c8733e723fe2c3179a75985d7c965f.jsonl.gz",
+    "sha256": "5425374821a7e5101eca099e387eea98efaca9f61685ca08a3e2395d9257c41c"
+  },
   "unexplained": 9503693
 }
