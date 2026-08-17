@@ -71,7 +71,11 @@ _HEADER = """# axiom_oracles.closure.ledger.v1 — GENERATED facts + committed d
 # generator preserves those rows and --check fails on any other drift.
 """
 _HEX_SHA256 = re.compile(r"^[0-9a-f]{64}$")
-_HEX_GIT_SHA = re.compile(r"^[0-9a-f]{40}$")
+#: A git object id: 40 lowercase hex chars with at least one of a-f. A
+#: decimal-only 40-char string is not a realistic commit (P ≈ (10/16)^40)
+#: and is exactly the YAML !!str-digit forgery shape (delta-audit #8), so it
+#: is rejected outright rather than compared.
+_HEX_GIT_SHA = re.compile(r"^(?=[0-9a-f]{40}$)(?=.*[a-f])[0-9a-f]{40}$")
 _IDENTIFIER = re.compile(r"\b[A-Za-z_][A-Za-z0-9_]*\b")
 _FORMULA_PROOF_PATH = re.compile(r"^versions\[(0|[1-9][0-9]*)\]\.formula$")
 _RESERVED_FORMULA_WORDS = frozenset({"and", "else", "false", "if", "not", "or", "true"})

@@ -2361,12 +2361,19 @@ def test_ledger_commit_must_be_a_string_sha_and_ref_must_equal_commit():
     assert cl._validation_errors(baseline) == []
 
     digits = int("1" * 40)  # a 40-digit integer, not a hex string
+    # delta-audit #8: the !!str-tagged form is a 40-char DECIMAL string, which
+    # is syntactically valid hex — it must still fail (a real git object id
+    # has at least one of a-f; a decimal-only id is the forgery shape).
+    digit_str = "1234567890123456789012345678901234567890"
     for fact in ("rulespec", "corpus_release"):
-        doc = copy.deepcopy(baseline)
-        doc["generated_facts"][fact]["commit"] = digits
-        doc["generated_facts"][fact]["ref"] = digits
-        errors = cl._validation_errors(doc)
-        assert any("commit must be a full git commit SHA" in e for e in errors), (fact, errors)
+        for forged in (digits, digit_str):
+            doc = copy.deepcopy(baseline)
+            doc["generated_facts"][fact]["commit"] = forged
+            doc["generated_facts"][fact]["ref"] = forged
+            errors = cl._validation_errors(doc)
+            assert any("commit must be a full git commit SHA" in e for e in errors), (
+                fact, forged, errors
+            )
 
         doc = copy.deepcopy(baseline)
         doc["generated_facts"][fact]["ref"] = "main"
@@ -2395,3 +2402,51 @@ def test_ledger_commit_must_be_a_string_sha_and_ref_must_equal_commit():
     assert cert["verdicts"]["executable"]["mode"] == "computed"
     assert any("provenance is not comparable" in b for b in cert["blockers"]), cert["blockers"]
     assert cert["certified"]["value"] is False
+
+    # delta-audit #8: COORDINATED equal digit-only strings on both computed
+    # sides satisfied plain equality. Equality now counts only between values
+    # that are each a canonical git object id.
+    original_exec = certify._producer_executable_verdict
+
+    def _tampered_closed(program, spec_, evidence, *, verify_producer=False):
+        block = original_closed(program, spec_, evidence, verify_producer=verify_producer)
+        if block is not None:
+            block["rulespec_commit"] = digit_str
+        return block
+
+    def _tampered_exec(program, spec_, evidence, *, verify_producer=False):
+        block = original_exec(program, spec_, evidence, verify_producer=verify_producer)
+        if block is not None:
+            block["rulespec_sha"] = digit_str
+        return block
+
+    certify._producer_closed_verdict = _tampered_closed
+    certify._producer_executable_verdict = _tampered_exec
+    try:
+        cert = certify.build_certificate(
+            "dk/boerne-og-ungeydelse", certify.PROGRAMS["dk/boerne-og-ungeydelse"]
+        )
+    finally:
+        certify._producer_closed_verdict = original_closed
+        certify._producer_executable_verdict = original_exec
+    assert cert["verdicts"]["closed"]["rulespec_commit"] == digit_str
+    assert cert["verdicts"]["executable"]["rulespec_sha"] == digit_str
+    assert any("provenance is not comparable" in b for b in cert["blockers"]), cert["blockers"]
+    assert cert["certified"]["value"] is False
+    assert cert["certified"]["state"] != "yes"
+
+
+def test_executable_receipt_rejects_digit_only_sha():
+    """delta-audit #8: the receipt's own sha regex accepted a decimal-only
+    40-char string; canonical git object ids need at least one of a-f."""
+    er = _load("executable_reproduction")
+    document = json.loads(
+        (REPO / "conformance/executable/dk-boerne-og-ungeydelse.json").read_text()
+    )
+    er.validate_artifact(document, repo_root=REPO)
+    mutant = copy.deepcopy(document)
+    digit_str = "1234567890123456789012345678901234567890"
+    mutant["rulespec"]["sha"] = digit_str
+    mutant["rulespec"]["ref"] = digit_str
+    with pytest.raises(ValueError):
+        er.validate_artifact(mutant, repo_root=REPO)

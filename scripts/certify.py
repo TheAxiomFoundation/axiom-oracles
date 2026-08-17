@@ -37,6 +37,7 @@ import argparse
 import hashlib
 import importlib.util
 import json
+import re
 import sys
 from collections import Counter
 from functools import lru_cache
@@ -46,6 +47,11 @@ from types import ModuleType
 import yaml
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+#: A git object id: 40 lowercase hex chars with at least one of a-f (a
+#: decimal-only string is not a realistic commit and is the !!str-digit forgery
+#: shape from delta-audit #8). Shared shape with closure_ledger/_HEX_GIT_SHA and
+#: executable_reproduction/HEX_40.
+GIT_SHA = re.compile(r"^(?=[0-9a-f]{40}$)(?=.*[a-f])[0-9a-f]{40}$")
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
@@ -1395,8 +1401,17 @@ def build_certificate(
         # Fail closed: two computed premises with no comparable provenance is
         # a blocker, not a silent skip — a 40-DIGIT integer commit slipped
         # through a str()-coercing validator and would have skipped this
-        # comparison (delta-audit #7).
-        if not (isinstance(closed_commit, str) and isinstance(executable_commit, str)):
+        # comparison (delta-audit #7); a !!str-tagged digit string then passed
+        # both validators' hex regex and, coordinated on both sides, satisfied
+        # plain equality (delta-audit #8). Equality only counts between values
+        # that are each a real git object id (GIT_SHA: lowercase hex with at
+        # least one a-f).
+        if not (
+            isinstance(closed_commit, str)
+            and isinstance(executable_commit, str)
+            and GIT_SHA.fullmatch(closed_commit)
+            and GIT_SHA.fullmatch(executable_commit)
+        ):
             blockers.append(
                 "producers' rulespec provenance is not comparable: closure ledger "
                 f"commit={closed_commit!r}, executable receipt sha="

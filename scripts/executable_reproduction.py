@@ -115,7 +115,11 @@ REPORT_SPECS = (
     },
 )
 
-HEX_40 = re.compile(r"^[0-9a-f]{40}$")
+#: A git object id: 40 lowercase hex chars with at least one of a-f. A
+#: decimal-only 40-char string is not a realistic commit (P ≈ (10/16)^40)
+#: and is exactly the YAML !!str-digit forgery shape (delta-audit #8), so it
+#: is rejected outright rather than compared.
+HEX_40 = re.compile(r"^(?=[0-9a-f]{40}$)(?=.*[a-f])[0-9a-f]{40}$")
 HEX_64 = re.compile(r"^[0-9a-f]{64}$")
 BRIDGED_RECORD_KEY = re.compile(
     r"^(?P<entity>[^\[]+)\[(?P<entity_id>[^\]]+)\]::(?P<name>.+)$"
