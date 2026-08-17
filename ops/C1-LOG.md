@@ -1,26 +1,72 @@
-# C1 journal — full-schedule tariff conformance
+# C1 build journal
 
-Branch: `tariff/certification-arc` (off `origin/main`)
+All probabilities below were recorded before the corresponding gate command.
+Wall-clock values are measured by the stage receipts.
 
-| Gate | P(pass) | Status | Receipt / note |
-|---|---:|---|---|
-| D0 design note written | 1.00 | PASS | `ops/C1-DESIGN.md`; design only, awaiting coordinator adjudication |
-| D0 design adjudicated | 0.00 | PENDING | Coordinator follow-up required before build |
-| R1 reference provenance | 0.00 | PENDING | No full-schedule extract built in this run |
-| R2 spine/schema/bridge/temporal integrity | 0.00 | PENDING | No full-schedule extract built in this run |
-| R3 stratification integrity and size | 0.00 | PENDING | Proposed algorithm only; measured counts required |
-| A1 compile/determinism | 0.00 | PENDING | No compilation in this run |
-| A2 membership/input feed | 0.00 | PENDING | No evaluation inputs generated in this run |
-| C1 exact authority comparison/reconciliation | 0.00 | PENDING | No evaluation in this run |
-| C2 signature conservation | 0.00 | PENDING | No mismatch report in this run |
-| D1 class dispositions / zero unexplained | 0.00 | PENDING | No dispositions authored in this run |
-| X1 excluded-slot exposure tripwires | 0.00 | PENDING | Design requirement only |
-| W1 witness regression | 0.00 | PENDING | Not run; existing artifacts inspected read-only |
-| N1 fail-closed mutants | 0.00 | PENDING | Not built in this run |
-| S1 computed scoreboard verdict | 0.00 | PENDING | No verdict change in this run |
+## 2026-08-16 — extraction preflight
 
-## 2026-08-16 — Step 1
+- D0 — P(pass) = 1.00. Receipt: `ops/C1-DESIGN.md` plus the coordinator's binding GO in the build instruction. Verdict: PASS.
+- R1 — P(pass) = 0.80. Pending receipt: `reference/us-tariff-schedule/provenance.json`.
+- R2 — P(pass) = 0.75. Pending receipt: `reference/us-tariff-schedule/integrity-receipt.json`.
+- R3 — P(pass) = 0.85. Pending receipt: `reference/us-tariff-schedule/quotient-receipt.json`.
 
-- Read the existing five-line Yale witness suite, extraction contract, dispositions, conformance report machinery, B1.6 r3 bulk evaluator/gates/log, the B1.6 campaign record, RuleSpec flag-feed contract, and Yale legal-date panel schema/revision calendar.
-- Measured/receipted planning inputs: approximately 20,206 rated lines, 240 Yale countries, about nine intersecting Yale intervals, an exhaustive estimate of 43,644,960 interval cells and at most 87,289,920 endpoint probes; B1.6 r3 support contained 386,202 weighted line-country rows and its G5 performed 6,179,232 comparisons.
-- Wrote `ops/C1-DESIGN.md`. Stopped before extraction, implementation, engine compilation, evaluation, dispositions, report regeneration, or conformance changes as required.
+### First extraction attempt
+
+- R1 — FAIL before receipt generation: `vector memory exhausted` caused by a full-table copy in the new extractor. Wall-clock: 218.83s. No quotient or engine run occurred.
+- R1 retry — P(pass) = 0.85. The retry converts the loaded object by reference and validates columns independently.
+- R2 retry — P(pass) = 0.80.
+- R3 retry — P(pass) = 0.85.
+
+### Second extraction attempt
+
+- R1 — PASS through schema, rate, key, interval, and trajectory construction in-memory; final provenance not emitted because R2 stopped the run.
+- R2 — FAIL: numeric-versus-character Census code join reported unbridged countries. Wall-clock: 508.47s. No quotient or engine run occurred.
+- R1 second retry — P(pass) = 0.92.
+- R2 second retry — P(pass) = 0.95 after explicit character normalization on both join keys.
+- R3 second retry — P(pass) = 0.85.
+
+### Third extraction attempt
+
+- R1 — PASS through 68,417,040 filtered interval cells and 4,921,920 line-country trajectories.
+- R2 — FAIL at bridge join after 466.79s; no quotient or engine run occurred. The next retry moves the set-difference check before hashing/join and prints any exact missing code.
+- R1 third retry — P(pass) = 0.95.
+- R2 third retry — P(pass) = 0.90.
+- R3 third retry — P(pass) = 0.85.
+
+### Fourth extraction attempt
+
+- R1 — PASS through the same measured spine and trajectory counts.
+- R2 — FAIL after 466.37s: pre-join set closure passed, but `data.table::merge` produced missing ISO values. No quotient or engine run occurred.
+- R1 fourth retry — P(pass) = 0.97.
+- R2 fourth retry — P(pass) = 0.98 using direct `match()` after the passing set-closure assertion.
+- R3 fourth retry — P(pass) = 0.85.
+
+### Fifth extraction attempt
+
+- R1 — PASS through the same measured spine and trajectory counts.
+- R2 — FAIL after 499.18s: inherited bridge row 7920 (Namibia) has a blank ISO-2. No quotient or engine run occurred.
+- R1 fifth retry — P(pass) = 0.98.
+- R2 fifth retry — P(pass) = 0.99 with published, hashed `7920 -> NA` ISO 3166-1 addition; the existing witness bridge is unchanged.
+- R3 fifth retry — P(pass) = 0.85.
+
+### Sixth extraction attempt
+
+- R1 — PASS through the same measured spine and trajectory counts.
+- R2 — FAIL after 454.72s because `fread` parsed the valid literal ISO code `NA` as a missing token. No quotient or engine run occurred.
+- R1 sixth retry — P(pass) = 0.98.
+- R2 sixth retry — P(pass) = 0.995 with empty-string-only NA parsing on both bridge inputs.
+- R3 sixth retry — P(pass) = 0.85.
+
+### Seventh extraction attempt
+
+- R1 — PASS through 68,417,040 interval cells, 20,508 lines, 240 countries, and 14 revisions.
+- R2 — PASS at 465.10s, including the published Namibia bridge addition.
+- R3 — STOP receipt emitted at 551.46s: representative-only quotient 6,713,128 > 5,000,000. A lexical-hash warning made the first guard count invalid, but cannot reverse the stop.
+- R3 receipt-correction retry — P(pass) = 0.97. Purpose is only to measure the A1 guard addition correctly; no engine run is authorized.
+
+### Final extraction verdict
+
+- R1 — PASS. Receipt: `reference/us-tariff-schedule/stop-provenance.json`. Full universe: 68,417,040 interval cells, 20,508 lines, 240 countries, 14 revisions.
+- R2 — PASS. Receipt: `reference/us-tariff-schedule/stop-provenance.json`; bridge closed with the hashed 7920/Namibia addition.
+- R3 — STOP / cap gate did not pass. Receipt: `reference/us-tariff-schedule/quotient-receipt.json`. The lossless EXPECTED-side trajectory quotient is 6,713,128 interval cells. The A1 exhaustive-behavior guard adds 3,200,176 cells (229,079 pairs), producing 9,913,304 candidate cells. The guard is dropped per A1, but the base quotient remains 1,713,128 above the 5,000,000 cap. Final measurement wall-clock: 594.53s.
+- A1, A2, C1, C2, D1, X1, W1, N1, S1 — NOT RUN because A2 mandates STOP before any engine run when R3 exceeds the cap. Engine processes started: 0.
