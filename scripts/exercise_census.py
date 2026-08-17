@@ -34,7 +34,10 @@ v1 scope, stated plainly: most suites commit *stage evidence* (gross income,
 net income, shelter deduction, ...), not raw input records, so this measures
 variation in the evidence the suite chose to keep. A suite with no committed
 per-case evidence appears with ``cases_scanned: 0`` — that absence is a
-finding, not a skip.
+finding, not a skip.  Census generation makes one lightweight pass over every
+suite's chunks and checks only index identity plus cardinality.  It never
+claims full verdict reconciliation; certification performs the strict row and
+verdict validation for the suites in its program registry.
 
 Modes::
 
@@ -57,6 +60,18 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = REPO_ROOT / "dashboard" / "public" / "data"
 CASES_DIR = DATA_DIR / "cases"
 OUTPUT_PATH = REPO_ROOT / "conformance" / "exercise-census.json"
+
+# Direct script execution puts ``scripts/`` rather than the repository root at
+# the front of sys.path.
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from axiom_oracles.evidence import (  # noqa: E402
+    EvidenceChunk,
+    is_safe_suite_name,
+    strict_json_loads,
+    validate_chunk_binding,
+)
 
 SCHEMA = "axiom_oracles.exercise_census.v1"
 
@@ -148,11 +163,15 @@ def _iter_suite_reports() -> list[tuple[str, dict, Path]]:
     reports = []
     for path in sorted(DATA_DIR.glob("*.json")):
         try:
-            payload = json.loads(path.read_text())
-        except (OSError, json.JSONDecodeError):
+            payload = strict_json_loads(path.read_text())
+        except (OSError, UnicodeDecodeError, ValueError):
             continue
-        if isinstance(payload, dict) and payload.get("suite"):
-            reports.append((str(payload["suite"]), payload, path))
+        if (
+            isinstance(payload, dict)
+            and isinstance(payload.get("suite"), str)
+            and payload["suite"]
+        ):
+            reports.append((payload["suite"], payload, path))
     return reports
 
 
@@ -188,32 +207,107 @@ def _canonical_value(raw) -> str:
     return json.dumps(raw, sort_keys=True, default=str)
 
 
-def _chunk_cases(suite: str) -> tuple[list[dict], list[dict]]:
-    """Return (cases, chunk_manifest) — each chunk named and sha-bound so a
-    census row is pinned to the exact evidence it counted (finding 10)."""
+def _chunk_cases(
+    suite: str,
+) -> tuple[list[dict], list[dict], tuple[EvidenceChunk, ...]]:
+    """Return cases plus identities from the census's existing chunk pass.
+
+    ``EvidenceChunk`` descriptors retain the raw JSON row cardinality, while
+    ``cases`` contains only mappings the variation census can inspect.  This
+    lets the shared binding validator compare the index without opening every
+    chunk a second time.
+    """
     cases: list[dict] = []
     manifest: list[dict] = []
+    descriptors: list[EvidenceChunk] = []
+    if not is_safe_suite_name(suite):
+        return cases, manifest, ()
     suite_dir = CASES_DIR / suite
     if not suite_dir.is_dir():
-        return cases, manifest
+        return cases, manifest, ()
     for chunk in sorted(suite_dir.glob("chunk-*.json")):
         try:
-            raw = chunk.read_text()
-            payload = json.loads(raw)
-        except (OSError, json.JSONDecodeError):
+            raw = chunk.read_bytes()
+            payload = strict_json_loads(raw)
+        except OSError:
             continue
+        except (UnicodeDecodeError, ValueError):
+            rows = []
+        else:
+            if isinstance(payload, list):
+                rows = payload
+            elif isinstance(payload, dict) and isinstance(payload.get("cases"), list):
+                rows = payload["cases"]
+            else:
+                rows = []
+        digest = hashlib.sha256(raw).hexdigest()
+        descriptor = EvidenceChunk(chunk.name, digest, len(rows))
+        descriptors.append(descriptor)
         manifest.append(
             {
                 "chunk": str(chunk.relative_to(REPO_ROOT)),
-                "sha256": hashlib.sha256(raw.encode()).hexdigest(),
+                "sha256": digest,
+                "cases": len(rows),
             }
         )
-        rows = payload if isinstance(payload, list) else payload.get("cases") or []
         cases.extend(row for row in rows if isinstance(row, dict))
-    return cases, manifest
+    return cases, manifest, tuple(descriptors)
+
+
+def _cardinality_reconciliation(report: dict, chunks: tuple[EvidenceChunk, ...]) -> str:
+    """State the strongest reconciliation the census itself establishes.
+
+    The census does not interpret per-case verdicts.  It may therefore claim
+    only ``cardinality``, and only when all three summary counts are
+    non-negative integers, conserve, and comparison_count equals the raw
+    number of rows across chunks.
+    """
+
+    chunk_case_count = sum(chunk.cases for chunk in chunks)
+    if not chunks or chunk_case_count == 0:
+        return "none"
+    summary = report.get("summary")
+    if not isinstance(summary, dict):
+        return "none"
+    counts = [
+        summary.get("comparison_count"),
+        summary.get("match_count"),
+        summary.get("mismatch_count"),
+    ]
+    if any(
+        isinstance(value, bool) or not isinstance(value, int) or value < 0
+        for value in counts
+    ):
+        return "none"
+    comparison_count, match_count, mismatch_count = counts
+    if match_count + mismatch_count != comparison_count:
+        return "none"
+    return "cardinality" if comparison_count == chunk_case_count else "none"
 
 
 def _census_suite(suite: str, report: dict, report_path: Path) -> dict:
+    # Unified records can carry a verifier-produced experiment receipt over
+    # the engine's complete active input catalog. This is stronger than
+    # inferring inputs from case metadata and avoids inventing a bridge
+    # manifest for a harness whose measured input states are already present.
+    experiment = report.get("experiment")
+    if report.get("record_schema") == "axiom.unified_comparison_record.v1":
+        fields, bridged = _unified_experiment_fields(suite, experiment)
+        cases = [case for case in report.get("cases") or [] if isinstance(case, dict)]
+        varied = sum(field["state"] == "varied" for field in fields.values())
+        return {
+            "cases_scanned": len(cases),
+            "report": str(report_path.relative_to(REPO_ROOT)),
+            "report_sha256": hashlib.sha256(report_path.read_bytes()).hexdigest(),
+            "evidence_source": "unified-experiment-receipt",
+            "inline_cases_not_counted": 0,
+            "chunk_manifest": [],
+            "evidence_fields": fields,
+            "verdict_concepts": {},
+            "varied_fields": varied,
+            "constant_fields": len(fields) - varied,
+            "bridged_through": bridged,
+        }
     field_values: dict[str, set[str]] = defaultdict(set)
     concept_values: dict[str, set[str]] = defaultdict(set)
     scanned = 0
@@ -248,14 +342,17 @@ def _census_suite(suite: str, report: dict, report_path: Path) -> dict:
     # chunks belong to only one of them. Counting them under the other is the
     # substitution the census must not perform silently (round-2 finding 4);
     # the contested flag set in build_census() makes the certificate refuse.
-    chunk_cases, chunk_manifest = _chunk_cases(suite)
+    chunk_cases, chunk_manifest, chunks = _chunk_cases(suite)
     inline_cases = [c for c in report.get("cases") or [] if isinstance(c, dict)]
-    if chunk_cases:
+    if chunks:
         for case in chunk_cases:
             eat_case(case)
     else:
         for case in inline_cases:
             eat_case(case)
+
+    binding, binding_defects = validate_chunk_binding(report_path, chunks, suite=suite)
+    reconciliation = _cardinality_reconciliation(report, chunks)
 
     fields = {
         name: {
@@ -276,8 +373,14 @@ def _census_suite(suite: str, report: dict, report_path: Path) -> dict:
         # inherit the other's evidence (audit finding 4).
         "report": str(report_path.relative_to(REPO_ROOT)),
         "report_sha256": hashlib.sha256(report_path.read_bytes()).hexdigest(),
-        "evidence_source": "chunks" if chunk_cases else "inline",
-        "inline_cases_not_counted": len(inline_cases) if chunk_cases else 0,
+        "binding": binding,
+        "binding_defects": list(binding_defects),
+        # Census-wide validation is intentionally capped at cardinality.
+        # Certification reparses program-registry suites and may establish
+        # full per-verdict reconciliation.
+        "reconciliation": reconciliation,
+        "evidence_source": "chunks" if chunks else "inline",
+        "inline_cases_not_counted": len(inline_cases) if chunks else 0,
         "chunk_manifest": chunk_manifest,
         "evidence_fields": fields,
         "verdict_concepts": concepts,
@@ -291,10 +394,55 @@ def _census_suite(suite: str, report: dict, report_path: Path) -> dict:
     }
 
 
+def _unified_experiment_fields(
+    suite: str, experiment: object
+) -> tuple[dict[str, dict], dict[str, str]]:
+    """Validate and normalize a unified record's measured input receipt."""
+
+    if not isinstance(experiment, dict):
+        raise ValueError(f"{suite}: unified record lacks an experiment receipt")
+    if experiment.get("schema") != "axiom.experiment_boundary_receipt.v1":
+        raise ValueError(f"{suite}: unsupported experiment receipt schema")
+    active = experiment.get("active_inputs")
+    if not isinstance(active, dict) or not active:
+        raise ValueError(f"{suite}: experiment receipt has no active inputs")
+    fields: dict[str, dict] = {}
+    for name, row in sorted(active.items()):
+        if not isinstance(row, dict):
+            raise ValueError(f"{suite}: active input {name!r} is not a mapping")
+        state = row.get("state")
+        distinct = row.get("distinct")
+        values = row.get("observed_values")
+        if state not in {"varied", "constant"}:
+            raise ValueError(f"{suite}: active input {name!r} has invalid state {state!r}")
+        if not isinstance(values, list) or not values:
+            raise ValueError(f"{suite}: active input {name!r} has no observations")
+        observed_distinct = len(set(map(str, values)))
+        expected_state = "varied" if observed_distinct > 1 else "constant"
+        if distinct != observed_distinct or state != expected_state:
+            raise ValueError(
+                f"{suite}: active input {name!r} state/count contradicts its observations"
+            )
+        fields[str(name)] = {"distinct": distinct, "state": state}
+    bridged = experiment.get("bridged_through")
+    if not isinstance(bridged, dict):
+        raise ValueError(f"{suite}: bridged_through must be a mapping")
+    return fields, {str(name): str(value) for name, value in bridged.items()}
+
+
 def build_census() -> dict:
     suites: dict[str, dict] = {}
     contested: dict[str, list[str]] = defaultdict(list)
     for suite, report, path in _iter_suite_reports():
+        # Unified records carry their own complete, verifier-produced
+        # experiment receipt and can expose several program views over one
+        # run.  Their exercise evidence is consumed directly by certify.py.
+        # Keeping it certificate-scoped prevents an unrelated unified record
+        # from changing the global-census hash in every existing program
+        # certificate (and therefore preserves those certificates' evidence
+        # identity when none of their suites changed).
+        if report.get("record_schema") == "axiom.unified_comparison_record.v1":
+            continue
         contested[suite].append(str(path.relative_to(REPO_ROOT)))
         suites[suite] = _census_suite(suite, report, path)
     # A suite claimed by more than one report is an ambiguity the census must
@@ -315,7 +463,12 @@ def build_census() -> dict:
             "(declared per audited bridge). cases_scanned: 0 means the suite "
             "commits no per-case rows; nonzero cases with zero evidence "
             "fields means the committed rows carry verdicts only. Either "
-            "way, the absence is the finding."
+            "way, the absence is the finding. Binding checks the versioned "
+            "chunk index against the exact report and chunk identities; "
+            "unbound evidence is recorded but does not stop census "
+            "generation. Reconciliation here is cardinality-only; strict "
+            "full verdict reconciliation is limited to certification's "
+            "program-registry suites."
         ),
         "suites": suites,
     }

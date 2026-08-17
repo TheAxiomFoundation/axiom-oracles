@@ -6,11 +6,15 @@
 # derived, CI-validated artifacts:
 #
 #   dispositioned reports (dispositions merged)     apply_dispositions.py
+#   NZ IncomeExplorer unified record                 nz_incomeexplorer.py
+#   NZ single-person attestations                    nz_incomeexplorer.py
+#   NZ closure census                                nz_closure.py
 #   axiom_oracles/data/euromod_be_coverage.json      …same (BE parity rollup)
 #   conformance/scoreboard.json + conformance/detail/<jur>.json
 #     (+ their dashboard/public/data mirrors)      conformance_scoreboard.py
 #   conformance/history/<jur>/<YYYY-MM-DD>.json    …with --snapshot (per-day)
 #   dashboard/public/data/conformance_burndown.json  conformance_burndown.py
+#   dashboard/public/data/cases/*/index.json         generate_chunk_indexes.py
 #   conformance/exercise-census.json               exercise_census.py
 #   certificates/*.json                            certify.py
 #   dashboard/public/data/freshness.json             check_vacuous_gate.py
@@ -78,6 +82,8 @@ derived_paths=(
   dashboard/public/data/
   conformance/
   certificates/
+  closure/nz/summary.json
+  comparisons/nz-treasury-incomeexplorer/single-person-attestations.json
   axiom_oracles/data/euromod_be_coverage.json
 )
 manifest="dashboard/public/data/manifest.json"
@@ -89,6 +95,17 @@ git config user.email >/dev/null 2>&1 ||
   git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
 regenerate_derived() {
+  # Rebuild the NZ unified tuple record and closure census before their
+  # downstream disposition, exercise, and certificate consumers. Both
+  # generators pin and validate their source inputs before writing. The
+  # existence checks preserve the refresh script's small hermetic test seeds
+  # and old release branches that predate the NZ inputs.
+  if [ -f comparisons/nz-treasury-incomeexplorer/source-comparison.json ]; then
+    "$PYTHON" scripts/nz_incomeexplorer.py
+  fi
+  if [ -f closure/nz/source.json ]; then
+    "$PYTHON" scripts/nz_closure.py
+  fi
   # Dispositions merge + the EUROMOD-BE coverage rollup
   # (axiom_oracles/data/euromod_be_coverage.json). run_comparison.py merges
   # dispositions into the reports it writes, but the rollup is maintained ONLY
@@ -99,6 +116,12 @@ regenerate_derived() {
   # dispositions schema problem (nothing was written) — not derivation lag —
   # so under `set -e` the refresh aborts loudly with nothing pushed.
   "$PYTHON" scripts/apply_dispositions.py
+  # Certified per-case chunks are refreshed and bound by run_comparison while
+  # it still holds the full case corpus. Here the generator validates that
+  # identity (or performs an initial legacy migration); it refuses to rebind
+  # changed report/chunk identities, so stale/foreign chunks cannot inherit a
+  # new report.
+  "$PYTHON" scripts/generate_chunk_indexes.py
   # Freshness register. Write mode exits 1 when a registry config has a schema
   # problem but STILL writes freshness.json — that is a content alarm for
   # verify_derived's --check (the same arbiter ci.yml uses) to rule on, not a
@@ -138,7 +161,14 @@ verify_derived() {
   # artifact, so it cannot go stale from a refresh. Its errors are authoring
   # mistakes for ci.yml to catch on the PR that makes them, not a reason to
   # drop a data refresh.
+  if [ -f comparisons/nz-treasury-incomeexplorer/source-comparison.json ]; then
+    "$PYTHON" scripts/nz_incomeexplorer.py --check || return
+  fi
+  if [ -f closure/nz/source.json ]; then
+    "$PYTHON" scripts/nz_closure.py --check || return
+  fi
   "$PYTHON" scripts/apply_dispositions.py --check &&
+    "$PYTHON" scripts/generate_chunk_indexes.py --check &&
     "$PYTHON" scripts/check_vacuous_gate.py --check &&
     "$PYTHON" scripts/conformance_scoreboard.py --check &&
     "$PYTHON" scripts/conformance_burndown.py --check &&
@@ -146,6 +176,16 @@ verify_derived() {
     "$PYTHON" scripts/exercise_census.py --check &&
     "$PYTHON" scripts/certify.py --check
 }
+
+# Safe proof of the exact regeneration path. It exits before collecting
+# private report output, fetching, resetting, committing, or pushing.
+if [ "${SIMULATE_DERIVED_REFRESH:-0}" = "1" ]; then
+  regenerate_derived
+  verify_derived
+  "$PYTHON" scripts/unexplained_ratchet.py --check
+  echo "simulated derived refresh passed for $suite"
+  exit 0
+fi
 
 # Collect this run's PRIVATE outputs — what run_comparison.py itself wrote
 # (the refreshed report + any fixture reports), BEFORE any regeneration, so

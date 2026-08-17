@@ -29,8 +29,6 @@ Modes::
 
     uv run python scripts/certify.py            # write certificates + summary
     uv run python scripts/certify.py --check    # CI: fail on drift
-    uv run python scripts/certify.py --check --verify-producers
-                                                # integration: rerun external producers
 """
 
 from __future__ import annotations
@@ -40,18 +38,27 @@ import hashlib
 import importlib.util
 import json
 import sys
-from functools import lru_cache
+from collections import Counter
 from pathlib import Path
-from types import ModuleType
-
-import yaml
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from axiom_oracles.comparison.dispositions import (  # noqa: E402
+    validate_dispositions,
+)
+from axiom_oracles.evidence import validate_suite_evidence  # noqa: E402
+
 DATA_DIR = REPO_ROOT / "dashboard" / "public" / "data"
 CENSUS_PATH = REPO_ROOT / "conformance" / "exercise-census.json"
 OUT_DIR = REPO_ROOT / "certificates"
+if str(Path(__file__).resolve().parent) not in sys.path:
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+from nz_programs import SINGLE_PERSON_PROGRAMS  # noqa: E402
 
 SCHEMA = "axiom_oracles.program_certificate.v1"
+_NZ_REPORT_CACHE: dict | None = None
 
 #: Program registry. One entry per certified (jurisdiction, program).
 #: ``suites`` lists every comparison that bears on the program, typed.
@@ -139,24 +146,68 @@ PROGRAMS: dict[str, dict] = {
                 "axiom-euromod-dk-child-youth-benefit-couple.json",
             },
         ],
-        # DK is the first program with committed, independently checkable
-        # closed and executable producer artifacts. Ordinary certification is
-        # hermetic: it validates those receipts and their in-repo inputs. The
-        # opt-in ``--verify-producers`` integration gate additionally re-derives
-        # closure from external Git sources and recompiles/replays executable.
-        "computed": {
-            "closed": {
-                "artifact": ("conformance/closure/dk-boerne-og-ungeydelse.yaml"),
-                "producer": "scripts/closure_ledger.py",
-            },
-            "executable": {
-                "artifact": ("conformance/executable/dk-boerne-og-ungeydelse.json"),
-                "producer": "scripts/executable_reproduction.py",
-            },
-        },
+        # No attested closed/executable claims yet: the closure and
+        # executable producers do not exist for dk (as for every program),
+        # so certified is UNAVAILABLE by construction. The jurisdiction
+        # scoreboard (conformance/dk.yaml) separately records the honest
+        # full-parity burndown: 22 substantive DK_2025 policies in scope,
+        # 1 covered by this program's suites, 21 uncovered.
         "attested": {},
     },
 }
+
+NZ_AGGREGATION_BLOCKER = (
+    "host-side aggregation pin: rulespec-nz#108 prerequisite 2 remains open; "
+    "person/child/family aggregation is still performed by the comparison "
+    "harness because the compiled composition carries no relations. Structural "
+    "fix axiom-rules-engine#134 is not yet ratified."
+)
+NZ_ACC_LOCALITY_BLOCKER = (
+    "person-locality is not yet proven — the two-endpoint perturbation cannot "
+    "exclude conditional/default-dormant cross-person dependencies "
+    "(adversarial review S1); structural cure = axiom-rules-engine#134 stage 2 "
+    "(prototype exists on feat/unit-derivation-stage2)."
+)
+for _nz_program in (
+    "nz/acc-earners-levy",
+    "nz/accommodation-supplement",
+    "nz/income-tax",
+    "nz/independent-earner-tax-credit",
+    "nz/main-benefits",
+    "nz/winter-energy-payment",
+    "nz/working-for-families",
+):
+    PROGRAMS[_nz_program] = {
+        "period": "2026-04-01/2027-03-31",
+        "suites": [
+            {
+                "suite": "nz-treasury-incomeexplorer",
+                "view": _nz_program,
+                "oracle_type": "reference",
+                "oracle": "NZ Treasury IncomeExplorer raw emtr() at "
+                "741a6ca4f5d27b1dc00b43dc395e39ffc4040a4b (TY27_BEFU25)",
+                "report": "dashboard/public/data/nz-treasury-incomeexplorer.json",
+            }
+        ],
+        "attested_closed_receipt": "closure/nz/summary.json",
+        "attested_exercise_receipt": (
+            "comparisons/nz-treasury-incomeexplorer/source-comparison.json"
+        ),
+        "attested_executable_receipt": (
+            "dashboard/public/data/nz-treasury-incomeexplorer.json"
+        ),
+        "certified_false_when_blocked": True,
+        "blockers": (
+            [NZ_ACC_LOCALITY_BLOCKER]
+            if _nz_program in SINGLE_PERSON_PROGRAMS
+            else [NZ_AGGREGATION_BLOCKER]
+        ),
+        "single_person_attestation": (
+            "comparisons/nz-treasury-incomeexplorer/single-person-attestations.json"
+            if _nz_program in SINGLE_PERSON_PROGRAMS
+            else None
+        ),
+    }
 
 
 #: The only disposition kinds with defined meaning. An unrecognized kind in a
@@ -195,10 +246,11 @@ def _count(raw, field: str, defects: list[str], suite: str) -> int:
 
 
 def _dispositions_suite(path: Path) -> str | None:
-    """The suite a dispositions file declares, or None if unreadable.
+    """The suite a valid, nonempty dispositions file declares, else None.
 
-    Hashing a file proves which bytes were cited; only parsing it proves the
-    citation is about this suite.
+    Hashing a file proves which bytes were cited. Only full schema validation
+    proves that those bytes are a dispositions document with entries rather
+    than an unrelated same-suite artifact.
     """
     try:
         import yaml
@@ -211,7 +263,14 @@ def _dispositions_suite(path: Path) -> str | None:
         payload = yaml.safe_load(path.read_text())
     except Exception:
         return None
-    return str(payload.get("suite")) if isinstance(payload, dict) else None
+    errors = validate_dispositions(
+        payload,
+        path_label=str(path),
+        repo_root=REPO_ROOT,
+    )
+    if errors:
+        return None
+    return str(payload["suite"])
 
 
 def sha256_of(path: Path) -> str:
@@ -220,6 +279,23 @@ def sha256_of(path: Path) -> str:
 
 def _load(path: Path) -> dict:
     return json.loads(path.read_text())
+
+
+def _rederived_nz_report() -> dict:
+    """Recompute the unified NZ report from its sha-pinned input receipt."""
+
+    global _NZ_REPORT_CACHE
+    if _NZ_REPORT_CACHE is None:
+        module_path = REPO_ROOT / "scripts" / "nz_incomeexplorer.py"
+        module_spec = importlib.util.spec_from_file_location(
+            "_certificate_nz_incomeexplorer", module_path
+        )
+        if module_spec is None or module_spec.loader is None:
+            raise ValueError("cannot load the NZ IncomeExplorer verifier")
+        module = importlib.util.module_from_spec(module_spec)
+        module_spec.loader.exec_module(module)
+        _NZ_REPORT_CACHE = module.build()
+    return _NZ_REPORT_CACHE
 
 
 def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
@@ -232,13 +308,67 @@ def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
     """
     defects: list[str] = []
     report_path = REPO_ROOT / entry["report"]
-    report = _load(report_path)
-    summary = report.get("summary") or {}
+    execution_evidence = validate_suite_evidence(report_path)
+    defects.extend(execution_evidence.defects)
+    reconciliation_sufficient = (
+        execution_evidence.reconciliation == "full"
+        if entry["oracle_type"] == "reference"
+        else execution_evidence.reconciliation != "none"
+    )
+    if (
+        entry["oracle_type"] == "reference"
+        and execution_evidence.valid
+        and execution_evidence.binding == "bound"
+        and execution_evidence.reconciliation != "full"
+    ):
+        defects.append(
+            f"{entry['suite']}: reference oracle requires full semantic "
+            f"reconciliation (got {execution_evidence.reconciliation})"
+        )
+    evidence_gate_clean = (
+        execution_evidence.valid
+        and execution_evidence.binding == "bound"
+        and reconciliation_sufficient
+    )
+    try:
+        loaded_report = _load(report_path)
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError):
+        # The validator already records the precise parse/read defect. Keep
+        # computing a defective leg so the certificate surfaces that finding
+        # instead of crashing before it can report it.
+        report = {}
+        report_loaded = False
+    else:
+        report = loaded_report if isinstance(loaded_report, dict) else {}
+        report_loaded = True
+    if entry["suite"] == "nz-treasury-incomeexplorer" and report_loaded:
+        if report != _rederived_nz_report():
+            raise ValueError(
+                "NZ IncomeExplorer report does not rederive from its pinned receipt"
+            )
+    view_name = entry.get("view")
+    if view_name:
+        raw_views = report.get("views")
+        if not isinstance(raw_views, dict):
+            defects.append(f"{entry['suite']}: report views must be an object")
+            raw_views = {}
+        view = raw_views.get(view_name)
+        if not isinstance(view, dict):
+            defects.append(
+                f"{entry['suite']}: report has no subgraph view {view_name!r}"
+            )
+            view = {}
+        raw_summary = view.get("summary")
+    else:
+        raw_summary = report.get("summary")
+    if raw_summary is not None and not isinstance(raw_summary, dict):
+        defects.append(f"{entry['suite']}: summary must be an object")
+    summary = raw_summary if isinstance(raw_summary, dict) else {}
 
     # Report identity: the artifact must claim the suite it is cited for.
     reported_suite = report.get("suite")
     accepted = {entry["suite"], *entry.get("aliases", [])}
-    if reported_suite not in accepted:
+    if not isinstance(reported_suite, str) or reported_suite not in accepted:
         defects.append(
             f"{entry['suite']}: report {entry['report']} identifies as "
             f"{reported_suite!r}, not this suite"
@@ -254,7 +384,22 @@ def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
     # Errors appear under several shapes across runners; a check that reads
     # only one key lets an errored run certify (audit finding 2). Count them
     # all, including the top-level list.
-    errors_by_engine = summary.get("errors_by_engine") or {}
+    raw_errors_by_engine = summary.get("errors_by_engine")
+    if raw_errors_by_engine is None:
+        errors_by_engine = {}
+    elif isinstance(raw_errors_by_engine, dict):
+        errors_by_engine = raw_errors_by_engine
+    else:
+        errors_by_engine = {}
+        defects.append(f"{entry['suite']}: errors_by_engine must be an object")
+    raw_errors = report.get("errors")
+    if raw_errors is None:
+        errors = []
+    elif isinstance(raw_errors, list):
+        errors = raw_errors
+    else:
+        errors = []
+        defects.append(f"{entry['suite']}: errors must be an array")
     error_count = (
         _count(summary.get("error_count"), "error_count", defects, entry["suite"])
         + _count(
@@ -264,7 +409,7 @@ def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
             _count(v, f"errors_by_engine[{k}]", defects, entry["suite"])
             for k, v in errors_by_engine.items()
         )
-        + len(report.get("errors") or [])
+        + len(errors)
     )
     if comparisons <= 0:
         defects.append(
@@ -274,14 +419,10 @@ def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
     # A positive comparison count must be backed by per-case evidence
     # somewhere: inline cases or committed chunks. Counts alone are an
     # assertion, not evidence (audit finding 2).
-    inline_cases = sum(
-        1 for c in (report.get("cases") or []) if isinstance(c, dict) and c
-    )
-    chunk_dir = REPO_ROOT / "dashboard" / "public" / "data" / "cases" / str(
-        reported_suite or entry["suite"]
-    )
-    chunk_files = sorted(chunk_dir.glob("chunk-*.json")) if chunk_dir.is_dir() else []
-    if comparisons > 0 and not inline_cases and not chunk_files:
+    raw_cases = report.get("cases")
+    inline_rows = raw_cases if isinstance(raw_cases, list) else []
+    inline_cases = sum(1 for c in inline_rows if isinstance(c, dict) and c)
+    if comparisons > 0 and not inline_cases and not execution_evidence.chunk_case_count:
         defects.append(
             f"{entry['suite']}: claims {comparisons} comparisons with no "
             "per-case evidence (no inline cases, no committed chunks)"
@@ -299,14 +440,22 @@ def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
 
     # Weighted evidence must not contradict the raw counts (a zero raw
     # mismatch count with nonzero weighted mismatch mass is hidden failure).
-    weighted = summary.get("weighted") or {}
+    raw_weighted = summary.get("weighted")
+    if raw_weighted is None:
+        weighted = {}
+    elif isinstance(raw_weighted, dict):
+        weighted = raw_weighted
+    else:
+        weighted = {}
+        defects.append(f"{entry['suite']}: weighted must be an object")
     try:
         weighted_mismatch = float(weighted.get("mismatch_weight") or 0)
     except (TypeError, ValueError):
         weighted_mismatch = 0.0
         defects.append(f"{entry['suite']}: weighted mismatch_weight is not numeric")
     if weighted_mismatch != weighted_mismatch or weighted_mismatch in (
-        float("inf"), float("-inf")
+        float("inf"),
+        float("-inf"),
     ):
         defects.append(f"{entry['suite']}: weighted mismatch_weight is not finite")
         weighted_mismatch = 0.0
@@ -328,17 +477,67 @@ def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
     #   none   — no machinery; every mismatch is unexplained by definition.
     #   inline — classifications exist with no file (generator-classified);
     #            unvalidated, so the leg is defective until migrated.
-    dispositioned = summary.get("dispositioned") or {}
-    counts = dispositioned.get("counts") or {}
-    evidence: list[dict] = [
-        {
-            "claim": f"suite:{entry['suite']}",
-            "mode": "computed",
-            "artifact": entry["report"],
-            "sha256": sha256_of(report_path),
-        }
-    ]
-    disposition_file = dispositioned.get("dispositions_file")
+    raw_dispositioned = summary.get("dispositioned")
+    if raw_dispositioned is None:
+        dispositioned = {}
+    elif isinstance(raw_dispositioned, dict):
+        dispositioned = raw_dispositioned
+    else:
+        dispositioned = {}
+        defects.append(f"{entry['suite']}: dispositioned must be an object")
+    raw_counts = dispositioned.get("counts")
+    if raw_counts is None:
+        counts = {}
+    elif isinstance(raw_counts, dict):
+        counts = raw_counts
+    else:
+        counts = {}
+        defects.append(f"{entry['suite']}: dispositioned.counts must be an object")
+    evidence: list[dict] = []
+    if execution_evidence.report_sha256 is not None:
+        evidence.append(
+            {
+                "claim": f"suite:{entry['suite']}",
+                "mode": "computed",
+                "artifact": entry["report"],
+                "sha256": execution_evidence.report_sha256,
+            }
+        )
+    if execution_evidence.suite:
+        index_path = (
+            report_path.parent / "cases" / execution_evidence.suite / "index.json"
+        )
+        if index_path.is_file():
+            try:
+                index_artifact = index_path.relative_to(REPO_ROOT).as_posix()
+            except ValueError:
+                index_artifact = index_path.as_posix()
+            try:
+                index_sha256 = sha256_of(index_path)
+            except OSError as exc:
+                defects.append(
+                    f"{entry['suite']}: case evidence index cannot be read "
+                    f"({exc.strerror or type(exc).__name__})"
+                )
+            else:
+                evidence.append(
+                    {
+                        "claim": f"case-evidence-index:{entry['suite']}",
+                        "mode": "computed",
+                        "artifact": index_artifact,
+                        "sha256": index_sha256,
+                    }
+                )
+    raw_disposition_file = dispositioned.get("dispositions_file")
+    if raw_disposition_file in (None, ""):
+        disposition_file = None
+    elif isinstance(raw_disposition_file, str):
+        disposition_file = raw_disposition_file
+    else:
+        disposition_file = None
+        defects.append(
+            f"{entry['suite']}: dispositions_file must be a repository-relative string"
+        )
     classified = sum(
         _count(v, f"counts.{k}", defects, entry["suite"]) for k, v in counts.items()
     )
@@ -371,6 +570,7 @@ def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
             # mismatches can be "explained" by another suite's file entirely
             # (audit finding 3).
             declared = _dispositions_suite(dispositions_path)
+            authorized = declared in accepted
             if declared is None:
                 # An unreadable, non-mapping, or suite-less file is not a
                 # dispositions artifact — any repository file could otherwise
@@ -384,46 +584,75 @@ def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
                     f"{entry['suite']}: {disposition_file} declares suite "
                     f"{declared!r}, which is not this suite"
                 )
-            unexplained = _count(
-                dispositioned.get("unexplained_count"),
-                "unexplained_count",
-                defects,
-                entry["suite"],
-            )
-            # counts.unexplained and unexplained_count must agree; a summary
-            # that reports both, differently, is not a reconciled aggregate.
-            counted_unexplained = _count(
-                counts.get("unexplained"),
-                "counts.unexplained",
-                defects,
-                entry["suite"],
-            )
-            if counted_unexplained != unexplained:
-                defects.append(
-                    f"{entry['suite']}: counts.unexplained "
-                    f"({counted_unexplained}) disagrees with unexplained_count "
-                    f"({unexplained})"
+            if not authorized:
+                # A same-suite label alone cannot authorize report-provided
+                # disposition counts. Diagnose their internal shape, then
+                # fail closed to the raw mismatch total.
+                reported_unexplained = _count(
+                    dispositioned.get("unexplained_count"),
+                    "unexplained_count",
+                    defects,
+                    entry["suite"],
                 )
-                unexplained = max(unexplained, counted_unexplained)
-            unknown = set(counts) - KNOWN_DISPOSITION_KINDS
-            if unknown:
-                defects.append(
-                    f"{entry['suite']}: unknown disposition kind(s) "
-                    f"{sorted(unknown)} — only {sorted(KNOWN_DISPOSITION_KINDS)} "
-                    "carry defined meaning"
+                counted_unexplained = _count(
+                    counts.get("unexplained"),
+                    "counts.unexplained",
+                    defects,
+                    entry["suite"],
                 )
-            if classified != mismatch_count:
-                defects.append(
-                    f"{entry['suite']}: disposition counts ({classified}) do "
-                    f"not conserve against mismatches ({mismatch_count})"
+                if counted_unexplained != reported_unexplained:
+                    defects.append(
+                        f"{entry['suite']}: counts.unexplained "
+                        f"({counted_unexplained}) disagrees with "
+                        f"unexplained_count ({reported_unexplained})"
+                    )
+                unexplained = mismatch_count
+            else:
+                unexplained = _count(
+                    dispositioned.get("unexplained_count"),
+                    "unexplained_count",
+                    defects,
+                    entry["suite"],
                 )
-    elif classified and classified != int(
-        dispositioned.get("unexplained_count") or 0
-    ):
-        defects.append(
-            f"{entry['suite']}: inline classifications present with no "
-            "dispositions file — unvalidated; migrate before they can explain"
+                # counts.unexplained and unexplained_count must agree; a
+                # summary that reports both, differently, is not reconciled.
+                counted_unexplained = _count(
+                    counts.get("unexplained"),
+                    "counts.unexplained",
+                    defects,
+                    entry["suite"],
+                )
+                if counted_unexplained != unexplained:
+                    defects.append(
+                        f"{entry['suite']}: counts.unexplained "
+                        f"({counted_unexplained}) disagrees with "
+                        f"unexplained_count ({unexplained})"
+                    )
+                    unexplained = max(unexplained, counted_unexplained)
+                unknown = set(counts) - KNOWN_DISPOSITION_KINDS
+                if unknown:
+                    defects.append(
+                        f"{entry['suite']}: unknown disposition kind(s) "
+                        f"{sorted(unknown)} — only "
+                        f"{sorted(KNOWN_DISPOSITION_KINDS)} carry defined meaning"
+                    )
+                if classified != mismatch_count:
+                    defects.append(
+                        f"{entry['suite']}: disposition counts ({classified}) "
+                        f"do not conserve against mismatches ({mismatch_count})"
+                    )
+    elif classified:
+        inline_unexplained = _count(
+            dispositioned.get("unexplained_count"),
+            "unexplained_count",
+            defects,
+            entry["suite"],
         )
+        if classified != inline_unexplained:
+            defects.append(
+                f"{entry['suite']}: inline classifications present with no "
+                "dispositions file — unvalidated; migrate before they can explain"
+            )
         unexplained = mismatch_count
     else:
         unexplained = mismatch_count
@@ -431,18 +660,30 @@ def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
     # Slim-report guard: when the summary claims mismatches the report body
     # does not carry and no per-case chunks exist, the aggregate cannot be
     # audited from committed evidence.
-    stored = len(report.get("mismatches") or [])
-    chunk_dir = REPO_ROOT / "dashboard" / "public" / "data" / "cases" / str(
-        reported_suite or entry["suite"]
-    )
-    if mismatch_count > stored and not chunk_dir.is_dir():
+    raw_mismatches = report.get("mismatches")
+    if raw_mismatches is None:
+        mismatch_rows = []
+    elif isinstance(raw_mismatches, list):
+        mismatch_rows = raw_mismatches
+    else:
+        mismatch_rows = []
+        defects.append(f"{entry['suite']}: mismatches must be an array")
+    stored = len(mismatch_rows)
+    if (
+        mismatch_count > stored
+        and not execution_evidence.chunk_case_count
+        and execution_evidence.reconciliation != "full"
+    ):
         defects.append(
             f"{entry['suite']}: {mismatch_count} mismatches claimed, "
             f"{stored} stored, no per-case chunks — aggregate unauditable"
         )
 
     axiom_open = _count(
-        counts.get("axiom_encoding_gap"), "counts.axiom_encoding_gap", defects, entry["suite"]
+        counts.get("axiom_encoding_gap"),
+        "counts.axiom_encoding_gap",
+        defects,
+        entry["suite"],
     )
     leg = {
         "suite": entry["suite"],
@@ -454,10 +695,231 @@ def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
         "weighted_mismatch_mass": weighted_mismatch or None,
         "unexplained": unexplained,
         "axiom_attributed_open": axiom_open,
+        "binding": execution_evidence.binding,
+        "reconciliation": execution_evidence.reconciliation,
+        "evidence_cases": execution_evidence.case_count,
         "report_defects": defects,
-        "clean": not defects and unexplained == 0 and axiom_open == 0,
+        "clean": (
+            evidence_gate_clean and not defects and unexplained == 0 and axiom_open == 0
+        ),
     }
+    if view_name:
+        leg["view"] = view_name
     return leg, evidence, defects
+
+
+def _closed_verdict(program: str, spec: dict, evidence: list[dict]) -> dict:
+    attested_path_string = spec.get("attested_closed_receipt")
+    if attested_path_string:
+        path = REPO_ROOT / attested_path_string
+        closure = _load(path)
+        scoped = (closure.get("programs") or {}).get(program)
+        if not isinstance(scoped, dict):
+            raise ValueError(f"NZ closure receipt has no program scope for {program}")
+        evidence.append(
+            {
+                "claim": f"closure receipt:{program}",
+                "mode": "attested",
+                "artifact": attested_path_string,
+                "sha256": sha256_of(path),
+            }
+        )
+        return {
+            "mode": "attested",
+            "status": "attested_receipt",
+            "value": scoped.get("closed") is True,
+            "downgrade_reason": (
+                "Adversarial review S4: no independently emitted requested-output "
+                "trace, root-set bijection, and monotone root/citation denominator "
+                "ratchet are all present; exact-path closure remains evidence only."
+            ),
+            "corpus_release": closure.get("corpus_release"),
+            "rulespec_commit": closure.get("rulespec_commit"),
+            "pending_citations": len(scoped.get("pending_citations") or []),
+            "pending_money_atoms": scoped.get("pending_money_atoms"),
+            "root_node_count": scoped.get("root_node_count"),
+            "root_nodes": scoped.get("root_nodes"),
+            "subgraph_node_count": scoped.get("subgraph_node_count"),
+            "citation_root_count": scoped.get("citation_root_count"),
+            "by_status": scoped.get("by_status"),
+        }
+    path_string = spec.get("computed_closed")
+    if not path_string:
+        block = (spec.get("attested") or {}).get("closed", {})
+        mode = "computed" if block.get("status") == "computed" else "attested"
+        return {**block, "mode": mode}
+    path = REPO_ROOT / path_string
+    closure = _load(path)
+    if path_string == "closure/nz/summary.json":
+        module_path = REPO_ROOT / "scripts" / "nz_closure.py"
+        module_spec = importlib.util.spec_from_file_location(
+            "_certificate_nz_closure", module_path
+        )
+        if module_spec is None or module_spec.loader is None:
+            raise ValueError("cannot load the NZ closure verifier")
+        module = importlib.util.module_from_spec(module_spec)
+        module_spec.loader.exec_module(module)
+        expected = module.build(module.load_source())
+        if closure != expected:
+            raise ValueError(
+                "closure/nz/summary.json does not rederive from its versioned input"
+            )
+        scoped = (closure.get("programs") or {}).get(program)
+        if not isinstance(scoped, dict):
+            raise ValueError(f"NZ closure has no program scope for {program}")
+    else:
+        scoped = closure
+    value = scoped.get("closed") is True
+    evidence.append(
+        {
+            "claim": f"closure census:{program}",
+            "mode": "computed",
+            "artifact": path_string,
+            "sha256": sha256_of(path),
+        }
+    )
+    return {
+        "mode": "computed",
+        "status": "computed_pass" if value else "computed_open",
+        "value": value,
+        "corpus_release": closure.get("corpus_release"),
+        "rulespec_commit": closure.get("rulespec_commit"),
+        "pending_citations": len(scoped.get("pending_citations") or []),
+        "pending_money_atoms": scoped.get("pending_money_atoms"),
+        "root_node_count": scoped.get("root_node_count"),
+        "root_nodes": scoped.get("root_nodes"),
+        "subgraph_node_count": scoped.get("subgraph_node_count"),
+        "citation_root_count": scoped.get("citation_root_count"),
+        "by_status": scoped.get("by_status"),
+    }
+
+
+def _single_person_evidence(program: str, spec: dict, evidence: list[dict]) -> None:
+    path_string = spec.get("single_person_attestation")
+    if not path_string:
+        return
+    path = REPO_ROOT / path_string
+    committed = _load(path)
+    module_path = REPO_ROOT / "scripts" / "nz_incomeexplorer.py"
+    module_spec = importlib.util.spec_from_file_location(
+        "_certificate_nz_single_person", module_path
+    )
+    if module_spec is None or module_spec.loader is None:
+        raise ValueError("cannot load the NZ single-person verifier")
+    module = importlib.util.module_from_spec(module_spec)
+    module_spec.loader.exec_module(module)
+    expected = module.build_single_person_attestations()
+    if committed != expected:
+        raise ValueError("NZ single-person attestation does not rederive")
+    row = (committed.get("programs") or {}).get(program)
+    if not isinstance(row, dict) or row.get("status") != "pass":
+        raise ValueError(f"NZ single-person attestation does not pass for {program}")
+    evidence.append(
+        {
+            "claim": f"single-person invariant:{program}",
+            "mode": "computed",
+            "artifact": path_string,
+            "sha256": sha256_of(path),
+            "limitation": (
+                "Supporting two-endpoint evidence only; it does not prove "
+                "person-locality or clear the S1 blocker."
+            ),
+        }
+    )
+
+
+def _executable_verdict(spec: dict, legs: list[dict], evidence: list[dict]) -> dict:
+    attested_path_string = spec.get("attested_executable_receipt")
+    if attested_path_string:
+        path = REPO_ROOT / attested_path_string
+        report = _load(path)
+        receipt = report.get("compiled_program") or {}
+        evidence.append(
+            {
+                "claim": "compiled-program execution receipt (commit-pinned harness)",
+                "mode": "attested",
+                "artifact": attested_path_string,
+                "sha256": sha256_of(path),
+            }
+        )
+        return {
+            "mode": "attested",
+            "status": "attested_receipt",
+            "value": True,
+            "receipt": receipt,
+            "limitation": (
+                "The generator and comparison harness lineage is commit-pinned, but "
+                "the compiled artifact bytes and an executable transcript are not "
+                "committed; metadata syntax and a digest string are not a computed "
+                "execution check (adversarial review S3)."
+            ),
+        }
+    if not spec.get("computed_executable"):
+        block = (spec.get("attested") or {}).get("executable", {})
+        mode = "computed" if block.get("status") == "computed" else "attested"
+        return {
+            **block,
+            "mode": mode,
+        }
+    raise ValueError(
+        "computed executable verdict requested without a verifier that loads and "
+        "runs committed artifact bytes"
+    )
+
+
+def _attested_exercise_verdict(spec: dict, evidence: list[dict]) -> dict:
+    path_string = spec["attested_exercise_receipt"]
+    path = REPO_ROOT / path_string
+    source = _load(path)
+    catalog = source.get("exercise_input_catalog")
+    if not isinstance(catalog, dict) or not catalog:
+        raise ValueError("NZ exercise attestation has no exercise_input_catalog")
+    state_counts = Counter(
+        row.get("state") for row in catalog.values() if isinstance(row, dict)
+    )
+    evidence.append(
+        {
+            "claim": "exercise input catalog (commit-pinned external receipt)",
+            "mode": "attested",
+            "artifact": path_string,
+            "sha256": sha256_of(path),
+        }
+    )
+    return {
+        "mode": "attested",
+        "status": "attested_receipt",
+        "value": True,
+        "receipt": {
+            "artifact": path_string,
+            "sha256": sha256_of(path),
+            "input_catalog_count": len(catalog),
+            "varied_fields": state_counts.get("varied", 0),
+            "constant_fields": state_counts.get("constant", 0),
+            "not_supplied_fields": state_counts.get("not_supplied", 0),
+        },
+        "limitation": (
+            "The harness lineage is commit-pinned, but the catalog is suite-wide "
+            "and not recomputed from committed, per-evaluation, view-scoped "
+            "request/output traces (adversarial review S2)."
+        ),
+    }
+
+
+def _nz_external_attestation_evidence(spec: dict, evidence: list[dict]) -> None:
+    if not spec.get("attested_exercise_receipt"):
+        return
+    snapshot = (
+        REPO_ROOT
+        / "comparisons/nz-treasury-incomeexplorer/treasury-emtr-snapshot-expanded.json"
+    )
+    evidence.append(
+        {
+            "claim": "Treasury oracle snapshot (commit-pinned external receipt)",
+            "mode": "attested",
+            "artifact": str(snapshot.relative_to(REPO_ROOT)),
+            "sha256": sha256_of(snapshot),
+        }
+    )
 
 
 def _exercise_block(
@@ -471,6 +933,46 @@ def _exercise_block(
             rows[entry["suite"]] = {"status": "no census row"}
             complete = False
             continue
+
+        expected_report = entry["report"]
+        expected_path = REPO_ROOT / expected_report
+        expected_sha256: str | None
+        if expected_path.is_file():
+            try:
+                expected_sha256 = sha256_of(expected_path)
+            except OSError as exc:
+                expected_sha256 = None
+                complete = False
+                defects.append(
+                    f"{entry['suite']}: registry report {expected_report!r} "
+                    f"cannot be read ({exc.strerror or type(exc).__name__})"
+                )
+        else:
+            expected_sha256 = None
+            complete = False
+            defects.append(
+                f"{entry['suite']}: registry report {expected_report!r} "
+                "does not exist and cannot be matched to the census"
+            )
+        report_identity_matches = (
+            row.get("report") == expected_report
+            and expected_sha256 is not None
+            and row.get("report_sha256") == expected_sha256
+        )
+        if row.get("report") != expected_report:
+            complete = False
+            defects.append(
+                f"{entry['suite']}: census report path {row.get('report')!r} "
+                f"diverges from registry report {expected_report!r}"
+            )
+        if expected_sha256 is not None and row.get("report_sha256") != expected_sha256:
+            complete = False
+            defects.append(
+                f"{entry['suite']}: census report_sha256 "
+                f"{row.get('report_sha256')!r} diverges from registry report "
+                f"bytes {expected_sha256}"
+            )
+
         has_evidence = bool(row.get("evidence_fields"))
         if not has_evidence:
             complete = False
@@ -490,221 +992,34 @@ def _exercise_block(
             "cases": row.get("cases_scanned"),
             "report": row.get("report"),
             "report_sha256": row.get("report_sha256"),
+            "registry_report": expected_report,
+            "registry_report_sha256": expected_sha256,
+            "report_identity_matches_registry": report_identity_matches,
             "contested_reports": contested,
             "varied_fields": row.get("varied_fields"),
             "constant_fields": row.get("constant_fields"),
             "bridged_through": sorted((row.get("bridged_through") or {}).keys()),
             "bridge_audited": bool(row.get("bridge_audited")),
             "per_case_evidence_committed": has_evidence,
+            "binding": row.get("binding"),
+            "reconciliation": row.get("reconciliation"),
         }
         if not row.get("bridge_audited"):
             complete = False
     return rows, complete
 
 
-def _repo_artifact_path(relative: object, *, label: str) -> Path:
-    """Resolve a configured artifact without permitting repository escape."""
+def _exercise_census_for(spec: dict) -> tuple[dict, list[dict]]:
+    """Return the exercise rows and evidence relevant to one certificate.
 
-    if not isinstance(relative, str) or not relative:
-        raise ValueError(f"{label} requires a non-empty repository-relative artifact")
-    candidate = Path(relative)
-    if candidate.is_absolute() or ".." in candidate.parts:
-        raise ValueError(f"{label} artifact must be repository-relative: {relative!r}")
-    path = (REPO_ROOT / candidate).resolve()
-    try:
-        path.relative_to(REPO_ROOT.resolve())
-    except ValueError as exc:  # pragma: no cover - defense beyond lexical guard
-        raise ValueError(
-            f"{label} artifact escapes the repository: {relative!r}"
-        ) from exc
-    return path
+    Conventional suites use the committed global census. Unified records
+    carry a complete experiment receipt of their own and are recomputed from
+    that receipt here. This keeps adding an unrelated unified record from
+    invalidating every existing certificate merely by changing the global
+    census artifact's hash.
+    """
 
-
-@lru_cache(maxsize=None)
-def _producer_module(relative: str) -> ModuleType:
-    """Load one in-repo producer so certification can reuse its pure validator."""
-
-    path = _repo_artifact_path(relative, label="computed producer")
-    if not path.is_file():
-        raise ValueError(f"computed producer is missing: {relative}")
-    module_name = f"_axiom_certificate_{path.stem}"
-    spec = importlib.util.spec_from_file_location(module_name, path)
-    if spec is None or spec.loader is None:  # pragma: no cover - importlib guard
-        raise ValueError(f"could not load computed producer: {relative}")
-    module = importlib.util.module_from_spec(spec)
-    # Dataclass and other runtime annotation helpers resolve their module by
-    # name while the file executes, so register it before exec_module.
-    sys.modules[module_name] = module
-    spec.loader.exec_module(module)
-    return module
-
-
-def _attested_verdict(spec: dict, name: str) -> dict:
-    """Emit sha-pinned scaffolding without promoting registry status strings."""
-
-    block = dict((spec.get("attested") or {}).get(name) or {})
-    return {**block, "mode": "attested"}
-
-
-def _closed_verdict(
-    program: str,
-    spec: dict,
-    evidence: list[dict],
-    *,
-    verify_producer: bool = False,
-) -> dict:
-    """Validate closure, optionally re-deriving it from external Git sources."""
-
-    config = (spec.get("computed") or {}).get("closed")
-    if not isinstance(config, dict):
-        return _attested_verdict(spec, "closed")
-    artifact_ref = config.get("artifact")
-    artifact_path = _repo_artifact_path(
-        artifact_ref,
-        label=f"{program} closed producer",
-    )
-    if not artifact_path.is_file():
-        return _attested_verdict(spec, "closed")
-
-    try:
-        document = yaml.safe_load(artifact_path.read_text()) or {}
-    except (OSError, UnicodeError, yaml.YAMLError) as exc:
-        raise ValueError(f"{artifact_ref} is not readable closure YAML: {exc}") from exc
-    producer = _producer_module(str(config.get("producer") or ""))
-    try:
-        summary = producer.validate_artifact(document)
-    except ValueError as exc:
-        raise ValueError(f"{artifact_ref} failed closure validation: {exc}") from exc
-    if verify_producer:
-        try:
-            verification = producer.verify_artifact(artifact_path=artifact_path)
-        except ValueError as exc:
-            raise ValueError(
-                f"{artifact_ref} closure verification crashed: {exc}"
-            ) from exc
-        if not getattr(verification, "valid", False):
-            errors = getattr(verification, "errors", ())
-            detail = (
-                "; ".join(str(error) for error in errors) or "unknown producer error"
-            )
-            raise ValueError(
-                f"{artifact_ref} failed full closure verification: {detail}"
-            )
-    if not isinstance(getattr(summary, "closed", None), bool):
-        raise ValueError(f"{artifact_ref} validator returned no closed boolean")
-    computed = document["computed"]
-    value = summary.closed
-    evidence.append(
-        {
-            "claim": f"closed:{program}",
-            "mode": "computed",
-            "artifact": str(artifact_ref),
-            "sha256": sha256_of(artifact_path),
-            "verification": "producer_artifact_validation",
-        }
-    )
-    return {
-        "mode": "computed",
-        "value": value,
-        "status": "computed_closed" if value else "computed_open",
-        "artifact": str(artifact_ref),
-        "provision_counts": computed.get("provision_counts"),
-        "boundary_frontier": computed.get("boundary_frontier"),
-        "non_encoded_reasons_complete": summary.non_encoded_reasons_complete,
-    }
-
-
-def _executable_verdict(
-    program: str,
-    spec: dict,
-    evidence: list[dict],
-    *,
-    verify_producer: bool = False,
-) -> dict:
-    """Validate execution, optionally recompiling and replaying every case."""
-
-    config = (spec.get("computed") or {}).get("executable")
-    if not isinstance(config, dict):
-        return _attested_verdict(spec, "executable")
-    artifact_ref = config.get("artifact")
-    artifact_path = _repo_artifact_path(
-        artifact_ref,
-        label=f"{program} executable producer",
-    )
-    if not artifact_path.is_file():
-        return _attested_verdict(spec, "executable")
-
-    try:
-        document = json.loads(artifact_path.read_text())
-    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
-        raise ValueError(
-            f"{artifact_ref} is not readable executable JSON: {exc}"
-        ) from exc
-    producer = _producer_module(str(config.get("producer") or ""))
-    try:
-        summary = producer.validate_artifact(document, repo_root=REPO_ROOT)
-    except ValueError as exc:
-        raise ValueError(f"{artifact_ref} failed executable validation: {exc}") from exc
-    if verify_producer:
-        try:
-            reproduced = producer.build_reproduction(
-                repo_root=REPO_ROOT,
-                rulespec_ref=document["rulespec"]["sha"],
-            )
-            producer.validate_artifact(reproduced, repo_root=REPO_ROOT)
-            rendered = producer._render(reproduced)
-        except (OSError, RuntimeError, ValueError) as exc:
-            raise ValueError(
-                f"{artifact_ref} failed full executable verification: {exc}"
-            ) from exc
-        if artifact_path.read_text() != rendered:
-            raise ValueError(
-                f"{artifact_ref} failed full executable verification: "
-                "compiled/replayed artifact drifted"
-            )
-    if not isinstance(summary, dict) or not isinstance(summary.get("executable"), bool):
-        raise ValueError(f"{artifact_ref} validator returned no executable boolean")
-    value = summary["executable"]
-    evidence.append(
-        {
-            "claim": f"executable:{program}",
-            "mode": "computed",
-            "artifact": str(artifact_ref),
-            "sha256": sha256_of(artifact_path),
-            "verification": "producer_artifact_validation",
-        }
-    )
-    return {
-        "mode": "computed",
-        "value": value,
-        "status": "computed_pass" if value else "computed_fail",
-        "artifact": str(artifact_ref),
-        "case_count": summary.get("case_count"),
-        "matched_case_count": summary.get("matched_case_count"),
-        "engine_binary_sha256": (document.get("engine") or {}).get("binary_sha256"),
-        "configured_engine_sha256": (document.get("engine") or {}).get(
-            "configured_sha256"
-        ),
-        "rulespec_sha": (document.get("rulespec") or {}).get("sha"),
-        "compiled_artifacts": [
-            {
-                "program": row.get("program"),
-                "sha256": row.get("sha256"),
-            }
-            for row in document.get("compiled_artifacts") or []
-            if isinstance(row, dict)
-        ],
-    }
-
-
-def build_certificate(
-    program: str,
-    spec: dict,
-    *,
-    verify_producers: bool = False,
-) -> dict:
     census = _load(CENSUS_PATH)
-    legs = []
     evidence = [
         {
             "claim": "exercise census",
@@ -713,23 +1028,74 @@ def build_certificate(
             "sha256": sha256_of(CENSUS_PATH),
         }
     ]
+    unified_entries = [
+        entry
+        for entry in spec["suites"]
+        if entry["suite"] == "nz-treasury-incomeexplorer"
+    ]
+    if not unified_entries:
+        return census, evidence
+
+    module_path = REPO_ROOT / "scripts" / "exercise_census.py"
+    module_spec = importlib.util.spec_from_file_location(
+        "_certificate_exercise_census", module_path
+    )
+    if module_spec is None or module_spec.loader is None:
+        raise ValueError("cannot load the exercise-census verifier")
+    module = importlib.util.module_from_spec(module_spec)
+    module_spec.loader.exec_module(module)
+
+    suites = dict(census.get("suites") or {})
+    for entry in unified_entries:
+        report_path = REPO_ROOT / entry["report"]
+        report = _load(report_path)
+        suites[entry["suite"]] = module._census_suite(
+            entry["suite"], report, report_path
+        )
+    census = {**census, "suites": suites}
+
+    # A certificate containing only unified suites derives no verdict from the
+    # global census, so do not cite it. The suite report evidence added by
+    # _suite_verdict sha-binds the exact experiment receipt consumed above.
+    if len(unified_entries) == len(spec["suites"]):
+        evidence = []
+    return census, evidence
+
+
+def build_certificate(program: str, spec: dict) -> dict:
+    if spec.get("attested_exercise_receipt"):
+        census, evidence = {}, []
+    else:
+        census, evidence = _exercise_census_for(spec)
+    legs = []
     all_defects: list[str] = []
     for entry in spec["suites"]:
         leg, evs, defects = _suite_verdict(entry)
         legs.append(leg)
         evidence.extend(evs)
         all_defects.extend(defects)
+    _single_person_evidence(program, spec, evidence)
+    _nz_external_attestation_evidence(spec, evidence)
 
     reference_legs = [leg for leg in legs if leg["oracle_type"] == "reference"]
     reality_legs = [leg for leg in legs if leg["oracle_type"] == "reality"]
     conformant = bool(reference_legs) and all(leg["clean"] for leg in reference_legs)
     reality_leads = sum(leg["mismatches"] for leg in reality_legs)
 
-    exercise_rows, exercise_complete = _exercise_block(
-        spec["suites"], census, all_defects
-    )
+    if spec.get("attested_exercise_receipt"):
+        exercised_block = _attested_exercise_verdict(spec, evidence)
+        exercise_complete = False
+    else:
+        exercise_rows, exercise_complete = _exercise_block(
+            spec["suites"], census, all_defects
+        )
+        exercised_block = {
+            "value": exercise_complete,
+            "mode": "computed",
+            "suites": exercise_rows,
+        }
 
-    blockers = list(all_defects)
+    blockers = [*all_defects, *(spec.get("blockers") or [])]
     for leg in reference_legs:
         if leg["unexplained"] or leg["axiom_attributed_open"]:
             blockers.append(
@@ -737,38 +1103,47 @@ def build_certificate(
                 f"— disposition or fix before this leg counts"
             )
     if not exercise_complete:
-        blockers.append(
-            "exercise: census incomplete (missing per-case evidence or "
-            "unaudited bridge) for at least one suite"
-        )
+        if spec.get("attested_exercise_receipt"):
+            blockers.append(
+                "exercise: the commit-pinned, sha-bound input catalog is attested, "
+                "not computed from committed per-evaluation, view-scoped "
+                "request/output traces"
+            )
+        else:
+            blockers.append(
+                "exercise: census incomplete (missing per-case evidence or "
+                "unaudited bridge) for at least one suite"
+            )
 
+    closed_block = _closed_verdict(program, spec, evidence)
+    executable_block = _executable_verdict(spec, legs, evidence)
     # The single public predicate (adopted from the 2026-07-26 design review):
     # "certified" is reserved for the conjunction of all four verdicts holding
-    # in computed mode with no open defects. DK now has the first computed
-    # closed/executable producers; the existing CO receipts deliberately stay
-    # attested scaffolding and cannot satisfy the predicate.
-    closed_block = _closed_verdict(
-        program,
-        spec,
-        evidence,
-        verify_producer=verify_producers,
-    )
-    executable_block = _executable_verdict(
-        program,
-        spec,
-        evidence,
-        verify_producer=verify_producers,
-    )
-
+    # in computed mode with no open defects. A certificate resting on attested
+    # premises is scaffolding, and saying so is the point.
+    # A status string alone must never authorize certification: flipping two
+    # registry strings to "computed" would otherwise certify while the
+    # underlying values are false and the emitted mode is still attested
+    # (audit finding 7). Require, per premise, that it is genuinely computed
+    # AND true. If no producer computes closed/executable, `certified` is
+    # explicitly UNAVAILABLE rather than silently false — an unreachable
+    # claim reported as a verdict is its own defect.
     def _premise(block: dict) -> tuple[bool, bool]:
-        """(is_computed, is_true) from exactly what the certificate emits."""
+        """Return ``(is_computed, is_true)`` for an emitted premise.
 
+        The mode the certificate EMITS is what a reader sees, so that is what
+        must be computed — checking the registry's `status` string instead let
+        a premise flip to computed while the emitted mode stayed attested
+        (round-2 audit finding 3).
+        """
         return block.get("mode") == "computed", block.get("value") is True
 
     closed_computed, closed_true = _premise(closed_block)
     exec_computed, exec_true = _premise(executable_block)
     premises_computed = closed_computed and exec_computed
-    if not premises_computed:
+    if spec.get("certified_false_when_blocked") and blockers:
+        certified_state = "no"
+    elif not premises_computed:
         certified_state = "unavailable"
     elif conformant and exercise_complete and not blockers and closed_true and exec_true:
         certified_state = "yes"
@@ -785,10 +1160,9 @@ def build_certificate(
             "rule": "computed(conformant AND exercised AND closed AND "
             "executable) with zero open defects. A premise counts only when "
             "its mode is computed AND its value is true; attested premises "
-            "never satisfy it. state=unavailable means at least one required "
-            "premise lacks computed evidence. Once all four premise modes are "
-            "computed, state=yes requires every value true and zero blockers; "
-            "otherwise state=no.",
+            "never satisfy it. state=unavailable means no producer computes "
+            "closed/executable yet, so certification is not merely withheld "
+            "but not yet offerable.",
         },
         "verdicts": {
             "conformant": {
@@ -801,13 +1175,13 @@ def build_certificate(
                 ],
                 "reality_leads": reality_leads,
             },
-            "exercised": {
-                "value": exercise_complete,
-                "mode": "computed",
-                "suites": exercise_rows,
+            "exercised": exercised_block,
+            "closed": {
+                **closed_block,
             },
-            "closed": closed_block,
-            "executable": executable_block,
+            "executable": {
+                **executable_block,
+            },
         },
         "blockers": blockers,
         "evidence": evidence,
@@ -818,18 +1192,20 @@ def build_certificate(
             "and are scaffolding, not certification. A certification "
             "question not answerable from this document is a certificate "
             "defect to file."
+            + (
+                " NZ exercise roadmap: commit per-evaluation request/output "
+                "traces and derive exercise separately for each certificate "
+                "view and requested-output root set."
+                if spec.get("attested_exercise_receipt")
+                else ""
+            )
         ),
     }
 
 
-def build_all(*, verify_producers: bool = False) -> dict[str, dict]:
+def build_all() -> dict[str, dict]:
     return {
-        program: build_certificate(
-            program,
-            spec,
-            verify_producers=verify_producers,
-        )
-        for program, spec in PROGRAMS.items()
+        program: build_certificate(program, spec) for program, spec in PROGRAMS.items()
     }
 
 
@@ -840,17 +1216,9 @@ def _out_path(program: str) -> Path:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true")
-    parser.add_argument(
-        "--verify-producers",
-        action="store_true",
-        help=(
-            "also re-derive DK closure from external Git sources and "
-            "recompile/replay DK with the pinned engine"
-        ),
-    )
     args = parser.parse_args()
 
-    certificates = build_all(verify_producers=args.verify_producers)
+    certificates = build_all()
     if args.check:
         # An unexpected certificate is a defect, not a curiosity: certificates/
         # is inside the bot's derived_paths, so a retired or stray file there is

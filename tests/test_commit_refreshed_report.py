@@ -44,6 +44,7 @@ SEED_DIRS = (
     "comparisons",
     "conformance",
     "certificates",
+    "closure",
     "dispositions",
     "docs",
     "reference",
@@ -182,6 +183,7 @@ def _assert_origin_tip_green(origin: Path, tmp_path: Path) -> Path:
     # Adding a gate to ci.yml means adding it here.
     for script in (
         "apply_dispositions.py",
+        "generate_chunk_indexes.py",
         "conformance_scoreboard.py",
         "conformance_burndown.py",
         "check_vacuous_gate.py",

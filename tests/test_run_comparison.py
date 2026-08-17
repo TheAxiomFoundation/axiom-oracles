@@ -17,6 +17,15 @@ def load_run_comparison_module():
     return module
 
 
+def load_script_module(name: str):
+    module_path = Path(__file__).parents[1] / "scripts" / f"{name}.py"
+    spec = importlib.util.spec_from_file_location(name, module_path)
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(module)
+    return module
+
+
 def test_resolve_path_uses_repo_env_override_when_config_path_is_missing(
     monkeypatch, tmp_path
 ):
@@ -877,6 +886,192 @@ def test_tax_ecps_dashboard_adapter_keeps_identity_when_all_cases_match():
     # slice `_slim_report_for_dashboard` would ship for a clean weekly run.
     slim = run_comparison._slim_report_for_dashboard(report)
     assert slim["dataset_identity"] == identity
+
+
+def test_versioned_chunk_storage_removes_inline_case_mirrors(monkeypatch, tmp_path):
+    run_comparison = load_run_comparison_module()
+    monkeypatch.setattr(run_comparison, "DASHBOARD_DATA_DIR", tmp_path)
+    suite_dir = tmp_path / "cases" / "bound-suite"
+    suite_dir.mkdir(parents=True)
+    (suite_dir / "index.json").write_text(
+        json.dumps({"schema_version": "axiom_oracles.chunk_index.v1"})
+    )
+    report = {
+        "suite": "bound-suite",
+        "case_count": 1,
+        "mismatches": [],
+        "cases": [{"case_id": "mirrored", "matched": True}],
+        "summary": {
+            "comparison_count": 1,
+            "match_count": 1,
+            "mismatch_count": 0,
+        },
+    }
+
+    slim = run_comparison._slim_report_for_dashboard(report)
+
+    assert slim["cases"] == []
+    assert slim["dashboard_truncation"] == {
+        "total_mismatches": 0,
+        "shown_mismatches": 0,
+        "total_case_rows": 1,
+        "shown_case_rows": 0,
+    }
+    assert report["cases"], "slimming must not mutate the full report"
+
+
+def test_dashboard_writer_refreshes_versioned_chunks_before_slimming(
+    monkeypatch, tmp_path
+):
+    from axiom_oracles.evidence import validate_suite_evidence
+
+    run_comparison = load_run_comparison_module()
+    monkeypatch.setattr(run_comparison, "DASHBOARD_DATA_DIR", tmp_path)
+    suite_dir = tmp_path / "cases" / "bound-suite"
+    suite_dir.mkdir(parents=True)
+    (suite_dir / "chunk-0.json").write_text(
+        '[{"id":"stale","r":100,"h":{},"m":[],"v":[]}]'
+    )
+    (suite_dir / "index.json").write_text(
+        json.dumps({"schema_version": "axiom_oracles.chunk_index.v1"})
+    )
+    report = {
+        "suite": "bound-suite",
+        "case_count": 1,
+        "engines": {"left": "axiom", "right": "oracle"},
+        "concepts": [
+            {
+                "id": "benefit",
+                "comparison": "amount",
+                "tolerance": 0,
+                "relative_tolerance": 0,
+            }
+        ],
+        "aggregates": [
+            {
+                "concept": "benefit",
+                "comparison_count": 1,
+                "match_count": 1,
+                "mismatch_count": 0,
+            }
+        ],
+        "mismatches": [],
+        "cases": [
+            {
+                "case_id": "fresh",
+                "match_rate": 100,
+                "matches": [{"concept": "benefit", "left": 2, "right": 2}],
+                "mismatches": [],
+                "metadata": {
+                    "household_summary": {"household_size": 1},
+                    "axiom_input_records": [
+                        {"name": "income", "value": 5, "entity_id": "household"}
+                    ],
+                    "axiom_all_outputs": {"benefit": 2},
+                },
+            }
+        ],
+        "summary": {
+            "comparison_count": 1,
+            "match_count": 1,
+            "mismatch_count": 0,
+        },
+    }
+
+    run_comparison._write_dashboard_report(report, "bound-report.json")
+
+    dashboard_report = tmp_path / "bound-report.json"
+    stored = json.loads(dashboard_report.read_text())
+    chunk = json.loads((suite_dir / "chunk-0.json").read_text())
+    index = json.loads((suite_dir / "index.json").read_text())
+    evidence = validate_suite_evidence(dashboard_report)
+    generator = load_script_module("generate_chunk_indexes")
+    index_current, _message = generator.generate(
+        dashboard_report,
+        check=True,
+        strip_inline=False,
+    )
+    assert stored["cases"] == []
+    assert chunk[0]["id"] == "fresh"
+    assert chunk[0]["v"] == [{"c": "benefit", "l": 2, "x": 2}]
+    assert index["input_slots"] == ["income"]
+    assert index["output_slots"] == ["benefit"]
+    assert evidence.valid is True
+    assert evidence.binding == "bound"
+    assert evidence.reconciliation == "full"
+    assert index_current is True
+
+
+def test_compact_full_evidence_preserves_explicit_zero_matches():
+    from scripts.emit_case_artifacts import compact_case
+
+    all_mismatch = compact_case(
+        {
+            "case_id": "all-mismatch",
+            "matches": [],
+            "mismatches": [
+                {"concept": "benefit", "left": 1, "right": 2}
+            ],
+        },
+        {},
+    )
+    all_match = compact_case(
+        {
+            "case_id": "all-match",
+            "match_rate": 99.9999995,
+            "matches": [{"concept": "benefit", "left": 1, "right": 1}],
+            "mismatches": [],
+        },
+        {},
+    )
+    verdict_free = compact_case(
+        {"case_id": "qc-shape", "matched": True, "mismatches": []},
+        {},
+    )
+
+    assert all_mismatch["v"] == []
+    assert all_mismatch["m"][0]["d"] == 1
+    assert all_mismatch["r"] == 0.0
+    assert all_match["r"] == 100.0
+    assert "v" not in verdict_free
+
+
+def test_skipped_versioned_run_preserves_existing_bound_artifacts(
+    monkeypatch, tmp_path
+):
+    run_comparison = load_run_comparison_module()
+    monkeypatch.setattr(run_comparison, "DASHBOARD_DATA_DIR", tmp_path)
+    suite_dir = tmp_path / "cases" / "bound-suite"
+    suite_dir.mkdir(parents=True)
+    target = tmp_path / "bound-report.json"
+    index_path = suite_dir / "index.json"
+    chunk_path = suite_dir / "chunk-0.json"
+    target.write_text('{"existing":"report"}')
+    index_path.write_text(
+        json.dumps({"schema_version": "axiom_oracles.chunk_index.v1"})
+    )
+    chunk_path.write_text('[{"id":"existing"}]')
+    before = tuple(
+        path.read_bytes() for path in (target, index_path, chunk_path)
+    )
+
+    run_comparison._write_dashboard_report(
+        {
+            "suite": "bound-suite",
+            "case_count": 1,
+            "cases": [],
+            "summary": {
+                "comparison_count": 1,
+                "match_count": 1,
+                "mismatch_count": 0,
+            },
+        },
+        target.name,
+        preserve_existing_versioned=True,
+    )
+
+    after = tuple(path.read_bytes() for path in (target, index_path, chunk_path))
+    assert after == before
 
 
 def test_dataset_label_from_identity_falls_back_without_revision():
