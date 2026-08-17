@@ -2339,3 +2339,59 @@ def test_producers_must_agree_on_one_rulespec_commit(tmp_path, monkeypatch):
     assert cert["verdicts"]["executable"]["rulespec_sha"] == receipt["rulespec"]["sha"]
     assert any("producers disagree on the rulespec commit" in b for b in cert["blockers"]), cert["blockers"]
     assert cert["certified"]["value"] is False
+
+
+def test_ledger_commit_must_be_a_string_sha_and_ref_must_equal_commit():
+    """MUTANT (delta-audit #7): a 40-DIGIT YAML integer is a legal scalar
+    that `str(commit)` turned into a passing "sha"; certification then emitted
+    a computed closed premise while the commit cross-check silently skipped
+    the non-string. The validator now requires a string SHA and ref==commit
+    for both the rulespec and corpus facts, and certify treats non-comparable
+    provenance on two computed premises as a blocker."""
+    import sys
+
+    spec = importlib.util.spec_from_file_location(
+        "_mutant_closure_ledger_types", REPO / "scripts" / "closure_ledger.py"
+    )
+    cl = importlib.util.module_from_spec(spec)
+    sys.modules["_mutant_closure_ledger_types"] = cl
+    spec.loader.exec_module(cl)
+    ledger_path = REPO / "conformance/closure/dk-boerne-og-ungeydelse.yaml"
+    baseline = yaml.safe_load(ledger_path.read_text())
+    assert cl._validation_errors(baseline) == []
+
+    digits = int("1" * 40)  # a 40-digit integer, not a hex string
+    for fact in ("rulespec", "corpus_release"):
+        doc = copy.deepcopy(baseline)
+        doc["generated_facts"][fact]["commit"] = digits
+        doc["generated_facts"][fact]["ref"] = digits
+        errors = cl._validation_errors(doc)
+        assert any("commit must be a full git commit SHA" in e for e in errors), (fact, errors)
+
+        doc = copy.deepcopy(baseline)
+        doc["generated_facts"][fact]["ref"] = "main"
+        errors = cl._validation_errors(doc)
+        assert any("must equal" in e and "commit" in e for e in errors), (fact, errors)
+
+    # certify, fail-closed: even if a non-string commit reached the closed
+    # block, two computed premises without comparable provenance BLOCK.
+    certify = _load("certify")
+    original_closed = certify._producer_closed_verdict
+
+    def _tampered(program, spec_, evidence, *, verify_producer=False):
+        block = original_closed(program, spec_, evidence, verify_producer=verify_producer)
+        if block is not None:
+            block["rulespec_commit"] = digits
+        return block
+
+    certify._producer_closed_verdict = _tampered
+    try:
+        cert = certify.build_certificate(
+            "dk/boerne-og-ungeydelse", certify.PROGRAMS["dk/boerne-og-ungeydelse"]
+        )
+    finally:
+        certify._producer_closed_verdict = original_closed
+    assert cert["verdicts"]["closed"]["mode"] == "computed"
+    assert cert["verdicts"]["executable"]["mode"] == "computed"
+    assert any("provenance is not comparable" in b for b in cert["blockers"]), cert["blockers"]
+    assert cert["certified"]["value"] is False

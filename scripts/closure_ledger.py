@@ -967,7 +967,16 @@ def _generated_fact_errors(generated: Any) -> list[str]:
             )
         if not isinstance(corpus.get("ref"), str) or not corpus["ref"].strip():
             errors.append("corpus_release.ref must be non-empty")
-        if not _HEX_GIT_SHA.fullmatch(str(corpus.get("commit", ""))):
+        elif corpus.get("ref") != corpus.get("commit"):
+            errors.append(
+                "corpus_release.ref must equal corpus_release.commit (a resolved "
+                "sha, never a branch name)"
+            )
+        # isinstance first: `str(...)` would let a 40-DIGIT YAML integer
+        # (a legal, silently-typed scalar) pass as a "sha" (delta-audit #7).
+        if not isinstance(corpus.get("commit"), str) or not _HEX_GIT_SHA.fullmatch(
+            corpus["commit"]
+        ):
             errors.append("corpus_release.commit must be a full git commit SHA")
         if not isinstance(corpus.get("path"), str) or not corpus["path"].endswith(
             ".jsonl"
@@ -988,8 +997,15 @@ def _generated_fact_errors(generated: Any) -> list[str]:
             errors.append(
                 "rulespec.repository must identify TheAxiomFoundation/rulespec-dk"
             )
-        if not _HEX_GIT_SHA.fullmatch(str(rulespec.get("commit", ""))):
-            errors.append("rulespec.commit must be a full git commit SHA")
+        if not isinstance(rulespec.get("commit"), str) or not _HEX_GIT_SHA.fullmatch(
+            rulespec["commit"]
+        ):
+            errors.append("rulespec.commit must be a full git commit SHA string")
+        if rulespec.get("ref") != rulespec.get("commit"):
+            errors.append(
+                "rulespec.ref must equal rulespec.commit (a resolved sha, never a "
+                "branch name)"
+            )
         if not _HEX_SHA256.fullmatch(str(rulespec.get("selected_content_sha256", ""))):
             errors.append("rulespec.selected_content_sha256 must be a full sha256")
 

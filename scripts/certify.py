@@ -1391,18 +1391,23 @@ def build_certificate(
     # the certificate (never a crash), so certified cannot be yes on it.
     closed_commit = closed_block.get("rulespec_commit")
     executable_commit = executable_block.get("rulespec_sha")
-    if (
-        closed_block.get("mode") == "computed"
-        and executable_block.get("mode") == "computed"
-        and isinstance(closed_commit, str)
-        and isinstance(executable_commit, str)
-        and closed_commit != executable_commit
-    ):
-        blockers.append(
-            "producers disagree on the rulespec commit: closure ledger "
-            f"{closed_commit[:12]} vs executable receipt {executable_commit[:12]}; "
-            "regenerate both at one commit"
-        )
+    if closed_block.get("mode") == "computed" and executable_block.get("mode") == "computed":
+        # Fail closed: two computed premises with no comparable provenance is
+        # a blocker, not a silent skip — a 40-DIGIT integer commit slipped
+        # through a str()-coercing validator and would have skipped this
+        # comparison (delta-audit #7).
+        if not (isinstance(closed_commit, str) and isinstance(executable_commit, str)):
+            blockers.append(
+                "producers' rulespec provenance is not comparable: closure ledger "
+                f"commit={closed_commit!r}, executable receipt sha="
+                f"{executable_commit!r}; both must be string SHAs"
+            )
+        elif closed_commit != executable_commit:
+            blockers.append(
+                "producers disagree on the rulespec commit: closure ledger "
+                f"{closed_commit[:12]} vs executable receipt {executable_commit[:12]}; "
+                "regenerate both at one commit"
+            )
     # The single public predicate (adopted from the 2026-07-26 design review):
     # "certified" is reserved for the conjunction of all four verdicts holding
     # in computed mode with no open defects. A certificate resting on attested
