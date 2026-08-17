@@ -117,6 +117,73 @@ def test_unbound_or_nonreconciling_chunks_do_not_block_census(tmp_path, monkeypa
     assert row["cases_scanned"] == 2
 
 
+def test_census_counts_bound_execution_inputs_as_case_evidence(
+    tmp_path, monkeypatch
+):
+    census = _load_census()
+    data_dir = tmp_path / "data"
+    cases_dir = data_dir / "cases"
+    suite = "fixture-suite"
+    report = {
+        "suite": suite,
+        "summary": {
+            "comparison_count": 2,
+            "match_count": 2,
+            "mismatch_count": 0,
+        },
+        "cases": [],
+    }
+    report_path = data_dir / "report.json"
+    report_bytes = _write_json(report_path, report)
+    chunk_path = cases_dir / suite / "chunk-0.json"
+    chunk_bytes = _write_json(
+        chunk_path,
+        [
+            {
+                "id": "one",
+                "execution": {
+                    "schema_version": "axiom_oracles.case_execution.v1",
+                    "axiom_inputs": {"amount": 1, "constant": False},
+                },
+            },
+            {
+                "id": "two",
+                "execution": {
+                    "schema_version": "axiom_oracles.case_execution.v1",
+                    "axiom_inputs": {"amount": 2, "constant": False},
+                },
+            },
+        ],
+    )
+    _write_json(
+        cases_dir / suite / "index.json",
+        {
+            "schema_version": CHUNK_INDEX_SCHEMA_VERSION,
+            "suite": suite,
+            "report_path": report_path.resolve().as_posix(),
+            "report_sha256": hashlib.sha256(report_bytes).hexdigest(),
+            "chunks": [
+                {
+                    "name": chunk_path.name,
+                    "sha256": hashlib.sha256(chunk_bytes).hexdigest(),
+                    "cases": 2,
+                }
+            ],
+        },
+    )
+    monkeypatch.setattr(census, "REPO_ROOT", tmp_path)
+    monkeypatch.setattr(census, "CASES_DIR", cases_dir)
+
+    row = census._census_suite(suite, report, report_path)
+
+    assert row["evidence_fields"] == {
+        "amount": {"distinct": 2, "state": "varied"},
+        "constant": {"distinct": 1, "state": "constant"},
+    }
+    assert row["varied_fields"] == 1
+    assert row["constant_fields"] == 1
+
+
 def test_unsafe_suite_name_cannot_escape_the_case_root(tmp_path, monkeypatch):
     census = _load_census()
     data_dir = tmp_path / "data"

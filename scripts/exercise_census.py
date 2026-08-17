@@ -81,7 +81,15 @@ MANIFEST_DIR = REPO_ROOT / "axiom_oracles" / "bridges" / "manifests"
 
 
 def _manifest_strict_clean() -> dict[str, bool]:
-    """Which manifests are strict-clean, per the validator itself.
+    """Which manifests are strict-clean, per the validator itself (see
+    ``_manifest_strict_audit`` for the identity-bound form)."""
+    return {name: row["clean"] for name, row in _manifest_strict_audit().items()}
+
+
+def _manifest_strict_audit() -> dict[str, dict]:
+    """Per suite: ``{"clean": bool, "manifest_sha256": str, "manifest": path}``.
+
+    Which manifests are strict-clean, per the validator itself.
 
     `bridge_audited` previously meant only "a manifest exists", so an unpinned
     manifest with partial catchalls and unverified completeness still reported
@@ -97,13 +105,25 @@ def _manifest_strict_clean() -> dict[str, bool]:
     spec.loader.exec_module(module)
     manifests = module.load_manifests()
     collisions = module.global_collisions(manifests)
-    clean: dict[str, bool] = {}
+    clean: dict[str, dict] = {}
     for path, manifest in manifests.items():
         errors, findings = module.validate(path, manifest)
+        # The manifest's own bytes are part of the audited claim: the census
+        # binds their sha so an evidence edit that keeps the validator green
+        # (delta-audit #2, item 7) can never leave census/certificate bytes
+        # identical — every manifest change is visible downstream.
+        manifest_sha = hashlib.sha256(Path(path).read_bytes()).hexdigest()
         # Global collisions are a property of the SET, so a per-manifest
         # validate() cannot see them; without this a colliding manifest could
         # still report audited (round-2 audit finding 5).
-        ok = not errors and not findings and not collisions
+        # A lane counts as audited only when it has OPTED IN to strict
+        # enforcement (`strict: true`) AND is clean. Without the flag
+        # requirement a strict-clean lane could drop the opt-in — silencing
+        # future --strict CI enforcement — while its census row kept
+        # bridge_audited=true and its certificate kept exercised=true
+        # (delta-audit finding). The opt-in is part of the certified claim.
+        declared_strict = isinstance(manifest, dict) and manifest.get("strict") is True
+        ok = declared_strict and not errors and not findings and not collisions
         if isinstance(manifest, dict):
             names = [manifest.get("suite")]
             aliases = manifest.get("aliases")
@@ -111,7 +131,11 @@ def _manifest_strict_clean() -> dict[str, bool]:
                 names.extend(aliases)
             for name in names:
                 if name:
-                    clean[str(name)] = ok
+                    clean[str(name)] = {
+                        "clean": ok,
+                        "manifest_sha256": manifest_sha,
+                        "manifest": str(Path(path).relative_to(REPO_ROOT)),
+                    }
     return clean
 
 
@@ -151,7 +175,10 @@ def _bridged_through_by_suite() -> dict[str, dict[str, str]]:
 
 
 BRIDGED_THROUGH: dict[str, dict[str, str]] = _bridged_through_by_suite()
-MANIFEST_STRICT_CLEAN: dict[str, bool] = _manifest_strict_clean()
+MANIFEST_STRICT_AUDIT: dict[str, dict] = _manifest_strict_audit()
+MANIFEST_STRICT_CLEAN: dict[str, bool] = {
+    name: row["clean"] for name, row in MANIFEST_STRICT_AUDIT.items()
+}
 
 
 def _iter_suite_reports() -> list[tuple[str, dict, Path]]:
@@ -354,6 +381,21 @@ def _census_suite(
                 concept_values[str(verdict["c"])].add(
                     _canonical_value(verdict.get("l"))
                 )
+        # Reference-oracle chunks may carry the exact runner inputs used for
+        # executable reproduction outside the dashboard-oriented ``i`` rows.
+        # Count those inputs as case evidence too: they are report-bound chunk
+        # bytes, and omitting them makes a genuinely exercised suite appear
+        # evidence-free after inline mirrors are stripped.
+        execution = case.get("execution")
+        if (
+            isinstance(execution, dict)
+            and execution.get("schema_version")
+            == "axiom_oracles.case_execution.v1"
+        ):
+            axiom_inputs = execution.get("axiom_inputs")
+            if isinstance(axiom_inputs, dict):
+                for key, value in axiom_inputs.items():
+                    field_values[str(key)].add(_canonical_value(value))
         # Inline report cases: scalar metadata entries are stage evidence.
         metadata = case.get("metadata")
         if isinstance(metadata, dict):
@@ -419,6 +461,13 @@ def _census_suite(
         # Audited means the validator finds nothing outstanding — not merely
         # that a manifest file exists (audit finding 5).
         "bridge_audited": MANIFEST_STRICT_CLEAN.get(suite, False),
+        # Identity of the audited manifest, so the certificate's census
+        # evidence sha moves whenever the manifest bytes move.
+        "bridge_manifest_sha256": (
+            MANIFEST_STRICT_AUDIT.get(suite, {}).get("manifest_sha256")
+            if MANIFEST_STRICT_CLEAN.get(suite, False)
+            else None
+        ),
     }
 
 

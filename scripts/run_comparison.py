@@ -2165,9 +2165,7 @@ def _reemit_gettsim_synthetic_report(
                     "mismatches_by_kind": [],
                     "mismatches_by_scenario": [],
                     "error_count": 1,
-                    "errors_by_engine": [
-                        {"value": unavailable_engine, "count": 1}
-                    ],
+                    "errors_by_engine": {unavailable_engine: 1},
                 },
                 "aggregates": [],
                 "mismatches": [],

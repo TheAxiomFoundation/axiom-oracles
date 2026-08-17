@@ -1,0 +1,35 @@
+{
+  "schema_version": "axiom_oracles.chunk_index.v1",
+  "report_path": "dashboard/public/data/axiom-euromod-dk-child-youth-benefit.json",
+  "report_sha256": "5e4d2c4305d1bb3a7255b44dd682ac1a12b741f4eaf3b7a177dc025049a3b1fe",
+  "case_verdicts_sha256": "87f3d889b06241561e0bf65f9573b09d29b2bb2dc8d467e68d5e2133e5e21c6f",
+  "suite": "dk-child-youth-benefit",
+  "count": 8,
+  "output_slots": [
+    "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1#annual_tax_free_child_or_youth_benefit",
+    "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1#benefit_age_band",
+    "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#income_basis_for_benefit_reduction",
+    "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#qualifying_pension_contributions_capped"
+  ],
+  "chunk_size": 500,
+  "engines": {
+    "left": "euromod",
+    "right": "axiom",
+    "versions": {
+      "axiom_rules_engine": "0.1.0"
+    }
+  },
+  "mismatch_concepts": [
+    "dk:statutes/composed/boerne-og-ungeydelse-pipeline#single_recipient_annual_child_youth_benefit"
+  ],
+  "source": "axiom-euromod-dk-child-youth-benefit-0-2026-08-17.json",
+  "total_cases": 8,
+  "chunk_count": 1,
+  "chunks": [
+    {
+      "name": "chunk-0.json",
+      "sha256": "e138f71e5ae9a328a18fe9f753c83decf6d0fc5eb764560d977b483a07c8a102",
+      "cases": 8
+    }
+  ]
+}
