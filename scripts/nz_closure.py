@@ -22,6 +22,14 @@ from nz_programs import PROGRAM_VIEWS  # noqa: E402
 OUT_DIR = REPO_ROOT / "closure" / "nz"
 SOURCE_PATH = OUT_DIR / "source.json"
 SUMMARY_PATH = OUT_DIR / "summary.json"
+REQUEST_TRACE_PATH = (
+    REPO_ROOT
+    / "conformance"
+    / "executable"
+    / "nz-treasury-incomeexplorer"
+    / "requests.json"
+)
+RATCHET_PATH = OUT_DIR / "denominator-ratchet.json"
 SOURCE_SHA256 = "a69b872fbc9fd9a98132ea5b7f5272d8be9631d3060651603b2b3c1f7cd64aea"
 RULESPEC_REPO = Path("/Users/maxghenis/TheAxiomFoundation/rulespec-nz")
 CORPUS_REPO = Path("/Users/maxghenis/TheAxiomFoundation/axiom-corpus")
@@ -102,6 +110,86 @@ def load_source() -> dict:
     if not isinstance(source, dict):
         raise ClosureError("NZ closure source must contain an object")
     return source
+
+
+def _load_json_object(path: Path, label: str) -> dict:
+    try:
+        value = json.loads(path.read_text())
+    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        raise ClosureError(f"cannot read {label}: {exc}") from exc
+    if not isinstance(value, dict):
+        raise ClosureError(f"{label} must contain an object")
+    return value
+
+
+def load_requested_output_roots() -> dict[str, list[str]]:
+    """Derive per-program roots from the independently captured engine requests."""
+
+    trace = _load_json_object(REQUEST_TRACE_PATH, "NZ requested-output trace")
+    if trace.get("schema") != "axiom_oracles.nz_executable_requests.v1":
+        raise ClosureError("unexpected NZ requested-output trace schema")
+    provenance = trace.get("provenance") or {}
+    if (
+        provenance.get("harness")
+        != "TheAxiomFoundation/ops/nz-lane/emtr_reproduction/run.py"
+        or provenance.get("harness_commit") != "bcf631b5"
+        or provenance.get("rulespec_commit") != RULESPEC_SHA
+        or provenance.get("engine_git_sha")
+        != "d59969b53430ae2fd97eb4349d44ad23ce930d85"
+    ):
+        raise ClosureError("NZ requested-output trace provenance drifted")
+    programs = sorted(PROGRAM_VIEWS)
+    derived: dict[str, set[str]] = {program: set() for program in programs}
+    rows = trace.get("requests")
+    if not isinstance(rows, list) or not rows:
+        raise ClosureError("NZ requested-output trace has no requests")
+    for index, row in enumerate(rows):
+        if not isinstance(row, dict):
+            raise ClosureError(f"NZ requested-output trace request {index} is invalid")
+        program = row.get("program")
+        if program not in derived:
+            raise ClosureError(
+                f"NZ requested-output trace request {index} has unknown program {program!r}"
+            )
+        request = row.get("request") or {}
+        queries = request.get("queries")
+        if not isinstance(queries, list) or len(queries) != 1:
+            raise ClosureError(
+                f"NZ requested-output trace request {index} must contain one query"
+            )
+        outputs = queries[0].get("outputs")
+        if (
+            not isinstance(outputs, list)
+            or outputs != list(dict.fromkeys(outputs))
+            or not all(isinstance(output, str) and output for output in outputs)
+        ):
+            raise ClosureError(
+                f"NZ requested-output trace request {index} has invalid outputs"
+            )
+        derived[program].update(outputs)
+    result = {program: sorted(roots) for program, roots in sorted(derived.items())}
+    if trace.get("requested_outputs_by_program") != result:
+        raise ClosureError(
+            "NZ requested-output trace summary is not derived from its requests"
+        )
+    return result
+
+
+def load_denominator_ratchet() -> dict[str, dict[str, int]]:
+    ratchet = _load_json_object(RATCHET_PATH, "NZ closure denominator ratchet")
+    if ratchet.get("schema") != "axiom_oracles.nz_closure_denominator_ratchet.v1":
+        raise ClosureError("unexpected NZ closure denominator ratchet schema")
+    programs = ratchet.get("programs")
+    if not isinstance(programs, dict) or set(programs) != set(PROGRAM_VIEWS):
+        raise ClosureError("NZ closure denominator ratchet program set drifted")
+    for program, row in programs.items():
+        if not isinstance(row, dict):
+            raise ClosureError(f"{program}: closure denominator ratchet row is invalid")
+        for field in ("requested_output_count_min", "citation_count_min"):
+            value = row.get(field)
+            if not isinstance(value, int) or isinstance(value, bool) or value < 0:
+                raise ClosureError(f"{program}: {field} must be a non-negative integer")
+    return programs
 
 
 def bootstrap_source() -> dict:
@@ -201,7 +289,12 @@ def bootstrap_source() -> dict:
     }
 
 
-def build(source: dict) -> dict:
+def build(
+    source: dict,
+    *,
+    requested_output_roots: dict[str, list[str]] | None = None,
+    denominator_ratchet: dict[str, dict[str, int]] | None = None,
+) -> dict:
     if source.get("schema") != "axiom_oracles.nz_closure_source.v2":
         raise ClosureError("unexpected NZ closure source schema")
     rulespec = source.get("rulespec") or {}
@@ -228,8 +321,29 @@ def build(source: dict) -> dict:
         program: sorted(spec["roots"])
         for program, spec in sorted(PROGRAM_VIEWS.items())
     }
-    if source.get("program_roots") != expected_program_roots:
-        raise ClosureError("NZ program root sets drifted from the ratified node views")
+    if requested_output_roots is None:
+        requested_output_roots = load_requested_output_roots()
+    if denominator_ratchet is None:
+        denominator_ratchet = load_denominator_ratchet()
+    if set(requested_output_roots) != set(expected_program_roots):
+        raise ClosureError("NZ requested-output trace program set drifted")
+    if source.get("program_roots") != requested_output_roots:
+        raise ClosureError(
+            "NZ program root sets are not bijective with the independent "
+            "requested-output trace"
+        )
+    if expected_program_roots != requested_output_roots:
+        raise ClosureError(
+            "NZ ratified node views are not bijective with the independent "
+            "requested-output trace"
+        )
+    for program, roots in requested_output_roots.items():
+        floor = denominator_ratchet[program]["requested_output_count_min"]
+        if len(roots) < floor:
+            raise ClosureError(
+                f"{program}: requested-output denominator RATCHET regressed "
+                f"from floor {floor} to {len(roots)}"
+            )
     nodes_by_id: dict[str, dict] = {}
     nodes_by_name: dict[str, dict] = {}
     for row in files:
@@ -345,6 +459,12 @@ def build(source: dict) -> dict:
         pending = [
             row["citation_path"] for row in citation_rows if row["status"] == "pending"
         ]
+        citation_floor = denominator_ratchet[program]["citation_count_min"]
+        if len(citation_rows) < citation_floor:
+            raise ClosureError(
+                f"{program}: citation denominator RATCHET regressed "
+                f"from floor {citation_floor} to {len(citation_rows)}"
+            )
         program_summaries[program] = {
             "closed": not pending,
             "root_nodes": root_nodes,
@@ -359,6 +479,12 @@ def build(source: dict) -> dict:
             "citations": citation_rows,
             "pending_citations": pending,
             "pending_money_atoms": 0,
+            "denominator_ratchet": {
+                "requested_output_count_min": denominator_ratchet[program][
+                    "requested_output_count_min"
+                ],
+                "citation_count_min": citation_floor,
+            },
         }
     return {
         "schema": "axiom_oracles.nz_closure_summary.v2",
@@ -375,7 +501,26 @@ def build(source: dict) -> dict:
             "artifact": str(SOURCE_PATH.relative_to(REPO_ROOT)),
             "sha256": hashlib.sha256(SOURCE_PATH.read_bytes()).hexdigest(),
         },
+        "requested_output_trace": {
+            "artifact": str(REQUEST_TRACE_PATH.relative_to(REPO_ROOT)),
+            "sha256": hashlib.sha256(REQUEST_TRACE_PATH.read_bytes()).hexdigest(),
+        },
+        "denominator_ratchet": {
+            "artifact": str(RATCHET_PATH.relative_to(REPO_ROOT)),
+            "sha256": hashlib.sha256(RATCHET_PATH.read_bytes()).hexdigest(),
+        },
     }
+
+
+def validate_artifact(document: dict, *, repo_root: Path = REPO_ROOT) -> dict:
+    """Pure validator used by the shared computed-certificate predicate."""
+
+    if Path(repo_root).resolve() != REPO_ROOT.resolve():
+        raise ClosureError("NZ closure must validate at the repository root")
+    expected = build(load_source())
+    if document != expected:
+        raise ClosureError("NZ closure artifact does not rederive from committed inputs")
+    return expected
 
 
 def _render(value: dict) -> str:

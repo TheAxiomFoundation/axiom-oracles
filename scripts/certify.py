@@ -12,10 +12,11 @@ adapters.
 
 Two evidence modes, stated per claim:
 
-* ``computed`` — this script re-derives the value from committed in-repo
-  artifacts; drift fails ``--check``.
-* ``attested`` — the value is carried from a sha-pinned external receipt
-  (today: the ops closure prototype and the engine-execution receipts).
+* ``computed`` — this script invokes the named producer's pure validator and
+  re-derives the value from committed in-repo artifacts; drift fails
+  ``--check``. Producer integration gates may additionally replay external,
+  commit-pinned toolchains.
+* ``attested`` — the value is carried from a sha-pinned external receipt.
   Attested is scaffolding, not certification; the roadmap is monotone
   conversion of attested claims to computed ones.
 
@@ -39,7 +40,11 @@ import importlib.util
 import json
 import sys
 from collections import Counter
+from functools import lru_cache
 from pathlib import Path
+from types import ModuleType
+
+import yaml
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 if str(REPO_ROOT) not in sys.path:
@@ -189,12 +194,20 @@ for _nz_program in (
                 "report": "dashboard/public/data/nz-treasury-incomeexplorer.json",
             }
         ],
-        "attested_closed_receipt": "closure/nz/summary.json",
+        "computed": {
+            "closed": {
+                "artifact": "closure/nz/summary.json",
+                "producer": "scripts/nz_closure.py",
+            },
+            "executable": {
+                "artifact": (
+                    "conformance/executable/nz-treasury-incomeexplorer.json"
+                ),
+                "producer": "scripts/nz_executable_reproduction.py",
+            },
+        },
         "attested_exercise_receipt": (
             "comparisons/nz-treasury-incomeexplorer/source-comparison.json"
-        ),
-        "attested_executable_receipt": (
-            "dashboard/public/data/nz-treasury-incomeexplorer.json"
         ),
         "certified_false_when_blocked": True,
         "blockers": (
@@ -708,90 +721,114 @@ def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
     return leg, evidence, defects
 
 
+def _repo_artifact_path(relative: object, *, label: str) -> Path:
+    if not isinstance(relative, str) or not relative:
+        raise ValueError(f"{label} path is missing")
+    path = (REPO_ROOT / relative).resolve()
+    try:
+        path.relative_to(REPO_ROOT.resolve())
+    except ValueError as exc:
+        raise ValueError(f"{label} path escapes the repository: {relative}") from exc
+    return path
+
+
+@lru_cache(maxsize=None)
+def _producer_module(relative: str) -> ModuleType:
+    path = _repo_artifact_path(relative, label="computed producer")
+    if not path.is_file():
+        raise ValueError(f"computed producer is missing: {relative}")
+    module_name = f"_axiom_certificate_{path.stem}"
+    module_spec = importlib.util.spec_from_file_location(module_name, path)
+    if module_spec is None or module_spec.loader is None:
+        raise ValueError(f"cannot load computed producer: {relative}")
+    module = importlib.util.module_from_spec(module_spec)
+    sys.modules[module_name] = module
+    module_spec.loader.exec_module(module)
+    return module
+
+
+def _attested_verdict(spec: dict, name: str) -> dict:
+    block = dict((spec.get("attested") or {}).get(name) or {})
+    emitted_mode = "computed" if block.get("status") == "computed" else "attested"
+    return {**block, "mode": emitted_mode}
+
+
+def _computed_config(spec: dict, name: str) -> dict | None:
+    config = (spec.get("computed") or {}).get(name)
+    return config if isinstance(config, dict) else None
+
+
 def _closed_verdict(program: str, spec: dict, evidence: list[dict]) -> dict:
-    attested_path_string = spec.get("attested_closed_receipt")
-    if attested_path_string:
-        path = REPO_ROOT / attested_path_string
-        closure = _load(path)
-        scoped = (closure.get("programs") or {}).get(program)
-        if not isinstance(scoped, dict):
-            raise ValueError(f"NZ closure receipt has no program scope for {program}")
-        evidence.append(
-            {
-                "claim": f"closure receipt:{program}",
-                "mode": "attested",
-                "artifact": attested_path_string,
-                "sha256": sha256_of(path),
-            }
+    """One computed closure predicate, scoped by the producer's program map."""
+
+    config = _computed_config(spec, "closed")
+    if config is None:
+        return _attested_verdict(spec, "closed")
+    artifact_ref = config.get("artifact")
+    artifact_path = _repo_artifact_path(
+        artifact_ref, label=f"{program} closed artifact"
+    )
+    if not artifact_path.is_file():
+        raise ValueError(f"computed closure artifact is missing: {artifact_ref}")
+    try:
+        document = (
+            yaml.safe_load(artifact_path.read_text())
+            if artifact_path.suffix in {".yaml", ".yml"}
+            else json.loads(artifact_path.read_text())
         )
-        return {
-            "mode": "attested",
-            "status": "attested_receipt",
-            "value": scoped.get("closed") is True,
-            "downgrade_reason": (
-                "Adversarial review S4: no independently emitted requested-output "
-                "trace, root-set bijection, and monotone root/citation denominator "
-                "ratchet are all present; exact-path closure remains evidence only."
-            ),
-            "corpus_release": closure.get("corpus_release"),
-            "rulespec_commit": closure.get("rulespec_commit"),
-            "pending_citations": len(scoped.get("pending_citations") or []),
-            "pending_money_atoms": scoped.get("pending_money_atoms"),
-            "root_node_count": scoped.get("root_node_count"),
-            "root_nodes": scoped.get("root_nodes"),
-            "subgraph_node_count": scoped.get("subgraph_node_count"),
-            "citation_root_count": scoped.get("citation_root_count"),
-            "by_status": scoped.get("by_status"),
-        }
-    path_string = spec.get("computed_closed")
-    if not path_string:
-        block = (spec.get("attested") or {}).get("closed", {})
-        mode = "computed" if block.get("status") == "computed" else "attested"
-        return {**block, "mode": mode}
-    path = REPO_ROOT / path_string
-    closure = _load(path)
-    if path_string == "closure/nz/summary.json":
-        module_path = REPO_ROOT / "scripts" / "nz_closure.py"
-        module_spec = importlib.util.spec_from_file_location(
-            "_certificate_nz_closure", module_path
-        )
-        if module_spec is None or module_spec.loader is None:
-            raise ValueError("cannot load the NZ closure verifier")
-        module = importlib.util.module_from_spec(module_spec)
-        module_spec.loader.exec_module(module)
-        expected = module.build(module.load_source())
-        if closure != expected:
-            raise ValueError(
-                "closure/nz/summary.json does not rederive from its versioned input"
-            )
-        scoped = (closure.get("programs") or {}).get(program)
+    except (OSError, UnicodeError, json.JSONDecodeError, yaml.YAMLError) as exc:
+        raise ValueError(f"{artifact_ref} is not readable closure evidence: {exc}") from exc
+    producer = _producer_module(str(config.get("producer") or ""))
+    try:
+        summary = producer.validate_artifact(document)
+    except ValueError as exc:
+        raise ValueError(f"{artifact_ref} failed closure validation: {exc}") from exc
+    if isinstance(summary, dict):
+        scoped = (summary.get("programs") or {}).get(program, summary)
         if not isinstance(scoped, dict):
-            raise ValueError(f"NZ closure has no program scope for {program}")
+            raise ValueError(f"{artifact_ref} has no closure scope for {program}")
+        value = scoped.get("closed")
     else:
-        scoped = closure
-    value = scoped.get("closed") is True
+        scoped = {}
+        value = getattr(summary, "closed", None)
+    if not isinstance(value, bool):
+        raise ValueError(f"{artifact_ref} validator returned no closed Boolean")
     evidence.append(
         {
-            "claim": f"closure census:{program}",
+            "claim": f"closed:{program}",
             "mode": "computed",
-            "artifact": path_string,
-            "sha256": sha256_of(path),
+            "artifact": str(artifact_ref),
+            "sha256": sha256_of(artifact_path),
+            "verification": "producer_artifact_validation",
         }
     )
-    return {
+    result = {
         "mode": "computed",
         "status": "computed_pass" if value else "computed_open",
         "value": value,
-        "corpus_release": closure.get("corpus_release"),
-        "rulespec_commit": closure.get("rulespec_commit"),
-        "pending_citations": len(scoped.get("pending_citations") or []),
-        "pending_money_atoms": scoped.get("pending_money_atoms"),
-        "root_node_count": scoped.get("root_node_count"),
-        "root_nodes": scoped.get("root_nodes"),
-        "subgraph_node_count": scoped.get("subgraph_node_count"),
-        "citation_root_count": scoped.get("citation_root_count"),
-        "by_status": scoped.get("by_status"),
+        "artifact": str(artifact_ref),
     }
+    if isinstance(document, dict):
+        result.update(
+            {
+                "corpus_release": document.get("corpus_release"),
+                "rulespec_commit": document.get("rulespec_commit"),
+            }
+        )
+    if scoped:
+        result.update(
+            {
+                "pending_citations": len(scoped.get("pending_citations") or []),
+                "pending_money_atoms": scoped.get("pending_money_atoms"),
+                "root_node_count": scoped.get("root_node_count"),
+                "root_nodes": scoped.get("root_nodes"),
+                "subgraph_node_count": scoped.get("subgraph_node_count"),
+                "citation_root_count": scoped.get("citation_root_count"),
+                "by_status": scoped.get("by_status"),
+                "denominator_ratchet": scoped.get("denominator_ratchet"),
+            }
+        )
+    return result
 
 
 def _single_person_evidence(program: str, spec: dict, evidence: list[dict]) -> None:
@@ -828,43 +865,54 @@ def _single_person_evidence(program: str, spec: dict, evidence: list[dict]) -> N
     )
 
 
-def _executable_verdict(spec: dict, legs: list[dict], evidence: list[dict]) -> dict:
-    attested_path_string = spec.get("attested_executable_receipt")
-    if attested_path_string:
-        path = REPO_ROOT / attested_path_string
-        report = _load(path)
-        receipt = report.get("compiled_program") or {}
-        evidence.append(
-            {
-                "claim": "compiled-program execution receipt (commit-pinned harness)",
-                "mode": "attested",
-                "artifact": attested_path_string,
-                "sha256": sha256_of(path),
-            }
-        )
-        return {
-            "mode": "attested",
-            "status": "attested_receipt",
-            "value": True,
-            "receipt": receipt,
-            "limitation": (
-                "The generator and comparison harness lineage is commit-pinned, but "
-                "the compiled artifact bytes and an executable transcript are not "
-                "committed; metadata syntax and a digest string are not a computed "
-                "execution check (adversarial review S3)."
-            ),
-        }
-    if not spec.get("computed_executable"):
-        block = (spec.get("attested") or {}).get("executable", {})
-        mode = "computed" if block.get("status") == "computed" else "attested"
-        return {
-            **block,
-            "mode": mode,
-        }
-    raise ValueError(
-        "computed executable verdict requested without a verifier that loads and "
-        "runs committed artifact bytes"
+def _executable_verdict(program: str, spec: dict, evidence: list[dict]) -> dict:
+    """One computed executable predicate for any producer using the v1 receipt."""
+
+    config = _computed_config(spec, "executable")
+    if config is None:
+        return _attested_verdict(spec, "executable")
+    artifact_ref = config.get("artifact")
+    artifact_path = _repo_artifact_path(
+        artifact_ref, label=f"{program} executable artifact"
     )
+    if not artifact_path.is_file():
+        raise ValueError(f"computed executable artifact is missing: {artifact_ref}")
+    try:
+        document = json.loads(artifact_path.read_text())
+    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        raise ValueError(f"{artifact_ref} is not readable executable JSON: {exc}") from exc
+    producer = _producer_module(str(config.get("producer") or ""))
+    try:
+        summary = producer.validate_artifact(document, repo_root=REPO_ROOT)
+    except ValueError as exc:
+        raise ValueError(f"{artifact_ref} failed executable validation: {exc}") from exc
+    if not isinstance(summary, dict):
+        raise ValueError(f"{artifact_ref} validator returned no executable summary")
+    scoped = (summary.get("programs") or {}).get(program)
+    value = scoped.get("executable") if isinstance(scoped, dict) else summary.get("executable")
+    if not isinstance(value, bool):
+        raise ValueError(f"{artifact_ref} validator returned no executable Boolean")
+    evidence.append(
+        {
+            "claim": f"executable:{program}",
+            "mode": "computed",
+            "artifact": str(artifact_ref),
+            "sha256": sha256_of(artifact_path),
+            "verification": "producer_artifact_validation",
+        }
+    )
+    return {
+        "mode": "computed",
+        "status": "computed_pass" if value else "computed_fail",
+        "value": value,
+        "artifact": str(artifact_ref),
+        "engine": document.get("engine"),
+        "compiled_artifact": document.get("compiled_artifact"),
+        "request_set": document.get("request_set"),
+        "golden_outputs": document.get("golden_outputs"),
+        "transcript": document.get("transcript"),
+        "summary": scoped if isinstance(scoped, dict) else summary,
+    }
 
 
 def _attested_exercise_verdict(spec: dict, evidence: list[dict]) -> dict:
@@ -1116,7 +1164,7 @@ def build_certificate(program: str, spec: dict) -> dict:
             )
 
     closed_block = _closed_verdict(program, spec, evidence)
-    executable_block = _executable_verdict(spec, legs, evidence)
+    executable_block = _executable_verdict(program, spec, evidence)
     # The single public predicate (adopted from the 2026-07-26 design review):
     # "certified" is reserved for the conjunction of all four verdicts holding
     # in computed mode with no open defects. A certificate resting on attested

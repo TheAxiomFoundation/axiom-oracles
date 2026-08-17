@@ -1,0 +1,102 @@
+{
+  "compiled_artifact": {
+    "byte_count": 703295,
+    "compile_contract": "compile-composed",
+    "path": "conformance/executable/nz-treasury-incomeexplorer/compiled-program.json",
+    "sha256": "b1d72c1f4840a1774aefbddc9692e22a79ced26cde6c44efb4c01fc394a15c33"
+  },
+  "composition": {
+    "path": "conformance/executable/nz-treasury-incomeexplorer/composition.yaml",
+    "sha256": "af2ce73f1b16a74603965db1da92991545838748e943f3ed81cef394d469c3b0"
+  },
+  "engine": {
+    "binary_sha256": "56fbffea1e0e32c52b6fcbddbca76223bb185b33b49368c288e0c7213b0126e1",
+    "git_sha": "d59969b53430ae2fd97eb4349d44ad23ce930d85",
+    "repository": "TheAxiomFoundation/axiom-rules-engine"
+  },
+  "execution_period": "2026-04-01/2027-03-31",
+  "generated_by": "scripts/nz_executable_reproduction.py",
+  "golden_outputs": {
+    "path": "conformance/executable/nz-treasury-incomeexplorer/golden-outputs.json",
+    "sha256": "037d41e32acdf59d37ef0b39124a7323f6df47fd71e9e2faa041e2935760c786"
+  },
+  "program": "nz/treasury-incomeexplorer-comparison-composition",
+  "programs": [
+    "nz/acc-earners-levy",
+    "nz/accommodation-supplement",
+    "nz/income-tax",
+    "nz/independent-earner-tax-credit",
+    "nz/main-benefits",
+    "nz/winter-energy-payment",
+    "nz/working-for-families"
+  ],
+  "request_set": {
+    "path": "conformance/executable/nz-treasury-incomeexplorer/requests.json",
+    "sha256": "ed83b26c3221c253b13a9df307567e09948b2e9337ff5289729276b6b6ed6272"
+  },
+  "rulespec": {
+    "repository": "TheAxiomFoundation/rulespec-nz",
+    "sha": "89a7d25dc03a4d045348620283332de10b1047da"
+  },
+  "schema": "axiom_oracles.executable_reproduction.v1",
+  "source_report": {
+    "compiled_artifact_sha256": "b1d72c1f4840a1774aefbddc9692e22a79ced26cde6c44efb4c01fc394a15c33",
+    "path": "comparisons/nz-treasury-incomeexplorer/source-comparison.json",
+    "sha256": "abd3bcbebc01c73e58c27496db5897a306bb0496ae1d53e5abbd5ae487010b3b"
+  },
+  "summary": {
+    "all_golden_outputs_reproduced": true,
+    "comparison_cell_count": 22,
+    "executable": true,
+    "program_count": 7,
+    "programs": {
+      "nz/acc-earners-levy": {
+        "all_golden_outputs_reproduced": true,
+        "executable": true,
+        "request_count": 2,
+        "requested_root_count": 1
+      },
+      "nz/accommodation-supplement": {
+        "all_golden_outputs_reproduced": true,
+        "executable": true,
+        "request_count": 4,
+        "requested_root_count": 3
+      },
+      "nz/income-tax": {
+        "all_golden_outputs_reproduced": true,
+        "executable": true,
+        "request_count": 3,
+        "requested_root_count": 1
+      },
+      "nz/independent-earner-tax-credit": {
+        "all_golden_outputs_reproduced": true,
+        "executable": true,
+        "request_count": 2,
+        "requested_root_count": 1
+      },
+      "nz/main-benefits": {
+        "all_golden_outputs_reproduced": true,
+        "executable": true,
+        "request_count": 3,
+        "requested_root_count": 2
+      },
+      "nz/winter-energy-payment": {
+        "all_golden_outputs_reproduced": true,
+        "executable": true,
+        "request_count": 1,
+        "requested_root_count": 1
+      },
+      "nz/working-for-families": {
+        "all_golden_outputs_reproduced": true,
+        "executable": true,
+        "request_count": 4,
+        "requested_root_count": 10
+      }
+    },
+    "request_count": 19
+  },
+  "transcript": {
+    "path": "conformance/executable/nz-treasury-incomeexplorer/transcript.json",
+    "sha256": "7293d34c6038ec95179e07dc359e3c235c72183e3e0c28b001a09122e9c56e64"
+  }
+}

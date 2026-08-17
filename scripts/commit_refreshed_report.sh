@@ -95,13 +95,17 @@ git config user.email >/dev/null 2>&1 ||
   git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
 regenerate_derived() {
-  # Rebuild the NZ unified tuple record and closure census before their
-  # downstream disposition, exercise, and certificate consumers. Both
+  # Rebuild the NZ unified tuple record, executable receipt binding, and
+  # closure census before their downstream disposition, exercise, and
+  # certificate consumers. All
   # generators pin and validate their source inputs before writing. The
   # existence checks preserve the refresh script's small hermetic test seeds
   # and old release branches that predate the NZ inputs.
   if [ -f comparisons/nz-treasury-incomeexplorer/source-comparison.json ]; then
     "$PYTHON" scripts/nz_incomeexplorer.py
+  fi
+  if [ -f conformance/executable/nz-treasury-incomeexplorer.json ]; then
+    "$PYTHON" scripts/nz_executable_reproduction.py --refresh-receipt
   fi
   if [ -f closure/nz/source.json ]; then
     "$PYTHON" scripts/nz_closure.py
@@ -163,6 +167,9 @@ verify_derived() {
   # drop a data refresh.
   if [ -f comparisons/nz-treasury-incomeexplorer/source-comparison.json ]; then
     "$PYTHON" scripts/nz_incomeexplorer.py --check || return
+  fi
+  if [ -f conformance/executable/nz-treasury-incomeexplorer.json ]; then
+    "$PYTHON" scripts/nz_executable_reproduction.py --check || return
   fi
   if [ -f closure/nz/source.json ]; then
     "$PYTHON" scripts/nz_closure.py --check || return

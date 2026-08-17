@@ -51,6 +51,11 @@ jobs:
       - name: Bridge manifests validate (findings reported, errors fail)
         run: uv run python scripts/validate_bridge_manifests.py
 
+      - name: NZ computed closure and executable evidence is current
+        run: |
+          uv run python scripts/nz_executable_reproduction.py --check
+          uv run python scripts/nz_closure.py --check
+
       - name: Program certificates recompute clean
         run: uv run python scripts/certify.py --check
 

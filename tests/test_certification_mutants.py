@@ -502,15 +502,17 @@ def test_nz_unified_exercise_receipt_does_not_self_audit_a_bridge():
     assert row["evidence_source"] == "unified-experiment-receipt"
 
 
-def test_nz_attested_premises_cannot_certify():
+def test_nz_computed_closed_and_executable_do_not_override_attested_exercise():
     certify = _load("certify")
     for program in sorted(name for name in certify.PROGRAMS if name.startswith("nz/")):
         certificate = certify.build_certificate(program, certify.PROGRAMS[program])
         assert certificate["certified"]["value"] is False
         assert certificate["certified"]["state"] == "no"
         assert certificate["verdicts"]["exercised"]["mode"] == "attested"
-        assert certificate["verdicts"]["closed"]["mode"] == "attested"
-        assert certificate["verdicts"]["executable"]["mode"] == "attested"
+        assert certificate["verdicts"]["closed"]["mode"] == "computed"
+        assert certificate["verdicts"]["closed"]["value"] is True
+        assert certificate["verdicts"]["executable"]["mode"] == "computed"
+        assert certificate["verdicts"]["executable"]["value"] is True
 
 
 # ── Round 3: inputs from the second fix-verification ─────────────────────────
@@ -1616,8 +1618,32 @@ def test_nz_subgraph_root_cannot_be_silently_dropped():
     source = json.loads(closure.SOURCE_PATH.read_text())
     mutant = copy.deepcopy(source)
     mutant["program_roots"]["nz/working-for-families"].pop()
-    with pytest.raises(closure.ClosureError, match="program root sets drifted"):
+    with pytest.raises(closure.ClosureError, match="not bijective"):
         closure.build(mutant)
+
+
+def test_nz_coordinated_root_deletion_hits_denominator_ratchet(monkeypatch):
+    """MUTANT: trace + declaration + snapshot deletion still cannot pass."""
+
+    closure = _load("nz_closure")
+    source = json.loads(closure.SOURCE_PATH.read_text())
+    requested = closure.load_requested_output_roots()
+    ratchet = closure.load_denominator_ratchet()
+    program = "nz/working-for-families"
+    dropped = source["program_roots"][program].pop()
+    requested[program].remove(dropped)
+    views = copy.deepcopy(closure.PROGRAM_VIEWS)
+    views[program] = {
+        **views[program],
+        "roots": tuple(root for root in views[program]["roots"] if root != dropped),
+    }
+    monkeypatch.setattr(closure, "PROGRAM_VIEWS", views)
+    with pytest.raises(closure.ClosureError, match="denominator RATCHET regressed"):
+        closure.build(
+            source,
+            requested_output_roots=requested,
+            denominator_ratchet=ratchet,
+        )
 
 
 def test_nz_subgraph_cited_path_cannot_be_silently_dropped():
@@ -1707,25 +1733,25 @@ def test_nz_certificate_rederives_closure_instead_of_trusting_summary(
     tmp_path, monkeypatch
 ):
     certify = _load("certify")
-    repo = tmp_path / "repo"
-    (repo / "closure/nz").mkdir(parents=True)
+    closure = _load("nz_closure")
     summary = json.loads((REPO / "closure/nz/summary.json").read_text())
-    summary["closed"] = True
-    (repo / "closure/nz/summary.json").write_text(json.dumps(summary))
-    # Keep the verifier code and its own source paths rooted in the real tree;
-    # only the allegedly-computed summary is redirected to the mutant.
-    monkeypatch.setattr(certify, "REPO_ROOT", repo)
-    real_spec_from_file_location = importlib.util.spec_from_file_location
-    monkeypatch.setattr(
-        importlib.util,
-        "spec_from_file_location",
-        lambda name, path: real_spec_from_file_location(
-            name, REPO / "scripts/nz_closure.py"
-        ),
-    )
-    with pytest.raises(ValueError, match="does not rederive"):
+    summary["programs"]["nz/income-tax"]["closed"] = False
+    mutant = tmp_path / "summary.json"
+    mutant.write_text(json.dumps(summary))
+    monkeypatch.setattr(certify, "_repo_artifact_path", lambda *args, **kwargs: mutant)
+    monkeypatch.setattr(certify, "_producer_module", lambda _relative: closure)
+    with pytest.raises(ValueError, match="failed closure validation"):
         certify._closed_verdict(
-            "nz/income-tax", {"computed_closed": "closure/nz/summary.json"}, []
+            "nz/income-tax",
+            {
+                "computed": {
+                    "closed": {
+                        "artifact": "closure/nz/summary.json",
+                        "producer": "scripts/nz_closure.py",
+                    }
+                }
+            },
+            [],
         )
 
 
@@ -1737,21 +1763,30 @@ def test_nz_money_atom_ledger_is_a_ceiling_not_a_target():
         closure.build(source)
 
 
-def test_nz_syntax_only_executable_metadata_has_no_computed_acceptance_path():
+def test_nz_syntax_only_executable_metadata_has_no_computed_acceptance_path(
+    tmp_path, monkeypatch
+):
     certify = _load("certify")
-    with pytest.raises(ValueError, match="without a verifier"):
+    fake = tmp_path / "receipt.json"
+    fake.write_text(json.dumps({"summary": {"executable": True}}))
+    monkeypatch.setattr(certify, "_repo_artifact_path", lambda *args, **kwargs: fake)
+
+    class RejectSyntaxOnly:
+        @staticmethod
+        def validate_artifact(_document, *, repo_root):
+            raise ValueError("compiled artifact bytes and transcript were not verified")
+
+    monkeypatch.setattr(certify, "_producer_module", lambda _relative: RejectSyntaxOnly)
+    with pytest.raises(ValueError, match="bytes and transcript"):
         certify._executable_verdict(
+            "nz/income-tax",
             {
-                "computed_executable": True,
-                "suites": [
-                    {
-                        "report": (
-                            "dashboard/public/data/"
-                            "nz-treasury-incomeexplorer.json"
-                        )
+                "computed": {
+                    "executable": {
+                        "artifact": "conformance/executable/fake.json",
+                        "producer": "scripts/fake.py",
                     }
-                ],
+                }
             },
-            [{"suite": "nz-mutant"}],
             [],
         )
