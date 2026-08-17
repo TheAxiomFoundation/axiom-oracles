@@ -50,10 +50,12 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.util
 import json
 import sys
 from collections import defaultdict
 from decimal import Decimal, InvalidOperation, localcontext
+from functools import lru_cache
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -278,13 +280,46 @@ def _cardinality_reconciliation(report: dict, chunks: tuple[EvidenceChunk, ...])
     return "cardinality" if comparison_count == chunk_case_count else "none"
 
 
-def _census_suite(suite: str, report: dict, report_path: Path) -> dict:
+def _census_suite(
+    suite: str,
+    report: dict,
+    report_path: Path,
+    view: str | None = None,
+) -> dict:
     # Unified records can carry a verifier-produced experiment receipt over
     # the engine's complete active input catalog. This is stronger than
     # inferring inputs from case metadata and avoids inventing a bridge
     # manifest for a harness whose measured input states are already present.
     experiment = report.get("experiment")
     if report.get("record_schema") == "axiom.unified_comparison_record.v1":
+        if view is not None:
+            fields, receipt = _unified_view_fields(suite, view, experiment)
+            varied = sum(field["state"] == "varied" for field in fields.values())
+            trace = experiment["trace"]
+            return {
+                "evaluations_scanned": receipt["evaluation_count"],
+                "report": str(report_path.relative_to(REPO_ROOT)),
+                "report_sha256": hashlib.sha256(report_path.read_bytes()).hexdigest(),
+                "evidence_source": "view-scoped-evaluation-traces",
+                "view": view,
+                "inline_cases_not_counted": 0,
+                "chunk_manifest": [],
+                "evidence_fields": fields,
+                "verdict_concepts": {},
+                "varied_fields": varied,
+                "constant_fields": len(fields) - varied,
+                "bridged_through": {},
+                "requested_output_roots": receipt["requested_output_roots"],
+                "requested_output_root_sets": receipt[
+                    "requested_output_root_sets"
+                ],
+                "root_set_receipts": receipt["root_set_receipts"],
+                "root_reconciliation": receipt["root_reconciliation"],
+                "trace_artifact": trace["artifact"],
+                "trace_sha256": trace["sha256"],
+                "trace_binding": receipt["trace_binding"],
+                "capture_lineage_mode": trace["capture_lineage_mode"],
+            }
         fields, bridged = _unified_experiment_fields(suite, experiment)
         cases = [case for case in report.get("cases") or [] if isinstance(case, dict)]
         varied = sum(field["state"] == "varied" for field in fields.values())
@@ -421,6 +456,99 @@ def _unified_experiment_fields(
     if not isinstance(bridged, dict):
         raise ValueError(f"{suite}: bridged_through must be a mapping")
     return fields, {str(name): str(value) for name, value in bridged.items()}
+
+
+@lru_cache(maxsize=1)
+def _bound_nz_trace_contract() -> tuple[dict[str, dict], dict]:
+    """Load the NZ producer and rederive trace receipts from committed bytes."""
+
+    module_path = REPO_ROOT / "scripts" / "nz_incomeexplorer.py"
+    spec = importlib.util.spec_from_file_location("_exercise_nz_producer", module_path)
+    if spec is None or spec.loader is None:
+        raise ValueError("cannot load the NZ trace producer")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    views = module.derive_bound_trace_views()
+    trace = {
+        "artifact": str(module.TRACE_PATH.relative_to(REPO_ROOT)),
+        "sha256": module.TRACE_SHA256,
+        "schema": module.TRACE_SCHEMA,
+        "capture_lineage_mode": "attested",
+    }
+    return views, trace
+
+
+def _unified_view_fields(
+    suite: str,
+    view: str,
+    experiment: object,
+) -> tuple[dict[str, dict], dict]:
+    """Validate one trace-derived certificate-view exercise receipt."""
+
+    if not isinstance(experiment, dict):
+        raise ValueError(f"{suite}: unified record lacks an experiment receipt")
+    if experiment.get("schema") != "axiom.experiment_boundary_receipt.v1":
+        raise ValueError(f"{suite}: unsupported experiment receipt schema")
+    trace = experiment.get("trace")
+    if not isinstance(trace, dict):
+        raise ValueError(f"{suite}: unified record lacks a bound trace artifact")
+    views = experiment.get("views")
+    derived_views, expected_trace = _bound_nz_trace_contract()
+    if trace != expected_trace:
+        raise ValueError(f"{suite}: trace reference diverges from committed bytes")
+    if views != derived_views:
+        raise ValueError(f"{suite}: embedded view receipts diverge from traces")
+    if not isinstance(views, dict) or not isinstance(derived_views.get(view), dict):
+        raise ValueError(f"{suite}: experiment receipt has no view {view!r}")
+    receipt = derived_views[view]
+    count = receipt.get("evaluation_count")
+    if isinstance(count, bool) or not isinstance(count, int) or count <= 0:
+        raise ValueError(f"{suite}: view {view!r} has no evaluation traces")
+    fields = receipt.get("evidence_fields")
+    if not isinstance(fields, dict) or not fields:
+        raise ValueError(f"{suite}: view {view!r} has no traced input fields")
+    normalized: dict[str, dict] = {}
+    for name, row in sorted(fields.items()):
+        if not isinstance(row, dict):
+            raise ValueError(f"{suite}: view input {name!r} is not a mapping")
+        state = row.get("state")
+        distinct = row.get("distinct")
+        expected_state = (
+            "varied"
+            if isinstance(distinct, int) and not isinstance(distinct, bool) and distinct > 1
+            else "constant"
+            if distinct == 1
+            else None
+        )
+        if state != expected_state:
+            raise ValueError(
+                f"{suite}: view input {name!r} state/count contradicts its traces"
+            )
+        normalized[str(name)] = {"distinct": distinct, "state": state}
+    roots = receipt.get("requested_output_roots")
+    root_sets = receipt.get("requested_output_root_sets")
+    root_set_receipts = receipt.get("root_set_receipts")
+    if (
+        not isinstance(roots, list)
+        or not roots
+        or len(set(roots)) != len(roots)
+        or not isinstance(root_sets, list)
+        or not root_sets
+        or any(not isinstance(root_set, list) or not root_set for root_set in root_sets)
+        or {root for root_set in root_sets for root in root_set} != set(roots)
+        or not isinstance(root_set_receipts, list)
+        or any(not isinstance(row, dict) for row in root_set_receipts)
+        or [row.get("requested_output_roots") for row in root_set_receipts]
+        != root_sets
+        or sum(row.get("evaluation_count", 0) for row in root_set_receipts) != count
+    ):
+        raise ValueError(f"{suite}: view {view!r} requested-root receipt is not exact")
+    if (
+        receipt.get("trace_binding") != "bound"
+        or receipt.get("root_reconciliation") != "exact"
+    ):
+        raise ValueError(f"{suite}: view {view!r} trace/root binding is incomplete")
+    return normalized, receipt
 
 
 def build_census() -> dict:

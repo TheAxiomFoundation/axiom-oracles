@@ -73,6 +73,33 @@ PROGRAM_VIEWS = {
 }
 
 
+# The comparison harness makes one engine request per tuple below.  Keeping
+# the request groupings beside the certificate views makes "exact root-set"
+# a checkable contract instead of merely checking that the union of roots is
+# eventually seen.  Main benefits and Working for Families deliberately use
+# two distinct request shapes.
+REQUESTED_OUTPUT_ROOT_SETS = {
+    view: (tuple(spec["roots"]),) for view, spec in PROGRAM_VIEWS.items()
+}
+REQUESTED_OUTPUT_ROOT_SETS["nz/main-benefits"] = tuple(
+    (root,) for root in PROGRAM_VIEWS["nz/main-benefits"]["roots"]
+)
+_wff_roots = PROGRAM_VIEWS["nz/working-for-families"]["roots"]
+REQUESTED_OUTPUT_ROOT_SETS["nz/working-for-families"] = (
+    (_wff_roots[7], _wff_roots[8], _wff_roots[3]),
+    (
+        _wff_roots[4],
+        _wff_roots[0],
+        _wff_roots[1],
+        _wff_roots[5],
+        _wff_roots[6],
+        _wff_roots[2],
+        _wff_roots[9],
+    ),
+)
+del _wff_roots
+
+
 # Only ACC's compared cell is a direct function of primary-person earnings.
 # Every other view's harness path performs a family/partner/child operation.
 SINGLE_PERSON_PROGRAMS = frozenset({"nz/acc-earners-levy"})
