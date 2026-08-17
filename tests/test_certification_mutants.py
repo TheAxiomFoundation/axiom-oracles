@@ -2233,6 +2233,25 @@ def test_executable_receipt_binds_reports_provenance_commit():
         er.validate_artifact(mutant, repo_root=REPO)
 
 
+def test_closure_ledger_records_resolved_commits():
+    """Hermetic half: the committed ledger's generated facts pin RESOLVED
+    commits — ref equals commit for both the rulespec and corpus facts, and
+    both are canonical git object ids. Runs everywhere (no external clones)."""
+    facts = yaml.safe_load(
+        (REPO / "conformance/closure/dk-boerne-og-ungeydelse.yaml").read_text()
+    )["generated_facts"]
+    for fact in ("rulespec", "corpus_release"):
+        ref, commit = facts[fact]["ref"], facts[fact]["commit"]
+        assert ref == commit, fact
+        assert isinstance(commit, str) and len(commit) == 40, fact
+        assert any(c in "abcdef" for c in commit), fact
+
+
+@pytest.mark.skipif(
+    not (Path.home() / "TheAxiomFoundation" / "rulespec-dk" / ".git").exists(),
+    reason="needs the local rulespec-dk clone (the full re-derivation path; "
+    "CI runs the hermetic validate/certify gates instead)",
+)
 def test_closure_check_pins_to_recorded_commit(tmp_path):
     """Default --check re-derives at the ledger's RECORDED rulespec commit
     (so rulespec-dk main advancing with unrelated commits cannot make the
