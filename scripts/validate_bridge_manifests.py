@@ -102,6 +102,44 @@ def _covered_by_resolves(text: str) -> bool:
     return False
 
 
+#: Roots a strict-clean lane's evidence may live under. These are exactly the
+#: directories the refresh bot's hermetic tree carries (see
+#: tests/test_commit_refreshed_report.py SEED_DIRS + SEED_DATA): a certificate
+#: whose evidence resolves only when `tests/` (or any other unshipped dir) is
+#: present flaps between "audited" and "unaudited" depending on who runs the
+#: census — which is how the couple manifest's tests/ citation redded the
+#: refresh bot's idle path (PR #475 CI). Evidence for a certified claim must be
+#: shipped bytes: reports, comparison configs, dispositions, conformance
+#: artifacts, the manifests themselves, docs/reference.
+STRICT_EVIDENCE_ROOTS = (
+    "axiom_oracles/",
+    "comparisons/",
+    "conformance/",
+    "certificates/",
+    "dispositions/",
+    "docs/",
+    "reference/",
+    "reports/",
+    "dashboard/public/data/",
+)
+
+
+def _unshipped_evidence_paths(text: str) -> list[str]:
+    """Repository paths a covered_by entry cites that exist but live OUTSIDE
+    the shipped-artifact roots — legal for ordinary lanes (visible debt is
+    fine there), forbidden for strict-declared lanes."""
+    out: list[str] = []
+    for token in text.replace(",", " ").replace("(", " ").replace(")", " ").split():
+        candidate = token.strip("'\"`;")
+        if not candidate or candidate.startswith("/") or ".." in candidate:
+            continue
+        if (REPO_ROOT / candidate).is_file() and not candidate.startswith(
+            STRICT_EVIDENCE_ROOTS
+        ):
+            out.append(candidate)
+    return out
+
+
 def _report_for(suite_names: list[str]) -> tuple[str | None, dict | None]:
     for path in sorted(DATA_DIR.glob("*.json")):
         try:
@@ -611,6 +649,20 @@ def validate(path: Path, manifest: dict) -> tuple[list[str], list[str]]:
                         f"{str(ref)[:60]!r} is not verifiable from this "
                         "repository (cross-repo evidence — audit debt)"
                     )
+                if manifest.get("strict") is True:
+                    # A certified lane's evidence must be shipped bytes: a
+                    # citation that resolves only when an unshipped dir such
+                    # as tests/ is present makes bridge_audited depend on the
+                    # checkout, not the artifacts.
+                    for ref in covered_by:
+                        for path in _unshipped_evidence_paths(str(ref)):
+                            findings.append(
+                                f"{name}: bridged binding [{index}] covered_by "
+                                f"cites {path!r}, which is outside the shipped "
+                                "evidence roots — a strict lane's evidence must "
+                                "live under "
+                                + ", ".join(STRICT_EVIDENCE_ROOTS)
+                            )
             if not isinstance(binding.get("source"), str) or not binding.get("source"):
                 errors.append(
                     f"{name}: bridged binding [{index}] requires a non-empty "

@@ -8,6 +8,7 @@ gains a rule — a rule without a mutant here is not yet a rule.
 
 import copy
 import importlib.util
+import shutil
 import json
 from pathlib import Path
 from types import SimpleNamespace
@@ -804,3 +805,66 @@ def test_dropping_strict_opt_in_drops_bridge_audited():
     finally:
         path.write_text(original)
     assert census._manifest_strict_clean()["dk-child-youth-benefit"] is True
+
+
+def test_strict_lane_evidence_must_be_shipped_bytes():
+    """MUTANT (PR #475 CI regression): the couple manifest cited
+    tests/test_package_targets.py as covered_by evidence. The file exists here,
+    so the validator resolved it — but the refresh bot's hermetic tree carries
+    no tests/, so there the citation was unverifiable, the couple suite lost
+    bridge_audited, the census drifted, and the bot's idle path pushed. A
+    strict lane's evidence must live under the shipped roots; citing an
+    existing unshipped path is now an enforced finding, and the census must
+    read identically with and without tests/ present."""
+    vbm = _load("validate_bridge_manifests")
+    path = REPO / "axiom_oracles/bridges/manifests/dk-child-youth-benefit-couple.yaml"
+    manifest = yaml.safe_load(path.read_text())
+    assert manifest.get("strict") is True
+    errors, findings = vbm.validate(path, manifest)
+    assert not errors and not findings, (errors, findings)
+
+    # Any repo file outside the shipped roots — tests/ is the live example.
+    unshipped = "tests/test_certification_mutants.py"
+    assert (REPO / unshipped).is_file()
+    binding = next(b for b in manifest["bindings"] if b.get("kind") == "bridged")
+    binding["covered_by"] = list(binding["covered_by"]) + [
+        f"{unshipped} — a fixture that only exists in a full checkout"
+    ]
+    _errors, mutated = vbm.validate(path, manifest)
+    assert any("outside the shipped evidence roots" in f for f in mutated), mutated
+
+    # Non-strict lanes may still cite such paths (visible debt, not enforced).
+    manifest["strict"] = False
+    _errors, relaxed = vbm.validate(path, manifest)
+    assert not any("outside the shipped evidence roots" in f for f in relaxed)
+
+
+def test_certified_lane_census_is_hermetic_without_tests_dir(tmp_path):
+    """The census the refresh bot computes from its shipped tree (no tests/)
+    must equal the committed census — otherwise the bot's idle path stops
+    being idle (test_no_changes_second_run_is_a_noop). Reproduces the
+    STRICT_EVIDENCE_ROOTS tree and asserts bridge_audited for every strict
+    dk lane survives it."""
+    vbm = _load("validate_bridge_manifests")
+    tree = tmp_path / "shipped"
+    for root in vbm.STRICT_EVIDENCE_ROOTS:
+        src = REPO / root
+        if src.is_dir():
+            shutil.copytree(
+                src, tree / root, ignore=shutil.ignore_patterns("__pycache__")
+            )
+    shutil.copytree(REPO / "scripts", tree / "scripts",
+                    ignore=shutil.ignore_patterns("__pycache__"))
+    assert not (tree / "tests").exists()
+    spec = importlib.util.spec_from_file_location(
+        "census_hermetic", tree / "scripts" / "exercise_census.py"
+    )
+    census = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(census)
+    clean = census._manifest_strict_clean()
+    for suite in (
+        "dk-child-youth-benefit",
+        "dk-child-youth-benefit-2023",
+        "dk-child-youth-benefit-couple",
+    ):
+        assert clean.get(suite) is True, (suite, clean.get(suite))
