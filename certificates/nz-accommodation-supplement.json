@@ -48,15 +48,17 @@
     },
     {
       "artifact": "closure/nz/summary.json",
-      "claim": "closure receipt:nz/accommodation-supplement",
-      "mode": "attested",
-      "sha256": "533f53d14d5fe5ecc88dec9c9aba1d38108d08b44d08fb81ffa4459a257fbfed"
+      "claim": "closed:nz/accommodation-supplement",
+      "mode": "computed",
+      "sha256": "aa8d23bdba2f7f299fc024c2211e213a37b5e60627afceb50b0b4c14654a45db",
+      "verification": "producer_artifact_validation"
     },
     {
-      "artifact": "dashboard/public/data/nz-treasury-incomeexplorer.json",
-      "claim": "compiled-program execution receipt (commit-pinned harness)",
-      "mode": "attested",
-      "sha256": "123fb3378d29322dcff7583cd8365fbd03079f9629183e7e46767eacce0e5784"
+      "artifact": "conformance/executable/nz-treasury-incomeexplorer.json",
+      "claim": "executable:nz/accommodation-supplement",
+      "mode": "computed",
+      "sha256": "9be56797682b9fedc95eb2acc1e205579f4e48d7d33e703b27a3b51d348c3cc0",
+      "verification": "producer_artifact_validation"
     }
   ],
   "period": "2026-04-01/2027-03-31",
@@ -64,6 +66,7 @@
   "schema": "axiom_oracles.program_certificate.v1",
   "verdicts": {
     "closed": {
+      "artifact": "closure/nz/summary.json",
       "by_status": {
         "encoded": 5,
         "excluded": 0,
@@ -71,8 +74,11 @@
       },
       "citation_root_count": 5,
       "corpus_release": "nz-rulespec-2026-07-18",
-      "downgrade_reason": "Adversarial review S4: no independently emitted requested-output trace, root-set bijection, and monotone root/citation denominator ratchet are all present; exact-path closure remains evidence only.",
-      "mode": "attested",
+      "denominator_ratchet": {
+        "citation_count_min": 5,
+        "requested_output_count_min": 3
+      },
+      "mode": "computed",
       "pending_citations": 0,
       "pending_money_atoms": 0,
       "root_node_count": 3,
@@ -82,7 +88,7 @@
         "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_qualifying_accommodation_costs"
       ],
       "rulespec_commit": "89a7d25dc03a4d045348620283332de10b1047da",
-      "status": "attested_receipt",
+      "status": "computed_pass",
       "subgraph_node_count": 30,
       "value": true
     },
@@ -112,17 +118,38 @@
       "value": true
     },
     "executable": {
-      "limitation": "The generator and comparison harness lineage is commit-pinned, but the compiled artifact bytes and an executable transcript are not committed; metadata syntax and a digest string are not a computed execution check (adversarial review S3).",
-      "mode": "attested",
-      "receipt": {
-        "artifact_sha256": "b1d72c1f4840a1774aefbddc9692e22a79ced26cde6c44efb4c01fc394a15c33",
-        "derived_outputs": 176,
-        "engine_evaluations": 883,
-        "input_slots": 328,
-        "parameters": 129,
-        "relations": 0
+      "artifact": "conformance/executable/nz-treasury-incomeexplorer.json",
+      "compiled_artifact": {
+        "byte_count": 703295,
+        "compile_contract": "compile-composed",
+        "path": "conformance/executable/nz-treasury-incomeexplorer/compiled-program.json",
+        "sha256": "b1d72c1f4840a1774aefbddc9692e22a79ced26cde6c44efb4c01fc394a15c33"
       },
-      "status": "attested_receipt",
+      "engine": {
+        "binary_sha256": "56fbffea1e0e32c52b6fcbddbca76223bb185b33b49368c288e0c7213b0126e1",
+        "git_sha": "d59969b53430ae2fd97eb4349d44ad23ce930d85",
+        "repository": "TheAxiomFoundation/axiom-rules-engine"
+      },
+      "golden_outputs": {
+        "path": "conformance/executable/nz-treasury-incomeexplorer/golden-outputs.json",
+        "sha256": "037d41e32acdf59d37ef0b39124a7323f6df47fd71e9e2faa041e2935760c786"
+      },
+      "mode": "computed",
+      "request_set": {
+        "path": "conformance/executable/nz-treasury-incomeexplorer/requests.json",
+        "sha256": "ed83b26c3221c253b13a9df307567e09948b2e9337ff5289729276b6b6ed6272"
+      },
+      "status": "computed_pass",
+      "summary": {
+        "all_golden_outputs_reproduced": true,
+        "executable": true,
+        "request_count": 4,
+        "requested_root_count": 3
+      },
+      "transcript": {
+        "path": "conformance/executable/nz-treasury-incomeexplorer/transcript.json",
+        "sha256": "7293d34c6038ec95179e07dc359e3c235c72183e3e0c28b001a09122e9c56e64"
+      },
       "value": true
     },
     "exercised": {
