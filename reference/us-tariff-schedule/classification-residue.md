@@ -1,33 +1,30 @@
-# C1 classification residue — 2026-08-17
+# C1 reviewed classification census — 2026-08-17
 
-Classification stopped fail-closed with conservation passing and 9,503,693
-unexplained mismatch units across 1,654,848 incidence signatures. The reviewed
-mapping and instrument receipts referenced by the task as
-`sol-c1-dispositions-brief.md` are not present in this checkout or its Git
-history. The existing disposition ledger contains class-name stubs and pending
-receipts only. Broad slot selectors would therefore assign heterogeneous
-families without the required reviewed authority.
+Classification closes with 9,503,693 of 9,503,693 mismatch units classified,
+zero unexplained units, zero engine errors, and conservation `PASS`. The
+content-addressed signature sidecar and its SHA-256 are recorded in
+`classification-receipt.json`.
 
-| Slot | Residual units |
+| Reviewed class | Component units |
 |---|---:|
-| total | 4,389,045 |
-| forced_labor_section_301 | 1,499,038 |
-| section_122 | 1,485,889 |
-| section_232 | 1,268,014 |
-| base | 689,043 |
-| brazil_section_301 | 93,198 |
-| ieepa | 38,636 |
-| china_section_301 | 31,446 |
-| section_201 | 9,384 |
+| fed-false-family-forced-labor | 1,499,038 |
+| s122-entry-facts | 1,485,889 |
+| non-metal-232-family | 754,434 |
+| column2-gn3b | 683,334 |
+| vintage-revision-232 | 513,580 |
+| fed-false-family-brazil | 93,198 |
+| legal-date-boundary-ieepa | 38,636 |
+| vintage-revision-301 | 31,446 |
+| s201-stale-proxy | 9,384 |
+| preference-entry-semantics | 5,709 |
 
-The data review verified that forced-labor mismatches occur only in revisions
-`bnd_2026-07-24` (750,048 units) and `bnd_2026-07-31` (748,990 units), are all
-negative, and include observed deltas of -0.10 and -0.125 among 202 rounded
-delta values. Other large slots are not uniform: Section 122 contains both
-signs and 686 rounded delta values; Section 232 contains both signs and 2,308
-rounded delta values; total contains both signs and 9,877 rounded delta values.
-Those populations cannot honestly be collapsed to the pending stub classes
-without the missing reviewed mapping and receipts.
+The remaining 4,389,045 classified units are totals derived from 49 exact
+same-case component-class compositions. They are enumerated in the receipt's
+`derived_total_compositions`; there is deliberately no free-standing total
+class or total selector.
 
-The full signature sidecar, including normalized selector fields and unit
-counts, is identified by path and SHA-256 in `classification-receipt.json`.
+Data corrections to the reviewed brief are retained in the disposition
+comments: forced-labor Axiom-minus-Yale deltas are negative and dominated by
+-12.5% and -10%, not +25%/+100%; and the stale section-201 population contains
+30% and 40% proxies as well as 14.5%. All observed section-201 cells begin after
+the 2026-02-07 expiry, so no pre-expiry solar fed-false subclass appears.

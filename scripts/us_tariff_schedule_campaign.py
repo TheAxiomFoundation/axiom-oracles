@@ -83,7 +83,7 @@ OUTPUT_NAMES = (
 )
 TOLERANCE = 1e-12
 SELECTOR_FIELDS = frozenset({
-    "slot", "origin_regime", "revision", "delta", "disposition", "line_class",
+    "slot", "origin_regime", "revision", "delta", "disposition", "line_class", "iso2",
 })
 EXPECTED_COLUMNS = (
     "statutory_base_rate", "statutory_rate_232", "statutory_rate_ieepa_recip",
@@ -911,10 +911,10 @@ def selector_matches(unit: dict[str, Any], match: dict[str, Any]) -> bool:
     _require(isinstance(match, dict) and match, "structured selector match must be a nonempty mapping")
     _require(set(match) <= SELECTOR_FIELDS,
              f"unknown selector fields: {sorted(set(match) - SELECTOR_FIELDS)}")
-    _require(not all(match.get(field) == "any" for field in SELECTOR_FIELDS),
+    _require(not all(selector == "any" for selector in match.values()),
              "universal disposition selector is forbidden")
     for field, selector in match.items():
-        if field in {"slot", "origin_regime", "revision", "disposition"}:
+        if field in {"slot", "origin_regime", "revision", "disposition", "iso2"}:
             if field == "slot":
                 _require(isinstance(selector, str) and selector, "selector slot must be an exact string")
                 if unit[field] != selector:
@@ -952,6 +952,8 @@ def validate_dispositions(entries: list[dict[str, Any]], observed: dict[str, dic
         evidence = entry.get("evidence", {})
         _require(evidence.get("instrument_receipt") and evidence.get("receipt_type"),
                  f"disposition {entry.get('id')} lacks instrument receipt fields")
+        _require(entry.get("attribution") and entry.get("receipt") and entry.get("reason"),
+                 f"disposition {entry.get('id')} lacks attribution/receipt/reason")
         for signature in signatures:
             _require(signature in observed, f"stale disposition signature {signature}")
             _require(signature not in claimed_signatures, f"overlapping disposition signature {signature}")
@@ -986,11 +988,28 @@ def classify_campaign(*, disposition_ledger: Path = DISPOSITION_LEDGER,
     _require(_sha256(artifact) == comparison["comparison_artifact"]["sha256"], "comparison artifact hash mismatch")
     observed: dict[str, dict[str, Any]] = {}
     counts: Counter[str] = Counter()
+    total_signature_compositions: Counter[tuple[str, ...]] = Counter()
     routes = _routing_dispositions()
     engine_errors = 0
+    active_case: str | None = None
+    active_signatures: list[str] = []
     with gzip.open(artifact, "rt") as source:
         for line in source:
             row = json.loads(line)
+            case_id = row.get("case_id")
+            if case_id != active_case:
+                # Components-only non-ad-valorem cases intentionally have no
+                # comparable total row; their component classes do not derive
+                # a total classification unit.
+                active_signatures = []
+                active_case = case_id
+            if row["slot"] == "total":
+                if not row["match"]:
+                    _require(active_signatures,
+                             "total mismatch lacks a mismatching component composition")
+                    total_signature_compositions[tuple(sorted(active_signatures))] += 1
+                active_signatures = []
+                continue
             if row["match"]:
                 continue
             if row["slot"] == "engine_error":
@@ -999,14 +1018,28 @@ def classify_campaign(*, disposition_ledger: Path = DISPOSITION_LEDGER,
             signature = mismatch_signature(row)
             counts[signature] += 1
             observed.setdefault(signature, mismatch_unit(row, routes))
+            active_signatures.append(signature)
     ledger = yaml.safe_load(disposition_ledger.read_text())
     _require(ledger.get("suite") == "us-tariff-schedule", "wrong disposition suite")
     entries = ledger.get("entries", []) if entries_override is None else entries_override
     selectors = validate_dispositions(entries, observed)
     census: Counter[str] = Counter()
+    derived_total_compositions: Counter[str] = Counter()
     per_slot: dict[str, Counter[str]] = {}
     sample_signatures: dict[str, list[str]] = {}
     unexplained = engine_errors
+    derived_total_units = 0
+    for signature_composition, units in total_signature_compositions.items():
+        component_classes = {
+            matching_class_id(signature, observed[signature], selectors)
+            for signature in signature_composition
+        }
+        if None in component_classes:
+            unexplained += units
+            continue
+        class_composition = tuple(sorted(component_classes))
+        derived_total_units += units
+        derived_total_compositions[" + ".join(class_composition)] += units
     selector_digest = _sha256(disposition_ledger) if entries_override is None else hashlib.sha256(_render(entries).encode()).hexdigest()
     digest = hashlib.sha256((comparison["comparison_artifact"]["sha256"] + selector_digest).encode()).hexdigest()
     sidecar = CACHE_ROOT / "classify" / digest[:2] / f"{digest}.jsonl.gz"
@@ -1029,12 +1062,15 @@ def classify_campaign(*, disposition_ledger: Path = DISPOSITION_LEDGER,
             else:
                 census[class_id] += count
     temporary.replace(sidecar)
-    _require(sum(counts.values()) + engine_errors == sum(census.values()) + unexplained,
+    mismatch_total = sum(counts.values()) + sum(total_signature_compositions.values()) + engine_errors
+    _require(mismatch_total == sum(census.values()) + derived_total_units + unexplained,
              "classification conservation failure")
     receipt = {"schema": "axiom_oracles.us_tariff_schedule.classification.v1",
-               "mismatches": sum(counts.values()) + engine_errors,
-               "classified": sum(census.values()), "unexplained": unexplained,
+               "mismatches": mismatch_total,
+               "classified": sum(census.values()) + derived_total_units, "unexplained": unexplained,
                "engine_errors": engine_errors, "class_census": dict(sorted(census.items())),
+               "derived_total_units": derived_total_units,
+               "derived_total_compositions": dict(sorted(derived_total_compositions.items())),
                "observed_signature_count": len(observed),
                "selector_count": len(selectors),
                "groups": {name: {"units": sum(per_slot[name].values()),

@@ -117,6 +117,11 @@ _ENTRY_KEYS = {
     "pinned",
     "selector_binding",
     "notes",
+    "match",
+    "attribution",
+    "receipt",
+    "reason",
+    "comment",
 }
 _EVIDENCE_KEYS = {
     "mechanism", "arithmetic", "upstream_url", "sources",
@@ -298,15 +303,20 @@ def _validate_entry(
     case_id = entry.get("case_id")
     case_selector = entry.get("case_selector")
     signatures = entry.get("signatures")
-    if sum(value is not None for value in (case_id, case_selector, signatures)) != 1:
+    signature_match = entry.get("match")
+    if sum(value is not None for value in (case_id, case_selector, signatures, signature_match)) != 1:
         errors.append(
-            f"{label} needs exactly one of `case_id`, `case_selector`, or `signatures`"
+            f"{label} needs exactly one of `case_id`, `case_selector`, `signatures`, or `match`"
         )
     if signatures is not None and (
         not isinstance(signatures, list)
         or any(not isinstance(value, str) or not value for value in signatures)
     ):
         errors.append(f"{label} `signatures` must be a list of non-empty strings")
+    if signature_match is not None and (
+        not isinstance(signature_match, dict) or not signature_match
+    ):
+        errors.append(f"{label} `match` must be a non-empty mapping")
     if case_id is not None and (
         not isinstance(case_id, str | int) or str(case_id).strip() == ""
     ):

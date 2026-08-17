@@ -123,7 +123,9 @@ def test_engine_error_surfaces_as_unexplained_comparison() -> None:
 
 
 def test_stale_and_overlapping_disposition_selectors_fail() -> None:
-    base = {"id": "one", "evidence": {"receipt_type": "instrument", "instrument_receipt": "receipt"}}
+    base = {"id": "one", "attribution": "input-comparability", "receipt": "receipt",
+            "reason": "reason", "evidence": {"receipt_type": "instrument",
+                                                "instrument_receipt": "receipt"}}
     with pytest.raises(ValueError, match="stale"):
         validate_dispositions([base | {"signatures": ["stale"]}], {"live": 1})
     with pytest.raises(ValueError, match="overlapping"):
@@ -161,6 +163,11 @@ def test_universal_structured_selector_fails() -> None:
 def test_fabricated_structured_selector_field_fails_schema() -> None:
     with pytest.raises(ValueError, match="unknown selector fields"):
         selector_matches(_selector_unit(), {"slot": "base", "fabricated": ["value"]})
+
+
+def test_iso2_structured_selector_is_exactly_bounded() -> None:
+    assert selector_matches(_selector_unit(), {"slot": "base", "iso2": ["CA", "MX"]})
+    assert not selector_matches(_selector_unit(), {"slot": "base", "iso2": ["CU", "RU"]})
 
 
 def test_nonzero_excluded_column_exposure_fails_x1() -> None:
