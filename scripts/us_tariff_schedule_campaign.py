@@ -941,21 +941,46 @@ def build_report() -> dict[str, Any]:
     return report
 
 
+def _witness_surface(summary: dict[str, Any]) -> dict[str, Any]:
+    # The replay-invariant raw comparison surface. The regenerated detail
+    # legitimately differs in run date and truncated example ordering, so
+    # W1 compares this surface, not file bytes.
+    concept = {row["value"]: row["count"]
+               for row in summary.get("mismatches_by_concept", [])}
+    return {"comparison_count": summary.get("comparison_count"),
+            "match_count": summary.get("match_count"),
+            "mismatch_count": summary.get("mismatch_count"),
+            "error_count": summary.get("error_count"),
+            "internal_component_sum_inconsistencies":
+                summary.get("internal_component_sum_inconsistencies"),
+            "mismatches_by_concept": concept}
+
+
 def witness_replay(*, execute: bool = False) -> dict[str, Any]:
     dashboard = REPO_ROOT / "dashboard/public/data/axiom-yale-us-tariff-panel.json"
     _require(dashboard.is_file(), "missing committed us-tariff-panel detail")
     before = dashboard.read_bytes()
-    if execute:
-        subprocess.run([sys.executable, str(REPO_ROOT / "scripts/run_comparison.py"),
-                        "us-tariff-panel"], check=True)
     payload = json.loads(before)
     summary = payload.get("summary", {})
     dispositioned = summary.get("dispositioned", {})
     verdict = summary.get("error_count") == 0 and dispositioned.get("unexplained_count") == 0
     _require(verdict, "us-tariff-panel witness is not conformant")
-    _require(dashboard.read_bytes() == before, "us-tariff-panel detail bytes changed during replay")
+    fresh_surface = None
+    if execute:
+        try:
+            subprocess.run([sys.executable, str(REPO_ROOT / "scripts/run_comparison.py"),
+                            "us-tariff-panel"], check=True)
+            fresh = json.loads(dashboard.read_bytes())
+            fresh_surface = _witness_surface(fresh.get("summary", {}))
+            _require(fresh_surface == _witness_surface(summary),
+                     "us-tariff-panel raw comparison surface changed during replay")
+        finally:
+            dashboard.write_bytes(before)
+    _require(dashboard.read_bytes() == before, "us-tariff-panel detail bytes not restored")
     return {"schema": "axiom_oracles.us_tariff_schedule.witness_replay.v1",
-            "conformant": True, "detail_sha256": hashlib.sha256(before).hexdigest(), "byte_stable": True}
+            "conformant": True, "detail_sha256": hashlib.sha256(before).hexdigest(),
+            "surface_reproduced": fresh_surface is not None,
+            "surface": _witness_surface(summary)}
 
 
 def main() -> int:

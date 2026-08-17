@@ -1,0 +1,11 @@
+{
+  "class_census": {},
+  "classified": 0,
+  "conservation": "PASS",
+  "engine_errors": 0,
+  "mismatches": 9503693,
+  "observed_signature_count": 1654848,
+  "schema": "axiom_oracles.us_tariff_schedule.classification.v1",
+  "selected_signature_count": 0,
+  "unexplained": 9503693
+}

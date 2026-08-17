@@ -1,4 +1,905 @@
 {
   "schema": "axiom_oracles.us_tariff_schedule.eval_manifest.v1",
-  "shards": {}
+  "shards": {
+    "005fc7b5f2bb1c2352815b1f1152f10bfa4dc8d852de79ed3f8009df032280ff": {
+      "cases": 33912,
+      "chapter": "35",
+      "elapsed_seconds": 87.309,
+      "engine_errors": 0,
+      "key": "005fc7b5f2bb1c2352815b1f1152f10bfa4dc8d852de79ed3f8009df032280ff",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/00/005fc7b5f2bb1c2352815b1f1152f10bfa4dc8d852de79ed3f8009df032280ff.jsonl.gz",
+      "sha256": "4c2caac021c55f4756261eb6c428130b1a156fdedc841a133603a86bc8524ddf"
+    },
+    "011260cc44e9b91d73f5dbd5edce111ea2054f88432bbc06d2c0844162d04aff": {
+      "cases": 433269,
+      "chapter": "64",
+      "elapsed_seconds": 565.043,
+      "engine_errors": 0,
+      "key": "011260cc44e9b91d73f5dbd5edce111ea2054f88432bbc06d2c0844162d04aff",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/01/011260cc44e9b91d73f5dbd5edce111ea2054f88432bbc06d2c0844162d04aff.jsonl.gz",
+      "sha256": "94ae76a368ed204f57372076ff8657a8774193a52bef576376a4a5d1ee4217ab"
+    },
+    "021b6b13feca5fbb5f8c64cd3707c767cd0770dbc76340e18e7001bc654907d7": {
+      "cases": 16578,
+      "chapter": "09",
+      "elapsed_seconds": 82.164,
+      "engine_errors": 0,
+      "key": "021b6b13feca5fbb5f8c64cd3707c767cd0770dbc76340e18e7001bc654907d7",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/02/021b6b13feca5fbb5f8c64cd3707c767cd0770dbc76340e18e7001bc654907d7.jsonl.gz",
+      "sha256": "0d6afddc9ba682db67f56580a587e7c44f82c2c4415ba71e341640fbd6235e0f"
+    },
+    "0cff88529f63c5eef3da29df57732ee1ad0efc03568ec96a7f71ea25d3cff945": {
+      "cases": 134865,
+      "chapter": "42",
+      "elapsed_seconds": 199.186,
+      "engine_errors": 0,
+      "key": "0cff88529f63c5eef3da29df57732ee1ad0efc03568ec96a7f71ea25d3cff945",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/0c/0cff88529f63c5eef3da29df57732ee1ad0efc03568ec96a7f71ea25d3cff945.jsonl.gz",
+      "sha256": "34b901206f555460acca0463e3bc45849af22d0cf57898437e1ef3550b4d6dd8"
+    },
+    "108ca26a8dd207a1b98c6c41fe93fb3570369be9c0d6594f788eefa7fabf4f68": {
+      "cases": 105858,
+      "chapter": "21",
+      "elapsed_seconds": 182.869,
+      "engine_errors": 0,
+      "key": "108ca26a8dd207a1b98c6c41fe93fb3570369be9c0d6594f788eefa7fabf4f68",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/10/108ca26a8dd207a1b98c6c41fe93fb3570369be9c0d6594f788eefa7fabf4f68.jsonl.gz",
+      "sha256": "b1e708a36ec094e3bbc4324d8d19c99bc695a41a941af186f3bbf1c96c6e60be"
+    },
+    "15b8cdf40ad81ee520e8c108ae42692d2babd7d829218b8ce18411faa0992470": {
+      "cases": 230409,
+      "chapter": "38",
+      "elapsed_seconds": 473.528,
+      "engine_errors": 0,
+      "key": "15b8cdf40ad81ee520e8c108ae42692d2babd7d829218b8ce18411faa0992470",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/15/15b8cdf40ad81ee520e8c108ae42692d2babd7d829218b8ce18411faa0992470.jsonl.gz",
+      "sha256": "41ab7746a9635485ea96637a234c1bc9f7b9fb9025f91296df784748f2f5071a"
+    },
+    "19453ad077bdca64f2bcd9417698c5fed7e7b236a5b6e35be94202db9d631691": {
+      "cases": 66933,
+      "chapter": "37",
+      "elapsed_seconds": 222.385,
+      "engine_errors": 0,
+      "key": "19453ad077bdca64f2bcd9417698c5fed7e7b236a5b6e35be94202db9d631691",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/19/19453ad077bdca64f2bcd9417698c5fed7e7b236a5b6e35be94202db9d631691.jsonl.gz",
+      "sha256": "842cbeca5094289db90414a24e76c5c04451daa560ef0e363ad095ad6ace4a9e"
+    },
+    "20e96e447390a0ff08885597bd9e35d8438bd4f36ca661d5d62f971fc4dc5c42": {
+      "cases": 31401,
+      "chapter": "86",
+      "elapsed_seconds": 51.853,
+      "engine_errors": 0,
+      "key": "20e96e447390a0ff08885597bd9e35d8438bd4f36ca661d5d62f971fc4dc5c42",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/20/20e96e447390a0ff08885597bd9e35d8438bd4f36ca661d5d62f971fc4dc5c42.jsonl.gz",
+      "sha256": "64806a718e5118c1d2e86175152d3ee39fcbe095355fe5b1c47f624a9a23a580"
+    },
+    "225f35f96de66de14054d76a0254e3c772bd0d29d77462dd56e99a47c7711452": {
+      "cases": 102699,
+      "chapter": "19",
+      "elapsed_seconds": 215.589,
+      "engine_errors": 0,
+      "key": "225f35f96de66de14054d76a0254e3c772bd0d29d77462dd56e99a47c7711452",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/22/225f35f96de66de14054d76a0254e3c772bd0d29d77462dd56e99a47c7711452.jsonl.gz",
+      "sha256": "911823ba3a913def2f490901dc16af5a215b1e0bdf3662409f50702192e32519"
+    },
+    "231be79b6e325e0ae4435ac82fc9c4518e06d09b846744c41888f7e66b52107a": {
+      "cases": 73737,
+      "chapter": "88",
+      "elapsed_seconds": 95.477,
+      "engine_errors": 0,
+      "key": "231be79b6e325e0ae4435ac82fc9c4518e06d09b846744c41888f7e66b52107a",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/23/231be79b6e325e0ae4435ac82fc9c4518e06d09b846744c41888f7e66b52107a.jsonl.gz",
+      "sha256": "83714fa60ca818f717b46f001ae1ac27a74b4a6d200bb1df76151c3e228488ee"
+    },
+    "247e46e42ba3e40b361458d8666e8e5649705d4704428627bf73512332571bdd": {
+      "cases": 26784,
+      "chapter": "98",
+      "elapsed_seconds": 83.452,
+      "engine_errors": 0,
+      "key": "247e46e42ba3e40b361458d8666e8e5649705d4704428627bf73512332571bdd",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/24/247e46e42ba3e40b361458d8666e8e5649705d4704428627bf73512332571bdd.jsonl.gz",
+      "sha256": "709fc596fffc1f065223c9104418fc5f35994f24ce03b677e1e0fd6d3852d5d9"
+    },
+    "2584e3252a0c13cb818e8812940bfca6c3388eb7ddf0487319359ee038f386ed": {
+      "cases": 135153,
+      "chapter": "12",
+      "elapsed_seconds": 733.089,
+      "engine_errors": 0,
+      "key": "2584e3252a0c13cb818e8812940bfca6c3388eb7ddf0487319359ee038f386ed",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/25/2584e3252a0c13cb818e8812940bfca6c3388eb7ddf0487319359ee038f386ed.jsonl.gz",
+      "sha256": "43a84349e9a7160f7afc8f132cf07071172f99cd4d180b37c6ef731ee815bfab"
+    },
+    "26c69cfe4560c9ca5baba0e0919fdb3e5e30357957081e0b77ffd27eb9e0b768": {
+      "cases": 596970,
+      "chapter": "52",
+      "elapsed_seconds": 869.768,
+      "engine_errors": 0,
+      "key": "26c69cfe4560c9ca5baba0e0919fdb3e5e30357957081e0b77ffd27eb9e0b768",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/26/26c69cfe4560c9ca5baba0e0919fdb3e5e30357957081e0b77ffd27eb9e0b768.jsonl.gz",
+      "sha256": "da0a0e2cb23ed9937fb3ab56f5380670e38e6fbf61e80dbf584ddca3134c7a61"
+    },
+    "2a92903d59ac9d5ce1b7ddb41af996a42a8409e4d02bfe1c2584b963b724ce2a": {
+      "cases": 79974,
+      "chapter": "01",
+      "elapsed_seconds": 444.1,
+      "engine_errors": 0,
+      "key": "2a92903d59ac9d5ce1b7ddb41af996a42a8409e4d02bfe1c2584b963b724ce2a",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/2a/2a92903d59ac9d5ce1b7ddb41af996a42a8409e4d02bfe1c2584b963b724ce2a.jsonl.gz",
+      "sha256": "d13ebfa09a03b6d1e8b39a74d87f256529905323775951cd4ebf79f46d0b26d8"
+    },
+    "2aa3ff8bbaff9ec51f3cb8426bda7c86bfc6be99fa8f1397e86697062b7ae3be": {
+      "cases": 122715,
+      "chapter": "58",
+      "elapsed_seconds": 694.303,
+      "engine_errors": 0,
+      "key": "2aa3ff8bbaff9ec51f3cb8426bda7c86bfc6be99fa8f1397e86697062b7ae3be",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/2a/2aa3ff8bbaff9ec51f3cb8426bda7c86bfc6be99fa8f1397e86697062b7ae3be.jsonl.gz",
+      "sha256": "2ded4d8e15795b4d75587b24dadf0e84d4ff5d7e2dd4aa6e60a4945737f948ed"
+    },
+    "36c433a332b43af905cf0609eb6c49006edaad43fb76eed92a0c2ad232041d35": {
+      "cases": 87426,
+      "chapter": "56",
+      "elapsed_seconds": 139.557,
+      "engine_errors": 0,
+      "key": "36c433a332b43af905cf0609eb6c49006edaad43fb76eed92a0c2ad232041d35",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/36/36c433a332b43af905cf0609eb6c49006edaad43fb76eed92a0c2ad232041d35.jsonl.gz",
+      "sha256": "724f542af5d83960c37b698d6250b1eb599a7801f182745556f0e019f07d7bbf"
+    },
+    "3784a48d4ce51a032357c08ca10b2c73f988d3ed04a617aad7bffb1b04844904": {
+      "cases": 70902,
+      "chapter": "65",
+      "elapsed_seconds": 112.88,
+      "engine_errors": 0,
+      "key": "3784a48d4ce51a032357c08ca10b2c73f988d3ed04a617aad7bffb1b04844904",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/37/3784a48d4ce51a032357c08ca10b2c73f988d3ed04a617aad7bffb1b04844904.jsonl.gz",
+      "sha256": "1b24faa5e43ad13bc73da8f7d7a3de04abad9a6b68cd57228b4e6e53314145ed"
+    },
+    "3b684d45339a9c61b4bba656da92a4a963275df4ea7e31c84cd8a4d7dfd81b46": {
+      "cases": 58347,
+      "chapter": "33",
+      "elapsed_seconds": 109.357,
+      "engine_errors": 0,
+      "key": "3b684d45339a9c61b4bba656da92a4a963275df4ea7e31c84cd8a4d7dfd81b46",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/3b/3b684d45339a9c61b4bba656da92a4a963275df4ea7e31c84cd8a4d7dfd81b46.jsonl.gz",
+      "sha256": "138b91b4c26c1d6546916ce2592f860d4f8bcc4a181c611392dd1e96f4db9ec8"
+    },
+    "3eae3dbadf41fac779963e6cfac2c6cfe4f942428aa0f4ffd17933d275031b5f": {
+      "cases": 186408,
+      "chapter": "32",
+      "elapsed_seconds": 313.347,
+      "engine_errors": 0,
+      "key": "3eae3dbadf41fac779963e6cfac2c6cfe4f942428aa0f4ffd17933d275031b5f",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/3e/3eae3dbadf41fac779963e6cfac2c6cfe4f942428aa0f4ffd17933d275031b5f.jsonl.gz",
+      "sha256": "53fd165c73a70d25ad142cd4ae81fbebd1bfbef123276f6ce5689d915bb5d1b2"
+    },
+    "3fa12d27e6ab0361021166efea4b6bd3078739c0ac6a841ace02a9dd7d21e577": {
+      "cases": 64098,
+      "chapter": "89",
+      "elapsed_seconds": 106.212,
+      "engine_errors": 0,
+      "key": "3fa12d27e6ab0361021166efea4b6bd3078739c0ac6a841ace02a9dd7d21e577",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/3f/3fa12d27e6ab0361021166efea4b6bd3078739c0ac6a841ace02a9dd7d21e577.jsonl.gz",
+      "sha256": "a526c23b976d3e0944d90bf33ce1dbd26917d1ef9f723ee7556d624799f05e2a"
+    },
+    "43483ca585a209d97be324d8a0b97643fe9526aa1c48e180a7d8a3ed704bb8b3": {
+      "cases": 0,
+      "chapter": "99b",
+      "elapsed_seconds": 27.549,
+      "engine_errors": 0,
+      "key": "43483ca585a209d97be324d8a0b97643fe9526aa1c48e180a7d8a3ed704bb8b3",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/43/43483ca585a209d97be324d8a0b97643fe9526aa1c48e180a7d8a3ed704bb8b3.jsonl.gz",
+      "sha256": "ac73670af3abed54ac6fb4695131f4099be9fbe39d6076c5d0264a6bbdae9d83"
+    },
+    "445d98012d23c870ba62e1bc869e689cda5fda8d07129e09d1ae60bf958ddee7": {
+      "cases": 258228,
+      "chapter": "63",
+      "elapsed_seconds": 489.529,
+      "engine_errors": 0,
+      "key": "445d98012d23c870ba62e1bc869e689cda5fda8d07129e09d1ae60bf958ddee7",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/44/445d98012d23c870ba62e1bc869e689cda5fda8d07129e09d1ae60bf958ddee7.jsonl.gz",
+      "sha256": "acf9f9ebb8519127714e2eddfbb04680f2403302537ead9d619c267857e16529"
+    },
+    "46fea03a7cf93a2a5a1aad492f7e83d11ca365cc54fce8dd1bc48b1700142826": {
+      "cases": 133029,
+      "chapter": "69",
+      "elapsed_seconds": 208.122,
+      "engine_errors": 0,
+      "key": "46fea03a7cf93a2a5a1aad492f7e83d11ca365cc54fce8dd1bc48b1700142826",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/46/46fea03a7cf93a2a5a1aad492f7e83d11ca365cc54fce8dd1bc48b1700142826.jsonl.gz",
+      "sha256": "465f0bb7b3df85d0fefd2d8571e133a6b18f07772ab0b704896ed64633ffe34b"
+    },
+    "4759f00182e9f4cd75a03c4bafc7e96e3c20664df3eb693c8e5441cf46e0053e": {
+      "cases": 64125,
+      "chapter": "53",
+      "elapsed_seconds": 90.82,
+      "engine_errors": 0,
+      "key": "4759f00182e9f4cd75a03c4bafc7e96e3c20664df3eb693c8e5441cf46e0053e",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/47/4759f00182e9f4cd75a03c4bafc7e96e3c20664df3eb693c8e5441cf46e0053e.jsonl.gz",
+      "sha256": "6a812a9842603d7f64d290c9dbd5b4cec689046d2824b9b0b4d6f6120537449e"
+    },
+    "4b3db258cebca14f0807d86fe5abb63b5ca65e3f8c27f00169e6a75fb953a003": {
+      "cases": 372492,
+      "chapter": "07",
+      "elapsed_seconds": 912.373,
+      "engine_errors": 0,
+      "key": "4b3db258cebca14f0807d86fe5abb63b5ca65e3f8c27f00169e6a75fb953a003",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/4b/4b3db258cebca14f0807d86fe5abb63b5ca65e3f8c27f00169e6a75fb953a003.jsonl.gz",
+      "sha256": "47cd7a26759e12d5a064184c5b06e53f19e036cc5d5f161b350efc259260dd15"
+    },
+    "4c894f46b4ec429909575c088bcbf883cdf2393b0125215ed5754f12e4877000": {
+      "cases": 8802,
+      "chapter": "66",
+      "elapsed_seconds": 36.663,
+      "engine_errors": 0,
+      "key": "4c894f46b4ec429909575c088bcbf883cdf2393b0125215ed5754f12e4877000",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/4c/4c894f46b4ec429909575c088bcbf883cdf2393b0125215ed5754f12e4877000.jsonl.gz",
+      "sha256": "54249398c323353dae919fa98bd6462a9b66e16a4cdf731d830326a76a93ad0c"
+    },
+    "50c70c4f3563778aae4555b47d161075e889f7dda01da8b4cb96baa9f2a8135e": {
+      "cases": 119853,
+      "chapter": "60",
+      "elapsed_seconds": 514.292,
+      "engine_errors": 0,
+      "key": "50c70c4f3563778aae4555b47d161075e889f7dda01da8b4cb96baa9f2a8135e",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/50/50c70c4f3563778aae4555b47d161075e889f7dda01da8b4cb96baa9f2a8135e.jsonl.gz",
+      "sha256": "ba133fb03a1199d8c6d8208c5a4868c76a66925de22c4461fec8f1b0405e34ba"
+    },
+    "51a2e5e3723e5d77d0fec01e8370c03452c39f14bcadad096c1f20475f08f375": {
+      "cases": 5670,
+      "chapter": "97",
+      "elapsed_seconds": 28.741,
+      "engine_errors": 0,
+      "key": "51a2e5e3723e5d77d0fec01e8370c03452c39f14bcadad096c1f20475f08f375",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/51/51a2e5e3723e5d77d0fec01e8370c03452c39f14bcadad096c1f20475f08f375.jsonl.gz",
+      "sha256": "965c1e5e420074679c21510615dde91a3e26afd5fb4711d598887fee99a6fb7d"
+    },
+    "536b908ac70f11e3cb2581c30d2f66375dbf6f158b05985a5e75371668f9cd34": {
+      "cases": 0,
+      "chapter": "99a",
+      "elapsed_seconds": 27.086,
+      "engine_errors": 0,
+      "key": "536b908ac70f11e3cb2581c30d2f66375dbf6f158b05985a5e75371668f9cd34",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/53/536b908ac70f11e3cb2581c30d2f66375dbf6f158b05985a5e75371668f9cd34.jsonl.gz",
+      "sha256": "ac73670af3abed54ac6fb4695131f4099be9fbe39d6076c5d0264a6bbdae9d83"
+    },
+    "56879084011af3c96cdb9154b1d74c168404616f64c6c174ca5645b8b96857ed": {
+      "cases": 83214,
+      "chapter": "83",
+      "elapsed_seconds": 191.135,
+      "engine_errors": 0,
+      "key": "56879084011af3c96cdb9154b1d74c168404616f64c6c174ca5645b8b96857ed",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/56/56879084011af3c96cdb9154b1d74c168404616f64c6c174ca5645b8b96857ed.jsonl.gz",
+      "sha256": "6d3becb40bb9915844422bed84da417e176313ee5ef1285bc33ce9e65d837e61"
+    },
+    "58d96be4b16afffd5f0aa295f17ef9f646a88fc18bfbf8c7aefbe14379e62a8b": {
+      "cases": 4509,
+      "chapter": "31",
+      "elapsed_seconds": 34.253,
+      "engine_errors": 0,
+      "key": "58d96be4b16afffd5f0aa295f17ef9f646a88fc18bfbf8c7aefbe14379e62a8b",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/58/58d96be4b16afffd5f0aa295f17ef9f646a88fc18bfbf8c7aefbe14379e62a8b.jsonl.gz",
+      "sha256": "a77cfc91dbb57cac3758417c606c29c109c621efa55ee57b6b04edca6aee825b"
+    },
+    "590df73b732234178616f4c61e13e333a0106133825bd0afac3d4bfbc9393bcf": {
+      "cases": 21465,
+      "chapter": "47",
+      "elapsed_seconds": 48.156,
+      "engine_errors": 0,
+      "key": "590df73b732234178616f4c61e13e333a0106133825bd0afac3d4bfbc9393bcf",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/59/590df73b732234178616f4c61e13e333a0106133825bd0afac3d4bfbc9393bcf.jsonl.gz",
+      "sha256": "195300a53b4df0d351fc04cada90614cf5321c3fec004c7bfa8a12d889723080"
+    },
+    "621294f9c208baf4eb35ad960982fb6fe6cb92f20e19fb7e84244f6daeb9242c": {
+      "cases": 105057,
+      "chapter": "68",
+      "elapsed_seconds": 183.065,
+      "engine_errors": 0,
+      "key": "621294f9c208baf4eb35ad960982fb6fe6cb92f20e19fb7e84244f6daeb9242c",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/62/621294f9c208baf4eb35ad960982fb6fe6cb92f20e19fb7e84244f6daeb9242c.jsonl.gz",
+      "sha256": "1dee574a45cf19c5f6c4b6500c32fb48e1d4bd05adc60939392d69b070cb00ea"
+    },
+    "64de1621f670375359fcd65cc53ec4e921fa705c851d10c56a442eb9c65f3d3a": {
+      "cases": 269109,
+      "chapter": "20",
+      "elapsed_seconds": 474.945,
+      "engine_errors": 0,
+      "key": "64de1621f670375359fcd65cc53ec4e921fa705c851d10c56a442eb9c65f3d3a",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/64/64de1621f670375359fcd65cc53ec4e921fa705c851d10c56a442eb9c65f3d3a.jsonl.gz",
+      "sha256": "82c80dbddf80379ad72a0b8eb02168247af404950ead31e75e13c17489fcf607"
+    },
+    "65157a655f3be4fad4f79fd451ac3b5fe6022c13886976598cd2588cbd1cb1ac": {
+      "cases": 282654,
+      "chapter": "94",
+      "elapsed_seconds": 416.14,
+      "engine_errors": 0,
+      "key": "65157a655f3be4fad4f79fd451ac3b5fe6022c13886976598cd2588cbd1cb1ac",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/65/65157a655f3be4fad4f79fd451ac3b5fe6022c13886976598cd2588cbd1cb1ac.jsonl.gz",
+      "sha256": "54d418535e16199ef1293701ee9cb5fecdf2990fd26bfabc4d8dc8427d6bbbf5"
+    },
+    "6c6cb5c0485ea469e8264e457532081556b4730612e79d98f0306bfe4ccb1966": {
+      "cases": 362061,
+      "chapter": "72",
+      "elapsed_seconds": 544.624,
+      "engine_errors": 0,
+      "key": "6c6cb5c0485ea469e8264e457532081556b4730612e79d98f0306bfe4ccb1966",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/6c/6c6cb5c0485ea469e8264e457532081556b4730612e79d98f0306bfe4ccb1966.jsonl.gz",
+      "sha256": "e337a8f676de530e6a9ad41dfb67d057254e60060fbd3e71a798285033013997"
+    },
+    "6db3eeab506c61545866b07e8d3ac18a78b8a19f0ee7816ea554130422b12709": {
+      "cases": 0,
+      "chapter": "99c",
+      "elapsed_seconds": 32.678,
+      "engine_errors": 0,
+      "key": "6db3eeab506c61545866b07e8d3ac18a78b8a19f0ee7816ea554130422b12709",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/6d/6db3eeab506c61545866b07e8d3ac18a78b8a19f0ee7816ea554130422b12709.jsonl.gz",
+      "sha256": "ac73670af3abed54ac6fb4695131f4099be9fbe39d6076c5d0264a6bbdae9d83"
+    },
+    "6de4db9878c56d83f7ceca262a56183e13d22d25cc61e5dbb5a457ace4145437": {
+      "cases": 312471,
+      "chapter": "48",
+      "elapsed_seconds": 464.597,
+      "engine_errors": 0,
+      "key": "6de4db9878c56d83f7ceca262a56183e13d22d25cc61e5dbb5a457ace4145437",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/6d/6de4db9878c56d83f7ceca262a56183e13d22d25cc61e5dbb5a457ace4145437.jsonl.gz",
+      "sha256": "294a7c17e7c6e969f5350c96cf4c6ce0eff0bb83fc0bf154e78bc37e6e79e381"
+    },
+    "705579bda6e2909265e9f0b1356e972d023a9fe7a02b413efc238836713744f3": {
+      "cases": 45063,
+      "chapter": "81",
+      "elapsed_seconds": 100.891,
+      "engine_errors": 0,
+      "key": "705579bda6e2909265e9f0b1356e972d023a9fe7a02b413efc238836713744f3",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/70/705579bda6e2909265e9f0b1356e972d023a9fe7a02b413efc238836713744f3.jsonl.gz",
+      "sha256": "e43ec13813208a86d497034da4791dd5da8a8bc1e4a54670ffdd433120f57341"
+    },
+    "73cd167a78d3e5b8c76f6cf2b7e740a55f98e17031160fad02c6bd9f98267081": {
+      "cases": 38394,
+      "chapter": "05",
+      "elapsed_seconds": 227.398,
+      "engine_errors": 0,
+      "key": "73cd167a78d3e5b8c76f6cf2b7e740a55f98e17031160fad02c6bd9f98267081",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/73/73cd167a78d3e5b8c76f6cf2b7e740a55f98e17031160fad02c6bd9f98267081.jsonl.gz",
+      "sha256": "036a33826ad2a55cb8dc10513e81319d889c5dc81791c20a9e6cf5e6203a5c1a"
+    },
+    "748ec77e2ac7d9e29e0f32f9b75656c61e73810957911d323ed6225c09d8b0fd": {
+      "cases": 14040,
+      "chapter": "67",
+      "elapsed_seconds": 37.94,
+      "engine_errors": 0,
+      "key": "748ec77e2ac7d9e29e0f32f9b75656c61e73810957911d323ed6225c09d8b0fd",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/74/748ec77e2ac7d9e29e0f32f9b75656c61e73810957911d323ed6225c09d8b0fd.jsonl.gz",
+      "sha256": "64ff8b8e3f85053e7d2af034f8b1a1a2e9876e809267e19fb28d8d94ab6392b1"
+    },
+    "75817fe0be6b6680e2bb782d1e1c5e0eebe872e91f25acff72f3cc12944bff1b": {
+      "cases": 108135,
+      "chapter": "02",
+      "elapsed_seconds": 508.09,
+      "engine_errors": 0,
+      "key": "75817fe0be6b6680e2bb782d1e1c5e0eebe872e91f25acff72f3cc12944bff1b",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/75/75817fe0be6b6680e2bb782d1e1c5e0eebe872e91f25acff72f3cc12944bff1b.jsonl.gz",
+      "sha256": "a8a37668b6ece333943bdbd78e59cefa778ffc771e663b5a396344a71e84d6bf"
+    },
+    "76311de8c256b7f69880c7309eebcf93e8a3885b61d7149b9f61bfd0b5045d21": {
+      "cases": 62316,
+      "chapter": "10",
+      "elapsed_seconds": 302.0,
+      "engine_errors": 0,
+      "key": "76311de8c256b7f69880c7309eebcf93e8a3885b61d7149b9f61bfd0b5045d21",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/76/76311de8c256b7f69880c7309eebcf93e8a3885b61d7149b9f61bfd0b5045d21.jsonl.gz",
+      "sha256": "cd683e676fe35f8d2490fa33d05ad64d87f2ae60313d33326ef4a6ba8bad63d6"
+    },
+    "7a04302afd4d1fb311f428db5298e856800e2ef86d8abe12f2c165b0f8570ebf": {
+      "cases": 94167,
+      "chapter": "17",
+      "elapsed_seconds": 150.218,
+      "engine_errors": 0,
+      "key": "7a04302afd4d1fb311f428db5298e856800e2ef86d8abe12f2c165b0f8570ebf",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/7a/7a04302afd4d1fb311f428db5298e856800e2ef86d8abe12f2c165b0f8570ebf.jsonl.gz",
+      "sha256": "6727d837716047e89640ea5e8aafd91907af15bd02aa670d952a41365f960c7c"
+    },
+    "7a150fa07e5770a37eeffb3922413d4f8547390a216bb9377f115e3b7699a69c": {
+      "cases": 22896,
+      "chapter": "27",
+      "elapsed_seconds": 50.567,
+      "engine_errors": 0,
+      "key": "7a150fa07e5770a37eeffb3922413d4f8547390a216bb9377f115e3b7699a69c",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/7a/7a150fa07e5770a37eeffb3922413d4f8547390a216bb9377f115e3b7699a69c.jsonl.gz",
+      "sha256": "90f1b21013355e8e9a8dbfd07fe5bba3eba4c4438dac28c9cbb99d3082f2432d"
+    },
+    "7aa1e19beb3464fa063ab4e14f8bae64e24c2aaa71da5b198a258978e37a9c8f": {
+      "cases": 387288,
+      "chapter": "73",
+      "elapsed_seconds": 679.561,
+      "engine_errors": 0,
+      "key": "7aa1e19beb3464fa063ab4e14f8bae64e24c2aaa71da5b198a258978e37a9c8f",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/7a/7aa1e19beb3464fa063ab4e14f8bae64e24c2aaa71da5b198a258978e37a9c8f.jsonl.gz",
+      "sha256": "efec8135147a6fa9adb5042bfff1649715f551de282392ab344692d90c6b26b6"
+    },
+    "7cab0533612ef282b2757b3a0dbd905be98f1592b6340b4cc97df96b4bf4ed45": {
+      "cases": 534303,
+      "chapter": "44",
+      "elapsed_seconds": 889.35,
+      "engine_errors": 0,
+      "key": "7cab0533612ef282b2757b3a0dbd905be98f1592b6340b4cc97df96b4bf4ed45",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/7c/7cab0533612ef282b2757b3a0dbd905be98f1592b6340b4cc97df96b4bf4ed45.jsonl.gz",
+      "sha256": "2c4ff97030276eb5eebfff75faf91d80db237ff52a17d0e0977942d6fcfa7045"
+    },
+    "7d3cb29685cf223bd85ba6e00be43fa93e20012dca153a84fc74a0ff5f9307de": {
+      "cases": 211437,
+      "chapter": "24",
+      "elapsed_seconds": 440.043,
+      "engine_errors": 0,
+      "key": "7d3cb29685cf223bd85ba6e00be43fa93e20012dca153a84fc74a0ff5f9307de",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/7d/7d3cb29685cf223bd85ba6e00be43fa93e20012dca153a84fc74a0ff5f9307de.jsonl.gz",
+      "sha256": "4e44ad7b97a99611d9a5c0866a36e53ea33a88ce6d80255fc70f84adf82125f9"
+    },
+    "7defc5c165608677c126c1cc4487811762a0b70dd83ca82edc378240b3d26f1c": {
+      "cases": 183330,
+      "chapter": "91",
+      "elapsed_seconds": 271.977,
+      "engine_errors": 0,
+      "key": "7defc5c165608677c126c1cc4487811762a0b70dd83ca82edc378240b3d26f1c",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/7d/7defc5c165608677c126c1cc4487811762a0b70dd83ca82edc378240b3d26f1c.jsonl.gz",
+      "sha256": "6a96809719e1d878fb72b722bbdf6a5eae1c8c36e24c726d2bc76f7bdc4b6c13"
+    },
+    "80d075b5cc22984a9ad91b995dd4caa66f4bdd25007226ce51b714cef47f0139": {
+      "cases": 89856,
+      "chapter": "06",
+      "elapsed_seconds": 239.079,
+      "engine_errors": 0,
+      "key": "80d075b5cc22984a9ad91b995dd4caa66f4bdd25007226ce51b714cef47f0139",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/80/80d075b5cc22984a9ad91b995dd4caa66f4bdd25007226ce51b714cef47f0139.jsonl.gz",
+      "sha256": "0bec65ebfc8de20670325263981ff7a3b65d6b409209736ff8c43a38e54012ff"
+    },
+    "830d2b01ad889e764f88cffbfb95bee71fb9df9a470e5dbffbf64c13aac5393c": {
+      "cases": 33588,
+      "chapter": "50",
+      "elapsed_seconds": 60.407,
+      "engine_errors": 0,
+      "key": "830d2b01ad889e764f88cffbfb95bee71fb9df9a470e5dbffbf64c13aac5393c",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/83/830d2b01ad889e764f88cffbfb95bee71fb9df9a470e5dbffbf64c13aac5393c.jsonl.gz",
+      "sha256": "572550f5d5de47065b5fce55b08c9e1f25ed9e83edc01e5a721922f19bcf9c39"
+    },
+    "84b5ef792d6b918881a20ee8013197694b02a1694dd3459794171473e5bf0139": {
+      "cases": 62829,
+      "chapter": "26",
+      "elapsed_seconds": 158.397,
+      "engine_errors": 0,
+      "key": "84b5ef792d6b918881a20ee8013197694b02a1694dd3459794171473e5bf0139",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/84/84b5ef792d6b918881a20ee8013197694b02a1694dd3459794171473e5bf0139.jsonl.gz",
+      "sha256": "6543de09f30f07b01b5449f0c87b2ae813e72daffaa76a42f26fdb8adeecbec3"
+    },
+    "8609bdb5bb4d2ea02078448b710ed6c06019442d4722d4aaccbdbd2def019135": {
+      "cases": 50247,
+      "chapter": "11",
+      "elapsed_seconds": 544.234,
+      "engine_errors": 0,
+      "key": "8609bdb5bb4d2ea02078448b710ed6c06019442d4722d4aaccbdbd2def019135",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/86/8609bdb5bb4d2ea02078448b710ed6c06019442d4722d4aaccbdbd2def019135.jsonl.gz",
+      "sha256": "524f6e0c119492ad7bbff9369e453f3cad535e1700990ae4e96601b96f739342"
+    },
+    "875a11bfdb614d6c0fa463cf999aa3d5561d7d4c2e154c3d0ddbf7864e74f9dd": {
+      "cases": 80244,
+      "chapter": "74",
+      "elapsed_seconds": 101.916,
+      "engine_errors": 0,
+      "key": "875a11bfdb614d6c0fa463cf999aa3d5561d7d4c2e154c3d0ddbf7864e74f9dd",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/87/875a11bfdb614d6c0fa463cf999aa3d5561d7d4c2e154c3d0ddbf7864e74f9dd.jsonl.gz",
+      "sha256": "fd135bf01a69600bdc2363635c5fb5eb0ab4c44517d5c527dd82ec3ae61fc76f"
+    },
+    "8b2d69dea3fb29acf7d1afb8d776f4ef3202edc33a81715cb21e368522789525": {
+      "cases": 12474,
+      "chapter": "14",
+      "elapsed_seconds": 253.282,
+      "engine_errors": 0,
+      "key": "8b2d69dea3fb29acf7d1afb8d776f4ef3202edc33a81715cb21e368522789525",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/8b/8b2d69dea3fb29acf7d1afb8d776f4ef3202edc33a81715cb21e368522789525.jsonl.gz",
+      "sha256": "9788d9f3b240c82a2b2ecfb1c4ad704e68bf2919057ec4c7edf04cb3fe53ad2c"
+    },
+    "8d6adc4454cb3431104f3b1c6ae91f04e23e2c1a3e069d8c5c5969a00a2ecf13": {
+      "cases": 991575,
+      "chapter": "29",
+      "elapsed_seconds": 1711.205,
+      "engine_errors": 0,
+      "key": "8d6adc4454cb3431104f3b1c6ae91f04e23e2c1a3e069d8c5c5969a00a2ecf13",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/8d/8d6adc4454cb3431104f3b1c6ae91f04e23e2c1a3e069d8c5c5969a00a2ecf13.jsonl.gz",
+      "sha256": "c87a669598ee1412974542c1e7aa9a2bd47992e2db6e6c7e3cd21ed5066e8082"
+    },
+    "8df2f724ba7778d1056dad69ae34a944e9ce9278b1ee897ec7f11fe8d8661a60": {
+      "cases": 14121,
+      "chapter": "78",
+      "elapsed_seconds": 39.932,
+      "engine_errors": 0,
+      "key": "8df2f724ba7778d1056dad69ae34a944e9ce9278b1ee897ec7f11fe8d8661a60",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/8d/8df2f724ba7778d1056dad69ae34a944e9ce9278b1ee897ec7f11fe8d8661a60.jsonl.gz",
+      "sha256": "08058155018ccc10d7a70ba37f28423543e52c5d8affecd4ce86b423cae885c9"
+    },
+    "903222d95b4b80820bfc863ea173b66b8c3e8c43e7e5caf1cc73b52704ea5911": {
+      "cases": 173043,
+      "chapter": "96",
+      "elapsed_seconds": 346.047,
+      "engine_errors": 0,
+      "key": "903222d95b4b80820bfc863ea173b66b8c3e8c43e7e5caf1cc73b52704ea5911",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/90/903222d95b4b80820bfc863ea173b66b8c3e8c43e7e5caf1cc73b52704ea5911.jsonl.gz",
+      "sha256": "78b519ec4831d0dbea67874091a39c6b04562fb7ccb3f32275f8d2ff90b8bb89"
+    },
+    "90479b08f59f48704a86c899b6e08a87bd80c552d5e51f0a5ed01f4e9899c9dd": {
+      "cases": 47286,
+      "chapter": "30",
+      "elapsed_seconds": 77.572,
+      "engine_errors": 0,
+      "key": "90479b08f59f48704a86c899b6e08a87bd80c552d5e51f0a5ed01f4e9899c9dd",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/90/90479b08f59f48704a86c899b6e08a87bd80c552d5e51f0a5ed01f4e9899c9dd.jsonl.gz",
+      "sha256": "5e264c407a0360e62f10fa5201e051a4a0c1522882bb63748fca2167e668eb2c"
+    },
+    "92e0d7c679e42f83804f7d6149a0b526dce3dd834f11e10562be8da6fe0466b4": {
+      "cases": 83106,
+      "chapter": "59",
+      "elapsed_seconds": 351.231,
+      "engine_errors": 0,
+      "key": "92e0d7c679e42f83804f7d6149a0b526dce3dd834f11e10562be8da6fe0466b4",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/92/92e0d7c679e42f83804f7d6149a0b526dce3dd834f11e10562be8da6fe0466b4.jsonl.gz",
+      "sha256": "2d8a8d8db2132c15c3204044998f33ddbff441725c246b0ed4c9e8dfe77ef60d"
+    },
+    "9488875b2d3ad7db66cd719066da4b05ea73dd940f18a9cf7f24c4bd30fcc9ee": {
+      "cases": 26703,
+      "chapter": "75",
+      "elapsed_seconds": 49.494,
+      "engine_errors": 0,
+      "key": "9488875b2d3ad7db66cd719066da4b05ea73dd940f18a9cf7f24c4bd30fcc9ee",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/94/9488875b2d3ad7db66cd719066da4b05ea73dd940f18a9cf7f24c4bd30fcc9ee.jsonl.gz",
+      "sha256": "becbdddd6f85484db4012622534a5d8dcfb2dc106b5b7ad6e0ec33a9b342b14f"
+    },
+    "971f35be4330a0b4619609ba4e66a97f9311c07fbcadfc3684628d2ab4c9da38": {
+      "cases": 446985,
+      "chapter": "90",
+      "elapsed_seconds": 573.939,
+      "engine_errors": 0,
+      "key": "971f35be4330a0b4619609ba4e66a97f9311c07fbcadfc3684628d2ab4c9da38",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/97/971f35be4330a0b4619609ba4e66a97f9311c07fbcadfc3684628d2ab4c9da38.jsonl.gz",
+      "sha256": "5845d72d2f0d45f98146591acaf2c5984d9c044eefc40e1199f498e71b5aad7d"
+    },
+    "97b58a7c7c51d7cc92f69e5fd30ed0b17a14132229fb69e1075bfb8b3691be03": {
+      "cases": 111096,
+      "chapter": "15",
+      "elapsed_seconds": 324.212,
+      "engine_errors": 0,
+      "key": "97b58a7c7c51d7cc92f69e5fd30ed0b17a14132229fb69e1075bfb8b3691be03",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/97/97b58a7c7c51d7cc92f69e5fd30ed0b17a14132229fb69e1075bfb8b3691be03.jsonl.gz",
+      "sha256": "88d0163ab80b99fe5d67c5c0b12387dae8146351e02385653f88e61f20875f6e"
+    },
+    "980c39f7ec3fd05c3b27c1d6cb4b71c49dbd2742fd4f54b4c1bb29c380458e49": {
+      "cases": 1403865,
+      "chapter": "62",
+      "elapsed_seconds": 2317.103,
+      "engine_errors": 0,
+      "key": "980c39f7ec3fd05c3b27c1d6cb4b71c49dbd2742fd4f54b4c1bb29c380458e49",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/98/980c39f7ec3fd05c3b27c1d6cb4b71c49dbd2742fd4f54b4c1bb29c380458e49.jsonl.gz",
+      "sha256": "55e0d0b9eb6bd9a2ec149bbdcf8680b02d9587468203ca40cb3cd6fc225b97a0"
+    },
+    "9889647fd34efef37654e2a7f826c17eeb66143b8b4a120f9eb6223b87fcc878": {
+      "cases": 442233,
+      "chapter": "55",
+      "elapsed_seconds": 979.71,
+      "engine_errors": 0,
+      "key": "9889647fd34efef37654e2a7f826c17eeb66143b8b4a120f9eb6223b87fcc878",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/98/9889647fd34efef37654e2a7f826c17eeb66143b8b4a120f9eb6223b87fcc878.jsonl.gz",
+      "sha256": "3837c805bc72b4422917c4e8ac7357a7fb8e24bfeadaad3a168361bb894bc890"
+    },
+    "9b064014b9bdcbf3be2bf09916e94b1e8b13aeb0fcf2c483a60512ab432cd5e2": {
+      "cases": 81189,
+      "chapter": "18",
+      "elapsed_seconds": 184.335,
+      "engine_errors": 0,
+      "key": "9b064014b9bdcbf3be2bf09916e94b1e8b13aeb0fcf2c483a60512ab432cd5e2",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/9b/9b064014b9bdcbf3be2bf09916e94b1e8b13aeb0fcf2c483a60512ab432cd5e2.jsonl.gz",
+      "sha256": "98f1aa985b4294021dba1a9d2ba60b56c6cd06f05e56bbef925351e5e50b8623"
+    },
+    "9e1c36568b9e3ab90871c18f1d2e8f6d25d451e84ee5a0fbf6085731d1a58012": {
+      "cases": 64692,
+      "chapter": "23",
+      "elapsed_seconds": 100.985,
+      "engine_errors": 0,
+      "key": "9e1c36568b9e3ab90871c18f1d2e8f6d25d451e84ee5a0fbf6085731d1a58012",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/9e/9e1c36568b9e3ab90871c18f1d2e8f6d25d451e84ee5a0fbf6085731d1a58012.jsonl.gz",
+      "sha256": "1226c07b631123018bf39834e25babd408d0f3501be09af9c5c7d46143b874ce"
+    },
+    "9e5a63ff2f5d328fc6454ab86d5055bf6931840e199f7565122201e8046565ad": {
+      "cases": 188757,
+      "chapter": "82",
+      "elapsed_seconds": 366.131,
+      "engine_errors": 0,
+      "key": "9e5a63ff2f5d328fc6454ab86d5055bf6931840e199f7565122201e8046565ad",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/9e/9e5a63ff2f5d328fc6454ab86d5055bf6931840e199f7565122201e8046565ad.jsonl.gz",
+      "sha256": "35fb9219eb3e8a480bcd61b5ca8818812326c69a7ba08b94695f68c2490ca3e9"
+    },
+    "9fc95fd0c532f7c1dbaf27c256e5c2148d751b26474771183314968aed6ce93c": {
+      "cases": 20061,
+      "chapter": "36",
+      "elapsed_seconds": 60.7,
+      "engine_errors": 0,
+      "key": "9fc95fd0c532f7c1dbaf27c256e5c2148d751b26474771183314968aed6ce93c",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/9f/9fc95fd0c532f7c1dbaf27c256e5c2148d751b26474771183314968aed6ce93c.jsonl.gz",
+      "sha256": "6e48d45d914182233af9678d6d8d3560d03450d15e8b5e89e7d29437b79ca8c2"
+    },
+    "a1a7f1475b4dc03548b924aae7ce2ef77fdda158b866ed0c2b6dbf6f503d4761": {
+      "cases": 8100,
+      "chapter": "79",
+      "elapsed_seconds": 34.535,
+      "engine_errors": 0,
+      "key": "a1a7f1475b4dc03548b924aae7ce2ef77fdda158b866ed0c2b6dbf6f503d4761",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/a1/a1a7f1475b4dc03548b924aae7ce2ef77fdda158b866ed0c2b6dbf6f503d4761.jsonl.gz",
+      "sha256": "03624b9ab3ee7539ae7ef0333725e1a1e79211dbee08d035e07786ab44ee3e62"
+    },
+    "a3d0c9f05297af131c9da00c81f4cadf4214b311ec40bef341f8d84939480efb": {
+      "cases": 184437,
+      "chapter": "16",
+      "elapsed_seconds": 385.153,
+      "engine_errors": 0,
+      "key": "a3d0c9f05297af131c9da00c81f4cadf4214b311ec40bef341f8d84939480efb",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/a3/a3d0c9f05297af131c9da00c81f4cadf4214b311ec40bef341f8d84939480efb.jsonl.gz",
+      "sha256": "9df5401d7b3945684845697a835d74e189bb23fc12d7ebf3c9e017a1201f8dbb"
+    },
+    "abdf13a7a7f8e6399754559059c6783ec4708f6bf8aac42d9ba9cd10ac4857a3": {
+      "cases": 14850,
+      "chapter": "49",
+      "elapsed_seconds": 36.304,
+      "engine_errors": 0,
+      "key": "abdf13a7a7f8e6399754559059c6783ec4708f6bf8aac42d9ba9cd10ac4857a3",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/ab/abdf13a7a7f8e6399754559059c6783ec4708f6bf8aac42d9ba9cd10ac4857a3.jsonl.gz",
+      "sha256": "42754682c848ce2424fd365c7e6cf5b7aad994c3b65b1934ada0b015e7a945de"
+    },
+    "b1a12f1de442fadb1375df2e20ffbaaace41fecae3e7e42a073823e95ba195cb": {
+      "cases": 194400,
+      "chapter": "41",
+      "elapsed_seconds": 360.203,
+      "engine_errors": 0,
+      "key": "b1a12f1de442fadb1375df2e20ffbaaace41fecae3e7e42a073823e95ba195cb",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/b1/b1a12f1de442fadb1375df2e20ffbaaace41fecae3e7e42a073823e95ba195cb.jsonl.gz",
+      "sha256": "ac0e13a0facb074048c9b0fe252e248702032be554d1ee4f5f92d86e4adc063c"
+    },
+    "b3e1373339ffc6812bb7055ba9b016b47f80939c910a0082b6bfc61238ed014c": {
+      "cases": 9234,
+      "chapter": "80",
+      "elapsed_seconds": 38.386,
+      "engine_errors": 0,
+      "key": "b3e1373339ffc6812bb7055ba9b016b47f80939c910a0082b6bfc61238ed014c",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/b3/b3e1373339ffc6812bb7055ba9b016b47f80939c910a0082b6bfc61238ed014c.jsonl.gz",
+      "sha256": "e0e78a353c7a1de7187004277f0235f17bf2598128382e7b96c2b60402967a40"
+    },
+    "b4296a393350fd452df5655ab45f1a24b8b2278167ec66e83aa9a37c1d9fa943": {
+      "cases": 81027,
+      "chapter": "25",
+      "elapsed_seconds": 179.003,
+      "engine_errors": 0,
+      "key": "b4296a393350fd452df5655ab45f1a24b8b2278167ec66e83aa9a37c1d9fa943",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/b4/b4296a393350fd452df5655ab45f1a24b8b2278167ec66e83aa9a37c1d9fa943.jsonl.gz",
+      "sha256": "0064a97e1feb2da8fe7102f571829d2567c3afea0a3425eef83da4c697a11ca2"
+    },
+    "bf13afd8f6bb19261df61cc6ed74a52d2037e16c81b98f85f9ac2979b3da0a86": {
+      "cases": 93663,
+      "chapter": "76",
+      "elapsed_seconds": 243.111,
+      "engine_errors": 0,
+      "key": "bf13afd8f6bb19261df61cc6ed74a52d2037e16c81b98f85f9ac2979b3da0a86",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/bf/bf13afd8f6bb19261df61cc6ed74a52d2037e16c81b98f85f9ac2979b3da0a86.jsonl.gz",
+      "sha256": "1b9f9395c909a04adf228338bf7139ba253489ee65413186943f34d115110613"
+    },
+    "c267a9cfa8436844f62b805ea728bd06000fe29f0556bfd7c661b3c784d1f6a5": {
+      "cases": 71145,
+      "chapter": "93",
+      "elapsed_seconds": 141.752,
+      "engine_errors": 0,
+      "key": "c267a9cfa8436844f62b805ea728bd06000fe29f0556bfd7c661b3c784d1f6a5",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/c2/c267a9cfa8436844f62b805ea728bd06000fe29f0556bfd7c661b3c784d1f6a5.jsonl.gz",
+      "sha256": "08bd7b85dc9ef10d7bdc6e2f077ad33f98ddd57462bbc46fb1ecf14f2b5daa83"
+    },
+    "c428b23512fa32e466af99a009686695c7487236eafa359e653330b43326070c": {
+      "cases": 319446,
+      "chapter": "87",
+      "elapsed_seconds": 387.465,
+      "engine_errors": 0,
+      "key": "c428b23512fa32e466af99a009686695c7487236eafa359e653330b43326070c",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/c4/c428b23512fa32e466af99a009686695c7487236eafa359e653330b43326070c.jsonl.gz",
+      "sha256": "b73cbb69e62b2d80eaaee9f697331a4efac4e0ef7e52e8297e11a864443d0534"
+    },
+    "ca7ffbd9c5a8a7ef4505896129e952f2ed94bb436b180d2c733daa3930f497ad": {
+      "cases": 55188,
+      "chapter": "46",
+      "elapsed_seconds": 163.899,
+      "engine_errors": 0,
+      "key": "ca7ffbd9c5a8a7ef4505896129e952f2ed94bb436b180d2c733daa3930f497ad",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/ca/ca7ffbd9c5a8a7ef4505896129e952f2ed94bb436b180d2c733daa3930f497ad.jsonl.gz",
+      "sha256": "7392ce5e2e3134437ef501584be15087b411539ea31de0536746f3846420b8b4"
+    },
+    "cb9c6e14535646f8f3d746f1b728fed779b7fd6170ff78738f5d0fd764e5b26a": {
+      "cases": 928638,
+      "chapter": "85",
+      "elapsed_seconds": 1228.73,
+      "engine_errors": 0,
+      "key": "cb9c6e14535646f8f3d746f1b728fed779b7fd6170ff78738f5d0fd764e5b26a",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/cb/cb9c6e14535646f8f3d746f1b728fed779b7fd6170ff78738f5d0fd764e5b26a.jsonl.gz",
+      "sha256": "d16aab39974047cd570cc1bbafe041ce989052c758f2dd9afbd001f0f3f5cb8c"
+    },
+    "cee102c5c5f5f5a44cfc904c5d7e118cf9c052c7a20c2d74b6598f5273c276cd": {
+      "cases": 567621,
+      "chapter": "03",
+      "elapsed_seconds": 1381.232,
+      "engine_errors": 0,
+      "key": "cee102c5c5f5f5a44cfc904c5d7e118cf9c052c7a20c2d74b6598f5273c276cd",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/ce/cee102c5c5f5f5a44cfc904c5d7e118cf9c052c7a20c2d74b6598f5273c276cd.jsonl.gz",
+      "sha256": "967674b752d4a798d758e7b98440ee8bd9fa4d5d8868a51d52be0da36011006f"
+    },
+    "cf4c55c5d68f7b14b19e0b86fab400fd5ef3a0ccaa0167e1d84e4a1e46c95986": {
+      "cases": 133920,
+      "chapter": "51",
+      "elapsed_seconds": 159.648,
+      "engine_errors": 0,
+      "key": "cf4c55c5d68f7b14b19e0b86fab400fd5ef3a0ccaa0167e1d84e4a1e46c95986",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/cf/cf4c55c5d68f7b14b19e0b86fab400fd5ef3a0ccaa0167e1d84e4a1e46c95986.jsonl.gz",
+      "sha256": "6fcff68d5a6c3279a7e34f3c6a9b15ef5e019fd22f960bf30f134fcf3e3a85df"
+    },
+    "d3800a9886ef32758a6a8adc08a82175690c12aa00062af381e2592ab32a7bcc": {
+      "cases": 80568,
+      "chapter": "57",
+      "elapsed_seconds": 404.987,
+      "engine_errors": 0,
+      "key": "d3800a9886ef32758a6a8adc08a82175690c12aa00062af381e2592ab32a7bcc",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/d3/d3800a9886ef32758a6a8adc08a82175690c12aa00062af381e2592ab32a7bcc.jsonl.gz",
+      "sha256": "b507ce39b39407042132271c180d61b9f1ea455e04e2af60d92f2504bd2ef8d4"
+    },
+    "d3c7a074b738a861bed4607456c6b2f9010a353e1ea81da098533eb73dbaeee4": {
+      "cases": 120114,
+      "chapter": "71",
+      "elapsed_seconds": 165.266,
+      "engine_errors": 0,
+      "key": "d3c7a074b738a861bed4607456c6b2f9010a353e1ea81da098533eb73dbaeee4",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/d3/d3c7a074b738a861bed4607456c6b2f9010a353e1ea81da098533eb73dbaeee4.jsonl.gz",
+      "sha256": "f624b31460ccd06f5404148d3e7da827a0fae4e1bbce942a8242f267e88bd9df"
+    },
+    "d78197482432682a793dea0394ee50917bbe0710f3ff251ffde2b22638b93e93": {
+      "cases": 49572,
+      "chapter": "34",
+      "elapsed_seconds": 110.259,
+      "engine_errors": 0,
+      "key": "d78197482432682a793dea0394ee50917bbe0710f3ff251ffde2b22638b93e93",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/d7/d78197482432682a793dea0394ee50917bbe0710f3ff251ffde2b22638b93e93.jsonl.gz",
+      "sha256": "12618415688518d2f0f7e2166f610dcd3744a642a72bdbc9c4af2d8e9ca3f8c9"
+    },
+    "d7c67c78cb71bf9ab261e2d346f05a299445b14f1242b3591040f944d03fb349": {
+      "cases": 116100,
+      "chapter": "22",
+      "elapsed_seconds": 188.226,
+      "engine_errors": 0,
+      "key": "d7c67c78cb71bf9ab261e2d346f05a299445b14f1242b3591040f944d03fb349",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/d7/d7c67c78cb71bf9ab261e2d346f05a299445b14f1242b3591040f944d03fb349.jsonl.gz",
+      "sha256": "53a6d3f619baf466575768abb8da8ed7e0afeecb88bc34123e68e9d77f83e40d"
+    },
+    "d9c6e30cf98b81df99dbe971cb64c24a4479df635a58261956b9e9baf7c98594": {
+      "cases": 70335,
+      "chapter": "92",
+      "elapsed_seconds": 98.718,
+      "engine_errors": 0,
+      "key": "d9c6e30cf98b81df99dbe971cb64c24a4479df635a58261956b9e9baf7c98594",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/d9/d9c6e30cf98b81df99dbe971cb64c24a4479df635a58261956b9e9baf7c98594.jsonl.gz",
+      "sha256": "5ec69fea447e20caa1501fff1a23197e671a928c8fd888258861f9aac8f02aaa"
+    },
+    "e02af0976b8f8d905b31b98ef847db16db342ce8b1f416e1670b142993fe602f": {
+      "cases": 250722,
+      "chapter": "28",
+      "elapsed_seconds": 456.213,
+      "engine_errors": 0,
+      "key": "e02af0976b8f8d905b31b98ef847db16db342ce8b1f416e1670b142993fe602f",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/e0/e02af0976b8f8d905b31b98ef847db16db342ce8b1f416e1670b142993fe602f.jsonl.gz",
+      "sha256": "f33315ecf9f7fe9ce979090ff8a5819082dc444e21626dea9d5948a95b815c4f"
+    },
+    "e31d673ef92ec71d0fe4b45d017e124f7990e7ff1baa9d61fc9a349b4e4926db": {
+      "cases": 294111,
+      "chapter": "54",
+      "elapsed_seconds": 402.915,
+      "engine_errors": 0,
+      "key": "e31d673ef92ec71d0fe4b45d017e124f7990e7ff1baa9d61fc9a349b4e4926db",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/e3/e31d673ef92ec71d0fe4b45d017e124f7990e7ff1baa9d61fc9a349b4e4926db.jsonl.gz",
+      "sha256": "d6bdf759746a2552f89344eb76a092039538bd16e065a80ece6592d9725cd03d"
+    },
+    "e35817e2e0369c81435f731c2db47678455b11392d4da6c8b3500672350f7c1a": {
+      "cases": 20601,
+      "chapter": "45",
+      "elapsed_seconds": 76.094,
+      "engine_errors": 0,
+      "key": "e35817e2e0369c81435f731c2db47678455b11392d4da6c8b3500672350f7c1a",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/e3/e35817e2e0369c81435f731c2db47678455b11392d4da6c8b3500672350f7c1a.jsonl.gz",
+      "sha256": "b457737e999d7158e48b025e040c8e99b46be782e23b43db8b8b05a6f920c170"
+    },
+    "e5d4b107ea5ba23b5388d324b64f2ebb1e566ec586e928268e3a56ff18710f7f": {
+      "cases": 346617,
+      "chapter": "39",
+      "elapsed_seconds": 584.333,
+      "engine_errors": 0,
+      "key": "e5d4b107ea5ba23b5388d324b64f2ebb1e566ec586e928268e3a56ff18710f7f",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/e5/e5d4b107ea5ba23b5388d324b64f2ebb1e566ec586e928268e3a56ff18710f7f.jsonl.gz",
+      "sha256": "da6f6f72628a628681db7b83cf569892ddc592874015fb655767cf61da6ed382"
+    },
+    "e660b1225025fcc53e5187bb07901c06042a5faadd49614039d42161d8aa3532": {
+      "cases": 288657,
+      "chapter": "04",
+      "elapsed_seconds": 696.404,
+      "engine_errors": 0,
+      "key": "e660b1225025fcc53e5187bb07901c06042a5faadd49614039d42161d8aa3532",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/e6/e660b1225025fcc53e5187bb07901c06042a5faadd49614039d42161d8aa3532.jsonl.gz",
+      "sha256": "7fdfe7a12e8185e7cefbaec527d53509fc26ac3f15e2ba030e2195dbf8191f05"
+    },
+    "e86cff37ed5a310c6ddce33f371b3522ff48a107e175bf49cdd54df917709346": {
+      "cases": 42363,
+      "chapter": "43",
+      "elapsed_seconds": 113.029,
+      "engine_errors": 0,
+      "key": "e86cff37ed5a310c6ddce33f371b3522ff48a107e175bf49cdd54df917709346",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/e8/e86cff37ed5a310c6ddce33f371b3522ff48a107e175bf49cdd54df917709346.jsonl.gz",
+      "sha256": "4ad707e9f20c19477ae0e352e6ff5f343d6cdf577ae5e4ea4573165af35c76df"
+    },
+    "e94c13d49fdb2855975894fc658afc87ac8e2be1de59880821afb8d5318ab2d7": {
+      "cases": 24696,
+      "chapter": "13",
+      "elapsed_seconds": 281.751,
+      "engine_errors": 0,
+      "key": "e94c13d49fdb2855975894fc658afc87ac8e2be1de59880821afb8d5318ab2d7",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/e9/e94c13d49fdb2855975894fc658afc87ac8e2be1de59880821afb8d5318ab2d7.jsonl.gz",
+      "sha256": "410db0ec2914bfdf1f3f8fb5497b50c7fce092c8bf5f03d3723d412895546854"
+    },
+    "ea8f58907005d4f5011c50dc2fdad37ae3487d31b0845bee5c77753b06f870df": {
+      "cases": 936549,
+      "chapter": "61",
+      "elapsed_seconds": 1641.589,
+      "engine_errors": 0,
+      "key": "ea8f58907005d4f5011c50dc2fdad37ae3487d31b0845bee5c77753b06f870df",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/ea/ea8f58907005d4f5011c50dc2fdad37ae3487d31b0845bee5c77753b06f870df.jsonl.gz",
+      "sha256": "d6564f6f20707716b4440004b3802ed1c8081c161a968196bda3543299b87b2e"
+    },
+    "eb1c32f4e9c62fe2f2aa130f40e9564432f4b278a7a5e0370e46ce7967575ff1": {
+      "cases": 197397,
+      "chapter": "40",
+      "elapsed_seconds": 361.928,
+      "engine_errors": 0,
+      "key": "eb1c32f4e9c62fe2f2aa130f40e9564432f4b278a7a5e0370e46ce7967575ff1",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/eb/eb1c32f4e9c62fe2f2aa130f40e9564432f4b278a7a5e0370e46ce7967575ff1.jsonl.gz",
+      "sha256": "b3e20fab706c0d04551feff47b913b8fec733b09f7684eaddc4e32a6b486d229"
+    },
+    "f44cf3cd8e7d927016ea6339f2409146e422c39da5a58dae3413f398286fa42e": {
+      "cases": 126063,
+      "chapter": "95",
+      "elapsed_seconds": 184.013,
+      "engine_errors": 0,
+      "key": "f44cf3cd8e7d927016ea6339f2409146e422c39da5a58dae3413f398286fa42e",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/f4/f44cf3cd8e7d927016ea6339f2409146e422c39da5a58dae3413f398286fa42e.jsonl.gz",
+      "sha256": "8231ea86e6cbb907fc25b68819ebced3e2217a181fc084f3caa4cb8055e7d57b"
+    },
+    "f488b1f749b670b20da35a9d4633ceead92cf69e1de1a8bdee1dc4be935e469a": {
+      "cases": 1821240,
+      "chapter": "84",
+      "elapsed_seconds": 2875.274,
+      "engine_errors": 0,
+      "key": "f488b1f749b670b20da35a9d4633ceead92cf69e1de1a8bdee1dc4be935e469a",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/f4/f488b1f749b670b20da35a9d4633ceead92cf69e1de1a8bdee1dc4be935e469a.jsonl.gz",
+      "sha256": "4748ae8f46e379c23f50fda1d0271502e419d56217a84761d9374a1e4679a145"
+    },
+    "f92cf039f8a3c77f0cc69ec324b67398ede551492a0aa6661a7be925f777c7b3": {
+      "cases": 176328,
+      "chapter": "08",
+      "elapsed_seconds": 233.988,
+      "engine_errors": 0,
+      "key": "f92cf039f8a3c77f0cc69ec324b67398ede551492a0aa6661a7be925f777c7b3",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/f9/f92cf039f8a3c77f0cc69ec324b67398ede551492a0aa6661a7be925f777c7b3.jsonl.gz",
+      "sha256": "5923d9a937fcd740460b304f649fb6f32ef80241879f69151b82a47297662411"
+    },
+    "fc361c88f9e2dde34855c0ec36d8ee8b6bd9134836028690f917e778e6edb224": {
+      "cases": 308421,
+      "chapter": "70",
+      "elapsed_seconds": 456.322,
+      "engine_errors": 0,
+      "key": "fc361c88f9e2dde34855c0ec36d8ee8b6bd9134836028690f917e778e6edb224",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/fc/fc361c88f9e2dde34855c0ec36d8ee8b6bd9134836028690f917e778e6edb224.jsonl.gz",
+      "sha256": "3ffe5be43cb0fa19d43c249fb8ee4f57a00daa203c12758ef2b6d99c7e3f7530"
+    }
+  }
 }
