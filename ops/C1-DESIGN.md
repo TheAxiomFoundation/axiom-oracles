@@ -104,6 +104,19 @@ Totals are dispositioned by the ordered set of component-class signatures that e
 
 `known_not_comparable` and excluded-with-reason are fail-closed states. For every excluded Yale output column, the report computes live `column_exposure` over the complete extracted full universe and the evaluated quotient. Any nonzero, missing, or non-finite exposure changes the scoreboard status to invalid and blocks `conformant`, following the enforced #452 pattern. The same rule applies if a presently post-window family becomes live after a window change. No exclusion may rely only on a prose assertion that a column is dormant.
 
+Amendment A7 makes generated base disposition a mandatory reference-side
+pre-pass. General or column-2 `ad_valorem`/`free` cells retain the full query
+surface. `specific`, `compound`, `component`, `conditional`, and `empty` cells
+mark base and total `known_not_comparable` with
+`non_ad_valorem_base:<disposition>` before shard planning; independent
+authority components remain comparable. A component whose generated formula
+actually depends on `mfn_ad_valorem_rate` is separately excluded with a formula
+receipt. This is never an Axiom-attributed disposition and can never absorb an
+engine error. The certificate reports the value-free cell count and quotient
+share and names the components-only scope explicitly. Chapters 99a/99b use the
+same structural treatment when their deferred-output contract supplies no flat
+column-2 rate.
+
 ## Cost, caching, and reruns
 
 B1.6 r3 compiled 100/100 chapters with three workers and evaluated 386,202 weighted support rows over eight program intervals; its G5 alone performed 6,179,232 comparisons, and the campaign describes the full run in hours. C1's stratified target of roughly one to three million interval cells and up to twice as many endpoint probes is therefore expected to take hours, potentially an overnight supervised run. The exhaustive 43.6-million-cell universe would likely take days and is not the routine v1 path.

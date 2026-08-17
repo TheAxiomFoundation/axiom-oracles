@@ -7,6 +7,10 @@ description: >-
   plus a fixed-regime guard probing, for every multi-country class, the member
   whose origin regime differs most from the representative. It does not establish
   identical Axiom behavior for unprobed countries grouped by Yale.
+  Cells whose generated statutory disposition is not ad-valorem or Free are
+  reference-side known-not-comparable for base and total, while independent
+  authority components remain compared and base-dependent components carry a
+  separate structural exclusion receipt.
 runner:
   type: us-tariff-schedule
   parameters:
