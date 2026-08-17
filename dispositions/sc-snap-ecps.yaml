@@ -1,6 +1,6 @@
 schema: axiom_oracles.dispositions.v1
 suite: sc-snap-ecps
-updated: '2026-08-12'
+updated: '2026-08-16'
 entries:
 - id: sc-bbce-gross-band-snap_eligible
   concept: us:statutes/7/2014/o#snap_eligible
@@ -2061,29 +2061,62 @@ entries:
   pinned:
     left: false
     right: true
-- id: sc-pe-cat-gross-gate-2026-08-12-29732-benefit
+- id: sc-bridge-elderly-disabled-projection-2026-08-16-29732-benefit
   concept: us:statutes/7/2014/u#snap_benefit
   case_id: ecps-29732
   kind: amount_difference
-  disposition: upstream_engine_gap
+  disposition: bridge_artifact
   evidence:
-    mechanism: Exact-household requested-month replay on PolicyEngine 4.18.9 / PolicyEngine-US
-      1.767.3 / PolicyEngine-Core 3.30.3. January PolicyEngine computes SNAP 0 with
-      net income 2154.65; Axiom's persisted net income is 2155.56 under its round-30-percent-up
-      election. January PolicyEngine records meets_snap_categorical_eligibility=True
-      yet is_snap_eligible=False with meets_snap_gross_income_test=False — on this
-      household PolicyEngine still gates eligibility on the 130-percent gross test
-      despite the categorical flag — while the composed program's encoded South
-      Carolina family-independence screen (its persisted household_income_at_or_below_family_independence_fpl_limit=true)
-      waives the gross test, leaving Axiom eligible and paying its recorded allotment.
+    mechanism: 'Elderly/disabled-member projection asymmetry (the #435 class), reproduced by exact-household
+      requested-month replay on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3.
+      The comparison bridge projects the populace DISABLED fact straight into Axiom''s snap_member_is_elderly_or_disabled
+      input (populace_mapping_loader.py transform elderly_or_disabled = age >= 60 or DISABLED), so members
+      0 and 2 (ages 31 and 35, CPS disability flag set, no disability-benefit receipt) make the composed
+      us-sc program''s snap_household_has_elderly_or_disabled_member true and waive the 130-percent gross
+      test: Axiom''s persisted surface shows snap_total_gross_income 2954.56 above its own snap_gross_income_limit_130_percent_fpl_48_states_dc
+      2888.00 yet snap_standard_gross_income_eligible true, net income 2155.56 before shelter, and the
+      round-30-percent-up election (state_agency_rounds_thirty_percent_net_income_up=true) giving 785
+      - 647 = 138. PolicyEngine derives the same status from benefit receipt: is_usda_disabled is any
+      of the gov.usda.disabled_programs list (is_ssi_disabled, social_security_disability, and the disabled-veteran
+      statuses) and meets_snap_gross_income_test = has_usda_elderly_disabled | (gross ratio <= limit);
+      with no disability program received, January PolicyEngine records has_usda_elderly_disabled=False,
+      meets_snap_gross_income_test=False on gross 2954.563232, meets_snap_categorical_eligibility=False,
+      is_snap_eligible=False and SNAP 0 (the report''s matched eligibility row is the year-shaped boolean).
+      Counterfactual: forcing is_ssi_disabled=true on member 0 in the direct requested-month simulation
+      flips has_usda_elderly_disabled and the gross test to true and produces January SNAP 138.79998779296875
+      = 785 - 0.3 x floor(2154.650635); its absolute delta from Axiom''s 138.0 is 0.80, within the suite
+      tolerance 7. The 7 CFR 271.2 definition of an elderly or disabled member turns on receipt of listed
+      disability benefits, so the bridge''s disability-flag projection is the defect. Secondary observation,
+      not load-bearing here: the SC page-44 family-independence screen household_income_at_or_below_family_independence_fpl_limit
+      persists true although gross exceeds 130 percent of FPL, consistent with its household_gross_income
+      input being unmapped and defaulting to zero; the expanded-categorical path additionally requires
+      the referral-services input, and the operative eligibility path on this row is the standard gross
+      test waived by the projected E/D flag.'
     arithmetic:
+    - expression: 2954.56 - 2888.0
+      equals: 66.56
+      tolerance: 1.0e-06
     - expression: 785 - 647 - 138
       equals: 0.0
-      tolerance: 0.51
+      tolerance: 1.0e-06
+    - expression: 785 - 0.3 * 2154
+      equals: 138.8
+      tolerance: 1.0e-06
+    - expression: 138.79998779296875 - 138.0
+      equals: 0.79998779296875
+      tolerance: 1.0e-06
+    upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/435
     sources:
     - dashboard/public/data/axiom-policyengine-sc-snap-ecps.json
+    - axiom_oracles/adapters/axiom/populace_mapping_loader.py
     - axiom_oracles/data/populace_input_mapping.yaml
     - axiom_oracles/adapters/policyengine/runner.py
+    - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/variables/gov/usda/is_usda_disabled.py
+    - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/parameters/gov/usda/disabled_programs.yaml
+    - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/variables/gov/usda/has_usda_elderly_disabled.py
+    - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/variables/gov/usda/snap/eligibility/meets_snap_gross_income_test.py
+    - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/variables/gov/usda/snap/eligibility/is_snap_eligible.py
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-271#p-271.2(Elderly%20or%20disabled%20member)
   expires_on_source_change: true
   pinned:
     left: 138.0
