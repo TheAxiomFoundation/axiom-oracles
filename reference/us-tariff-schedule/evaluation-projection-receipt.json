@@ -1,0 +1,25 @@
+{
+  "batch_cases": 5001,
+  "ceiling_hours": 16,
+  "chapter_shard": "01",
+  "deterministic": true,
+  "endpoint_case_upper_bound": 19826608,
+  "maximum_concurrent_engine_processes": 3,
+  "projected_engine_hours": 2.074318347823377,
+  "projected_engine_seconds": 7467.546052164157,
+  "projection_method": "slowest replay seconds/case * two-endpoint upper bound / 3 workers",
+  "replay_runs": [
+    {
+      "case_count": 5001,
+      "engine_wall_clock_seconds": 4.12345508398721
+    },
+    {
+      "case_count": 5001,
+      "engine_wall_clock_seconds": 5.650769583007786
+    }
+  ],
+  "result_sha256": "aa977aab3e8818582171d2442678c5279ff8b742d480d68211893c5a6c58a04c",
+  "schema": "axiom_oracles.us_tariff_schedule.evaluation_projection.v1",
+  "selected_interval_cells": 9913304,
+  "verdict": "PASS"
+}

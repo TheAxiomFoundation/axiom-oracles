@@ -22,17 +22,22 @@ import sys
 import tempfile
 import time
 from collections import Counter
+from datetime import date
 from pathlib import Path
 from typing import Any, Iterable
 
 import yaml
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
 SELECTED = REPO_ROOT / "reference/us-tariff-schedule/selected-intervals.csv.gz"
 OUT_DIR = REPO_ROOT / "reference/us-tariff-schedule"
 ROUTING_ROWS = OUT_DIR / "disposition-routing.csv.gz"
 ROUTING_RECEIPT = OUT_DIR / "disposition-routing-receipt.json"
 INPUT_CONTRACT_RECEIPT = OUT_DIR / "declared-input-contract-receipt.json"
+EVAL_DIR = OUT_DIR / "eval"
+EVAL_PROJECTION_RECEIPT = OUT_DIR / "evaluation-projection-receipt.json"
 SCHEMA = "axiom_oracles.us_tariff_schedule.disposition_routing.v1"
 DISPOSITIONS = {
     "ad_valorem", "free", "specific", "compound", "component",
@@ -50,6 +55,22 @@ COMPONENT_SLOTS = (
 )
 BASE_DEPENDENT_COMPONENTS = ("ieepa", "forced_labor_section_301")
 EXPECTED_DROPPED_ENTRY_FLAGS = frozenset({"entry_is_line_c", "entry_is_line_e"})
+NEUTRAL_BOOLEAN_INPUTS = (
+    "article_is_potash", "cbp_agrees_chapter_98_entry_is_appropriate",
+    "entry_is_9802_excepted_entry", "entry_is_chapter_98_subchapter_xxiii_entry",
+    "entry_is_entered_free_of_duty_under_usmca",
+    "entry_is_humanitarian_donation_article", "entry_is_informational_material_article",
+    "entry_is_personal_use_accompanied_baggage",
+    "entry_is_properly_claimed_chapter_98_entry", "entry_is_usmca_duty_free_entry",
+    "entry_loaded_and_in_transit_before_july_24_2026",
+)
+OUTPUT_NAMES = (
+    "mfn_ad_valorem_rate", "ieepa_component_rate", "section_201_component_rate",
+    "section_122_component_rate", "section_232_aluminum_component_rate",
+    "section_232_steel_component_rate", "section_338_component_rate",
+    "china_section_301_component_rate", "brazil_section_301_component_rate",
+    "forced_labor_section_301_component_rate", "schedule_statutory_stack",
+)
 
 
 def _sha256(path: Path) -> str:
@@ -390,13 +411,134 @@ def write_prepass(rows: list[dict[str, str]], receipt: dict[str, Any]) -> None:
     ROUTING_RECEIPT.write_text(_render(receipt))
 
 
+def _routing_by_member() -> dict[str, dict[str, str]]:
+    with gzip.open(ROUTING_ROWS, "rt", newline="") as source:
+        rows = list(csv.DictReader(source))
+    _require(len(rows) == 20_508, f"routing member count changed: {len(rows)}")
+    return {row["hts10"]: row for row in rows}
+
+
+def _probe_dates(row: dict[str, str]) -> tuple[str, ...]:
+    start = date.fromisoformat(row["clipped_from"])
+    end = date.fromisoformat(row["clipped_until"])
+    _require(start <= end, f"inverted clipped interval: {row}")
+    return (start.isoformat(),) if start == end else (start.isoformat(), end.isoformat())
+
+
+def _first_shard_cases(*, rulespec_root: Path, limit: int) -> tuple[list[Any], list[str]]:
+    """Build the deterministic timing shard using only full-comparison cells."""
+    from axiom_oracles.core.case import Case
+
+    sys.path.insert(0, str(rulespec_root))
+    from tools.b16_entry_flags import entry_flags  # type: ignore
+
+    routes = _routing_by_member()
+    chapter = "01"
+    module = f"us:policies/cbp/us-tariff-schedule/generated/ch{chapter}/ch{chapter}"
+    outputs = [f"{module}#{name}" for name in OUTPUT_NAMES]
+    cases = []
+    for row in _selected_rows(SELECTED):
+        route = routes[row["hts10"]]
+        if route["chapter_shard"] != chapter:
+            continue
+        disposition = (
+            route["column2_disposition"]
+            if row["iso2"] in COLUMN2_ORIGINS else route["general_disposition"]
+        )
+        if disposition not in COMPARABLE:
+            continue
+        for probe in _probe_dates(row):
+            flags = {
+                key: value for key, value in entry_flags(
+                    int(route["hts_line"]), row["hts10"], row["iso2"]
+                ).items()
+                if key.startswith("entry_is_") and key not in EXPECTED_DROPPED_ENTRY_FLAGS
+            }
+            feed = {
+                "hts_line": int(route["hts_line"]),
+                "hts_number": row["hts10"],
+                "country_of_origin": row["iso2"],
+                **{name: False for name in NEUTRAL_BOOLEAN_INPUTS},
+                **flags,
+            }
+            cases.append(Case(
+                case_id=f"{row['hts10']}-{row['country']}-{probe}",
+                period=probe,
+                metadata={
+                    "axiom_entity": "CustomsEntry", "axiom_entity_id": "entry",
+                    "axiom_inputs": {
+                        f"{module}#input.{name}": value for name, value in feed.items()
+                    },
+                },
+                outputs=tuple(outputs),
+            ))
+            if len(cases) == limit:
+                return cases, outputs
+    raise ValueError(f"chapter {chapter} has only {len(cases)} timing cases; need {limit}")
+
+
+def evaluate_projection(*, rulespec_root: Path, engine_binary: Path, limit: int = 5_001) -> dict[str, Any]:
+    """Run and deterministically replay the first shard, then enforce 16 hours."""
+    from axiom_oracles.adapters.axiom.runner import AxiomRulesRunner
+
+    cases, outputs = _first_shard_cases(rulespec_root=rulespec_root, limit=limit)
+    program = rulespec_root / "us/policies/cbp/us-tariff-schedule/generated/ch01/ch01.yaml"
+    runs = []
+    value_hashes = []
+    for _replay in range(2):
+        started = time.perf_counter()
+        runner = AxiomRulesRunner(
+            program_path=program, binary_path=engine_binary,
+            default_entity="CustomsEntry", default_entity_id="entry",
+            rulespec_repo_roots=(rulespec_root,), batch_size=limit,
+        )
+        results = runner.run_cases(cases, outputs)
+        elapsed = time.perf_counter() - started
+        errors = [result for result in results if result.errors]
+        if errors:
+            raise ValueError(f"first shard engine errors: {errors[0].errors}")
+        canonical = _render([
+            {"case_id": str(result.household_id), "values": result.values}
+            for result in results
+        ]).encode()
+        value_hashes.append(hashlib.sha256(canonical).hexdigest())
+        runs.append({"engine_wall_clock_seconds": elapsed, "case_count": len(results)})
+    _require(len(set(value_hashes)) == 1, f"first-shard determinism failure: {value_hashes}")
+    selected_cells = json.loads(ROUTING_RECEIPT.read_text())["evaluated_cells"]
+    endpoint_upper_bound = selected_cells * 2
+    projected_seconds = max(run["engine_wall_clock_seconds"] for run in runs) * endpoint_upper_bound / limit / 3
+    receipt = {
+        "schema": "axiom_oracles.us_tariff_schedule.evaluation_projection.v1",
+        "chapter_shard": "01", "batch_cases": limit, "replay_runs": runs,
+        "result_sha256": value_hashes[0], "deterministic": True,
+        "selected_interval_cells": selected_cells,
+        "endpoint_case_upper_bound": endpoint_upper_bound,
+        "maximum_concurrent_engine_processes": 3,
+        "projection_method": "slowest replay seconds/case * two-endpoint upper bound / 3 workers",
+        "projected_engine_seconds": projected_seconds,
+        "projected_engine_hours": projected_seconds / 3600,
+        "ceiling_hours": 16,
+        "verdict": "PASS" if projected_seconds <= 16 * 3600 else "STOP_16H_PROJECTION_BREACH",
+    }
+    EVAL_PROJECTION_RECEIPT.write_text(_render(receipt))
+    return receipt
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("stage", choices=("prepass", "input-contract"))
+    parser.add_argument("stage", choices=("prepass", "input-contract", "evaluate"))
     parser.add_argument("--rulespec-root", type=Path, required=True)
     parser.add_argument("--engine-binary", type=Path)
     args = parser.parse_args()
     started = time.perf_counter()
+    if args.stage == "evaluate":
+        _require(args.engine_binary is not None, "--engine-binary is required")
+        receipt = evaluate_projection(
+            rulespec_root=args.rulespec_root.resolve(),
+            engine_binary=args.engine_binary.resolve(),
+        )
+        print(_render(receipt), end="")
+        return 0 if receipt["verdict"] == "PASS" else 2
     if args.stage == "input-contract":
         _require(args.engine_binary is not None, "--engine-binary is required")
         receipt = build_input_contract_receipt(
