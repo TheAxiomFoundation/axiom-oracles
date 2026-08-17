@@ -17,6 +17,9 @@ import hashlib
 import io
 import json
 import re
+import subprocess
+import sys
+import tempfile
 import time
 from collections import Counter
 from pathlib import Path
@@ -29,6 +32,7 @@ SELECTED = REPO_ROOT / "reference/us-tariff-schedule/selected-intervals.csv.gz"
 OUT_DIR = REPO_ROOT / "reference/us-tariff-schedule"
 ROUTING_ROWS = OUT_DIR / "disposition-routing.csv.gz"
 ROUTING_RECEIPT = OUT_DIR / "disposition-routing-receipt.json"
+INPUT_CONTRACT_RECEIPT = OUT_DIR / "declared-input-contract-receipt.json"
 SCHEMA = "axiom_oracles.us_tariff_schedule.disposition_routing.v1"
 DISPOSITIONS = {
     "ad_valorem", "free", "specific", "compound", "component",
@@ -45,6 +49,7 @@ COMPONENT_SLOTS = (
     "brazil_section_301", "forced_labor_section_301",
 )
 BASE_DEPENDENT_COMPONENTS = ("ieepa", "forced_labor_section_301")
+EXPECTED_DROPPED_ENTRY_FLAGS = frozenset({"entry_is_line_c", "entry_is_line_e"})
 
 
 def _sha256(path: Path) -> str:
@@ -62,6 +67,133 @@ def _render(value: Any) -> str:
 def _require(condition: bool, message: str) -> None:
     if not condition:
         raise ValueError(message)
+
+
+def _collect_artifact_inputs(node: Any, inputs: set[str]) -> None:
+    """Collect the engine's compiled input surface, including input-or-else."""
+    if isinstance(node, list):
+        for item in node:
+            _collect_artifact_inputs(item, inputs)
+    elif isinstance(node, dict):
+        if node.get("kind") in {"input", "input_or_else"}:
+            name = node.get("name")
+            _require(isinstance(name, str) and name, "compiled input has no name")
+            inputs.add(name)
+        for value in node.values():
+            _collect_artifact_inputs(value, inputs)
+
+
+def declared_inputs_from_artifact(path: Path) -> frozenset[str]:
+    payload = json.loads(path.read_text())
+    program = payload.get("program")
+    _require(isinstance(program, dict), f"{path}: compiled artifact has no program")
+    inputs: set[str] = set()
+    _collect_artifact_inputs(program, inputs)
+    _require(inputs, f"{path}: compiled artifact declares no inputs")
+    return frozenset(inputs)
+
+
+def filter_declared_feed(
+    feed: dict[str, Any],
+    declared_inputs: Iterable[str],
+    *,
+    emitted_flag_names: Iterable[str],
+    expected_dropped_flags: frozenset[str] = EXPECTED_DROPPED_ENTRY_FLAGS,
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    """Fail-closed projection of one case feed onto its compiled input surface.
+
+    Only surplus fields emitted by the entry-flag tool may be projected away.
+    Every declared field must already be present: the engine supports
+    ``input_or_else`` defaults, but this campaign deliberately does not rely on
+    them because an accidentally unfed declared input must remain observable.
+    """
+    declared = frozenset(declared_inputs)
+    supplied = frozenset(feed)
+    emitted = frozenset(emitted_flag_names)
+    dropped = supplied - declared
+    missing = declared - supplied
+    _require(dropped <= emitted, f"undeclared non-flag inputs in feed: {sorted(dropped - emitted)}")
+    _require(
+        dropped == expected_dropped_flags,
+        f"dropped entry flags changed: expected {sorted(expected_dropped_flags)}, got {sorted(dropped)}",
+    )
+    _require(not missing, f"declared inputs absent from feed: {sorted(missing)}")
+    filtered = {name: value for name, value in feed.items() if name in declared}
+    return filtered, {
+        "declared_input_count": len(declared),
+        "supplied_input_count": len(supplied),
+        "forwarded_input_count": len(filtered),
+        "dropped_entry_flags": sorted(dropped),
+        "missing_declared_inputs": sorted(missing),
+        "absent_declared_input_semantics": (
+            "STOP in harness before engine; engine input_or_else can substitute its "
+            "per-reference default, while a strict input raises MissingInput"
+        ),
+    }
+
+
+def build_input_contract_receipt(*, rulespec_root: Path, engine_binary: Path) -> dict[str, Any]:
+    """Compile all generated compositions and receipt their entry-flag surface."""
+    sys.path.insert(0, str(rulespec_root))
+    from tools.b16_entry_flags import entry_flags  # type: ignore
+
+    emitted = entry_flags(102294000, "0102294024", "CA")
+    # The tool also returns incidence diagnostics (``s232_*``, list-specific
+    # helpers).  The harness feeds only its public entry-input namespace.
+    emitted_names = frozenset(name for name in emitted if name.startswith("entry_is_"))
+    modules = sorted(
+        path for path in (rulespec_root / "us/policies/cbp/us-tariff-schedule/generated").glob("ch*/ch*.yaml")
+        if not path.name.endswith(".test.yaml")
+    )
+    _require(len(modules) == 100, f"expected 100 generated compositions, found {len(modules)}")
+    env = dict(__import__("os").environ)
+    env["AXIOM_RULESPEC_REPO_ROOTS"] = str(rulespec_root.parent)
+    chapters = []
+    with tempfile.TemporaryDirectory(prefix="tariff-input-contract-") as raw:
+        work = Path(raw)
+        for index, module in enumerate(modules):
+            artifact = work / f"chapter-{index:03d}.json"
+            subprocess.run(
+                [str(engine_binary), "compile", "--program", str(module.resolve()), "--output", str(artifact)],
+                check=True, capture_output=True, text=True, env=env,
+            )
+            declared = declared_inputs_from_artifact(artifact)
+            declared_flags = declared & emitted_names
+            dropped = emitted_names - declared_flags
+            _require(
+                dropped == EXPECTED_DROPPED_ENTRY_FLAGS,
+                f"{module}: dropped entry flags changed: {sorted(dropped)}",
+            )
+            _require(
+                not (declared_flags - emitted_names),
+                f"{module}: declared entry flags are not emitted: {sorted(declared_flags - emitted_names)}",
+            )
+            chapters.append({
+                "chapter": module.parent.name.removeprefix("ch"),
+                "module": str(module.relative_to(rulespec_root)),
+                "module_sha256": _sha256(module),
+                "artifact_sha256": _sha256(artifact),
+                "declared_input_count": len(declared),
+                "declared_entry_flags": sorted(declared_flags),
+                "dropped_entry_flags": sorted(dropped),
+                "missing_declared_entry_flags": [],
+            })
+    return {
+        "schema": "axiom_oracles.us_tariff_schedule.declared_input_contract.v1",
+        "composition_count": len(chapters),
+        "entry_flag_tool": str((rulespec_root / "tools/b16_entry_flags.py").relative_to(rulespec_root)),
+        "entry_flag_tool_sha256": _sha256(rulespec_root / "tools/b16_entry_flags.py"),
+        "emitted_entry_flags": sorted(emitted_names),
+        "expected_dropped_entry_flags": sorted(EXPECTED_DROPPED_ENTRY_FLAGS),
+        "absent_declared_input_semantics": {
+            "harness": "STOP before engine execution",
+            "engine_strict_input": "MissingInput",
+            "engine_input_or_else": "substitutes the compiled per-reference default",
+            "campaign_policy": "never default a declared case-feed input silently",
+        },
+        "chapters": chapters,
+        "verdict": "PASS",
+    }
 
 
 def _chapter_table_paths(rulespec_root: Path) -> list[Path]:
@@ -260,10 +392,21 @@ def write_prepass(rows: list[dict[str, str]], receipt: dict[str, Any]) -> None:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("prepass", choices=("prepass",))
+    parser.add_argument("stage", choices=("prepass", "input-contract"))
     parser.add_argument("--rulespec-root", type=Path, required=True)
+    parser.add_argument("--engine-binary", type=Path)
     args = parser.parse_args()
     started = time.perf_counter()
+    if args.stage == "input-contract":
+        _require(args.engine_binary is not None, "--engine-binary is required")
+        receipt = build_input_contract_receipt(
+            rulespec_root=args.rulespec_root.resolve(),
+            engine_binary=args.engine_binary.resolve(),
+        )
+        receipt["stage_wall_clock_seconds"] = round(time.perf_counter() - started, 3)
+        INPUT_CONTRACT_RECEIPT.write_text(_render(receipt))
+        print(_render(receipt), end="")
+        return 0
     rows, receipt = build_prepass(rulespec_root=args.rulespec_root.resolve())
     receipt["stage_wall_clock_seconds"] = round(time.perf_counter() - started, 3)
     write_prepass(rows, receipt)

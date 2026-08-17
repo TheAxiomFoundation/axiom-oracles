@@ -5,9 +5,40 @@ import pytest
 from scripts.us_tariff_schedule_campaign import (
     BASE_DEPENDENT_COMPONENTS,
     COMPONENT_SLOTS,
+    EXPECTED_DROPPED_ENTRY_FLAGS,
+    filter_declared_feed,
     query_plan,
     route_member,
 )
+
+
+def test_declared_feed_drops_only_retired_exemplar_flags() -> None:
+    feed = {"hts_line": 1, "entry_is_line_a": False, "entry_is_line_b": False,
+            "entry_is_line_c": False, "entry_is_line_d": False, "entry_is_line_e": False}
+    declared = {"hts_line", "entry_is_line_a", "entry_is_line_b", "entry_is_line_d"}
+    filtered, receipt = filter_declared_feed(
+        feed, declared, emitted_flag_names={name for name in feed if name.startswith("entry_")}
+    )
+    assert set(filtered) == declared
+    assert receipt["dropped_entry_flags"] == sorted(EXPECTED_DROPPED_ENTRY_FLAGS)
+
+
+def test_undeclared_input_mutant_fails_filter_assertion() -> None:
+    feed = {"declared": True, "entry_is_line_c": False, "entry_is_line_e": False,
+            "mutant_undeclared": True}
+    with pytest.raises(ValueError, match="undeclared non-flag inputs"):
+        filter_declared_feed(
+            feed, {"declared"}, emitted_flag_names={"entry_is_line_c", "entry_is_line_e"}
+        )
+
+
+def test_declared_but_unfed_input_mutant_surfaces_before_default() -> None:
+    feed = {"entry_is_line_c": False, "entry_is_line_e": False}
+    with pytest.raises(ValueError, match="declared inputs absent from feed:.*required_neutral_fact"):
+        filter_declared_feed(
+            feed, {"required_neutral_fact"},
+            emitted_flag_names={"entry_is_line_c", "entry_is_line_e"},
+        )
 
 
 def test_specific_disposition_routes_to_components_only() -> None:
