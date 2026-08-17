@@ -11,6 +11,7 @@ queries; authority-component queries remain in the plan.
 from __future__ import annotations
 
 import argparse
+import concurrent.futures
 import csv
 import gzip
 import hashlib
@@ -21,10 +22,11 @@ import subprocess
 import sys
 import tempfile
 import time
+import os
 from collections import Counter
 from datetime import date
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any, Iterable, Iterator
 
 import yaml
 
@@ -37,6 +39,14 @@ ROUTING_ROWS = OUT_DIR / "disposition-routing.csv.gz"
 ROUTING_RECEIPT = OUT_DIR / "disposition-routing-receipt.json"
 INPUT_CONTRACT_RECEIPT = OUT_DIR / "declared-input-contract-receipt.json"
 EVAL_DIR = OUT_DIR / "eval"
+EVAL_MANIFEST = EVAL_DIR / "MANIFEST.json"
+COMPARISON_RECEIPT = OUT_DIR / "comparison-summary.json"
+CLASSIFICATION_RECEIPT = OUT_DIR / "classification-receipt.json"
+DISPOSITION_LEDGER = REPO_ROOT / "dispositions/us-tariff-schedule.yaml"
+REPORT_PATH = REPO_ROOT / "conformance/detail/us-tariff-schedule.json"
+CACHE_ROOT = Path(os.environ.get(
+    "AXIOM_TARIFF_C1_CACHE", "~/PolicyEngine/_tariff-p5/c1-cache"
+)).expanduser()
 EVAL_PROJECTION_RECEIPT = OUT_DIR / "evaluation-projection-receipt.json"
 SCHEMA = "axiom_oracles.us_tariff_schedule.disposition_routing.v1"
 DISPOSITIONS = {
@@ -70,6 +80,40 @@ OUTPUT_NAMES = (
     "section_232_steel_component_rate", "section_338_component_rate",
     "china_section_301_component_rate", "brazil_section_301_component_rate",
     "forced_labor_section_301_component_rate", "schedule_statutory_stack",
+)
+TOLERANCE = 1e-12
+EXPECTED_COLUMNS = (
+    "statutory_base_rate", "statutory_rate_232", "statutory_rate_ieepa_recip",
+    "statutory_rate_ieepa_fent", "statutory_rate_301", "statutory_rate_301_cs",
+    "statutory_rate_s301fl", "statutory_rate_s301br", "statutory_rate_s338",
+    "statutory_rate_s122", "statutory_rate_section_201", "statutory_rate_other",
+)
+SLOT_OUTPUTS = {
+    "base": ("mfn_ad_valorem_rate",),
+    "ieepa": ("ieepa_component_rate",),
+    "section_122": ("section_122_component_rate",),
+    "section_201": ("section_201_component_rate",),
+    "section_232": ("section_232_aluminum_component_rate", "section_232_steel_component_rate"),
+    "china_section_301": ("china_section_301_component_rate",),
+    "brazil_section_301": ("brazil_section_301_component_rate",),
+    "forced_labor_section_301": ("forced_labor_section_301_component_rate",),
+    "section_338": ("section_338_component_rate",),
+}
+EXPECTED_SLOT_COLUMNS = {
+    "base": ("statutory_base_rate",),
+    "ieepa": ("statutory_rate_ieepa_recip", "statutory_rate_ieepa_fent"),
+    "section_122": ("statutory_rate_s122",),
+    "section_201": ("statutory_rate_section_201",),
+    "section_232": ("statutory_rate_232",),
+    "china_section_301": ("statutory_rate_301",),
+    "brazil_section_301": ("statutory_rate_s301br",),
+    "forced_labor_section_301": ("statutory_rate_s301fl",),
+    "section_338": ("statutory_rate_s338",),
+}
+AUTHORITY_SLOTS = tuple(slot for slot in SLOT_OUTPUTS if slot != "base")
+BASE_INDEPENDENT_AUTHORITY_SLOTS = (
+    "section_201", "section_122", "section_232", "section_338",
+    "china_section_301", "brazil_section_301",
 )
 
 
@@ -319,10 +363,8 @@ def query_plan(disposition: str, *, column2_rate_available: bool = True) -> dict
         f"non_ad_valorem_base:{disposition}"
         if disposition not in COMPARABLE else "structurally_unavailable:column2_rate"
     )
-    compared_components = list(COMPONENT_SLOTS if comparable else (
-        slot for slot in COMPONENT_SLOTS if slot not in BASE_DEPENDENT_COMPONENTS
-    ))
-    excluded_components = [] if comparable else list(BASE_DEPENDENT_COMPONENTS)
+    compared_components = list(AUTHORITY_SLOTS if comparable else BASE_INDEPENDENT_AUTHORITY_SLOTS)
+    excluded_components = [] if comparable else ["ieepa", "forced_labor_section_301"]
     return {
         "base": "compare" if comparable else "known_not_comparable",
         "total": "compare" if comparable else "known_not_comparable",
@@ -524,21 +566,437 @@ def evaluate_projection(*, rulespec_root: Path, engine_binary: Path, limit: int 
     return receipt
 
 
+def _atomic_json(path: Path, payload: Any) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    rendered = _render(payload)
+    with tempfile.NamedTemporaryFile("w", dir=path.parent, delete=False) as target:
+        target.write(rendered)
+        temporary = Path(target.name)
+    temporary.replace(path)
+
+
+def _load_manifest() -> dict[str, Any]:
+    if not EVAL_MANIFEST.exists():
+        return {"schema": "axiom_oracles.us_tariff_schedule.eval_manifest.v1", "shards": {}}
+    payload = json.loads(EVAL_MANIFEST.read_text())
+    _require(payload.get("schema") == "axiom_oracles.us_tariff_schedule.eval_manifest.v1", "bad eval manifest schema")
+    _require(isinstance(payload.get("shards"), dict), "bad eval manifest shards")
+    return payload
+
+
+def _chapter_from_route(route: dict[str, str]) -> str:
+    return route["chapter_shard"]
+
+
+def _case_feed(row: dict[str, str], route: dict[str, str], entry_flags: Any) -> tuple[dict[str, Any], dict[str, bool]]:
+    raw_flags = entry_flags(int(route["hts_line"]), row["hts10"], row["iso2"])
+    flags = {
+        key: bool(value) for key, value in raw_flags.items()
+        if key.startswith("entry_is_") and key not in EXPECTED_DROPPED_ENTRY_FLAGS
+    }
+    feed = {
+        "hts_line": int(route["hts_line"]), "hts_number": row["hts10"],
+        "country_of_origin": row["iso2"],
+        **{name: False for name in NEUTRAL_BOOLEAN_INPUTS}, **flags,
+    }
+    return feed, flags
+
+
+def _case_id(row: dict[str, str], probe: str, ordinal: int) -> str:
+    identity = "|".join((row["hts10"], row["country"], row["revision"],
+                         row["clipped_from"], row["clipped_until"], probe, str(ordinal)))
+    return "schedule-" + hashlib.sha256(identity.encode()).hexdigest()[:24]
+
+
+def _chapter_records(chapter: str) -> Iterator[dict[str, Any]]:
+    routes = _routing_by_member()
+    for row in _selected_rows(SELECTED):
+        route = routes[row["hts10"]]
+        if _chapter_from_route(route) != chapter:
+            continue
+        disposition = route["column2_disposition"] if row["iso2"] in COLUMN2_ORIGINS else route["general_disposition"]
+        column2_available = not (row["iso2"] in COLUMN2_ORIGINS and route["chapter_shard"] in {"99a", "99b"})
+        plan = query_plan(disposition, column2_rate_available=column2_available)
+        for ordinal, probe in enumerate(_probe_dates(row)):
+            yield {"row": row, "route": route, "plan": plan, "probe": probe, "ordinal": ordinal}
+
+
+def _module_path(rulespec_root: Path, chapter: str) -> Path:
+    return rulespec_root / f"us/policies/cbp/us-tariff-schedule/generated/ch{chapter}/ch{chapter}.yaml"
+
+
+def _shard_key(*, chapter: str, rulespec_root: Path, engine_binary: Path) -> str:
+    ingredients = {
+        "chapter": chapter, "selected_sha256": _sha256(SELECTED),
+        "routing_sha256": _sha256(ROUTING_ROWS), "module_sha256": _sha256(_module_path(rulespec_root, chapter)),
+        "engine_sha256": _sha256(engine_binary), "outputs": OUTPUT_NAMES,
+        "input_contract_sha256": _sha256(INPUT_CONTRACT_RECEIPT),
+    }
+    return hashlib.sha256(_render(ingredients).encode()).hexdigest()
+
+
+def _result_values(result: Any, requested: Iterable[str]) -> dict[str, float]:
+    values = {}
+    for key, value in result.values.items():
+        short = key.rsplit("#", 1)[-1]
+        _require(short in OUTPUT_NAMES, f"unexpected engine output {key}")
+        number = float(value)
+        _require(number == number and abs(number) != float("inf"), f"non-finite engine output {key}")
+        values[short] = number
+    _require(set(values) == set(requested), f"missing engine outputs: {sorted(set(requested) - set(values))}")
+    return values
+
+
+def _evaluate_chapter(chapter: str, *, rulespec_root: Path, engine_binary: Path, cache_dir: Path) -> dict[str, Any]:
+    from axiom_oracles.adapters.axiom.runner import AxiomRulesRunner
+    from axiom_oracles.core.case import Case
+
+    sys.path.insert(0, str(rulespec_root))
+    from tools.b16_entry_flags import entry_flags  # type: ignore
+
+    started = time.perf_counter()
+    records = list(_chapter_records(chapter))
+    module_ref = f"us:policies/cbp/us-tariff-schedule/generated/ch{chapter}/ch{chapter}"
+    cases: dict[str, list[Any]] = {"full": [], "components": []}
+    contexts: dict[str, list[Any]] = {"full": [], "components": []}
+    for record in records:
+        feed, flags = _case_feed(record["row"], record["route"], entry_flags)
+        case_id = _case_id(record["row"], record["probe"], record["ordinal"])
+        group = "full" if record["plan"]["base"] == "compare" else "components"
+        requested = list(dict.fromkeys(
+            name for slot in record["plan"]["components"] for name in SLOT_OUTPUTS[slot]
+        ))
+        if group == "full":
+            requested += ["mfn_ad_valorem_rate", "schedule_statutory_stack"]
+        outputs = tuple(f"{module_ref}#{name}" for name in requested)
+        cases[group].append(Case(case_id=case_id, period=record["probe"], metadata={
+            "axiom_entity": "CustomsEntry", "axiom_entity_id": "entry",
+            "axiom_inputs": {f"{module_ref}#input.{name}": value for name, value in feed.items()},
+        }, outputs=outputs))
+        contexts[group].append((record, flags, case_id, requested))
+    runner = AxiomRulesRunner(program_path=_module_path(rulespec_root, chapter), binary_path=engine_binary,
+                              default_entity="CustomsEntry", default_entity_id="entry",
+                              rulespec_repo_roots=(rulespec_root,), batch_size=5_000)
+    paired = []
+    for group in ("full", "components"):
+        group_cases = cases[group]
+        if not group_cases:
+            continue
+        variables = list(group_cases[0].outputs)
+        results = runner.run_cases(group_cases, variables)
+        _require(len(results) == len(contexts[group]), f"chapter {chapter}: missing engine results")
+        paired.extend(zip(results, contexts[group], strict=True))
+    key = _shard_key(chapter=chapter, rulespec_root=rulespec_root, engine_binary=engine_binary)
+    path = cache_dir / key[:2] / f"{key}.jsonl.gz"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    errors = 0
+    with tempfile.NamedTemporaryFile("wb", dir=path.parent, delete=False) as raw:
+        temporary = Path(raw.name)
+        with gzip.GzipFile(filename="", mode="wb", fileobj=raw, compresslevel=6, mtime=0) as zipped:
+            for result, (record, flags, case_id, requested) in paired:
+                error = list(result.errors or [])
+                errors += bool(error)
+                payload = {
+                    "case_id": case_id, "chapter": chapter, "probe": record["probe"],
+                    "expected": {name: record["row"][name] for name in EXPECTED_COLUMNS},
+                    "actual": None if error else _result_values(result, requested), "engine_errors": error,
+                    "plan": record["plan"], "hts10": record["row"]["hts10"],
+                    "country": record["row"]["country"], "iso2": record["row"]["iso2"],
+                    "revision": record["row"]["revision"],
+                    "interval": [record["row"]["clipped_from"], record["row"]["clipped_until"]],
+                    "origin_regime": record["row"]["origin_regime"],
+                    "flags": flags, "hts_line": record["route"]["hts_line"],
+                }
+                zipped.write((json.dumps(payload, sort_keys=True, separators=(",", ":")) + "\n").encode())
+    temporary.replace(path)
+    return {"chapter": chapter, "key": key, "sha256": _sha256(path), "path": str(path),
+            "cases": sum(map(len, cases.values())), "engine_errors": errors,
+            "elapsed_seconds": round(time.perf_counter() - started, 3)}
+
+
+def evaluate_campaign(*, rulespec_root: Path, engine_binary: Path, workers: int,
+                      chapters: Iterable[str] | None = None, resume: bool = False,
+                      cache_dir: Path | None = None) -> dict[str, Any]:
+    _require(1 <= workers <= 3, "workers must be between 1 and 3")
+    declared_chapters = [item["chapter"] for item in json.loads(INPUT_CONTRACT_RECEIPT.read_text())["chapters"]]
+    chosen = sorted(set(chapters or declared_chapters))
+    _require(set(chosen) <= set(declared_chapters), f"unknown chapters: {sorted(set(chosen) - set(declared_chapters))}")
+    cache = cache_dir or CACHE_ROOT / "eval"
+    manifest = _load_manifest()
+    pending = []
+    for chapter in chosen:
+        key = _shard_key(chapter=chapter, rulespec_root=rulespec_root, engine_binary=engine_binary)
+        old = manifest["shards"].get(key)
+        complete = old and Path(old["path"]).is_file() and _sha256(Path(old["path"])) == old["sha256"]
+        if resume and complete:
+            print(f"{chapter}: resume skip cases={old['cases']} errors={old['engine_errors']}", flush=True)
+        else:
+            pending.append(chapter)
+    campaign_started = time.perf_counter()
+    finished = 0
+    with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as pool:
+        futures = {pool.submit(_evaluate_chapter, chapter, rulespec_root=rulespec_root,
+                               engine_binary=engine_binary, cache_dir=cache): chapter for chapter in pending}
+        for future in concurrent.futures.as_completed(futures):
+            receipt = future.result()
+            manifest["shards"][receipt["key"]] = receipt
+            _atomic_json(EVAL_MANIFEST, manifest)
+            finished += 1
+            elapsed = time.perf_counter() - campaign_started
+            eta = elapsed / finished * (len(pending) - finished) if finished else 0
+            print(f"{receipt['chapter']}: cases={receipt['cases']} errors={receipt['engine_errors']} "
+                  f"elapsed={receipt['elapsed_seconds']:.1f}s ETA={eta:.0f}s", flush=True)
+    return manifest
+
+
+def _iter_eval_records(manifest: dict[str, Any]) -> Iterator[dict[str, Any]]:
+    seen_chapters = set()
+    for shard in sorted(manifest["shards"].values(), key=lambda item: item["chapter"]):
+        path = Path(shard["path"])
+        _require(path.is_file() and _sha256(path) == shard["sha256"], f"invalid shard {shard['key']}")
+        _require(shard["chapter"] not in seen_chapters, f"duplicate chapter shard {shard['chapter']}")
+        seen_chapters.add(shard["chapter"])
+        with gzip.open(path, "rt") as source:
+            for line in source:
+                yield json.loads(line)
+
+
+def _expected_slots(expected: dict[str, str]) -> dict[str, float]:
+    values = {name: float(value) for name, value in expected.items()}
+    return {slot: sum(values[name] for name in columns) for slot, columns in EXPECTED_SLOT_COLUMNS.items()}
+
+
+def compare_record(record: dict[str, Any], tolerance: float = TOLERANCE) -> list[dict[str, Any]]:
+    if record["engine_errors"]:
+        return [{"case_id": record["case_id"], "slot": "engine_error", "match": False,
+                 "error": record["engine_errors"], "delta": None}]
+    expected = _expected_slots(record["expected"])
+    comparable = list(record["plan"]["components"])
+    if record["plan"]["base"] == "compare":
+        comparable += ["base"]
+    actual = {slot: sum(record["actual"][name] for name in SLOT_OUTPUTS[slot]) for slot in comparable}
+    rows = []
+    for slot in comparable:
+        delta = actual[slot] - expected[slot]
+        rows.append({"case_id": record["case_id"], "slot": slot,
+                     "expected": expected[slot], "actual": actual[slot],
+                     "delta": delta, "match": abs(delta) <= tolerance})
+    yale_total = sum(float(record["expected"][name]) for name in EXPECTED_COLUMNS)
+    axiom_total = sum(actual.values())
+    if record["plan"]["total"] == "compare":
+        total_delta = axiom_total - yale_total
+        rows.append({"case_id": record["case_id"], "slot": "total", "expected": yale_total,
+                     "actual": axiom_total, "delta": total_delta, "match": abs(total_delta) <= tolerance})
+        stack_delta = record["actual"]["schedule_statutory_stack"] - axiom_total
+        rows.append({"case_id": record["case_id"], "slot": "axiom_total_reconciliation",
+                     "expected": axiom_total, "actual": record["actual"]["schedule_statutory_stack"],
+                     "delta": stack_delta, "match": abs(stack_delta) <= tolerance})
+        yale_rebuilt = sum(expected.values()) + float(record["expected"]["statutory_rate_301_cs"]) + float(record["expected"]["statutory_rate_other"])
+        rows.append({"case_id": record["case_id"], "slot": "yale_total_reconciliation",
+                     "expected": yale_total, "actual": yale_rebuilt, "delta": yale_rebuilt - yale_total,
+                     "match": abs(yale_rebuilt - yale_total) <= tolerance})
+    for row in rows:
+        row["context"] = {key: record[key] for key in ("hts10", "hts_line", "iso2", "revision", "interval", "origin_regime", "flags")}
+    return rows
+
+
+def compare_campaign(*, cache_dir: Path | None = None) -> dict[str, Any]:
+    manifest = _load_manifest()
+    chapters = {shard["chapter"] for shard in manifest["shards"].values()}
+    expected_chapters = {item["chapter"] for item in json.loads(INPUT_CONTRACT_RECEIPT.read_text())["chapters"]}
+    _require(chapters == expected_chapters, "evaluation manifest is incomplete")
+    counts: dict[str, Counter[str]] = {}
+    digest = hashlib.sha256(_render(manifest).encode()).hexdigest()
+    output = (cache_dir or CACHE_ROOT / "compare") / digest[:2] / f"{digest}.jsonl.gz"
+    output.parent.mkdir(parents=True, exist_ok=True)
+    engine_errors = 0
+    with tempfile.NamedTemporaryFile("wb", dir=output.parent, delete=False) as raw:
+        temporary = Path(raw.name)
+        with gzip.GzipFile(filename="", mode="wb", fileobj=raw, mtime=0) as zipped:
+            for record in _iter_eval_records(manifest):
+                for comparison in compare_record(record):
+                    slot = comparison["slot"]
+                    counts.setdefault(slot, Counter())["match" if comparison["match"] else "mismatch"] += 1
+                    engine_errors += slot == "engine_error"
+                    zipped.write((json.dumps(comparison, sort_keys=True, separators=(",", ":")) + "\n").encode())
+    temporary.replace(output)
+    receipt = {"schema": "axiom_oracles.us_tariff_schedule.comparison_summary.v1",
+               "tolerance": TOLERANCE, "comparison_artifact": {"path": str(output), "sha256": _sha256(output)},
+               "per_slot": {slot: dict(counter) for slot, counter in sorted(counts.items())},
+               "engine_errors": engine_errors}
+    _atomic_json(COMPARISON_RECEIPT, receipt)
+    return receipt
+
+
+def mismatch_signature(row: dict[str, Any]) -> str:
+    context = row["context"]
+    signature = {
+        "authority_slot": row["slot"], "delta": row["delta"],
+        "flag_vector": context["flags"], "revision_interval_regime": [context["revision"], *context["interval"]],
+        "origin_regime": context["origin_regime"],
+        "line_incidence_signature": [context["hts_line"], sorted(name for name, value in context["flags"].items() if value)],
+    }
+    return hashlib.sha256(_render(signature).encode()).hexdigest()
+
+
+def validate_dispositions(entries: list[dict[str, Any]], observed: Counter[str]) -> dict[str, str]:
+    selectors: dict[str, str] = {}
+    for entry in entries:
+        signatures = entry.get("signatures")
+        _require(isinstance(signatures, list), f"disposition {entry.get('id')} lacks signatures")
+        evidence = entry.get("evidence", {})
+        _require(evidence.get("instrument_receipt") and evidence.get("receipt_type"),
+                 f"disposition {entry.get('id')} lacks instrument receipt fields")
+        for signature in signatures:
+            _require(signature in observed, f"stale disposition signature {signature}")
+            _require(signature not in selectors, f"overlapping disposition signature {signature}")
+            selectors[signature] = entry["id"]
+    return selectors
+
+
+def classify_campaign() -> dict[str, Any]:
+    comparison = json.loads(COMPARISON_RECEIPT.read_text())
+    artifact = Path(comparison["comparison_artifact"]["path"])
+    _require(_sha256(artifact) == comparison["comparison_artifact"]["sha256"], "comparison artifact hash mismatch")
+    observed: Counter[str] = Counter()
+    engine_errors = 0
+    with gzip.open(artifact, "rt") as source:
+        for line in source:
+            row = json.loads(line)
+            if row["match"]:
+                continue
+            if row["slot"] == "engine_error":
+                engine_errors += 1
+                continue
+            observed[mismatch_signature(row)] += 1
+    ledger = yaml.safe_load(DISPOSITION_LEDGER.read_text())
+    _require(ledger.get("suite") == "us-tariff-schedule", "wrong disposition suite")
+    selectors = validate_dispositions(ledger.get("entries", []), observed)
+    census: Counter[str] = Counter()
+    unexplained = engine_errors
+    for signature, count in observed.items():
+        class_id = selectors.get(signature)
+        if class_id is None:
+            unexplained += count
+        else:
+            census[class_id] += count
+    _require(sum(observed.values()) + engine_errors == sum(census.values()) + unexplained,
+             "classification conservation failure")
+    receipt = {"schema": "axiom_oracles.us_tariff_schedule.classification.v1",
+               "mismatches": sum(observed.values()) + engine_errors,
+               "classified": sum(census.values()), "unexplained": unexplained,
+               "engine_errors": engine_errors, "class_census": dict(sorted(census.items())),
+               "observed_signature_count": len(observed), "selected_signature_count": len(selectors),
+               "conservation": "PASS"}
+    _atomic_json(CLASSIFICATION_RECEIPT, receipt)
+    return receipt
+
+
+def enforce_excluded_exposure(exposure: dict[str, Any]) -> None:
+    for column in ("statutory_rate_301_cs", "statutory_rate_other"):
+        value = exposure.get(column)
+        _require(isinstance(value, (int, float)) and value == value and value == 0,
+                 f"X1 excluded-column exposure is nonzero or missing: {column}={value!r}")
+
+
+def computed_conformant(*, unexplained: int, engine_errors: int) -> bool:
+    return unexplained == 0 and engine_errors == 0
+
+
+def build_report() -> dict[str, Any]:
+    comparison = json.loads(COMPARISON_RECEIPT.read_text())
+    classification = json.loads(CLASSIFICATION_RECEIPT.read_text())
+    quotient = json.loads((OUT_DIR / "quotient-receipt.json").read_text())
+    routing = json.loads(ROUTING_RECEIPT.read_text())
+    exposure = json.loads((OUT_DIR / "full-exposure.json").read_text())
+    enforce_excluded_exposure(exposure)
+    per_slot = comparison["per_slot"]
+    matches = sum(item.get("match", 0) for item in per_slot.values())
+    mismatches = sum(item.get("mismatch", 0) for item in per_slot.values())
+    unexplained = classification["unexplained"]
+    conformant = computed_conformant(unexplained=unexplained, engine_errors=comparison["engine_errors"])
+    scope_sentence = routing["scope_statement"] + f" ({routing['non_ad_valorem_share'] * 100:.4f}%; components-only)."
+    report = {
+        "schema": "axiom.comparison_report.v2", "suite": "us-tariff-schedule",
+        "title": "US tariff full schedule — Axiom bulk path vs Yale statutory panel",
+        "conformant": conformant,
+        "summary": {"total": matches + mismatches, "matches": matches, "mismatches": mismatches,
+                    "explained": classification["classified"], "unexplained": unexplained,
+                    "engine_errors": comparison["engine_errors"]},
+        "output_summary": per_slot, "column_exposure": exposure,
+        "scope": {
+            "full_universe_interval_cells": quotient["full_interval_cells"],
+            "evaluated_quotient_interval_cells": quotient["evaluated_interval_cells"],
+            "trajectory_quotient_label": "lossless partition of the EXPECTED side",
+            "components_only_interval_cells": routing["non_ad_valorem_components_only_cells"],
+            "components_only_share": routing["non_ad_valorem_share"],
+            "components_only_statement": scope_sentence,
+            "limitation": "Does not prove identical Axiom behavior for unprobed countries grouped by Yale trajectory.",
+        },
+        "classification": classification,
+        "scoreboard": {"gate": "S1", "conformant": conformant,
+                       "derivation": "unexplained == 0 and engine_errors == 0"},
+    }
+    _atomic_json(REPORT_PATH, report)
+    return report
+
+
+def witness_replay(*, execute: bool = False) -> dict[str, Any]:
+    dashboard = REPO_ROOT / "dashboard/public/data/axiom-yale-us-tariff-panel.json"
+    _require(dashboard.is_file(), "missing committed us-tariff-panel detail")
+    before = dashboard.read_bytes()
+    if execute:
+        subprocess.run([sys.executable, str(REPO_ROOT / "scripts/run_comparison.py"),
+                        "us-tariff-panel"], check=True)
+    payload = json.loads(before)
+    summary = payload.get("summary", {})
+    dispositioned = summary.get("dispositioned", {})
+    verdict = summary.get("error_count") == 0 and dispositioned.get("unexplained_count") == 0
+    _require(verdict, "us-tariff-panel witness is not conformant")
+    _require(dashboard.read_bytes() == before, "us-tariff-panel detail bytes changed during replay")
+    return {"schema": "axiom_oracles.us_tariff_schedule.witness_replay.v1",
+            "conformant": True, "detail_sha256": hashlib.sha256(before).hexdigest(), "byte_stable": True}
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("stage", choices=("prepass", "input-contract", "evaluate"))
-    parser.add_argument("--rulespec-root", type=Path, required=True)
-    parser.add_argument("--engine-binary", type=Path)
+    parser.add_argument("stage", choices=("prepass", "input-contract", "projection", "evaluate",
+                                         "compare", "classify", "report", "witness-replay"))
+    parser.add_argument("--rulespec-root", type=Path,
+                        default=Path("/Users/maxghenis/TheAxiomFoundation/_b1wt/rulespec-us-b16"))
+    parser.add_argument("--engine-binary", type=Path,
+                        default=Path("/Users/maxghenis/TheAxiomFoundation/axiom-rules-engine-pinned/target/release/axiom-rules-engine"))
+    parser.add_argument("--workers", type=int, default=3)
+    parser.add_argument("--chapters", help="comma-separated chapters, for example CH01,CH72")
+    parser.add_argument("--resume", action="store_true")
     args = parser.parse_args()
     started = time.perf_counter()
-    if args.stage == "evaluate":
-        _require(args.engine_binary is not None, "--engine-binary is required")
+    if args.stage == "projection":
         receipt = evaluate_projection(
             rulespec_root=args.rulespec_root.resolve(),
             engine_binary=args.engine_binary.resolve(),
         )
         print(_render(receipt), end="")
         return 0 if receipt["verdict"] == "PASS" else 2
+    if args.stage == "evaluate":
+        chapters = None if not args.chapters else [item.strip().upper().removeprefix("CH") for item in args.chapters.split(",")]
+        receipt = evaluate_campaign(rulespec_root=args.rulespec_root.resolve(),
+                                    engine_binary=args.engine_binary.resolve(), workers=args.workers,
+                                    chapters=chapters, resume=args.resume)
+        print(_render(receipt), end="")
+        return 0
+    if args.stage == "compare":
+        print(_render(compare_campaign()), end="")
+        return 0
+    if args.stage == "classify":
+        print(_render(classify_campaign()), end="")
+        return 0
+    if args.stage == "report":
+        print(_render(build_report()), end="")
+        return 0
+    if args.stage == "witness-replay":
+        print(_render(witness_replay(execute=True)), end="")
+        return 0
     if args.stage == "input-contract":
         _require(args.engine_binary is not None, "--engine-binary is required")
         receipt = build_input_contract_receipt(

@@ -1,0 +1,58 @@
+schema: axiom_oracles.dispositions.v1
+suite: us-tariff-schedule
+updated: '2026-08-17'
+entries:
+  - &class
+    id: current-incidence-vs-yale-vintage
+    concept: us:policies/cbp/us-tariff-schedule#statutory_total
+    kind: signature_class
+    signatures: []
+    disposition: explained_residual
+    expires_on_source_change: true
+    evidence: &pending
+      mechanism: Reviewed class stub; exact signatures and instrument citation are filled from the completed campaign census.
+      receipt_type: revision-and-instrument-vintage
+      instrument_receipt: pending-real-signature-census
+      sources: [comparisons/us-tariff-schedule.yaml]
+  - <<: *class
+    id: chapter-9802-partial-value
+    evidence: {<<: *pending, receipt_type: instrument-and-input-availability}
+  - <<: *class
+    id: gn6-conditional-utilization
+    evidence: {<<: *pending, receipt_type: general-note-and-condition-column}
+  - <<: *class
+    id: brazil-301-fed-false
+    disposition: axiom_encoding_gap
+    evidence: {<<: *pending, receipt_type: instrument-and-input-feed}
+  - <<: *class
+    id: forced-labor-301-fed-false
+    disposition: axiom_encoding_gap
+    evidence: {<<: *pending, receipt_type: instrument-and-input-feed}
+  - <<: *class
+    id: china-2024-action-fed-false
+    disposition: axiom_encoding_gap
+    evidence: {<<: *pending, receipt_type: instrument-and-input-feed}
+  - <<: *class
+    id: solar-fed-false
+    disposition: axiom_encoding_gap
+    evidence: {<<: *pending, receipt_type: instrument-and-input-feed}
+  - <<: *class
+    id: non-metal-section-232-family
+    disposition: axiom_encoding_gap
+    evidence: {<<: *pending, receipt_type: authority-registry-and-output-inventory}
+  - <<: *class
+    id: section-201-vintage-proxy
+    disposition: upstream_engine_gap
+    evidence: {<<: *pending, receipt_type: proclamation-and-reference-methodology}
+  - <<: *class
+    id: yale-defect-34-9802-section-122
+    disposition: upstream_engine_gap
+    evidence: {<<: *pending, receipt_type: upstream-issue-and-source-lines}
+  - <<: *class
+    id: yale-defect-35-90314970-gn6
+    disposition: upstream_engine_gap
+    evidence: {<<: *pending, receipt_type: upstream-issue-and-exact-code}
+  - <<: *class
+    id: column-2-gn3b
+    disposition: upstream_engine_gap
+    evidence: {<<: *pending, receipt_type: parser-source-and-general-note}
