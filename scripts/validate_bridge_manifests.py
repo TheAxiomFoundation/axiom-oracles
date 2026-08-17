@@ -124,20 +124,58 @@ STRICT_EVIDENCE_ROOTS = (
 )
 
 
-def _unshipped_evidence_paths(text: str) -> list[str]:
-    """Repository paths a covered_by entry cites that exist but live OUTSIDE
-    the shipped-artifact roots — legal for ordinary lanes (visible debt is
-    fine there), forbidden for strict-declared lanes."""
-    out: list[str] = []
+def _shipped_evidence_file(candidate: str) -> bool:
+    """True iff ``candidate`` is an explicit repository-relative FILE whose
+    RESOLVED location lies inside an allowed evidence root, with no symlink
+    at any path component.
+
+    Containment is decided on ``Path.resolve()`` + ``relative_to``, never on
+    string prefixes: a lexical ``docs/`` symlink pointing outside the roots
+    passed the old ``startswith`` check (delta-audit #2, item 7)."""
+    if not candidate or candidate.startswith("/") or ".." in candidate.split("/"):
+        return False
+    lexical = REPO_ROOT / candidate
+    if not lexical.is_file():
+        return False
+    # No symlink anywhere along the cited path (a symlinked directory would
+    # otherwise let evidence "live" under docs/ while resolving elsewhere).
+    probe = REPO_ROOT
+    for part in Path(candidate).parts:
+        probe = probe / part
+        if probe.is_symlink():
+            return False
+    try:
+        resolved = lexical.resolve(strict=True)
+        rel = resolved.relative_to(REPO_ROOT.resolve(strict=True))
+    except (OSError, ValueError):
+        return False
+    return rel.as_posix().startswith(
+        tuple(root.rstrip("/") + "/" for root in STRICT_EVIDENCE_ROOTS)
+    )
+
+
+def _strict_evidence_tokens(text: str) -> tuple[list[str], list[str]]:
+    """Split a covered_by entry into (shipped_files, offending_paths).
+
+    ``shipped_files`` are explicit repository-relative files inside the
+    evidence roots (resolved, symlink-free). ``offending_paths`` are tokens
+    that name an EXISTING repository file (or symlink) that is NOT such a
+    shipped file — tests/…, a symlink, an escape — which a strict lane may
+    not cite at all. Suite-name tokens and prose are neither: they are fine
+    as commentary but do not count as strict evidence."""
+    shipped: list[str] = []
+    offending: list[str] = []
     for token in text.replace(",", " ").replace("(", " ").replace(")", " ").split():
         candidate = token.strip("'\"`;")
-        if not candidate or candidate.startswith("/") or ".." in candidate:
+        if not candidate:
             continue
-        if (REPO_ROOT / candidate).is_file() and not candidate.startswith(
-            STRICT_EVIDENCE_ROOTS
-        ):
-            out.append(candidate)
-    return out
+        if _shipped_evidence_file(candidate):
+            shipped.append(candidate)
+            continue
+        lexical = REPO_ROOT / candidate if not candidate.startswith("/") else None
+        if lexical is not None and (lexical.is_file() or lexical.is_symlink()):
+            offending.append(candidate)
+    return shipped, offending
 
 
 def _report_for(suite_names: list[str]) -> tuple[str | None, dict | None]:
@@ -650,18 +688,30 @@ def validate(path: Path, manifest: dict) -> tuple[list[str], list[str]]:
                         "repository (cross-repo evidence — audit debt)"
                     )
                 if manifest.get("strict") is True:
-                    # A certified lane's evidence must be shipped bytes: a
-                    # citation that resolves only when an unshipped dir such
-                    # as tests/ is present makes bridge_audited depend on the
-                    # checkout, not the artifacts.
+                    # A certified lane's evidence must be shipped bytes, and
+                    # EVERY covered_by entry must name at least one explicit
+                    # repository-relative file inside the evidence roots
+                    # (resolved, symlink-free). A bare suite-name token or
+                    # prose is not evidence for a strict lane — the census
+                    # keys bridge_audited off this, so a token that
+                    # `_covered_by_resolves` accepts for ordinary lanes must
+                    # not carry a certificate (delta-audit #2, item 7).
                     for ref in covered_by:
-                        for path in _unshipped_evidence_paths(str(ref)):
+                        shipped, offending = _strict_evidence_tokens(str(ref))
+                        for path in offending:
                             findings.append(
                                 f"{name}: bridged binding [{index}] covered_by "
-                                f"cites {path!r}, which is outside the shipped "
-                                "evidence roots — a strict lane's evidence must "
-                                "live under "
+                                f"cites {path!r}, which is not a shipped, "
+                                "symlink-free evidence file under "
                                 + ", ".join(STRICT_EVIDENCE_ROOTS)
+                            )
+                        if not shipped:
+                            findings.append(
+                                f"{name}: bridged binding [{index}] covered_by "
+                                f"entry {str(ref)[:60]!r} names no explicit "
+                                "repository-relative evidence file under the "
+                                "shipped roots — a strict lane's evidence must "
+                                "be a file, not a suite name or prose"
                             )
             if not isinstance(binding.get("source"), str) or not binding.get("source"):
                 errors.append(

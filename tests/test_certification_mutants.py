@@ -1074,12 +1074,14 @@ def test_strict_lane_evidence_must_be_shipped_bytes():
         f"{unshipped} — a fixture that only exists in a full checkout"
     ]
     _errors, mutated = vbm.validate(path, manifest)
-    assert any("outside the shipped evidence roots" in f for f in mutated), mutated
+    assert any(
+        "is not a shipped, symlink-free evidence file" in f for f in mutated
+    ), mutated
 
     # Non-strict lanes may still cite such paths (visible debt, not enforced).
     manifest["strict"] = False
     _errors, relaxed = vbm.validate(path, manifest)
-    assert not any("outside the shipped evidence roots" in f for f in relaxed)
+    assert not any("is not a shipped, symlink-free evidence file" in f for f in relaxed)
 
 
 def test_certified_lane_census_is_hermetic_without_tests_dir(tmp_path):
@@ -2101,3 +2103,67 @@ def test_nz_syntax_only_executable_metadata_has_no_computed_acceptance_path():
             legs=[{"suite": "nz-mutant"}],
             evidence=[],
         )
+
+
+def test_strict_lane_evidence_cannot_be_a_suite_name_token():
+    """MUTANT (delta-audit #2, item 7): `_covered_by_resolves` accepts any
+    KNOWN_SUITES token for ordinary lanes, so replacing a strict binding's
+    evidence with the bare suite name kept --strict, the census and the
+    certificate green and byte-identical. A strict lane's covered_by entry
+    must name an explicit shipped evidence FILE; a suite name is prose."""
+    vbm = _load("validate_bridge_manifests")
+    path = REPO / "axiom_oracles/bridges/manifests/dk-child-youth-benefit-couple.yaml"
+    manifest = yaml.safe_load(path.read_text())
+    assert manifest.get("strict") is True
+    _errors, findings = vbm.validate(path, manifest)
+    assert not findings, findings
+
+    binding = next(b for b in manifest["bindings"] if b.get("kind") == "bridged")
+    binding["covered_by"] = ["dk-child-youth-benefit-couple"]
+    assert vbm._covered_by_resolves("dk-child-youth-benefit-couple")  # ordinary lanes: fine
+    _errors, mutated = vbm.validate(path, manifest)
+    assert any("names no explicit repository-relative evidence file" in f for f in mutated), mutated
+
+
+def test_strict_lane_evidence_rejects_symlinked_roots(tmp_path):
+    """MUTANT (delta-audit #2, item 7): containment was a string-prefix check,
+    so a `docs/` symlink to a file OUTSIDE the evidence roots passed. Now
+    containment resolves the path and refuses any symlink component."""
+    vbm = _load("validate_bridge_manifests")
+    outside = REPO / "tests" / "fixtures" / "evidence" / "contested_reports" / "census.json"
+    assert outside.is_file()
+    link_dir = REPO / "docs" / "zz-audit-symlink-mutant"
+    assert not link_dir.exists()
+    link_dir.symlink_to(REPO / "tests" / "fixtures" / "evidence" / "contested_reports")
+    try:
+        cited = "docs/zz-audit-symlink-mutant/census.json"
+        assert (REPO / cited).is_file()  # lexically under docs/, physically not
+        assert vbm._shipped_evidence_file(cited) is False
+        shipped, offending = vbm._strict_evidence_tokens(f"{cited} — smuggled evidence")
+        assert shipped == [] and offending == [cited]
+    finally:
+        link_dir.unlink()
+    # And the honest citation form is accepted.
+    assert vbm._shipped_evidence_file(
+        "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json"
+    )
+
+
+def test_census_binds_strict_manifest_identity():
+    """Any byte change to a strict-clean manifest must move its census row
+    (bridge_manifest_sha256), so no evidence edit — however the validator
+    judges it — can leave census/certificate bytes identical."""
+    census = _load("exercise_census")
+    path = REPO / "axiom_oracles/bridges/manifests/dk-child-youth-benefit.yaml"
+    original = path.read_text()
+    before = census._manifest_strict_audit()["dk-child-youth-benefit"]
+    assert before["clean"] is True
+    assert len(before["manifest_sha256"]) == 64
+    try:
+        path.write_text(original + "\n# an innocuous trailing comment\n")
+        after = census._manifest_strict_audit()["dk-child-youth-benefit"]
+    finally:
+        path.write_text(original)
+    assert after["clean"] is True
+    assert after["manifest_sha256"] != before["manifest_sha256"]
+    assert census._manifest_strict_audit()["dk-child-youth-benefit"] == before
