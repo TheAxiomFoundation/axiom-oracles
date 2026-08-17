@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Generate report-bound, versioned indexes for certified case chunks.
 
-The default set is the two chunk-backed legs currently named by
+The default set is the chunk-backed legs currently named by
 ``certify.PROGRAMS``. Other reports may be supplied explicitly:
 
     python scripts/generate_chunk_indexes.py
@@ -40,6 +40,7 @@ from axiom_oracles.evidence import (  # noqa: E402
 DEFAULT_REPORTS = (
     "dashboard/public/data/axiom-policyengine-co-snap-ecps.json",
     "dashboard/public/data/axiom-snapqc-co-snap.json",
+    "dashboard/public/data/nz-treasury-incomeexplorer.json",
 )
 
 

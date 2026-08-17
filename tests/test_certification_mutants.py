@@ -560,13 +560,22 @@ def test_nz_unified_exercise_receipt_does_not_self_audit_a_bridge():
     assert row["evidence_source"] == "unified-experiment-receipt"
 
 
-def test_nz_attested_premises_cannot_certify():
+def test_nz_computed_exercise_does_not_promote_attested_other_premises():
     certify = _load("certify")
     for program in sorted(name for name in certify.PROGRAMS if name.startswith("nz/")):
         certificate = certify.build_certificate(program, certify.PROGRAMS[program])
         assert certificate["certified"]["value"] is False
         assert certificate["certified"]["state"] == "no"
-        assert certificate["verdicts"]["exercised"]["mode"] == "attested"
+        assert certificate["verdicts"]["exercised"]["mode"] == "computed"
+        assert certificate["verdicts"]["exercised"]["value"] is True
+        assert (
+            certificate["verdicts"]["exercised"]["catalog_completeness"]["mode"]
+            == "attested"
+        )
+        assert certificate["verdicts"]["exercised"]["capture_lineage"]["mode"] == (
+            "attested"
+        )
+        assert any(blocker.startswith("exercise denominator:") for blocker in certificate["blockers"])
         assert certificate["verdicts"]["closed"]["mode"] == "attested"
         assert certificate["verdicts"]["executable"]["mode"] == "attested"
 
@@ -1813,6 +1822,391 @@ def _nz_inputs(module):
     )
 
 
+def _nz_trace_inputs(module):
+    return (
+        json.loads(module.SOURCE_PATH.read_text()),
+        json.loads(module.TRACE_PATH.read_text()),
+    )
+
+
+def test_nz_bound_cases_fully_reconcile_every_existing_verdict():
+    evidence = validate_suite_evidence(
+        REPO / "dashboard/public/data/nz-treasury-incomeexplorer.json"
+    )
+    assert evidence.valid is True
+    assert evidence.binding == "bound"
+    assert evidence.reconciliation == "full"
+    assert evidence.case_count == 104
+    assert (
+        evidence.comparison_count,
+        evidence.match_count,
+        evidence.mismatch_count,
+    ) == (1_976, 1_454, 522)
+    assert (
+        evidence.case_verdicts_sha256
+        == "2b7adb537af2627a937e4e61bf026aeee5e9555a2e4f2cdfb8677907f53c1bd5"
+    )
+
+
+def test_nz_missing_matched_verdict_cannot_preserve_headline_counts(tmp_path):
+    data_dir = tmp_path / "dashboard/public/data"
+    data_dir.mkdir(parents=True)
+    report_path = data_dir / "nz-treasury-incomeexplorer.json"
+    shutil.copy2(
+        REPO / "dashboard/public/data/nz-treasury-incomeexplorer.json",
+        report_path,
+    )
+    suite_dir = data_dir / "cases/nz-treasury-incomeexplorer"
+    shutil.copytree(
+        REPO / "dashboard/public/data/cases/nz-treasury-incomeexplorer",
+        suite_dir,
+    )
+    chunk_path = suite_dir / "chunk-0.json"
+    rows = json.loads(chunk_path.read_text())
+    row = next(item for item in rows if item["v"])
+    row["v"].pop()
+    chunk_path.write_text(json.dumps(rows, separators=(",", ":")))
+
+    evidence = validate_suite_evidence(report_path)
+    assert evidence.valid is False
+    assert any(
+        "summary.match_count 1454 does not match parsed per-case verdicts 1453"
+        in defect
+        for defect in evidence.content_defects
+    )
+
+
+@pytest.mark.parametrize(
+    ("mutation", "marker"),
+    [
+        ("trace-schema", "wrong schema or suite"),
+        ("trace-suite", "wrong schema or suite"),
+        ("capture-lineage", "capture lineage"),
+        ("source-receipt", "not bound to the source comparison"),
+        ("harness-receipt", "harness provenance"),
+        ("compiled-receipt", "compiled-program receipt"),
+        ("engine-receipt", "engine receipt"),
+        ("rulespec-receipt", "RuleSpec receipt"),
+        ("trace-period", "trace period"),
+        ("missing-source-catalog", "no exercise input catalog"),
+        ("malformed-source-catalog-row", "source catalog slot"),
+        ("duplicate-source-catalog-name", "canonical names are not unique"),
+        ("missing-evaluation", "evaluation count"),
+        ("malformed-evaluation", "must be an object"),
+        ("reordered-id", "missing, duplicate, or reordered id"),
+        ("request-mode", "not explain mode"),
+        ("relations", "zero-relation request"),
+        ("missing-inputs", "no typed inputs"),
+        ("query-count", "exactly one query"),
+        ("malformed-query", "query must be an object"),
+        ("invalid-outputs", "requested outputs are invalid"),
+        ("declared-roots", "requested-output root receipt"),
+        ("missing-returned-output", "do not biject requested roots"),
+        ("cross-view-root", "cross or escape NZ views"),
+        ("wrong-view", "wrong certificate view"),
+        ("regrouped-root-set", "unexpected requested-output root set"),
+        ("query-period", "query period"),
+        ("query-entity", "query entity_id"),
+        ("unknown-input", "unknown or duplicate input"),
+        ("malformed-input-record", "must be an object"),
+        ("input-binding", "entity or interval"),
+        ("malformed-input", "not a typed decimal string"),
+        ("response-object", "response must be an object"),
+        ("response-mode", "response mode receipt"),
+        ("response-entity", "response entity_id"),
+        ("response-period", "response period"),
+        ("output-identity", "lost identity"),
+        ("malformed-scalar", "returned scalar"),
+        ("malformed-judgment", "returned judgment"),
+        ("unknown-output-kind", "unknown kind"),
+        ("changed-typed-input", "do not reproduce the supplied-input receipt"),
+    ],
+)
+def test_nz_view_scoped_trace_mutants_are_killed(mutation, marker):
+    nz = _load("nz_incomeexplorer")
+    source, traces = _nz_trace_inputs(nz)
+    mutant = {**traces, "evaluations": list(traces["evaluations"])}
+
+    def evaluation(index=0):
+        row = copy.deepcopy(mutant["evaluations"][index])
+        mutant["evaluations"][index] = row
+        return row
+
+    def bind_mutant_source():
+        mutant["capture"] = copy.deepcopy(mutant["capture"])
+        mutant["capture"]["source_comparison"]["substance_sha256"] = (
+            nz._canonical_sha256(nz._without_provenance(source))
+        )
+
+    if mutation == "trace-schema":
+        mutant["schema"] = "mutant"
+    elif mutation == "trace-suite":
+        mutant["suite"] = "mutant"
+    elif mutation == "capture-lineage":
+        mutant["capture"] = copy.deepcopy(mutant["capture"])
+        mutant["capture"]["lineage_mode"] = "computed"
+    elif mutation == "source-receipt":
+        mutant["capture"] = copy.deepcopy(mutant["capture"])
+        mutant["capture"]["source_comparison"]["regenerated_sha256"] = "0" * 64
+    elif mutation == "harness-receipt":
+        mutant["capture"] = copy.deepcopy(mutant["capture"])
+        mutant["capture"]["source_harness"]["sha256"] = "0" * 64
+    elif mutation == "compiled-receipt":
+        mutant["compiled_program"] = {
+            **mutant["compiled_program"],
+            "derived_outputs": mutant["compiled_program"]["derived_outputs"] + 1,
+        }
+    elif mutation == "engine-receipt":
+        mutant["engine"] = {**mutant["engine"], "git_sha": "0" * 40}
+    elif mutation == "rulespec-receipt":
+        mutant["rulespec_commit"] = "0" * 40
+    elif mutation == "trace-period":
+        mutant["period"] = {**mutant["period"], "end": "2027-04-01"}
+    elif mutation == "missing-source-catalog":
+        source = {**source, "exercise_input_catalog": {}}
+        bind_mutant_source()
+    elif mutation == "malformed-source-catalog-row":
+        source = copy.deepcopy(source)
+        slot = next(iter(source["exercise_input_catalog"]))
+        source["exercise_input_catalog"][slot] = None
+        bind_mutant_source()
+    elif mutation == "duplicate-source-catalog-name":
+        source = copy.deepcopy(source)
+        rows = iter(source["exercise_input_catalog"].values())
+        first = next(rows)["canonical_request_name"]
+        next(rows)["canonical_request_name"] = first
+        bind_mutant_source()
+    elif mutation == "missing-evaluation":
+        mutant["evaluations"].pop()
+    elif mutation == "malformed-evaluation":
+        mutant["evaluations"][0] = None
+    elif mutation == "reordered-id":
+        evaluation()["evaluation_id"] = "nz-ie-eval-9999"
+    elif mutation == "request-mode":
+        evaluation()["request"]["mode"] = "values"
+    elif mutation == "relations":
+        evaluation()["request"]["dataset"]["relations"] = [{}]
+    elif mutation == "missing-inputs":
+        evaluation()["request"]["dataset"]["inputs"] = []
+    elif mutation == "query-count":
+        evaluation()["request"]["queries"] = []
+    elif mutation == "malformed-query":
+        evaluation()["request"]["queries"] = [None]
+    elif mutation == "invalid-outputs":
+        evaluation()["request"]["queries"][0]["outputs"] = []
+    elif mutation == "declared-roots":
+        evaluation()["requested_output_roots"] = ["mutant"]
+    elif mutation == "changed-typed-input":
+        evaluation()["request"]["dataset"]["inputs"][0]["value"]["value"] = (
+            "999999999"
+        )
+    elif mutation == "missing-returned-output":
+        row = evaluation()
+        root = row["requested_output_roots"][0]
+        del row["response"]["outputs"][root]
+    elif mutation == "cross-view-root":
+        row = evaluation()
+        foreign = nz.PROGRAM_VIEWS["nz/income-tax"]["roots"][0]
+        template = copy.deepcopy(
+            next(iter(row["response"]["outputs"].values()))
+        )
+        template["id"] = foreign
+        row["request"]["queries"][0]["outputs"].append(foreign)
+        row["requested_output_roots"].append(foreign)
+        row["response"]["outputs"][foreign] = template
+    elif mutation == "wrong-view":
+        evaluation()["view"] = "nz/income-tax"
+    elif mutation == "regrouped-root-set":
+        index = next(
+            i
+            for i, row in enumerate(mutant["evaluations"])
+            if row["view"] == "nz/working-for-families"
+            and len(row["requested_output_roots"]) == 7
+        )
+        row = evaluation(index)
+        root = row["requested_output_roots"].pop()
+        row["request"]["queries"][0]["outputs"].remove(root)
+        del row["response"]["outputs"][root]
+    elif mutation == "query-period":
+        evaluation()["request"]["queries"][0]["period"]["end"] = "2027-04-01"
+    elif mutation == "query-entity":
+        evaluation()["request"]["queries"][0]["entity_id"] = ""
+    elif mutation == "unknown-input":
+        evaluation()["request"]["dataset"]["inputs"][0]["name"] = "mutant"
+    elif mutation == "malformed-input-record":
+        evaluation()["request"]["dataset"]["inputs"][0] = None
+    elif mutation == "input-binding":
+        evaluation()["request"]["dataset"]["inputs"][0]["entity_id"] = "mutant"
+    elif mutation == "malformed-input":
+        evaluation()["request"]["dataset"]["inputs"][0]["value"]["value"] = True
+    elif mutation == "response-object":
+        evaluation()["response"] = None
+    elif mutation == "response-mode":
+        evaluation()["response"]["metadata"]["actual_mode"] = "values"
+    elif mutation == "response-entity":
+        evaluation()["response"]["entity_id"] = "mutant"
+    elif mutation == "response-period":
+        evaluation()["response"]["period"]["end"] = "2027-04-01"
+    elif mutation == "output-identity":
+        row = evaluation()
+        next(iter(row["response"]["outputs"].values()))["id"] = "mutant"
+    elif mutation == "malformed-scalar":
+        row = evaluation()
+        next(iter(row["response"]["outputs"].values()))["value"]["value"] = (
+            "not-a-number"
+        )
+    elif mutation == "malformed-judgment":
+        index = next(
+            i
+            for i, row in enumerate(mutant["evaluations"])
+            if any(
+                item.get("kind") == "judgment"
+                for item in row["response"]["outputs"].values()
+            )
+        )
+        row = evaluation(index)
+        item = next(
+            item
+            for item in row["response"]["outputs"].values()
+            if item.get("kind") == "judgment"
+        )
+        item["outcome"] = "maybe"
+    elif mutation == "unknown-output-kind":
+        row = evaluation()
+        next(iter(row["response"]["outputs"].values()))["kind"] = "mutant"
+
+    with pytest.raises(nz.NZRecordError, match=marker):
+        nz._trace_view_receipts(source, mutant, verify_file_hash=False)
+
+
+def test_nz_exercise_is_derived_separately_for_each_requested_root_set():
+    nz = _load("nz_incomeexplorer")
+    views = nz.derive_bound_trace_views()
+
+    benefits = views["nz/main-benefits"]["root_set_receipts"]
+    assert [(row["evaluation_count"], len(row["evidence_fields"])) for row in benefits] == [
+        (150, 11),
+        (16, 2),
+    ]
+    wff = views["nz/working-for-families"]["root_set_receipts"]
+    assert [(row["evaluation_count"], len(row["evidence_fields"])) for row in wff] == [
+        (41, 40),
+        (137, 91),
+    ]
+
+
+def test_nz_every_declared_root_set_must_be_observed(monkeypatch):
+    nz = _load("nz_incomeexplorer")
+    source, traces = _nz_trace_inputs(nz)
+    benefits = nz.REQUESTED_OUTPUT_ROOT_SETS["nz/main-benefits"]
+    monkeypatch.setitem(
+        nz.REQUESTED_OUTPUT_ROOT_SETS,
+        "nz/main-benefits",
+        (*benefits, tuple(nz.PROGRAM_VIEWS["nz/main-benefits"]["roots"])),
+    )
+    with pytest.raises(nz.NZRecordError, match="root sets do not exactly close"):
+        nz._trace_view_receipts(source, traces, verify_file_hash=False)
+
+
+def test_nz_trace_receipt_is_hard_bound_to_exact_bytes(tmp_path, monkeypatch):
+    nz = _load("nz_incomeexplorer")
+    source, traces = _nz_trace_inputs(nz)
+    mutant_path = tmp_path / "evaluation-traces.json"
+    mutant_path.write_bytes(nz.TRACE_PATH.read_bytes() + b"\n")
+    monkeypatch.setattr(nz, "TRACE_PATH", mutant_path)
+    with pytest.raises(nz.NZRecordError, match="trace bytes changed"):
+        nz._trace_view_receipts(source, traces)
+
+
+@pytest.mark.parametrize(
+    ("mutation", "marker"),
+    [
+        ("raw-schema", "raw NZ trace capture has the wrong schema"),
+        ("comparison-substance", "changed comparison substance"),
+        ("comparison-bytes", "comparison bytes changed"),
+        ("missing-evaluations", "raw NZ trace capture has no evaluations"),
+        ("missing-outputs", "has no outputs"),
+        ("cross-view-outputs", "crosses views"),
+    ],
+)
+def test_nz_trace_normalizer_mutants_are_killed(mutation, marker, monkeypatch):
+    nz = _load("nz_incomeexplorer")
+    source, traces = _nz_trace_inputs(nz)
+    capture = {**traces, "schema": nz.RAW_TRACE_SCHEMA}
+    regenerated = copy.deepcopy(source)
+
+    if mutation == "raw-schema":
+        capture["schema"] = "mutant"
+    elif mutation == "comparison-substance":
+        regenerated["_mutant"] = True
+    elif mutation == "comparison-bytes":
+        regenerated.setdefault("provenance", {})["mutant"] = True
+    else:
+        monkeypatch.setattr(
+            nz,
+            "REGENERATED_SOURCE_SHA256",
+            nz._canonical_file_sha(regenerated),
+        )
+        if mutation == "missing-evaluations":
+            capture["evaluations"] = None
+        elif mutation == "missing-outputs":
+            capture["evaluations"] = [{"request": {"queries": [{}]}}]
+        else:
+            capture["evaluations"] = [
+                {
+                    "request": {
+                        "queries": [
+                            {
+                                "outputs": [
+                                    nz.PROGRAM_VIEWS["nz/income-tax"]["roots"][0],
+                                    nz.PROGRAM_VIEWS["nz/acc-earners-levy"]["roots"][
+                                        0
+                                    ],
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+
+    with pytest.raises(nz.NZRecordError, match=marker):
+        nz.build_trace_document(capture, regenerated)
+
+
+def test_nz_attested_catalog_denominator_cannot_contradict_its_receipt(monkeypatch):
+    certify = _load("certify")
+    source_path = (
+        REPO / "comparisons/nz-treasury-incomeexplorer/source-comparison.json"
+    )
+    mutant = json.loads(source_path.read_text())
+    mutant["compiled_program"]["input_slots"] += 1
+    original_load = certify._load
+
+    def load_with_mutant(path):
+        return mutant if path == source_path else original_load(path)
+
+    monkeypatch.setattr(certify, "_load", load_with_mutant)
+    with pytest.raises(ValueError, match="attested denominator"):
+        certify._attested_exercise_catalog(
+            certify.PROGRAMS["nz/income-tax"],
+            [],
+        )
+
+
+def test_nz_attested_catalog_receipt_must_have_catalog_and_compiled_shape(monkeypatch):
+    certify = _load("certify")
+    monkeypatch.setattr(
+        certify,
+        "_load",
+        lambda _path: {"exercise_input_catalog": [], "compiled_program": {}},
+    )
+    with pytest.raises(ValueError, match="completeness receipt is malformed"):
+        certify._attested_exercise_catalog(
+            certify.PROGRAMS["nz/income-tax"],
+            [],
+        )
+
+
 def test_nz_population_must_remain_treasurys_complete_spine():
     nz = _load("nz_incomeexplorer")
     source, snapshot, closures = _nz_inputs(nz)
@@ -1880,10 +2274,109 @@ def test_nz_exercise_receipt_cannot_fake_variation():
         (REPO / "dashboard/public/data/nz-treasury-incomeexplorer.json").read_text()
     )
     mutant = copy.deepcopy(report["experiment"])
-    name, row = next(iter(mutant["active_inputs"].items()))
-    row["state"] = "varied" if row["state"] == "constant" else "constant"
-    with pytest.raises(ValueError, match="contradicts its observations"):
-        census._unified_experiment_fields("nz-mutant", mutant)
+    view = "nz/income-tax"
+    name, row = next(iter(mutant["views"][view]["evidence_fields"].items()))
+    row["distinct"] = row["distinct"] + 1
+    with pytest.raises(ValueError, match="embedded view receipts diverge from traces"):
+        census._unified_view_fields("nz-mutant", view, mutant)
+
+
+@pytest.mark.parametrize(
+    ("mutation", "view", "marker"),
+    [
+        ("schema", "nz/income-tax", "unsupported experiment receipt schema"),
+        ("trace", "nz/income-tax", "lacks a bound trace artifact"),
+        ("view", "nz/not-real", "has no view"),
+    ],
+)
+def test_nz_certificate_trace_contract_mutants_are_killed(mutation, view, marker):
+    census = _load("exercise_census")
+    report = json.loads(
+        (REPO / "dashboard/public/data/nz-treasury-incomeexplorer.json").read_text()
+    )
+    mutant = copy.deepcopy(report["experiment"])
+    if mutation == "schema":
+        mutant["schema"] = "mutant"
+    elif mutation == "trace":
+        mutant["trace"] = None
+
+    with pytest.raises(ValueError, match=marker):
+        census._unified_view_fields("nz-mutant", view, mutant)
+
+
+@pytest.mark.parametrize(
+    ("mutation", "marker"),
+    [
+        ("evaluation-count", "has no evaluation traces"),
+        ("evidence-fields", "has no traced input fields"),
+        ("field-state", "contradicts its traces"),
+        ("root-set-count", "requested-root receipt is not exact"),
+        ("trace-binding", "trace/root binding is incomplete"),
+        ("root-reconciliation", "trace/root binding is incomplete"),
+    ],
+)
+def test_nz_derived_view_shape_mutants_are_killed(mutation, marker, monkeypatch):
+    census = _load("exercise_census")
+    report = json.loads(
+        (REPO / "dashboard/public/data/nz-treasury-incomeexplorer.json").read_text()
+    )
+    experiment = copy.deepcopy(report["experiment"])
+    views = experiment["views"]
+    row = views["nz/income-tax"]
+    if mutation == "evaluation-count":
+        row["evaluation_count"] = 0
+    elif mutation == "evidence-fields":
+        row["evidence_fields"] = {}
+    elif mutation == "field-state":
+        field = next(iter(row["evidence_fields"].values()))
+        field["state"] = "constant"
+    elif mutation == "root-set-count":
+        row["root_set_receipts"][0]["evaluation_count"] += 1
+    elif mutation == "trace-binding":
+        row["trace_binding"] = "unbound"
+    else:
+        row["root_reconciliation"] = "none"
+    trace = experiment["trace"]
+    monkeypatch.setattr(census, "_bound_nz_trace_contract", lambda: (views, trace))
+
+    with pytest.raises(ValueError, match=marker):
+        census._unified_view_fields("nz-mutant", "nz/income-tax", experiment)
+
+
+def test_nz_exercise_receipt_cannot_substitute_a_claimed_trace_hash():
+    census = _load("exercise_census")
+    report = json.loads(
+        (REPO / "dashboard/public/data/nz-treasury-incomeexplorer.json").read_text()
+    )
+    mutant = copy.deepcopy(report["experiment"])
+    mutant["trace"]["sha256"] = "0" * 64
+    with pytest.raises(ValueError, match="trace reference diverges"):
+        census._unified_view_fields("nz-mutant", "nz/income-tax", mutant)
+
+
+def test_nz_certificate_path_reopens_the_committed_trace_bytes(monkeypatch):
+    census = _load("exercise_census")
+    report = json.loads(
+        (REPO / "dashboard/public/data/nz-treasury-incomeexplorer.json").read_text()
+    )
+    trace_path = (
+        REPO / "comparisons/nz-treasury-incomeexplorer/evaluation-traces.json"
+    ).resolve()
+    original = Path.read_bytes
+
+    def drift_trace_bytes(path):
+        value = original(path)
+        return value + b"\n" if path.resolve() == trace_path else value
+
+    monkeypatch.setattr(Path, "read_bytes", drift_trace_bytes)
+    census._bound_nz_trace_contract.cache_clear()
+    with pytest.raises(ValueError, match="evaluation trace bytes changed"):
+        census._census_suite(
+            "nz-treasury-incomeexplorer",
+            report,
+            REPO / "dashboard/public/data/nz-treasury-incomeexplorer.json",
+            view="nz/income-tax",
+        )
 
 
 def test_nz_exercise_receipt_is_certificate_scoped():
@@ -1897,7 +2390,19 @@ def test_nz_exercise_receipt_is_certificate_scoped():
         certify.PROGRAMS["nz/income-tax"]
     )
     assert "nz-treasury-incomeexplorer" in scoped["suites"]
-    assert evidence == []
+    income_tax = scoped["suites"]["nz-treasury-incomeexplorer"]
+    assert evidence[0]["claim"] == "view-scoped evaluation traces:nz/income-tax"
+
+    wff_scoped, wff_evidence = certify._exercise_census_for(
+        certify.PROGRAMS["nz/working-for-families"]
+    )
+    wff = wff_scoped["suites"]["nz-treasury-incomeexplorer"]
+    assert income_tax["view"] == "nz/income-tax"
+    assert wff["view"] == "nz/working-for-families"
+    assert income_tax["evaluations_scanned"] == 91
+    assert wff["evaluations_scanned"] == 178
+    assert income_tax["requested_output_roots"] != wff["requested_output_roots"]
+    assert wff_evidence[0]["claim"].endswith("nz/working-for-families")
 
     dk = certify.build_certificate(
         "dk/boerne-og-ungeydelse",
@@ -1907,6 +2412,37 @@ def test_nz_exercise_receipt_is_certificate_scoped():
         (REPO / "certificates/dk-boerne-og-ungeydelse.json").read_text()
     )
     assert dk == committed
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [
+        ("trace_binding", "unbound"),
+        ("root_reconciliation", "none"),
+        ("root_set_receipts", []),
+    ],
+)
+def test_nz_certificate_rejects_incomplete_trace_rows(field, value):
+    census = _load("exercise_census")
+    certify = _load("certify")
+    report_path = REPO / "dashboard/public/data/nz-treasury-incomeexplorer.json"
+    report = json.loads(report_path.read_text())
+    row = census._census_suite(
+        "nz-treasury-incomeexplorer",
+        report,
+        report_path,
+        view="nz/income-tax",
+    )
+    row[field] = value
+    entry = certify.PROGRAMS["nz/income-tax"]["suites"][0]
+    defects = []
+    _rows, complete = certify._exercise_block(
+        [entry],
+        {"suites": {"nz-treasury-incomeexplorer": row}},
+        defects,
+    )
+    assert complete is False
+    assert any("view-scoped request/output traces" in defect for defect in defects)
 
 
 def test_nz_closure_resolves_by_exact_citation_path_only():

@@ -7,6 +7,7 @@
 #
 #   dispositioned reports (dispositions merged)     apply_dispositions.py
 #   NZ IncomeExplorer unified record                 nz_incomeexplorer.py
+#   NZ bound case chunks + trace-derived view receipts nz_incomeexplorer.py
 #   NZ single-person attestations                    nz_incomeexplorer.py
 #   NZ closure census                                nz_closure.py
 #   axiom_oracles/data/euromod_be_coverage.json      …same (BE parity rollup)
@@ -95,7 +96,8 @@ git config user.email >/dev/null 2>&1 ||
   git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
 regenerate_derived() {
-  # Rebuild the NZ unified tuple record and closure census before their
+  # Rebuild the NZ unified tuple record, bound verdict chunks, trace-derived
+  # exercise views, and closure census before their
   # downstream disposition, exercise, and certificate consumers. Both
   # generators pin and validate their source inputs before writing. The
   # existence checks preserve the refresh script's small hermetic test seeds
