@@ -10,6 +10,7 @@ jurisdiction record, with program subgraphs represented only as node views.
 from __future__ import annotations
 
 import argparse
+import copy
 import hashlib
 import json
 import sys
@@ -24,7 +25,20 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 if str(Path(__file__).resolve().parent) not in sys.path:
     sys.path.insert(0, str(Path(__file__).resolve().parent))
-from nz_programs import PROGRAM_VIEWS, SINGLE_PERSON_PROGRAMS  # noqa: E402
+from nz_programs import (  # noqa: E402
+    PROGRAM_VIEWS,
+    REQUESTED_OUTPUT_ROOT_SETS,
+    SINGLE_PERSON_PROGRAMS,
+)
+from emit_case_artifacts import (  # noqa: E402
+    CHUNK_SIZE,
+    compact_case,
+    explained_lookup,
+)
+from axiom_oracles.evidence import (  # noqa: E402
+    build_chunk_index,
+    validate_suite_evidence,
+)
 SOURCE_DIR = REPO_ROOT / "comparisons" / "nz-treasury-incomeexplorer"
 SOURCE_PATH = SOURCE_DIR / "source-comparison.json"
 SNAPSHOT_PATH = SOURCE_DIR / "treasury-emtr-snapshot-expanded.json"
@@ -33,12 +47,28 @@ DISPOSITIONS_PATH = REPO_ROOT / "dispositions" / "nz-treasury-incomeexplorer.yam
 OUTPUT_PATH = (
     REPO_ROOT / "dashboard" / "public" / "data" / "nz-treasury-incomeexplorer.json"
 )
+CASE_DIR = OUTPUT_PATH.parent / "cases" / "nz-treasury-incomeexplorer"
+INDEX_PATH = CASE_DIR / "index.json"
 ATTESTATION_PATH = SOURCE_DIR / "single-person-attestations.json"
+TRACE_PATH = SOURCE_DIR / "evaluation-traces.json"
 
 SCHEMA = "axiom.unified_comparison_record.v1"
 SUITE = "nz-treasury-incomeexplorer"
+TRACE_SCHEMA = "axiom_oracles.nz_evaluation_traces.v1"
+RAW_TRACE_SCHEMA = "axiom_oracles.nz_evaluation_traces.raw.v1"
 SOURCE_SHA256 = "abd3bcbebc01c73e58c27496db5897a306bb0496ae1d53e5abbd5ae487010b3b"
 SNAPSHOT_SHA256 = "6bed8c0a91e4ba6416238ef1cf381bc8033f3122f3eeb5766074d763929293fd"
+# The regenerated source differs from the committed source only in provenance.
+# It is an external receipt, so pin its claimed bytes rather than accepting an
+# arbitrary 64-character value from the trace document itself.
+REGENERATED_SOURCE_SHA256 = (
+    "7b58fcfdb50f8627f0228bf024d95cde3ef3d50caae7f2d9de2862d82ea6e8c6"
+)
+# Filled from the view-scoped trace artifact. The producer rejects even
+# semantically equivalent byte drift so certificates name one exact public
+# receipt. Capture lineage is explicitly attested; exercise observations are
+# computed from the committed bytes.
+TRACE_SHA256 = "43cca386b15e71fc07fa8fb223b2bef8d351e0bb56ecfdf05fe98e790e66f4da"
 TREASURY_COMMIT = "741a6ca4f5d27b1dc00b43dc395e39ffc4040a4b"
 AMOUNT_TOLERANCE = Decimal("0.005")
 ATTESTATION_BASELINE_SCENARIO = "single_no_children_area2_no_housing_costs"
@@ -86,6 +116,429 @@ def _load(path: Path) -> dict:
     if not isinstance(value, dict):
         raise NZRecordError(f"{path.relative_to(REPO_ROOT)} must contain an object")
     return value
+
+
+def _canonical_sha256(value: object) -> str:
+    rendered = json.dumps(
+        value,
+        allow_nan=False,
+        ensure_ascii=False,
+        separators=(",", ":"),
+        sort_keys=True,
+    ).encode()
+    return hashlib.sha256(rendered).hexdigest()
+
+
+def _without_provenance(source: dict) -> dict:
+    substance = copy.deepcopy(source)
+    substance.pop("provenance", None)
+    return substance
+
+
+def _root_owners() -> dict[str, str]:
+    owners: dict[str, str] = {}
+    for view, spec in PROGRAM_VIEWS.items():
+        for root in spec["roots"]:
+            if root in owners:
+                raise NZRecordError(
+                    f"requested-output root {root!r} belongs to multiple NZ views"
+                )
+            owners[root] = view
+    return owners
+
+
+def _observed_input_value(record: dict, location: str) -> str:
+    raw = record.get("value")
+    if not isinstance(raw, dict):
+        raise NZRecordError(f"{location}.value must be an object")
+    kind = raw.get("kind")
+    value = raw.get("value")
+    if kind == "bool":
+        if not isinstance(value, bool):
+            raise NZRecordError(f"{location}.value is not a typed bool")
+        return json.dumps(value, sort_keys=True)
+    if kind == "integer":
+        if isinstance(value, bool) or not isinstance(value, int):
+            raise NZRecordError(f"{location}.value is not a typed integer")
+        return json.dumps(value, sort_keys=True)
+    if kind == "decimal":
+        if not isinstance(value, str):
+            raise NZRecordError(f"{location}.value is not a typed decimal string")
+        try:
+            number = Decimal(value)
+        except Exception as exc:
+            raise NZRecordError(f"{location}.value is not decimal") from exc
+        if not number.is_finite():
+            raise NZRecordError(f"{location}.value is not a finite decimal")
+        return value
+    raise NZRecordError(f"{location}.value has unsupported kind {kind!r}")
+
+
+def _catalog_from_observations(
+    source_catalog: dict,
+    observations: dict[str, set[str]],
+) -> dict:
+    return {
+        slot: {
+            "canonical_request_name": row["canonical_request_name"],
+            "distinct": len(observations[slot]),
+            "state": "constant" if len(observations[slot]) == 1 else "varied",
+            "observed_values": sorted(observations[slot]),
+        }
+        for slot, row in sorted(source_catalog.items())
+        if observations.get(slot)
+    }
+
+
+def _trace_view_receipts(
+    source: dict,
+    traces: dict,
+    *,
+    verify_file_hash: bool = True,
+) -> dict[str, dict]:
+    """Validate exact engine calls and derive exercise for each NZ view."""
+
+    if verify_file_hash and _sha256(TRACE_PATH) != TRACE_SHA256:
+        raise NZRecordError("NZ evaluation trace bytes changed; a new receipt is required")
+    if traces.get("schema") != TRACE_SCHEMA or traces.get("suite") != SUITE:
+        raise NZRecordError("NZ evaluation traces have the wrong schema or suite")
+    capture = traces.get("capture")
+    if not isinstance(capture, dict) or capture.get("lineage_mode") != "attested":
+        raise NZRecordError("NZ evaluation trace capture lineage is not identified")
+    source_receipt = capture.get("source_comparison")
+    expected_substance_sha = _canonical_sha256(_without_provenance(source))
+    if not isinstance(source_receipt, dict) or source_receipt != {
+        "artifact": str(SOURCE_PATH.relative_to(REPO_ROOT)),
+        "sha256": SOURCE_SHA256,
+        "regenerated_sha256": REGENERATED_SOURCE_SHA256,
+        "substance_sha256": expected_substance_sha,
+        "regeneration_difference": "provenance only",
+    }:
+        raise NZRecordError("NZ evaluation traces are not bound to the source comparison")
+    if capture.get("source_harness") != (source.get("provenance") or {}).get(
+        "source_comparison_harness"
+    ):
+        raise NZRecordError("NZ trace harness provenance drifted")
+    if traces.get("compiled_program") != source.get("compiled_program"):
+        raise NZRecordError("NZ trace compiled-program receipt drifted")
+    provenance = source.get("provenance") or {}
+    expected_engine = provenance.get("engine") or {}
+    if traces.get("engine") != {
+        "binary_sha256": expected_engine.get("binary_sha256"),
+        "git_sha": expected_engine.get("git_sha"),
+    }:
+        raise NZRecordError("NZ trace engine receipt drifted")
+    if traces.get("rulespec_commit") != (provenance.get("rulespec") or {}).get(
+        "git_sha"
+    ):
+        raise NZRecordError("NZ trace RuleSpec receipt drifted")
+    period = traces.get("period")
+    if period != {"start": "2026-04-01", "end": "2027-03-31"}:
+        raise NZRecordError("NZ trace period drifted")
+
+    source_catalog = source.get("exercise_input_catalog")
+    if not isinstance(source_catalog, dict) or not source_catalog:
+        raise NZRecordError("NZ source comparison has no exercise input catalog")
+    by_name: dict[str, str] = {}
+    for slot, row in source_catalog.items():
+        if not isinstance(row, dict):
+            raise NZRecordError(f"NZ source catalog slot {slot!r} is malformed")
+        name = row.get("canonical_request_name")
+        if not isinstance(name, str) or not name or name in by_name:
+            raise NZRecordError("NZ source catalog canonical names are not unique")
+        by_name[name] = slot
+
+    evaluations = traces.get("evaluations")
+    expected_count = (source.get("compiled_program") or {}).get("engine_evaluations")
+    if (
+        not isinstance(evaluations, list)
+        or isinstance(traces.get("evaluation_count"), bool)
+        or traces.get("evaluation_count") != len(evaluations)
+        or len(evaluations) != expected_count
+    ):
+        raise NZRecordError(
+            "NZ trace evaluation count does not match the compiled-program receipt"
+        )
+
+    owners = _root_owners()
+    global_observations: dict[str, set[str]] = defaultdict(set)
+    view_observations: dict[str, dict[str, set[str]]] = {
+        view: defaultdict(set) for view in PROGRAM_VIEWS
+    }
+    view_root_sets: dict[str, set[tuple[str, ...]]] = {
+        view: set() for view in PROGRAM_VIEWS
+    }
+    root_set_observations: dict[
+        str, dict[tuple[str, ...], dict[str, set[str]]]
+    ] = {
+        view: defaultdict(lambda: defaultdict(set)) for view in PROGRAM_VIEWS
+    }
+    root_set_counts: dict[str, Counter[tuple[str, ...]]] = {
+        view: Counter() for view in PROGRAM_VIEWS
+    }
+    view_counts: Counter[str] = Counter()
+    seen_ids: set[str] = set()
+    for index, evaluation in enumerate(evaluations, start=1):
+        location = f"evaluation-traces[{index - 1}]"
+        if not isinstance(evaluation, dict):
+            raise NZRecordError(f"{location} must be an object")
+        expected_id = f"nz-ie-eval-{index:04d}"
+        evaluation_id = evaluation.get("evaluation_id")
+        if evaluation_id != expected_id or evaluation_id in seen_ids:
+            raise NZRecordError(f"{location} has a missing, duplicate, or reordered id")
+        seen_ids.add(evaluation_id)
+        request = evaluation.get("request")
+        if not isinstance(request, dict) or request.get("mode") != "explain":
+            raise NZRecordError(f"{location} request is not explain mode")
+        dataset = request.get("dataset")
+        if not isinstance(dataset, dict) or dataset.get("relations") != []:
+            raise NZRecordError(f"{location} dataset must carry the zero-relation request")
+        inputs = dataset.get("inputs")
+        if not isinstance(inputs, list) or not inputs:
+            raise NZRecordError(f"{location} request has no typed inputs")
+        queries = request.get("queries")
+        if not isinstance(queries, list) or len(queries) != 1:
+            raise NZRecordError(f"{location} must carry exactly one query")
+        query = queries[0]
+        if not isinstance(query, dict):
+            raise NZRecordError(f"{location} query must be an object")
+        outputs = query.get("outputs")
+        if (
+            not isinstance(outputs, list)
+            or not outputs
+            or not all(isinstance(root, str) and root for root in outputs)
+            or len(set(outputs)) != len(outputs)
+        ):
+            raise NZRecordError(f"{location} requested outputs are invalid")
+        declared_roots = evaluation.get("requested_output_roots")
+        if declared_roots != outputs:
+            raise NZRecordError(f"{location} requested-output root receipt drifted")
+        output_owners = {owners.get(root) for root in outputs}
+        if None in output_owners or len(output_owners) != 1:
+            raise NZRecordError(f"{location} requested roots cross or escape NZ views")
+        view = next(iter(output_owners))
+        if evaluation.get("view") != view:
+            raise NZRecordError(f"{location} is assigned to the wrong certificate view")
+        root_set = tuple(outputs)
+        if root_set not in REQUESTED_OUTPUT_ROOT_SETS[view]:
+            raise NZRecordError(
+                f"{location} has an unexpected requested-output root set for {view}"
+            )
+        expected_period = {
+            "period_kind": "tax_year",
+            "start": period["start"],
+            "end": period["end"],
+        }
+        if query.get("period") != expected_period:
+            raise NZRecordError(f"{location} query period drifted")
+        query_entity = query.get("entity_id")
+        if not isinstance(query_entity, str) or not query_entity:
+            raise NZRecordError(f"{location} query entity_id is invalid")
+
+        input_names: set[str] = set()
+        for input_index, record in enumerate(inputs):
+            input_location = f"{location}.request.dataset.inputs[{input_index}]"
+            if not isinstance(record, dict):
+                raise NZRecordError(f"{input_location} must be an object")
+            name = record.get("name")
+            if not isinstance(name, str) or name not in by_name or name in input_names:
+                raise NZRecordError(f"{input_location} names an unknown or duplicate input")
+            input_names.add(name)
+            if (
+                not isinstance(record.get("entity"), str)
+                or record.get("entity_id") != query_entity
+                or record.get("interval")
+                != {"start": period["start"], "end": period["end"]}
+            ):
+                raise NZRecordError(f"{input_location} entity or interval drifted")
+            observed = _observed_input_value(record, input_location)
+            slot = by_name[name]
+            global_observations[slot].add(observed)
+            view_observations[view][slot].add(observed)
+            root_set_observations[view][root_set][slot].add(observed)
+
+        response = evaluation.get("response")
+        if not isinstance(response, dict):
+            raise NZRecordError(f"{location} response must be an object")
+        if response.get("metadata") != {
+            "actual_mode": "explain",
+            "requested_mode": "explain",
+        }:
+            raise NZRecordError(f"{location} response mode receipt drifted")
+        if response.get("entity_id") != query_entity:
+            raise NZRecordError(f"{location} response entity_id drifted")
+        if response.get("period") != query.get("period"):
+            raise NZRecordError(f"{location} response period drifted")
+        returned = response.get("outputs")
+        if not isinstance(returned, dict) or set(returned) != set(outputs):
+            raise NZRecordError(f"{location} returned outputs do not biject requested roots")
+        for root in outputs:
+            item = returned[root]
+            if not isinstance(item, dict) or item.get("id") != root:
+                raise NZRecordError(f"{location} returned output {root!r} lost identity")
+            if item.get("kind") == "scalar":
+                try:
+                    _observed_input_value(
+                        item,
+                        f"{location}.response.outputs[{root!r}]",
+                    )
+                except NZRecordError as exc:
+                    raise NZRecordError(
+                        f"{location} returned scalar {root!r} is malformed"
+                    ) from exc
+            elif item.get("kind") == "judgment":
+                if item.get("outcome") not in {"holds", "not_holds"}:
+                    raise NZRecordError(f"{location} returned judgment {root!r} is malformed")
+            else:
+                raise NZRecordError(f"{location} returned output {root!r} has unknown kind")
+        view_counts[view] += 1
+        view_root_sets[view].add(root_set)
+        root_set_counts[view][root_set] += 1
+
+    derived_catalog = _catalog_from_observations(source_catalog, global_observations)
+    attested_active_catalog = {
+        slot: row
+        for slot, row in source_catalog.items()
+        if row.get("state") != "not_supplied"
+    }
+    if derived_catalog != attested_active_catalog:
+        raise NZRecordError(
+            "NZ trace request inputs do not reproduce the supplied-input receipt"
+        )
+
+    receipts: dict[str, dict] = {}
+    for view, spec in PROGRAM_VIEWS.items():
+        root_sets = view_root_sets[view]
+        expected_root_sets = REQUESTED_OUTPUT_ROOT_SETS[view]
+        observed_roots = {root for root_set in root_sets for root in root_set}
+        expected_roots = set(spec["roots"])
+        if (
+            view_counts[view] <= 0
+            or root_sets != set(expected_root_sets)
+            or observed_roots != expected_roots
+        ):
+            raise NZRecordError(
+                f"NZ trace requested root sets do not exactly close view {view}"
+            )
+        fields = {
+            slot: {
+                "canonical_request_name": source_catalog[slot][
+                    "canonical_request_name"
+                ],
+                "distinct": len(values),
+                "state": "varied" if len(values) > 1 else "constant",
+            }
+            for slot, values in sorted(view_observations[view].items())
+        }
+        root_set_receipts = []
+        for requested_roots in expected_root_sets:
+            observations = root_set_observations[view][requested_roots]
+            root_set_receipts.append(
+                {
+                    "requested_output_roots": list(requested_roots),
+                    "evaluation_count": root_set_counts[view][requested_roots],
+                    "evidence_fields": {
+                        slot: {
+                            "canonical_request_name": source_catalog[slot][
+                                "canonical_request_name"
+                            ],
+                            "distinct": len(values),
+                            "state": "varied" if len(values) > 1 else "constant",
+                        }
+                        for slot, values in sorted(observations.items())
+                    },
+                }
+            )
+        receipts[view] = {
+            "evaluation_count": view_counts[view],
+            "evidence_fields": fields,
+            "requested_output_root_sets": [
+                list(root_set) for root_set in expected_root_sets
+            ],
+            "root_set_receipts": root_set_receipts,
+            "requested_output_roots": list(spec["roots"]),
+            "root_reconciliation": "exact",
+            "trace_binding": "bound",
+        }
+    return receipts
+
+
+def derive_bound_trace_views() -> dict[str, dict]:
+    """Reopen and rederive every view/root-set receipt from committed bytes."""
+
+    source = _load(SOURCE_PATH)
+    snapshot = _load(SNAPSHOT_PATH)
+    closures = _load(CLOSURES_PATH)
+    _validate_inputs(source, snapshot, closures)
+    return _trace_view_receipts(source, _load(TRACE_PATH))
+
+
+def build_trace_document(capture: dict, regenerated_source: dict) -> dict:
+    """Normalize one external harness capture into the public trace receipt."""
+
+    source = _load(SOURCE_PATH)
+    if capture.get("schema") != RAW_TRACE_SCHEMA:
+        raise NZRecordError("raw NZ trace capture has the wrong schema")
+    if _without_provenance(regenerated_source) != _without_provenance(source):
+        raise NZRecordError("instrumented trace run changed comparison substance")
+    if _canonical_file_sha(regenerated_source) != REGENERATED_SOURCE_SHA256:
+        raise NZRecordError("instrumented trace comparison bytes changed")
+    evaluations = copy.deepcopy(capture.get("evaluations"))
+    if not isinstance(evaluations, list):
+        raise NZRecordError("raw NZ trace capture has no evaluations")
+    owners = _root_owners()
+    for index, evaluation in enumerate(evaluations):
+        outputs = ((evaluation.get("request") or {}).get("queries") or [{}])[0].get(
+            "outputs"
+        )
+        if not isinstance(outputs, list) or not outputs:
+            raise NZRecordError(f"raw NZ trace evaluation {index} has no outputs")
+        views = {owners.get(root) for root in outputs}
+        if None in views or len(views) != 1:
+            raise NZRecordError(f"raw NZ trace evaluation {index} crosses views")
+        evaluation["view"] = next(iter(views))
+        evaluation["requested_output_roots"] = list(outputs)
+    document = {
+        "_comment": (
+            "Normalized from capture-only instrumentation associated with the pinned "
+            "external comparison harness. scripts/nz_incomeexplorer.py recomputes "
+            "supplied-input observations separately for each certificate view and "
+            "requested-output root set from these exact typed requests and returned "
+            "outputs. Capture lineage and the compiled-input denominator remain "
+            "attested because neither the capture transcript/instrumentation nor "
+            "compiled artifact bytes are committed here."
+        ),
+        "schema": TRACE_SCHEMA,
+        "suite": SUITE,
+        "capture": {
+            "lineage_mode": "attested",
+            "source_comparison": {
+                "artifact": str(SOURCE_PATH.relative_to(REPO_ROOT)),
+                "sha256": SOURCE_SHA256,
+                "regenerated_sha256": _canonical_file_sha(regenerated_source),
+                "substance_sha256": _canonical_sha256(_without_provenance(source)),
+                "regeneration_difference": "provenance only",
+            },
+            "source_harness": (source.get("provenance") or {}).get(
+                "source_comparison_harness"
+            ),
+        },
+        "compiled_program": source["compiled_program"],
+        "engine": copy.deepcopy(capture.get("engine")),
+        "evaluation_count": capture.get("evaluation_count"),
+        "evaluations": evaluations,
+        "period": copy.deepcopy(capture.get("period")),
+        "rulespec_commit": capture.get("rulespec_commit"),
+    }
+    _trace_view_receipts(source, document, verify_file_hash=False)
+    return document
+
+
+def _canonical_file_sha(value: dict) -> str:
+    """SHA of the same sorted, indented JSON form emitted by the ops harness."""
+
+    rendered = json.dumps(value, indent=2, sort_keys=True, ensure_ascii=False) + "\n"
+    return hashlib.sha256(rendered.encode()).hexdigest()
 
 
 def _case_id(row: dict) -> str:
@@ -318,16 +771,33 @@ def _mismatch(row: dict) -> dict:
     }
 
 
-def _base_report(source: dict, snapshot: dict, closures: dict) -> dict:
+def _match(row: dict) -> dict:
+    return {
+        "concept": COLUMN_CONCEPTS[row["column"]],
+        "left": _number(row["rulespec"]),
+        "right": _number(row["treasury"]),
+    }
+
+
+def _base_report(
+    source: dict,
+    snapshot: dict,
+    closures: dict,
+    trace_views: dict[str, dict] | None = None,
+) -> dict:
     amount_rows = [row for row in source["comparisons"] if row["column"] != "EMTR"]
     mismatch_rows = [
         _mismatch(row)
         for row in amount_rows
         if Decimal(row["absolute_delta"]) >= AMOUNT_TOLERANCE
     ]
-    by_case: dict[str, list[dict]] = defaultdict(list)
+    by_case_mismatches: dict[str, list[dict]] = defaultdict(list)
     for mismatch in mismatch_rows:
-        by_case[mismatch["case_id"]].append(mismatch)
+        by_case_mismatches[mismatch["case_id"]].append(mismatch)
+    by_case_matches: dict[str, list[dict]] = defaultdict(list)
+    for row in amount_rows:
+        if Decimal(row["absolute_delta"]) < AMOUNT_TOLERANCE:
+            by_case_matches[_case_id(row)].append(_match(row))
     scenarios = {item["id"]: item for item in source["scenarios"]}
     cases = []
     for scenario_id, wages in (
@@ -344,7 +814,8 @@ def _base_report(source: dict, snapshot: dict, closures: dict) -> dict:
                         "weekly_wage": wage,
                         **scenario["inputs"],
                     },
-                    "mismatches": by_case.get(case_id, []),
+                    "matches": by_case_matches.get(case_id, []),
+                    "mismatches": by_case_mismatches.get(case_id, []),
                 }
             )
 
@@ -391,6 +862,16 @@ def _base_report(source: dict, snapshot: dict, closures: dict) -> dict:
         "population": "treasury-incomeexplorer-emtr-scenario-grid",
         "dataset_identity": {"sha256": SNAPSHOT_SHA256, "revision": TREASURY_COMMIT},
         "engines": {"left": "axiom", "right": "treasury-incomeexplorer"},
+        "case_count": len(cases),
+        "concepts": [
+            {
+                "id": concept,
+                "comparison": "amount",
+                "tolerance": float(AMOUNT_TOLERANCE),
+                "relative_tolerance": 0,
+            }
+            for concept in sorted(set(COLUMN_CONCEPTS.values()))
+        ],
         "aggregates": aggregates,
         "cases": cases,
         "mismatches": mismatch_rows,
@@ -403,12 +884,31 @@ def _base_report(source: dict, snapshot: dict, closures: dict) -> dict:
         "experiment": {
             "schema": "axiom.experiment_boundary_receipt.v1",
             "active_inputs": active_catalog,
-            "compiled_input_catalog_count": len(source["exercise_input_catalog"]),
-            "inactive_compiled_inputs": sum(
-                item["state"] == "not_supplied"
-                for item in source["exercise_input_catalog"].values()
-            ),
+            "compiled_input_catalog": {
+                "mode": "attested",
+                "artifact": str(SOURCE_PATH.relative_to(REPO_ROOT)),
+                "sha256": SOURCE_SHA256,
+                "input_count": len(source["exercise_input_catalog"]),
+                "supplied_input_count": len(active_catalog),
+                "not_supplied_count": sum(
+                    item["state"] == "not_supplied"
+                    for item in source["exercise_input_catalog"].values()
+                ),
+                "limitation": (
+                    "No committed compiled-program artifact or compiler-produced "
+                    "catalog enumeration proves the complete input denominator."
+                ),
+            },
             "bridged_through": {},
+            "trace": {
+                "artifact": str(TRACE_PATH.relative_to(REPO_ROOT)),
+                "sha256": TRACE_SHA256,
+                "schema": TRACE_SCHEMA,
+                "capture_lineage_mode": "attested",
+            }
+            if trace_views is not None
+            else None,
+            "views": trace_views or {},
             "eligibility_closures": {
                 "artifact": str(CLOSURES_PATH.relative_to(REPO_ROOT)),
                 "sha256": _sha256(CLOSURES_PATH),
@@ -478,12 +978,103 @@ def _apply_and_view(report: dict) -> dict:
     return merged
 
 
-def build() -> dict:
+def build_evidence() -> tuple[dict, list[dict]]:
     source = _load(SOURCE_PATH)
     snapshot = _load(SNAPSHOT_PATH)
     closures = _load(CLOSURES_PATH)
+    traces = _load(TRACE_PATH)
     _validate_inputs(source, snapshot, closures)
-    return _apply_and_view(_base_report(source, snapshot, closures))
+    trace_views = _trace_view_receipts(source, traces)
+    report = _apply_and_view(
+        _base_report(source, snapshot, closures, trace_views=trace_views)
+    )
+    explained = explained_lookup(report)
+    rows = [
+        compact_case(case, explained)
+        for case in report["cases"]
+    ]
+    # Bound chunks are the sole execution corpus. Keeping the same case IDs
+    # inline as well would double the parsed cardinality and weaken identity
+    # checks by presenting two copies of every verdict.
+    return {**report, "cases": []}, rows
+
+
+def build() -> dict:
+    report, _rows = build_evidence()
+    return report
+
+
+def _render_chunks(rows: list[dict]) -> dict[str, str]:
+    chunks = [rows[i : i + CHUNK_SIZE] for i in range(0, len(rows), CHUNK_SIZE)]
+    return {
+        f"chunk-{index}.json": json.dumps(chunk, separators=(",", ":"))
+        for index, chunk in enumerate(chunks)
+    }
+
+
+def _index_payload(rows: list[dict]) -> dict:
+    candidate = build_chunk_index(OUTPUT_PATH)
+    return {
+        "schema_version": candidate["schema_version"],
+        "report_path": candidate["report_path"],
+        "report_sha256": candidate["report_sha256"],
+        "case_verdicts_sha256": candidate["case_verdicts_sha256"],
+        "suite": SUITE,
+        "count": len(rows),
+        "chunk_size": CHUNK_SIZE,
+        "engines": {"left": "axiom", "right": "treasury-incomeexplorer"},
+        "mismatch_concepts": sorted(
+            {
+                mismatch["c"]
+                for row in rows
+                for mismatch in row["m"]
+                if mismatch.get("c")
+            }
+        ),
+        "source": str(SOURCE_PATH.relative_to(REPO_ROOT)),
+        "total_cases": len(rows),
+        "chunk_count": candidate["chunk_count"],
+        "chunks": candidate["chunks"],
+    }
+
+
+def _write_case_artifacts(chunks: dict[str, str], rows: list[dict]) -> None:
+    CASE_DIR.mkdir(parents=True, exist_ok=True)
+    expected = set(chunks)
+    for stale in CASE_DIR.glob("chunk-*.json"):
+        if stale.name not in expected:
+            stale.unlink()
+    for name, rendered in chunks.items():
+        (CASE_DIR / name).write_text(rendered, encoding="utf-8")
+    INDEX_PATH.write_text(
+        json.dumps(_index_payload(rows), indent=2) + "\n",
+        encoding="utf-8",
+    )
+
+
+def _case_artifact_drift(chunks: dict[str, str], rows: list[dict]) -> list[str]:
+    problems: list[str] = []
+    expected_names = set(chunks)
+    actual_names = {path.name for path in CASE_DIR.glob("chunk-*.json")}
+    if actual_names != expected_names:
+        problems.append(
+            "NZ IncomeExplorer chunk file set drifted "
+            f"(expected={sorted(expected_names)}, actual={sorted(actual_names)})"
+        )
+    for name, rendered in chunks.items():
+        path = CASE_DIR / name
+        if not path.exists() or path.read_text(encoding="utf-8") != rendered:
+            problems.append(f"NZ IncomeExplorer {name} drifted")
+    if problems:
+        return problems
+    expected_index = json.dumps(_index_payload(rows), indent=2) + "\n"
+    if not INDEX_PATH.exists() or INDEX_PATH.read_text(encoding="utf-8") != expected_index:
+        problems.append("NZ IncomeExplorer chunk index drifted")
+        return problems
+    evidence = validate_suite_evidence(OUTPUT_PATH)
+    if not evidence.valid or evidence.binding != "bound" or evidence.reconciliation != "full":
+        problems.extend(evidence.defects)
+    return problems
 
 
 def _instrument_names(source: dict, row: dict, at_point: dict[tuple, list[dict]]) -> list[str]:
@@ -574,8 +1165,35 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true")
     parser.add_argument("--bootstrap-dispositions", action="store_true")
+    parser.add_argument(
+        "--capture-traces",
+        type=Path,
+        help="raw double-run trace capture from the pinned ops harness",
+    )
+    parser.add_argument(
+        "--capture-comparison",
+        type=Path,
+        help="comparison.json emitted beside --capture-traces",
+    )
     args = parser.parse_args()
     try:
+        if args.capture_traces or args.capture_comparison:
+            if args.check or not args.capture_traces or not args.capture_comparison:
+                parser.error(
+                    "--capture-traces and --capture-comparison are required together "
+                    "and cannot be used with --check"
+                )
+            document = build_trace_document(
+                _load(args.capture_traces),
+                _load(args.capture_comparison),
+            )
+            TRACE_PATH.write_text(
+                json.dumps(document, indent=2, sort_keys=True, ensure_ascii=False)
+                + "\n",
+                encoding="utf-8",
+            )
+            print(f"wrote {TRACE_PATH.relative_to(REPO_ROOT)}")
+            return 0
         if args.bootstrap_dispositions:
             rendered = bootstrap_dispositions()
             if args.check:
@@ -585,7 +1203,7 @@ def main() -> int:
             else:
                 DISPOSITIONS_PATH.write_text(rendered, encoding="utf-8")
             return 0
-        record = build()
+        record, case_rows = build_evidence()
         attestations = build_single_person_attestations()
     except (NZRecordError, OSError, ValueError) as exc:
         print(f"NZ IncomeExplorer ERROR: {exc}", file=sys.stderr)
@@ -594,22 +1212,31 @@ def main() -> int:
     attestation_rendered = (
         json.dumps(attestations, indent=2, sort_keys=True, ensure_ascii=False) + "\n"
     )
+    chunk_renderings = _render_chunks(case_rows)
     if args.check:
+        drift: list[str] = []
         if not OUTPUT_PATH.exists() or OUTPUT_PATH.read_text(encoding="utf-8") != rendered:
-            print("NZ IncomeExplorer unified record drifted", file=sys.stderr)
-            return 1
+            drift.append("NZ IncomeExplorer unified record drifted")
         if (
             not ATTESTATION_PATH.exists()
             or ATTESTATION_PATH.read_text(encoding="utf-8") != attestation_rendered
         ):
-            print("NZ single-person attestations drifted", file=sys.stderr)
+            drift.append("NZ single-person attestations drifted")
+        if not drift:
+            drift.extend(_case_artifact_drift(chunk_renderings, case_rows))
+        if drift:
+            print("\n".join(drift), file=sys.stderr)
             return 1
-        print("NZ IncomeExplorer unified record up to date")
+        print(
+            "NZ IncomeExplorer unified record and bound case evidence up to date"
+        )
         return 0
     OUTPUT_PATH.write_text(rendered, encoding="utf-8")
     ATTESTATION_PATH.write_text(attestation_rendered, encoding="utf-8")
+    _write_case_artifacts(chunk_renderings, case_rows)
     print(f"wrote {OUTPUT_PATH.relative_to(REPO_ROOT)}")
     print(f"wrote {ATTESTATION_PATH.relative_to(REPO_ROOT)}")
+    print(f"wrote {INDEX_PATH.relative_to(REPO_ROOT)}")
     return 0
 
 
