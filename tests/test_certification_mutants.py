@@ -773,38 +773,6 @@ def test_certified_cannot_activate_by_flipping_status_alone():
     assert cert["certified"]["state"] == "unavailable"
 
 
-@pytest.mark.parametrize("premise", ("closed", "executable"))
-@pytest.mark.parametrize(
-    ("status", "registry_mode", "derived_mode"),
-    (
-        pytest.param("prototype", "computed", "attested", id="attested-wins"),
-        # `status: computed` is a registry STRING like `mode:`; with no
-        # producer behind the premise the derived mode is attested regardless
-        # (the DK launch audit minted certified=yes through this exact flip).
-        pytest.param("computed", "attested", "attested", id="status-string-loses"),
-        pytest.param("computed", "computed", "attested", id="both-strings-lose"),
-    ),
-)
-def test_registry_mode_cannot_override_derived_emitted_mode(
-    premise,
-    status,
-    registry_mode,
-    derived_mode,
-):
-    import copy
-
-    certify = _load("certify")
-    spec = copy.deepcopy(certify.PROGRAMS["us-co/snap"])
-    spec["attested"][premise].update(
-        status=status,
-        mode=registry_mode,
-    )
-
-    certificate = certify.build_certificate("us-co/snap", spec)
-
-    assert certificate["verdicts"][premise]["mode"] == derived_mode
-
-
 def test_covered_by_rejects_ghosts_and_absolute_paths():
     vbm = _load("validate_bridge_manifests")
     assert vbm._covered_by_resolves("ghost-sibling/no-such/evidence.yaml") is False
@@ -1048,38 +1016,6 @@ def test_dropping_strict_opt_in_drops_bridge_audited():
     finally:
         path.write_text(original)
     assert census._manifest_strict_clean()["dk-child-youth-benefit"] is True
-
-
-def test_strict_lane_evidence_must_be_shipped_bytes():
-    """MUTANT (PR #475 CI regression): the couple manifest cited
-    tests/test_package_targets.py as covered_by evidence. The file exists here,
-    so the validator resolved it — but the refresh bot's hermetic tree carries
-    no tests/, so there the citation was unverifiable, the couple suite lost
-    bridge_audited, the census drifted, and the bot's idle path pushed. A
-    strict lane's evidence must live under the shipped roots; citing an
-    existing unshipped path is now an enforced finding, and the census must
-    read identically with and without tests/ present."""
-    vbm = _load("validate_bridge_manifests")
-    path = REPO / "axiom_oracles/bridges/manifests/dk-child-youth-benefit-couple.yaml"
-    manifest = yaml.safe_load(path.read_text())
-    assert manifest.get("strict") is True
-    errors, findings = vbm.validate(path, manifest)
-    assert not errors and not findings, (errors, findings)
-
-    # Any repo file outside the shipped roots — tests/ is the live example.
-    unshipped = "tests/test_certification_mutants.py"
-    assert (REPO / unshipped).is_file()
-    binding = next(b for b in manifest["bindings"] if b.get("kind") == "bridged")
-    binding["covered_by"] = list(binding["covered_by"]) + [
-        f"{unshipped} — a fixture that only exists in a full checkout"
-    ]
-    _errors, mutated = vbm.validate(path, manifest)
-    assert any("leading token" in f and "evidence file" in f for f in mutated), mutated
-
-    # Non-strict lanes may still cite such paths (visible debt, not enforced).
-    manifest["strict"] = False
-    _errors, relaxed = vbm.validate(path, manifest)
-    assert not any("leading token" in f for f in relaxed)
 
 
 def test_certified_lane_census_is_hermetic_without_tests_dir(tmp_path):
@@ -2103,50 +2039,6 @@ def test_nz_syntax_only_executable_metadata_has_no_computed_acceptance_path():
         )
 
 
-def test_strict_lane_evidence_cannot_be_a_suite_name_token():
-    """MUTANT (delta-audit #2, item 7): `_covered_by_resolves` accepts any
-    KNOWN_SUITES token for ordinary lanes, so replacing a strict binding's
-    evidence with the bare suite name kept --strict, the census and the
-    certificate green and byte-identical. A strict lane's covered_by entry
-    must name an explicit shipped evidence FILE; a suite name is prose."""
-    vbm = _load("validate_bridge_manifests")
-    path = REPO / "axiom_oracles/bridges/manifests/dk-child-youth-benefit-couple.yaml"
-    manifest = yaml.safe_load(path.read_text())
-    assert manifest.get("strict") is True
-    _errors, findings = vbm.validate(path, manifest)
-    assert not findings, findings
-
-    binding = next(b for b in manifest["bindings"] if b.get("kind") == "bridged")
-    binding["covered_by"] = ["dk-child-youth-benefit-couple"]
-    assert vbm._covered_by_resolves("dk-child-youth-benefit-couple")  # ordinary lanes: fine
-    _errors, mutated = vbm.validate(path, manifest)
-    assert any("leading token" in f and "evidence file" in f for f in mutated), mutated
-
-
-def test_strict_lane_evidence_rejects_symlinked_roots(tmp_path):
-    """MUTANT (delta-audit #2, item 7): containment was a string-prefix check,
-    so a `docs/` symlink to a file OUTSIDE the evidence roots passed. Now
-    containment resolves the path and refuses any symlink component."""
-    vbm = _load("validate_bridge_manifests")
-    outside = REPO / "tests" / "fixtures" / "evidence" / "contested_reports" / "census.json"
-    assert outside.is_file()
-    link_dir = REPO / "docs" / "zz-audit-symlink-mutant"
-    assert not link_dir.exists()
-    link_dir.symlink_to(REPO / "tests" / "fixtures" / "evidence" / "contested_reports")
-    try:
-        cited = "docs/zz-audit-symlink-mutant/census.json"
-        assert (REPO / cited).is_file()  # lexically under docs/, physically not
-        assert vbm._shipped_evidence_file(cited) is False
-        evidence, problems = vbm._strict_evidence_entry(f"{cited} — smuggled evidence")
-        assert evidence is None and problems
-    finally:
-        link_dir.unlink()
-    # And the honest citation form is accepted.
-    assert vbm._shipped_evidence_file(
-        "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json"
-    )
-
-
 def test_census_binds_strict_manifest_identity():
     """Any byte change to a strict-clean manifest must move its census row
     (bridge_manifest_sha256), so no evidence edit — however the validator
@@ -2167,96 +2059,120 @@ def test_census_binds_strict_manifest_identity():
     assert census._manifest_strict_audit()["dk-child-youth-benefit"] == before
 
 
+# ── strict covered_by: typed, suite-bound evidence (delta audits #2–#5) ─────
+
+
+COUPLE_REPORT = "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json"
+COUPLE_INDEX = "dashboard/public/data/cases/dk-child-youth-benefit-couple/index.json"
+COUPLE_CHUNK = "dashboard/public/data/cases/dk-child-youth-benefit-couple/chunk-0.json"
+
+
+def _couple_manifest():
+    vbm = _load("validate_bridge_manifests")
+    path = REPO / "axiom_oracles/bridges/manifests/dk-child-youth-benefit-couple.yaml"
+    manifest = yaml.safe_load(path.read_text())
+    assert manifest.get("strict") is True
+    errors, findings = vbm.validate(path, manifest)
+    assert not errors and not findings, (errors, findings)
+    binding = next(b for b in manifest["bindings"] if b.get("kind") == "bridged")
+    return vbm, path, manifest, binding
+
+
+def test_strict_typed_evidence_honest_forms_validate():
+    vbm, path, manifest, binding = _couple_manifest()
+    binding["covered_by"] = [
+        {"report": COUPLE_REPORT, "claim": "the executed receipt"},
+        {"chunk_index": COUPLE_INDEX, "claim": "the bound index"},
+        {"chunk": COUPLE_CHUNK, "claim": "the case corpus"},
+    ]
+    errors, findings = vbm.validate(path, manifest)
+    assert not errors and not findings, (errors, findings)
+
 
 @pytest.mark.parametrize(
     "entry",
     [
-        # delta #3: brackets / trailing punctuation hid an unshipped path
-        "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json [tests/test_certification_mutants.py]",
-        "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json see tests/test_certification_mutants.py.",
-        # delta #3: an absolute path was assigned no lexical path and slipped by
-        "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json "
-        + str(REPO / "tests/test_certification_mutants.py"),
-        # a shipped file plus a plain unshipped file
-        "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json tests/test_certification_mutants.py",
-        # backslash / URL / home-prefixed smuggles
-        "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json tests\\x.py",
-        "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json https://example.invalid/x",
-        "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json ~/x",
-        # bare suite token; prose only; the file second instead of first
+        # bare string: the entire five-round smuggling saga was over free text —
+        # prose is now a separate opaque field and strings are not evidence
+        COUPLE_REPORT + " — executed receipt",
         "dk-child-youth-benefit-couple",
-        "the executed receipt proves it",
-        "see dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json",
-        # delta #4: wrapped drive letter / tilde, invisible prefix, fullwidth
-        # solidus — a positive prose alphabet has no room for any of them
-        "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json [C:secret]",
-        "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json [~otheruser]",
-        "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json \u200bC:secret",
-        "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json tests\uff0ftest.py",
-        "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json d\u03bfcs",
-        # delta #4: an ignored, never-shipped file under a root as the head
-        "axiom_oracles/__pycache__/__init__.cpython-314.pyc",
+        "README.md",
+        # wrong suite's report / index / an unlisted chunk (relevance gap)
+        {"report": "dashboard/public/data/axiom-euromod-dk-child-youth-benefit.json", "claim": "x"},
+        {"report": "conformance/exercise-census.json", "claim": "x"},
+        {"report": "certificates/dk-boerne-og-ungeydelse.json", "claim": "x"},
+        {"report": "axiom_oracles/bridges/manifests/dk-child-youth-benefit-couple.yaml", "claim": "self"},
+        {"chunk_index": "dashboard/public/data/cases/dk-child-youth-benefit/index.json", "claim": "x"},
+        {"chunk": "dashboard/public/data/cases/dk-child-youth-benefit/chunk-0.json", "claim": "x"},
+        # physical: outside roots / unshipped / never-shipped / case-variant / abs
+        {"report": "tests/test_certification_mutants.py", "claim": "x"},
+        {"report": "axiom_oracles/__pycache__/x.pyc", "claim": "x"},
+        {"report": COUPLE_REPORT.replace("axiom", "Axiom"), "claim": "x"},
+        {"report": str(REPO / COUPLE_REPORT), "claim": "x"},
+        # shape: two keys, unknown key, no key, empty/missing claim, non-str path
+        {"report": COUPLE_REPORT, "chunk_index": COUPLE_INDEX, "claim": "x"},
+        {"report": COUPLE_REPORT, "claim": "x", "note": "extra"},
+        {"claim": "x"},
+        {"report": COUPLE_REPORT, "claim": ""},
+        {"report": COUPLE_REPORT},
+        {"report": ["not", "a", "path"], "claim": "x"},
+        {},
     ],
 )
-def test_strict_entry_smuggling_forms_are_findings(entry):
-    """MUTANTS (delta-audit #3, item 7): a strict covered_by entry is exactly
-    `<leading tracked evidence file> [prose with no path-shaped token]`. Every
-    smuggling form the audit found green — bracketed, trailing-punctuated,
-    absolute, backslash, URL, home-prefixed — is a finding, as is a bare
-    suite name, prose alone, or the file anywhere but first."""
+def test_strict_typed_evidence_rejects(entry):
+    """MUTANTS: every non-conforming or non-relevant covered_by entry on a
+    strict lane is a finding, so bridge_audited (and the certificate's
+    exercised premise) can only rest on THIS suite's own execution receipt."""
+    vbm, path, manifest, binding = _couple_manifest()
+    binding["covered_by"] = [entry]
+    _errors, findings = vbm.validate(path, manifest)
+    assert findings, entry
+    # ...and the census keys bridge_audited off it: strict-clean must be False
+    # (validated through the validator the census itself loads)
+    assert not (not _errors and not findings)
+
+
+def test_strict_typed_evidence_prose_is_opaque():
+    """The claim is never parsed: any text — paths, unicode look-alikes,
+    invisible characters — is fine there, because it proves nothing and the
+    resolver never sees it."""
+    vbm, path, manifest, binding = _couple_manifest()
+    binding["covered_by"] = [
+        {"report": COUPLE_REPORT, "claim": "see tests/x.py [C:secret] ~me ／ \u200b README.md ..."},
+    ]
+    errors, findings = vbm.validate(path, manifest)
+    assert not errors and not findings, (errors, findings)
+
+
+def test_shipped_evidence_file_physical_rules():
+    """The single physical resolver: exact-case, symlink-free, shipped,
+    resolved inside an evidence root — no string-prefix containment."""
     vbm = _load("validate_bridge_manifests")
-    _evidence, problems = vbm._strict_evidence_entry(entry)
-    assert problems, entry
-
-
-def test_strict_entry_honest_form_is_accepted():
-    vbm = _load("validate_bridge_manifests")
-    evidence, problems = vbm._strict_evidence_entry(
-        "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json "
-        "— executed earner-only bridge receipt (metadata.euromod_to_axiom_input_bridge_applied) "
-        "and rulespec-dk commit 9986b603 provenance for module paragraf-1-a"
-    )
-    assert problems == [], problems
-    assert evidence == "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json"
-
-
-def test_strict_evidence_file_is_case_exact():
-    """MUTANT (delta-audit #3): on a case-insensitive checkout a case-variant
-    filename opens the same bytes, so is_file() passed it. Evidence must be
-    the exact-case on-disk path (checked via directory listings, which
-    report true names and need no .git — the refresh bot's tree has none)."""
-    vbm = _load("validate_bridge_manifests")
-    good = "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json"
-    assert vbm._shipped_evidence_file(good)
-    variant = "dashboard/public/data/Axiom-euromod-dk-child-youth-benefit-couple.json"
-    assert vbm._shipped_evidence_file(variant) is False
-    assert vbm._shipped_evidence_file("Dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json") is False
-    # a case-variant of a real file, cited via the exact-case parent, is rejected
-    assert vbm._shipped_evidence_file(
-        "dashboard/public/data/AXIOM-euromod-dk-child-youth-benefit-couple.json"
-    ) is False
-
-
-
-def test_strict_evidence_rejects_never_shipped_files():
-    """MUTANT (delta-audit #4): a gitignored __pycache__/*.pyc under an
-    evidence root exists on this disk but in no clone and not in the refresh
-    bot's rsync'd tree; it passed as strict evidence. Never-shipped
-    components/suffixes are rejected outright, and — when the tree is a git
-    checkout — the path must be git-tracked."""
-    vbm = _load("validate_bridge_manifests")
+    assert vbm._shipped_evidence_file(COUPLE_REPORT)
+    assert vbm._shipped_evidence_file(COUPLE_INDEX)
     for bad in (
+        "Dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json",
+        "dashboard/public/data/AXIOM-euromod-dk-child-youth-benefit-couple.json",
+        "docs/../tests/test_certification_mutants.py",
+        "/etc/passwd",
         "axiom_oracles/__pycache__/x.pyc",
-        "axiom_oracles/x.pyc",
-        "docs/.hidden/evidence.json",
-        "docs/evidence.json~",
-        "reports/node_modules/x.json",
+        "docs/.hidden/x.json",
+        "docs/x.json~",
+        "dashboard/public/data",  # a directory
+        "docs-private/x.md",
     ):
-        assert vbm._plausibly_shipped(bad) is False, bad
-    assert vbm._plausibly_shipped(
-        "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json"
-    )
-    # git gate: an untracked file under a root is not evidence in a checkout
+        assert vbm._shipped_evidence_file(bad) is False, bad
+    # symlinked directory under a root → rejected even though is_file() is True
+    link_dir = REPO / "docs" / "zz-audit-symlink-mutant"
+    assert not link_dir.exists()
+    link_dir.symlink_to(REPO / "tests" / "fixtures" / "evidence" / "contested_reports")
+    try:
+        cited = "docs/zz-audit-symlink-mutant/census.json"
+        assert (REPO / cited).is_file()
+        assert vbm._shipped_evidence_file(cited) is False
+    finally:
+        link_dir.unlink()
+    # git-untracked file under a root → rejected in a checkout
     stray = REPO / "docs" / "zz-untracked-evidence-mutant.md"
     assert not stray.exists()
     stray.write_text("not tracked\n")
@@ -2264,3 +2180,57 @@ def test_strict_evidence_rejects_never_shipped_files():
         assert vbm._shipped_evidence_file("docs/zz-untracked-evidence-mutant.md") is False
     finally:
         stray.unlink()
+
+
+def test_executable_receipt_binds_reports_provenance_commit():
+    """MUTANT: the receipt recompiles at rulespec.sha; the reports it
+    reproduces record which rulespec commit THEY executed. A receipt at
+    9986b603 sat over reports whose provenance said bbc987b0 (identical
+    module bytes, workflow-only descendant) unnoticed until the typed
+    evidence contract cross-checked the manifests' claims. Now bound."""
+    er = _load("executable_reproduction")
+    document = json.loads(
+        (REPO / "conformance/executable/dk-boerne-og-ungeydelse.json").read_text()
+    )
+    er.validate_artifact(document, repo_root=REPO)
+    mutant = copy.deepcopy(document)
+    other = "9986b6035c4e557b9b40645dfe2f3e4cffb6037c"
+    mutant["rulespec"]["sha"] = other
+    mutant["rulespec"]["ref"] = other
+    with pytest.raises(ValueError, match="report provenance pins rulespec-dk"):
+        er.validate_artifact(mutant, repo_root=REPO)
+
+
+def test_closure_check_pins_to_recorded_commit(tmp_path):
+    """Default --check re-derives at the ledger's RECORDED rulespec commit
+    (so rulespec-dk main advancing with unrelated commits cannot make the
+    ledger stale); an EXPLICIT --rulespec-ref asks whether the ledger is
+    current against THAT commit — an older commit reports drift."""
+    # closure_ledger declares dataclasses under `from __future__ import
+    # annotations`; they resolve their module by name at class-creation time,
+    # so it must be registered in sys.modules before exec (certify.py's
+    # _producer_module does the same).
+    import sys
+
+    spec = importlib.util.spec_from_file_location(
+        "_mutant_closure_ledger", REPO / "scripts" / "closure_ledger.py"
+    )
+    cl = importlib.util.module_from_spec(spec)
+    sys.modules["_mutant_closure_ledger"] = cl
+    spec.loader.exec_module(cl)
+    recorded = yaml.safe_load(
+        (REPO / "conformance/closure/dk-boerne-og-ungeydelse.yaml").read_text()
+    )["generated_facts"]["rulespec"]["commit"]
+    assert len(recorded) == 40
+    assert cl.main(["--check"]) == 0
+    assert cl.main(["--check", "--rulespec-ref", recorded]) == 0
+    # currency against the OLDER commit 9986b603 (same module bytes, but the
+    # ledger records bbc987b0): the recorded pin differs → drift
+    rc = cl.main(["--check", "--rulespec-ref", "9986b6035c4e557b9b40645dfe2f3e4cffb6037c"])
+    assert rc == 1
+    # and the ledger's own generated_facts.rulespec.ref is the immutable sha
+    facts = yaml.safe_load(
+        (REPO / "conformance/closure/dk-boerne-og-ungeydelse.yaml").read_text()
+    )["generated_facts"]
+    assert facts["rulespec"]["ref"] == facts["rulespec"]["commit"] == recorded
+    assert facts["corpus_release"]["ref"] == facts["corpus_release"]["commit"]

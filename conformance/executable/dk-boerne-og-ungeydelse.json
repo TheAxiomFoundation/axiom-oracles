@@ -158,9 +158,9 @@
   "generated_by": "scripts/executable_reproduction.py",
   "program": "dk/boerne-og-ungeydelse",
   "rulespec": {
-    "ref": "9986b6035c4e557b9b40645dfe2f3e4cffb6037c",
+    "ref": "bbc987b0e32413369b8f80ee2e4f721bf3c8a5db",
     "repo": "TheAxiomFoundation/rulespec-dk",
-    "sha": "9986b6035c4e557b9b40645dfe2f3e4cffb6037c"
+    "sha": "bbc987b0e32413369b8f80ee2e4f721bf3c8a5db"
   },
   "schema": "axiom_oracles.executable_reproduction.v1",
   "source_reports": [

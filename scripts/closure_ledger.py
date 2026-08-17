@@ -309,7 +309,7 @@ def _read_corpus_spine(
 
     generated_source = {
         "repository": "TheAxiomFoundation/axiom-corpus",
-        "ref": ref,
+        "ref": commit,
         "commit": commit,
         "path": relative_path,
         "sha256": _sha256_bytes(blob),
@@ -603,7 +603,11 @@ def _read_rulespec_facts(
         )
     rulespec = {
         "repository": "TheAxiomFoundation/rulespec-dk",
-        "ref": ref,
+        # Record the RESOLVED commit as the ref, never a branch name: a ledger
+        # is a statement about one commit, and --check re-derives at that
+        # commit whatever branch tips have moved to (the executable receipt
+        # made the same move for launch-audit finding #6).
+        "ref": commit,
         "commit": commit,
         "selected_content_sha256": content_digest.hexdigest(),
     }
@@ -1357,11 +1361,19 @@ def verify_artifact(
     *,
     artifact_path: Path = ARTIFACT_PATH,
     corpus_release: Path = CORPUS_RELEASE_PATH,
-    corpus_ref: str = CORPUS_REF,
+    corpus_ref: str | None = None,
     rulespec_root: Path = RULESPEC_ROOT,
-    rulespec_ref: str = RULESPEC_REF,
+    rulespec_ref: str | None = None,
 ) -> VerificationResult:
-    """Fully reproduce ``artifact_path`` from corpus and RuleSpec sources."""
+    """Fully reproduce ``artifact_path`` from corpus and RuleSpec sources.
+
+    With ``corpus_ref`` / ``rulespec_ref`` left ``None`` the reproduction is
+    PINNED to the commits the artifact records (the ledger is a statement
+    about one corpus commit and one rulespec commit; a branch tip moving with
+    unrelated commits must not make it stale — and this is what certify's
+    ``--verify-producers`` and the default ``--check`` exercise). Pass a ref
+    explicitly to ask instead whether the ledger is CURRENT against it.
+    """
 
     errors: list[str] = []
     try:
@@ -1375,6 +1387,13 @@ def verify_artifact(
         return VerificationResult(
             None, None, (f"{artifact_path} is not a YAML mapping",)
         )
+    facts = loaded.get("generated_facts") if isinstance(loaded.get("generated_facts"), dict) else {}
+    if corpus_ref is None:
+        recorded = (facts.get("corpus_release") or {}).get("commit") if isinstance(facts.get("corpus_release"), dict) else None
+        corpus_ref = recorded if isinstance(recorded, str) and recorded else CORPUS_REF
+    if rulespec_ref is None:
+        recorded = (facts.get("rulespec") or {}).get("commit") if isinstance(facts.get("rulespec"), dict) else None
+        rulespec_ref = recorded if isinstance(recorded, str) and recorded else RULESPEC_REF
     errors.extend(_validation_errors(loaded))
     try:
         expected, build_errors = build_artifact(
@@ -1405,9 +1424,9 @@ def run(
     check: bool,
     artifact_path: Path,
     corpus_release: Path,
-    corpus_ref: str,
+    corpus_ref: str | None,
     rulespec_root: Path,
-    rulespec_ref: str,
+    rulespec_ref: str | None,
 ) -> int:
     if check:
         result = verify_artifact(
@@ -1433,6 +1452,10 @@ def run(
         )
         return 0
 
+    if corpus_ref is None:
+        corpus_ref = CORPUS_REF
+    if rulespec_ref is None:
+        rulespec_ref = RULESPEC_REF
     try:
         decisions = _load_decisions(artifact_path)
         document, errors = build_artifact(
@@ -1468,9 +1491,25 @@ def main(argv: Sequence[str] | None = None) -> int:
     )
     parser.add_argument("--artifact", type=Path, default=ARTIFACT_PATH)
     parser.add_argument("--corpus-release", type=Path, default=CORPUS_RELEASE_PATH)
-    parser.add_argument("--corpus-ref", default=CORPUS_REF)
+    parser.add_argument(
+        "--corpus-ref",
+        default=None,
+        help=(
+            f"corpus ref (default: {CORPUS_REF!r} for --generate; for --check the "
+            "RECORDED corpus commit — pass a ref explicitly to ask whether the "
+            "ledger is current against it)"
+        ),
+    )
     parser.add_argument("--rulespec-root", type=Path, default=RULESPEC_ROOT)
-    parser.add_argument("--rulespec-ref", default=RULESPEC_REF)
+    parser.add_argument(
+        "--rulespec-ref",
+        default=None,
+        help=(
+            f"rulespec ref (default: {RULESPEC_REF!r} for --generate; for --check "
+            "the RECORDED rulespec commit — pass a ref explicitly to ask whether "
+            "the ledger is current against it)"
+        ),
+    )
     args = parser.parse_args(argv)
     return run(
         check=args.check,

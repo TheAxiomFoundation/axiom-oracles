@@ -74,9 +74,26 @@ bindings:
       without scaling, only into the earner's two Person records; the household
       result then sums the separately executed recipient legs.
     covered_by:
-      - dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json — executed earner-only bridge receipt and rulespec-dk commit 9986b6035c4e557b9b40645dfe2f3e4cffb6037c provenance for module paragraf-1-a
-      - dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json — pinned companion fixtures module paragraf-1-a companion fixture and composed boerne-og-ungeydelse-couple-pipeline companion fixture plus the own-recipient formula in composed boerne-og-ungeydelse-couple-pipeline
-      - dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json — the executed bridge receipt (metadata.euromod_to_axiom_input_bridge_applied) records writes ONLY to Person[earner] for both income-basis inputs while metadata.axiom_result_aggregation_applied shows both records executed, so the non-earner ran at its zero baseline; shipped report bytes, so the claim verifies in every hermetic tree (the adapter's unit fixture is a companion, not the evidence)
+      - report: dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json
+        claim: >-
+          executed earner-only bridge receipt and rulespec-dk commit
+          bbc987b0e32413369b8f80ee2e4f721bf3c8a5db provenance for module
+          paragraf-1-a
+      - report: dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json
+        claim: >-
+          pinned companion fixtures module paragraf-1-a companion fixture and
+          composed boerne-og-ungeydelse-couple-pipeline companion fixture plus
+          the own-recipient formula in composed boerne-og-ungeydelse-couple-
+          pipeline
+      - report: dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json
+        claim: >-
+          the executed bridge receipt
+          (metadata.euromod_to_axiom_input_bridge_applied) records writes ONLY
+          to Person[earner] for both income-basis inputs while
+          metadata.axiom_result_aggregation_applied shows both records
+          executed, so the non-earner ran at its zero baseline; shipped report
+          bytes, so the claim verifies in every hermetic tree (the adapter's
+          unit fixture is a companion, not the evidence)
     audit: read
 
   - kind: constant

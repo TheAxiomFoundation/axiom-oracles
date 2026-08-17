@@ -807,6 +807,27 @@ def validate_artifact(
         document.get("source_reports") == _source_reports(repo_root),
         "source_reports do not match the committed DK reports and SHA-256s",
     )
+    # The receipt recompiles at rulespec.sha; the reports it reproduces record
+    # in their own provenance which rulespec commit THEY executed. Those must
+    # be the same commit — a receipt at 9986b603 sat over reports whose
+    # provenance said bbc987b0 (a workflow-only descendant with identical
+    # module bytes) and nothing noticed until the typed evidence contract
+    # cross-checked the manifests' claims. Binding it here makes the receipt
+    # a statement about the SAME execution the reports describe.
+    for spec in REPORT_SPECS:
+        report = _read_json(repo_root / str(spec["path"]))
+        recorded = (report.get("provenance") or {}).get("rulespecs") or []
+        shas = {
+            row.get("sha")
+            for row in recorded
+            if isinstance(row, dict) and row.get("repo") == rulespec["repo"]
+        }
+        _require(
+            shas == {rulespec_sha},
+            f"{spec['path']}: report provenance pins rulespec-dk {sorted(shas)} "
+            f"but the receipt recompiles {rulespec_sha}; the receipt must "
+            "reproduce the same rulespec commit the reports executed",
+        )
     compiled = document.get("compiled_artifacts")
     _require(
         isinstance(compiled, list) and len(compiled) == len(PROGRAM_SPECS),

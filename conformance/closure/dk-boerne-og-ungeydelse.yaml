@@ -9,7 +9,7 @@ program:
 generated_facts:
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
-    ref: HEAD
+    ref: a2e713913fb7250b28b55407c850c3c9ae3c69a3
     commit: a2e713913fb7250b28b55407c850c3c9ae3c69a3
     path: data/corpus/provisions/dk/statute/2026-08-04-dk-full-parity-tier1-current.jsonl
     sha256: c906f1b6b709d3602bfd1ece96404462cbe53b4f9049056eff997aac037bdf44
@@ -20,8 +20,8 @@ generated_facts:
     declared_block_count: 24
   rulespec:
     repository: TheAxiomFoundation/rulespec-dk
-    ref: main
-    commit: 9986b6035c4e557b9b40645dfe2f3e4cffb6037c
+    ref: bbc987b0e32413369b8f80ee2e4f721bf3c8a5db
+    commit: bbc987b0e32413369b8f80ee2e4f721bf3c8a5db
     selected_content_sha256: bf4d060d394cf685ea84aa5a8afc59091e087e97d5e1f8daf259f73219c3c6cb
   provision_spine:
   - ordinal: 1

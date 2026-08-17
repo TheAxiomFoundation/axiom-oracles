@@ -37,7 +37,6 @@ import os
 import re
 import subprocess
 import sys
-import unicodedata
 from functools import lru_cache
 from pathlib import Path
 
@@ -225,60 +224,99 @@ def _shipped_evidence_file(candidate: str) -> bool:
     return rel.as_posix() == candidate
 
 
-#: Prose after the leading evidence file must be PLAIN TEXT drawn from an
-#: explicit alphabet: ASCII letters and digits, and this punctuation set. It
-#: is a positive grammar, not a denylist: earlier rounds showed a denylist of
-#: "path-shaped" markers (slash, drive letter, ~) is defeated by wrapping
-#: brackets, an invisible prefix (U+200B), or a look-alike (fullwidth
-#: solidus U+FF0F) — every such character simply is not in this alphabet.
-#: Text is NFKC-folded first so compatibility look-alikes collapse to their
-#: ASCII forms and are judged as those (U+FF0F → "/", which is not allowed).
-#: Deliberately absent: "/", "\\", ":", "~", "<", ">", "|", "*", "?", any
-#: non-ASCII, and every control/format character.
-_PROSE_ALPHABET = frozenset(
-    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-    ".,;()[]{}'\"`!?%&+=#@_-–—…§"
-)
+#: The evidence a strict-lane covered_by entry may cite, by typed key. Each
+#: key names ONE physical artifact class of THIS suite's own execution
+#: receipt: the dashboard report, its bound chunk index, or a chunk that
+#: index lists. Prose lives in the separate ``claim`` field and is never
+#: parsed. Five audit rounds showed that no grammar over free text can prove
+#: a token is not a filename ("README.md", ".", "..." are all prose and all
+#: paths); the fix is structural — the resolver only ever sees a value that
+#: is declared to be a path, and the path must be the suite's own evidence.
+STRICT_EVIDENCE_KEYS = ("report", "chunk_index", "chunk")
 
 
-def _prose_token_ok(token: str) -> bool:
-    folded = unicodedata.normalize("NFKC", token)
-    return all(ch in _PROSE_ALPHABET for ch in folded)
-
-
-def _strict_evidence_entry(text: str) -> tuple[str | None, list[str]]:
+def _strict_evidence_entry(
+    entry: object,
+    *,
+    suite_report: str | None,
+    suite: str | None,
+) -> tuple[str | None, list[str]]:
     """Resolve one strict-lane covered_by entry.
 
-    Contract: ``<repository-relative evidence file> [— free prose]``. Returns
-    ``(evidence_file_or_None, problems)``. The leading whitespace-delimited
-    token must be a shipped evidence file (see ``_shipped_evidence_file``);
-    every OTHER token in the entry must be plain prose from an explicit
-    alphabet (``_PROSE_ALPHABET``). This is deliberately structural and
-    positive: no attempt is made to guess which tokens are "really" paths,
-    so there is nothing to smuggle past — anything that is not plain text
-    is a finding."""
+    Contract: a mapping with exactly one of ``report`` / ``chunk_index`` /
+    ``chunk`` (a repository-relative path) plus a required non-empty
+    ``claim`` (free prose, opaque). The path must be an exact-case,
+    symlink-free, shipped file AND must be THIS suite's evidence: ``report``
+    == the suite's committed dashboard report; ``chunk_index`` == that
+    report's ``cases/<suite>/index.json``; ``chunk`` == a chunk file that
+    index lists. Returns ``(path_or_None, problems)``.
+    """
     problems: list[str] = []
-    tokens = text.split()
-    if not tokens:
-        return None, ["empty covered_by entry"]
-    head, rest = tokens[0], tokens[1:]
-    evidence = head if _shipped_evidence_file(head) else None
-    if evidence is None:
+    if not isinstance(entry, dict):
+        return None, [
+            "strict covered_by entries are mappings {report|chunk_index|chunk: "
+            "<path>, claim: <prose>}; a bare string is not evidence for a "
+            "certified lane"
+        ]
+    keys = [k for k in STRICT_EVIDENCE_KEYS if k in entry]
+    extra = sorted(set(entry) - set(STRICT_EVIDENCE_KEYS) - {"claim"})
+    if len(keys) != 1:
         problems.append(
-            f"leading token {head[:60]!r} is not an exact-case, shipped, "
-            "symlink-free evidence file under "
-            + ", ".join(STRICT_EVIDENCE_ROOTS)
+            "exactly one of report / chunk_index / chunk is required"
         )
-    for token in rest:
-        if not _prose_token_ok(token):
-            problems.append(
-                f"prose token {token[:60]!r} is outside the plain-text "
-                "alphabet — a strict entry cites exactly one evidence file, "
-                "as its leading token, followed only by plain prose (no "
-                "slashes, drive letters, tildes, non-ASCII, or invisible "
-                "characters)"
-            )
-    return evidence, problems
+    if extra:
+        problems.append(f"unexpected keys {extra} — only the path key and claim")
+    claim = entry.get("claim")
+    if not isinstance(claim, str) or not claim.strip():
+        problems.append("claim must be a non-empty string")
+    if problems:
+        return None, problems
+    kind = keys[0]
+    path = entry[kind]
+    if not isinstance(path, str) or not path:
+        return None, [f"{kind} must be a non-empty repository-relative path"]
+    if not _shipped_evidence_file(path):
+        return None, [
+            f"{kind} {path[:60]!r} is not an exact-case, shipped, symlink-free "
+            "file under " + ", ".join(STRICT_EVIDENCE_ROOTS)
+        ]
+    if suite_report is None or suite is None:
+        return None, ["the suite has no committed report to bind evidence to"]
+    index_path = f"dashboard/public/data/cases/{suite}/index.json"
+    if kind == "report" and path != suite_report:
+        return None, [
+            f"report {path!r} is not this suite's committed report {suite_report!r}"
+        ]
+    if kind == "chunk_index" and path != index_path:
+        return None, [
+            f"chunk_index {path!r} is not this suite's bound index {index_path!r}"
+        ]
+    if kind == "chunk":
+        listed = _index_chunk_paths(index_path)
+        if path not in listed:
+            return None, [
+                f"chunk {path!r} is not listed by this suite's bound index "
+                f"{index_path!r}"
+            ]
+    return path, []
+
+
+@lru_cache(maxsize=None)
+def _index_chunk_paths(index_path: str) -> frozenset[str]:
+    """Chunk paths a bound index lists, repository-relative; empty if absent."""
+    p = REPO_ROOT / index_path
+    try:
+        payload = json.loads(p.read_text())
+    except (OSError, json.JSONDecodeError):
+        return frozenset()
+    chunks = payload.get("chunks") if isinstance(payload, dict) else None
+    out: set[str] = set()
+    if isinstance(chunks, list):
+        for row in chunks:
+            name = row.get("name") if isinstance(row, dict) else None
+            if isinstance(name, str) and name:
+                out.add(str(Path(index_path).parent / name))
+    return frozenset(out)
 
 
 def _report_for(suite_names: list[str]) -> tuple[str | None, dict | None]:
@@ -669,6 +707,15 @@ def validate(path: Path, manifest: dict) -> tuple[list[str], list[str]]:
     seen_inputs: set[str] = set()
     binding_claims: dict[str, list[dict[str, object]]] = {}
     partial = 0
+    # Strict lanes bind covered_by evidence to THIS suite's own report; resolve
+    # it once here (the same lookup the population/period checks use below).
+    strict_suite = manifest.get("suite") if isinstance(manifest.get("suite"), str) else None
+    strict_report: str | None = None
+    if manifest.get("strict") is True and strict_suite:
+        strict_names = [strict_suite]
+        if isinstance(aliases, list):
+            strict_names.extend(a for a in aliases if isinstance(a, str))
+        strict_report, _payload = _report_for(strict_names)
     for index, binding in enumerate(bindings):
         if not isinstance(binding, dict):
             errors.append(f"{name}: bindings[{index}] is not a mapping")
@@ -774,10 +821,17 @@ def validate(path: Path, manifest: dict) -> tuple[list[str], list[str]]:
                 # evidence is real but unverifiable from this checkout, so it
                 # is recorded as visible debt rather than either silently
                 # accepted (the old path-shape heuristic) or discarded.
-                resolvable = [r for r in covered_by if _covered_by_resolves(str(r))]
-                unresolvable = [
-                    r for r in covered_by if str(r) not in map(str, resolvable)
-                ]
+                def _resolves(ref: object) -> bool:
+                    if isinstance(ref, dict):
+                        for key in STRICT_EVIDENCE_KEYS:
+                            value = ref.get(key)
+                            if isinstance(value, str) and (REPO_ROOT / value).is_file():
+                                return True
+                        return False
+                    return _covered_by_resolves(str(ref))
+
+                resolvable = [r for r in covered_by if _resolves(r)]
+                unresolvable = [r for r in covered_by if not _resolves(r)]
                 if not resolvable:
                     errors.append(
                         f"{name}: bridged binding [{index}] has no covered_by "
@@ -791,19 +845,18 @@ def validate(path: Path, manifest: dict) -> tuple[list[str], list[str]]:
                         "repository (cross-repo evidence — audit debt)"
                     )
                 if manifest.get("strict") is True:
-                    # A certified lane's evidence must be shipped bytes, and
-                    # EVERY covered_by entry must lead with exactly one
-                    # exact-case git-tracked, symlink-free file under the
-                    # evidence roots, followed only by prose containing no
-                    # path-shaped token (delta audits #2/#3, item 7). The
-                    # census keys bridge_audited off this and binds the
-                    # manifest sha, so no evidence edit is invisible.
+                    # A certified lane's evidence is typed and bound to THIS
+                    # suite's own execution receipt (report / bound chunk
+                    # index / listed chunk); prose is a separate opaque
+                    # field. See _strict_evidence_entry (delta audits #2–#5).
                     for ref in covered_by:
-                        _evidence, problems = _strict_evidence_entry(str(ref))
+                        _evidence, problems = _strict_evidence_entry(
+                            ref, suite_report=strict_report, suite=strict_suite
+                        )
                         for problem in problems:
                             findings.append(
                                 f"{name}: bridged binding [{index}] covered_by "
-                                f"entry {str(ref)[:50]!r}: {problem}"
+                                f"entry: {problem}"
                             )
             if not isinstance(binding.get("source"), str) or not binding.get("source"):
                 errors.append(

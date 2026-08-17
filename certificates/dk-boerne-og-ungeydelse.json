@@ -11,7 +11,7 @@
       "artifact": "conformance/exercise-census.json",
       "claim": "exercise census",
       "mode": "computed",
-      "sha256": "8e7a91f1733ba1b9703124e4ecb753b8384174f67a9c403c770b24795f8433e5"
+      "sha256": "be70be2d6f4f3aced174196dbc5393efcda927c81996501ee567fd0ad67f40ea"
     },
     {
       "artifact": "dashboard/public/data/axiom-euromod-dk-child-youth-benefit.json",
@@ -71,14 +71,14 @@
       "artifact": "conformance/closure/dk-boerne-og-ungeydelse.yaml",
       "claim": "closed:dk/boerne-og-ungeydelse",
       "mode": "computed",
-      "sha256": "2b0dc668fd560100b027685e294b80818e155f33c30c61ec3f883927c7f45dd7",
+      "sha256": "43f8ab630df29ee0d191edd9110eefa6aecfb895c938fde1686517136ed0d018",
       "verification": "producer_artifact_validation"
     },
     {
       "artifact": "conformance/executable/dk-boerne-og-ungeydelse.json",
       "claim": "executable:dk/boerne-og-ungeydelse",
       "mode": "computed",
-      "sha256": "1139ba72e739982ec8327a418c0e6bb8a8201d5b8f589ad5a84f2fe292632a6c",
+      "sha256": "530efdce4753b31c6f57366782f392b96fccdd2e8e64752e6a7f656c38699602",
       "verification": "producer_artifact_validation"
     }
   ],
@@ -223,7 +223,7 @@
       "engine_binary_sha256": "079c26f4244db8c2a72fcbfb8cf88aaa5cb7c99628dc1c8d9d3b2d011e5f32a5",
       "matched_case_count": 10,
       "mode": "computed",
-      "rulespec_sha": "9986b6035c4e557b9b40645dfe2f3e4cffb6037c",
+      "rulespec_sha": "bbc987b0e32413369b8f80ee2e4f721bf3c8a5db",
       "status": "computed_pass",
       "value": true
     },
