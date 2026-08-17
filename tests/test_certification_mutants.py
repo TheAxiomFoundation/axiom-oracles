@@ -777,7 +777,11 @@ def test_certified_cannot_activate_by_flipping_status_alone():
     ("status", "registry_mode", "derived_mode"),
     (
         pytest.param("prototype", "computed", "attested", id="attested-wins"),
-        pytest.param("computed", "attested", "computed", id="computed-wins"),
+        # `status: computed` is a registry STRING like `mode:`; with no
+        # producer behind the premise the derived mode is attested regardless
+        # (the DK launch audit minted certified=yes through this exact flip).
+        pytest.param("computed", "attested", "attested", id="status-string-loses"),
+        pytest.param("computed", "computed", "attested", id="both-strings-lose"),
     ),
 )
 def test_registry_mode_cannot_override_derived_emitted_mode(
