@@ -35,7 +35,10 @@ import argparse
 import json
 import os
 import re
+import subprocess
 import sys
+import unicodedata
+from functools import lru_cache
 from pathlib import Path
 
 import yaml
@@ -147,6 +150,47 @@ def _exact_case_file(candidate: str) -> bool:
     return True
 
 
+#: Path components and suffixes that are never shipped artifacts, whatever
+#: root they sit under: build caches, virtualenvs, VCS metadata, compiled or
+#: temporary files. A gitignored ``__pycache__/…pyc`` under axiom_oracles/
+#: passed as strict evidence (delta #4) — it exists on this disk but is
+#: absent from every clone and from the refresh bot's rsync'd tree.
+_NEVER_SHIPPED_PARTS = frozenset(
+    {"__pycache__", ".git", ".venv", "venv", "node_modules", "dist", "target",
+     ".pytest_cache", ".ruff_cache", ".mypy_cache", ".axiom", ".DS_Store"}
+)
+_NEVER_SHIPPED_SUFFIXES = (".pyc", ".pyo", ".tmp", ".swp", ".orig", ".rej", "~")
+
+
+@lru_cache(maxsize=1)
+def _git_tracked() -> frozenset[str] | None:
+    """Exact-case git-tracked paths when this tree IS a git checkout; None in
+    a hermetic copy (the refresh bot's tree, a test's rsync) where the
+    on-disk rules below are the whole test."""
+    if not (REPO_ROOT / ".git").exists():
+        return None
+    try:
+        out = subprocess.run(
+            ["git", "ls-files", "-z"], cwd=REPO_ROOT, capture_output=True, check=True
+        ).stdout
+    except (OSError, subprocess.CalledProcessError):
+        return None
+    return frozenset(part.decode("utf-8") for part in out.split(b"\0") if part)
+
+
+def _plausibly_shipped(candidate: str) -> bool:
+    """A cited evidence path must be something a clone actually carries."""
+    parts = Path(candidate).parts
+    if any(part in _NEVER_SHIPPED_PARTS or part.startswith(".") for part in parts):
+        return False
+    if candidate.endswith(_NEVER_SHIPPED_SUFFIXES):
+        return False
+    tracked = _git_tracked()
+    if tracked is not None and candidate not in tracked:
+        return False
+    return True
+
+
 def _shipped_evidence_file(candidate: str) -> bool:
     """True iff ``candidate`` is an explicit, exact-case FILE inside an
     allowed evidence root whose RESOLVED location also lies inside that root,
@@ -160,6 +204,8 @@ def _shipped_evidence_file(candidate: str) -> bool:
     if not candidate or candidate.startswith("/") or ".." in candidate.split("/"):
         return False
     if not candidate.startswith(STRICT_EVIDENCE_ROOTS):
+        return False
+    if not _plausibly_shipped(candidate):
         return False
     if not _exact_case_file(candidate):
         return False
@@ -179,14 +225,25 @@ def _shipped_evidence_file(candidate: str) -> bool:
     return rel.as_posix() == candidate
 
 
-#: Anything that looks like it could address a file: a slash, a backslash,
-#: a drive letter, or a home/URL scheme prefix — regardless of surrounding
-#: brackets, quotes, or trailing punctuation. Prose in a strict covered_by
-#: entry may not contain one: the evidence path is the LEADING token and
-#: nothing else in the entry may be path-shaped (delta #3: brackets, a
-#: trailing period, and absolute paths all smuggled an unshipped file past a
-#: punctuation-stripping tokenizer).
-_PATH_SHAPED = re.compile(r"[\\/]|^[A-Za-z]:|^~|://")
+#: Prose after the leading evidence file must be PLAIN TEXT drawn from an
+#: explicit alphabet: ASCII letters and digits, and this punctuation set. It
+#: is a positive grammar, not a denylist: earlier rounds showed a denylist of
+#: "path-shaped" markers (slash, drive letter, ~) is defeated by wrapping
+#: brackets, an invisible prefix (U+200B), or a look-alike (fullwidth
+#: solidus U+FF0F) — every such character simply is not in this alphabet.
+#: Text is NFKC-folded first so compatibility look-alikes collapse to their
+#: ASCII forms and are judged as those (U+FF0F → "/", which is not allowed).
+#: Deliberately absent: "/", "\\", ":", "~", "<", ">", "|", "*", "?", any
+#: non-ASCII, and every control/format character.
+_PROSE_ALPHABET = frozenset(
+    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+    ".,;()[]{}'\"`!?%&+=#@_-–—…§"
+)
+
+
+def _prose_token_ok(token: str) -> bool:
+    folded = unicodedata.normalize("NFKC", token)
+    return all(ch in _PROSE_ALPHABET for ch in folded)
 
 
 def _strict_evidence_entry(text: str) -> tuple[str | None, list[str]]:
@@ -195,10 +252,11 @@ def _strict_evidence_entry(text: str) -> tuple[str | None, list[str]]:
     Contract: ``<repository-relative evidence file> [— free prose]``. Returns
     ``(evidence_file_or_None, problems)``. The leading whitespace-delimited
     token must be a shipped evidence file (see ``_shipped_evidence_file``);
-    every OTHER token in the entry must be prose — no path-shaped token of
-    any kind, wrapped or bare, relative or absolute, existing or not. This
-    is deliberately structural: no attempt is made to guess which tokens
-    are "really" paths, so there is nothing to smuggle past."""
+    every OTHER token in the entry must be plain prose from an explicit
+    alphabet (``_PROSE_ALPHABET``). This is deliberately structural and
+    positive: no attempt is made to guess which tokens are "really" paths,
+    so there is nothing to smuggle past — anything that is not plain text
+    is a finding."""
     problems: list[str] = []
     tokens = text.split()
     if not tokens:
@@ -207,16 +265,18 @@ def _strict_evidence_entry(text: str) -> tuple[str | None, list[str]]:
     evidence = head if _shipped_evidence_file(head) else None
     if evidence is None:
         problems.append(
-            f"leading token {head[:60]!r} is not an exact-case git-tracked, "
+            f"leading token {head[:60]!r} is not an exact-case, shipped, "
             "symlink-free evidence file under "
             + ", ".join(STRICT_EVIDENCE_ROOTS)
         )
     for token in rest:
-        if _PATH_SHAPED.search(token):
+        if not _prose_token_ok(token):
             problems.append(
-                f"prose token {token[:60]!r} is path-shaped — a strict entry "
-                "cites exactly one evidence file, as its leading token, and "
-                "nothing else path-like"
+                f"prose token {token[:60]!r} is outside the plain-text "
+                "alphabet — a strict entry cites exactly one evidence file, "
+                "as its leading token, followed only by plain prose (no "
+                "slashes, drive letters, tildes, non-ASCII, or invisible "
+                "characters)"
             )
     return evidence, problems
 

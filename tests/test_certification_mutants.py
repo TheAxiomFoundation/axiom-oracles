@@ -2187,6 +2187,15 @@ def test_census_binds_strict_manifest_identity():
         "dk-child-youth-benefit-couple",
         "the executed receipt proves it",
         "see dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json",
+        # delta #4: wrapped drive letter / tilde, invisible prefix, fullwidth
+        # solidus — a positive prose alphabet has no room for any of them
+        "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json [C:secret]",
+        "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json [~otheruser]",
+        "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json \u200bC:secret",
+        "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json tests\uff0ftest.py",
+        "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json d\u03bfcs",
+        # delta #4: an ignored, never-shipped file under a root as the head
+        "axiom_oracles/__pycache__/__init__.cpython-314.pyc",
     ],
 )
 def test_strict_entry_smuggling_forms_are_findings(entry):
@@ -2226,3 +2235,32 @@ def test_strict_evidence_file_is_case_exact():
     assert vbm._shipped_evidence_file(
         "dashboard/public/data/AXIOM-euromod-dk-child-youth-benefit-couple.json"
     ) is False
+
+
+
+def test_strict_evidence_rejects_never_shipped_files():
+    """MUTANT (delta-audit #4): a gitignored __pycache__/*.pyc under an
+    evidence root exists on this disk but in no clone and not in the refresh
+    bot's rsync'd tree; it passed as strict evidence. Never-shipped
+    components/suffixes are rejected outright, and — when the tree is a git
+    checkout — the path must be git-tracked."""
+    vbm = _load("validate_bridge_manifests")
+    for bad in (
+        "axiom_oracles/__pycache__/x.pyc",
+        "axiom_oracles/x.pyc",
+        "docs/.hidden/evidence.json",
+        "docs/evidence.json~",
+        "reports/node_modules/x.json",
+    ):
+        assert vbm._plausibly_shipped(bad) is False, bad
+    assert vbm._plausibly_shipped(
+        "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json"
+    )
+    # git gate: an untracked file under a root is not evidence in a checkout
+    stray = REPO / "docs" / "zz-untracked-evidence-mutant.md"
+    assert not stray.exists()
+    stray.write_text("not tracked\n")
+    try:
+        assert vbm._shipped_evidence_file("docs/zz-untracked-evidence-mutant.md") is False
+    finally:
+        stray.unlink()
