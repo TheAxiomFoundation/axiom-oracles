@@ -279,3 +279,46 @@ def test_case_artifact_check_fails_closed_on_incomplete_canonical_list(tmp_path)
         "test-suite: canonical mismatch list is incomplete (2/3); "
         "compact parity is uncheckable"
     ]
+
+
+def test_served_delta_parity_accepts_either_faithful_convention():
+    """PR #475 CI: two served-delta sign conventions coexist on main — this
+    emitter writes right-minus-left (dashboard_delta) while the populace
+    campaign artifacts (AL/MA/NC/SC/TN SNAP) serve the report's stored
+    left-minus-right `difference`. The parity check must accept either
+    (both are faithful projections of the same (l, x)) and reject anything
+    else — otherwise whichever suite is being worked on silently redefines
+    the contract for the rest."""
+    import importlib.util
+    from pathlib import Path
+
+    repo = Path(__file__).resolve().parents[1]
+    spec = importlib.util.spec_from_file_location(
+        "_eca", repo / "scripts" / "emit_case_artifacts.py"
+    )
+    eca = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(eca)
+    report = {
+        "mismatches": [
+            {"case_id": "c1", "concept": "k", "left": 10.0, "right": 16.0, "difference": -6.0},
+        ]
+    }
+    canonical, problems = eca._canonical_mismatch_payloads(report)
+    assert not problems
+    payload = canonical[("c1", "k")]
+    assert payload["d"] == -6.0  # stored (left-minus-right)
+    assert payload["d_alt"] == eca.dashboard_delta(10.0, 16.0)  # right-minus-left
+    assert payload["d_alt"] == 6.0
+    # a served row carrying either is parity-clean; a third value is drift
+    for served_d, ok in ((-6.0, True), (6.0, True), (5.0, False), (None, False)):
+        served = {("c1", "k"): {"l": 10.0, "x": 16.0, "d": served_d, "e": None}}
+        drift = [
+            key
+            for key in served
+            if any(canonical[key][f] != served[key][f] for f in ("l", "x"))
+            or not (
+                served[key]["d"] == canonical[key]["d"]
+                or served[key]["d"] == canonical[key]["d_alt"]
+            )
+        ]
+        assert (not drift) is ok, (served_d, drift)

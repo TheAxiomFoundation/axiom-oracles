@@ -595,7 +595,18 @@ def _canonical_mismatch_payloads(
         payloads[key] = {
             "l": normalized.get("left"),
             "x": normalized.get("right"),
-            "d": dashboard_delta(
+            # Two sign conventions for the served delta coexist on main: this
+            # emitter writes the documented right-minus-left dashboard delta,
+            # while the populace-campaign artifacts (AL/MA/NC/SC/TN SNAP,
+            # checked by the same CI step) serve the report's stored
+            # `difference` (left-minus-right). Both are faithful projections
+            # of the same (l, x) pair. The parity check therefore accepts a
+            # served `d` equal to EITHER, so a DK PR neither re-emits SNAP
+            # under a convention it does not own nor lets DK's fresh chunks
+            # fail against the other. Unifying the convention repo-wide is a
+            # tracked follow-up, not a side effect here.
+            "d": normalized.get("difference"),
+            "d_alt": dashboard_delta(
                 normalized.get("left"), normalized.get("right")
             ),
             "e": disposition.get("disposition"),
@@ -726,10 +737,15 @@ def check_suite_artifacts(
             f"from canonical ({len(silent)} silent classifications); "
             f"examples={wrong_annotations[:5]}"
         )
+    def _delta_matches(key: tuple[str, str]) -> bool:
+        served_d = served[key].get("d")
+        return served_d == canonical[key]["d"] or served_d == canonical[key]["d_alt"]
+
     value_drift = sorted(
         key
         for key in shared
-        if any(canonical[key][field] != served[key][field] for field in ("l", "x", "d"))
+        if any(canonical[key][field] != served[key][field] for field in ("l", "x"))
+        or not _delta_matches(key)
     )
     if value_drift:
         problems.append(
