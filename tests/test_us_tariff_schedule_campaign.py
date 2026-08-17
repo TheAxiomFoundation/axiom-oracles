@@ -146,7 +146,8 @@ def test_overlapping_structured_selectors_fail_conservation() -> None:
     unit = _selector_unit()
     selectors = [
         {"id": "one", "match": {"slot": "base", "delta": {"sign": "pos"}}},
-        {"id": "two", "match": {"revision": ["r1"], "disposition": ["free"]}},
+        {"id": "two", "match": {"revision": ["r1"], "disposition": ["free"],
+                                  "iso2": ["CA"]}},
     ]
     with pytest.raises(ValueError, match="overlapping selectors"):
         matching_class_id("signature", unit, selectors)
@@ -158,6 +159,18 @@ def test_universal_structured_selector_fails() -> None:
             "slot": "any", "origin_regime": "any", "revision": "any", "delta": "any",
             "disposition": "any", "line_class": "any",
         })
+
+
+def test_slot_only_structured_selector_mutant_fails() -> None:
+    with pytest.raises(ValueError, match="non-slot bound"):
+        selector_matches(_selector_unit(), {"slot": "base"})
+
+
+def test_delta_and_date_are_non_slot_bounds() -> None:
+    assert selector_matches(_selector_unit(), {
+        "slot": "base", "delta": {"values": [0.2]},
+        "date": {"from": "2026-01-01", "through": "2026-01-02"},
+    })
 
 
 def test_fabricated_structured_selector_field_fails_schema() -> None:

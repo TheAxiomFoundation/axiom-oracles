@@ -23,6 +23,7 @@ import sys
 import tempfile
 import time
 import os
+from functools import cache
 from collections import Counter
 from datetime import date
 from pathlib import Path
@@ -44,6 +45,7 @@ COMPARISON_RECEIPT = OUT_DIR / "comparison-summary.json"
 CLASSIFICATION_RECEIPT = OUT_DIR / "classification-receipt.json"
 DISPOSITION_LEDGER = REPO_ROOT / "dispositions/us-tariff-schedule.yaml"
 REPORT_PATH = REPO_ROOT / "conformance/detail/us-tariff-schedule.json"
+WITNESS_REPLAY_RECEIPT = OUT_DIR / "witness-replay-execute-receipt.json"
 CACHE_ROOT = Path(os.environ.get(
     "AXIOM_TARIFF_C1_CACHE", "~/PolicyEngine/_tariff-p5/c1-cache"
 )).expanduser()
@@ -84,7 +86,13 @@ OUTPUT_NAMES = (
 TOLERANCE = 1e-12
 SELECTOR_FIELDS = frozenset({
     "slot", "origin_regime", "revision", "delta", "disposition", "line_class", "iso2",
+    "line_set", "date",
 })
+NON_SLOT_SELECTOR_FIELDS = frozenset({"origin_regime", "delta", "iso2", "line_set", "date"})
+INCIDENCE_ROOT = Path(os.environ.get(
+    "RULESPEC_US_CHECKOUT", "/Users/maxghenis/TheAxiomFoundation/_b1wt/rulespec-us-b16"
+)).expanduser() / "us/policies/usitc/us-tariff-incidence/generated"
+CH98_LINES = INCIDENCE_ROOT.parent.parent / "us-tariff-duty/lines/generated/ch98.yaml"
 EXPECTED_COLUMNS = (
     "statutory_base_rate", "statutory_rate_232", "statutory_rate_ieepa_recip",
     "statutory_rate_ieepa_fent", "statutory_rate_301", "statutory_rate_301_cs",
@@ -907,12 +915,71 @@ def _match_line_class(unit: dict[str, Any], selector: Any) -> bool:
     return True
 
 
+@cache
+def _membership_rules(path: Path) -> dict[str, tuple[int, frozenset[str]]]:
+    _require(path.is_file(), f"line-set membership table unavailable: {path}")
+    payload = yaml.safe_load(path.read_text())
+    result: dict[str, tuple[int, frozenset[str]]] = {}
+    for rule in payload.get("rules", []):
+        name = rule.get("name", "")
+        if "membership" not in name and path != CH98_LINES:
+            continue
+        values = rule.get("versions", [{}])[0].get("values", {})
+        if not isinstance(values, dict) or not values:
+            continue
+        width = 10 if "hts10" in name else 6 if "subheading6" in name else 4 if "heading" in name else 8
+        result[name] = (width, frozenset(str(key).zfill(width) for key, value in values.items() if value))
+    return result
+
+
+@cache
+def _named_line_sets() -> dict[str, tuple[tuple[int, frozenset[str]], ...]]:
+    tables = {
+        stem: _membership_rules(INCIDENCE_ROOT / f"{stem}.yaml")
+        for stem in ("note16-232-steel", "note19-232-aluminum", "note20-china-301",
+                     "note2aa-122-exemptions")
+    }
+    metal = tuple(tables["note16-232-steel"].values()) + tuple(tables["note19-232-aluminum"].values())
+    note20 = tuple(tables["note20-china-301"].values())
+    s122 = tables["note2aa-122-exemptions"]
+    unconditional = tuple(value for name, value in s122.items() if "aa_ii_" in name or "aa_iii_" in name)
+    gn6 = tuple(value for name, value in s122.items()
+                if "aa_iv_" in name or "gn6_conditional" in name)
+    return {
+        "metal-membership-union": metal,
+        "not-metal-membership-union": metal,
+        "note20-membership-union": note20,
+        "s122-unconditional-membership": unconditional,
+        "s122-gn6-conditional-membership": gn6,
+        "s122-no-exemption-membership": unconditional + gn6,
+        "chapter-98-lines": ((2, frozenset({"98"})),),
+    }
+
+
+def _line_set_contains(unit: dict[str, Any], name: str) -> bool:
+    _require(name in _named_line_sets(), f"unknown line_set {name}")
+    code = unit["hts10"]
+    member = any(code[:width] in values for width, values in _named_line_sets()[name])
+    if name == "s122-gn6-conditional-membership":
+        return member and not code.startswith("98")
+    if name == "s122-unconditional-membership":
+        gn6 = any(code[:width] in values for width, values in
+                  _named_line_sets()["s122-gn6-conditional-membership"])
+        return member and not gn6 and not code.startswith("98")
+    if name.startswith("not-") or name == "s122-no-exemption-membership":
+        return not member and not (name == "s122-no-exemption-membership" and code.startswith("98"))
+    return member
+
+
 def selector_matches(unit: dict[str, Any], match: dict[str, Any]) -> bool:
     _require(isinstance(match, dict) and match, "structured selector match must be a nonempty mapping")
     _require(set(match) <= SELECTOR_FIELDS,
              f"unknown selector fields: {sorted(set(match) - SELECTOR_FIELDS)}")
     _require(not all(selector == "any" for selector in match.values()),
              "universal disposition selector is forbidden")
+    _require(any(field in NON_SLOT_SELECTOR_FIELDS and selector != "any"
+                 for field, selector in match.items()),
+             "slot-only disposition selector is forbidden; a non-slot bound is required")
     for field, selector in match.items():
         if field in {"slot", "origin_regime", "revision", "disposition", "iso2"}:
             if field == "slot":
@@ -924,9 +991,15 @@ def selector_matches(unit: dict[str, Any], match: dict[str, Any]) -> bool:
         elif field == "delta":
             if selector == "any":
                 continue
-            _require(isinstance(selector, dict) and set(selector) <= {"sign", "min", "max"},
-                     "selector delta must be any or a sign/min/max mapping")
+            _require(isinstance(selector, dict) and set(selector) <= {"sign", "min", "max", "values"},
+                     "selector delta must be any or a sign/min/max/values mapping")
             _require(selector and selector.get("sign") in {None, "pos", "neg"}, "invalid delta sign")
+            if "values" in selector:
+                values = selector["values"]
+                _require(isinstance(values, list) and values and all(isinstance(v, (int, float)) for v in values),
+                         "selector delta values must be a nonempty numeric list")
+                if not any(abs(unit[field] - value) <= TOLERANCE for value in values):
+                    return False
             if selector.get("sign") == "pos" and unit[field] <= 0:
                 return False
             if selector.get("sign") == "neg" and unit[field] >= 0:
@@ -937,6 +1010,18 @@ def selector_matches(unit: dict[str, Any], match: dict[str, Any]) -> bool:
                 return False
         elif field == "line_class" and not _match_line_class(unit, selector):
             return False
+        elif field == "line_set":
+            _require(isinstance(selector, str) and selector, "line_set must be a named set")
+            if not _line_set_contains(unit, selector):
+                return False
+        elif field == "date":
+            _require(isinstance(selector, dict) and selector and set(selector) <= {"from", "through"},
+                     "date selector must be a from/through mapping")
+            start, end = unit["interval"]
+            if selector.get("from") and start < selector["from"]:
+                return False
+            if selector.get("through") and end > selector["through"]:
+                return False
     return True
 
 
@@ -1107,6 +1192,17 @@ def build_report() -> dict[str, Any]:
     unexplained = classification["unexplained"]
     conformant = computed_conformant(unexplained=unexplained, engine_errors=comparison["engine_errors"])
     scope_sentence = routing["scope_statement"] + f" ({routing['non_ad_valorem_share'] * 100:.4f}%; components-only)."
+    ledger = yaml.safe_load(DISPOSITION_LEDGER.read_text())
+    entries = {entry["id"]: entry for entry in ledger["entries"]}
+    class_attribution = {
+        name: {"units": classification["class_census"].get(name, 0), "attribution": entry["attribution"],
+               "receipt": entry["receipt"], "bounds": entry["match"]}
+        for name, entry in entries.items()
+    }
+    open_classes = {
+        name: item for name, item in class_attribution.items()
+        if item["attribution"] == "axiom-attributed-open"
+    }
     report = {
         "schema": "axiom.comparison_report.v2", "suite": "us-tariff-schedule",
         "title": "US tariff full schedule — Axiom bulk path vs Yale statutory panel",
@@ -1122,9 +1218,11 @@ def build_report() -> dict[str, Any]:
             "components_only_interval_cells": routing["non_ad_valorem_components_only_cells"],
             "components_only_share": routing["non_ad_valorem_share"],
             "components_only_statement": scope_sentence,
-            "limitation": "Does not prove identical Axiom behavior for unprobed countries grouped by Yale trajectory.",
+            "limitation": "This comparison does not prove identical behavior across grouped countries. It does not prove identical Axiom behavior for unprobed countries grouped by Yale trajectory.",
+            "open": {"status": "OPEN", "axiom_attributed_open_classes": open_classes,
+                     "statement": "Upstream-methodology classes are receipted divergences, not agreement."},
         },
-        "classification": classification,
+        "classification": classification | {"class_attribution": class_attribution},
         "scoreboard": {"gate": "S1", "conformant": conformant,
                        "derivation": "unexplained == 0 and engine_errors == 0"},
     }
@@ -1168,11 +1266,14 @@ def witness_replay(*, execute: bool = False) -> dict[str, Any]:
         finally:
             dashboard.write_bytes(before)
     _require(dashboard.read_bytes() == before, "us-tariff-panel detail bytes not restored")
-    return {"schema": "axiom_oracles.us_tariff_schedule.witness_replay.v1",
+    receipt = {"schema": "axiom_oracles.us_tariff_schedule.witness_replay.v1",
             "conformant": True, "detail_sha256": hashlib.sha256(before).hexdigest(),
             "byte_stable": True,
             "surface_reproduced": fresh_surface is not None,
             "surface": _witness_surface(summary)}
+    if execute:
+        _atomic_json(WITNESS_REPLAY_RECEIPT, receipt)
+    return receipt
 
 
 def main() -> int:

@@ -1,0 +1,21 @@
+{
+  "availability": {
+    "b1_6_generated_incidence_table": false,
+    "corpus_note_52": true
+  },
+  "corpus_path": "/Users/maxghenis/TheAxiomFoundation/axiom-corpus-b1-full/data/corpus/provisions/us/statute/2026-08-04-usitc-hts-2026-rev15-notes.jsonl",
+  "finding": "U.S. note 52 is present at chapter-99/page-553 and its country tier provisions are present at pages 639-652. The corpus confirms 12.5% and 10% tiers, including Brazil at 12.5%; country-specific ceiling provisions also appear. The B1.6 generated incidence directory has no note-52 membership table, so the forced-labor/federal-false class uses the two dominant tier deltas plus the effective-date and direction bounds.",
+  "rate_receipts": {
+    "10_percent": [
+      "us/statute/hts/chapter-99/page-639",
+      "us/statute/hts/chapter-99/page-640"
+    ],
+    "12_5_percent": [
+      "us/statute/hts/chapter-99/page-639",
+      "us/statute/hts/chapter-99/page-640"
+    ],
+    "brazil_12_5_percent": "us/statute/hts/chapter-99/page-640",
+    "note_text": "us/statute/hts/chapter-99/page-553"
+  },
+  "schema": "axiom_oracles.us_tariff_schedule.note52_corpus_receipt.v1"
+}

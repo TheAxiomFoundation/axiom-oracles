@@ -1,30 +1,32 @@
-# C1 reviewed classification census — 2026-08-17
+# C1 bounded classification residue — 2026-08-17
 
-Classification closes with 9,503,693 of 9,503,693 mismatch units classified,
-zero unexplained units, zero engine errors, and conservation `PASS`. The
-content-addressed signature sidecar and its SHA-256 are recorded in
-`classification-receipt.json`.
+The repaired classification leaves S1 false: 8,934,110 of 9,503,693 mismatch
+units are classified, 569,583 are unexplained after derived-total propagation,
+engine errors are zero, and conservation is `PASS`.
 
-| Reviewed class | Component units |
-|---|---:|
-| fed-false-family-forced-labor | 1,499,038 |
-| s122-entry-facts | 1,485,889 |
-| non-metal-232-family | 754,434 |
-| column2-gn3b | 683,334 |
-| vintage-revision-232 | 513,580 |
-| fed-false-family-brazil | 93,198 |
-| legal-date-boundary-ieepa | 38,636 |
-| vintage-revision-301 | 31,446 |
-| s201-stale-proxy | 9,384 |
-| preference-entry-semantics | 5,709 |
+| Bounded class | Component units | Non-slot bounds | Attribution |
+|---|---:|---|---|
+| fed-false-family-forced-labor | 1,241,176 | delta {-12.5, -10}; date >= 2026-07-24 | axiom-attributed-open |
+| s122-entry-status-lines | 779,746 | no-exemption complement; date; [-10, +10] | input-comparability |
+| non-metal-232-family | 754,434 | outside notes 16/19 union; negative delta | input-comparability |
+| s122-gn6-lines | 687,295 | GN6 conditional table; date; [-10, +10] | input-comparability |
+| column2-gn3b | 683,334 | CU/KP/BY/RU origin list | upstream-methodology |
+| vintage-revision-232 | 513,556 | notes 16/19 union; [-150, +50] | input-comparability |
+| fed-false-family-brazil | 93,198 | BR; delta {-25, -12.5, -2.5}; date | axiom-attributed-open |
+| legal-date-boundary-ieepa | 38,392 | positive delta; 2026-02-15..2026-02-24 | input-comparability |
+| s122-ch98 | 18,848 | chapter 98 list; +10; statutory window | input-comparability |
+| s201-stale-proxy | 9,384 | delta {-14.5, -30, -40}; after expiry | upstream-methodology |
+| preference-entry-semantics | 5,709 | exact origin list | input-comparability |
+| vintage-revision-301 | 4,716 | note 20 union; [-100, +25] | input-comparability |
+| s122-unconditional-exempt-lines | 0 | 2(aa)(ii)/(iii) tables; statutory window | input-comparability |
 
-The remaining 4,389,045 classified units are totals derived from 49 exact
-same-case component-class compositions. They are enumerated in the receipt's
-`derived_total_compositions`; there is deliberately no free-standing total
-class or total selector.
+Direct unexplained residue is 284,860 component units: 257,862 forced-labor
+rows outside the required two-delta bound, 26,730 China-301 rows outside the
+note-20 generated memberships, 244 IEEPA rows outside the bounded
+direction/window, and 24 metal-232 rows outside the declared delta range. The
+remaining 284,723 unexplained units are totals whose component composition
+contains at least one of those direct unexplained signatures.
 
-Data corrections to the reviewed brief are retained in the disposition
-comments: forced-labor Axiom-minus-Yale deltas are negative and dominated by
--12.5% and -10%, not +25%/+100%; and the stale section-201 population contains
-30% and 40% proxies as well as 14.5%. All observed section-201 cells begin after
-the 2026-02-07 expiry, so no pre-expiry solar fed-false subclass appears.
+The note-52 corpus finding and the absence of a B1.6 generated note-52 table
+are recorded in `note52-corpus-receipt.json`. Upstream-methodology classes are
+receipted divergences, not agreement.
