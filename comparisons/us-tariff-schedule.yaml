@@ -4,14 +4,15 @@ title: US tariff full schedule — Axiom bulk path vs Yale statutory panel
 description: >-
   Additive full-schedule lane. Evaluates the lossless partition of the EXPECTED
   side formed by every distinct Yale statutory trajectory per HTS-10 line,
-  plus the fixed-origin-regime exhaustive-behavior guard. It does not establish
+  plus a fixed-regime guard probing, for every multi-country class, the member
+  whose origin regime differs most from the representative. It does not establish
   identical Axiom behavior for unprobed countries grouped by Yale.
 runner:
   type: us-tariff-schedule
   parameters:
     period_start: "2026-02-15"
     period_end: "2026-08-01"
-    interval_cell_cap: 5000000
+    interval_cell_cap: 12000000
     max_engine_processes: 3
 artifacts:
   report_basename: axiom-yale-us-tariff-schedule

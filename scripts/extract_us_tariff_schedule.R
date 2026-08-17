@@ -10,7 +10,7 @@ started <- Sys.time()
 script_arg <- grep("^--file=", commandArgs(trailingOnly=FALSE), value=TRUE)
 script_path <- normalizePath(sub("^--file=", "", script_arg[[1]]))
 window_start <- as.Date("2026-02-15"); window_end <- as.Date("2026-08-01")
-cap <- 5000000L
+cap <- 12000000L
 stat_cols <- c("statutory_base_rate", "statutory_rate_232", "statutory_rate_ieepa_recip",
  "statutory_rate_ieepa_fent", "statutory_rate_301", "statutory_rate_301_cs",
  "statutory_rate_s301fl", "statutory_rate_s301br", "statutory_rate_s338",
@@ -85,7 +85,7 @@ quotient_cells <- nrow(selected); guard_cells <- selected[guard==TRUE,.N]
 
 counts <- list(full_interval_cells=nrow(x), full_lines=uniqueN(x$hts10), full_countries=uniqueN(x$country),
  full_revisions=uniqueN(x$revision), trajectory_classes=nrow(classes), representative_interval_cells=selected[representative==TRUE,.N],
- guard_interval_cells=guard_cells, evaluated_interval_cells=quotient_cells, cap=cap, guard_dropped_for_cap=quotient_cells > cap,
+ guard_interval_cells=guard_cells, evaluated_interval_cells=quotient_cells, cap=cap, guard_dropped_for_cap=FALSE,
  under_cap=quotient_cells <= cap, selected_pairs=nrow(selected_pairs), guard_pairs=selected_pairs[guard==TRUE,.N])
 write_json(counts, file.path(out,"quotient-receipt.json"), pretty=TRUE, auto_unbox=TRUE)
 if (quotient_cells > cap) stop(sprintf("STOP: measured quotient %d exceeds cap %d", quotient_cells, cap))

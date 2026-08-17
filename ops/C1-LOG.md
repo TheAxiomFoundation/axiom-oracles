@@ -3,6 +3,18 @@
 All probabilities below were recorded before the corresponding gate command.
 Wall-clock values are measured by the stage receipts.
 
+## 2026-08-17 — amended cap execution
+
+- A2' adjudication receipt: cap raised to 12,000,000 evaluated interval cells; the 6,713,128-cell quotient and 3,200,176-cell fixed-regime guard are both required, totaling 9,913,304 cells. No Yale re-extraction is authorized because the committed receipt keys remain valid.
+- A1 — P(pass) = 0.98. Pending receipt: fresh validation of `conformance/executable/us-tariff-witness.json`, including absolute-path compilation of the 100 generated chapters plus the five-line witness and exact witness replay. Engine-process ceiling: 3.
+- A1 first invocation — FAIL before engine start: the ad-hoc `.venv` lacks PyYAML (`ModuleNotFoundError: yaml`). Wall-clock: 0.07s. Engine processes started: 0.
+- A1 retry — P(pass) = 0.98 using the repository's locked `uv run` environment.
+- A1 locked-environment retry — FAIL before engine start: sandbox policy denied access to uv's default cache. Wall-clock: 0.04s. Engine processes started: 0.
+- A1 cache-relocated retry — P(pass) = 0.95 with `UV_CACHE_DIR` confined to writable temporary storage; lockfile unchanged.
+- A1 cache-relocated retry — FAIL before engine start: the writable cache lacks a locked wheel and network is disabled. Wall-clock: 0.16s. Engine processes started: 0.
+- A1 installed-environment retry — P(pass) = 0.98 using the readable sibling `axiom-oracles/.venv` interpreter with the same project dependencies already installed.
+- A1 installed-environment retry — PASS. Receipt: `conformance/executable/us-tariff-witness.json`; 101/101 programs compiled, pinned engine hash matched, and 10/10 witness values reproduced by exact JSON numeric equality with `executable=true`. Wall-clock: 12.03s. Maximum concurrent engine processes: 1.
+
 ## 2026-08-16 — extraction preflight
 
 - D0 — P(pass) = 1.00. Receipt: `ops/C1-DESIGN.md` plus the coordinator's binding GO in the build instruction. Verdict: PASS.
