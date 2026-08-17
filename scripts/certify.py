@@ -837,11 +837,16 @@ def _producer_closed_verdict(
             "verification": "producer_artifact_validation",
         }
     )
+    facts = document.get("generated_facts") or {}
+    ledger_rulespec = facts.get("rulespec") if isinstance(facts, dict) else None
     return {
         "mode": "computed",
         "value": value,
         "status": "computed_closed" if value else "computed_open",
         "artifact": str(artifact_ref),
+        "rulespec_commit": (
+            ledger_rulespec.get("commit") if isinstance(ledger_rulespec, dict) else None
+        ),
         "provision_counts": computed.get("provision_counts"),
         "boundary_frontier": computed.get("boundary_frontier"),
         "non_encoded_reasons_complete": summary.non_encoded_reasons_complete,
@@ -1376,6 +1381,28 @@ def build_certificate(
     executable_block = _executable_verdict(
         program, spec, legs, evidence, verify_producer=verify_producers
     )
+    # ONE rulespec commit across producer-computed premises. The closure
+    # ledger and the executable receipt each verify their OWN recorded pin
+    # (and the receipt binds the reports' provenance), but a coherently
+    # regenerated ledger at a different commit would pass its own check while
+    # the receipt sat at another — "the encoded law is closed at X" and "the
+    # encoded law executes at Y" is not a certificate about one artifact.
+    # Both blocks are producer-computed for DK; a mismatch is a blocker on
+    # the certificate (never a crash), so certified cannot be yes on it.
+    closed_commit = closed_block.get("rulespec_commit")
+    executable_commit = executable_block.get("rulespec_sha")
+    if (
+        closed_block.get("mode") == "computed"
+        and executable_block.get("mode") == "computed"
+        and isinstance(closed_commit, str)
+        and isinstance(executable_commit, str)
+        and closed_commit != executable_commit
+    ):
+        blockers.append(
+            "producers disagree on the rulespec commit: closure ledger "
+            f"{closed_commit[:12]} vs executable receipt {executable_commit[:12]}; "
+            "regenerate both at one commit"
+        )
     # The single public predicate (adopted from the 2026-07-26 design review):
     # "certified" is reserved for the conjunction of all four verdicts holding
     # in computed mode with no open defects. A certificate resting on attested

@@ -773,6 +773,38 @@ def test_certified_cannot_activate_by_flipping_status_alone():
     assert cert["certified"]["state"] == "unavailable"
 
 
+@pytest.mark.parametrize("premise", ("closed", "executable"))
+@pytest.mark.parametrize(
+    ("status", "registry_mode", "derived_mode"),
+    (
+        pytest.param("prototype", "computed", "attested", id="attested-wins"),
+        # `status: computed` is a registry STRING like `mode:`; with no
+        # producer behind the premise the derived mode is attested regardless
+        # (the DK launch audit minted certified=yes through this exact flip).
+        pytest.param("computed", "attested", "attested", id="status-string-loses"),
+        pytest.param("computed", "computed", "attested", id="both-strings-lose"),
+    ),
+)
+def test_registry_mode_cannot_override_derived_emitted_mode(
+    premise,
+    status,
+    registry_mode,
+    derived_mode,
+):
+    import copy
+
+    certify = _load("certify")
+    spec = copy.deepcopy(certify.PROGRAMS["us-co/snap"])
+    spec["attested"][premise].update(
+        status=status,
+        mode=registry_mode,
+    )
+
+    certificate = certify.build_certificate("us-co/snap", spec)
+
+    assert certificate["verdicts"][premise]["mode"] == derived_mode
+
+
 def test_covered_by_rejects_ghosts_and_absolute_paths():
     vbm = _load("validate_bridge_manifests")
     assert vbm._covered_by_resolves("ghost-sibling/no-such/evidence.yaml") is False
@@ -2234,3 +2266,76 @@ def test_closure_check_pins_to_recorded_commit(tmp_path):
     )["generated_facts"]
     assert facts["rulespec"]["ref"] == facts["rulespec"]["commit"] == recorded
     assert facts["corpus_release"]["ref"] == facts["corpus_release"]["commit"]
+
+
+def test_strict_evidence_rejects_never_shipped_files():
+    """MUTANT (delta-audit #4): a gitignored __pycache__/*.pyc under an
+    evidence root exists on this disk but in no clone and not in the refresh
+    bot's rsync'd tree; it passed as strict evidence. Never-shipped
+    components/suffixes are rejected outright, and — when the tree is a git
+    checkout — the path must be git-tracked."""
+    vbm = _load("validate_bridge_manifests")
+    for bad in (
+        "axiom_oracles/__pycache__/x.pyc",
+        "axiom_oracles/x.pyc",
+        "docs/.hidden/evidence.json",
+        "docs/evidence.json~",
+        "reports/node_modules/x.json",
+    ):
+        assert vbm._plausibly_shipped(bad) is False, bad
+    assert vbm._plausibly_shipped(
+        "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json"
+    )
+    # git gate: an untracked file under a root is not evidence in a checkout
+    stray = REPO / "docs" / "zz-untracked-evidence-mutant.md"
+    assert not stray.exists()
+    stray.write_text("not tracked\n")
+    try:
+        assert vbm._shipped_evidence_file("docs/zz-untracked-evidence-mutant.md") is False
+    finally:
+        stray.unlink()
+
+
+def test_producers_must_agree_on_one_rulespec_commit(tmp_path, monkeypatch):
+    """MUTANT (delta-audit #6): the closure ledger and executable receipt each
+    verify their OWN recorded pin, so a ledger coherently regenerated at
+    9986b603 passes its own check while the receipt sits at bbc987b0 (byte-
+    identical modules, different commit). certify must refuse to treat those
+    as one certificate: a producer-commit mismatch is a blocker."""
+    certify = _load("certify")
+    ledger_path = REPO / "conformance/closure/dk-boerne-og-ungeydelse.yaml"
+    original = ledger_path.read_text()
+    doc = yaml.safe_load(original)
+    facts = doc["generated_facts"]["rulespec"]
+    assert facts["commit"] == facts["ref"]
+    receipt = json.loads(
+        (REPO / "conformance/executable/dk-boerne-og-ungeydelse.json").read_text()
+    )
+    assert receipt["rulespec"]["sha"] == facts["commit"]  # baseline agrees
+
+    other = "9986b6035c4e557b9b40645dfe2f3e4cffb6037c"
+    # A "coherently regenerated" ledger at the other commit: the pin moves,
+    # everything else (identical module bytes) stays. Serialize through the
+    # producer so the artifact is byte-canonical for its own validator.
+    facts["commit"] = other
+    facts["ref"] = other
+    import sys
+
+    spec = importlib.util.spec_from_file_location(
+        "_mutant_closure_ledger_drift", REPO / "scripts" / "closure_ledger.py"
+    )
+    cl = importlib.util.module_from_spec(spec)
+    sys.modules["_mutant_closure_ledger_drift"] = cl
+    spec.loader.exec_module(cl)
+    ledger_path.write_text(cl.serialize_artifact(doc))
+    try:
+        cert = certify.build_certificate(
+            "dk/boerne-og-ungeydelse", certify.PROGRAMS["dk/boerne-og-ungeydelse"]
+        )
+    finally:
+        ledger_path.write_text(original)
+    assert cert["verdicts"]["closed"]["mode"] == "computed"
+    assert cert["verdicts"]["closed"]["rulespec_commit"] == other
+    assert cert["verdicts"]["executable"]["rulespec_sha"] == receipt["rulespec"]["sha"]
+    assert any("producers disagree on the rulespec commit" in b for b in cert["blockers"]), cert["blockers"]
+    assert cert["certified"]["value"] is False

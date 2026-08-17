@@ -147,6 +147,7 @@
         "pending": 12,
         "total": 24
       },
+      "rulespec_commit": "bbc987b0e32413369b8f80ee2e4f721bf3c8a5db",
       "status": "computed_open",
       "value": false
     },
