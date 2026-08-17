@@ -9,6 +9,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 9,
       "chunk_manifest": [],
@@ -58,6 +59,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 3,
       "chunk_manifest": [],
@@ -107,6 +109,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 1632,
       "chunk_manifest": [
@@ -152,6 +155,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 1444,
       "chunk_manifest": [
@@ -276,6 +280,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 1444,
       "chunk_manifest": [
@@ -333,6 +338,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 4,
       "chunk_manifest": [],
@@ -382,6 +388,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 1475,
       "chunk_manifest": [
@@ -422,6 +429,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -448,6 +456,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 1585,
       "chunk_manifest": [
@@ -493,6 +502,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 1341,
       "chunk_manifest": [
@@ -625,6 +635,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 922,
       "chunk_manifest": [
@@ -656,6 +667,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 2,
       "chunk_manifest": [],
@@ -705,6 +717,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 1341,
       "chunk_manifest": [
@@ -786,6 +799,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 5,
       "chunk_manifest": [],
@@ -827,6 +841,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 3,
       "chunk_manifest": [],
@@ -872,6 +887,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 2,
       "chunk_manifest": [],
@@ -913,6 +929,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 3,
       "chunk_manifest": [],
@@ -958,6 +975,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 1,
       "chunk_manifest": [],
@@ -995,6 +1013,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 2,
       "chunk_manifest": [],
@@ -1048,6 +1067,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 7,
       "chunk_manifest": [],
@@ -1097,6 +1117,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 17,
       "chunk_manifest": [],
@@ -1146,6 +1167,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 4,
       "chunk_manifest": [],
@@ -1211,6 +1233,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 4,
       "chunk_manifest": [],
@@ -1276,6 +1299,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 3,
       "chunk_manifest": [],
@@ -1329,6 +1353,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 8,
       "chunk_manifest": [],
@@ -1382,6 +1407,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 7,
       "chunk_manifest": [],
@@ -1431,6 +1457,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 2,
       "chunk_manifest": [],
@@ -1472,6 +1499,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 3,
       "chunk_manifest": [],
@@ -1521,6 +1549,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 3,
       "chunk_manifest": [
@@ -1552,6 +1581,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 3,
       "chunk_manifest": [],
@@ -1597,6 +1627,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [],
@@ -1638,6 +1669,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 3,
       "chunk_manifest": [],
@@ -1683,6 +1715,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 3,
       "chunk_manifest": [],
@@ -1732,6 +1765,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 7,
       "chunk_manifest": [],
@@ -1781,6 +1815,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 2,
       "chunk_manifest": [],
@@ -1818,6 +1853,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 7,
       "chunk_manifest": [],
@@ -1871,6 +1907,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [],
@@ -1908,6 +1945,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 4,
       "chunk_manifest": [],
@@ -1949,6 +1987,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 2,
       "chunk_manifest": [
@@ -1975,6 +2014,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 2,
       "chunk_manifest": [],
@@ -2016,6 +2056,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 3,
       "chunk_manifest": [],
@@ -2057,6 +2098,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 2,
       "chunk_manifest": [],
@@ -2098,6 +2140,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 2,
       "chunk_manifest": [],
@@ -2139,6 +2182,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 2,
       "chunk_manifest": [],
@@ -2188,6 +2232,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 0,
       "chunk_manifest": [],
@@ -2208,6 +2253,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 2,
       "chunk_manifest": [
@@ -2234,6 +2280,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 8883,
       "chunk_manifest": [
@@ -2349,6 +2396,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 7101,
       "chunk_manifest": [
@@ -2445,6 +2493,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 883,
       "chunk_manifest": [
@@ -2476,6 +2525,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 7101,
       "chunk_manifest": [
@@ -2601,6 +2651,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 8,
       "chunk_manifest": [],
@@ -2654,6 +2705,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -2680,6 +2732,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 1201,
       "chunk_manifest": [
@@ -2718,6 +2771,7 @@
       "binding_defects": [],
       "bridge_audited": false,
       "bridge_declared": true,
+      "bridge_manifest_sha256": null,
       "bridged_through": {
         "dependent_care_deduction": "PE's computed deduction is fed as expenses_paid with reimbursed=0 and necessary=(deduction>0); the receiving formula max(0, paid - reimbursed) reproduces it identically.",
         "medical_deduction": "PE's computed medical deduction fed through."
@@ -2795,6 +2849,7 @@
       "binding_defects": [],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 856,
       "chunk_manifest": [
@@ -2826,6 +2881,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 31,
       "chunk_manifest": [
@@ -2852,6 +2908,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 1201,
       "chunk_manifest": [
@@ -2893,6 +2950,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 1,
       "chunk_manifest": [],
@@ -2942,6 +3000,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 0,
       "chunk_manifest": [],
@@ -2962,6 +3021,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 1045,
       "chunk_manifest": [
@@ -3011,6 +3071,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 1201,
       "chunk_manifest": [
@@ -3052,6 +3113,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 1,
       "chunk_manifest": [],
@@ -3101,6 +3163,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 951,
       "chunk_manifest": [
@@ -3136,6 +3199,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -3162,6 +3226,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 1362,
       "chunk_manifest": [
@@ -3202,6 +3267,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 936,
       "chunk_manifest": [
@@ -3237,6 +3303,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 781,
       "chunk_manifest": [
@@ -3281,6 +3348,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 12,
       "chunk_manifest": [
@@ -3301,161 +3369,174 @@
       "verdict_concepts": {}
     },
     "dk-child-youth-benefit": {
-      "binding": "unbound",
-      "binding_defects": [
-        "dk-child-youth-benefit: chunk index dashboard/public/data/cases/dk-child-youth-benefit/index.json is missing; report/chunk evidence binding is unbound"
-      ],
-      "bridge_audited": false,
-      "bridge_declared": false,
-      "bridged_through": {},
+      "binding": "bound",
+      "binding_defects": [],
+      "bridge_audited": true,
+      "bridge_declared": true,
+      "bridge_manifest_sha256": "6a66e8487b5a4357b0ac0c5887905e9fcfce4cf5b6f9c77f95097f3cff9fba6e",
+      "bridged_through": {
+        "personskatteloven_section_7_income_basis": "The runner copies each case's executed annual tintbto_s value, without scaling, into both section-7-basis slots before Axiom executes. Because person_only_taxable_part_of_year is false, the full-year slot is selected; the companion fixture independently exercises the recalculated slot."
+      },
       "cases_scanned": 8,
-      "chunk_manifest": [],
-      "constant_fields": 6,
+      "chunk_manifest": [
+        {
+          "cases": 8,
+          "chunk": "dashboard/public/data/cases/dk-child-youth-benefit/chunk-0.json",
+          "sha256": "e138f71e5ae9a328a18fe9f753c83decf6d0fc5eb764560d977b483a07c8a102"
+        }
+      ],
+      "constant_fields": 5,
       "evidence_fields": {
-        "axiom_all_outputs_count": {
+        "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.current_year_income_reduction_allowance": {
           "distinct": 1,
           "state": "constant"
         },
-        "axiom_entity": {
-          "distinct": 1,
-          "state": "constant"
-        },
-        "axiom_entity_id": {
-          "distinct": 1,
-          "state": "constant"
-        },
-        "child_age": {
+        "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1#input.child_age_years": {
           "distinct": 4,
           "state": "varied"
         },
-        "head_annual_earnings": {
+        "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1#input.payment_year_has_additional_statutory_increase": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1#input.percentage_change_rounded_to_one_decimal_place": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.pension_contribution_limit_under_pensionsbeskatningsloven_section_16": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.person_only_taxable_part_of_year": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis": {
           "distinct": 4,
           "state": "varied"
         },
-        "locale": {
-          "distinct": 1,
-          "state": "constant"
+        "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis_after_section_14_recalculation": {
+          "distinct": 4,
+          "state": "varied"
         },
-        "qualifying_pension_contributions": {
-          "distinct": 1,
-          "state": "constant"
-        },
-        "scenario": {
-          "distinct": 1,
-          "state": "constant"
+        "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.total_contributions_to_qualifying_pension_accounts": {
+          "distinct": 2,
+          "state": "varied"
         }
       },
-      "evidence_source": "inline",
+      "evidence_source": "chunks",
       "inline_cases_not_counted": 0,
-      "reconciliation": "none",
+      "reconciliation": "cardinality",
       "report": "dashboard/public/data/axiom-euromod-dk-child-youth-benefit.json",
-      "report_sha256": "ecfebe933f0b077aea11c29afb72082a0a59de5afad2182f00595d6277d11ae0",
-      "varied_fields": 2,
-      "verdict_concepts": {}
+      "report_sha256": "5e4d2c4305d1bb3a7255b44dd682ac1a12b741f4eaf3b7a177dc025049a3b1fe",
+      "varied_fields": 4,
+      "verdict_concepts": {
+        "dk:statutes/composed/boerne-og-ungeydelse-pipeline#single_recipient_annual_child_youth_benefit": {
+          "distinct_left_values": 6
+        }
+      }
     },
     "dk-child-youth-benefit-2023": {
-      "binding": "unbound",
-      "binding_defects": [
-        "dk-child-youth-benefit-2023: chunk index dashboard/public/data/cases/dk-child-youth-benefit-2023/index.json is missing; report/chunk evidence binding is unbound"
-      ],
-      "bridge_audited": false,
-      "bridge_declared": false,
-      "bridged_through": {},
+      "binding": "bound",
+      "binding_defects": [],
+      "bridge_audited": true,
+      "bridge_declared": true,
+      "bridge_manifest_sha256": "aee00dcb6cfc83fad0c290c4a2eebc89810f8e1cc9c7aac178373fc9994765eb",
+      "bridged_through": {
+        "personskatteloven_section_7_income_basis": "The runner copies the executed annual tintbto_s value, without scaling, into both section-7-basis slots before Axiom executes. The witness selects the full-year slot; the companion fixture independently exercises the recalculated slot."
+      },
       "cases_scanned": 1,
-      "chunk_manifest": [],
-      "constant_fields": 7,
+      "chunk_manifest": [
+        {
+          "cases": 1,
+          "chunk": "dashboard/public/data/cases/dk-child-youth-benefit-2023/chunk-0.json",
+          "sha256": "d7b470b5a030d9469772a7febed70d783b60a55ffa4a517de7c474634d6d8418"
+        }
+      ],
+      "constant_fields": 9,
       "evidence_fields": {
-        "axiom_all_outputs_count": {
+        "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.current_year_income_reduction_allowance": {
           "distinct": 1,
           "state": "constant"
         },
-        "axiom_entity": {
+        "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1#input.child_age_years": {
           "distinct": 1,
           "state": "constant"
         },
-        "axiom_entity_id": {
+        "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1#input.payment_year_has_additional_statutory_increase": {
           "distinct": 1,
           "state": "constant"
         },
-        "child_age": {
+        "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1#input.percentage_change_rounded_to_one_decimal_place": {
           "distinct": 1,
           "state": "constant"
         },
-        "head_annual_earnings": {
+        "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.pension_contribution_limit_under_pensionsbeskatningsloven_section_16": {
           "distinct": 1,
           "state": "constant"
         },
-        "locale": {
+        "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.person_only_taxable_part_of_year": {
           "distinct": 1,
           "state": "constant"
         },
-        "scenario": {
+        "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis_after_section_14_recalculation": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.total_contributions_to_qualifying_pension_accounts": {
           "distinct": 1,
           "state": "constant"
         }
       },
-      "evidence_source": "inline",
+      "evidence_source": "chunks",
       "inline_cases_not_counted": 0,
-      "reconciliation": "none",
+      "reconciliation": "cardinality",
       "report": "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-2023.json",
-      "report_sha256": "4aa6aa89e02d57cebabad266b997132e817d0a83d885ba2da30bd0e43d126feb",
+      "report_sha256": "c1e82d55cf53f32e91d90e0c33833b269d0284ff63d5226803b033b55fd22034",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "dk-child-youth-benefit-couple": {
-      "binding": "unbound",
-      "binding_defects": [
-        "dk-child-youth-benefit-couple: chunk index dashboard/public/data/cases/dk-child-youth-benefit-couple/index.json is missing; report/chunk evidence binding is unbound"
-      ],
-      "bridge_audited": false,
-      "bridge_declared": false,
-      "bridged_through": {},
+      "binding": "bound",
+      "binding_defects": [],
+      "bridge_audited": true,
+      "bridge_declared": true,
+      "bridge_manifest_sha256": "fa90ccfc7f0e539b664e516aa93744d358fd3cb9f0c77263aed13fd7ccbd98a4",
+      "bridged_through": {
+        "personskatteloven_section_7_income_basis": "The runner copies the executed annual household tintbto_s value, without scaling, only into the earner's two Person records; the household result then sums the separately executed recipient legs."
+      },
       "cases_scanned": 1,
-      "chunk_manifest": [],
-      "constant_fields": 9,
+      "chunk_manifest": [
+        {
+          "cases": 1,
+          "chunk": "dashboard/public/data/cases/dk-child-youth-benefit-couple/chunk-0.json",
+          "sha256": "5570decac864607e8db3c5d5fd893b1cac07505606715df7be1b7039e1d5f1d4"
+        }
+      ],
+      "constant_fields": 3,
       "evidence_fields": {
-        "axiom_entity": {
+        "input_records": {
           "distinct": 1,
           "state": "constant"
         },
-        "axiom_entity_id": {
+        "result_aggregation": {
           "distinct": 1,
           "state": "constant"
         },
-        "axiom_input_records_count": {
-          "distinct": 1,
-          "state": "constant"
-        },
-        "child_age": {
-          "distinct": 1,
-          "state": "constant"
-        },
-        "comparison_level": {
-          "distinct": 1,
-          "state": "constant"
-        },
-        "head_annual_earnings": {
-          "distinct": 1,
-          "state": "constant"
-        },
-        "locale": {
-          "distinct": 1,
-          "state": "constant"
-        },
-        "scenario": {
-          "distinct": 1,
-          "state": "constant"
-        },
-        "spouse_annual_earnings": {
+        "result_aggregation_applied": {
           "distinct": 1,
           "state": "constant"
         }
       },
-      "evidence_source": "inline",
+      "evidence_source": "chunks",
       "inline_cases_not_counted": 0,
-      "reconciliation": "none",
+      "reconciliation": "cardinality",
       "report": "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json",
-      "report_sha256": "a78cfbe7f6f2289b4d762e47aa941daa316154c648bbf7f61655999c383c009a",
+      "report_sha256": "29adb22c8110170c8120d1c800bed839495796daddd784a0fcf47bd56213521f",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -3466,6 +3547,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 12691,
       "chunk_manifest": [
@@ -3617,6 +3699,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 3968,
       "chunk_manifest": [
@@ -3762,6 +3845,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 15,
       "chunk_manifest": [],
@@ -3811,6 +3895,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 5,
       "chunk_manifest": [],
@@ -3860,6 +3945,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -3886,6 +3972,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 2187,
       "chunk_manifest": [
@@ -3936,6 +4023,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 1897,
       "chunk_manifest": [
@@ -4061,6 +4149,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 945,
       "chunk_manifest": [
@@ -4092,6 +4181,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 1897,
       "chunk_manifest": [
@@ -4146,6 +4236,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 8,
       "chunk_manifest": [],
@@ -4195,6 +4286,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -4221,6 +4313,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 12,
       "chunk_manifest": [],
@@ -4270,6 +4363,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 1519,
       "chunk_manifest": [
@@ -4315,6 +4409,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -4341,6 +4436,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 4,
       "chunk_manifest": [],
@@ -4390,6 +4486,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 976,
       "chunk_manifest": [
@@ -4425,6 +4522,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -4451,6 +4549,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [],
@@ -4471,6 +4570,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 2332,
       "chunk_manifest": [
@@ -4521,6 +4621,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -4547,6 +4648,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 1292,
       "chunk_manifest": [
@@ -4587,6 +4689,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 10,
       "chunk_manifest": [],
@@ -4636,6 +4739,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -4662,6 +4766,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 989,
       "chunk_manifest": [
@@ -4697,6 +4802,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 861,
       "chunk_manifest": [
@@ -4741,6 +4847,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -4767,6 +4874,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 891,
       "chunk_manifest": [
@@ -4802,6 +4910,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -4828,6 +4937,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 1847,
       "chunk_manifest": [
@@ -4873,6 +4983,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 1,
       "chunk_manifest": [],
@@ -4922,6 +5033,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -4948,6 +5060,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 1632,
       "chunk_manifest": [
@@ -5085,6 +5198,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -5111,6 +5225,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 722,
       "chunk_manifest": [
@@ -5142,6 +5257,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 5,
       "chunk_manifest": [],
@@ -5191,6 +5307,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -5217,6 +5334,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 8,
       "chunk_manifest": [],
@@ -5266,6 +5384,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 1045,
       "chunk_manifest": [
@@ -5330,6 +5449,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 196,
       "chunk_manifest": [],
@@ -5379,6 +5499,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -5405,6 +5526,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 1788,
       "chunk_manifest": [
@@ -5450,6 +5572,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [],
@@ -5499,6 +5622,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -5525,6 +5649,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 1117,
       "chunk_manifest": [
@@ -5565,6 +5690,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 991,
       "chunk_manifest": [
@@ -5609,6 +5735,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -5635,6 +5762,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -5661,6 +5789,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 1497,
       "chunk_manifest": [
@@ -5701,6 +5830,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -5727,6 +5857,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 1171,
       "chunk_manifest": [
@@ -5767,6 +5898,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -5793,6 +5925,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 2169,
       "chunk_manifest": [
@@ -5843,6 +5976,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 1854,
       "chunk_manifest": [
@@ -5996,6 +6130,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 3,
       "chunk_manifest": [
@@ -6022,6 +6157,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -6048,6 +6184,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [],
@@ -6068,6 +6205,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 1693,
       "chunk_manifest": [
@@ -6113,6 +6251,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -6139,6 +6278,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 1475,
       "chunk_manifest": [
@@ -6179,6 +6319,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -6205,6 +6346,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 3741,
       "chunk_manifest": [
@@ -6270,6 +6412,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 3187,
       "chunk_manifest": [
@@ -6422,6 +6565,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 847,
       "chunk_manifest": [
@@ -6453,6 +6597,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 3187,
       "chunk_manifest": [
@@ -6550,6 +6695,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 4,
       "chunk_manifest": [],
@@ -6599,6 +6745,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 847,
       "chunk_manifest": [],
@@ -6684,6 +6831,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 11,
       "chunk_manifest": [],
@@ -6733,6 +6881,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 813,
       "chunk_manifest": [
@@ -6773,6 +6922,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -6799,6 +6949,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 2144,
       "chunk_manifest": [
@@ -6849,6 +7000,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -6875,6 +7027,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 1292,
       "chunk_manifest": [
@@ -6915,6 +7068,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -6941,6 +7095,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 0,
       "chunk_manifest": [],
@@ -6961,6 +7116,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [],
@@ -6981,6 +7137,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 2457,
       "chunk_manifest": [
@@ -7031,6 +7188,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 2,
       "chunk_manifest": [],
@@ -7080,6 +7238,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -7106,6 +7265,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -7132,6 +7292,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 1457,
       "chunk_manifest": [
@@ -7172,6 +7333,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 1283,
       "chunk_manifest": [
@@ -7316,6 +7478,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 8,
       "chunk_manifest": [],
@@ -7361,6 +7524,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 2990,
       "chunk_manifest": [
@@ -7412,6 +7576,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 3,
       "chunk_manifest": [],
@@ -7461,6 +7626,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 5,
       "chunk_manifest": [
@@ -7487,6 +7653,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 1427,
       "chunk_manifest": [
@@ -7615,6 +7782,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 906,
       "chunk_manifest": [
@@ -7646,6 +7814,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 4,
       "chunk_manifest": [],
@@ -7695,6 +7864,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 3,
       "chunk_manifest": [],
@@ -7715,6 +7885,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 7,
       "chunk_manifest": [],
@@ -7780,6 +7951,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 2,
       "chunk_manifest": [],
@@ -7821,6 +7993,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [],
@@ -7841,6 +8014,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [],
@@ -7861,6 +8035,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 12,
       "chunk_manifest": [],
@@ -7906,6 +8081,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 1,
       "chunk_manifest": [],
@@ -7947,6 +8123,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 2,
       "chunk_manifest": [
@@ -7973,6 +8150,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 11,
       "chunk_manifest": [],
@@ -7993,6 +8171,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 5,
       "chunk_manifest": [],
@@ -8034,6 +8213,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 9,
       "chunk_manifest": [],
@@ -8054,6 +8234,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 2,
       "chunk_manifest": [],
@@ -8095,6 +8276,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 3,
       "chunk_manifest": [
@@ -8121,6 +8303,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 5,
       "chunk_manifest": [],
@@ -8170,6 +8353,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 3,
       "chunk_manifest": [
@@ -8196,6 +8380,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 5,
       "chunk_manifest": [],
@@ -8245,6 +8430,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 9,
       "chunk_manifest": [],
@@ -8286,6 +8472,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -8312,6 +8499,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 3,
       "chunk_manifest": [],
@@ -8353,6 +8541,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 4,
       "chunk_manifest": [
@@ -8379,6 +8568,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 5,
       "chunk_manifest": [],
@@ -8420,6 +8610,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 1,
       "chunk_manifest": [
@@ -8446,6 +8637,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 3,
       "chunk_manifest": [
@@ -8472,6 +8664,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 5,
       "chunk_manifest": [],
@@ -8513,6 +8706,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 5,
       "chunk_manifest": [],
@@ -8554,6 +8748,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 5,
       "chunk_manifest": [],
@@ -8595,6 +8790,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 1,
       "chunk_manifest": [],
@@ -8632,6 +8828,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 166,
       "chunk_manifest": [
@@ -8658,6 +8855,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 3,
       "chunk_manifest": [],
@@ -8678,6 +8876,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 18,
       "chunk_manifest": [],
@@ -8698,6 +8897,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 11,
       "chunk_manifest": [
@@ -8724,6 +8924,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 0,
       "chunk_manifest": [],
@@ -8744,6 +8945,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 9,
       "chunk_manifest": [],
@@ -8764,6 +8966,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 7,
       "chunk_manifest": [],
@@ -8825,6 +9028,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 7,
       "chunk_manifest": [],
@@ -8845,6 +9049,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 5,
       "chunk_manifest": [],
@@ -8886,6 +9091,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 5,
       "chunk_manifest": [],
@@ -8927,6 +9133,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [],
@@ -8947,6 +9154,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 5,
       "chunk_manifest": [],
@@ -8967,6 +9175,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 9,
       "chunk_manifest": [],
@@ -8987,6 +9196,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 17,
       "chunk_manifest": [],
@@ -9007,6 +9217,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 12,
       "chunk_manifest": [],
@@ -9027,6 +9238,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [],
@@ -9047,6 +9259,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 11,
       "chunk_manifest": [],
@@ -9067,6 +9280,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 16,
       "chunk_manifest": [],
@@ -9087,6 +9301,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 34,
       "chunk_manifest": [],
@@ -9107,6 +9322,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [],
@@ -9127,6 +9343,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 9,
       "chunk_manifest": [],
@@ -9147,6 +9364,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 40,
       "chunk_manifest": [
@@ -9173,6 +9391,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 122,
       "chunk_manifest": [],
@@ -9193,6 +9412,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -9219,6 +9439,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 1251,
       "chunk_manifest": [
@@ -9259,6 +9480,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 0,
       "chunk_manifest": [],
@@ -9279,6 +9501,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -9305,6 +9528,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 1710,
       "chunk_manifest": [
@@ -9350,6 +9574,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -9376,6 +9601,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 922,
       "chunk_manifest": [
@@ -9411,6 +9637,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -9437,6 +9664,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 1467,
       "chunk_manifest": [
@@ -9486,6 +9714,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 4,
       "chunk_manifest": [],
@@ -9535,6 +9764,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -9561,6 +9791,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 6,
       "chunk_manifest": [
@@ -9587,6 +9818,7 @@
       ],
       "bridge_audited": false,
       "bridge_declared": false,
+      "bridge_manifest_sha256": null,
       "bridged_through": {},
       "cases_scanned": 1608,
       "chunk_manifest": [
