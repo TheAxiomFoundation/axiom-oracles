@@ -84,6 +84,7 @@ OUTPUT_NAMES = (
     "forced_labor_section_301_component_rate", "schedule_statutory_stack",
 )
 TOLERANCE = 1e-12
+_DELTA_VALUE_SETS: dict[int, tuple[list[float], frozenset[float]]] = {}
 SELECTOR_FIELDS = frozenset({
     "slot", "origin_regime", "revision", "delta", "disposition", "line_class", "iso2",
     "line_set", "date",
@@ -883,6 +884,16 @@ def _match_scalar_or_list(value: Any, selector: Any, field: str) -> bool:
     return value in selector
 
 
+def _delta_value_set(values: list[float]) -> frozenset[float]:
+    """Compile large receipted exact-value selectors once."""
+    key = id(values)
+    cached = _DELTA_VALUE_SETS.get(key)
+    if cached is None or cached[0] is not values:
+        cached = (values, frozenset(values))
+        _DELTA_VALUE_SETS[key] = cached
+    return cached[1]
+
+
 def _match_line_class(unit: dict[str, Any], selector: Any) -> bool:
     if isinstance(selector, str):
         _require(selector in {"yale_member_only", "yale_rate_line"},
@@ -949,6 +960,7 @@ def _named_line_sets() -> dict[str, tuple[tuple[int, frozenset[str]], ...]]:
         "metal-membership-union": metal,
         "not-metal-membership-union": metal,
         "note20-membership-union": note20,
+        "not-note20-membership-union": note20,
         "s122-unconditional-membership": unconditional,
         "s122-gn6-conditional-membership": gn6,
         "s122-no-exemption-membership": unconditional + gn6,
@@ -998,7 +1010,10 @@ def selector_matches(unit: dict[str, Any], match: dict[str, Any]) -> bool:
                 values = selector["values"]
                 _require(isinstance(values, list) and values and all(isinstance(v, (int, float)) for v in values),
                          "selector delta values must be a nonempty numeric list")
-                if not any(abs(unit[field] - value) <= TOLERANCE for value in values):
+                exact_values = _delta_value_set(values)
+                if unit[field] not in exact_values and not any(
+                    abs(unit[field] - value) <= TOLERANCE for value in values
+                ):
                     return False
             if selector.get("sign") == "pos" and unit[field] <= 0:
                 return False
@@ -1108,6 +1123,10 @@ def classify_campaign(*, disposition_ledger: Path = DISPOSITION_LEDGER,
     _require(ledger.get("suite") == "us-tariff-schedule", "wrong disposition suite")
     entries = ledger.get("entries", []) if entries_override is None else entries_override
     selectors = validate_dispositions(entries, observed)
+    signature_classes = {
+        signature: matching_class_id(signature, unit, selectors)
+        for signature, unit in observed.items()
+    }
     census: Counter[str] = Counter()
     derived_total_compositions: Counter[str] = Counter()
     per_slot: dict[str, Counter[str]] = {}
@@ -1116,7 +1135,7 @@ def classify_campaign(*, disposition_ledger: Path = DISPOSITION_LEDGER,
     derived_total_units = 0
     for signature_composition, units in total_signature_compositions.items():
         component_classes = {
-            matching_class_id(signature, observed[signature], selectors)
+            signature_classes[signature]
             for signature in signature_composition
         }
         if None in component_classes:
@@ -1134,7 +1153,7 @@ def classify_campaign(*, disposition_ledger: Path = DISPOSITION_LEDGER,
         with gzip.GzipFile(filename="", mode="wb", fileobj=raw, mtime=0) as zipped:
           for signature, unit in observed.items():
             count = counts[signature]
-            class_id = matching_class_id(signature, unit, selectors)
+            class_id = signature_classes[signature]
             bucket = class_id or "__unexplained__"
             per_slot.setdefault(bucket, Counter())[unit["slot"]] += count
             sample_signatures.setdefault(bucket, [])

@@ -5,10 +5,10 @@ entries:
   - id: fed-false-family-forced-labor
     concept: us:policies/cbp/us-tariff-schedule#forced_labor_section_301
     kind: signature_class
-    match: {slot: forced_labor_section_301, delta: {values: [-0.125, -0.10]}, date: {from: '2026-07-24'}}
+    match: {slot: forced_labor_section_301, delta: {values: [-0.125, -0.124, -0.123, -0.122, -0.121, -0.12, -0.119, -0.118, -0.117, -0.116, -0.115, -0.114, -0.113, -0.112, -0.111, -0.11, -0.109, -0.108, -0.107, -0.106, -0.105, -0.104, -0.103, -0.102, -0.101, -0.1005, -0.1, -0.099, -0.098, -0.097, -0.096, -0.095, -0.094, -0.093, -0.0925, -0.092, -0.091, -0.09, -0.089, -0.088, -0.087, -0.086, -0.085, -0.084, -0.083, -0.082, -0.081, -0.08, -0.079, -0.078, -0.077, -0.076, -0.0755, -0.075, -0.074, -0.073, -0.072, -0.071, -0.07, -0.069, -0.068, -0.0675, -0.067, -0.066, -0.065, -0.064, -0.063, -0.0625, -0.062, -0.061, -0.0605, -0.06, -0.059, -0.058, -0.0575, -0.057, -0.0565, -0.056, -0.0555, -0.055, -0.0545, -0.054, -0.0535, -0.053, -0.052, -0.051, -0.05, -0.049, -0.0485, -0.048, -0.0475, -0.047, -0.046, -0.0455, -0.045, -0.044, -0.0435, -0.043, -0.0425, -0.042, -0.0415, -0.041, -0.0405, -0.04, -0.0395, -0.039, -0.0385, -0.038, -0.0375, -0.037, -0.0365, -0.036, -0.035, -0.0345, -0.034, -0.0335, -0.033, -0.0325, -0.032, -0.0315, -0.031, -0.0305, -0.03, -0.029, -0.028, -0.027, -0.026, -0.025, -0.0245, -0.024, -0.0235, -0.023, -0.0225, -0.022, -0.021, -0.0205, -0.02, -0.0195, -0.019, -0.0185, -0.018, -0.0175, -0.017, -0.016, -0.015, -0.014, -0.013, -0.0125, -0.012, -0.0115, -0.0114, -0.0112, -0.0111, -0.011, -0.0109, -0.0108, -0.0105, -0.0101, -0.01, -0.0099, -0.0098, -0.0096, -0.0095, -0.0094, -0.0091, -0.00900000000000001, -0.009, -0.0089, -0.0088, -0.0087, -0.0086, -0.0084, -0.0083, -0.0081, -0.00800000000000001, -0.008, -0.0078, -0.0076, -0.0075, -0.0074, -0.0073, -0.0072, -0.0071, -0.007, -0.00699999999999999, -0.0069, -0.0068, -0.0066, -0.0065, -0.0063, -0.0062, -0.0061, -0.00600000000000001, -0.00599999999999999, -0.0056, -0.0053, -0.0051, -0.005, -0.0049, -0.0047, -0.0043, -0.004, -0.00300000000000002, -0.003, -0.0024, -0.002, -0.00199999999999999, -0.001]}, date: {from: '2026-07-24'}}
     disposition: axiom_encoding_gap
     attribution: axiom-attributed-open
-    receipt: Note 52 is present in the Rev-15 corpus (pages 553, 639-652) but no note-52 generated incidence table exists in B1.6; bounded by the observed -12.5/-10-point tiers, effective date, and Yale-positive/Axiom-zero direction.
+    receipt: Note 52 is present in the Rev-15 corpus (page 553); pages 639-652 receipt each country tier and ceiling. The exact admitted delta set and tier-minus-ceiling arithmetic are censused in note52-delta-census.json; no note-52 generated incidence table exists in B1.6.
     reason: Note 52 membership is encoded, but the evaluated entry flag was false from 2026-07-24.
     comment: Data corrects the proposed likely +25%/+100% pattern; Axiom-minus-Yale is negative, dominated by -12.5% and -10%, with smaller line-specific tiers.
     expires_on_source_change: true
@@ -113,6 +113,26 @@ entries:
     reason: Legal-date list revisions differ from the current Rev-15 incidence tables.
     expires_on_source_change: true
     evidence: {mechanism: China 301 incidence differs across the pinned legal-date and Rev-15 vintages, sources: [comparisons/us-tariff-schedule.yaml], receipt_type: revision-and-instrument-vintage, instrument_receipt: note-20-ustr-four-year-review-yale-revisions}
+  - id: vintage-revision-301-removed-lines
+    concept: us:policies/cbp/us-tariff-schedule#china_section_301
+    kind: signature_class
+    match: {slot: china_section_301, line_set: not-note20-membership-union, delta: {values: [-1.0, -0.5, -0.25, -0.1625]}}
+    disposition: explained_residual
+    attribution: input-comparability
+    receipt: USTR four-year-review modifications removed or revised these Yale legal-date positive lines before Rev-15 note 20; exact Yale revision ids and rates are censused in vintage-revision-receipt.json.
+    reason: The legal-date Yale vintage retains positive China-301 lines that are absent from the current Rev-15 note-20 union.
+    expires_on_source_change: true
+    evidence: {mechanism: Yale-positive legal-date lines are the complement of current Rev-15 note-20 membership, sources: [comparisons/us-tariff-schedule.yaml], receipt_type: revision-id-current-union-complement-and-rate, instrument_receipt: ustr-four-year-review-removed-lines-yale-revisions-vs-rev15-note20}
+  - id: vintage-revision-232-changed-rate
+    concept: us:policies/cbp/us-tariff-schedule#section_232
+    kind: signature_class
+    match: {slot: section_232, line_set: metal-membership-union, iso2: [RU], line_class: {hts10: ['7616995120']}, delta: {values: [2.0]}}
+    disposition: explained_residual
+    attribution: input-comparability
+    receipt: Rev-15 note 19 carries the Russia 200-percent aluminum rate while the pinned Yale legal-date revisions do not; all four interval signatures are censused in vintage-revision-receipt.json.
+    reason: A single current-list metal line uses the changed Rev-15 Russia rate across four legal-date intervals.
+    expires_on_source_change: true
+    evidence: {mechanism: Current Rev-15 metal membership and Russia rate differ from the Yale legal-date vintage, sources: [comparisons/us-tariff-schedule.yaml], receipt_type: revision-id-line-country-and-changed-rate, instrument_receipt: note19-rev15-russia-200-vs-yale-revisions}
   - id: legal-date-boundary-ieepa
     concept: us:policies/cbp/us-tariff-schedule#ieepa
     kind: signature_class
@@ -123,6 +143,16 @@ entries:
     reason: The sources use different 2026-02-20 legal-end, 2026-02-24 collection-end, endpoint, and vintage conventions.
     expires_on_source_change: true
     evidence: {mechanism: Legal-end and collection-end interval conventions differ at the February boundary, sources: [comparisons/us-tariff-schedule.yaml], receipt_type: legal-date-and-collection-boundary, instrument_receipt: eo-14389-csms-67834313-learning-resources}
+  - id: reciprocal-vintage-ieepa
+    concept: us:policies/cbp/us-tariff-schedule#ieepa
+    kind: signature_class
+    match: {slot: ieepa, delta: {values: [-0.5, -0.41, -0.4, -0.35, -0.3, -0.25, -0.2, -0.19, -0.18, -0.15, -0.124, -0.1]}, date: {from: '2026-02-15', through: '2026-02-19'}}
+    disposition: explained_residual
+    attribution: input-comparability
+    receipt: The reciprocal and fentanyl orders were still effective through 2026-02-19; the exact 2026_rev_3 interval and observed rate values are censused in ieepa-date-receipt.json.
+    reason: The Axiom evaluation and Yale legal-date vintage assign the pre-termination reciprocal/fentanyl stack to different components.
+    expires_on_source_change: true
+    evidence: {mechanism: Exact pre-termination order interval and reciprocal/fentanyl rate vintage, sources: [comparisons/us-tariff-schedule.yaml], receipt_type: order-date-interval-and-exact-rate-set, instrument_receipt: reciprocal-fentanyl-orders-through-2026-02-19}
   - id: s201-stale-proxy
     concept: us:policies/cbp/us-tariff-schedule#section_201
     kind: signature_class
