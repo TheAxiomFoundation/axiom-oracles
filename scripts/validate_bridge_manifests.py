@@ -33,6 +33,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import sys
 from pathlib import Path
@@ -124,21 +125,47 @@ STRICT_EVIDENCE_ROOTS = (
 )
 
 
-def _shipped_evidence_file(candidate: str) -> bool:
-    """True iff ``candidate`` is an explicit repository-relative FILE whose
-    RESOLVED location lies inside an allowed evidence root, with no symlink
-    at any path component.
+def _exact_case_file(candidate: str) -> bool:
+    """True iff every component of ``candidate`` matches an actual directory
+    entry BYTE-FOR-BYTE, walking from REPO_ROOT.
 
-    Containment is decided on ``Path.resolve()`` + ``relative_to``, never on
-    string prefixes: a lexical ``docs/`` symlink pointing outside the roots
-    passed the old ``startswith`` check (delta-audit #2, item 7)."""
+    Case-insensitive filesystems (this checkout is one) let ``Dashboard/…``
+    or a case-variant filename open the same bytes as the shipped path, so
+    ``is_file()`` alone cannot prove a citation names the SHIPPED artifact.
+    ``os.listdir`` reports true on-disk names, and this works in every tree —
+    a git checkout, the refresh bot's hermetic copy, or a test's rsync — with
+    no dependency on a ``.git`` directory."""
+    probe = REPO_ROOT
+    for part in Path(candidate).parts:
+        try:
+            entries = os.listdir(probe)
+        except OSError:
+            return False
+        if part not in entries:
+            return False
+        probe = probe / part
+    return True
+
+
+def _shipped_evidence_file(candidate: str) -> bool:
+    """True iff ``candidate`` is an explicit, exact-case FILE inside an
+    allowed evidence root whose RESOLVED location also lies inside that root,
+    with no symlink at any path component.
+
+    Containment is decided on exact on-disk names + ``Path.resolve()`` +
+    ``relative_to``, never on string prefixes or ``is_file()`` alone: a
+    lexical ``docs/`` symlink, a hardlink-by-another-name, or a case-variant
+    filename each opened real bytes and passed weaker checks (delta audits
+    #2/#3, item 7)."""
     if not candidate or candidate.startswith("/") or ".." in candidate.split("/"):
+        return False
+    if not candidate.startswith(STRICT_EVIDENCE_ROOTS):
+        return False
+    if not _exact_case_file(candidate):
         return False
     lexical = REPO_ROOT / candidate
     if not lexical.is_file():
         return False
-    # No symlink anywhere along the cited path (a symlinked directory would
-    # otherwise let evidence "live" under docs/ while resolving elsewhere).
     probe = REPO_ROOT
     for part in Path(candidate).parts:
         probe = probe / part
@@ -149,33 +176,49 @@ def _shipped_evidence_file(candidate: str) -> bool:
         rel = resolved.relative_to(REPO_ROOT.resolve(strict=True))
     except (OSError, ValueError):
         return False
-    return rel.as_posix().startswith(
-        tuple(root.rstrip("/") + "/" for root in STRICT_EVIDENCE_ROOTS)
-    )
+    return rel.as_posix() == candidate
 
 
-def _strict_evidence_tokens(text: str) -> tuple[list[str], list[str]]:
-    """Split a covered_by entry into (shipped_files, offending_paths).
+#: Anything that looks like it could address a file: a slash, a backslash,
+#: a drive letter, or a home/URL scheme prefix — regardless of surrounding
+#: brackets, quotes, or trailing punctuation. Prose in a strict covered_by
+#: entry may not contain one: the evidence path is the LEADING token and
+#: nothing else in the entry may be path-shaped (delta #3: brackets, a
+#: trailing period, and absolute paths all smuggled an unshipped file past a
+#: punctuation-stripping tokenizer).
+_PATH_SHAPED = re.compile(r"[\\/]|^[A-Za-z]:|^~|://")
 
-    ``shipped_files`` are explicit repository-relative files inside the
-    evidence roots (resolved, symlink-free). ``offending_paths`` are tokens
-    that name an EXISTING repository file (or symlink) that is NOT such a
-    shipped file — tests/…, a symlink, an escape — which a strict lane may
-    not cite at all. Suite-name tokens and prose are neither: they are fine
-    as commentary but do not count as strict evidence."""
-    shipped: list[str] = []
-    offending: list[str] = []
-    for token in text.replace(",", " ").replace("(", " ").replace(")", " ").split():
-        candidate = token.strip("'\"`;")
-        if not candidate:
-            continue
-        if _shipped_evidence_file(candidate):
-            shipped.append(candidate)
-            continue
-        lexical = REPO_ROOT / candidate if not candidate.startswith("/") else None
-        if lexical is not None and (lexical.is_file() or lexical.is_symlink()):
-            offending.append(candidate)
-    return shipped, offending
+
+def _strict_evidence_entry(text: str) -> tuple[str | None, list[str]]:
+    """Resolve one strict-lane covered_by entry.
+
+    Contract: ``<repository-relative evidence file> [— free prose]``. Returns
+    ``(evidence_file_or_None, problems)``. The leading whitespace-delimited
+    token must be a shipped evidence file (see ``_shipped_evidence_file``);
+    every OTHER token in the entry must be prose — no path-shaped token of
+    any kind, wrapped or bare, relative or absolute, existing or not. This
+    is deliberately structural: no attempt is made to guess which tokens
+    are "really" paths, so there is nothing to smuggle past."""
+    problems: list[str] = []
+    tokens = text.split()
+    if not tokens:
+        return None, ["empty covered_by entry"]
+    head, rest = tokens[0], tokens[1:]
+    evidence = head if _shipped_evidence_file(head) else None
+    if evidence is None:
+        problems.append(
+            f"leading token {head[:60]!r} is not an exact-case git-tracked, "
+            "symlink-free evidence file under "
+            + ", ".join(STRICT_EVIDENCE_ROOTS)
+        )
+    for token in rest:
+        if _PATH_SHAPED.search(token):
+            problems.append(
+                f"prose token {token[:60]!r} is path-shaped — a strict entry "
+                "cites exactly one evidence file, as its leading token, and "
+                "nothing else path-like"
+            )
+    return evidence, problems
 
 
 def _report_for(suite_names: list[str]) -> tuple[str | None, dict | None]:
@@ -689,29 +732,18 @@ def validate(path: Path, manifest: dict) -> tuple[list[str], list[str]]:
                     )
                 if manifest.get("strict") is True:
                     # A certified lane's evidence must be shipped bytes, and
-                    # EVERY covered_by entry must name at least one explicit
-                    # repository-relative file inside the evidence roots
-                    # (resolved, symlink-free). A bare suite-name token or
-                    # prose is not evidence for a strict lane — the census
-                    # keys bridge_audited off this, so a token that
-                    # `_covered_by_resolves` accepts for ordinary lanes must
-                    # not carry a certificate (delta-audit #2, item 7).
+                    # EVERY covered_by entry must lead with exactly one
+                    # exact-case git-tracked, symlink-free file under the
+                    # evidence roots, followed only by prose containing no
+                    # path-shaped token (delta audits #2/#3, item 7). The
+                    # census keys bridge_audited off this and binds the
+                    # manifest sha, so no evidence edit is invisible.
                     for ref in covered_by:
-                        shipped, offending = _strict_evidence_tokens(str(ref))
-                        for path in offending:
+                        _evidence, problems = _strict_evidence_entry(str(ref))
+                        for problem in problems:
                             findings.append(
                                 f"{name}: bridged binding [{index}] covered_by "
-                                f"cites {path!r}, which is not a shipped, "
-                                "symlink-free evidence file under "
-                                + ", ".join(STRICT_EVIDENCE_ROOTS)
-                            )
-                        if not shipped:
-                            findings.append(
-                                f"{name}: bridged binding [{index}] covered_by "
-                                f"entry {str(ref)[:60]!r} names no explicit "
-                                "repository-relative evidence file under the "
-                                "shipped roots — a strict lane's evidence must "
-                                "be a file, not a suite name or prose"
+                                f"entry {str(ref)[:50]!r}: {problem}"
                             )
             if not isinstance(binding.get("source"), str) or not binding.get("source"):
                 errors.append(

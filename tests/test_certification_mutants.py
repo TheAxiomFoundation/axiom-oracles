@@ -1074,14 +1074,12 @@ def test_strict_lane_evidence_must_be_shipped_bytes():
         f"{unshipped} — a fixture that only exists in a full checkout"
     ]
     _errors, mutated = vbm.validate(path, manifest)
-    assert any(
-        "is not a shipped, symlink-free evidence file" in f for f in mutated
-    ), mutated
+    assert any("leading token" in f and "evidence file" in f for f in mutated), mutated
 
     # Non-strict lanes may still cite such paths (visible debt, not enforced).
     manifest["strict"] = False
     _errors, relaxed = vbm.validate(path, manifest)
-    assert not any("is not a shipped, symlink-free evidence file" in f for f in relaxed)
+    assert not any("leading token" in f for f in relaxed)
 
 
 def test_certified_lane_census_is_hermetic_without_tests_dir(tmp_path):
@@ -2122,7 +2120,7 @@ def test_strict_lane_evidence_cannot_be_a_suite_name_token():
     binding["covered_by"] = ["dk-child-youth-benefit-couple"]
     assert vbm._covered_by_resolves("dk-child-youth-benefit-couple")  # ordinary lanes: fine
     _errors, mutated = vbm.validate(path, manifest)
-    assert any("names no explicit repository-relative evidence file" in f for f in mutated), mutated
+    assert any("leading token" in f and "evidence file" in f for f in mutated), mutated
 
 
 def test_strict_lane_evidence_rejects_symlinked_roots(tmp_path):
@@ -2139,8 +2137,8 @@ def test_strict_lane_evidence_rejects_symlinked_roots(tmp_path):
         cited = "docs/zz-audit-symlink-mutant/census.json"
         assert (REPO / cited).is_file()  # lexically under docs/, physically not
         assert vbm._shipped_evidence_file(cited) is False
-        shipped, offending = vbm._strict_evidence_tokens(f"{cited} — smuggled evidence")
-        assert shipped == [] and offending == [cited]
+        evidence, problems = vbm._strict_evidence_entry(f"{cited} — smuggled evidence")
+        assert evidence is None and problems
     finally:
         link_dir.unlink()
     # And the honest citation form is accepted.
@@ -2167,3 +2165,64 @@ def test_census_binds_strict_manifest_identity():
     assert after["clean"] is True
     assert after["manifest_sha256"] != before["manifest_sha256"]
     assert census._manifest_strict_audit()["dk-child-youth-benefit"] == before
+
+
+
+@pytest.mark.parametrize(
+    "entry",
+    [
+        # delta #3: brackets / trailing punctuation hid an unshipped path
+        "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json [tests/test_certification_mutants.py]",
+        "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json see tests/test_certification_mutants.py.",
+        # delta #3: an absolute path was assigned no lexical path and slipped by
+        "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json "
+        + str(REPO / "tests/test_certification_mutants.py"),
+        # a shipped file plus a plain unshipped file
+        "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json tests/test_certification_mutants.py",
+        # backslash / URL / home-prefixed smuggles
+        "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json tests\\x.py",
+        "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json https://example.invalid/x",
+        "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json ~/x",
+        # bare suite token; prose only; the file second instead of first
+        "dk-child-youth-benefit-couple",
+        "the executed receipt proves it",
+        "see dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json",
+    ],
+)
+def test_strict_entry_smuggling_forms_are_findings(entry):
+    """MUTANTS (delta-audit #3, item 7): a strict covered_by entry is exactly
+    `<leading tracked evidence file> [prose with no path-shaped token]`. Every
+    smuggling form the audit found green — bracketed, trailing-punctuated,
+    absolute, backslash, URL, home-prefixed — is a finding, as is a bare
+    suite name, prose alone, or the file anywhere but first."""
+    vbm = _load("validate_bridge_manifests")
+    _evidence, problems = vbm._strict_evidence_entry(entry)
+    assert problems, entry
+
+
+def test_strict_entry_honest_form_is_accepted():
+    vbm = _load("validate_bridge_manifests")
+    evidence, problems = vbm._strict_evidence_entry(
+        "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json "
+        "— executed earner-only bridge receipt (metadata.euromod_to_axiom_input_bridge_applied) "
+        "and rulespec-dk commit 9986b603 provenance for module paragraf-1-a"
+    )
+    assert problems == [], problems
+    assert evidence == "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json"
+
+
+def test_strict_evidence_file_is_case_exact():
+    """MUTANT (delta-audit #3): on a case-insensitive checkout a case-variant
+    filename opens the same bytes, so is_file() passed it. Evidence must be
+    the exact-case on-disk path (checked via directory listings, which
+    report true names and need no .git — the refresh bot's tree has none)."""
+    vbm = _load("validate_bridge_manifests")
+    good = "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json"
+    assert vbm._shipped_evidence_file(good)
+    variant = "dashboard/public/data/Axiom-euromod-dk-child-youth-benefit-couple.json"
+    assert vbm._shipped_evidence_file(variant) is False
+    assert vbm._shipped_evidence_file("Dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json") is False
+    # a case-variant of a real file, cited via the exact-case parent, is rejected
+    assert vbm._shipped_evidence_file(
+        "dashboard/public/data/AXIOM-euromod-dk-child-youth-benefit-couple.json"
+    ) is False

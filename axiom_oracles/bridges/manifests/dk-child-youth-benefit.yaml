@@ -78,8 +78,8 @@ bindings:
       selected; the companion fixture independently exercises the recalculated
       slot.
     covered_by:
-      - dashboard/public/data/axiom-euromod-dk-child-youth-benefit.json — executed bridge receipt and rulespec-dk@9986b6035c4e557b9b40645dfe2f3e4cffb6037c provenance for dk/statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a.yaml
-      - dashboard/public/data/axiom-euromod-dk-child-youth-benefit.json — pinned companion fixtures dk/statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a.test.yaml and dk/statutes/composed/boerne-og-ungeydelse-pipeline.test.yaml
+      - dashboard/public/data/axiom-euromod-dk-child-youth-benefit.json — executed bridge receipt and rulespec-dk commit 9986b6035c4e557b9b40645dfe2f3e4cffb6037c provenance for module paragraf-1-a
+      - dashboard/public/data/axiom-euromod-dk-child-youth-benefit.json — pinned companion fixtures module paragraf-1-a companion fixture and composed boerne-og-ungeydelse-pipeline companion fixture
     audit: read
 
 completeness:

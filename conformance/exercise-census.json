@@ -3373,7 +3373,7 @@
       "binding_defects": [],
       "bridge_audited": true,
       "bridge_declared": true,
-      "bridge_manifest_sha256": "55768b49a10e8cbcd556a1026116d254762c4f1926bbcb38c8cd64d65be99fb8",
+      "bridge_manifest_sha256": "a472675444fa6d4d782185ff1717ed7f4d2ac71be253a079b366bd3969e2f0bf",
       "bridged_through": {
         "personskatteloven_section_7_income_basis": "The runner copies each case's executed annual tintbto_s value, without scaling, into both section-7-basis slots before Axiom executes. Because person_only_taxable_part_of_year is false, the full-year slot is selected; the companion fixture independently exercises the recalculated slot."
       },
@@ -3441,7 +3441,7 @@
       "binding_defects": [],
       "bridge_audited": true,
       "bridge_declared": true,
-      "bridge_manifest_sha256": "c88f9a4af7db18694671903ce5c78762c83c3af8bf5a852559d134bc2b1b2e3f",
+      "bridge_manifest_sha256": "0123e69036266b5ce51879b85dda02a8f762bc1b5b17449d1f1f06c83c59def7",
       "bridged_through": {
         "personskatteloven_section_7_income_basis": "The runner copies the executed annual tintbto_s value, without scaling, into both section-7-basis slots before Axiom executes. The witness selects the full-year slot; the companion fixture independently exercises the recalculated slot."
       },
@@ -3505,7 +3505,7 @@
       "binding_defects": [],
       "bridge_audited": true,
       "bridge_declared": true,
-      "bridge_manifest_sha256": "9e3bc977bd504479a733500dfca1a824752cd0fdd18474f0460424bd0559cf0c",
+      "bridge_manifest_sha256": "b7fbffc5fe191a01f18f04a18e6d2cb44b1718be19bdd3e3b3280f5fa5cc0279",
       "bridged_through": {
         "personskatteloven_section_7_income_basis": "The runner copies the executed annual household tintbto_s value, without scaling, only into the earner's two Person records; the household result then sums the separately executed recipient legs."
       },
