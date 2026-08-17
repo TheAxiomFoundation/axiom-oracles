@@ -10,7 +10,9 @@ from scripts.us_tariff_schedule_campaign import (
     enforce_excluded_exposure,
     filter_declared_feed,
     query_plan,
+    matching_class_id,
     route_member,
+    selector_matches,
     validate_dispositions,
     witness_replay,
 )
@@ -127,6 +129,38 @@ def test_stale_and_overlapping_disposition_selectors_fail() -> None:
     with pytest.raises(ValueError, match="overlapping"):
         validate_dispositions([base | {"signatures": ["live"]},
                                (base | {"id": "two", "signatures": ["live"]})], {"live": 1})
+
+
+def _selector_unit() -> dict:
+    return {
+        "slot": "base", "origin_regime": "regime", "revision": "r1", "delta": 0.2,
+        "disposition": "free", "hts10": "0101210010", "hts_line": "0101210000",
+        "flags": {"entry_is_test": False}, "interval": ["2026-01-01", "2026-01-02"],
+        "iso2": "CA",
+    }
+
+
+def test_overlapping_structured_selectors_fail_conservation() -> None:
+    unit = _selector_unit()
+    selectors = [
+        {"id": "one", "match": {"slot": "base", "delta": {"sign": "pos"}}},
+        {"id": "two", "match": {"revision": ["r1"], "disposition": ["free"]}},
+    ]
+    with pytest.raises(ValueError, match="overlapping selectors"):
+        matching_class_id("signature", unit, selectors)
+
+
+def test_universal_structured_selector_fails() -> None:
+    with pytest.raises(ValueError, match="universal"):
+        selector_matches(_selector_unit(), {
+            "slot": "any", "origin_regime": "any", "revision": "any", "delta": "any",
+            "disposition": "any", "line_class": "any",
+        })
+
+
+def test_fabricated_structured_selector_field_fails_schema() -> None:
+    with pytest.raises(ValueError, match="unknown selector fields"):
+        selector_matches(_selector_unit(), {"slot": "base", "fabricated": ["value"]})
 
 
 def test_nonzero_excluded_column_exposure_fails_x1() -> None:

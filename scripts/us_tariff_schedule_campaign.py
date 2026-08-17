@@ -82,6 +82,9 @@ OUTPUT_NAMES = (
     "forced_labor_section_301_component_rate", "schedule_statutory_stack",
 )
 TOLERANCE = 1e-12
+SELECTOR_FIELDS = frozenset({
+    "slot", "origin_regime", "revision", "delta", "disposition", "line_class",
+})
 EXPECTED_COLUMNS = (
     "statutory_base_rate", "statutory_rate_232", "statutory_rate_ieepa_recip",
     "statutory_rate_ieepa_fent", "statutory_rate_301", "statutory_rate_301_cs",
@@ -839,26 +842,151 @@ def mismatch_signature(row: dict[str, Any]) -> str:
     return hashlib.sha256(_render(signature).encode()).hexdigest()
 
 
-def validate_dispositions(entries: list[dict[str, Any]], observed: Counter[str]) -> dict[str, str]:
-    selectors: dict[str, str] = {}
+def _routing_dispositions() -> dict[str, tuple[str, str]]:
+    with gzip.open(ROUTING_ROWS, "rt", newline="") as source:
+        return {
+            row["hts10"]: (row["general_disposition"], row["column2_disposition"])
+            for row in csv.DictReader(source)
+        }
+
+
+def mismatch_unit(row: dict[str, Any], routes: dict[str, tuple[str, str]]) -> dict[str, Any]:
+    context = row["context"]
+    general, column2 = routes[context["hts10"]]
+    return {
+        "slot": row["slot"],
+        "origin_regime": context["origin_regime"],
+        "revision": context["revision"],
+        "delta": row["delta"],
+        "disposition": column2 if context["iso2"] in COLUMN2_ORIGINS else general,
+        "hts10": context["hts10"],
+        "hts_line": context["hts_line"],
+        "flags": context["flags"],
+        "interval": context["interval"],
+        "iso2": context["iso2"],
+    }
+
+
+def _match_scalar_or_list(value: Any, selector: Any, field: str) -> bool:
+    if selector == "any":
+        return True
+    _require(isinstance(selector, list) and selector, f"selector {field} must be any or a nonempty list")
+    _require(all(isinstance(item, str) and item for item in selector), f"selector {field} has invalid values")
+    return value in selector
+
+
+def _match_line_class(unit: dict[str, Any], selector: Any) -> bool:
+    if isinstance(selector, str):
+        _require(selector in {"yale_member_only", "yale_rate_line"},
+                 f"unknown line_class {selector}")
+        return (unit["hts10"] != unit["hts_line"]) == (selector == "yale_member_only")
+    _require(isinstance(selector, dict) and selector, "line_class must be a named class or nonempty mapping")
+    allowed = {"membership", "hts_prefix", "hts10", "flags"}
+    _require(set(selector) <= allowed, f"unknown line_class fields: {sorted(set(selector) - allowed)}")
+    if "membership" in selector:
+        _require(selector["membership"] in {"member_only", "rate_line"}, "invalid line_class membership")
+        if (unit["hts10"] != unit["hts_line"]) != (selector["membership"] == "member_only"):
+            return False
+    for field in ("hts_prefix", "hts10"):
+        if field not in selector:
+            continue
+        values = selector[field]
+        _require(isinstance(values, list) and values and all(isinstance(v, str) and v for v in values),
+                 f"line_class {field} must be a nonempty string list")
+        if field == "hts_prefix" and not any(unit["hts10"].startswith(value) for value in values):
+            return False
+        if field == "hts10" and unit["hts10"] not in values:
+            return False
+    if "flags" in selector:
+        flags = selector["flags"]
+        _require(isinstance(flags, dict) and flags, "line_class flags must be a nonempty mapping")
+        _require(all(name in unit["flags"] for name in flags), "line_class references unknown flag")
+        _require(all(isinstance(value, bool) for value in flags.values()), "line_class flag values must be boolean")
+        if any(unit["flags"][name] is not value for name, value in flags.items()):
+            return False
+    return True
+
+
+def selector_matches(unit: dict[str, Any], match: dict[str, Any]) -> bool:
+    _require(isinstance(match, dict) and match, "structured selector match must be a nonempty mapping")
+    _require(set(match) <= SELECTOR_FIELDS,
+             f"unknown selector fields: {sorted(set(match) - SELECTOR_FIELDS)}")
+    _require(not all(match.get(field) == "any" for field in SELECTOR_FIELDS),
+             "universal disposition selector is forbidden")
+    for field, selector in match.items():
+        if field in {"slot", "origin_regime", "revision", "disposition"}:
+            if field == "slot":
+                _require(isinstance(selector, str) and selector, "selector slot must be an exact string")
+                if unit[field] != selector:
+                    return False
+            elif not _match_scalar_or_list(unit[field], selector, field):
+                return False
+        elif field == "delta":
+            if selector == "any":
+                continue
+            _require(isinstance(selector, dict) and set(selector) <= {"sign", "min", "max"},
+                     "selector delta must be any or a sign/min/max mapping")
+            _require(selector and selector.get("sign") in {None, "pos", "neg"}, "invalid delta sign")
+            if selector.get("sign") == "pos" and unit[field] <= 0:
+                return False
+            if selector.get("sign") == "neg" and unit[field] >= 0:
+                return False
+            if "min" in selector and unit[field] < selector["min"]:
+                return False
+            if "max" in selector and unit[field] > selector["max"]:
+                return False
+        elif field == "line_class" and not _match_line_class(unit, selector):
+            return False
+    return True
+
+
+def validate_dispositions(entries: list[dict[str, Any]], observed: dict[str, dict[str, Any]]) -> list[dict[str, Any]]:
+    selectors: list[dict[str, Any]] = []
+    claimed_signatures: set[str] = set()
     for entry in entries:
-        signatures = entry.get("signatures")
-        _require(isinstance(signatures, list), f"disposition {entry.get('id')} lacks signatures")
+        _require(isinstance(entry.get("id"), str) and entry["id"], "disposition lacks id")
+        signatures = entry.get("signatures", [])
+        match = entry.get("match")
+        _require(bool(signatures) != bool(match),
+                 f"disposition {entry['id']} must have exactly one of signatures or match")
         evidence = entry.get("evidence", {})
         _require(evidence.get("instrument_receipt") and evidence.get("receipt_type"),
                  f"disposition {entry.get('id')} lacks instrument receipt fields")
         for signature in signatures:
             _require(signature in observed, f"stale disposition signature {signature}")
-            _require(signature not in selectors, f"overlapping disposition signature {signature}")
-            selectors[signature] = entry["id"]
+            _require(signature not in claimed_signatures, f"overlapping disposition signature {signature}")
+            claimed_signatures.add(signature)
+        if match:
+            # Schema validation is independent of whether this particular census
+            # happens to contain a matching row.
+            selector_matches(next(iter(observed.values()), {
+                "slot": "base", "origin_regime": "x", "revision": "x", "delta": 1.0,
+                "disposition": "free", "hts10": "0000000000", "hts_line": "0000000000",
+                "flags": {}, "interval": ["", ""], "iso2": "US",
+            }), match)
+        selectors.append(entry)
     return selectors
 
 
-def classify_campaign() -> dict[str, Any]:
+def matching_class_id(signature: str, unit: dict[str, Any], selectors: list[dict[str, Any]]) -> str | None:
+    matches = [
+        entry["id"] for entry in selectors
+        if signature in entry.get("signatures", [])
+        or (entry.get("match") and selector_matches(unit, entry["match"]))
+    ]
+    _require(len(matches) <= 1,
+             f"classification conservation failure: overlapping selectors {matches} for {signature}")
+    return matches[0] if matches else None
+
+
+def classify_campaign(*, disposition_ledger: Path = DISPOSITION_LEDGER,
+                      entries_override: list[dict[str, Any]] | None = None) -> dict[str, Any]:
     comparison = json.loads(COMPARISON_RECEIPT.read_text())
     artifact = Path(comparison["comparison_artifact"]["path"])
     _require(_sha256(artifact) == comparison["comparison_artifact"]["sha256"], "comparison artifact hash mismatch")
-    observed: Counter[str] = Counter()
+    observed: dict[str, dict[str, Any]] = {}
+    counts: Counter[str] = Counter()
+    routes = _routing_dispositions()
     engine_errors = 0
     with gzip.open(artifact, "rt") as source:
         for line in source:
@@ -868,25 +996,52 @@ def classify_campaign() -> dict[str, Any]:
             if row["slot"] == "engine_error":
                 engine_errors += 1
                 continue
-            observed[mismatch_signature(row)] += 1
-    ledger = yaml.safe_load(DISPOSITION_LEDGER.read_text())
+            signature = mismatch_signature(row)
+            counts[signature] += 1
+            observed.setdefault(signature, mismatch_unit(row, routes))
+    ledger = yaml.safe_load(disposition_ledger.read_text())
     _require(ledger.get("suite") == "us-tariff-schedule", "wrong disposition suite")
-    selectors = validate_dispositions(ledger.get("entries", []), observed)
+    entries = ledger.get("entries", []) if entries_override is None else entries_override
+    selectors = validate_dispositions(entries, observed)
     census: Counter[str] = Counter()
+    per_slot: dict[str, Counter[str]] = {}
+    sample_signatures: dict[str, list[str]] = {}
     unexplained = engine_errors
-    for signature, count in observed.items():
-        class_id = selectors.get(signature)
-        if class_id is None:
-            unexplained += count
-        else:
-            census[class_id] += count
-    _require(sum(observed.values()) + engine_errors == sum(census.values()) + unexplained,
+    selector_digest = _sha256(disposition_ledger) if entries_override is None else hashlib.sha256(_render(entries).encode()).hexdigest()
+    digest = hashlib.sha256((comparison["comparison_artifact"]["sha256"] + selector_digest).encode()).hexdigest()
+    sidecar = CACHE_ROOT / "classify" / digest[:2] / f"{digest}.jsonl.gz"
+    sidecar.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.NamedTemporaryFile("wb", dir=sidecar.parent, delete=False) as raw:
+        temporary = Path(raw.name)
+        with gzip.GzipFile(filename="", mode="wb", fileobj=raw, mtime=0) as zipped:
+          for signature, unit in observed.items():
+            count = counts[signature]
+            class_id = matching_class_id(signature, unit, selectors)
+            bucket = class_id or "__unexplained__"
+            per_slot.setdefault(bucket, Counter())[unit["slot"]] += count
+            sample_signatures.setdefault(bucket, [])
+            if len(sample_signatures[bucket]) < 5:
+                sample_signatures[bucket].append(signature)
+            zipped.write((json.dumps({"signature": signature, "units": count, "class": class_id,
+                                      "fields": unit}, sort_keys=True, separators=(",", ":")) + "\n").encode())
+            if class_id is None:
+                unexplained += count
+            else:
+                census[class_id] += count
+    temporary.replace(sidecar)
+    _require(sum(counts.values()) + engine_errors == sum(census.values()) + unexplained,
              "classification conservation failure")
     receipt = {"schema": "axiom_oracles.us_tariff_schedule.classification.v1",
-               "mismatches": sum(observed.values()) + engine_errors,
+               "mismatches": sum(counts.values()) + engine_errors,
                "classified": sum(census.values()), "unexplained": unexplained,
                "engine_errors": engine_errors, "class_census": dict(sorted(census.items())),
-               "observed_signature_count": len(observed), "selected_signature_count": len(selectors),
+               "observed_signature_count": len(observed),
+               "selector_count": len(selectors),
+               "groups": {name: {"units": sum(per_slot[name].values()),
+                                  "per_slot": dict(sorted(per_slot[name].items())),
+                                  "sample_signatures": sample_signatures[name]}
+                          for name in sorted(per_slot)},
+               "sidecar": {"path": str(sidecar), "sha256": _sha256(sidecar)},
                "conservation": "PASS"}
     _atomic_json(CLASSIFICATION_RECEIPT, receipt)
     return receipt
@@ -979,6 +1134,7 @@ def witness_replay(*, execute: bool = False) -> dict[str, Any]:
     _require(dashboard.read_bytes() == before, "us-tariff-panel detail bytes not restored")
     return {"schema": "axiom_oracles.us_tariff_schedule.witness_replay.v1",
             "conformant": True, "detail_sha256": hashlib.sha256(before).hexdigest(),
+            "byte_stable": True,
             "surface_reproduced": fresh_surface is not None,
             "surface": _witness_surface(summary)}
 
