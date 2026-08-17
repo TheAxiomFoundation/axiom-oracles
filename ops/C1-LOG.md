@@ -6,6 +6,8 @@ Wall-clock values are measured by the stage receipts.
 ## 2026-08-17 — amended cap execution
 
 - A2' adjudication receipt: cap raised to 12,000,000 evaluated interval cells; the 6,713,128-cell quotient and 3,200,176-cell fixed-regime guard are both required, totaling 9,913,304 cells. No Yale re-extraction is authorized because the committed receipt keys remain valid.
+- R1/R2/R3 authorized extractor rerun — P(pass) = 0.98, conditional on exact reproduction of 68,417,040 / 6,713,128 / 3,200,176 / 480,580 and immediate stop on any difference.
+- R1/R2/R3 authorized extractor rerun — PASS. The single invocation reproduced all four binding counts exactly, retained the guard, and emitted the five required artifacts. Evaluated interval cells: 9,913,304 under the 12,000,000 cap. Wall-clock: 669.29s. Engine processes started: 0. Receipts: `reference/us-tariff-schedule/{provenance,integrity-receipt,quotient-receipt,full-exposure}.json`, `selected-intervals.csv.gz`, and `trajectory-class-map.csv.gz`.
 - A1 — P(pass) = 0.98. Pending receipt: fresh validation of `conformance/executable/us-tariff-witness.json`, including absolute-path compilation of the 100 generated chapters plus the five-line witness and exact witness replay. Engine-process ceiling: 3.
 - A1 first invocation — FAIL before engine start: the ad-hoc `.venv` lacks PyYAML (`ModuleNotFoundError: yaml`). Wall-clock: 0.07s. Engine processes started: 0.
 - A1 retry — P(pass) = 0.98 using the repository's locked `uv run` environment.

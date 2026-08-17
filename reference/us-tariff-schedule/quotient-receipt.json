@@ -7,9 +7,9 @@
   "representative_interval_cells": 6713128,
   "guard_interval_cells": 3200176,
   "evaluated_interval_cells": 9913304,
-  "cap": 5000000,
-  "guard_dropped_for_cap": true,
-  "under_cap": false,
+  "cap": 12000000,
+  "guard_dropped_for_cap": false,
+  "under_cap": true,
   "selected_pairs": 709659,
   "guard_pairs": 229079
 }
