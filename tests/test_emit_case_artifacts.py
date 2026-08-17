@@ -58,7 +58,7 @@ def _served_rows() -> list[dict]:
                     "c": "benefit",
                     "l": 24,
                     "x": 100,
-                    "d": -76,
+                    "d": 76,
                     "e": "bridge_artifact",
                 }
             ],
@@ -129,6 +129,57 @@ def test_case_artifact_check_accepts_exact_annotations_and_values(tmp_path):
         "mismatches": 2,
         "annotated": 1,
         "silent": 0,
+    }
+
+
+def test_case_artifact_check_accepts_v1_chunk_descriptors(tmp_path):
+    module = _load_module()
+    config = _write_fixture(
+        module,
+        tmp_path,
+        report=_canonical_report(),
+        rows=_served_rows(),
+        index_updates={
+            "schema_version": "axiom_oracles.chunk_index.v1",
+            "chunk_count": 1,
+            "chunks": [
+                {
+                    "name": "chunk-0.json",
+                    "sha256": "0" * 64,
+                    "cases": 2,
+                }
+            ],
+        },
+    )
+
+    problems, stats = module.check_suite_artifacts("test-suite", config)
+
+    assert problems == []
+    assert stats["cases"] == 2
+
+
+def test_compact_case_preserves_exact_execution_inputs():
+    module = _load_module()
+    inputs = {"benefit#input.amount": 919999.9999999999, "benefit#input.flag": False}
+    row = module.compact_case(
+        {
+            "case_id": "case-1",
+            "matches": [{"concept": "benefit", "left": 1, "right": 1}],
+            "mismatches": [],
+            "metadata": {
+                "axiom_entity": "Person",
+                "axiom_entity_id": "recipient",
+                "axiom_inputs": inputs,
+            },
+        },
+        {},
+    )
+
+    assert row["execution"] == {
+        "schema_version": "axiom_oracles.case_execution.v1",
+        "axiom_entity": "Person",
+        "axiom_entity_id": "recipient",
+        "axiom_inputs": inputs,
     }
 
 

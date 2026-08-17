@@ -8,10 +8,37 @@ from pathlib import Path
 import pytest
 import yaml
 
+from axiom_oracles.evidence import strict_json_loads, validate_suite_evidence
+
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 COMPARISONS_DIR = REPO_ROOT / "comparisons"
 DASHBOARD_DATA_DIR = REPO_ROOT / "dashboard" / "public" / "data"
+
+
+def _load_bound_report_cases(report_name: str) -> tuple[dict, list[dict]]:
+    """Load the authoritative case rows only after strict binding validation."""
+
+    report_path = DASHBOARD_DATA_DIR / report_name
+    report = strict_json_loads(report_path.read_text())
+    assert isinstance(report, dict)
+
+    evidence = validate_suite_evidence(report_path)
+    assert evidence.valid, evidence.defects
+    assert evidence.binding == "bound"
+    assert evidence.reconciliation == "full"
+    assert evidence.suite == report["suite"]
+
+    case_dir = DASHBOARD_DATA_DIR / "cases" / evidence.suite
+    cases: list[dict] = []
+    for chunk in evidence.chunks:
+        payload = strict_json_loads((case_dir / chunk.name).read_text())
+        assert isinstance(payload, list)
+        assert len(payload) == chunk.cases
+        assert all(isinstance(case, dict) for case in payload)
+        cases.extend(payload)
+    assert len(cases) == evidence.case_count
+    return report, cases
 
 
 def test_dk_2023_child_youth_benefit_registry_config_shape() -> None:
@@ -64,9 +91,9 @@ def test_dk_witness_reports_pin_live_outputs_and_dispositions() -> None:
         "axiom-euromod-dk-child-youth-benefit-2023.json",
         "axiom-euromod-dk-child-youth-benefit-couple.json",
     )
-    reports = [
-        json.loads((DASHBOARD_DATA_DIR / name).read_text()) for name in report_names
-    ]
+    reports_and_cases = [_load_bound_report_cases(name) for name in report_names]
+    reports = [report for report, _cases in reports_and_cases]
+    committed_cases = [cases for _report, cases in reports_and_cases]
 
     assert sum(report["summary"]["comparison_count"] for report in reports) == 10
     assert sum(report["summary"]["match_count"] for report in reports) == 7
@@ -85,10 +112,9 @@ def test_dk_witness_reports_pin_live_outputs_and_dispositions() -> None:
     )
 
     main_report, report_2023, couple_report = reports
-    assert len(main_report["cases"]) == 8
-    assert all(
-        case["matches"] and not case["mismatches"] for case in main_report["cases"][:7]
-    )
+    main_cases, _cases_2023, couple_cases = committed_cases
+    assert len(main_cases) == 8
+    assert all(case["v"] and not case["m"] for case in main_cases[:7])
 
     pension = main_report["mismatches"][0]
     assert pension["case_id"] == ("dk-child-youth-benefit-age5-yem1300000-pension60000")
@@ -121,11 +147,13 @@ def test_dk_witness_reports_pin_live_outputs_and_dispositions() -> None:
     assert couple["disposition"]["id"] == ("euromod-dk-bfachnm-pre2022-spousal-taper")
     assert couple["disposition"]["disposition"] == "upstream_engine_gap"
 
-    [couple_case] = couple_report["cases"]
-    assert couple_case["metadata"]["comparison_level"] == "household_sum"
-    components = couple_case["metadata"]["axiom_result_aggregation_applied"][
-        "components"
-    ]
+    [couple_case] = couple_cases
+    compact_inputs = {row["n"]: row["v"] for row in couple_case["i"]}
+    assert compact_inputs["result_aggregation"] == {
+        "entity_ids": ["earner", "non_earner"],
+        "strategy": "sum",
+    }
+    components = compact_inputs["result_aggregation_applied"]["components"]
     concept = couple["concept"]
     assert [(row["entity_id"], row["values"][concept]) for row in components] == [
         ("earner", 0),

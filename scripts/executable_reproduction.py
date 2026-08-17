@@ -42,6 +42,7 @@ if str(REPO_ROOT) not in sys.path:
 
 from axiom_oracles.adapters.axiom.runner import AxiomRulesRunner  # noqa: E402
 from axiom_oracles.core.case import Case  # noqa: E402
+from axiom_oracles.evidence import validate_suite_evidence  # noqa: E402
 from axiom_oracles.suites.dk_child_youth_benefit import (  # noqa: E402
     dk_child_youth_benefit_couple_cases,
 )
@@ -352,6 +353,87 @@ def _input_binding(metadata: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _expanded_compact_case(
+    row: dict[str, Any],
+    *,
+    report: dict[str, Any],
+    label: str,
+) -> dict[str, Any]:
+    """Expand one validated compact verdict row for executable replay."""
+
+    execution = row.get("execution")
+    _require(
+        isinstance(execution, dict)
+        and execution.get("schema_version") == "axiom_oracles.case_execution.v1",
+        f"{label}: compact case execution metadata is missing or unversioned",
+    )
+    metadata = {
+        key: copy.deepcopy(value)
+        for key, value in execution.items()
+        if key != "schema_version"
+    }
+
+    def verdicts(field: str) -> list[dict[str, Any]]:
+        expanded: list[dict[str, Any]] = []
+        for verdict in row.get(field) or []:
+            _require(isinstance(verdict, dict), f"{label}: malformed {field} row")
+            expanded.append(
+                {
+                    "concept": verdict.get("c"),
+                    "left": verdict.get("l"),
+                    "right": verdict.get("x"),
+                }
+            )
+        return expanded
+
+    return {
+        "case_id": row.get("id"),
+        "right_engine": (report.get("engines") or {}).get("right"),
+        "metadata": metadata,
+        "matches": verdicts("v"),
+        "mismatches": verdicts("m"),
+    }
+
+
+def _committed_case_rows(
+    report_path: Path,
+    report: dict[str, Any],
+) -> list[dict[str, Any]]:
+    """Load inline legacy cases or the report's validated bound chunk corpus."""
+
+    inline = report.get("cases")
+    _require(isinstance(inline, list), f"{report_path}: cases must be a list")
+    if inline:
+        return inline
+
+    evidence = validate_suite_evidence(report_path)
+    _require(
+        evidence.valid
+        and evidence.binding == "bound"
+        and evidence.reconciliation == "full",
+        f"{report_path}: executable cases require valid bound/full evidence: "
+        + "; ".join(evidence.defects),
+    )
+    chunk_dir = report_path.parent / "cases" / str(evidence.suite)
+    expanded: list[dict[str, Any]] = []
+    for chunk in evidence.chunks:
+        try:
+            payload = json.loads((chunk_dir / chunk.name).read_text())
+        except (OSError, json.JSONDecodeError) as exc:
+            raise ValueError(f"{chunk_dir / chunk.name}: cannot read chunk: {exc}") from exc
+        _require(
+            isinstance(payload, list),
+            f"{chunk_dir / chunk.name}: expected a compact case array",
+        )
+        for position, row in enumerate(payload):
+            label = f"{evidence.suite}/{chunk.name}[{position}]"
+            _require(isinstance(row, dict), f"{label}: compact case is not a mapping")
+            expanded.append(
+                _expanded_compact_case(row, report=report, label=label)
+            )
+    return expanded
+
+
 def _expected_cases(repo_root: Path = REPO_ROOT) -> list[dict[str, Any]]:
     couple_suite = {
         str(case.case_id): case for case in dk_child_youth_benefit_couple_cases()
@@ -373,8 +455,7 @@ def _expected_cases(repo_root: Path = REPO_ROOT) -> list[dict[str, Any]]:
             and engines.get("right") == "axiom",
             f"{report_path}: expected EUROMOD-left/Axiom-right report",
         )
-        cases = report.get("cases")
-        _require(isinstance(cases, list), f"{report_path}: cases must be a list")
+        cases = _committed_case_rows(report_path, report)
         _require(
             len(cases) == spec["case_count"],
             f"{report_path}: expected {spec['case_count']} cases, found {len(cases)}",

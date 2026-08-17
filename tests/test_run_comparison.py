@@ -471,9 +471,7 @@ def test_gettsim_synthetic_first_run_shell_attributes_unavailable_engine(tmp_pat
             "error": "skipped: EUROMOD_PYTHON unset",
         }
     ]
-    assert euromod_report["summary"]["errors_by_engine"] == [
-        {"value": "euromod", "count": 1}
-    ]
+    assert euromod_report["summary"]["errors_by_engine"] == {"euromod": 1}
 
     gettsim_output = tmp_path / "gettsim-missing.json"
     run_comparison._reemit_gettsim_synthetic_report(

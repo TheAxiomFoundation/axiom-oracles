@@ -158,7 +158,8 @@ def engine_pair_records(metadata: dict) -> list[dict]:
 
 
 def compact_case(case: dict, explained: dict) -> dict:
-    hs = (case.get("metadata") or {}).get("household_summary") or {}
+    metadata = case.get("metadata") or {}
+    hs = metadata.get("household_summary") or {}
     ages = hs.get("ages") or []
     mismatches = []
     for m in case.get("mismatches") or []:
@@ -210,7 +211,7 @@ def compact_case(case: dict, explained: dict) -> dict:
     # the artifact two orders of magnitude heavier than the site can carry.
     # `i0` records how many defaults were dropped; the full report under
     # reports/ remains the complete record.
-    records = (case.get("metadata") or {}).get("axiom_input_records")
+    records = metadata.get("axiom_input_records")
     if records:
         kept = []
         dropped = 0
@@ -237,7 +238,7 @@ def compact_case(case: dict, explained: dict) -> dict:
         # Consumed by write_artifacts for the suite-level slot dictionary,
         # stripped before chunks are written.
         row["_all_input_names"] = [{"name": r.get("name")} for r in records]
-    outputs = (case.get("metadata") or {}).get("axiom_all_outputs")
+    outputs = metadata.get("axiom_all_outputs")
     if isinstance(outputs, dict) and outputs:
         kept_o = []
         dropped_o = 0
@@ -252,9 +253,31 @@ def compact_case(case: dict, explained: dict) -> dict:
             row["o0"] = dropped_o
         row["_all_output_names"] = sorted(outputs)
     else:
-        synth = engine_pair_records(case.get("metadata") or {})
+        synth = engine_pair_records(metadata)
         if synth:
             row["i"] = synth
+    # A report-bound chunk can also be the durable input source for a
+    # hermetic executable receipt. Preserve the exact post-bridge Axiom
+    # inputs when the producer exposes them, plus the small bridge/aggregation
+    # facts needed to reconstruct record-oriented runs. This is deliberately
+    # narrower than copying all case metadata (notably EUROMOD input tables).
+    execution = {
+        "schema_version": "axiom_oracles.case_execution.v1",
+    }
+    axiom_inputs = metadata.get("axiom_inputs")
+    if isinstance(axiom_inputs, dict):
+        execution["axiom_inputs"] = axiom_inputs
+    for key in (
+        "axiom_entity",
+        "axiom_entity_id",
+        "axiom_input_records_count",
+        "axiom_result_aggregation",
+        "euromod_to_axiom_input_bridge_applied",
+    ):
+        if metadata.get(key) is not None:
+            execution[key] = metadata[key]
+    if len(execution) > 1:
+        row["execution"] = execution
     if isinstance(matches, list):
         row["v"] = [
             {"c": m.get("concept"), "l": m.get("left"), "x": m.get("right")}
@@ -477,9 +500,47 @@ def _load_served_rows(suite: str, index: dict) -> tuple[list[dict], list[str]]:
     problems: list[str] = []
     out_dir = OUT_ROOT / suite
     declared_chunks = index.get("chunks")
-    if not isinstance(declared_chunks, int) or declared_chunks < 0:
-        return [], [f"{suite}: index.chunks must be a non-negative integer"]
-    expected_names = {f"chunk-{i}.json" for i in range(declared_chunks)}
+    if isinstance(declared_chunks, int) and not isinstance(declared_chunks, bool):
+        if declared_chunks < 0:
+            return [], [f"{suite}: index.chunks must be non-negative"]
+        expected_names = {f"chunk-{i}.json" for i in range(declared_chunks)}
+    elif (
+        index.get("schema_version") == CHUNK_INDEX_SCHEMA_VERSION
+        and isinstance(declared_chunks, list)
+    ):
+        declared_names: list[str] = []
+        for position, descriptor in enumerate(declared_chunks):
+            name = descriptor.get("name") if isinstance(descriptor, dict) else None
+            if not isinstance(name, str) or not re.fullmatch(
+                r"chunk-\d+\.json", name
+            ):
+                problems.append(
+                    f"{suite}: index.chunks[{position}].name is invalid"
+                )
+                continue
+            declared_names.append(name)
+        if len(set(declared_names)) != len(declared_names):
+            problems.append(f"{suite}: index.chunks repeats a chunk name")
+        expected_names = set(declared_names)
+        chunk_count = index.get("chunk_count")
+        if (
+            isinstance(chunk_count, bool)
+            or not isinstance(chunk_count, int)
+            or chunk_count < 0
+        ):
+            problems.append(
+                f"{suite}: index.chunk_count must be a non-negative integer"
+            )
+        elif chunk_count != len(declared_chunks):
+            problems.append(
+                f"{suite}: index.chunk_count {chunk_count} != "
+                f"{len(declared_chunks)} descriptors"
+            )
+    else:
+        return [], [
+            f"{suite}: index.chunks must be a non-negative integer or "
+            "a v1 descriptor array"
+        ]
     actual_names = {path.name for path in out_dir.glob("chunk-*.json")}
     if actual_names != expected_names:
         missing = sorted(expected_names - actual_names)
@@ -534,7 +595,9 @@ def _canonical_mismatch_payloads(
         payloads[key] = {
             "l": normalized.get("left"),
             "x": normalized.get("right"),
-            "d": normalized.get("difference"),
+            "d": dashboard_delta(
+                normalized.get("left"), normalized.get("right")
+            ),
             "e": disposition.get("disposition"),
         }
     return payloads, problems

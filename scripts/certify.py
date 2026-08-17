@@ -1409,6 +1409,16 @@ def build_certificate(
     else:
         certified_state = "no"
     certified = certified_state == "yes"
+    certified_rule = (
+        "computed(conformant AND exercised AND closed AND executable) with zero "
+        "open defects. A premise counts only when its mode is computed AND its "
+        "value is true; attested premises never satisfy it."
+    )
+    if not premises_computed:
+        certified_rule += (
+            " state=unavailable means no producer computes closed/executable yet, "
+            "so certification is not merely withheld but not yet offerable."
+        )
     return {
         "schema": SCHEMA,
         "program": program,
@@ -1416,12 +1426,7 @@ def build_certificate(
         "certified": {
             "value": certified,
             "state": certified_state,
-            "rule": "computed(conformant AND exercised AND closed AND "
-            "executable) with zero open defects. A premise counts only when "
-            "its mode is computed AND its value is true; attested premises "
-            "never satisfy it. state=unavailable means no producer computes "
-            "closed/executable yet, so certification is not merely withheld "
-            "but not yet offerable.",
+            "rule": certified_rule,
         },
         "verdicts": {
             "conformant": {

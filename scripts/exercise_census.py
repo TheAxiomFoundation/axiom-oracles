@@ -326,6 +326,21 @@ def _census_suite(suite: str, report: dict, report_path: Path) -> dict:
                 concept_values[str(verdict["c"])].add(
                     _canonical_value(verdict.get("l"))
                 )
+        # Reference-oracle chunks may carry the exact runner inputs used for
+        # executable reproduction outside the dashboard-oriented ``i`` rows.
+        # Count those inputs as case evidence too: they are report-bound chunk
+        # bytes, and omitting them makes a genuinely exercised suite appear
+        # evidence-free after inline mirrors are stripped.
+        execution = case.get("execution")
+        if (
+            isinstance(execution, dict)
+            and execution.get("schema_version")
+            == "axiom_oracles.case_execution.v1"
+        ):
+            axiom_inputs = execution.get("axiom_inputs")
+            if isinstance(axiom_inputs, dict):
+                for key, value in axiom_inputs.items():
+                    field_values[str(key)].add(_canonical_value(value))
         # Inline report cases: scalar metadata entries are stage evidence.
         metadata = case.get("metadata")
         if isinstance(metadata, dict):

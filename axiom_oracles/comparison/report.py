@@ -186,7 +186,7 @@ class ComparisonReportAccumulator:
                     "scenario",
                 ),
                 "error_count": len(self._error_rows),
-                "errors_by_engine": _count_rows(self._error_rows, "engine"),
+                "errors_by_engine": _count_object(self._error_rows, "engine"),
             },
             "aggregates": _aggregate_rows_from_buckets(
                 self._aggregate_buckets,
@@ -717,6 +717,15 @@ def _count_rows(rows: list[dict], key: str) -> list[dict]:
             key=lambda item: (-item[1], item[0] or ""),
         )
     ]
+
+
+def _count_object(rows: list[dict], key: str) -> dict[str, int]:
+    """Return certificate-safe named counters instead of display rows."""
+
+    counts = Counter(
+        str(row[key]) for row in rows if row.get(key) is not None
+    )
+    return dict(sorted(counts.items()))
 
 
 def _to_number(value: Value) -> float:

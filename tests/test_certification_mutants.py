@@ -507,9 +507,10 @@ def test_dk_opt_in_executable_gate_requires_full_reproduction(monkeypatch):
     monkeypatch.setattr(producer, "build_reproduction", forged_reproduction)
     with pytest.raises(ValueError, match="compiled/replayed artifact drifted"):
         certify._executable_verdict(
-            "dk/boerne-og-ungeydelse",
-            certify.PROGRAMS["dk/boerne-og-ungeydelse"],
-            [],
+            program="dk/boerne-og-ungeydelse",
+            spec=certify.PROGRAMS["dk/boerne-og-ungeydelse"],
+            legs=[],
+            evidence=[],
             verify_producer=True,
         )
     assert len(calls) == 1
@@ -2085,7 +2086,8 @@ def test_nz_syntax_only_executable_metadata_has_no_computed_acceptance_path():
     certify = _load("certify")
     with pytest.raises(ValueError, match="without a verifier"):
         certify._executable_verdict(
-            {
+            program="nz/mutant",
+            spec={
                 "computed_executable": True,
                 "suites": [
                     {
@@ -2096,6 +2098,6 @@ def test_nz_syntax_only_executable_metadata_has_no_computed_acceptance_path():
                     }
                 ],
             },
-            [{"suite": "nz-mutant"}],
-            [],
+            legs=[{"suite": "nz-mutant"}],
+            evidence=[],
         )
