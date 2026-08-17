@@ -16,6 +16,10 @@ Wall-clock values are measured by the stage receipts.
 - A1 cache-relocated retry — FAIL before engine start: the writable cache lacks a locked wheel and network is disabled. Wall-clock: 0.16s. Engine processes started: 0.
 - A1 installed-environment retry — P(pass) = 0.98 using the readable sibling `axiom-oracles/.venv` interpreter with the same project dependencies already installed.
 - A1 installed-environment retry — PASS. Receipt: `conformance/executable/us-tariff-witness.json`; 101/101 programs compiled, pinned engine hash matched, and 10/10 witness values reproduced by exact JSON numeric equality with `executable=true`. Wall-clock: 12.03s. Maximum concurrent engine processes: 1.
+- A2 — P(pass) = 0.90. Pending receipt: a content-addressed cache for all 709,659 selected line-country pairs, using the pinned `b16_entry_flags.py` and the generated statistical-member to rate-bearing-line routing.
+- A2 first feed attempt — FAIL before engine start: it passed the Yale 10-digit statistical member as `hts_line`; the generated schedule parameters require the rate-bearing ancestor key. The attempted benchmark hard-failed all 5,000 cases on the first member (`0101210010`), so its timing projection and output were rejected. Engine processes started sequentially: 1; maximum concurrent: 1.
+- A2 routing retry — P(pass) = 0.95, with `hts_line` derived only from the pinned generated chapter parameter tables and the Yale member retained separately as `hts_number`.
+- A2 routing retry — STOP before engine execution: the selected Yale universe contains members under non-ad-valorem rate lines for which the generated bulk program intentionally has disposition keys but no General-rate parameter. First deterministic counterexample: Yale member `0102294024`; generated rate-bearing/disposition key `0102294000` (`specific`). The required MFN and statutory-total queries would therefore hard-fail, and the C1 contract forbids dispositioning engine errors. No valid first shard exists, so no greater-than-six-hour projection can be computed. C1/C2, D1, X1, W1, N1, and S1 were not run.
 
 ## 2026-08-16 — extraction preflight
 
