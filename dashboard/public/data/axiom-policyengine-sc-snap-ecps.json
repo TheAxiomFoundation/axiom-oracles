@@ -10033,8 +10033,8 @@
       "description": "SNAP benefit amount",
       "difference": 138.0,
       "disposition": {
-        "disposition": "upstream_engine_gap",
-        "id": "sc-pe-cat-gross-gate-2026-08-12-29732-benefit"
+        "disposition": "bridge_artifact",
+        "id": "sc-bridge-elderly-disabled-projection-2026-08-16-29732-benefit"
       },
       "kind": "amount_difference",
       "left": 138.0,
@@ -10190,10 +10190,10 @@
     "dispositioned": {
       "counts": {
         "axiom_encoding_gap": 120,
-        "bridge_artifact": 50,
+        "bridge_artifact": 51,
         "explained_residual": 0,
         "unexplained": 0,
-        "upstream_engine_gap": 5
+        "upstream_engine_gap": 4
       },
       "dispositions_file": "dispositions/sc-snap-ecps.yaml",
       "expired_entries": [],

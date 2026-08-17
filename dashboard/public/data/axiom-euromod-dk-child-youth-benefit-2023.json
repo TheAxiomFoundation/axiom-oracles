@@ -192,11 +192,11 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "04231ca884485be1daec9e0dd41a8a681a621fb8",
+      "axiom_rules_engine_sha": "74881519c829106e4e696d77b38e10ba61c881d8",
       "axiom_rules_engine_version": "0.2.1",
       "binary_sha256": "079c26f4244db8c2a72fcbfb8cf88aaa5cb7c99628dc1c8d9d3b2d011e5f32a5"
     },
-    "generated_at": "2026-08-17T02:00:03Z",
+    "generated_at": "2026-08-17T13:19:31Z",
     "generated_by": "scripts/run_comparison.py::dk-child-youth-benefit-2023-euromod",
     "oracle": {
       "euromod_country": "DK",
