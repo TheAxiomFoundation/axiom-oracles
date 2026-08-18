@@ -9385,24 +9385,245 @@
       "verdict_concepts": {}
     },
     "us-tariff-panel": {
-      "binding": "unbound",
-      "binding_defects": [
-        "us-tariff-panel: chunk index dashboard/public/data/cases/us-tariff-panel/index.json is missing; report/chunk evidence binding is unbound"
-      ],
-      "bridge_audited": false,
-      "bridge_declared": false,
-      "bridge_manifest_sha256": null,
+      "binding": "bound",
+      "binding_defects": [],
+      "bridge_audited": true,
+      "bridge_declared": true,
+      "bridge_manifest_sha256": "d0fff6c3606a8f89b5f7ce4dd93c4b06ae2ef6e194e8122f84919c7a40c463a5",
       "bridged_through": {},
       "cases_scanned": 122,
-      "chunk_manifest": [],
-      "constant_fields": 0,
-      "evidence_fields": {},
-      "evidence_source": "inline",
+      "chunk_manifest": [
+        {
+          "path": "dashboard/public/data/axiom-yale-us-tariff-panel.json",
+          "sha256": "cfa6fd6f2abd8af3b15e8f423c87ba44336dc725cfb5c2d9948a2f698dbff5a5"
+        }
+      ],
+      "constant_fields": 11,
+      "evidence_fields": {
+        "article_is_potash": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "cbp_agrees_chapter_98_entry_is_appropriate": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "country_of_origin": {
+          "distinct": 240,
+          "state": "varied"
+        },
+        "entry_date": {
+          "distinct": 33,
+          "state": "varied"
+        },
+        "entry_is_9802_excepted_entry": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "entry_is_chapter_98_subchapter_xxiii_entry": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "entry_is_entered_free_of_duty_under_usmca": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "entry_is_humanitarian_donation_article": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "entry_is_informational_material_article": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "entry_is_personal_use_accompanied_baggage": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "entry_is_properly_claimed_chapter_98_entry": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "entry_is_usmca_duty_free_entry": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "entry_loaded_and_in_transit_before_july_24_2026": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "hts_number": {
+          "distinct": 5,
+          "state": "varied"
+        }
+      },
+      "evidence_receipt": "axiom_oracles/bridges/exercise_receipts/us-tariff-panel.json",
+      "evidence_receipt_sha256": "7f2053cab31d6ee1f0a62fc0ec1731f1e66e03427a0e022cf386c197ebedfca1",
+      "evidence_source": "committed-detail-rows",
+      "exercised": true,
       "inline_cases_not_counted": 0,
-      "reconciliation": "none",
+      "per_case_evidence_committed": true,
+      "reconciliation": "content-addressed-receipt",
       "report": "dashboard/public/data/axiom-yale-us-tariff-panel.json",
       "report_sha256": "cfa6fd6f2abd8af3b15e8f423c87ba44336dc725cfb5c2d9948a2f698dbff5a5",
-      "varied_fields": 0,
+      "varied_fields": 3,
+      "verdict_concepts": {}
+    },
+    "us-tariff-schedule": {
+      "binding": "bound",
+      "binding_defects": [],
+      "bridge_audited": true,
+      "bridge_declared": true,
+      "bridge_manifest_sha256": "2a776bc7058b292a60ef628f1500d0f762184c186991b902ab6fe75dcf663fc5",
+      "bridged_through": {},
+      "cases_scanned": 19118619,
+      "chunk_manifest": [
+        {
+          "path": "reference/us-tariff-schedule/eval/MANIFEST.json",
+          "sha256": "5123e201a32c3965d82440c515525c854e9113d7efc84e820bbe878617a83a39"
+        },
+        {
+          "path": "reference/us-tariff-schedule/comparison-summary.json",
+          "sha256": "5981a1cb92e76d03b5f88692062311093b04db2aff5373cea29f52a3057cce98"
+        },
+        {
+          "path": "conformance/detail/us-tariff-schedule.json",
+          "sha256": "ac6152975c4f33f7ada883ca6ccd8eb9c3510d53f54a0ec57a49763181e7af72"
+        }
+      ],
+      "constant_fields": 15,
+      "evidence_fields": {
+        "article_is_potash": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "cbp_agrees_chapter_98_entry_is_appropriate": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "country_of_origin": {
+          "distinct": 240,
+          "state": "varied"
+        },
+        "entry_date": {
+          "distinct": 27,
+          "state": "varied"
+        },
+        "entry_is_9802_excepted_entry": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "entry_is_brazil_301_listed": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "entry_is_chapter_98_subchapter_xxiii_entry": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "entry_is_china_301_2024_action": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "entry_is_china_301_list123": {
+          "distinct": 2,
+          "state": "varied"
+        },
+        "entry_is_china_301_list4a": {
+          "distinct": 2,
+          "state": "varied"
+        },
+        "entry_is_china_301_solar": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "entry_is_entered_free_of_duty_under_usmca": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "entry_is_forced_labor_301_listed": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "entry_is_humanitarian_donation_article": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "entry_is_informational_material_article": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "entry_is_line_a": {
+          "distinct": 2,
+          "state": "varied"
+        },
+        "entry_is_line_b": {
+          "distinct": 2,
+          "state": "varied"
+        },
+        "entry_is_line_d": {
+          "distinct": 2,
+          "state": "varied"
+        },
+        "entry_is_personal_use_accompanied_baggage": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "entry_is_properly_claimed_chapter_98_entry": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "entry_is_section_122_exempt": {
+          "distinct": 2,
+          "state": "varied"
+        },
+        "entry_is_section_201_cspv": {
+          "distinct": 2,
+          "state": "varied"
+        },
+        "entry_is_section_232_aluminum": {
+          "distinct": 2,
+          "state": "varied"
+        },
+        "entry_is_section_232_covered": {
+          "distinct": 2,
+          "state": "varied"
+        },
+        "entry_is_section_232_steel": {
+          "distinct": 2,
+          "state": "varied"
+        },
+        "entry_is_usmca_duty_free_entry": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "entry_loaded_and_in_transit_before_july_24_2026": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "hts_line": {
+          "distinct": 11570,
+          "state": "varied"
+        },
+        "hts_number": {
+          "distinct": 20508,
+          "state": "varied"
+        },
+        "origin_regime": {
+          "distinct": 16,
+          "state": "varied"
+        }
+      },
+      "evidence_receipt": "axiom_oracles/bridges/exercise_receipts/us-tariff-schedule.json",
+      "evidence_receipt_sha256": "0e8b34d64db5dc7eeeddac03056820a94e933c6a86fa1819a395a9c203c1ab64",
+      "evidence_source": "content-addressed-shard-manifest",
+      "exercised": true,
+      "inline_cases_not_counted": 0,
+      "per_case_evidence_committed": true,
+      "reconciliation": "content-addressed-receipt",
+      "report": "conformance/detail/us-tariff-schedule.json",
+      "report_sha256": "ac6152975c4f33f7ada883ca6ccd8eb9c3510d53f54a0ec57a49763181e7af72",
+      "varied_fields": 15,
       "verdict_concepts": {}
     },
     "ut-income-tax-liability": {

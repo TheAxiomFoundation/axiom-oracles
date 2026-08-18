@@ -78,6 +78,8 @@ from axiom_oracles.evidence import (  # noqa: E402
 SCHEMA = "axiom_oracles.exercise_census.v1"
 
 MANIFEST_DIR = REPO_ROOT / "axiom_oracles" / "bridges" / "manifests"
+EXERCISE_RECEIPT_DIR = REPO_ROOT / "axiom_oracles" / "bridges" / "exercise_receipts"
+EXERCISE_RECEIPT_SCHEMA = "axiom_oracles.committed_exercise_receipt.v1"
 
 
 def _manifest_strict_clean() -> dict[str, bool]:
@@ -600,6 +602,91 @@ def _unified_view_fields(
     return normalized, receipt
 
 
+def _committed_exercise_rows() -> dict[str, dict]:
+    """Load hash-bound campaign receipts that are too large for chunk storage."""
+    rows: dict[str, dict] = {}
+    for path in sorted(EXERCISE_RECEIPT_DIR.glob("*.json")):
+        receipt = strict_json_loads(path.read_text())
+        if not isinstance(receipt, dict) or receipt.get("schema") != EXERCISE_RECEIPT_SCHEMA:
+            raise ValueError(f"{path.name}: unsupported committed exercise receipt")
+        suite = receipt.get("suite")
+        report_name = receipt.get("report")
+        if not isinstance(suite, str) or not suite or not isinstance(report_name, str):
+            raise ValueError(f"{path.name}: receipt lacks suite/report identity")
+        report_path = REPO_ROOT / report_name
+        if not report_path.is_file():
+            raise ValueError(f"{path.name}: receipt report is missing")
+        report_sha = hashlib.sha256(report_path.read_bytes()).hexdigest()
+        if receipt.get("report_sha256") != report_sha:
+            raise ValueError(f"{path.name}: receipt report sha256 drifted")
+        artifacts = receipt.get("evidence_artifacts")
+        if not isinstance(artifacts, list) or not artifacts:
+            raise ValueError(f"{path.name}: receipt has no evidence artifacts")
+        for artifact in artifacts:
+            if not isinstance(artifact, dict) or not isinstance(artifact.get("path"), str):
+                raise ValueError(f"{path.name}: malformed evidence artifact")
+            artifact_path = REPO_ROOT / artifact["path"]
+            if not artifact_path.is_file() or artifact.get("sha256") != hashlib.sha256(
+                artifact_path.read_bytes()
+            ).hexdigest():
+                raise ValueError(f"{path.name}: evidence artifact drifted")
+        fields = receipt.get("evidence_fields")
+        if not isinstance(fields, dict) or not fields:
+            raise ValueError(f"{path.name}: receipt has no evidence fields")
+        normalized: dict[str, dict] = {}
+        for name, field in sorted(fields.items()):
+            if not isinstance(field, dict):
+                raise ValueError(f"{path.name}: malformed field {name!r}")
+            distinct = field.get("distinct")
+            state = field.get("state")
+            expected = (
+                "varied"
+                if isinstance(distinct, int) and not isinstance(distinct, bool) and distinct > 1
+                else "constant" if distinct == 1 else None
+            )
+            if state != expected:
+                raise ValueError(f"{path.name}: field {name!r} state/count disagree")
+            normalized[str(name)] = {"distinct": distinct, "state": state}
+        cases = receipt.get("cases")
+        if isinstance(cases, bool) or not isinstance(cases, int) or cases <= 0:
+            raise ValueError(f"{path.name}: receipt has no positive case count")
+        varied = sum(field["state"] == "varied" for field in normalized.values())
+        bridge_audited = MANIFEST_STRICT_CLEAN.get(suite, False)
+        per_case_evidence = bool(normalized) and cases > 0
+        rows[suite] = {
+            "cases_scanned": cases,
+            "report": report_name,
+            "report_sha256": report_sha,
+            "binding": "bound",
+            "binding_defects": [],
+            "reconciliation": "content-addressed-receipt",
+            "evidence_source": receipt.get("evidence_mode"),
+            "inline_cases_not_counted": 0,
+            "chunk_manifest": artifacts,
+            "evidence_receipt": str(path.relative_to(REPO_ROOT)),
+            "evidence_receipt_sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+            "evidence_fields": normalized,
+            "per_case_evidence_committed": per_case_evidence,
+            "verdict_concepts": {},
+            "varied_fields": varied,
+            "constant_fields": len(normalized) - varied,
+            "bridged_through": BRIDGED_THROUGH.get(suite, {}),
+            "bridge_declared": suite in BRIDGED_THROUGH,
+            "bridge_audited": bridge_audited,
+            # Match certification's computed premise: variation is disclosed
+            # field-by-field, while a suite counts as exercised when its
+            # per-case evidence is committed and its complete bridge/input
+            # boundary is strict-clean. Constants remain honest scope limits.
+            "exercised": bridge_audited and per_case_evidence,
+            "bridge_manifest_sha256": (
+                MANIFEST_STRICT_AUDIT.get(suite, {}).get("manifest_sha256")
+                if MANIFEST_STRICT_CLEAN.get(suite, False)
+                else None
+            ),
+        }
+    return rows
+
+
 def build_census() -> dict:
     suites: dict[str, dict] = {}
     contested: dict[str, list[str]] = defaultdict(list)
@@ -622,6 +709,9 @@ def build_census() -> dict:
     for suite, paths in contested.items():
         if len(paths) > 1:
             suites[suite]["contested_reports"] = sorted(paths)
+    # Large supervised campaigns commit bounded, hash-bound census receipts
+    # instead of duplicating millions of raw rows into dashboard chunks.
+    suites.update(_committed_exercise_rows())
     return {
         "schema": SCHEMA,
         "_comment": (

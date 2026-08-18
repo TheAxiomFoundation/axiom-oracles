@@ -1,5 +1,12 @@
 {
   "schema": "axiom_oracles.us_tariff_schedule.eval_manifest.v1",
+  "comparison_artifact": {
+    "sha256": "514ac782f630b0d7300c07f0b9737c311a00aafa13364b717fa941e5caf27a6c"
+  },
+  "comparison_receipt": {
+    "path": "reference/us-tariff-schedule/comparison-summary.json",
+    "sha256": "5981a1cb92e76d03b5f88692062311093b04db2aff5373cea29f52a3057cce98"
+  },
   "shards": {
     "005fc7b5f2bb1c2352815b1f1152f10bfa4dc8d852de79ed3f8009df032280ff": {
       "cases": 33912,
