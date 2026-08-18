@@ -20,9 +20,9 @@ generated_facts:
     declared_block_count: 24
   rulespec:
     repository: TheAxiomFoundation/rulespec-dk
-    ref: 553c5b5b0fa16f1e3a1514487679e897d3b93516
-    commit: 553c5b5b0fa16f1e3a1514487679e897d3b93516
-    selected_content_sha256: 876951523a775c0e41f9b2cbb6c2d9490d7375cad4c9659fa752a058b7dad312
+    ref: f12271e3736406c932d36cdfa0fb42d719b91532
+    commit: f12271e3736406c932d36cdfa0fb42d719b91532
+    selected_content_sha256: 20f7539782762fac77a9725c2b9790c5f9ad2ae69131b3ae64020ecd2d5adc6d
   provision_spine:
   - ordinal: 1
     citation_path: dk/statute/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1
@@ -318,22 +318,31 @@ generated_facts:
     source_sha256: 2e135cac3ca5eb201b948ca915bf9554e864a09ebc8576c2603b6115730329ec
   - path: dk/statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-2.yaml
     module_id: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-2
-    sha256: a28171173310e1594290c95af9854f5d05a5c6bca14835409aef6bba9b134cbf
+    sha256: ad5f521bb7ce30b39c555768f6adf76738a545d450896c70941158a31ba50036
     source_citation_path: dk/statute/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-2
     rule_count: 13
-    summary: Retten til børne- og ungeydelsen er betinget af de angivne skatte-, opholds-, civilstands-,
-      forsørgelses- og kommunale afgørelsesbetingelser. Er seksårsbetingelsen ikke opfyldt, udbetales
-      en forholdsmæssig andel efter 6-66 måneders bopæl eller beskæftigelse inden for de seneste 10 år.
-      Kortvarigt eller uddannelsesbetinget midlertidigt udlandsophold kan opfylde opholdsbetingelsen,
-      dog ikke ved ulovligt skolefravær for undervisningspligtige børn.
+    summary: 'Retten til børne- og ungeydelse afhænger af § 2, stk. 1''s betingelser. Når ingen
+
+      person med forsørgelsespligt opfylder seksårskravet, følger den forholdsmæssige
+
+      andel den højeste bopæls- eller beskæftigelsesoptjening blandt disse personer
+
+      inden for de seneste 10 år. Kortvarige og bestemte uddannelsesophold i udlandet
+
+      kan opfylde opholdsbetingelsen, undtagen ved ulovligt skolefravær for
+
+      undervisningspligtige børn.'
     source_sha256: 5932ffa55798c79a1f656ab11032a06533fd32d6f0852e86305bff68d1c3a0d5
   - path: dk/statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-3.yaml
     module_id: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-3
-    sha256: 3991ecbd339e48c0dd3cf6ed0777bb3fb86ee9e1d5f8820c291eaebdd37e0c34
+    sha256: d123aa1849e670402da2ada09fb9f2d1f03a4c2781191d0ab178e38410fb7f84
     source_citation_path: dk/statute/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-3
     rule_count: 2
-    summary: »Betingelserne i §§ 1 og 2 skal være opfyldt den første dag i den periode, som den enkelte
-      udbetaling vedrører.«
+    summary: '»Betingelserne i §§ 1 og 2 skal være opfyldt den første dag i den periode,
+
+      som den enkelte udbetaling vedrører.« De to § 1- og § 2-betingelser er
+
+      case-supplied composite condition facts assessed for that first day.'
     source_sha256: df5122c4610e6b456542213b9fd5adb2854a906c7b0c64638b0826832bd0bbcb
   - path: dk/statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-4-a.yaml
     module_id: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-4-a
@@ -358,13 +367,18 @@ generated_facts:
     source_sha256: 8d5cb1008f3004081a7666335b9e726c1a6898e337058c51aa9907b32ddcb563
   - path: dk/statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-4-c.yaml
     module_id: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-4-c
-    sha256: 717a13fb3fb1791937f610a9c5d1cdcab5b9513d33de47f7e44817abc171f946
+    sha256: 6f038f049d7aad7abae28fe21465db6b95683c09a5000b9e720ad973f5673db9
     source_citation_path: dk/statute/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-4-c
     rule_count: 6
-    summary: Der skal ske tilbagebetaling af børne- og ungeydelse udbetalt for en periode, hvor ydelsesmodtageren
-      eller barnet ved endelig dom findes at have overtrådt de nævnte bestemmelser. Efter tilbagebetaling
-      efter stk. 1, 1. pkt., udbetales ydelsen for perioden til den person, barnet bor hos, med mulighed
-      for udbetaling til barnet selv, hvis det skønnes bedst for barnet.
+    summary: 'Der skal ske tilbagebetaling af børne- og ungeydelse udbetalt for en periode,
+
+      hvor ydelsesmodtageren eller barnet ved endelig dom findes at have overtrådt
+
+      de nævnte bestemmelser. Efter faktisk tilbagebetaling efter stk. 1, 1. pkt.,
+
+      udbetales ydelsen for perioden til den person, barnet bor hos, med mulighed
+
+      for udbetaling til barnet selv, hvis det skønnes bedst for barnet.'
     source_sha256: aa92cab270b97deb9ef7df92dc2f1eb7bdb4a3702d3b152424f17b237bb7f5ae
   - path: dk/statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-4-e.yaml
     module_id: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-4-e
@@ -400,6 +414,17 @@ generated_facts:
       og sidste udbetaling, forholdsmæssige ydelser ved det fyldte 15. og 18. år med afrunding til hele
       kroner samt tilbagebetaling ved mod bedre vidende uberettiget modtagelse.
     source_sha256: 6bfe19e2ed661875e80a85edf7bb20e9d0bad6d5275e4ea1b4b11f7868bd0e6d
+  - path: dk/statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-a.yaml
+    module_id: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-a
+    sha256: f4f13ecc426bb29e7b042069a5a2d549f7e4d35b26fcb87ba6c1de631ec67604
+    source_citation_path: dk/statute/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-a
+    rule_count: 9
+    summary: Ved hver kvartals- eller månedsudbetaling beregnes den foreløbige nedsættelse udelukkende
+      efter modtagerens indkomst i den seneste forskudsopgørelse. Den endelige nedsættelse fastsættes
+      udelukkende efter årsopgørelsen. Regulering sker så vidt muligt ved modregning i eller tillæg til
+      senere ydelser; resterende tilbagebetalingskrav opkræves af Udbetaling Danmark. Efterfølgende ændringer
+      i årsopgørelsen medfører ny regulering. Nedsættelse og regulering kan ske uden partshøring.
+    source_sha256: 9b411b66e51e65e70e779aa2e2cbb5105cc0a3095b3e4c2f603e6e9d3e20af6e
   module_inputs:
   - slot: dk:statutes/composed/boerne-og-ungeydelse-couple-pipeline#input.current_year_income_reduction_allowance
     name: current_year_income_reduction_allowance
@@ -522,6 +547,11 @@ generated_facts:
     module: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-2
     read_by:
     - non_duration_entitlement_conditions_met
+  - slot: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-2#input.maximum_residence_or_employment_months_among_maintenance_duty_holders_in_lookback
+    name: maximum_residence_or_employment_months_among_maintenance_duty_holders_in_lookback
+    module: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-2
+    read_by:
+    - partial_entitlement_duration_band
   - slot: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-2#input.municipal_item_10_decision_stops_benefit_for_quarter
     name: municipal_item_10_decision_stops_benefit_for_quarter
     module: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-2
@@ -532,11 +562,6 @@ generated_facts:
     module: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-2
     read_by:
     - non_duration_entitlement_conditions_met
-  - slot: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-2#input.residence_or_employment_months_in_lookback
-    name: residence_or_employment_months_in_lookback
-    module: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-2
-    read_by:
-    - partial_entitlement_duration_band
   - slot: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-2#input.youth_education_activity_noncompliance_stops_benefit_for_month
     name: youth_education_activity_noncompliance_stops_benefit_for_month
     module: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-2
@@ -694,6 +719,12 @@ generated_facts:
     - payment_to_child_authorized_after_recipient_repayment
     - repayment_decision_required_for_recipient_conviction_period
     - repayment_required_for_conviction_period
+  - slot: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-4-c#input.repayment_has_occurred_under_subsection_1
+    name: repayment_has_occurred_under_subsection_1
+    module: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-4-c
+    read_by:
+    - benefit_payable_to_person_child_lives_with_after_recipient_repayment
+    - payment_to_child_authorized_after_recipient_repayment
   - slot: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-4-e#input.cessation_period_has_ended_after_detention_completion
     name: cessation_period_has_ended_after_detention_completion
     module: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-4-e
@@ -855,6 +886,33 @@ generated_facts:
     module: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-5
     read_by:
     - youth_benefit_final_payment_due
+  - slot: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-a#input.annual_assessment_has_subsequently_changed
+    name: annual_assessment_has_subsequently_changed
+    module: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-a
+    read_by:
+    - annual_assessment_change_requires_regulation
+    - revised_reduction_after_annual_assessment_change
+  - slot: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-a#input.calculation_uses_annual_assessment_for_income_year
+    name: calculation_uses_annual_assessment_for_income_year
+    module: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-a
+    read_by:
+    - final_reduction_for_income_year
+  - slot: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-a#input.following_benefit_payments_available_for_offset
+    name: following_benefit_payments_available_for_offset
+    module: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-a
+    read_by:
+    - overpayment_offset_against_following_benefit_payments
+  - slot: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-a#input.payment_uses_latest_forecast_assessment_for_income_year
+    name: payment_uses_latest_forecast_assessment_for_income_year
+    module: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-a
+    read_by:
+    - provisional_reduction_at_payment
+  - slot: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-a#input.prior_provisional_reductions_for_income_year
+    name: prior_provisional_reductions_for_income_year
+    module: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-a
+    read_by:
+    - overpayment_claim_after_final_reduction
+    - underpayment_addition_to_following_benefit_payments
 committed_decisions:
   provisions:
   - citation_path: dk/statute/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-4-d
@@ -882,21 +940,14 @@ committed_decisions:
       and directs Udbetaling Danmark to obtain a parental declaration about the child's whereabouts (with
       a 14-day default to decide on the available record); it is information-gathering procedure feeding
       the § 2, stk. 1, nr. 2 residence determination and states no entitlement or amount rule itself.
-  - citation_path: dk/statute/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-a
-    status: excluded-with-reason
-    classification: administration_only
-    reason: § 8 a designates which tax assessment supplies the § 1 a income basis at each payment (the
-      latest forskudsopgørelse provisionally; the årsopgørelse finally) and reconciles interim over- or
-      underpayment by offset against later payments or collection; it administers within-year cash flow
-      toward the annual reduction that the encoded § 1 a module computes on the final-assessment basis,
-      adding no independent rule for the annual entitlement.
   - citation_path: dk/statute/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-b
     status: excluded-with-reason
     classification: evidence_designation
-    reason: § 8 b designates which register's custody records evidence the § 4 payment split (CPR exclusively
-      for children born on or after 1 July 2004, absent a CPR personnummer; Udbetaling Danmark's own records
-      for earlier cohorts); it selects the proof source for facts the § 4 rules consume and states no
-      entitlement or amount rule (same family as the excluded § 4 d notification duties).
+    reason: '§ 8 b designates which register''s custody records evidence the § 4 payment split: CPR exclusively
+      for children born on or after 1 July 2004, except where the child lacks a CPR personnummer; Udbetaling
+      Danmark''s own records for earlier cohorts. It selects the proof source for facts the § 4 rules
+      consume and states no entitlement or amount rule (same family as the excluded § 4 d notification
+      duties).'
   - citation_path: dk/statute/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-9
     status: excluded-with-reason
     classification: public_finance
@@ -943,22 +994,34 @@ committed_decisions:
     grounding: uncaptured
     reason: Udbetaling Danmark's discretionary determination (§ 4 c, stk. 3, 2. pkt.).
     uncaptured_scope: Udbetaling Danmark determination
+  - name: annual_assessment_has_subsequently_changed
+    grounding: uncaptured
+    reason: A subsequent change to the årsopgørelse re-triggers regulation of the year's paid benefit
+      (§ 8 a, stk. 1, 5. pkt.); the change event arrives from the tax administration.
+    uncaptured_scope: told- og skatteforvaltningen assessment-change feed
   - name: at_least_one_person_with_maintenance_duty_meets_full_residence_or_employment_requirement
     grounding: captured
     reason: Optjening status over the household's maintenance-duty holders (§ 2, stk. 1, nr. 7).
   - name: benefit_payment_has_ceased_under_subsection_1
     grounding: captured
-    reason: Flow from the § 4 a, stk. 1 cessation rule consumed by stk. 2-4.
+    reason: Flow from the § 4 b, stk. 1 cessation rule consumed by its stk. 2-3 (back-payment and resumption).
   - name: benefit_recipient_has_final_judgment_for_listed_offence
     grounding: uncaptured
-    reason: Final criminal judgment for the §§ listed in § 4 c, stk. 1.
-    uncaptured_scope: criminal judgment feed (straffeloven §§ 101 a, 114 c-j; pasloven § 2 b)
+    reason: 'Final criminal judgment for the provisions § 4 c, stk. 1 enumerates: straffeloven § 101 a,
+      stk. 1; § 114 c, stk. 3; §§ 114 d, 114 e og 114 g for forhold begået i udlandet; § 114 j, stk. 1;
+      or a stay abroad violating an exit ban under pasloven § 2 b, stk. 1.'
+    uncaptured_scope: criminal judgment feed (straffeloven §§ 101 a stk. 1, 114 c stk. 3, 114 d, 114 e,
+      114 g udlandsforhold, 114 j stk. 1; pasloven § 2 b)
   - name: benefit_was_not_paid_during_cessation
     grounding: captured
     reason: Payment-history fact during the cessation window (§ 4 b, stk. 2).
   - name: benefit_was_not_paid_to_original_recipient_during_cessation
     grounding: captured
     reason: Payment-history fact during the cessation window (§ 4 a, stk. 3).
+  - name: calculation_uses_annual_assessment_for_income_year
+    grounding: captured
+    reason: 'Stage selector per § 8 a, stk. 1, 2. pkt.: the final reduction is fixed exclusively on the
+      årsopgørelse for the income year.'
   - name: caretaker_is_fully_tax_liable_under_kildeskatteloven_section_1
     grounding: captured
     reason: Tax-liability status determined under kildeskatteloven (§ 2, stk. 1, nr. 1); supplied as a
@@ -977,7 +1040,8 @@ committed_decisions:
     reason: Payment-history flow consumed by the §§ 4 c and 5, stk. 5 repayment rules.
   - name: child_benefit_is_payable_for_child
     grounding: captured
-    reason: Entitlement flow from §§ 1-3 consumed by the § 5 cadence rules.
+    reason: Entitlement flow from §§ 1-3 consumed by the § 4 b back-payment condition and the § 5 cadence
+      rules.
   - name: child_documented_presence_in_denmark_by_appearing_at_police
     grounding: captured
     reason: Documented-presence fact for § 4 b, stk. 3 resumption.
@@ -986,8 +1050,10 @@ committed_decisions:
     reason: Civil-status fact (§ 2, stk. 1, nr. 3).
   - name: child_has_final_judgment_for_listed_offence
     grounding: uncaptured
-    reason: Final criminal judgment against the child (§ 4 c, stk. 1, 2. pkt.).
-    uncaptured_scope: criminal judgment feed
+    reason: Final criminal judgment against the child under the same enumerated provisions (§ 4 c, stk.
+      1, 2. pkt.).
+    uncaptured_scope: criminal judgment feed (straffeloven §§ 101 a stk. 1, 114 c stk. 3, 114 d, 114 e,
+      114 g udlandsforhold, 114 j stk. 1; pasloven § 2 b)
   - name: child_has_person_who_has_taken_child_into_care
     grounding: captured
     reason: Care-relationship fact (§ 2, stk. 1, nr. 1).
@@ -996,8 +1062,9 @@ committed_decisions:
     reason: Household fact conditioning the § 2, stk. 3 exception.
   - name: child_is_admitted_with_custodial_parent_to_residential_facility_under_barnets_lov
     grounding: uncaptured
-    reason: Residential-facility admission under barnets lov (§ 2, stk. 1, nr. 4).
-    uncaptured_scope: barnets lov placement register
+    reason: Residential-facility admission together with a custodial parent under barnets lov (§ 2, stk.
+      1, nr. 4) — the second placement branch alongside placement outside the home.
+    uncaptured_scope: barnets lov placement and residential-facility admission records
   - name: child_is_otherwise_maintained_by_public_funds
     grounding: uncaptured
     reason: Public-maintenance status (§ 2, stk. 1, nr. 4).
@@ -1005,7 +1072,7 @@ committed_decisions:
   - name: child_is_placed_outside_home_under_barnets_lov
     grounding: uncaptured
     reason: Placement decision under barnets lov (§ 2, stk. 1, nr. 4).
-    uncaptured_scope: barnets lov placement register
+    uncaptured_scope: barnets lov placement and residential-facility admission records
   - name: child_is_short_term_abroad
     grounding: captured
     reason: Household fact for the § 2, stk. 3 short-stay exception.
@@ -1029,10 +1096,14 @@ committed_decisions:
     reason: Derived from the child's birth date and the payment quarter.
   - name: conditions_under_section_1_are_met_on_first_day_of_payment_period
     grounding: captured
-    reason: Output of the § 1 module evaluated at the § 3 assessment date.
+    reason: 'Case-supplied composite fact: whether the § 1 conditions hold on the first day of the payment
+      period (§ 3''s assessment-date rule). No module computes this composite; § 3''s module binds it
+      to the period start.'
   - name: conditions_under_section_2_are_met_on_first_day_of_payment_period
     grounding: captured
-    reason: Output of the § 2 module evaluated at the § 3 assessment date.
+    reason: 'Case-supplied composite fact: whether the § 2 conditions hold on the first day of the payment
+      period (§ 3''s assessment-date rule). No module computes this composite; § 3''s module binds it
+      to the period start.'
   - name: conviction_offence_is_covered_by_straffeloven_section_81_a
     grounding: uncaptured
     reason: Offence classification under straffeloven § 81 a (§ 4 e, stk. 1).
@@ -1086,9 +1157,18 @@ committed_decisions:
   - name: days_in_current_month
     grounding: captured
     reason: Calendar arithmetic over the payment month that § 5, stk. 4 defines; no external fact.
+  - name: following_benefit_payments_available_for_offset
+    grounding: captured
+    reason: 'Payment schedule fact: whether later benefit payments exist against which regulering can
+      be offset (§ 8 a, stk. 1, 3. pkt.).'
   - name: improperly_received_child_or_youth_benefit_amount
     grounding: captured
     reason: Amount improperly received, from payment history (§ 5, stk. 5).
+  - name: maximum_residence_or_employment_months_among_maintenance_duty_holders_in_lookback
+    grounding: captured
+    reason: The § 2, stk. 2 proportional share follows the highest residence-or-employment accrual among
+      the child's maintenance-duty holders (consistent with stk. 1, nr. 7's 'mindst en af de personer');
+      supplied as the maximum over the holders' 10-year histories.
   - name: monthly_youth_benefit_amount
     grounding: captured
     reason: Amount flow from § 1 (monthly share) consumed by § 5, stk. 4.
@@ -1118,12 +1198,14 @@ committed_decisions:
     uncaptured_scope: barnets lov § 38, stk. 7 decision feed
   - name: passport_withdrawal_decision_has_been_reversed_or_set_aside
     grounding: uncaptured
-    reason: Reversal of the passport decision (§ 4 a, stk. 3).
-    uncaptured_scope: pasloven decision/appeal feed
+    reason: Reversal of the passport decision — administrative omgørelse OR annulment on subsequent judicial
+      review (§ 4 a, stk. 3).
+    uncaptured_scope: pasloven decision reversal (administrative omgørelse) or annulment on judicial review
   - name: passport_withdrawal_decision_is_reversed_or_annulled_by_court
     grounding: uncaptured
-    reason: Reversal or annulment on judicial review (§ 4 b, stk. 2).
-    uncaptured_scope: court review feed
+    reason: Reversal of the passport decision — administrative omgørelse OR annulment on subsequent judicial
+      review (§ 4 b, stk. 2; § 4 a, stk. 3 uses the same disjunction).
+    uncaptured_scope: pasloven decision reversal (administrative omgørelse) or annulment on judicial review
   - name: payment_has_ceased_after_passport_withdrawal
     grounding: captured
     reason: Flow from the § 4 a-b cessation rules.
@@ -1135,10 +1217,12 @@ committed_decisions:
     reason: Identifies the § 1, stk. 3, 9. pkt. one-off increase payment referenced by § 5, stk. 3-4.
   - name: payment_routing_under_section_4_subsection_5_applies
     grounding: captured
-    reason: Routing flow from § 4, stk. 5 consumed by § 4 e, stk. 4.
+    reason: Case-supplied routing fact per § 4, stk. 5 (the § 4 routing surface itself is classified entity_not_supported;
+      no module computes it).
   - name: payment_routing_under_section_4_subsection_7_applies
     grounding: captured
-    reason: Routing flow from § 4, stk. 7 consumed by § 4 e, stk. 4.
+    reason: Case-supplied routing fact per § 4, stk. 7 (the § 4 routing surface itself is classified entity_not_supported;
+      no module computes it).
   - name: payment_to_child_or_young_person_is_best_for_child_or_young_person
     grounding: uncaptured
     reason: Udbetaling Danmark's discretionary determination (§ 4 e, stk. 2, 2. pkt.).
@@ -1146,6 +1230,10 @@ committed_decisions:
   - name: payment_to_original_recipient_has_resumed_after_documented_police_attendance
     grounding: captured
     reason: Flow from the § 4 a, stk. 4 resumption rule.
+  - name: payment_uses_latest_forecast_assessment_for_income_year
+    grounding: captured
+    reason: 'Stage selector per § 8 a, stk. 1, 1. pkt.: the payment at hand computes its provisional reduction
+      exclusively on the latest forskudsopgørelse.'
   - name: payment_year_has_additional_statutory_increase
     grounding: captured
     reason: The supplied year condition selects the additional 2023 increase stated directly in § 1, stk.
@@ -1192,16 +1280,20 @@ committed_decisions:
     grounding: uncaptured
     reason: Police passport-withdrawal decision against the child (§ 4 b, stk. 1).
     uncaptured_scope: pasloven § 2, stk. 1, nr. 4 decision feed
+  - name: prior_provisional_reductions_for_income_year
+    grounding: captured
+    reason: 'Payment history: provisional reductions already effected for the income year, reconciled
+      against the final reduction (§ 8 a, stk. 1, 3.-4. pkt.).'
   - name: quarterly_child_benefit_amount
     grounding: captured
     reason: Amount flow from § 1 (quarterly share) consumed by § 5, stk. 3.
   - name: recipient_has_documented_presence_in_denmark_by_attendance_at_police
     grounding: captured
     reason: Documented-presence fact for § 4 a, stk. 4 resumption.
-  - name: residence_or_employment_months_in_lookback
+  - name: repayment_has_occurred_under_subsection_1
     grounding: captured
-    reason: Optjening months accumulated in the 10-year lookback (§ 2, stk. 2); supplied from residence/employment
-      history.
+    reason: 'Payment-history fact: whether repayment under § 4 c, stk. 1, 1. pkt. has actually occurred
+      — the stk. 3 redirect''s prerequisite.'
   - name: right_to_youth_benefit_ends_in_current_month
     grounding: captured
     reason: Derived from the § 1 age bound and the payment month.
@@ -1334,23 +1426,19 @@ computed:
     citation_path: dk/statute/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-a
     heading: § 8 a.
     body_sha256: 9b411b66e51e65e70e779aa2e2cbb5105cc0a3095b3e4c2f603e6e9d3e20af6e
-    status: excluded-with-reason
-    classification: administration_only
-    reason: § 8 a designates which tax assessment supplies the § 1 a income basis at each payment (the
-      latest forskudsopgørelse provisionally; the årsopgørelse finally) and reconciles interim over- or
-      underpayment by offset against later payments or collection; it administers within-year cash flow
-      toward the annual reduction that the encoded § 1 a module computes on the final-assessment basis,
-      adding no independent rule for the annual entitlement.
+    status: encoded
+    encoded_by: dk/statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-a.yaml
   - ordinal: 17
     citation_path: dk/statute/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-b
     heading: § 8 b.
     body_sha256: b28333306d483c00ef195c249dcb1e38cf07b16d6e7e2c6cecd4000a10468b2f
     status: excluded-with-reason
     classification: evidence_designation
-    reason: § 8 b designates which register's custody records evidence the § 4 payment split (CPR exclusively
-      for children born on or after 1 July 2004, absent a CPR personnummer; Udbetaling Danmark's own records
-      for earlier cohorts); it selects the proof source for facts the § 4 rules consume and states no
-      entitlement or amount rule (same family as the excluded § 4 d notification duties).
+    reason: '§ 8 b designates which register''s custody records evidence the § 4 payment split: CPR exclusively
+      for children born on or after 1 July 2004, except where the child lacks a CPR personnummer; Udbetaling
+      Danmark''s own records for earlier cohorts. It selects the proof source for facts the § 4 rules
+      consume and states no entitlement or amount rule (same family as the excluded § 4 d notification
+      duties).'
   - ordinal: 18
     citation_path: dk/statute/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-9
     heading: § 9.
@@ -1415,16 +1503,16 @@ computed:
       the Act applies rather than any rule within it.
   provision_counts:
     total: 24
-    encoded: 9
+    encoded: 10
     partially-encoded: 0
     classified-with-reason: 1
-    excluded-with-reason: 14
+    excluded-with-reason: 13
     pending: 0
   partially_encoded: []
   pending: []
   boundary_frontier:
-    parsed_input_count: 83
-    uncaptured_input_count: 24
+    parsed_input_count: 89
+    uncaptured_input_count: 25
     complete: true
     inputs:
     - input: agency_determines_payment_to_child_is_best_for_child
@@ -1432,21 +1520,33 @@ computed:
       - dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-4-c#input.agency_determines_payment_to_child_is_best_for_child
       uncaptured_scope: Udbetaling Danmark determination
       reason: Udbetaling Danmark's discretionary determination (§ 4 c, stk. 3, 2. pkt.).
+    - input: annual_assessment_has_subsequently_changed
+      slots:
+      - dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-a#input.annual_assessment_has_subsequently_changed
+      uncaptured_scope: told- og skatteforvaltningen assessment-change feed
+      reason: A subsequent change to the årsopgørelse re-triggers regulation of the year's paid benefit
+        (§ 8 a, stk. 1, 5. pkt.); the change event arrives from the tax administration.
     - input: benefit_recipient_has_final_judgment_for_listed_offence
       slots:
       - dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-4-c#input.benefit_recipient_has_final_judgment_for_listed_offence
-      uncaptured_scope: criminal judgment feed (straffeloven §§ 101 a, 114 c-j; pasloven § 2 b)
-      reason: Final criminal judgment for the §§ listed in § 4 c, stk. 1.
+      uncaptured_scope: criminal judgment feed (straffeloven §§ 101 a stk. 1, 114 c stk. 3, 114 d, 114
+        e, 114 g udlandsforhold, 114 j stk. 1; pasloven § 2 b)
+      reason: 'Final criminal judgment for the provisions § 4 c, stk. 1 enumerates: straffeloven § 101
+        a, stk. 1; § 114 c, stk. 3; §§ 114 d, 114 e og 114 g for forhold begået i udlandet; § 114 j, stk.
+        1; or a stay abroad violating an exit ban under pasloven § 2 b, stk. 1.'
     - input: child_has_final_judgment_for_listed_offence
       slots:
       - dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-4-c#input.child_has_final_judgment_for_listed_offence
-      uncaptured_scope: criminal judgment feed
-      reason: Final criminal judgment against the child (§ 4 c, stk. 1, 2. pkt.).
+      uncaptured_scope: criminal judgment feed (straffeloven §§ 101 a stk. 1, 114 c stk. 3, 114 d, 114
+        e, 114 g udlandsforhold, 114 j stk. 1; pasloven § 2 b)
+      reason: Final criminal judgment against the child under the same enumerated provisions (§ 4 c, stk.
+        1, 2. pkt.).
     - input: child_is_admitted_with_custodial_parent_to_residential_facility_under_barnets_lov
       slots:
       - dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-2#input.child_is_admitted_with_custodial_parent_to_residential_facility_under_barnets_lov
-      uncaptured_scope: barnets lov placement register
-      reason: Residential-facility admission under barnets lov (§ 2, stk. 1, nr. 4).
+      uncaptured_scope: barnets lov placement and residential-facility admission records
+      reason: Residential-facility admission together with a custodial parent under barnets lov (§ 2,
+        stk. 1, nr. 4) — the second placement branch alongside placement outside the home.
     - input: child_is_otherwise_maintained_by_public_funds
       slots:
       - dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-2#input.child_is_otherwise_maintained_by_public_funds
@@ -1455,7 +1555,7 @@ computed:
     - input: child_is_placed_outside_home_under_barnets_lov
       slots:
       - dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-2#input.child_is_placed_outside_home_under_barnets_lov
-      uncaptured_scope: barnets lov placement register
+      uncaptured_scope: barnets lov placement and residential-facility admission records
       reason: Placement decision under barnets lov (§ 2, stk. 1, nr. 4).
     - input: conviction_offence_is_covered_by_straffeloven_section_81_a
       slots:
@@ -1493,13 +1593,17 @@ computed:
     - input: passport_withdrawal_decision_has_been_reversed_or_set_aside
       slots:
       - dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-4-a#input.passport_withdrawal_decision_has_been_reversed_or_set_aside
-      uncaptured_scope: pasloven decision/appeal feed
-      reason: Reversal of the passport decision (§ 4 a, stk. 3).
+      uncaptured_scope: pasloven decision reversal (administrative omgørelse) or annulment on judicial
+        review
+      reason: Reversal of the passport decision — administrative omgørelse OR annulment on subsequent
+        judicial review (§ 4 a, stk. 3).
     - input: passport_withdrawal_decision_is_reversed_or_annulled_by_court
       slots:
       - dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-4-b#input.passport_withdrawal_decision_is_reversed_or_annulled_by_court
-      uncaptured_scope: court review feed
-      reason: Reversal or annulment on judicial review (§ 4 b, stk. 2).
+      uncaptured_scope: pasloven decision reversal (administrative omgørelse) or annulment on judicial
+        review
+      reason: Reversal of the passport decision — administrative omgørelse OR annulment on subsequent
+        judicial review (§ 4 b, stk. 2; § 4 a, stk. 3 uses the same disjunction).
     - input: payment_to_child_or_young_person_is_best_for_child_or_young_person
       slots:
       - dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-4-e#input.payment_to_child_or_young_person_is_best_for_child_or_young_person

@@ -312,16 +312,16 @@ def test_committed_dk_closure_artifact_is_internally_valid_and_closed() -> None:
     summary = module.validate_artifact(document)
 
     assert summary.closed is True
-    assert summary.encoded_count == 9
+    assert summary.encoded_count == 10
     assert summary.partially_encoded_count == 0
     assert summary.pending_count == 0
     assert summary.frontier_complete is True
     assert document["computed"]["provision_counts"] == {
         "total": 24,
-        "encoded": 9,
+        "encoded": 10,
         "partially-encoded": 0,
         "classified-with-reason": 1,
-        "excluded-with-reason": 14,
+        "excluded-with-reason": 13,
         "pending": 0,
     }
     former_partial = next(
