@@ -1,10 +1,12 @@
 # DK closed and executable producers (WS2 + WS3)
 
-Status: **SHIP-READY — all four DK certificate premises are computed
-(`conformant=true`, `exercised=true`, `closed=false`, and `executable=true`),
-and every audit blocker is fixed. The truthful DK result is
-`certified.state=no` because 12 paragraffer remain pending and § 5 is only
-partially encoded.**
+Status: **CERTIFIED=YES at rulespec-dk f12271e37 — all four premises computed
+true, blockers=[], 10 provisions encoded / 1 classified / 13 excluded with
+text-grounded reasons / 0 pending, boundary frontier complete (89 grounded
+inputs). The certificate certifies benefit year 2025, Denmark excluding the
+Faroe Islands and Greenland, at the exact pinned corpus, RuleSpec, engine,
+manifests, and receipts; suite results remain 7/8, 0/1, 0/1 with dispositioned
+mismatches of DKK 313,33 / 60 / 880.**
 
 Strict contract (final, superseding an interim global-strict restoration):
 `--strict` enforces findings on manifests that declare `strict: true`; the

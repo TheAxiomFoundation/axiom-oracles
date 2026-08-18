@@ -20,9 +20,9 @@ generated_facts:
     declared_block_count: 24
   rulespec:
     repository: TheAxiomFoundation/rulespec-dk
-    ref: f12271e3736406c932d36cdfa0fb42d719b91532
-    commit: f12271e3736406c932d36cdfa0fb42d719b91532
-    selected_content_sha256: 20f7539782762fac77a9725c2b9790c5f9ad2ae69131b3ae64020ecd2d5adc6d
+    ref: fefd44a826abb695dba608caf223f4e3583f766a
+    commit: fefd44a826abb695dba608caf223f4e3583f766a
+    selected_content_sha256: 6e663d3a797560d3aa972772dcbccbbc9dff69970da6483ce1ba359a033a6a63
   provision_spine:
   - ordinal: 1
     citation_path: dk/statute/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1
@@ -318,20 +318,18 @@ generated_facts:
     source_sha256: 2e135cac3ca5eb201b948ca915bf9554e864a09ebc8576c2603b6115730329ec
   - path: dk/statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-2.yaml
     module_id: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-2
-    sha256: ad5f521bb7ce30b39c555768f6adf76738a545d450896c70941158a31ba50036
+    sha256: b2e22c0b94bbefc6d7dbf431aa57afa030ceb134f7deb5552bed923cdcc80b21
     source_citation_path: dk/statute/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-2
     rule_count: 13
-    summary: 'Retten til børne- og ungeydelse afhænger af § 2, stk. 1''s betingelser. Når ingen
+    summary: 'Retten til børne- og ungeydelse er betinget af § 2, stk. 1''s betingelser.
 
-      person med forsørgelsespligt opfylder seksårskravet, følger den forholdsmæssige
+      Hvis seksårsperioden for bopæl eller beskæftigelse ikke er opfyldt, udbetales
 
-      andel den højeste bopæls- eller beskæftigelsesoptjening blandt disse personer
+      den højeste relevante forholdsmæssige andel fra stk. 2. Kortvarigt
 
-      inden for de seneste 10 år. Kortvarige og bestemte uddannelsesophold i udlandet
+      udlandsophold og et nærmere bestemt uddannelsesophold kan opfylde
 
-      kan opfylde opholdsbetingelsen, undtagen ved ulovligt skolefravær for
-
-      undervisningspligtige børn.'
+      opholdsbetingelsen, undtagen ved ulovligt skolefravær for undervisningspligtige børn.'
     source_sha256: 5932ffa55798c79a1f656ab11032a06533fd32d6f0852e86305bff68d1c3a0d5
   - path: dk/statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-3.yaml
     module_id: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-3
@@ -416,14 +414,20 @@ generated_facts:
     source_sha256: 6bfe19e2ed661875e80a85edf7bb20e9d0bad6d5275e4ea1b4b11f7868bd0e6d
   - path: dk/statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-a.yaml
     module_id: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-a
-    sha256: f4f13ecc426bb29e7b042069a5a2d549f7e4d35b26fcb87ba6c1de631ec67604
+    sha256: abd00d268c39b25fe94ca8f8320aad62c15fd0bfd75e3a6c775f9a9ddcaef893
     source_citation_path: dk/statute/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-a
-    rule_count: 9
-    summary: Ved hver kvartals- eller månedsudbetaling beregnes den foreløbige nedsættelse udelukkende
-      efter modtagerens indkomst i den seneste forskudsopgørelse. Den endelige nedsættelse fastsættes
-      udelukkende efter årsopgørelsen. Regulering sker så vidt muligt ved modregning i eller tillæg til
-      senere ydelser; resterende tilbagebetalingskrav opkræves af Udbetaling Danmark. Efterfølgende ændringer
-      i årsopgørelsen medfører ny regulering. Nedsættelse og regulering kan ske uden partshøring.
+    rule_count: 12
+    summary: 'Ved kvartals- og månedsudbetalinger anvendes alene den seneste forskudsopgørelse
+
+      til foreløbig nedsættelse, mens den endelige nedsættelse fastsættes alene efter
+
+      årsopgørelsen. Regulering sker så vidt muligt ved modregning i eller tillæg til
+
+      senere ydelser; uafregnede tilbagebetalingskrav opkræves af Udbetaling Danmark.
+
+      Senere ændringer i årsopgørelsen kræver regulering af årets udbetalte ydelse.
+
+      Nedsættelse og regulering kan ske uden partshøring.'
     source_sha256: 9b411b66e51e65e70e779aa2e2cbb5105cc0a3095b3e4c2f603e6e9d3e20af6e
   module_inputs:
   - slot: dk:statutes/composed/boerne-og-ungeydelse-couple-pipeline#input.current_year_income_reduction_allowance
@@ -892,6 +896,7 @@ generated_facts:
     read_by:
     - annual_assessment_change_requires_regulation
     - revised_reduction_after_annual_assessment_change
+    - subsequent_regulation_amount
   - slot: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-a#input.calculation_uses_annual_assessment_for_income_year
     name: calculation_uses_annual_assessment_for_income_year
     module: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-a
@@ -907,6 +912,11 @@ generated_facts:
     module: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-a
     read_by:
     - provisional_reduction_at_payment
+  - slot: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-a#input.previously_settled_final_reduction_for_income_year
+    name: previously_settled_final_reduction_for_income_year
+    module: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-a
+    read_by:
+    - subsequent_regulation_amount
   - slot: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-a#input.prior_provisional_reductions_for_income_year
     name: prior_provisional_reductions_for_income_year
     module: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-a
@@ -1159,8 +1169,9 @@ committed_decisions:
     reason: Calendar arithmetic over the payment month that § 5, stk. 4 defines; no external fact.
   - name: following_benefit_payments_available_for_offset
     grounding: captured
-    reason: 'Payment schedule fact: whether later benefit payments exist against which regulering can
-      be offset (§ 8 a, stk. 1, 3. pkt.).'
+    reason: 'Payment-schedule amount: the DKK capacity of later benefit payments against which regulering
+      can be offset in or added to (§ 8 a, stk. 1, 3. pkt.); zero when no further payments remain, in
+      which case Udbetaling Danmark collects the residue.'
   - name: improperly_received_child_or_youth_benefit_amount
     grounding: captured
     reason: Amount improperly received, from payment history (§ 5, stk. 5).
@@ -1280,6 +1291,11 @@ committed_decisions:
     grounding: uncaptured
     reason: Police passport-withdrawal decision against the child (§ 4 b, stk. 1).
     uncaptured_scope: pasloven § 2, stk. 1, nr. 4 decision feed
+  - name: previously_settled_final_reduction_for_income_year
+    grounding: captured
+    reason: 'Payment/settlement history: the final § 1 a reduction previously fixed and settled for the
+      income year — the baseline a subsequent årsopgørelse change reconciles against (§ 8 a, stk. 1, 5.
+      pkt.).'
   - name: prior_provisional_reductions_for_income_year
     grounding: captured
     reason: 'Payment history: provisional reductions already effected for the income year, reconciled
@@ -1511,7 +1527,7 @@ computed:
   partially_encoded: []
   pending: []
   boundary_frontier:
-    parsed_input_count: 89
+    parsed_input_count: 90
     uncaptured_input_count: 25
     complete: true
     inputs:
