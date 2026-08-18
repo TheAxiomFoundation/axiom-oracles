@@ -108,6 +108,7 @@ _ENTRY_KEYS = {
     "concept",
     "case_id",
     "case_selector",
+    "signatures",
     "kind",
     "disposition",
     "evidence",
@@ -116,8 +117,15 @@ _ENTRY_KEYS = {
     "pinned",
     "selector_binding",
     "notes",
+    "attribution",
+    "receipt",
+    "reason",
+    "comment",
 }
-_EVIDENCE_KEYS = {"mechanism", "arithmetic", "upstream_url", "sources"}
+_EVIDENCE_KEYS = {
+    "mechanism", "arithmetic", "upstream_url", "sources",
+    "receipt_type", "instrument_receipt",
+}
 _SELECTOR_KEYS = {"case_ids", "case_id_prefix"}
 _PINNED_KEYS = {"left", "right", "difference"}
 
@@ -293,10 +301,16 @@ def _validate_entry(
 
     case_id = entry.get("case_id")
     case_selector = entry.get("case_selector")
-    if (case_id is None) == (case_selector is None):
+    signatures = entry.get("signatures")
+    if sum(value is not None for value in (case_id, case_selector, signatures)) != 1:
         errors.append(
-            f"{label} needs exactly one of `case_id` or `case_selector`"
+            f"{label} needs exactly one of `case_id`, `case_selector`, or `signatures`"
         )
+    if signatures is not None and (
+        not isinstance(signatures, list)
+        or any(not isinstance(value, str) or not value for value in signatures)
+    ):
+        errors.append(f"{label} `signatures` must be a list of non-empty strings")
     if case_id is not None and (
         not isinstance(case_id, str | int) or str(case_id).strip() == ""
     ):
@@ -562,6 +576,9 @@ def _entry_selects_row(entry: dict, row: dict) -> bool:
     case_id = entry.get("case_id")
     if case_id is not None:
         return row_case == str(case_id)
+    signatures = entry.get("signatures")
+    if signatures is not None:
+        return row.get("signature") in signatures
     selector = entry.get("case_selector") or {}
     case_ids = selector.get("case_ids")
     if case_ids is not None and row_case not in {

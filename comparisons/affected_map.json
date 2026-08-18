@@ -1562,6 +1562,13 @@
       "source": "comparisons/us-tariff-panel.yaml"
     },
     {
+      "suite": "us-tariff-schedule",
+      "name": null,
+      "report": "axiom-yale-us-tariff-schedule.json",
+      "repos": [],
+      "source": "comparisons/us-tariff-schedule.yaml"
+    },
+    {
       "suite": "ut-income-tax-liability",
       "name": null,
       "report": "axiom-policyengine-taxsim-ut-income-tax-liability.json",

@@ -3005,3 +3005,31 @@ def test_executable_receipt_rejects_digit_only_sha():
     mutant["rulespec"]["ref"] = digit_str
     with pytest.raises(ValueError):
         er.validate_artifact(mutant, repo_root=REPO)
+
+
+def test_tariff_scale_report_rejects_fabricated_conformant(monkeypatch):
+    """The C1 report's typed premise is checked against producer semantics."""
+    certify = _load("certify")
+    entry = certify.PROGRAMS["us/tariff-duty"]["suites"][0]
+    report = json.loads((REPO / entry["report"]).read_text())
+    report["summary"]["unexplained"] = 1
+    report["summary"]["explained"] -= 1
+    monkeypatch.setattr(certify, "_load", lambda _path: report)
+    leg, _evidence, defects = certify._tariff_schedule_suite_verdict(entry)
+    assert leg["clean"] is False
+    assert any("conformant flag is fabricated" in defect for defect in defects)
+
+
+def test_tariff_scale_report_derives_open_axiom_units(monkeypatch):
+    certify = _load("certify")
+    entry = certify.PROGRAMS["us/tariff-duty"]["suites"][0]
+    report = json.loads((REPO / entry["report"]).read_text())
+    monkeypatch.setattr(certify, "_load", lambda _path: report)
+    leg, _evidence, defects = certify._tariff_schedule_suite_verdict(entry)
+    assert defects == []
+    assert leg["axiom_attributed_open"] == 1_592_236
+    assert leg["axiom_attributed_open_classes"] == {
+        "fed-false-family-brazil": 93_198,
+        "fed-false-family-forced-labor": 1_499_038,
+    }
+    assert leg["clean"] is False
