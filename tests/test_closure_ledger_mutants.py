@@ -306,67 +306,31 @@ def _configure_composed_proof_atom(
     }
 
 
-def test_committed_dk_closure_artifact_is_internally_valid_and_open() -> None:
+def test_committed_dk_closure_artifact_is_internally_valid_and_closed() -> None:
     module = _load_script()
     document = _load(COMMITTED_ARTIFACT)
     summary = module.validate_artifact(document)
 
-    assert summary.closed is False
-    assert summary.encoded_count == 2
-    assert summary.partially_encoded_count == 1
-    assert summary.pending_count == 12
+    assert summary.closed is True
+    assert summary.encoded_count == 9
+    assert summary.partially_encoded_count == 0
+    assert summary.pending_count == 0
     assert summary.frontier_complete is True
     assert document["computed"]["provision_counts"] == {
         "total": 24,
-        "encoded": 2,
-        "partially-encoded": 1,
+        "encoded": 9,
+        "partially-encoded": 0,
         "classified-with-reason": 1,
-        "excluded-with-reason": 8,
-        "pending": 12,
+        "excluded-with-reason": 14,
+        "pending": 0,
     }
-    partial = next(
+    former_partial = next(
         row
         for row in document["computed"]["ledger"]
         if row["citation_path"] == f"{CORPUS_ROOT}/paragraf-5"
     )
-    assert partial == {
-        "ordinal": 11,
-        "citation_path": f"{CORPUS_ROOT}/paragraf-5",
-        "heading": "§ 5.",
-        "body_sha256": (
-            "6bfe19e2ed661875e80a85edf7bb20e9d0bad6d5275e4ea1b4b11f7868bd0e6d"
-        ),
-        "status": "partially-encoded",
-        "partially_encoded_by": [
-            "dk/statutes/composed/boerne-og-ungeydelse-couple-pipeline.yaml"
-        ],
-        "proof_atom_count": 4,
-    }
-    composed = next(
-        row
-        for row in document["generated_facts"]["rulespec_modules"]
-        if row["path"]
-        == "dk/statutes/composed/boerne-og-ungeydelse-couple-pipeline.yaml"
-    )
-    assert composed["proof_validation_required"] is True
-    section_5_atoms = [
-        atom
-        for atom in composed["proof_atoms"]
-        if atom["corpus_citation_path"] == f"{CORPUS_ROOT}/paragraf-5"
-    ]
-    assert len(section_5_atoms) == 4
-    assert all(atom["path"] == "versions[0].formula" for atom in section_5_atoms)
-    assert all("excerpt" not in atom for atom in section_5_atoms)
-    assert {
-        row["input"] for row in document["computed"]["boundary_frontier"]["inputs"]
-    } == {
-        "current_year_income_reduction_allowance",
-        "pension_contribution_limit_under_pensionsbeskatningsloven_section_16",
-        "percentage_change_rounded_to_one_decimal_place",
-        "personskatteloven_section_7_income_basis",
-        "personskatteloven_section_7_income_basis_after_section_14_recalculation",
-    }
-    assert len(document["generated_facts"]["module_inputs"]) == 11
+    assert former_partial["status"] == "encoded"
+    assert former_partial["encoded_by"].endswith("/paragraf-5.yaml")
 
 
 def test_generation_parses_inputs_and_preserves_committed_decisions(
@@ -422,27 +386,62 @@ def test_check_rejects_a_pending_row_hidden_as_an_exclusion(
 
 
 def test_validator_rejects_an_atom_level_partial_claim_hidden_as_pending() -> None:
-    """A proof-atom join cannot be erased by relabeling its row and counts."""
+    """A proof-atom join cannot be erased by relabeling its row and counts.
+
+    The committed artifact no longer carries a partially-encoded row (wave 2
+    encoded § 5 directly), so the mutant SYNTHESIZES the state the validator
+    must protect: remove § 5's direct module (and its now-orphaned inputs and
+    grounding rows), let the producer's own derivation rebuild the computed
+    block — § 5 becomes partially-encoded via the composed proof atoms — then
+    relabel that row as pending. The atoms still exist in the generated
+    facts, so the relabel must be rejected."""
 
     module = _load_script()
     document = _load(COMMITTED_ARTIFACT)
     citation = f"{CORPUS_ROOT}/paragraf-5"
-    partial = next(
-        row
-        for row in document["computed"]["ledger"]
-        if row["citation_path"] == citation
+    modules = document["generated_facts"]["rulespec_modules"]
+    direct = next(
+        row for row in modules if row.get("source_citation_path") == citation
     )
-    assert partial["status"] == "partially-encoded"
-    partial["status"] = "pending"
-    partial.pop("partially_encoded_by")
-    partial.pop("proof_atom_count")
+    modules.remove(direct)
+    remaining_ids = {m["module_id"] for m in modules}
+    document["generated_facts"]["module_inputs"] = [
+        r
+        for r in document["generated_facts"]["module_inputs"]
+        if r.get("module") in remaining_ids
+    ]
+    live_names = {r["name"] for r in document["generated_facts"]["module_inputs"]}
+    document["committed_decisions"]["input_grounding"] = [
+        r
+        for r in document["committed_decisions"]["input_grounding"]
+        if r["name"] in live_names
+    ]
+    derivation_errors: list[str] = []
+    document["computed"] = module._derive_computed(
+        document["generated_facts"],
+        document["committed_decisions"],
+        derivation_errors,
+    )
+    assert derivation_errors == []
+    summary = module.validate_artifact(document)
+    assert summary.partially_encoded_count == 1
+    row = next(
+        r for r in document["computed"]["ledger"] if r["citation_path"] == citation
+    )
+    assert row["status"] == "partially-encoded"
+
+    row["status"] = "pending"
+    row.pop("partially_encoded_by")
+    row.pop("proof_atom_count")
     counts = document["computed"]["provision_counts"]
     counts["partially-encoded"] -= 1
     counts["pending"] += 1
-    document["computed"]["partially_encoded"].remove(citation)
-    document["computed"]["pending"].append(citation)
+    document["computed"]["partially_encoded"] = []
+    document["computed"]["pending"] = [citation]
 
-    with pytest.raises(module.ClosureLedgerError, match="computed"):
+    import pytest as _pytest
+
+    with _pytest.raises(module.ClosureLedgerError, match="computed"):
         module.validate_artifact(document)
 
 
