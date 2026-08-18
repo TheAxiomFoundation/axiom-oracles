@@ -20,9 +20,9 @@ generated_facts:
     declared_block_count: 24
   rulespec:
     repository: TheAxiomFoundation/rulespec-dk
-    ref: 4f0737e872f5e9614f2fa8877cb0e54d3bd549f8
-    commit: 4f0737e872f5e9614f2fa8877cb0e54d3bd549f8
-    selected_content_sha256: 98ec8400a447e1713374d67ade5b4b86df62399f74b6f38e21b51a4f02d61a67
+    ref: 1eee47bdee3258b6f14af2240ccaef169d8eeb5f
+    commit: 1eee47bdee3258b6f14af2240ccaef169d8eeb5f
+    selected_content_sha256: 31ec2394a9e11071a8bf0000e4263aa09553ad95dc9d0d7364c14262e3992f46
   provision_spine:
   - ordinal: 1
     citation_path: dk/statute/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1
@@ -414,7 +414,7 @@ generated_facts:
     source_sha256: 6bfe19e2ed661875e80a85edf7bb20e9d0bad6d5275e4ea1b4b11f7868bd0e6d
   - path: dk/statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-a.yaml
     module_id: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-a
-    sha256: 1eab235a9b5e0b877605cdcba41ed7d7a62053634cf105f4ee387f4471e1efc0
+    sha256: 95178c7e20f9b1547b733cd1c1299335ea6c1856b5a1b09fdadbfcac5becdd57
     source_citation_path: dk/statute/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-a
     rule_count: 15
     summary: 'Ved hver kvartals- eller månedsudbetaling anvendes alene den seneste

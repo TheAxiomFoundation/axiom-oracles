@@ -1,6 +1,6 @@
 # dk/boerne-og-ungeydelse: the registry's first certified=yes
 
-Status: **CERTIFIED=YES at rulespec-dk `4f0737e872f5` — all four premises
+Status: **CERTIFIED=YES at rulespec-dk `1eee47bdee32` — all four premises
 computed true, blockers=[], 10 provisions encoded / 1 classified / 13
 excluded with text-grounded reasons / 0 pending, boundary frontier complete
 (90 grounded inputs: 65 captured, 25 uncaptured external boundaries).**

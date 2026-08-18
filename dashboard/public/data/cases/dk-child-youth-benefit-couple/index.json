@@ -1,7 +1,7 @@
 {
   "schema_version": "axiom_oracles.chunk_index.v1",
   "report_path": "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json",
-  "report_sha256": "d1f3eb900936206293354c4afa30f766d03c30450b0a48932796d3f7be65851c",
+  "report_sha256": "9cb99a1c321e6eba7f0943223ba5b61bf4b21216ec9d403d2689798cb1e856e9",
   "case_verdicts_sha256": "4831a12b838034f5d1ded0d5a403732740d849126637bc0b01f6f8ade14e58c6",
   "suite": "dk-child-youth-benefit-couple",
   "count": 1,
