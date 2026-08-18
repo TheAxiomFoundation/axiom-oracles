@@ -415,7 +415,70 @@ def _tariff_schedule_suite_verdict(
             defects.append(f"{entry['suite']}: scoreboard conformant flag is fabricated")
     if report.get("conformant") is not derived_conformant:
         defects.append(f"{entry['suite']}: report conformant flag is fabricated")
-    clean = derived_conformant and not defects
+    classification = report.get("classification")
+    if not isinstance(classification, dict):
+        classification = {}
+        defects.append(f"{entry['suite']}: classification must be an object")
+    class_attribution = classification.get("class_attribution")
+    class_census = classification.get("class_census")
+    if not isinstance(class_attribution, dict):
+        class_attribution = {}
+        defects.append(f"{entry['suite']}: class_attribution must be an object")
+    if not isinstance(class_census, dict):
+        class_census = {}
+        defects.append(f"{entry['suite']}: class_census must be an object")
+    axiom_open_classes: dict[str, int] = {}
+    for class_name, raw_class in class_attribution.items():
+        if not isinstance(raw_class, dict):
+            defects.append(
+                f"{entry['suite']}: class_attribution.{class_name} must be an object"
+            )
+            continue
+        if raw_class.get("attribution") != "axiom-attributed-open":
+            continue
+        units = _count(
+            raw_class.get("units"),
+            f"classification.class_attribution.{class_name}.units",
+            defects,
+            entry["suite"],
+        )
+        census_units = _count(
+            class_census.get(class_name),
+            f"classification.class_census.{class_name}",
+            defects,
+            entry["suite"],
+        )
+        if units != census_units:
+            defects.append(
+                f"{entry['suite']}: open class {class_name} units do not match "
+                f"the class census ({units} != {census_units})"
+            )
+        axiom_open_classes[class_name] = units
+    scope = report.get("scope")
+    open_scope = scope.get("open") if isinstance(scope, dict) else None
+    scoped_classes = (
+        open_scope.get("axiom_attributed_open_classes")
+        if isinstance(open_scope, dict)
+        else None
+    )
+    if not isinstance(scoped_classes, dict):
+        defects.append(f"{entry['suite']}: scope lacks axiom-attributed-open classes")
+    else:
+        scoped_units = {
+            class_name: raw_class.get("units")
+            for class_name, raw_class in scoped_classes.items()
+            if isinstance(raw_class, dict)
+        }
+        if scoped_units != axiom_open_classes:
+            defects.append(
+                f"{entry['suite']}: scope open classes do not match classification"
+            )
+    if axiom_open_classes and (
+        not isinstance(open_scope, dict) or open_scope.get("status") != "OPEN"
+    ):
+        defects.append(f"{entry['suite']}: nonempty open classes require OPEN scope")
+    axiom_open = sum(axiom_open_classes.values())
+    clean = derived_conformant and axiom_open == 0 and not defects
     evidence = [
         {
             "claim": f"suite:{entry['suite']}",
@@ -434,7 +497,8 @@ def _tariff_schedule_suite_verdict(
             "mismatches": mismatches,
             "weighted_mismatch_mass": None,
             "unexplained": unexplained,
-            "axiom_attributed_open": 0,
+            "axiom_attributed_open": axiom_open,
+            "axiom_attributed_open_classes": axiom_open_classes,
             "binding": "bound",
             "reconciliation": "full",
             "evidence_cases": total,
@@ -1677,9 +1741,15 @@ def build_certificate(
     blockers = [*all_defects, *(spec.get("blockers") or [])]
     for leg in reference_legs:
         if leg["unexplained"] or leg["axiom_attributed_open"]:
+            open_classes = leg.get("axiom_attributed_open_classes") or {}
+            open_detail = ", ".join(
+                f"{name}={units}" for name, units in sorted(open_classes.items())
+            )
             blockers.append(
-                f"{leg['suite']}: {leg['unexplained']} unexplained mismatch(es) "
-                f"— disposition or fix before this leg counts"
+                f"{leg['suite']}: {leg['unexplained']} unexplained mismatch(es), "
+                f"{leg['axiom_attributed_open']} axiom-attributed-open unit(s)"
+                + (f" ({open_detail})" if open_detail else "")
+                + " — disposition or fix before this leg counts"
             )
     if not exercise_complete:
         if spec.get("attested_exercise_receipt"):
@@ -1724,6 +1794,11 @@ def build_certificate(
         ):
             raise ValueError(f"{program}: scope lacks axiom-attributed-open classes")
         scope = raw_scope
+        scope["certificate_premise"] = (
+            "S1 zero unexplained means every mismatch is classified; it does not "
+            "close axiom-attributed-open classes. Those open units independently "
+            "make the conformant premise false."
+        )
     # ONE rulespec commit across producer-computed premises. The closure
     # ledger and the executable receipt each verify their OWN recorded pin
     # (and the receipt binds the reports' provenance), but a coherently
@@ -1841,6 +1916,13 @@ def build_certificate(
             "and are scaffolding, not certification. A certification "
             "question not answerable from this document is a certificate "
             "defect to file."
+            + (
+                " For the tariff certificate, S1 zero unexplained records complete "
+                "classification, while axiom-attributed-open units independently "
+                "block the computed conformant premise."
+                if program == "us/tariff-duty"
+                else ""
+            )
             + (
                 " NZ exercise roadmap: commit per-evaluation request/output "
                 "traces and derive exercise separately for each certificate "

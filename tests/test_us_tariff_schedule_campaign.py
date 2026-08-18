@@ -1,6 +1,9 @@
 from __future__ import annotations
 
 import pytest
+import yaml
+
+from axiom_oracles.comparison.dispositions import validate_dispositions as validate_shared
 
 from scripts.us_tariff_schedule_campaign import (
     BASE_INDEPENDENT_AUTHORITY_SLOTS,
@@ -16,6 +19,7 @@ from scripts.us_tariff_schedule_campaign import (
     validate_dispositions,
     witness_replay,
 )
+from scripts.us_tariff_schedule_campaign import DISPOSITION_LEDGER
 
 
 def test_declared_feed_drops_only_retired_exemplar_flags() -> None:
@@ -131,6 +135,15 @@ def test_stale_and_overlapping_disposition_selectors_fail() -> None:
     with pytest.raises(ValueError, match="overlapping"):
         validate_dispositions([base | {"signatures": ["live"]},
                                (base | {"id": "two", "signatures": ["live"]})], {"live": 1})
+
+
+def test_campaign_ledger_uses_only_campaign_local_matcher() -> None:
+    ledger = yaml.safe_load(DISPOSITION_LEDGER.read_text())
+    entries = ledger["entries"]
+    assert any(entry.get("match") for entry in entries)
+    assert validate_dispositions(entries, {}) == entries
+    shared_errors = validate_shared(ledger)
+    assert any("unknown keys: ['match']" in error for error in shared_errors)
 
 
 def _selector_unit() -> dict:
