@@ -20,9 +20,9 @@ generated_facts:
     declared_block_count: 24
   rulespec:
     repository: TheAxiomFoundation/rulespec-dk
-    ref: fefd44a826abb695dba608caf223f4e3583f766a
-    commit: fefd44a826abb695dba608caf223f4e3583f766a
-    selected_content_sha256: 6e663d3a797560d3aa972772dcbccbbc9dff69970da6483ce1ba359a033a6a63
+    ref: 4f0737e872f5e9614f2fa8877cb0e54d3bd549f8
+    commit: 4f0737e872f5e9614f2fa8877cb0e54d3bd549f8
+    selected_content_sha256: 98ec8400a447e1713374d67ade5b4b86df62399f74b6f38e21b51a4f02d61a67
   provision_spine:
   - ordinal: 1
     citation_path: dk/statute/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1
@@ -318,18 +318,18 @@ generated_facts:
     source_sha256: 2e135cac3ca5eb201b948ca915bf9554e864a09ebc8576c2603b6115730329ec
   - path: dk/statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-2.yaml
     module_id: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-2
-    sha256: b2e22c0b94bbefc6d7dbf431aa57afa030ceb134f7deb5552bed923cdcc80b21
+    sha256: d8b6b66fd719905edbf289d355396e4a8487a4e185837fe77e419bf948a8b24e
     source_citation_path: dk/statute/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-2
     rule_count: 13
-    summary: 'Retten til børne- og ungeydelse er betinget af § 2, stk. 1''s betingelser.
+    summary: 'Retten til børne- og ungeydelse er betinget af stk. 1''s ti betingelser.
 
-      Hvis seksårsperioden for bopæl eller beskæftigelse ikke er opfyldt, udbetales
+      Når seksårsperioden ikke er opfyldt, udbetales den højeste relevante
 
-      den højeste relevante forholdsmæssige andel fra stk. 2. Kortvarigt
+      forholdsmæssige andel i stk. 2. Kortvarigt udlandsophold eller et
 
-      udlandsophold og et nærmere bestemt uddannelsesophold kan opfylde
+      uddannelsesophold kan opfylde opholdsbetingelsen, dog ikke ved ulovligt
 
-      opholdsbetingelsen, undtagen ved ulovligt skolefravær for undervisningspligtige børn.'
+      skolefravær for undervisningspligtige børn.'
     source_sha256: 5932ffa55798c79a1f656ab11032a06533fd32d6f0852e86305bff68d1c3a0d5
   - path: dk/statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-3.yaml
     module_id: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-3
@@ -414,18 +414,18 @@ generated_facts:
     source_sha256: 6bfe19e2ed661875e80a85edf7bb20e9d0bad6d5275e4ea1b4b11f7868bd0e6d
   - path: dk/statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-a.yaml
     module_id: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-a
-    sha256: abd00d268c39b25fe94ca8f8320aad62c15fd0bfd75e3a6c775f9a9ddcaef893
+    sha256: 1eab235a9b5e0b877605cdcba41ed7d7a62053634cf105f4ee387f4471e1efc0
     source_citation_path: dk/statute/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-a
-    rule_count: 12
-    summary: 'Ved kvartals- og månedsudbetalinger anvendes alene den seneste forskudsopgørelse
+    rule_count: 15
+    summary: 'Ved hver kvartals- eller månedsudbetaling anvendes alene den seneste
 
-      til foreløbig nedsættelse, mens den endelige nedsættelse fastsættes alene efter
+      forskudsopgørelse til foreløbig nedsættelse. Den endelige nedsættelse og
 
-      årsopgørelsen. Regulering sker så vidt muligt ved modregning i eller tillæg til
+      senere ændringer fastsættes efter årsopgørelsen. Regulering sker så vidt
 
-      senere ydelser; uafregnede tilbagebetalingskrav opkræves af Udbetaling Danmark.
+      muligt ved modregning i eller tillæg til efterfølgende udbetalinger; et
 
-      Senere ændringer i årsopgørelsen kræver regulering af årets udbetalte ydelse.
+      ikke-modregnet tilbagebetalingskrav opkræves af Udbetaling Danmark.
 
       Nedsættelse og regulering kan ske uden partshøring.'
     source_sha256: 9b411b66e51e65e70e779aa2e2cbb5105cc0a3095b3e4c2f603e6e9d3e20af6e
@@ -895,18 +895,22 @@ generated_facts:
     module: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-a
     read_by:
     - annual_assessment_change_requires_regulation
+    - initial_settlement_applies
     - revised_reduction_after_annual_assessment_change
-    - subsequent_regulation_amount
   - slot: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-a#input.calculation_uses_annual_assessment_for_income_year
     name: calculation_uses_annual_assessment_for_income_year
     module: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-a
     read_by:
+    - annual_assessment_change_requires_regulation
     - final_reduction_for_income_year
+    - initial_settlement_applies
+    - revised_reduction_after_annual_assessment_change
   - slot: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-a#input.following_benefit_payments_available_for_offset
     name: following_benefit_payments_available_for_offset
     module: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-a
     read_by:
     - overpayment_offset_against_following_benefit_payments
+    - subsequent_overpayment_offset_against_following_benefit_payments
   - slot: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-a#input.payment_uses_latest_forecast_assessment_for_income_year
     name: payment_uses_latest_forecast_assessment_for_income_year
     module: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-a
@@ -916,6 +920,8 @@ generated_facts:
     name: previously_settled_final_reduction_for_income_year
     module: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-a
     read_by:
+    - subsequent_addition_to_following_benefit_payments
+    - subsequent_overpayment_claim
     - subsequent_regulation_amount
   - slot: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-a#input.prior_provisional_reductions_for_income_year
     name: prior_provisional_reductions_for_income_year

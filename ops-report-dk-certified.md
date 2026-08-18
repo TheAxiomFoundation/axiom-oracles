@@ -1,214 +1,100 @@
-# DK closed and executable producers (WS2 + WS3)
+# dk/boerne-og-ungeydelse: the registry's first certified=yes
 
-Status: **CERTIFIED=YES at rulespec-dk f12271e37 — all four premises computed
-true, blockers=[], 10 provisions encoded / 1 classified / 13 excluded with
-text-grounded reasons / 0 pending, boundary frontier complete (89 grounded
-inputs). The certificate certifies benefit year 2025, Denmark excluding the
-Faroe Islands and Greenland, at the exact pinned corpus, RuleSpec, engine,
-manifests, and receipts; suite results remain 7/8, 0/1, 0/1 with dispositioned
-mismatches of DKK 313,33 / 60 / 880.**
+Status: **CERTIFIED=YES at rulespec-dk `4f0737e872f5` — all four premises
+computed true, blockers=[], 10 provisions encoded / 1 classified / 13
+excluded with text-grounded reasons / 0 pending, boundary frontier complete
+(90 grounded inputs: 65 captured, 25 uncaptured external boundaries).**
 
-Strict contract (final, superseding an interim global-strict restoration):
+## Certification scope
+
+`certified=yes` certifies that, for benefit year 2025, Denmark excluding the
+Faroe Islands and Greenland, and the exact pinned corpus, RuleSpec, engine,
+manifests, and receipts: every provision in the declared LBK 603/2025 spine
+is either faithfully encoded for its documented entity/input contract or
+explicitly classified or excluded with a text-grounded reason; every formula
+input is either derivable or case-supplied under a documented contract, or
+explicitly declared as an external boundary; the pinned executable artifact
+reproduces all 10 committed Axiom cases with exact JSON numeric equality;
+and the three comparison suites are conformant in the project's
+explained-mismatch sense.
+
+It does **not** claim: raw numerical parity (suite results are 7/8, 0/1,
+0/1, with dispositioned mismatches of DKK 313,33 / 60 / 880); exhaustive
+household or input coverage; independent correctness or availability of the
+25 external judicial, municipal, agency, tax, register, and payment-history
+feeds; net cash after § 11 setoff; any § 4 entity/routing surface (classified
+`entity_not_supported`); effects under other benefit schemes; application in
+the Faroe Islands or Greenland; or post-2025 law, including LOV 303/2026's
+§ 4 e changes and the new § 4 f.
+
+## The four premises and their producers
+
+- **conformant (computed true)** — three provenance-pinned EUROMOD J2.0+
+  reference legs (DK_2025 single, DK_2023 witness year, DK_2025 couple),
+  migrated to the strict execution-evidence contract: bound chunk corpus,
+  report-bound v1 index, full per-case reconciliation.
+- **exercised (computed true)** — three strict-declared bridge manifests,
+  validated clean; typed suite-bound covered_by evidence
+  (`{report|chunk_index|chunk, claim}`); the census binds each manifest's
+  sha and the strict opt-in, so no evidence edit is invisible downstream.
+- **closed (computed true)** — the closure ledger derives the 24-paragraf
+  spine from corpus release `a2e71391` (body sha256 per row) and maps every
+  row: §§ 1, 1a, 2, 3, 4a, 4b, 4c, 4e, 5, 8a encoded by direct signed
+  modules; § 4 classified `entity_not_supported`; §§ 4d, 6, 6a, 7, 8, 8b, 9,
+  10, 11, 12, 13, 14, 15 excluded with text-grounded reasons; 0 pending;
+  boundary frontier complete with 90 committed grounding decisions.
+- **executable (computed true)** — the pinned engine (binary sha256
+  `079c26f4…`) recompiles both composed programs at the recorded rulespec
+  commit and reproduces all 10 certified values; `--check` recompiles and
+  replays from the validated chunk corpus; the receipt binds the reports'
+  provenance commit and the ledger's commit (certify blocks on any
+  producer-commit disagreement).
+
+## Gate history
+
+The `certified=yes` claim survived two launch-grade adversarial audit
+rounds plus two scoped deltas after the certificate first computed yes.
+Substantive blockers found and fixed (each by a signed CI re-encode):
+
+1. § 8 a had been excluded as administrative — gerrymandered: it governs
+   the legally required income source for the § 1 a reduction (provisional
+   per the latest forskudsopgørelse; final exclusively per the
+   årsopgørelse) and mandates reconciliation. Now encoded, including the
+   stk. 1, 5. pkt. rule that a subsequent årsopgørelse change reconciles
+   against the previously settled final amount, stage-gated from the
+   initial settlement so the two stages never both fire.
+2. § 2's partial-entitlement route consumed residence months with no
+   defined holder aggregation. The contract now fixes the maximum accrual
+   among the child's maintenance-duty holders, consistent with stk. 1,
+   nr. 7's »mindst en af de personer«, with the existential wording as the
+   proof excerpt.
+3. § 3 claimed nonexistent module outputs; its inputs are now documented
+   case-supplied composite condition facts, with the ledger's grounding
+   rows saying exactly that.
+4. § 4 c redirected payment without checking that repayment had occurred;
+   the stk. 3 redirect is now gated on the repayment-occurred fact, with a
+   companion case pinning judgment-without-repayment → no redirect.
+
+Grounding corrections from the same rounds: passport-decision reversal
+covers administrative omgørelse and judicial annulment; the § 4 c offence
+list is enumerated exactly (no §§ 114 c–j abbreviation); §§ 4a/4b
+attribution; both barnets lov placement branches; § 4 routing facts
+documented as case-supplied against a classified surface; § 8 b's register
+exception stated in the correct direction; the offset-capacity input
+documented as a DKK amount.
+
+## Strict evidence contract (unchanged from the certified-arc landing)
+
 `--strict` enforces findings on manifests that declare `strict: true`; the
-census counts a lane as `bridge_audited` ONLY when it declares `strict: true`
-AND validates clean, so the opt-in is bound to the certificate (dropping the
-flag drops audited/exercised — mutant-proven). Findings on non-strict
-manifests are visible audit debt: co-snap-populace's four genuine findings
-(unpinned population identity, cross-repo covered_by, partial audits,
-unverified completeness) print on every run and keep its row unaudited, but
-do not red the org's CI — they are that lane's own burndown.
+census counts a lane as `bridge_audited` only when it declares the opt-in
+AND validates clean. Findings on non-strict manifests are visible audit
+debt: co-snap-populace's four genuine findings print on every run and keep
+its row unaudited without redding CI — that lane's own burndown.
 
-## Checkout and source provenance
+## Historical record
 
-- Continued on the requested local-only branch `d3/dk-exercised`, building on
-  WS1 commit `27a14d0f3`; nothing was pushed.
-- The pre-existing untracked `.axiom/` run-log directory was left untouched and
-  is not part of this work.
-- Refreshing `rulespec-dk` was attempted before generation. The sandbox could
-  not write that checkout's `FETCH_HEAD`, and a separate temporary fetch could
-  not resolve `github.com`. The GitHub API independently verified current
-  `main` as signed merge `369aaf920692d9c778d37cfc0f97373403131a92` and
-  showed that its only first-parent change is
-  `.github/workflows/repository-checks.yml`. The relevant `dk/statutes` bytes
-  are identical between locally available `main@9986b6035c4e557b9b40645dfe2f3e4cffb6037c`
-  and the merged guard branch. Both producers therefore honestly record commit
-  `9986b603...`; no unavailable SHA was fabricated. The executable receipt now
-  stores that resolved commit as both `rulespec.ref` and `rulespec.sha`, and all
-  replay paths use the recorded commit rather than mutable `main`.
-- The closure producer reads the release JSONL as an immutable tracked Git blob
-  from `TheAxiomFoundation/axiom-corpus@a2e713913fb7250b28b55407c850c3c9ae3c69a3`
-  (release SHA-256
-  `c906f1b6b709d3602bfd1ece96404462cbe53b4f9049056eff997aac037bdf44`).
-  Dirty or untracked corpus bytes cannot authorize closure.
-- The executable producer used the requested binary at rules-engine commit
-  `05eac9d2f89dabe5c6673176260762cef3a58f47`; its measured SHA-256 is exactly
-  `079c26f4244db8c2a72fcbfb8cf88aaa5cb7c99628dc1c8d9d3b2d011e5f32a5`.
-
-## WS2 — closed producer
-
-Added `scripts/closure_ledger.py` and the generated/committed split at
-`conformance/closure/dk-boerne-og-ungeydelse.yaml`.
-
-- The generated spine contains all 24 direct paragraffer under
-  `dk/statute/lbk-603-2025/boerne-og-ungeydelsesloven/`, in contiguous release
-  order with body hashes.
-- RuleSpec content is read from immutable Git blobs after resolving the moving
-  ref once. Direct modules must cite the matching provision body hash, and only
-  the explicit `entity_not_supported` status is accepted as a classified row.
-- The ledger result is 2 encoded (§§ 1 and 1 a), 1 partially encoded (§ 5), 1
-  classified-with-reason (§ 4), 8 excluded-with-reason, and 12 pending.
-  Exclusions are limited to defensible administrative/appeal/repealed/penalty/
-  public-finance/delegation/commencement provisions (§§ 4 d, 6, 6 a, 7, 9,
-  12, 13, and 14); substantive provisions were not relabeled to force closure.
-- The producer parses the selected modules rather than hand-listing inputs. It
-  finds 11 qualified `#input` slots representing 9 logical inputs. All are
-  grounded, and the 5 uncaptured frontier inputs name personskatteloven §§ 7,
-  14, and 20, pensionsbeskatningsloven § 16, and Danmarks Statistik CPI.
-- `frontier.complete=true` and non-encoded reasons are complete, but
-  `partially-encoded=1` and `pending=12`; therefore the producer correctly
-  computes `closed=false`.
-- Artifact SHA-256:
-  `2b0dc668fd560100b027685e294b80818e155f33c30c61ec3f883927c7f45dd7`.
-
-The closure mutants cover a dropped ledger row, a hidden pending row, a
-removed frontier input/grounding decision, coordinated generated-spine
-truncation, dirty and untracked corpus releases, stale/missing module source
-hashes, an unknown classification status, mutable-ref races, coordinated
-proof-atom hiding, missing proof validation, fake atom paths, and fabricated
-corpus excerpts.
-
-## WS3 — executable producer
-
-Added `scripts/executable_reproduction.py` and
-`conformance/executable/dk-boerne-og-ungeydelse.json`.
-
-- Both composed programs compile through `AxiomRulesRunner`'s canonical
-  `compile-composed` contract from an archived exact RuleSpec Git tree.
-- Compiled artifacts reproduce deterministically at:
-  - single-recipient pipeline:
-    `cbe3bdfaf2d7a735c11cbe22d4bcb04065ee698325421c372a46eb1b4ff50a49`;
-  - couple pipeline:
-    `6e9c9e6b4ca8e2d6dfed5795671bc5c54ec5d83156048d7dc9b2aee02d2dfae4`.
-- The producer reconstructs the committed 8 + 1 + 1 case inputs, including the
-  report's exact floating tails and the couple's two committed earner bridge
-  overlays, runs all ten cases, and uses exact JSON numeric equality.
-  All 10 reproduce, including `11497.333333333334`; `executable=true`.
-- This receipt claims the ten requested comparison cases only. It does not
-  overclaim separate golden companion fixtures mentioned in the design note.
-- Artifact SHA-256:
-  `0cb850b895d57fc29aaf290dd937a662798f529459130f70eb8cfaf3a360d1e9`.
-
-The executable mutants coherently tamper with a committed value, reject mutable
-RuleSpec refs, and prove that `--check` replays the recorded commit before
-turning red. Certification mutants additionally prove that a forged
-compiled-artifact hash cannot pass the opt-in full producer-verification gate.
-
-## Certification wiring and result
-
-`scripts/certify.py` now preserves the US-CO attested path while giving DK two
-producer-backed premises. Its ordinary CI path hermetically validates each
-committed artifact and its in-repo report/config inputs. The explicit
-`--verify-producers` integration gate additionally requires closure to
-re-derive from the corpus and RuleSpec Git blobs and executable to recompile
-and replay with the pinned engine before producing the same certificate bytes.
-Both evidence rows carry the committed artifact path, SHA-256, and
-`verification: producer_artifact_validation`; the full checks remain explicit
-integration gates rather than an unportable claim in the receipt.
-
-The regenerated DK certificate reports:
-
-| premise | mode | value |
-|---|---|---:|
-| conformant | computed | true |
-| exercised | computed | true |
-| closed | computed | false |
-| executable | computed | true |
-
-Consequently `certified.value=false` and `certified.state=no`. This is the
-intended honest result: every required premise is now offerable and computed,
-but closure is not yet true. The generic rule text was updated accordingly;
-US-CO remains `state=unavailable` on its unchanged attested closed/executable
-path.
-
-## Verification
-
-- Closure producer full `--check`: **up to date**, `closed=false`, 2 encoded,
-  1 partially encoded, 12 pending, frontier complete.
-- Executable producer full `--check`: **10/10 exact JSON numeric equality**,
-  `executable=true`; a live temporary-clone check also passed after `main` was
-  moved away from the receipt's recorded commit.
-- Exercise census, scoreboard, ordinary hermetic certificate checks, and
-  `certify.py --check --verify-producers`: **all exit 0**. Global manifest
-  `--strict` intentionally exits 1 on the four genuine CO findings; all three
-  DK manifests independently validate with zero errors and findings.
-- Focused certification, manifest, closure, and executable mutants:
-  **69 passed** after the final review cycle.
-- Required DK/disposition selector: **108 passed, 2,531 deselected**.
-- `ruff check .`: **all checks passed**.
-- Newly affected closure/executable files were Ruff-formatted; `certify.py`
-  retains the repository's pre-existing formatting outside edited sections to
-  avoid unrelated churn.
-- Independent reviews found and drove fixes for corpus working-tree trust,
-  RuleSpec ref races, stale source hashes, arbitrary classification statuses,
-  shape-only integration verification, and accidental coupling of ordinary CI
-  to an arm64 macOS engine. The post-fix producer reviews are clean; final
-  integrated review is recorded before commit.
-
-## Audit fix addendum — 2026-08-15
-
-This addendum supersedes the original WS2/WS3 counts, hashes, replay semantics,
-and launch status above.
-
-- Status strings no longer promote attested registry blocks. With both producer
-  configs removed, attested `closed` and `executable` blocks carrying
-  `{status: computed, value: true}` still emit `mode=attested`, and
-  `certified.state=unavailable`.
-- Bridge bindings can target named records. The couple manifest declares the
-  two income-basis inputs as bridged only for `earner` and as explicit constant
-  zero for `non_earner`; suite mutations to `777` produce findings. Aggregate
-  constants are also checked across every record.
-- Every non-synthetic population requires `pin_required: true` plus a typed,
-  non-empty revision and full lowercase SHA-256 identity. The coordinated
-  `populace-us` / `pin_required: false` / no-identity mutant reds, as do boolean
-  pseudo-identities.
-- All three DK manifests distinguish logical and execution periods. For the
-  2023 witness those are `2023` and `2025-06-01`; the validator binds the latter
-  to `euromod-synthetic-compare`'s actual `runner.parameters.period` and rejects
-  dashboard or `year` fallbacks.
-- Corpus-root composed proof atoms now join the closure spine. Four validated
-  § 5 atoms make it `partially-encoded`, cite the couple module, and reduce
-  pending from 13 to 12 without changing `closed=false`. Atoms require
-  `proof_validation.required=true`, a real version formula path, and an excerpt
-  present in the pinned provision body.
-- The executable receipt records `ref=sha=9986b6035c4e557b9b40645dfe2f3e4cffb6037c`.
-  Generation may resolve a branch once, but validation, CLI checks, and full
-  certification replay the recorded commit.
-- Global `--strict` again returns nonzero for any finding, regardless of a
-  manifest's `strict` metadata. Its current failure is honest: CO lacks a
-  report-bound population identity, has three partial mixed-kind bindings, has
-  unverified completeness, and cites one cross-repository evidence path.
-- Executable comparison language now says “exact JSON numeric equality.” The
-  former byte-oriented wording is gone from tracked files.
-
-Regenerated artifact SHA-256s:
-
-- closure: `2b0dc668fd560100b027685e294b80818e155f33c30c61ec3f883927c7f45dd7`;
-- executable: `0cb850b895d57fc29aaf290dd937a662798f529459130f70eb8cfaf3a360d1e9`;
-- exercise census: `8d948559364a150808312087527289e02d52320740078912fda887814e4f45d5`;
-- DK certificate: `af40d0c3f19a53f65f6247f80fefe8ef097ca5259bad10cfd9e8bdcffd30519f`;
-- CO certificate, refreshed only for the census hash:
-  `58b257b719f3cd2cdad0cee8f485fea958a0279c2f125b6e555912e19e617d30`.
-
-The DK premise table remains:
-
-| premise | mode | value |
-|---|---|---:|
-| conformant | computed | true |
-| exercised | computed | true |
-| closed | computed | false |
-| executable | computed | true |
-
-The remaining repository-wide launch blocker is CO recertification. Its
-historical report dropped the population identity sidecar and does not contain
-the complete submitted input catalog, so those findings cannot be safely
-backfilled from current committed evidence.
+The WS1–WS3 build narrative (the first decidable certificate, honest
+`certified=no` at 2 encoded / 12 pending, and its audit rounds) lives in
+the git history of this file and in the ops mirror under
+`ops/dk-lane/certified/` and `ops/dk-lane/wave2/` (briefs, audit reports,
+and run logs for every round).
