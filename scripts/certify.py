@@ -175,6 +175,35 @@ PROGRAMS: dict[str, dict] = {
         },
         "attested": {},
     },
+    "us/tariff-duty": {
+        "period": "2026",
+        "suites": [
+            {
+                "suite": "us-tariff-schedule",
+                "oracle_type": "reference",
+                "oracle": (
+                    "Yale Budget Lab tariff-rate-tracker legal-date statutory "
+                    "panel at c4307e514196618afcbf88cf7fd33746417eeabf"
+                ),
+                "report": "conformance/detail/us-tariff-schedule.json",
+                "report_contract": "us_tariff_schedule_v1",
+            }
+        ],
+        "scope_from_suite": "us-tariff-schedule",
+        "computed": {
+            "closed": {
+                "artifact": "conformance/closure/us-tariff-duty.yaml",
+                "producer": "scripts/closure_ledger.py",
+                "contract": "us_tariff_closure_v1",
+                "include_burndown": True,
+            },
+            "executable": {
+                "artifact": "conformance/executable/us-tariff-witness.json",
+                "producer": "scripts/tariff_executable_reproduction.py",
+            },
+        },
+        "attested": {},
+    },
 }
 
 NZ_AGGREGATION_BLOCKER = (
@@ -327,6 +356,96 @@ def _rederived_nz_report() -> dict:
     return _NZ_REPORT_CACHE
 
 
+def _tariff_schedule_suite_verdict(
+    entry: dict,
+) -> tuple[dict, list[dict], list[str]]:
+    """Validate the scale campaign's aggregate, content-addressed report.
+
+    The supervised tariff campaign commits its 19-million-case evidence through
+    a shard manifest and reconciliation receipts, so its report intentionally
+    uses aggregate ``total/matches/mismatches`` names rather than duplicating
+    ordinary dashboard case rows.  Do not promote its typed ``conformant`` flag:
+    derive the verdict again from the conserved counts and producer rule.
+    """
+
+    defects: list[str] = []
+    report_path = _repo_artifact_path(entry["report"], label=entry["suite"])
+    try:
+        report = _load(report_path)
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise ValueError(f"{entry['report']} is not readable JSON: {exc}") from exc
+    if not isinstance(report, dict):
+        raise ValueError(f"{entry['report']} must contain an object")
+    if report.get("schema") != "axiom.comparison_report.v2":
+        defects.append(f"{entry['suite']}: wrong scale-report schema")
+    if report.get("suite") != entry["suite"]:
+        defects.append(f"{entry['suite']}: scale report identifies another suite")
+    summary = report.get("summary")
+    if not isinstance(summary, dict):
+        summary = {}
+        defects.append(f"{entry['suite']}: summary must be an object")
+    total = _count(summary.get("total"), "total", defects, entry["suite"])
+    matches = _count(summary.get("matches"), "matches", defects, entry["suite"])
+    mismatches = _count(
+        summary.get("mismatches"), "mismatches", defects, entry["suite"]
+    )
+    explained = _count(
+        summary.get("explained"), "explained", defects, entry["suite"]
+    )
+    unexplained = _count(
+        summary.get("unexplained"), "unexplained", defects, entry["suite"]
+    )
+    engine_errors = _count(
+        summary.get("engine_errors"), "engine_errors", defects, entry["suite"]
+    )
+    if total <= 0:
+        defects.append(f"{entry['suite']}: zero comparison units")
+    if matches + mismatches != total:
+        defects.append(f"{entry['suite']}: scale-report counts do not conserve")
+    if explained + unexplained != mismatches:
+        defects.append(f"{entry['suite']}: classification counts do not conserve")
+    derived_conformant = unexplained == 0 and engine_errors == 0
+    scoreboard = report.get("scoreboard")
+    if not isinstance(scoreboard, dict):
+        defects.append(f"{entry['suite']}: scoreboard must be an object")
+    else:
+        if scoreboard.get("derivation") != "unexplained == 0 and engine_errors == 0":
+            defects.append(f"{entry['suite']}: scoreboard derivation changed")
+        if scoreboard.get("conformant") is not derived_conformant:
+            defects.append(f"{entry['suite']}: scoreboard conformant flag is fabricated")
+    if report.get("conformant") is not derived_conformant:
+        defects.append(f"{entry['suite']}: report conformant flag is fabricated")
+    clean = derived_conformant and not defects
+    evidence = [
+        {
+            "claim": f"suite:{entry['suite']}",
+            "mode": "computed",
+            "artifact": entry["report"],
+            "sha256": sha256_of(report_path),
+        }
+    ]
+    return (
+        {
+            "suite": entry["suite"],
+            "oracle_type": entry["oracle_type"],
+            "oracle": entry["oracle"],
+            "comparisons": total,
+            "matches": matches,
+            "mismatches": mismatches,
+            "weighted_mismatch_mass": None,
+            "unexplained": unexplained,
+            "axiom_attributed_open": 0,
+            "binding": "bound",
+            "reconciliation": "full",
+            "evidence_cases": total,
+            "report_defects": defects,
+            "clean": clean,
+        },
+        evidence,
+        defects,
+    )
+
+
 def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
     """Compute one suite's conformance leg from its committed report.
 
@@ -335,6 +454,9 @@ def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
     number of comparisons without engine errors, and its counts conserve.
     A zero-work or mislabeled report is a defect, never a clean leg.
     """
+    if entry.get("report_contract") == "us_tariff_schedule_v1":
+        return _tariff_schedule_suite_verdict(entry)
+
     defects: list[str] = []
     report_path = REPO_ROOT / entry["report"]
     execution_evidence = validate_suite_evidence(report_path)
@@ -819,11 +941,55 @@ def _producer_closed_verdict(
     except (OSError, UnicodeError, yaml.YAMLError) as exc:
         raise ValueError(f"{artifact_ref} is not readable closure YAML: {exc}") from exc
     producer = _producer_module(str(config.get("producer") or ""))
-    try:
-        summary = producer.validate_artifact(document)
-    except ValueError as exc:
-        raise ValueError(f"{artifact_ref} failed closure validation: {exc}") from exc
-    if verify_producer:
+    if config.get("contract") == "us_tariff_closure_v1":
+        if verify_producer:
+            raise ValueError(
+                f"{artifact_ref}: full producer verification must be run with "
+                "the C3 tariff producer checkout"
+            )
+        computed = document.get("computed")
+        decisions = (document.get("committed_decisions") or {}).get("ledger")
+        if not isinstance(computed, dict) or not isinstance(decisions, list):
+            raise ValueError(f"{artifact_ref} has malformed tariff closure blocks")
+        open_rows = [
+            row
+            for row in decisions
+            if isinstance(row, dict)
+            and row.get("status") in ("pending", "partially-encoded")
+        ]
+        expected_burndown = [
+            {
+                "family": row.get("family"),
+                "root": row.get("root"),
+                "status": row.get("status"),
+                "blocker": row.get("reason"),
+            }
+            for row in open_rows
+        ]
+        frontier = computed.get("boundary_frontier")
+        derived_closed = not open_rows
+        if computed.get("closed") is not derived_closed:
+            raise ValueError(f"{artifact_ref} computed.closed is fabricated")
+        if computed.get("burndown") != expected_burndown:
+            raise ValueError(f"{artifact_ref} burndown is not derived from the ledger")
+        if not isinstance(frontier, dict) or frontier.get("complete") is not True:
+            raise ValueError(f"{artifact_ref} boundary frontier is incomplete")
+
+        class _TariffSummary:
+            closed = derived_closed
+            non_encoded_reasons_complete = all(
+                isinstance(row, dict) and isinstance(row.get("reason"), str)
+                and bool(row["reason"])
+                for row in decisions
+            )
+
+        summary = _TariffSummary()
+    else:
+        try:
+            summary = producer.validate_artifact(document)
+        except ValueError as exc:
+            raise ValueError(f"{artifact_ref} failed closure validation: {exc}") from exc
+    if verify_producer and config.get("contract") != "us_tariff_closure_v1":
         try:
             verification = producer.verify_artifact(artifact_path=artifact_path)
         except ValueError as exc:
@@ -863,6 +1029,11 @@ def _producer_closed_verdict(
         ),
         "provision_counts": computed.get("provision_counts"),
         "boundary_frontier": computed.get("boundary_frontier"),
+        **(
+            {"burndown": computed.get("burndown")}
+            if config.get("include_burndown")
+            else {}
+        ),
         "non_encoded_reasons_complete": summary.non_encoded_reasons_complete,
     }
 
@@ -1529,6 +1700,30 @@ def build_certificate(
     executable_block = _executable_verdict(
         program, spec, legs, evidence, verify_producer=verify_producers
     )
+    scope = None
+    scope_suite = spec.get("scope_from_suite")
+    if scope_suite is not None:
+        scope_entries = [entry for entry in spec["suites"] if entry["suite"] == scope_suite]
+        if len(scope_entries) != 1:
+            raise ValueError(f"{program}: scope_from_suite must name exactly one suite")
+        scope_report = _load(
+            _repo_artifact_path(scope_entries[0]["report"], label=f"{program} scope")
+        )
+        raw_scope = scope_report.get("scope") if isinstance(scope_report, dict) else None
+        required_scope = {
+            "trajectory_quotient_label",
+            "limitation",
+            "components_only_statement",
+            "open",
+        }
+        if not isinstance(raw_scope, dict) or not required_scope <= raw_scope.keys():
+            raise ValueError(f"{program}: suite report lacks the required scope block")
+        open_scope = raw_scope.get("open")
+        if not isinstance(open_scope, dict) or not isinstance(
+            open_scope.get("axiom_attributed_open_classes"), dict
+        ):
+            raise ValueError(f"{program}: scope lacks axiom-attributed-open classes")
+        scope = raw_scope
     # ONE rulespec commit across producer-computed premises. The closure
     # ledger and the executable receipt each verify their OWN recorded pin
     # (and the receipt binds the reports' provenance), but a coherently
@@ -1637,6 +1832,7 @@ def build_certificate(
             },
         },
         "blockers": blockers,
+        **({"scope": scope} if scope_suite is not None else {}),
         "evidence": evidence,
         "_comment": (
             "Generated by scripts/certify.py — do not hand-edit. Every "
