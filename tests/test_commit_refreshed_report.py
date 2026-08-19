@@ -460,7 +460,13 @@ def test_racing_pusher_converges_when_remote_advances_mid_push(origin, tmp_path)
     )
     # Hook has signaled the leg's first push; land the sibling (its push sees
     # `racing` set, so the hook waves it through), then release the hook.
-    deadline = time.monotonic() + 120
+    # The allowance covers ONE regenerate+verify cycle before the first push.
+    # That cycle now includes trace-bound closure verification, the executable
+    # receipt reconstruction, and certificate recomputation; on shared CI
+    # runners it exceeds the old 120s. The race itself stays deterministic —
+    # the pre-receive barrier, not this deadline, sequences the sibling — and
+    # the proc.poll() liveness assertion still fails fast on a dead leg.
+    deadline = time.monotonic() + 600
     while not racing.exists():
         assert time.monotonic() < deadline, "leg never attempted its first push"
         assert proc.poll() is None, proc.communicate()[1]
