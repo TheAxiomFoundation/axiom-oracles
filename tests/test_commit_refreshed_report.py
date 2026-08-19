@@ -59,6 +59,8 @@ BE_ROLLUP = "axiom_oracles/data/euromod_be_coverage.json"
 BE_REPORT = "dashboard/public/data/axiom-euromod-be-article-51-forfait.json"
 NZ_INDEX = "dashboard/public/data/cases/nz-treasury-incomeexplorer/index.json"
 NZ_CHUNK = "dashboard/public/data/cases/nz-treasury-incomeexplorer/chunk-0.json"
+NZ_EXECUTABLE_RECEIPT = "conformance/executable/nz-treasury-incomeexplorer.json"
+NZ_CLOSURE_SUMMARY = "closure/nz/summary.json"
 
 #: Hermetic git: no user/system config (no signing hooks, no identity — the
 #: script must supply the bot identity itself, exactly as on a CI runner).
@@ -187,6 +189,8 @@ def _assert_origin_tip_green(origin: Path, tmp_path: Path) -> Path:
     for script in (
         "apply_dispositions.py",
         "nz_incomeexplorer.py",
+        "nz_executable_reproduction.py",
+        "nz_closure.py",
         "generate_chunk_indexes.py",
         "conformance_scoreboard.py",
         "conformance_burndown.py",
@@ -358,6 +362,41 @@ def test_refresh_regenerates_and_stages_nz_bound_evidence(origin, tmp_path):
     verify = _assert_origin_tip_green(origin, tmp_path)
     assert (verify / NZ_CHUNK).read_bytes() == canonical_chunk
     assert (verify / NZ_INDEX).read_bytes() == canonical_index
+
+
+def test_refresh_reconstructs_and_stages_stale_nz_receipt_and_closure(origin, tmp_path):
+    """The bot must repair stale producer outputs, not validate them first."""
+
+    broken = _clone(origin, tmp_path / "broken-nz-producers")
+    receipt_path = broken / NZ_EXECUTABLE_RECEIPT
+    closure_path = broken / NZ_CLOSURE_SUMMARY
+    canonical_receipt = receipt_path.read_bytes()
+    canonical_closure = closure_path.read_bytes()
+
+    receipt = json.loads(receipt_path.read_text())
+    receipt["transcript"]["sha256"] = "0" * 64
+    receipt_path.write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n")
+    closure_path.write_bytes(canonical_closure + b" ")
+    _git(
+        broken,
+        "add",
+        "--",
+        NZ_EXECUTABLE_RECEIPT,
+        NZ_CLOSURE_SUMMARY,
+    )
+    _git(broken, "commit", "-q", "-m", "seed stale NZ producer outputs")
+    _git(broken, "push", "-q", "origin", "HEAD:main")
+
+    stale = _clone(origin, tmp_path / "stale-nz-producer-check")
+    assert _staleness_gate(stale, "nz_executable_reproduction.py").returncode == 1
+    assert _staleness_gate(stale, "nz_closure.py").returncode == 1
+
+    healer = _clone(origin, tmp_path / "healer-nz-producers")
+    result = _run_script(healer)
+    assert result.returncode == 0, result.stderr
+    verify = _assert_origin_tip_green(origin, tmp_path)
+    assert (verify / NZ_EXECUTABLE_RECEIPT).read_bytes() == canonical_receipt
+    assert (verify / NZ_CLOSURE_SUMMARY).read_bytes() == canonical_closure
 
 
 def test_racing_pusher_converges_when_remote_advances_mid_push(origin, tmp_path):

@@ -2,782 +2,254 @@
   "comparison_cells": [
     {
       "column": "AS_Amount",
+      "declared_rulespec_value": "302.07678846153846153846153846",
+      "expected_classification": "b",
+      "expected_reason_code": "B_AS_UPSTREAM_VINTAGE",
       "program": "nz/accommodation-supplement",
-      "rulespec_value": "302.07678846153846153846153846",
       "scenario_id": "single_parent_three_children_area1_rent",
+      "treasury_value": "304.204969",
       "unit": "NZD/week",
       "weekly_wage": 0
     },
     {
       "column": "BestStart_Total",
+      "declared_rulespec_value": "154.9972602739726027397260273972602739726",
+      "expected_classification": "b",
+      "expected_reason_code": "B_WFF_VINTAGE",
       "program": "nz/working-for-families",
-      "rulespec_value": "154.9972602739726027397260273972602739726",
       "scenario_id": "single_parent_three_children_area1_rent",
+      "treasury_value": "147.210959",
       "unit": "NZD/week",
       "weekly_wage": 0
     },
     {
       "column": "FTC_abated",
+      "declared_rulespec_value": "399.4602739726027397260273972602739726028",
+      "expected_classification": "b",
+      "expected_reason_code": "B_WFF_VINTAGE",
       "program": "nz/working-for-families",
-      "rulespec_value": "399.4602739726027397260273972602739726028",
       "scenario_id": "single_parent_three_children_area1_rent",
+      "treasury_value": "379.419178",
       "unit": "NZD/week",
       "weekly_wage": 0
     },
     {
       "column": "IETC_abated",
+      "declared_rulespec_value": "0",
+      "expected_classification": "match",
+      "expected_reason_code": "MATCH_SNAPSHOT_PRECISION",
       "program": "nz/independent-earner-tax-credit",
-      "rulespec_value": "0",
       "scenario_id": "single_parent_three_children_area1_rent",
+      "treasury_value": "0",
       "unit": "NZD/week",
       "weekly_wage": 0
     },
     {
       "column": "IWTC_abated",
+      "declared_rulespec_value": "0",
+      "expected_classification": "match",
+      "expected_reason_code": "MATCH_SNAPSHOT_PRECISION",
       "program": "nz/working-for-families",
-      "rulespec_value": "0",
       "scenario_id": "single_parent_three_children_area1_rent",
+      "treasury_value": "0",
       "unit": "NZD/week",
       "weekly_wage": 0
     },
     {
       "column": "MFTC",
+      "declared_rulespec_value": "0",
+      "expected_classification": "match",
+      "expected_reason_code": "MATCH_SNAPSHOT_PRECISION",
       "program": "nz/working-for-families",
-      "rulespec_value": "0",
       "scenario_id": "single_parent_three_children_area1_rent",
+      "treasury_value": "0",
       "unit": "NZD/week",
       "weekly_wage": 0
     },
     {
       "column": "WFF_abated",
+      "declared_rulespec_value": "399.4602739726027397260273972602739726028",
+      "expected_classification": "b",
+      "expected_reason_code": "B_WFF_VINTAGE",
       "program": "nz/working-for-families",
-      "rulespec_value": "399.4602739726027397260273972602739726028",
       "scenario_id": "single_parent_three_children_area1_rent",
+      "treasury_value": "379.419178",
       "unit": "NZD/week",
       "weekly_wage": 0
     },
     {
       "column": "WinterEnergy",
+      "declared_rulespec_value": "13.42465753424657534246575342465753424658",
+      "expected_classification": "match",
+      "expected_reason_code": "MATCH_SNAPSHOT_PRECISION",
       "program": "nz/winter-energy-payment",
-      "rulespec_value": "13.42465753424657534246575342465753424658",
       "scenario_id": "single_parent_three_children_area1_rent",
+      "treasury_value": "13.424658",
       "unit": "NZD/week",
       "weekly_wage": 0
     },
     {
       "column": "net_benefit",
+      "declared_rulespec_value": "521.52",
+      "expected_classification": "b",
+      "expected_reason_code": "B_BENEFIT_VINTAGE",
       "program": "nz/main-benefits",
-      "rulespec_value": "521.52",
       "scenario_id": "single_parent_three_children_area1_rent",
+      "treasury_value": "517.39",
       "unit": "NZD/week",
       "weekly_wage": 0
     },
     {
       "column": "wage1_ACC_levy",
+      "declared_rulespec_value": "0",
+      "expected_classification": "match",
+      "expected_reason_code": "MATCH_SNAPSHOT_PRECISION",
       "program": "nz/acc-earners-levy",
-      "rulespec_value": "0",
       "scenario_id": "single_parent_three_children_area1_rent",
+      "treasury_value": "0",
       "unit": "NZD/week",
       "weekly_wage": 0
     },
     {
       "column": "wage1_tax",
+      "declared_rulespec_value": "0",
+      "expected_classification": "match",
+      "expected_reason_code": "MATCH_SNAPSHOT_PRECISION",
       "program": "nz/income-tax",
-      "rulespec_value": "0",
       "scenario_id": "single_parent_three_children_area1_rent",
+      "treasury_value": "0",
       "unit": "NZD/week",
       "weekly_wage": 0
     },
     {
       "column": "AS_Amount",
+      "declared_rulespec_value": "302.07678846153846153846153846",
+      "expected_classification": "b",
+      "expected_reason_code": "B_AS_UPSTREAM_VINTAGE",
       "program": "nz/accommodation-supplement",
-      "rulespec_value": "302.07678846153846153846153846",
       "scenario_id": "single_parent_three_children_area1_rent",
+      "treasury_value": "304.204969",
       "unit": "NZD/week",
       "weekly_wage": 740
     },
     {
       "column": "BestStart_Total",
+      "declared_rulespec_value": "154.9972602739726027397260273972602739726",
+      "expected_classification": "b",
+      "expected_reason_code": "B_WFF_VINTAGE",
       "program": "nz/working-for-families",
-      "rulespec_value": "154.9972602739726027397260273972602739726",
       "scenario_id": "single_parent_three_children_area1_rent",
+      "treasury_value": "147.210959",
       "unit": "NZD/week",
       "weekly_wage": 740
     },
     {
       "column": "FTC_abated",
+      "declared_rulespec_value": "399.4602739726027397260273972602739726028",
+      "expected_classification": "b",
+      "expected_reason_code": "B_WFF_VINTAGE",
       "program": "nz/working-for-families",
-      "rulespec_value": "399.4602739726027397260273972602739726028",
       "scenario_id": "single_parent_three_children_area1_rent",
+      "treasury_value": "379.419178",
       "unit": "NZD/week",
       "weekly_wage": 740
     },
     {
       "column": "IETC_abated",
+      "declared_rulespec_value": "0",
+      "expected_classification": "match",
+      "expected_reason_code": "MATCH_SNAPSHOT_PRECISION",
       "program": "nz/independent-earner-tax-credit",
-      "rulespec_value": "0",
       "scenario_id": "single_parent_three_children_area1_rent",
+      "treasury_value": "0",
       "unit": "NZD/week",
       "weekly_wage": 740
     },
     {
       "column": "IWTC_abated",
+      "declared_rulespec_value": "147.5",
+      "expected_classification": "b",
+      "expected_reason_code": "B_WFF_VINTAGE",
       "program": "nz/working-for-families",
-      "rulespec_value": "147.5",
       "scenario_id": "single_parent_three_children_area1_rent",
+      "treasury_value": "97.5",
       "unit": "NZD/week",
       "weekly_wage": 740
     },
     {
       "column": "MFTC",
+      "declared_rulespec_value": "72.480611169652265542676501575",
+      "expected_classification": "b",
+      "expected_reason_code": "B_WFF_VINTAGE",
       "program": "nz/working-for-families",
-      "rulespec_value": "72.480611169652265542676501575",
       "scenario_id": "single_parent_three_children_area1_rent",
+      "treasury_value": "70.557534",
       "unit": "NZD/week",
       "weekly_wage": 740
     },
     {
       "column": "WFF_abated",
+      "declared_rulespec_value": "546.9602739726027397260273972602739726028",
+      "expected_classification": "b",
+      "expected_reason_code": "B_WFF_VINTAGE",
       "program": "nz/working-for-families",
-      "rulespec_value": "546.9602739726027397260273972602739726028",
       "scenario_id": "single_parent_three_children_area1_rent",
+      "treasury_value": "476.919178",
       "unit": "NZD/week",
       "weekly_wage": 740
     },
     {
       "column": "WinterEnergy",
+      "declared_rulespec_value": "0",
+      "expected_classification": "match",
+      "expected_reason_code": "MATCH_SNAPSHOT_PRECISION",
       "program": "nz/winter-energy-payment",
-      "rulespec_value": "0",
       "scenario_id": "single_parent_three_children_area1_rent",
+      "treasury_value": "0",
       "unit": "NZD/week",
       "weekly_wage": 740
     },
     {
       "column": "net_benefit",
+      "declared_rulespec_value": "0",
+      "expected_classification": "match",
+      "expected_reason_code": "MATCH_SNAPSHOT_PRECISION",
       "program": "nz/main-benefits",
-      "rulespec_value": "0",
       "scenario_id": "single_parent_three_children_area1_rent",
+      "treasury_value": "0",
       "unit": "NZD/week",
       "weekly_wage": 740
     },
     {
       "column": "wage1_ACC_levy",
+      "declared_rulespec_value": "12.95",
+      "expected_classification": "match",
+      "expected_reason_code": "MATCH_SNAPSHOT_PRECISION",
       "program": "nz/acc-earners-levy",
-      "rulespec_value": "12.95",
       "scenario_id": "single_parent_three_children_area1_rent",
+      "treasury_value": "12.95",
       "unit": "NZD/week",
       "weekly_wage": 740
     },
     {
       "column": "wage1_tax",
+      "declared_rulespec_value": "108.5575342465753424657534246575342465753",
+      "expected_classification": "match",
+      "expected_reason_code": "MATCH_SNAPSHOT_PRECISION",
       "program": "nz/income-tax",
-      "rulespec_value": "108.5575342465753424657534246575342465753",
       "scenario_id": "single_parent_three_children_area1_rent",
+      "treasury_value": "108.557534",
       "unit": "NZD/week",
       "weekly_wage": 740
     }
   ],
-  "requests": [
-    {
-      "id": "golden-00",
-      "outputs": {
-        "nz:statutes/social_security/main_benefits/rates#sole_parent_support_net_weekly_payment": {
-          "dtype": "decimal",
-          "id": "nz:statutes/social_security/main_benefits/rates#sole_parent_support_net_weekly_payment",
-          "kind": "scalar",
-          "name": "sole_parent_support_net_weekly_payment",
-          "unit": "NZD",
-          "value": {
-            "kind": "decimal",
-            "value": "521.52"
-          }
-        }
-      },
-      "program": "nz/main-benefits",
-      "request_sha256": "1ac639dd25ef790c315c1622ca064c20fad7d5f76e7ddbf13f9c5269dc6c5b08"
-    },
-    {
-      "id": "golden-01",
-      "outputs": {
-        "nz:statutes/income_tax/schedule_1/individual_income_tax#individual_income_tax_before_credits": {
-          "dtype": "decimal",
-          "id": "nz:statutes/income_tax/schedule_1/individual_income_tax#individual_income_tax_before_credits",
-          "kind": "scalar",
-          "name": "individual_income_tax_before_credits",
-          "unit": "NZD",
-          "value": {
-            "kind": "decimal",
-            "value": "4444.690909090909090909090909"
-          }
-        }
-      },
-      "program": "nz/income-tax",
-      "request_sha256": "328ae0ed64b7fbc665389a101847aaec10f05de7cb700d5e258eea870283096a"
-    },
-    {
-      "id": "golden-02",
-      "outputs": {
-        "nz:regulations/acc/earners_levy#acc_standard_earners_levy_including_gst": {
-          "dtype": "decimal",
-          "id": "nz:regulations/acc/earners_levy#acc_standard_earners_levy_including_gst",
-          "kind": "scalar",
-          "name": "acc_standard_earners_levy_including_gst",
-          "unit": "NZD",
-          "value": {
-            "kind": "decimal",
-            "value": "0"
-          }
-        }
-      },
-      "program": "nz/acc-earners-levy",
-      "request_sha256": "3b7e3f39bfbbb7c846bfaf095bdb31a79a46b3a306c0a34068e7284a4c0602c3"
-    },
-    {
-      "id": "golden-03",
-      "outputs": {
-        "nz:statutes/income_tax/family_scheme/eligibility#entitled_to_in_work_tax_credit": {
-          "id": "nz:statutes/income_tax/family_scheme/eligibility#entitled_to_in_work_tax_credit",
-          "kind": "judgment",
-          "name": "entitled_to_in_work_tax_credit",
-          "outcome": "not_holds",
-          "unit": null
-        },
-        "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_income": {
-          "dtype": "decimal",
-          "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_income",
-          "kind": "scalar",
-          "name": "family_scheme_income",
-          "unit": "NZD",
-          "value": {
-            "kind": "decimal",
-            "value": "31638.233766233766233766233767"
-          }
-        },
-        "nz:statutes/income_tax/family_scheme/tax_credits#family_tax_credit_after_abatement": {
-          "dtype": "decimal",
-          "id": "nz:statutes/income_tax/family_scheme/tax_credits#family_tax_credit_after_abatement",
-          "kind": "scalar",
-          "name": "family_tax_credit_after_abatement",
-          "unit": "NZD",
-          "value": {
-            "kind": "decimal",
-            "value": "20829"
-          }
-        },
-        "nz:statutes/income_tax/family_scheme/tax_credits#family_tax_credit_before_abatement": {
-          "dtype": "decimal",
-          "id": "nz:statutes/income_tax/family_scheme/tax_credits#family_tax_credit_before_abatement",
-          "kind": "scalar",
-          "name": "family_tax_credit_before_abatement",
-          "unit": "NZD",
-          "value": {
-            "kind": "decimal",
-            "value": "20829"
-          }
-        },
-        "nz:statutes/income_tax/family_scheme/tax_credits#in_work_tax_credit_before_abatement": {
-          "dtype": "decimal",
-          "id": "nz:statutes/income_tax/family_scheme/tax_credits#in_work_tax_credit_before_abatement",
-          "kind": "scalar",
-          "name": "in_work_tax_credit_before_abatement",
-          "unit": "NZD",
-          "value": {
-            "kind": "decimal",
-            "value": "0"
-          }
-        },
-        "nz:statutes/income_tax/family_scheme/tax_credits#minimum_family_tax_credit": {
-          "dtype": "decimal",
-          "id": "nz:statutes/income_tax/family_scheme/tax_credits#minimum_family_tax_credit",
-          "kind": "scalar",
-          "name": "minimum_family_tax_credit",
-          "unit": "NZD",
-          "value": {
-            "kind": "decimal",
-            "value": "0"
-          }
-        },
-        "nz:statutes/income_tax/family_scheme/tax_credits#wff_abatement_remaining_after_family_tax_credit": {
-          "dtype": "decimal",
-          "id": "nz:statutes/income_tax/family_scheme/tax_credits#wff_abatement_remaining_after_family_tax_credit",
-          "kind": "scalar",
-          "name": "wff_abatement_remaining_after_family_tax_credit",
-          "unit": "NZD",
-          "value": {
-            "kind": "decimal",
-            "value": "0"
-          }
-        }
-      },
-      "program": "nz/working-for-families",
-      "request_sha256": "462ad17e06666fcdf612d8bf147989a1fb9e902aa1245bb2bee3622171a2e16f"
-    },
-    {
-      "id": "golden-04",
-      "outputs": {
-        "nz:statutes/income_tax/family_scheme/tax_credits#best_start_credit_abatement": {
-          "dtype": "decimal",
-          "id": "nz:statutes/income_tax/family_scheme/tax_credits#best_start_credit_abatement",
-          "kind": "scalar",
-          "name": "best_start_credit_abatement",
-          "unit": "NZD",
-          "value": {
-            "kind": "decimal",
-            "value": "0"
-          }
-        },
-        "nz:statutes/income_tax/family_scheme/tax_credits#best_start_tax_credit": {
-          "dtype": "decimal",
-          "id": "nz:statutes/income_tax/family_scheme/tax_credits#best_start_tax_credit",
-          "kind": "scalar",
-          "name": "best_start_tax_credit",
-          "unit": "NZD",
-          "value": {
-            "kind": "decimal",
-            "value": "4041"
-          }
-        },
-        "nz:statutes/income_tax/family_scheme/tax_credits#best_start_tax_credit_before_abatement": {
-          "dtype": "decimal",
-          "id": "nz:statutes/income_tax/family_scheme/tax_credits#best_start_tax_credit_before_abatement",
-          "kind": "scalar",
-          "name": "best_start_tax_credit_before_abatement",
-          "unit": "NZD",
-          "value": {
-            "kind": "decimal",
-            "value": "4041"
-          }
-        }
-      },
-      "program": "nz/working-for-families",
-      "request_sha256": "8ce38bae59aecf1a9b438c61a457ac3623c50fc89cccc1b9fa3bcc550a469001"
-    },
-    {
-      "id": "golden-05",
-      "outputs": {
-        "nz:statutes/income_tax/credits/individual_credits#independent_earner_tax_credit": {
-          "dtype": "decimal",
-          "id": "nz:statutes/income_tax/credits/individual_credits#independent_earner_tax_credit",
-          "kind": "scalar",
-          "name": "independent_earner_tax_credit",
-          "unit": "NZD",
-          "value": {
-            "kind": "decimal",
-            "value": "0"
-          }
-        }
-      },
-      "program": "nz/independent-earner-tax-credit",
-      "request_sha256": "8151eafc1061a5670725f5b21271c7bc59f13c936aac0e3db35ca1867259b057"
-    },
-    {
-      "id": "golden-06",
-      "outputs": {
-        "nz:statutes/social_security/winter_energy_payment/core#winter_energy_payment_rate_per_winter_period": {
-          "dtype": "decimal",
-          "id": "nz:statutes/social_security/winter_energy_payment/core#winter_energy_payment_rate_per_winter_period",
-          "kind": "scalar",
-          "name": "winter_energy_payment_rate_per_winter_period",
-          "unit": "NZD",
-          "value": {
-            "kind": "integer",
-            "value": 700
-          }
-        }
-      },
-      "program": "nz/winter-energy-payment",
-      "request_sha256": "f9c4bc64114faa174cb870c2b7667f04000e930918ade4b01f26c2e9506594b7"
-    },
-    {
-      "id": "golden-07",
-      "outputs": {
-        "nz:statutes/social_security/main_benefits/rates#jobseeker_support_net_weekly_payment": {
-          "dtype": "decimal",
-          "id": "nz:statutes/social_security/main_benefits/rates#jobseeker_support_net_weekly_payment",
-          "kind": "scalar",
-          "name": "jobseeker_support_net_weekly_payment",
-          "unit": "NZD",
-          "value": {
-            "kind": "decimal",
-            "value": "521.52"
-          }
-        }
-      },
-      "program": "nz/main-benefits",
-      "request_sha256": "074a15620602b8de42f2bde008e8767b1db112d691bf072a8c7a723c9a4829b2"
-    },
-    {
-      "id": "golden-08",
-      "outputs": {
-        "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_rounded_weekly_payment": {
-          "dtype": "decimal",
-          "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_rounded_weekly_payment",
-          "kind": "scalar",
-          "name": "accommodation_supplement_rounded_weekly_payment",
-          "unit": "NZD",
-          "value": {
-            "kind": "decimal",
-            "value": "303"
-          }
-        },
-        "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_amount_before_rounding": {
-          "dtype": "decimal",
-          "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_amount_before_rounding",
-          "kind": "scalar",
-          "name": "accommodation_supplement_weekly_amount_before_rounding",
-          "unit": "NZD",
-          "value": {
-            "kind": "decimal",
-            "value": "302.07678846153846153846153846"
-          }
-        },
-        "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_qualifying_accommodation_costs": {
-          "dtype": "decimal",
-          "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_qualifying_accommodation_costs",
-          "kind": "scalar",
-          "name": "accommodation_supplement_weekly_qualifying_accommodation_costs",
-          "unit": "NZD",
-          "value": {
-            "kind": "decimal",
-            "value": "600"
-          }
-        }
-      },
-      "program": "nz/accommodation-supplement",
-      "request_sha256": "50636d0d291ed5cc33d26dc5d419cd87c252095aaae1d0e5b19397c1f5a5c2c1"
-    },
-    {
-      "id": "golden-09",
-      "outputs": {
-        "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_rounded_weekly_payment": {
-          "dtype": "decimal",
-          "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_rounded_weekly_payment",
-          "kind": "scalar",
-          "name": "accommodation_supplement_rounded_weekly_payment",
-          "unit": "NZD",
-          "value": {
-            "kind": "decimal",
-            "value": "303"
-          }
-        },
-        "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_amount_before_rounding": {
-          "dtype": "decimal",
-          "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_amount_before_rounding",
-          "kind": "scalar",
-          "name": "accommodation_supplement_weekly_amount_before_rounding",
-          "unit": "NZD",
-          "value": {
-            "kind": "decimal",
-            "value": "302.14982191780821917808219178"
-          }
-        },
-        "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_qualifying_accommodation_costs": {
-          "dtype": "decimal",
-          "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_qualifying_accommodation_costs",
-          "kind": "scalar",
-          "name": "accommodation_supplement_weekly_qualifying_accommodation_costs",
-          "unit": "NZD",
-          "value": {
-            "kind": "decimal",
-            "value": "600"
-          }
-        }
-      },
-      "program": "nz/accommodation-supplement",
-      "request_sha256": "fe4aa4dcf624098985e3b2684a3ad86eca9583dc53834bd8ad12f5d1b7052c4f"
-    },
-    {
-      "id": "golden-10",
-      "outputs": {
-        "nz:statutes/social_security/main_benefits/rates#sole_parent_support_net_weekly_payment": {
-          "dtype": "decimal",
-          "id": "nz:statutes/social_security/main_benefits/rates#sole_parent_support_net_weekly_payment",
-          "kind": "scalar",
-          "name": "sole_parent_support_net_weekly_payment",
-          "unit": "NZD",
-          "value": {
-            "kind": "decimal",
-            "value": "151.52"
-          }
-        }
-      },
-      "program": "nz/main-benefits",
-      "request_sha256": "5560a3bcb9289875a3dba1721c66eefe0e831e4903f70bf245651707dfc2e7db"
-    },
-    {
-      "id": "golden-11",
-      "outputs": {
-        "nz:statutes/income_tax/schedule_1/individual_income_tax#individual_income_tax_before_credits": {
-          "dtype": "decimal",
-          "id": "nz:statutes/income_tax/schedule_1/individual_income_tax#individual_income_tax_before_credits",
-          "kind": "scalar",
-          "name": "individual_income_tax_before_credits",
-          "unit": "NZD",
-          "value": {
-            "kind": "decimal",
-            "value": "5660.5"
-          }
-        }
-      },
-      "program": "nz/income-tax",
-      "request_sha256": "a88f9638b0f01370a2fdffc1f2664bdd4a48af59aa06054e73420c8dc78f69ef"
-    },
-    {
-      "id": "golden-12",
-      "outputs": {
-        "nz:statutes/income_tax/schedule_1/individual_income_tax#individual_income_tax_before_credits": {
-          "dtype": "decimal",
-          "id": "nz:statutes/income_tax/schedule_1/individual_income_tax#individual_income_tax_before_credits",
-          "kind": "scalar",
-          "name": "individual_income_tax_before_credits",
-          "unit": "NZD",
-          "value": {
-            "kind": "decimal",
-            "value": "0"
-          }
-        }
-      },
-      "program": "nz/income-tax",
-      "request_sha256": "0aa5401e19851db1c1a731e72511c0c5bd9e51367ff04b98634c72ce822737f4"
-    },
-    {
-      "id": "golden-13",
-      "outputs": {
-        "nz:regulations/acc/earners_levy#acc_standard_earners_levy_including_gst": {
-          "dtype": "decimal",
-          "id": "nz:regulations/acc/earners_levy#acc_standard_earners_levy_including_gst",
-          "kind": "scalar",
-          "name": "acc_standard_earners_levy_including_gst",
-          "unit": "NZD",
-          "value": {
-            "kind": "decimal",
-            "value": "675.25"
-          }
-        }
-      },
-      "program": "nz/acc-earners-levy",
-      "request_sha256": "65c6f2606dbe8f5d14cabdd5dc2972e05d4271bf1b8b44f407aeab49310d2236"
-    },
-    {
-      "id": "golden-14",
-      "outputs": {
-        "nz:statutes/income_tax/family_scheme/eligibility#entitled_to_in_work_tax_credit": {
-          "id": "nz:statutes/income_tax/family_scheme/eligibility#entitled_to_in_work_tax_credit",
-          "kind": "judgment",
-          "name": "entitled_to_in_work_tax_credit",
-          "outcome": "holds",
-          "unit": null
-        },
-        "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_income": {
-          "dtype": "decimal",
-          "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_income",
-          "kind": "scalar",
-          "name": "family_scheme_income",
-          "unit": "NZD",
-          "value": {
-            "kind": "decimal",
-            "value": "38585.714285714285714285714285"
-          }
-        },
-        "nz:statutes/income_tax/family_scheme/tax_credits#family_tax_credit_after_abatement": {
-          "dtype": "decimal",
-          "id": "nz:statutes/income_tax/family_scheme/tax_credits#family_tax_credit_after_abatement",
-          "kind": "scalar",
-          "name": "family_tax_credit_after_abatement",
-          "unit": "NZD",
-          "value": {
-            "kind": "decimal",
-            "value": "20829"
-          }
-        },
-        "nz:statutes/income_tax/family_scheme/tax_credits#family_tax_credit_before_abatement": {
-          "dtype": "decimal",
-          "id": "nz:statutes/income_tax/family_scheme/tax_credits#family_tax_credit_before_abatement",
-          "kind": "scalar",
-          "name": "family_tax_credit_before_abatement",
-          "unit": "NZD",
-          "value": {
-            "kind": "decimal",
-            "value": "20829"
-          }
-        },
-        "nz:statutes/income_tax/family_scheme/tax_credits#in_work_tax_credit_before_abatement": {
-          "dtype": "decimal",
-          "id": "nz:statutes/income_tax/family_scheme/tax_credits#in_work_tax_credit_before_abatement",
-          "kind": "scalar",
-          "name": "in_work_tax_credit_before_abatement",
-          "unit": "NZD",
-          "value": {
-            "kind": "decimal",
-            "value": "7670"
-          }
-        },
-        "nz:statutes/income_tax/family_scheme/tax_credits#minimum_family_tax_credit": {
-          "dtype": "decimal",
-          "id": "nz:statutes/income_tax/family_scheme/tax_credits#minimum_family_tax_credit",
-          "kind": "scalar",
-          "name": "minimum_family_tax_credit",
-          "unit": "NZD",
-          "value": {
-            "kind": "decimal",
-            "value": "3768.9917808219178082191780819"
-          }
-        },
-        "nz:statutes/income_tax/family_scheme/tax_credits#wff_abatement_remaining_after_family_tax_credit": {
-          "dtype": "decimal",
-          "id": "nz:statutes/income_tax/family_scheme/tax_credits#wff_abatement_remaining_after_family_tax_credit",
-          "kind": "scalar",
-          "name": "wff_abatement_remaining_after_family_tax_credit",
-          "unit": "NZD",
-          "value": {
-            "kind": "decimal",
-            "value": "0"
-          }
-        }
-      },
-      "program": "nz/working-for-families",
-      "request_sha256": "7935cebb5b9d39e29aaf0f486a4c49574f48963f9645675444ed360c2a4cd9f3"
-    },
-    {
-      "id": "golden-15",
-      "outputs": {
-        "nz:statutes/income_tax/family_scheme/tax_credits#best_start_credit_abatement": {
-          "dtype": "decimal",
-          "id": "nz:statutes/income_tax/family_scheme/tax_credits#best_start_credit_abatement",
-          "kind": "scalar",
-          "name": "best_start_credit_abatement",
-          "unit": "NZD",
-          "value": {
-            "kind": "decimal",
-            "value": "0"
-          }
-        },
-        "nz:statutes/income_tax/family_scheme/tax_credits#best_start_tax_credit": {
-          "dtype": "decimal",
-          "id": "nz:statutes/income_tax/family_scheme/tax_credits#best_start_tax_credit",
-          "kind": "scalar",
-          "name": "best_start_tax_credit",
-          "unit": "NZD",
-          "value": {
-            "kind": "decimal",
-            "value": "4041"
-          }
-        },
-        "nz:statutes/income_tax/family_scheme/tax_credits#best_start_tax_credit_before_abatement": {
-          "dtype": "decimal",
-          "id": "nz:statutes/income_tax/family_scheme/tax_credits#best_start_tax_credit_before_abatement",
-          "kind": "scalar",
-          "name": "best_start_tax_credit_before_abatement",
-          "unit": "NZD",
-          "value": {
-            "kind": "decimal",
-            "value": "4041"
-          }
-        }
-      },
-      "program": "nz/working-for-families",
-      "request_sha256": "a7779bcf38498c06f5f5d94cdfa0bc56e31c9d1d9bd45b287f5a33e2371d766a"
-    },
-    {
-      "id": "golden-16",
-      "outputs": {
-        "nz:statutes/income_tax/credits/individual_credits#independent_earner_tax_credit": {
-          "dtype": "decimal",
-          "id": "nz:statutes/income_tax/credits/individual_credits#independent_earner_tax_credit",
-          "kind": "scalar",
-          "name": "independent_earner_tax_credit",
-          "unit": "NZD",
-          "value": {
-            "kind": "decimal",
-            "value": "0"
-          }
-        }
-      },
-      "program": "nz/independent-earner-tax-credit",
-      "request_sha256": "e9294b6942424a8ed3c6708cb067c2c58adff96c0d0ceec0553e328f8439b9f4"
-    },
-    {
-      "id": "golden-17",
-      "outputs": {
-        "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_rounded_weekly_payment": {
-          "dtype": "decimal",
-          "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_rounded_weekly_payment",
-          "kind": "scalar",
-          "name": "accommodation_supplement_rounded_weekly_payment",
-          "unit": "NZD",
-          "value": {
-            "kind": "decimal",
-            "value": "303"
-          }
-        },
-        "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_amount_before_rounding": {
-          "dtype": "decimal",
-          "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_amount_before_rounding",
-          "kind": "scalar",
-          "name": "accommodation_supplement_weekly_amount_before_rounding",
-          "unit": "NZD",
-          "value": {
-            "kind": "decimal",
-            "value": "302.07678846153846153846153846"
-          }
-        },
-        "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_qualifying_accommodation_costs": {
-          "dtype": "decimal",
-          "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_qualifying_accommodation_costs",
-          "kind": "scalar",
-          "name": "accommodation_supplement_weekly_qualifying_accommodation_costs",
-          "unit": "NZD",
-          "value": {
-            "kind": "decimal",
-            "value": "600"
-          }
-        }
-      },
-      "program": "nz/accommodation-supplement",
-      "request_sha256": "e7953030142899a4fe20bf943874b1fcddff94b820c5d0692219640c00c637de"
-    },
-    {
-      "id": "golden-18",
-      "outputs": {
-        "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_rounded_weekly_payment": {
-          "dtype": "decimal",
-          "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_rounded_weekly_payment",
-          "kind": "scalar",
-          "name": "accommodation_supplement_rounded_weekly_payment",
-          "unit": "NZD",
-          "value": {
-            "kind": "decimal",
-            "value": "303"
-          }
-        },
-        "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_amount_before_rounding": {
-          "dtype": "decimal",
-          "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_amount_before_rounding",
-          "kind": "scalar",
-          "name": "accommodation_supplement_weekly_amount_before_rounding",
-          "unit": "NZD",
-          "value": {
-            "kind": "decimal",
-            "value": "302.14982191780821917808219178"
-          }
-        },
-        "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_qualifying_accommodation_costs": {
-          "dtype": "decimal",
-          "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_qualifying_accommodation_costs",
-          "kind": "scalar",
-          "name": "accommodation_supplement_weekly_qualifying_accommodation_costs",
-          "unit": "NZD",
-          "value": {
-            "kind": "decimal",
-            "value": "600"
-          }
-        }
-      },
-      "program": "nz/accommodation-supplement",
-      "request_sha256": "bb8cdff762b57f3cf023a3259ba93f112364f77a428169fd53f8fee36c0d44f9"
-    }
-  ],
-  "schema": "axiom_oracles.nz_executable_golden_outputs.v1",
-  "source_report": "comparisons/nz-treasury-incomeexplorer/source-comparison.json",
-  "source_report_sha256": "abd3bcbebc01c73e58c27496db5897a306bb0496ae1d53e5abbd5ae487010b3b"
+  "schema": "axiom_oracles.nz_executable_expected_comparisons.v2",
+  "source_classifications": {
+    "path": "comparisons/nz-treasury-incomeexplorer/source-comparison.json",
+    "sha256": "abd3bcbebc01c73e58c27496db5897a306bb0496ae1d53e5abbd5ae487010b3b"
+  },
+  "treasury_snapshot": {
+    "path": "comparisons/nz-treasury-incomeexplorer/treasury-emtr-snapshot-expanded.json",
+    "sha256": "6bed8c0a91e4ba6416238ef1cf381bc8033f3122f3eeb5766074d763929293fd"
+  }
 }

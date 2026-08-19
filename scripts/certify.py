@@ -252,10 +252,12 @@ for _nz_program in (
             "closed": {
                 "artifact": "closure/nz/summary.json",
                 "producer": "scripts/nz_closure.py",
+                "external_verification": "hermetic_program_scoped",
             },
             "executable": {
                 "artifact": ("conformance/executable/nz-treasury-incomeexplorer.json"),
                 "producer": "scripts/nz_executable_reproduction.py",
+                "external_verification": "dedicated_source_build_ci",
             },
         },
         "attested_exercise_catalog_receipt": (
@@ -1080,7 +1082,7 @@ def _producer_closed_verdict(
     if (
         verify_producer
         and config.get("contract") != "us_tariff_closure_v1"
-        and hasattr(producer, "verify_artifact")
+        and config.get("external_verification") != "hermetic_program_scoped"
     ):
         try:
             verification = producer.verify_artifact(artifact_path=artifact_path)
@@ -1098,8 +1100,8 @@ def _producer_closed_verdict(
             )
     scoped: dict | None = None
     if isinstance(summary, dict):
-        programs = summary.get("programs")
-        if programs is not None:
+        if "programs" in summary:
+            programs = summary["programs"]
             if not isinstance(programs, dict) or not isinstance(
                 programs.get(program), dict
             ):
@@ -1201,7 +1203,10 @@ def _producer_executable_verdict(
         summary = producer.validate_artifact(document, repo_root=REPO_ROOT)
     except ValueError as exc:
         raise ValueError(f"{artifact_ref} failed executable validation: {exc}") from exc
-    if verify_producer and hasattr(producer, "build_reproduction"):
+    if (
+        verify_producer
+        and config.get("external_verification") != "dedicated_source_build_ci"
+    ):
         try:
             reproduced = producer.build_reproduction(
                 repo_root=REPO_ROOT,
@@ -1220,14 +1225,15 @@ def _producer_executable_verdict(
             )
     if not isinstance(summary, dict):
         raise ValueError(f"{artifact_ref} validator returned no executable summary")
-    programs = summary.get("programs")
-    if programs is not None:
+    if "programs" in summary:
+        programs = summary["programs"]
         if not isinstance(programs, dict) or not isinstance(
             programs.get(program), dict
         ):
             raise ValueError(f"{artifact_ref} has no executable scope for {program}")
         scoped = programs[program]
     else:
+        programs = None
         scoped = summary
     value = scoped.get("executable")
     if not isinstance(value, bool):
@@ -1251,7 +1257,11 @@ def _producer_executable_verdict(
             "engine": document.get("engine"),
             "compiled_artifact": document.get("compiled_artifact"),
             "request_set": document.get("request_set"),
-            "golden_outputs": document.get("golden_outputs"),
+            "execution_trace": document.get("execution_trace"),
+            "treasury_snapshot": document.get("treasury_snapshot"),
+            "reducer": document.get("reducer"),
+            "independent_expected": document.get("independent_expected"),
+            "full_responses": document.get("full_responses"),
             "transcript": document.get("transcript"),
             "summary": scoped,
         }

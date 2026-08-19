@@ -260,7 +260,11 @@ def _trace_view_receipts(
             "NZ trace evaluation count does not match the compiled-program receipt"
         )
 
-    owners = _root_owners()
+    # Evidence-side ownership is the view emitted by the digest-pinned trace.
+    # This reverse map is declaration-side only: it audits that the emitted
+    # assignment remains bijective with PROGRAM_VIEWS, but never chooses the
+    # bucket into which an evaluation is counted.
+    declared_owners = _root_owners()
     global_observations: dict[str, set[str]] = defaultdict(set)
     view_observations: dict[str, dict[str, set[str]]] = {
         view: defaultdict(set) for view in PROGRAM_VIEWS
@@ -313,11 +317,13 @@ def _trace_view_receipts(
         declared_roots = evaluation.get("requested_output_roots")
         if declared_roots != outputs:
             raise NZRecordError(f"{location} requested-output root receipt drifted")
-        output_owners = {owners.get(root) for root in outputs}
+        view = evaluation.get("view")
+        if not isinstance(view, str) or view not in view_observations:
+            raise NZRecordError(f"{location} is assigned to the wrong certificate view")
+        output_owners = {declared_owners.get(root) for root in outputs}
         if None in output_owners or len(output_owners) != 1:
             raise NZRecordError(f"{location} requested roots cross or escape NZ views")
-        view = next(iter(output_owners))
-        if evaluation.get("view") != view:
+        if output_owners != {view}:
             raise NZRecordError(f"{location} is assigned to the wrong certificate view")
         root_set = tuple(outputs)
         if root_set not in REQUESTED_OUTPUT_ROOT_SETS[view]:
@@ -474,9 +480,46 @@ def derive_bound_trace_views() -> dict[str, dict]:
 
 
 def build_trace_document(capture: dict, regenerated_source: dict) -> dict:
-    """Normalize one external harness capture into the public trace receipt."""
+    """Reconstruct the already-committed public trace from a raw capture.
+
+    This is deliberately a no-drift verification path, not an evidence minting
+    path.  Evidence-side view ownership comes from the committed #476 trace;
+    ``PROGRAM_VIEWS`` participates only later, when ``_trace_view_receipts``
+    audits the declaration side of the bijection.  A candidate must be
+    canonically identical to the digest-pinned committed trace before the CLI
+    is allowed to write anything.
+    """
 
     source = _load(SOURCE_PATH)
+    if _sha256(TRACE_PATH) != TRACE_SHA256:
+        raise NZRecordError(
+            "committed NZ evaluation trace bytes changed; capture verification "
+            "cannot establish its authority"
+        )
+    committed_trace = _load(TRACE_PATH)
+    committed_evaluations = committed_trace.get("evaluations")
+    if not isinstance(committed_evaluations, list):
+        raise NZRecordError("committed NZ evaluation trace has no evaluations")
+    committed_by_request: dict[str, dict] = {}
+    for index, evaluation in enumerate(committed_evaluations):
+        if not isinstance(evaluation, dict) or not isinstance(
+            evaluation.get("request"), dict
+        ):
+            raise NZRecordError(
+                f"committed NZ evaluation trace row {index} has no request"
+            )
+        key = json.dumps(
+            evaluation["request"],
+            allow_nan=False,
+            ensure_ascii=False,
+            separators=(",", ":"),
+            sort_keys=True,
+        )
+        if key in committed_by_request:
+            raise NZRecordError(
+                "committed NZ evaluation trace repeats a canonical request"
+            )
+        committed_by_request[key] = evaluation
     if capture.get("schema") != RAW_TRACE_SCHEMA:
         raise NZRecordError("raw NZ trace capture has the wrong schema")
     if _without_provenance(regenerated_source) != _without_provenance(source):
@@ -486,18 +529,36 @@ def build_trace_document(capture: dict, regenerated_source: dict) -> dict:
     evaluations = copy.deepcopy(capture.get("evaluations"))
     if not isinstance(evaluations, list):
         raise NZRecordError("raw NZ trace capture has no evaluations")
-    owners = _root_owners()
     for index, evaluation in enumerate(evaluations):
+        if not isinstance(evaluation, dict):
+            raise NZRecordError(f"raw NZ trace evaluation {index} is not an object")
         outputs = ((evaluation.get("request") or {}).get("queries") or [{}])[0].get(
             "outputs"
         )
         if not isinstance(outputs, list) or not outputs:
             raise NZRecordError(f"raw NZ trace evaluation {index} has no outputs")
-        views = {owners.get(root) for root in outputs}
-        if None in views or len(views) != 1:
-            raise NZRecordError(f"raw NZ trace evaluation {index} crosses views")
-        evaluation["view"] = next(iter(views))
-        evaluation["requested_output_roots"] = list(outputs)
+        request = evaluation.get("request")
+        if not isinstance(request, dict):
+            raise NZRecordError(f"raw NZ trace evaluation {index} has no request")
+        request_key = json.dumps(
+            request,
+            allow_nan=False,
+            ensure_ascii=False,
+            separators=(",", ":"),
+            sort_keys=True,
+        )
+        committed_evaluation = committed_by_request.get(request_key)
+        if committed_evaluation is None:
+            raise NZRecordError(
+                f"raw NZ trace evaluation {index} request/root is absent from the "
+                "committed #476 evaluation trace or crosses views"
+            )
+        # These evidence-side fields are copied from the committed trace, never
+        # inferred through PROGRAM_VIEWS or another mutable declaration table.
+        evaluation["view"] = committed_evaluation.get("view")
+        evaluation["requested_output_roots"] = copy.deepcopy(
+            committed_evaluation.get("requested_output_roots")
+        )
     document = {
         "_comment": (
             "Normalized from capture-only instrumentation associated with the pinned "
@@ -530,6 +591,11 @@ def build_trace_document(capture: dict, regenerated_source: dict) -> dict:
         "period": copy.deepcopy(capture.get("period")),
         "rulespec_commit": capture.get("rulespec_commit"),
     }
+    if document != committed_trace:
+        raise NZRecordError(
+            "raw NZ trace capture is not canonically identical to the committed "
+            "#476 evaluation trace"
+        )
     _trace_view_receipts(source, document, verify_file_hash=False)
     return document
 

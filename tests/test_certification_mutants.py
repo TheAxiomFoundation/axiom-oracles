@@ -463,7 +463,7 @@ def test_certified_requires_computed_true_premises_not_status_strings():
 
 
 def test_dk_opt_in_closure_gate_requires_full_source_verification(monkeypatch):
-    """The opt-in integration gate rejects a failed full source re-derivation."""
+    """A program-scoped producer shape cannot bypass DK's source replay."""
 
     certify = _load("certify")
     producer = certify._producer_module("scripts/closure_ledger.py")
@@ -477,6 +477,13 @@ def test_dk_opt_in_closure_gate_requires_full_source_verification(monkeypatch):
             document=None,
         )
 
+    monkeypatch.setattr(
+        producer,
+        "validate_artifact",
+        lambda *args, **kwargs: {
+            "programs": {"dk/boerne-og-ungeydelse": {"closed": True}}
+        },
+    )
     monkeypatch.setattr(producer, "verify_artifact", rejected_full_check)
     with pytest.raises(ValueError, match="failed full closure verification"):
         certify._closed_verdict(
@@ -489,7 +496,7 @@ def test_dk_opt_in_closure_gate_requires_full_source_verification(monkeypatch):
 
 
 def test_dk_opt_in_executable_gate_requires_full_reproduction(monkeypatch):
-    """The opt-in integration gate rejects a well-shaped forged compiled hash."""
+    """Program-scoped output cannot bypass DK's executable reproduction."""
 
     certify = _load("certify")
     producer = certify._producer_module("scripts/executable_reproduction.py")
@@ -504,6 +511,13 @@ def test_dk_opt_in_executable_gate_requires_full_reproduction(monkeypatch):
         calls.append(kwargs)
         return reproduced
 
+    monkeypatch.setattr(
+        producer,
+        "validate_artifact",
+        lambda *args, **kwargs: {
+            "programs": {"dk/boerne-og-ungeydelse": {"executable": True}}
+        },
+    )
     monkeypatch.setattr(producer, "build_reproduction", forged_reproduction)
     with pytest.raises(ValueError, match="compiled/replayed artifact drifted"):
         certify._executable_verdict(
@@ -515,6 +529,30 @@ def test_dk_opt_in_executable_gate_requires_full_reproduction(monkeypatch):
         )
     assert len(calls) == 1
     assert calls[0]["rulespec_ref"] == artifact["rulespec"]["sha"]
+
+
+def test_verify_producers_cli_flag_reaches_build_all(monkeypatch):
+    """MUTANT: the CLI flag cannot be parsed and then dropped at dispatch."""
+
+    certify = _load("certify")
+    observed = []
+
+    def stop_before_writes(*, verify_producers=False):
+        observed.append(verify_producers)
+        raise RuntimeError("stop after CLI dispatch")
+
+    monkeypatch.setattr(certify, "build_all", stop_before_writes)
+    monkeypatch.setattr(
+        certify.sys,
+        "argv",
+        ["certify.py", "--verify-producers"],
+    )
+
+    with pytest.raises(RuntimeError, match="stop after CLI dispatch"):
+        certify.main()
+
+    assert observed == [True]
+
 
 def test_nz_two_endpoint_gate_misses_conditional_default_person_dependency():
     """S1 negative test: preserve proof that the supporting gate is insufficient."""
@@ -2175,6 +2213,78 @@ def test_nz_trace_normalizer_mutants_are_killed(mutation, marker, monkeypatch):
         nz.build_trace_document(capture, regenerated)
 
 
+def test_nz_trace_capture_rejects_uncommitted_extra_evaluation_field(monkeypatch):
+    """MUTANT: canonical requests cannot carry uncommitted trace metadata."""
+
+    nz = _load("nz_incomeexplorer")
+    source, traces = _nz_trace_inputs(nz)
+    capture = copy.deepcopy(traces)
+    capture["schema"] = nz.RAW_TRACE_SCHEMA
+    capture["evaluations"][0]["mutant_uncommitted_metadata"] = True
+
+    # Keep the historical, uncommitted regenerated comparison's pinned byte
+    # identity out of this mutant: the added evaluation field is the only
+    # difference between the reconstructed document and committed authority.
+    monkeypatch.setattr(
+        nz,
+        "_canonical_file_sha",
+        lambda _document: nz.REGENERATED_SOURCE_SHA256,
+    )
+
+    with pytest.raises(nz.NZRecordError, match="not canonically identical"):
+        nz.build_trace_document(capture, source)
+
+
+def test_nz_trace_capture_path_is_no_drift_only(tmp_path, monkeypatch, capsys):
+    """MUTANT: an uncommitted request cannot mint or overwrite trace evidence."""
+
+    nz = _load("nz_incomeexplorer")
+    source, traces = _nz_trace_inputs(nz)
+    authority_path = tmp_path / "evaluation-traces.json"
+    authority_path.write_bytes(nz.TRACE_PATH.read_bytes())
+    original_bytes = authority_path.read_bytes()
+    monkeypatch.setattr(nz, "TRACE_PATH", authority_path)
+    # The original instrumented comparison differs from SOURCE_PATH only in
+    # provenance and is not itself committed.  Model its already-pinned byte
+    # identity while exercising the capture trust boundary.
+    monkeypatch.setattr(
+        nz,
+        "_canonical_file_sha",
+        lambda _document: nz.REGENERATED_SOURCE_SHA256,
+    )
+
+    # The legitimate path is a verifier: the same raw capture reconstructs the
+    # already-committed document exactly and a rewrite is byte-identical.
+    raw_capture = copy.deepcopy(traces)
+    raw_capture["schema"] = nz.RAW_TRACE_SCHEMA
+    assert nz.build_trace_document(raw_capture, source) == traces
+
+    mutant_capture = copy.deepcopy(raw_capture)
+    mutant_capture["evaluations"][0]["request"]["dataset"]["inputs"][0]["value"][
+        "value"
+    ] = "888888"
+    capture_path = tmp_path / "uncommitted-capture.json"
+    comparison_path = tmp_path / "comparison.json"
+    capture_path.write_text(json.dumps(mutant_capture))
+    comparison_path.write_text(json.dumps(source))
+    monkeypatch.setattr(
+        nz.sys,
+        "argv",
+        [
+            "nz_incomeexplorer.py",
+            "--capture-traces",
+            str(capture_path),
+            "--capture-comparison",
+            str(comparison_path),
+        ],
+    )
+
+    assert nz.main() == 1
+    assert authority_path.read_bytes() == original_bytes
+    error = capsys.readouterr().err
+    assert "request/root is absent from the committed #476 evaluation trace" in error
+
+
 def test_nz_attested_catalog_denominator_cannot_contradict_its_receipt(monkeypatch):
     certify = _load("certify")
     source_path = (
@@ -2948,6 +3058,56 @@ def test_producers_must_agree_on_one_rulespec_commit(tmp_path, monkeypatch):
     assert cert["verdicts"]["closed"]["rulespec_commit"] == other
     assert cert["verdicts"]["executable"]["rulespec_sha"] == receipt["rulespec"]["sha"]
     assert any("producers disagree on the rulespec commit" in b for b in cert["blockers"]), cert["blockers"]
+    assert cert["certified"]["value"] is False
+
+
+def test_nz_program_scoped_adapters_emit_the_same_pinned_rulespec_sha():
+    """Both NZ producer result shapes expose comparable pinned provenance."""
+
+    certify = _load("certify")
+    program = "nz/income-tax"
+    spec = certify.PROGRAMS[program]
+    closed = certify._producer_closed_verdict(program, spec, [])
+    executable = certify._producer_executable_verdict(program, spec, [])
+    pinned_sha = "89a7d25dc03a4d045348620283332de10b1047da"
+
+    assert closed is not None
+    assert executable is not None
+    assert closed["rulespec_commit"] == pinned_sha
+    assert executable["rulespec_sha"] == pinned_sha
+
+
+def test_nz_program_scoped_producers_must_agree_on_one_rulespec_commit(
+    monkeypatch,
+):
+    """MUTANT: NZ's dict adapters cannot escape cross-producer SHA agreement."""
+
+    certify = _load("certify")
+    original_closed = certify._producer_closed_verdict
+
+    def drifted_closure(program, spec, evidence, *, verify_producer=False):
+        block = original_closed(
+            program,
+            spec,
+            evidence,
+            verify_producer=verify_producer,
+        )
+        if program == "nz/income-tax" and block is not None:
+            block["rulespec_commit"] = "9986b6035c4e557b9b40645dfe2f3e4cffb6037c"
+        return block
+
+    monkeypatch.setattr(certify, "_producer_closed_verdict", drifted_closure)
+    cert = certify.build_certificate(
+        "nz/income-tax",
+        certify.PROGRAMS["nz/income-tax"],
+    )
+
+    assert cert["verdicts"]["closed"]["mode"] == "computed"
+    assert cert["verdicts"]["executable"]["mode"] == "computed"
+    assert any(
+        "producers disagree on the rulespec commit" in blocker
+        for blocker in cert["blockers"]
+    )
     assert cert["certified"]["value"] is False
 
 

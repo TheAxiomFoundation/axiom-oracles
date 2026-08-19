@@ -29,8 +29,14 @@ REQUEST_TRACE_PATH = (
     / "nz-treasury-incomeexplorer"
     / "requests.json"
 )
+EVALUATION_TRACE_PATH = (
+    REPO_ROOT / "comparisons" / "nz-treasury-incomeexplorer" / "evaluation-traces.json"
+)
 RATCHET_PATH = OUT_DIR / "denominator-ratchet.json"
 SOURCE_SHA256 = "a69b872fbc9fd9a98132ea5b7f5272d8be9631d3060651603b2b3c1f7cd64aea"
+EVALUATION_TRACE_SHA256 = (
+    "43cca386b15e71fc07fa8fb223b2bef8d351e0bb56ecfdf05fe98e790e66f4da"
+)
 RULESPEC_REPO = Path("/Users/maxghenis/TheAxiomFoundation/rulespec-nz")
 CORPUS_REPO = Path("/Users/maxghenis/TheAxiomFoundation/axiom-corpus")
 RULESPEC_SHA = "89a7d25dc03a4d045348620283332de10b1047da"
@@ -43,6 +49,53 @@ CORPUS_FILES = (
     "data/corpus/provisions/nz/district-plan/2026-07-18-wellington-district-plan.jsonl",
 )
 LEDGER_REPO_PATH = "known-missing-money-atoms.yaml"
+RATCHET_REPO_PATH = RATCHET_PATH.relative_to(REPO_ROOT).as_posix()
+
+TRACE_SCHEMA = "axiom_oracles.nz_evaluation_traces.v1"
+TRACE_SUITE = "nz-treasury-incomeexplorer"
+TRACE_EVALUATION_COUNT = 883
+TRACE_ENGINE = {
+    "binary_sha256": "56fbffea1e0e32c52b6fcbddbca76223bb185b33b49368c288e0c7213b0126e1",
+    "git_sha": "d59969b53430ae2fd97eb4349d44ad23ce930d85",
+}
+TRACE_COMPILED_PROGRAM = {
+    "artifact_sha256": "b1d72c1f4840a1774aefbddc9692e22a79ced26cde6c44efb4c01fc394a15c33",
+    "derived_outputs": 176,
+    "engine_evaluations": TRACE_EVALUATION_COUNT,
+    "input_slots": 328,
+    "parameters": 129,
+    "relations": 0,
+}
+TRACE_CAPTURE = {
+    "lineage_mode": "attested",
+    "source_comparison": {
+        "artifact": "comparisons/nz-treasury-incomeexplorer/source-comparison.json",
+        "regenerated_sha256": (
+            "7b58fcfdb50f8627f0228bf024d95cde3ef3d50caae7f2d9de2862d82ea6e8c6"
+        ),
+        "regeneration_difference": "provenance only",
+        "sha256": "abd3bcbebc01c73e58c27496db5897a306bb0496ae1d53e5abbd5ae487010b3b",
+        "substance_sha256": (
+            "a52a16d81433c91bc73e107fdaa5cdbc701d908f5c359615fd317cb82e6b8a15"
+        ),
+    },
+    "source_harness": {
+        "path": "nz-lane/emtr_reproduction/run.py",
+        "repository": "TheAxiomFoundation/ops",
+        "repository_commit": "bcf631b59968be4907e679b4704f5e029e2188ab",
+        "repository_commit_status": "pinned",
+        "sha256": "9aa0fc64af8dca4a8f7574e98923fe0022561679027c2ed5325bf381e9c6ab27",
+    },
+}
+
+REQUEST_EVIDENCE_PROVENANCE = {
+    "compiled_sha256": TRACE_COMPILED_PROGRAM["artifact_sha256"],
+    "engine_binary_sha256": TRACE_ENGINE["binary_sha256"],
+    "engine_git_sha": TRACE_ENGINE["git_sha"],
+    "harness": "TheAxiomFoundation/ops/nz-lane/emtr_reproduction/run.py",
+    "harness_commit": "bcf631b5",
+    "rulespec_commit": RULESPEC_SHA,
+}
 
 
 class ClosureError(ValueError):
@@ -122,73 +175,425 @@ def _load_json_object(path: Path, label: str) -> dict:
     return value
 
 
-def load_requested_output_roots() -> dict[str, list[str]]:
-    """Derive per-program roots from the independently captured engine requests."""
+def _canonical_json(value: object) -> str:
+    return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
 
-    trace = _load_json_object(REQUEST_TRACE_PATH, "NZ requested-output trace")
-    if trace.get("schema") != "axiom_oracles.nz_executable_requests.v1":
-        raise ClosureError("unexpected NZ requested-output trace schema")
-    provenance = trace.get("provenance") or {}
+
+def _derive_requested_output_roots(
+    trace: dict,
+) -> tuple[dict[str, list[str]], dict[str, set[tuple[str, tuple[str, ...]]]]]:
+    """Derive ownership exclusively from each execution-emitted trace row.
+
+    ``PROGRAM_VIEWS`` deliberately does not participate here. It is the
+    declaration side of the later bijection, not an ownership oracle for the
+    execution evidence.
+    """
+
+    expected_keys = {
+        "_comment",
+        "capture",
+        "compiled_program",
+        "engine",
+        "evaluation_count",
+        "evaluations",
+        "period",
+        "rulespec_commit",
+        "schema",
+        "suite",
+    }
+    if set(trace) != expected_keys:
+        raise ClosureError("NZ evaluation trace top-level shape drifted")
+    if trace.get("schema") != TRACE_SCHEMA or trace.get("suite") != TRACE_SUITE:
+        raise ClosureError("unexpected NZ evaluation trace schema or suite")
     if (
-        provenance.get("harness")
-        != "TheAxiomFoundation/ops/nz-lane/emtr_reproduction/run.py"
-        or provenance.get("harness_commit") != "bcf631b5"
-        or provenance.get("rulespec_commit") != RULESPEC_SHA
-        or provenance.get("engine_git_sha")
-        != "d59969b53430ae2fd97eb4349d44ad23ce930d85"
+        trace.get("capture") != TRACE_CAPTURE
+        or trace.get("compiled_program") != TRACE_COMPILED_PROGRAM
+        or trace.get("engine") != TRACE_ENGINE
+        or trace.get("rulespec_commit") != RULESPEC_SHA
+        or trace.get("period") != {"start": "2026-04-01", "end": "2027-03-31"}
     ):
-        raise ClosureError("NZ requested-output trace provenance drifted")
-    programs = sorted(PROGRAM_VIEWS)
-    derived: dict[str, set[str]] = {program: set() for program in programs}
-    rows = trace.get("requests")
-    if not isinstance(rows, list) or not rows:
-        raise ClosureError("NZ requested-output trace has no requests")
-    for index, row in enumerate(rows):
-        if not isinstance(row, dict):
-            raise ClosureError(f"NZ requested-output trace request {index} is invalid")
-        program = row.get("program")
-        if program not in derived:
-            raise ClosureError(
-                f"NZ requested-output trace request {index} has unknown program {program!r}"
-            )
-        request = row.get("request") or {}
+        raise ClosureError("NZ evaluation trace provenance drifted")
+    evaluations = trace.get("evaluations")
+    if (
+        not isinstance(evaluations, list)
+        or isinstance(trace.get("evaluation_count"), bool)
+        or trace.get("evaluation_count") != len(evaluations)
+        or len(evaluations) != TRACE_EVALUATION_COUNT
+    ):
+        raise ClosureError("NZ evaluation trace must contain 883 evaluations")
+
+    derived: dict[str, set[str]] = {}
+    canonical_requests: dict[str, set[tuple[str, tuple[str, ...]]]] = {}
+    for index, evaluation in enumerate(evaluations, start=1):
+        location = f"NZ evaluation trace row {index - 1}"
+        if not isinstance(evaluation, dict) or set(evaluation) != {
+            "evaluation_id",
+            "request",
+            "requested_output_roots",
+            "response",
+            "view",
+        }:
+            raise ClosureError(f"{location} has invalid canonical shape")
+        if evaluation.get("evaluation_id") != f"nz-ie-eval-{index:04d}":
+            raise ClosureError(f"{location} has a missing, duplicate, or reordered id")
+        view = evaluation.get("view")
+        if not isinstance(view, str) or not view:
+            raise ClosureError(f"{location} has an invalid emitted view")
+        request = evaluation.get("request")
+        if (
+            not isinstance(request, dict)
+            or set(request) != {"dataset", "mode", "queries"}
+            or request.get("mode") != "explain"
+        ):
+            raise ClosureError(f"{location} has an invalid explain request")
+        dataset = request.get("dataset")
+        if (
+            not isinstance(dataset, dict)
+            or set(dataset) != {"inputs", "relations"}
+            or not isinstance(dataset.get("inputs"), list)
+            or not dataset["inputs"]
+            or dataset.get("relations") != []
+        ):
+            raise ClosureError(f"{location} has an invalid request dataset")
         queries = request.get("queries")
         if not isinstance(queries, list) or len(queries) != 1:
-            raise ClosureError(
-                f"NZ requested-output trace request {index} must contain one query"
-            )
-        outputs = queries[0].get("outputs")
+            raise ClosureError(f"{location} must contain exactly one query")
+        query = queries[0]
+        if not isinstance(query, dict) or set(query) != {
+            "entity_id",
+            "outputs",
+            "period",
+        }:
+            raise ClosureError(f"{location} query has invalid canonical shape")
+        outputs = query.get("outputs")
         if (
             not isinstance(outputs, list)
+            or not outputs
             or outputs != list(dict.fromkeys(outputs))
             or not all(isinstance(output, str) and output for output in outputs)
         ):
+            raise ClosureError(f"{location} has invalid requested outputs")
+        if evaluation.get("requested_output_roots") != outputs:
             raise ClosureError(
-                f"NZ requested-output trace request {index} has invalid outputs"
+                f"{location} requested_output_roots differ from request outputs"
             )
-        derived[program].update(outputs)
-    result = {program: sorted(roots) for program, roots in sorted(derived.items())}
-    if trace.get("requested_outputs_by_program") != result:
-        raise ClosureError(
-            "NZ requested-output trace summary is not derived from its requests"
+        expected_period = {
+            "period_kind": "tax_year",
+            "start": trace["period"]["start"],
+            "end": trace["period"]["end"],
+        }
+        entity_id = query.get("entity_id")
+        if (
+            not isinstance(entity_id, str)
+            or not entity_id
+            or query.get("period") != expected_period
+        ):
+            raise ClosureError(f"{location} query entity or period drifted")
+        response = evaluation.get("response")
+        if (
+            not isinstance(response, dict)
+            or set(response) != {"entity_id", "metadata", "outputs", "period"}
+            or response.get("entity_id") != entity_id
+            or response.get("period") != expected_period
+            or response.get("metadata")
+            != {"actual_mode": "explain", "requested_mode": "explain"}
+        ):
+            raise ClosureError(f"{location} response envelope drifted")
+        returned = response.get("outputs")
+        if not isinstance(returned, dict) or set(returned) != set(outputs):
+            raise ClosureError(
+                f"{location} response outputs do not biject request outputs"
+            )
+        if any(
+            not isinstance(returned[root], dict) or returned[root].get("id") != root
+            for root in outputs
+        ):
+            raise ClosureError(f"{location} response output identity drifted")
+
+        roots = tuple(outputs)
+        derived.setdefault(view, set()).update(roots)
+        canonical_requests.setdefault(_canonical_json(request), set()).add(
+            (view, roots)
         )
-    return result
+
+    return (
+        {view: sorted(roots) for view, roots in sorted(derived.items())},
+        canonical_requests,
+    )
 
 
-def load_denominator_ratchet() -> dict[str, dict[str, int]]:
-    ratchet = _load_json_object(RATCHET_PATH, "NZ closure denominator ratchet")
-    if ratchet.get("schema") != "axiom_oracles.nz_closure_denominator_ratchet.v1":
-        raise ClosureError("unexpected NZ closure denominator ratchet schema")
-    programs = ratchet.get("programs")
-    if not isinstance(programs, dict) or set(programs) != set(PROGRAM_VIEWS):
+def _validate_request_evidence_binding(
+    evidence: dict,
+    *,
+    trace_roots: dict[str, list[str]],
+    canonical_trace_requests: dict[str, set[tuple[str, tuple[str, ...]]]],
+) -> None:
+    """Bind the committed executable request subset to actual trace calls."""
+
+    if evidence.get("schema") != "axiom_oracles.nz_executable_requests.v1":
+        raise ClosureError("unexpected NZ executable request evidence schema")
+    if evidence.get("provenance") != REQUEST_EVIDENCE_PROVENANCE:
+        raise ClosureError("NZ executable request evidence provenance drifted")
+    rows = evidence.get("requests")
+    if not isinstance(rows, list) or not rows:
+        raise ClosureError("NZ executable request evidence has no requests")
+    seen_ids: set[str] = set()
+    roots_from_matched_trace: dict[str, set[str]] = {}
+    for index, row in enumerate(rows):
+        location = f"NZ executable request evidence row {index}"
+        if not isinstance(row, dict):
+            raise ClosureError(f"{location} is invalid")
+        request_id = row.get("id")
+        if not isinstance(request_id, str) or not request_id or request_id in seen_ids:
+            raise ClosureError(f"{location} has a missing or duplicate id")
+        seen_ids.add(request_id)
+        declared_program = row.get("program")
+        if not isinstance(declared_program, str) or not declared_program:
+            raise ClosureError(f"{location} has an invalid declared program")
+        request = row.get("request")
+        if not isinstance(request, dict):
+            raise ClosureError(f"{location} has no canonical request")
+        matches = canonical_trace_requests.get(_canonical_json(request))
+        if not matches:
+            raise ClosureError(
+                f"{location} request/root is absent from the committed evaluation trace"
+            )
+        if len(matches) != 1:
+            raise ClosureError(
+                f"{location} has ambiguous ownership in the evaluation trace"
+            )
+        # Ownership comes from the matched trace evaluation. The evidence row's
+        # program label is intentionally not used to normalize this side.
+        view, requested_roots = next(iter(matches))
+        if declared_program != view:
+            raise ClosureError(
+                f"{location} declared program differs from trace-emitted ownership"
+            )
+        roots_from_matched_trace.setdefault(view, set()).update(requested_roots)
+    matched = {
+        view: sorted(roots) for view, roots in sorted(roots_from_matched_trace.items())
+    }
+    if matched != trace_roots:
+        raise ClosureError(
+            "NZ executable request evidence does not cover the trace-derived root set"
+        )
+    if evidence.get("requested_outputs_by_program") != trace_roots:
+        raise ClosureError(
+            "NZ executable request evidence summary differs from trace-derived roots"
+        )
+
+
+def load_requested_output_roots(
+    *,
+    trace: dict | None = None,
+    request_evidence: dict | None = None,
+) -> dict[str, list[str]]:
+    """Derive per-program roots from #476's committed execution trace."""
+
+    if trace is None:
+        if hashlib.sha256(EVALUATION_TRACE_PATH.read_bytes()).hexdigest() != (
+            EVALUATION_TRACE_SHA256
+        ):
+            raise ClosureError(
+                "NZ evaluation trace bytes changed; review and re-pin the execution evidence"
+            )
+        trace = _load_json_object(EVALUATION_TRACE_PATH, "NZ evaluation trace")
+    if request_evidence is None:
+        request_evidence = _load_json_object(
+            REQUEST_TRACE_PATH, "NZ executable request evidence"
+        )
+    roots, canonical_requests = _derive_requested_output_roots(trace)
+    _validate_request_evidence_binding(
+        request_evidence,
+        trace_roots=roots,
+        canonical_trace_requests=canonical_requests,
+    )
+    return roots
+
+
+def _validate_ratchet_programs(
+    programs: object,
+    *,
+    label: str,
+    require_current_program_set: bool,
+) -> dict[str, dict[str, int]]:
+    if not isinstance(programs, dict):
+        raise ClosureError(f"{label} programs must contain an object")
+    if require_current_program_set and set(programs) != set(PROGRAM_VIEWS):
         raise ClosureError("NZ closure denominator ratchet program set drifted")
     for program, row in programs.items():
-        if not isinstance(row, dict):
-            raise ClosureError(f"{program}: closure denominator ratchet row is invalid")
+        if not isinstance(program, str) or not isinstance(row, dict):
+            raise ClosureError(f"{label} row {program!r} is invalid")
         for field in ("requested_output_count_min", "citation_count_min"):
             value = row.get(field)
             if not isinstance(value, int) or isinstance(value, bool) or value < 0:
                 raise ClosureError(f"{program}: {field} must be a non-negative integer")
+    return programs
+
+
+def _ratchet_from_document(
+    document: dict,
+    *,
+    label: str,
+    require_current_program_set: bool,
+) -> dict[str, dict[str, int]]:
+    if document.get("schema") != "axiom_oracles.nz_closure_denominator_ratchet.v1":
+        raise ClosureError(f"unexpected {label} schema")
+    return _validate_ratchet_programs(
+        document.get("programs"),
+        label=label,
+        require_current_program_set=require_current_program_set,
+    )
+
+
+def _history_note(message: str) -> None:
+    print(
+        f"NZ closure NOTE: {message}; ancestor floor check failed open", file=sys.stderr
+    )
+
+
+def _git_history(*args: str) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        ["git", "-C", str(REPO_ROOT), *args],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+
+
+def _ratchet_at_revision(
+    revision: str,
+    *,
+    label: str,
+    unavailable_is_note: bool,
+) -> dict[str, dict[str, int]] | None:
+    shown = _git_history("show", f"{revision}:{RATCHET_REPO_PATH}")
+    if shown.returncode:
+        if unavailable_is_note:
+            _history_note(f"{label} has no readable {RATCHET_REPO_PATH}")
+        return None
+    try:
+        document = json.loads(shown.stdout)
+    except json.JSONDecodeError as exc:
+        raise ClosureError(
+            f"{label} denominator ratchet is invalid JSON: {exc}"
+        ) from exc
+    if not isinstance(document, dict):
+        raise ClosureError(f"{label} denominator ratchet must contain an object")
+    return _ratchet_from_document(
+        document,
+        label=f"{label} denominator ratchet",
+        require_current_program_set=False,
+    )
+
+
+def _load_ancestor_denominator_ratchets() -> dict[str, dict[str, dict[str, int]]]:
+    """Load merge-base and feature-history floors without requiring network access."""
+
+    ancestors: dict[str, dict[str, dict[str, int]]] = {}
+
+    # HEAD protects an uncommitted/staged lowering. The strict ancestor below
+    # independently protects a lowering once that mutation itself is committed.
+    head_ratchet = _ratchet_at_revision("HEAD", label="HEAD", unavailable_is_note=True)
+    if head_ratchet is not None:
+        ancestors["HEAD"] = head_ratchet
+
+    # Walk every reachable version of the path, not only the direct parents.
+    # GitHub Actions checks pull requests out at a synthetic merge commit. If
+    # the PR tip itself lowers a floor, both that merge and its PR-tip parent
+    # contain the lowered bytes while the older, higher floor sits one commit
+    # farther back. A direct-parent-only check therefore accepts the lowering.
+    # ``--full-history`` keeps both sides of merges; comparing every readable
+    # version makes the effective floor the strictest value reachable from
+    # HEAD, including the feature branch's pre-merge history.
+    strict_history = _git_history(
+        "rev-list", "--full-history", "HEAD", "--", RATCHET_REPO_PATH
+    )
+    if strict_history.returncode:
+        _history_note(
+            strict_history.stderr.strip()
+            or f"reachable history for {RATCHET_REPO_PATH} is unavailable"
+        )
+    else:
+        strict_found = False
+        for revision in strict_history.stdout.splitlines():
+            strict_ratchet = _ratchet_at_revision(
+                revision,
+                label=f"reachable HEAD history {revision}",
+                unavailable_is_note=False,
+            )
+            if strict_ratchet is None:
+                continue
+            strict_found = True
+            ancestors[f"reachable HEAD history {revision}"] = strict_ratchet
+        if not strict_found:
+            _history_note(
+                f"reachable HEAD history containing {RATCHET_REPO_PATH} is unavailable"
+            )
+
+    merge_base = _git_history("merge-base", "HEAD", "origin/main")
+    merge_base_revision = (
+        merge_base.stdout.strip() if merge_base.returncode == 0 else ""
+    )
+    if not merge_base_revision:
+        detail = (
+            merge_base.stderr.strip() or "origin/main or its merge-base is unavailable"
+        )
+        _history_note(detail)
+    else:
+        merge_base_ratchet = _ratchet_at_revision(
+            merge_base_revision,
+            label=f"origin/main merge-base {merge_base_revision}",
+            unavailable_is_note=True,
+        )
+        if merge_base_ratchet is not None:
+            ancestors[f"origin/main merge-base {merge_base_revision}"] = (
+                merge_base_ratchet
+            )
+    return ancestors
+
+
+def _validate_ancestor_monotonicity(
+    current: dict[str, dict[str, int]],
+    *,
+    ancestors: dict[str, dict[str, dict[str, int]]] | None = None,
+) -> None:
+    if ancestors is None:
+        ancestors = _load_ancestor_denominator_ratchets()
+    for label, ancestor in ancestors.items():
+        ancestor = _validate_ratchet_programs(
+            ancestor,
+            label=label,
+            require_current_program_set=False,
+        )
+        for program, old_row in ancestor.items():
+            current_row = current.get(program)
+            if current_row is None:
+                raise ClosureError(
+                    f"{program}: ancestor-monotone denominator RATCHET dropped the "
+                    f"program present at {label}"
+                )
+            for field in ("requested_output_count_min", "citation_count_min"):
+                old = old_row[field]
+                new = current_row[field]
+                if new < old:
+                    raise ClosureError(
+                        f"{program}: ancestor-monotone denominator RATCHET lowered "
+                        f"{field} from {old} at {label} to {new}"
+                    )
+
+
+def load_denominator_ratchet(
+    *,
+    ancestor_ratchets: dict[str, dict[str, dict[str, int]]] | None = None,
+) -> dict[str, dict[str, int]]:
+    ratchet = _load_json_object(RATCHET_PATH, "NZ closure denominator ratchet")
+    programs = _ratchet_from_document(
+        ratchet,
+        label="NZ closure denominator ratchet",
+        require_current_program_set=True,
+    )
+    _validate_ancestor_monotonicity(programs, ancestors=ancestor_ratchets)
     return programs
 
 
@@ -201,7 +606,12 @@ def bootstrap_source() -> dict:
     rule_names: set[str] = set()
     for path in _git(
         RULESPEC_REPO,
-        "ls-tree", "-r", "--name-only", RULESPEC_SHA, "--", *ROOTS,
+        "ls-tree",
+        "-r",
+        "--name-only",
+        RULESPEC_SHA,
+        "--",
+        *ROOTS,
     ).splitlines():
         raw = _git(RULESPEC_REPO, "show", f"{RULESPEC_SHA}:{path}")
         try:
@@ -256,7 +666,9 @@ def bootstrap_source() -> dict:
                 row = json.loads(line)
                 citation = row["citation_path"]
             except (json.JSONDecodeError, KeyError, TypeError) as exc:
-                raise ClosureError(f"{path}:{line_number}: invalid provision row") from exc
+                raise ClosureError(
+                    f"{path}:{line_number}: invalid provision row"
+                ) from exc
             if citation in corpus_paths:
                 raise ClosureError(f"duplicate corpus citation path {citation!r}")
             corpus_paths.add(citation)
@@ -294,13 +706,17 @@ def build(
     *,
     requested_output_roots: dict[str, list[str]] | None = None,
     denominator_ratchet: dict[str, dict[str, int]] | None = None,
+    ancestor_denominator_ratchets: dict[str, dict[str, dict[str, int]]] | None = None,
 ) -> dict:
     if source.get("schema") != "axiom_oracles.nz_closure_source.v2":
         raise ClosureError("unexpected NZ closure source schema")
     rulespec = source.get("rulespec") or {}
     corpus = source.get("corpus") or {}
     ledger = source.get("pending_ledger") or {}
-    if rulespec.get("commit") != RULESPEC_SHA or tuple(rulespec.get("roots") or ()) != ROOTS:
+    if (
+        rulespec.get("commit") != RULESPEC_SHA
+        or tuple(rulespec.get("roots") or ()) != ROOTS
+    ):
         raise ClosureError("NZ closure RuleSpec pin or declared roots drifted")
     if (
         corpus.get("release") != "nz-rulespec-2026-07-18"
@@ -324,7 +740,19 @@ def build(
     if requested_output_roots is None:
         requested_output_roots = load_requested_output_roots()
     if denominator_ratchet is None:
-        denominator_ratchet = load_denominator_ratchet()
+        denominator_ratchet = load_denominator_ratchet(
+            ancestor_ratchets=ancestor_denominator_ratchets
+        )
+    else:
+        denominator_ratchet = _validate_ratchet_programs(
+            denominator_ratchet,
+            label="NZ closure denominator ratchet",
+            require_current_program_set=True,
+        )
+        _validate_ancestor_monotonicity(
+            denominator_ratchet,
+            ancestors=ancestor_denominator_ratchets,
+        )
     if set(requested_output_roots) != set(expected_program_roots):
         raise ClosureError("NZ requested-output trace program set drifted")
     if source.get("program_roots") != requested_output_roots:
@@ -351,7 +779,9 @@ def build(
         if not isinstance(file_citations, list) or file_citations != sorted(
             set(file_citations)
         ):
-            raise ClosureError(f"{row.get('path')}: citations must be unique and sorted")
+            raise ClosureError(
+                f"{row.get('path')}: citations must be unique and sorted"
+            )
         for node in row.get("nodes") or []:
             if not isinstance(node, dict):
                 raise ClosureError(f"{row.get('path')}: invalid node entry")
@@ -360,7 +790,9 @@ def build(
             if not isinstance(node_id, str) or not isinstance(name, str):
                 raise ClosureError(f"{row.get('path')}: node lacks id or name")
             if node_id != _node_id(row["path"], name):
-                raise ClosureError(f"{node_id}: node id does not match its RuleSpec path")
+                raise ClosureError(
+                    f"{node_id}: node id does not match its RuleSpec path"
+                )
             if node_id in nodes_by_id or name in nodes_by_name:
                 raise ClosureError(f"duplicate RuleSpec node {node_id!r}")
             citations = node.get("citations")
@@ -370,7 +802,9 @@ def build(
             if node.get("citations_sha256") != _list_sha256(citations):
                 raise ClosureError(f"{node_id}: cited path was dropped or changed")
             if not set(citations).issubset(file_citations):
-                raise ClosureError(f"{node_id}: node citation missing from its file census")
+                raise ClosureError(
+                    f"{node_id}: node citation missing from its file census"
+                )
             if not isinstance(dependencies, list) or dependencies != sorted(
                 set(dependencies)
             ):
@@ -388,7 +822,9 @@ def build(
     summaries = []
     all_pending: set[str] = set()
     for root in ROOTS:
-        root_files = [row for row in files if str(row.get("path", "")).startswith(root + "/")]
+        root_files = [
+            row for row in files if str(row.get("path", "")).startswith(root + "/")
+        ]
         classifications = []
         for row in root_files:
             citations = row.get("citations")
@@ -399,7 +835,10 @@ def build(
             elif citations:
                 status, reason = "encoded", "all_citations_resolve_by_exact_path"
             else:
-                status, reason = "excluded", "storage_or_test_file_without_corpus_citation"
+                status, reason = (
+                    "excluded",
+                    "storage_or_test_file_without_corpus_citation",
+                )
             classifications.append(
                 {
                     "path": row["path"],
@@ -502,6 +941,10 @@ def build(
             "sha256": hashlib.sha256(SOURCE_PATH.read_bytes()).hexdigest(),
         },
         "requested_output_trace": {
+            "artifact": str(EVALUATION_TRACE_PATH.relative_to(REPO_ROOT)),
+            "sha256": hashlib.sha256(EVALUATION_TRACE_PATH.read_bytes()).hexdigest(),
+        },
+        "executable_request_evidence": {
             "artifact": str(REQUEST_TRACE_PATH.relative_to(REPO_ROOT)),
             "sha256": hashlib.sha256(REQUEST_TRACE_PATH.read_bytes()).hexdigest(),
         },
@@ -519,7 +962,9 @@ def validate_artifact(document: dict, *, repo_root: Path = REPO_ROOT) -> dict:
         raise ClosureError("NZ closure must validate at the repository root")
     expected = build(load_source())
     if document != expected:
-        raise ClosureError("NZ closure artifact does not rederive from committed inputs")
+        raise ClosureError(
+            "NZ closure artifact does not rederive from committed inputs"
+        )
     return expected
 
 
