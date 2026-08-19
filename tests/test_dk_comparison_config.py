@@ -183,14 +183,15 @@ def test_dk_all_four_computed_premises_flow_to_certificate() -> None:
     } == {
         "conformant": ("computed", True),
         "exercised": ("computed", True),
-        "closed": ("computed", False),
+        "closed": ("computed", True),
         "executable": ("computed", True),
     }
     assert not any(
         blocker.startswith("exercise:") for blocker in certificate["blockers"]
     )
-    assert certificate["certified"]["value"] is False
-    assert certificate["certified"]["state"] == "no"
+    assert certificate["blockers"] == []
+    assert certificate["certified"]["value"] is True
+    assert certificate["certified"]["state"] == "yes"
 
     evidence = {row["artifact"]: row for row in certificate["evidence"]}
     for relative in (
