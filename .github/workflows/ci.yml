@@ -58,6 +58,7 @@ jobs:
         run: |
           uv run python scripts/nz_executable_reproduction.py --check
           uv run python scripts/nz_closure.py --check
+          uv run python scripts/nz_exercise_denominator.py --check
 
       - name: Cache pinned NZ engine source build
         uses: actions/cache@v4

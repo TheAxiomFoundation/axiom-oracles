@@ -608,12 +608,16 @@ def test_nz_computed_premises_without_cleared_blockers_do_not_certify():
         assert certificate["verdicts"]["exercised"]["value"] is True
         assert (
             certificate["verdicts"]["exercised"]["catalog_completeness"]["mode"]
-            == "attested"
+            == "computed"
         )
         assert certificate["verdicts"]["exercised"]["capture_lineage"]["mode"] == (
-            "attested"
+            "computed"
         )
-        assert any(blocker.startswith("exercise denominator:") for blocker in certificate["blockers"])
+        assert not any(
+            blocker.startswith("exercise denominator:")
+            for blocker in certificate["blockers"]
+        )
+        assert certificate["blockers"], "structural engine blockers must remain"
         assert certificate["verdicts"]["closed"]["mode"] == "computed"
         assert certificate["verdicts"]["closed"]["value"] is True
         assert certificate["verdicts"]["executable"]["mode"] == "computed"
@@ -2298,11 +2302,10 @@ def test_nz_attested_catalog_denominator_cannot_contradict_its_receipt(monkeypat
         return mutant if path == source_path else original_load(path)
 
     monkeypatch.setattr(certify, "_load", load_with_mutant)
+    attested_spec = copy.deepcopy(certify.PROGRAMS["nz/income-tax"])
+    attested_spec["computed"].pop("exercise_denominator", None)
     with pytest.raises(ValueError, match="attested denominator"):
-        certify._attested_exercise_catalog(
-            certify.PROGRAMS["nz/income-tax"],
-            [],
-        )
+        certify._attested_exercise_catalog(attested_spec, [])
 
 
 def test_nz_attested_catalog_receipt_must_have_catalog_and_compiled_shape(monkeypatch):
@@ -2312,11 +2315,10 @@ def test_nz_attested_catalog_receipt_must_have_catalog_and_compiled_shape(monkey
         "_load",
         lambda _path: {"exercise_input_catalog": [], "compiled_program": {}},
     )
+    attested_spec = copy.deepcopy(certify.PROGRAMS["nz/income-tax"])
+    attested_spec["computed"].pop("exercise_denominator", None)
     with pytest.raises(ValueError, match="completeness receipt is malformed"):
-        certify._attested_exercise_catalog(
-            certify.PROGRAMS["nz/income-tax"],
-            [],
-        )
+        certify._attested_exercise_catalog(attested_spec, [])
 
 
 def test_nz_population_must_remain_treasurys_complete_spine():
@@ -3248,3 +3250,64 @@ def test_tariff_scale_report_derives_open_axiom_units(monkeypatch):
         "fed-false-family-forced-labor": 1_499_038,
     }
     assert leg["clean"] is False
+
+
+# ── Exercise denominator: computed from committed artifacts ──────────────────
+
+
+def test_nz_denominator_slot_deleted_from_suite_catalog_reds(tmp_path, monkeypatch):
+    """MUTANT: a slot dropped from the suite catalog breaks the bijection."""
+
+    denominator = _load("nz_exercise_denominator")
+    report = json.loads(denominator.SOURCE_REPORT_PATH.read_text())
+    dropped = sorted(report["exercise_input_catalog"])[0]
+    del report["exercise_input_catalog"][dropped]
+    mutant = tmp_path / "source-comparison.json"
+    mutant.write_text(json.dumps(report))
+    monkeypatch.setattr(denominator, "SOURCE_REPORT_PATH", mutant)
+    with pytest.raises(denominator.DenominatorError, match="not bijective"):
+        denominator.validate()
+
+
+def test_nz_denominator_recorded_input_slots_tamper_reds(tmp_path, monkeypatch):
+    """MUTANT: shrinking the recorded input_slots denominator must red."""
+
+    denominator = _load("nz_exercise_denominator")
+    report = json.loads(denominator.SOURCE_REPORT_PATH.read_text())
+    report["compiled_program"]["input_slots"] -= 1
+    mutant = tmp_path / "source-comparison.json"
+    mutant.write_text(json.dumps(report))
+    monkeypatch.setattr(denominator, "SOURCE_REPORT_PATH", mutant)
+    with pytest.raises(
+        denominator.DenominatorError, match="input_slots denominator"
+    ):
+        denominator.validate()
+
+
+def test_nz_denominator_trace_count_tamper_reds(tmp_path, monkeypatch):
+    """MUTANT: deleting a committed evaluation trace must red the cardinality."""
+
+    denominator = _load("nz_exercise_denominator")
+    traces = json.loads(denominator.TRACES_PATH.read_text())
+    traces["evaluations"].pop()
+    traces["evaluation_count"] = len(traces["evaluations"])
+    mutant = tmp_path / "evaluation-traces.json"
+    mutant.write_text(json.dumps(traces))
+    monkeypatch.setattr(denominator, "TRACES_PATH", mutant)
+    with pytest.raises(denominator.DenominatorError, match="capture cardinality"):
+        denominator.validate()
+
+
+def test_nz_denominator_artifact_byte_flip_reds(tmp_path, monkeypatch):
+    """MUTANT: any change to the committed compiled artifact bytes must red."""
+
+    denominator = _load("nz_exercise_denominator")
+    artifact = json.loads(denominator.ARTIFACT_PATH.read_text())
+    artifact["metadata"]["input_catalog"].append(
+        {"slot": "smuggled_extra_slot", "canonical_request_name": "nz:none"}
+    )
+    mutant = tmp_path / "compiled-program.json"
+    mutant.write_text(json.dumps(artifact))
+    monkeypatch.setattr(denominator, "ARTIFACT_PATH", mutant)
+    with pytest.raises(denominator.DenominatorError, match="bytes drifted"):
+        denominator.validate()

@@ -219,14 +219,6 @@ NZ_ACC_LOCALITY_BLOCKER = (
     "(adversarial review S1); structural cure = axiom-rules-engine#134 stage 2 "
     "(prototype exists on feat/unit-derivation-stage2)."
 )
-NZ_EXERCISE_EVIDENCE_LIMITATION = (
-    "exercise denominator: committed per-evaluation traces compute each "
-    "certificate view's supplied-input variation and exact requested-output "
-    "root sets, but the 328-slot compiled-input universe (including 178 "
-    "never-supplied slots) and the 883-call capture-completeness receipt remain "
-    "commit-pinned external attestations; no committed compiled-program "
-    "artifact or in-repo harness execution derives them."
-)
 for _nz_program in (
     "nz/acc-earners-levy",
     "nz/accommodation-supplement",
@@ -259,15 +251,18 @@ for _nz_program in (
                 "producer": "scripts/nz_executable_reproduction.py",
                 "external_verification": "dedicated_source_build_ci",
             },
+            "exercise_denominator": {
+                "producer": "scripts/nz_exercise_denominator.py",
+            },
         },
         "attested_exercise_catalog_receipt": (
             "comparisons/nz-treasury-incomeexplorer/source-comparison.json"
         ),
         "certified_false_when_blocked": True,
         "blockers": (
-            [NZ_ACC_LOCALITY_BLOCKER, NZ_EXERCISE_EVIDENCE_LIMITATION]
+            [NZ_ACC_LOCALITY_BLOCKER]
             if _nz_program in SINGLE_PERSON_PROGRAMS
-            else [NZ_AGGREGATION_BLOCKER, NZ_EXERCISE_EVIDENCE_LIMITATION]
+            else [NZ_AGGREGATION_BLOCKER]
         ),
         "single_person_attestation": (
             "comparisons/nz-treasury-incomeexplorer/single-person-attestations.json"
@@ -1521,11 +1516,39 @@ def _attested_exercise_catalog(
     spec: dict,
     evidence: list[dict],
 ) -> dict | None:
-    """Describe the NZ completeness boundary without promoting it to computed."""
+    """The NZ completeness boundary: computed when the denominator producer
+    cross-derives it from committed artifacts, attested otherwise."""
 
     path_string = spec.get("attested_exercise_catalog_receipt")
     if not path_string:
         return None
+    config = (spec.get("computed") or {}).get("exercise_denominator")
+    if isinstance(config, dict):
+        producer = _producer_module(str(config.get("producer") or ""))
+        try:
+            summary = producer.validate(repo_root=REPO_ROOT)
+        except ValueError as exc:
+            raise ValueError(f"exercise denominator failed to compute: {exc}") from exc
+        path = REPO_ROOT / path_string
+        evidence.append(
+            {
+                "claim": "compiled input universe and capture cardinality",
+                "mode": "computed",
+                "artifact": path_string,
+                "sha256": sha256_of(path),
+                "verification": "producer_cross_derivation",
+            }
+        )
+        return {
+            "mode": "computed",
+            "artifact": path_string,
+            "sha256": sha256_of(path),
+            "input_count": summary["input_count"],
+            "supplied_input_count": summary["supplied_input_count"],
+            "not_supplied_count": summary["not_supplied_count"],
+            "expected_evaluation_count": summary["evaluation_count"],
+            "universe_source": summary["universe_source"],
+        }
     path = REPO_ROOT / path_string
     source = _load(path)
     catalog = source.get("exercise_input_catalog")
@@ -1829,13 +1852,31 @@ def build_certificate(
                         "root sets observed in the committed traces"
                     ),
                     "catalog_completeness": catalog_completeness,
-                    "capture_lineage": {
-                        "mode": "attested",
-                        "limitation": (
-                            "The external capture instrumentation and executable "
-                            "capture transcript are not committed in this repository."
-                        ),
-                    },
+                    "capture_lineage": (
+                        {
+                            "mode": "computed",
+                            "basis": (
+                                "committed evaluation traces bind to the "
+                                "byte-verified compiled artifact and pinned "
+                                "engine, and their cardinality cross-derives "
+                                "from the committed record; traces are a lower "
+                                "bound on exercise — an unrecorded call could "
+                                "only add variation, never subtract it — so "
+                                "with the denominator derived from the "
+                                "committed artifact, capture completeness is "
+                                "not load-bearing"
+                            ),
+                        }
+                        if catalog_completeness.get("mode") == "computed"
+                        else {
+                            "mode": "attested",
+                            "limitation": (
+                                "The external capture instrumentation and "
+                                "executable capture transcript are not "
+                                "committed in this repository."
+                            ),
+                        }
+                    ),
                 }
                 if catalog_completeness is not None
                 else {}

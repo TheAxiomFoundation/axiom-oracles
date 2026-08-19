@@ -171,6 +171,7 @@ verify_derived() {
   fi
   if [ -f conformance/executable/nz-treasury-incomeexplorer.json ]; then
     "$PYTHON" scripts/nz_executable_reproduction.py --check || return
+    "$PYTHON" scripts/nz_exercise_denominator.py --check || return
   fi
   if [ -f closure/nz/source.json ]; then
     "$PYTHON" scripts/nz_closure.py --check || return
