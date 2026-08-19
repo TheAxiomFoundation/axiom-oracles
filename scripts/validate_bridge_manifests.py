@@ -32,6 +32,7 @@ visible audit debt: never hidden, never a CI break, and their census rows stay
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import re
@@ -50,6 +51,8 @@ COMPARISON_DIR = REPO_ROOT / "comparisons"
 SCHEMA = "axiom_oracles.bridge_manifest.v1"
 KINDS = {"mapped", "projected", "bridged", "constant"}
 SUITE_CASE_INPUTS = "suite_cases"
+COMMITTED_EXERCISE_RECEIPT = "committed_exercise_receipt"
+EXERCISE_RECEIPT_SCHEMA = "axiom_oracles.committed_exercise_receipt.v1"
 SHA256_PATTERN = re.compile(r"[0-9a-f]{64}")
 EUROMOD_SYNTHETIC_RUNNER = "euromod-synthetic-compare"
 YEAR_MONTH_EXECUTION_RUNNERS = {"axiom-encode-snap-ecps-compare"}
@@ -320,7 +323,11 @@ def _index_chunk_paths(index_path: str) -> frozenset[str]:
 
 
 def _report_for(suite_names: list[str]) -> tuple[str | None, dict | None]:
-    for path in sorted(DATA_DIR.glob("*.json")):
+    report_paths = [
+        *sorted(DATA_DIR.glob("*.json")),
+        *sorted((REPO_ROOT / "conformance" / "detail").glob("*.json")),
+    ]
+    for path in report_paths:
         try:
             payload = json.loads(path.read_text())
         except (OSError, json.JSONDecodeError):
@@ -361,6 +368,96 @@ def _valid_dataset_identity(identity: object) -> bool:
         and isinstance(sha256, str)
         and SHA256_PATTERN.fullmatch(sha256) is not None
     )
+
+
+def _validate_committed_exercise_receipt(
+    name: str,
+    manifest: dict,
+    completeness: dict,
+    seen_inputs: set[str],
+    report_path: str | None,
+) -> tuple[list[str], list[str]]:
+    """Validate a bounded census receipt for non-registry campaign suites.
+
+    Some supervised campaigns are too large to recreate through ``load_suite``
+    (the tariff schedule has 19 million cases). Their committed receipt is the
+    computed input catalog and binds the exact report plus every content-
+    addressed evidence manifest used to derive it.
+    """
+    errors: list[str] = []
+    findings: list[str] = []
+    raw_path = completeness.get("receipt")
+    if not isinstance(raw_path, str) or not raw_path:
+        return [f"{name}: committed exercise completeness needs receipt path"], []
+    path = REPO_ROOT / raw_path
+    if (
+        raw_path.startswith("/")
+        or ".." in Path(raw_path).parts
+        or not raw_path.startswith("axiom_oracles/bridges/exercise_receipts/")
+        or not path.is_file()
+    ):
+        return [f"{name}: invalid committed exercise receipt {raw_path!r}"], []
+    try:
+        receipt = json.loads(path.read_text())
+    except (OSError, json.JSONDecodeError) as exc:
+        return [f"{name}: cannot read committed exercise receipt: {exc}"], []
+    if not isinstance(receipt, dict) or receipt.get("schema") != EXERCISE_RECEIPT_SCHEMA:
+        errors.append(f"{name}: committed exercise receipt has wrong schema")
+        return errors, findings
+    if receipt.get("suite") != manifest.get("suite"):
+        errors.append(f"{name}: committed exercise receipt suite does not match")
+    if receipt.get("report") != report_path:
+        errors.append(f"{name}: committed exercise receipt is not bound to its suite report")
+    cases = receipt.get("cases")
+    if isinstance(cases, bool) or not isinstance(cases, int) or cases <= 0:
+        errors.append(f"{name}: committed exercise receipt has no positive case count")
+    fields = receipt.get("evidence_fields")
+    if not isinstance(fields, dict) or not fields:
+        errors.append(f"{name}: committed exercise receipt has no evidence fields")
+        fields = {}
+    for field, row in fields.items():
+        if not isinstance(field, str) or not field or not isinstance(row, dict):
+            errors.append(f"{name}: malformed committed exercise field {field!r}")
+            continue
+        distinct = row.get("distinct")
+        state = row.get("state")
+        expected = (
+            "varied" if isinstance(distinct, int) and not isinstance(distinct, bool) and distinct > 1
+            else "constant" if distinct == 1
+            else None
+        )
+        if state != expected:
+            errors.append(
+                f"{name}: committed exercise field {field!r} state/count disagree"
+            )
+    missing = sorted(set(fields) - seen_inputs)
+    extra = sorted(seen_inputs - set(fields))
+    if missing:
+        errors.append(f"{name}: bindings omit receipt input(s): {', '.join(missing)}")
+    if extra:
+        errors.append(f"{name}: bindings declare input(s) absent from receipt: {', '.join(extra)}")
+    artifacts = receipt.get("evidence_artifacts")
+    if not isinstance(artifacts, list) or not artifacts:
+        errors.append(f"{name}: committed exercise receipt has no evidence artifacts")
+        artifacts = []
+    for index, artifact in enumerate(artifacts):
+        if not isinstance(artifact, dict):
+            errors.append(f"{name}: evidence artifact [{index}] is not a mapping")
+            continue
+        candidate = artifact.get("path")
+        expected_sha = artifact.get("sha256")
+        if not isinstance(candidate, str) or not _shipped_evidence_file(candidate):
+            errors.append(f"{name}: evidence artifact [{index}] is not shipped")
+            continue
+        actual_sha = hashlib.sha256((REPO_ROOT / candidate).read_bytes()).hexdigest()
+        if expected_sha != actual_sha:
+            errors.append(f"{name}: evidence artifact [{index}] sha256 mismatch")
+    report_sha = receipt.get("report_sha256")
+    if report_path and (REPO_ROOT / report_path).is_file():
+        actual_report_sha = hashlib.sha256((REPO_ROOT / report_path).read_bytes()).hexdigest()
+        if report_sha != actual_report_sha:
+            errors.append(f"{name}: committed exercise report_sha256 mismatch")
+    return errors, findings
 
 
 def _comparison_execution_periods(
@@ -919,7 +1016,9 @@ def validate(path: Path, manifest: dict) -> tuple[list[str], list[str]]:
             report_provenance.get("dataset_identity"),
             provenance_dataset,
         )
-        pinned = any(_valid_dataset_identity(identity) for identity in identities)
+        pinned = any(_valid_dataset_identity(identity) for identity in identities) or (
+            _valid_dataset_identity(population.get("pinned"))
+        )
         report_population = report.get("population")
         provenance_population = provenance_dataset.get("population")
         synthetic = (
@@ -1203,6 +1302,18 @@ def validate(path: Path, manifest: dict) -> tuple[list[str], list[str]]:
                         f"{name}: execution_period {declared_execution!r} does not "
                         f"match {details} ({configured_execution!r})"
                     )
+    elif completeness == "verified" and completeness_block.get("source") == (
+        COMMITTED_EXERCISE_RECEIPT
+    ):
+        receipt_errors, receipt_findings = _validate_committed_exercise_receipt(
+            name,
+            manifest,
+            completeness_block,
+            seen_inputs,
+            report_path,
+        )
+        errors.extend(receipt_errors)
+        findings.extend(receipt_findings)
     elif completeness == "verified":
         # A bare assertion remains forbidden. `verified` is accepted only when
         # the validator can derive and reconcile the suite's actual case input

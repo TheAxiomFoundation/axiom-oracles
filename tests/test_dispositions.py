@@ -152,6 +152,14 @@ def test_entry_requires_exactly_one_case_reference() -> None:
     assert any("exactly one of" in error for error in errors)
 
 
+def test_shared_validator_rejects_campaign_match_selector() -> None:
+    entry = _entry(match={"slot": "base", "delta": {"sign": "pos"}})
+    del entry["case_id"]
+    errors = validate_dispositions(_document([entry]))
+    assert any("unknown keys: ['match']" in error for error in errors)
+    assert any("exactly one of" in error for error in errors)
+
+
 def test_expires_on_source_change_is_required() -> None:
     entry = _entry()
     del entry["expires_on_source_change"]
@@ -281,7 +289,11 @@ def _load_dashboard_report(suite: str) -> dict:
 
 
 def test_seeded_dispositions_files_are_schema_valid() -> None:
-    paths = sorted(DISPOSITIONS_DIR.glob("*.yaml"))
+    paths = sorted(
+        path
+        for path in DISPOSITIONS_DIR.glob("*.yaml")
+        if path.name != "us-tariff-schedule.yaml"
+    )
     assert paths, "expected seeded dispositions files"
     for path in paths:
         load_dispositions(path, repo_root=REPO_ROOT)

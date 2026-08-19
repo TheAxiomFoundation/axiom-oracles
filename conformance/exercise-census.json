@@ -656,7 +656,7 @@
       "inline_cases_not_counted": 922,
       "reconciliation": "cardinality",
       "report": "dashboard/public/data/axiom-snapqc-az-snap.json",
-      "report_sha256": "ddd8eb5d5621753c82916c22ec3e227da23019b9811d6b5bdec7da42a002d81b",
+      "report_sha256": "7e5fda5d37017becce6b600666cfb4f4de8e4ac6820bfec8f650a3d274f17d39",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -830,7 +830,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-be-article-51-forfait.json",
-      "report_sha256": "710d75e16acf6724887493e74131db05ade5aefeb09e6baed2ecf545fa3580a8",
+      "report_sha256": "5e944f27f22b2ddc584699b27745ec14d37cbfea341f7dfdffcf6c51df891e00",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -964,7 +964,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-be-capital-income-tax.json",
-      "report_sha256": "c47bc7045055413b015114b6cd8e9bd1c954136185ef08a459fb605cd9438467",
+      "report_sha256": "9edfbf475c675ac4513f07bc1904569bce62d5aa50ab201226eeefe77a030749",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -1002,7 +1002,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-be-elderly-income-support.json",
-      "report_sha256": "13ad4c0e925033e688bf4b6cd204ee248fa9aa7389b689fe958c8667eb02177e",
+      "report_sha256": "bd86050e61cfe1eb34fd361b7b0c92b5813653d8368ceb90f7de8648e427ffd5",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -1538,7 +1538,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-be-local-municipal-pit.json",
-      "report_sha256": "4ecbc29aafe1a2b8ee668dc71cc1b5c117ffac2ab5b982908fce92f15c069fa7",
+      "report_sha256": "fdcc9f2e8e1bfb7769760433f054d26eb706333867792fdd45c5724e38df3edc",
       "varied_fields": 2,
       "verdict_concepts": {}
     },
@@ -1570,7 +1570,7 @@
       "inline_cases_not_counted": 3,
       "reconciliation": "cardinality",
       "report": "dashboard/public/data/axiom-euromod-be-marital-quotient.json",
-      "report_sha256": "ffddcd4ab1b7c581753504863c5785a38623f5a8f5fed9fb4456bc13519910ed",
+      "report_sha256": "71d472ce84dda5a5d7a82cb91d4ee53716b27796e8af6530e5206311ae4f1951",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -1658,7 +1658,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-be-pensioner-contributions.json",
-      "report_sha256": "6d237e2b9d25672375ca99481da02e86c758b661655b787ada3fffeb06ac682a",
+      "report_sha256": "2d8a9a15617f11288acb930f9016f32c7adf29aab0bc64dbd2dd334995ca1515",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -1754,7 +1754,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-be-regional-pit-surcharge.json",
-      "report_sha256": "2eca894c06fc80af4d3dee40ba2af36b910ef5c1b40d3034c000ce196094a490",
+      "report_sha256": "5a7219bd77329d0d0d3672c235419598eec014b72d43239ff56dd92d59f45fbc",
       "varied_fields": 2,
       "verdict_concepts": {}
     },
@@ -1934,7 +1934,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-be-study-allowance.json",
-      "report_sha256": "98870514fffe76591864eda6e16d3ef8dc50a3f809d2f15774feaea3ede89920",
+      "report_sha256": "dbd60848ea1282f012bc149f38e6ce41a25712eac83741a3f41ccf2e005bb78b",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -2003,7 +2003,7 @@
       "inline_cases_not_counted": 4,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-be-work-bonus-credit.json",
-      "report_sha256": "1fe7eda488d3855bd62fe11bbf7ec0c9f1266fb612dae7e19b2cd9dbf01f984a",
+      "report_sha256": "721edcbd93365b405fddc5796047563d1e143688282f9a78b60acccf4c6e9f9f",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -2514,7 +2514,7 @@
       "inline_cases_not_counted": 883,
       "reconciliation": "cardinality",
       "report": "dashboard/public/data/axiom-snapqc-ca-snap.json",
-      "report_sha256": "4234b12ea5f6ee792eeb6931efab7d67886e4c1c0274eb944525c961610b245f",
+      "report_sha256": "c9090bb6248dede135c3a4af0d2887d1a8332d947d24ac129695e77eb8d7cf1f",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -4170,7 +4170,7 @@
       "inline_cases_not_counted": 945,
       "reconciliation": "cardinality",
       "report": "dashboard/public/data/axiom-snapqc-ga-snap.json",
-      "report_sha256": "48239a62d1771c2f7ae0b66946eeb1cb8e0b9ea496896a751c9ec4fc05957411",
+      "report_sha256": "2010fca8aba4cb642c67d58153dc749619ed4a9b61b6268e4ec5581963f2298a",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -5246,7 +5246,7 @@
       "inline_cases_not_counted": 722,
       "reconciliation": "cardinality",
       "report": "dashboard/public/data/axiom-snapqc-md-snap.json",
-      "report_sha256": "fbfbe9ac2e774e675b0769bd16e6b3e4ac99d4075f8049925038380f4bc3b7c8",
+      "report_sha256": "44b0d98973230e585f4a6c35c743fa9e92c64ddaf6112ce92123b7396322a835",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -6586,7 +6586,7 @@
       "inline_cases_not_counted": 847,
       "reconciliation": "cardinality",
       "report": "dashboard/public/data/axiom-snapqc-ny-snap.json",
-      "report_sha256": "f7da3255fa9884fc2e628bd3e8610ecc2cbbec45287c44c87ab0a6893f9ff843",
+      "report_sha256": "f5ac20e7c3b5692e48bb3070aa9d6b2aa2152447272d0c19d5cf173ed5be559e",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -7803,7 +7803,7 @@
       "inline_cases_not_counted": 906,
       "reconciliation": "cardinality",
       "report": "dashboard/public/data/axiom-snapqc-tx-snap.json",
-      "report_sha256": "3cb88d4316d5b886d34bdee2254521ec09ccc6c743e31ba169dca190cf6b798c",
+      "report_sha256": "c388f71e16409cf9daf8fc5bca3fb5bb49e6b135cb7fd33a8c76937698304669",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -7940,7 +7940,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-uk-benefit-cap.json",
-      "report_sha256": "c2f4cc97639ad4b40b4f55249b6f6146c38a199b06afa0bfa342e57e56c02dfd",
+      "report_sha256": "1329b9baa922fdd0bb363b68b7a4bd2387f116d8925aef60659d07ac226b7516",
       "varied_fields": 6,
       "verdict_concepts": {}
     },
@@ -7982,7 +7982,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-uk-best-start-foods.json",
-      "report_sha256": "8eb1e735e4362a7fdcaaebdd811f041a7454ccc1e1dec4b189c07340174b3f45",
+      "report_sha256": "d459206fdfee454f145ca10eb357ac4a041fd1e65c644d6431239f14abf020d1",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -8070,7 +8070,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-uk-child-benefit.json",
-      "report_sha256": "e3f3752df9b4e52d7695d2d7bbd798a060efba358cb79817c627c496202b187f",
+      "report_sha256": "85316757de77438f5b97e74346e6f83c3bc75c03dbe8495e3d2075ea08bd87c2",
       "varied_fields": 2,
       "verdict_concepts": {}
     },
@@ -8112,7 +8112,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-uk-child-winter-heating-payment.json",
-      "report_sha256": "8f7761a9258fa300060638a5a739fc6130dbe1f679f50e2476c494f03090adc9",
+      "report_sha256": "7cf0e75f9f49905db87363a5041dc77fec044d34b977884898f06f57af7f8ad3",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -8139,7 +8139,7 @@
       "inline_cases_not_counted": 2,
       "reconciliation": "cardinality",
       "report": "dashboard/public/data/axiom-euromod-uk-contribution-based-jsa.json",
-      "report_sha256": "7c1cb12d965c26d6b943ca5ca088ec110881560c3e6c9dfe1266ca09ebf88c49",
+      "report_sha256": "448e98f6212d16e6f2a6bdb505be8d4b9ee8b2b4c6f48c5055bf36e79fc0b613",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -8202,7 +8202,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-uk-employer-nic.json",
-      "report_sha256": "3f084488991757c3162f9f4e810d954a0bc043a00eace144b61c88d7a7bca8f2",
+      "report_sha256": "a5b180d0e0a23f86b56c42cfb03ed1e13dfce3af15641f2234166f8d30cf3603",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -8265,7 +8265,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-uk-healthy-start.json",
-      "report_sha256": "9c113b79b30742f37fb3aaa59df37c8b8d03a3509c6276c7c9c054817a41f87c",
+      "report_sha256": "ed83c0a82080f8d88df43cef0490dff6f644884c75f9f08df5a8fda52c02adff",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -8292,7 +8292,7 @@
       "inline_cases_not_counted": 5,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-uk-housing-benefit.json",
-      "report_sha256": "3e172ccf88e163c5476e859c8ea868c1f1d4871c76b3b87b4baf7652646de510",
+      "report_sha256": "518851a496cb7a93b3c0a7db8b73a1e0916391bdbb68dd2e71b2c24140055cb5",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -8342,7 +8342,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-uk-income-tax-dividend.json",
-      "report_sha256": "739da5d9e2193003fde2bd1832ab609f35ca89b6854d12461301711735c171aa",
+      "report_sha256": "69def0fb975a581a8feec4bc4bf8973c8c167f58399a56a2629b3d161c2af734",
       "varied_fields": 2,
       "verdict_concepts": {}
     },
@@ -8369,7 +8369,7 @@
       "inline_cases_not_counted": 3,
       "reconciliation": "cardinality",
       "report": "dashboard/public/data/axiom-euromod-uk-income-tax-mixed.json",
-      "report_sha256": "c14ea40ce9a6bb8d1494f65bc6aaee0a77161512234ff5080d772165801d9261",
+      "report_sha256": "90d933e5dbb92e4330369b09c7c59a6db97dad8aca35c9a4b023abbc71df3d93",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -8419,7 +8419,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-uk-income-tax-savings.json",
-      "report_sha256": "7f9d09174d4f6f7cab7afa34e5bd1605bf046525376e8a032553f4376bdb3198",
+      "report_sha256": "391b452645bdd017d504231326bf4ceb36f24d00614ec2022190cf94e21839e5",
       "varied_fields": 2,
       "verdict_concepts": {}
     },
@@ -8461,7 +8461,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-uk-income-tax-scottish.json",
-      "report_sha256": "5b7d543b26ce83d28f7cddfd74ca3ca2f0cd8727017b67dc99af29076382e463",
+      "report_sha256": "5351af83d435eb118dbbb85bb7a2499b924eb95d6b853290673235a635e8d39a",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -8530,7 +8530,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-uk-maternity-allowance.json",
-      "report_sha256": "73ab15913b91d5fac4190f6f7f36e0b80247d3f5605094e4ff7708bb8801a019",
+      "report_sha256": "9ee0fba640324051fb3f7f36ba8846f78d7e4a2746e026db6706311ade106fb1",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -8557,7 +8557,7 @@
       "inline_cases_not_counted": 12,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-uk-pension-credit.json",
-      "report_sha256": "1bc5cf13911a54f75a3c9c84840bb7d31d9a9621be2fff9688d3bf5f32bec287",
+      "report_sha256": "1e53e06fe8762ebc6afd06185c5c74888b0ce41c71fad747d8aebafea4ac111b",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -8599,7 +8599,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-uk-personal-allowance.json",
-      "report_sha256": "53eba002e76b6fdd85c26ace571c0a67d2b630047cd7b598dbcb7b5abea4587d",
+      "report_sha256": "b81b953661f6a5500e623c7981149e5c52be11849c8d7a9660f8b4c41cca12bc",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -8626,7 +8626,7 @@
       "inline_cases_not_counted": 1,
       "reconciliation": "cardinality",
       "report": "dashboard/public/data/axiom-euromod-uk-scottish-carer-supplement.json",
-      "report_sha256": "46894899a446ea14bfabffb54e6f1f271403f18e44117b38eeada22adcabf731",
+      "report_sha256": "44c7151eb9c838e905d8a8c07793fc63856464198d596510abff9dac1337796b",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -8653,7 +8653,7 @@
       "inline_cases_not_counted": 4,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-uk-scottish-child-payment.json",
-      "report_sha256": "b25ca90626a007edaa09143f16094322b56dcda393d9030d2391ba1e03efb201",
+      "report_sha256": "2c86bac3c6bcb85e4e8b940add7fbedb2c14ba554d94f65a87e57f721884dc16",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -8695,7 +8695,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-uk-self-employed-nic.json",
-      "report_sha256": "0d79f34571832b2d3845de4b51da506cd612b0963374d9f35343f8508a693d45",
+      "report_sha256": "08cccc3c27cf1a20b16bfcf5784274d5f82681f674bb2c51630ea2115a0a66b1",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -8737,7 +8737,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-uk-statutory-maternity-pay.json",
-      "report_sha256": "653ef5e70dd02cd0c61879b51f4e983441220b67674743c7b23a8071a5481271",
+      "report_sha256": "bb73d77dea2b125762d56157aca7260959a14472dcbb19c91cbc9a73142a77fc",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -8779,7 +8779,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-uk-statutory-paternity-pay.json",
-      "report_sha256": "ec32dfa040c396a9b4cf49d077842c31bbac3424032dda102346e247795dfa83",
+      "report_sha256": "96218679d23405186f1466692b88ab20ef297de2b45ee76e1bfe60f38a0e4b1a",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -8817,7 +8817,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-uk-sure-start-maternity-grant.json",
-      "report_sha256": "8bcb1971f17279f4c326b93520e4232af88832083ddab136166948146efb64f0",
+      "report_sha256": "f0d8b5a7bd745085c082e4063760b18cdf3e4d86bbf9ab88b4722d688bf18aaf",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -8913,7 +8913,7 @@
       "inline_cases_not_counted": 19,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-uk-universal-credit.json",
-      "report_sha256": "7e01eb89b59938fdcdd144fd63f9731db40bdf63348133e5c3ed41608064c5fb",
+      "report_sha256": "190dbce74e1f2afd8025e91940bc5e8a151d24962e53a16050e625078f3946db",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -9017,7 +9017,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-uk-winter-fuel.json",
-      "report_sha256": "afd554aa9b4a243a6d85b3923e0ff136e2854df61bf8959a2b63143081028c7c",
+      "report_sha256": "f0e11b73a0f38b2075949fba9f85638b187556acf0f235b474c6285937c10516",
       "varied_fields": 6,
       "verdict_concepts": {}
     },
@@ -9080,7 +9080,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-uk-worker-nic.json",
-      "report_sha256": "f0ed669df03eabb227756ebdd435145da2e75ba36fb12fbf73d6c8f2704aa930",
+      "report_sha256": "9ab3affdace02eb2d67bf3abb755e55a639f20f41c52c28dc9d2b184f24e1374",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -9122,7 +9122,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-uk-worker-pit.json",
-      "report_sha256": "be1ddc10c8b693a0bde248e0967fa4c4232b41be997e982d0447a7cf8cbaaa2e",
+      "report_sha256": "36b32502448e565393736552c1b7520f60f15a9244d9ed58df52523152a208e6",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -9353,7 +9353,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-policyengine-us-snap-abawd-grid.json",
-      "report_sha256": "aaef9494542786ee9e0a0ae6da515a3eae5cf126eedbe6bf3b7b3c8c7e6f4dea",
+      "report_sha256": "5a23f5d7183968b87b9931cd31a2a20efaec40695730098eb60fa7343824f5d1",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -9380,29 +9380,250 @@
       "inline_cases_not_counted": 40,
       "reconciliation": "cardinality",
       "report": "dashboard/public/data/axiom-usitc-us-tariff.json",
-      "report_sha256": "6c4feaa4158c979fbbeb04c5f826468b1ba48775248dafb98d03b348ce3ae028",
+      "report_sha256": "d6be318aff18b2d5f55f869f39da592c8da17a82a18cfb1fcf9df12e79e30daf",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
     "us-tariff-panel": {
-      "binding": "unbound",
-      "binding_defects": [
-        "us-tariff-panel: chunk index dashboard/public/data/cases/us-tariff-panel/index.json is missing; report/chunk evidence binding is unbound"
-      ],
-      "bridge_audited": false,
-      "bridge_declared": false,
-      "bridge_manifest_sha256": null,
+      "binding": "bound",
+      "binding_defects": [],
+      "bridge_audited": true,
+      "bridge_declared": true,
+      "bridge_manifest_sha256": "d0fff6c3606a8f89b5f7ce4dd93c4b06ae2ef6e194e8122f84919c7a40c463a5",
       "bridged_through": {},
       "cases_scanned": 122,
-      "chunk_manifest": [],
-      "constant_fields": 0,
-      "evidence_fields": {},
-      "evidence_source": "inline",
+      "chunk_manifest": [
+        {
+          "path": "dashboard/public/data/axiom-yale-us-tariff-panel.json",
+          "sha256": "cfa6fd6f2abd8af3b15e8f423c87ba44336dc725cfb5c2d9948a2f698dbff5a5"
+        }
+      ],
+      "constant_fields": 11,
+      "evidence_fields": {
+        "article_is_potash": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "cbp_agrees_chapter_98_entry_is_appropriate": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "country_of_origin": {
+          "distinct": 240,
+          "state": "varied"
+        },
+        "entry_date": {
+          "distinct": 33,
+          "state": "varied"
+        },
+        "entry_is_9802_excepted_entry": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "entry_is_chapter_98_subchapter_xxiii_entry": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "entry_is_entered_free_of_duty_under_usmca": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "entry_is_humanitarian_donation_article": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "entry_is_informational_material_article": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "entry_is_personal_use_accompanied_baggage": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "entry_is_properly_claimed_chapter_98_entry": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "entry_is_usmca_duty_free_entry": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "entry_loaded_and_in_transit_before_july_24_2026": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "hts_number": {
+          "distinct": 5,
+          "state": "varied"
+        }
+      },
+      "evidence_receipt": "axiom_oracles/bridges/exercise_receipts/us-tariff-panel.json",
+      "evidence_receipt_sha256": "7f2053cab31d6ee1f0a62fc0ec1731f1e66e03427a0e022cf386c197ebedfca1",
+      "evidence_source": "committed-detail-rows",
+      "exercised": true,
       "inline_cases_not_counted": 0,
-      "reconciliation": "none",
+      "per_case_evidence_committed": true,
+      "reconciliation": "content-addressed-receipt",
       "report": "dashboard/public/data/axiom-yale-us-tariff-panel.json",
       "report_sha256": "cfa6fd6f2abd8af3b15e8f423c87ba44336dc725cfb5c2d9948a2f698dbff5a5",
-      "varied_fields": 0,
+      "varied_fields": 3,
+      "verdict_concepts": {}
+    },
+    "us-tariff-schedule": {
+      "binding": "bound",
+      "binding_defects": [],
+      "bridge_audited": true,
+      "bridge_declared": true,
+      "bridge_manifest_sha256": "2a776bc7058b292a60ef628f1500d0f762184c186991b902ab6fe75dcf663fc5",
+      "bridged_through": {},
+      "cases_scanned": 19118619,
+      "chunk_manifest": [
+        {
+          "path": "reference/us-tariff-schedule/eval/MANIFEST.json",
+          "sha256": "5123e201a32c3965d82440c515525c854e9113d7efc84e820bbe878617a83a39"
+        },
+        {
+          "path": "reference/us-tariff-schedule/comparison-summary.json",
+          "sha256": "5981a1cb92e76d03b5f88692062311093b04db2aff5373cea29f52a3057cce98"
+        },
+        {
+          "path": "conformance/detail/us-tariff-schedule.json",
+          "sha256": "ac6152975c4f33f7ada883ca6ccd8eb9c3510d53f54a0ec57a49763181e7af72"
+        }
+      ],
+      "constant_fields": 15,
+      "evidence_fields": {
+        "article_is_potash": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "cbp_agrees_chapter_98_entry_is_appropriate": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "country_of_origin": {
+          "distinct": 240,
+          "state": "varied"
+        },
+        "entry_date": {
+          "distinct": 27,
+          "state": "varied"
+        },
+        "entry_is_9802_excepted_entry": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "entry_is_brazil_301_listed": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "entry_is_chapter_98_subchapter_xxiii_entry": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "entry_is_china_301_2024_action": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "entry_is_china_301_list123": {
+          "distinct": 2,
+          "state": "varied"
+        },
+        "entry_is_china_301_list4a": {
+          "distinct": 2,
+          "state": "varied"
+        },
+        "entry_is_china_301_solar": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "entry_is_entered_free_of_duty_under_usmca": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "entry_is_forced_labor_301_listed": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "entry_is_humanitarian_donation_article": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "entry_is_informational_material_article": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "entry_is_line_a": {
+          "distinct": 2,
+          "state": "varied"
+        },
+        "entry_is_line_b": {
+          "distinct": 2,
+          "state": "varied"
+        },
+        "entry_is_line_d": {
+          "distinct": 2,
+          "state": "varied"
+        },
+        "entry_is_personal_use_accompanied_baggage": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "entry_is_properly_claimed_chapter_98_entry": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "entry_is_section_122_exempt": {
+          "distinct": 2,
+          "state": "varied"
+        },
+        "entry_is_section_201_cspv": {
+          "distinct": 2,
+          "state": "varied"
+        },
+        "entry_is_section_232_aluminum": {
+          "distinct": 2,
+          "state": "varied"
+        },
+        "entry_is_section_232_covered": {
+          "distinct": 2,
+          "state": "varied"
+        },
+        "entry_is_section_232_steel": {
+          "distinct": 2,
+          "state": "varied"
+        },
+        "entry_is_usmca_duty_free_entry": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "entry_loaded_and_in_transit_before_july_24_2026": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "hts_line": {
+          "distinct": 11570,
+          "state": "varied"
+        },
+        "hts_number": {
+          "distinct": 20508,
+          "state": "varied"
+        },
+        "origin_regime": {
+          "distinct": 16,
+          "state": "varied"
+        }
+      },
+      "evidence_receipt": "axiom_oracles/bridges/exercise_receipts/us-tariff-schedule.json",
+      "evidence_receipt_sha256": "0e8b34d64db5dc7eeeddac03056820a94e933c6a86fa1819a395a9c203c1ab64",
+      "evidence_source": "content-addressed-shard-manifest",
+      "exercised": true,
+      "inline_cases_not_counted": 0,
+      "per_case_evidence_committed": true,
+      "reconciliation": "content-addressed-receipt",
+      "report": "conformance/detail/us-tariff-schedule.json",
+      "report_sha256": "ac6152975c4f33f7ada883ca6ccd8eb9c3510d53f54a0ec57a49763181e7af72",
+      "varied_fields": 15,
       "verdict_concepts": {}
     },
     "ut-income-tax-liability": {
