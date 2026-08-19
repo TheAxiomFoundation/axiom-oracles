@@ -53,7 +53,9 @@ the Faroe Islands or Greenland; or post-2025 law, including LOV 303/2026's
 ## Gate history
 
 The `certified=yes` claim survived two launch-grade adversarial audit
-rounds plus two scoped deltas after the certificate first computed yes.
+rounds plus five scoped closing deltas after the certificate first
+computed yes; the final delta closed with every ledger row resolved (SHIP,
+sol-yes-delta7).
 Substantive blockers found and fixed (each by a signed CI re-encode):
 
 1. § 8 a had been excluded as administrative — gerrymandered: it governs
