@@ -1,6 +1,6 @@
 # dk/boerne-og-ungeydelse: the registry's first certified=yes
 
-Status: **CERTIFIED=YES at rulespec-dk `1eee47bdee32` — all four premises
+Status: **CERTIFIED=YES at rulespec-dk `9a9469edbbc4` — all four premises
 computed true, blockers=[], 10 provisions encoded / 1 classified / 13
 excluded with text-grounded reasons / 0 pending, boundary frontier complete
 (90 grounded inputs: 65 captured, 25 uncaptured external boundaries).**
@@ -82,6 +82,16 @@ attribution; both barnets lov placement branches; § 4 routing facts
 documented as case-supplied against a classified surface; § 8 b's register
 exception stated in the correct direction; the offset-capacity input
 documented as a DKK amount.
+
+The § 8 a companion test took two further signed re-encodes to reach its
+final form: the first preserved module semantics but regenerated the test
+as a degenerate per-output scaffold (every formula exercised only at zero,
+Boolean fixtures for DKK inputs); the second — a finding stating all
+fifteen formulas and all seven cases as explicit requirements — produced
+the exact target suite: both forecast cases, the initial-settlement
+offset/collection case asserting the subsequent stage inert, and both
+signed-delta amended-assessment directions, with every capacity fixture a
+DKK amount. Suite values were identical at every pin along the way.
 
 ## Strict evidence contract (unchanged from the certified-arc landing)
 

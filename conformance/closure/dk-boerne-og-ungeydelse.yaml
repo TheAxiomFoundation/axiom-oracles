@@ -20,9 +20,9 @@ generated_facts:
     declared_block_count: 24
   rulespec:
     repository: TheAxiomFoundation/rulespec-dk
-    ref: 1eee47bdee3258b6f14af2240ccaef169d8eeb5f
-    commit: 1eee47bdee3258b6f14af2240ccaef169d8eeb5f
-    selected_content_sha256: 31ec2394a9e11071a8bf0000e4263aa09553ad95dc9d0d7364c14262e3992f46
+    ref: 9a9469edbbc4829847698cd0adf218771120b9cd
+    commit: 9a9469edbbc4829847698cd0adf218771120b9cd
+    selected_content_sha256: 6031251f322df01b2b5d99c0faf46e2c91cdf31417a65066ecec7abbef469751
   provision_spine:
   - ordinal: 1
     citation_path: dk/statute/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1
@@ -414,18 +414,16 @@ generated_facts:
     source_sha256: 6bfe19e2ed661875e80a85edf7bb20e9d0bad6d5275e4ea1b4b11f7868bd0e6d
   - path: dk/statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-a.yaml
     module_id: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-a
-    sha256: 95178c7e20f9b1547b733cd1c1299335ea6c1856b5a1b09fdadbfcac5becdd57
+    sha256: 83154da475bea98d429a8218006cd9ec5c712db02442a309b8fa1c39fa8f7b6a
     source_citation_path: dk/statute/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-8-a
     rule_count: 15
-    summary: 'Ved hver kvartals- eller månedsudbetaling anvendes alene den seneste
+    summary: 'Ved hver kvartals- eller månedsudbetaling lægges alene den seneste
 
-      forskudsopgørelse til foreløbig nedsættelse. Den endelige nedsættelse og
+      forskudsopgørelse til grund for foreløbig nedsættelse. Endelig nedsættelse
 
-      senere ændringer fastsættes efter årsopgørelsen. Regulering sker så vidt
+      og efterfølgende regulering fastsættes efter årsopgørelsen; regulering sker
 
-      muligt ved modregning i eller tillæg til efterfølgende udbetalinger; et
-
-      ikke-modregnet tilbagebetalingskrav opkræves af Udbetaling Danmark.
+      så vidt muligt ved modregning eller tillæg til efterfølgende udbetalinger.
 
       Nedsættelse og regulering kan ske uden partshøring.'
     source_sha256: 9b411b66e51e65e70e779aa2e2cbb5105cc0a3095b3e4c2f603e6e9d3e20af6e
