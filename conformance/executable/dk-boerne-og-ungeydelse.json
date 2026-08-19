@@ -1,0 +1,188 @@
+{
+  "cases": [
+    {
+      "case_id": "dk-child-youth-benefit-age1-yem300000",
+      "committed_value": 21168.0,
+      "errors": [],
+      "input_sha256": "f13c194a29f56070af0f8da6f7aa0d047dedcc5fc9d62fec3a4e4129cfaf34e8",
+      "input_source": "committed_report",
+      "match": true,
+      "output": "dk:statutes/composed/boerne-og-ungeydelse-pipeline#single_recipient_annual_child_youth_benefit",
+      "program": "dk:statutes/composed/boerne-og-ungeydelse-pipeline",
+      "reproduced_value": 21168.0,
+      "source_report": "dashboard/public/data/axiom-euromod-dk-child-youth-benefit.json",
+      "suite": "dk-child-youth-benefit"
+    },
+    {
+      "case_id": "dk-child-youth-benefit-age5-yem300000",
+      "committed_value": 16764.0,
+      "errors": [],
+      "input_sha256": "5a2338d96fcbe97969b6581378b2c3cb273c042b414e951993435f9a6add5545",
+      "input_source": "committed_report",
+      "match": true,
+      "output": "dk:statutes/composed/boerne-og-ungeydelse-pipeline#single_recipient_annual_child_youth_benefit",
+      "program": "dk:statutes/composed/boerne-og-ungeydelse-pipeline",
+      "reproduced_value": 16764.0,
+      "source_report": "dashboard/public/data/axiom-euromod-dk-child-youth-benefit.json",
+      "suite": "dk-child-youth-benefit"
+    },
+    {
+      "case_id": "dk-child-youth-benefit-age10-yem300000",
+      "committed_value": 13188.0,
+      "errors": [],
+      "input_sha256": "1a822e0057e012f2385196ae01a742ba4dcf6393b6d8fa64a0e5977f4185fda6",
+      "input_source": "committed_report",
+      "match": true,
+      "output": "dk:statutes/composed/boerne-og-ungeydelse-pipeline#single_recipient_annual_child_youth_benefit",
+      "program": "dk:statutes/composed/boerne-og-ungeydelse-pipeline",
+      "reproduced_value": 13188.0,
+      "source_report": "dashboard/public/data/axiom-euromod-dk-child-youth-benefit.json",
+      "suite": "dk-child-youth-benefit"
+    },
+    {
+      "case_id": "dk-child-youth-benefit-age16-yem300000",
+      "committed_value": 13188.0,
+      "errors": [],
+      "input_sha256": "099f411f18b23512f67b551d7389e9f6f52ed1010b0428e962fa80953167130b",
+      "input_source": "committed_report",
+      "match": true,
+      "output": "dk:statutes/composed/boerne-og-ungeydelse-pipeline#single_recipient_annual_child_youth_benefit",
+      "program": "dk:statutes/composed/boerne-og-ungeydelse-pipeline",
+      "reproduced_value": 13188.0,
+      "source_report": "dashboard/public/data/axiom-euromod-dk-child-youth-benefit.json",
+      "suite": "dk-child-youth-benefit"
+    },
+    {
+      "case_id": "dk-child-youth-benefit-age5-yem1000000",
+      "committed_value": 16704.000000000004,
+      "errors": [],
+      "input_sha256": "6cd1e747b196a47025b110d7a2ed974d4087e3a8b8c2173d461b4cc71ec60069",
+      "input_source": "committed_report",
+      "match": true,
+      "output": "dk:statutes/composed/boerne-og-ungeydelse-pipeline#single_recipient_annual_child_youth_benefit",
+      "program": "dk:statutes/composed/boerne-og-ungeydelse-pipeline",
+      "reproduced_value": 16704.000000000004,
+      "source_report": "dashboard/public/data/axiom-euromod-dk-child-youth-benefit.json",
+      "suite": "dk-child-youth-benefit"
+    },
+    {
+      "case_id": "dk-child-youth-benefit-age5-yem1300000",
+      "committed_value": 11184.0,
+      "errors": [],
+      "input_sha256": "f3c1c5ddf6e4dc62feca814a8cd36c758384754f5b1aa975986a9c06a51dc520",
+      "input_source": "committed_report",
+      "match": true,
+      "output": "dk:statutes/composed/boerne-og-ungeydelse-pipeline#single_recipient_annual_child_youth_benefit",
+      "program": "dk:statutes/composed/boerne-og-ungeydelse-pipeline",
+      "reproduced_value": 11184.0,
+      "source_report": "dashboard/public/data/axiom-euromod-dk-child-youth-benefit.json",
+      "suite": "dk-child-youth-benefit"
+    },
+    {
+      "case_id": "dk-child-youth-benefit-age5-yem2000000",
+      "committed_value": 0.0,
+      "errors": [],
+      "input_sha256": "bd3472494ae0f6208961e98dbb29f8165af571d8588d65f719f71217a4616503",
+      "input_source": "committed_report",
+      "match": true,
+      "output": "dk:statutes/composed/boerne-og-ungeydelse-pipeline#single_recipient_annual_child_youth_benefit",
+      "program": "dk:statutes/composed/boerne-og-ungeydelse-pipeline",
+      "reproduced_value": 0.0,
+      "source_report": "dashboard/public/data/axiom-euromod-dk-child-youth-benefit.json",
+      "suite": "dk-child-youth-benefit"
+    },
+    {
+      "case_id": "dk-child-youth-benefit-age5-yem1300000-pension60000",
+      "committed_value": 11497.333333333334,
+      "errors": [],
+      "input_sha256": "4c00670a277dc3e2e3b2effe954297f8e4c626a2ebad0b64d54b029b17766ff2",
+      "input_source": "committed_report",
+      "match": true,
+      "output": "dk:statutes/composed/boerne-og-ungeydelse-pipeline#single_recipient_annual_child_youth_benefit",
+      "program": "dk:statutes/composed/boerne-og-ungeydelse-pipeline",
+      "reproduced_value": 11497.333333333334,
+      "source_report": "dashboard/public/data/axiom-euromod-dk-child-youth-benefit.json",
+      "suite": "dk-child-youth-benefit"
+    },
+    {
+      "case_id": "dk-child-youth-benefit-2023-age5-yem300000",
+      "committed_value": 15684.0,
+      "errors": [],
+      "input_sha256": "87ed77d4a822cb4177933fab16eb66e862ae94259f7e70c72770ee22a8e1f8f5",
+      "input_source": "committed_report",
+      "match": true,
+      "output": "dk:statutes/composed/boerne-og-ungeydelse-pipeline#single_recipient_annual_child_youth_benefit",
+      "program": "dk:statutes/composed/boerne-og-ungeydelse-pipeline",
+      "reproduced_value": 15684.0,
+      "source_report": "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-2023.json",
+      "suite": "dk-child-youth-benefit-2023"
+    },
+    {
+      "case_id": "dk-child-youth-benefit-couple-age5-yem1500000-spouse0",
+      "committed_value": 8384.0,
+      "errors": [],
+      "input_sha256": "21e3a46b8f3286a1369709eb67a62ce6ce4b073af4e012234cec2305538629be",
+      "input_source": "suite_plus_committed_bridge",
+      "match": true,
+      "output": "dk:statutes/composed/boerne-og-ungeydelse-couple-pipeline#couple_recipient_annual_child_youth_benefit",
+      "program": "dk:statutes/composed/boerne-og-ungeydelse-couple-pipeline",
+      "reproduced_value": 8384.0,
+      "source_report": "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json",
+      "suite": "dk-child-youth-benefit-couple"
+    }
+  ],
+  "compiled_artifacts": [
+    {
+      "byte_count": 42796,
+      "compile_contract": "compile-composed",
+      "program": "dk:statutes/composed/boerne-og-ungeydelse-pipeline",
+      "sha256": "cbe3bdfaf2d7a735c11cbe22d4bcb04065ee698325421c372a46eb1b4ff50a49",
+      "source_path": "dk/statutes/composed/boerne-og-ungeydelse-pipeline.yaml",
+      "source_sha256": "6bd3f3b62e8e6e6e4d4a8819da419b1a14f163c5f5a40dcee2727c46239d16a9"
+    },
+    {
+      "byte_count": 48381,
+      "compile_contract": "compile-composed",
+      "program": "dk:statutes/composed/boerne-og-ungeydelse-couple-pipeline",
+      "sha256": "6e9c9e6b4ca8e2d6dfed5795671bc5c54ec5d83156048d7dc9b2aee02d2dfae4",
+      "source_path": "dk/statutes/composed/boerne-og-ungeydelse-couple-pipeline.yaml",
+      "source_sha256": "341c370127f3d8a6b74b93093e39fa086c1e5fa57a833ccf1a5699bf8160994a"
+    }
+  ],
+  "engine": {
+    "binary_sha256": "079c26f4244db8c2a72fcbfb8cf88aaa5cb7c99628dc1c8d9d3b2d011e5f32a5",
+    "configured_sha256": "079c26f4244db8c2a72fcbfb8cf88aaa5cb7c99628dc1c8d9d3b2d011e5f32a5",
+    "matches_config_pin": true
+  },
+  "execution_period": "2025-06-01",
+  "generated_by": "scripts/executable_reproduction.py",
+  "program": "dk/boerne-og-ungeydelse",
+  "rulespec": {
+    "ref": "bbc987b0e32413369b8f80ee2e4f721bf3c8a5db",
+    "repo": "TheAxiomFoundation/rulespec-dk",
+    "sha": "bbc987b0e32413369b8f80ee2e4f721bf3c8a5db"
+  },
+  "schema": "axiom_oracles.executable_reproduction.v1",
+  "source_reports": [
+    {
+      "path": "dashboard/public/data/axiom-euromod-dk-child-youth-benefit.json",
+      "sha256": "5e4d2c4305d1bb3a7255b44dd682ac1a12b741f4eaf3b7a177dc025049a3b1fe"
+    },
+    {
+      "path": "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-2023.json",
+      "sha256": "c1e82d55cf53f32e91d90e0c33833b269d0284ff63d5226803b033b55fd22034"
+    },
+    {
+      "path": "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json",
+      "sha256": "29adb22c8110170c8120d1c800bed839495796daddd784a0fcf47bd56213521f"
+    }
+  ],
+  "summary": {
+    "all_cases_reproduced": true,
+    "case_count": 10,
+    "engine_binary_matches_pin": true,
+    "executable": true,
+    "matched_case_count": 10,
+    "program_count": 2
+  }
+}

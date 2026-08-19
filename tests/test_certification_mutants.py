@@ -11,8 +11,10 @@ import importlib.util
 import json
 import shutil
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
+import yaml
 
 from axiom_oracles.evidence import (
     build_chunk_index,
@@ -412,6 +414,7 @@ def test_scalar_aliases_are_rejected():
             "suite": "zz",
             "aliases": "victim",
             "program": "p",
+            "period": "2025",
             "population": {},
             "oracle": {},
             "bindings": [
@@ -430,6 +433,7 @@ def test_self_asserted_completeness_is_rejected():
             "schema": "axiom_oracles.bridge_manifest.v1",
             "suite": "zz",
             "program": "p",
+            "period": "2025",
             "population": {},
             "oracle": {},
             "bindings": [
@@ -457,6 +461,60 @@ def test_certified_requires_computed_true_premises_not_status_strings():
     assert cert["certified"]["state"] == "unavailable"
     assert cert["certified"]["value"] is False
 
+
+def test_dk_opt_in_closure_gate_requires_full_source_verification(monkeypatch):
+    """The opt-in integration gate rejects a failed full source re-derivation."""
+
+    certify = _load("certify")
+    producer = certify._producer_module("scripts/closure_ledger.py")
+    calls = []
+
+    def rejected_full_check(**kwargs):
+        calls.append(kwargs)
+        return SimpleNamespace(
+            valid=False,
+            errors=("coordinated provision-spine truncation",),
+            document=None,
+        )
+
+    monkeypatch.setattr(producer, "verify_artifact", rejected_full_check)
+    with pytest.raises(ValueError, match="failed full closure verification"):
+        certify._closed_verdict(
+            "dk/boerne-og-ungeydelse",
+            certify.PROGRAMS["dk/boerne-og-ungeydelse"],
+            [],
+            verify_producer=True,
+        )
+    assert len(calls) == 1
+
+
+def test_dk_opt_in_executable_gate_requires_full_reproduction(monkeypatch):
+    """The opt-in integration gate rejects a well-shaped forged compiled hash."""
+
+    certify = _load("certify")
+    producer = certify._producer_module("scripts/executable_reproduction.py")
+    artifact = json.loads(
+        (REPO / "conformance/executable/dk-boerne-og-ungeydelse.json").read_text()
+    )
+    reproduced = copy.deepcopy(artifact)
+    reproduced["compiled_artifacts"][0]["sha256"] = "0" * 64
+    calls = []
+
+    def forged_reproduction(**kwargs):
+        calls.append(kwargs)
+        return reproduced
+
+    monkeypatch.setattr(producer, "build_reproduction", forged_reproduction)
+    with pytest.raises(ValueError, match="compiled/replayed artifact drifted"):
+        certify._executable_verdict(
+            program="dk/boerne-og-ungeydelse",
+            spec=certify.PROGRAMS["dk/boerne-og-ungeydelse"],
+            legs=[],
+            evidence=[],
+            verify_producer=True,
+        )
+    assert len(calls) == 1
+    assert calls[0]["rulespec_ref"] == artifact["rulespec"]["sha"]
 
 def test_nz_two_endpoint_gate_misses_conditional_default_person_dependency():
     """S1 negative test: preserve proof that the supporting gate is insufficient."""
@@ -702,22 +760,28 @@ def test_weighted_mass_must_be_finite_and_nonnegative():
 
 
 def test_certified_cannot_activate_by_flipping_status_alone():
-    """status: computed with an attested emitted mode reproduced state=yes."""
-    import copy
-
+    """Attested status strings cannot replace verified producer artifacts."""
     certify = _load("certify")
-    spec = copy.deepcopy(certify.PROGRAMS["us-co/snap"])
-    spec["attested"]["closed"].update(status="computed", value=True)
-    spec["attested"]["executable"].update(status="computed", value=True)
-    cert = certify.build_certificate("us-co/snap", spec)
-    # Mode must follow the same determination — they can no longer disagree.
-    assert cert["verdicts"]["closed"]["mode"] == "computed"
-    # And with exercised still false, the verdict is a plain no.
-    assert cert["certified"]["state"] == "no"
+    spec = copy.deepcopy(certify.PROGRAMS["dk/boerne-og-ungeydelse"])
+    spec.pop("computed")
+    spec["attested"] = {
+        "closed": {"status": "computed", "value": True},
+        "executable": {"status": "computed", "value": True},
+    }
 
-    spec2 = copy.deepcopy(spec)
-    spec2["attested"]["executable"]["value"] = False
-    assert certify.build_certificate("us-co/snap", spec2)["certified"]["state"] == "no"
+    cert = certify.build_certificate("dk/boerne-og-ungeydelse", spec)
+
+    assert cert["verdicts"]["conformant"]["mode"] == "computed"
+    assert cert["verdicts"]["conformant"]["value"] is True
+    assert cert["verdicts"]["exercised"]["mode"] == "computed"
+    assert cert["verdicts"]["exercised"]["value"] is True
+    assert cert["verdicts"]["closed"]["mode"] == "attested"
+    assert cert["verdicts"]["closed"]["value"] is True
+    assert cert["verdicts"]["executable"]["mode"] == "attested"
+    assert cert["verdicts"]["executable"]["value"] is True
+    assert cert["blockers"] == []
+    assert cert["certified"]["value"] is False
+    assert cert["certified"]["state"] == "unavailable"
 
 
 @pytest.mark.parametrize("premise", ("closed", "executable"))
@@ -725,7 +789,11 @@ def test_certified_cannot_activate_by_flipping_status_alone():
     ("status", "registry_mode", "derived_mode"),
     (
         pytest.param("prototype", "computed", "attested", id="attested-wins"),
-        pytest.param("computed", "attested", "computed", id="computed-wins"),
+        # `status: computed` is a registry STRING like `mode:`; with no
+        # producer behind the premise the derived mode is attested regardless
+        # (the DK launch audit minted certified=yes through this exact flip).
+        pytest.param("computed", "attested", "attested", id="status-string-loses"),
+        pytest.param("computed", "computed", "attested", id="both-strings-lose"),
     ),
 )
 def test_registry_mode_cannot_override_derived_emitted_mode(
@@ -753,6 +821,8 @@ def test_covered_by_rejects_ghosts_and_absolute_paths():
     assert vbm._covered_by_resolves("ghost-sibling/no-such/evidence.yaml") is False
     assert vbm._covered_by_resolves("/etc/passwd") is False
     assert vbm._covered_by_resolves("../../../etc/passwd") is False
+    assert vbm._covered_by_resolves(".") is False
+    assert vbm._covered_by_resolves("dashboard/public/data") is False
 
 
 def test_contested_reports_are_a_certificate_defect():
@@ -777,6 +847,249 @@ def test_contested_reports_are_a_certificate_defect():
     assert complete is False
     assert any("claim this suite" in d for d in defects)
 
+
+def test_dk_manifest_dropped_suite_input_is_rejected():
+    """Suite-backed completeness must kill a manifest/input drift mutant."""
+    vbm = _load("validate_bridge_manifests")
+    path = REPO / "axiom_oracles/bridges/manifests/dk-child-youth-benefit.yaml"
+    manifest = yaml.safe_load(path.read_text())
+    target = (
+        "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/"
+        "paragraf-1-a#input.total_contributions_to_qualifying_pension_accounts"
+    )
+    manifest["bindings"] = [
+        binding for binding in manifest["bindings"] if binding.get("input") != target
+    ]
+
+    errors, _findings = vbm.validate(path, manifest)
+
+    assert any(
+        "bindings omit suite input(s)" in error and target in error for error in errors
+    )
+
+
+def test_dk_manifest_varying_input_cannot_be_declared_constant():
+    """The 0/60000 pension witness proves the contribution input is mapped."""
+    vbm = _load("validate_bridge_manifests")
+    path = REPO / "axiom_oracles/bridges/manifests/dk-child-youth-benefit.yaml"
+    manifest = copy.deepcopy(yaml.safe_load(path.read_text()))
+    target = (
+        "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/"
+        "paragraf-1-a#input.total_contributions_to_qualifying_pension_accounts"
+    )
+    [binding] = [
+        candidate
+        for candidate in manifest["bindings"]
+        if candidate.get("input") == target
+    ]
+    binding["kind"] = "constant"
+    binding["reason"] = "mutant"
+
+    errors, _findings = vbm.validate(path, manifest)
+
+    assert any(
+        "suite-varying input(s) cannot be kind=constant" in error and target in error
+        for error in errors
+    )
+
+
+def test_dk_manifest_bridge_target_cannot_change_binding_kind():
+    """The suite's tintbto target declarations make the bridged kind computed."""
+    vbm = _load("validate_bridge_manifests")
+    path = REPO / "axiom_oracles/bridges/manifests/dk-child-youth-benefit.yaml"
+    manifest = copy.deepcopy(yaml.safe_load(path.read_text()))
+    [binding] = [
+        candidate
+        for candidate in manifest["bindings"]
+        if candidate.get("dimension") == "personskatteloven_section_7_income_basis"
+    ]
+    binding["kind"] = "constant"
+    binding["reason"] = "mutant"
+
+    errors, _findings = vbm.validate(path, manifest)
+
+    assert any(
+        "suite bridge target(s) must be kind=bridged" in error for error in errors
+    )
+
+
+def test_dk_manifest_bridge_source_cannot_drift_from_tintbto():
+    """The suite names tintbto_s, so another bridge source cannot certify."""
+    vbm = _load("validate_bridge_manifests")
+    path = REPO / "axiom_oracles/bridges/manifests/dk-child-youth-benefit.yaml"
+    manifest = copy.deepcopy(yaml.safe_load(path.read_text()))
+    [binding] = [
+        candidate
+        for candidate in manifest["bindings"]
+        if candidate.get("dimension") == "personskatteloven_section_7_income_basis"
+    ]
+    binding["source"] = "euromod:garbage"
+
+    errors, _findings = vbm.validate(path, manifest)
+
+    assert any("suite bridge target source mismatch" in error for error in errors)
+
+
+def test_dk_manifest_rejects_multi_source_suite_target(monkeypatch):
+    """One manifest source cannot hide a second source introduced by suite drift."""
+    vbm = _load("validate_bridge_manifests")
+    path = REPO / "axiom_oracles/bridges/manifests/dk-child-youth-benefit.yaml"
+    manifest = yaml.safe_load(path.read_text())
+    original_catalog = vbm._suite_input_catalog
+    target = (
+        "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/"
+        "paragraf-1-a#input.personskatteloven_section_7_income_basis"
+    )
+
+    def multi_source_catalog(suite):
+        catalog = original_catalog(suite)
+        catalog[2][target].add("euromod:second_source")
+        return catalog
+
+    monkeypatch.setattr(vbm, "_suite_input_catalog", multi_source_catalog)
+    errors, _findings = vbm.validate(path, manifest)
+
+    assert any("suite bridge target source mismatch" in error for error in errors)
+
+
+def test_dk_synthetic_population_declaration_cannot_be_dropped():
+    """The committed synthetic report must force an honest population family."""
+    vbm = _load("validate_bridge_manifests")
+    path = REPO / "axiom_oracles/bridges/manifests/dk-child-youth-benefit.yaml"
+    manifest = copy.deepcopy(yaml.safe_load(path.read_text()))
+    manifest["population"] = {"pin_required": False}
+
+    errors, _findings = vbm.validate(path, manifest)
+
+    assert any("requires family=synthetic" in error for error in errors)
+    assert any("must declare case_source=suite" in error for error in errors)
+
+
+def test_strict_cli_cannot_be_disarmed_by_a_strict_lane_regressing(monkeypatch):
+    """MUTANT: a finding on a strict-declared manifest is fatal under --strict
+    even when a non-strict manifest with debt sits beside it — the mixed set
+    must still exit nonzero (the strict lane's certificate rests on zero
+    findings; debt elsewhere neither masks nor excuses it)."""
+    vbm = _load("validate_bridge_manifests")
+    strict_path = REPO / "strict.yaml"
+    legacy_path = REPO / "legacy.yaml"
+    manifests = {
+        strict_path: {"strict": True},
+        legacy_path: {"strict": False},
+    }
+    monkeypatch.setattr(vbm, "load_manifests", lambda: manifests)
+    monkeypatch.setattr(vbm, "global_collisions", lambda _manifests: [])
+    monkeypatch.setattr(
+        vbm,
+        "validate",
+        lambda path, _manifest: ([], [f"{path.name}: mutant finding"]),
+    )
+    monkeypatch.setattr(
+        vbm.sys,
+        "argv",
+        ["validate_bridge_manifests.py", "--strict"],
+    )
+
+    assert vbm.main() == 1
+
+
+def test_strict_cli_treats_non_strict_findings_as_visible_debt(monkeypatch, capsys):
+    """Only-debt sets (no strict-declared manifest has a finding) exit 0 under
+    --strict, and the debt is printed — never silently swallowed."""
+    vbm = _load("validate_bridge_manifests")
+    legacy_path = REPO / "legacy.yaml"
+    monkeypatch.setattr(vbm, "load_manifests", lambda: {legacy_path: {"strict": False}})
+    monkeypatch.setattr(vbm, "global_collisions", lambda _manifests: [])
+    monkeypatch.setattr(
+        vbm,
+        "validate",
+        lambda path, _manifest: ([], [f"{path.name}: debt finding"]),
+    )
+    monkeypatch.setattr(vbm.sys, "argv", ["validate_bridge_manifests.py", "--strict"])
+
+    assert vbm.main() == 0
+    assert "legacy.yaml: debt finding" in capsys.readouterr().out
+
+
+def test_bridge_manifest_identity_fields_are_typed():
+    """Null identities and mapping aliases must be errors, never clean/crashes."""
+    vbm = _load("validate_bridge_manifests")
+    path = REPO / "axiom_oracles/bridges/manifests/dk-child-youth-benefit.yaml"
+    original = yaml.safe_load(path.read_text())
+    mutants = (
+        ("program", None, "`program` must be a non-empty string"),
+        ("oracle", None, "oracle must be a mapping"),
+        ("aliases", [{"not": "a string"}], "every alias must be"),
+    )
+
+    for field, value, expected in mutants:
+        manifest = copy.deepcopy(original)
+        manifest[field] = value
+        errors, _findings = vbm.validate(path, manifest)
+        assert any(expected in error for error in errors)
+        # main() asks for collisions before per-manifest validation; malformed
+        # aliases therefore must be harmless here too.
+        vbm.global_collisions({path: manifest})
+
+
+def test_dropping_strict_opt_in_drops_bridge_audited():
+    """MUTANT (delta-audit finding): a strict-clean lane that removes or
+    falsifies its `strict: true` opt-in must LOSE bridge_audited — otherwise
+    the lane could silence future --strict enforcement while its census row
+    and certificate kept claiming audited/exercised. The opt-in is part of the
+    certified claim, so census binds it."""
+    census = _load("exercise_census")
+    baseline = census._manifest_strict_clean()
+    assert baseline.get("dk-child-youth-benifit") is None  # sanity: exact names only
+    assert baseline["dk-child-youth-benefit"] is True
+
+    path = REPO / "axiom_oracles/bridges/manifests/dk-child-youth-benefit.yaml"
+    original = path.read_text()
+    try:
+        for mutant_text in (
+            original.replace("strict: true", "strict: false"),
+            original.replace("strict: true\n", ""),
+        ):
+            assert mutant_text != original
+            path.write_text(mutant_text)
+            mutated = census._manifest_strict_clean()
+            assert mutated["dk-child-youth-benefit"] is False, (
+                "a lane without the strict opt-in must not count as audited"
+            )
+    finally:
+        path.write_text(original)
+    assert census._manifest_strict_clean()["dk-child-youth-benefit"] is True
+
+
+def test_certified_lane_census_is_hermetic_without_tests_dir(tmp_path):
+    """The census the refresh bot computes from its shipped tree (no tests/)
+    must equal the committed census — otherwise the bot's idle path stops
+    being idle (test_no_changes_second_run_is_a_noop). Reproduces the
+    STRICT_EVIDENCE_ROOTS tree and asserts bridge_audited for every strict
+    dk lane survives it."""
+    vbm = _load("validate_bridge_manifests")
+    tree = tmp_path / "shipped"
+    for root in vbm.STRICT_EVIDENCE_ROOTS:
+        src = REPO / root
+        if src.is_dir():
+            shutil.copytree(
+                src, tree / root, ignore=shutil.ignore_patterns("__pycache__")
+            )
+    shutil.copytree(REPO / "scripts", tree / "scripts",
+                    ignore=shutil.ignore_patterns("__pycache__"))
+    assert not (tree / "tests").exists()
+    spec = importlib.util.spec_from_file_location(
+        "census_hermetic", tree / "scripts" / "exercise_census.py"
+    )
+    census = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(census)
+    clean = census._manifest_strict_clean()
+    for suite in (
+        "dk-child-youth-benefit",
+        "dk-child-youth-benefit-2023",
+        "dk-child-youth-benefit-couple",
+    ):
+        assert clean.get(suite) is True, (suite, clean.get(suite))
 
 # ── #378: strict execution-evidence boundary ─────────────────────────────────
 
@@ -2299,7 +2612,7 @@ def test_nz_money_atom_ledger_is_a_ceiling_not_a_target():
         closure.build(source)
 
 
-def test_nz_syntax_only_executable_metadata_has_no_computed_acceptance_path(
+def test_nz_syntax_only_executable_receipt_is_rejected_by_producer(
     tmp_path, monkeypatch
 ):
     certify = _load("certify")
@@ -2326,3 +2639,452 @@ def test_nz_syntax_only_executable_metadata_has_no_computed_acceptance_path(
             },
             [],
         )
+
+
+def test_nz_computed_executable_flag_has_no_verifier_acceptance_path():
+    certify = _load("certify")
+    with pytest.raises(ValueError, match="without a verifier"):
+        certify._executable_verdict(
+            program="nz/mutant",
+            spec={
+                "computed_executable": True,
+                "suites": [
+                    {
+                        "report": (
+                            "dashboard/public/data/"
+                            "nz-treasury-incomeexplorer.json"
+                        )
+                    }
+                ],
+            },
+            legs=[{"suite": "nz-mutant"}],
+            evidence=[],
+        )
+
+
+def test_census_binds_strict_manifest_identity():
+    """Any byte change to a strict-clean manifest must move its census row
+    (bridge_manifest_sha256), so no evidence edit — however the validator
+    judges it — can leave census/certificate bytes identical."""
+    census = _load("exercise_census")
+    path = REPO / "axiom_oracles/bridges/manifests/dk-child-youth-benefit.yaml"
+    original = path.read_text()
+    before = census._manifest_strict_audit()["dk-child-youth-benefit"]
+    assert before["clean"] is True
+    assert len(before["manifest_sha256"]) == 64
+    try:
+        path.write_text(original + "\n# an innocuous trailing comment\n")
+        after = census._manifest_strict_audit()["dk-child-youth-benefit"]
+    finally:
+        path.write_text(original)
+    assert after["clean"] is True
+    assert after["manifest_sha256"] != before["manifest_sha256"]
+    assert census._manifest_strict_audit()["dk-child-youth-benefit"] == before
+
+
+# ── strict covered_by: typed, suite-bound evidence (delta audits #2–#5) ─────
+
+
+COUPLE_REPORT = "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json"
+COUPLE_INDEX = "dashboard/public/data/cases/dk-child-youth-benefit-couple/index.json"
+COUPLE_CHUNK = "dashboard/public/data/cases/dk-child-youth-benefit-couple/chunk-0.json"
+
+
+def _couple_manifest():
+    vbm = _load("validate_bridge_manifests")
+    path = REPO / "axiom_oracles/bridges/manifests/dk-child-youth-benefit-couple.yaml"
+    manifest = yaml.safe_load(path.read_text())
+    assert manifest.get("strict") is True
+    errors, findings = vbm.validate(path, manifest)
+    assert not errors and not findings, (errors, findings)
+    binding = next(b for b in manifest["bindings"] if b.get("kind") == "bridged")
+    return vbm, path, manifest, binding
+
+
+def test_strict_typed_evidence_honest_forms_validate():
+    vbm, path, manifest, binding = _couple_manifest()
+    binding["covered_by"] = [
+        {"report": COUPLE_REPORT, "claim": "the executed receipt"},
+        {"chunk_index": COUPLE_INDEX, "claim": "the bound index"},
+        {"chunk": COUPLE_CHUNK, "claim": "the case corpus"},
+    ]
+    errors, findings = vbm.validate(path, manifest)
+    assert not errors and not findings, (errors, findings)
+
+
+@pytest.mark.parametrize(
+    "entry",
+    [
+        # bare string: the entire five-round smuggling saga was over free text —
+        # prose is now a separate opaque field and strings are not evidence
+        COUPLE_REPORT + " — executed receipt",
+        "dk-child-youth-benefit-couple",
+        "README.md",
+        # wrong suite's report / index / an unlisted chunk (relevance gap)
+        {"report": "dashboard/public/data/axiom-euromod-dk-child-youth-benefit.json", "claim": "x"},
+        {"report": "conformance/exercise-census.json", "claim": "x"},
+        {"report": "certificates/dk-boerne-og-ungeydelse.json", "claim": "x"},
+        {"report": "axiom_oracles/bridges/manifests/dk-child-youth-benefit-couple.yaml", "claim": "self"},
+        {"chunk_index": "dashboard/public/data/cases/dk-child-youth-benefit/index.json", "claim": "x"},
+        {"chunk": "dashboard/public/data/cases/dk-child-youth-benefit/chunk-0.json", "claim": "x"},
+        # physical: outside roots / unshipped / never-shipped / case-variant / abs
+        {"report": "tests/test_certification_mutants.py", "claim": "x"},
+        {"report": "axiom_oracles/__pycache__/x.pyc", "claim": "x"},
+        {"report": COUPLE_REPORT.replace("axiom", "Axiom"), "claim": "x"},
+        {"report": str(REPO / COUPLE_REPORT), "claim": "x"},
+        # shape: two keys, unknown key, no key, empty/missing claim, non-str path
+        {"report": COUPLE_REPORT, "chunk_index": COUPLE_INDEX, "claim": "x"},
+        {"report": COUPLE_REPORT, "claim": "x", "note": "extra"},
+        {"claim": "x"},
+        {"report": COUPLE_REPORT, "claim": ""},
+        {"report": COUPLE_REPORT},
+        {"report": ["not", "a", "path"], "claim": "x"},
+        {},
+    ],
+)
+def test_strict_typed_evidence_rejects(entry):
+    """MUTANTS: every non-conforming or non-relevant covered_by entry on a
+    strict lane is a finding, so bridge_audited (and the certificate's
+    exercised premise) can only rest on THIS suite's own execution receipt."""
+    vbm, path, manifest, binding = _couple_manifest()
+    binding["covered_by"] = [entry]
+    _errors, findings = vbm.validate(path, manifest)
+    assert findings, entry
+    # ...and the census keys bridge_audited off it: strict-clean must be False
+    # (validated through the validator the census itself loads)
+    assert not (not _errors and not findings)
+
+
+def test_strict_typed_evidence_prose_is_opaque():
+    """The claim is never parsed: any text — paths, unicode look-alikes,
+    invisible characters — is fine there, because it proves nothing and the
+    resolver never sees it."""
+    vbm, path, manifest, binding = _couple_manifest()
+    binding["covered_by"] = [
+        {"report": COUPLE_REPORT, "claim": "see tests/x.py [C:secret] ~me ／ \u200b README.md ..."},
+    ]
+    errors, findings = vbm.validate(path, manifest)
+    assert not errors and not findings, (errors, findings)
+
+
+def test_shipped_evidence_file_physical_rules():
+    """The single physical resolver: exact-case, symlink-free, shipped,
+    resolved inside an evidence root — no string-prefix containment."""
+    vbm = _load("validate_bridge_manifests")
+    assert vbm._shipped_evidence_file(COUPLE_REPORT)
+    assert vbm._shipped_evidence_file(COUPLE_INDEX)
+    for bad in (
+        "Dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json",
+        "dashboard/public/data/AXIOM-euromod-dk-child-youth-benefit-couple.json",
+        "docs/../tests/test_certification_mutants.py",
+        "/etc/passwd",
+        "axiom_oracles/__pycache__/x.pyc",
+        "docs/.hidden/x.json",
+        "docs/x.json~",
+        "dashboard/public/data",  # a directory
+        "docs-private/x.md",
+    ):
+        assert vbm._shipped_evidence_file(bad) is False, bad
+    # symlinked directory under a root → rejected even though is_file() is True
+    link_dir = REPO / "docs" / "zz-audit-symlink-mutant"
+    assert not link_dir.exists()
+    link_dir.symlink_to(REPO / "tests" / "fixtures" / "evidence" / "contested_reports")
+    try:
+        cited = "docs/zz-audit-symlink-mutant/census.json"
+        assert (REPO / cited).is_file()
+        assert vbm._shipped_evidence_file(cited) is False
+    finally:
+        link_dir.unlink()
+    # git-untracked file under a root → rejected in a checkout
+    stray = REPO / "docs" / "zz-untracked-evidence-mutant.md"
+    assert not stray.exists()
+    stray.write_text("not tracked\n")
+    try:
+        assert vbm._shipped_evidence_file("docs/zz-untracked-evidence-mutant.md") is False
+    finally:
+        stray.unlink()
+
+
+def test_executable_receipt_binds_reports_provenance_commit():
+    """MUTANT: the receipt recompiles at rulespec.sha; the reports it
+    reproduces record which rulespec commit THEY executed. A receipt at
+    9986b603 sat over reports whose provenance said bbc987b0 (identical
+    module bytes, workflow-only descendant) unnoticed until the typed
+    evidence contract cross-checked the manifests' claims. Now bound."""
+    er = _load("executable_reproduction")
+    document = json.loads(
+        (REPO / "conformance/executable/dk-boerne-og-ungeydelse.json").read_text()
+    )
+    er.validate_artifact(document, repo_root=REPO)
+    mutant = copy.deepcopy(document)
+    other = "9986b6035c4e557b9b40645dfe2f3e4cffb6037c"
+    mutant["rulespec"]["sha"] = other
+    mutant["rulespec"]["ref"] = other
+    with pytest.raises(ValueError, match="report provenance pins rulespec-dk"):
+        er.validate_artifact(mutant, repo_root=REPO)
+
+
+def test_closure_ledger_records_resolved_commits():
+    """Hermetic half: the committed ledger's generated facts pin RESOLVED
+    commits — ref equals commit for both the rulespec and corpus facts, and
+    both are canonical git object ids. Runs everywhere (no external clones)."""
+    facts = yaml.safe_load(
+        (REPO / "conformance/closure/dk-boerne-og-ungeydelse.yaml").read_text()
+    )["generated_facts"]
+    for fact in ("rulespec", "corpus_release"):
+        ref, commit = facts[fact]["ref"], facts[fact]["commit"]
+        assert ref == commit, fact
+        assert isinstance(commit, str) and len(commit) == 40, fact
+        assert any(c in "abcdef" for c in commit), fact
+
+
+@pytest.mark.skipif(
+    not (Path.home() / "TheAxiomFoundation" / "rulespec-dk" / ".git").exists(),
+    reason="needs the local rulespec-dk clone (the full re-derivation path; "
+    "CI runs the hermetic validate/certify gates instead)",
+)
+def test_closure_check_pins_to_recorded_commit(tmp_path):
+    """Default --check re-derives at the ledger's RECORDED rulespec commit
+    (so rulespec-dk main advancing with unrelated commits cannot make the
+    ledger stale); an EXPLICIT --rulespec-ref asks whether the ledger is
+    current against THAT commit — an older commit reports drift."""
+    # closure_ledger declares dataclasses under `from __future__ import
+    # annotations`; they resolve their module by name at class-creation time,
+    # so it must be registered in sys.modules before exec (certify.py's
+    # _producer_module does the same).
+    import sys
+
+    spec = importlib.util.spec_from_file_location(
+        "_mutant_closure_ledger", REPO / "scripts" / "closure_ledger.py"
+    )
+    cl = importlib.util.module_from_spec(spec)
+    sys.modules["_mutant_closure_ledger"] = cl
+    spec.loader.exec_module(cl)
+    recorded = yaml.safe_load(
+        (REPO / "conformance/closure/dk-boerne-og-ungeydelse.yaml").read_text()
+    )["generated_facts"]["rulespec"]["commit"]
+    assert len(recorded) == 40
+    assert cl.main(["--check"]) == 0
+    assert cl.main(["--check", "--rulespec-ref", recorded]) == 0
+    # currency against the OLDER commit 9986b603 (same module bytes, but the
+    # ledger records bbc987b0): the recorded pin differs → drift
+    rc = cl.main(["--check", "--rulespec-ref", "9986b6035c4e557b9b40645dfe2f3e4cffb6037c"])
+    assert rc == 1
+    # and the ledger's own generated_facts.rulespec.ref is the immutable sha
+    facts = yaml.safe_load(
+        (REPO / "conformance/closure/dk-boerne-og-ungeydelse.yaml").read_text()
+    )["generated_facts"]
+    assert facts["rulespec"]["ref"] == facts["rulespec"]["commit"] == recorded
+    assert facts["corpus_release"]["ref"] == facts["corpus_release"]["commit"]
+
+
+def test_strict_evidence_rejects_never_shipped_files():
+    """MUTANT (delta-audit #4): a gitignored __pycache__/*.pyc under an
+    evidence root exists on this disk but in no clone and not in the refresh
+    bot's rsync'd tree; it passed as strict evidence. Never-shipped
+    components/suffixes are rejected outright, and — when the tree is a git
+    checkout — the path must be git-tracked."""
+    vbm = _load("validate_bridge_manifests")
+    for bad in (
+        "axiom_oracles/__pycache__/x.pyc",
+        "axiom_oracles/x.pyc",
+        "docs/.hidden/evidence.json",
+        "docs/evidence.json~",
+        "reports/node_modules/x.json",
+    ):
+        assert vbm._plausibly_shipped(bad) is False, bad
+    assert vbm._plausibly_shipped(
+        "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json"
+    )
+    # git gate: an untracked file under a root is not evidence in a checkout
+    stray = REPO / "docs" / "zz-untracked-evidence-mutant.md"
+    assert not stray.exists()
+    stray.write_text("not tracked\n")
+    try:
+        assert vbm._shipped_evidence_file("docs/zz-untracked-evidence-mutant.md") is False
+    finally:
+        stray.unlink()
+
+
+def test_producers_must_agree_on_one_rulespec_commit(tmp_path, monkeypatch):
+    """MUTANT (delta-audit #6): the closure ledger and executable receipt each
+    verify their OWN recorded pin, so a ledger coherently regenerated at
+    9986b603 passes its own check while the receipt sits at bbc987b0 (byte-
+    identical modules, different commit). certify must refuse to treat those
+    as one certificate: a producer-commit mismatch is a blocker."""
+    certify = _load("certify")
+    ledger_path = REPO / "conformance/closure/dk-boerne-og-ungeydelse.yaml"
+    original = ledger_path.read_text()
+    doc = yaml.safe_load(original)
+    facts = doc["generated_facts"]["rulespec"]
+    assert facts["commit"] == facts["ref"]
+    receipt = json.loads(
+        (REPO / "conformance/executable/dk-boerne-og-ungeydelse.json").read_text()
+    )
+    assert receipt["rulespec"]["sha"] == facts["commit"]  # baseline agrees
+
+    other = "9986b6035c4e557b9b40645dfe2f3e4cffb6037c"
+    # A "coherently regenerated" ledger at the other commit: the pin moves,
+    # everything else (identical module bytes) stays. Serialize through the
+    # producer so the artifact is byte-canonical for its own validator.
+    facts["commit"] = other
+    facts["ref"] = other
+    import sys
+
+    spec = importlib.util.spec_from_file_location(
+        "_mutant_closure_ledger_drift", REPO / "scripts" / "closure_ledger.py"
+    )
+    cl = importlib.util.module_from_spec(spec)
+    sys.modules["_mutant_closure_ledger_drift"] = cl
+    spec.loader.exec_module(cl)
+    ledger_path.write_text(cl.serialize_artifact(doc))
+    try:
+        cert = certify.build_certificate(
+            "dk/boerne-og-ungeydelse", certify.PROGRAMS["dk/boerne-og-ungeydelse"]
+        )
+    finally:
+        ledger_path.write_text(original)
+    assert cert["verdicts"]["closed"]["mode"] == "computed"
+    assert cert["verdicts"]["closed"]["rulespec_commit"] == other
+    assert cert["verdicts"]["executable"]["rulespec_sha"] == receipt["rulespec"]["sha"]
+    assert any("producers disagree on the rulespec commit" in b for b in cert["blockers"]), cert["blockers"]
+    assert cert["certified"]["value"] is False
+
+
+def test_ledger_commit_must_be_a_string_sha_and_ref_must_equal_commit():
+    """MUTANT (delta-audit #7): a 40-DIGIT YAML integer is a legal scalar
+    that `str(commit)` turned into a passing "sha"; certification then emitted
+    a computed closed premise while the commit cross-check silently skipped
+    the non-string. The validator now requires a string SHA and ref==commit
+    for both the rulespec and corpus facts, and certify treats non-comparable
+    provenance on two computed premises as a blocker."""
+    import sys
+
+    spec = importlib.util.spec_from_file_location(
+        "_mutant_closure_ledger_types", REPO / "scripts" / "closure_ledger.py"
+    )
+    cl = importlib.util.module_from_spec(spec)
+    sys.modules["_mutant_closure_ledger_types"] = cl
+    spec.loader.exec_module(cl)
+    ledger_path = REPO / "conformance/closure/dk-boerne-og-ungeydelse.yaml"
+    baseline = yaml.safe_load(ledger_path.read_text())
+    assert cl._validation_errors(baseline) == []
+
+    digits = int("1" * 40)  # a 40-digit integer, not a hex string
+    # delta-audit #8: the !!str-tagged form is a 40-char DECIMAL string, which
+    # is syntactically valid hex — it must still fail (a real git object id
+    # has at least one of a-f; a decimal-only id is the forgery shape).
+    digit_str = "1234567890123456789012345678901234567890"
+    for fact in ("rulespec", "corpus_release"):
+        for forged in (digits, digit_str):
+            doc = copy.deepcopy(baseline)
+            doc["generated_facts"][fact]["commit"] = forged
+            doc["generated_facts"][fact]["ref"] = forged
+            errors = cl._validation_errors(doc)
+            assert any("commit must be a full git commit SHA" in e for e in errors), (
+                fact, forged, errors
+            )
+
+        doc = copy.deepcopy(baseline)
+        doc["generated_facts"][fact]["ref"] = "main"
+        errors = cl._validation_errors(doc)
+        assert any("must equal" in e and "commit" in e for e in errors), (fact, errors)
+
+    # certify, fail-closed: even if a non-string commit reached the closed
+    # block, two computed premises without comparable provenance BLOCK.
+    certify = _load("certify")
+    original_closed = certify._producer_closed_verdict
+
+    def _tampered(program, spec_, evidence, *, verify_producer=False):
+        block = original_closed(program, spec_, evidence, verify_producer=verify_producer)
+        if block is not None:
+            block["rulespec_commit"] = digits
+        return block
+
+    certify._producer_closed_verdict = _tampered
+    try:
+        cert = certify.build_certificate(
+            "dk/boerne-og-ungeydelse", certify.PROGRAMS["dk/boerne-og-ungeydelse"]
+        )
+    finally:
+        certify._producer_closed_verdict = original_closed
+    assert cert["verdicts"]["closed"]["mode"] == "computed"
+    assert cert["verdicts"]["executable"]["mode"] == "computed"
+    assert any("provenance is not comparable" in b for b in cert["blockers"]), cert["blockers"]
+    assert cert["certified"]["value"] is False
+
+    # delta-audit #8: COORDINATED equal digit-only strings on both computed
+    # sides satisfied plain equality. Equality now counts only between values
+    # that are each a canonical git object id.
+    original_exec = certify._producer_executable_verdict
+
+    def _tampered_closed(program, spec_, evidence, *, verify_producer=False):
+        block = original_closed(program, spec_, evidence, verify_producer=verify_producer)
+        if block is not None:
+            block["rulespec_commit"] = digit_str
+        return block
+
+    def _tampered_exec(program, spec_, evidence, *, verify_producer=False):
+        block = original_exec(program, spec_, evidence, verify_producer=verify_producer)
+        if block is not None:
+            block["rulespec_sha"] = digit_str
+        return block
+
+    certify._producer_closed_verdict = _tampered_closed
+    certify._producer_executable_verdict = _tampered_exec
+    try:
+        cert = certify.build_certificate(
+            "dk/boerne-og-ungeydelse", certify.PROGRAMS["dk/boerne-og-ungeydelse"]
+        )
+    finally:
+        certify._producer_closed_verdict = original_closed
+        certify._producer_executable_verdict = original_exec
+    assert cert["verdicts"]["closed"]["rulespec_commit"] == digit_str
+    assert cert["verdicts"]["executable"]["rulespec_sha"] == digit_str
+    assert any("provenance is not comparable" in b for b in cert["blockers"]), cert["blockers"]
+    assert cert["certified"]["value"] is False
+    assert cert["certified"]["state"] != "yes"
+
+
+def test_executable_receipt_rejects_digit_only_sha():
+    """delta-audit #8: the receipt's own sha regex accepted a decimal-only
+    40-char string; canonical git object ids need at least one of a-f."""
+    er = _load("executable_reproduction")
+    document = json.loads(
+        (REPO / "conformance/executable/dk-boerne-og-ungeydelse.json").read_text()
+    )
+    er.validate_artifact(document, repo_root=REPO)
+    mutant = copy.deepcopy(document)
+    digit_str = "1234567890123456789012345678901234567890"
+    mutant["rulespec"]["sha"] = digit_str
+    mutant["rulespec"]["ref"] = digit_str
+    with pytest.raises(ValueError):
+        er.validate_artifact(mutant, repo_root=REPO)
+
+
+def test_tariff_scale_report_rejects_fabricated_conformant(monkeypatch):
+    """The C1 report's typed premise is checked against producer semantics."""
+    certify = _load("certify")
+    entry = certify.PROGRAMS["us/tariff-duty"]["suites"][0]
+    report = json.loads((REPO / entry["report"]).read_text())
+    report["summary"]["unexplained"] = 1
+    report["summary"]["explained"] -= 1
+    monkeypatch.setattr(certify, "_load", lambda _path: report)
+    leg, _evidence, defects = certify._tariff_schedule_suite_verdict(entry)
+    assert leg["clean"] is False
+    assert any("conformant flag is fabricated" in defect for defect in defects)
+
+
+def test_tariff_scale_report_derives_open_axiom_units(monkeypatch):
+    certify = _load("certify")
+    entry = certify.PROGRAMS["us/tariff-duty"]["suites"][0]
+    report = json.loads((REPO / entry["report"]).read_text())
+    monkeypatch.setattr(certify, "_load", lambda _path: report)
+    leg, _evidence, defects = certify._tariff_schedule_suite_verdict(entry)
+    assert defects == []
+    assert leg["axiom_attributed_open"] == 1_592_236
+    assert leg["axiom_attributed_open_classes"] == {
+        "fed-false-family-brazil": 93_198,
+        "fed-false-family-forced-labor": 1_499_038,
+    }
+    assert leg["clean"] is False

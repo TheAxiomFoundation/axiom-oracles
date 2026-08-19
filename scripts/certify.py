@@ -38,6 +38,7 @@ import argparse
 import hashlib
 import importlib.util
 import json
+import re
 import sys
 from collections import Counter
 from functools import lru_cache
@@ -47,6 +48,11 @@ from types import ModuleType
 import yaml
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+#: A git object id: 40 lowercase hex chars with at least one of a-f (a
+#: decimal-only string is not a realistic commit and is the !!str-digit forgery
+#: shape from delta-audit #8). Shared shape with closure_ledger/_HEX_GIT_SHA and
+#: executable_reproduction/HEX_40.
+GIT_SHA = re.compile(r"^(?=[0-9a-f]{40}$)(?=.*[a-f])[0-9a-f]{40}$")
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
@@ -151,12 +157,52 @@ PROGRAMS: dict[str, dict] = {
                 "axiom-euromod-dk-child-youth-benefit-couple.json",
             },
         ],
-        # No attested closed/executable claims yet: the closure and
-        # executable producers do not exist for dk (as for every program),
-        # so certified is UNAVAILABLE by construction. The jurisdiction
-        # scoreboard (conformance/dk.yaml) separately records the honest
-        # full-parity burndown: 22 substantive DK_2025 policies in scope,
-        # 1 covered by this program's suites, 21 uncovered.
+        # DK is the first program with committed, independently checkable
+        # closed and executable producer artifacts. Ordinary certification is
+        # hermetic: it validates those receipts and their in-repo inputs. The
+        # opt-in ``--verify-producers`` integration gate additionally re-derives
+        # closure from external Git sources and recompiles/replays executable.
+        # The jurisdiction scoreboard (conformance/dk.yaml) separately records
+        # the honest full-parity burndown.
+        "computed": {
+            "closed": {
+                "artifact": ("conformance/closure/dk-boerne-og-ungeydelse.yaml"),
+                "producer": "scripts/closure_ledger.py",
+            },
+            "executable": {
+                "artifact": ("conformance/executable/dk-boerne-og-ungeydelse.json"),
+                "producer": "scripts/executable_reproduction.py",
+            },
+        },
+        "attested": {},
+    },
+    "us/tariff-duty": {
+        "period": "2026",
+        "suites": [
+            {
+                "suite": "us-tariff-schedule",
+                "oracle_type": "reference",
+                "oracle": (
+                    "Yale Budget Lab tariff-rate-tracker legal-date statutory "
+                    "panel at c4307e514196618afcbf88cf7fd33746417eeabf"
+                ),
+                "report": "conformance/detail/us-tariff-schedule.json",
+                "report_contract": "us_tariff_schedule_v1",
+            }
+        ],
+        "scope_from_suite": "us-tariff-schedule",
+        "computed": {
+            "closed": {
+                "artifact": "conformance/closure/us-tariff-duty.yaml",
+                "producer": "scripts/closure_ledger.py",
+                "contract": "us_tariff_closure_v1",
+                "include_burndown": True,
+            },
+            "executable": {
+                "artifact": "conformance/executable/us-tariff-witness.json",
+                "producer": "scripts/tariff_executable_reproduction.py",
+            },
+        },
         "attested": {},
     },
 }
@@ -208,9 +254,7 @@ for _nz_program in (
                 "producer": "scripts/nz_closure.py",
             },
             "executable": {
-                "artifact": (
-                    "conformance/executable/nz-treasury-incomeexplorer.json"
-                ),
+                "artifact": ("conformance/executable/nz-treasury-incomeexplorer.json"),
                 "producer": "scripts/nz_executable_reproduction.py",
             },
         },
@@ -319,6 +363,160 @@ def _rederived_nz_report() -> dict:
     return _NZ_REPORT_CACHE
 
 
+def _tariff_schedule_suite_verdict(
+    entry: dict,
+) -> tuple[dict, list[dict], list[str]]:
+    """Validate the scale campaign's aggregate, content-addressed report.
+
+    The supervised tariff campaign commits its 19-million-case evidence through
+    a shard manifest and reconciliation receipts, so its report intentionally
+    uses aggregate ``total/matches/mismatches`` names rather than duplicating
+    ordinary dashboard case rows.  Do not promote its typed ``conformant`` flag:
+    derive the verdict again from the conserved counts and producer rule.
+    """
+
+    defects: list[str] = []
+    report_path = _repo_artifact_path(entry["report"], label=entry["suite"])
+    try:
+        report = _load(report_path)
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise ValueError(f"{entry['report']} is not readable JSON: {exc}") from exc
+    if not isinstance(report, dict):
+        raise ValueError(f"{entry['report']} must contain an object")
+    if report.get("schema") != "axiom.comparison_report.v2":
+        defects.append(f"{entry['suite']}: wrong scale-report schema")
+    if report.get("suite") != entry["suite"]:
+        defects.append(f"{entry['suite']}: scale report identifies another suite")
+    summary = report.get("summary")
+    if not isinstance(summary, dict):
+        summary = {}
+        defects.append(f"{entry['suite']}: summary must be an object")
+    total = _count(summary.get("total"), "total", defects, entry["suite"])
+    matches = _count(summary.get("matches"), "matches", defects, entry["suite"])
+    mismatches = _count(
+        summary.get("mismatches"), "mismatches", defects, entry["suite"]
+    )
+    explained = _count(summary.get("explained"), "explained", defects, entry["suite"])
+    unexplained = _count(
+        summary.get("unexplained"), "unexplained", defects, entry["suite"]
+    )
+    engine_errors = _count(
+        summary.get("engine_errors"), "engine_errors", defects, entry["suite"]
+    )
+    if total <= 0:
+        defects.append(f"{entry['suite']}: zero comparison units")
+    if matches + mismatches != total:
+        defects.append(f"{entry['suite']}: scale-report counts do not conserve")
+    if explained + unexplained != mismatches:
+        defects.append(f"{entry['suite']}: classification counts do not conserve")
+    derived_conformant = unexplained == 0 and engine_errors == 0
+    scoreboard = report.get("scoreboard")
+    if not isinstance(scoreboard, dict):
+        defects.append(f"{entry['suite']}: scoreboard must be an object")
+    else:
+        if scoreboard.get("derivation") != "unexplained == 0 and engine_errors == 0":
+            defects.append(f"{entry['suite']}: scoreboard derivation changed")
+        if scoreboard.get("conformant") is not derived_conformant:
+            defects.append(
+                f"{entry['suite']}: scoreboard conformant flag is fabricated"
+            )
+    if report.get("conformant") is not derived_conformant:
+        defects.append(f"{entry['suite']}: report conformant flag is fabricated")
+    classification = report.get("classification")
+    if not isinstance(classification, dict):
+        classification = {}
+        defects.append(f"{entry['suite']}: classification must be an object")
+    class_attribution = classification.get("class_attribution")
+    class_census = classification.get("class_census")
+    if not isinstance(class_attribution, dict):
+        class_attribution = {}
+        defects.append(f"{entry['suite']}: class_attribution must be an object")
+    if not isinstance(class_census, dict):
+        class_census = {}
+        defects.append(f"{entry['suite']}: class_census must be an object")
+    axiom_open_classes: dict[str, int] = {}
+    for class_name, raw_class in class_attribution.items():
+        if not isinstance(raw_class, dict):
+            defects.append(
+                f"{entry['suite']}: class_attribution.{class_name} must be an object"
+            )
+            continue
+        if raw_class.get("attribution") != "axiom-attributed-open":
+            continue
+        units = _count(
+            raw_class.get("units"),
+            f"classification.class_attribution.{class_name}.units",
+            defects,
+            entry["suite"],
+        )
+        census_units = _count(
+            class_census.get(class_name),
+            f"classification.class_census.{class_name}",
+            defects,
+            entry["suite"],
+        )
+        if units != census_units:
+            defects.append(
+                f"{entry['suite']}: open class {class_name} units do not match "
+                f"the class census ({units} != {census_units})"
+            )
+        axiom_open_classes[class_name] = units
+    scope = report.get("scope")
+    open_scope = scope.get("open") if isinstance(scope, dict) else None
+    scoped_classes = (
+        open_scope.get("axiom_attributed_open_classes")
+        if isinstance(open_scope, dict)
+        else None
+    )
+    if not isinstance(scoped_classes, dict):
+        defects.append(f"{entry['suite']}: scope lacks axiom-attributed-open classes")
+    else:
+        scoped_units = {
+            class_name: raw_class.get("units")
+            for class_name, raw_class in scoped_classes.items()
+            if isinstance(raw_class, dict)
+        }
+        if scoped_units != axiom_open_classes:
+            defects.append(
+                f"{entry['suite']}: scope open classes do not match classification"
+            )
+    if axiom_open_classes and (
+        not isinstance(open_scope, dict) or open_scope.get("status") != "OPEN"
+    ):
+        defects.append(f"{entry['suite']}: nonempty open classes require OPEN scope")
+    axiom_open = sum(axiom_open_classes.values())
+    clean = derived_conformant and axiom_open == 0 and not defects
+    evidence = [
+        {
+            "claim": f"suite:{entry['suite']}",
+            "mode": "computed",
+            "artifact": entry["report"],
+            "sha256": sha256_of(report_path),
+        }
+    ]
+    return (
+        {
+            "suite": entry["suite"],
+            "oracle_type": entry["oracle_type"],
+            "oracle": entry["oracle"],
+            "comparisons": total,
+            "matches": matches,
+            "mismatches": mismatches,
+            "weighted_mismatch_mass": None,
+            "unexplained": unexplained,
+            "axiom_attributed_open": axiom_open,
+            "axiom_attributed_open_classes": axiom_open_classes,
+            "binding": "bound",
+            "reconciliation": "full",
+            "evidence_cases": total,
+            "report_defects": defects,
+            "clean": clean,
+        },
+        evidence,
+        defects,
+    )
+
+
 def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
     """Compute one suite's conformance leg from its committed report.
 
@@ -327,6 +525,9 @@ def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
     number of comparisons without engine errors, and its counts conserve.
     A zero-work or mislabeled report is a defect, never a clean leg.
     """
+    if entry.get("report_contract") == "us_tariff_schedule_v1":
+        return _tariff_schedule_suite_verdict(entry)
+
     defects: list[str] = []
     report_path = REPO_ROOT / entry["report"]
     execution_evidence = validate_suite_evidence(report_path)
@@ -730,54 +931,84 @@ def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
 
 
 def _repo_artifact_path(relative: object, *, label: str) -> Path:
+    """Resolve a configured artifact without permitting repository escape."""
+
     if not isinstance(relative, str) or not relative:
-        raise ValueError(f"{label} path is missing")
-    path = (REPO_ROOT / relative).resolve()
+        raise ValueError(f"{label} requires a non-empty repository-relative artifact")
+    candidate = Path(relative)
+    if candidate.is_absolute() or ".." in candidate.parts:
+        raise ValueError(f"{label} artifact must be repository-relative: {relative!r}")
+    path = (REPO_ROOT / candidate).resolve()
     try:
         path.relative_to(REPO_ROOT.resolve())
-    except ValueError as exc:
-        raise ValueError(f"{label} path escapes the repository: {relative}") from exc
+    except ValueError as exc:  # pragma: no cover - defense beyond lexical guard
+        raise ValueError(
+            f"{label} artifact escapes the repository: {relative!r}"
+        ) from exc
     return path
 
 
 @lru_cache(maxsize=None)
 def _producer_module(relative: str) -> ModuleType:
+    """Load one in-repo producer so certification can reuse its pure validator."""
+
     path = _repo_artifact_path(relative, label="computed producer")
     if not path.is_file():
         raise ValueError(f"computed producer is missing: {relative}")
     module_name = f"_axiom_certificate_{path.stem}"
-    module_spec = importlib.util.spec_from_file_location(module_name, path)
-    if module_spec is None or module_spec.loader is None:
-        raise ValueError(f"cannot load computed producer: {relative}")
-    module = importlib.util.module_from_spec(module_spec)
+    spec = importlib.util.spec_from_file_location(module_name, path)
+    if spec is None or spec.loader is None:  # pragma: no cover - importlib guard
+        raise ValueError(f"could not load computed producer: {relative}")
+    module = importlib.util.module_from_spec(spec)
+    # Dataclass and other runtime annotation helpers resolve their module by
+    # name while the file executes, so register it before exec_module.
     sys.modules[module_name] = module
-    module_spec.loader.exec_module(module)
+    spec.loader.exec_module(module)
     return module
 
 
 def _attested_verdict(spec: dict, name: str) -> dict:
+    """Emit sha-pinned scaffolding without promoting registry status strings.
+
+    A registry block is a CLAIM. Its `status`/`mode` strings are labels the
+    registry author typed, not evidence; only a producer artifact (or NZ's
+    rederived closure summary) can make a premise computed. Flipping
+    `status: computed` on an attested block therefore changes NOTHING about
+    the emitted mode — that flip minted a full certified=yes live during the
+    DK launch audit (historical finding-7 class), so it is closed here for
+    every program at once.
+    """
+
     block = dict((spec.get("attested") or {}).get(name) or {})
-    emitted_mode = "computed" if block.get("status") == "computed" else "attested"
-    return {**block, "mode": emitted_mode}
+    return {**block, "mode": "attested"}
 
 
-def _computed_config(spec: dict, name: str) -> dict | None:
-    config = (spec.get("computed") or {}).get(name)
-    return config if isinstance(config, dict) else None
+def _producer_closed_verdict(
+    program: str,
+    spec: dict,
+    evidence: list[dict],
+    *,
+    verify_producer: bool = False,
+) -> dict | None:
+    """Computed closure from a committed artifact and its named producer.
 
+    Returns None when the program declares no closed producer (or its artifact
+    is absent) so the caller falls through to the other evidence classes. Both
+    object-style producer summaries and program-scoped mapping summaries are
+    supported; a mapping that declares ``programs`` must contain this program.
+    """
 
-def _closed_verdict(program: str, spec: dict, evidence: list[dict]) -> dict:
-    """One computed closure predicate, scoped by the producer's program map."""
-
-    config = _computed_config(spec, "closed")
-    if config is None:
-        return _attested_verdict(spec, "closed")
+    config = (spec.get("computed") or {}).get("closed")
+    if not isinstance(config, dict):
+        return None
     artifact_ref = config.get("artifact")
     artifact_path = _repo_artifact_path(
-        artifact_ref, label=f"{program} closed artifact"
+        artifact_ref,
+        label=f"{program} closed producer",
     )
     if not artifact_path.is_file():
-        raise ValueError(f"computed closure artifact is missing: {artifact_ref}")
+        return None
+
     try:
         document = (
             yaml.safe_load(artifact_path.read_text())
@@ -785,22 +1016,102 @@ def _closed_verdict(program: str, spec: dict, evidence: list[dict]) -> dict:
             else json.loads(artifact_path.read_text())
         )
     except (OSError, UnicodeError, json.JSONDecodeError, yaml.YAMLError) as exc:
-        raise ValueError(f"{artifact_ref} is not readable closure evidence: {exc}") from exc
+        raise ValueError(
+            f"{artifact_ref} is not readable closure evidence: {exc}"
+        ) from exc
+    if not isinstance(document, dict):
+        raise ValueError(f"{artifact_ref} closure artifact must contain an object")
     producer = _producer_module(str(config.get("producer") or ""))
-    try:
-        summary = producer.validate_artifact(document)
-    except ValueError as exc:
-        raise ValueError(f"{artifact_ref} failed closure validation: {exc}") from exc
+    if config.get("contract") == "us_tariff_closure_v1":
+        if verify_producer:
+            raise ValueError(
+                f"{artifact_ref}: full producer verification must be run with "
+                "the C3 tariff producer checkout"
+            )
+        computed = document.get("computed")
+        decisions = (document.get("committed_decisions") or {}).get("ledger")
+        if not isinstance(computed, dict) or not isinstance(decisions, list):
+            raise ValueError(f"{artifact_ref} has malformed tariff closure blocks")
+        open_rows = [
+            row
+            for row in decisions
+            if isinstance(row, dict)
+            and row.get("status") in ("pending", "partially-encoded")
+        ]
+        expected_burndown = [
+            {
+                "family": row.get("family"),
+                "root": row.get("root"),
+                "status": row.get("status"),
+                "blocker": row.get("reason"),
+            }
+            for row in open_rows
+        ]
+        frontier = computed.get("boundary_frontier")
+        derived_closed = not open_rows
+        if computed.get("closed") is not derived_closed:
+            raise ValueError(f"{artifact_ref} computed.closed is fabricated")
+        if computed.get("burndown") != expected_burndown:
+            raise ValueError(f"{artifact_ref} burndown is not derived from the ledger")
+        if not isinstance(frontier, dict) or frontier.get("complete") is not True:
+            raise ValueError(f"{artifact_ref} boundary frontier is incomplete")
+
+        class _TariffSummary:
+            closed = derived_closed
+            non_encoded_reasons_complete = all(
+                isinstance(row, dict)
+                and isinstance(row.get("reason"), str)
+                and bool(row["reason"])
+                for row in decisions
+            )
+
+        summary = _TariffSummary()
+    else:
+        try:
+            summary = (
+                producer.validate_artifact(document, repo_root=REPO_ROOT)
+                if artifact_path.suffix == ".json"
+                else producer.validate_artifact(document)
+            )
+        except ValueError as exc:
+            raise ValueError(
+                f"{artifact_ref} failed closure validation: {exc}"
+            ) from exc
+    if (
+        verify_producer
+        and config.get("contract") != "us_tariff_closure_v1"
+        and hasattr(producer, "verify_artifact")
+    ):
+        try:
+            verification = producer.verify_artifact(artifact_path=artifact_path)
+        except ValueError as exc:
+            raise ValueError(
+                f"{artifact_ref} closure verification crashed: {exc}"
+            ) from exc
+        if not getattr(verification, "valid", False):
+            errors = getattr(verification, "errors", ())
+            detail = (
+                "; ".join(str(error) for error in errors) or "unknown producer error"
+            )
+            raise ValueError(
+                f"{artifact_ref} failed full closure verification: {detail}"
+            )
+    scoped: dict | None = None
     if isinstance(summary, dict):
-        scoped = (summary.get("programs") or {}).get(program, summary)
-        if not isinstance(scoped, dict):
-            raise ValueError(f"{artifact_ref} has no closure scope for {program}")
+        programs = summary.get("programs")
+        if programs is not None:
+            if not isinstance(programs, dict) or not isinstance(
+                programs.get(program), dict
+            ):
+                raise ValueError(f"{artifact_ref} has no closure scope for {program}")
+            scoped = programs[program]
+        else:
+            scoped = summary
         value = scoped.get("closed")
     else:
-        scoped = {}
         value = getattr(summary, "closed", None)
     if not isinstance(value, bool):
-        raise ValueError(f"{artifact_ref} validator returned no closed Boolean")
+        raise ValueError(f"{artifact_ref} validator returned no closed boolean")
     evidence.append(
         {
             "claim": f"closed:{program}",
@@ -810,33 +1121,261 @@ def _closed_verdict(program: str, spec: dict, evidence: list[dict]) -> dict:
             "verification": "producer_artifact_validation",
         }
     )
-    result = {
+
+    if scoped is not None and isinstance(summary.get("programs"), dict):
+        return {
+            "mode": "computed",
+            "status": "computed_pass" if value else "computed_open",
+            "value": value,
+            "artifact": str(artifact_ref),
+            "corpus_release": document.get("corpus_release"),
+            "rulespec_commit": document.get("rulespec_commit"),
+            "pending_citations": len(scoped.get("pending_citations") or []),
+            "pending_money_atoms": scoped.get("pending_money_atoms"),
+            "root_node_count": scoped.get("root_node_count"),
+            "root_nodes": scoped.get("root_nodes"),
+            "subgraph_node_count": scoped.get("subgraph_node_count"),
+            "citation_root_count": scoped.get("citation_root_count"),
+            "by_status": scoped.get("by_status"),
+            "denominator_ratchet": scoped.get("denominator_ratchet"),
+        }
+
+    computed = document.get("computed")
+    if not isinstance(computed, dict):
+        raise ValueError(f"{artifact_ref} has no computed closure block")
+    facts = document.get("generated_facts") or {}
+    ledger_rulespec = facts.get("rulespec") if isinstance(facts, dict) else None
+    return {
+        "mode": "computed",
+        "value": value,
+        "status": "computed_closed" if value else "computed_open",
+        "artifact": str(artifact_ref),
+        "rulespec_commit": (
+            ledger_rulespec.get("commit") if isinstance(ledger_rulespec, dict) else None
+        ),
+        "provision_counts": computed.get("provision_counts"),
+        "boundary_frontier": computed.get("boundary_frontier"),
+        **(
+            {"burndown": computed.get("burndown")}
+            if config.get("include_burndown")
+            else {}
+        ),
+        "non_encoded_reasons_complete": summary.non_encoded_reasons_complete,
+    }
+
+
+def _producer_executable_verdict(
+    program: str,
+    spec: dict,
+    evidence: list[dict],
+    *,
+    verify_producer: bool = False,
+) -> dict | None:
+    """Computed execution from a committed receipt and its named producer.
+
+    ``verify_producer`` retains the DK producer's external compile/replay gate.
+    Producers such as NZ that expose a hermetic program-scoped validator but
+    no generic ``build_reproduction`` hook remain validated by that committed
+    contract; their pinned-engine replay runs in their dedicated CI gate.
+    """
+
+    config = (spec.get("computed") or {}).get("executable")
+    if not isinstance(config, dict):
+        return None
+    artifact_ref = config.get("artifact")
+    artifact_path = _repo_artifact_path(
+        artifact_ref,
+        label=f"{program} executable producer",
+    )
+    if not artifact_path.is_file():
+        return None
+
+    try:
+        document = json.loads(artifact_path.read_text())
+    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        raise ValueError(
+            f"{artifact_ref} is not readable executable JSON: {exc}"
+        ) from exc
+    producer = _producer_module(str(config.get("producer") or ""))
+    try:
+        summary = producer.validate_artifact(document, repo_root=REPO_ROOT)
+    except ValueError as exc:
+        raise ValueError(f"{artifact_ref} failed executable validation: {exc}") from exc
+    if verify_producer and hasattr(producer, "build_reproduction"):
+        try:
+            reproduced = producer.build_reproduction(
+                repo_root=REPO_ROOT,
+                rulespec_ref=document["rulespec"]["sha"],
+            )
+            producer.validate_artifact(reproduced, repo_root=REPO_ROOT)
+            rendered = producer._render(reproduced)
+        except (OSError, RuntimeError, ValueError) as exc:
+            raise ValueError(
+                f"{artifact_ref} failed full executable verification: {exc}"
+            ) from exc
+        if artifact_path.read_text() != rendered:
+            raise ValueError(
+                f"{artifact_ref} failed full executable verification: "
+                "compiled/replayed artifact drifted"
+            )
+    if not isinstance(summary, dict):
+        raise ValueError(f"{artifact_ref} validator returned no executable summary")
+    programs = summary.get("programs")
+    if programs is not None:
+        if not isinstance(programs, dict) or not isinstance(
+            programs.get(program), dict
+        ):
+            raise ValueError(f"{artifact_ref} has no executable scope for {program}")
+        scoped = programs[program]
+    else:
+        scoped = summary
+    value = scoped.get("executable")
+    if not isinstance(value, bool):
+        raise ValueError(f"{artifact_ref} validator returned no executable boolean")
+    evidence.append(
+        {
+            "claim": f"executable:{program}",
+            "mode": "computed",
+            "artifact": str(artifact_ref),
+            "sha256": sha256_of(artifact_path),
+            "verification": "producer_artifact_validation",
+        }
+    )
+    if programs is not None:
+        return {
+            "mode": "computed",
+            "status": "computed_pass" if value else "computed_fail",
+            "value": value,
+            "artifact": str(artifact_ref),
+            "rulespec_sha": (document.get("rulespec") or {}).get("sha"),
+            "engine": document.get("engine"),
+            "compiled_artifact": document.get("compiled_artifact"),
+            "request_set": document.get("request_set"),
+            "golden_outputs": document.get("golden_outputs"),
+            "transcript": document.get("transcript"),
+            "summary": scoped,
+        }
+    return {
+        "mode": "computed",
+        "value": value,
+        "status": "computed_pass" if value else "computed_fail",
+        "artifact": str(artifact_ref),
+        "case_count": summary.get("case_count"),
+        "matched_case_count": summary.get("matched_case_count"),
+        "engine_binary_sha256": (document.get("engine") or {}).get("binary_sha256"),
+        "configured_engine_sha256": (document.get("engine") or {}).get(
+            "configured_sha256"
+        ),
+        "rulespec_sha": (document.get("rulespec") or {}).get("sha"),
+        "compiled_artifacts": [
+            {
+                "program": row.get("program"),
+                "sha256": row.get("sha256"),
+            }
+            for row in document.get("compiled_artifacts") or []
+            if isinstance(row, dict)
+        ],
+    }
+
+
+def _closed_verdict(
+    program: str,
+    spec: dict,
+    evidence: list[dict],
+    *,
+    verify_producer: bool = False,
+) -> dict:
+    """One closure verdict for every evidence class, in strength order:
+    NZ attested receipt (attested), DK producer ledger (computed), NZ
+    rederived closure summary (computed), else the registry block (attested,
+    whatever its strings say)."""
+
+    attested_path_string = spec.get("attested_closed_receipt")
+    if attested_path_string:
+        path = REPO_ROOT / attested_path_string
+        closure = _load(path)
+        scoped = (closure.get("programs") or {}).get(program)
+        if not isinstance(scoped, dict):
+            raise ValueError(f"NZ closure receipt has no program scope for {program}")
+        evidence.append(
+            {
+                "claim": f"closure receipt:{program}",
+                "mode": "attested",
+                "artifact": attested_path_string,
+                "sha256": sha256_of(path),
+            }
+        )
+        return {
+            "mode": "attested",
+            "status": "attested_receipt",
+            "value": scoped.get("closed") is True,
+            "downgrade_reason": (
+                "Adversarial review S4: no independently emitted requested-output "
+                "trace, root-set bijection, and monotone root/citation denominator "
+                "ratchet are all present; exact-path closure remains evidence only."
+            ),
+            "corpus_release": closure.get("corpus_release"),
+            "rulespec_commit": closure.get("rulespec_commit"),
+            "pending_citations": len(scoped.get("pending_citations") or []),
+            "pending_money_atoms": scoped.get("pending_money_atoms"),
+            "root_node_count": scoped.get("root_node_count"),
+            "root_nodes": scoped.get("root_nodes"),
+            "subgraph_node_count": scoped.get("subgraph_node_count"),
+            "citation_root_count": scoped.get("citation_root_count"),
+            "by_status": scoped.get("by_status"),
+        }
+    produced = _producer_closed_verdict(
+        program, spec, evidence, verify_producer=verify_producer
+    )
+    if produced is not None:
+        return produced
+    path_string = spec.get("computed_closed")
+    if not path_string:
+        return _attested_verdict(spec, "closed")
+    path = REPO_ROOT / path_string
+    closure = _load(path)
+    if path_string == "closure/nz/summary.json":
+        module_path = REPO_ROOT / "scripts" / "nz_closure.py"
+        module_spec = importlib.util.spec_from_file_location(
+            "_certificate_nz_closure", module_path
+        )
+        if module_spec is None or module_spec.loader is None:
+            raise ValueError("cannot load the NZ closure verifier")
+        module = importlib.util.module_from_spec(module_spec)
+        module_spec.loader.exec_module(module)
+        expected = module.build(module.load_source())
+        if closure != expected:
+            raise ValueError(
+                "closure/nz/summary.json does not rederive from its versioned input"
+            )
+        scoped = (closure.get("programs") or {}).get(program)
+        if not isinstance(scoped, dict):
+            raise ValueError(f"NZ closure has no program scope for {program}")
+    else:
+        scoped = closure
+    value = scoped.get("closed") is True
+    evidence.append(
+        {
+            "claim": f"closure census:{program}",
+            "mode": "computed",
+            "artifact": path_string,
+            "sha256": sha256_of(path),
+        }
+    )
+    return {
         "mode": "computed",
         "status": "computed_pass" if value else "computed_open",
         "value": value,
-        "artifact": str(artifact_ref),
+        "corpus_release": closure.get("corpus_release"),
+        "rulespec_commit": closure.get("rulespec_commit"),
+        "pending_citations": len(scoped.get("pending_citations") or []),
+        "pending_money_atoms": scoped.get("pending_money_atoms"),
+        "root_node_count": scoped.get("root_node_count"),
+        "root_nodes": scoped.get("root_nodes"),
+        "subgraph_node_count": scoped.get("subgraph_node_count"),
+        "citation_root_count": scoped.get("citation_root_count"),
+        "by_status": scoped.get("by_status"),
     }
-    if isinstance(document, dict):
-        result.update(
-            {
-                "corpus_release": document.get("corpus_release"),
-                "rulespec_commit": document.get("rulespec_commit"),
-            }
-        )
-    if scoped:
-        result.update(
-            {
-                "pending_citations": len(scoped.get("pending_citations") or []),
-                "pending_money_atoms": scoped.get("pending_money_atoms"),
-                "root_node_count": scoped.get("root_node_count"),
-                "root_nodes": scoped.get("root_nodes"),
-                "subgraph_node_count": scoped.get("subgraph_node_count"),
-                "citation_root_count": scoped.get("citation_root_count"),
-                "by_status": scoped.get("by_status"),
-                "denominator_ratchet": scoped.get("denominator_ratchet"),
-            }
-        )
-    return result
 
 
 def _single_person_evidence(program: str, spec: dict, evidence: list[dict]) -> None:
@@ -873,54 +1412,61 @@ def _single_person_evidence(program: str, spec: dict, evidence: list[dict]) -> N
     )
 
 
-def _executable_verdict(program: str, spec: dict, evidence: list[dict]) -> dict:
-    """One computed executable predicate for any producer using the v1 receipt."""
+def _executable_verdict(
+    program: str,
+    spec: dict,
+    legs: list[dict] | None = None,
+    evidence: list[dict] | None = None,
+    *,
+    verify_producer: bool = False,
+) -> dict:
+    """One execution verdict for every evidence class.
 
-    config = _computed_config(spec, "executable")
-    if config is None:
-        return _attested_verdict(spec, "executable")
-    artifact_ref = config.get("artifact")
-    artifact_path = _repo_artifact_path(
-        artifact_ref, label=f"{program} executable artifact"
-    )
-    if not artifact_path.is_file():
-        raise ValueError(f"computed executable artifact is missing: {artifact_ref}")
-    try:
-        document = json.loads(artifact_path.read_text())
-    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
-        raise ValueError(f"{artifact_ref} is not readable executable JSON: {exc}") from exc
-    producer = _producer_module(str(config.get("producer") or ""))
-    try:
-        summary = producer.validate_artifact(document, repo_root=REPO_ROOT)
-    except ValueError as exc:
-        raise ValueError(f"{artifact_ref} failed executable validation: {exc}") from exc
-    if not isinstance(summary, dict):
-        raise ValueError(f"{artifact_ref} validator returned no executable summary")
-    scoped = (summary.get("programs") or {}).get(program)
-    value = scoped.get("executable") if isinstance(scoped, dict) else summary.get("executable")
-    if not isinstance(value, bool):
-        raise ValueError(f"{artifact_ref} validator returned no executable Boolean")
-    evidence.append(
-        {
-            "claim": f"executable:{program}",
-            "mode": "computed",
-            "artifact": str(artifact_ref),
-            "sha256": sha256_of(artifact_path),
-            "verification": "producer_artifact_validation",
+    ``legs`` is retained for the legacy executable dispatcher. The three-arg
+    form added by the shared producer adapter passes evidence in that position,
+    so normalize both call shapes before dispatching.
+    """
+
+    if evidence is None:
+        evidence = legs if legs is not None else []
+        legs = []
+
+    attested_path_string = spec.get("attested_executable_receipt")
+    if attested_path_string:
+        path = REPO_ROOT / attested_path_string
+        report = _load(path)
+        receipt = report.get("compiled_program") or {}
+        evidence.append(
+            {
+                "claim": "compiled-program execution receipt (commit-pinned harness)",
+                "mode": "attested",
+                "artifact": attested_path_string,
+                "sha256": sha256_of(path),
+            }
+        )
+        return {
+            "mode": "attested",
+            "status": "attested_receipt",
+            "value": True,
+            "receipt": receipt,
+            "limitation": (
+                "The generator and comparison harness lineage is commit-pinned, but "
+                "the compiled artifact bytes and an executable transcript are not "
+                "committed; metadata syntax and a digest string are not a computed "
+                "execution check (adversarial review S3)."
+            ),
         }
+    produced = _producer_executable_verdict(
+        program, spec, evidence, verify_producer=verify_producer
     )
-    return {
-        "mode": "computed",
-        "status": "computed_pass" if value else "computed_fail",
-        "value": value,
-        "artifact": str(artifact_ref),
-        "engine": document.get("engine"),
-        "compiled_artifact": document.get("compiled_artifact"),
-        "request_set": document.get("request_set"),
-        "golden_outputs": document.get("golden_outputs"),
-        "transcript": document.get("transcript"),
-        "summary": scoped if isinstance(scoped, dict) else summary,
-    }
+    if produced is not None:
+        return produced
+    if not spec.get("computed_executable"):
+        return _attested_verdict(spec, "executable")
+    raise ValueError(
+        "computed executable verdict requested without a verifier that loads and "
+        "runs committed artifact bytes"
+    )
 
 
 def _attested_exercise_verdict(spec: dict, evidence: list[dict]) -> dict:
@@ -1130,9 +1676,7 @@ def _exercise_block(
                 else {"per_case_evidence_committed": has_evidence}
             ),
             "binding": (
-                row.get("trace_binding")
-                if view_scoped_traces
-                else row.get("binding")
+                row.get("trace_binding") if view_scoped_traces else row.get("binding")
             ),
             "reconciliation": (
                 row.get("root_reconciliation")
@@ -1147,9 +1691,7 @@ def _exercise_block(
                     "trace_binding": row.get("trace_binding"),
                     "root_reconciliation": row.get("root_reconciliation"),
                     "requested_output_roots": row.get("requested_output_roots"),
-                    "requested_output_root_sets": row.get(
-                        "requested_output_root_sets"
-                    ),
+                    "requested_output_root_sets": row.get("requested_output_root_sets"),
                     "root_set_receipts": row.get("root_set_receipts"),
                     "capture_lineage_mode": row.get("capture_lineage_mode"),
                 }
@@ -1233,7 +1775,12 @@ def _exercise_census_for(spec: dict) -> tuple[dict, list[dict]]:
     return census, evidence
 
 
-def build_certificate(program: str, spec: dict) -> dict:
+def build_certificate(
+    program: str,
+    spec: dict,
+    *,
+    verify_producers: bool = False,
+) -> dict:
     if spec.get("attested_exercise_receipt"):
         census, evidence = {}, []
     else:
@@ -1288,9 +1835,15 @@ def build_certificate(program: str, spec: dict) -> dict:
     blockers = [*all_defects, *(spec.get("blockers") or [])]
     for leg in reference_legs:
         if leg["unexplained"] or leg["axiom_attributed_open"]:
+            open_classes = leg.get("axiom_attributed_open_classes") or {}
+            open_detail = ", ".join(
+                f"{name}={units}" for name, units in sorted(open_classes.items())
+            )
             blockers.append(
-                f"{leg['suite']}: {leg['unexplained']} unexplained mismatch(es) "
-                f"— disposition or fix before this leg counts"
+                f"{leg['suite']}: {leg['unexplained']} unexplained mismatch(es), "
+                f"{leg['axiom_attributed_open']} axiom-attributed-open unit(s)"
+                + (f" ({open_detail})" if open_detail else "")
+                + " — disposition or fix before this leg counts"
             )
     if not exercise_complete:
         if spec.get("attested_exercise_receipt"):
@@ -1305,8 +1858,85 @@ def build_certificate(program: str, spec: dict) -> dict:
                 "unaudited bridge) for at least one suite"
             )
 
-    closed_block = _closed_verdict(program, spec, evidence)
-    executable_block = _executable_verdict(program, spec, evidence)
+    closed_block = _closed_verdict(
+        program, spec, evidence, verify_producer=verify_producers
+    )
+    executable_block = _executable_verdict(
+        program, spec, legs, evidence, verify_producer=verify_producers
+    )
+    scope = None
+    scope_suite = spec.get("scope_from_suite")
+    if scope_suite is not None:
+        scope_entries = [
+            entry for entry in spec["suites"] if entry["suite"] == scope_suite
+        ]
+        if len(scope_entries) != 1:
+            raise ValueError(f"{program}: scope_from_suite must name exactly one suite")
+        scope_report = _load(
+            _repo_artifact_path(scope_entries[0]["report"], label=f"{program} scope")
+        )
+        raw_scope = (
+            scope_report.get("scope") if isinstance(scope_report, dict) else None
+        )
+        required_scope = {
+            "trajectory_quotient_label",
+            "limitation",
+            "components_only_statement",
+            "open",
+        }
+        if not isinstance(raw_scope, dict) or not required_scope <= raw_scope.keys():
+            raise ValueError(f"{program}: suite report lacks the required scope block")
+        open_scope = raw_scope.get("open")
+        if not isinstance(open_scope, dict) or not isinstance(
+            open_scope.get("axiom_attributed_open_classes"), dict
+        ):
+            raise ValueError(f"{program}: scope lacks axiom-attributed-open classes")
+        scope = raw_scope
+        scope["certificate_premise"] = (
+            "S1 zero unexplained means every mismatch is classified; it does not "
+            "close axiom-attributed-open classes. Those open units independently "
+            "make the conformant premise false."
+        )
+    # ONE rulespec commit across producer-computed premises. The closure
+    # ledger and the executable receipt each verify their OWN recorded pin
+    # (and the receipt binds the reports' provenance), but a coherently
+    # regenerated ledger at a different commit would pass its own check while
+    # the receipt sat at another — "the encoded law is closed at X" and "the
+    # encoded law executes at Y" is not a certificate about one artifact.
+    # Both blocks are producer-computed for DK and NZ; a mismatch is a blocker
+    # on the certificate (never a crash), so certified cannot be yes on it.
+    closed_commit = closed_block.get("rulespec_commit")
+    executable_commit = executable_block.get("rulespec_sha")
+    if (
+        closed_block.get("mode") == "computed"
+        and executable_block.get("mode") == "computed"
+    ):
+        # Fail closed: two computed premises with no comparable provenance is
+        # a blocker, not a silent skip — a 40-DIGIT integer commit slipped
+        # through a str()-coercing validator and would have skipped this
+        # comparison (delta-audit #7); a !!str-tagged digit string then passed
+        # both validators' hex regex and, coordinated on both sides, satisfied
+        # plain equality (delta-audit #8). Equality only counts between values
+        # that are each a real git object id (GIT_SHA: lowercase hex with at
+        # least one a-f).
+        if not (
+            isinstance(closed_commit, str)
+            and isinstance(executable_commit, str)
+            and GIT_SHA.fullmatch(closed_commit)
+            and GIT_SHA.fullmatch(executable_commit)
+        ):
+            blockers.append(
+                "producers' rulespec provenance is not comparable: closure ledger "
+                f"commit={closed_commit!r}, executable receipt sha="
+                f"{executable_commit!r}; both must be string SHAs"
+            )
+        elif closed_commit != executable_commit:
+            blockers.append(
+                "producers disagree on the rulespec commit: closure ledger "
+                f"{closed_commit[:12]} vs executable receipt {executable_commit[:12]}; "
+                "regenerate both at one commit"
+            )
+
     # The single public predicate (adopted from the 2026-07-26 design review):
     # "certified" is reserved for the conjunction of all four verdicts holding
     # in computed mode with no open defects. A certificate resting on attested
@@ -1335,11 +1965,23 @@ def build_certificate(program: str, spec: dict) -> dict:
         certified_state = "no"
     elif not premises_computed:
         certified_state = "unavailable"
-    elif conformant and exercise_complete and not blockers and closed_true and exec_true:
+    elif (
+        conformant and exercise_complete and not blockers and closed_true and exec_true
+    ):
         certified_state = "yes"
     else:
         certified_state = "no"
     certified = certified_state == "yes"
+    certified_rule = (
+        "computed(conformant AND exercised AND closed AND executable) with zero "
+        "open defects. A premise counts only when its mode is computed AND its "
+        "value is true; attested premises never satisfy it."
+    )
+    if not premises_computed:
+        certified_rule += (
+            " state=unavailable means no producer computes closed/executable yet, "
+            "so certification is not merely withheld but not yet offerable."
+        )
     return {
         "schema": SCHEMA,
         "program": program,
@@ -1347,20 +1989,20 @@ def build_certificate(program: str, spec: dict) -> dict:
         "certified": {
             "value": certified,
             "state": certified_state,
-            "rule": "computed(conformant AND exercised AND closed AND "
-            "executable) with zero open defects. A premise counts only when "
-            "its mode is computed AND its value is true; attested premises "
-            "never satisfy it. state=unavailable means no producer computes "
-            "closed/executable yet, so certification is not merely withheld "
-            "but not yet offerable.",
+            "rule": certified_rule,
         },
         "verdicts": {
             "conformant": {
                 "value": conformant,
                 "mode": "computed",
-                "reference_legs": [leg for leg in legs if leg["oracle_type"] == "reference"],
+                "reference_legs": [
+                    leg for leg in legs if leg["oracle_type"] == "reference"
+                ],
                 "reality_legs": [
-                    {**leg, "note": "reality-oracle disagreements are leads, not defects"}
+                    {
+                        **leg,
+                        "note": "reality-oracle disagreements are leads, not defects",
+                    }
                     for leg in reality_legs
                 ],
                 "reality_leads": reality_leads,
@@ -1374,6 +2016,7 @@ def build_certificate(program: str, spec: dict) -> dict:
             },
         },
         "blockers": blockers,
+        **({"scope": scope} if scope_suite is not None else {}),
         "evidence": evidence,
         "_comment": (
             "Generated by scripts/certify.py — do not hand-edit. Every "
@@ -1382,6 +2025,13 @@ def build_certificate(program: str, spec: dict) -> dict:
             "and are scaffolding, not certification. A certification "
             "question not answerable from this document is a certificate "
             "defect to file."
+            + (
+                " For the tariff certificate, S1 zero unexplained records complete "
+                "classification, while axiom-attributed-open units independently "
+                "block the computed conformant premise."
+                if program == "us/tariff-duty"
+                else ""
+            )
             + (
                 " NZ exercise roadmap: commit per-evaluation request/output "
                 "traces and derive exercise separately for each certificate "
@@ -1393,9 +2043,14 @@ def build_certificate(program: str, spec: dict) -> dict:
     }
 
 
-def build_all() -> dict[str, dict]:
+def build_all(*, verify_producers: bool = False) -> dict[str, dict]:
     return {
-        program: build_certificate(program, spec) for program, spec in PROGRAMS.items()
+        program: build_certificate(
+            program,
+            spec,
+            verify_producers=verify_producers,
+        )
+        for program, spec in PROGRAMS.items()
     }
 
 
@@ -1406,9 +2061,18 @@ def _out_path(program: str) -> Path:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true")
+    parser.add_argument(
+        "--verify-producers",
+        action="store_true",
+        help=(
+            "opt-in integration gate: additionally re-derive computed closure "
+            "from external Git sources and recompile/replay executable "
+            "reproductions before certifying"
+        ),
+    )
     args = parser.parse_args()
 
-    certificates = build_all()
+    certificates = build_all(verify_producers=args.verify_producers)
     if args.check:
         # An unexpected certificate is a defect, not a curiosity: certificates/
         # is inside the bot's derived_paths, so a retired or stray file there is

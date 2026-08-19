@@ -1,0 +1,298 @@
+# GENERATED facts; edit decisions in scripts/closure_ledger.py.
+schema: axiom_oracles.closure.ledger.v1
+program:
+  id: us/tariff-duty
+  rulespec_ref: 96d5e7c1
+generated_facts:
+  corpus_roots:
+    hts-rate-provisions:
+      path: data/corpus/provisions/us/statute/2026-08-09-usitc-hts-2026-rev15-full-schedule.jsonl
+      commit: bef19f24206a9de4ef29d9ba2b5924f3cc6a00c6
+      sha256: 6c8d07d21a1e3f2233197c1b2f96169f01a1a768dd2509a71c0fdb03d4a99d14
+      version: 2026-08-09-usitc-hts-2026-rev15-full-schedule
+      declared_count: 29845
+    chapter-99-notes:
+      path: data/corpus/provisions/us/statute/2026-08-04-usitc-hts-2026-rev15-notes.jsonl
+      commit: bef19f24206a9de4ef29d9ba2b5924f3cc6a00c6
+      sha256: 0f3ed7ef2efb64383825db65e615959200770e8511c8d4834b16e02892cb9ec8
+      version: 2026-08-04-usitc-hts-2026-rev15-notes
+      declared_count: 805
+    fr-instrument-families:
+      derived_from: composition source_verification plus overlays
+      rulespec_commit: 96d5e7c1e6309dc205b7320bbddaae8dd5d410df
+  rulespec:
+    commit: 96d5e7c1e6309dc205b7320bbddaae8dd5d410df
+    module_count: 380
+    paths_sha256: 481956d2972610d8fe382d37ee8e651fa8bbeaf29e3550f9b08c06ca656c1a45
+committed_decisions:
+  ledger:
+  - root: hts-rate-provisions
+    family: rated-lines-except-9802
+    status: encoded
+    reason: B1.2 generated chapter tables supply the Rev-15 column rates.
+    count: 13781
+  - root: hts-rate-provisions
+    family: 9802-partial-value-rated-lines
+    status: partially-encoded
+    reason: The rate rows are passthroughs, but dutiable partial value is supplied as an entry input rather than
+      derived.
+    count: 5
+  - root: hts-rate-provisions
+    family: unrated-structural-rows
+    status: excluded-with-reason
+    reason: Headings without a Rates of duty (1-General) field do not themselves supply a rate line.
+    count: 16059
+  - root: chapter-99-notes
+    family: note-20-section-301-lists
+    status: encoded
+    count: 1
+    membership_rows: 301
+    reason: Incidence membership tables are composed for the original China list overlays.
+  - root: chapter-99-notes
+    family: notes-16-19-section-232-metals
+    status: encoded
+    count: 1
+    membership_rows: 232
+    reason: Steel/aluminum incidence and composed overlays are present.
+  - root: chapter-99-notes
+    family: note-18-section-201
+    status: encoded
+    count: 1
+    membership_rows: 201
+    reason: Section 201 solar incidence and overlay are composed.
+  - root: chapter-99-notes
+    family: note-2aa-section-122
+    status: encoded
+    count: 1
+    membership_rows: 122
+    reason: Section 122 incidence and overlay are composed.
+  - root: chapter-99-notes
+    family: note-51-section-338
+    status: pending
+    count: 1
+    reason: Note 51 pages are absent from the D0 ingest; ingest and encode them before composing section 338.
+  - root: chapter-99-notes
+    family: other-chapter-99-pages
+    status: partially-encoded
+    reason: The witness composes many 9903.01/.02/.05 IEEPA and newer 301 headings, but no page-level census proves
+      every other Chapter-99 note covered.
+    count: 800
+  - root: fr-instrument-families
+    family: section-232-metal-instruments
+    status: encoded
+    count: 1
+    reason: 2018 and 2025 metal actions plus the 2026 annex restructure are represented in the composed aluminum/steel
+      overlays.
+  - root: fr-instrument-families
+    family: section-232-non-metal-annexes
+    status: pending
+    count: 6
+    reason: Autos/parts, copper, semiconductors, medium/heavy-duty vehicles, and wood proclamation annexes are not
+      encoded (approximately ten annex documents).
+  - root: fr-instrument-families
+    family: china-301-original-2018-actions
+    status: pending
+    count: 1
+    reason: Original 2018 instruments are absent from the D0 corpus.
+  - root: fr-instrument-families
+    family: china-301-2024-action
+    status: partially-encoded
+    count: 1
+    reason: Membership and overlay exist, but the action is not fed into the final composition.
+  - root: fr-instrument-families
+    family: brazil-301
+    status: partially-encoded
+    count: 1
+    reason: Membership and headings exist, but the family is not fed into the final composition.
+  - root: fr-instrument-families
+    family: forced-labor-301
+    status: partially-encoded
+    count: 1
+    reason: Membership and country tiers exist, but the family is not fed into the final composition.
+  - root: fr-instrument-families
+    family: solar-china
+    status: partially-encoded
+    count: 1
+    reason: Membership is encoded but the action is not fed into the final composition.
+  - root: fr-instrument-families
+    family: section-201-proclamation-10339
+    status: encoded
+    count: 1
+    reason: The solar safeguard is encoded and composed.
+  - root: fr-instrument-families
+    family: section-122-proclamation-11012
+    status: encoded
+    count: 1
+    reason: The temporary surcharge and exclusions are encoded and composed.
+  - root: fr-instrument-families
+    family: ieepa-orders-and-termination
+    status: encoded
+    count: 1
+    reason: Fentanyl, reciprocal families, exclusions, and termination are composed for the codified Rev-15 state.
+  - root: fr-instrument-families
+    family: section-338-instruments
+    status: pending
+    count: 1
+    reason: Blocked on the missing note-51 ingest.
+  - root: fr-instrument-families
+    family: historical-vintages
+    status: pending
+    count: 1
+    reason: This ledger covers the Rev-15 codified state only; historical schedule/instrument vintages are not a
+      reproduced root.
+  input_grounding: &id001
+  - input: hts_number
+    grounding: uncaptured
+    uncaptured_scope: HTS classification assigned to the entry
+  - input: country_of_origin
+    grounding: uncaptured
+    uncaptured_scope: origin determination for the entry
+  - input: entry_date
+    grounding: uncaptured
+    uncaptured_scope: CBP entry date and effective-time facts
+  - input: customs_value
+    grounding: uncaptured
+    uncaptured_scope: 19 USC 1401a appraised customs value
+  - input: shipment_value
+    grounding: uncaptured
+    uncaptured_scope: shipment value used by de-minimis/postal rules
+  - input: is_postal_shipment
+    grounding: uncaptured
+    uncaptured_scope: postal-channel classification
+  - input: column_1_general_rate
+    grounding: uncaptured
+    uncaptured_scope: selected Rev-15 HTS general rate line
+  - input: special_rate
+    grounding: uncaptured
+    uncaptured_scope: claimed and qualifying special-program rate
+  - input: column_2_rate
+    grounding: uncaptured
+    uncaptured_scope: column-2 rate selection
+  - input: section_232_membership
+    grounding: uncaptured
+    uncaptured_scope: membership in the applicable 232 annex
+  - input: section_301_membership
+    grounding: uncaptured
+    uncaptured_scope: membership in the applicable 301 list
+  - input: section_201_membership
+    grounding: uncaptured
+    uncaptured_scope: membership in the solar safeguard annex
+  - input: section_122_membership
+    grounding: uncaptured
+    uncaptured_scope: membership in surcharge exclusions
+  - input: ieepa_membership
+    grounding: uncaptured
+    uncaptured_scope: membership in reciprocal/fentanyl annexes
+  - input: section_338_membership
+    grounding: uncaptured
+    uncaptured_scope: membership under HTS note 51
+  - input: is_section_232_article
+    grounding: uncaptured
+    uncaptured_scope: 'witness boolean: 232 article'
+  - input: is_section_232_derivative
+    grounding: uncaptured
+    uncaptured_scope: 'witness boolean: 232 derivative'
+  - input: is_reciprocal_annex_excluded
+    grounding: uncaptured
+    uncaptured_scope: 'witness boolean: reciprocal annex exclusion'
+  - input: is_reciprocal_metals_excluded
+    grounding: uncaptured
+    uncaptured_scope: 'witness boolean: reciprocal metals exclusion'
+  - input: is_section_122_annex_excluded
+    grounding: uncaptured
+    uncaptured_scope: 'witness boolean: 122 annex exclusion'
+  - input: is_section_122_232_excluded
+    grounding: uncaptured
+    uncaptured_scope: 'witness boolean: 122/232 exclusion'
+  - input: is_brazil_301_excluded
+    grounding: uncaptured
+    uncaptured_scope: 'witness boolean: Brazil-301 exclusion'
+  - input: is_forced_labor_annex_excluded
+    grounding: uncaptured
+    uncaptured_scope: 'witness boolean: forced-labor annex exclusion'
+  - input: is_forced_labor_metals_excluded
+    grounding: uncaptured
+    uncaptured_scope: 'witness boolean: forced-labor metals exclusion'
+  - input: is_china_2024_action_member
+    grounding: uncaptured
+    uncaptured_scope: 'witness boolean: 2024 China action membership'
+  - input: is_solar_china_member
+    grounding: uncaptured
+    uncaptured_scope: 'witness boolean: solar-China membership'
+  - input: chapter_98_partial_value_share
+    grounding: uncaptured
+    uncaptured_scope: 9802 dutiable-value share supplied by the declarant
+  - input: section_338_reduced_duty_base_share
+    grounding: uncaptured
+    uncaptured_scope: note-51 partial-value share supplied by the declarant
+computed:
+  counts_by_status_per_root:
+    hts-rate-provisions:
+      encoded: 13781
+      partially-encoded: 5
+      excluded-with-reason: 16059
+      pending: 0
+    chapter-99-notes:
+      encoded: 4
+      partially-encoded: 800
+      excluded-with-reason: 0
+      pending: 1
+    fr-instrument-families:
+      encoded: 4
+      partially-encoded: 4
+      excluded-with-reason: 0
+      pending: 9
+  burndown:
+  - family: 9802-partial-value-rated-lines
+    root: hts-rate-provisions
+    status: partially-encoded
+    blocker: The rate rows are passthroughs, but dutiable partial value is supplied as an entry input rather than
+      derived.
+  - family: note-51-section-338
+    root: chapter-99-notes
+    status: pending
+    blocker: Note 51 pages are absent from the D0 ingest; ingest and encode them before composing section 338.
+  - family: other-chapter-99-pages
+    root: chapter-99-notes
+    status: partially-encoded
+    blocker: The witness composes many 9903.01/.02/.05 IEEPA and newer 301 headings, but no page-level census proves
+      every other Chapter-99 note covered.
+  - family: section-232-non-metal-annexes
+    root: fr-instrument-families
+    status: pending
+    blocker: Autos/parts, copper, semiconductors, medium/heavy-duty vehicles, and wood proclamation annexes are
+      not encoded (approximately ten annex documents).
+  - family: china-301-original-2018-actions
+    root: fr-instrument-families
+    status: pending
+    blocker: Original 2018 instruments are absent from the D0 corpus.
+  - family: china-301-2024-action
+    root: fr-instrument-families
+    status: partially-encoded
+    blocker: Membership and overlay exist, but the action is not fed into the final composition.
+  - family: brazil-301
+    root: fr-instrument-families
+    status: partially-encoded
+    blocker: Membership and headings exist, but the family is not fed into the final composition.
+  - family: forced-labor-301
+    root: fr-instrument-families
+    status: partially-encoded
+    blocker: Membership and country tiers exist, but the family is not fed into the final composition.
+  - family: solar-china
+    root: fr-instrument-families
+    status: partially-encoded
+    blocker: Membership is encoded but the action is not fed into the final composition.
+  - family: section-338-instruments
+    root: fr-instrument-families
+    status: pending
+    blocker: Blocked on the missing note-51 ingest.
+  - family: historical-vintages
+    root: fr-instrument-families
+    status: pending
+    blocker: This ledger covers the Rev-15 codified state only; historical schedule/instrument vintages are not
+      a reproduced root.
+  boundary_frontier:
+    complete: true
+    input_count: 28
+    inputs: *id001
+  closed: false

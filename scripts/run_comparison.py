@@ -2165,9 +2165,7 @@ def _reemit_gettsim_synthetic_report(
                     "mismatches_by_kind": [],
                     "mismatches_by_scenario": [],
                     "error_count": 1,
-                    "errors_by_engine": [
-                        {"value": unavailable_engine, "count": 1}
-                    ],
+                    "errors_by_engine": {unavailable_engine: 1},
                 },
                 "aggregates": [],
                 "mismatches": [],
@@ -3821,6 +3819,17 @@ def _run_spsm_ca_compare(runner: dict, output: Path) -> None:
         cwd=REPO_ROOT,
     )
 
+def _run_us_tariff_schedule(runner: dict, output: Path) -> None:
+    """Publish the completed, separately sharded C1 campaign report."""
+    del runner
+    subprocess.run(
+        [sys.executable, str(REPO_ROOT / "scripts/us_tariff_schedule_campaign.py"), "report"],
+        check=True,
+        cwd=REPO_ROOT,
+    )
+    shutil.copyfile(REPO_ROOT / "conformance/detail/us-tariff-schedule.json", output)
+
+
 RUNNERS = {
     "axiom-encode-snap-ecps-compare": _run_axiom_encode_snap_ecps_compare,
     "axiom-encode-tax-ecps-compare": _run_axiom_encode_tax_ecps_compare,
@@ -3845,6 +3854,7 @@ RUNNERS = {
     "uk-tv-licence-grid": _run_uk_tv_licence_grid,
     "us-tariff-grid": _run_us_tariff_grid,
     "us-tariff-panel": _run_us_tariff_panel,
+    "us-tariff-schedule": _run_us_tariff_schedule,
 }
 
 

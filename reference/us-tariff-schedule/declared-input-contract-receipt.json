@@ -1,0 +1,2838 @@
+{
+  "absent_declared_input_semantics": {
+    "campaign_policy": "never default a declared case-feed input silently",
+    "engine_input_or_else": "substitutes the compiled per-reference default",
+    "engine_strict_input": "MissingInput",
+    "harness": "STOP before engine execution"
+  },
+  "chapters": [
+    {
+      "artifact_sha256": "ad7ed6d1e634359dabfafa1a23128393a10f22c2b22ca40ac8d6bd10ef2929f5",
+      "chapter": "01",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch01/ch01.yaml",
+      "module_sha256": "889fc60e0b04dc206d4aa343948d050e73f126235b1a32847bf771001818b2f6"
+    },
+    {
+      "artifact_sha256": "86e4e4e5dd593f21ee71e9c7ee0a0b29e91132c5760dcf0ea2b6dd979de596ec",
+      "chapter": "02",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch02/ch02.yaml",
+      "module_sha256": "b81b0d311819c32066d970ccd1594e5caf3170623846fc4a201ceea4506f42de"
+    },
+    {
+      "artifact_sha256": "b066836ae63b00864f3ead566658b7ceac82e0187b0192e32aa7d47b9a6c2b03",
+      "chapter": "03",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch03/ch03.yaml",
+      "module_sha256": "3ce950f390cb3f8f16f384c29f6f53b1e743d0c069ab7d07456aa7413421c7c3"
+    },
+    {
+      "artifact_sha256": "7c4df1ae7fe80932dbeffd9efde1a91f1410db2d6c9a5e9560f8cfaef6369e89",
+      "chapter": "04",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch04/ch04.yaml",
+      "module_sha256": "4051925897328efec121fba7e98970ea4f3a05f337852add6da350c2e23c48c0"
+    },
+    {
+      "artifact_sha256": "9815e67888241b006dda4abe373fe7b04b5790ae557c71a2be663f606ba20e8c",
+      "chapter": "05",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch05/ch05.yaml",
+      "module_sha256": "dc96b77cae87315c93a212701de5b869ba734ee7278e70d273b1cd7307b85b8c"
+    },
+    {
+      "artifact_sha256": "43bbb1ab6449f63701e1074dbf10716cbe8d4918dec4d9d993008ae624ef9039",
+      "chapter": "06",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch06/ch06.yaml",
+      "module_sha256": "834ec1acd593f2afa13f401fd1d18e9d5c98814a3ae4a2b45e2f2a6915f6107f"
+    },
+    {
+      "artifact_sha256": "1d6c32f77ce76ca91b4c92eae4c5d03ec5018e7a862e6f1f1934d18567363831",
+      "chapter": "07",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch07/ch07.yaml",
+      "module_sha256": "33593c8a9f87bbb040766f5e0b32a966a14cd6724a6c417d4860f592a21bdd97"
+    },
+    {
+      "artifact_sha256": "3da345d5826b41ef94b0b42ed8db26854e7610325999c26af1a4657cbf34305f",
+      "chapter": "08",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch08/ch08.yaml",
+      "module_sha256": "bc33613273447ca7d6c93b3c863555a60547ffaece2bd0aa1273941be630a562"
+    },
+    {
+      "artifact_sha256": "2d25ae64b969d5f8a82bcf49dd5699ac7c2be6116efaa863ad83ce98377ca7f7",
+      "chapter": "09",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch09/ch09.yaml",
+      "module_sha256": "a9d3814c8c4bf1bb57f205c8f1339ffaf094d61b76dc49f47979f5cb39419b6f"
+    },
+    {
+      "artifact_sha256": "2de5bf0bec5b88cfbb6b35378fac00d16215ad9285b9d8eafd9ec9241cdb8467",
+      "chapter": "10",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch10/ch10.yaml",
+      "module_sha256": "0cbc44478615744f1dd16486e5752def12cd815e589f65727961161415fcce84"
+    },
+    {
+      "artifact_sha256": "0085feb2da12b1f6894775ba3d5c9c9211e8ecdfecc005e5d9cec97cf20302ff",
+      "chapter": "11",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch11/ch11.yaml",
+      "module_sha256": "79d9dc39adb1ff948032d058d39744c85469d2c020b323496757b66054b3edc4"
+    },
+    {
+      "artifact_sha256": "cc6ee93224993f6cd4e445e43b1944458ed3401e34b6efaaa15748477685e416",
+      "chapter": "12",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch12/ch12.yaml",
+      "module_sha256": "1d8f7f00077ceb3c017b8dcaed9094801d379f78eaa356898876e6eecaab2697"
+    },
+    {
+      "artifact_sha256": "9d23f0b51d204e67694d367fcc6ba28cac4f4f19df3b040af7469f1e250dc29e",
+      "chapter": "13",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch13/ch13.yaml",
+      "module_sha256": "ea45ac35fcc7eb18b3977d6e95e2d845b1a68a1e343443257f36459ea776e663"
+    },
+    {
+      "artifact_sha256": "473f8249721d73fce4ddc8aa6ade9f0375726c19da4136fff88cd42076e98cc3",
+      "chapter": "14",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch14/ch14.yaml",
+      "module_sha256": "0cf3277da96e1500e35210e89e316a1a08229c3514f04223790f3f0045c35cdd"
+    },
+    {
+      "artifact_sha256": "2bc610aea2b1e19075fd01c39c1fd51bf15c154ad5b0606ff0e506a222672d98",
+      "chapter": "15",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch15/ch15.yaml",
+      "module_sha256": "cb64af02b9020f22525987aed31e2f7af3df122ce0f7203a520d2295f3bf1afc"
+    },
+    {
+      "artifact_sha256": "56e573e92c718702cbda2e146dcb3b4a58a2398a719455a571025de5aeb3a19c",
+      "chapter": "16",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch16/ch16.yaml",
+      "module_sha256": "930d1ca74f1875105d2ea218743e94350fef6c831205272e99a7f68bce0a5e60"
+    },
+    {
+      "artifact_sha256": "dce7fde22a7337c2d27f57971f6aa011006a5867dd3b6e76995681ed89b9009d",
+      "chapter": "17",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch17/ch17.yaml",
+      "module_sha256": "493cbe2482b84f744f847e9d3ae67dc9e2f5185796e318c87ab9462b7e991dc1"
+    },
+    {
+      "artifact_sha256": "385e46cdd5ee5b923b223e105f88514e2e49ffd731f1022b43f10952ea101cb0",
+      "chapter": "18",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch18/ch18.yaml",
+      "module_sha256": "86725514ce431029d572f943833a3c21c07cab10b5443dc308ab5f6ea493c782"
+    },
+    {
+      "artifact_sha256": "81927702b8875515eae8cf43493bf981601f9900b63fc4d7cbb34cc44d3a7fb1",
+      "chapter": "19",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch19/ch19.yaml",
+      "module_sha256": "3ce1db68258a917ebb780a38ae4aabadf30cba8bb1a211603b5c6164a66a2ff8"
+    },
+    {
+      "artifact_sha256": "bd0c477a96fe74f00d0958670692a333e9c4b3425c9da989203fa706a17c8716",
+      "chapter": "20",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch20/ch20.yaml",
+      "module_sha256": "4ddd6cfdc669d38a13cbe3b14dbe6c38a5b2479b59d66639edaa2f187b7e3009"
+    },
+    {
+      "artifact_sha256": "b3081e33c3e571399a712aacb134eaf31141b2e9c097f7f1697cb0f4f9ec02c4",
+      "chapter": "21",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch21/ch21.yaml",
+      "module_sha256": "20e54752ddd1246aff247c744b84b08975eba67b6cc339317d001953318644eb"
+    },
+    {
+      "artifact_sha256": "068e76888820a7670649e61f08f4ae4e16dbfcbae451e0c56a9c2bb139ebe6f9",
+      "chapter": "22",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch22/ch22.yaml",
+      "module_sha256": "18d54261e90d0f3da5401fcda7c6872a42062fe49ab104eb42e562ed1dc24a0d"
+    },
+    {
+      "artifact_sha256": "3a1ecf2f2bd62d26185bd9532e4165194456ac0638ee3cba2911122af10446db",
+      "chapter": "23",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch23/ch23.yaml",
+      "module_sha256": "adb1e5cec3eed1f02a4498a2bc9ea861a06e0c8878cfa2ea8150f2c9518fd829"
+    },
+    {
+      "artifact_sha256": "e681d2bcf58bacb59ddfa36827e04e15093be571ac4350ca19d976e2f5ff8927",
+      "chapter": "24",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch24/ch24.yaml",
+      "module_sha256": "c953bdd753136033ac8f863146ec3c7b42b52e8df9f4b24f54fcc1561436ecb6"
+    },
+    {
+      "artifact_sha256": "3ab7a34af2502f14d806450ae73afc354124c7862908f25846ff1d5559996cfb",
+      "chapter": "25",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch25/ch25.yaml",
+      "module_sha256": "15f133f89a7fcb193850b28eb1580869f1001eee0b506a4c18546197c4ef84fa"
+    },
+    {
+      "artifact_sha256": "240a504908216af79aba8b7caaddecc3ee2a88893d63b0e0599388ec35980161",
+      "chapter": "26",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch26/ch26.yaml",
+      "module_sha256": "8555df8a5c64f142437562d58de103710ac4f6a83fb68ae0c34c015b96dd039a"
+    },
+    {
+      "artifact_sha256": "66fe08382c24f4ef697d90ee9a3101d2509b07773dfbb2a434df6d05c0439979",
+      "chapter": "27",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch27/ch27.yaml",
+      "module_sha256": "26e56c1f58b1be7149658dc420fb6f5f1a30276e084fbbf0bcfcb2ff49bc575c"
+    },
+    {
+      "artifact_sha256": "25e07d518fc183e6f6e61d204d957ac59ea1443c7fa99a228b398f87834dbeee",
+      "chapter": "28",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch28/ch28.yaml",
+      "module_sha256": "4202b99971dfac88b1cfeb38b2e5645bec2de4604bbb7a2808e10ae9a73f0e6f"
+    },
+    {
+      "artifact_sha256": "458d53e9e8b4bc820f68cf1a4c38a6b0bd529b9e117f3e5a69dab5a1212e4cb5",
+      "chapter": "29",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch29/ch29.yaml",
+      "module_sha256": "6b113f3eb5d922a23ab6c366b8ea866e5aef52b622db625aa9c13e5caaede023"
+    },
+    {
+      "artifact_sha256": "e12a7841035080a555de6a5e4b01411d51b877d9a5328a6936fa1076040a35c2",
+      "chapter": "30",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch30/ch30.yaml",
+      "module_sha256": "5a86a1f5615b28847e752d20c93169f66765c7370fc178c72deec81c8bb964ca"
+    },
+    {
+      "artifact_sha256": "079645c105b2d0558a0ee869a78340b3df519b20c363347313a371143acd3b5e",
+      "chapter": "31",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch31/ch31.yaml",
+      "module_sha256": "155ef6d8d9f48d5a681d47a171702174ad66c1825ec1fb44a4e25bb8b009b630"
+    },
+    {
+      "artifact_sha256": "8b04b240c997e88f74e865d8b7a3e52829bcf4a648f253954f19814cfd4751a7",
+      "chapter": "32",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch32/ch32.yaml",
+      "module_sha256": "d96e49cd829cdd908b09aa9cd315cd6ae3cbfb1e0fb9ac3a317a2c55d1cede42"
+    },
+    {
+      "artifact_sha256": "88b1c4a90ac02819f86bd8a6b5e422a24eb39517b9e000f75d3ba185cee99552",
+      "chapter": "33",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch33/ch33.yaml",
+      "module_sha256": "9cebae2c8f6d9162f4c4b194bf1194e5763960fabc6068ac8d4dc010f936acaa"
+    },
+    {
+      "artifact_sha256": "3f3439fb85b6914f89d9cf53d2d9a86004fa6294286167a1fc400a65b60cd988",
+      "chapter": "34",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch34/ch34.yaml",
+      "module_sha256": "10d0c51bc93d60b82598a54c51c60fb3eafdd74e36e993efa9248477aa49a1a4"
+    },
+    {
+      "artifact_sha256": "63c4893991c0d69aa56f484e4d047385cb782ee95feb478de27de85794ca97f4",
+      "chapter": "35",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch35/ch35.yaml",
+      "module_sha256": "efe5f8c3084b24baa1f5cbdea45aa070a215fa845f21a7831d0be2963c9c33cc"
+    },
+    {
+      "artifact_sha256": "546851b36006933a2da5363cf90d35fcc2093d7cbbc495ae2effb0b1a8349792",
+      "chapter": "36",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch36/ch36.yaml",
+      "module_sha256": "46e4a6619d9775009cdb44c6b3d8e4545d64e4881c0f7ef0bf4dcdef48608ef8"
+    },
+    {
+      "artifact_sha256": "9412c7de788705d4186a9548ad242bb1051142b27de5a2d2eca45758be280ed3",
+      "chapter": "37",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch37/ch37.yaml",
+      "module_sha256": "fe2c78e0ba29b7451fe9715e65d2501b24b3555650ff40aacdf14a6ddd87d14e"
+    },
+    {
+      "artifact_sha256": "53a0977d3f18339e8c6de566e221caae487a5e7ced788790b1defad2e0b4bcc7",
+      "chapter": "38",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch38/ch38.yaml",
+      "module_sha256": "9b5e0cce6369df9095f1d4066fa929d092a26a2ad568db08fd7dfe29aaf1cd7d"
+    },
+    {
+      "artifact_sha256": "3b55a3c5430aaa5a8ec99405afabd963498b343b005efdf809e3f179bfcbb4a4",
+      "chapter": "39",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch39/ch39.yaml",
+      "module_sha256": "71cce18ced811161c35c7b3ddd0e0f2ae2e6eb54c93add4281641b0a550abe63"
+    },
+    {
+      "artifact_sha256": "0a7d666c33bf2e2bab8946c2b663df18eaffb5899eb97efe3c72b8f92863b260",
+      "chapter": "40",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch40/ch40.yaml",
+      "module_sha256": "2e4f6e7f71527fa96b49cb98c2ecb39fdf0118febd0f81ce9c7e83b53f00932d"
+    },
+    {
+      "artifact_sha256": "9fbdcb2a9f8ca075949de964906577450732ccd243375ecdbad7e23070315245",
+      "chapter": "41",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch41/ch41.yaml",
+      "module_sha256": "33c7607227ec295c5b4b6229e845f8711490a14e5b34b37bf4df7a6348699270"
+    },
+    {
+      "artifact_sha256": "09608dab7ce1ae3e57f7cb4510a3dd39b2e3c41ba2fa709fc49bed329dfaa373",
+      "chapter": "42",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch42/ch42.yaml",
+      "module_sha256": "7cfc53d032b0f152a92f90366724ee30c869b4bbd870fb246e85469da4c9e229"
+    },
+    {
+      "artifact_sha256": "a00b122d7f29a51ef1b1f5a4a61bc195171c1279167c495ef87c21d0c4f99b25",
+      "chapter": "43",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch43/ch43.yaml",
+      "module_sha256": "dff94678ae06de15c96c532b3be80bffe3b7b473a2604cb7c6073da419e4e4e6"
+    },
+    {
+      "artifact_sha256": "b6b40a3de5f5c631b0d489c8854fd62ef4670f7549f5e7fb22e60da0b9e7769f",
+      "chapter": "44",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch44/ch44.yaml",
+      "module_sha256": "32497bb1c98427575c94999c059d722a94e59be06561769ffb8841af4ccf907d"
+    },
+    {
+      "artifact_sha256": "f2472b598bcb273f990816bfc003a3870fd2fe39f477f96eb703c000317ff164",
+      "chapter": "45",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch45/ch45.yaml",
+      "module_sha256": "144089fd18877beb3c296dfb4c1a755c5fb85012b0ff70fd53ccebb461804eb0"
+    },
+    {
+      "artifact_sha256": "5f733749e208efbfda8b38c341bd6b44e5a1a38f9f3e1eaab7d46183ec13cce3",
+      "chapter": "46",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch46/ch46.yaml",
+      "module_sha256": "7fdc329bd30e1c865add9d626c9aa8f2b96ed5d6df031d0deb47e60fd0328f06"
+    },
+    {
+      "artifact_sha256": "69087908ff2943a4c7a8977e960c22e4ce90b5306e6ea6654a756542f6906d25",
+      "chapter": "47",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch47/ch47.yaml",
+      "module_sha256": "15a9f8ad2a2c0c2548349b482e58475cf82571ba48ee1870cb2495ceb941a65d"
+    },
+    {
+      "artifact_sha256": "fba8f96789110e14f6a86c3256509357f6645913e2387c11e293887d73c54fe6",
+      "chapter": "48",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch48/ch48.yaml",
+      "module_sha256": "d7b92b1764ab8a3bd5cee9c2ca539624d14ad25344e6c751ba0a84a5495f5d00"
+    },
+    {
+      "artifact_sha256": "7ff1d22c19c0a26aa1e7600560f9ad85f0fcf603957a79fea173a092e20a56f8",
+      "chapter": "49",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch49/ch49.yaml",
+      "module_sha256": "e7e6c539fe405cd851eea8756c0734eee2dd3f6f24b9ee13caac092a29d641a6"
+    },
+    {
+      "artifact_sha256": "4929ef5e9069f1ff1d3131de2b5a570b91ec5a2a782044a11bcee38bd309e5f6",
+      "chapter": "50",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch50/ch50.yaml",
+      "module_sha256": "c772b75dcf33035fd63d187e12669efd746bb55e00c04fc5b93a1db8af7019f9"
+    },
+    {
+      "artifact_sha256": "1495550921fa1f4d6a27c84df36bc45dcd78b54f925653296904d5047fb98788",
+      "chapter": "51",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch51/ch51.yaml",
+      "module_sha256": "98fe1a0febc66faaa8abe25e64b6c15b26e668062e143bc23681b369ead37689"
+    },
+    {
+      "artifact_sha256": "34110ad15bbd4b546f8fb32b5d42e8cf5d768af6d1bf71ae1f76d296fdcae453",
+      "chapter": "52",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch52/ch52.yaml",
+      "module_sha256": "942ff051c9d05a852dbe5e1be4f2b45a958541d33e7f234c18062b6cefeffaad"
+    },
+    {
+      "artifact_sha256": "4cc5b335b550403fe95604bcc2b0af76f3d4e0ce89689778bba26344fcf6f0c0",
+      "chapter": "53",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch53/ch53.yaml",
+      "module_sha256": "ae1258fd5313e5904760a517cd3aa6d29cf7830c8ab02bd5c4baee3e97661f1f"
+    },
+    {
+      "artifact_sha256": "2a35ae105f09762cd383c0a48d6d825348cd66a81555c00b10e4b86b2d346dad",
+      "chapter": "54",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch54/ch54.yaml",
+      "module_sha256": "3fdb38f54f4690f300f40de018945e080d1314181b51c08f17f159abba40b0a6"
+    },
+    {
+      "artifact_sha256": "eca68e488dbbfafb52d2cbcfd96164a311fc289e44b29f9351a2d52b6439d8ab",
+      "chapter": "55",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch55/ch55.yaml",
+      "module_sha256": "a1124ff9bc790b3deb0b839ea3c6bcb0765f3bfd0d133a1d34fb960c49309eda"
+    },
+    {
+      "artifact_sha256": "03d1917507ef1b2dd4da88802db0991e4bcea7ffd6eaa26ab3d37e5a20194135",
+      "chapter": "56",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch56/ch56.yaml",
+      "module_sha256": "1f79048ad28f338fff16d1fd5cbecf2c89e1db88d73c3693576c70915bc70564"
+    },
+    {
+      "artifact_sha256": "901bb8b9ea846e5bf4f63854b0c6e2ae4631d012316d87efe26a9775406709c3",
+      "chapter": "57",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch57/ch57.yaml",
+      "module_sha256": "094356dda51b84f5cb305e6cf28a2185e43c2d5b4c0801c16c2e06e612741314"
+    },
+    {
+      "artifact_sha256": "4e1c80b11dab331c3a05a132a6313ff9b3674bdb9741cb5a817bec17b868691b",
+      "chapter": "58",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch58/ch58.yaml",
+      "module_sha256": "65139027229e57c1edde41a7800864ecb57c43fd4054c5e68a875330b9e6bab4"
+    },
+    {
+      "artifact_sha256": "7be6184b759169796533399913bce2efceca9aca0633df032ae50b8fd56d3776",
+      "chapter": "59",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch59/ch59.yaml",
+      "module_sha256": "4e7a9a302761032e7dd3d77b8c46403435c8350188c2da3b11ebe2a09aa920bb"
+    },
+    {
+      "artifact_sha256": "8c77143bb370496900d4d95258c2e1684b83961b9703469e947b63a58ade2a9b",
+      "chapter": "60",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch60/ch60.yaml",
+      "module_sha256": "7e5f93efa0b35023ad6af596033e6d8e6e6b37845253dc219fa9ff80b4d56410"
+    },
+    {
+      "artifact_sha256": "73f001a1c472f8af9f696045c4bca8a5a9e8b68f4ee8f6eced2294d17d2ec5c1",
+      "chapter": "61",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch61/ch61.yaml",
+      "module_sha256": "6eac0bb84d39482c9a5cf42b0f8871e50ce833e83cde0f38b7105779ae8859e3"
+    },
+    {
+      "artifact_sha256": "323cf7d0135b6870b10f08c36923055302249f96b78c781dd2dab8691a63e896",
+      "chapter": "62",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch62/ch62.yaml",
+      "module_sha256": "0b8ade106330aeeccb6e779a1ef22e10f29c0fa127fcb18f4e1b0d3595122aca"
+    },
+    {
+      "artifact_sha256": "2ef9acf5a7ffb542b4fb13eb2bcf650e9aa682071468a2f50d4d58791ab5deb5",
+      "chapter": "63",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch63/ch63.yaml",
+      "module_sha256": "0974afb8bcf8be71d53d46f7b0f3a76587d7fc01b7d9584d04706e95ed7fcd3a"
+    },
+    {
+      "artifact_sha256": "193c4762c903555437504280f59feb2b92dcfeb8896c942b9826deeeb032ef91",
+      "chapter": "64",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch64/ch64.yaml",
+      "module_sha256": "0e8283c5c53025f3d29bd0b3e7da5a2a9a10ce6340e903b44a165014a527721d"
+    },
+    {
+      "artifact_sha256": "5ff88758df763ceb7b773b85ffa506dcf84b193929b080f3739f5b553ccd9a0b",
+      "chapter": "65",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch65/ch65.yaml",
+      "module_sha256": "8d24fc58dc9faa577d493146f2db5c6a4ce406590069ba1bdf83507cad350005"
+    },
+    {
+      "artifact_sha256": "98108cbe02d3f26268b351592e5bb27e4ccdc0c2db9edee12d1f7cc367a2fe8b",
+      "chapter": "66",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch66/ch66.yaml",
+      "module_sha256": "5ff7477933f283459c43cf7073a14464bbe0773c4d7469cbd631f4844060d878"
+    },
+    {
+      "artifact_sha256": "e7495b31c38a5fe510aabec028cfbb48277ae272d4401652c78cf1eae1e37889",
+      "chapter": "67",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch67/ch67.yaml",
+      "module_sha256": "110ff551b9a92c1f830bdc661c68f1aed7cd9e5034801c10ad475826b58e22db"
+    },
+    {
+      "artifact_sha256": "fb5cf7ecfcca43680d747fcf0083b0f96ddaf783ad47fca033e301dc02d1bf18",
+      "chapter": "68",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch68/ch68.yaml",
+      "module_sha256": "a0140bb28e5c6c2aa2cd11c0208dac89e242c658c75954a20447145bc9328298"
+    },
+    {
+      "artifact_sha256": "9cf4e92f1045d08c3a6a202ebdd3687943df2d79383861bdd9b0d24c7a4d1fee",
+      "chapter": "69",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch69/ch69.yaml",
+      "module_sha256": "8526501ca78421294d97191583dc600b306a15149dd335815613804894cdac71"
+    },
+    {
+      "artifact_sha256": "ccac014372b1ee4c02f7a8570c6612dd353efa3043e987ec444ebb8981e5f37a",
+      "chapter": "70",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch70/ch70.yaml",
+      "module_sha256": "226297491693946e203fc9fe7f07791fde8357f455d4cfb674e899e26139b48b"
+    },
+    {
+      "artifact_sha256": "40d485233c9d0f28b55c267c937383fabec2abb7f79e05916121c3adcdffaab9",
+      "chapter": "71",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch71/ch71.yaml",
+      "module_sha256": "9cc3120f3d1c56d3c4118dbd8fe4c94cf68a479bbef9d7201221f01225e10205"
+    },
+    {
+      "artifact_sha256": "d50152b48ae85f491845912e64a96b180aff8dab1d09bcfebb653657bc7ffff5",
+      "chapter": "72",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch72/ch72.yaml",
+      "module_sha256": "000e157deae4a74f28b3a60971237d1b4c63b8f99322cdf16b09982a5b1ecd4e"
+    },
+    {
+      "artifact_sha256": "439b8d213a6d12b82766c8859e9f488d4c048a8630a7b93c1518763644a3b42e",
+      "chapter": "73",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch73/ch73.yaml",
+      "module_sha256": "728679a3d2472158d7e3a8c3329b51c0b034ba609ef97ce8efee8d54b1b9f2b7"
+    },
+    {
+      "artifact_sha256": "a53a169ae102cb70d585317f60e39461707826b07e8d1d360ab385178c55be01",
+      "chapter": "74",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch74/ch74.yaml",
+      "module_sha256": "2a1642e354440029f8a25aaaa14585e8e443cc5af9566b9c93cccbba4400f683"
+    },
+    {
+      "artifact_sha256": "56ebd3c24789c44ffa906bc69cfe5d9b0b3bab3a6c8e5545b71c83f65ba3f6f0",
+      "chapter": "75",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch75/ch75.yaml",
+      "module_sha256": "5424bf696e83d33035ba5d601ca5b5b076d47e1aa6b761e905de88e18d0a3581"
+    },
+    {
+      "artifact_sha256": "79ef9a2e245c20b629a24d69505cdff887ceb690e2542b611843ba6b88525132",
+      "chapter": "76",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch76/ch76.yaml",
+      "module_sha256": "d9a094a31d5bc94d6456d6b6e58e569b8a765c7304de651e5a6bbecfec1aed21"
+    },
+    {
+      "artifact_sha256": "2bfb558b5f4276b8776d3e4cf1cc007b424b38a6f2ee7b09aba99c1e8b5b5b6d",
+      "chapter": "78",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch78/ch78.yaml",
+      "module_sha256": "15dddbbc38f92a35590a45f432ace2d1c8c5726ca6faa576bac37630d8a45226"
+    },
+    {
+      "artifact_sha256": "55cd3a041a51d1b8119e8e282034187f214a8d89b681df209d4aa43828002f81",
+      "chapter": "79",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch79/ch79.yaml",
+      "module_sha256": "463b936851a2abd3b9bcc2d70e8ab46f7a8b09e6474d429f53ca20e10936e5dc"
+    },
+    {
+      "artifact_sha256": "82bc9ad77ab855e964fdfcd994cc9c57dd07f4e42d06592187524baae608cb3d",
+      "chapter": "80",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch80/ch80.yaml",
+      "module_sha256": "34996b6ceb9c41c6ffe40b676544f57286f6ff25ff6be8c6a25f0d580c0783ef"
+    },
+    {
+      "artifact_sha256": "e99e5eb5fa5a27fbb23d1625ad476aad2ac878a5187b3c4d52d5bc178be3869f",
+      "chapter": "81",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch81/ch81.yaml",
+      "module_sha256": "199acfe465f5ad50519e63fa221977d0dec866929d2a6dc8d2fdbbd20ce9bde3"
+    },
+    {
+      "artifact_sha256": "7dae44b0347d343faa07fb695f793bd634f692593e748e0dd997cc77e63619ca",
+      "chapter": "82",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch82/ch82.yaml",
+      "module_sha256": "e6d4dc8a83480fd721a4943a6dbb30a5708ec83e3767be54ce7a4d84507d408f"
+    },
+    {
+      "artifact_sha256": "17c98b15f41ca975484e793c4c22d526b5dfe713e434e21b6622fdcaa53cf453",
+      "chapter": "83",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch83/ch83.yaml",
+      "module_sha256": "3b28b0d2d50cd8010566800d85aea6511f3bb194ef98e1e58fbca24323c23199"
+    },
+    {
+      "artifact_sha256": "d6e6bbaa8759812d80b2a1a9fe4b042f1769efbf3dc52371e3037141fe2f9831",
+      "chapter": "84",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch84/ch84.yaml",
+      "module_sha256": "6b6b500ec468654020d3ffe0513818f27e0a6936309885a83a5a942e06b0c141"
+    },
+    {
+      "artifact_sha256": "6d9d72b23bc8a5e21c5dc49e9c06f76ddf513f92675e535371ecdfdebdb693da",
+      "chapter": "85",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch85/ch85.yaml",
+      "module_sha256": "2c2ab6ff0f8c280424a1a7ea00f3c4c855ffc857e4214dfd2512401f0c799e16"
+    },
+    {
+      "artifact_sha256": "8403a9280740e3c51299e731df753dc8dcb7d1e80069c501c323d5fc0d924d15",
+      "chapter": "86",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch86/ch86.yaml",
+      "module_sha256": "2ffcb67e312fd11f634e42e311e52f8534d8a4137c404c2fa1ece9506b3a6dcf"
+    },
+    {
+      "artifact_sha256": "be2268fb9d2e844f474ea8c51e7374eb1d25f321fca7b79c79f41b15d812a805",
+      "chapter": "87",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch87/ch87.yaml",
+      "module_sha256": "6f82988b649ec2b103397c67e286a69f46c00fcddee564400c1c605adf851f1e"
+    },
+    {
+      "artifact_sha256": "f3e3c6a5605e350cd540513556c46177306ac792078009f3d9b4647ce59846d5",
+      "chapter": "88",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch88/ch88.yaml",
+      "module_sha256": "c7431254a1599722d6eb7010cbf9cf50d76d5348bab185d77717338d299b91fc"
+    },
+    {
+      "artifact_sha256": "6502fda60ce2f3c6296778ad22ccc06e9e6a66ccab996e21806092c8c417084b",
+      "chapter": "89",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch89/ch89.yaml",
+      "module_sha256": "fadae4210125dfa381d8d677cef5d17600d05d16a74ce60727a7102c2bfedcdc"
+    },
+    {
+      "artifact_sha256": "8d8d6ac0f447b887743fcba707a282d4dc453bea8a37ce5ede0dec5cd6117148",
+      "chapter": "90",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch90/ch90.yaml",
+      "module_sha256": "a609b16bc9c95dc5b319a4fdf45ce003792835f9f791fea5016353f2dd7fec65"
+    },
+    {
+      "artifact_sha256": "65bf68157a85a5a5ca0922d9527b21362203332af6a767684db17caffebc2242",
+      "chapter": "91",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch91/ch91.yaml",
+      "module_sha256": "6a229594fd1b02ace0f603971feba526fa31ddf26f816d507a1854dee010d3bf"
+    },
+    {
+      "artifact_sha256": "8591612a2c15c019e45c4539c4d95934a8c9bd462ae725154c6d10e66500f25c",
+      "chapter": "92",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch92/ch92.yaml",
+      "module_sha256": "f9914d7a95e1a05605d7b71d0c605883e7ad4785488cee9ba6b99bb8ab44a51e"
+    },
+    {
+      "artifact_sha256": "113234cf7df7c0b030aee9f684ab8111259b6b9f1dfbd735c63f51b8ffa20023",
+      "chapter": "93",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch93/ch93.yaml",
+      "module_sha256": "682fdec4e1c6b51c62a275b70778ec65c7271cfbf292fa7497b7f868e64e6a4f"
+    },
+    {
+      "artifact_sha256": "4485448f60f26992ff8c9f005eebff2c2243b82b0105cbd444076f7bd4699323",
+      "chapter": "94",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch94/ch94.yaml",
+      "module_sha256": "38beb674441da532e00bb444f84e321cd8243d5e644d7167cd3cfee3b42e9eb3"
+    },
+    {
+      "artifact_sha256": "5b557e1eb6b3bae18293f987c09942abab8f3712c6f0c1219d805f547f891ac3",
+      "chapter": "95",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch95/ch95.yaml",
+      "module_sha256": "ff073d0dfd1168d6389fd336cb0ec0508fdfe491b54257590ad3ed38de79bd08"
+    },
+    {
+      "artifact_sha256": "a98554ecd2929349dc2ecef4774faea297c80899b420c1c06bc54cbe83fcab29",
+      "chapter": "96",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch96/ch96.yaml",
+      "module_sha256": "89cce0ef80dc8a07dbe2152d6ca3d29e6258c0649f3212ffbaa19d746deab158"
+    },
+    {
+      "artifact_sha256": "ae619e9869630eb0c23423f9de7a25b20135878d9f68e8472481e6d9a92a3056",
+      "chapter": "97",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch97/ch97.yaml",
+      "module_sha256": "f447ebde3015985951e631d00944337ad9ff62162a04e3bccb9ffcb6ee488e03"
+    },
+    {
+      "artifact_sha256": "41ec47b44322f6f05a7a604255bf8006b7a4b3117c8db4bf74a856a91de6dd8c",
+      "chapter": "98",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch98/ch98.yaml",
+      "module_sha256": "c372dfffc35c5e171f20127a0075eac145fd938d5e59b65bc0a20cdf23c83c4e"
+    },
+    {
+      "artifact_sha256": "1bb2178dd554afe01e73b2005c168e9dd6589ebf8731ebd4ebb58a02267f4761",
+      "chapter": "99a",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 191,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch99a/ch99a.yaml",
+      "module_sha256": "39a1f1ffc8fe0b7bf5f4f108179d821c6c2396fd741b9353219db07a35e64431"
+    },
+    {
+      "artifact_sha256": "1708cf951395d74c9dad573ba0a8659a421617d2cbaf4da108b7679a43054989",
+      "chapter": "99b",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 191,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch99b/ch99b.yaml",
+      "module_sha256": "e6086ebf5bef2c92acb554a17d1a35c055108ab87062799e8b001d36b898238b"
+    },
+    {
+      "artifact_sha256": "072377251f5d01fa6ddc3d559f9c88f49d989a34f4b6c4150d2c3bc9d7249f14",
+      "chapter": "99c",
+      "declared_entry_flags": [
+        "entry_is_brazil_301_listed",
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_list123",
+        "entry_is_china_301_list4a",
+        "entry_is_china_301_solar",
+        "entry_is_forced_labor_301_listed",
+        "entry_is_line_a",
+        "entry_is_line_b",
+        "entry_is_line_d",
+        "entry_is_section_122_exempt",
+        "entry_is_section_201_cspv",
+        "entry_is_section_232_aluminum",
+        "entry_is_section_232_covered",
+        "entry_is_section_232_steel"
+      ],
+      "declared_input_count": 190,
+      "dropped_entry_flags": [
+        "entry_is_line_c",
+        "entry_is_line_e"
+      ],
+      "missing_declared_entry_flags": [],
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch99c/ch99c.yaml",
+      "module_sha256": "b1982def129a9a25fb2ad9bb5211f2c9a03c1b4db6cc20cde7f900875a0dc10d"
+    }
+  ],
+  "composition_count": 100,
+  "emitted_entry_flags": [
+    "entry_is_brazil_301_listed",
+    "entry_is_china_301_2024_action",
+    "entry_is_china_301_list123",
+    "entry_is_china_301_list4a",
+    "entry_is_china_301_solar",
+    "entry_is_forced_labor_301_listed",
+    "entry_is_line_a",
+    "entry_is_line_b",
+    "entry_is_line_c",
+    "entry_is_line_d",
+    "entry_is_line_e",
+    "entry_is_section_122_exempt",
+    "entry_is_section_201_cspv",
+    "entry_is_section_232_aluminum",
+    "entry_is_section_232_covered",
+    "entry_is_section_232_steel"
+  ],
+  "entry_flag_tool": "tools/b16_entry_flags.py",
+  "entry_flag_tool_sha256": "d3f4b26e062e99349f656f7d9e39521db2897d565f5335e59e21b9aae7a5cc90",
+  "expected_dropped_entry_flags": [
+    "entry_is_line_c",
+    "entry_is_line_e"
+  ],
+  "schema": "axiom_oracles.us_tariff_schedule.declared_input_contract.v1",
+  "stage_wall_clock_seconds": 7.673,
+  "verdict": "PASS"
+}
