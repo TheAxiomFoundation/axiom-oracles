@@ -14,12 +14,16 @@
 - The legacy speculative harness has been replaced by a registry-driven
   implementation against the landed certificate, evidence/census, closure,
   and executable producer interfaces.
-- The local integration and adversarial hardening are committed through
-  `941de4040` (four commits on current main).
+- The local integration, adversarial hardening, validation ledger, and blocked
+  publication/report handoff are committed on current main.
 - Remote publication is currently blocked: `git push --force-with-lease` cannot
   resolve `github.com`, and two authenticated GitHub blob-write attempts were
   declined before creating any remote object. The remote branch and PR were
   therefore left unchanged.
+- The completed final report is staged at
+  `/private/tmp/w427-rebase.result.md`. Copying it to the required pre-created
+  closure-sprint output file was denied by the filesystem sandbox, so that
+  external target remains empty.
 - Canonical output is five refused candidates (two DK, three CO), zero
   certified nodes. The sidecar is directly compatible with axiom-api's
   `axiom-validation-evidence/1` queue projection.
@@ -78,7 +82,8 @@
 ## Next
 
 - Restore GitHub shell connectivity or authorize the authenticated writer,
-  then force-with-lease publish the four-commit rewrite and replace PR #427's
+  then force-with-lease publish the local rewrite and replace PR #427's
   stale speculative description; do not merge it.
-- Write the closure-sprint output report with contract divergences, DK/CO
-  refusal summaries, exact battery numbers, and remote handoff state.
+- Copy `/private/tmp/w427-rebase.result.md` to
+  `_closure-sprint/out/w427-rebase.result.md` when that external path is
+  writable.
