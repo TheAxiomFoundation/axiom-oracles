@@ -320,7 +320,12 @@ def build_map() -> dict:
             # on (the #73 lesson — never let one odd file break the tool).
             continue
         suite = (config.get("dashboard") or {}).get("suite", config["name"])
-        report = (config.get("dashboard") or {}).get("filename")
+        # Most selector inputs are dashboard reports.  Certificate-grade
+        # unified tuple records can instead declare a stable repo-relative
+        # selector report while retaining a dated reports/ run artifact.
+        report = (config.get("selector") or {}).get("report") or (
+            config.get("dashboard") or {}
+        ).get("filename")
         entry = {
             "suite": suite,
             # The run_comparison.py registry name — what the CI rerun

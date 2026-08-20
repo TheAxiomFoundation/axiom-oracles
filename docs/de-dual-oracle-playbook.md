@@ -97,13 +97,33 @@ the repository-supported `upstream_engine_gap` type:
    DE_2025 deducts §32(6) child allowances while paying full Kindergeld without
    the §31 sentence 4 add-back. The one- and two-child tax rows differ by
    EUR -1,476.17 and EUR -2,824.99. Finding against EUROMOD.
-3. [GETTSIM #1215](https://github.com/ttsim-dev/gettsim/issues/1215):
-   GETTSIM applies the childless Pflegeversicherung surcharge to the total
-   reduced Midijob base instead of the SGB IV §20(2a) sentence 6 employee base.
-   At EUR 1,200/month, EUROMOD−GETTSIM is EUR -1.06973/month. Finding against
-   GETTSIM; EUROMOD is statute-consistent.
+3. [JRC EUROMOD #23](https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/23)
+   (re-adjudicated 2026-08-19; supersedes the retracted
+   [GETTSIM #1215](https://github.com/ttsim-dev/gettsim/issues/1215)):
+   the childless Pflegeversicherung surcharge in the Midijob zone is an
+   employee-only component computed on the SGB IV §20(2a) sentence 1 total
+   base per BVV §2(2) sentences 3 and 6; EUROMOD applies it to the sentence 6
+   employee base. At the committed EUR 1,200 grid row, EUROMOD−GETTSIM is
+   EUR -1.06973/month. Finding against EUROMOD; GETTSIM is
+   regulation-consistent. Our original #1215 filing against GETTSIM was
+   rejected by the maintainer and retracted — the adjudication had not reached
+   the controlling BVV provision.
 
 All other grid comparisons match to the cent.
+
+## Rule: encode before filing oracle findings (Max, 2026-08-19)
+
+Never file an issue against an external oracle until we have encoded the
+provision ourselves. A divergence discovered before our signed encoding exists
+is recorded in dispositions as `unexplained` (or a neutral divergence record),
+never as a filed upstream finding. File upstream only when our encoding exists
+and the divergence survives against it: the complete-source-unit gate forces
+the full mechanism — every base, every rounding rule, the procedural
+regulations (the #1215 lesson: BVV §2(2)) — so the finding carries an
+independent legal derivation by construction. The certification layer is
+unchanged: `upstream_engine_gap` still requires maintainer acceptance or an
+independent legal derivation; this rule gates the filing, that one gates the
+classification.
 
 ## Run and validate
 

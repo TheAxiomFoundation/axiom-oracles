@@ -12,10 +12,11 @@ adapters.
 
 Two evidence modes, stated per claim:
 
-* ``computed`` — this script re-derives the value from committed in-repo
-  artifacts; drift fails ``--check``.
-* ``attested`` — the value is carried from a sha-pinned external receipt
-  (today: the ops closure prototype and the engine-execution receipts).
+* ``computed`` — this script invokes the named producer's pure validator and
+  re-derives the value from committed in-repo artifacts; drift fails
+  ``--check``. Producer integration gates may additionally replay external,
+  commit-pinned toolchains.
+* ``attested`` — the value is carried from a sha-pinned external receipt.
   Attested is scaffolding, not certification; the roadmap is monotone
   conversion of attested claims to computed ones.
 
@@ -34,6 +35,7 @@ Modes::
 from __future__ import annotations
 
 import argparse
+import copy
 import hashlib
 import importlib.util
 import json
@@ -69,6 +71,8 @@ from nz_programs import SINGLE_PERSON_PROGRAMS  # noqa: E402
 
 SCHEMA = "axiom_oracles.program_certificate.v1"
 _NZ_REPORT_CACHE: dict | None = None
+_DE_REPORT_CACHE: dict | None = None
+_DE_CENSUS_CACHE: dict | None = None
 
 #: Program registry. One entry per certified (jurisdiction, program).
 #: ``suites`` lists every comparison that bears on the program, typed.
@@ -218,14 +222,6 @@ NZ_ACC_LOCALITY_BLOCKER = (
     "(adversarial review S1); structural cure = axiom-rules-engine#134 stage 2 "
     "(prototype exists on feat/unit-derivation-stage2)."
 )
-NZ_EXERCISE_EVIDENCE_LIMITATION = (
-    "exercise denominator: committed per-evaluation traces compute each "
-    "certificate view's supplied-input variation and exact requested-output "
-    "root sets, but the 328-slot compiled-input universe (including 178 "
-    "never-supplied slots) and the 883-call capture-completeness receipt remain "
-    "commit-pinned external attestations; no committed compiled-program "
-    "artifact or in-repo harness execution derives them."
-)
 for _nz_program in (
     "nz/acc-earners-levy",
     "nz/accommodation-supplement",
@@ -247,24 +243,65 @@ for _nz_program in (
                 "report": "dashboard/public/data/nz-treasury-incomeexplorer.json",
             }
         ],
-        "attested_closed_receipt": "closure/nz/summary.json",
+        "computed": {
+            "closed": {
+                "artifact": "closure/nz/summary.json",
+                "producer": "scripts/nz_closure.py",
+                "external_verification": "hermetic_program_scoped",
+            },
+            "executable": {
+                "artifact": ("conformance/executable/nz-treasury-incomeexplorer.json"),
+                "producer": "scripts/nz_executable_reproduction.py",
+                "external_verification": "dedicated_source_build_ci",
+            },
+            "exercise_denominator": {
+                "producer": "scripts/nz_exercise_denominator.py",
+            },
+        },
         "attested_exercise_catalog_receipt": (
             "comparisons/nz-treasury-incomeexplorer/source-comparison.json"
         ),
-        "attested_executable_receipt": (
-            "dashboard/public/data/nz-treasury-incomeexplorer.json"
-        ),
         "certified_false_when_blocked": True,
         "blockers": (
-            [NZ_ACC_LOCALITY_BLOCKER, NZ_EXERCISE_EVIDENCE_LIMITATION]
+            [NZ_ACC_LOCALITY_BLOCKER]
             if _nz_program in SINGLE_PERSON_PROGRAMS
-            else [NZ_AGGREGATION_BLOCKER, NZ_EXERCISE_EVIDENCE_LIMITATION]
+            else [NZ_AGGREGATION_BLOCKER]
         ),
         "single_person_attestation": (
             "comparisons/nz-treasury-incomeexplorer/single-person-attestations.json"
             if _nz_program in SINGLE_PERSON_PROGRAMS
             else None
         ),
+    }
+
+PROGRAMS["de/kindergeld"] = {
+    "period": "2025",
+    "suites": [
+        {
+            "suite": "de-worker-dual-oracle",
+            "view": "de/kindergeld",
+            "oracle_type": "reference",
+            "oracle": "EUROMOD J2.0+ DE_2025 x GETTSIM 1.2.1 consensus; "
+            "Axiom x each oracle required separately",
+            "report": "comparisons/de-worker-dual-oracle/unified-record.json",
+            "computed_de_unified": True,
+        }
+    ],
+    "computed_de_exercise": ["child_count", "yearly_earned_income_total"],
+    "computed_closed": "closure/de/summary.json",
+    "computed_de_executable": "conformance/executable/de-kindergeld-status.json",
+    "de_census_program": True,
+}
+for _de_pending_program in (
+    "de/rv-employee-contribution",
+    "de/unterhaltsvorschuss",
+):
+    PROGRAMS[_de_pending_program] = {
+        "period": "2025",
+        "suites": [],
+        "pending_de_candidate": True,
+        "computed_closed": "closure/de/summary.json",
+        "de_census_program": True,
     }
 
 
@@ -389,9 +426,7 @@ def _tariff_schedule_suite_verdict(
     mismatches = _count(
         summary.get("mismatches"), "mismatches", defects, entry["suite"]
     )
-    explained = _count(
-        summary.get("explained"), "explained", defects, entry["suite"]
-    )
+    explained = _count(summary.get("explained"), "explained", defects, entry["suite"])
     unexplained = _count(
         summary.get("unexplained"), "unexplained", defects, entry["suite"]
     )
@@ -412,7 +447,9 @@ def _tariff_schedule_suite_verdict(
         if scoreboard.get("derivation") != "unexplained == 0 and engine_errors == 0":
             defects.append(f"{entry['suite']}: scoreboard derivation changed")
         if scoreboard.get("conformant") is not derived_conformant:
-            defects.append(f"{entry['suite']}: scoreboard conformant flag is fabricated")
+            defects.append(
+                f"{entry['suite']}: scoreboard conformant flag is fabricated"
+            )
     if report.get("conformant") is not derived_conformant:
         defects.append(f"{entry['suite']}: report conformant flag is fabricated")
     classification = report.get("classification")
@@ -510,6 +547,135 @@ def _tariff_schedule_suite_verdict(
     )
 
 
+def _load_generator(name: str, path: Path):
+    module_spec = importlib.util.spec_from_file_location(name, path)
+    if module_spec is None or module_spec.loader is None:
+        raise ValueError(f"cannot load verifier {path.relative_to(REPO_ROOT)}")
+    module = importlib.util.module_from_spec(module_spec)
+    module_spec.loader.exec_module(module)
+    return module
+
+
+def _rederived_de_report() -> dict:
+    """Recompute the DE unified record; committed JSON never self-attests."""
+
+    global _DE_REPORT_CACHE
+    if _DE_REPORT_CACHE is None:
+        module = _load_generator(
+            "_certificate_de_unified",
+            REPO_ROOT / "scripts" / "de_unified_comparison.py",
+        )
+        _DE_REPORT_CACHE = module.build()
+    return _DE_REPORT_CACHE
+
+
+def _rederived_de_census() -> dict:
+    """Recompute the DE declaration census and reject committed drift."""
+
+    global _DE_CENSUS_CACHE
+    path = REPO_ROOT / "conformance" / "de-certificate-census.json"
+    if _DE_CENSUS_CACHE is None:
+        module = _load_generator(
+            "_certificate_de_census",
+            REPO_ROOT / "scripts" / "de_certificate_census.py",
+        )
+        expected = module.build()
+        if _load(path) != expected:
+            raise ValueError("DE certificate census does not rederive")
+        _DE_CENSUS_CACHE = expected
+    return _DE_CENSUS_CACHE
+
+
+def _de_suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
+    """Compute the DE Kindergeld leg matrix from the rederived unified view."""
+
+    report_path = REPO_ROOT / entry["report"]
+    committed = _load(report_path)
+    report = _rederived_de_report()
+    if committed != report:
+        raise ValueError("DE unified comparison record does not rederive")
+    view = (report.get("views") or {}).get(entry.get("view"))
+    if not isinstance(view, dict):
+        raise ValueError("DE unified comparison lacks the Kindergeld view")
+    legs = view.get("legs")
+    if not isinstance(legs, list) or [row.get("id") for row in legs] != [
+        "euromod-gettsim",
+        "axiom-euromod",
+        "axiom-gettsim",
+    ]:
+        raise ValueError("DE Kindergeld required leg matrix changed")
+    source = legs[0]
+    if any(
+        source.get(field) != value
+        for field, value in {
+            "state": "complete",
+            "comparison_count": 13,
+            "match_count": 13,
+            "mismatch_count": 0,
+            "error_count": 0,
+            "left_weighted_sum": 765,
+            "right_weighted_sum": 765,
+        }.items()
+    ):
+        raise ValueError("DE source-source crosscheck is not clean")
+    required = view.get("required_axiom_legs")
+    missing = view.get("missing_for_certification")
+    if required != ["axiom-euromod", "axiom-gettsim"] or missing != [
+        row["id"] for row in legs[1:] if row.get("state") != "complete"
+    ]:
+        raise ValueError("DE Kindergeld missing-leg inventory does not reconcile")
+    complete_axiom = [row for row in legs[1:] if row.get("state") == "complete"]
+    clean = not missing and len(complete_axiom) == 2
+    axiom_comparisons = sum(row.get("comparison_count", 0) for row in complete_axiom)
+    axiom_matches = sum(row.get("match_count", 0) for row in complete_axiom)
+    axiom_mismatches = sum(row.get("mismatch_count", 0) for row in complete_axiom)
+    evidence = [
+        {
+            "claim": "DE unified comparison and required-leg matrix",
+            "mode": "computed",
+            "artifact": entry["report"],
+            "sha256": sha256_of(report_path),
+        }
+    ]
+    for row in complete_axiom:
+        artifact = row.get("artifact")
+        if isinstance(artifact, str):
+            evidence.append(
+                {
+                    "claim": f"comparison leg:{row['id']}",
+                    "mode": "computed",
+                    "artifact": artifact,
+                    "sha256": sha256_of(REPO_ROOT / artifact),
+                }
+            )
+    return (
+        {
+            "suite": entry["suite"],
+            "view": entry["view"],
+            "oracle_type": entry["oracle_type"],
+            "oracle": entry["oracle"],
+            # These top-level counts are Axiom comparisons only. The clean
+            # 13/13 source-source crosscheck is preserved below, but cannot
+            # fill in work the absent Axiom legs did not perform.
+            "comparisons": axiom_comparisons,
+            "matches": axiom_matches,
+            "mismatches": axiom_mismatches,
+            "unexplained": 0,
+            "axiom_attributed_open": 0,
+            "binding": "generator-rederived",
+            "reconciliation": "aggregate-source-crosscheck",
+            "evidence_cases": len(report.get("cases") or []),
+            "source_crosscheck": source,
+            "required_axiom_legs": legs[1:],
+            "missing_required_legs": missing,
+            "report_defects": [],
+            "clean": clean,
+        },
+        evidence,
+        [],
+    )
+
+
 def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
     """Compute one suite's conformance leg from its committed report.
 
@@ -521,6 +687,8 @@ def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
     if entry.get("report_contract") == "us_tariff_schedule_v1":
         return _tariff_schedule_suite_verdict(entry)
 
+    if entry.get("computed_de_unified"):
+        return _de_suite_verdict(entry)
     defects: list[str] = []
     report_path = REPO_ROOT / entry["report"]
     execution_evidence = validate_suite_evidence(report_path)
@@ -983,10 +1151,12 @@ def _producer_closed_verdict(
     *,
     verify_producer: bool = False,
 ) -> dict | None:
-    """DK-style computed closure: a committed ledger validated by its producer.
+    """Computed closure from a committed artifact and its named producer.
 
     Returns None when the program declares no closed producer (or its artifact
-    is absent) so the caller falls through to the other evidence classes.
+    is absent) so the caller falls through to the other evidence classes. Both
+    object-style producer summaries and program-scoped mapping summaries are
+    supported; a mapping that declares ``programs`` must contain this program.
     """
 
     config = (spec.get("computed") or {}).get("closed")
@@ -1001,9 +1171,17 @@ def _producer_closed_verdict(
         return None
 
     try:
-        document = yaml.safe_load(artifact_path.read_text()) or {}
-    except (OSError, UnicodeError, yaml.YAMLError) as exc:
-        raise ValueError(f"{artifact_ref} is not readable closure YAML: {exc}") from exc
+        document = (
+            yaml.safe_load(artifact_path.read_text())
+            if artifact_path.suffix in {".yaml", ".yml"}
+            else json.loads(artifact_path.read_text())
+        )
+    except (OSError, UnicodeError, json.JSONDecodeError, yaml.YAMLError) as exc:
+        raise ValueError(
+            f"{artifact_ref} is not readable closure evidence: {exc}"
+        ) from exc
+    if not isinstance(document, dict):
+        raise ValueError(f"{artifact_ref} closure artifact must contain an object")
     producer = _producer_module(str(config.get("producer") or ""))
     if config.get("contract") == "us_tariff_closure_v1":
         if verify_producer:
@@ -1042,7 +1220,8 @@ def _producer_closed_verdict(
         class _TariffSummary:
             closed = derived_closed
             non_encoded_reasons_complete = all(
-                isinstance(row, dict) and isinstance(row.get("reason"), str)
+                isinstance(row, dict)
+                and isinstance(row.get("reason"), str)
                 and bool(row["reason"])
                 for row in decisions
             )
@@ -1050,10 +1229,20 @@ def _producer_closed_verdict(
         summary = _TariffSummary()
     else:
         try:
-            summary = producer.validate_artifact(document)
+            summary = (
+                producer.validate_artifact(document, repo_root=REPO_ROOT)
+                if artifact_path.suffix == ".json"
+                else producer.validate_artifact(document)
+            )
         except ValueError as exc:
-            raise ValueError(f"{artifact_ref} failed closure validation: {exc}") from exc
-    if verify_producer and config.get("contract") != "us_tariff_closure_v1":
+            raise ValueError(
+                f"{artifact_ref} failed closure validation: {exc}"
+            ) from exc
+    if (
+        verify_producer
+        and config.get("contract") != "us_tariff_closure_v1"
+        and config.get("external_verification") != "hermetic_program_scoped"
+    ):
         try:
             verification = producer.verify_artifact(artifact_path=artifact_path)
         except ValueError as exc:
@@ -1068,10 +1257,118 @@ def _producer_closed_verdict(
             raise ValueError(
                 f"{artifact_ref} failed full closure verification: {detail}"
             )
-    if not isinstance(getattr(summary, "closed", None), bool):
+    scoped: dict | None = None
+    if isinstance(summary, dict):
+        if "programs" in summary:
+            programs = summary["programs"]
+            if not isinstance(programs, dict) or not isinstance(
+                programs.get(program), dict
+            ):
+                raise ValueError(f"{artifact_ref} has no closure scope for {program}")
+            scoped = programs[program]
+        else:
+            scoped = summary
+        value = scoped.get("closed")
+    else:
+        value = getattr(summary, "closed", None)
+    if not isinstance(value, bool):
         raise ValueError(f"{artifact_ref} validator returned no closed boolean")
-    computed = document["computed"]
-    value = summary.closed
+    # Central completeness requirement (oracles#491): a closure claim must
+    # disposition the act's subordinate instruments (regulations, guidance,
+    # rate publications), not just the act's own provisions. A closure
+    # artifact whose computed block carries no complete instrument frontier
+    # cannot compute closed=true, whatever its producer says — in the US,
+    # certifying statute-only closure would be very wrong.
+    _computed_block = document.get("computed")
+    _instrument_frontier = (
+        _computed_block.get("instrument_frontier")
+        if isinstance(_computed_block, dict)
+        else None
+    )
+    _instrument_frontier_summary = (
+        {
+            key: _instrument_frontier.get(key)
+            for key in (
+                "instrument_count",
+                "supplemental_count",
+                "counts",
+                "pending",
+                "complete",
+            )
+        }
+        if isinstance(_instrument_frontier, dict)
+        else {
+            "complete": False,
+            "missing": True,
+            "requirement": (
+                "closure must disposition the act's subordinate instruments "
+                "(oracles#491); this artifact declares none"
+            ),
+        }
+    )
+    if _instrument_frontier_summary.get("complete") is not True:
+        value = False
+    _dependency_block = (
+        _computed_block.get("dependency_closure")
+        if isinstance(_computed_block, dict)
+        else None
+    )
+    # A dependency-closure block only satisfies the gate when it is
+    # COMPLETE and internally consistent: all four fields present and
+    # well-typed, closed=true, and the enumerations actually empty. A bare
+    # {"closed": true} — or any block whose count and lists disagree — is
+    # treated as malformed and fails closed (launch-audit delta finding).
+    _dependency_well_formed = (
+        isinstance(_dependency_block, dict)
+        and isinstance(_dependency_block.get("open_dependency_count"), int)
+        # bool is an int subclass: open_dependency_count=false must read
+        # malformed, not as a zero count (launch-audit delta r2 finding).
+        and not isinstance(_dependency_block.get("open_dependency_count"), bool)
+        and isinstance(_dependency_block.get("law_derived_inputs"), list)
+        and isinstance(
+            _dependency_block.get("instruments_bearing_on_computed"), list
+        )
+        and isinstance(_dependency_block.get("closed"), bool)
+        and _dependency_block["open_dependency_count"]
+        == len(_dependency_block["law_derived_inputs"])
+        + len(_dependency_block["instruments_bearing_on_computed"])
+        and _dependency_block["closed"]
+        == (_dependency_block["open_dependency_count"] == 0)
+    )
+    if _dependency_well_formed:
+        _dependency_summary = {
+            key: _dependency_block[key]
+            for key in (
+                "open_dependency_count",
+                "law_derived_inputs",
+                "instruments_bearing_on_computed",
+                "closed",
+            )
+        }
+    elif isinstance(_dependency_block, dict):
+        _dependency_summary = {
+            "closed": False,
+            "malformed": True,
+            "requirement": (
+                "the dependency-closure block must carry a well-typed "
+                "open_dependency_count, law_derived_inputs, and "
+                "instruments_bearing_on_computed that agree with its closed "
+                "flag (CERTIFIED.md v3); this artifact's block is incomplete "
+                "or inconsistent"
+            ),
+        }
+    else:
+        _dependency_summary = {
+            "closed": False,
+            "missing": True,
+            "requirement": (
+                "closure must type every leaf and encode every law-derived "
+                "dependency (CERTIFIED.md v3); this artifact declares no "
+                "dependency-closure block"
+            ),
+        }
+    if not _dependency_well_formed or _dependency_summary.get("closed") is not True:
+        value = False
     evidence.append(
         {
             "claim": f"closed:{program}",
@@ -1081,6 +1378,30 @@ def _producer_closed_verdict(
             "verification": "producer_artifact_validation",
         }
     )
+
+    if scoped is not None and isinstance(summary.get("programs"), dict):
+        return {
+            "mode": "computed",
+            "status": "computed_pass" if value else "computed_open",
+            "value": value,
+            "instrument_frontier": _instrument_frontier_summary,
+            "dependency_closure": _dependency_summary,
+            "artifact": str(artifact_ref),
+            "corpus_release": document.get("corpus_release"),
+            "rulespec_commit": document.get("rulespec_commit"),
+            "pending_citations": len(scoped.get("pending_citations") or []),
+            "pending_money_atoms": scoped.get("pending_money_atoms"),
+            "root_node_count": scoped.get("root_node_count"),
+            "root_nodes": scoped.get("root_nodes"),
+            "subgraph_node_count": scoped.get("subgraph_node_count"),
+            "citation_root_count": scoped.get("citation_root_count"),
+            "by_status": scoped.get("by_status"),
+            "denominator_ratchet": scoped.get("denominator_ratchet"),
+        }
+
+    computed = document.get("computed")
+    if not isinstance(computed, dict):
+        raise ValueError(f"{artifact_ref} has no computed closure block")
     facts = document.get("generated_facts") or {}
     ledger_rulespec = facts.get("rulespec") if isinstance(facts, dict) else None
     return {
@@ -1093,6 +1414,8 @@ def _producer_closed_verdict(
         ),
         "provision_counts": computed.get("provision_counts"),
         "boundary_frontier": computed.get("boundary_frontier"),
+        "instrument_frontier": _instrument_frontier_summary,
+        "dependency_closure": _dependency_summary,
         **(
             {"burndown": computed.get("burndown")}
             if config.get("include_burndown")
@@ -1109,9 +1432,13 @@ def _producer_executable_verdict(
     *,
     verify_producer: bool = False,
 ) -> dict | None:
-    """DK-style computed execution: a committed reproduction receipt validated
-    by its producer; ``verify_producer`` recompiles and replays every case.
-    Returns None when the program declares no executable producer."""
+    """Computed execution from a committed receipt and its named producer.
+
+    ``verify_producer`` retains the DK producer's external compile/replay gate.
+    Producers such as NZ that expose a hermetic program-scoped validator but
+    no generic ``build_reproduction`` hook remain validated by that committed
+    contract; their pinned-engine replay runs in their dedicated CI gate.
+    """
 
     config = (spec.get("computed") or {}).get("executable")
     if not isinstance(config, dict):
@@ -1135,7 +1462,10 @@ def _producer_executable_verdict(
         summary = producer.validate_artifact(document, repo_root=REPO_ROOT)
     except ValueError as exc:
         raise ValueError(f"{artifact_ref} failed executable validation: {exc}") from exc
-    if verify_producer:
+    if (
+        verify_producer
+        and config.get("external_verification") != "dedicated_source_build_ci"
+    ):
         try:
             reproduced = producer.build_reproduction(
                 repo_root=REPO_ROOT,
@@ -1152,9 +1482,21 @@ def _producer_executable_verdict(
                 f"{artifact_ref} failed full executable verification: "
                 "compiled/replayed artifact drifted"
             )
-    if not isinstance(summary, dict) or not isinstance(summary.get("executable"), bool):
+    if not isinstance(summary, dict):
+        raise ValueError(f"{artifact_ref} validator returned no executable summary")
+    if "programs" in summary:
+        programs = summary["programs"]
+        if not isinstance(programs, dict) or not isinstance(
+            programs.get(program), dict
+        ):
+            raise ValueError(f"{artifact_ref} has no executable scope for {program}")
+        scoped = programs[program]
+    else:
+        programs = None
+        scoped = summary
+    value = scoped.get("executable")
+    if not isinstance(value, bool):
         raise ValueError(f"{artifact_ref} validator returned no executable boolean")
-    value = summary["executable"]
     evidence.append(
         {
             "claim": f"executable:{program}",
@@ -1164,6 +1506,24 @@ def _producer_executable_verdict(
             "verification": "producer_artifact_validation",
         }
     )
+    if programs is not None:
+        return {
+            "mode": "computed",
+            "status": "computed_pass" if value else "computed_fail",
+            "value": value,
+            "artifact": str(artifact_ref),
+            "rulespec_sha": (document.get("rulespec") or {}).get("sha"),
+            "engine": document.get("engine"),
+            "compiled_artifact": document.get("compiled_artifact"),
+            "request_set": document.get("request_set"),
+            "execution_trace": document.get("execution_trace"),
+            "treasury_snapshot": document.get("treasury_snapshot"),
+            "reducer": document.get("reducer"),
+            "independent_expected": document.get("independent_expected"),
+            "full_responses": document.get("full_responses"),
+            "transcript": document.get("transcript"),
+            "summary": scoped,
+        }
     return {
         "mode": "computed",
         "value": value,
@@ -1243,26 +1603,103 @@ def _closed_verdict(
         return _attested_verdict(spec, "closed")
     path = REPO_ROOT / path_string
     closure = _load(path)
-    if path_string == "closure/nz/summary.json":
-        module_path = REPO_ROOT / "scripts" / "nz_closure.py"
-        module_spec = importlib.util.spec_from_file_location(
-            "_certificate_nz_closure", module_path
-        )
-        if module_spec is None or module_spec.loader is None:
-            raise ValueError("cannot load the NZ closure verifier")
-        module = importlib.util.module_from_spec(module_spec)
-        module_spec.loader.exec_module(module)
+    if path_string in {"closure/nz/summary.json", "closure/de/summary.json"}:
+        jurisdiction = "nz" if path_string.startswith("closure/nz/") else "de"
+        try:
+            module = _load_generator(
+                f"_certificate_{jurisdiction}_closure",
+                REPO_ROOT / "scripts" / f"{jurisdiction}_closure.py",
+            )
+        except ValueError as exc:
+            if (
+                jurisdiction == "nz"
+                and str(exc) == "cannot load verifier scripts/nz_closure.py"
+            ):
+                raise ValueError("cannot load the NZ closure verifier") from exc
+            raise
         expected = module.build(module.load_source())
         if closure != expected:
             raise ValueError(
-                "closure/nz/summary.json does not rederive from its versioned input"
+                f"{path_string} does not rederive from its versioned input"
             )
         scoped = (closure.get("programs") or {}).get(program)
         if not isinstance(scoped, dict):
-            raise ValueError(f"NZ closure has no program scope for {program}")
+            if jurisdiction == "nz":
+                raise ValueError(f"NZ closure has no program scope for {program}")
+            raise ValueError(f"DE closure has no scope for {program}")
     else:
         scoped = closure
     value = scoped.get("closed") is True
+    # Central completeness requirement (oracles#491) — same bar the producer
+    # path enforces: a closure claim must disposition the act's subordinate
+    # instruments (regulations, administrative directives such as the DA-KG,
+    # guidance, rate publications), not just the statutory spine. A rederived
+    # closure summary that declares no complete instrument frontier cannot
+    # compute closed=true, whatever its exact-path resolution says. Scoped to
+    # the DE path here: extending it to the remaining evidence classes is the
+    # certified-definition rollout's change, not this lane's.
+    frontier_summary = None
+    if path_string == "closure/de/summary.json":
+        instrument_frontier = scoped.get("instrument_frontier")
+        if isinstance(instrument_frontier, dict):
+            frontier_summary = {
+                key: instrument_frontier.get(key)
+                for key in (
+                    "instrument_count",
+                    "supplemental_count",
+                    "counts",
+                    "pending",
+                    "complete",
+                )
+            }
+        else:
+            frontier_summary = {
+                "complete": False,
+                "missing": True,
+                "requirement": (
+                    "closure must disposition the act's subordinate "
+                    "instruments (oracles#491); this closure declares none"
+                ),
+            }
+        if frontier_summary.get("complete") is not True:
+            value = False
+            frontier_blockers = [
+                "closed: "
+                + str(
+                    frontier_summary.get("requirement")
+                    or "subordinate-instrument frontier is incomplete"
+                )
+            ]
+        else:
+            frontier_blockers = []
+        # Dependency closure with leaf discipline (CERTIFIED.md v3): the DE
+        # closure declares no typed-leaf ledger yet, so closed fails on the
+        # same requirement the central producer gate enforces. The four
+        # EStG 62-65 boundary inputs are law-derived and case-supplied — an
+        # open dependency until their defining rules are encoded.
+        dependency_summary = scoped.get("dependency_closure")
+        if not (
+            isinstance(dependency_summary, dict)
+            and dependency_summary.get("closed") is True
+        ):
+            value = False
+            frontier_blockers.append(
+                "closed: closure must type every leaf and encode every "
+                "law-derived dependency (CERTIFIED.md v3); this closure "
+                "declares no dependency-closure block"
+            )
+            dependency_summary = {
+                "closed": False,
+                "missing": True,
+                "requirement": (
+                    "closure must type every leaf and encode every "
+                    "law-derived dependency (CERTIFIED.md v3); this "
+                    "closure declares no dependency-closure block"
+                ),
+            }
+    else:
+        frontier_blockers = []
+        dependency_summary = None
     evidence.append(
         {
             "claim": f"closure census:{program}",
@@ -1275,6 +1712,15 @@ def _closed_verdict(
         "mode": "computed",
         "status": "computed_pass" if value else "computed_open",
         "value": value,
+        **(
+            {
+                "instrument_frontier": frontier_summary,
+                "dependency_closure": dependency_summary,
+                "blockers": frontier_blockers,
+            }
+            if frontier_summary is not None
+            else {}
+        ),
         "corpus_release": closure.get("corpus_release"),
         "rulespec_commit": closure.get("rulespec_commit"),
         "pending_citations": len(scoped.get("pending_citations") or []),
@@ -1284,6 +1730,20 @@ def _closed_verdict(
         "subgraph_node_count": scoped.get("subgraph_node_count"),
         "citation_root_count": scoped.get("citation_root_count"),
         "by_status": scoped.get("by_status"),
+        "source_closed": scoped.get("source_closed"),
+        "subgraph_sha256": scoped.get("subgraph_sha256"),
+        "boundaries": scoped.get("boundaries"),
+        "by_signature_state": scoped.get("by_signature_state"),
+        "signature_blockers": scoped.get("signature_blockers"),
+        "closed_claim_mode": scoped.get("closed_claim_mode"),
+        "source_closed_claim_mode": scoped.get("source_closed_claim_mode"),
+        "citation_paths": scoped.get("citation_paths"),
+        "declared_sources": scoped.get("declared_sources"),
+        "evidence_roots": scoped.get("evidence_roots"),
+        "signature_pending_citations": scoped.get("signature_pending_citations"),
+        "unresolved_sources": scoped.get("unresolved_sources"),
+        "universe_mode": "attested",
+        "resolution_mode": "computed",
     }
 
 
@@ -1324,15 +1784,54 @@ def _single_person_evidence(program: str, spec: dict, evidence: list[dict]) -> N
 def _executable_verdict(
     program: str,
     spec: dict,
-    legs: list[dict],
-    evidence: list[dict],
+    legs: list[dict] | None = None,
+    evidence: list[dict] | None = None,
     *,
     verify_producer: bool = False,
 ) -> dict:
-    """One execution verdict for every evidence class: NZ attested receipt
-    (attested), DK producer reproduction (computed), else the registry block
-    (attested, whatever its strings say)."""
+    """One execution verdict for every evidence class.
 
+    ``legs`` is retained for the legacy executable dispatcher. The three-arg
+    form added by the shared producer adapter passes evidence in that position,
+    so normalize both call shapes before dispatching.
+    """
+
+    if evidence is None:
+        evidence = legs if legs is not None else []
+        legs = []
+
+    de_status_path = spec.get("computed_de_executable")
+    if de_status_path:
+        module = _load_generator(
+            "_certificate_de_executable",
+            REPO_ROOT / "scripts" / "de_executable.py",
+        )
+        status = module.build_status()
+        path = REPO_ROOT / de_status_path
+        if _load(path) != status:
+            raise ValueError("DE executable status does not rederive")
+        evidence.extend(
+            [
+                {
+                    "claim": "released-engine executable contract",
+                    "mode": "computed",
+                    "artifact": ("conformance/executable/de-kindergeld-manifest.json"),
+                    "sha256": sha256_of(
+                        REPO_ROOT / "conformance/executable/de-kindergeld-manifest.json"
+                    ),
+                },
+                {
+                    "claim": "released-engine executable verdict",
+                    "mode": "computed",
+                    "artifact": de_status_path,
+                    "sha256": sha256_of(path),
+                },
+            ]
+        )
+        return {
+            **status,
+            "status": status.get("state"),
+        }
     attested_path_string = spec.get("attested_executable_receipt")
     if attested_path_string:
         path = REPO_ROOT / attested_path_string
@@ -1369,6 +1868,104 @@ def _executable_verdict(
         "computed executable verdict requested without a verifier that loads and "
         "runs committed artifact bytes"
     )
+
+
+def _align_de_closed_signature(closed: dict, executable: dict) -> dict:
+    """Reflect the fresh executable signature check in DE closure output.
+
+    Source closure and cryptographic validity are deliberately separate gates.
+    Once the exact signed descriptor validates, retaining the closure source
+    snapshot's historical ``pending`` note in a newly certified document would
+    be contradictory even though that note is not a top-level blocker.
+    """
+
+    rows = executable.get("required_inputs")
+    if not isinstance(rows, list):
+        return closed
+    signed = next(
+        (
+            row
+            for row in rows
+            if isinstance(row, dict) and row.get("id") == "signed-rulespec-estg-66-2025"
+        ),
+        None,
+    )
+    if not isinstance(signed, dict):
+        return closed
+    valid = signed.get("state") == "valid"
+    aligned = copy.deepcopy(closed)
+    aligned.update(
+        {
+            "by_signature_state": {
+                "not_applicable": 0,
+                "pending": 0 if valid else 1,
+                "signed": 1 if valid else 0,
+            },
+            "signature_blockers": (
+                []
+                if valid
+                else ["de/statute/estg/66: signed RuleSpec artifact has not landed"]
+            ),
+            "signature_pending_citations": ([] if valid else ["de/statute/estg/66"]),
+            "signature_state_claim_mode": "computed",
+            "signature_state_source": (
+                "conformance/executable/de-kindergeld-status.json required input"
+            ),
+        }
+    )
+    source_universe = {
+        "rulespec_commit": aligned.pop("rulespec_commit", None),
+        "rulespec_commit_claim_mode": "attested",
+        "subgraph_sha256": aligned.pop("subgraph_sha256", None),
+        "subgraph_sha256_claim_mode": "computed",
+        "role": "citation-path closure snapshot",
+        "role_claim_mode": "attested",
+    }
+    aligned["source_universe"] = source_universe
+    declared = aligned.get("declared_sources")
+    if not isinstance(declared, list):
+        raise ValueError("DE closure declared_sources must be an array")
+    estg = [
+        row
+        for row in declared
+        if isinstance(row, dict) and row.get("citation_path") == "de/statute/estg/66"
+    ]
+    if len(estg) != 1:
+        raise ValueError("DE closure must declare exactly one EStG 66 source")
+    estg[0]["signature_state_claim_mode"] = "computed"
+    estg[0]["state_claim_mode"] = "computed"
+    if not valid:
+        return aligned
+
+    estg[0].update(
+        {
+            "signature_state": "signed",
+            "signature_state_claim_mode": "computed",
+            "state": "encoded_signed",
+            "state_claim_mode": "computed",
+            "reason": (
+                "The executable verifier validated the exact 2025 module bytes, "
+                "signed apply manifest, corpus binding, and Ed25519 trust root."
+            ),
+            "reason_claim_mode": "computed",
+            "signed_artifact": {
+                key: signed[key]
+                for key in (
+                    "path",
+                    "sha256",
+                    "module_sha256",
+                    "encoding_manifest_payload_sha256",
+                    "encoding_manifest_source_file_sha256",
+                    "trusted_key_id",
+                )
+                if key in signed
+            },
+            "signed_artifact_claim_mode": "computed",
+        }
+    )
+    if isinstance(signed.get("checkout_observation"), dict):
+        estg[0]["checkout_observation"] = copy.deepcopy(signed["checkout_observation"])
+    return aligned
 
 
 def _attested_exercise_verdict(spec: dict, evidence: list[dict]) -> dict:
@@ -1413,11 +2010,39 @@ def _attested_exercise_catalog(
     spec: dict,
     evidence: list[dict],
 ) -> dict | None:
-    """Describe the NZ completeness boundary without promoting it to computed."""
+    """The NZ completeness boundary: computed when the denominator producer
+    cross-derives it from committed artifacts, attested otherwise."""
 
     path_string = spec.get("attested_exercise_catalog_receipt")
     if not path_string:
         return None
+    config = (spec.get("computed") or {}).get("exercise_denominator")
+    if isinstance(config, dict):
+        producer = _producer_module(str(config.get("producer") or ""))
+        try:
+            summary = producer.validate(repo_root=REPO_ROOT)
+        except ValueError as exc:
+            raise ValueError(f"exercise denominator failed to compute: {exc}") from exc
+        path = REPO_ROOT / path_string
+        evidence.append(
+            {
+                "claim": "compiled input universe and capture cardinality",
+                "mode": "computed",
+                "artifact": path_string,
+                "sha256": sha256_of(path),
+                "verification": "producer_cross_derivation",
+            }
+        )
+        return {
+            "mode": "computed",
+            "artifact": path_string,
+            "sha256": sha256_of(path),
+            "input_count": summary["input_count"],
+            "supplied_input_count": summary["supplied_input_count"],
+            "not_supplied_count": summary["not_supplied_count"],
+            "expected_evaluation_count": summary["evaluation_count"],
+            "universe_source": summary["universe_source"],
+        }
     path = REPO_ROOT / path_string
     source = _load(path)
     catalog = source.get("exercise_input_catalog")
@@ -1578,9 +2203,7 @@ def _exercise_block(
                 else {"per_case_evidence_committed": has_evidence}
             ),
             "binding": (
-                row.get("trace_binding")
-                if view_scoped_traces
-                else row.get("binding")
+                row.get("trace_binding") if view_scoped_traces else row.get("binding")
             ),
             "reconciliation": (
                 row.get("root_reconciliation")
@@ -1595,9 +2218,7 @@ def _exercise_block(
                     "trace_binding": row.get("trace_binding"),
                     "root_reconciliation": row.get("root_reconciliation"),
                     "requested_output_roots": row.get("requested_output_roots"),
-                    "requested_output_root_sets": row.get(
-                        "requested_output_root_sets"
-                    ),
+                    "requested_output_root_sets": row.get("requested_output_root_sets"),
                     "root_set_receipts": row.get("root_set_receipts"),
                     "capture_lineage_mode": row.get("capture_lineage_mode"),
                 }
@@ -1681,16 +2302,144 @@ def _exercise_census_for(spec: dict) -> tuple[dict, list[dict]]:
     return census, evidence
 
 
+def _de_exercise_verdict(spec: dict) -> tuple[dict, bool]:
+    """Measure the requested DE inputs from the rederived 13-case record."""
+
+    report = _rederived_de_report()
+    experiment = report.get("experiment")
+    active = experiment.get("active_inputs") if isinstance(experiment, dict) else None
+    if not isinstance(active, dict):
+        raise ValueError("DE unified record has no computed exercise receipt")
+    required = spec.get("computed_de_exercise")
+    if not isinstance(required, list) or not required:
+        raise ValueError("DE exercise gate has no required varied fields")
+    fields = {}
+    complete = len(report.get("cases") or []) == 13
+    for name in required:
+        row = active.get(name)
+        if not isinstance(row, dict):
+            raise ValueError(f"DE exercise receipt has no field {name!r}")
+        values = row.get("observed_values")
+        if not isinstance(values, list) or not values:
+            raise ValueError(f"DE exercise field {name!r} has no observations")
+        distinct = len({json.dumps(value, sort_keys=True) for value in values})
+        expected_state = "varied" if distinct > 1 else "constant"
+        if row.get("distinct") != distinct or row.get("state") != expected_state:
+            raise ValueError(f"DE exercise field {name!r} self-asserts variation")
+        if row.get("observations") != 13:
+            raise ValueError(f"DE exercise field {name!r} does not cover 13 cases")
+        fields[name] = {
+            "state": expected_state,
+            "distinct": distinct,
+            "observed_values": values,
+            "observations": row["observations"],
+        }
+        complete = complete and expected_state == "varied"
+    return (
+        {
+            "value": complete,
+            "mode": "computed",
+            "status": "computed_pass" if complete else "computed_open",
+            "cases": 13,
+            "view": "de/kindergeld",
+            "fields": fields,
+            "source": (
+                "canonical de_worker_dual_oracle_cases rebound to the unified "
+                "record's inline cases"
+            ),
+        },
+        complete,
+    )
+
+
+def _de_census_row(program: str, evidence: list[dict]) -> dict:
+    census = _rederived_de_census()
+    path = REPO_ROOT / "conformance" / "de-certificate-census.json"
+    row = (census.get("programs") or {}).get(program)
+    if not isinstance(row, dict):
+        raise ValueError(f"DE certificate census has no row for {program}")
+    evidence.append(
+        {
+            "claim": f"certificate candidate census:{program}",
+            "mode": "computed",
+            "artifact": path.relative_to(REPO_ROOT).as_posix(),
+            "sha256": sha256_of(path),
+        }
+    )
+    return row
+
+
+def _build_pending_de_certificate(program: str, spec: dict) -> dict:
+    """Emit a fail-closed certificate for a declared candidate with no run."""
+
+    evidence: list[dict] = []
+    row = _de_census_row(program, evidence)
+    closed = _closed_verdict(program, spec, evidence)
+    blockers = list(row.get("blockers") or [])
+    return {
+        "schema": SCHEMA,
+        "program": program,
+        "period": spec["period"],
+        "certified": {
+            "value": False,
+            "state": "no",
+            "rule": "computed(conformant AND exercised AND closed AND executable) "
+            "with zero open defects",
+        },
+        "declared_root_set": {
+            "mode": "computed",
+            "root_nodes": row.get("root_nodes"),
+            "citation_roots": row.get("declared_roots"),
+        },
+        "verdicts": {
+            "conformant": {
+                "value": False,
+                "mode": "computed",
+                "status": "computed_open",
+                "reference_legs": [],
+                "missing": "no comparison record has been declared",
+            },
+            "exercised": {
+                "value": False,
+                "mode": "computed",
+                "status": "computed_open",
+                "missing": "no comparison corpus has been declared",
+            },
+            "closed": closed,
+            "executable": {
+                "value": False,
+                "mode": "computed",
+                "status": "computed_open",
+                "missing_inputs": ["executable reproduction contract"],
+            },
+        },
+        "blockers": blockers,
+        "evidence": evidence,
+        "_comment": (
+            "Generated pending DE certificate. The declaration is visible and "
+            "fail-closed; no empty suite, attested signature, or absent producer "
+            "can satisfy a certification premise."
+        ),
+    }
+
+
 def build_certificate(
     program: str,
     spec: dict,
     *,
     verify_producers: bool = False,
 ) -> dict:
-    if spec.get("attested_exercise_receipt"):
+    if spec.get("pending_de_candidate"):
+        return _build_pending_de_certificate(program, spec)
+    if spec.get("computed_de_exercise"):
+        census, evidence = {}, []
+    elif spec.get("attested_exercise_receipt"):
         census, evidence = {}, []
     else:
         census, evidence = _exercise_census_for(spec)
+    de_census_row = (
+        _de_census_row(program, evidence) if spec.get("de_census_program") else None
+    )
     legs = []
     all_defects: list[str] = []
     for entry in spec["suites"]:
@@ -1706,7 +2455,9 @@ def build_certificate(
     conformant = bool(reference_legs) and all(leg["clean"] for leg in reference_legs)
     reality_leads = sum(leg["mismatches"] for leg in reality_legs)
 
-    if spec.get("attested_exercise_receipt"):
+    if spec.get("computed_de_exercise"):
+        exercised_block, exercise_complete = _de_exercise_verdict(spec)
+    elif spec.get("attested_exercise_receipt"):
         exercised_block = _attested_exercise_verdict(spec, evidence)
         exercise_complete = False
     else:
@@ -1725,21 +2476,50 @@ def build_certificate(
                         "root sets observed in the committed traces"
                     ),
                     "catalog_completeness": catalog_completeness,
-                    "capture_lineage": {
-                        "mode": "attested",
-                        "limitation": (
-                            "The external capture instrumentation and executable "
-                            "capture transcript are not committed in this repository."
-                        ),
-                    },
+                    "capture_lineage": (
+                        {
+                            "mode": "computed",
+                            "basis": (
+                                "committed evaluation traces bind to the "
+                                "byte-verified compiled artifact and pinned "
+                                "engine, and their cardinality cross-derives "
+                                "from the committed record; traces are a lower "
+                                "bound on exercise — an unrecorded call could "
+                                "only add variation, never subtract it — so "
+                                "with the denominator derived from the "
+                                "committed artifact, capture completeness is "
+                                "not load-bearing"
+                            ),
+                        }
+                        if catalog_completeness.get("mode") == "computed"
+                        else {
+                            "mode": "attested",
+                            "limitation": (
+                                "The external capture instrumentation and "
+                                "executable capture transcript are not "
+                                "committed in this repository."
+                            ),
+                        }
+                    ),
                 }
                 if catalog_completeness is not None
                 else {}
             ),
         }
 
-    blockers = [*all_defects, *(spec.get("blockers") or [])]
+    blockers = [
+        *all_defects,
+        *(spec.get("blockers") or []),
+        *(
+            []
+            if spec.get("computed_de_executable")
+            else ((de_census_row or {}).get("blockers") or [])
+        ),
+    ]
     for leg in reference_legs:
+        for missing in leg.get("missing_required_legs") or []:
+            if not spec.get("computed_de_executable"):
+                blockers.append(f"{leg['suite']}: missing required leg {missing}")
         if leg["unexplained"] or leg["axiom_attributed_open"]:
             open_classes = leg.get("axiom_attributed_open_classes") or {}
             open_detail = ", ".join(
@@ -1770,16 +2550,25 @@ def build_certificate(
     executable_block = _executable_verdict(
         program, spec, legs, evidence, verify_producer=verify_producers
     )
+    if program == "de/kindergeld":
+        closed_block = _align_de_closed_signature(closed_block, executable_block)
+    blockers.extend(closed_block.get("blockers") or [])
+    blockers.extend(executable_block.get("blockers") or [])
+    blockers = list(dict.fromkeys(blockers))
     scope = None
     scope_suite = spec.get("scope_from_suite")
     if scope_suite is not None:
-        scope_entries = [entry for entry in spec["suites"] if entry["suite"] == scope_suite]
+        scope_entries = [
+            entry for entry in spec["suites"] if entry["suite"] == scope_suite
+        ]
         if len(scope_entries) != 1:
             raise ValueError(f"{program}: scope_from_suite must name exactly one suite")
         scope_report = _load(
             _repo_artifact_path(scope_entries[0]["report"], label=f"{program} scope")
         )
-        raw_scope = scope_report.get("scope") if isinstance(scope_report, dict) else None
+        raw_scope = (
+            scope_report.get("scope") if isinstance(scope_report, dict) else None
+        )
         required_scope = {
             "trajectory_quotient_label",
             "limitation",
@@ -1805,11 +2594,21 @@ def build_certificate(
     # regenerated ledger at a different commit would pass its own check while
     # the receipt sat at another — "the encoded law is closed at X" and "the
     # encoded law executes at Y" is not a certificate about one artifact.
-    # Both blocks are producer-computed for DK; a mismatch is a blocker on
-    # the certificate (never a crash), so certified cannot be yes on it.
+    # Both blocks are producer-computed for DK and NZ; a mismatch is a blocker
+    # on the certificate (never a crash), so certified cannot be yes on it.
     closed_commit = closed_block.get("rulespec_commit")
     executable_commit = executable_block.get("rulespec_sha")
-    if closed_block.get("mode") == "computed" and executable_block.get("mode") == "computed":
+    computed_config = spec.get("computed")
+    producer_pair = (
+        isinstance(computed_config, dict)
+        and isinstance(computed_config.get("closed"), dict)
+        and isinstance(computed_config.get("executable"), dict)
+    )
+    if (
+        producer_pair
+        and closed_block.get("mode") == "computed"
+        and executable_block.get("mode") == "computed"
+    ):
         # Fail closed: two computed premises with no comparable provenance is
         # a blocker, not a silent skip — a 40-DIGIT integer commit slipped
         # through a str()-coercing validator and would have skipped this
@@ -1835,6 +2634,7 @@ def build_certificate(
                 f"{closed_commit[:12]} vs executable receipt {executable_commit[:12]}; "
                 "regenerate both at one commit"
             )
+
     # The single public predicate (adopted from the 2026-07-26 design review):
     # "certified" is reserved for the conjunction of all four verdicts holding
     # in computed mode with no open defects. A certificate resting on attested
@@ -1863,7 +2663,9 @@ def build_certificate(
         certified_state = "no"
     elif not premises_computed:
         certified_state = "unavailable"
-    elif conformant and exercise_complete and not blockers and closed_true and exec_true:
+    elif (
+        conformant and exercise_complete and not blockers and closed_true and exec_true
+    ):
         certified_state = "yes"
     else:
         certified_state = "no"
@@ -1871,9 +2673,9 @@ def build_certificate(
     certified_rule = (
         "computed(conformant AND exercised AND closed AND executable) with zero "
         "open defects. A premise counts only when its mode is computed AND its "
-        "value is true; attested premises never satisfy it."
+        "value is true; attested premises never satisfy it. The canonical definition, including the closure requirements (spine, instruments, dependency closure with leaf discipline), is CERTIFIED.md at the repository root."
     )
-    if not premises_computed:
+    if not premises_computed or program == "de/kindergeld":
         certified_rule += (
             " state=unavailable means no producer computes closed/executable yet, "
             "so certification is not merely withheld but not yet offerable."
@@ -1882,6 +2684,17 @@ def build_certificate(
         "schema": SCHEMA,
         "program": program,
         "period": spec["period"],
+        **(
+            {
+                "declared_root_set": {
+                    "mode": "computed",
+                    "root_nodes": de_census_row.get("root_nodes"),
+                    "citation_roots": de_census_row.get("declared_roots"),
+                }
+            }
+            if de_census_row is not None
+            else {}
+        ),
         "certified": {
             "value": certified,
             "state": certified_state,
@@ -1891,9 +2704,14 @@ def build_certificate(
             "conformant": {
                 "value": conformant,
                 "mode": "computed",
-                "reference_legs": [leg for leg in legs if leg["oracle_type"] == "reference"],
+                "reference_legs": [
+                    leg for leg in legs if leg["oracle_type"] == "reference"
+                ],
                 "reality_legs": [
-                    {**leg, "note": "reality-oracle disagreements are leads, not defects"}
+                    {
+                        **leg,
+                        "note": "reality-oracle disagreements are leads, not defects",
+                    }
                     for leg in reality_legs
                 ],
                 "reality_leads": reality_leads,

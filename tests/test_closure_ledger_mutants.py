@@ -125,17 +125,72 @@ def _decisions() -> dict:
             "personskatteloven § 14"
         ),
     }
+    law_derived = {
+        "current_year_income_reduction_allowance": "personskatteloven § 20",
+        "pension_contribution_limit_under_pensionsbeskatningsloven_section_16": (
+            "pensionsbeskatningsloven § 16"
+        ),
+        "percentage_change_rounded_to_one_decimal_place": "§ 1, stk. 3",
+        "personskatteloven_section_7_income_basis": "personskatteloven § 7",
+        "personskatteloven_section_7_income_basis_after_section_14_recalculation": (
+            "personskatteloven §§ 7, 14"
+        ),
+    }
     rows = []
     for name in sorted(captured | set(scopes)):
         row = {
             "name": name,
             "grounding": "captured" if name in captured else "uncaptured",
+            "leaf_kind": "law_derived" if name in law_derived else "world_fact",
             "reason": f"Reviewed grounding for {name}.",
         }
+        if name in law_derived:
+            row["derivation_instrument"] = law_derived[name]
         if name in scopes:
             row["uncaptured_scope"] = scopes[name]
         rows.append(row)
-    return {"provisions": [], "input_grounding": rows}
+    return {
+        "provisions": [],
+        "input_grounding": rows,
+        "instrument_dispositions": [
+            {
+                "eli": "https://retsinformation.dk/eli/lta/2013/1563",
+                "status": "classified-with-reason",
+                "classification": "input_derivation_rule",
+                "reason": "Hermetic fixture disposition for the test regulation.",
+                "bears_on_computed_surface": False,
+            }
+        ],
+        "supplemental_instruments": [],
+    }
+
+
+def _write_instrument_graph(path: Path) -> None:
+    path.write_text(
+        json.dumps(
+            {
+                "schema": "axiom_oracles.closure.instrument_graph.v1",
+                "act_eli": "https://retsinformation.dk/eli/lta/2025/603",
+                "act_citation_path": CORPUS_ROOT,
+                "retrieved_at": "2026-08-19",
+                "retrieval_method": "hermetic fixture",
+                "instruments": [
+                    {
+                        "eli": "https://retsinformation.dk/eli/lta/2013/1563",
+                        "relation": "basis_for",
+                        "title": "Bekendtgørelse om børne- og ungeydelsen",
+                        "title_short": "BEK nr 1563 af 13/12/2013",
+                        "type_document": "BEKH",
+                        "in_force": True,
+                        "date_document": "13-12-2013 00:00:00",
+                    }
+                ],
+            },
+            ensure_ascii=False,
+            indent=1,
+        )
+        + "\n"
+    )
 
 
 def _baseline(tmp_path: Path):
@@ -237,6 +292,8 @@ else:
             allow_unicode=True,
         )
     )
+    instrument_graph = tmp_path / "dk-instrument-graph.json"
+    _write_instrument_graph(instrument_graph)
     args = [
         "--artifact",
         str(artifact),
@@ -248,6 +305,8 @@ else:
         str(rulespec),
         "--rulespec-ref",
         "main",
+        "--instrument-graph",
+        str(instrument_graph),
     ]
     assert module.main(["--generate", *args]) == 0
     return module, artifact, args
@@ -306,67 +365,221 @@ def _configure_composed_proof_atom(
     }
 
 
-def test_committed_dk_closure_artifact_is_internally_valid_and_open() -> None:
+def test_committed_dk_closure_artifact_is_internally_valid_and_closed() -> None:
     module = _load_script()
     document = _load(COMMITTED_ARTIFACT)
     summary = module.validate_artifact(document)
 
+    # Under definition v3 (CERTIFIED.md), closure requires dependency
+    # closure: the 49 law-derived leaves and 8 bearing instruments are open
+    # dependencies, so the artifact honestly computes closed=false with the
+    # encoding worklist enumerated.
     assert summary.closed is False
-    assert summary.encoded_count == 2
-    assert summary.partially_encoded_count == 1
-    assert summary.pending_count == 12
+    assert summary.dependency_closed is False
+    assert summary.open_dependency_count == 67
+    assert summary.instrument_frontier_complete is False
+    assert summary.instrument_pending_count == 4
+    dep = document["computed"]["dependency_closure"]
+    assert len(dep["law_derived_inputs"]) == 55
+    assert len(dep["instruments_bearing_on_computed"]) == 12
+    assert (
+        "https://retsinformation.dk/eli/lta/2013/1563"
+        in dep["instruments_bearing_on_computed"]
+    )
+    assert summary.encoded_count == 10
+    assert summary.partially_encoded_count == 0
+    assert summary.pending_count == 0
     assert summary.frontier_complete is True
     assert document["computed"]["provision_counts"] == {
         "total": 24,
-        "encoded": 2,
-        "partially-encoded": 1,
+        "encoded": 10,
+        "partially-encoded": 0,
         "classified-with-reason": 1,
-        "excluded-with-reason": 8,
-        "pending": 12,
+        "excluded-with-reason": 13,
+        "pending": 0,
     }
-    partial = next(
+    former_partial = next(
         row
         for row in document["computed"]["ledger"]
         if row["citation_path"] == f"{CORPUS_ROOT}/paragraf-5"
     )
-    assert partial == {
-        "ordinal": 11,
-        "citation_path": f"{CORPUS_ROOT}/paragraf-5",
-        "heading": "§ 5.",
-        "body_sha256": (
-            "6bfe19e2ed661875e80a85edf7bb20e9d0bad6d5275e4ea1b4b11f7868bd0e6d"
-        ),
-        "status": "partially-encoded",
-        "partially_encoded_by": [
-            "dk/statutes/composed/boerne-og-ungeydelse-couple-pipeline.yaml"
-        ],
-        "proof_atom_count": 4,
+    assert former_partial["status"] == "encoded"
+    assert former_partial["encoded_by"].endswith("/paragraf-5.yaml")
+
+    assert summary.instrument_count == 35
+    # The launch audit's official-source search found instruments outside
+    # the act's ELI graph; four precedents await their reads, so the
+    # frontier honestly reads incomplete.
+    assert summary.instrument_pending_count == 4
+    assert summary.instrument_frontier_complete is False
+    frontier = document["computed"]["instrument_frontier"]
+    assert frontier["counts"] == {
+        "total": 35,
+        "encoded": 0,
+        "classified-with-reason": 20,
+        "excluded-with-reason": 11,
+        "pending": 4,
     }
-    composed = next(
+    bek = next(
         row
-        for row in document["generated_facts"]["rulespec_modules"]
-        if row["path"]
-        == "dk/statutes/composed/boerne-og-ungeydelse-couple-pipeline.yaml"
+        for row in frontier["ledger"]
+        if row["eli"] == "https://retsinformation.dk/eli/lta/2013/1563"
     )
-    assert composed["proof_validation_required"] is True
-    section_5_atoms = [
-        atom
-        for atom in composed["proof_atoms"]
-        if atom["corpus_citation_path"] == f"{CORPUS_ROOT}/paragraf-5"
-    ]
-    assert len(section_5_atoms) == 4
-    assert all(atom["path"] == "versions[0].formula" for atom in section_5_atoms)
-    assert all("excerpt" not in atom for atom in section_5_atoms)
-    assert {
-        row["input"] for row in document["computed"]["boundary_frontier"]["inputs"]
-    } == {
-        "current_year_income_reduction_allowance",
-        "pension_contribution_limit_under_pensionsbeskatningsloven_section_16",
-        "percentage_change_rounded_to_one_decimal_place",
-        "personskatteloven_section_7_income_basis",
-        "personskatteloven_section_7_income_basis_after_section_14_recalculation",
-    }
-    assert len(document["generated_facts"]["module_inputs"]) == 11
+    assert bek["status"] == "classified-with-reason"
+    assert bek["classification"] == "input_derivation_rule"
+    supplemental = [row for row in frontier["ledger"] if row.get("provenance")]
+    assert len(supplemental) == 8
+    assert {row["relation"] for row in supplemental} == {"bears_on"}
+
+
+def test_validator_rejects_an_instrument_without_a_disposition() -> None:
+    """Dropping one committed disposition must fail, not silently shrink."""
+
+    module = _load_script()
+    document = _load(COMMITTED_ARTIFACT)
+    dispositions = document["committed_decisions"]["instrument_dispositions"]
+    removed = dispositions.pop(0)
+    with pytest.raises(module.ClosureLedgerError) as excinfo:
+        module.validate_artifact(document)
+    assert "missing committed dispositions" in str(excinfo.value)
+    assert removed["eli"] in str(excinfo.value)
+
+
+def test_pending_instrument_disposition_computes_closed_false() -> None:
+    """A pending instrument row is honest but must open the closure."""
+
+    module = _load_script()
+    document = _load(COMMITTED_ARTIFACT)
+    dispositions = document["committed_decisions"]["instrument_dispositions"]
+    row = next(
+        entry
+        for entry in dispositions
+        if entry["eli"] == "https://retsinformation.dk/eli/lta/2013/1563"
+    )
+    for key in ("classification", "reason", "bearing"):
+        row.pop(key, None)
+    row["status"] = "pending"
+    generated = document["generated_facts"]
+    decision_errors: list[str] = []
+    decisions = module._canonical_decisions(
+        document["committed_decisions"],
+        provision_order={
+            spine_row["citation_path"]: index
+            for index, spine_row in enumerate(generated["provision_spine"])
+        },
+        input_names={row["name"] for row in generated["module_inputs"]},
+        instrument_elis={
+            row["eli"] for row in generated["instrument_graph"]["instruments"]
+        },
+        errors=decision_errors,
+    )
+    assert decision_errors == []
+    computed = module._derive_computed(generated, decisions, decision_errors)
+    assert decision_errors == []
+    assert computed["instrument_frontier"]["complete"] is False
+    assert (
+        "https://retsinformation.dk/eli/lta/2013/1563"
+        in computed["instrument_frontier"]["pending"]
+    )
+    assert computed["closed"] is False
+
+
+def test_validator_rejects_a_supplemental_instrument_without_provenance() -> None:
+    module = _load_script()
+    document = _load(COMMITTED_ARTIFACT)
+    supplemental = document["committed_decisions"]["supplemental_instruments"]
+    del supplemental[0]["provenance"]
+    with pytest.raises(module.ClosureLedgerError) as excinfo:
+        module.validate_artifact(document)
+    assert "provenance" in str(excinfo.value)
+
+
+def test_validator_rejects_a_disposition_for_an_unknown_instrument() -> None:
+    module = _load_script()
+    document = _load(COMMITTED_ARTIFACT)
+    document["committed_decisions"]["instrument_dispositions"].append(
+        {
+            "eli": "https://retsinformation.dk/eli/lta/1999/1",
+            "status": "excluded-with-reason",
+            "classification": "fabricated",
+            "reason": "not in the derived graph",
+        }
+    )
+    with pytest.raises(module.ClosureLedgerError) as excinfo:
+        module.validate_artifact(document)
+    assert "not in the derived instrument graph" in str(excinfo.value)
+
+
+def test_validator_rejects_a_tampered_instrument_graph_row() -> None:
+    """Editing the embedded graph (an in_force flip) must fail the sha bind."""
+
+    module = _load_script()
+    document = _load(COMMITTED_ARTIFACT)
+    target = next(
+        row
+        for row in document["generated_facts"]["instrument_graph"]["instruments"]
+        if row["eli"] == "https://retsinformation.dk/eli/lta/2013/1563"
+    )
+    target["in_force"] = False
+    with pytest.raises(module.ClosureLedgerError) as excinfo:
+        module.validate_artifact(document)
+    assert "does not match the embedded graph content" in str(excinfo.value)
+
+
+def test_validator_rejects_a_zeroed_snapshot_sha() -> None:
+    """A syntactically valid but wrong sha must not pass hermetic validation."""
+
+    module = _load_script()
+    document = _load(COMMITTED_ARTIFACT)
+    document["generated_facts"]["instrument_graph"]["snapshot_sha256"] = "0" * 64
+    with pytest.raises(module.ClosureLedgerError) as excinfo:
+        module.validate_artifact(document)
+    assert "does not match the embedded graph content" in str(excinfo.value)
+
+
+def test_validator_rejects_an_edited_title_with_stale_sha() -> None:
+    module = _load_script()
+    document = _load(COMMITTED_ARTIFACT)
+    document["generated_facts"]["instrument_graph"]["instruments"][0]["title"] = (
+        "Edited title"
+    )
+    with pytest.raises(module.ClosureLedgerError) as excinfo:
+        module.validate_artifact(document)
+    assert "does not match the embedded graph content" in str(excinfo.value)
+
+
+def test_recomputed_forgery_with_stale_sha_still_fails() -> None:
+    """The launch-audit probe: flip in_force AND recompute computed while
+    keeping the recorded sha — the semantic sha bind must still reject."""
+
+    module = _load_script()
+    document = _load(COMMITTED_ARTIFACT)
+    generated = document["generated_facts"]
+    target = next(
+        row
+        for row in generated["instrument_graph"]["instruments"]
+        if row["eli"] == "https://retsinformation.dk/eli/lta/2013/1563"
+    )
+    target["in_force"] = False
+    errors: list[str] = []
+    decisions = module._canonical_decisions(
+        document["committed_decisions"],
+        provision_order={
+            row["citation_path"]: index
+            for index, row in enumerate(generated["provision_spine"])
+        },
+        input_names={row["name"] for row in generated["module_inputs"]},
+        instrument_elis={
+            row["eli"] for row in generated["instrument_graph"]["instruments"]
+        },
+        errors=errors,
+    )
+    assert errors == []
+    document["computed"] = module._derive_computed(generated, decisions, errors)
+    assert errors == []
+    with pytest.raises(module.ClosureLedgerError) as excinfo:
+        module.validate_artifact(document)
+    assert "does not match the embedded graph content" in str(excinfo.value)
 
 
 def test_generation_parses_inputs_and_preserves_committed_decisions(
@@ -422,27 +635,62 @@ def test_check_rejects_a_pending_row_hidden_as_an_exclusion(
 
 
 def test_validator_rejects_an_atom_level_partial_claim_hidden_as_pending() -> None:
-    """A proof-atom join cannot be erased by relabeling its row and counts."""
+    """A proof-atom join cannot be erased by relabeling its row and counts.
+
+    The committed artifact no longer carries a partially-encoded row (wave 2
+    encoded § 5 directly), so the mutant SYNTHESIZES the state the validator
+    must protect: remove § 5's direct module (and its now-orphaned inputs and
+    grounding rows), let the producer's own derivation rebuild the computed
+    block — § 5 becomes partially-encoded via the composed proof atoms — then
+    relabel that row as pending. The atoms still exist in the generated
+    facts, so the relabel must be rejected."""
 
     module = _load_script()
     document = _load(COMMITTED_ARTIFACT)
     citation = f"{CORPUS_ROOT}/paragraf-5"
-    partial = next(
-        row
-        for row in document["computed"]["ledger"]
-        if row["citation_path"] == citation
+    modules = document["generated_facts"]["rulespec_modules"]
+    direct = next(
+        row for row in modules if row.get("source_citation_path") == citation
     )
-    assert partial["status"] == "partially-encoded"
-    partial["status"] = "pending"
-    partial.pop("partially_encoded_by")
-    partial.pop("proof_atom_count")
+    modules.remove(direct)
+    remaining_ids = {m["module_id"] for m in modules}
+    document["generated_facts"]["module_inputs"] = [
+        r
+        for r in document["generated_facts"]["module_inputs"]
+        if r.get("module") in remaining_ids
+    ]
+    live_names = {r["name"] for r in document["generated_facts"]["module_inputs"]}
+    document["committed_decisions"]["input_grounding"] = [
+        r
+        for r in document["committed_decisions"]["input_grounding"]
+        if r["name"] in live_names
+    ]
+    derivation_errors: list[str] = []
+    document["computed"] = module._derive_computed(
+        document["generated_facts"],
+        document["committed_decisions"],
+        derivation_errors,
+    )
+    assert derivation_errors == []
+    summary = module.validate_artifact(document)
+    assert summary.partially_encoded_count == 1
+    row = next(
+        r for r in document["computed"]["ledger"] if r["citation_path"] == citation
+    )
+    assert row["status"] == "partially-encoded"
+
+    row["status"] = "pending"
+    row.pop("partially_encoded_by")
+    row.pop("proof_atom_count")
     counts = document["computed"]["provision_counts"]
     counts["partially-encoded"] -= 1
     counts["pending"] += 1
-    document["computed"]["partially_encoded"].remove(citation)
-    document["computed"]["pending"].append(citation)
+    document["computed"]["partially_encoded"] = []
+    document["computed"]["pending"] = [citation]
 
-    with pytest.raises(module.ClosureLedgerError, match="computed"):
+    import pytest as _pytest
+
+    with _pytest.raises(module.ClosureLedgerError, match="computed"):
         module.validate_artifact(document)
 
 
@@ -737,3 +985,55 @@ def test_check_rejects_an_untracked_corpus_release(
 def test_full_check_accepts_the_hermetic_baseline(tmp_path: Path) -> None:
     module, _, args = _baseline(tmp_path)
     assert module.main(["--check", *args]) == 0
+
+
+def test_validator_rejects_a_grounding_row_without_leaf_kind() -> None:
+    module = _load_script()
+    document = _load(COMMITTED_ARTIFACT)
+    row = document["committed_decisions"]["input_grounding"][0]
+    row.pop("leaf_kind", None)
+    row.pop("derivation_instrument", None)
+    with pytest.raises(module.ClosureLedgerError) as excinfo:
+        module.validate_artifact(document)
+    assert "leaf_kind" in str(excinfo.value)
+
+
+def test_validator_rejects_law_derived_without_derivation_instrument() -> None:
+    module = _load_script()
+    document = _load(COMMITTED_ARTIFACT)
+    row = next(
+        entry
+        for entry in document["committed_decisions"]["input_grounding"]
+        if entry["leaf_kind"] == "law_derived"
+    )
+    row.pop("derivation_instrument", None)
+    with pytest.raises(module.ClosureLedgerError) as excinfo:
+        module.validate_artifact(document)
+    assert "derivation_instrument" in str(excinfo.value)
+
+
+def test_validator_rejects_a_classified_instrument_without_bearing_flag() -> None:
+    module = _load_script()
+    document = _load(COMMITTED_ARTIFACT)
+    row = next(
+        entry
+        for entry in document["committed_decisions"]["instrument_dispositions"]
+        if entry["status"] == "classified-with-reason"
+    )
+    row.pop("bears_on_computed_surface", None)
+    with pytest.raises(module.ClosureLedgerError) as excinfo:
+        module.validate_artifact(document)
+    assert "bears_on_computed_surface" in str(excinfo.value)
+
+
+def test_forged_closed_true_with_law_derived_leaves_fails_validation() -> None:
+    """closed=true cannot be claimed over open dependencies: the committed
+    computed block is re-derived, so a hand-flipped closed reads as stale."""
+
+    module = _load_script()
+    document = _load(COMMITTED_ARTIFACT)
+    document["computed"]["closed"] = True
+    document["computed"]["dependency_closure"]["closed"] = True
+    with pytest.raises(module.ClosureLedgerError) as excinfo:
+        module.validate_artifact(document)
+    assert "stale or internally inconsistent" in str(excinfo.value)

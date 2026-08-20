@@ -527,6 +527,155 @@ def test_de_dual_oracle_registry_config_shape() -> None:
     )
 
 
+def test_de_axiom_pair_runner_is_registered() -> None:
+    run_comparison = load_run_comparison_module()
+
+    assert run_comparison.RUNNERS["de-axiom-oracle-compare"] is (
+        run_comparison._run_de_axiom_oracle_compare
+    )
+
+
+@pytest.mark.parametrize(
+    ("name", "oracle", "canonical_record"),
+    [
+        (
+            "de-worker-dual-oracle-axiom-euromod",
+            "euromod",
+            "comparisons/de-worker-dual-oracle/axiom-euromod.json",
+        ),
+        (
+            "de-worker-dual-oracle-axiom-gettsim",
+            "gettsim",
+            "comparisons/de-worker-dual-oracle/axiom-gettsim.json",
+        ),
+    ],
+)
+def test_de_axiom_pair_configs_have_exact_names_and_synchronized_pins(
+    name, oracle, canonical_record
+) -> None:
+    run_comparison = load_run_comparison_module()
+    executable = load_script_module("de_executable")
+    unified = load_script_module("de_unified_comparison")
+    config_path = COMPARISONS_DIR / f"{name}.yaml"
+    config = run_comparison._load_comparison(name)
+    params = config["runner"]["parameters"]
+
+    assert config_path.stem == config["name"] == name
+    assert config["runner"]["type"] == "de-axiom-oracle-compare"
+    assert params["suite"] == name
+    assert params["oracle"] == oracle
+    assert config["artifacts"]["canonical_record"] == canonical_record
+    assert config["selector"]["report"] == canonical_record
+
+    configured_pin = {
+        "commit": params["rulespec_upstream_sha"],
+        "tree": params["rulespec_upstream_tree"],
+    }
+    assert configured_pin == unified.RULESPEC_REF_PIN
+    assert configured_pin == {
+        "commit": executable.RULESPEC_PIN["commit"],
+        "tree": executable.RULESPEC_PIN["tree"],
+    }
+    assert all(
+        len(value) == 40 and set(value) <= set("0123456789abcdef")
+        for value in configured_pin.values()
+    )
+
+
+def test_load_comparison_rejects_internal_name_drift(monkeypatch, tmp_path):
+    """A selector name must resolve to a config declaring that exact name;
+    silently running a differently named config repeats the #295 failure."""
+
+    run_comparison = load_run_comparison_module()
+    comparisons = tmp_path / "comparisons"
+    comparisons.mkdir()
+    (comparisons / "expected-name.yaml").write_text(
+        "name: different-name\n"
+        "runner:\n"
+        "  type: de-axiom-oracle-compare\n"
+        "  parameters: {}\n"
+    )
+    monkeypatch.setattr(run_comparison, "COMPARISONS_DIR", comparisons)
+
+    with pytest.raises(SystemExit, match="config.*name|name.*config"):
+        run_comparison._load_comparison("expected-name")
+
+
+def test_canonical_record_path_accepts_only_comparisons_descendants(
+    monkeypatch, tmp_path
+):
+    run_comparison = load_run_comparison_module()
+    repo = tmp_path / "repo"
+    comparisons = repo / "comparisons"
+    comparisons.mkdir(parents=True)
+    monkeypatch.setattr(run_comparison, "REPO_ROOT", repo)
+
+    assert run_comparison._canonical_record_path({}) is None
+    assert run_comparison._canonical_record_path(
+        {
+            "artifacts": {
+                "canonical_record": (
+                    "comparisons/de-worker-dual-oracle/axiom-euromod.json"
+                )
+            }
+        }
+    ) == (comparisons / "de-worker-dual-oracle" / "axiom-euromod.json").resolve()
+
+    for unsafe in (
+        "",
+        str(tmp_path / "absolute.json"),
+        "../outside.json",
+        "dashboard/public/data/not-canonical.json",
+        "comparisons/../../outside.json",
+    ):
+        with pytest.raises(SystemExit, match="canonical_record"):
+            run_comparison._canonical_record_path(
+                {"artifacts": {"canonical_record": unsafe}}
+            )
+
+    outside = tmp_path / "outside"
+    outside.mkdir()
+    (comparisons / "escape").symlink_to(outside, target_is_directory=True)
+    with pytest.raises(SystemExit, match="canonical_record"):
+        run_comparison._canonical_record_path(
+            {
+                "artifacts": {
+                    "canonical_record": "comparisons/escape/record.json"
+                }
+            }
+        )
+
+
+def test_write_canonical_record_publishes_exact_bytes_atomically(
+    monkeypatch, tmp_path
+):
+    run_comparison = load_run_comparison_module()
+    source = tmp_path / "reports" / "source.json"
+    target = tmp_path / "comparisons" / "de" / "record.json"
+    source.parent.mkdir()
+    source.write_bytes(b'{"suite":"de-pair","revision":1}\n')
+    replaced = []
+    real_replace = run_comparison.os.replace
+
+    def recording_replace(staging, destination):
+        replaced.append((Path(staging), Path(destination)))
+        real_replace(staging, destination)
+
+    monkeypatch.setattr(run_comparison.os, "replace", recording_replace)
+
+    run_comparison._write_canonical_record(source, target)
+
+    assert target.read_bytes() == source.read_bytes()
+    assert len(replaced) == 1
+    assert replaced[0][1] == target
+    assert replaced[0][0].parent == target.parent
+    assert not list(target.parent.glob(f".{target.name}.*.tmp"))
+
+    source.write_bytes(b'{"suite":"de-pair","revision":2}\n')
+    run_comparison._write_canonical_record(source, target)
+    assert target.read_bytes() == source.read_bytes()
+
+
 def test_uk_efrs_runner_merges_universal_credit_surfaces(monkeypatch, tmp_path):
     run_comparison = load_run_comparison_module()
     axiom_encode = tmp_path / "axiom-encode"

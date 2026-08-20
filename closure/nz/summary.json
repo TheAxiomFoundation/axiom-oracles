@@ -2,6 +2,14 @@
   "closed": false,
   "corpus_commit": "3f7b5d985bce759cb487f1b7fd050f5cbf007d17",
   "corpus_release": "nz-rulespec-2026-07-18",
+  "denominator_ratchet": {
+    "artifact": "closure/nz/denominator-ratchet.json",
+    "sha256": "01ec01be8ae1ee0ae2717ab4f0a1e58ea265a4166c9f65883986d46f8e43e786"
+  },
+  "executable_request_evidence": {
+    "artifact": "conformance/executable/nz-treasury-incomeexplorer/requests.json",
+    "sha256": "ed83b26c3221c253b13a9df307567e09948b2e9337ff5289729276b6b6ed6272"
+  },
   "jurisdiction": "nz",
   "pending_citations": [
     "nz/guidance/acc/loss-of-potential-earnings",
@@ -51,6 +59,10 @@
         }
       ],
       "closed": true,
+      "denominator_ratchet": {
+        "citation_count_min": 2,
+        "requested_output_count_min": 1
+      },
       "pending_citations": [],
       "pending_money_atoms": 0,
       "root_node_count": 1,
@@ -94,6 +106,10 @@
         }
       ],
       "closed": true,
+      "denominator_ratchet": {
+        "citation_count_min": 5,
+        "requested_output_count_min": 3
+      },
       "pending_citations": [],
       "pending_money_atoms": 0,
       "root_node_count": 3,
@@ -154,6 +170,10 @@
         }
       ],
       "closed": true,
+      "denominator_ratchet": {
+        "citation_count_min": 8,
+        "requested_output_count_min": 1
+      },
       "pending_citations": [],
       "pending_money_atoms": 0,
       "root_node_count": 1,
@@ -177,6 +197,10 @@
         }
       ],
       "closed": true,
+      "denominator_ratchet": {
+        "citation_count_min": 1,
+        "requested_output_count_min": 1
+      },
       "pending_citations": [],
       "pending_money_atoms": 0,
       "root_node_count": 1,
@@ -230,6 +254,10 @@
         }
       ],
       "closed": true,
+      "denominator_ratchet": {
+        "citation_count_min": 7,
+        "requested_output_count_min": 2
+      },
       "pending_citations": [],
       "pending_money_atoms": 0,
       "root_node_count": 2,
@@ -254,6 +282,10 @@
         }
       ],
       "closed": true,
+      "denominator_ratchet": {
+        "citation_count_min": 1,
+        "requested_output_count_min": 1
+      },
       "pending_citations": [],
       "pending_money_atoms": 0,
       "root_node_count": 1,
@@ -437,6 +469,10 @@
         }
       ],
       "closed": true,
+      "denominator_ratchet": {
+        "citation_count_min": 33,
+        "requested_output_count_min": 10
+      },
       "pending_citations": [],
       "pending_money_atoms": 0,
       "root_node_count": 10,
@@ -454,6 +490,10 @@
       ],
       "subgraph_node_count": 72
     }
+  },
+  "requested_output_trace": {
+    "artifact": "comparisons/nz-treasury-incomeexplorer/evaluation-traces.json",
+    "sha256": "43cca386b15e71fc07fa8fb223b2bef8d351e0bb56ecfdf05fe98e790e66f4da"
   },
   "roots": [
     {

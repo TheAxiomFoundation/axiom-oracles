@@ -1,0 +1,300 @@
+{
+  "aggregates": [
+    {
+      "claim_mode": "computed",
+      "comparison": "amount",
+      "comparison_count": 13,
+      "concept": "de:policies/worker_dual_oracle_baseline#kindergeld_monthly",
+      "error_count": 0,
+      "left_weighted_sum": 765,
+      "match_count": 13,
+      "mismatch_count": 0,
+      "right_weighted_sum": 765
+    }
+  ],
+  "cases": [
+    {
+      "case_id": "single-w-500",
+      "metadata": {
+        "child_count": 0,
+        "yearly_earned_income_total": 6000
+      },
+      "source_case_claim_mode": "computed"
+    },
+    {
+      "case_id": "single-w-1200",
+      "metadata": {
+        "child_count": 0,
+        "yearly_earned_income_total": 14400
+      },
+      "source_case_claim_mode": "computed"
+    },
+    {
+      "case_id": "single-w-2500",
+      "metadata": {
+        "child_count": 0,
+        "yearly_earned_income_total": 30000
+      },
+      "source_case_claim_mode": "computed"
+    },
+    {
+      "case_id": "single-w-4000",
+      "metadata": {
+        "child_count": 0,
+        "yearly_earned_income_total": 48000
+      },
+      "source_case_claim_mode": "computed"
+    },
+    {
+      "case_id": "single-w-5500",
+      "metadata": {
+        "child_count": 0,
+        "yearly_earned_income_total": 66000
+      },
+      "source_case_claim_mode": "computed"
+    },
+    {
+      "case_id": "single-w-7500",
+      "metadata": {
+        "child_count": 0,
+        "yearly_earned_income_total": 90000
+      },
+      "source_case_claim_mode": "computed"
+    },
+    {
+      "case_id": "single-w-9000",
+      "metadata": {
+        "child_count": 0,
+        "yearly_earned_income_total": 108000
+      },
+      "source_case_claim_mode": "computed"
+    },
+    {
+      "case_id": "single-w-12000",
+      "metadata": {
+        "child_count": 0,
+        "yearly_earned_income_total": 144000
+      },
+      "source_case_claim_mode": "computed"
+    },
+    {
+      "case_id": "single-e-4000",
+      "metadata": {
+        "child_count": 0,
+        "yearly_earned_income_total": 48000
+      },
+      "source_case_claim_mode": "computed"
+    },
+    {
+      "case_id": "couple-8000-0",
+      "metadata": {
+        "child_count": 0,
+        "yearly_earned_income_total": 96000
+      },
+      "source_case_claim_mode": "computed"
+    },
+    {
+      "case_id": "couple-4000-2000",
+      "metadata": {
+        "child_count": 0,
+        "yearly_earned_income_total": 72000
+      },
+      "source_case_claim_mode": "computed"
+    },
+    {
+      "case_id": "parent-1child-4000",
+      "metadata": {
+        "child_count": 1,
+        "yearly_earned_income_total": 48000
+      },
+      "source_case_claim_mode": "computed"
+    },
+    {
+      "case_id": "parent-2children-4000",
+      "metadata": {
+        "child_count": 2,
+        "yearly_earned_income_total": 48000
+      },
+      "source_case_claim_mode": "computed"
+    }
+  ],
+  "dataset_identity": {
+    "claim_mode": "computed",
+    "sha256": "db63064fed6fa91fb3a34096b0997fed2e11ac52db2b22516e2e00da2aace951"
+  },
+  "engines": {
+    "left": "euromod",
+    "right": "gettsim"
+  },
+  "experiment": {
+    "active_inputs": {
+      "child_count": {
+        "claim_mode": "computed",
+        "distinct": 3,
+        "observations": 13,
+        "observed_values": [
+          0,
+          1,
+          2
+        ],
+        "state": "varied"
+      },
+      "yearly_earned_income_total": {
+        "claim_mode": "computed",
+        "distinct": 10,
+        "observations": 13,
+        "observed_values": [
+          6000,
+          14400,
+          30000,
+          48000,
+          66000,
+          72000,
+          90000,
+          96000,
+          108000,
+          144000
+        ],
+        "state": "varied"
+      }
+    },
+    "bridged_through": {},
+    "claim_mode": "computed",
+    "schema": "axiom.experiment_boundary_receipt.v1"
+  },
+  "mismatches": [],
+  "period": "2025",
+  "population": "de-worker-dual-oracle-13-households",
+  "provenance": {
+    "generated_by": "scripts/de_unified_comparison.py",
+    "legacy_dispositions_used": false,
+    "source_engine_metadata": {
+      "euromod": {
+        "country": "DE",
+        "dataset": "DE_2024_b1_2015_03_e2",
+        "extra_columns": [
+          "drgn1"
+        ],
+        "system": "DE_2025",
+        "template_dataset": "DE_training_data"
+      },
+      "gettsim": {
+        "engine": "gettsim",
+        "gettsim_version": "1.2.1",
+        "policy_date_str": "2025-06-30",
+        "rounding": true
+      }
+    },
+    "source_engine_metadata_claim_mode": "attested",
+    "source_report": {
+      "artifact": "dashboard/public/data/euromod-gettsim-de-worker-dual-oracle.json",
+      "claim_mode": "computed",
+      "sha256": "2f27b71f1df9c3df51540ee3595d13ecb1f7d20bbbd93edf37042ccbd484c0f5"
+    }
+  },
+  "record_schema": "axiom.unified_comparison_record.v1",
+  "schema_version": "axiom.comparison_report.v2",
+  "suite": "de-worker-dual-oracle",
+  "summary": {
+    "claim_mode": "computed",
+    "comparison_count": 13,
+    "error_count": 0,
+    "match_count": 13,
+    "mismatch_count": 0
+  },
+  "tuple": {
+    "jurisdiction": "de",
+    "oracles": {
+      "euromod": {
+        "metadata_claim_mode": "attested",
+        "release": "J2.0+",
+        "system": "DE_2025"
+      },
+      "gettsim": {
+        "metadata_claim_mode": "attested",
+        "policy_date": "2025-06-30",
+        "version": "1.2.1"
+      }
+    },
+    "population": {
+      "case_count": 13,
+      "claim_mode": "computed",
+      "id": "de-worker-dual-oracle-13-households",
+      "sha256": "db63064fed6fa91fb3a34096b0997fed2e11ac52db2b22516e2e00da2aace951"
+    }
+  },
+  "views": {
+    "de/kindergeld": {
+      "claim_mode": "computed",
+      "columns": [
+        "de:policies/worker_dual_oracle_baseline#kindergeld_monthly"
+      ],
+      "kind": "subgraph",
+      "legs": [
+        {
+          "claim_mode": "computed",
+          "comparison_count": 13,
+          "engines": [
+            "euromod",
+            "gettsim"
+          ],
+          "error_count": 0,
+          "id": "euromod-gettsim",
+          "left_weighted_sum": 765,
+          "match_count": 13,
+          "mismatch_count": 0,
+          "right_weighted_sum": 765,
+          "state": "complete"
+        },
+        {
+          "artifact": "comparisons/de-worker-dual-oracle/axiom-euromod.json",
+          "artifact_sha256": "dca8dd5427db03d7da1fe6f310c35b7b52f6621a2e2ebaab5700d277e20c3b57",
+          "claim_mode": "computed",
+          "comparison_count": 13,
+          "error_count": 0,
+          "id": "axiom-euromod",
+          "left_weighted_sum": 765.0,
+          "match_count": 13,
+          "mismatch_count": 0,
+          "population_sha256": "db63064fed6fa91fb3a34096b0997fed2e11ac52db2b22516e2e00da2aace951",
+          "right_weighted_sum": 765.0,
+          "state": "complete"
+        },
+        {
+          "artifact": "comparisons/de-worker-dual-oracle/axiom-gettsim.json",
+          "artifact_sha256": "1327828a6812cb9f463d5bddbe5864e7812cb5e6d7eae53e98f3f75a80f03107",
+          "claim_mode": "computed",
+          "comparison_count": 13,
+          "error_count": 0,
+          "id": "axiom-gettsim",
+          "left_weighted_sum": 765.0,
+          "match_count": 13,
+          "mismatch_count": 0,
+          "population_sha256": "db63064fed6fa91fb3a34096b0997fed2e11ac52db2b22516e2e00da2aace951",
+          "right_weighted_sum": 765.0,
+          "state": "complete"
+        }
+      ],
+      "missing_for_certification": [],
+      "required_axiom_legs": [
+        "axiom-euromod",
+        "axiom-gettsim"
+      ],
+      "root_nodes": [
+        "de:statutes/estg/66#monthly_kindergeld_per_child"
+      ],
+      "scope": "amount",
+      "summary": {
+        "claim_mode": "computed",
+        "comparison": "amount",
+        "comparison_count": 13,
+        "concept": "de:policies/worker_dual_oracle_baseline#kindergeld_monthly",
+        "error_count": 0,
+        "left_weighted_sum": 765,
+        "match_count": 13,
+        "mismatch_count": 0,
+        "right_weighted_sum": 765
+      }
+    }
+  }
+}

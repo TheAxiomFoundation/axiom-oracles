@@ -178,6 +178,12 @@ def test_dk_all_four_computed_premises_flow_to_certificate() -> None:
         (REPO_ROOT / "certificates/dk-boerne-og-ungeydelse.json").read_text()
     )
     verdicts = certificate["verdicts"]
+    # Under definition v3 (CERTIFIED.md), closed additionally requires
+    # dependency closure: no law-derived leaf may be case-supplied, and no
+    # classified instrument may bear on a computed surface. The dk ledger
+    # honestly declares 49 law-derived leaves and 8 bearing instruments, so
+    # closed computes false and certified reads no with the encoding
+    # worklist in the verdict.
     assert {
         name: (block["mode"], block["value"]) for name, block in verdicts.items()
     } == {
@@ -186,6 +192,18 @@ def test_dk_all_four_computed_premises_flow_to_certificate() -> None:
         "closed": ("computed", False),
         "executable": ("computed", True),
     }
+    closed_verdict = verdicts["closed"]
+    # The launch audit's official-source search found bearing instruments
+    # outside the act's ELI graph (B-1-96, B-1-08, BEK 1063/2019, four
+    # precedents pending) — so the instrument frontier honestly reads
+    # incomplete until the pending reads land, and the link graph alone is
+    # demonstrated insufficient as a discovery channel.
+    assert closed_verdict["instrument_frontier"]["complete"] is False
+    dependency = closed_verdict["dependency_closure"]
+    assert dependency["closed"] is False
+    assert dependency["open_dependency_count"] == 67
+    assert len(dependency["law_derived_inputs"]) == 55
+    assert len(dependency["instruments_bearing_on_computed"]) == 12
     assert not any(
         blocker.startswith("exercise:") for blocker in certificate["blockers"]
     )

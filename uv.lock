@@ -71,6 +71,7 @@ version = "0.2.1"
 source = { editable = "." }
 dependencies = [
     { name = "click" },
+    { name = "cryptography" },
     { name = "pyyaml" },
     { name = "requests" },
 ]
@@ -100,6 +101,7 @@ taxsim = [
 [package.metadata]
 requires-dist = [
     { name = "click", specifier = ">=8.1" },
+    { name = "cryptography", specifier = ">=44.0" },
     { name = "gettsim", marker = "extra == 'gettsim'", specifier = "==1.2" },
     { name = "pandas", marker = "extra == 'dev'", specifier = ">=2.2" },
     { name = "policyengine", extras = ["us"], marker = "extra == 'policyengine'", specifier = "==5.0.0" },

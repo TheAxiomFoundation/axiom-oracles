@@ -1,0 +1,197 @@
+{
+  "_comment": "Generated pending DE certificate. The declaration is visible and fail-closed; no empty suite, attested signature, or absent producer can satisfy a certification premise.",
+  "blockers": [
+    "no comparison record has been declared",
+    "de/regulation/bsv-2018/1: encoding and 2025 temporal evidence pending",
+    "de/statute/sgb-6/168: signature pending",
+    "executable reproduction receipt pending"
+  ],
+  "certified": {
+    "rule": "computed(conformant AND exercised AND closed AND executable) with zero open defects",
+    "state": "no",
+    "value": false
+  },
+  "declared_root_set": {
+    "citation_roots": [
+      {
+        "attestation": {
+          "ref": "d83ba3db30e2f63376aacf822d116687589b8564",
+          "repository": "TheAxiomFoundation/rulespec-de"
+        },
+        "citation_path": "de/regulation/bsv-2018/1",
+        "claim_mode": "attested",
+        "classification": "pending",
+        "reason": "no RuleSpec encoding exists and the 2018 text alone does not prove that the 18.6 percent rate applies in 2025",
+        "role": "governing",
+        "signature_state": "pending"
+      },
+      {
+        "attestation": {
+          "path": ".axiom/encoding-manifests/de/regulations/svbezgrv-2025/4.json",
+          "ref": "d83ba3db30e2f63376aacf822d116687589b8564",
+          "repository": "TheAxiomFoundation/rulespec-de",
+          "sha256": "a46035cf77c7d2a9e15a6aeb64fee6b49c10991179f3a2388188cafd973dab32"
+        },
+        "citation_path": "de/regulation/svbezgrv-2025/4",
+        "claim_mode": "attested",
+        "classification": "encoded",
+        "reason": "signed ceiling encoding is merged on the pinned main commit",
+        "role": "dependency",
+        "signature_state": "signed"
+      },
+      {
+        "attestation": {
+          "ref": "203420d",
+          "repository": "TheAxiomFoundation/rulespec-de",
+          "sha256": "8a21603735171601927e2cbd626c0566a9c9d145c20263d78cb1dd849a79313c"
+        },
+        "citation_path": "de/statute/sgb-6/168",
+        "claim_mode": "attested",
+        "classification": "encoded",
+        "reason": "reviewed encoding exists but is not signed or merged",
+        "role": "governing",
+        "scope": "Absatz 1 Nummer 1 \u2014 ordinary persons employed for remuneration",
+        "signature_state": "pending"
+      }
+    ],
+    "mode": "computed",
+    "root_nodes": [
+      "de:statutes/sgb-6/168#employee_pension_insurance_contribution_share",
+      "de:regulations/svbezgrv-2025/4#general_pension_insurance_monthly_contribution_assessment_ceiling"
+    ]
+  },
+  "evidence": [
+    {
+      "artifact": "conformance/de-certificate-census.json",
+      "claim": "certificate candidate census:de/rv-employee-contribution",
+      "mode": "computed",
+      "sha256": "b83c8bdd7078a65eddcb099b9076d0be596a7eff204b73f06cf866ad7d3a87e7"
+    },
+    {
+      "artifact": "closure/de/summary.json",
+      "claim": "closure census:de/rv-employee-contribution",
+      "mode": "computed",
+      "sha256": "a3db79b35d9103a2eb8e23eb5920137e3f9a41f39d235f1c57f6240cfc3fa07d"
+    }
+  ],
+  "period": "2025",
+  "program": "de/rv-employee-contribution",
+  "schema": "axiom_oracles.program_certificate.v1",
+  "verdicts": {
+    "closed": {
+      "blockers": [
+        "closed: closure must disposition the act's subordinate instruments (oracles#491); this closure declares none",
+        "closed: closure must type every leaf and encode every law-derived dependency (CERTIFIED.md v3); this closure declares no dependency-closure block"
+      ],
+      "boundaries": [],
+      "by_signature_state": {
+        "not_applicable": 0,
+        "pending": 2,
+        "signed": 1
+      },
+      "by_status": {
+        "encoded": 2,
+        "evidence": 0,
+        "excluded": 0,
+        "pending": 1
+      },
+      "citation_paths": [
+        "de/regulation/bsv-2018/1",
+        "de/regulation/svbezgrv-2025/4",
+        "de/statute/sgb-6/168"
+      ],
+      "citation_root_count": 3,
+      "closed_claim_mode": "computed",
+      "corpus_release": "de-rulespec-2026-07-21",
+      "declared_sources": [
+        {
+          "citation_path": "de/regulation/bsv-2018/1",
+          "claim_mode": "attested",
+          "classification": "pending",
+          "reason": "No RuleSpec encoding exists, and the 2018 instrument alone does not establish that the 18.6 percent rate continued through 2025.",
+          "role": "contribution_rate",
+          "signature_state": "pending",
+          "state": "pending"
+        },
+        {
+          "citation_path": "de/regulation/svbezgrv-2025/4",
+          "claim_mode": "attested",
+          "classification": "encoded",
+          "reason": "The signed 2025 pension contribution ceiling module and encoding manifest are present on the pinned RuleSpec main commit.",
+          "role": "monthly_assessment_ceiling",
+          "signature_state": "signed",
+          "state": "encoded"
+        },
+        {
+          "citation_path": "de/statute/sgb-6/168",
+          "claim_mode": "attested",
+          "classification": "encoded",
+          "reason": "A reviewed encoding exists for Absatz 1 Nummer 1, but its signature has not landed on main.",
+          "role": "employee_share",
+          "signature_state": "pending",
+          "state": "encoded_pending_signature"
+        }
+      ],
+      "dependency_closure": {
+        "closed": false,
+        "missing": true,
+        "requirement": "closure must type every leaf and encode every law-derived dependency (CERTIFIED.md v3); this closure declares no dependency-closure block"
+      },
+      "evidence_roots": [],
+      "instrument_frontier": {
+        "complete": false,
+        "missing": true,
+        "requirement": "closure must disposition the act's subordinate instruments (oracles#491); this closure declares none"
+      },
+      "mode": "computed",
+      "pending_citations": 1,
+      "pending_money_atoms": null,
+      "resolution_mode": "computed",
+      "root_node_count": 2,
+      "root_nodes": [
+        "de:statutes/sgb-6/168#employee_pension_insurance_contribution_share",
+        "de:regulations/svbezgrv-2025/4#general_pension_insurance_monthly_contribution_assessment_ceiling"
+      ],
+      "rulespec_commit": "d83ba3db30e2f63376aacf822d116687589b8564",
+      "signature_blockers": [
+        "de/regulation/bsv-2018/1: signed RuleSpec artifact has not landed",
+        "de/statute/sgb-6/168: signed RuleSpec artifact has not landed"
+      ],
+      "signature_pending_citations": [
+        "de/regulation/bsv-2018/1",
+        "de/statute/sgb-6/168"
+      ],
+      "source_closed": false,
+      "source_closed_claim_mode": "computed",
+      "status": "computed_open",
+      "subgraph_node_count": null,
+      "subgraph_sha256": "feeffa1d27ebe9fe619e94c168ebf3c3c29fd11db4cd43e0faf48007f7915e5a",
+      "universe_mode": "attested",
+      "unresolved_sources": [
+        "de/regulation/bsv-2018/1"
+      ],
+      "value": false
+    },
+    "conformant": {
+      "missing": "no comparison record has been declared",
+      "mode": "computed",
+      "reference_legs": [],
+      "status": "computed_open",
+      "value": false
+    },
+    "executable": {
+      "missing_inputs": [
+        "executable reproduction contract"
+      ],
+      "mode": "computed",
+      "status": "computed_open",
+      "value": false
+    },
+    "exercised": {
+      "missing": "no comparison corpus has been declared",
+      "mode": "computed",
+      "status": "computed_open",
+      "value": false
+    }
+  }
+}

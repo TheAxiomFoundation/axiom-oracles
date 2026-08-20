@@ -383,6 +383,30 @@
       "source": "comparisons/de-worker-dual-oracle.yaml"
     },
     {
+      "suite": "de-worker-dual-oracle-axiom-euromod",
+      "name": "de-worker-dual-oracle-axiom-euromod",
+      "report": "comparisons/de-worker-dual-oracle/axiom-euromod.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-de"
+      ],
+      "source": "comparisons/de-worker-dual-oracle-axiom-euromod.yaml",
+      "pinned": {
+        "TheAxiomFoundation/rulespec-de": "d83ba3db30e2f63376aacf822d116687589b8564"
+      }
+    },
+    {
+      "suite": "de-worker-dual-oracle-axiom-gettsim",
+      "name": "de-worker-dual-oracle-axiom-gettsim",
+      "report": "comparisons/de-worker-dual-oracle/axiom-gettsim.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-de"
+      ],
+      "source": "comparisons/de-worker-dual-oracle-axiom-gettsim.yaml",
+      "pinned": {
+        "TheAxiomFoundation/rulespec-de": "d83ba3db30e2f63376aacf822d116687589b8564"
+      }
+    },
+    {
       "suite": "dk-child-youth-benefit",
       "name": "dk-child-youth-benefit-euromod",
       "report": "axiom-euromod-dk-child-youth-benefit.json",

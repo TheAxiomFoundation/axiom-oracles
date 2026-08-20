@@ -1,0 +1,250 @@
+{
+  "_comment": "Generated declaration census. 'pending' is a computed state, not a certification label. Encoding/signature observations are attested to the pinned rulespec-de revision and cannot independently satisfy a computed certificate premise.",
+  "closure_declarations": {
+    "artifact": "closure/de/source.json",
+    "claim_mode": "computed",
+    "sha256": "84fbc0559bacae1128bb992052791e0ecc78b71137dfc4244f2fc7f622d19bd7"
+  },
+  "executable_observation": {
+    "claim_mode": "computed",
+    "manifest": "conformance/executable/de-kindergeld-manifest.json",
+    "manifest_sha256": "5964df57b89a9d4d14592c062f23244d6ab51065ac116af142a5cc3ce4268e13",
+    "state": "computed_pass",
+    "value": true
+  },
+  "generated_by": "scripts/de_certificate_census.py",
+  "programs": {
+    "de/kindergeld": {
+      "blockers": [],
+      "certificate_path": "certificates/de-kindergeld.json",
+      "certificate_status": "ready",
+      "declared_roots": [
+        {
+          "attestation": {
+            "artifact": "conformance/executable/de-kindergeld-signed-rulespec.json",
+            "encoding_manifest_payload_sha256": "9a181bf76934891d909997a6a61b0d2ee9c6a46b7710906e76b72599f48f23de",
+            "encoding_manifest_source_file_sha256": "296e0f761edd2fd70cf622890fba5f6c0147bc51233df757afcb90e1e9a53a0a",
+            "module_sha256": "7c1545d20f21bcdaba0abd7b8af324b3747148f84d7593e4f358ec726a57396b",
+            "sha256": "4068585c4d92e2ad1068941fb4dc7383df21cfda01880ca8a2a8505c6b457c00",
+            "trusted_key_id": "sha256:24a78725a23b1c83cfc38bdc22f75401d8008e7a8477796b55179d1fc79c4d9a"
+          },
+          "attestation_claim_mode": "computed",
+          "citation_path": "de/statute/estg/66",
+          "claim_mode": "attested",
+          "classification": "encoded",
+          "reason": "the executable verifier validated the exact signed 2025 module, apply manifest, corpus binding, and Ed25519 trust root",
+          "role": "governing",
+          "signature_state": "signed",
+          "signature_state_claim_mode": "computed"
+        },
+        {
+          "attestation": {
+            "ref": "d83ba3db30e2f63376aacf822d116687589b8564",
+            "repository": "TheAxiomFoundation/rulespec-de"
+          },
+          "citation_path": "de/statute/estg/62",
+          "claim_mode": "attested",
+          "classification": "excluded-with-reason",
+          "reason": "EStG section 62 supplies eligibility/payee/child membership at the declared cut and is outside the amount subgraph",
+          "role": "boundary_input",
+          "signature_state": "not_applicable"
+        },
+        {
+          "attestation": {
+            "ref": "d83ba3db30e2f63376aacf822d116687589b8564",
+            "repository": "TheAxiomFoundation/rulespec-de"
+          },
+          "citation_path": "de/statute/estg/63",
+          "claim_mode": "attested",
+          "classification": "excluded-with-reason",
+          "reason": "EStG section 63 supplies eligibility/payee/child membership at the declared cut and is outside the amount subgraph",
+          "role": "boundary_input",
+          "signature_state": "not_applicable"
+        },
+        {
+          "attestation": {
+            "ref": "d83ba3db30e2f63376aacf822d116687589b8564",
+            "repository": "TheAxiomFoundation/rulespec-de"
+          },
+          "citation_path": "de/statute/estg/64",
+          "claim_mode": "attested",
+          "classification": "excluded-with-reason",
+          "reason": "EStG section 64 supplies eligibility/payee/child membership at the declared cut and is outside the amount subgraph",
+          "role": "boundary_input",
+          "signature_state": "not_applicable"
+        },
+        {
+          "attestation": {
+            "ref": "d83ba3db30e2f63376aacf822d116687589b8564",
+            "repository": "TheAxiomFoundation/rulespec-de"
+          },
+          "citation_path": "de/statute/estg/65",
+          "claim_mode": "attested",
+          "classification": "excluded-with-reason",
+          "reason": "EStG section 65 supplies eligibility/payee/child membership at the declared cut and is outside the amount subgraph",
+          "role": "boundary_input",
+          "signature_state": "not_applicable"
+        },
+        {
+          "attestation": {
+            "ref": "d83ba3db30e2f63376aacf822d116687589b8564",
+            "repository": "TheAxiomFoundation/rulespec-de"
+          },
+          "citation_path": "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz",
+          "claim_mode": "attested",
+          "classification": "evidence",
+          "reason": "SteFeG Article 1 number 4 supplies the 2025-effective 255 EUR amount that the current consolidated EStG text no longer shows",
+          "role": "evidence_root",
+          "signature_state": "not_applicable"
+        }
+      ],
+      "period": "2025",
+      "root_nodes": [
+        "de:statutes/estg/66#monthly_kindergeld_per_child"
+      ],
+      "status_claim_mode": "computed",
+      "view": {
+        "kind": "subgraph",
+        "scope": "amount"
+      }
+    },
+    "de/rv-employee-contribution": {
+      "blockers": [
+        "no comparison record has been declared",
+        "de/regulation/bsv-2018/1: encoding and 2025 temporal evidence pending",
+        "de/statute/sgb-6/168: signature pending",
+        "executable reproduction receipt pending"
+      ],
+      "certificate_path": "certificates/de-rv-employee-contribution.json",
+      "certificate_status": "pending",
+      "declared_roots": [
+        {
+          "attestation": {
+            "ref": "d83ba3db30e2f63376aacf822d116687589b8564",
+            "repository": "TheAxiomFoundation/rulespec-de"
+          },
+          "citation_path": "de/regulation/bsv-2018/1",
+          "claim_mode": "attested",
+          "classification": "pending",
+          "reason": "no RuleSpec encoding exists and the 2018 text alone does not prove that the 18.6 percent rate applies in 2025",
+          "role": "governing",
+          "signature_state": "pending"
+        },
+        {
+          "attestation": {
+            "path": ".axiom/encoding-manifests/de/regulations/svbezgrv-2025/4.json",
+            "ref": "d83ba3db30e2f63376aacf822d116687589b8564",
+            "repository": "TheAxiomFoundation/rulespec-de",
+            "sha256": "a46035cf77c7d2a9e15a6aeb64fee6b49c10991179f3a2388188cafd973dab32"
+          },
+          "citation_path": "de/regulation/svbezgrv-2025/4",
+          "claim_mode": "attested",
+          "classification": "encoded",
+          "reason": "signed ceiling encoding is merged on the pinned main commit",
+          "role": "dependency",
+          "signature_state": "signed"
+        },
+        {
+          "attestation": {
+            "ref": "203420d",
+            "repository": "TheAxiomFoundation/rulespec-de",
+            "sha256": "8a21603735171601927e2cbd626c0566a9c9d145c20263d78cb1dd849a79313c"
+          },
+          "citation_path": "de/statute/sgb-6/168",
+          "claim_mode": "attested",
+          "classification": "encoded",
+          "reason": "reviewed encoding exists but is not signed or merged",
+          "role": "governing",
+          "scope": "Absatz 1 Nummer 1 — ordinary persons employed for remuneration",
+          "signature_state": "pending"
+        }
+      ],
+      "period": "2025",
+      "root_nodes": [
+        "de:statutes/sgb-6/168#employee_pension_insurance_contribution_share",
+        "de:regulations/svbezgrv-2025/4#general_pension_insurance_monthly_contribution_assessment_ceiling"
+      ],
+      "status_claim_mode": "computed",
+      "view": {
+        "kind": "subgraph",
+        "scope": "ordinary employee pension-insurance contribution"
+      }
+    },
+    "de/unterhaltsvorschuss": {
+      "blockers": [
+        "no comparison record has been declared",
+        "de/statute/uhvorschg/2: final-amount encoding remains partial",
+        "executable reproduction receipt pending"
+      ],
+      "certificate_path": "certificates/de-unterhaltsvorschuss.json",
+      "certificate_status": "pending",
+      "declared_roots": [
+        {
+          "attestation": {
+            "path": ".axiom/encoding-manifests/de/regulations/minuhv/1.json",
+            "ref": "d83ba3db30e2f63376aacf822d116687589b8564",
+            "repository": "TheAxiomFoundation/rulespec-de",
+            "sha256": "cd7a6a3cd40f7098071f50e88f81eaa3072c0b6c833f99af6e88219bbac92e5f"
+          },
+          "citation_path": "de/regulation/minuhv/1",
+          "claim_mode": "attested",
+          "classification": "encoded",
+          "reason": "signed minimum-support encoding is merged on pinned main",
+          "role": "governing",
+          "signature_state": "signed"
+        },
+        {
+          "attestation": {
+            "ref": "0a5ba23",
+            "repository": "TheAxiomFoundation/rulespec-de",
+            "sha256": "d9c494557d2e439acf1270cb43e070005bf4ec91d9a0117ff076ce11818080cf"
+          },
+          "citation_path": "de/statute/uhvorschg/2",
+          "claim_mode": "attested",
+          "classification": "pending",
+          "reason": "reviewed unsigned module covers the base subtraction only; partial-month, income/maintenance offsets, and school/work income abatements in subsections 1, 3, and 4 remain open",
+          "role": "governing",
+          "signature_state": "pending"
+        },
+        {
+          "attestation": {
+            "artifact": "conformance/executable/de-kindergeld-signed-rulespec.json",
+            "encoding_manifest_payload_sha256": "9a181bf76934891d909997a6a61b0d2ee9c6a46b7710906e76b72599f48f23de",
+            "encoding_manifest_source_file_sha256": "296e0f761edd2fd70cf622890fba5f6c0147bc51233df757afcb90e1e9a53a0a",
+            "module_sha256": "7c1545d20f21bcdaba0abd7b8af324b3747148f84d7593e4f358ec726a57396b",
+            "sha256": "4068585c4d92e2ad1068941fb4dc7383df21cfda01880ca8a2a8505c6b457c00",
+            "trusted_key_id": "sha256:24a78725a23b1c83cfc38bdc22f75401d8008e7a8477796b55179d1fc79c4d9a"
+          },
+          "attestation_claim_mode": "computed",
+          "citation_path": "de/statute/estg/66",
+          "claim_mode": "attested",
+          "classification": "encoded",
+          "reason": "the executable verifier validated the exact signed 2025 module, apply manifest, corpus binding, and Ed25519 trust root",
+          "role": "dependency",
+          "signature_state": "signed",
+          "signature_state_claim_mode": "computed"
+        }
+      ],
+      "period": "2025",
+      "root_nodes": [
+        "de:statutes/uhvorschg/2#advance_maintenance_amount"
+      ],
+      "status_claim_mode": "computed",
+      "view": {
+        "kind": "subgraph",
+        "scope": "final maintenance advance amount"
+      }
+    }
+  },
+  "rulespec_observation": {
+    "claim_mode": "attested",
+    "commit": "d83ba3db30e2f63376aacf822d116687589b8564",
+    "repository": "TheAxiomFoundation/rulespec-de"
+  },
+  "schema": "axiom_oracles.certificate_candidate_census.v1",
+  "unified_record": {
+    "artifact": "comparisons/de-worker-dual-oracle/unified-record.json",
+    "claim_mode": "computed",
+    "sha256": "da4d421f133758d0ad0f2ea1006826efe8a091ddeb8fcf96709a944415e880cc"
+  }
+}
