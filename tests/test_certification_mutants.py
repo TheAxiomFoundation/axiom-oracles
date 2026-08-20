@@ -3372,3 +3372,71 @@ def test_bare_closed_true_dependency_block_fails_the_central_gate(
     )
     assert verdict["value"] is False
     assert verdict["dependency_closure"]["malformed"] is True
+
+
+def test_boolean_count_dependency_block_fails_the_central_gate(
+    tmp_path, monkeypatch
+):
+    """open_dependency_count=false must read malformed, not as zero: bool
+    is an int subclass in Python (launch-audit delta r2 finding). Covers
+    both the generic and program-scoped verdict paths."""
+
+    certify = _load("certify")
+    forged_computed = {
+        "closed": True,
+        "provision_counts": {},
+        "boundary_frontier": {"complete": True, "inputs": []},
+        "instrument_frontier": {
+            "instrument_count": 1,
+            "supplemental_count": 0,
+            "counts": {"total": 1, "pending": 0},
+            "pending": [],
+            "complete": True,
+        },
+        "dependency_closure": {
+            "open_dependency_count": False,
+            "law_derived_inputs": [],
+            "instruments_bearing_on_computed": [],
+            "closed": True,
+        },
+    }
+
+    class _ObjectProducer:
+        @staticmethod
+        def validate_artifact(document):
+            class _Summary:
+                closed = True
+                non_encoded_reasons_complete = True
+
+            return _Summary()
+
+    class _ScopedProducer:
+        # The program-scoped path activates when the producer's validator
+        # returns a dict summary carrying a "programs" map.
+        @staticmethod
+        def validate_artifact(document):
+            return {"programs": {"forged/program": {"closed": True}}}
+
+    for scoped, producer in ((False, _ObjectProducer), (True, _ScopedProducer)):
+        forged = {
+            "schema": "axiom_oracles.closure.ledger.v3",
+            "generated_facts": {"rulespec": {"commit": "a" * 40}},
+            "committed_decisions": {},
+            "computed": dict(forged_computed),
+        }
+        artifact = tmp_path / f"forged-bool-{scoped}.yaml"
+        artifact.write_text(yaml.safe_dump(forged, sort_keys=False))
+        monkeypatch.setattr(
+            certify, "_repo_artifact_path", lambda relative, label: artifact
+        )
+        monkeypatch.setattr(
+            certify, "_producer_module", lambda name, _p=producer: _p()
+        )
+        monkeypatch.setattr(certify, "sha256_of", lambda path: "0" * 64)
+        verdict = certify._producer_closed_verdict(
+            "forged/program",
+            {"computed": {"closed": {"artifact": "x", "producer": "y"}}},
+            [],
+        )
+        assert verdict["value"] is False, f"scoped={scoped}"
+        assert verdict["dependency_closure"]["malformed"] is True

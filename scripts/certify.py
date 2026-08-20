@@ -1157,6 +1157,9 @@ def _producer_closed_verdict(
     _dependency_well_formed = (
         isinstance(_dependency_block, dict)
         and isinstance(_dependency_block.get("open_dependency_count"), int)
+        # bool is an int subclass: open_dependency_count=false must read
+        # malformed, not as a zero count (launch-audit delta r2 finding).
+        and not isinstance(_dependency_block.get("open_dependency_count"), bool)
         and isinstance(_dependency_block.get("law_derived_inputs"), list)
         and isinstance(
             _dependency_block.get("instruments_bearing_on_computed"), list
