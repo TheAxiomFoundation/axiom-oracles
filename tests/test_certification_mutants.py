@@ -618,8 +618,16 @@ def test_nz_computed_premises_without_cleared_blockers_do_not_certify():
             for blocker in certificate["blockers"]
         )
         assert certificate["blockers"], "structural engine blockers must remain"
+        # The instrument-frontier requirement (oracles#491) opens every
+        # closure claim that dispositions only the act's own provisions: the
+        # NZ closure summary carries no instrument frontier, so certify
+        # computes closed=false with the named requirement until the NZ
+        # ledger dispositions its subordinate instruments.
         assert certificate["verdicts"]["closed"]["mode"] == "computed"
-        assert certificate["verdicts"]["closed"]["value"] is True
+        assert certificate["verdicts"]["closed"]["value"] is False
+        closed_frontier = certificate["verdicts"]["closed"]["instrument_frontier"]
+        assert closed_frontier["missing"] is True
+        assert closed_frontier["complete"] is False
         assert certificate["verdicts"]["executable"]["mode"] == "computed"
         assert certificate["verdicts"]["executable"]["value"] is True
 

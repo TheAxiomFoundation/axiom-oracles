@@ -178,20 +178,28 @@ def test_dk_all_four_computed_premises_flow_to_certificate() -> None:
         (REPO_ROOT / "certificates/dk-boerne-og-ungeydelse.json").read_text()
     )
     verdicts = certificate["verdicts"]
+    # The instrument-frontier requirement (oracles#491) opens the closed
+    # premise until the closure ledger dispositions the act's subordinate
+    # instruments: certify computes closed=false for a closure artifact that
+    # declares no complete instrument frontier, whatever its producer says.
+    # The other three premises stay computed true; certified honestly reads
+    # no until the dk frontier lands.
     assert {
         name: (block["mode"], block["value"]) for name, block in verdicts.items()
     } == {
         "conformant": ("computed", True),
         "exercised": ("computed", True),
-        "closed": ("computed", True),
+        "closed": ("computed", False),
         "executable": ("computed", True),
     }
+    closed_verdict = verdicts["closed"]
+    assert closed_verdict["instrument_frontier"]["missing"] is True
+    assert closed_verdict["instrument_frontier"]["complete"] is False
     assert not any(
         blocker.startswith("exercise:") for blocker in certificate["blockers"]
     )
-    assert certificate["blockers"] == []
-    assert certificate["certified"]["value"] is True
-    assert certificate["certified"]["state"] == "yes"
+    assert certificate["certified"]["value"] is False
+    assert certificate["certified"]["state"] == "no"
 
     evidence = {row["artifact"]: row for row in certificate["evidence"]}
     for relative in (

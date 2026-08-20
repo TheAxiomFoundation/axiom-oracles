@@ -1,9 +1,18 @@
-# dk/boerne-og-ungeydelse: the registry's first certified=yes
+# dk/boerne-og-ungeydelse: certification status
 
-Status: **CERTIFIED=YES at rulespec-dk `9a9469edbbc4` — all four premises
-computed true, blockers=[], 10 provisions encoded / 1 classified / 13
-excluded with text-grounded reasons / 0 pending, boundary frontier complete
-(90 grounded inputs: 65 captured, 25 uncaptured external boundaries).**
+Status: **CERTIFIED=NO — the closed premise reopened by the
+subordinate-instrument requirement (oracles#491).** Certify now computes
+`closed=false` for any closure artifact that dispositions only the act's
+own provisions: legal completeness must also disposition the instruments
+issued under the act (regulations, circulars, guidance, appeals
+precedents). The dk ledger does not yet carry that frontier, so the
+certificate honestly reads no. The other three premises remain computed
+true at rulespec-dk `9a9469edbbc4` (10 provisions encoded / 1 classified /
+13 excluded / 0 pending; boundary frontier complete with 90 grounded
+inputs; receipt 10/10; suites conformant). The frontier itself — the act's
+full ELI `basis_for`/`changed_by` graph dispositioned with text-grounded
+reasons — is built and under audit on `d3/instrument-frontier`; when it
+lands, `certified` re-derives under the strengthened predicate.
 
 ## Certification scope
 

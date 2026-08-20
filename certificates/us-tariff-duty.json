@@ -516,6 +516,11 @@
           "status": "pending"
         }
       ],
+      "instrument_frontier": {
+        "complete": false,
+        "missing": true,
+        "requirement": "closure must disposition the act's subordinate instruments (oracles#491); this artifact declares none"
+      },
       "mode": "computed",
       "non_encoded_reasons_complete": true,
       "provision_counts": null,
