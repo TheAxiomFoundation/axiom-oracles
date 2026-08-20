@@ -6,10 +6,17 @@ are the demonstrations, kept green forever. Grow this catalogue whenever a gate
 gains a rule — a rule without a mutant here is not yet a rule.
 """
 
+import base64
 import copy
+import hashlib
 import importlib.util
+import io
 import json
 import shutil
+import subprocess
+import sys
+import tarfile
+import types
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -30,6 +37,13 @@ EVIDENCE_FIXTURES = REPO / "tests" / "fixtures" / "evidence"
 
 def _load(name: str):
     spec = importlib.util.spec_from_file_location(name, REPO / "scripts" / f"{name}.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def _load_from(path: Path):
+    spec = importlib.util.spec_from_file_location(f"_tmp_{path.stem}", path)
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
@@ -576,7 +590,8 @@ def test_nz_two_endpoint_gate_misses_conditional_default_person_dependency():
 
     # An unsampled person 2 present at the default wage activates it.
     baseline = next(
-        row for row in source["scenarios"]
+        row
+        for row in source["scenarios"]
         if row["id"] == nz.ATTESTATION_BASELINE_SCENARIO
     )
     unsampled = copy.deepcopy(baseline)
@@ -1287,11 +1302,7 @@ def test_matched_amount_values_must_reconcile_with_aggregate_sums(tmp_path):
     report_path, suite_dir = _copied_evidence_fixture(tmp_path)
     chunk_path = suite_dir / "chunk-0.json"
     chunk = json.loads(chunk_path.read_text())
-    verdict = next(
-        row
-        for row in chunk[0]["v"]
-        if row["c"] == "benefit"
-    )
+    verdict = next(row for row in chunk[0]["v"] if row["c"] == "benefit")
     verdict.update(l=999, x=999)
     chunk_path.write_text(json.dumps(chunk, separators=(",", ":")))
     _refresh_fixture_binding(report_path, suite_dir)
@@ -1310,11 +1321,7 @@ def test_matched_eligibility_values_must_reconcile_with_positive_weights(
     report_path, suite_dir = _copied_evidence_fixture(tmp_path)
     chunk_path = suite_dir / "chunk-0.json"
     chunk = json.loads(chunk_path.read_text())
-    verdict = next(
-        row
-        for row in chunk[0]["v"]
-        if row["c"] == "eligibility"
-    )
+    verdict = next(row for row in chunk[0]["v"] if row["c"] == "eligibility")
     verdict.update(l=True, x=True)
     chunk_path.write_text(json.dumps(chunk, separators=(",", ":")))
     _refresh_fixture_binding(report_path, suite_dir)
@@ -1376,8 +1383,7 @@ def test_permuted_matched_case_values_must_reconcile_with_case_identity(
     assert evidence.binding == "unbound"
     assert evidence.valid is False
     assert any(
-        "case_verdicts_sha256" in defect
-        and "per-case verdict identity" in defect
+        "case_verdicts_sha256" in defect and "per-case verdict identity" in defect
         for defect in evidence.binding_defects
     )
 
@@ -1385,11 +1391,7 @@ def test_permuted_matched_case_values_must_reconcile_with_case_identity(
 def test_aggregate_values_require_reproducible_unit_weight(tmp_path):
     report_path, suite_dir = _copied_evidence_fixture(tmp_path)
     report = json.loads(report_path.read_text())
-    aggregate = next(
-        row
-        for row in report["aggregates"]
-        if row["concept"] == "benefit"
-    )
+    aggregate = next(row for row in report["aggregates"] if row["concept"] == "benefit")
     del aggregate["comparison_weight"]
     report_path.write_text(json.dumps(report, indent=2) + "\n")
     _refresh_fixture_binding(report_path, suite_dir)
@@ -1399,8 +1401,7 @@ def test_aggregate_values_require_reproducible_unit_weight(tmp_path):
     assert evidence.reconciliation == "full"
     assert evidence.valid is False
     assert any(
-        "comparison_weight is required" in defect
-        for defect in evidence.content_defects
+        "comparison_weight is required" in defect for defect in evidence.content_defects
     )
 
 
@@ -1437,8 +1438,7 @@ def test_dashboard_semantic_fields_must_match_stored_verdicts(
     assert evidence.reconciliation == "full"
     assert evidence.valid is False
     assert any(
-        marker in defect and detail in defect
-        for defect in evidence.content_defects
+        marker in defect and detail in defect for defect in evidence.content_defects
     )
 
 
@@ -1481,8 +1481,7 @@ def test_dashboard_match_rate_is_bounded_even_without_full_verdicts(
     assert evidence.reconciliation == "cardinality"
     assert evidence.valid is False
     assert any(
-        ".r must be between 0 and 100" in defect
-        for defect in evidence.content_defects
+        ".r must be between 0 and 100" in defect for defect in evidence.content_defects
     )
 
 
@@ -1863,6 +1862,8 @@ def test_census_report_path_and_sha_must_match_the_registry():
             is False
         )
         assert any(marker in defect for defect in defects), (field, defects)
+
+
 # ── NZ IncomeExplorer: every new certification gate gets a killed mutant ──
 
 
@@ -2508,9 +2509,7 @@ def test_nz_exercise_receipt_is_certificate_scoped():
     certify = _load("certify")
     assert "nz-treasury-incomeexplorer" not in census.build_census()["suites"]
 
-    scoped, evidence = certify._exercise_census_for(
-        certify.PROGRAMS["nz/income-tax"]
-    )
+    scoped, evidence = certify._exercise_census_for(certify.PROGRAMS["nz/income-tax"])
     assert "nz-treasury-incomeexplorer" in scoped["suites"]
     income_tax = scoped["suites"]["nz-treasury-incomeexplorer"]
     assert evidence[0]["claim"] == "view-scoped evaluation traces:nz/income-tax"
@@ -2654,17 +2653,14 @@ def test_unrelated_pending_path_does_not_red_acc_certificate_scope():
     assert summary["closed"] is False
     assert summary["programs"]["nz/acc-earners-levy"]["closed"] is True
     assert (
-        missing
-        not in summary["programs"]["nz/acc-earners-levy"]["pending_citations"]
+        missing not in summary["programs"]["nz/acc-earners-levy"]["pending_citations"]
     )
 
 
 def test_nz_single_person_attestation_recomputes_acc_cells():
     incomeexplorer = _load("nz_incomeexplorer")
     source = json.loads(incomeexplorer.SOURCE_PATH.read_text())
-    row = incomeexplorer.assert_single_person_invariant(
-        source, "nz/acc-earners-levy"
-    )
+    row = incomeexplorer.assert_single_person_invariant(source, "nz/acc-earners-levy")
     assert row["status"] == "pass"
     assert row["baseline_cells_sha256"] == row["perturbed_cells_sha256"]
 
@@ -2771,8 +2767,7 @@ def test_nz_computed_executable_flag_has_no_verifier_acceptance_path():
                 "suites": [
                     {
                         "report": (
-                            "dashboard/public/data/"
-                            "nz-treasury-incomeexplorer.json"
+                            "dashboard/public/data/nz-treasury-incomeexplorer.json"
                         )
                     }
                 ],
@@ -3440,3 +3435,2038 @@ def test_boolean_count_dependency_block_fails_the_central_gate(
         )
         assert verdict["value"] is False, f"scoped={scoped}"
         assert verdict["dependency_closure"]["malformed"] is True
+# ── DE Kindergeld: every new unified-record gate gets a killed mutant ──
+
+
+def _de_source_mutant(tmp_path, de, mutate):
+    source = json.loads(de.SOURCE_PATH.read_text())
+    mutate(source)
+    path = tmp_path / "de-source-mutant.json"
+    path.write_text(json.dumps(source))
+    return path
+
+
+def test_de_kindergeld_source_mismatch_cannot_be_counted_conformant(
+    tmp_path, monkeypatch
+):
+    """MUTANT: turn one of the 13 source-source matches into a mismatch."""
+
+    de = _load("de_unified_comparison")
+
+    def mutate(source):
+        row = next(
+            item
+            for item in source["aggregates"]
+            if item["concept"] == de.KINDERGELD_CONCEPT
+        )
+        row["match_weight"] -= 1
+        row["mismatch_count"] += 1
+        row["mismatch_weight"] += 1
+
+    monkeypatch.setattr(de, "SOURCE_PATH", _de_source_mutant(tmp_path, de, mutate))
+    with pytest.raises(de.DERecordError, match="not a clean 13-of-13"):
+        de.build()
+
+
+def test_de_exercise_variation_is_rederived_from_canonical_cases(tmp_path, monkeypatch):
+    """MUTANT: hand-label child count constant in the committed receipt."""
+
+    de = _load("de_unified_comparison")
+    mutant = de.build()
+    mutant["experiment"]["active_inputs"]["child_count"].update(
+        {"state": "constant", "distinct": 1, "observed_values": [0]}
+    )
+    output = tmp_path / "de-unified-mutant.json"
+    output.write_text(json.dumps(mutant, indent=2, sort_keys=True) + "\n")
+    monkeypatch.setattr(de, "OUTPUT_PATH", output)
+    monkeypatch.setattr(sys, "argv", ["de_unified_comparison.py", "--check"])
+    assert de.main() == 1
+
+
+def test_de_population_input_substitution_is_rejected(tmp_path, monkeypatch):
+    """MUTANT: substitute an income that no longer matches the canonical suite."""
+
+    de = _load("de_unified_comparison")
+
+    def mutate(source):
+        source["cases"][0]["metadata"]["yearly_earned_income"] += 1
+
+    monkeypatch.setattr(de, "SOURCE_PATH", _de_source_mutant(tmp_path, de, mutate))
+    with pytest.raises(de.DERecordError, match="source income differs"):
+        de.build()
+
+
+def test_de_source_oracle_release_tuple_is_pinned(tmp_path, monkeypatch):
+    """MUTANT: relabel the compared EUROMOD run as another release."""
+
+    de = _load("de_unified_comparison")
+
+    def mutate(source):
+        source["provenance"]["oracle"]["euromod_release"] = "J3.0"
+
+    monkeypatch.setattr(de, "SOURCE_PATH", _de_source_mutant(tmp_path, de, mutate))
+    with pytest.raises(de.DERecordError, match="oracle release tuple changed"):
+        de.build()
+
+
+def test_de_source_crosscheck_cannot_erase_missing_axiom_legs(tmp_path, monkeypatch):
+    """MUTANT: use clean EUROMOD x GETTSIM parity as if Axiom had run."""
+
+    de = _load("de_unified_comparison")
+    mutant = de.build()
+    view = mutant["views"][de.PROGRAM]
+    view["missing_for_certification"] = []
+    for leg in view["legs"]:
+        if leg["id"].startswith("axiom-"):
+            leg["state"] = "pending"
+            leg.pop("artifact", None)
+    output = tmp_path / "de-axiom-leg-mutant.json"
+    output.write_text(json.dumps(mutant, indent=2, sort_keys=True) + "\n")
+    monkeypatch.setattr(de, "OUTPUT_PATH", output)
+    monkeypatch.setattr(sys, "argv", ["de_unified_comparison.py", "--check"])
+    assert de.main() == 1
+
+
+def test_de_axiom_leg_needs_complete_case_evidence(tmp_path):
+    """MUTANT: drop a summary-only JSON into a declared Axiom-leg slot."""
+
+    de = _load("de_unified_comparison")
+    fake = tmp_path / "axiom-euromod.json"
+    fake.write_text(
+        json.dumps(
+            {
+                "record_schema": de.RECORD_SCHEMA,
+                "suite": de.AXIOM_LEG_SUITES["axiom-euromod"],
+                "period": de.DE_WORKER_PERIOD,
+                "engines": {"left": "euromod", "right": "axiom"},
+                "summary": {"comparison_count": 13, "match_count": 13},
+            }
+        )
+    )
+    unified = de.build()
+    with pytest.raises(de.DERecordError, match="complete output dependency views"):
+        de._validate_axiom_leg(
+            fake,
+            leg_id="axiom-euromod",
+            population_sha256=unified["tuple"]["population"]["sha256"],
+            population_cases=unified["cases"],
+            expected_oracle=de.ORACLE_PINS["euromod"],
+            expected_household_sum=de.EXPECTED_HOUSEHOLD_SUM,
+        )
+
+
+def test_de_census_cannot_drop_a_declared_citation_root():
+    """MUTANT: remove the BSV rate root from the RV candidate."""
+
+    census = _load("de_certificate_census")
+    mutant = copy.deepcopy(census.PROGRAM_DECLARATIONS)
+    mutant["de/rv-employee-contribution"]["declared_roots"] = [
+        row
+        for row in mutant["de/rv-employee-contribution"]["declared_roots"]
+        if row["citation_path"] != "de/regulation/bsv-2018/1"
+    ]
+    with pytest.raises(census.DECensusError, match="citation root set changed"):
+        census.validate_declarations(mutant)
+
+
+def test_de_census_cannot_hand_promote_pending_signature():
+    """MUTANT: label the pending EStG 66 encoding signed with borrowed pins."""
+
+    census = _load("de_certificate_census")
+    mutant = copy.deepcopy(census.PROGRAM_DECLARATIONS)
+    roots = mutant["de/kindergeld"]["declared_roots"]
+    estg = next(row for row in roots if row["citation_path"] == "de/statute/estg/66")
+    signed = next(
+        row
+        for row in mutant["de/rv-employee-contribution"]["declared_roots"]
+        if row["citation_path"] == "de/regulation/svbezgrv-2025/4"
+    )
+    estg["signature_state"] = "signed"
+    estg["attestation"] = copy.deepcopy(signed["attestation"])
+    with pytest.raises(census.DECensusError, match="cannot be hand-promoted"):
+        census.validate_declarations(mutant)
+
+    shaped_like_computed = copy.deepcopy(census.PROGRAM_DECLARATIONS)
+    estg = next(
+        row
+        for row in shaped_like_computed["de/kindergeld"]["declared_roots"]
+        if row["citation_path"] == "de/statute/estg/66"
+    )
+    estg.update(
+        {
+            "signature_state": "signed",
+            "signature_state_claim_mode": "computed",
+            "attestation_claim_mode": "computed",
+            "attestation": {
+                "artifact": "fabricated.json",
+                "sha256": "2" * 64,
+                "module_sha256": "3" * 64,
+                "encoding_manifest_payload_sha256": "4" * 64,
+                "encoding_manifest_source_file_sha256": "5" * 64,
+                "trusted_key_id": f"sha256:{'6' * 64}",
+            },
+        }
+    )
+    with pytest.raises(census.DECensusError, match="executable verifier"):
+        census.validate_declarations(shaped_like_computed)
+
+
+def test_de_census_signed_roots_and_scoped_root_cannot_drift():
+    """MUTANTS: demote/swap a signed pin or widen scoped SGB VI section 168."""
+
+    census = _load("de_certificate_census")
+
+    demoted = copy.deepcopy(census.PROGRAM_DECLARATIONS)
+    signed = next(
+        row
+        for row in demoted["de/rv-employee-contribution"]["declared_roots"]
+        if row["citation_path"] == "de/regulation/svbezgrv-2025/4"
+    )
+    signed["signature_state"] = "pending"
+    with pytest.raises(census.DECensusError, match="root declaration changed"):
+        census.validate_declarations(demoted)
+
+    swapped = copy.deepcopy(census.PROGRAM_DECLARATIONS)
+    rv_signed = next(
+        row
+        for row in swapped["de/rv-employee-contribution"]["declared_roots"]
+        if row["citation_path"] == "de/regulation/svbezgrv-2025/4"
+    )
+    uhv_signed = next(
+        row
+        for row in swapped["de/unterhaltsvorschuss"]["declared_roots"]
+        if row["citation_path"] == "de/regulation/minuhv/1"
+    )
+    rv_signed["attestation"] = copy.deepcopy(uhv_signed["attestation"])
+    with pytest.raises(census.DECensusError, match="attestation pin changed"):
+        census.validate_declarations(swapped)
+
+    widened = copy.deepcopy(census.PROGRAM_DECLARATIONS)
+    scoped = next(
+        row
+        for row in widened["de/rv-employee-contribution"]["declared_roots"]
+        if row["citation_path"] == "de/statute/sgb-6/168"
+    )
+    scoped["scope"] = "all of section 168"
+    with pytest.raises(census.DECensusError, match="SGB VI 168 scope changed"):
+        census.validate_declarations(widened)
+
+    promoted_bsv = copy.deepcopy(census.PROGRAM_DECLARATIONS)
+    bsv = next(
+        row
+        for row in promoted_bsv["de/rv-employee-contribution"]["declared_roots"]
+        if row["citation_path"] == "de/regulation/bsv-2018/1"
+    )
+    bsv["classification"] = "encoded"
+    with pytest.raises(census.DECensusError, match="root declaration changed"):
+        census.validate_declarations(promoted_bsv)
+
+
+def test_de_census_cannot_absorb_eligibility_into_amount_subgraph():
+    """MUTANT: silently classify EStG 63 eligibility as encoded amount logic."""
+
+    census = _load("de_certificate_census")
+    mutant = copy.deepcopy(census.PROGRAM_DECLARATIONS)
+    row = next(
+        item
+        for item in mutant["de/kindergeld"]["declared_roots"]
+        if item["citation_path"] == "de/statute/estg/63"
+    )
+    row.update({"role": "governing", "classification": "encoded"})
+    with pytest.raises(census.DECensusError, match="root declaration changed"):
+        census.validate_declarations(mutant)
+
+
+def test_de_census_cannot_drop_stefeg_evidence_role():
+    """MUTANT: treat the current consolidated §66 text as sufficient for 2025."""
+
+    census = _load("de_certificate_census")
+    mutant = copy.deepcopy(census.PROGRAM_DECLARATIONS)
+    row = next(
+        item
+        for item in mutant["de/kindergeld"]["declared_roots"]
+        if item["citation_path"].endswith("steuerfortentwicklungsgesetz")
+    )
+    row["role"] = "note"
+    with pytest.raises(census.DECensusError, match="root declaration changed"):
+        census.validate_declarations(mutant)
+
+
+def test_de_census_recomputes_ready_state_when_exact_inputs_land(monkeypatch):
+    """MUTANT: retain today's hard-coded blockers after all four inputs pass."""
+
+    census = _load("de_certificate_census")
+    unified = _load("de_unified_comparison").build()
+    unified["views"]["de/kindergeld"]["missing_for_certification"] = []
+    signed_input = {
+        "id": "signed-rulespec-estg-66-2025",
+        "path": "conformance/executable/de-kindergeld-signed-rulespec.json",
+        "state": "valid",
+        "sha256": "2" * 64,
+        "module_sha256": "3" * 64,
+        "encoding_manifest_payload_sha256": "4" * 64,
+        "encoding_manifest_source_file_sha256": "5" * 64,
+        "trusted_key_id": f"sha256:{'6' * 64}",
+        "checkout_observation": {
+            "repository": census.RULESPEC_REPOSITORY,
+            "commit": "1" * 40,
+            "claim_mode": "attested",
+        },
+    }
+    executable = {
+        "mode": "computed",
+        "state": "computed_pass",
+        "value": True,
+        "blockers": [],
+        "required_inputs": [signed_input],
+    }
+    monkeypatch.setattr(census, "_rederived_unified", lambda: unified)
+    monkeypatch.setattr(census, "_rederived_executable", lambda: executable)
+
+    result = census.build()
+    kindergeld = result["programs"]["de/kindergeld"]
+    assert kindergeld["certificate_status"] == "ready"
+    assert kindergeld["blockers"] == []
+    amount_root = next(
+        row
+        for row in kindergeld["declared_roots"]
+        if row["citation_path"] == "de/statute/estg/66"
+    )
+    assert amount_root["signature_state"] == "signed"
+    assert amount_root["claim_mode"] == "attested"
+    assert amount_root["signature_state_claim_mode"] == "computed"
+    assert amount_root["attestation_claim_mode"] == "computed"
+    dependency = next(
+        row
+        for row in result["programs"]["de/unterhaltsvorschuss"]["declared_roots"]
+        if row["citation_path"] == "de/statute/estg/66"
+    )
+    assert dependency["signature_state"] == "signed"
+    assert not any(
+        "estg/66" in blocker.lower()
+        for blocker in result["programs"]["de/unterhaltsvorschuss"]["blockers"]
+    )
+
+
+def test_de_closure_denominator_bytes_are_pinned(tmp_path, monkeypatch):
+    """MUTANT: edit even whitespace in the reviewed citation denominator."""
+
+    closure = _load("de_closure")
+    mutant = tmp_path / "source.json"
+    mutant.write_text(closure.SOURCE_PATH.read_text() + " ")
+    monkeypatch.setattr(closure, "SOURCE_PATH", mutant)
+    with pytest.raises(closure.ClosureError, match="review and re-pin"):
+        closure.load_source()
+
+
+def test_de_closure_cannot_resolve_by_filename_filter():
+    """MUTANT: replace the ratified citation-path universe with filename search."""
+
+    closure = _load("de_closure")
+    mutant = copy.deepcopy(closure.load_source())
+    mutant["resolution"]["filename_filters"] = True
+    with pytest.raises(closure.ClosureError, match="resolution protocol drifted"):
+        closure.build(mutant)
+
+
+def test_de_closure_requires_stefeg_content_descendant_and_target():
+    """MUTANTS: drop the content child or its amendment edge to EStG 66."""
+
+    closure = _load("de_closure")
+    source = closure.load_source()
+
+    missing_child = copy.deepcopy(source)
+    missing_child["corpus"]["rows"] = [
+        row
+        for row in missing_child["corpus"]["rows"]
+        if row["citation_path"] != closure.STEFEG_CONTENT
+    ]
+    with pytest.raises(closure.ClosureError, match="descendant denominator drifted"):
+        closure.build(missing_child)
+
+    missing_target = copy.deepcopy(source)
+    root = next(
+        row
+        for row in missing_target["corpus"]["rows"]
+        if row["citation_path"] == closure.STEFEG_ROOT
+    )
+    root["amendment_targets"].remove(closure.ESTG_66)
+    with pytest.raises(closure.ClosureError, match="does not target EStG 66"):
+        closure.build(missing_target)
+
+
+def test_de_closure_cannot_drop_kindergeld_boundary():
+    """MUTANT: omit EStG 65 from the amount-subgraph boundary declaration."""
+
+    closure = _load("de_closure")
+    mutant = copy.deepcopy(closure.load_source())
+    mutant["programs"]["de/kindergeld"]["boundaries"].pop()
+    with pytest.raises(
+        closure.ClosureError, match="boundary citation denominator drifted"
+    ):
+        closure.build(mutant)
+
+
+def test_de_closure_pending_signature_cannot_self_promote():
+    """MUTANT: a signed EStG 66 claim without pins, or a silent demotion."""
+
+    closure = _load("de_closure")
+    mutant = copy.deepcopy(closure.load_source())
+    module = next(
+        row
+        for row in mutant["rulespec"]["modules"]
+        if row["citation_path"] == closure.ESTG_66
+    )
+    del module["artifact"]
+    with pytest.raises(closure.ClosureError, match="lacks artifact pins"):
+        closure.build(mutant)
+
+    demoted = copy.deepcopy(closure.load_source())
+    module = next(
+        row
+        for row in demoted["rulespec"]["modules"]
+        if row["citation_path"] == closure.ESTG_66
+    )
+    module["signature_state"] = "pending"
+    del module["artifact"]
+    with pytest.raises(
+        closure.ClosureError, match="must be encoded and signed"
+    ):
+        closure.build(demoted)
+
+
+def test_de_certificate_does_not_count_source_crosscheck_as_axiom_work():
+    """MUTANT: the clean EUROMOD x GETTSIM aggregate cannot fill Axiom legs."""
+
+    certify = _load("certify")
+    certificate = certify.build_certificate(
+        "de/kindergeld", certify.PROGRAMS["de/kindergeld"]
+    )
+    conformant = certificate["verdicts"]["conformant"]
+    leg = conformant["reference_legs"][0]
+    assert conformant["value"] is True
+    # The 26 comparisons are the two real Axiom legs (13 cases each); the
+    # clean EUROMOD x GETTSIM aggregate stays a separate crosscheck and never
+    # counts as Axiom work.
+    assert leg["comparisons"] == 26
+    assert leg["matches"] == 26
+    assert leg["source_crosscheck"]["comparison_count"] == 13
+    assert leg["missing_required_legs"] == []
+    # Complete Axiom legs alone do not certify: the closure's subordinate-
+    # instrument frontier is undeclared, so certified stays an honest no.
+    assert certificate["certified"]["value"] is False
+    assert certificate["verdicts"]["closed"]["value"] is False
+
+
+def test_de_certificate_exercise_is_measured_and_closure_is_source_scoped():
+    certify = _load("certify")
+    certificate = certify.build_certificate(
+        "de/kindergeld", certify.PROGRAMS["de/kindergeld"]
+    )
+    exercise = certificate["verdicts"]["exercised"]
+    assert exercise["value"] is True
+    assert exercise["fields"]["child_count"]["observed_values"] == [0, 1, 2]
+    assert exercise["fields"]["yearly_earned_income_total"]["distinct"] == 10
+    closed = certificate["verdicts"]["closed"]
+    assert closed["value"] is False
+    assert closed["instrument_frontier"]["missing"] is True
+    assert closed["dependency_closure"]["missing"] is True
+    assert not closed["signature_blockers"]
+    assert closed["by_signature_state"]["pending"] == 0
+
+
+def test_de_certificate_flips_only_from_complete_legs_and_computed_replay(
+    monkeypatch,
+):
+    """MUTANT: keep a hand-maintained final verdict after every gate passes."""
+
+    certify = _load("certify")
+    # The committed evidence is complete and computed; only the executable
+    # verdict is forged here, in both directions.
+    signed = {
+        "id": "signed-rulespec-estg-66-2025",
+        "state": "valid",
+        "path": "conformance/executable/de-kindergeld-signed-rulespec.json",
+        "sha256": "1" * 64,
+        "module_sha256": "2" * 64,
+        "encoding_manifest_payload_sha256": "3" * 64,
+        "encoding_manifest_source_file_sha256": "4" * 64,
+        "trusted_key_id": f"sha256:{'5' * 64}",
+        "checkout_observation": {
+            "repository": "TheAxiomFoundation/rulespec-de",
+            "commit": "6" * 40,
+            "tree": "7" * 40,
+            "claim_mode": "attested",
+        },
+    }
+    executable = {
+        "mode": "computed",
+        "state": "computed_pass",
+        "value": True,
+        "blockers": [],
+        "required_inputs": [signed],
+    }
+    monkeypatch.setattr(
+        certify,
+        "_executable_verdict",
+        lambda _program, _spec, _legs=None, _evidence=None, **_kwargs: copy.deepcopy(
+            executable
+        ),
+    )
+
+    certificate = certify.build_certificate(
+        "de/kindergeld", certify.PROGRAMS["de/kindergeld"]
+    )
+
+    assert certificate["verdicts"]["conformant"]["value"] is True
+    assert certificate["verdicts"]["executable"]["value"] is True
+    # MUTANT boundary: complete legs plus a computed replay still cannot
+    # certify while the closure's instrument frontier is undeclared.
+    assert certificate["blockers"] == ["closed: closure must disposition the act's subordinate instruments (oracles#491); this closure declares none", 'closed: closure must type every leaf and encode every law-derived dependency (CERTIFIED.md v3); this closure declares no dependency-closure block']
+    assert certificate["certified"]["value"] is False
+    assert certificate["certified"]["state"] == "no"
+
+    executable["value"] = False
+    executable["state"] = "computed_invalid"
+    executable["blockers"] = ["release replay mismatch"]
+    mutant = certify.build_certificate(
+        "de/kindergeld", certify.PROGRAMS["de/kindergeld"]
+    )
+    assert mutant["certified"]["value"] is False
+    assert mutant["certified"]["state"] == "no"
+    assert mutant["blockers"] == [
+        "closed: closure must disposition the act's subordinate instruments (oracles#491); this closure declares none",
+        'closed: closure must type every leaf and encode every law-derived dependency (CERTIFIED.md v3); this closure declares no dependency-closure block',
+        "release replay mismatch",
+    ]
+
+
+def test_de_certificate_clears_stale_signature_note_after_computed_validation():
+    """MUTANT: certify while retaining any pending source/signature metadata."""
+
+    certify = _load("certify")
+    closed = {
+        "by_signature_state": {"pending": 1, "signed": 0},
+        "signature_blockers": ["stale"],
+        "signature_pending_citations": ["de/statute/estg/66"],
+        "rulespec_commit": "1" * 40,
+        "subgraph_sha256": "2" * 64,
+        "declared_sources": [
+            {
+                "citation_path": "de/statute/estg/66",
+                "claim_mode": "attested",
+                "signature_state": "pending",
+                "state": "encoded_pending_signature",
+                "reason": "parallel signing lane pending",
+            }
+        ],
+    }
+    executable = {
+        "required_inputs": [
+            {
+                "id": "signed-rulespec-estg-66-2025",
+                "state": "valid",
+                "path": "signed.json",
+                "sha256": "3" * 64,
+                "module_sha256": "4" * 64,
+                "encoding_manifest_payload_sha256": "5" * 64,
+                "encoding_manifest_source_file_sha256": "6" * 64,
+                "trusted_key_id": f"sha256:{'7' * 64}",
+                "checkout_observation": {
+                    "repository": "TheAxiomFoundation/rulespec-de",
+                    "commit": "8" * 40,
+                    "claim_mode": "attested",
+                },
+            }
+        ]
+    }
+
+    aligned = certify._align_de_closed_signature(closed, executable)
+    assert aligned["signature_blockers"] == []
+    assert aligned["signature_pending_citations"] == []
+    assert aligned["by_signature_state"]["signed"] == 1
+    assert aligned["signature_state_claim_mode"] == "computed"
+    assert "rulespec_commit" not in aligned
+    assert "subgraph_sha256" not in aligned
+    assert aligned["source_universe"] == {
+        "rulespec_commit": "1" * 40,
+        "rulespec_commit_claim_mode": "attested",
+        "subgraph_sha256": "2" * 64,
+        "subgraph_sha256_claim_mode": "computed",
+        "role": "citation-path closure snapshot",
+        "role_claim_mode": "attested",
+    }
+    [source] = aligned["declared_sources"]
+    assert source["signature_state"] == "signed"
+    assert source["state"] == "encoded_signed"
+    assert source["claim_mode"] == "attested"
+    assert source["state_claim_mode"] == "computed"
+    assert source["signed_artifact_claim_mode"] == "computed"
+    assert "pending" not in source["reason"].lower()
+    assert source["signed_artifact"]["module_sha256"] == "4" * 64
+    assert source["checkout_observation"]["claim_mode"] == "attested"
+
+
+def test_de_pending_candidates_cannot_inherit_empty_suite_success():
+    certify = _load("certify")
+    for program in (
+        "de/rv-employee-contribution",
+        "de/unterhaltsvorschuss",
+    ):
+        certificate = certify.build_certificate(program, certify.PROGRAMS[program])
+        assert certificate["certified"] == {
+            "value": False,
+            "state": "no",
+            "rule": "computed(conformant AND exercised AND closed AND executable) with zero open defects",
+        }
+        assert certificate["verdicts"]["conformant"]["value"] is False
+        assert certificate["verdicts"]["exercised"]["value"] is False
+        assert certificate["declared_root_set"]["citation_roots"]
+
+
+def test_de_certificate_rederives_closure_instead_of_trusting_summary(
+    tmp_path, monkeypatch
+):
+    certify = _load("certify")
+    repo = tmp_path / "repo"
+    (repo / "closure/de").mkdir(parents=True)
+    summary = json.loads((REPO / "closure/de/summary.json").read_text())
+    summary["programs"]["de/kindergeld"]["closed"] = False
+    (repo / "closure/de/summary.json").write_text(json.dumps(summary))
+    monkeypatch.setattr(certify, "REPO_ROOT", repo)
+    real_spec_from_file_location = importlib.util.spec_from_file_location
+    monkeypatch.setattr(
+        importlib.util,
+        "spec_from_file_location",
+        lambda name, path: real_spec_from_file_location(
+            name, REPO / "scripts/de_closure.py"
+        ),
+    )
+    with pytest.raises(ValueError, match="does not rederive"):
+        certify._closed_verdict(
+            "de/kindergeld", {"computed_closed": "closure/de/summary.json"}, []
+        )
+
+
+def test_de_executable_manifest_engine_pin_mutant_is_rejected(tmp_path, monkeypatch):
+    executable = _load("de_executable")
+    mutant = json.loads(executable.MANIFEST_PATH.read_text())
+    mutant["engine"]["archive_sha256"] = "0" * 64
+    path = tmp_path / "manifest.json"
+    path.write_text(json.dumps(mutant))
+    with pytest.raises(executable.DEExecutableError, match="manifest.engine"):
+        executable.load_manifest(path)
+
+
+def test_de_executable_manifest_cannot_freeze_today_unified_hash(tmp_path):
+    """MUTANT: add a static record SHA that would block the pending-leg flip."""
+
+    executable = _load("de_executable")
+    mutant = json.loads(executable.MANIFEST_PATH.read_text())
+    mutant["comparison_record"]["sha256"] = "0" * 64
+    path = tmp_path / "manifest.json"
+    path.write_text(json.dumps(mutant))
+    with pytest.raises(executable.DEExecutableError, match="comparison_record fields"):
+        executable.load_manifest(path)
+
+
+def test_de_replay_binding_ignores_bookkeeping_but_kills_semantic_mutants():
+    """MUTANTS: bind mutable provenance, or omit population/source semantics."""
+
+    executable = _load("de_executable")
+    record = _load("de_unified_comparison").build()
+    unified = {
+        "path": "comparisons/de-worker-dual-oracle/unified-record.json",
+        "record": record,
+    }
+    binding = executable._comparison_semantic_binding(unified)
+
+    bookkeeping = copy.deepcopy(unified)
+    bookkeeping["record"]["provenance"]["source_report"]["sha256"] = "0" * 64
+    bookkeeping["record"]["provenance"]["refresh_note"] = "routine rerun"
+    assert executable._comparison_semantic_binding(bookkeeping) == binding
+
+    population_mutant = copy.deepcopy(unified)
+    population_mutant["record"]["cases"][0]["metadata"][
+        "yearly_earned_income_total"
+    ] += 1
+    assert executable._comparison_semantic_binding(population_mutant) != binding
+
+    source_mutant = copy.deepcopy(unified)
+    source_view = source_mutant["record"]["views"][executable.PROGRAM]
+    source_view["summary"]["left_weighted_sum"] = 0
+    assert executable._comparison_semantic_binding(source_mutant) != binding
+
+
+def test_de_executable_rederives_unified_record_instead_of_trusting_bytes(tmp_path):
+    """MUTANT: edit a self-consistent committed record behind a valid path."""
+
+    executable = _load("de_executable")
+    manifest = executable.load_manifest()
+    expected = json.loads((REPO / manifest["comparison_record"]["path"]).read_text())
+    mutant = copy.deepcopy(expected)
+    mutant["experiment"]["active_inputs"]["child_count"]["state"] = "constant"
+    (tmp_path / "record.json").write_text(json.dumps(mutant))
+    generator = tmp_path / "generator.py"
+    generator.write_text(
+        "import json\n"
+        f"_DOCUMENT = {json.dumps(json.dumps(expected))}\n"
+        "def build():\n"
+        "    return json.loads(_DOCUMENT)\n"
+    )
+    manifest = copy.deepcopy(manifest)
+    manifest["comparison_record"]["path"] = "record.json"
+    manifest["comparison_record"]["generator"] = "generator.py"
+
+    with pytest.raises(executable.DEExecutableError, match="generator-rederived"):
+        executable._validate_unified_record(manifest, tmp_path)
+
+
+def test_de_executable_pending_inputs_never_self_assert_true(tmp_path):
+    """MUTANT: remove the Axiom pair records; the status must stay pending."""
+
+    executable = _load("de_executable")
+    root = tmp_path / "repo"
+    for relative in (
+        "conformance/executable/de-kindergeld-manifest.json",
+        "conformance/executable/de-kindergeld-signed-rulespec.json",
+        "conformance/executable/de-kindergeld-replay-receipt.json",
+        "comparisons/de-worker-dual-oracle/unified-record.json",
+        "comparisons/de-worker-dual-oracle/output-dependencies.json",
+        "scripts/de_unified_comparison.py",
+        "dashboard/public/data/euromod-gettsim-de-worker-dual-oracle.json",
+    ):
+        source = REPO / relative
+        target = root / relative
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(source.read_bytes())
+    # A coherent pending world: with the pair records gone, the unified
+    # record must itself be rederived to its pending shape first (a repo
+    # where legs vanish but the record still claims complete is invalid,
+    # not pending, and build_status fails closed on it).
+    tmp_unified = _load_from(root / "scripts/de_unified_comparison.py")
+    record = tmp_unified.build()
+    rendered = (
+        json.dumps(record, indent=2, sort_keys=True, ensure_ascii=False) + "\n"
+    )
+    (root / "comparisons/de-worker-dual-oracle/unified-record.json").write_text(
+        rendered, encoding="utf-8"
+    )
+    status = executable.build_status(
+        manifest_path=root / "conformance/executable/de-kindergeld-manifest.json",
+        repo_root=root,
+    )
+    assert status["mode"] == "computed"
+    assert status["value"] is False
+    assert status["state"] != "computed_pass"
+    listed = set(status.get("missing_inputs", [])) | set(
+        status.get("pending_inputs", [])
+    )
+    assert {"axiom-euromod", "axiom-gettsim"} <= listed
+
+
+def _complete_de_axiom_leg(de, unified, *, oracle="euromod"):
+    leg_id = f"axiom-{oracle}"
+    rows = []
+    execution_rows = []
+    for source in unified["cases"]:
+        child_count = source["metadata"]["child_count"]
+        household_amount = 255 * child_count
+        rows.append(
+            {
+                "case_id": source["case_id"],
+                "left_engine": oracle,
+                "right_engine": "axiom",
+                "left_errors": [],
+                "right_errors": [],
+                "metadata": copy.deepcopy(source["metadata"]),
+                "matches": [
+                    {
+                        "concept": de.KINDERGELD_CONCEPT,
+                        "left": household_amount,
+                        "right": household_amount,
+                    }
+                ],
+                "mismatches": [],
+            }
+        )
+        execution_rows.append({"case_id": source["case_id"], "value": household_amount})
+    record = {
+        "record_schema": de.RECORD_SCHEMA,
+        "schema_version": "axiom.comparison_report.v2",
+        "suite": de.AXIOM_LEG_SUITES[leg_id],
+        "period": de.DE_WORKER_PERIOD,
+        "state": "complete",
+        "engines": {"left": oracle, "right": "axiom"},
+        "tuple": {
+            "jurisdiction": "de",
+            "population": copy.deepcopy(unified["tuple"]["population"]),
+            "oracle": {"id": oracle, **de.ORACLE_PINS[oracle]},
+            "axiom": copy.deepcopy(de.AXIOM_ENGINE_PIN),
+            "rulespec": {
+                "repository": "TheAxiomFoundation/rulespec-de",
+                "commit": de.RULESPEC_REF_PIN["commit"],
+                "tree": de.RULESPEC_REF_PIN["tree"],
+                "claim_mode": "computed",
+            },
+        },
+        "population": unified["tuple"]["population"]["id"],
+        "dataset_identity": {
+            "sha256": unified["tuple"]["population"]["sha256"],
+            "claim_mode": "computed",
+        },
+        "cases": rows,
+        "views": {
+            de.PROGRAM: {
+                "kind": "subgraph",
+                "scope": "amount",
+                "claim_mode": "computed",
+                "leg_id": leg_id,
+                "state": "complete",
+                "root_nodes": [de.AMOUNT_ROOT_NODE],
+                "columns": [de.KINDERGELD_CONCEPT],
+                "summary": {
+                    "comparison_count": 13,
+                    "match_count": 13,
+                    "mismatch_count": 0,
+                    "error_count": 0,
+                },
+                "restatement": {
+                    "root_node": de.AMOUNT_ROOT_NODE,
+                    "column": de.KINDERGELD_CONCEPT,
+                    "operation": "multiply_root_amount_by_canonical_child_count",
+                    "input_source": "canonical_de_worker_dual_oracle_cases",
+                    "operation_claim_mode": "attested",
+                    "result_claim_mode": "computed",
+                },
+            }
+        },
+        "provenance": {
+            "generated_by": de.AXIOM_LEG_PRODUCER,
+            "rulespecs": [
+                {
+                    "repo": "TheAxiomFoundation/rulespec-de",
+                    "sha": de.RULESPEC_REF_PIN["commit"],
+                }
+            ],
+            "oracle_execution": {
+                "engine": oracle,
+                "target": de.ORACLE_TARGETS[oracle],
+                "mode": "live_no_reemit",
+                "case_results": execution_rows,
+                "case_results_sha256": hashlib.sha256(
+                    de._canonical_bytes(execution_rows)
+                ).hexdigest(),
+                "case_results_sha256_claim_mode": "computed",
+                "claim_mode": "attested",
+                "engine_identity_claim_mode": "attested",
+            },
+            "rulespec_artifact": {
+                "citation_path": "de/statute/estg/66",
+                "commit": de.RULESPEC_REF_PIN["commit"],
+                "tree": de.RULESPEC_REF_PIN["tree"],
+                "artifact_sha256": "a" * 64,
+                "apply_manifest_sha256": "b" * 64,
+                "claim_mode": "computed",
+            },
+        },
+    }
+    from scripts import de_axiom_legs
+
+    inspection = json.loads(
+        (
+            REPO
+            / "comparisons/de-worker-dual-oracle/axiom-euromod.json"
+        ).read_text()
+    )["provenance"]["rulespec_ref_inspection"]
+    for artifact in inspection["artifacts"]:
+        if artifact["path"] == "de/statutes/estg/66.yaml":
+            artifact.update({"presence": "on-pinned-ref", "sha256": "a" * 64})
+        elif artifact["path"] == (
+            ".axiom/encoding-manifests/de/statutes/estg/66.json"
+        ):
+            artifact.update({"presence": "on-pinned-ref", "sha256": "b" * 64})
+    scaffolds = de_axiom_legs.complete_view_scaffolds(oracle, inspection)
+    kindergeld = record["views"][de.PROGRAM]
+    for field in ("oracle_target", "target_root_nodes", "dependency_set"):
+        kindergeld[field] = copy.deepcopy(scaffolds[de.PROGRAM][field])
+    scaffolds[de.PROGRAM] = kindergeld
+    record["views"] = scaffolds
+    record["provenance"]["rulespec_ref_inspection"] = inspection
+    return record
+
+
+def test_de_axiom_leg_identity_scope_and_claim_mode_mutants_are_rejected(
+    tmp_path, monkeypatch
+):
+    """MUTANTS: relabel the oracle, subgraph scope, or computed evidence."""
+
+    de = _load("de_unified_comparison")
+    unified = de.build()
+    base = _complete_de_axiom_leg(de, unified)
+    path = tmp_path / "axiom-euromod.json"
+    monkeypatch.setattr(de, "REPO_ROOT", tmp_path)
+
+    path.write_text(json.dumps(base))
+    assert (
+        de._validate_axiom_leg(
+            path,
+            leg_id="axiom-euromod",
+            population_sha256=unified["tuple"]["population"]["sha256"],
+            population_cases=unified["cases"],
+            expected_oracle=de.ORACLE_PINS["euromod"],
+            expected_household_sum=de.EXPECTED_HOUSEHOLD_SUM,
+        )["state"]
+        == "complete"
+    )
+
+    mutants = []
+    wrong_oracle = copy.deepcopy(base)
+    wrong_oracle["tuple"]["oracle"]["id"] = "gettsim"
+    mutants.append((wrong_oracle, "oracle tuple"))
+    wrong_oracle_release = copy.deepcopy(base)
+    wrong_oracle_release["tuple"]["oracle"]["release"] = "J3.0"
+    mutants.append((wrong_oracle_release, "oracle tuple"))
+    wrong_axiom_release = copy.deepcopy(base)
+    wrong_axiom_release["tuple"]["axiom"]["commit"] = "0" * 40
+    mutants.append((wrong_axiom_release, "Axiom tuple"))
+    wrong_scope = copy.deepcopy(base)
+    wrong_scope["views"][de.PROGRAM]["scope"] = "whole-program"
+    mutants.append((wrong_scope, "subgraph view"))
+    attested_result = copy.deepcopy(base)
+    attested_result["views"][de.PROGRAM]["claim_mode"] = "attested"
+    mutants.append((attested_result, "subgraph view"))
+    unsigned_binding = copy.deepcopy(base)
+    unsigned_binding["provenance"]["rulespec_artifact"]["claim_mode"] = "attested"
+    mutants.append((unsigned_binding, "dependency inspection"))
+    wrong_rulespec_commit = copy.deepcopy(base)
+    wrong_rulespec_commit["provenance"]["rulespec_artifact"]["commit"] = "0" * 40
+    mutants.append((wrong_rulespec_commit, "dependency inspection"))
+    wrong_rulespec_tree = copy.deepcopy(base)
+    wrong_rulespec_tree["provenance"]["rulespec_artifact"]["tree"] = "0" * 40
+    mutants.append((wrong_rulespec_tree, "dependency inspection"))
+    reemitted_oracle = copy.deepcopy(base)
+    reemitted_oracle["provenance"]["oracle_execution"]["mode"] = "report_reemit"
+    mutants.append((reemitted_oracle, "live oracle execution contract"))
+    laundered_oracle = copy.deepcopy(base)
+    laundered_oracle["provenance"]["oracle_execution"]["claim_mode"] = "computed"
+    mutants.append((laundered_oracle, "live oracle execution contract"))
+    attested_digest = copy.deepcopy(base)
+    attested_digest["provenance"]["oracle_execution"][
+        "case_results_sha256_claim_mode"
+    ] = "attested"
+    mutants.append((attested_digest, "digest is not computed"))
+    fake_producer = copy.deepcopy(base)
+    fake_producer["provenance"]["generated_by"] = "hand-authored"
+    mutants.append((fake_producer, "live producer"))
+    drifted_execution = copy.deepcopy(base)
+    drifted_execution["provenance"]["oracle_execution"]["case_results"][0]["value"] = 1
+    mutants.append((drifted_execution, "execution digest"))
+    for mutant, marker in mutants:
+        path.write_text(json.dumps(mutant))
+        with pytest.raises(de.DERecordError, match=marker):
+            de._validate_axiom_leg(
+                path,
+                leg_id="axiom-euromod",
+                population_sha256=unified["tuple"]["population"]["sha256"],
+                population_cases=unified["cases"],
+                expected_oracle=de.ORACLE_PINS["euromod"],
+                expected_household_sum=de.EXPECTED_HOUSEHOLD_SUM,
+            )
+
+
+def test_de_axiom_leg_cannot_substitute_case_values_or_source_total(
+    tmp_path, monkeypatch
+):
+    """MUTANT: substitute 250-EUR rows for the stored live/source values."""
+
+    de = _load("de_unified_comparison")
+    unified = de.build()
+    mutant = _complete_de_axiom_leg(de, unified)
+    for source, row in zip(unified["cases"], mutant["cases"], strict=True):
+        amount = 250 * source["metadata"]["child_count"]
+        row["matches"][0].update({"left": amount, "right": amount})
+    path = tmp_path / "axiom-euromod.json"
+    path.write_text(json.dumps(mutant))
+    monkeypatch.setattr(de, "REPO_ROOT", tmp_path)
+
+    with pytest.raises(de.DERecordError, match="live oracle|765 EUR"):
+        de._validate_axiom_leg(
+            path,
+            leg_id="axiom-euromod",
+            population_sha256=unified["tuple"]["population"]["sha256"],
+            population_cases=unified["cases"],
+            expected_oracle=de.ORACLE_PINS["euromod"],
+            expected_household_sum=de.EXPECTED_HOUSEHOLD_SUM,
+        )
+
+
+def _de_engine_fixture(executable, case_ids):
+    request = {
+        "mode": "explain",
+        "dataset": {"inputs": [], "relations": []},
+        "queries": [
+            {
+                "entity_id": f"case-{index}::tax_unit",
+                "period": copy.deepcopy(executable.EXPECTED_PERIOD),
+                "outputs": [executable.ROOT_NODE],
+            }
+            for index in range(executable.POPULATION_PIN["case_count"])
+        ],
+    }
+    expected_results = [
+        {
+            "entity_id": query["entity_id"],
+            "period": copy.deepcopy(query["period"]),
+            "errors": [],
+            "outputs": {
+                executable.ROOT_NODE: {
+                    "kind": "scalar",
+                    "id": executable.ROOT_NODE,
+                    "name": executable.RULESPEC_PIN["rule_name"],
+                    "dtype": "integer",
+                    "unit": "EUR",
+                    "value": {"kind": "integer", "value": 255},
+                }
+            },
+        }
+        for query in request["queries"]
+    ]
+    return {
+        "expected_results_source": "axiom_execution_case_records",
+        "case_ids": list(case_ids),
+        "request": request,
+        "request_sha256": hashlib.sha256(
+            executable._canonical_bytes(request)
+        ).hexdigest(),
+        "expected_results": expected_results,
+        "expected_results_sha256": hashlib.sha256(
+            executable._canonical_bytes(expected_results)
+        ).hexdigest(),
+    }
+
+
+def _rehash_de_fixture(executable, fixture):
+    fixture["request_sha256"] = hashlib.sha256(
+        executable._canonical_bytes(fixture["request"])
+    ).hexdigest()
+    fixture["expected_results_sha256"] = hashlib.sha256(
+        executable._canonical_bytes(fixture["expected_results"])
+    ).hexdigest()
+
+
+def _complete_de_executable_leg(de, executable, unified, *, oracle="euromod"):
+    record = _complete_de_axiom_leg(de, unified, oracle=oracle)
+    case_ids = [row["case_id"] for row in unified["cases"]]
+    record["views"][de.PROGRAM]["executable_replay"] = _de_engine_fixture(
+        executable, case_ids
+    )
+    return record
+
+
+def test_de_live_leg_builder_uses_actual_engine_rows_not_aggregate_expansion():
+    """MUTANT: manufacture uniform 255-EUR rows from 765 / three children."""
+
+    de = _load("de_unified_comparison")
+    executable = _load("de_executable")
+    unified_record = de.build()
+    case_ids = [row["case_id"] for row in unified_record["cases"]]
+    fixture = _de_engine_fixture(executable, case_ids)
+    oracle_rows = [0.0] * 11 + [250.0, 515.0]
+    dependency_inspection = json.loads(
+        (
+            REPO
+            / "comparisons/de-worker-dual-oracle/axiom-euromod.json"
+        ).read_text()
+    )["provenance"]["rulespec_ref_inspection"]
+    for artifact in dependency_inspection["artifacts"]:
+        if artifact["path"] == executable.RULESPEC_PIN["module_path"]:
+            artifact.update({"presence": "on-pinned-ref", "sha256": "a" * 64})
+        elif artifact["path"] == executable.RULESPEC_PIN[
+            "encoding_manifest_path"
+        ]:
+            artifact.update({"presence": "on-pinned-ref", "sha256": "b" * 64})
+    with pytest.raises(executable.DEExecutableError, match="differs from Axiom"):
+        executable._build_live_leg_documents(
+            unified={"record": unified_record, "case_ids": case_ids},
+            request=fixture["request"],
+            axiom_results=fixture["expected_results"],
+            oracle_values={"euromod": oracle_rows, "gettsim": oracle_rows},
+            descriptor={
+                "module_sha256": "a" * 64,
+                "encoding_source_file_sha256": "b" * 64,
+            },
+            dependency_inspection=dependency_inspection,
+        )
+
+
+def test_de_live_producer_repairs_stale_bundle_and_emits_all_flip_inputs(
+    tmp_path, monkeypatch
+):
+    """MUTANTS: skip live oracles, trust stale legs, or omit a bundle output."""
+
+    executable = _load("de_executable")
+    for relative in (
+        "scripts/de_unified_comparison.py",
+        "conformance/executable/de-kindergeld-manifest.json",
+        "dashboard/public/data/euromod-gettsim-de-worker-dual-oracle.json",
+    ):
+        destination = tmp_path / relative
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(REPO / relative, destination)
+
+    archive_bytes = b"synthetic producer archive"
+    fake_engine = {
+        **executable.ENGINE_PIN,
+        "archive_sha256": hashlib.sha256(archive_bytes).hexdigest(),
+    }
+    monkeypatch.setattr(executable, "ENGINE_PIN", fake_engine)
+    manifest_path = tmp_path / "conformance/executable/de-kindergeld-manifest.json"
+    manifest_document = json.loads(manifest_path.read_text())
+    manifest_document["engine"] = fake_engine
+    manifest_path.write_text(json.dumps(manifest_document))
+
+    archive = tmp_path / "engine.tar.xz"
+    archive.write_bytes(archive_bytes)
+    public_key = tmp_path / "public.key"
+    public_key.write_bytes(b"k" * 32)
+    rulespec_root = tmp_path / "rulespec-de"
+    rulespec_root.mkdir()
+    model_root = tmp_path / "euromod-model"
+    model_root.mkdir()
+    euromod_python = tmp_path / "euromod-python"
+    euromod_python.write_text("synthetic")
+
+    stale_dir = tmp_path / "comparisons/de-worker-dual-oracle"
+    stale_dir.mkdir(parents=True)
+    (stale_dir / "axiom-euromod.json").write_text("{truncated")
+    (stale_dir / "unified-record.json").write_text('{"stale": true}')
+
+    descriptor_document = {"synthetic_signed_descriptor": True}
+    descriptor_validation = {
+        "checkout_observation": {
+            "repository": executable.RULESPEC_PIN["repository"],
+            "commit": executable.RULESPEC_PIN["commit"],
+            "tree": executable.RULESPEC_PIN["tree"],
+            "claim_mode": "attested",
+        },
+        "module_sha256": "2" * 64,
+        "module_bytes": b"synthetic module",
+        "encoding_payload_sha256": "3" * 64,
+        "encoding_source_file_sha256": "4" * 64,
+        "trusted_key_id": executable.RULESPEC_PIN["trusted_key_id"],
+        "public_key": b"k" * 32,
+    }
+    monkeypatch.setattr(
+        executable,
+        "_build_signed_descriptor",
+        lambda *_args, **_kwargs: copy.deepcopy(descriptor_document),
+    )
+    monkeypatch.setattr(
+        executable,
+        "_validate_signed_descriptor_document",
+        lambda *_args, **_kwargs: copy.deepcopy(descriptor_validation),
+    )
+
+    source_record = _load("de_unified_comparison").build()
+    case_ids = [row["case_id"] for row in source_record["cases"]]
+    engine_fixture = _de_engine_fixture(executable, case_ids)
+    replay_result = {
+        "binary_sha256": "5" * 64,
+        "version_stdout": "axiom-rules-engine 0.2.2",
+        "compiled_artifact_sha256": "6" * 64,
+        "stdout_sha256": "7" * 64,
+        "observed_results": engine_fixture["expected_results"],
+        "observed_results_sha256": engine_fixture["expected_results_sha256"],
+    }
+    monkeypatch.setattr(
+        executable,
+        "_execute_release_archive_raw",
+        lambda *_args, **_kwargs: copy.deepcopy(replay_result),
+    )
+    monkeypatch.setattr(
+        executable,
+        "_execute_release_archive",
+        lambda *_args, **_kwargs: copy.deepcopy(replay_result),
+    )
+
+    from scripts import de_axiom_legs
+
+    dependency_inspection = json.loads(
+        (
+            REPO
+            / "comparisons/de-worker-dual-oracle/axiom-euromod.json"
+        ).read_text()
+    )["provenance"]["rulespec_ref_inspection"]
+    for artifact in dependency_inspection["artifacts"]:
+        if artifact["path"] == executable.RULESPEC_PIN["module_path"]:
+            artifact.update({"presence": "on-pinned-ref", "sha256": "2" * 64})
+        elif artifact["path"] == executable.RULESPEC_PIN[
+            "encoding_manifest_path"
+        ]:
+            artifact.update({"presence": "on-pinned-ref", "sha256": "4" * 64})
+    monkeypatch.setattr(
+        de_axiom_legs,
+        "inspect_pinned_ref",
+        lambda *_args, **_kwargs: copy.deepcopy(dependency_inspection),
+    )
+
+    live_calls = []
+
+    def live_oracles(**kwargs):
+        live_calls.append(kwargs)
+        values = [0.0] * 11 + [255.0, 510.0]
+        return {"euromod": values, "gettsim": values}
+
+    monkeypatch.setattr(executable, "_live_kindergeld_oracle_values", live_oracles)
+    status = executable.produce(
+        engine_archive=archive,
+        rulespec_root=rulespec_root,
+        signing_public_key=public_key,
+        euromod_model_root=model_root,
+        euromod_python=euromod_python,
+        manifest_path=manifest_path,
+        repo_root=tmp_path,
+    )
+
+    assert len(live_calls) == 1
+    assert status["state"] == "computed_pass"
+    assert status["value"] is True
+    assert status["blockers"] == []
+    for relative in (
+        "comparisons/de-worker-dual-oracle/axiom-euromod.json",
+        "comparisons/de-worker-dual-oracle/axiom-gettsim.json",
+        "comparisons/de-worker-dual-oracle/unified-record.json",
+        "conformance/executable/de-kindergeld-signed-rulespec.json",
+        "conformance/executable/de-kindergeld-replay-receipt.json",
+        "conformance/executable/de-kindergeld-status.json",
+    ):
+        assert json.loads((tmp_path / relative).read_text())
+    unified = json.loads((stale_dir / "unified-record.json").read_text())
+    assert unified["views"][executable.PROGRAM]["missing_for_certification"] == []
+
+    old_unified_sha = hashlib.sha256(
+        (stale_dir / "unified-record.json").read_bytes()
+    ).hexdigest()
+    report_path = (
+        tmp_path / "dashboard/public/data/euromod-gettsim-de-worker-dual-oracle.json"
+    )
+    refreshed_report = json.loads(report_path.read_text())
+    refreshed_report["provenance"]["routine_refresh_note"] = "metadata only"
+    report_path.write_text(json.dumps(refreshed_report))
+    generator_spec = importlib.util.spec_from_file_location(
+        "_producer_refresh_unified", tmp_path / "scripts/de_unified_comparison.py"
+    )
+    assert generator_spec is not None and generator_spec.loader is not None
+    generator = importlib.util.module_from_spec(generator_spec)
+    generator_spec.loader.exec_module(generator)
+    (stale_dir / "unified-record.json").write_text(
+        json.dumps(generator.build(), indent=2, sort_keys=True) + "\n"
+    )
+    assert (
+        hashlib.sha256((stale_dir / "unified-record.json").read_bytes()).hexdigest()
+        != old_unified_sha
+    )
+    refreshed_status = executable.build_status(
+        manifest_path=manifest_path,
+        repo_root=tmp_path,
+    )
+    assert refreshed_status["state"] == "computed_pass"
+
+
+def test_de_executable_leg_semantic_mutants_are_rejected(tmp_path):
+    """MUTANTS: drift request, result, release, or case-value semantics."""
+
+    de = _load("de_unified_comparison")
+    executable = _load("de_executable")
+    unified_record = de.build()
+    unified = {
+        "record": unified_record,
+        "case_ids": [row["case_id"] for row in unified_record["cases"]],
+    }
+    manifest = executable.load_manifest()
+    slot = executable.LEG_PINS[0]
+    base = _complete_de_executable_leg(de, executable, unified_record)
+    path = tmp_path / "axiom-euromod.json"
+
+    path.write_text(json.dumps(base))
+    assert (
+        executable._validate_leg_record(path, slot, manifest, unified)["id"]
+        == "axiom-euromod"
+    )
+
+    mutants = []
+    wrong_period = copy.deepcopy(base)
+    fixture = wrong_period["views"][de.PROGRAM]["executable_replay"]
+    fixture["request"]["queries"][0]["period"]["start"] = "2024-01-01"
+    _rehash_de_fixture(executable, fixture)
+    mutants.append((wrong_period, "replay queries"))
+
+    wrong_unit = copy.deepcopy(base)
+    fixture = wrong_unit["views"][de.PROGRAM]["executable_replay"]
+    fixture["expected_results"][0]["outputs"][executable.ROOT_NODE]["unit"] = "USD"
+    _rehash_de_fixture(executable, fixture)
+    mutants.append((wrong_unit, "unit"))
+
+    wrong_root_value = copy.deepcopy(base)
+    fixture = wrong_root_value["views"][de.PROGRAM]["executable_replay"]
+    fixture["expected_results"][0]["outputs"][executable.ROOT_NODE]["value"][
+        "value"
+    ] = 250
+    _rehash_de_fixture(executable, fixture)
+    mutants.append((wrong_root_value, "case-varying"))
+
+    engine_error = copy.deepcopy(base)
+    fixture = engine_error["views"][de.PROGRAM]["executable_replay"]
+    fixture["expected_results"][0]["errors"] = ["fabricated success"]
+    _rehash_de_fixture(executable, fixture)
+    mutants.append((engine_error, "engine errors"))
+
+    wrong_oracle_release = copy.deepcopy(base)
+    wrong_oracle_release["tuple"]["oracle"]["release"] = "J3.0"
+    mutants.append((wrong_oracle_release, "oracle release tuple"))
+
+    wrong_axiom_release = copy.deepcopy(base)
+    wrong_axiom_release["tuple"]["axiom"]["release"] = "v9.9.9"
+    mutants.append((wrong_axiom_release, "Axiom release tuple"))
+
+    wrong_rulespec_commit = copy.deepcopy(base)
+    wrong_rulespec_commit["provenance"]["rulespec_artifact"]["commit"] = "0" * 40
+    mutants.append((wrong_rulespec_commit, "rulespec pinned commit"))
+
+    wrong_rulespec_tree = copy.deepcopy(base)
+    wrong_rulespec_tree["provenance"]["rulespec_artifact"]["tree"] = "0" * 40
+    mutants.append((wrong_rulespec_tree, "rulespec pinned tree"))
+
+    wrong_household_amount = copy.deepcopy(base)
+    for source, row in zip(
+        unified_record["cases"], wrong_household_amount["cases"], strict=True
+    ):
+        amount = 250 * source["metadata"]["child_count"]
+        row["matches"][0].update({"left": amount, "right": amount})
+    mutants.append((wrong_household_amount, "live oracle result"))
+
+    wrong_live_oracle_row = copy.deepcopy(base)
+    execution = wrong_live_oracle_row["provenance"]["oracle_execution"]
+    execution["case_results"][0]["value"] = 1
+    execution["case_results_sha256"] = hashlib.sha256(
+        executable._canonical_bytes(execution["case_results"])
+    ).hexdigest()
+    mutants.append((wrong_live_oracle_row, "live oracle result"))
+
+    for mutant, marker in mutants:
+        path.write_text(json.dumps(mutant))
+        with pytest.raises(executable.DEExecutableError, match=marker):
+            executable._validate_leg_record(path, slot, manifest, unified)
+
+
+def test_de_executable_common_legs_must_bind_exact_same_fixture_and_rulespec():
+    """MUTANTS: keep hashes while changing request bytes or signed artifact."""
+
+    executable = _load("de_executable")
+    fixture = _de_engine_fixture(executable, [f"case-{i}" for i in range(13)])
+    first = {
+        "id": "axiom-euromod",
+        "path": "euromod.json",
+        "sha256": "1" * 64,
+        **copy.deepcopy(fixture),
+        "rulespec_artifact": {
+            "citation_path": executable.RULESPEC_PIN["citation_path"],
+            "commit": executable.RULESPEC_PIN["commit"],
+            "tree": executable.RULESPEC_PIN["tree"],
+            "artifact_sha256": "2" * 64,
+            "apply_manifest_sha256": "3" * 64,
+        },
+    }
+    second = {**copy.deepcopy(first), "id": "axiom-gettsim"}
+    assert executable._common_leg_fixture([first, second])["request"]
+
+    request_drift = copy.deepcopy(second)
+    request_drift["request"]["mode"] = "trace"
+    with pytest.raises(executable.DEExecutableError, match="requests differ"):
+        executable._common_leg_fixture([first, request_drift])
+
+    rulespec_drift = copy.deepcopy(second)
+    rulespec_drift["rulespec_artifact"]["artifact_sha256"] = "4" * 64
+    with pytest.raises(executable.DEExecutableError, match="common signed RuleSpec"):
+        executable._common_leg_fixture([first, rulespec_drift])
+
+
+def test_de_executable_marks_incompatible_landed_legs_invalid_without_receipt(
+    tmp_path, monkeypatch
+):
+    """MUTANT: defer common-fixture validation until a replay receipt exists."""
+
+    executable = _load("de_executable")
+    manifest_path = tmp_path / "manifest.json"
+    manifest_path.write_text("{}\n")
+    for slot in executable.LEG_PINS:
+        path = tmp_path / slot["path"]
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("{}\n")
+
+    fixture = _de_engine_fixture(executable, [f"case-{i}" for i in range(13)])
+    rulespec = {
+        "citation_path": executable.RULESPEC_PIN["citation_path"],
+        "commit": executable.RULESPEC_PIN["commit"],
+        "tree": executable.RULESPEC_PIN["tree"],
+        "artifact_sha256": "2" * 64,
+        "apply_manifest_sha256": "3" * 64,
+    }
+    legs = {}
+    for index, slot in enumerate(executable.LEG_PINS):
+        legs[slot["id"]] = {
+            "id": slot["id"],
+            "path": slot["path"],
+            "sha256": str(index + 4) * 64,
+            **copy.deepcopy(fixture),
+            "rulespec_artifact": copy.deepcopy(rulespec),
+        }
+    legs["axiom-gettsim"]["request"]["mode"] = "trace"
+
+    monkeypatch.setattr(
+        executable,
+        "load_manifest",
+        lambda *_args, **_kwargs: {
+            "subgraph": {"scope": "amount", "root_nodes": [executable.ROOT_NODE]},
+            "replay": {
+                "verification_mode": "fresh_replay_from_embedded_release_archive"
+            },
+        },
+    )
+    monkeypatch.setattr(
+        executable,
+        "_validate_unified_record",
+        lambda *_args, **_kwargs: {"path": "unified.json", "sha256": "8" * 64},
+    )
+    monkeypatch.setattr(
+        executable,
+        "_validate_leg_record",
+        lambda _path, slot, *_args: copy.deepcopy(legs[slot["id"]]),
+    )
+
+    status = executable.build_status(
+        manifest_path=manifest_path,
+        repo_root=tmp_path,
+    )
+    assert status["state"] == "computed_invalid"
+    assert status["invalid_inputs"] == ["axiom-euromod", "axiom-gettsim"]
+    assert all(
+        "cross-leg consistency failed" in row["reason"]
+        for row in status["required_inputs"][:2]
+    )
+    assert "release-binary-replay-receipt" in status["missing_inputs"]
+
+
+def _synthetic_de_replay(executable, tmp_path, monkeypatch):
+    archive_bytes = b"synthetic pinned release archive"
+    fake_engine = {
+        **executable.ENGINE_PIN,
+        "archive_sha256": hashlib.sha256(archive_bytes).hexdigest(),
+    }
+    monkeypatch.setattr(executable, "ENGINE_PIN", fake_engine)
+    expected_results = [
+        {
+            "entity_id": f"case-{index}::tax_unit",
+            "period": copy.deepcopy(executable.EXPECTED_PERIOD),
+            "errors": [],
+            "outputs": {
+                executable.ROOT_NODE: {
+                    "kind": "scalar",
+                    "id": executable.ROOT_NODE,
+                    "name": executable.RULESPEC_PIN["rule_name"],
+                    "dtype": "integer",
+                    "unit": "EUR",
+                    "value": {"kind": "integer", "value": 255},
+                }
+            },
+        }
+        for index in range(executable.POPULATION_PIN["case_count"])
+    ]
+    request = {
+        "mode": "explain",
+        "dataset": {"inputs": [], "relations": []},
+        "queries": [
+            {
+                "entity_id": f"case-{index}::tax_unit",
+                "period": copy.deepcopy(executable.EXPECTED_PERIOD),
+                "outputs": [executable.ROOT_NODE],
+            }
+            for index in range(executable.POPULATION_PIN["case_count"])
+        ],
+    }
+    fixture = {
+        "request": request,
+        "request_sha256": hashlib.sha256(
+            executable._canonical_bytes(request)
+        ).hexdigest(),
+        "expected_results": expected_results,
+        "expected_results_sha256": hashlib.sha256(
+            executable._canonical_bytes(expected_results)
+        ).hexdigest(),
+        "rulespec_artifact": {
+            "citation_path": executable.RULESPEC_PIN["citation_path"],
+            "commit": executable.RULESPEC_PIN["commit"],
+            "tree": executable.RULESPEC_PIN["tree"],
+            "artifact_sha256": "3" * 64,
+            "apply_manifest_sha256": "4" * 64,
+        },
+    }
+    manifest = {
+        "replay": {
+            "required_commands": [["axiom-rules-engine", "--version"]],
+            "request_source": "exact_common_fixture_from_axiom_leg_slots",
+            "expected_results_source": (
+                "exact_common_axiom_results_from_axiom_leg_slots"
+            ),
+            "verification_mode": "fresh_replay_from_embedded_release_archive",
+        }
+    }
+    unified = {
+        "path": "unified.json",
+        "sha256": "5" * 64,
+        "record": _load("de_unified_comparison").build(),
+    }
+    legs = [
+        {"id": "axiom-euromod", "path": "euromod.json", "sha256": "6" * 64},
+        {"id": "axiom-gettsim", "path": "gettsim.json", "sha256": "7" * 64},
+    ]
+    descriptor = {
+        "path": "signed.json",
+        "sha256": "8" * 64,
+        "checkout_observation": {
+            "repository": executable.RULESPEC_PIN["repository"],
+            "commit": executable.RULESPEC_PIN["commit"],
+            "tree": executable.RULESPEC_PIN["tree"],
+            "claim_mode": "attested",
+        },
+        "module_sha256": "3" * 64,
+        "encoding_payload_sha256": "a" * 64,
+        "encoding_source_file_sha256": "4" * 64,
+        "trusted_key_id": f"sha256:{'9' * 64}",
+    }
+    fresh = {
+        "binary_sha256": "b" * 64,
+        "version_stdout": "axiom-rules-engine 0.2.2",
+        "compiled_artifact_sha256": "c" * 64,
+        "stdout_sha256": "d" * 64,
+        "observed_results": expected_results,
+        "observed_results_sha256": fixture["expected_results_sha256"],
+    }
+    receipt = {
+        "schema": executable.REPLAY_SCHEMA,
+        "program": executable.PROGRAM,
+        "period": executable.PERIOD,
+        "claim_mode": "computed",
+        "engine": {
+            **fake_engine,
+            "binary_sha256": fresh["binary_sha256"],
+            "version_stdout": fresh["version_stdout"],
+        },
+        "release_archive": {
+            "encoding": "base64",
+            "asset": fake_engine["asset"],
+            "sha256": fake_engine["archive_sha256"],
+            "bytes_base64": base64.b64encode(archive_bytes).decode("ascii"),
+        },
+        "comparison_record": {
+            "path": unified["path"],
+            "semantic_sha256": executable._comparison_semantic_binding(unified)[
+                "semantic_sha256"
+            ],
+            "population_sha256": executable.POPULATION_PIN["sha256"],
+        },
+        "signed_rulespec_artifact": {
+            "path": descriptor["path"],
+            "sha256": descriptor["sha256"],
+            "commit": executable.RULESPEC_PIN["commit"],
+            "tree": executable.RULESPEC_PIN["tree"],
+            "module_sha256": descriptor["module_sha256"],
+            "encoding_manifest_payload_sha256": descriptor["encoding_payload_sha256"],
+            "encoding_manifest_source_file_sha256": descriptor[
+                "encoding_source_file_sha256"
+            ],
+            "trusted_key_id": descriptor["trusted_key_id"],
+        },
+        "axiom_legs": legs,
+        "execution": {
+            "commands": [
+                {"argv": manifest["replay"]["required_commands"][0], "exit_code": 0}
+            ],
+            "request_source": manifest["replay"]["request_source"],
+            "expected_results_source": manifest["replay"]["expected_results_source"],
+            "verification_mode": manifest["replay"]["verification_mode"],
+            "request_sha256": fixture["request_sha256"],
+            "expected_results_sha256": fixture["expected_results_sha256"],
+            "observed_results": expected_results,
+            "observed_results_sha256": fixture["expected_results_sha256"],
+            "result_count": 13,
+            "compiled_artifact_sha256": fresh["compiled_artifact_sha256"],
+            "stdout_sha256": fresh["stdout_sha256"],
+        },
+    }
+    receipt_path = tmp_path / "receipt.json"
+    receipt_path.write_text(json.dumps(receipt))
+    return receipt_path, manifest, unified, legs, fixture, descriptor, receipt, fresh
+
+
+def test_de_executable_receipt_cannot_bypass_fresh_release_replay(
+    tmp_path, monkeypatch
+):
+    """MUTANT: a perfect stored transcript cannot survive a failed rerun."""
+
+    executable = _load("de_executable")
+    inputs = _synthetic_de_replay(executable, tmp_path, monkeypatch)
+    path, manifest, unified, legs, fixture, descriptor, _receipt, fresh = inputs
+    assert (
+        executable._validate_replay_receipt(
+            path,
+            manifest,
+            unified,
+            legs,
+            fixture,
+            descriptor,
+            lambda *_: fresh,
+        )["verification_mode"]
+        == "fresh_replay_from_embedded_release_archive"
+    )
+
+    def failed_replay(*_args):
+        raise executable.DEExecutableError("forced fresh replay failure")
+
+    with pytest.raises(executable.DEExecutableError, match="forced fresh replay"):
+        executable._validate_replay_receipt(
+            path,
+            manifest,
+            unified,
+            legs,
+            fixture,
+            descriptor,
+            failed_replay,
+        )
+
+
+def test_de_executable_embedded_archive_and_fresh_hash_mutants_are_rejected(
+    tmp_path, monkeypatch
+):
+    """MUTANTS: drift release bytes or retain stale compile/stdout hashes."""
+
+    executable = _load("de_executable")
+    inputs = _synthetic_de_replay(executable, tmp_path, monkeypatch)
+    path, manifest, unified, legs, fixture, descriptor, receipt, fresh = inputs
+
+    drifted_archive = copy.deepcopy(receipt)
+    drifted_archive["release_archive"]["bytes_base64"] = base64.b64encode(
+        b"substituted archive"
+    ).decode("ascii")
+    path.write_text(json.dumps(drifted_archive))
+    with pytest.raises(executable.DEExecutableError, match="embedded release archive"):
+        executable._validate_replay_receipt(
+            path,
+            manifest,
+            unified,
+            legs,
+            fixture,
+            descriptor,
+            lambda *_: fresh,
+        )
+
+    wrong_binding = copy.deepcopy(receipt)
+    wrong_binding["axiom_legs"][0]["sha256"] = "f" * 64
+    path.write_text(json.dumps(wrong_binding))
+    with pytest.raises(executable.DEExecutableError, match="receipt Axiom legs"):
+        executable._validate_replay_receipt(
+            path,
+            manifest,
+            unified,
+            legs,
+            fixture,
+            descriptor,
+            lambda *_: fresh,
+        )
+
+    wrong_rulespec_commit = copy.deepcopy(receipt)
+    wrong_rulespec_commit["signed_rulespec_artifact"]["commit"] = "0" * 40
+    path.write_text(json.dumps(wrong_rulespec_commit))
+    with pytest.raises(
+        executable.DEExecutableError, match="receipt signed RuleSpec binding"
+    ):
+        executable._validate_replay_receipt(
+            path,
+            manifest,
+            unified,
+            legs,
+            fixture,
+            descriptor,
+            lambda *_: fresh,
+        )
+
+    wrong_rulespec_tree = copy.deepcopy(receipt)
+    wrong_rulespec_tree["signed_rulespec_artifact"]["tree"] = "0" * 40
+    path.write_text(json.dumps(wrong_rulespec_tree))
+    with pytest.raises(
+        executable.DEExecutableError, match="receipt signed RuleSpec binding"
+    ):
+        executable._validate_replay_receipt(
+            path,
+            manifest,
+            unified,
+            legs,
+            fixture,
+            descriptor,
+            lambda *_: fresh,
+        )
+
+    wrong_fresh_results = copy.deepcopy(fresh)
+    wrong_fresh_results["observed_results"] = copy.deepcopy(fresh["observed_results"])
+    wrong_fresh_results["observed_results"][0]["outputs"][executable.ROOT_NODE][
+        "value"
+    ]["value"] = 250
+    path.write_text(json.dumps(receipt))
+    with pytest.raises(executable.DEExecutableError, match="fresh release replay"):
+        executable._validate_replay_receipt(
+            path,
+            manifest,
+            unified,
+            legs,
+            fixture,
+            descriptor,
+            lambda *_: wrong_fresh_results,
+        )
+
+    stale_compile = copy.deepcopy(receipt)
+    stale_compile["execution"]["compiled_artifact_sha256"] = "e" * 64
+    path.write_text(json.dumps(stale_compile))
+    with pytest.raises(executable.DEExecutableError, match="fresh compiled artifact"):
+        executable._validate_replay_receipt(
+            path,
+            manifest,
+            unified,
+            legs,
+            fixture,
+            descriptor,
+            lambda *_: fresh,
+        )
+
+
+def test_de_signed_descriptor_recomputes_exact_manifest_file_bytes(monkeypatch):
+    """MUTANT: a claimed apply-manifest file hash cannot self-attest."""
+
+    executable = _load("de_executable")
+    # This mutant targets exact file-byte binding, independently of the
+    # Ed25519 gate's own validation. Keep it runnable in pre-sync worktrees.
+    monkeypatch.setattr(executable, "_verify_apply_signature", lambda *_: None)
+    public_key = b"synthetic-public-key-material!!"
+    contract = copy.deepcopy(executable.RULESPEC_PIN)
+    manifest = {"signed_rulespec_artifact": contract}
+    module_bytes = b"""format: rulespec/v1
+module:
+  source_verification:
+    corpus_citation_path: de/statute/estg/66
+rules:
+  - name: monthly_kindergeld_per_child
+    kind: parameter
+    dtype: Money
+    unit: EUR
+    versions:
+      - effective_from: '2025-01-01'
+        formula: '255'
+"""
+    module_sha = hashlib.sha256(module_bytes).hexdigest()
+    unsigned_payload = {
+        "schema_version": contract["encoding_manifest_schema"],
+        "citation": contract["citation_path"],
+        "applied_files": [{"path": contract["module_path"], "sha256": module_sha}],
+        "source_attestation": {
+            "requested_corpus_citation_path": contract["citation_path"],
+            "resolved_corpus_citation_path": contract["citation_path"],
+            "corpus_release": contract["corpus_release"],
+            "corpus_release_content_sha256": contract["corpus_release_content_sha256"],
+        },
+    }
+    payload = {
+        **unsigned_payload,
+        "signature": {
+            "algorithm": contract["signature_algorithm"],
+            "key_id": contract["trusted_key_id"],
+            "value": base64.b64encode(b"s" * 64).decode("ascii"),
+        },
+    }
+    encoding_bytes = (json.dumps(payload, indent=2, sort_keys=True) + "\n").encode()
+    descriptor = {
+        "schema": contract["descriptor_schema"],
+        "program": executable.PROGRAM,
+        "period": executable.PERIOD,
+        "checkout_observation": {
+            "repository": contract["repository"],
+            "commit": contract["commit"],
+            "tree": contract["tree"],
+            "claim_mode": "attested",
+        },
+        "module": {
+            "path": contract["module_path"],
+            "sha256": module_sha,
+            "bytes_base64": base64.b64encode(module_bytes).decode("ascii"),
+        },
+        "encoding_manifest": {
+            "path": contract["encoding_manifest_path"],
+            "source_file_sha256": hashlib.sha256(encoding_bytes).hexdigest(),
+            "bytes_base64": base64.b64encode(encoding_bytes).decode("ascii"),
+            "payload_sha256": hashlib.sha256(
+                executable._canonical_bytes(payload)
+            ).hexdigest(),
+            "payload": payload,
+        },
+        "signature_trust": {
+            "key_id": contract["trusted_key_id"],
+            "public_key_base64": base64.b64encode(public_key).decode("ascii"),
+        },
+    }
+    assert (
+        executable._validate_signed_descriptor_document(descriptor, manifest)[
+            "encoding_source_file_sha256"
+        ]
+        == descriptor["encoding_manifest"]["source_file_sha256"]
+    )
+    wrong_checkout_commit = copy.deepcopy(descriptor)
+    wrong_checkout_commit["checkout_observation"]["commit"] = "0" * 40
+    with pytest.raises(executable.DEExecutableError, match="pinned commit"):
+        executable._validate_signed_descriptor_document(wrong_checkout_commit, manifest)
+
+    wrong_checkout_tree = copy.deepcopy(descriptor)
+    wrong_checkout_tree["checkout_observation"]["tree"] = "0" * 40
+    with pytest.raises(executable.DEExecutableError, match="pinned tree"):
+        executable._validate_signed_descriptor_document(wrong_checkout_tree, manifest)
+
+    mutant = copy.deepcopy(descriptor)
+    mutant["encoding_manifest"]["source_file_sha256"] = "0" * 64
+    with pytest.raises(executable.DEExecutableError, match="source-file SHA-256"):
+        executable._validate_signed_descriptor_document(mutant, manifest)
+
+    wrong_module_binding = copy.deepcopy(descriptor)
+    payload = wrong_module_binding["encoding_manifest"]["payload"]
+    payload["applied_files"][0]["sha256"] = "0" * 64
+    encoding_bytes = (json.dumps(payload, indent=2, sort_keys=True) + "\n").encode()
+    wrong_module_binding["encoding_manifest"].update(
+        {
+            "bytes_base64": base64.b64encode(encoding_bytes).decode("ascii"),
+            "source_file_sha256": hashlib.sha256(encoding_bytes).hexdigest(),
+            "payload_sha256": hashlib.sha256(
+                executable._canonical_bytes(payload)
+            ).hexdigest(),
+        }
+    )
+    with pytest.raises(executable.DEExecutableError, match="module SHA-256"):
+        executable._validate_signed_descriptor_document(wrong_module_binding, manifest)
+
+
+def test_de_signed_descriptor_rule_semantics_are_not_name_only():
+    """MUTANT: give the named amount root the wrong currency."""
+
+    executable = _load("de_executable")
+    module = {
+        "format": "rulespec/v1",
+        "module": {
+            "source_verification": {
+                "corpus_citation_path": executable.RULESPEC_PIN["citation_path"]
+            }
+        },
+        "rules": [
+            {
+                "name": executable.RULESPEC_PIN["rule_name"],
+                "kind": "parameter",
+                "dtype": "Money",
+                "unit": "USD",
+                "versions": [{"effective_from": "2025-01-01", "formula": "255"}],
+            }
+        ],
+    }
+    with pytest.raises(executable.DEExecutableError, match="rule unit"):
+        executable._validate_effective_rule(module, executable.RULESPEC_PIN)
+
+
+def test_de_apply_signature_cannot_use_an_untrusted_key():
+    """MUTANT: self-sign with a different key and retain the trusted key id."""
+
+    executable = _load("de_executable")
+    payload = {
+        "signature": {
+            "algorithm": executable.RULESPEC_PIN["signature_algorithm"],
+            "key_id": executable.RULESPEC_PIN["trusted_key_id"],
+            "value": base64.b64encode(b"s" * 64).decode("ascii"),
+        }
+    }
+    with pytest.raises(executable.DEExecutableError, match="signing key id"):
+        executable._verify_apply_signature(payload, b"x" * 32, executable.RULESPEC_PIN)
+
+
+def test_de_apply_signature_bit_flip_reaches_ed25519_verification(
+    tmp_path, monkeypatch
+):
+    """MUTANT: remove the cryptographic verify call after key-id validation."""
+
+    executable = _load("de_executable")
+    private_path = tmp_path / "private.pem"
+    public_path = tmp_path / "public.pem"
+    subprocess.run(
+        ["openssl", "genpkey", "-algorithm", "ED25519", "-out", private_path],
+        check=True,
+        capture_output=True,
+    )
+    subprocess.run(
+        [
+            "openssl",
+            "pkey",
+            "-in",
+            private_path,
+            "-pubout",
+            "-out",
+            public_path,
+        ],
+        check=True,
+        capture_output=True,
+    )
+    public_der = subprocess.run(
+        ["openssl", "pkey", "-in", private_path, "-pubout", "-outform", "DER"],
+        check=True,
+        capture_output=True,
+    ).stdout
+    public_key = public_der[-32:]
+    contract = copy.deepcopy(executable.RULESPEC_PIN)
+    contract["trusted_key_id"] = f"sha256:{hashlib.sha256(public_key).hexdigest()}"
+    payload = {
+        "schema_version": contract["encoding_manifest_schema"],
+        "citation": contract["citation_path"],
+    }
+    message = (
+        executable.APPLY_SIGNATURE_DOMAIN
+        + executable._unsigned_encoding_manifest_bytes(payload)
+    )
+    message_path = tmp_path / "message.bin"
+    signature_path = tmp_path / "signature.bin"
+    message_path.write_bytes(message)
+    subprocess.run(
+        [
+            "openssl",
+            "pkeyutl",
+            "-sign",
+            "-rawin",
+            "-inkey",
+            private_path,
+            "-in",
+            message_path,
+            "-out",
+            signature_path,
+        ],
+        check=True,
+        capture_output=True,
+    )
+    signature = signature_path.read_bytes()
+    payload["signature"] = {
+        "algorithm": contract["signature_algorithm"],
+        "key_id": contract["trusted_key_id"],
+        "value": base64.b64encode(signature).decode("ascii"),
+    }
+
+    class FakeInvalidSignature(Exception):
+        pass
+
+    calls = []
+
+    class OpenSSLEd25519PublicKey:
+        @classmethod
+        def from_public_bytes(cls, observed):
+            assert observed == public_key
+            return cls()
+
+        def verify(self, observed_signature, observed_message):
+            calls.append((observed_signature, observed_message))
+            verify_message = tmp_path / "verify-message.bin"
+            verify_signature = tmp_path / "verify-signature.bin"
+            verify_message.write_bytes(observed_message)
+            verify_signature.write_bytes(observed_signature)
+            process = subprocess.run(
+                [
+                    "openssl",
+                    "pkeyutl",
+                    "-verify",
+                    "-rawin",
+                    "-pubin",
+                    "-inkey",
+                    public_path,
+                    "-in",
+                    verify_message,
+                    "-sigfile",
+                    verify_signature,
+                ],
+                check=False,
+                capture_output=True,
+            )
+            if process.returncode:
+                raise FakeInvalidSignature
+
+    module_names = (
+        "cryptography",
+        "cryptography.hazmat",
+        "cryptography.hazmat.primitives",
+        "cryptography.hazmat.primitives.asymmetric",
+    )
+    for name in module_names:
+        monkeypatch.setitem(sys.modules, name, types.ModuleType(name))
+    exceptions = types.ModuleType("cryptography.exceptions")
+    exceptions.InvalidSignature = FakeInvalidSignature
+    monkeypatch.setitem(sys.modules, "cryptography.exceptions", exceptions)
+    ed25519 = types.ModuleType("cryptography.hazmat.primitives.asymmetric.ed25519")
+    ed25519.Ed25519PublicKey = OpenSSLEd25519PublicKey
+    monkeypatch.setitem(
+        sys.modules,
+        "cryptography.hazmat.primitives.asymmetric.ed25519",
+        ed25519,
+    )
+
+    executable._verify_apply_signature(payload, public_key, contract)
+
+    mutant = copy.deepcopy(payload)
+    corrupted = bytearray(signature)
+    corrupted[0] ^= 1
+    mutant["signature"]["value"] = base64.b64encode(corrupted).decode("ascii")
+    with pytest.raises(executable.DEExecutableError, match="Ed25519 signature"):
+        executable._verify_apply_signature(mutant, public_key, contract)
+    assert len(calls) == 2
+
+
+def test_de_release_archive_rejects_path_traversal(tmp_path):
+    """MUTANT: embed a traversal member in otherwise readable release bytes."""
+
+    executable = _load("de_executable")
+    archive = tmp_path / "release.tar.xz"
+    with tarfile.open(archive, "w:xz") as bundle:
+        member = tarfile.TarInfo("../escape")
+        member.size = 1
+        bundle.addfile(member, io.BytesIO(b"x"))
+    with pytest.raises(executable.DEExecutableError, match="unsafe path"):
+        executable._extract_release(archive, tmp_path / "extract")
+
+
+def test_de_release_process_does_not_inherit_ambient_environment(monkeypatch):
+    """MUTANT: let HOME or ambient credentials leak into release execution."""
+
+    executable = _load("de_executable")
+    observed = {}
+
+    def fake_run(argv, **kwargs):
+        observed.update(kwargs)
+        return executable.subprocess.CompletedProcess(argv, 0, b"", b"")
+
+    monkeypatch.setattr(executable.subprocess, "run", fake_run)
+    executable._run_process(["engine", "--version"])
+    assert observed["timeout"] == 120
+    assert observed["env"]["HOME"] == "/nonexistent"
+    assert set(observed["env"]) <= {
+        "HOME",
+        "LANG",
+        "LC_ALL",
+        "PATH",
+        "TZ",
+        "SYSTEMROOT",
+    }

@@ -297,6 +297,29 @@ def test_map_registry_entries_carry_their_registry_name():
     assert all("name" in e for e in entries.values())
 
 
+def test_de_axiom_pair_map_entries_keep_exact_names_and_canonical_reports():
+    """The DE pair suites dispatch their registry names, not the shared
+    population key, and select freshness from their stable unified records."""
+
+    gen = _load("generate_affected_map.py")
+    entries = {entry["suite"]: entry for entry in gen.build_map()["suites"]}
+    expected = {
+        "de-worker-dual-oracle-axiom-euromod": (
+            "comparisons/de-worker-dual-oracle/axiom-euromod.json"
+        ),
+        "de-worker-dual-oracle-axiom-gettsim": (
+            "comparisons/de-worker-dual-oracle/axiom-gettsim.json"
+        ),
+    }
+
+    for name, report in expected.items():
+        entry = entries[name]
+        assert entry["name"] == name
+        assert entry["source"] == f"comparisons/{name}.yaml"
+        assert entry["report"] == report
+        assert entry["repos"] == ["TheAxiomFoundation/rulespec-de"]
+
+
 def test_selector_decisions_carry_the_registry_name():
     sel = _load("select_affected_suites.py")
     amap = {
@@ -310,6 +333,89 @@ def test_selector_decisions_carry_the_registry_name():
     }
     selected = sel.select(amap, {"owner/rulespec-uk": "bbb"}, {})
     assert selected[0]["name"] == "uk-benefit-cap-ukmod"
+
+
+def test_selector_loads_explicit_repo_relative_report(monkeypatch, tmp_path):
+    """Canonical comparison records are selector inputs even though they are
+    not dashboard reports."""
+
+    sel = _load("select_affected_suites.py")
+    repo = tmp_path / "repo"
+    dashboard = repo / "dashboard" / "public" / "data"
+    canonical = repo / "comparisons" / "de-worker-dual-oracle" / "leg.json"
+    dashboard.mkdir(parents=True)
+    canonical.parent.mkdir(parents=True)
+    canonical.write_text(
+        json.dumps(
+            {
+                "suite": "de-worker-dual-oracle-axiom-euromod",
+                "provenance": {
+                    "rulespecs": [
+                        {
+                            "repo": "TheAxiomFoundation/rulespec-de",
+                            "sha": "a" * 40,
+                        }
+                    ]
+                },
+            }
+        )
+    )
+    monkeypatch.setattr(sel, "REPO_ROOT", repo)
+    monkeypatch.setattr(sel, "DASHBOARD_DATA_DIR", dashboard)
+    affected_map = {
+        "suites": [
+            {
+                "suite": "de-worker-dual-oracle-axiom-euromod",
+                "name": "de-worker-dual-oracle-axiom-euromod",
+                "report": "comparisons/de-worker-dual-oracle/leg.json",
+                "repos": ["TheAxiomFoundation/rulespec-de"],
+            }
+        ]
+    }
+
+    reports = sel.load_reports(affected_map)
+
+    assert reports["de-worker-dual-oracle-axiom-euromod"]["provenance"] == {
+        "rulespecs": [
+            {
+                "repo": "TheAxiomFoundation/rulespec-de",
+                "sha": "a" * 40,
+            }
+        ]
+    }
+
+
+@pytest.mark.parametrize(
+    "unsafe",
+    [
+        "",
+        "/tmp/outside.json",
+        "../outside.json",
+        "comparisons/../../outside.json",
+        17,
+    ],
+)
+def test_selector_rejects_unsafe_or_malformed_report_paths(unsafe):
+    sel = _load("select_affected_suites.py")
+
+    with pytest.raises(SystemExit, match="report path"):
+        sel._selector_report_path(unsafe)
+
+
+def test_selector_rejects_report_path_through_escaping_symlink(
+    monkeypatch, tmp_path
+):
+    sel = _load("select_affected_suites.py")
+    repo = tmp_path / "repo"
+    comparisons = repo / "comparisons"
+    outside = tmp_path / "outside"
+    comparisons.mkdir(parents=True)
+    outside.mkdir()
+    (comparisons / "escape").symlink_to(outside, target_is_directory=True)
+    monkeypatch.setattr(sel, "REPO_ROOT", repo)
+
+    with pytest.raises(SystemExit, match="escapes the repo"):
+        sel._selector_report_path("comparisons/escape/record.json")
 
 
 def test_runnable_names_dispatches_registry_names_not_suite_keys():

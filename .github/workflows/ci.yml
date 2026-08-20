@@ -45,6 +45,26 @@ jobs:
       - name: Validate NZ IncomeExplorer report, traces, and bound cases
         run: uv run python scripts/nz_incomeexplorer.py --check
 
+      - name: Validate served DE mismatch and disposition artifacts
+        run: |
+          uv run python scripts/emit_disposition_artifacts.py --check de-worker-dual-oracle
+          uv run python scripts/emit_case_artifacts.py --check de-worker-dual-oracle
+
+      - name: Validate pinned DE Axiom comparison legs
+        run: uv run python scripts/de_axiom_legs.py --check
+
+      - name: Validate DE unified comparison record
+        run: uv run python scripts/de_unified_comparison.py --check
+
+      - name: Validate DE exact-citation closure summary
+        run: uv run python scripts/de_closure.py --check
+
+      - name: Validate DE Kindergeld executable status
+        run: uv run python scripts/de_executable.py --check
+
+      - name: Validate DE certificate-candidate census
+        run: uv run python scripts/de_certificate_census.py --check
+
       - name: Validate report-bound case chunk indexes
         run: uv run python scripts/generate_chunk_indexes.py --check
 

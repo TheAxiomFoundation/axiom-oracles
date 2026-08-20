@@ -1,0 +1,297 @@
+{
+  "claim_modes": {
+    "attested": "corpus and RuleSpec pins, module observations, and declared subgraph boundaries",
+    "computed": "exact citation resolution, source-closure verdicts, pending sets, counts, and digests"
+  },
+  "closed": false,
+  "closed_claim_mode": "computed",
+  "corpus_commit": "6f064ee6081f16440dc706ae09ac60652bb67570",
+  "corpus_release": "de-rulespec-2026-07-21",
+  "corpus_release_content_sha256": "b4b405a06bfcf21331cff50a45844fd0117b52212dc24d0f4912ed07575fd574",
+  "jurisdiction": "de",
+  "pending_citations": [
+    "de/regulation/bsv-2018/1",
+    "de/statute/uhvorschg/2"
+  ],
+  "period": "2025",
+  "programs": {
+    "de/kindergeld": {
+      "blockers": [],
+      "boundaries": [
+        {
+          "assignment_required": true,
+          "basis": null,
+          "citation_path": "de/statute/estg/62",
+          "claim_mode": "attested",
+          "classification": "excluded-with-reason",
+          "input": "claimant_entitlement",
+          "reason": "Claimant entitlement is a required supplied input at the amount-subgraph cut; the eligibility rule is outside this certificate view."
+        },
+        {
+          "assignment_required": true,
+          "basis": null,
+          "citation_path": "de/statute/estg/63",
+          "claim_mode": "attested",
+          "classification": "excluded-with-reason",
+          "input": "qualifying_child_count",
+          "reason": "Qualifying-child membership is a required supplied input at the amount-subgraph cut; child eligibility is outside this certificate view."
+        },
+        {
+          "assignment_required": true,
+          "basis": null,
+          "citation_path": "de/statute/estg/64",
+          "claim_mode": "attested",
+          "classification": "excluded-with-reason",
+          "input": "recipient_priority",
+          "reason": "Recipient priority is a required supplied input at the amount-subgraph cut; resolution of competing claims is outside this certificate view."
+        },
+        {
+          "assignment_required": true,
+          "basis": null,
+          "citation_path": "de/statute/estg/65",
+          "claim_mode": "attested",
+          "classification": "excluded-with-reason",
+          "input": "substitute_child_benefit_exclusion",
+          "reason": "Other child-benefit exclusions are a required supplied input at the amount-subgraph cut; eligibility interactions are outside this certificate view."
+        }
+      ],
+      "boundary_count": 4,
+      "by_signature_state": {
+        "not_applicable": 0,
+        "pending": 0,
+        "signed": 1
+      },
+      "by_status": {
+        "encoded": 1,
+        "evidence": 1,
+        "excluded": 4,
+        "pending": 0
+      },
+      "citation_paths": [
+        "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz",
+        "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz/document-1",
+        "de/statute/estg/62",
+        "de/statute/estg/63",
+        "de/statute/estg/64",
+        "de/statute/estg/65",
+        "de/statute/estg/66"
+      ],
+      "citation_root_count": 6,
+      "closed": true,
+      "closed_claim_mode": "computed",
+      "closure_status": "closed",
+      "declared_sources": [
+        {
+          "citation_path": "de/statute/estg/66",
+          "claim_mode": "attested",
+          "classification": "encoded",
+          "reason": "The signed 2025/2026 dual-version amount module and encoding manifest are present on the pinned RuleSpec main commit (PR #42, merged 2026-08-19).",
+          "role": "amount_parameter",
+          "signature_state": "signed",
+          "state": "encoded"
+        }
+      ],
+      "evidence_roots": [
+        {
+          "citation_path": "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz",
+          "classification": "evidence",
+          "classification_claim_mode": "attested",
+          "content_sha256": "c9e66fb5daf1c7fd3ef43f66aad21b2df33f915c465544fb47facd0d4f0a3a07",
+          "reason": "SteFeG Article 1 number 4 supplies the 2025-effective 255 EUR amount that the current consolidated EStG text no longer displays.",
+          "resolution": "self_and_descendants",
+          "resolution_claim_mode": "computed",
+          "resolved_citation_paths": [
+            "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz",
+            "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz/document-1"
+          ],
+          "source_sha256": "0a679eafcaf3a658b84a5ef0a69992539fee7052cc80eca6fe2a04a9e56ddcf3"
+        }
+      ],
+      "pending_citations": [],
+      "root_node_count": 1,
+      "root_nodes": [
+        "de:statutes/estg/66#monthly_kindergeld_per_child"
+      ],
+      "signature_blockers": [],
+      "signature_pending_citations": [],
+      "source_closed": true,
+      "source_closed_claim_mode": "computed",
+      "subgraph_sha256": "b02aee37b98e74fcbcb939c57452281aa2017222c13b18ca8d9b922ecc569bac",
+      "unresolved_sources": []
+    },
+    "de/rv-employee-contribution": {
+      "blockers": [
+        "de/regulation/bsv-2018/1: No RuleSpec encoding exists, and the 2018 instrument alone does not establish that the 18.6 percent rate continued through 2025."
+      ],
+      "boundaries": [],
+      "boundary_count": 0,
+      "by_signature_state": {
+        "not_applicable": 0,
+        "pending": 2,
+        "signed": 1
+      },
+      "by_status": {
+        "encoded": 2,
+        "evidence": 0,
+        "excluded": 0,
+        "pending": 1
+      },
+      "citation_paths": [
+        "de/regulation/bsv-2018/1",
+        "de/regulation/svbezgrv-2025/4",
+        "de/statute/sgb-6/168"
+      ],
+      "citation_root_count": 3,
+      "closed": false,
+      "closed_claim_mode": "computed",
+      "closure_status": "open",
+      "declared_sources": [
+        {
+          "citation_path": "de/regulation/bsv-2018/1",
+          "claim_mode": "attested",
+          "classification": "pending",
+          "reason": "No RuleSpec encoding exists, and the 2018 instrument alone does not establish that the 18.6 percent rate continued through 2025.",
+          "role": "contribution_rate",
+          "signature_state": "pending",
+          "state": "pending"
+        },
+        {
+          "citation_path": "de/regulation/svbezgrv-2025/4",
+          "claim_mode": "attested",
+          "classification": "encoded",
+          "reason": "The signed 2025 pension contribution ceiling module and encoding manifest are present on the pinned RuleSpec main commit.",
+          "role": "monthly_assessment_ceiling",
+          "signature_state": "signed",
+          "state": "encoded"
+        },
+        {
+          "citation_path": "de/statute/sgb-6/168",
+          "claim_mode": "attested",
+          "classification": "encoded",
+          "reason": "A reviewed encoding exists for Absatz 1 Nummer 1, but its signature has not landed on main.",
+          "role": "employee_share",
+          "signature_state": "pending",
+          "state": "encoded_pending_signature"
+        }
+      ],
+      "evidence_roots": [],
+      "pending_citations": [
+        "de/regulation/bsv-2018/1"
+      ],
+      "root_node_count": 2,
+      "root_nodes": [
+        "de:statutes/sgb-6/168#employee_pension_insurance_contribution_share",
+        "de:regulations/svbezgrv-2025/4#general_pension_insurance_monthly_contribution_assessment_ceiling"
+      ],
+      "signature_blockers": [
+        "de/regulation/bsv-2018/1: signed RuleSpec artifact has not landed",
+        "de/statute/sgb-6/168: signed RuleSpec artifact has not landed"
+      ],
+      "signature_pending_citations": [
+        "de/regulation/bsv-2018/1",
+        "de/statute/sgb-6/168"
+      ],
+      "source_closed": false,
+      "source_closed_claim_mode": "computed",
+      "subgraph_sha256": "feeffa1d27ebe9fe619e94c168ebf3c3c29fd11db4cd43e0faf48007f7915e5a",
+      "unresolved_sources": [
+        "de/regulation/bsv-2018/1"
+      ]
+    },
+    "de/unterhaltsvorschuss": {
+      "blockers": [
+        "de/statute/uhvorschg/2: The reviewed unsigned module covers the base subtraction only; partial-month, income and maintenance offsets, and school or work income abatements remain open."
+      ],
+      "boundaries": [],
+      "boundary_count": 0,
+      "by_signature_state": {
+        "not_applicable": 0,
+        "pending": 1,
+        "signed": 2
+      },
+      "by_status": {
+        "encoded": 2,
+        "evidence": 0,
+        "excluded": 0,
+        "pending": 1
+      },
+      "citation_paths": [
+        "de/regulation/minuhv/1",
+        "de/statute/estg/66",
+        "de/statute/uhvorschg/2"
+      ],
+      "citation_root_count": 3,
+      "closed": false,
+      "closed_claim_mode": "computed",
+      "closure_status": "open",
+      "declared_sources": [
+        {
+          "citation_path": "de/regulation/minuhv/1",
+          "claim_mode": "attested",
+          "classification": "encoded",
+          "reason": "The signed minimum-maintenance module and encoding manifest are present on the pinned RuleSpec main commit.",
+          "role": "minimum_maintenance_amount",
+          "signature_state": "signed",
+          "state": "encoded"
+        },
+        {
+          "citation_path": "de/statute/uhvorschg/2",
+          "claim_mode": "attested",
+          "classification": "pending",
+          "reason": "The reviewed unsigned module covers the base subtraction only; partial-month, income and maintenance offsets, and school or work income abatements remain open.",
+          "role": "advance_amount_and_offsets",
+          "signature_state": "pending",
+          "state": "pending"
+        },
+        {
+          "citation_path": "de/statute/estg/66",
+          "claim_mode": "attested",
+          "classification": "encoded",
+          "reason": "The signed 2025/2026 dual-version amount module and encoding manifest are present on the pinned RuleSpec main commit (PR #42, merged 2026-08-19).",
+          "role": "kindergeld_dependency",
+          "signature_state": "signed",
+          "state": "encoded"
+        }
+      ],
+      "evidence_roots": [],
+      "pending_citations": [
+        "de/statute/uhvorschg/2"
+      ],
+      "root_node_count": 1,
+      "root_nodes": [
+        "de:statutes/uhvorschg/2#advance_maintenance_amount"
+      ],
+      "signature_blockers": [
+        "de/statute/uhvorschg/2: signed RuleSpec artifact has not landed"
+      ],
+      "signature_pending_citations": [
+        "de/statute/uhvorschg/2"
+      ],
+      "source_closed": false,
+      "source_closed_claim_mode": "computed",
+      "subgraph_sha256": "d43cfc199f6a1db6a4a78856f4783a9fdb5a7ef8a1c7a26cb29b7e0d7bdf08a9",
+      "unresolved_sources": [
+        "de/statute/uhvorschg/2"
+      ]
+    }
+  },
+  "resolution": {
+    "descendants_by": "parent_citation_path",
+    "filename_filters": false,
+    "key": "citation_path",
+    "match": "exact",
+    "protocol": "de-exact-citation-closure-v1",
+    "sha256": "7ada24d1abd66080a562a16f4d8d7de851c4e7c91a7f8e1065d394f2f1beada0"
+  },
+  "rulespec_commit": "d83ba3db30e2f63376aacf822d116687589b8564",
+  "schema": "axiom_oracles.de_closure_summary.v1",
+  "signature_pending_citations": [
+    "de/regulation/bsv-2018/1",
+    "de/statute/sgb-6/168",
+    "de/statute/uhvorschg/2"
+  ],
+  "source": {
+    "artifact": "closure/de/source.json",
+    "sha256": "84fbc0559bacae1128bb992052791e0ecc78b71137dfc4244f2fc7f622d19bd7"
+  }
+}
