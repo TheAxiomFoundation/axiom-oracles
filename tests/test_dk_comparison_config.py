@@ -198,6 +198,7 @@ def test_dk_all_four_computed_premises_flow_to_certificate() -> None:
     assert not any(
         blocker.startswith("exercise:") for blocker in certificate["blockers"]
     )
+    assert certificate["blockers"] == []
     assert certificate["certified"]["value"] is False
     assert certificate["certified"]["state"] == "no"
 
