@@ -14,8 +14,8 @@
 - The legacy speculative harness has been replaced by a registry-driven
   implementation against the landed certificate, evidence/census, closure,
   and executable producer interfaces.
-- The local integration is committed through `c7a46188b`; the subsequent
-  adversarial hardening/mirror-snapshot step is ready for its coherent commit.
+- The local integration and adversarial hardening are committed through
+  `e0c57637c`.
 - Canonical output is five refused candidates (two DK, three CO), zero
   certified nodes. The sidecar is directly compatible with axiom-api's
   `axiom-validation-evidence/1` queue projection.
@@ -58,15 +58,23 @@
   round-trip mutant mandatory even without a sibling checkout.
 - Producer batteries are green: five producer `--check` commands, 273 focused
   producer tests, and 42 supplemental NZ/tariff tests (`315/315` total).
-- Ruff, generated-output drift, diff whitespace, the 11 focused node tests,
-  and the repaired conformance/derived-report subset are being checked before
-  the hardening commit.
+- Final direct checks are green: the five producer drift checks, node-generator
+  drift, Ruff format/lint, diff whitespace, and all 11 focused node/mirror
+  tests.
+- Full pytest battery after the candidate-path repair: `2851 passed, 71
+  skipped, 3 failed, 3 warnings in 1633.62s` (27:13). All changed-surface tests
+  passed. The three failures are baseline/environment failures independently
+  reproduced on untouched `dd4ec472a` with the same Python 3.13 pytest runner:
+  Minnesota's installed PolicyEngine formula has a 16.64 residual where the
+  test pins 0.81; the installed PolicyEngine parameter tree lacks
+  `gov.irs.deductions.itemized.limitation.applies`; and the dashboard loader's
+  `npx esbuild` download fails under the sandbox's npm `ENOTFOUND` network
+  restriction.
 
 ## Next
 
-- Commit the adversarial hardening, real #461 compatibility, candidate-path
-  repair, exact mirror snapshot, regenerated sidecar, and this progress state.
-- Rerun the full pytest battery after the repaired path collision and record
-  exact counts, including independently confirmed main/environment failures.
-- Commit the final progress/battery ledger, publish the rewritten branch, and
-  update PR #427's description without merging it.
+- Commit this final progress/battery ledger.
+- Publish the rewritten branch and update PR #427's description without
+  merging it.
+- Write the closure-sprint output report with contract divergences, DK/CO
+  refusal summaries, exact battery numbers, and remote handoff state.
