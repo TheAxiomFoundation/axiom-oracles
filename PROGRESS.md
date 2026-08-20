@@ -8,14 +8,18 @@
 - Terminal `git fetch` is DNS-blocked, but the local remote-tracking ref and the
   GitHub connector report the same current `main` commit.
 - PR #427 is open, draft, unmerged, and still points at the pre-rewrite head
-  `dc8163b0b47d47981ea2b19771deab668e35bf38` until publication.
+  `dc8163b0b47d47981ea2b19771deab668e35bf38` pending publication.
 - The pre-rewrite tip is preserved locally as
   `autogo-harness-integration-pre-rewrite`.
 - The legacy speculative harness has been replaced by a registry-driven
   implementation against the landed certificate, evidence/census, closure,
   and executable producer interfaces.
 - The local integration and adversarial hardening are committed through
-  `e0c57637c`.
+  `941de4040` (four commits on current main).
+- Remote publication is currently blocked: `git push --force-with-lease` cannot
+  resolve `github.com`, and two authenticated GitHub blob-write attempts were
+  declined before creating any remote object. The remote branch and PR were
+  therefore left unchanged.
 - Canonical output is five refused candidates (two DK, three CO), zero
   certified nodes. The sidecar is directly compatible with axiom-api's
   `axiom-validation-evidence/1` queue projection.
@@ -73,8 +77,8 @@
 
 ## Next
 
-- Commit this final progress/battery ledger.
-- Publish the rewritten branch and update PR #427's description without
-  merging it.
+- Restore GitHub shell connectivity or authorize the authenticated writer,
+  then force-with-lease publish the four-commit rewrite and replace PR #427's
+  stale speculative description; do not merge it.
 - Write the closure-sprint output report with contract divergences, DK/CO
   refusal summaries, exact battery numbers, and remote handoff state.
