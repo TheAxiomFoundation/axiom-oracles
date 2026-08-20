@@ -1149,9 +1149,28 @@ def _producer_closed_verdict(
         if isinstance(_computed_block, dict)
         else None
     )
-    _dependency_summary = (
-        {
-            key: _dependency_block.get(key)
+    # A dependency-closure block only satisfies the gate when it is
+    # COMPLETE and internally consistent: all four fields present and
+    # well-typed, closed=true, and the enumerations actually empty. A bare
+    # {"closed": true} — or any block whose count and lists disagree — is
+    # treated as malformed and fails closed (launch-audit delta finding).
+    _dependency_well_formed = (
+        isinstance(_dependency_block, dict)
+        and isinstance(_dependency_block.get("open_dependency_count"), int)
+        and isinstance(_dependency_block.get("law_derived_inputs"), list)
+        and isinstance(
+            _dependency_block.get("instruments_bearing_on_computed"), list
+        )
+        and isinstance(_dependency_block.get("closed"), bool)
+        and _dependency_block["open_dependency_count"]
+        == len(_dependency_block["law_derived_inputs"])
+        + len(_dependency_block["instruments_bearing_on_computed"])
+        and _dependency_block["closed"]
+        == (_dependency_block["open_dependency_count"] == 0)
+    )
+    if _dependency_well_formed:
+        _dependency_summary = {
+            key: _dependency_block[key]
             for key in (
                 "open_dependency_count",
                 "law_derived_inputs",
@@ -1159,8 +1178,20 @@ def _producer_closed_verdict(
                 "closed",
             )
         }
-        if isinstance(_dependency_block, dict)
-        else {
+    elif isinstance(_dependency_block, dict):
+        _dependency_summary = {
+            "closed": False,
+            "malformed": True,
+            "requirement": (
+                "the dependency-closure block must carry a well-typed "
+                "open_dependency_count, law_derived_inputs, and "
+                "instruments_bearing_on_computed that agree with its closed "
+                "flag (CERTIFIED.md v3); this artifact's block is incomplete "
+                "or inconsistent"
+            ),
+        }
+    else:
+        _dependency_summary = {
             "closed": False,
             "missing": True,
             "requirement": (
@@ -1169,8 +1200,7 @@ def _producer_closed_verdict(
                 "dependency-closure block"
             ),
         }
-    )
-    if _dependency_summary.get("closed") is not True:
+    if not _dependency_well_formed or _dependency_summary.get("closed") is not True:
         value = False
     evidence.append(
         {

@@ -36,7 +36,8 @@ explicitly classified or excluded with a text-grounded reason; every
 instrument the official registry links to the act (its ELI `basis_for` and
 `changed_by` edges — regulations, circulars, guidance letters, appeals
 precedents, amendment acts — plus search-discovered supplements) is
-dispositioned with a text-grounded reason; every formula
+tracked and either dispositioned with a text-grounded reason or explicitly
+pending its read (today: four pending); every formula
 input is either derivable or case-supplied under a documented contract, or
 explicitly declared as an external boundary; the pinned executable artifact
 reproduces all 10 committed Axiom cases with exact JSON numeric equality;

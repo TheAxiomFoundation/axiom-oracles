@@ -3319,3 +3319,56 @@ def test_nz_denominator_artifact_byte_flip_reds(tmp_path, monkeypatch):
     monkeypatch.setattr(denominator, "ARTIFACT_PATH", mutant)
     with pytest.raises(denominator.DenominatorError, match="bytes drifted"):
         denominator.validate()
+
+
+def test_bare_closed_true_dependency_block_fails_the_central_gate(
+    tmp_path, monkeypatch
+):
+    """A closure artifact whose dependency block is just {"closed": true}
+    must fail closed: the central gate requires a complete, internally
+    consistent block (launch-audit delta finding on CERTIFIED.md v3)."""
+
+    certify = _load("certify")
+    forged = {
+        "schema": "axiom_oracles.closure.ledger.v3",
+        "generated_facts": {"rulespec": {"commit": "a" * 40}},
+        "committed_decisions": {},
+        "computed": {
+            "closed": True,
+            "provision_counts": {},
+            "boundary_frontier": {"complete": True, "inputs": []},
+            "instrument_frontier": {
+                "instrument_count": 1,
+                "supplemental_count": 0,
+                "counts": {"total": 1, "pending": 0},
+                "pending": [],
+                "complete": True,
+            },
+            "dependency_closure": {"closed": True},
+        },
+    }
+    artifact = tmp_path / "forged-closure.yaml"
+    artifact.write_text(yaml.safe_dump(forged, sort_keys=False))
+
+    class _Summary:
+        closed = True
+        non_encoded_reasons_complete = True
+
+    class _Producer:
+        @staticmethod
+        def validate_artifact(document):
+            return _Summary()
+
+    monkeypatch.setattr(
+        certify, "_repo_artifact_path", lambda relative, label: artifact
+    )
+    monkeypatch.setattr(certify, "_producer_module", lambda name: _Producer())
+    monkeypatch.setattr(certify, "sha256_of", lambda path: "0" * 64)
+    evidence = []
+    verdict = certify._producer_closed_verdict(
+        "forged/program",
+        {"computed": {"closed": {"artifact": "x", "producer": "y"}}},
+        evidence,
+    )
+    assert verdict["value"] is False
+    assert verdict["dependency_closure"]["malformed"] is True
