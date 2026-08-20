@@ -4,7 +4,7 @@
     "host-side aggregation pin: rulespec-nz#108 prerequisite 2 remains open; person/child/family aggregation is still performed by the comparison harness because the compiled composition carries no relations. Structural fix axiom-rules-engine#134 is not yet ratified."
   ],
   "certified": {
-    "rule": "computed(conformant AND exercised AND closed AND executable) with zero open defects. A premise counts only when its mode is computed AND its value is true; attested premises never satisfy it.",
+    "rule": "computed(conformant AND exercised AND closed AND executable) with zero open defects. A premise counts only when its mode is computed AND its value is true; attested premises never satisfy it. The canonical definition, including the closure requirements (spine, instruments, dependency closure with leaf discipline), is CERTIFIED.md at the repository root.",
     "state": "no",
     "value": false
   },
@@ -77,6 +77,11 @@
       "denominator_ratchet": {
         "citation_count_min": 7,
         "requested_output_count_min": 2
+      },
+      "dependency_closure": {
+        "closed": false,
+        "missing": true,
+        "requirement": "closure must type every leaf and encode every law-derived dependency (CERTIFIED.md v3); this artifact declares no dependency-closure block"
       },
       "instrument_frontier": {
         "complete": false,

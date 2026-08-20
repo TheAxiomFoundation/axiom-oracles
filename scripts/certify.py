@@ -1144,6 +1144,67 @@ def _producer_closed_verdict(
     )
     if _instrument_frontier_summary.get("complete") is not True:
         value = False
+    _dependency_block = (
+        _computed_block.get("dependency_closure")
+        if isinstance(_computed_block, dict)
+        else None
+    )
+    # A dependency-closure block only satisfies the gate when it is
+    # COMPLETE and internally consistent: all four fields present and
+    # well-typed, closed=true, and the enumerations actually empty. A bare
+    # {"closed": true} — or any block whose count and lists disagree — is
+    # treated as malformed and fails closed (launch-audit delta finding).
+    _dependency_well_formed = (
+        isinstance(_dependency_block, dict)
+        and isinstance(_dependency_block.get("open_dependency_count"), int)
+        # bool is an int subclass: open_dependency_count=false must read
+        # malformed, not as a zero count (launch-audit delta r2 finding).
+        and not isinstance(_dependency_block.get("open_dependency_count"), bool)
+        and isinstance(_dependency_block.get("law_derived_inputs"), list)
+        and isinstance(
+            _dependency_block.get("instruments_bearing_on_computed"), list
+        )
+        and isinstance(_dependency_block.get("closed"), bool)
+        and _dependency_block["open_dependency_count"]
+        == len(_dependency_block["law_derived_inputs"])
+        + len(_dependency_block["instruments_bearing_on_computed"])
+        and _dependency_block["closed"]
+        == (_dependency_block["open_dependency_count"] == 0)
+    )
+    if _dependency_well_formed:
+        _dependency_summary = {
+            key: _dependency_block[key]
+            for key in (
+                "open_dependency_count",
+                "law_derived_inputs",
+                "instruments_bearing_on_computed",
+                "closed",
+            )
+        }
+    elif isinstance(_dependency_block, dict):
+        _dependency_summary = {
+            "closed": False,
+            "malformed": True,
+            "requirement": (
+                "the dependency-closure block must carry a well-typed "
+                "open_dependency_count, law_derived_inputs, and "
+                "instruments_bearing_on_computed that agree with its closed "
+                "flag (CERTIFIED.md v3); this artifact's block is incomplete "
+                "or inconsistent"
+            ),
+        }
+    else:
+        _dependency_summary = {
+            "closed": False,
+            "missing": True,
+            "requirement": (
+                "closure must type every leaf and encode every law-derived "
+                "dependency (CERTIFIED.md v3); this artifact declares no "
+                "dependency-closure block"
+            ),
+        }
+    if not _dependency_well_formed or _dependency_summary.get("closed") is not True:
+        value = False
     evidence.append(
         {
             "claim": f"closed:{program}",
@@ -1160,6 +1221,7 @@ def _producer_closed_verdict(
             "status": "computed_pass" if value else "computed_open",
             "value": value,
             "instrument_frontier": _instrument_frontier_summary,
+            "dependency_closure": _dependency_summary,
             "artifact": str(artifact_ref),
             "corpus_release": document.get("corpus_release"),
             "rulespec_commit": document.get("rulespec_commit"),
@@ -1189,6 +1251,7 @@ def _producer_closed_verdict(
         "provision_counts": computed.get("provision_counts"),
         "boundary_frontier": computed.get("boundary_frontier"),
         "instrument_frontier": _instrument_frontier_summary,
+        "dependency_closure": _dependency_summary,
         **(
             {"burndown": computed.get("burndown")}
             if config.get("include_burndown")
@@ -2063,7 +2126,7 @@ def build_certificate(
     certified_rule = (
         "computed(conformant AND exercised AND closed AND executable) with zero "
         "open defects. A premise counts only when its mode is computed AND its "
-        "value is true; attested premises never satisfy it."
+        "value is true; attested premises never satisfy it. The canonical definition, including the closure requirements (spine, instruments, dependency closure with leaf discipline), is CERTIFIED.md at the repository root."
     )
     if not premises_computed:
         certified_rule += (

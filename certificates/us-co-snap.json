@@ -4,7 +4,7 @@
     "exercise: census incomplete (missing per-case evidence or unaudited bridge) for at least one suite"
   ],
   "certified": {
-    "rule": "computed(conformant AND exercised AND closed AND executable) with zero open defects. A premise counts only when its mode is computed AND its value is true; attested premises never satisfy it. state=unavailable means no producer computes closed/executable yet, so certification is not merely withheld but not yet offerable.",
+    "rule": "computed(conformant AND exercised AND closed AND executable) with zero open defects. A premise counts only when its mode is computed AND its value is true; attested premises never satisfy it. The canonical definition, including the closure requirements (spine, instruments, dependency closure with leaf discipline), is CERTIFIED.md at the repository root. state=unavailable means no producer computes closed/executable yet, so certification is not merely withheld but not yet offerable.",
     "state": "unavailable",
     "value": false
   },
