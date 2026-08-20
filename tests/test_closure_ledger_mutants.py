@@ -135,7 +135,47 @@ def _decisions() -> dict:
         if name in scopes:
             row["uncaptured_scope"] = scopes[name]
         rows.append(row)
-    return {"provisions": [], "input_grounding": rows}
+    return {
+        "provisions": [],
+        "input_grounding": rows,
+        "instrument_dispositions": [
+            {
+                "eli": "https://retsinformation.dk/eli/lta/2013/1563",
+                "status": "classified-with-reason",
+                "classification": "input_derivation_rule",
+                "reason": "Hermetic fixture disposition for the test regulation.",
+            }
+        ],
+        "supplemental_instruments": [],
+    }
+
+
+def _write_instrument_graph(path: Path) -> None:
+    path.write_text(
+        json.dumps(
+            {
+                "schema": "axiom_oracles.closure.instrument_graph.v1",
+                "act_eli": "https://retsinformation.dk/eli/lta/2025/603",
+                "act_citation_path": CORPUS_ROOT,
+                "retrieved_at": "2026-08-19",
+                "retrieval_method": "hermetic fixture",
+                "instruments": [
+                    {
+                        "eli": "https://retsinformation.dk/eli/lta/2013/1563",
+                        "relation": "basis_for",
+                        "title": "Bekendtgørelse om børne- og ungeydelsen",
+                        "title_short": "BEK nr 1563 af 13/12/2013",
+                        "type_document": "BEKH",
+                        "in_force": True,
+                        "date_document": "13-12-2013 00:00:00",
+                    }
+                ],
+            },
+            ensure_ascii=False,
+            indent=1,
+        )
+        + "\n"
+    )
 
 
 def _baseline(tmp_path: Path):
@@ -237,6 +277,8 @@ else:
             allow_unicode=True,
         )
     )
+    instrument_graph = tmp_path / "dk-instrument-graph.json"
+    _write_instrument_graph(instrument_graph)
     args = [
         "--artifact",
         str(artifact),
@@ -248,6 +290,8 @@ else:
         str(rulespec),
         "--rulespec-ref",
         "main",
+        "--instrument-graph",
+        str(instrument_graph),
     ]
     assert module.main(["--generate", *args]) == 0
     return module, artifact, args
@@ -331,6 +375,121 @@ def test_committed_dk_closure_artifact_is_internally_valid_and_closed() -> None:
     )
     assert former_partial["status"] == "encoded"
     assert former_partial["encoded_by"].endswith("/paragraf-5.yaml")
+
+    assert summary.instrument_count == 28
+    assert summary.instrument_pending_count == 0
+    assert summary.instrument_frontier_complete is True
+    frontier = document["computed"]["instrument_frontier"]
+    assert frontier["counts"] == {
+        "total": 28,
+        "encoded": 1,
+        "classified-with-reason": 16,
+        "excluded-with-reason": 11,
+        "pending": 0,
+    }
+    bek = next(
+        row
+        for row in frontier["ledger"]
+        if row["eli"] == "https://retsinformation.dk/eli/lta/2013/1563"
+    )
+    assert bek["status"] == "classified-with-reason"
+    assert bek["classification"] == "input_derivation_rule"
+    supplemental = [row for row in frontier["ledger"] if row.get("provenance")]
+    assert len(supplemental) == 1
+    assert supplemental[0]["relation"] == "bears_on"
+
+
+def test_validator_rejects_an_instrument_without_a_disposition() -> None:
+    """Dropping one committed disposition must fail, not silently shrink."""
+
+    module = _load_script()
+    document = _load(COMMITTED_ARTIFACT)
+    dispositions = document["committed_decisions"]["instrument_dispositions"]
+    removed = dispositions.pop(0)
+    with pytest.raises(module.ClosureLedgerError) as excinfo:
+        module.validate_artifact(document)
+    assert "missing committed dispositions" in str(excinfo.value)
+    assert removed["eli"] in str(excinfo.value)
+
+
+def test_pending_instrument_disposition_computes_closed_false() -> None:
+    """A pending instrument row is honest but must open the closure."""
+
+    module = _load_script()
+    document = _load(COMMITTED_ARTIFACT)
+    dispositions = document["committed_decisions"]["instrument_dispositions"]
+    row = next(
+        entry
+        for entry in dispositions
+        if entry["eli"] == "https://retsinformation.dk/eli/lta/2013/1563"
+    )
+    for key in ("classification", "reason", "bearing"):
+        row.pop(key, None)
+    row["status"] = "pending"
+    generated = document["generated_facts"]
+    decision_errors: list[str] = []
+    decisions = module._canonical_decisions(
+        document["committed_decisions"],
+        provision_order={
+            spine_row["citation_path"]: index
+            for index, spine_row in enumerate(generated["provision_spine"])
+        },
+        input_names={row["name"] for row in generated["module_inputs"]},
+        instrument_elis={
+            row["eli"] for row in generated["instrument_graph"]["instruments"]
+        },
+        errors=decision_errors,
+    )
+    assert decision_errors == []
+    computed = module._derive_computed(generated, decisions, decision_errors)
+    assert decision_errors == []
+    assert computed["instrument_frontier"]["complete"] is False
+    assert computed["instrument_frontier"]["pending"] == [
+        "https://retsinformation.dk/eli/lta/2013/1563"
+    ]
+    assert computed["closed"] is False
+
+
+def test_validator_rejects_a_supplemental_instrument_without_provenance() -> None:
+    module = _load_script()
+    document = _load(COMMITTED_ARTIFACT)
+    supplemental = document["committed_decisions"]["supplemental_instruments"]
+    del supplemental[0]["provenance"]
+    with pytest.raises(module.ClosureLedgerError) as excinfo:
+        module.validate_artifact(document)
+    assert "provenance" in str(excinfo.value)
+
+
+def test_validator_rejects_a_disposition_for_an_unknown_instrument() -> None:
+    module = _load_script()
+    document = _load(COMMITTED_ARTIFACT)
+    document["committed_decisions"]["instrument_dispositions"].append(
+        {
+            "eli": "https://retsinformation.dk/eli/lta/1999/1",
+            "status": "excluded-with-reason",
+            "classification": "fabricated",
+            "reason": "not in the derived graph",
+        }
+    )
+    with pytest.raises(module.ClosureLedgerError) as excinfo:
+        module.validate_artifact(document)
+    assert "not in the derived instrument graph" in str(excinfo.value)
+
+
+def test_validator_rejects_a_tampered_instrument_graph_row() -> None:
+    """Editing the embedded graph (an in_force flip) must read as stale."""
+
+    module = _load_script()
+    document = _load(COMMITTED_ARTIFACT)
+    target = next(
+        row
+        for row in document["generated_facts"]["instrument_graph"]["instruments"]
+        if row["eli"] == "https://retsinformation.dk/eli/lta/2013/1563"
+    )
+    target["in_force"] = False
+    with pytest.raises(module.ClosureLedgerError) as excinfo:
+        module.validate_artifact(document)
+    assert "stale or internally inconsistent" in str(excinfo.value)
 
 
 def test_generation_parses_inputs_and_preserves_committed_decisions(

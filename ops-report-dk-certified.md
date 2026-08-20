@@ -3,7 +3,10 @@
 Status: **CERTIFIED=YES at rulespec-dk `9a9469edbbc4` — all four premises
 computed true, blockers=[], 10 provisions encoded / 1 classified / 13
 excluded with text-grounded reasons / 0 pending, boundary frontier complete
-(90 grounded inputs: 65 captured, 25 uncaptured external boundaries).**
+(90 grounded inputs: 65 captured, 25 uncaptured external boundaries), and
+the subordinate-instrument frontier complete (28 instruments dispositioned:
+1 encoded, 16 classified, 11 excluded, 0 pending; ELI graph as of
+2026-08-19).**
 
 ## Certification scope
 
@@ -11,7 +14,11 @@ excluded with text-grounded reasons / 0 pending, boundary frontier complete
 Faroe Islands and Greenland, and the exact pinned corpus, RuleSpec, engine,
 manifests, and receipts: every provision in the declared LBK 603/2025 spine
 is either faithfully encoded for its documented entity/input contract or
-explicitly classified or excluded with a text-grounded reason; every formula
+explicitly classified or excluded with a text-grounded reason; every
+instrument the official registry links to the act (its ELI `basis_for` and
+`changed_by` edges — regulations, circulars, guidance letters, appeals
+precedents, amendment acts — plus search-discovered supplements) is
+dispositioned with a text-grounded reason; every formula
 input is either derivable or case-supplied under a documented contract, or
 explicitly declared as an external boundary; the pinned executable artifact
 reproduces all 10 committed Axiom cases with exact JSON numeric equality;
@@ -22,7 +29,12 @@ It does **not** claim: raw numerical parity (suite results are 7/8, 0/1,
 0/1, with dispositioned mismatches of DKK 313,33 / 60 / 880); exhaustive
 household or input coverage; independent correctness or availability of the
 25 external judicial, municipal, agency, tax, register, and payment-history
-feeds; net cash after § 11 setoff; any § 4 entity/routing surface (classified
+feeds; instruments the registry links to the act after 2026-08-19 (the
+committed instrument-graph snapshot date — the graph refreshes by rerun of
+`scripts/refresh_instrument_graph.py`); the upstream derivation of
+case-supplied inputs that BEK 1563/2013 governs (30-day residence
+aggregation, 39/80-hour employment thresholds — dispositioned as an
+input-derivation rule, not encoded); net cash after § 11 setoff; any § 4 entity/routing surface (classified
 `entity_not_supported`); effects under other benefit schemes; application in
 the Faroe Islands or Greenland; or post-2025 law, including LOV 303/2026's
 § 4 e changes and the new § 4 f.
@@ -42,7 +54,20 @@ the Faroe Islands or Greenland; or post-2025 law, including LOV 303/2026's
   row: §§ 1, 1a, 2, 3, 4a, 4b, 4c, 4e, 5, 8a encoded by direct signed
   modules; § 4 classified `entity_not_supported`; §§ 4d, 6, 6a, 7, 8, 8b, 9,
   10, 11, 12, 13, 14, 15 excluded with text-grounded reasons; 0 pending;
-  boundary frontier complete with 90 committed grounding decisions.
+  boundary frontier complete with 90 committed grounding decisions. The
+  ledger also derives the **subordinate-instrument frontier** (oracles#491)
+  from a committed snapshot of the act's official ELI graph: all 25
+  `basis_for` instruments, both `changed_by` amendment acts, and one
+  search-discovered supplement are dispositioned — BEK 1563/2013 and
+  principafgørelse 64-13 classified as input-derivation rules for the § 2
+  case-supplied inputs (cited in the grounding rows), the Ankestyrelsen
+  ligedeling line (11-23, 18-24, 4-25) classified against the non-claimed
+  § 4 routing surface, the setoff practice line against the § 11 non-claim,
+  three bilateral-convention guidances as coordination instruments, LOV
+  1642 encoded, and the rest excluded as not-in-force, superseded-regime, or
+  out-of-period with text-grounded reasons. `certified` now requires this:
+  certify computes `closed=false` for any closure artifact without a
+  complete instrument frontier, whatever its producer reports.
 - **executable (computed true)** — the pinned engine (binary sha256
   `079c26f4…`) recompiles both composed programs at the recorded rulespec
   commit and reproduces all 10 certified values; `--check` recompiles and
@@ -94,6 +119,21 @@ the exact target suite: both forecast cases, the initial-settlement
 offset/collection case asserting the subsequent stage inert, and both
 signed-delta amended-assessment directions, with every capacity fixture a
 DKK amount. Suite values were identical at every pin along the way.
+
+After the main landing, a completeness probe found the closed premise
+spine-relative only: nothing dispositioned the instruments issued under the
+act. The certified claim was withdrawn from circulation pending the fix
+(oracles#491). The official ELI graph turned out to enumerate the candidate
+set machine-readably (`basis_for`: 25 instruments; `changed_by`: 2), among
+them an in-force bekendtgørelse operationalizing § 2's accrual inputs and
+an in-period Ankestyrelsen principmeddelelse on the § 4 split surface —
+both invisible to the previous predicate. All 28 rows (including one
+search-discovered supplement) were read and dispositioned, the ledger
+schema moved to v2 with the frontier as a `closed` conjunct, and certify
+now refuses `closed=true` from any closure artifact without a complete
+instrument frontier — registry-wide, so a statute-only closure can never
+again certify. `certified=yes` was then re-derived under the strengthened
+predicate.
 
 ## Strict evidence contract (unchanged from the certified-arc landing)
 

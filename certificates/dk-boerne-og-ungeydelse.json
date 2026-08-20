@@ -71,7 +71,7 @@
       "artifact": "conformance/closure/dk-boerne-og-ungeydelse.yaml",
       "claim": "closed:dk/boerne-og-ungeydelse",
       "mode": "computed",
-      "sha256": "8b60cb1d4361d9547433211a347d30f90d37b3d354acccbb56a9011cd1946c60",
+      "sha256": "00be5b7f218a3313a8d27a211ac8e25c2f525145d188231a8e61d164742ec0ce",
       "verification": "producer_artifact_validation"
     },
     {
@@ -296,6 +296,19 @@
         ],
         "parsed_input_count": 90,
         "uncaptured_input_count": 25
+      },
+      "instrument_frontier": {
+        "complete": true,
+        "counts": {
+          "classified-with-reason": 16,
+          "encoded": 1,
+          "excluded-with-reason": 11,
+          "pending": 0,
+          "total": 28
+        },
+        "instrument_count": 27,
+        "pending": [],
+        "supplemental_count": 1
       },
       "mode": "computed",
       "non_encoded_reasons_complete": true,

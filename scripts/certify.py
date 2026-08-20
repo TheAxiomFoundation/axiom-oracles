@@ -1072,6 +1072,21 @@ def _producer_closed_verdict(
         raise ValueError(f"{artifact_ref} validator returned no closed boolean")
     computed = document["computed"]
     value = summary.closed
+    # Central completeness requirement (oracles#491): a closure claim must
+    # disposition the act's subordinate instruments (regulations, guidance,
+    # rate publications), not just the act's own provisions. A closure
+    # artifact whose computed block carries no complete instrument frontier
+    # cannot compute closed=true, whatever its producer says — in the US,
+    # certifying statute-only closure would be very wrong.
+    instrument_frontier = (
+        computed.get("instrument_frontier") if isinstance(computed, dict) else None
+    )
+    instrument_frontier_complete = (
+        isinstance(instrument_frontier, dict)
+        and instrument_frontier.get("complete") is True
+    )
+    if not instrument_frontier_complete:
+        value = False
     evidence.append(
         {
             "claim": f"closed:{program}",
@@ -1093,6 +1108,27 @@ def _producer_closed_verdict(
         ),
         "provision_counts": computed.get("provision_counts"),
         "boundary_frontier": computed.get("boundary_frontier"),
+        "instrument_frontier": (
+            {
+                key: instrument_frontier.get(key)
+                for key in (
+                    "instrument_count",
+                    "supplemental_count",
+                    "counts",
+                    "pending",
+                    "complete",
+                )
+            }
+            if isinstance(instrument_frontier, dict)
+            else {
+                "complete": False,
+                "missing": True,
+                "requirement": (
+                    "closure must disposition the act's subordinate "
+                    "instruments (oracles#491); this artifact declares none"
+                ),
+            }
+        ),
         **(
             {"burndown": computed.get("burndown")}
             if config.get("include_burndown")
