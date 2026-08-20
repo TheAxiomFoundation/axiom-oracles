@@ -210,18 +210,15 @@ PROGRAMS: dict[str, dict] = {
     },
 }
 
-NZ_AGGREGATION_BLOCKER = (
-    "host-side aggregation pin: rulespec-nz#108 prerequisite 2 remains open; "
-    "person/child/family aggregation is still performed by the comparison "
-    "harness because the compiled composition carries no relations. Structural "
-    "fix axiom-rules-engine#134 is not yet ratified."
-)
-NZ_ACC_LOCALITY_BLOCKER = (
-    "person-locality is not yet proven — the two-endpoint perturbation cannot "
-    "exclude conditional/default-dormant cross-person dependencies "
-    "(adversarial review S1); structural cure = axiom-rules-engine#134 stage 2 "
-    "(prototype exists on feat/unit-derivation-stage2)."
-)
+# The two structural NZ blockers cleared on 2026-08-19: person/child/family
+# aggregation moved engine-side under the ratified unit-derivation algebra
+# (axiom-rules-engine#161; typed operand provenance, family-scope reduction
+# uniqueness, Knowledge propagation), and the comparison harness cut over to
+# it (TheAxiomFoundation/ops#41, implementation commit d9069693 pinned with
+# runtime binding guards) with parity unchanged: 1,454/1,976 cells, the same
+# 522 dispositioned exceptions, comparison.csv byte-identical. ACC person
+# locality is structurally proven by the same move: cross-person flow exists
+# only as declared plan relations, and the ACC view declares none.
 for _nz_program in (
     "nz/acc-earners-levy",
     "nz/accommodation-supplement",
@@ -262,11 +259,7 @@ for _nz_program in (
             "comparisons/nz-treasury-incomeexplorer/source-comparison.json"
         ),
         "certified_false_when_blocked": True,
-        "blockers": (
-            [NZ_ACC_LOCALITY_BLOCKER]
-            if _nz_program in SINGLE_PERSON_PROGRAMS
-            else [NZ_AGGREGATION_BLOCKER]
-        ),
+        "blockers": [],
         "single_person_attestation": (
             "comparisons/nz-treasury-incomeexplorer/single-person-attestations.json"
             if _nz_program in SINGLE_PERSON_PROGRAMS

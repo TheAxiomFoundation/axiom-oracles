@@ -613,17 +613,19 @@ def test_nz_unified_exercise_receipt_does_not_self_audit_a_bridge():
     assert row["evidence_source"] == "unified-experiment-receipt"
 
 
-def test_nz_computed_premises_without_cleared_blockers_do_not_certify():
+def test_nz_aggregation_blockers_cleared_but_v3_closure_remains_open():
+    """Aggregation is cleared, while v3 frontier closure still gates NZ."""
+
     certify = _load("certify")
     for program in sorted(name for name in certify.PROGRAMS if name.startswith("nz/")):
         certificate = certify.build_certificate(program, certify.PROGRAMS[program])
+        assert certificate["blockers"] == []
         assert certificate["certified"]["value"] is False
         assert certificate["certified"]["state"] == "no"
         assert certificate["verdicts"]["exercised"]["mode"] == "computed"
         assert certificate["verdicts"]["exercised"]["value"] is True
-        assert (
-            certificate["verdicts"]["exercised"]["catalog_completeness"]["mode"]
-            == "computed"
+        assert certificate["verdicts"]["exercised"]["catalog_completeness"]["mode"] == (
+            "computed"
         )
         assert certificate["verdicts"]["exercised"]["capture_lineage"]["mode"] == (
             "computed"
@@ -632,7 +634,6 @@ def test_nz_computed_premises_without_cleared_blockers_do_not_certify():
             blocker.startswith("exercise denominator:")
             for blocker in certificate["blockers"]
         )
-        assert certificate["blockers"], "structural engine blockers must remain"
         # The instrument-frontier requirement (oracles#491) opens every
         # closure claim that dispositions only the act's own provisions: the
         # NZ closure summary carries no instrument frontier, so certify
@@ -645,6 +646,18 @@ def test_nz_computed_premises_without_cleared_blockers_do_not_certify():
         assert closed_frontier["complete"] is False
         assert certificate["verdicts"]["executable"]["mode"] == "computed"
         assert certificate["verdicts"]["executable"]["value"] is True
+
+
+def test_nz_injected_blocker_still_gates_certified(monkeypatch):
+    """MUTANT: blockers must still veto certified even with all premises green."""
+
+    certify = _load("certify")
+    spec = copy.deepcopy(certify.PROGRAMS["nz/income-tax"])
+    spec["blockers"] = ["synthetic gating blocker: must veto certification"]
+    certificate = certify.build_certificate("nz/income-tax", spec)
+    assert certificate["certified"]["value"] is False
+    assert certificate["certified"]["state"] == "no"
+    assert any("synthetic gating blocker" in b for b in certificate["blockers"])
 
 
 # ── Round 3: inputs from the second fix-verification ─────────────────────────
