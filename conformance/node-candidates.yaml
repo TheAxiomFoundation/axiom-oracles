@@ -1,0 +1,59 @@
+schema: axiom_oracles.node_candidates.v1
+_comment: >-
+  Explicit public/output candidate adapter for node certification. Current main
+  has no generic candidate producer, so this file names only exact graph nodes
+  on the two DK/CO launch surfaces; comparison aliases and the id-less CO
+  snap_benefit wrapper are intentionally excluded.
+
+programs:
+  dk/boerne-og-ungeydelse:
+    membership:
+      adapter: closure_ledger_rule
+      artifact: conformance/closure/dk-boerne-og-ungeydelse.yaml
+      selection_artifact: conformance/executable/dk-boerne-og-ungeydelse.json
+    closure:
+      adapter: certificate
+    executable:
+      required_tier: source_reproduction
+
+  us-co/snap:
+    membership:
+      adapter: compiled_program_node
+      artifact: axiom_oracles/adapters/axiom/artifacts/co-snap.compiled.json
+    closure:
+      adapter: co_closure_universes
+      directory: closure
+      producer: scripts/closure_universe.py
+    executable:
+      required_tier: release_receipt
+
+candidates:
+  - node: dk:statutes/composed/boerne-og-ungeydelse-pipeline#single_recipient_annual_child_youth_benefit
+    program: dk/boerne-og-ungeydelse
+    label: Single-recipient annual child and youth benefit
+    provision: Børne- og ungeydelsesloven §§ 1 and 1 a
+    selection_basis: Exact output root in the computed DK source-reproduction receipt.
+
+  - node: dk:statutes/composed/boerne-og-ungeydelse-couple-pipeline#couple_recipient_annual_child_youth_benefit
+    program: dk/boerne-og-ungeydelse
+    label: Couple-recipient annual child and youth benefit
+    provision: Børne- og ungeydelsesloven §§ 1, 1 a, and 4
+    selection_basis: Exact output root in the computed DK source-reproduction receipt.
+
+  - node: us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment
+    program: us-co/snap
+    label: Colorado SNAP allotment
+    provision: 10 CCR 2506-1 § 4.207.2
+    selection_basis: Exact CO published-artifact golden output binding pending release receipt #461.
+
+  - node: us:statutes/7/2014/e/6/A#snap_net_income
+    program: us-co/snap
+    label: SNAP net income
+    provision: 7 USC § 2014(e)(6)(A)
+    selection_basis: Exact CO published-artifact golden output binding pending release receipt #461.
+
+  - node: us-co:policies/cdhs/snap/fy-2026-benefit-calculation#snap_eligible
+    program: us-co/snap
+    label: Colorado SNAP eligibility composition
+    provision: Colorado SNAP FY 2026 benefit-calculation composition
+    selection_basis: Exact CO published-artifact golden output binding pending release receipt #461.

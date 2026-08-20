@@ -11,9 +11,12 @@
   `dc8163b0b47d47981ea2b19771deab668e35bf38` until publication.
 - The pre-rewrite tip is preserved locally as
   `autogo-harness-integration-pre-rewrite`.
-- Legacy harness files have been recovered into the worktree for adaptation;
-  they are not yet committed on the new base and still encode speculative
-  producer contracts.
+- The legacy speculative harness has been replaced by a registry-driven
+  implementation against the landed certificate, evidence/census, closure,
+  and executable producer interfaces.
+- Canonical output is five refused candidates (two DK, three CO), zero
+  certified nodes. The sidecar is directly compatible with axiom-api's
+  `axiom-validation-evidence/1` queue projection.
 - Final report target: the closure-sprint `w427-rebase.result.md` output.
 
 ## Done
@@ -27,15 +30,23 @@
 - Rewrote the branch pointer to current main while preserving the old tip and
   only restored the 28 harness-specific code, documentation, test, and fixture
   paths (no stale-main reversions).
+- Audited the real producer registry and downstream ops/API contracts. Bound
+  five exact graph candidates, rejected CO comparison aliases, and recorded
+  the ops/API nonempty-entry `mode` mismatch without weakening the ops output.
+- Implemented `scripts/certify_nodes.py`, the explicit candidate adapter,
+  ops-schema-exact empty ledger, per-candidate refusal/API queue sidecar, and
+  distinct `source_reproduction` / `release_receipt` handling.
+- Kept provision rooting computed-or-refused with the missing producer named
+  as `TheAxiomFoundation/axiom-rules-engine#136`.
+- Replaced the old speculative fixtures with eight focused real-interface and
+  mutant tests; focused battery: `8 passed`.
+- Rewrote `docs/autogo-contract.md` around the landed interfaces and documented
+  every material divergence from the pre-producer contract.
 
 ## Next
 
-- Commit this progress baseline.
-- Read the landed certificate registry, program certificates, closure
-  universes, strict evidence/census artifacts, and source-reproduction receipt
-  schema, plus the ops ledger and axiom-api mirror contract.
-- Replace the speculative harness with the real registry-driven generator,
-  preserving computed-or-refused provenance and tiered executable evidence.
-- Add the three requested mutants, generate the zero-entry ledger and refusal
-  sidecar, run focused and full batteries, push, and update PR #427 without
-  merging it.
+- Commit the integrated generator, contract, outputs, and focused mutants.
+- Run certificate, closure, generator, exact mirror, lint/format, and full
+  pytest batteries; record exact counts.
+- Commit the final progress/battery ledger, publish the rewritten branch, and
+  update PR #427's description without merging it.
