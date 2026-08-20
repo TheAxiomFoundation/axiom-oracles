@@ -78,6 +78,11 @@
         "citation_count_min": 1,
         "requested_output_count_min": 1
       },
+      "instrument_frontier": {
+        "complete": false,
+        "missing": true,
+        "requirement": "closure must disposition the act's subordinate instruments (oracles#491); this artifact declares none"
+      },
       "mode": "computed",
       "pending_citations": 0,
       "pending_money_atoms": 0,
@@ -86,9 +91,9 @@
         "nz:statutes/income_tax/credits/individual_credits#independent_earner_tax_credit"
       ],
       "rulespec_commit": "89a7d25dc03a4d045348620283332de10b1047da",
-      "status": "computed_pass",
+      "status": "computed_open",
       "subgraph_node_count": 10,
-      "value": true
+      "value": false
     },
     "conformant": {
       "mode": "computed",

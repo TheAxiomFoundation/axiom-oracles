@@ -1,9 +1,18 @@
-# dk/boerne-og-ungeydelse: the registry's first certified=yes
+# dk/boerne-og-ungeydelse: certification status
 
-Status: **CERTIFIED=YES at rulespec-dk `9a9469edbbc4` — all four premises
-computed true, blockers=[], 10 provisions encoded / 1 classified / 13
-excluded with text-grounded reasons / 0 pending, boundary frontier complete
-(90 grounded inputs: 65 captured, 25 uncaptured external boundaries).**
+Status: **CERTIFIED=NO — the closed premise reopened by the
+subordinate-instrument requirement (oracles#491).** Certify now computes
+`closed=false` for any closure artifact that dispositions only the act's
+own provisions: legal completeness must also disposition the instruments
+issued under the act (regulations, circulars, guidance, appeals
+precedents). The dk ledger does not yet carry that frontier, so the
+certificate honestly reads no. The other three premises remain computed
+true at rulespec-dk `9a9469edbbc4` (10 provisions encoded / 1 classified /
+13 excluded / 0 pending; boundary frontier complete with 90 grounded
+inputs; receipt 10/10; suites conformant). The frontier itself — the act's
+full ELI `basis_for`/`changed_by` graph dispositioned with text-grounded
+reasons — is built and under audit on `d3/instrument-frontier`; when it
+lands, `certified` re-derives under the strengthened predicate.
 
 ## Certification scope
 
@@ -11,7 +20,10 @@ excluded with text-grounded reasons / 0 pending, boundary frontier complete
 Faroe Islands and Greenland, and the exact pinned corpus, RuleSpec, engine,
 manifests, and receipts: every provision in the declared LBK 603/2025 spine
 is either faithfully encoded for its documented entity/input contract or
-explicitly classified or excluded with a text-grounded reason; every formula
+explicitly classified or excluded with a text-grounded reason; every
+instrument the official registry links to the act is dispositioned with a
+text-grounded reason (the strengthened requirement this certificate does
+not yet meet); every formula
 input is either derivable or case-supplied under a documented contract, or
 explicitly declared as an external boundary; the pinned executable artifact
 reproduces all 10 committed Axiom cases with exact JSON numeric equality;
@@ -37,12 +49,14 @@ the Faroe Islands or Greenland; or post-2025 law, including LOV 303/2026's
   validated clean; typed suite-bound covered_by evidence
   (`{report|chunk_index|chunk, claim}`); the census binds each manifest's
   sha and the strict opt-in, so no evidence edit is invisible downstream.
-- **closed (computed true)** — the closure ledger derives the 24-paragraf
-  spine from corpus release `a2e71391` (body sha256 per row) and maps every
-  row: §§ 1, 1a, 2, 3, 4a, 4b, 4c, 4e, 5, 8a encoded by direct signed
-  modules; § 4 classified `entity_not_supported`; §§ 4d, 6, 6a, 7, 8, 8b, 9,
-  10, 11, 12, 13, 14, 15 excluded with text-grounded reasons; 0 pending;
-  boundary frontier complete with 90 committed grounding decisions.
+- **closed (computed FALSE — the reopened premise)** — the closure ledger
+  still derives the 24-paragraf spine from corpus release `a2e71391` and
+  maps every row (10 encoded / 1 classified / 13 excluded / 0 pending;
+  boundary frontier complete with 90 committed grounding decisions), but
+  certify now additionally requires a complete subordinate-instrument
+  frontier, and this ledger declares none — so the verdict reads
+  `computed_open` with the missing-frontier requirement named
+  (oracles#491). The frontier lands via `d3/instrument-frontier`.
 - **executable (computed true)** — the pinned engine (binary sha256
   `079c26f4…`) recompiles both composed programs at the recorded rulespec
   commit and reproduces all 10 certified values; `--check` recompiles and

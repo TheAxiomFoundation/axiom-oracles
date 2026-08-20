@@ -1109,6 +1109,41 @@ def _producer_closed_verdict(
         value = getattr(summary, "closed", None)
     if not isinstance(value, bool):
         raise ValueError(f"{artifact_ref} validator returned no closed boolean")
+    # Central completeness requirement (oracles#491): a closure claim must
+    # disposition the act's subordinate instruments (regulations, guidance,
+    # rate publications), not just the act's own provisions. A closure
+    # artifact whose computed block carries no complete instrument frontier
+    # cannot compute closed=true, whatever its producer says — in the US,
+    # certifying statute-only closure would be very wrong.
+    _computed_block = document.get("computed")
+    _instrument_frontier = (
+        _computed_block.get("instrument_frontier")
+        if isinstance(_computed_block, dict)
+        else None
+    )
+    _instrument_frontier_summary = (
+        {
+            key: _instrument_frontier.get(key)
+            for key in (
+                "instrument_count",
+                "supplemental_count",
+                "counts",
+                "pending",
+                "complete",
+            )
+        }
+        if isinstance(_instrument_frontier, dict)
+        else {
+            "complete": False,
+            "missing": True,
+            "requirement": (
+                "closure must disposition the act's subordinate instruments "
+                "(oracles#491); this artifact declares none"
+            ),
+        }
+    )
+    if _instrument_frontier_summary.get("complete") is not True:
+        value = False
     evidence.append(
         {
             "claim": f"closed:{program}",
@@ -1124,6 +1159,7 @@ def _producer_closed_verdict(
             "mode": "computed",
             "status": "computed_pass" if value else "computed_open",
             "value": value,
+            "instrument_frontier": _instrument_frontier_summary,
             "artifact": str(artifact_ref),
             "corpus_release": document.get("corpus_release"),
             "rulespec_commit": document.get("rulespec_commit"),
@@ -1152,6 +1188,7 @@ def _producer_closed_verdict(
         ),
         "provision_counts": computed.get("provision_counts"),
         "boundary_frontier": computed.get("boundary_frontier"),
+        "instrument_frontier": _instrument_frontier_summary,
         **(
             {"burndown": computed.get("burndown")}
             if config.get("include_burndown")

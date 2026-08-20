@@ -3,8 +3,8 @@
   "blockers": [],
   "certified": {
     "rule": "computed(conformant AND exercised AND closed AND executable) with zero open defects. A premise counts only when its mode is computed AND its value is true; attested premises never satisfy it.",
-    "state": "yes",
-    "value": true
+    "state": "no",
+    "value": false
   },
   "evidence": [
     {
@@ -297,6 +297,11 @@
         "parsed_input_count": 90,
         "uncaptured_input_count": 25
       },
+      "instrument_frontier": {
+        "complete": false,
+        "missing": true,
+        "requirement": "closure must disposition the act's subordinate instruments (oracles#491); this artifact declares none"
+      },
       "mode": "computed",
       "non_encoded_reasons_complete": true,
       "provision_counts": {
@@ -308,8 +313,8 @@
         "total": 24
       },
       "rulespec_commit": "9a9469edbbc4829847698cd0adf218771120b9cd",
-      "status": "computed_closed",
-      "value": true
+      "status": "computed_open",
+      "value": false
     },
     "conformant": {
       "mode": "computed",
