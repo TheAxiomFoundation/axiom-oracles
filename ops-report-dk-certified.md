@@ -5,8 +5,7 @@ computed true, blockers=[], 10 provisions encoded / 1 classified / 13
 excluded with text-grounded reasons / 0 pending, boundary frontier complete
 (90 grounded inputs: 65 captured, 25 uncaptured external boundaries), and
 the subordinate-instrument frontier complete (28 instruments dispositioned:
-1 encoded, 16 classified, 11 excluded, 0 pending; ELI graph as of
-2026-08-19).**
+17 classified, 11 excluded, 0 pending; ELI graph as of 2026-08-19).**
 
 ## Certification scope
 
@@ -71,8 +70,10 @@ the Faroe Islands or Greenland; or post-2025 law, including LOV 303/2026's
   ligedeling line (11-23, 18-24, 4-25) classified against the non-claimed
   § 4 routing surface, the setoff practice line against the § 11 non-claim,
   three bilateral-convention guidances as coordination instruments, LOV
-  1642 encoded, and the rest excluded as not-in-force, superseded-regime, or
-  out-of-period with text-grounded reasons. `certified` now requires this:
+  1642 classified amendment_act_partially_encoded (nr. 1's divisor change
+  encoded via the two-version § 1 parameter; nrs. 2-11 commence 2026 under
+  the post-2025 non-claim), and the rest excluded as not-in-force,
+  superseded-regime, or out-of-period with text-grounded reasons. `certified` now requires this:
   certify computes `closed=false` for any closure artifact without a
   complete instrument frontier, whatever its producer reports.
 - **executable (computed true)** — the pinned engine (binary sha256
