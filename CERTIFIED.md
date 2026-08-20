@@ -53,6 +53,12 @@ of the policy, every single dependency, whether it's a reg or not" (Max,
    official registry links to the act — regulations, circulars, guidance,
    appeals precedents, amendment acts, plus search-discovered supplements —
    is dispositioned from a sha-bound snapshot of the registry's own graph.
+   The link graph is one discovery channel and is demonstrably incomplete
+   (the 2026-08-20 launch audit found current bearing precedents and a
+   cross-act regulation outside it); subject-matter search and, as it
+   lands, the corpus citation scan (axiom-corpus#611) are mandatory
+   supplements, and an instrument found by any channel enters the frontier
+   as a pending row until dispositioned.
    An instrument that bears on a computed surface must be **encoded**, not
    classified around: a classification is only honest for instruments with
    no bearing on any computed output (not in force, superseded regime,
@@ -110,5 +116,8 @@ is announced anywhere, in any words, without Max's explicit clear.
   case-supplying law-derived inputs (BEK 1563's optjening construction,
   personskatteloven § 7's income basis) and scoping around instruments that
   bear on encoded surfaces (§ 23's post-death collection bar, §§ 16-18's
-  convention overrides). Under v3, no program currently certifies; the
-  worklists are the certificates' own dependency-closure blocks.
+  convention overrides). Under v3, no program currently certifies. Certify
+  enforces the block centrally — a closure artifact without a complete
+  dependency-closure block computes closed=false, whatever its producer
+  reports — and each certificate's closed verdict carries either its
+  enumerated worklist or the missing-block marker.

@@ -376,10 +376,12 @@ def test_committed_dk_closure_artifact_is_internally_valid_and_closed() -> None:
     # encoding worklist enumerated.
     assert summary.closed is False
     assert summary.dependency_closed is False
-    assert summary.open_dependency_count == 57
+    assert summary.open_dependency_count == 67
+    assert summary.instrument_frontier_complete is False
+    assert summary.instrument_pending_count == 4
     dep = document["computed"]["dependency_closure"]
-    assert len(dep["law_derived_inputs"]) == 49
-    assert len(dep["instruments_bearing_on_computed"]) == 8
+    assert len(dep["law_derived_inputs"]) == 55
+    assert len(dep["instruments_bearing_on_computed"]) == 12
     assert (
         "https://retsinformation.dk/eli/lta/2013/1563"
         in dep["instruments_bearing_on_computed"]
@@ -404,16 +406,19 @@ def test_committed_dk_closure_artifact_is_internally_valid_and_closed() -> None:
     assert former_partial["status"] == "encoded"
     assert former_partial["encoded_by"].endswith("/paragraf-5.yaml")
 
-    assert summary.instrument_count == 28
-    assert summary.instrument_pending_count == 0
-    assert summary.instrument_frontier_complete is True
+    assert summary.instrument_count == 35
+    # The launch audit's official-source search found instruments outside
+    # the act's ELI graph; four precedents await their reads, so the
+    # frontier honestly reads incomplete.
+    assert summary.instrument_pending_count == 4
+    assert summary.instrument_frontier_complete is False
     frontier = document["computed"]["instrument_frontier"]
     assert frontier["counts"] == {
-        "total": 28,
+        "total": 35,
         "encoded": 0,
-        "classified-with-reason": 17,
+        "classified-with-reason": 20,
         "excluded-with-reason": 11,
-        "pending": 0,
+        "pending": 4,
     }
     bek = next(
         row
@@ -423,8 +428,8 @@ def test_committed_dk_closure_artifact_is_internally_valid_and_closed() -> None:
     assert bek["status"] == "classified-with-reason"
     assert bek["classification"] == "input_derivation_rule"
     supplemental = [row for row in frontier["ledger"] if row.get("provenance")]
-    assert len(supplemental) == 1
-    assert supplemental[0]["relation"] == "bears_on"
+    assert len(supplemental) == 8
+    assert {row["relation"] for row in supplemental} == {"bears_on"}
 
 
 def test_validator_rejects_an_instrument_without_a_disposition() -> None:
@@ -472,9 +477,10 @@ def test_pending_instrument_disposition_computes_closed_false() -> None:
     computed = module._derive_computed(generated, decisions, decision_errors)
     assert decision_errors == []
     assert computed["instrument_frontier"]["complete"] is False
-    assert computed["instrument_frontier"]["pending"] == [
+    assert (
         "https://retsinformation.dk/eli/lta/2013/1563"
-    ]
+        in computed["instrument_frontier"]["pending"]
+    )
     assert computed["closed"] is False
 
 
@@ -979,3 +985,55 @@ def test_check_rejects_an_untracked_corpus_release(
 def test_full_check_accepts_the_hermetic_baseline(tmp_path: Path) -> None:
     module, _, args = _baseline(tmp_path)
     assert module.main(["--check", *args]) == 0
+
+
+def test_validator_rejects_a_grounding_row_without_leaf_kind() -> None:
+    module = _load_script()
+    document = _load(COMMITTED_ARTIFACT)
+    row = document["committed_decisions"]["input_grounding"][0]
+    row.pop("leaf_kind", None)
+    row.pop("derivation_instrument", None)
+    with pytest.raises(module.ClosureLedgerError) as excinfo:
+        module.validate_artifact(document)
+    assert "leaf_kind" in str(excinfo.value)
+
+
+def test_validator_rejects_law_derived_without_derivation_instrument() -> None:
+    module = _load_script()
+    document = _load(COMMITTED_ARTIFACT)
+    row = next(
+        entry
+        for entry in document["committed_decisions"]["input_grounding"]
+        if entry["leaf_kind"] == "law_derived"
+    )
+    row.pop("derivation_instrument", None)
+    with pytest.raises(module.ClosureLedgerError) as excinfo:
+        module.validate_artifact(document)
+    assert "derivation_instrument" in str(excinfo.value)
+
+
+def test_validator_rejects_a_classified_instrument_without_bearing_flag() -> None:
+    module = _load_script()
+    document = _load(COMMITTED_ARTIFACT)
+    row = next(
+        entry
+        for entry in document["committed_decisions"]["instrument_dispositions"]
+        if entry["status"] == "classified-with-reason"
+    )
+    row.pop("bears_on_computed_surface", None)
+    with pytest.raises(module.ClosureLedgerError) as excinfo:
+        module.validate_artifact(document)
+    assert "bears_on_computed_surface" in str(excinfo.value)
+
+
+def test_forged_closed_true_with_law_derived_leaves_fails_validation() -> None:
+    """closed=true cannot be claimed over open dependencies: the committed
+    computed block is re-derived, so a hand-flipped closed reads as stale."""
+
+    module = _load_script()
+    document = _load(COMMITTED_ARTIFACT)
+    document["computed"]["closed"] = True
+    document["computed"]["dependency_closure"]["closed"] = True
+    with pytest.raises(module.ClosureLedgerError) as excinfo:
+        module.validate_artifact(document)
+    assert "stale or internally inconsistent" in str(excinfo.value)

@@ -71,7 +71,7 @@
       "artifact": "conformance/closure/dk-boerne-og-ungeydelse.yaml",
       "claim": "closed:dk/boerne-og-ungeydelse",
       "mode": "computed",
-      "sha256": "4eeaa16a3ecfdfa590541752ec76f84636c0fac0d3a9ee7edec16ea3786fbf0c",
+      "sha256": "19ff3133286d860a744b5145687b3889db125f0ae0b6797f95aba2a1b5ac015f",
       "verification": "producer_artifact_validation"
     },
     {
@@ -301,6 +301,10 @@
         "closed": false,
         "instruments_bearing_on_computed": [
           "https://retsinformation.dk/eli/lta/2013/1563",
+          "https://retsinformation.dk/eli/lta/2019/1063",
+          "https://retsinformation.dk/eli/mt/1986/148",
+          "https://retsinformation.dk/eli/retsinfo/1996/9256",
+          "https://retsinformation.dk/eli/retsinfo/2008/10901",
           "https://retsinformation.dk/eli/retsinfo/2013/9724",
           "https://retsinformation.dk/eli/retsinfo/2014/9267",
           "https://retsinformation.dk/eli/retsinfo/2014/9268",
@@ -312,12 +316,18 @@
         "law_derived_inputs": [
           "at_least_one_person_with_maintenance_duty_meets_full_residence_or_employment_requirement",
           "benefit_payment_has_ceased_under_subsection_1",
+          "benefit_recipient_has_final_judgment_for_listed_offence",
           "calculation_uses_annual_assessment_for_income_year",
           "caretaker_is_fully_tax_liable_under_kildeskatteloven_section_1",
           "cessation_period_has_ended_after_detention_completion",
           "child_actually_resides_in_denmark",
           "child_benefit_is_payable_for_child",
+          "child_has_final_judgment_for_listed_offence",
+          "child_has_unlawful_school_absence",
+          "child_is_otherwise_maintained_by_public_funds",
+          "child_is_short_term_abroad",
           "child_is_subject_to_compulsory_schooling",
+          "child_is_temporarily_abroad_for_education_to_improve_continued_residence_prospects",
           "child_turns_eighteen_in_current_month",
           "child_turns_fifteen_in_current_quarter",
           "conditions_under_section_1_are_met_on_first_day_of_payment_period",
@@ -360,20 +370,25 @@
           "total_contributions_to_qualifying_pension_accounts",
           "youth_benefit_is_payable_for_young_person"
         ],
-        "open_dependency_count": 57
+        "open_dependency_count": 67
       },
       "instrument_frontier": {
-        "complete": true,
+        "complete": false,
         "counts": {
-          "classified-with-reason": 17,
+          "classified-with-reason": 20,
           "encoded": 0,
           "excluded-with-reason": 11,
-          "pending": 0,
-          "total": 28
+          "pending": 4,
+          "total": 35
         },
         "instrument_count": 27,
-        "pending": [],
-        "supplemental_count": 1
+        "pending": [
+          "https://retsinformation.dk/eli/retsinfo/1996/9261",
+          "https://retsinformation.dk/eli/retsinfo/1997/9246",
+          "https://retsinformation.dk/eli/retsinfo/1998/9196",
+          "https://retsinformation.dk/eli/retsinfo/2007/11117"
+        ],
+        "supplemental_count": 8
       },
       "mode": "computed",
       "non_encoded_reasons_complete": true,

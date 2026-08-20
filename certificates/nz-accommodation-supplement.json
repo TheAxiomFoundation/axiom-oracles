@@ -78,6 +78,11 @@
         "citation_count_min": 5,
         "requested_output_count_min": 3
       },
+      "dependency_closure": {
+        "closed": false,
+        "missing": true,
+        "requirement": "closure must type every leaf and encode every law-derived dependency (CERTIFIED.md v3); this artifact declares no dependency-closure block"
+      },
       "instrument_frontier": {
         "complete": false,
         "missing": true,

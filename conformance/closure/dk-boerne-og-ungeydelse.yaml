@@ -1245,10 +1245,12 @@ committed_decisions:
     derivation_instrument: § 4 b, stk. 1 (encoded rule's outcome wired as input)
   - name: benefit_recipient_has_final_judgment_for_listed_offence
     grounding: uncaptured
-    leaf_kind: world_fact
+    leaf_kind: law_derived
     reason: 'Final criminal judgment for the provisions § 4 c, stk. 1 enumerates: straffeloven § 101 a,
       stk. 1; § 114 c, stk. 3; §§ 114 d, 114 e og 114 g for forhold begået i udlandet; § 114 j, stk. 1;
       or a stay abroad violating an exit ban under pasloven § 2 b, stk. 1.'
+    derivation_instrument: § 4 c, stk. 1 offence-list membership (the judgment and its offence citation
+      are observable acts; membership in the enumerated set is encodable from the citation)
     uncaptured_scope: criminal judgment feed (straffeloven §§ 101 a stk. 1, 114 c stk. 3, 114 d, 114 e,
       114 g udlandsforhold, 114 j stk. 1; pasloven § 2 b)
   - name: benefit_was_not_paid_during_cessation
@@ -1305,9 +1307,11 @@ committed_decisions:
     reason: Civil-status fact (§ 2, stk. 1, nr. 3).
   - name: child_has_final_judgment_for_listed_offence
     grounding: uncaptured
-    leaf_kind: world_fact
+    leaf_kind: law_derived
     reason: Final criminal judgment against the child under the same enumerated provisions (§ 4 c, stk.
       1, 2. pkt.).
+    derivation_instrument: § 4 c, stk. 1 offence-list membership (the judgment and its offence citation
+      are observable acts; membership in the enumerated set is encodable from the citation)
     uncaptured_scope: criminal judgment feed (straffeloven §§ 101 a stk. 1, 114 c stk. 3, 114 d, 114 e,
       114 g udlandsforhold, 114 j stk. 1; pasloven § 2 b)
   - name: child_has_person_who_has_taken_child_into_care
@@ -1316,8 +1320,10 @@ committed_decisions:
     reason: Care-relationship fact (§ 2, stk. 1, nr. 1).
   - name: child_has_unlawful_school_absence
     grounding: captured
-    leaf_kind: world_fact
+    leaf_kind: law_derived
     reason: Household fact conditioning the § 2, stk. 3 exception.
+    derivation_instrument: BEK 1063/2019 (folkeskole absence registration and classification, issued under
+      folkeskoleloven)
   - name: child_is_admitted_with_custodial_parent_to_residential_facility_under_barnets_lov
     grounding: uncaptured
     leaf_kind: world_fact
@@ -1326,8 +1332,10 @@ committed_decisions:
     uncaptured_scope: barnets lov placement and residential-facility admission records
   - name: child_is_otherwise_maintained_by_public_funds
     grounding: uncaptured
-    leaf_kind: world_fact
+    leaf_kind: law_derived
     reason: Public-maintenance status (§ 2, stk. 1, nr. 4).
+    derivation_instrument: § 2, stk. 1, nr. 4 as applied by Ankestyrelsen B-1-96 (support-expense comparison,
+      expressly relying on CIR 148 pkt. 7)
     uncaptured_scope: public-maintenance determination feed
   - name: child_is_placed_outside_home_under_barnets_lov
     grounding: uncaptured
@@ -1336,8 +1344,10 @@ committed_decisions:
     uncaptured_scope: barnets lov placement and residential-facility admission records
   - name: child_is_short_term_abroad
     grounding: captured
-    leaf_kind: world_fact
+    leaf_kind: law_derived
     reason: Household fact for the § 2, stk. 3 short-stay exception.
+    derivation_instrument: § 2, stk. 3 as applied by Ankestyrelsen B-1-08 (expected-duration test for
+      stays abroad)
   - name: child_is_subject_to_compulsory_schooling
     grounding: captured
     leaf_kind: law_derived
@@ -1345,8 +1355,9 @@ committed_decisions:
     derivation_instrument: folkeskoleloven (undervisningspligt) via § 2, stk. 3
   - name: child_is_temporarily_abroad_for_education_to_improve_continued_residence_prospects
     grounding: captured
-    leaf_kind: world_fact
+    leaf_kind: law_derived
     reason: Household fact for the § 2, stk. 3 education exception.
+    derivation_instrument: § 2, stk. 3 as applied by Ankestyrelsen B-1-08 (qualifying-education test)
   - name: child_lives_with_proposed_payee
     grounding: captured
     leaf_kind: world_fact
@@ -1731,14 +1742,13 @@ committed_decisions:
   - eli: https://retsinformation.dk/eli/mt/1986/148
     status: excluded-with-reason
     classification: superseded_regime_guidance
-    reason: 1986 circular guiding the original børnefamilieydelse regime; body captured from the rendered
-      official page 2026-08-19. Every described mechanism — administration by Statsskattedirektoratet,
-      amtsskatteinspektorater and municipal social committees, payment 'normalt til moderen', EF regulation
-      1408/71 coordination, quarterly prepaid rates, PSL § 20 regulation rounded up to nearest 100 kr
-      — is superseded on its face by the encoded consolidation (LBK 603/2025 §§ 1-4, LOV 1642 divisor-24
-      rounding, Udbetaling Danmark administration, EU regulation 883/2004). Formally in force; no bearing
-      on benefit-year-2025 computed outputs.
-    bears_on_computed_surface: false
+    reason: '1986 circular on the original børnefamilieydelse regime; body captured from the rendered
+      official page 2026-08-19. Its administration, payment routing, EF-1408/71 coordination, and regulation
+      mechanics are superseded by the encoded consolidation — but pkt. 7''s application of the forsørget-af-offentlige-midler
+      predicate remains LIVE law: current Ankestyrelsen precedent B-1-96 expressly relies on it for §
+      2, stk. 1, nr. 4, an encoded surface consuming a case-supplied condition. Bearing instrument until
+      that predicate chain is encoded (launch-audit finding, 2026-08-20).'
+    bears_on_computed_surface: true
   - eli: https://retsinformation.dk/eli/retsinfo/2003/9806
     status: excluded-with-reason
     classification: not_in_force
@@ -1901,6 +1911,17 @@ committed_decisions:
       certificate covers benefit year 2025 and expressly non-claims post-2025 law.
     bears_on_computed_surface: false
   supplemental_instruments:
+  - eli: https://retsinformation.dk/eli/lta/2019/1063
+    status: classified-with-reason
+    title_short: BEK nr 1063 af 24/10/2019
+    relation: bears_on
+    provenance: launch-audit official-source search 2026-08-20 (outside the act's ELI basis_for graph);
+      ELI metadata fetched and verified in force
+    classification: input_derivation_rule
+    reason: 'Bekendtgørelse om elevers fravær fra undervisningen i folkeskolen (issued under folkeskoleloven
+      — a cross-act bearing the act''s own ELI graph cannot express): defines registration and classification
+      of the unlawful-absence fact the § 2, stk. 3 exception consumes.'
+    bears_on_computed_surface: true
   - eli: https://retsinformation.dk/eli/lta/2026/357
     status: excluded-with-reason
     title_short: LOV nr 357 af 03/03/2026
@@ -1911,6 +1932,51 @@ committed_decisions:
     reason: March 2026 act granting one-off amounts to recipients of support benefits; outside benefit
       year 2025, which the certificate expressly non-claims.
     bears_on_computed_surface: false
+  - eli: https://retsinformation.dk/eli/retsinfo/1996/9256
+    status: classified-with-reason
+    title_short: KEN nr 9256 af 15/01/1996 (B-1-96)
+    relation: bears_on
+    provenance: launch-audit official-source search 2026-08-20 (outside the act's ELI basis_for graph);
+      ELI metadata fetched and verified in force
+    classification: input_derivation_rule
+    reason: 'Ankestyrelsen principafgørelse B-1-96 on forsørget af offentlige midler: defines the support-expense
+      comparison behind the § 2, stk. 1, nr. 4 condition, expressly relying on CIR 148 pkt. 7.'
+    bears_on_computed_surface: true
+  - eli: https://retsinformation.dk/eli/retsinfo/1996/9261
+    status: pending
+    title_short: KEN nr 9261 af 15/07/1996 (B-9-96)
+    relation: bears_on
+    provenance: launch-audit official-source search 2026-08-20; located via documentsearch, body not yet
+      read — pending disposition
+  - eli: https://retsinformation.dk/eli/retsinfo/1997/9246
+    status: pending
+    title_short: KEN nr 9246 af 15/01/1997 (B-1-97)
+    relation: bears_on
+    provenance: launch-audit official-source search 2026-08-20; located via documentsearch, body not yet
+      read — pending disposition
+  - eli: https://retsinformation.dk/eli/retsinfo/1998/9196
+    status: pending
+    title_short: KEN nr 9196 af 15/06/1998 (B-5-98)
+    relation: bears_on
+    provenance: launch-audit official-source search 2026-08-20; located via documentsearch, body not yet
+      read — pending disposition
+  - eli: https://retsinformation.dk/eli/retsinfo/2007/11117
+    status: pending
+    title_short: KEN nr 11117 af 02/11/2007 (B-5-07)
+    relation: bears_on
+    provenance: launch-audit official-source search 2026-08-20; located via documentsearch, body not yet
+      read — pending disposition
+  - eli: https://retsinformation.dk/eli/retsinfo/2008/10901
+    status: classified-with-reason
+    title_short: KEN nr 10901 af 01/02/2008 (B-1-08)
+    relation: bears_on
+    provenance: launch-audit official-source search 2026-08-20 (outside the act's ELI basis_for graph);
+      ELI metadata fetched and verified in force
+    classification: input_derivation_rule
+    reason: 'Ankestyrelsen principafgørelse B-1-08 on the child''s residence in Denmark versus stays abroad:
+      supplies the expected-duration and qualifying-education tests that determine the § 2, stk. 3 exception
+      facts consumed by the encoded § 2 surface.'
+    bears_on_computed_surface: true
 computed:
   ledger:
   - ordinal: 1
@@ -2256,15 +2322,19 @@ computed:
       reason: Municipal decision on the 15-17 education/employment duty (§ 2, stk. 1, nr. 6).
   instrument_frontier:
     instrument_count: 27
-    supplemental_count: 1
+    supplemental_count: 8
     counts:
-      total: 28
+      total: 35
       encoded: 0
-      classified-with-reason: 17
+      classified-with-reason: 20
       excluded-with-reason: 11
-      pending: 0
-    pending: []
-    complete: true
+      pending: 4
+    pending:
+    - https://retsinformation.dk/eli/retsinfo/1996/9261
+    - https://retsinformation.dk/eli/retsinfo/1997/9246
+    - https://retsinformation.dk/eli/retsinfo/1998/9196
+    - https://retsinformation.dk/eli/retsinfo/2007/11117
+    complete: false
     ledger:
     - eli: https://retsinformation.dk/eli/lta/2013/1563
       relation: basis_for
@@ -2296,14 +2366,13 @@ computed:
       in_force: true
       status: excluded-with-reason
       classification: superseded_regime_guidance
-      reason: 1986 circular guiding the original børnefamilieydelse regime; body captured from the rendered
-        official page 2026-08-19. Every described mechanism — administration by Statsskattedirektoratet,
-        amtsskatteinspektorater and municipal social committees, payment 'normalt til moderen', EF regulation
-        1408/71 coordination, quarterly prepaid rates, PSL § 20 regulation rounded up to nearest 100 kr
-        — is superseded on its face by the encoded consolidation (LBK 603/2025 §§ 1-4, LOV 1642 divisor-24
-        rounding, Udbetaling Danmark administration, EU regulation 883/2004). Formally in force; no bearing
-        on benefit-year-2025 computed outputs.
-      bears_on_computed_surface: false
+      reason: '1986 circular on the original børnefamilieydelse regime; body captured from the rendered
+        official page 2026-08-19. Its administration, payment routing, EF-1408/71 coordination, and regulation
+        mechanics are superseded by the encoded consolidation — but pkt. 7''s application of the forsørget-af-offentlige-midler
+        predicate remains LIVE law: current Ankestyrelsen precedent B-1-96 expressly relies on it for
+        § 2, stk. 1, nr. 4, an encoded surface consuming a case-supplied condition. Bearing instrument
+        until that predicate chain is encoded (launch-audit finding, 2026-08-20).'
+      bears_on_computed_surface: true
     - eli: https://retsinformation.dk/eli/retsinfo/2003/9806
       relation: basis_for
       title_short: SKR nr 9806 af 12/12/2003
@@ -2580,6 +2649,17 @@ computed:
       reason: LOV 303/2026 amends § 4 e and adds § 4 f after the certified period; the certificate covers
         benefit year 2025 and expressly non-claims these changes.
       bears_on_computed_surface: false
+    - eli: https://retsinformation.dk/eli/lta/2019/1063
+      relation: bears_on
+      title_short: BEK nr 1063 af 24/10/2019
+      provenance: launch-audit official-source search 2026-08-20 (outside the act's ELI basis_for graph);
+        ELI metadata fetched and verified in force
+      status: classified-with-reason
+      classification: input_derivation_rule
+      reason: 'Bekendtgørelse om elevers fravær fra undervisningen i folkeskolen (issued under folkeskoleloven
+        — a cross-act bearing the act''s own ELI graph cannot express): defines registration and classification
+        of the unlawful-absence fact the § 2, stk. 3 exception consumes.'
+      bears_on_computed_surface: true
     - eli: https://retsinformation.dk/eli/lta/2026/357
       relation: bears_on
       title_short: LOV nr 357 af 03/03/2026
@@ -2590,16 +2670,67 @@ computed:
       reason: March 2026 act granting one-off amounts to recipients of support benefits; outside benefit
         year 2025, which the certificate expressly non-claims.
       bears_on_computed_surface: false
+    - eli: https://retsinformation.dk/eli/retsinfo/1996/9256
+      relation: bears_on
+      title_short: KEN nr 9256 af 15/01/1996 (B-1-96)
+      provenance: launch-audit official-source search 2026-08-20 (outside the act's ELI basis_for graph);
+        ELI metadata fetched and verified in force
+      status: classified-with-reason
+      classification: input_derivation_rule
+      reason: 'Ankestyrelsen principafgørelse B-1-96 on forsørget af offentlige midler: defines the support-expense
+        comparison behind the § 2, stk. 1, nr. 4 condition, expressly relying on CIR 148 pkt. 7.'
+      bears_on_computed_surface: true
+    - eli: https://retsinformation.dk/eli/retsinfo/1996/9261
+      relation: bears_on
+      title_short: KEN nr 9261 af 15/07/1996 (B-9-96)
+      provenance: launch-audit official-source search 2026-08-20; located via documentsearch, body not
+        yet read — pending disposition
+      status: pending
+    - eli: https://retsinformation.dk/eli/retsinfo/1997/9246
+      relation: bears_on
+      title_short: KEN nr 9246 af 15/01/1997 (B-1-97)
+      provenance: launch-audit official-source search 2026-08-20; located via documentsearch, body not
+        yet read — pending disposition
+      status: pending
+    - eli: https://retsinformation.dk/eli/retsinfo/1998/9196
+      relation: bears_on
+      title_short: KEN nr 9196 af 15/06/1998 (B-5-98)
+      provenance: launch-audit official-source search 2026-08-20; located via documentsearch, body not
+        yet read — pending disposition
+      status: pending
+    - eli: https://retsinformation.dk/eli/retsinfo/2007/11117
+      relation: bears_on
+      title_short: KEN nr 11117 af 02/11/2007 (B-5-07)
+      provenance: launch-audit official-source search 2026-08-20; located via documentsearch, body not
+        yet read — pending disposition
+      status: pending
+    - eli: https://retsinformation.dk/eli/retsinfo/2008/10901
+      relation: bears_on
+      title_short: KEN nr 10901 af 01/02/2008 (B-1-08)
+      provenance: launch-audit official-source search 2026-08-20 (outside the act's ELI basis_for graph);
+        ELI metadata fetched and verified in force
+      status: classified-with-reason
+      classification: input_derivation_rule
+      reason: 'Ankestyrelsen principafgørelse B-1-08 on the child''s residence in Denmark versus stays
+        abroad: supplies the expected-duration and qualifying-education tests that determine the § 2,
+        stk. 3 exception facts consumed by the encoded § 2 surface.'
+      bears_on_computed_surface: true
   dependency_closure:
     law_derived_inputs:
     - at_least_one_person_with_maintenance_duty_meets_full_residence_or_employment_requirement
     - benefit_payment_has_ceased_under_subsection_1
+    - benefit_recipient_has_final_judgment_for_listed_offence
     - calculation_uses_annual_assessment_for_income_year
     - caretaker_is_fully_tax_liable_under_kildeskatteloven_section_1
     - cessation_period_has_ended_after_detention_completion
     - child_actually_resides_in_denmark
     - child_benefit_is_payable_for_child
+    - child_has_final_judgment_for_listed_offence
+    - child_has_unlawful_school_absence
+    - child_is_otherwise_maintained_by_public_funds
+    - child_is_short_term_abroad
     - child_is_subject_to_compulsory_schooling
+    - child_is_temporarily_abroad_for_education_to_improve_continued_residence_prospects
     - child_turns_eighteen_in_current_month
     - child_turns_fifteen_in_current_quarter
     - conditions_under_section_1_are_met_on_first_day_of_payment_period
@@ -2643,6 +2774,10 @@ computed:
     - youth_benefit_is_payable_for_young_person
     instruments_bearing_on_computed:
     - https://retsinformation.dk/eli/lta/2013/1563
+    - https://retsinformation.dk/eli/lta/2019/1063
+    - https://retsinformation.dk/eli/mt/1986/148
+    - https://retsinformation.dk/eli/retsinfo/1996/9256
+    - https://retsinformation.dk/eli/retsinfo/2008/10901
     - https://retsinformation.dk/eli/retsinfo/2013/9724
     - https://retsinformation.dk/eli/retsinfo/2014/9267
     - https://retsinformation.dk/eli/retsinfo/2014/9268
@@ -2650,7 +2785,7 @@ computed:
     - https://retsinformation.dk/eli/retsinfo/2023/9456
     - https://retsinformation.dk/eli/retsinfo/2024/9493
     - https://retsinformation.dk/eli/retsinfo/2025/9372
-    open_dependency_count: 57
+    open_dependency_count: 67
     closed: false
   non_encoded_reasons_complete: true
   closed: false

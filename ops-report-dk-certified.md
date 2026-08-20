@@ -1,23 +1,28 @@
 # dk/boerne-og-ungeydelse: certification status
 
-Status: **CERTIFIED=NO under definition v3 (CERTIFIED.md) — 57 open
-dependencies.** Certified now requires full dependency closure: every
-quantity a legal instrument defines how to compute must be encoded, with
-only observable acts (dates, register entries, issued assessments,
-judgments, decisions) as leaves. The dk ledger honestly declares 49
-law-derived leaves (BEK 1563/2013's optjening construction; personskatteloven
-§§ 7, 14, 20; pensionsbeskatningsloven; kildeskatteloven § 1; straffeloven
-§ 81 a; folkeskoleloven; and the act's own §§ 1-5 cadence, flow, and
-composite rules currently wired as case-supplied inputs) and 8 instruments
-bearing on computed surfaces (BEK 1563 §§ 16-18 and § 23, principafgørelse
-64-13, the convention guidances, the ligedeling line via § 4). Each is an
-enumerated encoding work item in the certificate's dependency-closure
-block. The prior premises all hold: spine closed (10 encoded / 1
-classified / 13 excluded / 0 pending), input frontier complete (90 typed
-grounding rows), instrument frontier complete (28 dispositioned,
-semantic-sha-bound), receipt 10/10 exact, suites conformant with zero
-unexplained. What remains between this program and certified is encoding,
-not process.
+Status: **CERTIFIED=NO under definition v3 (CERTIFIED.md) — 67 open
+dependencies, instrument frontier honestly incomplete.** Certified requires
+full dependency closure: every quantity a legal instrument defines how to
+compute must be encoded, with only observable acts (dates, register
+entries, issued assessments, judgments, decisions) as leaves. The dk
+ledger declares 55 law-derived leaves (BEK 1563/2013's optjening
+construction; personskatteloven §§ 7, 14, 20; pensionsbeskatningsloven;
+kildeskatteloven § 1; straffeloven § 81 a and the § 4 c offence-list
+membership; folkeskoleloven and BEK 1063/2019; the Ankestyrelsen B-1-96 /
+B-1-08 tests behind the § 2 condition facts; and the act's own §§ 1-5
+cadence, flow, and composite rules currently wired as case-supplied
+inputs) and 12 bearing instruments. The launch audit's official-source
+search found current precedents OUTSIDE the act's ELI graph — B-1-96,
+B-1-08, and BEK 1063/2019 (verified, dispositioned, bearing) plus four
+precedents pending their reads (B-1-97, B-5-98, B-9-96, B-5-07) — so the
+instrument frontier reads incomplete (35 rows: 20 classified / 11
+excluded / 4 pending), demonstrating that the registry's link graph alone
+under-discovers; the corpus ingest + citation-scan arc (axiom-corpus#611)
+is the systematic second channel. The other premises hold: spine closed,
+input frontier typed and complete, receipt 10/10 exact, suites conformant
+with zero unexplained. What remains between this program and certified is
+encoding and the pending instrument reads, all enumerated in the
+certificate's closed verdict.
 
 ## Certification scope
 
@@ -69,12 +74,13 @@ the Faroe Islands or Greenland; or post-2025 law, including LOV 303/2026's
   validated clean; typed suite-bound covered_by evidence
   (`{report|chunk_index|chunk, claim}`); the census binds each manifest's
   sha and the strict opt-in, so no evidence edit is invisible downstream.
-- **closed (computed FALSE — open dependencies)** — the spine, input
-  frontier, and instrument frontier are all complete (below), but
-  definition v3 additionally requires dependency closure, and the ledger's
-  typed leaves honestly declare 49 law-derived inputs and 8 bearing
-  instruments as open encoding work — so the premise computes false with
-  the worklist enumerated in `computed.dependency_closure`. The completed
+- **closed (computed FALSE — open dependencies and pending instruments)**
+  — the spine and input frontier are complete, but the typed leaves
+  declare 55 law-derived inputs and 12 bearing instruments as open
+  encoding work, and the instrument frontier holds 4 pending
+  search-discovered precedents — so the premise computes false with the
+  worklist enumerated in `computed.dependency_closure` and the pending
+  reads in `computed.instrument_frontier`. The completed
   layers: the closure ledger derives the 24-paragraf
   spine from corpus release `a2e71391` (body sha256 per row) and maps every
   row: §§ 1, 1a, 2, 3, 4a, 4b, 4c, 4e, 5, 8a encoded by direct signed
@@ -83,8 +89,9 @@ the Faroe Islands or Greenland; or post-2025 law, including LOV 303/2026's
   boundary frontier complete with 90 committed grounding decisions. The
   ledger also derives the **subordinate-instrument frontier** (oracles#491)
   from a committed snapshot of the act's official ELI graph: all 25
-  `basis_for` instruments, both `changed_by` amendment acts, and one
-  search-discovered supplement are dispositioned — BEK 1563/2013 and
+  `basis_for` instruments, both `changed_by` amendment acts, and eight
+  search-discovered supplements (four dispositioned, four pending their
+  reads) are tracked — BEK 1563/2013 and
   principafgørelse 64-13 classified as input-derivation rules for the § 2
   case-supplied inputs (cited in the grounding rows), the Ankestyrelsen
   ligedeling line (11-23, 18-24, 4-25) classified against the non-claimed
