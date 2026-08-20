@@ -16,7 +16,7 @@
 #   NZ IncomeExplorer unified record                 nz_incomeexplorer.py
 #   NZ bound case chunks + trace-derived view receipts nz_incomeexplorer.py
 #   NZ single-person attestations                    nz_incomeexplorer.py
-#   NZ closure census                                nz_closure.py
+#   NZ closure + bound instrument frontier           nz_closure.py
 #   axiom_oracles/data/euromod_be_coverage.json      …same (BE parity rollup)
 #   conformance/scoreboard.json + conformance/detail/<jur>.json
 #     (+ their dashboard/public/data mirrors)      conformance_scoreboard.py
@@ -117,10 +117,13 @@ regenerate_derived() {
   "$PYTHON" scripts/generate_affected_map.py
   # Rebuild the NZ unified tuple record, bound verdict chunks, trace-derived
   # exercise views, executable receipt binding, and closure census before
-  # their downstream disposition, exercise, and certificate consumers. All
-  # generators pin and validate their source inputs before writing. The
-  # existence checks preserve the refresh script's small hermetic test seeds
-  # and old release branches that predate the NZ inputs.
+  # their downstream disposition, exercise, and certificate consumers. The
+  # closure producer also validates and byte-binds the committed subordinate-
+  # instrument graph and its dispositions; this refresh path deliberately
+  # never invokes the network capture script. All generators pin and validate
+  # their source inputs before writing. The existence checks preserve the
+  # refresh script's small hermetic test seeds and old release branches that
+  # predate the NZ inputs.
   if [ -f comparisons/nz-treasury-incomeexplorer/source-comparison.json ]; then
     "$PYTHON" scripts/nz_incomeexplorer.py
   fi
@@ -216,7 +219,9 @@ regenerate_derived() {
 
 verify_derived() {
   # The staleness gates ci.yml runs on main, verbatim; a tree that fails any
-  # of them must never be pushed. conformance_ratchet.py --check is
+  # of them must never be pushed. nz_closure.py --check includes exact-byte
+  # verification of the committed instrument graph and complete disposition
+  # coverage, without a network retrieval. conformance_ratchet.py --check is
   # intentionally absent — see the header. Explicitly &&-chained: this
   # function is also called in an if-condition (the fast no-op path), where
   # errexit is suppressed and bare lines would reduce the verdict to the LAST

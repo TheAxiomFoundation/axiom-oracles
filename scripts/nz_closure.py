@@ -10,6 +10,7 @@ import re
 import subprocess
 import sys
 from pathlib import Path
+from typing import Any, Mapping
 
 import yaml
 
@@ -33,6 +34,10 @@ EVALUATION_TRACE_PATH = (
     REPO_ROOT / "comparisons" / "nz-treasury-incomeexplorer" / "evaluation-traces.json"
 )
 RATCHET_PATH = OUT_DIR / "denominator-ratchet.json"
+INSTRUMENT_GRAPH_PATH = (
+    REPO_ROOT / "conformance" / "closure" / "nz-instrument-graph.json"
+)
+INSTRUMENT_DISPOSITIONS_PATH = OUT_DIR / "instrument-dispositions.json"
 SOURCE_SHA256 = "a69b872fbc9fd9a98132ea5b7f5272d8be9631d3060651603b2b3c1f7cd64aea"
 EVALUATION_TRACE_SHA256 = (
     "43cca386b15e71fc07fa8fb223b2bef8d351e0bb56ecfdf05fe98e790e66f4da"
@@ -50,6 +55,57 @@ CORPUS_FILES = (
 )
 LEDGER_REPO_PATH = "known-missing-money-atoms.yaml"
 RATCHET_REPO_PATH = RATCHET_PATH.relative_to(REPO_ROOT).as_posix()
+
+INSTRUMENT_GRAPH_SCHEMA = "axiom_oracles.closure.instrument_graph.v1"
+INSTRUMENT_STATUSES = (
+    "encoded",
+    "classified-with-reason",
+    "excluded-with-reason",
+    "pending",
+)
+INSTRUMENT_RELATIONS = ("basis_for", "bears_on")
+INSTRUMENT_ACTS = {
+    "nz/statute/act/public/2001/0049": {
+        "eli": "https://www.legislation.govt.nz/act/public/2001/49/en/latest/",
+        "classic_listing_url": (
+            "https://classic.legislation.govt.nz/act/public/2001/0049/latest/"
+            "secondary.aspx?sds=aa&sdr=1&sda=1"
+        ),
+        "reported_count": 136,
+        "programs": ("nz/acc-earners-levy",),
+    },
+    "nz/statute/act/public/2007/0097": {
+        "eli": "https://www.legislation.govt.nz/act/public/2007/97/en/latest/",
+        "classic_listing_url": (
+            "https://classic.legislation.govt.nz/act/public/2007/0097/latest/"
+            "secondary.aspx?sds=aa&sdr=1&sda=1"
+        ),
+        "reported_count": 202,
+        "programs": (
+            "nz/income-tax",
+            "nz/independent-earner-tax-credit",
+            "nz/working-for-families",
+        ),
+    },
+    "nz/statute/act/public/2018/0032": {
+        "eli": "https://www.legislation.govt.nz/act/public/2018/32/en/latest/",
+        "classic_listing_url": (
+            "https://classic.legislation.govt.nz/act/public/2018/0032/latest/"
+            "secondary.aspx?sds=aa&sdr=1&sda=1"
+        ),
+        "reported_count": 99,
+        "programs": (
+            "nz/accommodation-supplement",
+            "nz/main-benefits",
+            "nz/winter-energy-payment",
+        ),
+    },
+}
+PROGRAM_INSTRUMENT_ACT = {
+    program: act_path
+    for act_path, act in INSTRUMENT_ACTS.items()
+    for program in act["programs"]
+}
 
 TRACE_SCHEMA = "axiom_oracles.nz_evaluation_traces.v1"
 TRACE_SUITE = "nz-treasury-incomeexplorer"
@@ -100,6 +156,38 @@ REQUEST_EVIDENCE_PROVENANCE = {
 
 class ClosureError(ValueError):
     pass
+
+
+class ClosureValidation(dict):
+    """Mapping-compatible validation result with the DK producer attributes.
+
+    The current NZ certificate adapter consumes program-scoped mappings while
+    d3/instrument-frontier's common adapter consumes ``summary.closed``.  A
+    dict subclass exposes both without changing either enforcement path.
+    """
+
+    @property
+    def closed(self) -> bool:
+        return self.get("closed") is True
+
+
+class ClosureVerificationResult:
+    """Small DK-compatible result for full producer verification."""
+
+    def __init__(
+        self,
+        *,
+        document: dict[str, Any] | None,
+        expected: dict[str, Any] | None,
+        errors: tuple[str, ...],
+    ) -> None:
+        self.document = document
+        self.expected = expected
+        self.errors = errors
+
+    @property
+    def valid(self) -> bool:
+        return not self.errors
 
 
 def _git(repo: Path, *args: str) -> str:
@@ -177,6 +265,834 @@ def _load_json_object(path: Path, label: str) -> dict:
 
 def _canonical_json(value: object) -> str:
     return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+
+
+_INSTRUMENT_ROW_REQUIRED = {
+    "eli",
+    "relation",
+    "date_document",
+    "type_document",
+    "in_force",
+    "title",
+    "title_short",
+    "act_eli",
+    "act_citation_path",
+}
+_INSTRUMENT_ROW_OPTIONAL = {
+    "empowering_provisions",
+    "corpus_citation_path",
+    "corpus_commit",
+    "corpus_manifest",
+    "corpus_manifest_sha256",
+    "source_sha256",
+    "retrieval_method",
+    "publisher_response_sha256",
+    "publisher_response_retrieved_at",
+    "application_end",
+}
+_DISPOSITION_OPTIONAL = {
+    "classification",
+    "reason",
+    "bearing",
+    "encoded_by",
+}
+
+
+def _load_instrument_graph() -> tuple[dict[str, Any], bytes]:
+    try:
+        raw = INSTRUMENT_GRAPH_PATH.read_bytes()
+        document = json.loads(raw)
+    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        raise ClosureError(f"cannot read NZ instrument graph: {exc}") from exc
+    if not isinstance(document, dict):
+        raise ClosureError("NZ instrument graph must contain an object")
+    if set(document) != {
+        "schema",
+        "schema_compatibility_note",
+        "act_eli",
+        "act_citation_path",
+        "retrieved_at",
+        "retrieval_method",
+        "retrieval_receipts",
+        "instruments",
+    }:
+        raise ClosureError("NZ instrument graph has unexpected or missing top-level keys")
+    if document.get("schema") != INSTRUMENT_GRAPH_SCHEMA:
+        raise ClosureError("unexpected NZ instrument graph schema")
+    note = document.get("schema_compatibility_note")
+    if not isinstance(note, str) or "single-Act" not in note:
+        raise ClosureError("NZ instrument graph must disclose its v1 multi-Act extension")
+    retrieved_at = document.get("retrieved_at")
+    if not isinstance(retrieved_at, str) or not re.fullmatch(
+        r"\d{4}-\d{2}-\d{2}", retrieved_at
+    ):
+        raise ClosureError("NZ instrument graph retrieved_at must be an ISO date")
+    retrieval_method = document.get("retrieval_method")
+    if not isinstance(retrieval_method, str) or not retrieval_method.strip():
+        raise ClosureError("NZ instrument graph retrieval_method must be non-empty")
+    if set(document.get("act_citation_path") or ()) != set(INSTRUMENT_ACTS):
+        raise ClosureError("NZ instrument graph empowering-Act paths drifted")
+    expected_elis = {str(value["eli"]) for value in INSTRUMENT_ACTS.values()}
+    if set(document.get("act_eli") or ()) != expected_elis:
+        raise ClosureError("NZ instrument graph empowering-Act ELIs drifted")
+
+    rows = document.get("instruments")
+    if not isinstance(rows, list) or not rows:
+        raise ClosureError("NZ instrument graph has no instrument rows")
+    seen: set[str] = set()
+    sort_keys: list[tuple[str, str, str]] = []
+    for index, row in enumerate(rows):
+        if not isinstance(row, dict):
+            raise ClosureError(f"NZ instrument graph row {index} is not an object")
+        keys = set(row)
+        if not _INSTRUMENT_ROW_REQUIRED.issubset(keys) or not keys.issubset(
+            _INSTRUMENT_ROW_REQUIRED | _INSTRUMENT_ROW_OPTIONAL
+        ):
+            raise ClosureError(
+                f"NZ instrument graph row {index} has unexpected or missing keys"
+            )
+        eli = row.get("eli")
+        if not isinstance(eli, str) or not eli.startswith("https://"):
+            raise ClosureError(f"NZ instrument graph row {index} has invalid ELI/URL")
+        if eli in seen:
+            raise ClosureError(f"duplicate NZ instrument ELI/URL {eli!r}")
+        seen.add(eli)
+        if row.get("relation") not in INSTRUMENT_RELATIONS:
+            raise ClosureError(f"{eli}: unsupported instrument relation")
+        if row["relation"] == "basis_for" and not re.fullmatch(
+            r"https://www\.legislation\.govt\.nz/"
+            r"(?:secondary-legislation/(?:agency|pco)-drafted|regulation/public)/"
+            r"[^/]+/[^/]+/en/latest/",
+            eli,
+        ):
+            raise ClosureError(f"{eli}: basis_for row is not a canonical NZ ELI")
+        if row["relation"] == "bears_on":
+            if not re.match(
+                r"https://(?:www\.(?:ird\.govt\.nz|workandincome\.govt\.nz|"
+                r"acc\.co\.nz|taxtechnical\.ird\.govt\.nz)|"
+                r"taxtechnical\.ird\.govt\.nz)/",
+                eli,
+            ):
+                raise ClosureError(f"{eli}: supplemental publisher is not allowlisted")
+            row_method = row.get("retrieval_method")
+            if not isinstance(row_method, str) or not row_method.strip():
+                raise ClosureError(f"{eli}: supplemental retrieval method is missing")
+            publisher_digest = row.get("publisher_response_sha256")
+            publisher_retrieved_at = row.get("publisher_response_retrieved_at")
+            if (publisher_digest is None) != (publisher_retrieved_at is None):
+                raise ClosureError(
+                    f"{eli}: live publisher receipt must carry both digest and date"
+                )
+            if publisher_digest is not None and (
+                not re.fullmatch(r"[0-9a-f]{64}", str(publisher_digest))
+                or not isinstance(publisher_retrieved_at, str)
+                or not re.fullmatch(r"\d{4}-\d{2}-\d{2}", publisher_retrieved_at)
+            ):
+                raise ClosureError(f"{eli}: live publisher receipt is malformed")
+            corpus_path = row.get("corpus_citation_path")
+            if corpus_path is not None:
+                if not isinstance(corpus_path, str) or not corpus_path.startswith(
+                    "nz/guidance/"
+                ):
+                    raise ClosureError(f"{eli}: invalid corpus guidance citation path")
+                if not re.fullmatch(r"[0-9a-f]{40}", str(row.get("corpus_commit", ""))):
+                    raise ClosureError(f"{eli}: corpus guidance commit is not pinned")
+                if not isinstance(row.get("corpus_manifest"), str) or not row[
+                    "corpus_manifest"
+                ].strip():
+                    raise ClosureError(f"{eli}: corpus guidance manifest is missing")
+                if not re.fullmatch(
+                    r"[0-9a-f]{64}", str(row.get("corpus_manifest_sha256", ""))
+                ):
+                    raise ClosureError(f"{eli}: corpus manifest bytes are not bound")
+                if "source_sha256" in row and not re.fullmatch(
+                    r"[0-9a-f]{64}", str(row["source_sha256"])
+                ):
+                    raise ClosureError(f"{eli}: corpus source digest is invalid")
+        act_path = row.get("act_citation_path")
+        act = INSTRUMENT_ACTS.get(str(act_path))
+        if act is None or row.get("act_eli") != act["eli"]:
+            raise ClosureError(f"{eli}: empowering-Act identity is inconsistent")
+        if not isinstance(row.get("in_force"), bool):
+            raise ClosureError(f"{eli}: in_force must be boolean")
+        for field in ("date_document", "type_document", "title", "title_short"):
+            if not isinstance(row.get(field), str) or not row[field].strip():
+                raise ClosureError(f"{eli}: {field} must be a non-empty string")
+        if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", row["date_document"]):
+            raise ClosureError(f"{eli}: date_document must be an ISO date")
+        if "application_end" in row and not re.fullmatch(
+            r"\d{4}-\d{2}-\d{2}", str(row["application_end"])
+        ):
+            raise ClosureError(f"{eli}: application_end must be an ISO date")
+        if "application_end" in row and (
+            row["relation"] != "bears_on"
+            or row["in_force"] is not False
+            or str(row["application_end"]) >= retrieved_at
+        ):
+            raise ClosureError(
+                f"{eli}: expired application period is inconsistent with capture date"
+            )
+        if row["relation"] == "basis_for" and (
+            not isinstance(row.get("empowering_provisions"), str)
+            or not row["empowering_provisions"].strip()
+        ):
+            raise ClosureError(f"{eli}: empowering provisions were not captured")
+        sort_keys.append((str(act_path), str(row["relation"]), eli))
+    if sort_keys != sorted(sort_keys):
+        raise ClosureError("NZ instrument graph rows are not canonically sorted")
+
+    receipts = document.get("retrieval_receipts")
+    if not isinstance(receipts, list) or len(receipts) != len(INSTRUMENT_ACTS):
+        raise ClosureError("NZ instrument graph retrieval receipts are incomplete")
+    receipts_by_act: dict[str, dict[str, Any]] = {}
+    for receipt in receipts:
+        if not isinstance(receipt, dict):
+            raise ClosureError("NZ instrument graph receipt is not an object")
+        act_path = receipt.get("act_citation_path")
+        if (
+            not isinstance(act_path, str)
+            or act_path not in INSTRUMENT_ACTS
+            or act_path in receipts_by_act
+        ):
+            raise ClosureError("NZ instrument graph receipt Act identity is invalid")
+        reported = receipt.get("reported_count")
+        captured = receipt.get("captured_count")
+        unresolved = receipt.get("unresolved_count")
+        if not all(
+            isinstance(value, int)
+            and not isinstance(value, bool)
+            and value >= 0
+            for value in (reported, captured, unresolved)
+        ):
+            raise ClosureError(f"{act_path}: invalid instrument receipt counts")
+        actual = sum(
+            row["relation"] == "basis_for" and row["act_citation_path"] == act_path
+            for row in rows
+        )
+        if captured != actual or reported != captured + unresolved:
+            raise ClosureError(f"{act_path}: instrument receipt counts do not reconcile")
+        act = INSTRUMENT_ACTS[act_path]
+        if (
+            receipt.get("act_eli") != act["eli"]
+            or receipt.get("listing_url") != act["eli"]
+            or receipt.get("classic_cross_check_url")
+            != act["classic_listing_url"]
+            or reported != act["reported_count"]
+        ):
+            raise ClosureError(f"{act_path}: authoritative retrieval URLs/count drifted")
+        method = receipt.get("method")
+        if not isinstance(method, str) or not method.strip():
+            raise ClosureError(f"{act_path}: retrieval receipt method is missing")
+        complete = receipt.get("complete")
+        if not isinstance(complete, bool) or complete != (unresolved == 0):
+            raise ClosureError(f"{act_path}: instrument receipt completeness is stale")
+        digest_field = "response_sha256" if complete else "manifest_sha256"
+        if not re.fullmatch(r"[0-9a-f]{64}", str(receipt.get(digest_field, ""))):
+            raise ClosureError(f"{act_path}: retrieval receipt bytes are not SHA-bound")
+        if not complete:
+            if not isinstance(receipt.get("manifest_name"), str) or not receipt[
+                "manifest_name"
+            ].strip():
+                raise ClosureError(f"{act_path}: offline manifest name is missing")
+            manifest_discovered = receipt.get("manifest_discovered_count")
+            manifest_downloaded = receipt.get("manifest_downloaded_count")
+            manifest_failed = receipt.get("manifest_failed_count")
+            if (
+                not all(
+                    isinstance(value, int)
+                    and not isinstance(value, bool)
+                    and value >= 0
+                    for value in (
+                        manifest_discovered,
+                        manifest_downloaded,
+                        manifest_failed,
+                    )
+                )
+                or manifest_discovered != manifest_downloaded + manifest_failed
+            ):
+                raise ClosureError(
+                    f"{act_path}: offline manifest totals do not reconcile"
+                )
+            failed_work_ids = receipt.get("manifest_failed_work_ids")
+            if (
+                not isinstance(failed_work_ids, list)
+                or failed_work_ids != sorted(set(failed_work_ids))
+                or len(failed_work_ids) != manifest_failed
+                or not all(
+                    isinstance(value, str) and value
+                    for value in failed_work_ids
+                )
+            ):
+                raise ClosureError(
+                    f"{act_path}: offline manifest failures are malformed"
+                )
+            for field in ("source_retrieved_at", "status_evaluated_as_of"):
+                value = receipt.get(field)
+                if not isinstance(value, str) or not re.fullmatch(
+                    r"\d{4}-\d{2}-\d{2}", value
+                ):
+                    raise ClosureError(f"{act_path}: {field} must be an ISO date")
+        receipts_by_act[act_path] = receipt
+    return document, raw
+
+
+def _load_instrument_dispositions() -> tuple[dict[str, Any], bytes]:
+    try:
+        raw = INSTRUMENT_DISPOSITIONS_PATH.read_bytes()
+        document = json.loads(raw)
+    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        raise ClosureError(f"cannot read NZ instrument dispositions: {exc}") from exc
+    if not isinstance(document, dict):
+        raise ClosureError("NZ instrument dispositions must contain an object")
+    if set(document) != {
+        "schema_compatibility_note",
+        "instrument_dispositions",
+    }:
+        raise ClosureError(
+            "NZ instrument dispositions have unexpected or missing top-level keys"
+        )
+    note = document.get("schema_compatibility_note")
+    if not isinstance(note, str) or "repeated per program" not in note:
+        raise ClosureError(
+            "NZ instrument dispositions must disclose their program-scoped extension"
+        )
+    rows = document.get("instrument_dispositions")
+    if not isinstance(rows, list):
+        raise ClosureError("NZ instrument dispositions must contain a row list")
+    return document, raw
+
+
+def _expected_instrument_pairs(graph: Mapping[str, Any]) -> set[tuple[str, str]]:
+    pairs: set[tuple[str, str]] = set()
+    for row in graph.get("instruments") or []:
+        if not isinstance(row, Mapping):
+            continue
+        act = INSTRUMENT_ACTS[str(row["act_citation_path"])]
+        for program in act["programs"]:
+            pairs.add((str(program), str(row["eli"])))
+    return pairs
+
+
+def _canonical_instrument_decisions(
+    graph: Mapping[str, Any],
+    decisions: Mapping[str, Any],
+    *,
+    rulespec_paths: set[str],
+) -> dict[tuple[str, str], dict[str, Any]]:
+    expected = _expected_instrument_pairs(graph)
+    by_pair: dict[tuple[str, str], dict[str, Any]] = {}
+    sort_keys: list[tuple[str, str]] = []
+    for index, value in enumerate(
+        decisions.get("instrument_dispositions") or []
+    ):
+        if not isinstance(value, dict):
+            raise ClosureError(f"instrument disposition row {index} is not an object")
+        allowed = {"program", "eli", "status"} | _DISPOSITION_OPTIONAL
+        if not {"program", "eli", "status"}.issubset(value) or not set(
+            value
+        ).issubset(allowed):
+            raise ClosureError(
+                f"instrument disposition row {index} has unexpected or missing keys"
+            )
+        if not isinstance(value["program"], str) or not isinstance(
+            value["eli"], str
+        ):
+            raise ClosureError(
+                f"instrument disposition row {index} program/eli must be strings"
+            )
+        pair = (value["program"], value["eli"])
+        if pair not in expected:
+            raise ClosureError(
+                f"unknown NZ instrument disposition {pair[0]} / {pair[1]}"
+            )
+        if pair in by_pair:
+            raise ClosureError(
+                f"duplicate NZ instrument disposition {pair[0]} / {pair[1]}"
+            )
+        status = value.get("status")
+        if status not in INSTRUMENT_STATUSES:
+            raise ClosureError(f"{pair[0]} / {pair[1]}: invalid disposition status")
+        if status == "pending":
+            unexpected = _DISPOSITION_OPTIONAL & set(value)
+            if unexpected:
+                raise ClosureError(
+                    f"{pair[0]} / {pair[1]}: pending disposition must not carry "
+                    "classification, reason, bearing, or encoded_by"
+                )
+        else:
+            for field in ("classification", "reason"):
+                if not isinstance(value.get(field), str) or not value[field].strip():
+                    raise ClosureError(
+                        f"{pair[0]} / {pair[1]}: {status} requires {field}"
+                    )
+            if status == "encoded" and (
+                not isinstance(value.get("encoded_by"), str)
+                or not value["encoded_by"].strip()
+            ):
+                raise ClosureError(
+                    f"{pair[0]} / {pair[1]}: encoded requires encoded_by"
+                )
+            if status == "encoded" and value["encoded_by"] not in rulespec_paths:
+                raise ClosureError(
+                    f"{pair[0]} / {pair[1]}: encoded_by is not a pinned RuleSpec module"
+                )
+            if status != "encoded" and "encoded_by" in value:
+                raise ClosureError(
+                    f"{pair[0]} / {pair[1]}: only encoded may carry encoded_by"
+                )
+            if "bearing" in value and (
+                not isinstance(value["bearing"], str) or not value["bearing"].strip()
+            ):
+                raise ClosureError(
+                    f"{pair[0]} / {pair[1]}: bearing must be a non-empty string"
+                )
+        by_pair[pair] = value
+        sort_keys.append(pair)
+    if sort_keys != sorted(sort_keys):
+        raise ClosureError("NZ instrument dispositions are not canonically sorted")
+    missing = sorted(expected - set(by_pair))
+    if missing:
+        program, eli = missing[0]
+        raise ClosureError(f"missing NZ instrument disposition {program} / {eli}")
+    return by_pair
+
+
+def _decision(
+    status: str,
+    *,
+    classification: str | None = None,
+    reason: str | None = None,
+    encoded_by: str | None = None,
+    bearing: str | None = None,
+) -> dict[str, Any]:
+    row: dict[str, Any] = {"status": status}
+    for key, value in (
+        ("classification", classification),
+        ("reason", reason),
+        ("encoded_by", encoded_by),
+        ("bearing", bearing),
+    ):
+        if value is not None:
+            row[key] = value
+    return row
+
+
+def _seed_instrument_decision(program: str, row: Mapping[str, Any]) -> dict[str, Any]:
+    eli = str(row["eli"])
+    title = str(row["title"])
+    pair = (program, eli)
+    encoded: dict[tuple[str, str], tuple[str, str]] = {
+        (
+            "nz/acc-earners-levy",
+            "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/18/en/latest/",
+        ): (
+            "nz/regulations/acc/earners_levy.yaml",
+            "Regulations 4 and 5 set the certified levy rates and maximum earnings caps.",
+        ),
+        (
+            "nz/acc-earners-levy",
+            "https://www.ird.govt.nz/en/income-tax/income-tax-for-individuals/acc-clients-and-carers/acc-earners-levy-rates",
+        ): (
+            "nz/regulations/acc/earners_levy.yaml",
+            "Named parameter source for GST-inclusive levy rates, caps, and rounding.",
+        ),
+        (
+            "nz/accommodation-supplement",
+            "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/202/en/latest/",
+        ): (
+            "nz/statutes/social_security/accommodation_supplement/core.yaml",
+            "Regulations 15 and 18–19 supply encoded asset, abatement, and rounding rules.",
+        ),
+        (
+            "nz/accommodation-supplement",
+            "https://www.workandincome.govt.nz/products/benefit-rates/benefit-rates-april-2026.html",
+        ): (
+            "nz/statutes/social_security/accommodation_supplement/core.yaml",
+            "Named corroborating parameter source for the 1 April 2026 maximum rates.",
+        ),
+        (
+            "nz/main-benefits",
+            "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2026/36/en/latest/",
+        ): (
+            "nz/statutes/social_security/main_benefits/rates.yaml",
+            "The 2026 order sets the encoded main-benefit rates from 1 April 2026.",
+        ),
+        (
+            "nz/working-for-families",
+            "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/260/en/latest/",
+        ): (
+            "nz/statutes/income_tax/family_scheme/tax_credits.yaml",
+            "The order sets the encoded 2026–27 FTC, MFTC, and Best Start amounts.",
+        ),
+    }
+    wff_guidance = {
+        "https://www.ird.govt.nz/working-for-families/types/family-tax-credit",
+        "https://www.ird.govt.nz/working-for-families/types/in-work-tax-credit",
+        "https://www.ird.govt.nz/best-start",
+        "https://www.ird.govt.nz/working-for-families/types/minimum-family-tax-credit",
+        "https://www.ird.govt.nz/in-work-tax-credit-increase",
+    }
+    if program == "nz/working-for-families" and eli in wff_guidance:
+        encoded[pair] = (
+            "nz/statutes/income_tax/family_scheme/tax_credits.yaml",
+            "Inland Revenue guidance is named by, and agrees with, the encoded WFF parameter surface.",
+        )
+    if pair in encoded:
+        encoded_by, reason = encoded[pair]
+        return _decision(
+            "encoded",
+            classification="parameter_or_rule_source",
+            reason=reason,
+            encoded_by=encoded_by,
+        )
+
+    input_boundary: dict[tuple[str, str], tuple[str, str]] = {
+        (
+            "nz/acc-earners-levy",
+            "https://www.ird.govt.nz/deductions-from-salary-and-wages",
+        ): (
+            "corroborating_levy_guidance",
+            "The corpus inventory records that this PAYE guidance also covers ACC earners' levy deductions. It bears on the certified levy surface but supplies no separate parameter beyond the encoded Earners' Levy Regulations and the separately encoded IRD levy-rate page.",
+        ),
+        (
+            "nz/main-benefits",
+            "https://www.workandincome.govt.nz/products/benefit-rates/benefit-rates-april-2026.html",
+        ): (
+            "corroborating_rate_guidance",
+            "The page independently corroborates the 1 April 2026 rates, but the pinned module names and proves the 2026 rates order rather than this guidance page.",
+        ),
+        (
+            "nz/main-benefits",
+            "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/202/en/latest/",
+        ): (
+            "input_derivation_rule",
+            "The regulations govern assessable-income and administration inputs supplied to the claimed rate calculation; those upstream case determinations are not claimed.",
+        ),
+        (
+            "nz/accommodation-supplement",
+            "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2026/36/en/latest/",
+        ): (
+            "input_derivation_rule",
+            "The order supplies the case-provided base-rate input used by the Accommodation Supplement entry-threshold formula.",
+        ),
+        (
+            "nz/independent-earner-tax-credit",
+            "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/260/en/latest/",
+        ): (
+            "input_derivation_rule",
+            "The WFF order affects the case-supplied WFF-entitlement disqualifier consumed by the IETC rule, not the IETC formula itself.",
+        ),
+    }
+    if program == "nz/independent-earner-tax-credit" and eli in wff_guidance:
+        input_boundary[pair] = (
+            "input_derivation_rule",
+            "This WFF guidance governs the case-supplied WFF-entitlement disqualifier consumed by IETC; upstream entitlement classification is not claimed.",
+        )
+    is_statement = eli.endswith("/is-26-12")
+    is_determination = "/determinations/emergency-events/2026/det-26-" in eli
+    if program in {
+        "nz/working-for-families",
+        "nz/independent-earner-tax-credit",
+    } and (is_statement or is_determination):
+        input_boundary[pair] = (
+            "interpretive_input_boundary" if is_statement else "input_derivation_rule",
+            (
+                "The instrument governs classification of amounts supplied through the explicit family_scheme_other_payments_not_excluded and related case-input boundary; the certificate does not claim event, payment, trust, or company adjudication upstream of those inputs."
+            ),
+        )
+    if pair in input_boundary:
+        classification, reason = input_boundary[pair]
+        bearing = "documented case-input or nonclaimed upstream surface"
+        if classification == "corroborating_rate_guidance":
+            bearing = "independent official rate corroboration; not an encoded source"
+        elif classification == "corroborating_levy_guidance":
+            bearing = "ACC levy deduction guidance; no separate encoded parameter"
+        elif is_statement and program == "nz/working-for-families":
+            reason = (
+                "IS 26/12 interprets family-scheme-income categories. The certified "
+                "subgraph encodes the statutory arithmetic in "
+                "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml; "
+                "taxpayer company, trust, control, payment, and event facts enter "
+                "through explicit case inputs, and the statement sets no separate "
+                "numeric parameter claimed by the certificate."
+            )
+            bearing = (
+                "interpretive guidance over an encoded statutory module and its "
+                "explicit taxpayer-fact inputs"
+            )
+        return _decision(
+            "classified-with-reason",
+            classification=classification,
+            reason=reason,
+            bearing=bearing,
+        )
+
+    weekly_compensation = row.get("corpus_citation_path", "").startswith(
+        "nz/guidance/acc/"
+    )
+    duplicate_fact_sheet = eli.endswith("/is-26-12-fs-1")
+    manifest_nonbearing = eli in {
+        "https://www.ird.govt.nz/rwt-rate",
+        "https://www.ird.govt.nz/deductions-from-salary-and-wages",
+    }
+    program_specific_nonbearing = (
+        program == "nz/income-tax"
+        and (
+            eli in wff_guidance
+            or is_statement
+            or is_determination
+            or eli.endswith("/2025/260/en/latest/")
+        )
+    ) or (
+        program == "nz/winter-energy-payment"
+        and eli
+        in {
+            "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/202/en/latest/",
+            "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2026/36/en/latest/",
+            "https://www.workandincome.govt.nz/products/benefit-rates/benefit-rates-april-2026.html",
+        }
+    )
+    if weekly_compensation:
+        return _decision(
+            "excluded-with-reason",
+            classification="no_computational_bearing",
+            reason=(
+                "ACC weekly-compensation/client-payment guidance concerns entitlement payments, not the certified earners' levy calculation."
+            ),
+        )
+    if duplicate_fact_sheet:
+        return _decision(
+            "excluded-with-reason",
+            classification="duplicative_summary",
+            reason="Fact sheet adds no rule beyond IS 26/12, which is separately dispositioned.",
+        )
+    if manifest_nonbearing or program_specific_nonbearing:
+        return _decision(
+            "excluded-with-reason",
+            classification="no_computational_bearing",
+            reason=f"{title} does not alter this certified program's claimed output surface.",
+        )
+    if row.get("in_force") is False:
+        application_end = row.get("application_end")
+        if isinstance(application_end, str):
+            reason = (
+                f"{title}'s authoritative application period ended "
+                f"{application_end}, before the certified 2026–27 period."
+            )
+        else:
+            reason = (
+                f"{title} is marked not in force in the authoritative PCO snapshot."
+            )
+        return _decision(
+            "excluded-with-reason",
+            classification="not_in_force",
+            reason=reason,
+        )
+    return _decision("pending")
+
+
+def bootstrap_instrument_dispositions(graph: Mapping[str, Any]) -> dict[str, Any]:
+    rows = []
+    for instrument in graph.get("instruments") or []:
+        act = INSTRUMENT_ACTS[str(instrument["act_citation_path"])]
+        for program in act["programs"]:
+            rows.append(
+                {
+                    "program": program,
+                    "eli": instrument["eli"],
+                    **_seed_instrument_decision(str(program), instrument),
+                }
+            )
+    rows.sort(key=lambda row: (row["program"], row["eli"]))
+    return {
+        "schema_compatibility_note": (
+            "DK ledger-v2 committed_decisions.instrument_dispositions status and "
+            "reason fields, repeated per program because instrument_graph.v1 has "
+            "no multi-program disposition dimension; this decision input does not "
+            "claim a new standalone schema"
+        ),
+        "instrument_dispositions": rows,
+    }
+
+
+def _instrument_ledger_row(
+    graph_row: Mapping[str, Any], decision: Mapping[str, Any]
+) -> dict[str, Any]:
+    row = {
+        "eli": graph_row.get("eli"),
+        "relation": graph_row.get("relation"),
+        "title_short": graph_row.get("title_short"),
+        "type_document": graph_row.get("type_document"),
+        "in_force": graph_row.get("in_force"),
+        "status": decision.get("status"),
+    }
+    for key in ("classification", "reason", "bearing", "encoded_by"):
+        if decision.get(key) is not None:
+            row[key] = decision[key]
+    return row
+
+
+def _frontier_counts(ledger: list[dict[str, Any]]) -> dict[str, int]:
+    """Count only disposition rows that actually exist in the ledger.
+
+    An authoritative listing gap is a capture-completeness defect, not an
+    invented instrument row.  Keep those unknown candidates in ``capture`` /
+    ``capture_gaps`` and force ``complete=false`` without laundering them into
+    the DK status counts or the pending-ELI list.
+    """
+
+    counts = {
+        status: sum(row.get("status") == status for row in ledger)
+        for status in INSTRUMENT_STATUSES
+    }
+    return {"total": len(ledger), **counts}
+
+
+def _build_instrument_frontiers(
+    graph: Mapping[str, Any],
+    decisions: Mapping[str, Any],
+    *,
+    rulespec_paths: set[str],
+) -> tuple[dict[str, Any], dict[str, dict[str, Any]]]:
+    decision_by_pair = _canonical_instrument_decisions(
+        graph, decisions, rulespec_paths=rulespec_paths
+    )
+    graph_rows = list(graph["instruments"])
+    receipt_by_act = {
+        row["act_citation_path"]: row for row in graph["retrieval_receipts"]
+    }
+    program_frontiers: dict[str, dict[str, Any]] = {}
+    for program, act_path in sorted(PROGRAM_INSTRUMENT_ACT.items()):
+        selected = [row for row in graph_rows if row["act_citation_path"] == act_path]
+        ledger = [
+            _instrument_ledger_row(
+                row, decision_by_pair[(program, str(row["eli"]))]
+            )
+            for row in selected
+        ]
+        receipt = receipt_by_act[act_path]
+        unresolved = receipt["unresolved_count"]
+        pending = [
+            row["eli"] for row in ledger if row.get("status") == "pending"
+        ]
+        reasons_complete = all(
+            row.get("status") == "pending"
+            or (isinstance(row.get("reason"), str) and bool(row["reason"].strip()))
+            for row in ledger
+        )
+        program_frontiers[program] = {
+            "instrument_count": receipt["captured_count"],
+            "reported_instrument_count": receipt["reported_count"],
+            "supplemental_count": sum(row["relation"] == "bears_on" for row in selected),
+            "counts": _frontier_counts(ledger),
+            "pending": pending,
+            "complete": (
+                bool(selected)
+                and receipt["complete"] is True
+                and not pending
+                and reasons_complete
+            ),
+            "capture": {
+                "act_citation_path": act_path,
+                "reported_count": receipt["reported_count"],
+                "captured_count": receipt["captured_count"],
+                "unresolved_count": unresolved,
+                "complete": receipt["complete"],
+            },
+            "ledger": ledger,
+        }
+
+    global_ledger = []
+    precedence = {
+        "excluded-with-reason": 0,
+        "classified-with-reason": 1,
+        "encoded": 2,
+        "pending": 3,
+    }
+    for graph_row in graph_rows:
+        programs = INSTRUMENT_ACTS[str(graph_row["act_citation_path"])]["programs"]
+        program_rows = [
+            decision_by_pair[(str(program), str(graph_row["eli"]))]
+            for program in programs
+        ]
+        status = max(
+            (str(row["status"]) for row in program_rows), key=precedence.__getitem__
+        )
+        aggregate: dict[str, Any] = {"status": status}
+        if status == "encoded":
+            encoded_by = sorted(
+                {
+                    str(row["encoded_by"])
+                    for row in program_rows
+                    if row.get("status") == "encoded"
+                }
+            )
+            aggregate.update(
+                {
+                    "classification": "encoded_in_at_least_one_program",
+                    "reason": "At least one certified program encodes this instrument; see program_dispositions.",
+                    "encoded_by": encoded_by[0],
+                }
+            )
+        elif status == "classified-with-reason":
+            aggregate.update(
+                {
+                    "classification": "classified_in_at_least_one_program",
+                    "reason": "At least one certified program classifies this instrument at a documented boundary; see program_dispositions.",
+                }
+            )
+        elif status == "excluded-with-reason":
+            aggregate.update(
+                {
+                    "classification": "excluded_for_all_certified_programs",
+                    "reason": "Every certified program empowered by this Act excludes this instrument with a reason; see program_dispositions.",
+                }
+            )
+        row = _instrument_ledger_row(graph_row, aggregate)
+        row["program_dispositions"] = [
+            {"program": program, **decision_by_pair[(str(program), str(graph_row["eli"]))]}
+            for program in programs
+        ]
+        global_ledger.append(row)
+
+    capture_gaps = [
+        {
+            "act_citation_path": act_path,
+            "unresolved_listing_rows": receipt["unresolved_count"],
+        }
+        for act_path, receipt in sorted(receipt_by_act.items())
+        if receipt["unresolved_count"]
+    ]
+    global_pending = [
+        row["eli"] for row in global_ledger if row.get("status") == "pending"
+    ]
+    global_frontier = {
+        "instrument_count": sum(
+            receipt["captured_count"] for receipt in receipt_by_act.values()
+        ),
+        "reported_instrument_count": sum(
+            receipt["reported_count"] for receipt in receipt_by_act.values()
+        ),
+        "supplemental_count": sum(
+            row["relation"] == "bears_on" for row in graph_rows
+        ),
+        "counts": _frontier_counts(global_ledger),
+        "pending": global_pending,
+        "complete": all(
+            frontier["complete"] for frontier in program_frontiers.values()
+        ),
+        "capture_gaps": capture_gaps,
+        "programs": {
+            program: {
+                "counts": frontier["counts"],
+                "pending": len(frontier["pending"]),
+                "complete": frontier["complete"],
+            }
+            for program, frontier in program_frontiers.items()
+        },
+        "ledger": global_ledger,
+    }
+    return global_frontier, program_frontiers
 
 
 def _derive_requested_output_roots(
@@ -725,6 +1641,8 @@ def build(
         raise ClosureError("NZ closure corpus release pin drifted")
     if (ledger.get("document") or {}).get("total_allowed") != 0:
         raise ClosureError("known-missing-money-atoms ceiling rose above zero")
+    instrument_graph, instrument_graph_raw = _load_instrument_graph()
+    instrument_decisions, instrument_decisions_raw = _load_instrument_dispositions()
     corpus_paths = corpus.get("citation_paths") or []
     if corpus_paths != sorted(set(corpus_paths)):
         raise ClosureError("corpus citation paths must be unique and sorted")
@@ -733,6 +1651,13 @@ def build(
     paths = [row.get("path") for row in files if isinstance(row, dict)]
     if paths != sorted(set(paths)):
         raise ClosureError("RuleSpec file inventory must be unique and sorted")
+    global_instrument_frontier, program_instrument_frontiers = (
+        _build_instrument_frontiers(
+            instrument_graph,
+            instrument_decisions,
+            rulespec_paths=set(paths),
+        )
+    )
     expected_program_roots = {
         program: sorted(spec["roots"])
         for program, spec in sorted(PROGRAM_VIEWS.items())
@@ -904,8 +1829,9 @@ def build(
                 f"{program}: citation denominator RATCHET regressed "
                 f"from floor {citation_floor} to {len(citation_rows)}"
             )
+        instrument_frontier = program_instrument_frontiers[program]
         program_summaries[program] = {
-            "closed": not pending,
+            "closed": not pending and instrument_frontier["complete"],
             "root_nodes": root_nodes,
             "root_node_count": len(root_nodes),
             "subgraph_node_count": len(reached),
@@ -918,6 +1844,7 @@ def build(
             "citations": citation_rows,
             "pending_citations": pending,
             "pending_money_atoms": 0,
+            "instrument_frontier": instrument_frontier,
             "denominator_ratchet": {
                 "requested_output_count_min": denominator_ratchet[program][
                     "requested_output_count_min"
@@ -934,8 +1861,25 @@ def build(
         "roots": summaries,
         "pending_citations": sorted(all_pending),
         "pending_money_atoms": 0,
-        "closed": not all_pending,
+        "closed": not all_pending and global_instrument_frontier["complete"],
         "programs": program_summaries,
+        "generated_facts": {
+            "rulespec": {
+                "commit": RULESPEC_SHA,
+            },
+            "instrument_graph": {
+                "snapshot_path": str(INSTRUMENT_GRAPH_PATH.relative_to(REPO_ROOT)),
+                "snapshot_sha256": hashlib.sha256(instrument_graph_raw).hexdigest(),
+                "document": instrument_graph,
+            },
+            "instrument_dispositions": {
+                "artifact": str(
+                    INSTRUMENT_DISPOSITIONS_PATH.relative_to(REPO_ROOT)
+                ),
+                "sha256": hashlib.sha256(instrument_decisions_raw).hexdigest(),
+            },
+        },
+        "computed": {"instrument_frontier": global_instrument_frontier},
         "source": {
             "artifact": str(SOURCE_PATH.relative_to(REPO_ROOT)),
             "sha256": hashlib.sha256(SOURCE_PATH.read_bytes()).hexdigest(),
@@ -955,7 +1899,9 @@ def build(
     }
 
 
-def validate_artifact(document: dict, *, repo_root: Path = REPO_ROOT) -> dict:
+def validate_artifact(
+    document: dict, *, repo_root: Path = REPO_ROOT
+) -> ClosureValidation:
     """Pure validator used by the shared computed-certificate predicate."""
 
     if Path(repo_root).resolve() != REPO_ROOT.resolve():
@@ -965,19 +1911,61 @@ def validate_artifact(document: dict, *, repo_root: Path = REPO_ROOT) -> dict:
         raise ClosureError(
             "NZ closure artifact does not rederive from committed inputs"
         )
-    return expected
+    return ClosureValidation(expected)
+
+
+def verify_artifact(
+    *, artifact_path: Path = SUMMARY_PATH
+) -> ClosureVerificationResult:
+    """Rebuild an NZ closure artifact for the common d3 producer adapter."""
+
+    try:
+        document = _load_json_object(artifact_path, "NZ closure artifact")
+        expected = build(load_source())
+    except (OSError, json.JSONDecodeError, ClosureError) as exc:
+        return ClosureVerificationResult(
+            document=None,
+            expected=None,
+            errors=(str(exc),),
+        )
+    errors = (
+        ()
+        if document == expected
+        else ("NZ closure artifact does not rederive from committed inputs",)
+    )
+    return ClosureVerificationResult(
+        document=document,
+        expected=expected,
+        errors=errors,
+    )
 
 
 def _render(value: dict) -> str:
     return json.dumps(value, indent=2, sort_keys=True, ensure_ascii=False) + "\n"
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true")
-    parser.add_argument("--bootstrap-source", action="store_true")
-    args = parser.parse_args()
+    bootstrap = parser.add_mutually_exclusive_group()
+    bootstrap.add_argument("--bootstrap-source", action="store_true")
+    bootstrap.add_argument("--bootstrap-instrument-dispositions", action="store_true")
+    args = parser.parse_args(argv)
     try:
+        if args.bootstrap_instrument_dispositions:
+            graph, _raw = _load_instrument_graph()
+            rendered = _render(bootstrap_instrument_dispositions(graph))
+            if args.check:
+                if (
+                    not INSTRUMENT_DISPOSITIONS_PATH.exists()
+                    or INSTRUMENT_DISPOSITIONS_PATH.read_text() != rendered
+                ):
+                    print("NZ instrument dispositions drifted", file=sys.stderr)
+                    return 1
+            else:
+                OUT_DIR.mkdir(parents=True, exist_ok=True)
+                INSTRUMENT_DISPOSITIONS_PATH.write_text(rendered)
+            return 0
         if args.bootstrap_source:
             rendered = _render(bootstrap_source())
             if args.check:

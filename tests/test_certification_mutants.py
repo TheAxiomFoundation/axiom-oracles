@@ -613,8 +613,8 @@ def test_nz_unified_exercise_receipt_does_not_self_audit_a_bridge():
     assert row["evidence_source"] == "unified-experiment-receipt"
 
 
-def test_nz_aggregation_blockers_cleared_but_v3_closure_remains_open():
-    """Aggregation is cleared, while v3 frontier closure still gates NZ."""
+def test_nz_certificates_compute_open_on_incomplete_instrument_frontier():
+    """Aggregation is cleared, but an incomplete frontier still gates NZ."""
 
     certify = _load("certify")
     for program in sorted(name for name in certify.PROGRAMS if name.startswith("nz/")):
@@ -622,8 +622,10 @@ def test_nz_aggregation_blockers_cleared_but_v3_closure_remains_open():
         assert certificate["blockers"] == []
         assert certificate["certified"]["value"] is False
         assert certificate["certified"]["state"] == "no"
-        assert certificate["verdicts"]["exercised"]["mode"] == "computed"
-        assert certificate["verdicts"]["exercised"]["value"] is True
+        for premise in ("conformant", "exercised", "closed", "executable"):
+            block = certificate["verdicts"][premise]
+            assert block["mode"] == "computed", (program, premise)
+            assert block["value"] is (premise != "closed"), (program, premise)
         assert certificate["verdicts"]["exercised"]["catalog_completeness"]["mode"] == (
             "computed"
         )
@@ -634,15 +636,9 @@ def test_nz_aggregation_blockers_cleared_but_v3_closure_remains_open():
             blocker.startswith("exercise denominator:")
             for blocker in certificate["blockers"]
         )
-        # The instrument-frontier requirement (oracles#491) opens every
-        # closure claim that dispositions only the act's own provisions: the
-        # NZ closure summary carries no instrument frontier, so certify
-        # computes closed=false with the named requirement until the NZ
-        # ledger dispositions its subordinate instruments.
         assert certificate["verdicts"]["closed"]["mode"] == "computed"
         assert certificate["verdicts"]["closed"]["value"] is False
         closed_frontier = certificate["verdicts"]["closed"]["instrument_frontier"]
-        assert closed_frontier["missing"] is True
         assert closed_frontier["complete"] is False
         assert certificate["verdicts"]["executable"]["mode"] == "computed"
         assert certificate["verdicts"]["executable"]["value"] is True
@@ -654,7 +650,20 @@ def test_nz_injected_blocker_still_gates_certified(monkeypatch):
     certify = _load("certify")
     spec = copy.deepcopy(certify.PROGRAMS["nz/income-tax"])
     spec["blockers"] = ["synthetic gating blocker: must veto certification"]
+    monkeypatch.setattr(
+        certify,
+        "_closed_verdict",
+        lambda *_args, **_kwargs: {
+            "mode": "computed",
+            "status": "computed_closed",
+            "value": True,
+        },
+    )
     certificate = certify.build_certificate("nz/income-tax", spec)
+    assert all(
+        certificate["verdicts"][premise]["value"] is True
+        for premise in ("conformant", "exercised", "closed", "executable")
+    )
     assert certificate["certified"]["value"] is False
     assert certificate["certified"]["state"] == "no"
     assert any("synthetic gating blocker" in b for b in certificate["blockers"])
@@ -2646,7 +2655,7 @@ def test_nz_subgraph_cited_path_cannot_be_silently_dropped():
 
 
 def test_unrelated_pending_path_does_not_red_acc_certificate_scope():
-    """MUTANT: a pending citation outside ACC must stay jurisdiction-only."""
+    """MUTANT: an unrelated citation must not enter ACC's scoped evidence."""
 
     closure = _load("nz_closure")
     source = json.loads(closure.SOURCE_PATH.read_text())
@@ -2661,12 +2670,20 @@ def test_unrelated_pending_path_does_not_red_acc_certificate_scope():
     node["citations"] = sorted([*node["citations"], missing])
     node["citations_sha256"] = closure._list_sha256(node["citations"])
     row["citations"] = sorted([*row["citations"], missing])
+    baseline = closure.build(source)
     summary = closure.build(mutant)
     assert missing in summary["pending_citations"]
     assert summary["closed"] is False
-    assert summary["programs"]["nz/acc-earners-levy"]["closed"] is True
+    # ACC is already honestly open on its incomplete instrument capture.  The
+    # unrelated Income Tax citation must leave both its citation and instrument
+    # frontiers exactly unchanged rather than being credited for that openness.
+    assert summary["programs"]["nz/acc-earners-levy"]["closed"] is False
     assert (
         missing not in summary["programs"]["nz/acc-earners-levy"]["pending_citations"]
+    )
+    assert (
+        summary["programs"]["nz/acc-earners-levy"]
+        == baseline["programs"]["nz/acc-earners-levy"]
     )
 
 
@@ -2713,7 +2730,7 @@ def test_nz_certificate_rederives_closure_instead_of_trusting_summary(
     certify = _load("certify")
     closure = _load("nz_closure")
     summary = json.loads((REPO / "closure/nz/summary.json").read_text())
-    summary["programs"]["nz/income-tax"]["closed"] = False
+    summary["programs"]["nz/income-tax"]["closed"] = True
     mutant = tmp_path / "summary.json"
     mutant.write_text(json.dumps(summary))
     monkeypatch.setattr(certify, "_repo_artifact_path", lambda *args, **kwargs: mutant)

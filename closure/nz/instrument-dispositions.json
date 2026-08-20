@@ -1,0 +1,4133 @@
+{
+  "instrument_dispositions": [
+    {
+      "classification": "no_computational_bearing",
+      "eli": "https://www.acc.co.nz/im-injured/financial-support/weekly-compensation",
+      "program": "nz/acc-earners-levy",
+      "reason": "ACC weekly-compensation/client-payment guidance concerns entitlement payments, not the certified earners' levy calculation.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "no_computational_bearing",
+      "eli": "https://www.acc.co.nz/im-injured/financial-support/weekly-compensation/weekly-compensation-for-employees",
+      "program": "nz/acc-earners-levy",
+      "reason": "ACC weekly-compensation/client-payment guidance concerns entitlement payments, not the certified earners' levy calculation.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "no_computational_bearing",
+      "eli": "https://www.acc.co.nz/newsroom/stories/changes-to-acc-client-payments-from-1-july-2026",
+      "program": "nz/acc-earners-levy",
+      "reason": "ACC weekly-compensation/client-payment guidance concerns entitlement payments, not the certified earners' levy calculation.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "no_computational_bearing",
+      "eli": "https://www.acc.co.nz/newsroom/stories/changes-to-client-payments-from-1-april-2025",
+      "program": "nz/acc-earners-levy",
+      "reason": "ACC weekly-compensation/client-payment guidance concerns entitlement payments, not the certified earners' levy calculation.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "no_computational_bearing",
+      "eli": "https://www.acc.co.nz/newsroom/stories/changes-to-client-payments-from-1-april-2026",
+      "program": "nz/acc-earners-levy",
+      "reason": "ACC weekly-compensation/client-payment guidance concerns entitlement payments, not the certified earners' levy calculation.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "bearing": "ACC levy deduction guidance; no separate encoded parameter",
+      "classification": "corroborating_levy_guidance",
+      "eli": "https://www.ird.govt.nz/deductions-from-salary-and-wages",
+      "program": "nz/acc-earners-levy",
+      "reason": "The corpus inventory records that this PAYE guidance also covers ACC earners' levy deductions. It bears on the certified levy surface but supplies no separate parameter beyond the encoded Earners' Levy Regulations and the separately encoded IRD levy-rate page.",
+      "status": "classified-with-reason"
+    },
+    {
+      "classification": "parameter_or_rule_source",
+      "eli": "https://www.ird.govt.nz/en/income-tax/income-tax-for-individuals/acc-clients-and-carers/acc-earners-levy-rates",
+      "encoded_by": "nz/regulations/acc/earners_levy.yaml",
+      "program": "nz/acc-earners-levy",
+      "reason": "Named parameter source for GST-inclusive levy rates, caps, and rounding.",
+      "status": "encoded"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2002/127/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2002/13/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2002/186/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2002/21/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Injury Prevention, Rehabilitation, and Compensation (Interim Indexation of Weekly Abatement Amounts) Regulations 2002 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2002/22/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2002/390/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2002/40/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2002/71/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2002/81/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2003/213/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2003/273/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2003/291/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2003/388/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2004/186/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2004/187/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2004/318/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2004/424/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2005/29/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2005/74/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2006/116/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2006/18/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2006/21/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Injury Prevention, Rehabilitation, and Compensation (Residual Claims Levy) Regulations 2006 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2006/61/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Injury Prevention, Rehabilitation, and Compensation (Employer Levy) Regulations 2006 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2006/62/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Injury Prevention, Rehabilitation, and Compensation (Self-Employed Work Account Levies) Regulations 2006 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2007/15/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2007/19/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2007/20/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Injury Prevention, Rehabilitation, and Compensation (Motor Vehicles Levies) Regulations 2007 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2007/402/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2007/70/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Injury Prevention, Rehabilitation, and Compensation (Work Account Levies) Regulations 2007 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2007/71/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Injury Prevention, Rehabilitation, and Compensation (Earners' Levy) Regulations 2007 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2007/72/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Injury Prevention, Rehabilitation, and Compensation (Residual Claims Levy) Regulations 2007 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/105/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Injury Prevention, Rehabilitation, and Compensation (Motor Vehicles Levies) Regulations 2008 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/303/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/338/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Injury Prevention, Rehabilitation, and Compensation (Motor Vehicles Levies) Amendment Regulations 2008 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/40/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Injury Prevention, Rehabilitation, and Compensation (Earners' Levy) Regulations 2008 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/41/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Injury Prevention, Rehabilitation, and Compensation (Residual Claims Levy) Regulations 2008 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/42/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Injury Prevention, Rehabilitation, and Compensation (Work Account Levies) Regulations 2008 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/58/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/17/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Injury Prevention, Rehabilitation, and Compensation (Work Account Levies) Regulations 2009 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/18/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Injury Prevention, Rehabilitation, and Compensation (Residual Claims Levy) Regulations 2009 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/19/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Injury Prevention, Rehabilitation, and Compensation (Earners' Levy and Earners' Account Residual Levy) Regulations 2009 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/60/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Injury Prevention, Rehabilitation, and Compensation (Motor Vehicles Levies) Regulations 2009 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/328/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/329/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/330/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/424/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/425/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/72/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Accident Compensation (Earners' Levy) Regulations 2010 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/73/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Accident Compensation (Motor Vehicle Account Levies) Regulations 2010 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/74/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Accident Compensation (Work Account Levies) Regulations 2010 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/20/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Accident Compensation (Earners' Levy) Regulations 2011 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/21/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Accident Compensation (Work Account Levies) Regulations 2011 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/213/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Accident Compensation (Experience Rating) Amendment Regulations 2011 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/22/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Accident Compensation (Experience Rating) Regulations 2011 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2012/10/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Accident Compensation (Work Account Levies) Regulations 2012 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2012/11/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2012/40/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Accident Compensation (Motor Vehicle Account Levies) Regulations 2012 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2012/8/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Accident Compensation (Earners' Levy) Regulations 2012 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2012/9/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Accident Compensation (Experience Rating) Amendment Regulations 2012 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/138/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/14/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Accident Compensation (Work Account Levies) Regulations 2013 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/15/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Accident Compensation (Earners' Levy) Regulations 2013 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/16/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Accident Compensation (Experience Rating) Regulations 2013 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/419/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Accident Compensation (Motor Vehicle Account Levies) Regulations 2013 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/420/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Accident Compensation (Work Account Levies) Amendment Regulations 2013 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/153/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/161/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Accident Compensation (Motor Vehicle Account Levies) Regulations 2014 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/162/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/29/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/30/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Accident Compensation (Earners' Levy) Regulations 2014 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/31/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/32/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Accident Compensation (Work Account Levies) Regulations 2014 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/73/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Accident Compensation (Experience Rating) Regulations 2014 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/170/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Accident Compensation (Motor Vehicle Account Levies) Amendment Regulations 2015 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/221/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/37/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Accident Compensation (Earners' Levy) Regulations 2015 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/38/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Accident Compensation (Experience Rating) Regulations 2015 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/39/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Accident Compensation (Work Account Levies) Regulations 2015 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/60/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Accident Compensation (Motor Vehicle Account Levies) Regulations 2015 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/81/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2016/236/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2016/27/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Accident Compensation (Work Account Levies) Regulations 2016 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2016/28/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Accident Compensation (Earners' Levy) Regulations 2016 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2016/29/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Accident Compensation (Experience Rating) Regulations 2016 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2016/80/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Accident Compensation (Motor Vehicle Account Levies) Regulations 2016 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2017/124/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Accident Compensation (Motor Vehicle Account Levies) Amendment Regulations 2017 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2017/152/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Accident Compensation (Motor Vehicle Account Levies) Amendment Regulations (No 2) 2017 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2017/18/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Accident Compensation (Earners’ Levy) Regulations 2017 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2017/19/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Accident Compensation (Work Account Levies) Regulations 2017 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2017/20/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Accident Compensation (Experience Rating) Regulations 2017 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2017/71/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Accident Compensation (Motor Vehicle Account Levies) Regulations 2017 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2017/72/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/215/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/194/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/36/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Accident Compensation (Earners’ Levy) Regulations 2019 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/37/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Accident Compensation (Work Account Levies) Regulations 2019 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/38/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Accident Compensation (Experience Rating) Regulations 2019 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/85/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Accident Compensation (Motor Vehicle Account Levies) Regulations 2019 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/24/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Accident Compensation (Experience Rating) Amendment Regulations 2020 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/41/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/42/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/115/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Accident Compensation (Motor Vehicle Account Levies) Regulations 2022 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/30/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Accident Compensation (Earners’ Levy) Regulations 2022 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/31/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Accident Compensation (Work Account Levies) Regulations 2022 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/32/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Accident Compensation (Experience Rating) Regulations 2022 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/33/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "reason": "Accident Compensation (Experience Rating) Amendment Regulations 2022 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/23/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/22/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/230/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/231/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/232/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/36/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/37/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/82/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/17/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "classification": "parameter_or_rule_source",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/18/en/latest/",
+      "encoded_by": "nz/regulations/acc/earners_levy.yaml",
+      "program": "nz/acc-earners-levy",
+      "reason": "Regulations 4 and 5 set the certified levy rates and maximum earnings caps.",
+      "status": "encoded"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/19/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/20/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/238/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/239/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/240/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/241/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2026/149/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2026/29/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2026/30/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2026/31/en/latest/",
+      "program": "nz/acc-earners-levy",
+      "status": "pending"
+    },
+    {
+      "classification": "parameter_or_rule_source",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/202/en/latest/",
+      "encoded_by": "nz/statutes/social_security/accommodation_supplement/core.yaml",
+      "program": "nz/accommodation-supplement",
+      "reason": "Regulations 15 and 18–19 supply encoded asset, abatement, and rounding rules.",
+      "status": "encoded"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/236/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/115/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/128/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/215/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/264/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/27/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "reason": "Social Security (Rates of Benefits and Allowances) Order 2019 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/28/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/31/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/68/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/76/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/99/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/111/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/126/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "reason": "Social Security (COVID-19 Increase to Rates of Orphan’s Benefit and Unsupported Child’s Benefit) Order 2020 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/13/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "reason": "Social Security (Rates of Benefits and Allowances) Order 2020 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/14/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "reason": "Social Security (Definitions of Income Test 1, Income Test 2, Income Test 3, and Income Test 4) Order 2020 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/15/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/179/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/18/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/20/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/223/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/32/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/34/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/49/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "reason": "Social Security (Rates of Benefits and Allowances) (COVID-19 Recovery Package) Amendment Order 2020 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/53/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/120/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "reason": "Social Security (Rates of Main Benefits) Order 2021 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/121/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/138/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/15/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "reason": "Social Security (Rates of Benefits and Allowances) Order 2021 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/16/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/17/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/20/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/351/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/185/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/250/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/251/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/27/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/28/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "reason": "Social Security (Rates of Benefits and Allowances) Order 2022 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/34/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/67/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "reason": "Social Security (Rates of Benefits and Allowances) Order (No 2) 2022 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/188/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/208/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/255/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/274/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/37/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/38/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "reason": "Social Security (Rates of Benefits and Allowances) Order 2023 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/41/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/63/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/10/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/11/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "reason": "Social Security (Rates of Benefits and Allowances) Order 2024 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/12/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/137/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/163/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/26/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/50/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/10/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/121/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/13/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/157/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/223/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/250/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/306/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/9/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "reason": "Social Security (Rates of Benefits and Allowances) Order 2025 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "bearing": "documented case-input or nonclaimed upstream surface",
+      "classification": "input_derivation_rule",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2026/36/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "reason": "The order supplies the case-provided base-rate input used by the Accommodation Supplement entry-threshold formula.",
+      "status": "classified-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2026/37/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2026/38/en/latest/",
+      "program": "nz/accommodation-supplement",
+      "status": "pending"
+    },
+    {
+      "classification": "parameter_or_rule_source",
+      "eli": "https://www.workandincome.govt.nz/products/benefit-rates/benefit-rates-april-2026.html",
+      "encoded_by": "nz/statutes/social_security/accommodation_supplement/core.yaml",
+      "program": "nz/accommodation-supplement",
+      "reason": "Named corroborating parameter source for the 1 April 2026 maximum rates.",
+      "status": "encoded"
+    },
+    {
+      "classification": "no_computational_bearing",
+      "eli": "https://www.ird.govt.nz/best-start",
+      "program": "nz/income-tax",
+      "reason": "Best Start tax credit does not alter this certified program's claimed output surface.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "no_computational_bearing",
+      "eli": "https://www.ird.govt.nz/in-work-tax-credit-increase",
+      "program": "nz/income-tax",
+      "reason": "In-work tax credit increase does not alter this certified program's claimed output surface.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "no_computational_bearing",
+      "eli": "https://www.ird.govt.nz/rwt-rate",
+      "program": "nz/income-tax",
+      "reason": "Inland Revenue — Resident withholding tax (RWT) rates does not alter this certified program's claimed output surface.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "no_computational_bearing",
+      "eli": "https://www.ird.govt.nz/working-for-families/types/family-tax-credit",
+      "program": "nz/income-tax",
+      "reason": "Family tax credit does not alter this certified program's claimed output surface.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "no_computational_bearing",
+      "eli": "https://www.ird.govt.nz/working-for-families/types/in-work-tax-credit",
+      "program": "nz/income-tax",
+      "reason": "In-work tax credit does not alter this certified program's claimed output surface.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "no_computational_bearing",
+      "eli": "https://www.ird.govt.nz/working-for-families/types/minimum-family-tax-credit",
+      "program": "nz/income-tax",
+      "reason": "Minimum family tax credit does not alter this certified program's claimed output surface.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/227/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/228/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/284/en/latest/",
+      "program": "nz/income-tax",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations (No 2) 2008 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/290/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/291/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/384/en/latest/",
+      "program": "nz/income-tax",
+      "reason": "Income Tax (Minimum Family Tax Credit) Order 2008 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/182/en/latest/",
+      "program": "nz/income-tax",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations (No 2) 2009 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/320/en/latest/",
+      "program": "nz/income-tax",
+      "reason": "Income Tax (Deemed Rate of Return on Attributing Interests in Foreign Investment Funds, 2008–09 Income Year) Order 2009 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/365/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/366/en/latest/",
+      "program": "nz/income-tax",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations (No 3) 2009 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/367/en/latest/",
+      "program": "nz/income-tax",
+      "reason": "Income Tax (Minimum Family Tax Credit) Order 2009 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/8/en/latest/",
+      "program": "nz/income-tax",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations 2009 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/115/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/13/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/144/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/145/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/146/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/147/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/148/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/149/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/150/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/151/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/152/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/153/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/154/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/155/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/156/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/195/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/242/en/latest/",
+      "program": "nz/income-tax",
+      "reason": "Income Tax (Deemed Rate of Return on Attributing Interests in Foreign Investment Funds, 2009–10 Income Year) Order 2010 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/300/en/latest/",
+      "program": "nz/income-tax",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations 2010 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/311/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/418/en/latest/",
+      "program": "nz/income-tax",
+      "reason": "Income Tax (Minimum Family Tax Credit) Order 2010 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/469/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/470/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/471/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/99/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/133/en/latest/",
+      "program": "nz/income-tax",
+      "reason": "Income Tax (Deemed Rate of Return on Attributing Interests in Foreign Investment Funds, 2010–11 Income Year) Order 2011 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/192/en/latest/",
+      "program": "nz/income-tax",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations 2011 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/354/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/403/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/404/en/latest/",
+      "program": "nz/income-tax",
+      "reason": "Income Tax (Minimum Family Tax Credit) Order 2011 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2012/154/en/latest/",
+      "program": "nz/income-tax",
+      "reason": "Income Tax (Deemed Rate of Return on Attributing Interests in Foreign Investment Funds, 2011–12 Income Year) Order 2012 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2012/325/en/latest/",
+      "program": "nz/income-tax",
+      "reason": "Income Tax (Minimum Family Tax Credit) Order 2012 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2012/410/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/276/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/316/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/338/en/latest/",
+      "program": "nz/income-tax",
+      "reason": "Income Tax (Deemed Rate of Return on Attributing Interests in Foreign Investment Funds, 2012–13 Income Year) Order 2013 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/426/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/427/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/437/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/438/en/latest/",
+      "program": "nz/income-tax",
+      "reason": "Income Tax (Minimum Family Tax Credit) Order 2013 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/112/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/183/en/latest/",
+      "program": "nz/income-tax",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations 2014 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/209/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/210/en/latest/",
+      "program": "nz/income-tax",
+      "reason": "Income Tax (Deemed Rate of Return on Attributing Interests in Foreign Investment Funds, 2013–14 Income Year) Order 2014 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/284/en/latest/",
+      "program": "nz/income-tax",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations (No 2) 2014 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/350/en/latest/",
+      "program": "nz/income-tax",
+      "reason": "Income Tax (Minimum Family Tax Credit) Order 2014 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/141/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/200/en/latest/",
+      "program": "nz/income-tax",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations 2015 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/261/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/265/en/latest/",
+      "program": "nz/income-tax",
+      "reason": "Income Tax (Deemed Rate of Return on Attributing Interests in Foreign Investment Funds, 2014–15 Income Year) Order 2015 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/293/en/latest/",
+      "program": "nz/income-tax",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations (No 2) 2015 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/294/en/latest/",
+      "program": "nz/income-tax",
+      "reason": "Income Tax (Minimum Family Tax Credit) Order 2015 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/74/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/75/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2016/190/en/latest/",
+      "program": "nz/income-tax",
+      "reason": "Income Tax (Deemed Rate of Return on Attributing Interests in Foreign Investment Funds, 2015–16 Income Year) Order 2016 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2016/282/en/latest/",
+      "program": "nz/income-tax",
+      "reason": "Income Tax (Minimum Family Tax Credit) Order 2016 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2016/31/en/latest/",
+      "program": "nz/income-tax",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations 2016 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2017/178/en/latest/",
+      "program": "nz/income-tax",
+      "reason": "Income Tax (Deemed Rate of Return on Attributing Interests in Foreign Investment Funds, 2016–17 Income Year) Order 2017 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2017/208/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2017/209/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2017/241/en/latest/",
+      "program": "nz/income-tax",
+      "reason": "Income Tax (Employment-related Remedial Payments) Regulations 2017 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/100/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/118/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/239/en/latest/",
+      "program": "nz/income-tax",
+      "reason": "Income Tax (Minimum Family Tax Credit) Order 2018 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/72/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/119/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/204/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/240/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/241/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/290/en/latest/",
+      "program": "nz/income-tax",
+      "reason": "Income Tax (Minimum Family Tax Credit) Order 2019 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/291/en/latest/",
+      "program": "nz/income-tax",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations 2019 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/129/en/latest/",
+      "program": "nz/income-tax",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations 2020 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/151/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/21/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/22/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/308/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/154/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/178/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/78/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/151/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/296/en/latest/",
+      "program": "nz/income-tax",
+      "reason": "Income Tax (Tax Credit) Order 2022 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/306/en/latest/",
+      "program": "nz/income-tax",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations (No 2) 2022 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/98/en/latest/",
+      "program": "nz/income-tax",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations 2022 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/119/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/134/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/184/en/latest/",
+      "program": "nz/income-tax",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations (No 2) 2023 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/22/en/latest/",
+      "program": "nz/income-tax",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations 2023 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/288/en/latest/",
+      "program": "nz/income-tax",
+      "reason": "Income Tax (Tax Credit) Order 2023 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/119/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/153/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/154/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/150/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/151/en/latest/",
+      "program": "nz/income-tax",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations (No 2) 2025 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "no_computational_bearing",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/260/en/latest/",
+      "program": "nz/income-tax",
+      "reason": "Income Tax (Tax Credit) Order 2025 does not alter this certified program's claimed output surface.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/271/en/latest/",
+      "program": "nz/income-tax",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations (No 3) 2025 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/64/en/latest/",
+      "program": "nz/income-tax",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations 2025 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2026/138/en/latest/",
+      "program": "nz/income-tax",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2026/25/en/latest/",
+      "program": "nz/income-tax",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations 2026 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/2023/ee-23-01",
+      "program": "nz/income-tax",
+      "reason": "Declaration of the January 2023 flood events and Cyclone Gabrielle as emergency events for family scheme income's authoritative application period ended 2023-08-31, before the certified 2026–27 period.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "no_computational_bearing",
+      "eli": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/2026/det-26-01",
+      "program": "nz/income-tax",
+      "reason": "Declaration that the January 2026 severe weather event is an emergency event for the purposes of family scheme income does not alter this certified program's claimed output surface.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "no_computational_bearing",
+      "eli": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/2026/det-26-02",
+      "program": "nz/income-tax",
+      "reason": "Declaration that the February 2026 severe weather event is an emergency event for the purposes of family scheme income does not alter this certified program's claimed output surface.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "no_computational_bearing",
+      "eli": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/2026/det-26-03",
+      "program": "nz/income-tax",
+      "reason": "Declaration that the April 2026 Wellington severe weather event is an emergency event for the purposes of family scheme income does not alter this certified program's claimed output surface.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/det-ee-1101-declaration-of-the-canterbury-earthquake-of-4-september-2010-as-an-emergency-event-for-t",
+      "program": "nz/income-tax",
+      "reason": "Declaration of the Canterbury earthquake of 4 September 2010 as an emergency event for family scheme income's authoritative application period ended 2011-09-03, before the certified 2026–27 period.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/det-ee-1102-declaration-of-the-canterbury-earthquake-of-22-february-2011-as-an-emergency-event-for-t",
+      "program": "nz/income-tax",
+      "reason": "Declaration of the Canterbury earthquake of 22 February 2011 as an emergency event for family scheme income's authoritative application period ended 2012-02-21, before the certified 2026–27 period.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "duplicative_summary",
+      "eli": "https://www.taxtechnical.ird.govt.nz/fact-sheets/2026/is-26-12-fs-1",
+      "program": "nz/income-tax",
+      "reason": "Fact sheet adds no rule beyond IS 26/12, which is separately dispositioned.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "no_computational_bearing",
+      "eli": "https://www.taxtechnical.ird.govt.nz/interpretation-statements/2026/is-26-12",
+      "program": "nz/income-tax",
+      "reason": "Working for Families tax credits and family scheme income does not alter this certified program's claimed output surface.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "bearing": "documented case-input or nonclaimed upstream surface",
+      "classification": "input_derivation_rule",
+      "eli": "https://www.ird.govt.nz/best-start",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "This WFF guidance governs the case-supplied WFF-entitlement disqualifier consumed by IETC; upstream entitlement classification is not claimed.",
+      "status": "classified-with-reason"
+    },
+    {
+      "bearing": "documented case-input or nonclaimed upstream surface",
+      "classification": "input_derivation_rule",
+      "eli": "https://www.ird.govt.nz/in-work-tax-credit-increase",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "This WFF guidance governs the case-supplied WFF-entitlement disqualifier consumed by IETC; upstream entitlement classification is not claimed.",
+      "status": "classified-with-reason"
+    },
+    {
+      "classification": "no_computational_bearing",
+      "eli": "https://www.ird.govt.nz/rwt-rate",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Inland Revenue — Resident withholding tax (RWT) rates does not alter this certified program's claimed output surface.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "bearing": "documented case-input or nonclaimed upstream surface",
+      "classification": "input_derivation_rule",
+      "eli": "https://www.ird.govt.nz/working-for-families/types/family-tax-credit",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "This WFF guidance governs the case-supplied WFF-entitlement disqualifier consumed by IETC; upstream entitlement classification is not claimed.",
+      "status": "classified-with-reason"
+    },
+    {
+      "bearing": "documented case-input or nonclaimed upstream surface",
+      "classification": "input_derivation_rule",
+      "eli": "https://www.ird.govt.nz/working-for-families/types/in-work-tax-credit",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "This WFF guidance governs the case-supplied WFF-entitlement disqualifier consumed by IETC; upstream entitlement classification is not claimed.",
+      "status": "classified-with-reason"
+    },
+    {
+      "bearing": "documented case-input or nonclaimed upstream surface",
+      "classification": "input_derivation_rule",
+      "eli": "https://www.ird.govt.nz/working-for-families/types/minimum-family-tax-credit",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "This WFF guidance governs the case-supplied WFF-entitlement disqualifier consumed by IETC; upstream entitlement classification is not claimed.",
+      "status": "classified-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/227/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/228/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/284/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations (No 2) 2008 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/290/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/291/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/384/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Income Tax (Minimum Family Tax Credit) Order 2008 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/182/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations (No 2) 2009 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/320/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Income Tax (Deemed Rate of Return on Attributing Interests in Foreign Investment Funds, 2008–09 Income Year) Order 2009 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/365/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/366/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations (No 3) 2009 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/367/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Income Tax (Minimum Family Tax Credit) Order 2009 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/8/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations 2009 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/115/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/13/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/144/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/145/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/146/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/147/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/148/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/149/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/150/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/151/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/152/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/153/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/154/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/155/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/156/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/195/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/242/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Income Tax (Deemed Rate of Return on Attributing Interests in Foreign Investment Funds, 2009–10 Income Year) Order 2010 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/300/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations 2010 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/311/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/418/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Income Tax (Minimum Family Tax Credit) Order 2010 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/469/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/470/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/471/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/99/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/133/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Income Tax (Deemed Rate of Return on Attributing Interests in Foreign Investment Funds, 2010–11 Income Year) Order 2011 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/192/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations 2011 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/354/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/403/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/404/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Income Tax (Minimum Family Tax Credit) Order 2011 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2012/154/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Income Tax (Deemed Rate of Return on Attributing Interests in Foreign Investment Funds, 2011–12 Income Year) Order 2012 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2012/325/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Income Tax (Minimum Family Tax Credit) Order 2012 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2012/410/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/276/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/316/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/338/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Income Tax (Deemed Rate of Return on Attributing Interests in Foreign Investment Funds, 2012–13 Income Year) Order 2013 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/426/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/427/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/437/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/438/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Income Tax (Minimum Family Tax Credit) Order 2013 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/112/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/183/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations 2014 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/209/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/210/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Income Tax (Deemed Rate of Return on Attributing Interests in Foreign Investment Funds, 2013–14 Income Year) Order 2014 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/284/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations (No 2) 2014 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/350/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Income Tax (Minimum Family Tax Credit) Order 2014 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/141/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/200/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations 2015 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/261/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/265/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Income Tax (Deemed Rate of Return on Attributing Interests in Foreign Investment Funds, 2014–15 Income Year) Order 2015 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/293/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations (No 2) 2015 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/294/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Income Tax (Minimum Family Tax Credit) Order 2015 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/74/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/75/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2016/190/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Income Tax (Deemed Rate of Return on Attributing Interests in Foreign Investment Funds, 2015–16 Income Year) Order 2016 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2016/282/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Income Tax (Minimum Family Tax Credit) Order 2016 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2016/31/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations 2016 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2017/178/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Income Tax (Deemed Rate of Return on Attributing Interests in Foreign Investment Funds, 2016–17 Income Year) Order 2017 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2017/208/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2017/209/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2017/241/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Income Tax (Employment-related Remedial Payments) Regulations 2017 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/100/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/118/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/239/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Income Tax (Minimum Family Tax Credit) Order 2018 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/72/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/119/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/204/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/240/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/241/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/290/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Income Tax (Minimum Family Tax Credit) Order 2019 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/291/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations 2019 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/129/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations 2020 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/151/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/21/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/22/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/308/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/154/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/178/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/78/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/151/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/296/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Income Tax (Tax Credit) Order 2022 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/306/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations (No 2) 2022 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/98/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations 2022 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/119/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/134/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/184/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations (No 2) 2023 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/22/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations 2023 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/288/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Income Tax (Tax Credit) Order 2023 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/119/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/153/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/154/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/150/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/151/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations (No 2) 2025 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "bearing": "documented case-input or nonclaimed upstream surface",
+      "classification": "input_derivation_rule",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/260/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "The WFF order affects the case-supplied WFF-entitlement disqualifier consumed by the IETC rule, not the IETC formula itself.",
+      "status": "classified-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/271/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations (No 3) 2025 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/64/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations 2025 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2026/138/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2026/25/en/latest/",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations 2026 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/2023/ee-23-01",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Declaration of the January 2023 flood events and Cyclone Gabrielle as emergency events for family scheme income's authoritative application period ended 2023-08-31, before the certified 2026–27 period.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "bearing": "documented case-input or nonclaimed upstream surface",
+      "classification": "input_derivation_rule",
+      "eli": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/2026/det-26-01",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "The instrument governs classification of amounts supplied through the explicit family_scheme_other_payments_not_excluded and related case-input boundary; the certificate does not claim event, payment, trust, or company adjudication upstream of those inputs.",
+      "status": "classified-with-reason"
+    },
+    {
+      "bearing": "documented case-input or nonclaimed upstream surface",
+      "classification": "input_derivation_rule",
+      "eli": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/2026/det-26-02",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "The instrument governs classification of amounts supplied through the explicit family_scheme_other_payments_not_excluded and related case-input boundary; the certificate does not claim event, payment, trust, or company adjudication upstream of those inputs.",
+      "status": "classified-with-reason"
+    },
+    {
+      "bearing": "documented case-input or nonclaimed upstream surface",
+      "classification": "input_derivation_rule",
+      "eli": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/2026/det-26-03",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "The instrument governs classification of amounts supplied through the explicit family_scheme_other_payments_not_excluded and related case-input boundary; the certificate does not claim event, payment, trust, or company adjudication upstream of those inputs.",
+      "status": "classified-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/det-ee-1101-declaration-of-the-canterbury-earthquake-of-4-september-2010-as-an-emergency-event-for-t",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Declaration of the Canterbury earthquake of 4 September 2010 as an emergency event for family scheme income's authoritative application period ended 2011-09-03, before the certified 2026–27 period.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/det-ee-1102-declaration-of-the-canterbury-earthquake-of-22-february-2011-as-an-emergency-event-for-t",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Declaration of the Canterbury earthquake of 22 February 2011 as an emergency event for family scheme income's authoritative application period ended 2012-02-21, before the certified 2026–27 period.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "duplicative_summary",
+      "eli": "https://www.taxtechnical.ird.govt.nz/fact-sheets/2026/is-26-12-fs-1",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "Fact sheet adds no rule beyond IS 26/12, which is separately dispositioned.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "bearing": "documented case-input or nonclaimed upstream surface",
+      "classification": "interpretive_input_boundary",
+      "eli": "https://www.taxtechnical.ird.govt.nz/interpretation-statements/2026/is-26-12",
+      "program": "nz/independent-earner-tax-credit",
+      "reason": "The instrument governs classification of amounts supplied through the explicit family_scheme_other_payments_not_excluded and related case-input boundary; the certificate does not claim event, payment, trust, or company adjudication upstream of those inputs.",
+      "status": "classified-with-reason"
+    },
+    {
+      "bearing": "documented case-input or nonclaimed upstream surface",
+      "classification": "input_derivation_rule",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/202/en/latest/",
+      "program": "nz/main-benefits",
+      "reason": "The regulations govern assessable-income and administration inputs supplied to the claimed rate calculation; those upstream case determinations are not claimed.",
+      "status": "classified-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/236/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/115/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/128/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/215/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/264/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/27/en/latest/",
+      "program": "nz/main-benefits",
+      "reason": "Social Security (Rates of Benefits and Allowances) Order 2019 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/28/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/31/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/68/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/76/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/99/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/111/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/126/en/latest/",
+      "program": "nz/main-benefits",
+      "reason": "Social Security (COVID-19 Increase to Rates of Orphan’s Benefit and Unsupported Child’s Benefit) Order 2020 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/13/en/latest/",
+      "program": "nz/main-benefits",
+      "reason": "Social Security (Rates of Benefits and Allowances) Order 2020 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/14/en/latest/",
+      "program": "nz/main-benefits",
+      "reason": "Social Security (Definitions of Income Test 1, Income Test 2, Income Test 3, and Income Test 4) Order 2020 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/15/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/179/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/18/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/20/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/223/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/32/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/34/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/49/en/latest/",
+      "program": "nz/main-benefits",
+      "reason": "Social Security (Rates of Benefits and Allowances) (COVID-19 Recovery Package) Amendment Order 2020 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/53/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/120/en/latest/",
+      "program": "nz/main-benefits",
+      "reason": "Social Security (Rates of Main Benefits) Order 2021 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/121/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/138/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/15/en/latest/",
+      "program": "nz/main-benefits",
+      "reason": "Social Security (Rates of Benefits and Allowances) Order 2021 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/16/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/17/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/20/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/351/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/185/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/250/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/251/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/27/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/28/en/latest/",
+      "program": "nz/main-benefits",
+      "reason": "Social Security (Rates of Benefits and Allowances) Order 2022 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/34/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/67/en/latest/",
+      "program": "nz/main-benefits",
+      "reason": "Social Security (Rates of Benefits and Allowances) Order (No 2) 2022 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/188/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/208/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/255/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/274/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/37/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/38/en/latest/",
+      "program": "nz/main-benefits",
+      "reason": "Social Security (Rates of Benefits and Allowances) Order 2023 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/41/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/63/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/10/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/11/en/latest/",
+      "program": "nz/main-benefits",
+      "reason": "Social Security (Rates of Benefits and Allowances) Order 2024 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/12/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/137/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/163/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/26/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/50/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/10/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/121/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/13/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/157/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/223/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/250/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/306/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/9/en/latest/",
+      "program": "nz/main-benefits",
+      "reason": "Social Security (Rates of Benefits and Allowances) Order 2025 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "parameter_or_rule_source",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2026/36/en/latest/",
+      "encoded_by": "nz/statutes/social_security/main_benefits/rates.yaml",
+      "program": "nz/main-benefits",
+      "reason": "The 2026 order sets the encoded main-benefit rates from 1 April 2026.",
+      "status": "encoded"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2026/37/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2026/38/en/latest/",
+      "program": "nz/main-benefits",
+      "status": "pending"
+    },
+    {
+      "bearing": "independent official rate corroboration; not an encoded source",
+      "classification": "corroborating_rate_guidance",
+      "eli": "https://www.workandincome.govt.nz/products/benefit-rates/benefit-rates-april-2026.html",
+      "program": "nz/main-benefits",
+      "reason": "The page independently corroborates the 1 April 2026 rates, but the pinned module names and proves the 2026 rates order rather than this guidance page.",
+      "status": "classified-with-reason"
+    },
+    {
+      "classification": "no_computational_bearing",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/202/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "reason": "Social Security Regulations 2018 does not alter this certified program's claimed output surface.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/236/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/115/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/128/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/215/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/264/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/27/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "reason": "Social Security (Rates of Benefits and Allowances) Order 2019 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/28/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/31/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/68/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/76/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/99/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/111/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/126/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "reason": "Social Security (COVID-19 Increase to Rates of Orphan’s Benefit and Unsupported Child’s Benefit) Order 2020 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/13/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "reason": "Social Security (Rates of Benefits and Allowances) Order 2020 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/14/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "reason": "Social Security (Definitions of Income Test 1, Income Test 2, Income Test 3, and Income Test 4) Order 2020 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/15/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/179/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/18/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/20/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/223/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/32/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/34/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/49/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "reason": "Social Security (Rates of Benefits and Allowances) (COVID-19 Recovery Package) Amendment Order 2020 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/53/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/120/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "reason": "Social Security (Rates of Main Benefits) Order 2021 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/121/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/138/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/15/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "reason": "Social Security (Rates of Benefits and Allowances) Order 2021 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/16/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/17/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/20/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/351/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/185/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/250/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/251/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/27/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/28/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "reason": "Social Security (Rates of Benefits and Allowances) Order 2022 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/34/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/67/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "reason": "Social Security (Rates of Benefits and Allowances) Order (No 2) 2022 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/188/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/208/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/255/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/274/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/37/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/38/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "reason": "Social Security (Rates of Benefits and Allowances) Order 2023 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/41/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/63/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/10/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/11/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "reason": "Social Security (Rates of Benefits and Allowances) Order 2024 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/12/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/137/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/163/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/26/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/50/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/10/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/121/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/13/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/157/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/223/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/250/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/306/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/9/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "reason": "Social Security (Rates of Benefits and Allowances) Order 2025 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "no_computational_bearing",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2026/36/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "reason": "Social Security (Rates of Benefits and Allowances) Order 2026 does not alter this certified program's claimed output surface.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2026/37/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2026/38/en/latest/",
+      "program": "nz/winter-energy-payment",
+      "status": "pending"
+    },
+    {
+      "classification": "no_computational_bearing",
+      "eli": "https://www.workandincome.govt.nz/products/benefit-rates/benefit-rates-april-2026.html",
+      "program": "nz/winter-energy-payment",
+      "reason": "Benefit rates at 1 April 2026 does not alter this certified program's claimed output surface.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "parameter_or_rule_source",
+      "eli": "https://www.ird.govt.nz/best-start",
+      "encoded_by": "nz/statutes/income_tax/family_scheme/tax_credits.yaml",
+      "program": "nz/working-for-families",
+      "reason": "Inland Revenue guidance is named by, and agrees with, the encoded WFF parameter surface.",
+      "status": "encoded"
+    },
+    {
+      "classification": "parameter_or_rule_source",
+      "eli": "https://www.ird.govt.nz/in-work-tax-credit-increase",
+      "encoded_by": "nz/statutes/income_tax/family_scheme/tax_credits.yaml",
+      "program": "nz/working-for-families",
+      "reason": "Inland Revenue guidance is named by, and agrees with, the encoded WFF parameter surface.",
+      "status": "encoded"
+    },
+    {
+      "classification": "no_computational_bearing",
+      "eli": "https://www.ird.govt.nz/rwt-rate",
+      "program": "nz/working-for-families",
+      "reason": "Inland Revenue — Resident withholding tax (RWT) rates does not alter this certified program's claimed output surface.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "parameter_or_rule_source",
+      "eli": "https://www.ird.govt.nz/working-for-families/types/family-tax-credit",
+      "encoded_by": "nz/statutes/income_tax/family_scheme/tax_credits.yaml",
+      "program": "nz/working-for-families",
+      "reason": "Inland Revenue guidance is named by, and agrees with, the encoded WFF parameter surface.",
+      "status": "encoded"
+    },
+    {
+      "classification": "parameter_or_rule_source",
+      "eli": "https://www.ird.govt.nz/working-for-families/types/in-work-tax-credit",
+      "encoded_by": "nz/statutes/income_tax/family_scheme/tax_credits.yaml",
+      "program": "nz/working-for-families",
+      "reason": "Inland Revenue guidance is named by, and agrees with, the encoded WFF parameter surface.",
+      "status": "encoded"
+    },
+    {
+      "classification": "parameter_or_rule_source",
+      "eli": "https://www.ird.govt.nz/working-for-families/types/minimum-family-tax-credit",
+      "encoded_by": "nz/statutes/income_tax/family_scheme/tax_credits.yaml",
+      "program": "nz/working-for-families",
+      "reason": "Inland Revenue guidance is named by, and agrees with, the encoded WFF parameter surface.",
+      "status": "encoded"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/227/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/228/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/284/en/latest/",
+      "program": "nz/working-for-families",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations (No 2) 2008 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/290/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/291/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/384/en/latest/",
+      "program": "nz/working-for-families",
+      "reason": "Income Tax (Minimum Family Tax Credit) Order 2008 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/182/en/latest/",
+      "program": "nz/working-for-families",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations (No 2) 2009 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/320/en/latest/",
+      "program": "nz/working-for-families",
+      "reason": "Income Tax (Deemed Rate of Return on Attributing Interests in Foreign Investment Funds, 2008–09 Income Year) Order 2009 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/365/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/366/en/latest/",
+      "program": "nz/working-for-families",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations (No 3) 2009 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/367/en/latest/",
+      "program": "nz/working-for-families",
+      "reason": "Income Tax (Minimum Family Tax Credit) Order 2009 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/8/en/latest/",
+      "program": "nz/working-for-families",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations 2009 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/115/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/13/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/144/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/145/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/146/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/147/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/148/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/149/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/150/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/151/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/152/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/153/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/154/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/155/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/156/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/195/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/242/en/latest/",
+      "program": "nz/working-for-families",
+      "reason": "Income Tax (Deemed Rate of Return on Attributing Interests in Foreign Investment Funds, 2009–10 Income Year) Order 2010 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/300/en/latest/",
+      "program": "nz/working-for-families",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations 2010 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/311/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/418/en/latest/",
+      "program": "nz/working-for-families",
+      "reason": "Income Tax (Minimum Family Tax Credit) Order 2010 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/469/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/470/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/471/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/99/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/133/en/latest/",
+      "program": "nz/working-for-families",
+      "reason": "Income Tax (Deemed Rate of Return on Attributing Interests in Foreign Investment Funds, 2010–11 Income Year) Order 2011 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/192/en/latest/",
+      "program": "nz/working-for-families",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations 2011 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/354/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/403/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/404/en/latest/",
+      "program": "nz/working-for-families",
+      "reason": "Income Tax (Minimum Family Tax Credit) Order 2011 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2012/154/en/latest/",
+      "program": "nz/working-for-families",
+      "reason": "Income Tax (Deemed Rate of Return on Attributing Interests in Foreign Investment Funds, 2011–12 Income Year) Order 2012 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2012/325/en/latest/",
+      "program": "nz/working-for-families",
+      "reason": "Income Tax (Minimum Family Tax Credit) Order 2012 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2012/410/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/276/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/316/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/338/en/latest/",
+      "program": "nz/working-for-families",
+      "reason": "Income Tax (Deemed Rate of Return on Attributing Interests in Foreign Investment Funds, 2012–13 Income Year) Order 2013 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/426/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/427/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/437/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/438/en/latest/",
+      "program": "nz/working-for-families",
+      "reason": "Income Tax (Minimum Family Tax Credit) Order 2013 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/112/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/183/en/latest/",
+      "program": "nz/working-for-families",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations 2014 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/209/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/210/en/latest/",
+      "program": "nz/working-for-families",
+      "reason": "Income Tax (Deemed Rate of Return on Attributing Interests in Foreign Investment Funds, 2013–14 Income Year) Order 2014 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/284/en/latest/",
+      "program": "nz/working-for-families",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations (No 2) 2014 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/350/en/latest/",
+      "program": "nz/working-for-families",
+      "reason": "Income Tax (Minimum Family Tax Credit) Order 2014 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/141/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/200/en/latest/",
+      "program": "nz/working-for-families",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations 2015 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/261/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/265/en/latest/",
+      "program": "nz/working-for-families",
+      "reason": "Income Tax (Deemed Rate of Return on Attributing Interests in Foreign Investment Funds, 2014–15 Income Year) Order 2015 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/293/en/latest/",
+      "program": "nz/working-for-families",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations (No 2) 2015 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/294/en/latest/",
+      "program": "nz/working-for-families",
+      "reason": "Income Tax (Minimum Family Tax Credit) Order 2015 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/74/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/75/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2016/190/en/latest/",
+      "program": "nz/working-for-families",
+      "reason": "Income Tax (Deemed Rate of Return on Attributing Interests in Foreign Investment Funds, 2015–16 Income Year) Order 2016 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2016/282/en/latest/",
+      "program": "nz/working-for-families",
+      "reason": "Income Tax (Minimum Family Tax Credit) Order 2016 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2016/31/en/latest/",
+      "program": "nz/working-for-families",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations 2016 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2017/178/en/latest/",
+      "program": "nz/working-for-families",
+      "reason": "Income Tax (Deemed Rate of Return on Attributing Interests in Foreign Investment Funds, 2016–17 Income Year) Order 2017 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2017/208/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2017/209/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2017/241/en/latest/",
+      "program": "nz/working-for-families",
+      "reason": "Income Tax (Employment-related Remedial Payments) Regulations 2017 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/100/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/118/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/239/en/latest/",
+      "program": "nz/working-for-families",
+      "reason": "Income Tax (Minimum Family Tax Credit) Order 2018 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/72/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/119/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/204/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/240/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/241/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/290/en/latest/",
+      "program": "nz/working-for-families",
+      "reason": "Income Tax (Minimum Family Tax Credit) Order 2019 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/291/en/latest/",
+      "program": "nz/working-for-families",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations 2019 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/129/en/latest/",
+      "program": "nz/working-for-families",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations 2020 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/151/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/21/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/22/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/308/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/154/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/178/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/78/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/151/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/296/en/latest/",
+      "program": "nz/working-for-families",
+      "reason": "Income Tax (Tax Credit) Order 2022 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/306/en/latest/",
+      "program": "nz/working-for-families",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations (No 2) 2022 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/98/en/latest/",
+      "program": "nz/working-for-families",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations 2022 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/119/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/134/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/184/en/latest/",
+      "program": "nz/working-for-families",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations (No 2) 2023 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/22/en/latest/",
+      "program": "nz/working-for-families",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations 2023 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/288/en/latest/",
+      "program": "nz/working-for-families",
+      "reason": "Income Tax (Tax Credit) Order 2023 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/119/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/153/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/154/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/150/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/151/en/latest/",
+      "program": "nz/working-for-families",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations (No 2) 2025 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "parameter_or_rule_source",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/260/en/latest/",
+      "encoded_by": "nz/statutes/income_tax/family_scheme/tax_credits.yaml",
+      "program": "nz/working-for-families",
+      "reason": "The order sets the encoded 2026–27 FTC, MFTC, and Best Start amounts.",
+      "status": "encoded"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/271/en/latest/",
+      "program": "nz/working-for-families",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations (No 3) 2025 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/64/en/latest/",
+      "program": "nz/working-for-families",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations 2025 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2026/138/en/latest/",
+      "program": "nz/working-for-families",
+      "status": "pending"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2026/25/en/latest/",
+      "program": "nz/working-for-families",
+      "reason": "Income Tax (Fringe Benefit Tax, Interest on Loans) Amendment Regulations 2026 is marked not in force in the authoritative PCO snapshot.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/2023/ee-23-01",
+      "program": "nz/working-for-families",
+      "reason": "Declaration of the January 2023 flood events and Cyclone Gabrielle as emergency events for family scheme income's authoritative application period ended 2023-08-31, before the certified 2026–27 period.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "bearing": "documented case-input or nonclaimed upstream surface",
+      "classification": "input_derivation_rule",
+      "eli": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/2026/det-26-01",
+      "program": "nz/working-for-families",
+      "reason": "The instrument governs classification of amounts supplied through the explicit family_scheme_other_payments_not_excluded and related case-input boundary; the certificate does not claim event, payment, trust, or company adjudication upstream of those inputs.",
+      "status": "classified-with-reason"
+    },
+    {
+      "bearing": "documented case-input or nonclaimed upstream surface",
+      "classification": "input_derivation_rule",
+      "eli": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/2026/det-26-02",
+      "program": "nz/working-for-families",
+      "reason": "The instrument governs classification of amounts supplied through the explicit family_scheme_other_payments_not_excluded and related case-input boundary; the certificate does not claim event, payment, trust, or company adjudication upstream of those inputs.",
+      "status": "classified-with-reason"
+    },
+    {
+      "bearing": "documented case-input or nonclaimed upstream surface",
+      "classification": "input_derivation_rule",
+      "eli": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/2026/det-26-03",
+      "program": "nz/working-for-families",
+      "reason": "The instrument governs classification of amounts supplied through the explicit family_scheme_other_payments_not_excluded and related case-input boundary; the certificate does not claim event, payment, trust, or company adjudication upstream of those inputs.",
+      "status": "classified-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/det-ee-1101-declaration-of-the-canterbury-earthquake-of-4-september-2010-as-an-emergency-event-for-t",
+      "program": "nz/working-for-families",
+      "reason": "Declaration of the Canterbury earthquake of 4 September 2010 as an emergency event for family scheme income's authoritative application period ended 2011-09-03, before the certified 2026–27 period.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "not_in_force",
+      "eli": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/det-ee-1102-declaration-of-the-canterbury-earthquake-of-22-february-2011-as-an-emergency-event-for-t",
+      "program": "nz/working-for-families",
+      "reason": "Declaration of the Canterbury earthquake of 22 February 2011 as an emergency event for family scheme income's authoritative application period ended 2012-02-21, before the certified 2026–27 period.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "classification": "duplicative_summary",
+      "eli": "https://www.taxtechnical.ird.govt.nz/fact-sheets/2026/is-26-12-fs-1",
+      "program": "nz/working-for-families",
+      "reason": "Fact sheet adds no rule beyond IS 26/12, which is separately dispositioned.",
+      "status": "excluded-with-reason"
+    },
+    {
+      "bearing": "interpretive guidance over an encoded statutory module and its explicit taxpayer-fact inputs",
+      "classification": "interpretive_input_boundary",
+      "eli": "https://www.taxtechnical.ird.govt.nz/interpretation-statements/2026/is-26-12",
+      "program": "nz/working-for-families",
+      "reason": "IS 26/12 interprets family-scheme-income categories. The certified subgraph encodes the statutory arithmetic in nz/statutes/income_tax/family_scheme/family_scheme_income.yaml; taxpayer company, trust, control, payment, and event facts enter through explicit case inputs, and the statement sets no separate numeric parameter claimed by the certificate.",
+      "status": "classified-with-reason"
+    }
+  ],
+  "schema_compatibility_note": "DK ledger-v2 committed_decisions.instrument_dispositions status and reason fields, repeated per program because instrument_graph.v1 has no multi-program disposition dimension; this decision input does not claim a new standalone schema"
+}

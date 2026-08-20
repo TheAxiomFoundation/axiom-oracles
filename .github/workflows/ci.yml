@@ -80,6 +80,12 @@ jobs:
           uv run python scripts/nz_closure.py --check
           uv run python scripts/nz_exercise_denominator.py --check
 
+      - name: NZ subordinate-instrument frontier guards
+        # Focused fail-closed proofs for row removal, pending-count drift, and
+        # byte-level snapshot mutation. The capture itself stays out of CI:
+        # nz_closure.py above verifies the committed, byte-bound snapshot.
+        run: uv run pytest -q tests/test_nz_instrument_frontier_mutants.py
+
       - name: Cache pinned NZ engine source build
         uses: actions/cache@v4
         with:
