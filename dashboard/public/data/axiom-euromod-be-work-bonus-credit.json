@@ -346,7 +346,7 @@
     "left": "euromod",
     "right": "axiom",
     "versions": {
-      "axiom_rules_engine": "0.2.1"
+      "axiom_rules_engine": "0.2.2"
     }
   },
   "errors": [],
@@ -404,10 +404,10 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "cdaffd68e449625294a1931439be57e6f2703870",
-      "axiom_rules_engine_version": "0.2.1"
+      "axiom_rules_engine_sha": "2c0e1edac0dccc355297eb9663e0aa0c4e97e5b4",
+      "axiom_rules_engine_version": "0.2.2"
     },
-    "generated_at": "2026-08-20T01:57:18Z",
+    "generated_at": "2026-08-20T07:22:53Z",
     "generated_by": "scripts/run_comparison.py::be-work-bonus-credit",
     "oracle": {
       "euromod_country": "BE",
