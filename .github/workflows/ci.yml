@@ -54,6 +54,47 @@ jobs:
       - name: Bridge manifests validate (strict-clean lanes enforce findings)
         run: uv run python scripts/validate_bridge_manifests.py --strict
 
+      - name: NZ computed closure and executable evidence is current
+        run: |
+          uv run python scripts/nz_executable_reproduction.py --check
+          uv run python scripts/nz_closure.py --check
+          uv run python scripts/nz_exercise_denominator.py --check
+
+      - name: Cache pinned NZ engine source build
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            ${{ runner.temp }}/nz-engine-target
+          key: nz-engine-${{ runner.os }}-d59969b53430ae2fd97eb4349d44ad23ce930d85
+
+      - name: Checkout pinned NZ engine source
+        uses: actions/checkout@v4
+        with:
+          repository: TheAxiomFoundation/axiom-rules-engine
+          ref: d59969b53430ae2fd97eb4349d44ad23ce930d85
+          path: .ci/axiom-rules-engine
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout pinned NZ RuleSpec source
+        uses: actions/checkout@v4
+        with:
+          repository: TheAxiomFoundation/rulespec-nz
+          ref: 89a7d25dc03a4d045348620283332de10b1047da
+          path: .ci/rulespec-nz
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build pinned NZ engine and replay committed requests
+        env:
+          NZ_ENGINE_ROOT: ${{ github.workspace }}/.ci/axiom-rules-engine
+          NZ_ENGINE_TARGET: ${{ runner.temp }}/nz-engine-target
+          NZ_RULESPEC_ROOT: ${{ github.workspace }}/.ci/rulespec-nz
+        run: |
+          set -euo pipefail
+          CARGO_TARGET_DIR="$NZ_ENGINE_TARGET" cargo build --locked --release --manifest-path "$NZ_ENGINE_ROOT/Cargo.toml" --bin axiom-rules-engine
+          uv run python scripts/nz_executable_reproduction.py --check --live --source-built-engine --engine-root "$NZ_ENGINE_ROOT" --engine-binary "$NZ_ENGINE_TARGET/release/axiom-rules-engine" --rulespec-root "$NZ_RULESPEC_ROOT"
+
       - name: Program certificates recompute clean
         run: uv run python scripts/certify.py --check
 

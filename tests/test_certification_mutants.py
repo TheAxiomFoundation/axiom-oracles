@@ -463,7 +463,7 @@ def test_certified_requires_computed_true_premises_not_status_strings():
 
 
 def test_dk_opt_in_closure_gate_requires_full_source_verification(monkeypatch):
-    """The opt-in integration gate rejects a failed full source re-derivation."""
+    """A program-scoped producer shape cannot bypass DK's source replay."""
 
     certify = _load("certify")
     producer = certify._producer_module("scripts/closure_ledger.py")
@@ -477,6 +477,13 @@ def test_dk_opt_in_closure_gate_requires_full_source_verification(monkeypatch):
             document=None,
         )
 
+    monkeypatch.setattr(
+        producer,
+        "validate_artifact",
+        lambda *args, **kwargs: {
+            "programs": {"dk/boerne-og-ungeydelse": {"closed": True}}
+        },
+    )
     monkeypatch.setattr(producer, "verify_artifact", rejected_full_check)
     with pytest.raises(ValueError, match="failed full closure verification"):
         certify._closed_verdict(
@@ -489,7 +496,7 @@ def test_dk_opt_in_closure_gate_requires_full_source_verification(monkeypatch):
 
 
 def test_dk_opt_in_executable_gate_requires_full_reproduction(monkeypatch):
-    """The opt-in integration gate rejects a well-shaped forged compiled hash."""
+    """Program-scoped output cannot bypass DK's executable reproduction."""
 
     certify = _load("certify")
     producer = certify._producer_module("scripts/executable_reproduction.py")
@@ -504,6 +511,13 @@ def test_dk_opt_in_executable_gate_requires_full_reproduction(monkeypatch):
         calls.append(kwargs)
         return reproduced
 
+    monkeypatch.setattr(
+        producer,
+        "validate_artifact",
+        lambda *args, **kwargs: {
+            "programs": {"dk/boerne-og-ungeydelse": {"executable": True}}
+        },
+    )
     monkeypatch.setattr(producer, "build_reproduction", forged_reproduction)
     with pytest.raises(ValueError, match="compiled/replayed artifact drifted"):
         certify._executable_verdict(
@@ -515,6 +529,30 @@ def test_dk_opt_in_executable_gate_requires_full_reproduction(monkeypatch):
         )
     assert len(calls) == 1
     assert calls[0]["rulespec_ref"] == artifact["rulespec"]["sha"]
+
+
+def test_verify_producers_cli_flag_reaches_build_all(monkeypatch):
+    """MUTANT: the CLI flag cannot be parsed and then dropped at dispatch."""
+
+    certify = _load("certify")
+    observed = []
+
+    def stop_before_writes(*, verify_producers=False):
+        observed.append(verify_producers)
+        raise RuntimeError("stop after CLI dispatch")
+
+    monkeypatch.setattr(certify, "build_all", stop_before_writes)
+    monkeypatch.setattr(
+        certify.sys,
+        "argv",
+        ["certify.py", "--verify-producers"],
+    )
+
+    with pytest.raises(RuntimeError, match="stop after CLI dispatch"):
+        certify.main()
+
+    assert observed == [True]
+
 
 def test_nz_two_endpoint_gate_misses_conditional_default_person_dependency():
     """S1 negative test: preserve proof that the supporting gate is insufficient."""
@@ -560,7 +598,7 @@ def test_nz_unified_exercise_receipt_does_not_self_audit_a_bridge():
     assert row["evidence_source"] == "unified-experiment-receipt"
 
 
-def test_nz_computed_exercise_does_not_promote_attested_other_premises():
+def test_nz_computed_premises_without_cleared_blockers_do_not_certify():
     certify = _load("certify")
     for program in sorted(name for name in certify.PROGRAMS if name.startswith("nz/")):
         certificate = certify.build_certificate(program, certify.PROGRAMS[program])
@@ -570,14 +608,28 @@ def test_nz_computed_exercise_does_not_promote_attested_other_premises():
         assert certificate["verdicts"]["exercised"]["value"] is True
         assert (
             certificate["verdicts"]["exercised"]["catalog_completeness"]["mode"]
-            == "attested"
+            == "computed"
         )
         assert certificate["verdicts"]["exercised"]["capture_lineage"]["mode"] == (
-            "attested"
+            "computed"
         )
-        assert any(blocker.startswith("exercise denominator:") for blocker in certificate["blockers"])
-        assert certificate["verdicts"]["closed"]["mode"] == "attested"
-        assert certificate["verdicts"]["executable"]["mode"] == "attested"
+        assert not any(
+            blocker.startswith("exercise denominator:")
+            for blocker in certificate["blockers"]
+        )
+        assert certificate["blockers"], "structural engine blockers must remain"
+        # The instrument-frontier requirement (oracles#491) opens every
+        # closure claim that dispositions only the act's own provisions: the
+        # NZ closure summary carries no instrument frontier, so certify
+        # computes closed=false with the named requirement until the NZ
+        # ledger dispositions its subordinate instruments.
+        assert certificate["verdicts"]["closed"]["mode"] == "computed"
+        assert certificate["verdicts"]["closed"]["value"] is False
+        closed_frontier = certificate["verdicts"]["closed"]["instrument_frontier"]
+        assert closed_frontier["missing"] is True
+        assert closed_frontier["complete"] is False
+        assert certificate["verdicts"]["executable"]["mode"] == "computed"
+        assert certificate["verdicts"]["executable"]["value"] is True
 
 
 # ── Round 3: inputs from the second fix-verification ─────────────────────────
@@ -2173,6 +2225,78 @@ def test_nz_trace_normalizer_mutants_are_killed(mutation, marker, monkeypatch):
         nz.build_trace_document(capture, regenerated)
 
 
+def test_nz_trace_capture_rejects_uncommitted_extra_evaluation_field(monkeypatch):
+    """MUTANT: canonical requests cannot carry uncommitted trace metadata."""
+
+    nz = _load("nz_incomeexplorer")
+    source, traces = _nz_trace_inputs(nz)
+    capture = copy.deepcopy(traces)
+    capture["schema"] = nz.RAW_TRACE_SCHEMA
+    capture["evaluations"][0]["mutant_uncommitted_metadata"] = True
+
+    # Keep the historical, uncommitted regenerated comparison's pinned byte
+    # identity out of this mutant: the added evaluation field is the only
+    # difference between the reconstructed document and committed authority.
+    monkeypatch.setattr(
+        nz,
+        "_canonical_file_sha",
+        lambda _document: nz.REGENERATED_SOURCE_SHA256,
+    )
+
+    with pytest.raises(nz.NZRecordError, match="not canonically identical"):
+        nz.build_trace_document(capture, source)
+
+
+def test_nz_trace_capture_path_is_no_drift_only(tmp_path, monkeypatch, capsys):
+    """MUTANT: an uncommitted request cannot mint or overwrite trace evidence."""
+
+    nz = _load("nz_incomeexplorer")
+    source, traces = _nz_trace_inputs(nz)
+    authority_path = tmp_path / "evaluation-traces.json"
+    authority_path.write_bytes(nz.TRACE_PATH.read_bytes())
+    original_bytes = authority_path.read_bytes()
+    monkeypatch.setattr(nz, "TRACE_PATH", authority_path)
+    # The original instrumented comparison differs from SOURCE_PATH only in
+    # provenance and is not itself committed.  Model its already-pinned byte
+    # identity while exercising the capture trust boundary.
+    monkeypatch.setattr(
+        nz,
+        "_canonical_file_sha",
+        lambda _document: nz.REGENERATED_SOURCE_SHA256,
+    )
+
+    # The legitimate path is a verifier: the same raw capture reconstructs the
+    # already-committed document exactly and a rewrite is byte-identical.
+    raw_capture = copy.deepcopy(traces)
+    raw_capture["schema"] = nz.RAW_TRACE_SCHEMA
+    assert nz.build_trace_document(raw_capture, source) == traces
+
+    mutant_capture = copy.deepcopy(raw_capture)
+    mutant_capture["evaluations"][0]["request"]["dataset"]["inputs"][0]["value"][
+        "value"
+    ] = "888888"
+    capture_path = tmp_path / "uncommitted-capture.json"
+    comparison_path = tmp_path / "comparison.json"
+    capture_path.write_text(json.dumps(mutant_capture))
+    comparison_path.write_text(json.dumps(source))
+    monkeypatch.setattr(
+        nz.sys,
+        "argv",
+        [
+            "nz_incomeexplorer.py",
+            "--capture-traces",
+            str(capture_path),
+            "--capture-comparison",
+            str(comparison_path),
+        ],
+    )
+
+    assert nz.main() == 1
+    assert authority_path.read_bytes() == original_bytes
+    error = capsys.readouterr().err
+    assert "request/root is absent from the committed #476 evaluation trace" in error
+
+
 def test_nz_attested_catalog_denominator_cannot_contradict_its_receipt(monkeypatch):
     certify = _load("certify")
     source_path = (
@@ -2186,11 +2310,10 @@ def test_nz_attested_catalog_denominator_cannot_contradict_its_receipt(monkeypat
         return mutant if path == source_path else original_load(path)
 
     monkeypatch.setattr(certify, "_load", load_with_mutant)
+    attested_spec = copy.deepcopy(certify.PROGRAMS["nz/income-tax"])
+    attested_spec["computed"].pop("exercise_denominator", None)
     with pytest.raises(ValueError, match="attested denominator"):
-        certify._attested_exercise_catalog(
-            certify.PROGRAMS["nz/income-tax"],
-            [],
-        )
+        certify._attested_exercise_catalog(attested_spec, [])
 
 
 def test_nz_attested_catalog_receipt_must_have_catalog_and_compiled_shape(monkeypatch):
@@ -2200,11 +2323,10 @@ def test_nz_attested_catalog_receipt_must_have_catalog_and_compiled_shape(monkey
         "_load",
         lambda _path: {"exercise_input_catalog": [], "compiled_program": {}},
     )
+    attested_spec = copy.deepcopy(certify.PROGRAMS["nz/income-tax"])
+    attested_spec["computed"].pop("exercise_denominator", None)
     with pytest.raises(ValueError, match="completeness receipt is malformed"):
-        certify._attested_exercise_catalog(
-            certify.PROGRAMS["nz/income-tax"],
-            [],
-        )
+        certify._attested_exercise_catalog(attested_spec, [])
 
 
 def test_nz_population_must_remain_treasurys_complete_spine():
@@ -2465,8 +2587,32 @@ def test_nz_subgraph_root_cannot_be_silently_dropped():
     source = json.loads(closure.SOURCE_PATH.read_text())
     mutant = copy.deepcopy(source)
     mutant["program_roots"]["nz/working-for-families"].pop()
-    with pytest.raises(closure.ClosureError, match="program root sets drifted"):
+    with pytest.raises(closure.ClosureError, match="not bijective"):
         closure.build(mutant)
+
+
+def test_nz_coordinated_root_deletion_hits_denominator_ratchet(monkeypatch):
+    """MUTANT: trace + declaration + snapshot deletion still cannot pass."""
+
+    closure = _load("nz_closure")
+    source = json.loads(closure.SOURCE_PATH.read_text())
+    requested = closure.load_requested_output_roots()
+    ratchet = closure.load_denominator_ratchet()
+    program = "nz/working-for-families"
+    dropped = source["program_roots"][program].pop()
+    requested[program].remove(dropped)
+    views = copy.deepcopy(closure.PROGRAM_VIEWS)
+    views[program] = {
+        **views[program],
+        "roots": tuple(root for root in views[program]["roots"] if root != dropped),
+    }
+    monkeypatch.setattr(closure, "PROGRAM_VIEWS", views)
+    with pytest.raises(closure.ClosureError, match="denominator RATCHET regressed"):
+        closure.build(
+            source,
+            requested_output_roots=requested,
+            denominator_ratchet=ratchet,
+        )
 
 
 def test_nz_subgraph_cited_path_cannot_be_silently_dropped():
@@ -2556,25 +2702,25 @@ def test_nz_certificate_rederives_closure_instead_of_trusting_summary(
     tmp_path, monkeypatch
 ):
     certify = _load("certify")
-    repo = tmp_path / "repo"
-    (repo / "closure/nz").mkdir(parents=True)
+    closure = _load("nz_closure")
     summary = json.loads((REPO / "closure/nz/summary.json").read_text())
-    summary["closed"] = True
-    (repo / "closure/nz/summary.json").write_text(json.dumps(summary))
-    # Keep the verifier code and its own source paths rooted in the real tree;
-    # only the allegedly-computed summary is redirected to the mutant.
-    monkeypatch.setattr(certify, "REPO_ROOT", repo)
-    real_spec_from_file_location = importlib.util.spec_from_file_location
-    monkeypatch.setattr(
-        importlib.util,
-        "spec_from_file_location",
-        lambda name, path: real_spec_from_file_location(
-            name, REPO / "scripts/nz_closure.py"
-        ),
-    )
-    with pytest.raises(ValueError, match="does not rederive"):
+    summary["programs"]["nz/income-tax"]["closed"] = False
+    mutant = tmp_path / "summary.json"
+    mutant.write_text(json.dumps(summary))
+    monkeypatch.setattr(certify, "_repo_artifact_path", lambda *args, **kwargs: mutant)
+    monkeypatch.setattr(certify, "_producer_module", lambda _relative: closure)
+    with pytest.raises(ValueError, match="failed closure validation"):
         certify._closed_verdict(
-            "nz/income-tax", {"computed_closed": "closure/nz/summary.json"}, []
+            "nz/income-tax",
+            {
+                "computed": {
+                    "closed": {
+                        "artifact": "closure/nz/summary.json",
+                        "producer": "scripts/nz_closure.py",
+                    }
+                }
+            },
+            [],
         )
 
 
@@ -2586,7 +2732,36 @@ def test_nz_money_atom_ledger_is_a_ceiling_not_a_target():
         closure.build(source)
 
 
-def test_nz_syntax_only_executable_metadata_has_no_computed_acceptance_path():
+def test_nz_syntax_only_executable_receipt_is_rejected_by_producer(
+    tmp_path, monkeypatch
+):
+    certify = _load("certify")
+    fake = tmp_path / "receipt.json"
+    fake.write_text(json.dumps({"summary": {"executable": True}}))
+    monkeypatch.setattr(certify, "_repo_artifact_path", lambda *args, **kwargs: fake)
+
+    class RejectSyntaxOnly:
+        @staticmethod
+        def validate_artifact(_document, *, repo_root):
+            raise ValueError("compiled artifact bytes and transcript were not verified")
+
+    monkeypatch.setattr(certify, "_producer_module", lambda _relative: RejectSyntaxOnly)
+    with pytest.raises(ValueError, match="bytes and transcript"):
+        certify._executable_verdict(
+            "nz/income-tax",
+            {
+                "computed": {
+                    "executable": {
+                        "artifact": "conformance/executable/fake.json",
+                        "producer": "scripts/fake.py",
+                    }
+                }
+            },
+            [],
+        )
+
+
+def test_nz_computed_executable_flag_has_no_verifier_acceptance_path():
     certify = _load("certify")
     with pytest.raises(ValueError, match="without a verifier"):
         certify._executable_verdict(
@@ -2896,6 +3071,56 @@ def test_producers_must_agree_on_one_rulespec_commit(tmp_path, monkeypatch):
     assert cert["certified"]["value"] is False
 
 
+def test_nz_program_scoped_adapters_emit_the_same_pinned_rulespec_sha():
+    """Both NZ producer result shapes expose comparable pinned provenance."""
+
+    certify = _load("certify")
+    program = "nz/income-tax"
+    spec = certify.PROGRAMS[program]
+    closed = certify._producer_closed_verdict(program, spec, [])
+    executable = certify._producer_executable_verdict(program, spec, [])
+    pinned_sha = "89a7d25dc03a4d045348620283332de10b1047da"
+
+    assert closed is not None
+    assert executable is not None
+    assert closed["rulespec_commit"] == pinned_sha
+    assert executable["rulespec_sha"] == pinned_sha
+
+
+def test_nz_program_scoped_producers_must_agree_on_one_rulespec_commit(
+    monkeypatch,
+):
+    """MUTANT: NZ's dict adapters cannot escape cross-producer SHA agreement."""
+
+    certify = _load("certify")
+    original_closed = certify._producer_closed_verdict
+
+    def drifted_closure(program, spec, evidence, *, verify_producer=False):
+        block = original_closed(
+            program,
+            spec,
+            evidence,
+            verify_producer=verify_producer,
+        )
+        if program == "nz/income-tax" and block is not None:
+            block["rulespec_commit"] = "9986b6035c4e557b9b40645dfe2f3e4cffb6037c"
+        return block
+
+    monkeypatch.setattr(certify, "_producer_closed_verdict", drifted_closure)
+    cert = certify.build_certificate(
+        "nz/income-tax",
+        certify.PROGRAMS["nz/income-tax"],
+    )
+
+    assert cert["verdicts"]["closed"]["mode"] == "computed"
+    assert cert["verdicts"]["executable"]["mode"] == "computed"
+    assert any(
+        "producers disagree on the rulespec commit" in blocker
+        for blocker in cert["blockers"]
+    )
+    assert cert["certified"]["value"] is False
+
+
 def test_ledger_commit_must_be_a_string_sha_and_ref_must_equal_commit():
     """MUTANT (delta-audit #7): a 40-DIGIT YAML integer is a legal scalar
     that `str(commit)` turned into a passing "sha"; certification then emitted
@@ -3033,3 +3258,64 @@ def test_tariff_scale_report_derives_open_axiom_units(monkeypatch):
         "fed-false-family-forced-labor": 1_499_038,
     }
     assert leg["clean"] is False
+
+
+# ── Exercise denominator: computed from committed artifacts ──────────────────
+
+
+def test_nz_denominator_slot_deleted_from_suite_catalog_reds(tmp_path, monkeypatch):
+    """MUTANT: a slot dropped from the suite catalog breaks the bijection."""
+
+    denominator = _load("nz_exercise_denominator")
+    report = json.loads(denominator.SOURCE_REPORT_PATH.read_text())
+    dropped = sorted(report["exercise_input_catalog"])[0]
+    del report["exercise_input_catalog"][dropped]
+    mutant = tmp_path / "source-comparison.json"
+    mutant.write_text(json.dumps(report))
+    monkeypatch.setattr(denominator, "SOURCE_REPORT_PATH", mutant)
+    with pytest.raises(denominator.DenominatorError, match="not bijective"):
+        denominator.validate()
+
+
+def test_nz_denominator_recorded_input_slots_tamper_reds(tmp_path, monkeypatch):
+    """MUTANT: shrinking the recorded input_slots denominator must red."""
+
+    denominator = _load("nz_exercise_denominator")
+    report = json.loads(denominator.SOURCE_REPORT_PATH.read_text())
+    report["compiled_program"]["input_slots"] -= 1
+    mutant = tmp_path / "source-comparison.json"
+    mutant.write_text(json.dumps(report))
+    monkeypatch.setattr(denominator, "SOURCE_REPORT_PATH", mutant)
+    with pytest.raises(
+        denominator.DenominatorError, match="input_slots denominator"
+    ):
+        denominator.validate()
+
+
+def test_nz_denominator_trace_count_tamper_reds(tmp_path, monkeypatch):
+    """MUTANT: deleting a committed evaluation trace must red the cardinality."""
+
+    denominator = _load("nz_exercise_denominator")
+    traces = json.loads(denominator.TRACES_PATH.read_text())
+    traces["evaluations"].pop()
+    traces["evaluation_count"] = len(traces["evaluations"])
+    mutant = tmp_path / "evaluation-traces.json"
+    mutant.write_text(json.dumps(traces))
+    monkeypatch.setattr(denominator, "TRACES_PATH", mutant)
+    with pytest.raises(denominator.DenominatorError, match="capture cardinality"):
+        denominator.validate()
+
+
+def test_nz_denominator_artifact_byte_flip_reds(tmp_path, monkeypatch):
+    """MUTANT: any change to the committed compiled artifact bytes must red."""
+
+    denominator = _load("nz_exercise_denominator")
+    artifact = json.loads(denominator.ARTIFACT_PATH.read_text())
+    artifact["metadata"]["input_catalog"].append(
+        {"slot": "smuggled_extra_slot", "canonical_request_name": "nz:none"}
+    )
+    mutant = tmp_path / "compiled-program.json"
+    mutant.write_text(json.dumps(artifact))
+    monkeypatch.setattr(denominator, "ARTIFACT_PATH", mutant)
+    with pytest.raises(denominator.DenominatorError, match="bytes drifted"):
+        denominator.validate()

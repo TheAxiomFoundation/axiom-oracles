@@ -12,10 +12,11 @@ adapters.
 
 Two evidence modes, stated per claim:
 
-* ``computed`` — this script re-derives the value from committed in-repo
-  artifacts; drift fails ``--check``.
-* ``attested`` — the value is carried from a sha-pinned external receipt
-  (today: the ops closure prototype and the engine-execution receipts).
+* ``computed`` — this script invokes the named producer's pure validator and
+  re-derives the value from committed in-repo artifacts; drift fails
+  ``--check``. Producer integration gates may additionally replay external,
+  commit-pinned toolchains.
+* ``attested`` — the value is carried from a sha-pinned external receipt.
   Attested is scaffolding, not certification; the roadmap is monotone
   conversion of attested claims to computed ones.
 
@@ -218,14 +219,6 @@ NZ_ACC_LOCALITY_BLOCKER = (
     "(adversarial review S1); structural cure = axiom-rules-engine#134 stage 2 "
     "(prototype exists on feat/unit-derivation-stage2)."
 )
-NZ_EXERCISE_EVIDENCE_LIMITATION = (
-    "exercise denominator: committed per-evaluation traces compute each "
-    "certificate view's supplied-input variation and exact requested-output "
-    "root sets, but the 328-slot compiled-input universe (including 178 "
-    "never-supplied slots) and the 883-call capture-completeness receipt remain "
-    "commit-pinned external attestations; no committed compiled-program "
-    "artifact or in-repo harness execution derives them."
-)
 for _nz_program in (
     "nz/acc-earners-levy",
     "nz/accommodation-supplement",
@@ -247,18 +240,29 @@ for _nz_program in (
                 "report": "dashboard/public/data/nz-treasury-incomeexplorer.json",
             }
         ],
-        "attested_closed_receipt": "closure/nz/summary.json",
+        "computed": {
+            "closed": {
+                "artifact": "closure/nz/summary.json",
+                "producer": "scripts/nz_closure.py",
+                "external_verification": "hermetic_program_scoped",
+            },
+            "executable": {
+                "artifact": ("conformance/executable/nz-treasury-incomeexplorer.json"),
+                "producer": "scripts/nz_executable_reproduction.py",
+                "external_verification": "dedicated_source_build_ci",
+            },
+            "exercise_denominator": {
+                "producer": "scripts/nz_exercise_denominator.py",
+            },
+        },
         "attested_exercise_catalog_receipt": (
             "comparisons/nz-treasury-incomeexplorer/source-comparison.json"
         ),
-        "attested_executable_receipt": (
-            "dashboard/public/data/nz-treasury-incomeexplorer.json"
-        ),
         "certified_false_when_blocked": True,
         "blockers": (
-            [NZ_ACC_LOCALITY_BLOCKER, NZ_EXERCISE_EVIDENCE_LIMITATION]
+            [NZ_ACC_LOCALITY_BLOCKER]
             if _nz_program in SINGLE_PERSON_PROGRAMS
-            else [NZ_AGGREGATION_BLOCKER, NZ_EXERCISE_EVIDENCE_LIMITATION]
+            else [NZ_AGGREGATION_BLOCKER]
         ),
         "single_person_attestation": (
             "comparisons/nz-treasury-incomeexplorer/single-person-attestations.json"
@@ -389,9 +393,7 @@ def _tariff_schedule_suite_verdict(
     mismatches = _count(
         summary.get("mismatches"), "mismatches", defects, entry["suite"]
     )
-    explained = _count(
-        summary.get("explained"), "explained", defects, entry["suite"]
-    )
+    explained = _count(summary.get("explained"), "explained", defects, entry["suite"])
     unexplained = _count(
         summary.get("unexplained"), "unexplained", defects, entry["suite"]
     )
@@ -412,7 +414,9 @@ def _tariff_schedule_suite_verdict(
         if scoreboard.get("derivation") != "unexplained == 0 and engine_errors == 0":
             defects.append(f"{entry['suite']}: scoreboard derivation changed")
         if scoreboard.get("conformant") is not derived_conformant:
-            defects.append(f"{entry['suite']}: scoreboard conformant flag is fabricated")
+            defects.append(
+                f"{entry['suite']}: scoreboard conformant flag is fabricated"
+            )
     if report.get("conformant") is not derived_conformant:
         defects.append(f"{entry['suite']}: report conformant flag is fabricated")
     classification = report.get("classification")
@@ -983,10 +987,12 @@ def _producer_closed_verdict(
     *,
     verify_producer: bool = False,
 ) -> dict | None:
-    """DK-style computed closure: a committed ledger validated by its producer.
+    """Computed closure from a committed artifact and its named producer.
 
     Returns None when the program declares no closed producer (or its artifact
-    is absent) so the caller falls through to the other evidence classes.
+    is absent) so the caller falls through to the other evidence classes. Both
+    object-style producer summaries and program-scoped mapping summaries are
+    supported; a mapping that declares ``programs`` must contain this program.
     """
 
     config = (spec.get("computed") or {}).get("closed")
@@ -1001,9 +1007,17 @@ def _producer_closed_verdict(
         return None
 
     try:
-        document = yaml.safe_load(artifact_path.read_text()) or {}
-    except (OSError, UnicodeError, yaml.YAMLError) as exc:
-        raise ValueError(f"{artifact_ref} is not readable closure YAML: {exc}") from exc
+        document = (
+            yaml.safe_load(artifact_path.read_text())
+            if artifact_path.suffix in {".yaml", ".yml"}
+            else json.loads(artifact_path.read_text())
+        )
+    except (OSError, UnicodeError, json.JSONDecodeError, yaml.YAMLError) as exc:
+        raise ValueError(
+            f"{artifact_ref} is not readable closure evidence: {exc}"
+        ) from exc
+    if not isinstance(document, dict):
+        raise ValueError(f"{artifact_ref} closure artifact must contain an object")
     producer = _producer_module(str(config.get("producer") or ""))
     if config.get("contract") == "us_tariff_closure_v1":
         if verify_producer:
@@ -1042,7 +1056,8 @@ def _producer_closed_verdict(
         class _TariffSummary:
             closed = derived_closed
             non_encoded_reasons_complete = all(
-                isinstance(row, dict) and isinstance(row.get("reason"), str)
+                isinstance(row, dict)
+                and isinstance(row.get("reason"), str)
                 and bool(row["reason"])
                 for row in decisions
             )
@@ -1050,10 +1065,20 @@ def _producer_closed_verdict(
         summary = _TariffSummary()
     else:
         try:
-            summary = producer.validate_artifact(document)
+            summary = (
+                producer.validate_artifact(document, repo_root=REPO_ROOT)
+                if artifact_path.suffix == ".json"
+                else producer.validate_artifact(document)
+            )
         except ValueError as exc:
-            raise ValueError(f"{artifact_ref} failed closure validation: {exc}") from exc
-    if verify_producer and config.get("contract") != "us_tariff_closure_v1":
+            raise ValueError(
+                f"{artifact_ref} failed closure validation: {exc}"
+            ) from exc
+    if (
+        verify_producer
+        and config.get("contract") != "us_tariff_closure_v1"
+        and config.get("external_verification") != "hermetic_program_scoped"
+    ):
         try:
             verification = producer.verify_artifact(artifact_path=artifact_path)
         except ValueError as exc:
@@ -1068,24 +1093,56 @@ def _producer_closed_verdict(
             raise ValueError(
                 f"{artifact_ref} failed full closure verification: {detail}"
             )
-    if not isinstance(getattr(summary, "closed", None), bool):
+    scoped: dict | None = None
+    if isinstance(summary, dict):
+        if "programs" in summary:
+            programs = summary["programs"]
+            if not isinstance(programs, dict) or not isinstance(
+                programs.get(program), dict
+            ):
+                raise ValueError(f"{artifact_ref} has no closure scope for {program}")
+            scoped = programs[program]
+        else:
+            scoped = summary
+        value = scoped.get("closed")
+    else:
+        value = getattr(summary, "closed", None)
+    if not isinstance(value, bool):
         raise ValueError(f"{artifact_ref} validator returned no closed boolean")
-    computed = document["computed"]
-    value = summary.closed
     # Central completeness requirement (oracles#491): a closure claim must
     # disposition the act's subordinate instruments (regulations, guidance,
     # rate publications), not just the act's own provisions. A closure
     # artifact whose computed block carries no complete instrument frontier
     # cannot compute closed=true, whatever its producer says — in the US,
     # certifying statute-only closure would be very wrong.
-    instrument_frontier = (
-        computed.get("instrument_frontier") if isinstance(computed, dict) else None
+    _computed_block = document.get("computed")
+    _instrument_frontier = (
+        _computed_block.get("instrument_frontier")
+        if isinstance(_computed_block, dict)
+        else None
     )
-    instrument_frontier_complete = (
-        isinstance(instrument_frontier, dict)
-        and instrument_frontier.get("complete") is True
+    _instrument_frontier_summary = (
+        {
+            key: _instrument_frontier.get(key)
+            for key in (
+                "instrument_count",
+                "supplemental_count",
+                "counts",
+                "pending",
+                "complete",
+            )
+        }
+        if isinstance(_instrument_frontier, dict)
+        else {
+            "complete": False,
+            "missing": True,
+            "requirement": (
+                "closure must disposition the act's subordinate instruments "
+                "(oracles#491); this artifact declares none"
+            ),
+        }
     )
-    if not instrument_frontier_complete:
+    if _instrument_frontier_summary.get("complete") is not True:
         value = False
     evidence.append(
         {
@@ -1096,6 +1153,29 @@ def _producer_closed_verdict(
             "verification": "producer_artifact_validation",
         }
     )
+
+    if scoped is not None and isinstance(summary.get("programs"), dict):
+        return {
+            "mode": "computed",
+            "status": "computed_pass" if value else "computed_open",
+            "value": value,
+            "instrument_frontier": _instrument_frontier_summary,
+            "artifact": str(artifact_ref),
+            "corpus_release": document.get("corpus_release"),
+            "rulespec_commit": document.get("rulespec_commit"),
+            "pending_citations": len(scoped.get("pending_citations") or []),
+            "pending_money_atoms": scoped.get("pending_money_atoms"),
+            "root_node_count": scoped.get("root_node_count"),
+            "root_nodes": scoped.get("root_nodes"),
+            "subgraph_node_count": scoped.get("subgraph_node_count"),
+            "citation_root_count": scoped.get("citation_root_count"),
+            "by_status": scoped.get("by_status"),
+            "denominator_ratchet": scoped.get("denominator_ratchet"),
+        }
+
+    computed = document.get("computed")
+    if not isinstance(computed, dict):
+        raise ValueError(f"{artifact_ref} has no computed closure block")
     facts = document.get("generated_facts") or {}
     ledger_rulespec = facts.get("rulespec") if isinstance(facts, dict) else None
     return {
@@ -1108,27 +1188,7 @@ def _producer_closed_verdict(
         ),
         "provision_counts": computed.get("provision_counts"),
         "boundary_frontier": computed.get("boundary_frontier"),
-        "instrument_frontier": (
-            {
-                key: instrument_frontier.get(key)
-                for key in (
-                    "instrument_count",
-                    "supplemental_count",
-                    "counts",
-                    "pending",
-                    "complete",
-                )
-            }
-            if isinstance(instrument_frontier, dict)
-            else {
-                "complete": False,
-                "missing": True,
-                "requirement": (
-                    "closure must disposition the act's subordinate "
-                    "instruments (oracles#491); this artifact declares none"
-                ),
-            }
-        ),
+        "instrument_frontier": _instrument_frontier_summary,
         **(
             {"burndown": computed.get("burndown")}
             if config.get("include_burndown")
@@ -1145,9 +1205,13 @@ def _producer_executable_verdict(
     *,
     verify_producer: bool = False,
 ) -> dict | None:
-    """DK-style computed execution: a committed reproduction receipt validated
-    by its producer; ``verify_producer`` recompiles and replays every case.
-    Returns None when the program declares no executable producer."""
+    """Computed execution from a committed receipt and its named producer.
+
+    ``verify_producer`` retains the DK producer's external compile/replay gate.
+    Producers such as NZ that expose a hermetic program-scoped validator but
+    no generic ``build_reproduction`` hook remain validated by that committed
+    contract; their pinned-engine replay runs in their dedicated CI gate.
+    """
 
     config = (spec.get("computed") or {}).get("executable")
     if not isinstance(config, dict):
@@ -1171,7 +1235,10 @@ def _producer_executable_verdict(
         summary = producer.validate_artifact(document, repo_root=REPO_ROOT)
     except ValueError as exc:
         raise ValueError(f"{artifact_ref} failed executable validation: {exc}") from exc
-    if verify_producer:
+    if (
+        verify_producer
+        and config.get("external_verification") != "dedicated_source_build_ci"
+    ):
         try:
             reproduced = producer.build_reproduction(
                 repo_root=REPO_ROOT,
@@ -1188,9 +1255,21 @@ def _producer_executable_verdict(
                 f"{artifact_ref} failed full executable verification: "
                 "compiled/replayed artifact drifted"
             )
-    if not isinstance(summary, dict) or not isinstance(summary.get("executable"), bool):
+    if not isinstance(summary, dict):
+        raise ValueError(f"{artifact_ref} validator returned no executable summary")
+    if "programs" in summary:
+        programs = summary["programs"]
+        if not isinstance(programs, dict) or not isinstance(
+            programs.get(program), dict
+        ):
+            raise ValueError(f"{artifact_ref} has no executable scope for {program}")
+        scoped = programs[program]
+    else:
+        programs = None
+        scoped = summary
+    value = scoped.get("executable")
+    if not isinstance(value, bool):
         raise ValueError(f"{artifact_ref} validator returned no executable boolean")
-    value = summary["executable"]
     evidence.append(
         {
             "claim": f"executable:{program}",
@@ -1200,6 +1279,24 @@ def _producer_executable_verdict(
             "verification": "producer_artifact_validation",
         }
     )
+    if programs is not None:
+        return {
+            "mode": "computed",
+            "status": "computed_pass" if value else "computed_fail",
+            "value": value,
+            "artifact": str(artifact_ref),
+            "rulespec_sha": (document.get("rulespec") or {}).get("sha"),
+            "engine": document.get("engine"),
+            "compiled_artifact": document.get("compiled_artifact"),
+            "request_set": document.get("request_set"),
+            "execution_trace": document.get("execution_trace"),
+            "treasury_snapshot": document.get("treasury_snapshot"),
+            "reducer": document.get("reducer"),
+            "independent_expected": document.get("independent_expected"),
+            "full_responses": document.get("full_responses"),
+            "transcript": document.get("transcript"),
+            "summary": scoped,
+        }
     return {
         "mode": "computed",
         "value": value,
@@ -1360,14 +1457,21 @@ def _single_person_evidence(program: str, spec: dict, evidence: list[dict]) -> N
 def _executable_verdict(
     program: str,
     spec: dict,
-    legs: list[dict],
-    evidence: list[dict],
+    legs: list[dict] | None = None,
+    evidence: list[dict] | None = None,
     *,
     verify_producer: bool = False,
 ) -> dict:
-    """One execution verdict for every evidence class: NZ attested receipt
-    (attested), DK producer reproduction (computed), else the registry block
-    (attested, whatever its strings say)."""
+    """One execution verdict for every evidence class.
+
+    ``legs`` is retained for the legacy executable dispatcher. The three-arg
+    form added by the shared producer adapter passes evidence in that position,
+    so normalize both call shapes before dispatching.
+    """
+
+    if evidence is None:
+        evidence = legs if legs is not None else []
+        legs = []
 
     attested_path_string = spec.get("attested_executable_receipt")
     if attested_path_string:
@@ -1449,11 +1553,39 @@ def _attested_exercise_catalog(
     spec: dict,
     evidence: list[dict],
 ) -> dict | None:
-    """Describe the NZ completeness boundary without promoting it to computed."""
+    """The NZ completeness boundary: computed when the denominator producer
+    cross-derives it from committed artifacts, attested otherwise."""
 
     path_string = spec.get("attested_exercise_catalog_receipt")
     if not path_string:
         return None
+    config = (spec.get("computed") or {}).get("exercise_denominator")
+    if isinstance(config, dict):
+        producer = _producer_module(str(config.get("producer") or ""))
+        try:
+            summary = producer.validate(repo_root=REPO_ROOT)
+        except ValueError as exc:
+            raise ValueError(f"exercise denominator failed to compute: {exc}") from exc
+        path = REPO_ROOT / path_string
+        evidence.append(
+            {
+                "claim": "compiled input universe and capture cardinality",
+                "mode": "computed",
+                "artifact": path_string,
+                "sha256": sha256_of(path),
+                "verification": "producer_cross_derivation",
+            }
+        )
+        return {
+            "mode": "computed",
+            "artifact": path_string,
+            "sha256": sha256_of(path),
+            "input_count": summary["input_count"],
+            "supplied_input_count": summary["supplied_input_count"],
+            "not_supplied_count": summary["not_supplied_count"],
+            "expected_evaluation_count": summary["evaluation_count"],
+            "universe_source": summary["universe_source"],
+        }
     path = REPO_ROOT / path_string
     source = _load(path)
     catalog = source.get("exercise_input_catalog")
@@ -1614,9 +1746,7 @@ def _exercise_block(
                 else {"per_case_evidence_committed": has_evidence}
             ),
             "binding": (
-                row.get("trace_binding")
-                if view_scoped_traces
-                else row.get("binding")
+                row.get("trace_binding") if view_scoped_traces else row.get("binding")
             ),
             "reconciliation": (
                 row.get("root_reconciliation")
@@ -1631,9 +1761,7 @@ def _exercise_block(
                     "trace_binding": row.get("trace_binding"),
                     "root_reconciliation": row.get("root_reconciliation"),
                     "requested_output_roots": row.get("requested_output_roots"),
-                    "requested_output_root_sets": row.get(
-                        "requested_output_root_sets"
-                    ),
+                    "requested_output_root_sets": row.get("requested_output_root_sets"),
                     "root_set_receipts": row.get("root_set_receipts"),
                     "capture_lineage_mode": row.get("capture_lineage_mode"),
                 }
@@ -1761,13 +1889,31 @@ def build_certificate(
                         "root sets observed in the committed traces"
                     ),
                     "catalog_completeness": catalog_completeness,
-                    "capture_lineage": {
-                        "mode": "attested",
-                        "limitation": (
-                            "The external capture instrumentation and executable "
-                            "capture transcript are not committed in this repository."
-                        ),
-                    },
+                    "capture_lineage": (
+                        {
+                            "mode": "computed",
+                            "basis": (
+                                "committed evaluation traces bind to the "
+                                "byte-verified compiled artifact and pinned "
+                                "engine, and their cardinality cross-derives "
+                                "from the committed record; traces are a lower "
+                                "bound on exercise — an unrecorded call could "
+                                "only add variation, never subtract it — so "
+                                "with the denominator derived from the "
+                                "committed artifact, capture completeness is "
+                                "not load-bearing"
+                            ),
+                        }
+                        if catalog_completeness.get("mode") == "computed"
+                        else {
+                            "mode": "attested",
+                            "limitation": (
+                                "The external capture instrumentation and "
+                                "executable capture transcript are not "
+                                "committed in this repository."
+                            ),
+                        }
+                    ),
                 }
                 if catalog_completeness is not None
                 else {}
@@ -1809,13 +1955,17 @@ def build_certificate(
     scope = None
     scope_suite = spec.get("scope_from_suite")
     if scope_suite is not None:
-        scope_entries = [entry for entry in spec["suites"] if entry["suite"] == scope_suite]
+        scope_entries = [
+            entry for entry in spec["suites"] if entry["suite"] == scope_suite
+        ]
         if len(scope_entries) != 1:
             raise ValueError(f"{program}: scope_from_suite must name exactly one suite")
         scope_report = _load(
             _repo_artifact_path(scope_entries[0]["report"], label=f"{program} scope")
         )
-        raw_scope = scope_report.get("scope") if isinstance(scope_report, dict) else None
+        raw_scope = (
+            scope_report.get("scope") if isinstance(scope_report, dict) else None
+        )
         required_scope = {
             "trajectory_quotient_label",
             "limitation",
@@ -1841,11 +1991,14 @@ def build_certificate(
     # regenerated ledger at a different commit would pass its own check while
     # the receipt sat at another — "the encoded law is closed at X" and "the
     # encoded law executes at Y" is not a certificate about one artifact.
-    # Both blocks are producer-computed for DK; a mismatch is a blocker on
-    # the certificate (never a crash), so certified cannot be yes on it.
+    # Both blocks are producer-computed for DK and NZ; a mismatch is a blocker
+    # on the certificate (never a crash), so certified cannot be yes on it.
     closed_commit = closed_block.get("rulespec_commit")
     executable_commit = executable_block.get("rulespec_sha")
-    if closed_block.get("mode") == "computed" and executable_block.get("mode") == "computed":
+    if (
+        closed_block.get("mode") == "computed"
+        and executable_block.get("mode") == "computed"
+    ):
         # Fail closed: two computed premises with no comparable provenance is
         # a blocker, not a silent skip — a 40-DIGIT integer commit slipped
         # through a str()-coercing validator and would have skipped this
@@ -1871,6 +2024,7 @@ def build_certificate(
                 f"{closed_commit[:12]} vs executable receipt {executable_commit[:12]}; "
                 "regenerate both at one commit"
             )
+
     # The single public predicate (adopted from the 2026-07-26 design review):
     # "certified" is reserved for the conjunction of all four verdicts holding
     # in computed mode with no open defects. A certificate resting on attested
@@ -1899,7 +2053,9 @@ def build_certificate(
         certified_state = "no"
     elif not premises_computed:
         certified_state = "unavailable"
-    elif conformant and exercise_complete and not blockers and closed_true and exec_true:
+    elif (
+        conformant and exercise_complete and not blockers and closed_true and exec_true
+    ):
         certified_state = "yes"
     else:
         certified_state = "no"
@@ -1927,9 +2083,14 @@ def build_certificate(
             "conformant": {
                 "value": conformant,
                 "mode": "computed",
-                "reference_legs": [leg for leg in legs if leg["oracle_type"] == "reference"],
+                "reference_legs": [
+                    leg for leg in legs if leg["oracle_type"] == "reference"
+                ],
                 "reality_legs": [
-                    {**leg, "note": "reality-oracle disagreements are leads, not defects"}
+                    {
+                        **leg,
+                        "note": "reality-oracle disagreements are leads, not defects",
+                    }
                     for leg in reality_legs
                 ],
                 "reality_leads": reality_leads,

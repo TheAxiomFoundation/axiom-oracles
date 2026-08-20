@@ -133,7 +133,11 @@ schema moved to v2 with the frontier as a `closed` conjunct, and certify
 now refuses `closed=true` from any closure artifact without a complete
 instrument frontier — registry-wide, so a statute-only closure can never
 again certify. `certified=yes` was then re-derived under the strengthened
-predicate.
+predicate. The strengthening itself landed on main first as a dedicated
+change (PR#494, sol-audited): between that landing and this one, main
+honestly read `certified=no` with the missing-frontier requirement named —
+the flag fell because the definition strengthened, never by hand-editing
+an artifact.
 
 ## Strict evidence contract (unchanged from the certified-arc landing)
 

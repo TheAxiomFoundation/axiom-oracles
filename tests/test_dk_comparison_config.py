@@ -178,6 +178,11 @@ def test_dk_all_four_computed_premises_flow_to_certificate() -> None:
         (REPO_ROOT / "certificates/dk-boerne-og-ungeydelse.json").read_text()
     )
     verdicts = certificate["verdicts"]
+    # The closed premise satisfies the instrument-frontier requirement
+    # (oracles#491): the closure ledger dispositions every instrument in the
+    # act's ELI graph plus the search-discovered supplement, so certify
+    # computes closed=true under the strengthened predicate and certified
+    # re-derives yes.
     assert {
         name: (block["mode"], block["value"]) for name, block in verdicts.items()
     } == {
@@ -186,6 +191,16 @@ def test_dk_all_four_computed_premises_flow_to_certificate() -> None:
         "closed": ("computed", True),
         "executable": ("computed", True),
     }
+    closed_frontier = verdicts["closed"]["instrument_frontier"]
+    assert closed_frontier["complete"] is True
+    assert closed_frontier["counts"] == {
+        "total": 28,
+        "encoded": 1,
+        "classified-with-reason": 16,
+        "excluded-with-reason": 11,
+        "pending": 0,
+    }
+    assert closed_frontier["pending"] == []
     assert not any(
         blocker.startswith("exercise:") for blocker in certificate["blockers"]
     )

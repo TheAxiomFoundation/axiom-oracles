@@ -1,0 +1,255 @@
+{
+  "comparison_cells": [
+    {
+      "column": "AS_Amount",
+      "declared_rulespec_value": "302.07678846153846153846153846",
+      "expected_classification": "b",
+      "expected_reason_code": "B_AS_UPSTREAM_VINTAGE",
+      "program": "nz/accommodation-supplement",
+      "scenario_id": "single_parent_three_children_area1_rent",
+      "treasury_value": "304.204969",
+      "unit": "NZD/week",
+      "weekly_wage": 0
+    },
+    {
+      "column": "BestStart_Total",
+      "declared_rulespec_value": "154.9972602739726027397260273972602739726",
+      "expected_classification": "b",
+      "expected_reason_code": "B_WFF_VINTAGE",
+      "program": "nz/working-for-families",
+      "scenario_id": "single_parent_three_children_area1_rent",
+      "treasury_value": "147.210959",
+      "unit": "NZD/week",
+      "weekly_wage": 0
+    },
+    {
+      "column": "FTC_abated",
+      "declared_rulespec_value": "399.4602739726027397260273972602739726028",
+      "expected_classification": "b",
+      "expected_reason_code": "B_WFF_VINTAGE",
+      "program": "nz/working-for-families",
+      "scenario_id": "single_parent_three_children_area1_rent",
+      "treasury_value": "379.419178",
+      "unit": "NZD/week",
+      "weekly_wage": 0
+    },
+    {
+      "column": "IETC_abated",
+      "declared_rulespec_value": "0",
+      "expected_classification": "match",
+      "expected_reason_code": "MATCH_SNAPSHOT_PRECISION",
+      "program": "nz/independent-earner-tax-credit",
+      "scenario_id": "single_parent_three_children_area1_rent",
+      "treasury_value": "0",
+      "unit": "NZD/week",
+      "weekly_wage": 0
+    },
+    {
+      "column": "IWTC_abated",
+      "declared_rulespec_value": "0",
+      "expected_classification": "match",
+      "expected_reason_code": "MATCH_SNAPSHOT_PRECISION",
+      "program": "nz/working-for-families",
+      "scenario_id": "single_parent_three_children_area1_rent",
+      "treasury_value": "0",
+      "unit": "NZD/week",
+      "weekly_wage": 0
+    },
+    {
+      "column": "MFTC",
+      "declared_rulespec_value": "0",
+      "expected_classification": "match",
+      "expected_reason_code": "MATCH_SNAPSHOT_PRECISION",
+      "program": "nz/working-for-families",
+      "scenario_id": "single_parent_three_children_area1_rent",
+      "treasury_value": "0",
+      "unit": "NZD/week",
+      "weekly_wage": 0
+    },
+    {
+      "column": "WFF_abated",
+      "declared_rulespec_value": "399.4602739726027397260273972602739726028",
+      "expected_classification": "b",
+      "expected_reason_code": "B_WFF_VINTAGE",
+      "program": "nz/working-for-families",
+      "scenario_id": "single_parent_three_children_area1_rent",
+      "treasury_value": "379.419178",
+      "unit": "NZD/week",
+      "weekly_wage": 0
+    },
+    {
+      "column": "WinterEnergy",
+      "declared_rulespec_value": "13.42465753424657534246575342465753424658",
+      "expected_classification": "match",
+      "expected_reason_code": "MATCH_SNAPSHOT_PRECISION",
+      "program": "nz/winter-energy-payment",
+      "scenario_id": "single_parent_three_children_area1_rent",
+      "treasury_value": "13.424658",
+      "unit": "NZD/week",
+      "weekly_wage": 0
+    },
+    {
+      "column": "net_benefit",
+      "declared_rulespec_value": "521.52",
+      "expected_classification": "b",
+      "expected_reason_code": "B_BENEFIT_VINTAGE",
+      "program": "nz/main-benefits",
+      "scenario_id": "single_parent_three_children_area1_rent",
+      "treasury_value": "517.39",
+      "unit": "NZD/week",
+      "weekly_wage": 0
+    },
+    {
+      "column": "wage1_ACC_levy",
+      "declared_rulespec_value": "0",
+      "expected_classification": "match",
+      "expected_reason_code": "MATCH_SNAPSHOT_PRECISION",
+      "program": "nz/acc-earners-levy",
+      "scenario_id": "single_parent_three_children_area1_rent",
+      "treasury_value": "0",
+      "unit": "NZD/week",
+      "weekly_wage": 0
+    },
+    {
+      "column": "wage1_tax",
+      "declared_rulespec_value": "0",
+      "expected_classification": "match",
+      "expected_reason_code": "MATCH_SNAPSHOT_PRECISION",
+      "program": "nz/income-tax",
+      "scenario_id": "single_parent_three_children_area1_rent",
+      "treasury_value": "0",
+      "unit": "NZD/week",
+      "weekly_wage": 0
+    },
+    {
+      "column": "AS_Amount",
+      "declared_rulespec_value": "302.07678846153846153846153846",
+      "expected_classification": "b",
+      "expected_reason_code": "B_AS_UPSTREAM_VINTAGE",
+      "program": "nz/accommodation-supplement",
+      "scenario_id": "single_parent_three_children_area1_rent",
+      "treasury_value": "304.204969",
+      "unit": "NZD/week",
+      "weekly_wage": 740
+    },
+    {
+      "column": "BestStart_Total",
+      "declared_rulespec_value": "154.9972602739726027397260273972602739726",
+      "expected_classification": "b",
+      "expected_reason_code": "B_WFF_VINTAGE",
+      "program": "nz/working-for-families",
+      "scenario_id": "single_parent_three_children_area1_rent",
+      "treasury_value": "147.210959",
+      "unit": "NZD/week",
+      "weekly_wage": 740
+    },
+    {
+      "column": "FTC_abated",
+      "declared_rulespec_value": "399.4602739726027397260273972602739726028",
+      "expected_classification": "b",
+      "expected_reason_code": "B_WFF_VINTAGE",
+      "program": "nz/working-for-families",
+      "scenario_id": "single_parent_three_children_area1_rent",
+      "treasury_value": "379.419178",
+      "unit": "NZD/week",
+      "weekly_wage": 740
+    },
+    {
+      "column": "IETC_abated",
+      "declared_rulespec_value": "0",
+      "expected_classification": "match",
+      "expected_reason_code": "MATCH_SNAPSHOT_PRECISION",
+      "program": "nz/independent-earner-tax-credit",
+      "scenario_id": "single_parent_three_children_area1_rent",
+      "treasury_value": "0",
+      "unit": "NZD/week",
+      "weekly_wage": 740
+    },
+    {
+      "column": "IWTC_abated",
+      "declared_rulespec_value": "147.5",
+      "expected_classification": "b",
+      "expected_reason_code": "B_WFF_VINTAGE",
+      "program": "nz/working-for-families",
+      "scenario_id": "single_parent_three_children_area1_rent",
+      "treasury_value": "97.5",
+      "unit": "NZD/week",
+      "weekly_wage": 740
+    },
+    {
+      "column": "MFTC",
+      "declared_rulespec_value": "72.480611169652265542676501575",
+      "expected_classification": "b",
+      "expected_reason_code": "B_WFF_VINTAGE",
+      "program": "nz/working-for-families",
+      "scenario_id": "single_parent_three_children_area1_rent",
+      "treasury_value": "70.557534",
+      "unit": "NZD/week",
+      "weekly_wage": 740
+    },
+    {
+      "column": "WFF_abated",
+      "declared_rulespec_value": "546.9602739726027397260273972602739726028",
+      "expected_classification": "b",
+      "expected_reason_code": "B_WFF_VINTAGE",
+      "program": "nz/working-for-families",
+      "scenario_id": "single_parent_three_children_area1_rent",
+      "treasury_value": "476.919178",
+      "unit": "NZD/week",
+      "weekly_wage": 740
+    },
+    {
+      "column": "WinterEnergy",
+      "declared_rulespec_value": "0",
+      "expected_classification": "match",
+      "expected_reason_code": "MATCH_SNAPSHOT_PRECISION",
+      "program": "nz/winter-energy-payment",
+      "scenario_id": "single_parent_three_children_area1_rent",
+      "treasury_value": "0",
+      "unit": "NZD/week",
+      "weekly_wage": 740
+    },
+    {
+      "column": "net_benefit",
+      "declared_rulespec_value": "0",
+      "expected_classification": "match",
+      "expected_reason_code": "MATCH_SNAPSHOT_PRECISION",
+      "program": "nz/main-benefits",
+      "scenario_id": "single_parent_three_children_area1_rent",
+      "treasury_value": "0",
+      "unit": "NZD/week",
+      "weekly_wage": 740
+    },
+    {
+      "column": "wage1_ACC_levy",
+      "declared_rulespec_value": "12.95",
+      "expected_classification": "match",
+      "expected_reason_code": "MATCH_SNAPSHOT_PRECISION",
+      "program": "nz/acc-earners-levy",
+      "scenario_id": "single_parent_three_children_area1_rent",
+      "treasury_value": "12.95",
+      "unit": "NZD/week",
+      "weekly_wage": 740
+    },
+    {
+      "column": "wage1_tax",
+      "declared_rulespec_value": "108.5575342465753424657534246575342465753",
+      "expected_classification": "match",
+      "expected_reason_code": "MATCH_SNAPSHOT_PRECISION",
+      "program": "nz/income-tax",
+      "scenario_id": "single_parent_three_children_area1_rent",
+      "treasury_value": "108.557534",
+      "unit": "NZD/week",
+      "weekly_wage": 740
+    }
+  ],
+  "schema": "axiom_oracles.nz_executable_expected_comparisons.v2",
+  "source_classifications": {
+    "path": "comparisons/nz-treasury-incomeexplorer/source-comparison.json",
+    "sha256": "abd3bcbebc01c73e58c27496db5897a306bb0496ae1d53e5abbd5ae487010b3b"
+  },
+  "treasury_snapshot": {
+    "path": "comparisons/nz-treasury-incomeexplorer/treasury-emtr-snapshot-expanded.json",
+    "sha256": "6bed8c0a91e4ba6416238ef1cf381bc8033f3122f3eeb5766074d763929293fd"
+  }
+}

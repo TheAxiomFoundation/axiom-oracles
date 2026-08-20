@@ -59,6 +59,8 @@ BE_ROLLUP = "axiom_oracles/data/euromod_be_coverage.json"
 BE_REPORT = "dashboard/public/data/axiom-euromod-be-article-51-forfait.json"
 NZ_INDEX = "dashboard/public/data/cases/nz-treasury-incomeexplorer/index.json"
 NZ_CHUNK = "dashboard/public/data/cases/nz-treasury-incomeexplorer/chunk-0.json"
+NZ_EXECUTABLE_RECEIPT = "conformance/executable/nz-treasury-incomeexplorer.json"
+NZ_CLOSURE_SUMMARY = "closure/nz/summary.json"
 
 #: Hermetic git: no user/system config (no signing hooks, no identity — the
 #: script must supply the bot identity itself, exactly as on a CI runner).
@@ -187,6 +189,8 @@ def _assert_origin_tip_green(origin: Path, tmp_path: Path) -> Path:
     for script in (
         "apply_dispositions.py",
         "nz_incomeexplorer.py",
+        "nz_executable_reproduction.py",
+        "nz_closure.py",
         "generate_chunk_indexes.py",
         "conformance_scoreboard.py",
         "conformance_burndown.py",
@@ -360,6 +364,41 @@ def test_refresh_regenerates_and_stages_nz_bound_evidence(origin, tmp_path):
     assert (verify / NZ_INDEX).read_bytes() == canonical_index
 
 
+def test_refresh_reconstructs_and_stages_stale_nz_receipt_and_closure(origin, tmp_path):
+    """The bot must repair stale producer outputs, not validate them first."""
+
+    broken = _clone(origin, tmp_path / "broken-nz-producers")
+    receipt_path = broken / NZ_EXECUTABLE_RECEIPT
+    closure_path = broken / NZ_CLOSURE_SUMMARY
+    canonical_receipt = receipt_path.read_bytes()
+    canonical_closure = closure_path.read_bytes()
+
+    receipt = json.loads(receipt_path.read_text())
+    receipt["transcript"]["sha256"] = "0" * 64
+    receipt_path.write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n")
+    closure_path.write_bytes(canonical_closure + b" ")
+    _git(
+        broken,
+        "add",
+        "--",
+        NZ_EXECUTABLE_RECEIPT,
+        NZ_CLOSURE_SUMMARY,
+    )
+    _git(broken, "commit", "-q", "-m", "seed stale NZ producer outputs")
+    _git(broken, "push", "-q", "origin", "HEAD:main")
+
+    stale = _clone(origin, tmp_path / "stale-nz-producer-check")
+    assert _staleness_gate(stale, "nz_executable_reproduction.py").returncode == 1
+    assert _staleness_gate(stale, "nz_closure.py").returncode == 1
+
+    healer = _clone(origin, tmp_path / "healer-nz-producers")
+    result = _run_script(healer)
+    assert result.returncode == 0, result.stderr
+    verify = _assert_origin_tip_green(origin, tmp_path)
+    assert (verify / NZ_EXECUTABLE_RECEIPT).read_bytes() == canonical_receipt
+    assert (verify / NZ_CLOSURE_SUMMARY).read_bytes() == canonical_closure
+
+
 def test_racing_pusher_converges_when_remote_advances_mid_push(origin, tmp_path):
     """A sibling advances main BETWEEN this leg's rebuild and its push — the
     genuine race, made deterministic with a two-marker barrier: the hook
@@ -421,7 +460,13 @@ def test_racing_pusher_converges_when_remote_advances_mid_push(origin, tmp_path)
     )
     # Hook has signaled the leg's first push; land the sibling (its push sees
     # `racing` set, so the hook waves it through), then release the hook.
-    deadline = time.monotonic() + 120
+    # The allowance covers ONE regenerate+verify cycle before the first push.
+    # That cycle now includes trace-bound closure verification, the executable
+    # receipt reconstruction, and certificate recomputation; on shared CI
+    # runners it exceeds the old 120s. The race itself stays deterministic —
+    # the pre-receive barrier, not this deadline, sequences the sibling — and
+    # the proc.poll() liveness assertion still fails fast on a dead leg.
+    deadline = time.monotonic() + 600
     while not racing.exists():
         assert time.monotonic() < deadline, "leg never attempted its first push"
         assert proc.poll() is None, proc.communicate()[1]
