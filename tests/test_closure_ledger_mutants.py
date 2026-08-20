@@ -382,8 +382,8 @@ def test_committed_dk_closure_artifact_is_internally_valid_and_closed() -> None:
     frontier = document["computed"]["instrument_frontier"]
     assert frontier["counts"] == {
         "total": 28,
-        "encoded": 1,
-        "classified-with-reason": 16,
+        "encoded": 0,
+        "classified-with-reason": 17,
         "excluded-with-reason": 11,
         "pending": 0,
     }
@@ -477,7 +477,7 @@ def test_validator_rejects_a_disposition_for_an_unknown_instrument() -> None:
 
 
 def test_validator_rejects_a_tampered_instrument_graph_row() -> None:
-    """Editing the embedded graph (an in_force flip) must read as stale."""
+    """Editing the embedded graph (an in_force flip) must fail the sha bind."""
 
     module = _load_script()
     document = _load(COMMITTED_ARTIFACT)
@@ -489,7 +489,63 @@ def test_validator_rejects_a_tampered_instrument_graph_row() -> None:
     target["in_force"] = False
     with pytest.raises(module.ClosureLedgerError) as excinfo:
         module.validate_artifact(document)
-    assert "stale or internally inconsistent" in str(excinfo.value)
+    assert "does not match the embedded graph content" in str(excinfo.value)
+
+
+def test_validator_rejects_a_zeroed_snapshot_sha() -> None:
+    """A syntactically valid but wrong sha must not pass hermetic validation."""
+
+    module = _load_script()
+    document = _load(COMMITTED_ARTIFACT)
+    document["generated_facts"]["instrument_graph"]["snapshot_sha256"] = "0" * 64
+    with pytest.raises(module.ClosureLedgerError) as excinfo:
+        module.validate_artifact(document)
+    assert "does not match the embedded graph content" in str(excinfo.value)
+
+
+def test_validator_rejects_an_edited_title_with_stale_sha() -> None:
+    module = _load_script()
+    document = _load(COMMITTED_ARTIFACT)
+    document["generated_facts"]["instrument_graph"]["instruments"][0]["title"] = (
+        "Edited title"
+    )
+    with pytest.raises(module.ClosureLedgerError) as excinfo:
+        module.validate_artifact(document)
+    assert "does not match the embedded graph content" in str(excinfo.value)
+
+
+def test_recomputed_forgery_with_stale_sha_still_fails() -> None:
+    """The launch-audit probe: flip in_force AND recompute computed while
+    keeping the recorded sha — the semantic sha bind must still reject."""
+
+    module = _load_script()
+    document = _load(COMMITTED_ARTIFACT)
+    generated = document["generated_facts"]
+    target = next(
+        row
+        for row in generated["instrument_graph"]["instruments"]
+        if row["eli"] == "https://retsinformation.dk/eli/lta/2013/1563"
+    )
+    target["in_force"] = False
+    errors: list[str] = []
+    decisions = module._canonical_decisions(
+        document["committed_decisions"],
+        provision_order={
+            row["citation_path"]: index
+            for index, row in enumerate(generated["provision_spine"])
+        },
+        input_names={row["name"] for row in generated["module_inputs"]},
+        instrument_elis={
+            row["eli"] for row in generated["instrument_graph"]["instruments"]
+        },
+        errors=errors,
+    )
+    assert errors == []
+    document["computed"] = module._derive_computed(generated, decisions, errors)
+    assert errors == []
+    with pytest.raises(module.ClosureLedgerError) as excinfo:
+        module.validate_artifact(document)
+    assert "does not match the embedded graph content" in str(excinfo.value)
 
 
 def test_generation_parses_inputs_and_preserves_committed_decisions(

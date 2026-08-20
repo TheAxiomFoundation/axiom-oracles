@@ -929,7 +929,7 @@ generated_facts:
     - underpayment_addition_to_following_benefit_payments
   instrument_graph:
     snapshot_path: conformance/closure/dk-instrument-graph.json
-    snapshot_sha256: 14f699a9f7317f9f93eaf0dcaa83a004244efc1f89f09678546a8196b5f860e8
+    snapshot_sha256: 790a22110216c4bb788d2a03ce0c95f564572ae69cab926d947b579be3ec0479
     act_eli: https://retsinformation.dk/eli/lta/2025/603
     retrieved_at: '2026-08-19'
     instruments:
@@ -1558,21 +1558,29 @@ committed_decisions:
   - eli: https://retsinformation.dk/eli/lta/2013/1563
     status: classified-with-reason
     classification: input_derivation_rule
-    reason: 'Bekendtgørelse om børne- og ungeydelsen, issued under §§ 8(1), 12 and 13; read in full 2026-08-19.
-      Operationalizes § 2''s optjeningsprincip: 30 CPR-registered days aggregate to one accrual month
-      (§ 1), wage earners need 39 employment hours per month and the self-employed 80 (§§ 2, 7), with
-      income-register computation rules per era (§§ 3-6), outside-Denmark counting (§ 8), private family
-      placement (§ 9), orphans (§ 10), pensioners under EU regulation 883/2004 (§ 11), refugee exemption
-      (§ 12) and EU coordination (§ 13). Governs the derivation of the case-supplied optjening and residence
-      inputs the § 2 module consumes under its documented contract; encoding it is the named path to moving
-      that input boundary upstream. No encoded formula consumes its values directly.'
-    bearing: § 2 case-supplied optjening/residence input contract
+    reason: 'Bekendtgørelse om børne- og ungeydelsen, issued under §§ 8(1), 12 and 13; all four pages
+      read (2026-08-19/20), chapter-scoped: Kapitel 1 and §§ 14-15 (optjening construction — 30 CPR-days
+      per accrual month, 39/80 employment hours, income-register computation, missing-persons and death-of-holder
+      counting, omberegning) and Kapitel 3 §§ 19-22 and 24 (SKAT-to-Udbetaling Danmark income feeds and
+      the provisional/final reduction calculation and regulation cadence, applied before other setoff)
+      govern the derivation of the case-supplied § 2 and § 8 a inputs under their documented contracts.
+      Kapitel 2 §§ 16-18 (condition waivers for convention-covered persons and the § 18 entitlement bar)
+      and § 23 (no collection of final-regulation debt after the child''s death) BEAR ON ENCODED SURFACES
+      beyond input derivation: the § 2 formula has no coordination waiver/bar input and the § 8 a collectible-residue
+      outputs carry no death guard — both are therefore expressly non-claimed in the certificate scope
+      (convention-covered entitlement; post-death collectibility), with encoding them as the named path
+      to closing the non-claims. Kapitel 4-5 (institution/school reporting, recipient notification duties)
+      are administrative reporting with no bearing on computed outputs.'
+    bearing: § 2 and § 8 a case-supplied input contracts; §§ 16-18 and § 23 drive certificate non-claims
+      (convention entitlement; post-death collection)
   - eli: https://retsinformation.dk/eli/lta/2025/1642
-    status: encoded
-    classification: amendment_encoded
-    reason: LOV 1642's § 1 nr. 1 rounding-divisor change (12 to 24 from 2026-01-01) is encoded as the
-      two-version § 1 parameter in the satser module, citing the amendment act.
-    encoded_by: dk/statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1.yaml
+    status: classified-with-reason
+    classification: amendment_act_partially_encoded
+    reason: 'Amendment act with eleven numbered changes: nr. 1 (the § 1 rounding divisor 12 to 24 from
+      2026-01-01) is encoded as the two-version § 1 parameter in dk/statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1.yaml,
+      citing this act. Nrs. 2-11 all commence in 2026 and post-date the certified period (covered by the
+      post-2025 non-claim): nr. 2 amends § 2, nrs. 3-10 amend the § 4 routing surface (additionally classified
+      entity_not_supported and non-claimed), and nr. 11 amends the excluded § 11 setoff surface.'
   - eli: https://retsinformation.dk/eli/lta/2026/303
     status: excluded-with-reason
     classification: out_of_certified_period
@@ -2084,8 +2092,8 @@ computed:
     supplemental_count: 1
     counts:
       total: 28
-      encoded: 1
-      classified-with-reason: 16
+      encoded: 0
+      classified-with-reason: 17
       excluded-with-reason: 11
       pending: 0
     pending: []
@@ -2098,16 +2106,21 @@ computed:
       in_force: true
       status: classified-with-reason
       classification: input_derivation_rule
-      reason: 'Bekendtgørelse om børne- og ungeydelsen, issued under §§ 8(1), 12 and 13; read in full
-        2026-08-19. Operationalizes § 2''s optjeningsprincip: 30 CPR-registered days aggregate to one
-        accrual month (§ 1), wage earners need 39 employment hours per month and the self-employed 80
-        (§§ 2, 7), with income-register computation rules per era (§§ 3-6), outside-Denmark counting (§
-        8), private family placement (§ 9), orphans (§ 10), pensioners under EU regulation 883/2004 (§
-        11), refugee exemption (§ 12) and EU coordination (§ 13). Governs the derivation of the case-supplied
-        optjening and residence inputs the § 2 module consumes under its documented contract; encoding
-        it is the named path to moving that input boundary upstream. No encoded formula consumes its values
-        directly.'
-      bearing: § 2 case-supplied optjening/residence input contract
+      reason: 'Bekendtgørelse om børne- og ungeydelsen, issued under §§ 8(1), 12 and 13; all four pages
+        read (2026-08-19/20), chapter-scoped: Kapitel 1 and §§ 14-15 (optjening construction — 30 CPR-days
+        per accrual month, 39/80 employment hours, income-register computation, missing-persons and death-of-holder
+        counting, omberegning) and Kapitel 3 §§ 19-22 and 24 (SKAT-to-Udbetaling Danmark income feeds
+        and the provisional/final reduction calculation and regulation cadence, applied before other setoff)
+        govern the derivation of the case-supplied § 2 and § 8 a inputs under their documented contracts.
+        Kapitel 2 §§ 16-18 (condition waivers for convention-covered persons and the § 18 entitlement
+        bar) and § 23 (no collection of final-regulation debt after the child''s death) BEAR ON ENCODED
+        SURFACES beyond input derivation: the § 2 formula has no coordination waiver/bar input and the
+        § 8 a collectible-residue outputs carry no death guard — both are therefore expressly non-claimed
+        in the certificate scope (convention-covered entitlement; post-death collectibility), with encoding
+        them as the named path to closing the non-claims. Kapitel 4-5 (institution/school reporting, recipient
+        notification duties) are administrative reporting with no bearing on computed outputs.'
+      bearing: § 2 and § 8 a case-supplied input contracts; §§ 16-18 and § 23 drive certificate non-claims
+        (convention entitlement; post-death collection)
     - eli: https://retsinformation.dk/eli/mt/1986/148
       relation: basis_for
       title_short: CIR nr 148 af 17/12/1986
@@ -2357,11 +2370,13 @@ computed:
       title_short: LOV nr 1642 af 16/12/2025
       type_document: LOVC
       in_force: true
-      status: encoded
-      classification: amendment_encoded
-      reason: LOV 1642's § 1 nr. 1 rounding-divisor change (12 to 24 from 2026-01-01) is encoded as the
-        two-version § 1 parameter in the satser module, citing the amendment act.
-      encoded_by: dk/statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1.yaml
+      status: classified-with-reason
+      classification: amendment_act_partially_encoded
+      reason: 'Amendment act with eleven numbered changes: nr. 1 (the § 1 rounding divisor 12 to 24 from
+        2026-01-01) is encoded as the two-version § 1 parameter in dk/statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1.yaml,
+        citing this act. Nrs. 2-11 all commence in 2026 and post-date the certified period (covered by
+        the post-2025 non-claim): nr. 2 amends § 2, nrs. 3-10 amend the § 4 routing surface (additionally
+        classified entity_not_supported and non-claimed), and nr. 11 amends the excluded § 11 setoff surface.'
     - eli: https://retsinformation.dk/eli/lta/2026/303
       relation: changed_by
       title_short: LOV nr 303 af 24/02/2026

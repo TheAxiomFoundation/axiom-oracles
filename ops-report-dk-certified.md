@@ -34,7 +34,14 @@ committed instrument-graph snapshot date — the graph refreshes by rerun of
 `scripts/refresh_instrument_graph.py`); the upstream derivation of
 case-supplied inputs that BEK 1563/2013 governs (30-day residence
 aggregation, 39/80-hour employment thresholds — dispositioned as an
-input-derivation rule, not encoded); net cash after § 11 setoff; any § 4 entity/routing surface (classified
+input-derivation rule, not encoded); entitlement for persons covered by a
+bilateral social-security convention (BEK 1563 §§ 16-18 waive the tax and
+residence conditions and § 18 bars entitlement for other-state coverage —
+neither expressible through the encoded § 2 inputs); collectibility of
+§ 8 a residue amounts after the child's death (BEK 1563 § 23 bars
+collection of final-regulation debt on death — the encoded residue outputs
+are pre-collection arithmetic with no death guard, parallel to the § 11
+setoff non-claim); net cash after § 11 setoff; any § 4 entity/routing surface (classified
 `entity_not_supported`); effects under other benefit schemes; application in
 the Faroe Islands or Greenland; or post-2025 law, including LOV 303/2026's
 § 4 e changes and the new § 4 f.

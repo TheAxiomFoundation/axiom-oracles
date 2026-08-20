@@ -195,8 +195,8 @@ def test_dk_all_four_computed_premises_flow_to_certificate() -> None:
     assert closed_frontier["complete"] is True
     assert closed_frontier["counts"] == {
         "total": 28,
-        "encoded": 1,
-        "classified-with-reason": 16,
+        "encoded": 0,
+        "classified-with-reason": 17,
         "excluded-with-reason": 11,
         "pending": 0,
     }

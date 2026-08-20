@@ -645,6 +645,30 @@ _INSTRUMENT_ROW_KEYS = (
 )
 
 
+# Semantic hash of the embedded graph: recomputable from the artifact
+# alone, so hermetic validation binds the rows to the recorded sha (a
+# graph edit with a stale sha is an error, not silent drift).
+def _instrument_graph_sha(
+    act_eli: Any,
+    retrieved_at: Any,
+    instruments: Sequence[Mapping[str, Any]],
+) -> str:
+    canonical = json.dumps(
+        {
+            "act_eli": act_eli,
+            "retrieved_at": retrieved_at,
+            "instruments": [
+                {key: row.get(key) for key in _INSTRUMENT_ROW_KEYS}
+                for row in instruments
+            ],
+        },
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    )
+    return _sha256_bytes(canonical.encode())
+
+
 def _read_instrument_graph(path: Path = INSTRUMENT_GRAPH_PATH) -> dict[str, Any]:
     """Load the committed subordinate-instrument snapshot (hermetic).
 
@@ -681,7 +705,9 @@ def _read_instrument_graph(path: Path = INSTRUMENT_GRAPH_PATH) -> dict[str, Any]
         snapshot_path = path.name
     return {
         "snapshot_path": snapshot_path,
-        "snapshot_sha256": _sha256_bytes(data),
+        "snapshot_sha256": _instrument_graph_sha(
+            snapshot.get("act_eli"), snapshot.get("retrieved_at"), rows
+        ),
         "act_eli": snapshot.get("act_eli"),
         "retrieved_at": snapshot.get("retrieved_at"),
         "instruments": rows,
@@ -1231,6 +1257,20 @@ def _generated_fact_errors(generated: Any) -> list[str]:
             errors.append("instrument_graph has unexpected or missing keys")
         if not _HEX_SHA256.fullmatch(str(graph.get("snapshot_sha256", ""))):
             errors.append("instrument_graph.snapshot_sha256 must be a full sha256")
+        else:
+            embedded_rows = [
+                row
+                for row in (graph.get("instruments") or [])
+                if isinstance(row, Mapping)
+            ]
+            expected_sha = _instrument_graph_sha(
+                graph.get("act_eli"), graph.get("retrieved_at"), embedded_rows
+            )
+            if graph.get("snapshot_sha256") != expected_sha:
+                errors.append(
+                    "instrument_graph.snapshot_sha256 does not match the "
+                    "embedded graph content (edited rows or stale sha)"
+                )
         if graph.get("act_eli") != INSTRUMENT_ACT_ELI:
             errors.append(f"instrument_graph.act_eli must be {INSTRUMENT_ACT_ELI}")
         retrieved = graph.get("retrieved_at")
