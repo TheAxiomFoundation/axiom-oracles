@@ -32,7 +32,7 @@ satisfy a criterion.
 ## Candidate surface
 
 Current main did not land a generic node-candidate producer or node index.
-`conformance/node-candidates.yaml` is therefore a small, explicit adapter. It
+`node-candidates.yaml` is therefore a small, explicit adapter. It
 selects only exact public/executable output nodes and names the membership
 artifact and required executable tier for each program.
 
@@ -105,6 +105,16 @@ Tier labels are assigned only after `scripts/certify.py` has invoked the named
 producer validator. A schema string, compiled hash, `target/release` path, or
 legacy attestation cannot manufacture a tier.
 
+Current producer-specific `axiom_oracles.executable_reproduction.v1` receipts
+remain supported. The pending #461 shared envelope
+`axiom_oracles.executable_receipt.v2` is recognized from its explicit `tier`
+only after the computed certificate verdict has validated and agreed with it.
+The older public release-only #461 v1 shape had no explicit tier or `contract`
+field. It is recognized only when the recomputed certificate verdict points at
+the producer-validated v1 receipt, the registry carries that producer's
+manifest/output-pin shape, and the program is on the hard release-tier surface
+(currently CO). It is not inferred from receipt prose.
+
 DK's `axiom_oracles.executable_reproduction.v1` receipt is labeled
 `source_reproduction`. It is program-level evidence: its witness output roots
 do not imply that every individual graph node was itself executed. Exact graph
@@ -116,13 +126,18 @@ reproduction offered for CO would still refuse with
 `executable.tier_insufficient`; source reproduction never satisfies a release
 requirement.
 
-A `release_receipt` may satisfy a source-level requirement, but not the other
-way around.
+The required tier is bound to `scripts/certify.py` when the registry carries
+`required_tier`, and the CO published surface is hard-required to remain
+`release_receipt` before #461 lands. Tier equality is exact: neither tier
+silently substitutes for the other. A release receipt must also name the same
+artifact SHA used for exact program-graph membership; a receipt for artifact A
+cannot certify a node read from artifact B.
 
 ### Provision rooting
 
-`provision_rooted` remains computed-or-refused. The accepted node record must
-carry both:
+`provision_rooted` remains computed-or-refused. Engine #136's actual contract
+is a validated `metadata.nodes` catalog whose exact node entry carries, among
+other catalog fields:
 
 ```yaml
 provenance: provision_backed
@@ -130,17 +145,20 @@ corpus_citation_path: <non-empty exact path>
 ```
 
 Neither the DK closure/receipt artifacts nor the CO compiled program carry the
-node-level engine provenance annotation. The generator does not substitute a
-module source path, a comparison concept, a program certificate, or a compiled
-artifact hash. It emits:
+node-level catalog, and no landed validator authenticates it. This version
+therefore refuses unconditionally, even if raw `derived[]` input is forged to
+contain those two strings. The generator does not substitute a module source
+path, a comparison concept, a program certificate, or a compiled artifact
+hash. It emits:
 
 ```text
 code: provision_rooted.producer_missing
 producer: TheAxiomFoundation/axiom-rules-engine#136
 ```
 
-If a provenance field exists but is not `provision_backed` with a citation, the
-refusal is `provision_rooted.unverified`.
+When #136 lands, a protocol change must consume and validate the exact
+`metadata.nodes` catalog before this gate can accept its node entry; the forged
+annotation mutant must remain red.
 
 ## Generated artifacts
 
@@ -217,8 +235,12 @@ The generator writes neither output until every input producer has validated.
 
 ## Downstream mirror parity
 
-The exact axiom-api `scripts/mirror-certified-nodes.mjs` is exercised against
-the committed YAML twice. The test checks that:
+An exact byte-for-byte snapshot of axiom-api
+`scripts/mirror-certified-nodes.mjs` (SHA-256
+`9d83931c0ab69348856a64b43ec40884ce2e8a4ca0bce6b8bf8032b05c6978ae`)
+is exercised against the committed YAML twice, including in an isolated
+checkout. When the sibling axiom-api checkout is present, the test requires its
+script bytes to equal that snapshot. The test checks that:
 
 - the source bytes are unchanged;
 - the ledger is `axiom-certified-ledger/1`;
@@ -246,8 +268,11 @@ loader at the sidecar (or copy it to that data path).
    with node-ID parity and no source mutation.
 
 Additional checks pin the five exact graph members, both executable tier
-labels, CO's real computed closure counts, rejection of comparison aliases,
-sidecar/API queue compatibility, and committed-output drift.
+labels and the real v2 discriminator, registry-bound exact tier policy,
+release/membership artifact-hash equality, a forged provenance annotation,
+program-bound unique membership, CO's real computed closure counts, rejection
+of comparison aliases, sidecar/API queue compatibility, and committed-output
+drift.
 
 ## Where reality diverged from the old contract
 
@@ -261,7 +286,7 @@ important differences are:
 | Closure would be per-node over a dependency graph. | DK exposes a closure ledger with module/rule facts. CO v1 closure is program-wide across three universes and remains open. |
 | Conformance could be read from a flat comparisons file. | `scripts/certify.py` now consumes strict bound reports, chunk evidence, dispositions, and reference/reality oracle types. |
 | Exercise required the speculative dimensions contract. | The landed census and certificate define audited bridge, per-case evidence, reconciliation, and observed variation semantics. |
-| Executable meant one release-only node adapter with golden binding maps. | Main first landed multiple program-scoped source-reproduction families. Release receipt authentication grew into a separate, still-pending #461 producer. |
+| Executable meant one release-only node adapter with golden binding maps. | Main first landed multiple program-scoped source-reproduction families. Release receipt authentication grew into a separate, still-pending #461 producer with a shared v2 tier discriminator. |
 | Receipt witness outputs enumerated node coverage. | Source receipts prove a program replay, not per-node execution. Program-subgraph membership is established separately. |
 | Provision annotations were expected from engine #115. | The current missing producer is engine #136; no artifact carries its node annotation yet. |
 | A run manifest and workflow-governance document authorized certification. | Certification is deterministic and computed-only. Producer validation and committed-byte drift checks replace the speculative governance ceremony. |
@@ -271,5 +296,6 @@ important differences are:
 
 CO's report, closure universes, local compiled artifact, and published release
 also pin different vintages. The current false exercise, open closure, and
-missing release receipt already prevent their conjunction; no cross-vintage
-certification is inferred.
+missing release receipt already prevent their conjunction; the executable gate
+additionally requires the future release artifact hash to equal the membership
+artifact hash, so no cross-vintage certification can be inferred later.

@@ -19,6 +19,7 @@ Modes::
 from __future__ import annotations
 
 import argparse
+import copy
 import hashlib
 import importlib.util
 import json
@@ -58,9 +59,14 @@ RELEASE_RECEIPT_PRODUCERS = {
     "axiom_oracles/executable_receipt.py",
     "scripts/produce_executable_receipt.py",
 }
+SHARED_EXECUTABLE_RECEIPT_SCHEMA = "axiom_oracles.executable_receipt.v2"
+RELEASE_TIER_PROGRAMS = {"us-co/snap"}
+COMPILED_PROGRAM_ARTIFACTS = {
+    "us-co/snap": "axiom_oracles/adapters/axiom/artifacts/co-snap.compiled.json",
+}
 PROVENANCE_PRODUCER = "TheAxiomFoundation/axiom-rules-engine#136"
 RELEASE_RECEIPT_PRODUCER = "TheAxiomFoundation/axiom-oracles#461"
-DEFAULT_CANDIDATES = Path("conformance/node-candidates.yaml")
+DEFAULT_CANDIDATES = Path("node-candidates.yaml")
 DEFAULT_LEDGER = Path("certified-nodes.yaml")
 DEFAULT_REFUSALS = Path("certified-node-refusals.json")
 _DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
@@ -421,18 +427,74 @@ def _co_closure_criterion(
     )
 
 
-def recognize_executable_tier(producer: object, schema: object) -> str | None:
-    """Classify only named, producer-validated executable receipt families."""
+def recognize_executable_tier(
+    producer: object,
+    schema: object,
+    *,
+    declared_tier: object = None,
+    contract: object = None,
+) -> str | None:
+    """Classify a receipt only after its program certificate validated it.
+
+    Current main uses producer-specific source-reproduction v1 documents. The
+    pending #461 integration uses a shared v2 envelope whose explicit ``tier``
+    discriminator is copied into the computed certificate verdict. The older
+    #461 release-only branch used receipt v1 plus a certificate verdict that
+    points at the producer-validated receipt.
+    """
+
+    if schema == SHARED_EXECUTABLE_RECEIPT_SCHEMA:
+        return str(declared_tier) if declared_tier in EXECUTABLE_TIERS else None
 
     if producer in SOURCE_REPRODUCTION_PRODUCERS and isinstance(schema, str):
         if schema.startswith("axiom_oracles.executable_reproduction.v"):
             return "source_reproduction"
     if (
-        producer in RELEASE_RECEIPT_PRODUCERS
-        and schema == "axiom_oracles.executable_receipt.v1"
-    ):
+        producer in RELEASE_RECEIPT_PRODUCERS or contract == "release_receipt"
+    ) and schema == "axiom_oracles.executable_receipt.v1":
         return "release_receipt"
     return None
+
+
+def _registry_executable_config(spec: Mapping[str, Any]) -> dict[str, Any] | None:
+    computed = (spec.get("computed") or {}).get("executable")
+    if isinstance(computed, dict):
+        return computed
+    # The public v1 #461 branch predates the computed namespace.
+    legacy = spec.get("executable")
+    return legacy if isinstance(legacy, dict) else None
+
+
+def resolve_required_executable_tier(
+    program: str,
+    candidate_tier: object,
+    spec: Mapping[str, Any],
+) -> str:
+    """Bind candidate policy to registry policy and hard release surfaces."""
+
+    if candidate_tier not in EXECUTABLE_TIERS:
+        raise CertificationError(
+            f"{program} candidate executable tier must be one of {EXECUTABLE_TIERS}"
+        )
+    config = _registry_executable_config(spec) or {}
+    registered = config.get("required_tier")
+    if registered is not None and registered not in EXECUTABLE_TIERS:
+        raise CertificationError(
+            f"{program} registry has unknown executable tier {registered!r}"
+        )
+    expected = registered
+    if config.get("contract") == "release_receipt" or program in RELEASE_TIER_PROGRAMS:
+        if expected not in (None, "release_receipt"):
+            raise CertificationError(
+                f"{program} release contract conflicts with registry tier {expected!r}"
+            )
+        expected = "release_receipt"
+    if expected is not None and candidate_tier != expected:
+        raise CertificationError(
+            f"{program} candidate tier {candidate_tier!r} disagrees with "
+            f"registry-required {expected!r}"
+        )
+    return str(expected or candidate_tier)
 
 
 def _offered_executable_tier(
@@ -443,7 +505,7 @@ def _offered_executable_tier(
 ) -> tuple[str | None, dict[str, Any]]:
     verdicts = certificate.get("verdicts")
     verdict = verdicts.get("executable") if isinstance(verdicts, dict) else None
-    computed = (spec.get("computed") or {}).get("executable")
+    computed = _registry_executable_config(spec)
     evidence: dict[str, Any] = {
         "certificate_mode": verdict.get("mode") if isinstance(verdict, dict) else None,
         "certificate_value": verdict.get("value")
@@ -461,25 +523,99 @@ def _offered_executable_tier(
         return None, evidence
     if not isinstance(computed, dict):
         return None, evidence
-    artifact_ref = computed.get("artifact")
+    # The public release-only #461 v1 shape predates both ``computed`` and an
+    # explicit tier/contract field. Its recomputed verdict names the validated
+    # receipt, while the registry names the manifest and pinned outputs. Only a
+    # hard release-tier program may use that compatibility path.
+    legacy_v1_contract = bool(
+        program in RELEASE_TIER_PROGRAMS
+        and _nonempty(computed.get("manifest"))
+        and isinstance(computed.get("expected_outputs"), dict)
+        and _nonempty(verdict.get("receipt"))
+        and not _nonempty(computed.get("artifact"))
+    )
+    artifact_ref = computed.get("artifact") or (
+        verdict.get("receipt") if legacy_v1_contract else None
+    )
     artifact_path = _repo_path(
         repo_root,
         artifact_ref,
         label=f"{program} executable artifact",
     )
     document = _read_json(artifact_path, label=str(artifact_ref))
+    verdict_receipt_sha256 = verdict.get("receipt_sha256")
+    if verdict_receipt_sha256 is not None and verdict_receipt_sha256 != _sha256(
+        artifact_path
+    ):
+        raise CertificationError(
+            f"{program} executable receipt hash disagrees with its certificate"
+        )
     producer = computed.get("producer")
-    tier = recognize_executable_tier(producer, document.get("schema"))
+    schema = document.get("schema")
+    document_tier = document.get("tier")
+    verdict_tier = verdict.get("tier")
+    if verdict_tier is not None and verdict_tier not in EXECUTABLE_TIERS:
+        raise CertificationError(
+            f"{program} computed executable verdict has unknown tier {verdict_tier!r}"
+        )
+    tier = recognize_executable_tier(
+        producer,
+        schema,
+        declared_tier=document_tier,
+        contract=(
+            computed.get("contract")
+            or ("release_receipt" if legacy_v1_contract else None)
+        ),
+    )
+    if verdict_tier is not None:
+        if tier is not None and verdict_tier != tier:
+            raise CertificationError(
+                f"{program} executable receipt tier {tier!r} disagrees with "
+                f"certificate tier {verdict_tier!r}"
+            )
+        tier = str(verdict_tier)
+    if schema == SHARED_EXECUTABLE_RECEIPT_SCHEMA and tier != document_tier:
+        raise CertificationError(
+            f"{program} shared executable receipt lacks an agreed explicit tier"
+        )
+    released_artifact = document.get("artifact")
+    receipt_artifact_sha256 = (
+        released_artifact.get("sha256") if isinstance(released_artifact, dict) else None
+    )
+    verdict_evidence = verdict.get("evidence")
+    validated_artifact = (
+        verdict_evidence.get("artifact") if isinstance(verdict_evidence, dict) else None
+    )
+    validated_artifact_sha256 = (
+        validated_artifact.get("sha256")
+        if isinstance(validated_artifact, dict)
+        else None
+    )
+    if (
+        _nonempty(receipt_artifact_sha256)
+        and _nonempty(validated_artifact_sha256)
+        and receipt_artifact_sha256 != validated_artifact_sha256
+    ):
+        raise CertificationError(
+            f"{program} executable artifact hash disagrees with its certificate"
+        )
+    released_artifact_sha256 = validated_artifact_sha256 or receipt_artifact_sha256
     evidence.update(
         {
             "artifact": str(artifact_ref),
             "artifact_sha256": _sha256(artifact_path),
             "producer": producer,
-            "schema": document.get("schema"),
+            "schema": schema,
+            "receipt_declared_tier": document_tier,
+            "certificate_declared_tier": verdict_tier,
+            "registry_required_tier": computed.get("required_tier"),
+            "registry_contract": computed.get("contract"),
+            "legacy_v1_release_contract": legacy_v1_contract,
             "recognized_tier": tier,
             "verification": "program_certificate_producer_validation",
             "rulespec_sha": verdict.get("rulespec_sha"),
             "engine_binary_sha256": verdict.get("engine_binary_sha256"),
+            "released_artifact_sha256": released_artifact_sha256,
         }
     )
     return tier, evidence
@@ -490,11 +626,7 @@ def assess_executable_tier(
     offered_tier: str | None,
     evidence: Mapping[str, Any] | None = None,
 ) -> tuple[dict[str, Any], dict[str, Any] | None]:
-    """Apply the explicit executable-tier rule.
-
-    A release receipt may satisfy a source-level requirement, but source
-    reproduction never satisfies a release-tier requirement.
-    """
+    """Apply exact executable-tier equality from the shared #461 contract."""
 
     if required_tier not in EXECUTABLE_TIERS:
         raise CertificationError(f"unknown required executable tier {required_tier!r}")
@@ -505,9 +637,7 @@ def assess_executable_tier(
         "required_tier": required_tier,
         "offered_tier": offered_tier,
     }
-    holds = offered_tier == required_tier or (
-        required_tier == "source_reproduction" and offered_tier == "release_receipt"
-    )
+    holds = offered_tier == required_tier
     if holds:
         return _criterion(True, detail), None
     if required_tier == "release_receipt" and offered_tier == "source_reproduction":
@@ -515,6 +645,13 @@ def assess_executable_tier(
             "executable",
             "executable.tier_insufficient",
             "source_reproduction was offered, but this published artifact requires a release_receipt",
+            producer=RELEASE_RECEIPT_PRODUCER,
+        )
+    if offered_tier is not None:
+        return _criterion(False, detail), _refusal(
+            "executable",
+            "executable.tier_mismatch",
+            f"{offered_tier} was offered, but the registry requires {required_tier}",
             producer=RELEASE_RECEIPT_PRODUCER,
         )
     if required_tier == "release_receipt":
@@ -532,10 +669,44 @@ def assess_executable_tier(
     )
 
 
+def bind_release_artifact(
+    executable: Mapping[str, Any],
+    membership: Mapping[str, Any],
+) -> tuple[dict[str, Any], dict[str, Any] | None]:
+    """Bind a release receipt to the exact compiled graph used for membership."""
+
+    result = copy.deepcopy(dict(executable))
+    evidence = result.get("evidence")
+    if not isinstance(evidence, dict):
+        raise CertificationError("executable criterion evidence must be a mapping")
+    if not result.get("holds") or evidence.get("offered_tier") != "release_receipt":
+        return result, None
+    released_sha = evidence.get("released_artifact_sha256")
+    membership_sha = membership.get("artifact_sha256")
+    evidence["membership_artifact_sha256"] = membership_sha
+    if not _nonempty(released_sha) or not _nonempty(membership_sha):
+        result["holds"] = False
+        return result, _refusal(
+            "executable",
+            "executable.release_artifact_unbound",
+            "the release receipt does not bind the compiled program used for node membership",
+            producer=RELEASE_RECEIPT_PRODUCER,
+        )
+    if released_sha != membership_sha:
+        result["holds"] = False
+        return result, _refusal(
+            "executable",
+            "executable.release_artifact_mismatch",
+            "the release receipt artifact hash differs from the membership graph artifact hash",
+            producer=RELEASE_RECEIPT_PRODUCER,
+        )
+    return result, None
+
+
 def assess_provision_rooted(
     node_record: Mapping[str, Any] | None,
 ) -> tuple[dict[str, Any], dict[str, Any] | None]:
-    """Accept only the node-level annotation engine #136 is meant to emit."""
+    """Refuse annotations until the engine #136 catalog producer is validated."""
 
     record = dict(node_record or {})
     provenance = record.get("provenance")
@@ -545,22 +716,14 @@ def assess_provision_rooted(
         "producer": PROVENANCE_PRODUCER,
         "observed_provenance": provenance,
         "corpus_citation_path": citation,
+        "producer_validated": False,
     }
-    if provenance is None:
-        return _criterion(False, evidence), _refusal(
-            "provision_rooted",
-            "provision_rooted.producer_missing",
-            "the compiled node carries no engine #136 provision provenance annotation",
-            producer=PROVENANCE_PRODUCER,
-        )
-    if provenance != "provision_backed" or not _nonempty(citation):
-        return _criterion(False, evidence), _refusal(
-            "provision_rooted",
-            "provision_rooted.unverified",
-            "the node is not provision_backed with a non-empty corpus citation path",
-            producer=PROVENANCE_PRODUCER,
-        )
-    return _criterion(True, evidence), None
+    return _criterion(False, evidence), _refusal(
+        "provision_rooted",
+        "provision_rooted.producer_missing",
+        "no validated engine #136 metadata.nodes provenance catalog is available",
+        producer=PROVENANCE_PRODUCER,
+    )
 
 
 def _membership(
@@ -583,6 +746,13 @@ def _membership(
     }
 
     if adapter == "compiled_program_node":
+        expected_artifact = COMPILED_PROGRAM_ARTIFACTS.get(program)
+        if expected_artifact is None or artifact_ref != expected_artifact:
+            raise CertificationError(
+                f"{program} has no gate-bound compiled membership artifact "
+                f"matching {artifact_ref!r}"
+            )
+        base_evidence["program_binding"] = expected_artifact
         artifact = _read_json(artifact_path, label=str(artifact_ref))
         raw_program = artifact.get("program")
         if not isinstance(raw_program, dict):
@@ -714,7 +884,11 @@ def _program_contexts(
         offered_tier, executable_evidence = _offered_executable_tier(
             repo_root, program, specs[program], certificate
         )
-        required_tier = config["executable"]["required_tier"]
+        required_tier = resolve_required_executable_tier(
+            program,
+            config["executable"]["required_tier"],
+            specs[program],
+        )
         executable, executable_refusal = assess_executable_tier(
             required_tier,
             offered_tier,
@@ -830,12 +1004,31 @@ def evaluate_candidates(
         node = str(candidate["node"])
         program = str(candidate["program"])
         context = contexts[program]
-        member, membership_evidence, node_record, membership_refusal = _membership(
-            repo_root,
-            program,
-            node,
-            context["membership"],
+        attempts = {
+            owner: _membership(
+                repo_root,
+                owner,
+                node,
+                owner_context["membership"],
+            )
+            for owner, owner_context in contexts.items()
+        }
+        matched_programs = sorted(
+            owner for owner, attempt in attempts.items() if attempt[0]
         )
+        member, membership_evidence, node_record, membership_refusal = attempts[program]
+        membership_evidence = {
+            **membership_evidence,
+            "matched_programs": matched_programs,
+        }
+        if matched_programs != [program]:
+            member = False
+            node_record = None
+            membership_refusal = _refusal(
+                "program_subgraph",
+                "program_subgraph.membership_ambiguous",
+                f"{node} resolved to {matched_programs}; exactly {program!r} is required",
+            )
         criteria: dict[str, dict[str, Any]] = {}
         refusals: list[dict[str, Any]] = []
         if member:
@@ -844,10 +1037,17 @@ def evaluate_candidates(
             if provision_refusal:
                 refusals.append(provision_refusal)
             for name in CRITERIA[1:]:
-                criteria[name] = context["criteria"][name]
+                criteria[name] = copy.deepcopy(context["criteria"][name])
                 refusal = context["refusals"][name]
                 if refusal:
                     refusals.append(dict(refusal))
+            executable, binding_refusal = bind_release_artifact(
+                criteria["executable"],
+                membership_evidence,
+            )
+            criteria["executable"] = executable
+            if binding_refusal:
+                refusals.append(binding_refusal)
         else:
             unavailable = {
                 "holds": False,
