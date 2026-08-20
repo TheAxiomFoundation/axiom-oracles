@@ -1,0 +1,93 @@
+{
+  "blockers": [],
+  "comparison_record": {
+    "path": "comparisons/de-worker-dual-oracle/unified-record.json",
+    "sha256": "da4d421f133758d0ad0f2ea1006826efe8a091ddeb8fcf96709a944415e880cc"
+  },
+  "engine": {
+    "archive_sha256": "76565685230d64edf33e4205f01f77c57ef341ba2d3cf75dc967fc12c883f1f4",
+    "asset": "axiom-rules-engine-x86_64-unknown-linux-gnu.tar.xz",
+    "binary_in_archive": "axiom-rules-engine-x86_64-unknown-linux-gnu/axiom-rules-engine",
+    "commit": "2c0e1edac0dccc355297eb9663e0aa0c4e97e5b4",
+    "release": "v0.2.2",
+    "repository": "TheAxiomFoundation/axiom-rules-engine",
+    "target": "x86_64-unknown-linux-gnu"
+  },
+  "expected_results_policy": {
+    "note": "The EUROMOD x GETTSIM aggregate constrains population-level and household-total conservation, but it contains no stored per-case matched outputs and never supplies replay expected-result rows.",
+    "source": "exact common Axiom execution rows from both required leg records",
+    "source_aggregate_allowed": false,
+    "verification": "fresh_replay_from_embedded_release_archive"
+  },
+  "invalid_inputs": [],
+  "manifest": {
+    "path": "conformance/executable/de-kindergeld-manifest.json",
+    "sha256": "5964df57b89a9d4d14592c062f23244d6ab51065ac116af142a5cc3ce4268e13"
+  },
+  "missing_inputs": [],
+  "mode": "computed",
+  "pending_inputs": [],
+  "period": "2025",
+  "population": {
+    "case_count": 13,
+    "id": "de-worker-dual-oracle-13-households",
+    "sha256": "db63064fed6fa91fb3a34096b0997fed2e11ac52db2b22516e2e00da2aace951"
+  },
+  "program": "de/kindergeld",
+  "required_inputs": [
+    {
+      "expected_results_sha256": "b25b52e3afd08dac883b86ca724bf298e42151488656e5117c236f7b60621b05",
+      "id": "axiom-euromod",
+      "path": "comparisons/de-worker-dual-oracle/axiom-euromod.json",
+      "reason": "exact unified Axiom leg and replay fixture validated",
+      "request_sha256": "6294ead2a324cc39f2755ea1b409c81f557e288ae817efe059246b36470ade0e",
+      "sha256": "dca8dd5427db03d7da1fe6f310c35b7b52f6621a2e2ebaab5700d277e20c3b57",
+      "state": "valid"
+    },
+    {
+      "expected_results_sha256": "b25b52e3afd08dac883b86ca724bf298e42151488656e5117c236f7b60621b05",
+      "id": "axiom-gettsim",
+      "path": "comparisons/de-worker-dual-oracle/axiom-gettsim.json",
+      "reason": "exact unified Axiom leg and replay fixture validated",
+      "request_sha256": "6294ead2a324cc39f2755ea1b409c81f557e288ae817efe059246b36470ade0e",
+      "sha256": "1327828a6812cb9f463d5bddbe5864e7812cb5e6d7eae53e98f3f75a80f03107",
+      "state": "valid"
+    },
+    {
+      "checkout_observation": {
+        "claim_mode": "attested",
+        "commit": "d83ba3db30e2f63376aacf822d116687589b8564",
+        "repository": "TheAxiomFoundation/rulespec-de",
+        "tree": "1e75a045e32100544f057ffe335065c1ef99c1bc"
+      },
+      "encoding_manifest_payload_sha256": "9a181bf76934891d909997a6a61b0d2ee9c6a46b7710906e76b72599f48f23de",
+      "encoding_manifest_source_file_sha256": "296e0f761edd2fd70cf622890fba5f6c0147bc51233df757afcb90e1e9a53a0a",
+      "id": "signed-rulespec-estg-66-2025",
+      "module_sha256": "7c1545d20f21bcdaba0abd7b8af324b3747148f84d7593e4f358ec726a57396b",
+      "path": "conformance/executable/de-kindergeld-signed-rulespec.json",
+      "reason": "module bytes, corpus binding, and Ed25519 signature validated",
+      "sha256": "4068585c4d92e2ad1068941fb4dc7383df21cfda01880ca8a2a8505c6b457c00",
+      "state": "valid",
+      "trusted_key_id": "sha256:24a78725a23b1c83cfc38bdc22f75401d8008e7a8477796b55179d1fc79c4d9a"
+    },
+    {
+      "fresh_binary_sha256": "d05c521f6fede3491856f22a4b624b4d2ad22685271c8f7f619d811f34afbb21",
+      "fresh_observed_results_sha256": "b25b52e3afd08dac883b86ca724bf298e42151488656e5117c236f7b60621b05",
+      "id": "release-binary-replay-receipt",
+      "path": "conformance/executable/de-kindergeld-replay-receipt.json",
+      "reason": "verifier freshly reran pinned release bytes and reproduced exact Axiom-leg result rows",
+      "sha256": "911eec5de8c96e30f6fd28801b850a72d9b05ac90b84acaa527b74f6af87ae5f",
+      "state": "valid",
+      "verification_mode": "fresh_replay_from_embedded_release_archive"
+    }
+  ],
+  "schema": "axiom_oracles.de_executable_status.v1",
+  "state": "computed_pass",
+  "subgraph": {
+    "root_nodes": [
+      "de:statutes/estg/66#monthly_kindergeld_per_child"
+    ],
+    "scope": "amount"
+  },
+  "value": true
+}

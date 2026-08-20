@@ -13,6 +13,7 @@ import csv
 import fcntl
 import fnmatch
 import hashlib
+import importlib.util
 import json
 import os
 import shutil
@@ -558,6 +559,12 @@ def main() -> int:
                 # filename rather than crashing --list.
                 print(f"{path.stem:24s}  (non-registry config)")
                 continue
+            if config["name"] != path.stem:
+                raise SystemExit(
+                    f"comparison config {path.name!r} declares name "
+                    f"{config['name']!r}; expected {path.stem!r} to match its "
+                    "registry selector"
+                )
             print(f"{config['name']:24s}  {config.get('title', '')}")
         return 0
 
@@ -602,6 +609,13 @@ def main() -> int:
     print(f"Running {config['name']}: {config.get('title', config['name'])}")
     try:
         runner_fn(config["runner"], staging)
+        canonical_record = _canonical_record_path(config)
+        producer_native_canonical = (
+            staging.read_bytes()
+            if canonical_record is not None
+            and runner_type == "de-axiom-oracle-compare"
+            else None
+        )
 
         # Provenance (O2): stamp what produced this report — rulespec repos +
         # SHAs, engine identity, oracle identity, dataset identity, run kind —
@@ -620,6 +634,7 @@ def main() -> int:
                 runner_type == "axiom-oracles-compare"
                 and "policyengine" in compared_engines
             ),
+            preserve_runner_provenance=(runner_type == "de-axiom-oracle-compare"),
         )
         dashboard_target = config.get("dashboard", {}).get("filename")
         adapted = None
@@ -670,6 +685,14 @@ def main() -> int:
             else:
                 os.replace(staging, output)
                 print(f"Wrote: {output}")
+            if canonical_record is not None:
+                if producer_native_canonical is not None:
+                    _write_canonical_record_bytes(
+                        producer_native_canonical, canonical_record
+                    )
+                else:
+                    _write_canonical_record(output, canonical_record)
+                print(f"Wrote canonical record: {canonical_record}")
             if dashboard_target and adapted is not None:
                 _write_dashboard_report(
                     adapted,
@@ -861,6 +884,7 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
         "axiom-encode-snap-ecps-compare",
         "axiom-encode-tax-ecps-compare",
         "axiom-oracles-compare",
+        "de-axiom-oracle-compare",
     ):
         rulespecs = _complete_rulespecs_from_affected_map(config, runner, rulespecs)
     # A skip-capable runner that re-emitted the committed report never
@@ -1012,6 +1036,22 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
                 "gettsim_policy_date", "2025-06-30"
             ),
         }
+    elif runner_type == "de-axiom-oracle-compare":
+        oracle_id = str(params.get("oracle", ""))
+        if oracle_id == "euromod":
+            oracle = {
+                "name": "euromod",
+                "euromod_release": "J2.0+",
+                "euromod_country": "DE",
+                "euromod_system": "DE_2025",
+                "euromod_dataset": "DE_2024_b1_2015_03_e2",
+            }
+        elif oracle_id == "gettsim":
+            oracle = {
+                "name": "gettsim",
+                "gettsim_version": "1.2.1",
+                "gettsim_policy_date": "2025-06-30",
+            }
     elif runner_type == "snap-qc-compare":
         # The USDA SNAP QC public-use file is the oracle; its identity is the
         # pinned posting for the fiscal year (immutable, sha256-verified by the
@@ -1073,6 +1113,7 @@ def _stamp_report_provenance(
     provenance: dict,
     *,
     require_engine_versions: bool = False,
+    preserve_runner_provenance: bool = False,
 ) -> None:
     """Add ``provenance`` to the reports/ JSON, preserving the file's own format.
 
@@ -1088,7 +1129,23 @@ def _stamp_report_provenance(
         return
     if not isinstance(data, dict):
         return
-    data["provenance"] = provenance
+    existing_provenance = data.get("provenance")
+    if preserve_runner_provenance and isinstance(existing_provenance, dict):
+        # DE's unified pair record carries the evidence-producing execution
+        # receipt in this block.  Keep it while adding the generic affected-
+        # rerun provenance (rulespec pin, engine, oracle, dataset).  Other
+        # runners retain the historical replace behavior so stale producer
+        # metadata cannot survive an ordinary rerun accidentally.
+        data["provenance"] = {
+            **provenance,
+            **existing_provenance,
+            "registry_run": {
+                "generated_by": provenance.get("generated_by"),
+                "generated_at": provenance.get("generated_at"),
+            },
+        }
+    else:
+        data["provenance"] = provenance
     engines = data.get("engines")
     if require_engine_versions and not isinstance(engines, dict):
         raise SystemExit(
@@ -3829,6 +3886,26 @@ def _run_us_tariff_schedule(runner: dict, output: Path) -> None:
     )
     shutil.copyfile(REPO_ROOT / "conformance/detail/us-tariff-schedule.json", output)
 
+def _run_de_axiom_oracle_compare(runner: dict, output: Path) -> None:
+    """Build one pinned DE Axiom↔oracle unified tuple record.
+
+    The producer owns exact-ref inspection and its pre-signing pending record;
+    keeping this registry wrapper thin makes the affected-rerun dispatch name
+    the same callable developers run locally.  The private verified pin is
+    stamped only after that producer accepts the configured commit/tree.
+    """
+
+    module_path = REPO_ROOT / "scripts" / "de_axiom_legs.py"
+    spec = importlib.util.spec_from_file_location("_de_axiom_legs_runner", module_path)
+    if spec is None or spec.loader is None:
+        raise SystemExit("cannot load scripts/de_axiom_legs.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    module.run_registered_leg(runner, output)
+    params = runner.get("parameters") or {}
+    pin = params.get("rulespec_upstream_sha")
+    if pin:
+        params[_VERIFIED_RULESPEC_UPSTREAM_SHA] = str(pin)
 
 RUNNERS = {
     "axiom-encode-snap-ecps-compare": _run_axiom_encode_snap_ecps_compare,
@@ -3838,6 +3915,7 @@ RUNNERS = {
     "euromod-synthetic-compare": _run_euromod_synthetic_compare,
     "federal-tax-liability-grid": _run_federal_tax_liability_grid,
     "gettsim-synthetic-compare": _run_gettsim_synthetic_compare,
+    "de-axiom-oracle-compare": _run_de_axiom_oracle_compare,
     "snap-abawd-boundary-grid": _run_snap_abawd_boundary_grid,
     "snap-qc-compare": _run_snap_qc_compare,
     "spsm-ca-compare": _run_spsm_ca_compare,
@@ -3920,7 +3998,60 @@ def _load_comparison(name: str) -> dict:
         raise SystemExit(
             f"unknown comparison {name!r}; available: {', '.join(available)}"
         )
-    return yaml.safe_load(path.read_text())
+    config = yaml.safe_load(path.read_text())
+    if not isinstance(config, dict):
+        raise SystemExit(f"comparison config {path.name!r} must be a mapping")
+    declared = config.get("name")
+    if declared != name:
+        raise SystemExit(
+            f"comparison config {path.name!r} declares name {declared!r}; "
+            f"expected {name!r} to match its registry selector"
+        )
+    return config
+
+
+def _canonical_record_path(config: dict) -> Path | None:
+    """Resolve an optional fixed comparison record without path traversal.
+
+    Most runners publish a dated full report plus a dashboard copy.  Unified
+    tuple records are instead stable certificate inputs under ``comparisons``;
+    the dated report remains useful run evidence, while this exact copy is the
+    registry/selector surface and is regenerated on every run.
+    """
+
+    raw = (config.get("artifacts") or {}).get("canonical_record")
+    if raw is None:
+        return None
+    if not isinstance(raw, str) or not raw.strip() or Path(raw).is_absolute():
+        raise SystemExit("artifacts.canonical_record must be a repo-relative path")
+    target = (REPO_ROOT / raw).resolve()
+    comparisons_root = (REPO_ROOT / "comparisons").resolve()
+    if comparisons_root not in target.parents:
+        raise SystemExit("artifacts.canonical_record must stay under comparisons/")
+    return target
+
+
+def _write_canonical_record(source: Path, target: Path) -> None:
+    """Atomically publish the exact stamped full record at its stable path."""
+
+    _write_canonical_record_bytes(source.read_bytes(), target)
+
+
+def _write_canonical_record_bytes(payload: bytes, target: Path) -> None:
+    """Atomically publish canonical bytes without mutating producer evidence."""
+
+    target.parent.mkdir(parents=True, exist_ok=True)
+    fd, temporary = tempfile.mkstemp(
+        dir=target.parent,
+        prefix=f".{target.name}.",
+        suffix=".tmp",
+    )
+    try:
+        with os.fdopen(fd, "wb") as stream:
+            stream.write(payload)
+        os.replace(temporary, target)
+    finally:
+        Path(temporary).unlink(missing_ok=True)
 
 
 def _resolve_path(raw: str, field: str) -> Path:

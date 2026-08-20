@@ -1,0 +1,1080 @@
+{
+  "cases": [
+    {
+      "case_id": "single-w-500",
+      "left_engine": "gettsim",
+      "left_errors": [],
+      "matches": [
+        {
+          "concept": "de:policies/worker_dual_oracle_baseline#kindergeld_monthly",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
+      "metadata": {
+        "child_count": 0,
+        "yearly_earned_income_total": 6000
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "single-w-1200",
+      "left_engine": "gettsim",
+      "left_errors": [],
+      "matches": [
+        {
+          "concept": "de:policies/worker_dual_oracle_baseline#kindergeld_monthly",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
+      "metadata": {
+        "child_count": 0,
+        "yearly_earned_income_total": 14400
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "single-w-2500",
+      "left_engine": "gettsim",
+      "left_errors": [],
+      "matches": [
+        {
+          "concept": "de:policies/worker_dual_oracle_baseline#kindergeld_monthly",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
+      "metadata": {
+        "child_count": 0,
+        "yearly_earned_income_total": 30000
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "single-w-4000",
+      "left_engine": "gettsim",
+      "left_errors": [],
+      "matches": [
+        {
+          "concept": "de:policies/worker_dual_oracle_baseline#kindergeld_monthly",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
+      "metadata": {
+        "child_count": 0,
+        "yearly_earned_income_total": 48000
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "single-w-5500",
+      "left_engine": "gettsim",
+      "left_errors": [],
+      "matches": [
+        {
+          "concept": "de:policies/worker_dual_oracle_baseline#kindergeld_monthly",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
+      "metadata": {
+        "child_count": 0,
+        "yearly_earned_income_total": 66000
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "single-w-7500",
+      "left_engine": "gettsim",
+      "left_errors": [],
+      "matches": [
+        {
+          "concept": "de:policies/worker_dual_oracle_baseline#kindergeld_monthly",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
+      "metadata": {
+        "child_count": 0,
+        "yearly_earned_income_total": 90000
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "single-w-9000",
+      "left_engine": "gettsim",
+      "left_errors": [],
+      "matches": [
+        {
+          "concept": "de:policies/worker_dual_oracle_baseline#kindergeld_monthly",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
+      "metadata": {
+        "child_count": 0,
+        "yearly_earned_income_total": 108000
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "single-w-12000",
+      "left_engine": "gettsim",
+      "left_errors": [],
+      "matches": [
+        {
+          "concept": "de:policies/worker_dual_oracle_baseline#kindergeld_monthly",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
+      "metadata": {
+        "child_count": 0,
+        "yearly_earned_income_total": 144000
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "single-e-4000",
+      "left_engine": "gettsim",
+      "left_errors": [],
+      "matches": [
+        {
+          "concept": "de:policies/worker_dual_oracle_baseline#kindergeld_monthly",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
+      "metadata": {
+        "child_count": 0,
+        "yearly_earned_income_total": 48000
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "couple-8000-0",
+      "left_engine": "gettsim",
+      "left_errors": [],
+      "matches": [
+        {
+          "concept": "de:policies/worker_dual_oracle_baseline#kindergeld_monthly",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
+      "metadata": {
+        "child_count": 0,
+        "yearly_earned_income_total": 96000
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "couple-4000-2000",
+      "left_engine": "gettsim",
+      "left_errors": [],
+      "matches": [
+        {
+          "concept": "de:policies/worker_dual_oracle_baseline#kindergeld_monthly",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
+      "metadata": {
+        "child_count": 0,
+        "yearly_earned_income_total": 72000
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "parent-1child-4000",
+      "left_engine": "gettsim",
+      "left_errors": [],
+      "matches": [
+        {
+          "concept": "de:policies/worker_dual_oracle_baseline#kindergeld_monthly",
+          "left": 255.0,
+          "right": 255.0
+        }
+      ],
+      "metadata": {
+        "child_count": 1,
+        "yearly_earned_income_total": 48000
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "parent-2children-4000",
+      "left_engine": "gettsim",
+      "left_errors": [],
+      "matches": [
+        {
+          "concept": "de:policies/worker_dual_oracle_baseline#kindergeld_monthly",
+          "left": 510.0,
+          "right": 510.0
+        }
+      ],
+      "metadata": {
+        "child_count": 2,
+        "yearly_earned_income_total": 48000
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    }
+  ],
+  "dataset_identity": {
+    "claim_mode": "computed",
+    "sha256": "db63064fed6fa91fb3a34096b0997fed2e11ac52db2b22516e2e00da2aace951"
+  },
+  "engines": {
+    "left": "gettsim",
+    "right": "axiom"
+  },
+  "period": "2025",
+  "population": "de-worker-dual-oracle-13-households",
+  "provenance": {
+    "generated_by": "scripts/de_executable.py::produce",
+    "oracle_execution": {
+      "case_results": [
+        {
+          "case_id": "single-w-500",
+          "value": 0.0
+        },
+        {
+          "case_id": "single-w-1200",
+          "value": 0.0
+        },
+        {
+          "case_id": "single-w-2500",
+          "value": 0.0
+        },
+        {
+          "case_id": "single-w-4000",
+          "value": 0.0
+        },
+        {
+          "case_id": "single-w-5500",
+          "value": 0.0
+        },
+        {
+          "case_id": "single-w-7500",
+          "value": 0.0
+        },
+        {
+          "case_id": "single-w-9000",
+          "value": 0.0
+        },
+        {
+          "case_id": "single-w-12000",
+          "value": 0.0
+        },
+        {
+          "case_id": "single-e-4000",
+          "value": 0.0
+        },
+        {
+          "case_id": "couple-8000-0",
+          "value": 0.0
+        },
+        {
+          "case_id": "couple-4000-2000",
+          "value": 0.0
+        },
+        {
+          "case_id": "parent-1child-4000",
+          "value": 255.0
+        },
+        {
+          "case_id": "parent-2children-4000",
+          "value": 510.0
+        }
+      ],
+      "case_results_sha256": "596d298abb660972b3aa12b6b7bfd498a31f079fc62b74c15202369167613a4c",
+      "case_results_sha256_claim_mode": "computed",
+      "claim_mode": "attested",
+      "engine": "gettsim",
+      "engine_identity_claim_mode": "attested",
+      "mode": "live_no_reemit",
+      "target": "kindergeld.betrag_m"
+    },
+    "rulespec_artifact": {
+      "apply_manifest_sha256": "296e0f761edd2fd70cf622890fba5f6c0147bc51233df757afcb90e1e9a53a0a",
+      "artifact_sha256": "7c1545d20f21bcdaba0abd7b8af324b3747148f84d7593e4f358ec726a57396b",
+      "citation_path": "de/statute/estg/66",
+      "claim_mode": "computed",
+      "commit": "d83ba3db30e2f63376aacf822d116687589b8564",
+      "tree": "1e75a045e32100544f057ffe335065c1ef99c1bc"
+    },
+    "rulespec_ref_inspection": {
+      "artifacts": [
+        {
+          "path": ".axiom/encoding-manifests/de/statutes/estg/66.json",
+          "presence": "on-pinned-ref",
+          "sha256": "296e0f761edd2fd70cf622890fba5f6c0147bc51233df757afcb90e1e9a53a0a"
+        },
+        {
+          "path": ".axiom/encoding-manifests/de/statutes/sgb-5/241.json",
+          "presence": "on-pinned-ref",
+          "sha256": "a1516439921c88795537ec56ddbece9f0bd716601376bea77409aa4bb33a9556"
+        },
+        {
+          "path": "de/statutes/estg/66.yaml",
+          "presence": "on-pinned-ref",
+          "sha256": "7c1545d20f21bcdaba0abd7b8af324b3747148f84d7593e4f358ec726a57396b"
+        },
+        {
+          "path": "de/statutes/sgb-5/241.yaml",
+          "presence": "on-pinned-ref",
+          "sha256": "3c2f912dc99f4eb01a8f6e4ecabb68e31d57ddf2c79dfbabff5b4ac357cd9286"
+        }
+      ],
+      "checkout_head_ignored": true,
+      "claim_mode": "computed",
+      "commit": "d83ba3db30e2f63376aacf822d116687589b8564",
+      "inspection_mode": "git-object-database-exact-ref",
+      "repository": "TheAxiomFoundation/rulespec-de",
+      "tree": "1e75a045e32100544f057ffe335065c1ef99c1bc"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-de",
+        "sha": "d83ba3db30e2f63376aacf822d116687589b8564"
+      }
+    ]
+  },
+  "record_schema": "axiom.unified_comparison_record.v1",
+  "schema_version": "axiom.comparison_report.v2",
+  "state": "complete",
+  "suite": "de-worker-dual-oracle-axiom-gettsim",
+  "tuple": {
+    "axiom": {
+      "asset_sha256": "76565685230d64edf33e4205f01f77c57ef341ba2d3cf75dc967fc12c883f1f4",
+      "commit": "2c0e1edac0dccc355297eb9663e0aa0c4e97e5b4",
+      "id": "axiom",
+      "metadata_claim_mode": "attested",
+      "release": "v0.2.2"
+    },
+    "jurisdiction": "de",
+    "oracle": {
+      "id": "gettsim",
+      "metadata_claim_mode": "attested",
+      "policy_date": "2025-06-30",
+      "version": "1.2.1"
+    },
+    "population": {
+      "case_count": 13,
+      "claim_mode": "computed",
+      "id": "de-worker-dual-oracle-13-households",
+      "sha256": "db63064fed6fa91fb3a34096b0997fed2e11ac52db2b22516e2e00da2aace951"
+    },
+    "rulespec": {
+      "claim_mode": "computed",
+      "commit": "d83ba3db30e2f63376aacf822d116687589b8564",
+      "repository": "TheAxiomFoundation/rulespec-de",
+      "tree": "1e75a045e32100544f057ffe335065c1ef99c1bc"
+    }
+  },
+  "views": {
+    "de/health-insurance": {
+      "claim_mode": "computed",
+      "columns": [
+        "de:policies/worker_dual_oracle_baseline#employee_health_insurance_contribution_monthly"
+      ],
+      "dependency_set": {
+        "artifacts": [
+          {
+            "dependency_status": "available-partial",
+            "kind": "rulespec-module",
+            "nodes": [
+              "de:statutes/sgb-5/241#general_contribution_rate"
+            ],
+            "path": "de/statutes/sgb-5/241.yaml",
+            "presence": "on-pinned-ref",
+            "role": "general-contribution-rate",
+            "sha256": "3c2f912dc99f4eb01a8f6e4ecabb68e31d57ddf2c79dfbabff5b4ac357cd9286"
+          },
+          {
+            "dependency_status": "available-partial",
+            "kind": "signed-apply-manifest",
+            "nodes": [],
+            "path": ".axiom/encoding-manifests/de/statutes/sgb-5/241.json",
+            "presence": "on-pinned-ref",
+            "role": "signed-general-contribution-rate-binding",
+            "sha256": "a1516439921c88795537ec56ddbece9f0bd716601376bea77409aa4bb33a9556"
+          }
+        ],
+        "available_partial_dependencies": [
+          "de/statutes/sgb-5/241.yaml",
+          ".axiom/encoding-manifests/de/statutes/sgb-5/241.json"
+        ],
+        "claim_mode": "computed",
+        "complete_on_pinned_ref": false,
+        "declared_complete": false,
+        "missing_dependency_roles": [
+          "contribution-liability-income",
+          "employee-share",
+          "average-additional-contribution-rate",
+          "assessment-ceiling-and-midijob-output-closure"
+        ]
+      },
+      "kind": "subgraph",
+      "leg_id": "axiom-gettsim",
+      "oracle_target": "sozialversicherung.kranken.beitrag.betrag_versicherter_m",
+      "pending": "module-not-on-main",
+      "scope": "amount",
+      "state": "leg-pending",
+      "target_root_nodes": [
+        "de:policies/worker_dual_oracle_baseline#employee_health_insurance_contribution_monthly"
+      ]
+    },
+    "de/income-tax-including-solidarity-surcharge": {
+      "claim_mode": "computed",
+      "columns": [
+        "de:policies/worker_dual_oracle_baseline#income_tax_including_solidarity_surcharge_annual"
+      ],
+      "dependency_set": {
+        "artifacts": [],
+        "available_partial_dependencies": [],
+        "claim_mode": "computed",
+        "complete_on_pinned_ref": false,
+        "declared_complete": false,
+        "missing_dependency_roles": [
+          "income-tax-base-tariff-and-solidarity-surcharge-output-closure"
+        ]
+      },
+      "kind": "subgraph",
+      "leg_id": "axiom-gettsim",
+      "oracle_target": [
+        "einkommensteuer.betrag_y_sn",
+        "solidaritätszuschlag.betrag_y_sn"
+      ],
+      "pending": "module-not-on-main",
+      "scope": "amount",
+      "state": "leg-pending",
+      "target_root_nodes": [
+        "de:policies/worker_dual_oracle_baseline#income_tax_including_solidarity_surcharge_annual"
+      ]
+    },
+    "de/kindergeld": {
+      "claim_mode": "computed",
+      "columns": [
+        "de:policies/worker_dual_oracle_baseline#kindergeld_monthly"
+      ],
+      "dependency_set": {
+        "artifacts": [
+          {
+            "dependency_status": "required",
+            "kind": "rulespec-module",
+            "nodes": [
+              "de:statutes/estg/66#monthly_kindergeld_per_child"
+            ],
+            "path": "de/statutes/estg/66.yaml",
+            "presence": "on-pinned-ref",
+            "role": "kindergeld-monthly-amount-per-child",
+            "sha256": "7c1545d20f21bcdaba0abd7b8af324b3747148f84d7593e4f358ec726a57396b"
+          },
+          {
+            "dependency_status": "required",
+            "kind": "signed-apply-manifest",
+            "nodes": [],
+            "path": ".axiom/encoding-manifests/de/statutes/estg/66.json",
+            "presence": "on-pinned-ref",
+            "role": "signed-module-binding",
+            "sha256": "296e0f761edd2fd70cf622890fba5f6c0147bc51233df757afcb90e1e9a53a0a"
+          }
+        ],
+        "available_partial_dependencies": [],
+        "claim_mode": "computed",
+        "complete_on_pinned_ref": true,
+        "declared_complete": true,
+        "missing_dependency_roles": []
+      },
+      "executable_replay": {
+        "case_ids": [
+          "single-w-500",
+          "single-w-1200",
+          "single-w-2500",
+          "single-w-4000",
+          "single-w-5500",
+          "single-w-7500",
+          "single-w-9000",
+          "single-w-12000",
+          "single-e-4000",
+          "couple-8000-0",
+          "couple-4000-2000",
+          "parent-1child-4000",
+          "parent-2children-4000"
+        ],
+        "expected_results": [
+          {
+            "entity_id": "case-0::tax_unit",
+            "outputs": {
+              "de:statutes/estg/66#monthly_kindergeld_per_child": {
+                "dtype": "integer",
+                "id": "de:statutes/estg/66#monthly_kindergeld_per_child",
+                "kind": "scalar",
+                "name": "monthly_kindergeld_per_child",
+                "unit": "EUR",
+                "value": {
+                  "kind": "integer",
+                  "value": 255
+                }
+              }
+            },
+            "period": {
+              "end": "2025-12-31",
+              "period_kind": "tax_year",
+              "start": "2025-01-01"
+            },
+            "trace": {}
+          },
+          {
+            "entity_id": "case-1::tax_unit",
+            "outputs": {
+              "de:statutes/estg/66#monthly_kindergeld_per_child": {
+                "dtype": "integer",
+                "id": "de:statutes/estg/66#monthly_kindergeld_per_child",
+                "kind": "scalar",
+                "name": "monthly_kindergeld_per_child",
+                "unit": "EUR",
+                "value": {
+                  "kind": "integer",
+                  "value": 255
+                }
+              }
+            },
+            "period": {
+              "end": "2025-12-31",
+              "period_kind": "tax_year",
+              "start": "2025-01-01"
+            },
+            "trace": {}
+          },
+          {
+            "entity_id": "case-2::tax_unit",
+            "outputs": {
+              "de:statutes/estg/66#monthly_kindergeld_per_child": {
+                "dtype": "integer",
+                "id": "de:statutes/estg/66#monthly_kindergeld_per_child",
+                "kind": "scalar",
+                "name": "monthly_kindergeld_per_child",
+                "unit": "EUR",
+                "value": {
+                  "kind": "integer",
+                  "value": 255
+                }
+              }
+            },
+            "period": {
+              "end": "2025-12-31",
+              "period_kind": "tax_year",
+              "start": "2025-01-01"
+            },
+            "trace": {}
+          },
+          {
+            "entity_id": "case-3::tax_unit",
+            "outputs": {
+              "de:statutes/estg/66#monthly_kindergeld_per_child": {
+                "dtype": "integer",
+                "id": "de:statutes/estg/66#monthly_kindergeld_per_child",
+                "kind": "scalar",
+                "name": "monthly_kindergeld_per_child",
+                "unit": "EUR",
+                "value": {
+                  "kind": "integer",
+                  "value": 255
+                }
+              }
+            },
+            "period": {
+              "end": "2025-12-31",
+              "period_kind": "tax_year",
+              "start": "2025-01-01"
+            },
+            "trace": {}
+          },
+          {
+            "entity_id": "case-4::tax_unit",
+            "outputs": {
+              "de:statutes/estg/66#monthly_kindergeld_per_child": {
+                "dtype": "integer",
+                "id": "de:statutes/estg/66#monthly_kindergeld_per_child",
+                "kind": "scalar",
+                "name": "monthly_kindergeld_per_child",
+                "unit": "EUR",
+                "value": {
+                  "kind": "integer",
+                  "value": 255
+                }
+              }
+            },
+            "period": {
+              "end": "2025-12-31",
+              "period_kind": "tax_year",
+              "start": "2025-01-01"
+            },
+            "trace": {}
+          },
+          {
+            "entity_id": "case-5::tax_unit",
+            "outputs": {
+              "de:statutes/estg/66#monthly_kindergeld_per_child": {
+                "dtype": "integer",
+                "id": "de:statutes/estg/66#monthly_kindergeld_per_child",
+                "kind": "scalar",
+                "name": "monthly_kindergeld_per_child",
+                "unit": "EUR",
+                "value": {
+                  "kind": "integer",
+                  "value": 255
+                }
+              }
+            },
+            "period": {
+              "end": "2025-12-31",
+              "period_kind": "tax_year",
+              "start": "2025-01-01"
+            },
+            "trace": {}
+          },
+          {
+            "entity_id": "case-6::tax_unit",
+            "outputs": {
+              "de:statutes/estg/66#monthly_kindergeld_per_child": {
+                "dtype": "integer",
+                "id": "de:statutes/estg/66#monthly_kindergeld_per_child",
+                "kind": "scalar",
+                "name": "monthly_kindergeld_per_child",
+                "unit": "EUR",
+                "value": {
+                  "kind": "integer",
+                  "value": 255
+                }
+              }
+            },
+            "period": {
+              "end": "2025-12-31",
+              "period_kind": "tax_year",
+              "start": "2025-01-01"
+            },
+            "trace": {}
+          },
+          {
+            "entity_id": "case-7::tax_unit",
+            "outputs": {
+              "de:statutes/estg/66#monthly_kindergeld_per_child": {
+                "dtype": "integer",
+                "id": "de:statutes/estg/66#monthly_kindergeld_per_child",
+                "kind": "scalar",
+                "name": "monthly_kindergeld_per_child",
+                "unit": "EUR",
+                "value": {
+                  "kind": "integer",
+                  "value": 255
+                }
+              }
+            },
+            "period": {
+              "end": "2025-12-31",
+              "period_kind": "tax_year",
+              "start": "2025-01-01"
+            },
+            "trace": {}
+          },
+          {
+            "entity_id": "case-8::tax_unit",
+            "outputs": {
+              "de:statutes/estg/66#monthly_kindergeld_per_child": {
+                "dtype": "integer",
+                "id": "de:statutes/estg/66#monthly_kindergeld_per_child",
+                "kind": "scalar",
+                "name": "monthly_kindergeld_per_child",
+                "unit": "EUR",
+                "value": {
+                  "kind": "integer",
+                  "value": 255
+                }
+              }
+            },
+            "period": {
+              "end": "2025-12-31",
+              "period_kind": "tax_year",
+              "start": "2025-01-01"
+            },
+            "trace": {}
+          },
+          {
+            "entity_id": "case-9::tax_unit",
+            "outputs": {
+              "de:statutes/estg/66#monthly_kindergeld_per_child": {
+                "dtype": "integer",
+                "id": "de:statutes/estg/66#monthly_kindergeld_per_child",
+                "kind": "scalar",
+                "name": "monthly_kindergeld_per_child",
+                "unit": "EUR",
+                "value": {
+                  "kind": "integer",
+                  "value": 255
+                }
+              }
+            },
+            "period": {
+              "end": "2025-12-31",
+              "period_kind": "tax_year",
+              "start": "2025-01-01"
+            },
+            "trace": {}
+          },
+          {
+            "entity_id": "case-10::tax_unit",
+            "outputs": {
+              "de:statutes/estg/66#monthly_kindergeld_per_child": {
+                "dtype": "integer",
+                "id": "de:statutes/estg/66#monthly_kindergeld_per_child",
+                "kind": "scalar",
+                "name": "monthly_kindergeld_per_child",
+                "unit": "EUR",
+                "value": {
+                  "kind": "integer",
+                  "value": 255
+                }
+              }
+            },
+            "period": {
+              "end": "2025-12-31",
+              "period_kind": "tax_year",
+              "start": "2025-01-01"
+            },
+            "trace": {}
+          },
+          {
+            "entity_id": "case-11::tax_unit",
+            "outputs": {
+              "de:statutes/estg/66#monthly_kindergeld_per_child": {
+                "dtype": "integer",
+                "id": "de:statutes/estg/66#monthly_kindergeld_per_child",
+                "kind": "scalar",
+                "name": "monthly_kindergeld_per_child",
+                "unit": "EUR",
+                "value": {
+                  "kind": "integer",
+                  "value": 255
+                }
+              }
+            },
+            "period": {
+              "end": "2025-12-31",
+              "period_kind": "tax_year",
+              "start": "2025-01-01"
+            },
+            "trace": {}
+          },
+          {
+            "entity_id": "case-12::tax_unit",
+            "outputs": {
+              "de:statutes/estg/66#monthly_kindergeld_per_child": {
+                "dtype": "integer",
+                "id": "de:statutes/estg/66#monthly_kindergeld_per_child",
+                "kind": "scalar",
+                "name": "monthly_kindergeld_per_child",
+                "unit": "EUR",
+                "value": {
+                  "kind": "integer",
+                  "value": 255
+                }
+              }
+            },
+            "period": {
+              "end": "2025-12-31",
+              "period_kind": "tax_year",
+              "start": "2025-01-01"
+            },
+            "trace": {}
+          }
+        ],
+        "expected_results_sha256": "b25b52e3afd08dac883b86ca724bf298e42151488656e5117c236f7b60621b05",
+        "expected_results_source": "axiom_execution_case_records",
+        "request": {
+          "dataset": {
+            "inputs": [],
+            "relations": []
+          },
+          "mode": "explain",
+          "queries": [
+            {
+              "entity_id": "case-0::tax_unit",
+              "outputs": [
+                "de:statutes/estg/66#monthly_kindergeld_per_child"
+              ],
+              "period": {
+                "end": "2025-12-31",
+                "period_kind": "tax_year",
+                "start": "2025-01-01"
+              }
+            },
+            {
+              "entity_id": "case-1::tax_unit",
+              "outputs": [
+                "de:statutes/estg/66#monthly_kindergeld_per_child"
+              ],
+              "period": {
+                "end": "2025-12-31",
+                "period_kind": "tax_year",
+                "start": "2025-01-01"
+              }
+            },
+            {
+              "entity_id": "case-2::tax_unit",
+              "outputs": [
+                "de:statutes/estg/66#monthly_kindergeld_per_child"
+              ],
+              "period": {
+                "end": "2025-12-31",
+                "period_kind": "tax_year",
+                "start": "2025-01-01"
+              }
+            },
+            {
+              "entity_id": "case-3::tax_unit",
+              "outputs": [
+                "de:statutes/estg/66#monthly_kindergeld_per_child"
+              ],
+              "period": {
+                "end": "2025-12-31",
+                "period_kind": "tax_year",
+                "start": "2025-01-01"
+              }
+            },
+            {
+              "entity_id": "case-4::tax_unit",
+              "outputs": [
+                "de:statutes/estg/66#monthly_kindergeld_per_child"
+              ],
+              "period": {
+                "end": "2025-12-31",
+                "period_kind": "tax_year",
+                "start": "2025-01-01"
+              }
+            },
+            {
+              "entity_id": "case-5::tax_unit",
+              "outputs": [
+                "de:statutes/estg/66#monthly_kindergeld_per_child"
+              ],
+              "period": {
+                "end": "2025-12-31",
+                "period_kind": "tax_year",
+                "start": "2025-01-01"
+              }
+            },
+            {
+              "entity_id": "case-6::tax_unit",
+              "outputs": [
+                "de:statutes/estg/66#monthly_kindergeld_per_child"
+              ],
+              "period": {
+                "end": "2025-12-31",
+                "period_kind": "tax_year",
+                "start": "2025-01-01"
+              }
+            },
+            {
+              "entity_id": "case-7::tax_unit",
+              "outputs": [
+                "de:statutes/estg/66#monthly_kindergeld_per_child"
+              ],
+              "period": {
+                "end": "2025-12-31",
+                "period_kind": "tax_year",
+                "start": "2025-01-01"
+              }
+            },
+            {
+              "entity_id": "case-8::tax_unit",
+              "outputs": [
+                "de:statutes/estg/66#monthly_kindergeld_per_child"
+              ],
+              "period": {
+                "end": "2025-12-31",
+                "period_kind": "tax_year",
+                "start": "2025-01-01"
+              }
+            },
+            {
+              "entity_id": "case-9::tax_unit",
+              "outputs": [
+                "de:statutes/estg/66#monthly_kindergeld_per_child"
+              ],
+              "period": {
+                "end": "2025-12-31",
+                "period_kind": "tax_year",
+                "start": "2025-01-01"
+              }
+            },
+            {
+              "entity_id": "case-10::tax_unit",
+              "outputs": [
+                "de:statutes/estg/66#monthly_kindergeld_per_child"
+              ],
+              "period": {
+                "end": "2025-12-31",
+                "period_kind": "tax_year",
+                "start": "2025-01-01"
+              }
+            },
+            {
+              "entity_id": "case-11::tax_unit",
+              "outputs": [
+                "de:statutes/estg/66#monthly_kindergeld_per_child"
+              ],
+              "period": {
+                "end": "2025-12-31",
+                "period_kind": "tax_year",
+                "start": "2025-01-01"
+              }
+            },
+            {
+              "entity_id": "case-12::tax_unit",
+              "outputs": [
+                "de:statutes/estg/66#monthly_kindergeld_per_child"
+              ],
+              "period": {
+                "end": "2025-12-31",
+                "period_kind": "tax_year",
+                "start": "2025-01-01"
+              }
+            }
+          ]
+        },
+        "request_sha256": "6294ead2a324cc39f2755ea1b409c81f557e288ae817efe059246b36470ade0e"
+      },
+      "kind": "subgraph",
+      "leg_id": "axiom-gettsim",
+      "oracle_target": "kindergeld.betrag_m",
+      "restatement": {
+        "column": "de:policies/worker_dual_oracle_baseline#kindergeld_monthly",
+        "input_source": "canonical_de_worker_dual_oracle_cases",
+        "operation": "multiply_root_amount_by_canonical_child_count",
+        "operation_claim_mode": "attested",
+        "result_claim_mode": "computed",
+        "root_node": "de:statutes/estg/66#monthly_kindergeld_per_child"
+      },
+      "root_nodes": [
+        "de:statutes/estg/66#monthly_kindergeld_per_child"
+      ],
+      "scope": "amount",
+      "state": "complete",
+      "summary": {
+        "comparison_count": 13,
+        "error_count": 0,
+        "match_count": 13,
+        "mismatch_count": 0
+      },
+      "target_root_nodes": [
+        "de:statutes/estg/66#monthly_kindergeld_per_child"
+      ]
+    },
+    "de/long-term-care-insurance": {
+      "claim_mode": "computed",
+      "columns": [
+        "de:policies/worker_dual_oracle_baseline#employee_long_term_care_insurance_contribution_monthly"
+      ],
+      "dependency_set": {
+        "artifacts": [],
+        "available_partial_dependencies": [],
+        "claim_mode": "computed",
+        "complete_on_pinned_ref": false,
+        "declared_complete": false,
+        "missing_dependency_roles": [
+          "care-rate-child-status-region-and-employee-amount-output-closure"
+        ]
+      },
+      "kind": "subgraph",
+      "leg_id": "axiom-gettsim",
+      "oracle_target": "sozialversicherung.pflege.beitrag.betrag_versicherter_m",
+      "pending": "module-not-on-main",
+      "scope": "amount",
+      "state": "leg-pending",
+      "target_root_nodes": [
+        "de:policies/worker_dual_oracle_baseline#employee_long_term_care_insurance_contribution_monthly"
+      ]
+    },
+    "de/pension-insurance": {
+      "claim_mode": "computed",
+      "columns": [
+        "de:policies/worker_dual_oracle_baseline#employee_pension_insurance_contribution_monthly"
+      ],
+      "dependency_set": {
+        "artifacts": [],
+        "available_partial_dependencies": [],
+        "claim_mode": "computed",
+        "complete_on_pinned_ref": false,
+        "declared_complete": false,
+        "missing_dependency_roles": [
+          "pension-contribution-rate-and-employee-amount-output-closure"
+        ]
+      },
+      "kind": "subgraph",
+      "leg_id": "axiom-gettsim",
+      "oracle_target": "sozialversicherung.rente.beitrag.betrag_versicherter_m",
+      "pending": "module-not-on-main",
+      "scope": "amount",
+      "state": "leg-pending",
+      "target_root_nodes": [
+        "de:policies/worker_dual_oracle_baseline#employee_pension_insurance_contribution_monthly"
+      ]
+    },
+    "de/unemployment-insurance": {
+      "claim_mode": "computed",
+      "columns": [
+        "de:policies/worker_dual_oracle_baseline#employee_unemployment_insurance_contribution_monthly"
+      ],
+      "dependency_set": {
+        "artifacts": [],
+        "available_partial_dependencies": [],
+        "claim_mode": "computed",
+        "complete_on_pinned_ref": false,
+        "declared_complete": false,
+        "missing_dependency_roles": [
+          "unemployment-contribution-rate-and-employee-amount-output-closure"
+        ]
+      },
+      "kind": "subgraph",
+      "leg_id": "axiom-gettsim",
+      "oracle_target": "sozialversicherung.arbeitslosen.beitrag.betrag_versicherter_m",
+      "pending": "module-not-on-main",
+      "scope": "amount",
+      "state": "leg-pending",
+      "target_root_nodes": [
+        "de:policies/worker_dual_oracle_baseline#employee_unemployment_insurance_contribution_monthly"
+      ]
+    }
+  }
+}

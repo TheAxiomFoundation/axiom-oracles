@@ -3350,12 +3350,12 @@
       "bridge_declared": false,
       "bridge_manifest_sha256": null,
       "bridged_through": {},
-      "cases_scanned": 12,
+      "cases_scanned": 13,
       "chunk_manifest": [
         {
-          "cases": 12,
+          "cases": 13,
           "chunk": "dashboard/public/data/cases/de-worker-dual-oracle/chunk-0.json",
-          "sha256": "3e12757833e6ddaa8e8882b3b4a45f96463519c4a64ff4056b88a4575b597237"
+          "sha256": "08eaaa051ae351b0596443a4d458c510dd5e93dd1bab339da8351c1c99859d34"
         }
       ],
       "constant_fields": 0,

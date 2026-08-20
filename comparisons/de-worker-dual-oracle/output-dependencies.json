@@ -1,0 +1,137 @@
+{
+  "schema": "axiom_oracles.de_axiom_output_dependency_plan.v1",
+  "suite": "de-worker-dual-oracle",
+  "period": "2025",
+  "outputs": [
+    {
+      "view_id": "de/health-insurance",
+      "concept": "de:policies/worker_dual_oracle_baseline#employee_health_insurance_contribution_monthly",
+      "oracle_targets": {
+        "euromod": "tsceehl_s",
+        "gettsim": "sozialversicherung.kranken.beitrag.betrag_versicherter_m"
+      },
+      "target_root_nodes": [
+        "de:policies/worker_dual_oracle_baseline#employee_health_insurance_contribution_monthly"
+      ],
+      "required_artifacts": [
+        {
+          "path": "de/statutes/sgb-5/241.yaml",
+          "kind": "rulespec-module",
+          "role": "general-contribution-rate",
+          "nodes": [
+            "de:statutes/sgb-5/241#general_contribution_rate"
+          ]
+        },
+        {
+          "path": ".axiom/encoding-manifests/de/statutes/sgb-5/241.json",
+          "kind": "signed-apply-manifest",
+          "role": "signed-general-contribution-rate-binding",
+          "nodes": []
+        }
+      ],
+      "dependency_closure_declared_complete": false,
+      "missing_dependency_roles": [
+        "contribution-liability-income",
+        "employee-share",
+        "average-additional-contribution-rate",
+        "assessment-ceiling-and-midijob-output-closure"
+      ]
+    },
+    {
+      "view_id": "de/pension-insurance",
+      "concept": "de:policies/worker_dual_oracle_baseline#employee_pension_insurance_contribution_monthly",
+      "oracle_targets": {
+        "euromod": "tsceepi_s",
+        "gettsim": "sozialversicherung.rente.beitrag.betrag_versicherter_m"
+      },
+      "target_root_nodes": [
+        "de:policies/worker_dual_oracle_baseline#employee_pension_insurance_contribution_monthly"
+      ],
+      "required_artifacts": [],
+      "dependency_closure_declared_complete": false,
+      "missing_dependency_roles": [
+        "pension-contribution-rate-and-employee-amount-output-closure"
+      ]
+    },
+    {
+      "view_id": "de/unemployment-insurance",
+      "concept": "de:policies/worker_dual_oracle_baseline#employee_unemployment_insurance_contribution_monthly",
+      "oracle_targets": {
+        "euromod": "tsceeui_s",
+        "gettsim": "sozialversicherung.arbeitslosen.beitrag.betrag_versicherter_m"
+      },
+      "target_root_nodes": [
+        "de:policies/worker_dual_oracle_baseline#employee_unemployment_insurance_contribution_monthly"
+      ],
+      "required_artifacts": [],
+      "dependency_closure_declared_complete": false,
+      "missing_dependency_roles": [
+        "unemployment-contribution-rate-and-employee-amount-output-closure"
+      ]
+    },
+    {
+      "view_id": "de/long-term-care-insurance",
+      "concept": "de:policies/worker_dual_oracle_baseline#employee_long_term_care_insurance_contribution_monthly",
+      "oracle_targets": {
+        "euromod": "tsceeci_s",
+        "gettsim": "sozialversicherung.pflege.beitrag.betrag_versicherter_m"
+      },
+      "target_root_nodes": [
+        "de:policies/worker_dual_oracle_baseline#employee_long_term_care_insurance_contribution_monthly"
+      ],
+      "required_artifacts": [],
+      "dependency_closure_declared_complete": false,
+      "missing_dependency_roles": [
+        "care-rate-child-status-region-and-employee-amount-output-closure"
+      ]
+    },
+    {
+      "view_id": "de/income-tax-including-solidarity-surcharge",
+      "concept": "de:policies/worker_dual_oracle_baseline#income_tax_including_solidarity_surcharge_annual",
+      "oracle_targets": {
+        "euromod": "tin_s",
+        "gettsim": [
+          "einkommensteuer.betrag_y_sn",
+          "solidaritätszuschlag.betrag_y_sn"
+        ]
+      },
+      "target_root_nodes": [
+        "de:policies/worker_dual_oracle_baseline#income_tax_including_solidarity_surcharge_annual"
+      ],
+      "required_artifacts": [],
+      "dependency_closure_declared_complete": false,
+      "missing_dependency_roles": [
+        "income-tax-base-tariff-and-solidarity-surcharge-output-closure"
+      ]
+    },
+    {
+      "view_id": "de/kindergeld",
+      "concept": "de:policies/worker_dual_oracle_baseline#kindergeld_monthly",
+      "oracle_targets": {
+        "euromod": "bch00_s",
+        "gettsim": "kindergeld.betrag_m"
+      },
+      "target_root_nodes": [
+        "de:statutes/estg/66#monthly_kindergeld_per_child"
+      ],
+      "required_artifacts": [
+        {
+          "path": "de/statutes/estg/66.yaml",
+          "kind": "rulespec-module",
+          "role": "kindergeld-monthly-amount-per-child",
+          "nodes": [
+            "de:statutes/estg/66#monthly_kindergeld_per_child"
+          ]
+        },
+        {
+          "path": ".axiom/encoding-manifests/de/statutes/estg/66.json",
+          "kind": "signed-apply-manifest",
+          "role": "signed-module-binding",
+          "nodes": []
+        }
+      ],
+      "dependency_closure_declared_complete": true,
+      "missing_dependency_roles": []
+    }
+  ]
+}

@@ -61,6 +61,31 @@ NZ_INDEX = "dashboard/public/data/cases/nz-treasury-incomeexplorer/index.json"
 NZ_CHUNK = "dashboard/public/data/cases/nz-treasury-incomeexplorer/chunk-0.json"
 NZ_EXECUTABLE_RECEIPT = "conformance/executable/nz-treasury-incomeexplorer.json"
 NZ_CLOSURE_SUMMARY = "closure/nz/summary.json"
+DE_REPORT = "dashboard/public/data/euromod-gettsim-de-worker-dual-oracle.json"
+DE_REBOUND_ARTIFACTS = (
+    "comparisons/de-worker-dual-oracle/unified-record.json",
+    "conformance/executable/de-kindergeld-status.json",
+    "conformance/de-certificate-census.json",
+    "certificates/de-kindergeld.json",
+)
+DE_DERIVED_CHAIN = (
+    "scripts/apply_dispositions.py",
+    "scripts/de_axiom_legs.py",
+    "scripts/de_unified_comparison.py",
+    "scripts/de_closure.py",
+    "scripts/de_executable.py",
+    "scripts/de_certificate_census.py",
+    "scripts/certify.py",
+)
+DE_SERVED_GATES = (
+    "scripts/emit_disposition_artifacts.py",
+    "scripts/emit_case_artifacts.py",
+)
+DE_EXACT_DERIVED_PATHS = (
+    "closure/de/summary.json",
+    "comparisons/affected_map.json",
+    "comparisons/de-worker-dual-oracle/",
+)
 
 #: Hermetic git: no user/system config (no signing hooks, no identity — the
 #: script must supply the bot identity itself, exactly as on a CI runner).
@@ -169,11 +194,17 @@ def _perturb_report(clone: Path, report: str = REPORT) -> str:
     return sentinel
 
 
-def _staleness_gate(clone: Path, script: str) -> subprocess.CompletedProcess:
+def _staleness_gate(
+    clone: Path, script: str, *args: str
+) -> subprocess.CompletedProcess:
+    inherited_pythonpath = os.environ.get("PYTHONPATH")
+    pythonpath = str(clone)
+    if inherited_pythonpath:
+        pythonpath = f"{pythonpath}{os.pathsep}{inherited_pythonpath}"
     return subprocess.run(
-        [sys.executable, f"scripts/{script}", "--check"],
+        [sys.executable, f"scripts/{script}", "--check", *args],
         cwd=clone,
-        env={**os.environ, **GIT_ENV, "PYTHONPATH": str(clone)},
+        env={**os.environ, **GIT_ENV, "PYTHONPATH": pythonpath},
         capture_output=True,
         text=True,
     )
@@ -191,6 +222,11 @@ def _assert_origin_tip_green(origin: Path, tmp_path: Path) -> Path:
         "nz_incomeexplorer.py",
         "nz_executable_reproduction.py",
         "nz_closure.py",
+        "de_axiom_legs.py",
+        "de_unified_comparison.py",
+        "de_closure.py",
+        "de_executable.py",
+        "de_certificate_census.py",
         "generate_chunk_indexes.py",
         "conformance_scoreboard.py",
         "conformance_burndown.py",
@@ -204,7 +240,78 @@ def _assert_origin_tip_green(origin: Path, tmp_path: Path) -> Path:
             f"{script} --check failed on the pushed tip:\n"
             f"stdout: {result.stdout}\nstderr: {result.stderr}"
         )
+    for script in ("emit_disposition_artifacts.py", "emit_case_artifacts.py"):
+        result = _staleness_gate(verify, script, "de-worker-dual-oracle")
+        assert result.returncode == 0, (
+            f"{script} --check de-worker-dual-oracle failed on the pushed tip:\n"
+            f"stdout: {result.stdout}\nstderr: {result.stderr}"
+        )
     return verify
+
+
+def test_de_refresh_chain_is_ordered_checked_and_staged():
+    """The bot and CI preserve the DE producer dependency chain.
+
+    This is intentionally structural as well as functional: omitting a newly
+    generated path from ``derived_paths`` can pass every check in the bot's
+    worktree and still push a stale artifact.
+    """
+
+    shell = (REPO_ROOT / SCRIPT).read_text()
+    assert 'export PYTHONPATH="$PWD${PYTHONPATH:+:$PYTHONPATH}"' in shell
+    regenerate = shell.split("regenerate_derived() {", 1)[1].split(
+        "\n}\n\nverify_derived()", 1
+    )[0]
+    verify = shell.split("verify_derived() {", 1)[1].split("\n}\n\n# Safe proof", 1)[0]
+    derived_paths = shell.split("derived_paths=(", 1)[1].split("\n)", 1)[0]
+
+    assert '"$PYTHON" scripts/generate_affected_map.py\n' in regenerate
+    assert '"$PYTHON" scripts/generate_affected_map.py --check' in verify
+
+    for body, check_suffix in ((regenerate, ""), (verify, " --check")):
+        positions = [
+            body.index(f'"$PYTHON" {script}{check_suffix}')
+            for script in DE_DERIVED_CHAIN
+        ]
+        assert positions == sorted(positions), (
+            "DE derived producers must run after dispositions and in dependency "
+            "order through certificates"
+        )
+
+    apply_regenerate = regenerate.index('"$PYTHON" scripts/apply_dispositions.py\n')
+    legs_regenerate = regenerate.index('"$PYTHON" scripts/de_axiom_legs.py')
+    unified_regenerate = regenerate.index('"$PYTHON" scripts/de_unified_comparison.py')
+    apply_verify = verify.index('"$PYTHON" scripts/apply_dispositions.py --check')
+    legs_verify = verify.index('"$PYTHON" scripts/de_axiom_legs.py --check')
+    unified_verify = verify.index('"$PYTHON" scripts/de_unified_comparison.py --check')
+    for script in DE_SERVED_GATES:
+        assert (
+            apply_regenerate
+            < regenerate.index(f'"$PYTHON" {script} de-worker-dual-oracle')
+            < legs_regenerate
+            < unified_regenerate
+        )
+        assert (
+            apply_verify
+            < verify.index(f'"$PYTHON" {script} --check')
+            < legs_verify
+            < unified_verify
+        )
+
+    for path in DE_EXACT_DERIVED_PATHS:
+        assert path in derived_paths, f"{path} must be staged by the refresh bot"
+    assert "conformance/" in derived_paths
+    assert "certificates/" in derived_paths
+
+    ci = (REPO_ROOT / ".github/workflows/ci.yml").read_text()
+    ci_positions = [ci.index(f"{script} --check") for script in DE_DERIVED_CHAIN]
+    assert ci_positions == sorted(ci_positions), (
+        "CI must check the DE chain in the same dependency order as refresh"
+    )
+    for script in DE_SERVED_GATES:
+        assert ci.index(f"{script} --check de-worker-dual-oracle") < ci.index(
+            "scripts/de_unified_comparison.py --check"
+        )
 
 
 def test_refresh_pushes_report_with_derived_artifacts(origin, tmp_path):
@@ -219,6 +326,37 @@ def test_refresh_pushes_report_with_derived_artifacts(origin, tmp_path):
     verify = _assert_origin_tip_green(origin, tmp_path)
     pushed = json.loads((verify / REPORT).read_text())
     assert pushed["provenance"]["generated_at"] == sentinel
+
+
+def test_de_refresh_rebinds_entire_certificate_chain(origin, tmp_path):
+    """A DE source refresh cannot push stale unified/status/census/certificate."""
+
+    clone = _clone(origin, tmp_path / "job-de")
+    before = {path: (clone / path).read_text() for path in DE_REBOUND_ARTIFACTS}
+    report_path = clone / DE_REPORT
+    report = json.loads(report_path.read_text())
+    sentinel = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    assert report["provenance"]["generated_at"] != sentinel
+    report["provenance"]["generated_at"] = sentinel
+    report_path.write_text(json.dumps(report, indent=2) + "\n")
+
+    result = _run_script(clone, "de-worker-dual-oracle")
+    assert result.returncode == 0, result.stderr
+
+    verify = _assert_origin_tip_green(origin, tmp_path)
+    pushed = json.loads((verify / DE_REPORT).read_text())
+    assert pushed["provenance"]["generated_at"] == sentinel
+    for path in DE_REBOUND_ARTIFACTS:
+        assert (verify / path).read_text() != before[path], (
+            f"{path} did not rebind to the refreshed DE report"
+        )
+    certificate = json.loads((verify / "certificates/de-kindergeld.json").read_text())
+    # The evidence legs are complete and computed, but the closure's
+    # subordinate-instrument frontier is undeclared: a refresh must rebind
+    # every artifact while keeping the honest certified=no.
+    assert certificate["blockers"] == ["closed: closure must disposition the act's subordinate instruments (oracles#491); this closure declares none", 'closed: closure must type every leaf and encode every law-derived dependency (CERTIFIED.md v3); this closure declares no dependency-closure block']
+    assert certificate["certified"]["value"] is False
+    assert certificate["certified"]["state"] == "no"
 
 
 def test_be_refresh_regenerates_euromod_coverage_rollup(origin, tmp_path):
