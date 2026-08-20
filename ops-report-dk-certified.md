@@ -1,15 +1,29 @@
-# dk/boerne-og-ungeydelse: the registry's first certified=yes
+# dk/boerne-og-ungeydelse: certification status
 
-Status: **CERTIFIED=YES at rulespec-dk `9a9469edbbc4` — all four premises
-computed true, blockers=[], 10 provisions encoded / 1 classified / 13
-excluded with text-grounded reasons / 0 pending, boundary frontier complete
-(90 grounded inputs: 65 captured, 25 uncaptured external boundaries), and
-the subordinate-instrument frontier complete (28 instruments dispositioned:
-17 classified, 11 excluded, 0 pending; ELI graph as of 2026-08-19).**
+Status: **CERTIFIED=NO under definition v3 (CERTIFIED.md) — 57 open
+dependencies.** Certified now requires full dependency closure: every
+quantity a legal instrument defines how to compute must be encoded, with
+only observable acts (dates, register entries, issued assessments,
+judgments, decisions) as leaves. The dk ledger honestly declares 49
+law-derived leaves (BEK 1563/2013's optjening construction; personskatteloven
+§§ 7, 14, 20; pensionsbeskatningsloven; kildeskatteloven § 1; straffeloven
+§ 81 a; folkeskoleloven; and the act's own §§ 1-5 cadence, flow, and
+composite rules currently wired as case-supplied inputs) and 8 instruments
+bearing on computed surfaces (BEK 1563 §§ 16-18 and § 23, principafgørelse
+64-13, the convention guidances, the ligedeling line via § 4). Each is an
+enumerated encoding work item in the certificate's dependency-closure
+block. The prior premises all hold: spine closed (10 encoded / 1
+classified / 13 excluded / 0 pending), input frontier complete (90 typed
+grounding rows), instrument frontier complete (28 dispositioned,
+semantic-sha-bound), receipt 10/10 exact, suites conformant with zero
+unexplained. What remains between this program and certified is encoding,
+not process.
 
 ## Certification scope
 
-`certified=yes` certifies that, for benefit year 2025, Denmark excluding the
+What the four premises establish today (and what `certified=yes` would
+certify once the dependency worklist is encoded): for benefit year 2025,
+Denmark excluding the
 Faroe Islands and Greenland, and the exact pinned corpus, RuleSpec, engine,
 manifests, and receipts: every provision in the declared LBK 603/2025 spine
 is either faithfully encoded for its documented entity/input contract or
@@ -55,7 +69,13 @@ the Faroe Islands or Greenland; or post-2025 law, including LOV 303/2026's
   validated clean; typed suite-bound covered_by evidence
   (`{report|chunk_index|chunk, claim}`); the census binds each manifest's
   sha and the strict opt-in, so no evidence edit is invisible downstream.
-- **closed (computed true)** — the closure ledger derives the 24-paragraf
+- **closed (computed FALSE — open dependencies)** — the spine, input
+  frontier, and instrument frontier are all complete (below), but
+  definition v3 additionally requires dependency closure, and the ledger's
+  typed leaves honestly declare 49 law-derived inputs and 8 bearing
+  instruments as open encoding work — so the premise computes false with
+  the worklist enumerated in `computed.dependency_closure`. The completed
+  layers: the closure ledger derives the 24-paragraf
   spine from corpus release `a2e71391` (body sha256 per row) and maps every
   row: §§ 1, 1a, 2, 3, 4a, 4b, 4c, 4e, 5, 8a encoded by direct signed
   modules; § 4 classified `entity_not_supported`; §§ 4d, 6, 6a, 7, 8, 8b, 9,
@@ -73,9 +93,10 @@ the Faroe Islands or Greenland; or post-2025 law, including LOV 303/2026's
   1642 classified amendment_act_partially_encoded (nr. 1's divisor change
   encoded via the two-version § 1 parameter; nrs. 2-11 commence 2026 under
   the post-2025 non-claim), and the rest excluded as not-in-force,
-  superseded-regime, or out-of-period with text-grounded reasons. `certified` now requires this:
-  certify computes `closed=false` for any closure artifact without a
-  complete instrument frontier, whatever its producer reports.
+  superseded-regime, or out-of-period with text-grounded reasons. Certify
+  enforces both layers registry-wide: `closed=false` for any closure
+  artifact without a complete instrument frontier, and under v3 for any
+  ledger with unencoded law-derived leaves or bearing instruments.
 - **executable (computed true)** — the pinned engine (binary sha256
   `079c26f4…`) recompiles both composed programs at the recorded rulespec
   commit and reproduces all 10 certified values; `--check` recompiles and

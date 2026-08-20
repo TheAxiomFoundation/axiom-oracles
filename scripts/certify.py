@@ -1190,6 +1190,21 @@ def _producer_closed_verdict(
         "boundary_frontier": computed.get("boundary_frontier"),
         "instrument_frontier": _instrument_frontier_summary,
         **(
+            {
+                "dependency_closure": {
+                    key: computed["dependency_closure"].get(key)
+                    for key in (
+                        "open_dependency_count",
+                        "law_derived_inputs",
+                        "instruments_bearing_on_computed",
+                        "closed",
+                    )
+                }
+            }
+            if isinstance(computed.get("dependency_closure"), dict)
+            else {}
+        ),
+        **(
             {"burndown": computed.get("burndown")}
             if config.get("include_burndown")
             else {}
@@ -2063,7 +2078,7 @@ def build_certificate(
     certified_rule = (
         "computed(conformant AND exercised AND closed AND executable) with zero "
         "open defects. A premise counts only when its mode is computed AND its "
-        "value is true; attested premises never satisfy it."
+        "value is true; attested premises never satisfy it. The canonical definition, including the closure requirements (spine, instruments, dependency closure with leaf discipline), is CERTIFIED.md at the repository root."
     )
     if not premises_computed:
         certified_rule += (

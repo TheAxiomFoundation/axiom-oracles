@@ -4,7 +4,7 @@
     "person-locality is not yet proven \u2014 the two-endpoint perturbation cannot exclude conditional/default-dormant cross-person dependencies (adversarial review S1); structural cure = axiom-rules-engine#134 stage 2 (prototype exists on feat/unit-derivation-stage2)."
   ],
   "certified": {
-    "rule": "computed(conformant AND exercised AND closed AND executable) with zero open defects. A premise counts only when its mode is computed AND its value is true; attested premises never satisfy it.",
+    "rule": "computed(conformant AND exercised AND closed AND executable) with zero open defects. A premise counts only when its mode is computed AND its value is true; attested premises never satisfy it. The canonical definition, including the closure requirements (spine, instruments, dependency closure with leaf discipline), is CERTIFIED.md at the repository root.",
     "state": "no",
     "value": false
   },

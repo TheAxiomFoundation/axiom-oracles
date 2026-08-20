@@ -125,13 +125,27 @@ def _decisions() -> dict:
             "personskatteloven § 14"
         ),
     }
+    law_derived = {
+        "current_year_income_reduction_allowance": "personskatteloven § 20",
+        "pension_contribution_limit_under_pensionsbeskatningsloven_section_16": (
+            "pensionsbeskatningsloven § 16"
+        ),
+        "percentage_change_rounded_to_one_decimal_place": "§ 1, stk. 3",
+        "personskatteloven_section_7_income_basis": "personskatteloven § 7",
+        "personskatteloven_section_7_income_basis_after_section_14_recalculation": (
+            "personskatteloven §§ 7, 14"
+        ),
+    }
     rows = []
     for name in sorted(captured | set(scopes)):
         row = {
             "name": name,
             "grounding": "captured" if name in captured else "uncaptured",
+            "leaf_kind": "law_derived" if name in law_derived else "world_fact",
             "reason": f"Reviewed grounding for {name}.",
         }
+        if name in law_derived:
+            row["derivation_instrument"] = law_derived[name]
         if name in scopes:
             row["uncaptured_scope"] = scopes[name]
         rows.append(row)
@@ -144,6 +158,7 @@ def _decisions() -> dict:
                 "status": "classified-with-reason",
                 "classification": "input_derivation_rule",
                 "reason": "Hermetic fixture disposition for the test regulation.",
+                "bears_on_computed_surface": False,
             }
         ],
         "supplemental_instruments": [],
@@ -355,7 +370,20 @@ def test_committed_dk_closure_artifact_is_internally_valid_and_closed() -> None:
     document = _load(COMMITTED_ARTIFACT)
     summary = module.validate_artifact(document)
 
-    assert summary.closed is True
+    # Under definition v3 (CERTIFIED.md), closure requires dependency
+    # closure: the 49 law-derived leaves and 8 bearing instruments are open
+    # dependencies, so the artifact honestly computes closed=false with the
+    # encoding worklist enumerated.
+    assert summary.closed is False
+    assert summary.dependency_closed is False
+    assert summary.open_dependency_count == 57
+    dep = document["computed"]["dependency_closure"]
+    assert len(dep["law_derived_inputs"]) == 49
+    assert len(dep["instruments_bearing_on_computed"]) == 8
+    assert (
+        "https://retsinformation.dk/eli/lta/2013/1563"
+        in dep["instruments_bearing_on_computed"]
+    )
     assert summary.encoded_count == 10
     assert summary.partially_encoded_count == 0
     assert summary.pending_count == 0

@@ -4,7 +4,7 @@
     "us-tariff-schedule: 0 unexplained mismatch(es), 1592236 axiom-attributed-open unit(s) (fed-false-family-brazil=93198, fed-false-family-forced-labor=1499038) \u2014 disposition or fix before this leg counts"
   ],
   "certified": {
-    "rule": "computed(conformant AND exercised AND closed AND executable) with zero open defects. A premise counts only when its mode is computed AND its value is true; attested premises never satisfy it.",
+    "rule": "computed(conformant AND exercised AND closed AND executable) with zero open defects. A premise counts only when its mode is computed AND its value is true; attested premises never satisfy it. The canonical definition, including the closure requirements (spine, instruments, dependency closure with leaf discipline), is CERTIFIED.md at the repository root.",
     "state": "no",
     "value": false
   },
