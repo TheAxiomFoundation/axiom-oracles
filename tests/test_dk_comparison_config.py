@@ -178,29 +178,35 @@ def test_dk_all_four_computed_premises_flow_to_certificate() -> None:
         (REPO_ROOT / "certificates/dk-boerne-og-ungeydelse.json").read_text()
     )
     verdicts = certificate["verdicts"]
-    # The instrument-frontier requirement (oracles#491) opens the closed
-    # premise until the closure ledger dispositions the act's subordinate
-    # instruments: certify computes closed=false for a closure artifact that
-    # declares no complete instrument frontier, whatever its producer says.
-    # The other three premises stay computed true; certified honestly reads
-    # no until the dk frontier lands.
+    # The closed premise satisfies the instrument-frontier requirement
+    # (oracles#491): the closure ledger dispositions every instrument in the
+    # act's ELI graph plus the search-discovered supplement, so certify
+    # computes closed=true under the strengthened predicate and certified
+    # re-derives yes.
     assert {
         name: (block["mode"], block["value"]) for name, block in verdicts.items()
     } == {
         "conformant": ("computed", True),
         "exercised": ("computed", True),
-        "closed": ("computed", False),
+        "closed": ("computed", True),
         "executable": ("computed", True),
     }
-    closed_verdict = verdicts["closed"]
-    assert closed_verdict["instrument_frontier"]["missing"] is True
-    assert closed_verdict["instrument_frontier"]["complete"] is False
+    closed_frontier = verdicts["closed"]["instrument_frontier"]
+    assert closed_frontier["complete"] is True
+    assert closed_frontier["counts"] == {
+        "total": 28,
+        "encoded": 0,
+        "classified-with-reason": 17,
+        "excluded-with-reason": 11,
+        "pending": 0,
+    }
+    assert closed_frontier["pending"] == []
     assert not any(
         blocker.startswith("exercise:") for blocker in certificate["blockers"]
     )
     assert certificate["blockers"] == []
-    assert certificate["certified"]["value"] is False
-    assert certificate["certified"]["state"] == "no"
+    assert certificate["certified"]["value"] is True
+    assert certificate["certified"]["state"] == "yes"
 
     evidence = {row["artifact"]: row for row in certificate["evidence"]}
     for relative in (

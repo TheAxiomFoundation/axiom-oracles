@@ -3,8 +3,8 @@
   "blockers": [],
   "certified": {
     "rule": "computed(conformant AND exercised AND closed AND executable) with zero open defects. A premise counts only when its mode is computed AND its value is true; attested premises never satisfy it.",
-    "state": "no",
-    "value": false
+    "state": "yes",
+    "value": true
   },
   "evidence": [
     {
@@ -71,7 +71,7 @@
       "artifact": "conformance/closure/dk-boerne-og-ungeydelse.yaml",
       "claim": "closed:dk/boerne-og-ungeydelse",
       "mode": "computed",
-      "sha256": "8b60cb1d4361d9547433211a347d30f90d37b3d354acccbb56a9011cd1946c60",
+      "sha256": "b12b5952752b3f70aaf3f03fd1f6f78f0aae4367f8440a642f6b43e0fb8842aa",
       "verification": "producer_artifact_validation"
     },
     {
@@ -298,9 +298,17 @@
         "uncaptured_input_count": 25
       },
       "instrument_frontier": {
-        "complete": false,
-        "missing": true,
-        "requirement": "closure must disposition the act's subordinate instruments (oracles#491); this artifact declares none"
+        "complete": true,
+        "counts": {
+          "classified-with-reason": 17,
+          "encoded": 0,
+          "excluded-with-reason": 11,
+          "pending": 0,
+          "total": 28
+        },
+        "instrument_count": 27,
+        "pending": [],
+        "supplemental_count": 1
       },
       "mode": "computed",
       "non_encoded_reasons_complete": true,
@@ -313,8 +321,8 @@
         "total": 24
       },
       "rulespec_commit": "9a9469edbbc4829847698cd0adf218771120b9cd",
-      "status": "computed_open",
-      "value": false
+      "status": "computed_closed",
+      "value": true
     },
     "conformant": {
       "mode": "computed",
