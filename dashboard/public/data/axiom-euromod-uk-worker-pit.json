@@ -360,7 +360,7 @@
       "axiom_rules_engine_sha": "2c0e1edac0dccc355297eb9663e0aa0c4e97e5b4",
       "axiom_rules_engine_version": "0.2.2"
     },
-    "generated_at": "2026-08-21T13:24:20Z",
+    "generated_at": "2026-08-21T19:04:28Z",
     "generated_by": "scripts/run_comparison.py::uk-worker-pit-ukmod",
     "oracle": {
       "euromod_country": "UK",
