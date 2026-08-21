@@ -36,7 +36,7 @@ DEFAULT_OUTPUT = REPO_ROOT / "V3-AUDIT-OUT.md"
 AUDIT_DATE = "2026-08-20"
 REBASE_BASE_REF = "origin/main"
 REBASE_BASE_SHA = "9a8274b4303b512876b56453622f3cdca3f91725"
-IMPLEMENTATION_SHA = "3c0fa74e86d3f2d43496759ecee24d23ed046220"
+IMPLEMENTATION_SHA = "2e27a2fd2b549894c2cf5081ea728cb3a8b6e335"
 
 EXPECTED_PROGRAMS = (
     "nz/acc-earners-levy",
@@ -815,8 +815,8 @@ def build_model() -> dict[str, Any]:
             "local_gate_note": (
                 "On Darwin arm64, the DE-only checks verified the pinned Linux ELF hash, "
                 "replayed with a native engine built from the exact pinned source, and "
-                "verified Ed25519 signatures through OpenSSL because the host CFFI module "
-                "was unavailable. The temporary local adapters were removed before commit."
+                "completed the ordinary signature checks. The temporary local adapter was "
+                "removed before commit."
             ),
         },
         "resolved_audit_questions": resolved_audit_questions,

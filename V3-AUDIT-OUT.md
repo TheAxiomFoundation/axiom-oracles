@@ -4,7 +4,7 @@
 
 This is the deterministic audit rendered on the fixed discovery date **2026-08-20** from the committed NZ ledgers. The requested ops destination `/Users/maxghenis/TheAxiomFoundation/ops/nz-lane/_cert/sol-v3-nz-audit.md` is outside the writable sandbox, so the report is emitted as `V3-AUDIT-OUT.md`. The ops checkout is outside the writable sandbox; no ops file was modified.
 
-Rebase base: `origin/main` at `9a8274b4303b512876b56453622f3cdca3f91725`. Implementation SHA: `3c0fa74e86d3f2d43496759ecee24d23ed046220` — **committed implementation audited by this attestation**.
+Rebase base: `origin/main` at `9a8274b4303b512876b56453622f3cdca3f91725`. Implementation SHA: `2e27a2fd2b549894c2cf5081ea728cb3a8b6e335` — **committed implementation audited by this attestation**.
 
 ## Part 1 — leaf typing (dependency closure)
 
@@ -658,7 +658,7 @@ The required battery was run against the implementation commit above.
 | `simulated_nz_refresh` | `PASS — nz-treasury-incomeexplorer` |
 | `whole_mutant_file` | `PASS — 259 passed; guard reversions included` |
 
-**Local DE gate compatibility:** On Darwin arm64, the DE-only checks verified the pinned Linux ELF hash, replayed with a native engine built from the exact pinned source, and verified Ed25519 signatures through OpenSSL because the host CFFI module was unavailable. The temporary local adapters were removed before commit.
+**Local DE gate compatibility:** On Darwin arm64, the DE-only checks verified the pinned Linux ELF hash, replayed with a native engine built from the exact pinned source, and completed the ordinary signature checks. The temporary local adapter was removed before commit.
 
 ## C1 resolutions of audit questions
 
@@ -674,5 +674,5 @@ The required battery was run against the implementation commit above.
 ## Final identifiers
 
 - Rebase base: `9a8274b4303b512876b56453622f3cdca3f91725` (`origin/main`).
-- Final implementation SHA: `3c0fa74e86d3f2d43496759ecee24d23ed046220`.
+- Final implementation SHA: `2e27a2fd2b549894c2cf5081ea728cb3a8b6e335`.
 - Rendered output: `V3-AUDIT-OUT.md` (ops fallback).
