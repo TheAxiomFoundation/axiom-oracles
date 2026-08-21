@@ -194,16 +194,16 @@ def test_dk_all_four_computed_premises_flow_to_certificate() -> None:
     }
     closed_verdict = verdicts["closed"]
     # The launch audit's official-source search found bearing instruments
-    # outside the act's ELI graph (B-1-96, B-1-08, BEK 1063/2019, four
-    # precedents pending) — so the instrument frontier honestly reads
-    # incomplete until the pending reads land, and the link graph alone is
-    # demonstrated insufficient as a discovery channel.
-    assert closed_verdict["instrument_frontier"]["complete"] is False
+    # outside the act's ELI graph (B-1-96, B-1-08, BEK 1063/2019, and four
+    # further precedents, all now read and dispositioned) — the frontier is
+    # complete again, and every discovered instrument that governs a § 2
+    # condition fact counts as an open bearing dependency until encoded.
+    assert closed_verdict["instrument_frontier"]["complete"] is True
     dependency = closed_verdict["dependency_closure"]
     assert dependency["closed"] is False
-    assert dependency["open_dependency_count"] == 67
+    assert dependency["open_dependency_count"] == 71
     assert len(dependency["law_derived_inputs"]) == 55
-    assert len(dependency["instruments_bearing_on_computed"]) == 12
+    assert len(dependency["instruments_bearing_on_computed"]) == 16
     assert not any(
         blocker.startswith("exercise:") for blocker in certificate["blockers"]
     )
