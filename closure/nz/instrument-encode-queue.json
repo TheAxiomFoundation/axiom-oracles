@@ -37,6 +37,22 @@
       "title": "Goods and Services Tax Act 1985"
     },
     {
+      "bearing_surface": "Social-housing additional-resident and contribution inputs",
+      "defining_provision": "Public and Community Housing Management Act 1992 s 2; Social Security Act 2018 ss 65AAA–66",
+      "eli": "https://www.legislation.govt.nz/act/public/1992/76/en/latest/",
+      "programs": [
+        "nz/accommodation-supplement"
+      ],
+      "reason": "The Accommodation Supplement RuleSpec consumes the resulting social-housing facts but has no proof binding to this Act's imported definitions.",
+      "size_class": "M",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/act/public/1992/76/en/latest/",
+      "target_modules": [
+        "nz/statutes/social_security/accommodation_supplement/core.yaml"
+      ],
+      "title": "Public and Community Housing Management Act 1992"
+    },
+    {
       "bearing_surface": "WFF entitlement, payment administration and cadence, and MB 13 emergency-event determinations, with the downstream IETC gate",
       "defining_provision": "Tax Administration Act 1994 ss 80KA–80KW (especially ss 80KF, 80KO, 80KW) and 91AAS; Income Tax Act 2007 ss LC 13, MB 13",
       "eli": "https://www.legislation.govt.nz/act/public/1994/166/en/latest/",
@@ -54,6 +70,42 @@
         "nz/statutes/income_tax/family_scheme/tax_credits.yaml"
       ],
       "title": "Tax Administration Act 1994"
+    },
+    {
+      "bearing_surface": "Main-benefit, WEP, and Accommodation Supplement eligibility and continuation",
+      "defining_provision": "Social Security (Modernisation) Amendment Act 2026 ss 4–13, 19, 21, 33–34, 43–65 and schedules",
+      "eli": "https://www.legislation.govt.nz/act/public/2026/27/en/latest/",
+      "programs": [
+        "nz/accommodation-supplement",
+        "nz/main-benefits",
+        "nz/winter-energy-payment"
+      ],
+      "reason": "These changes occur after the pinned principal Act's 1 April 2026 version and during the certified period; no existing Accommodation Supplement, main-benefit, or WEP module proof-binds and implements them.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/act/public/2026/27/en/latest/",
+      "target_modules": [
+        "nz/statutes/social_security/accommodation_supplement/core.yaml",
+        "nz/statutes/social_security/main_benefits/entitlement.yaml",
+        "nz/statutes/social_security/winter_energy_payment/core.yaml"
+      ],
+      "title": "Social Security (Modernisation) Amendment Act 2026"
+    },
+    {
+      "bearing_surface": "Student-allowance/grant eligibility gate for Accommodation Supplement",
+      "defining_provision": "Student Allowances Regulations 1998 regs 2–8, 12, 12A–16, 20, 26, 28–31, 34–35, 40, 44–46, 47B–47E, 48; Social Security Act 2018 s 67",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/1998/277/en/latest/",
+      "programs": [
+        "nz/accommodation-supplement"
+      ],
+      "reason": "The Accommodation Supplement RuleSpec accepts receiving-or-eligible-for-student-allowance/grant as a case-derived input but does not proof-bind or compute the eligibility defined by these regulations.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/1998/277/en/latest/",
+      "target_modules": [
+        "nz/statutes/social_security/accommodation_supplement/core.yaml"
+      ],
+      "title": "Student Allowances Regulations 1998"
     },
     {
       "bearing_surface": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
@@ -695,7 +747,8 @@
   ],
   "reviewed_acts": [
     "Accident Compensation Act 2001",
-    "Income Tax Act 2007"
+    "Income Tax Act 2007",
+    "Social Security Act 2018"
   ],
   "schema": "axiom_oracles.nz_instrument_encode_queue.v1",
   "source_dispositions": "closure/nz/instrument-dispositions.json"

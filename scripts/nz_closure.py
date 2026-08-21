@@ -3288,6 +3288,361 @@ def _income_tax_graph_exclusion(eli: str, title: str) -> tuple[str, str]:
     )
 
 
+_SOCIAL_SECURITY_GRAPH_EXCLUSIONS: dict[str, tuple[str, str]] = {
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/236/en/latest/': (
+        'superseded_regime',
+        'Inserted Social Security Regulations 2018 Schedule 8 Part 28, exempting '
+        'Housing New Zealand methamphetamine tenancy-termination reimbursement from '
+        'cash assets and income. Its operative exemption is consolidated into the '
+        'pinned Social Security Regulations 2018 version dated 2026-04-05; this '
+        'amending instrument is not a separate current rule source.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/115/en/latest/': (
+        'superseded_regime',
+        'Inserted regulations 5 and 7A so specified Christchurch response visa '
+        'holders satisfy specified residential requirements. The operative '
+        'residential rule is consolidated into the pinned Social Security '
+        'Regulations 2018 version dated 2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/128/en/latest/': (
+        'superseded_regime',
+        'Amended Schedule 8 cash-asset and income exemptions for specified ex '
+        'gratia and compensation payments, including payments by specified other '
+        'entities. The operative exemptions are consolidated into the pinned Social '
+        'Security Regulations 2018 version dated 2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/215/en/latest/': (
+        'superseded_regime',
+        'Inserted Schedule 8 Part 31 to exempt specified MSD lump-sum payments from '
+        'cash assets and income for the first 12 months. The operative exemption is '
+        'consolidated into the pinned Social Security Regulations 2018 version '
+        'dated 2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/264/en/latest/': (
+        'superseded_regime',
+        'Amended regulations 30 and 38 and Schedule 1 for cohort-entry policy '
+        'effects on childcare subsidy and OSCAR assistance. The operative childcare '
+        'rules are consolidated into the pinned Social Security Regulations 2018 '
+        'version dated 2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/28/en/latest/': (
+        'superseded_regime',
+        'Amended regulations 55 and 71 and Schedules 2 and 8 for funeral grants, '
+        'temporary additional support, childcare rates, and '
+        'accommodation-supplement arrears exemptions. These historical parameters '
+        'and rules are superseded by the pinned consolidated 2026-04-05 '
+        'regulations.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/31/en/latest/': (
+        'spine_excluded_surface',
+        'Changed Health Entitlement Cards Regulations 1993 income thresholds for '
+        'community services cards. It bears only on the '
+        'health-card/community-services-card output, which is outside the AS, '
+        'main-benefit, and WEP certified computed surfaces.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/68/en/latest/': (
+        'superseded_regime',
+        'Inserted Schedule 8 Part 29 cash-asset and income exemptions for '
+        'Christchurch mosques attack support payments. The operative exemption is '
+        'consolidated into the pinned Social Security Regulations 2018 version '
+        'dated 2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/76/en/latest/': (
+        'superseded_regime',
+        'Inserted Schedule 8 Part 30 exemptions for refunds of specified debt '
+        'repayments related to Housing New Zealand methamphetamine contamination. '
+        'The operative exemption is consolidated into the pinned Social Security '
+        'Regulations 2018 version dated 2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/99/en/latest/': (
+        'superseded_regime',
+        "Amended regulation 3's family-violence definition to align with the Family "
+        'Violence Act 2018. The operative definition is consolidated into the '
+        'pinned Social Security Regulations 2018 version dated 2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/111/en/latest/': (
+        'superseded_regime',
+        'Inserted temporary regulation 179A exempting specified COVID-19 cases from '
+        'stand down; the provision was revoked on 23 November 2020. The temporary '
+        'rule was revoked years before the certified period and is absent as an '
+        'operative rule from the pinned consolidated regulations.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/15/en/latest/': (
+        'superseded_regime',
+        'Made annual amendments to regulations 55, 69, and 71 and Schedules 2 and '
+        '8, including funeral, TAS, childcare, and transitional-assistance values. '
+        'These historical parameters and rules are superseded by the pinned '
+        'consolidated 2026-04-05 regulations.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/179/en/latest/': (
+        'superseded_regime',
+        'Inserted time-limited regulation 179B COVID-19 recovery stand-down '
+        'exemptions and amended regulation 189 expiry-and-regrant rules. The '
+        'temporary COVID-19 provisions ended before the certified period; any '
+        'surviving operative text is reflected in the pinned consolidated '
+        'regulations.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/18/en/latest/': (
+        'spine_excluded_surface',
+        'Changed Health Entitlement Cards Regulations 1993 community-services-card '
+        'thresholds. It bears only on a health-card output outside the three '
+        'certified computed surfaces.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/20/en/latest/': (
+        'superseded_regime',
+        'Amended regulations 3, 71, 209, 210, and 227 and a schedule for '
+        'emergency/transitional housing, TAS, and debt treatment. The operative '
+        'housing and debt rules are consolidated into the pinned Social Security '
+        'Regulations 2018 version dated 2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/223/en/latest/': (
+        'superseded_regime',
+        'Amended regulation 28 for COVID-19-related childcare absence. The '
+        'temporary historical rule is superseded; the pinned consolidated '
+        'regulations contain the operative certified-period text.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/32/en/latest/': (
+        'superseded_regime',
+        'Amended Schedule 8 to make the Christchurch mosques attack support-payment '
+        'exemptions permanent. The operative exemption is consolidated into the '
+        'pinned Social Security Regulations 2018 version dated 2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/34/en/latest/': (
+        'superseded_regime',
+        'Inserted a temporary COVID-19 stand-down exemption through regulation '
+        '179A. The temporary provision was revoked before the certified period and '
+        'has no operative certified-period effect.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/53/en/latest/': (
+        'superseded_regime',
+        'Amended regulations 67 and 189 for temporary COVID-19 TAS and '
+        'expiry-and-regrant treatment. The temporary historical rules are '
+        'superseded; the pinned consolidated regulations contain the operative '
+        'certified-period text.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/121/en/latest/': (
+        'superseded_regime',
+        'Amended regulations 20, 64, 66, and 69 concerning disability allowance, '
+        'TAS, and childcare-income treatment. The operative rules are consolidated '
+        'into the pinned Social Security Regulations 2018 version dated 2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/138/en/latest/': (
+        'superseded_regime',
+        'Inserted Schedule 8 Part 32 exemptions for lump-sum '
+        'residential-care-subsidy refunds. The operative exemption is consolidated '
+        'into the pinned Social Security Regulations 2018 version dated 2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/16/en/latest/': (
+        'superseded_regime',
+        'Amended Social Security Act 2018 Schedule 2 Income Test 1 through Income '
+        'Test 4 thresholds from 1 April 2021. Those historical thresholds are '
+        'superseded by later updates and the pinned Social Security Act version '
+        'dated 2026-04-01.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/17/en/latest/': (
+        'superseded_regime',
+        'Made annual amendments to regulations 55, 69, and 71 and Schedules 2 and '
+        '8. These historical parameters and rules are superseded by the pinned '
+        'consolidated 2026-04-05 regulations.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/20/en/latest/': (
+        'spine_excluded_surface',
+        'Changed Health Entitlement Cards Regulations 1993 community-services-card '
+        'thresholds. It bears only on a health-card output outside the three '
+        'certified computed surfaces.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/351/en/latest/': (
+        'spine_excluded_surface',
+        "The incorporated agreement's Article 1(f) limits New Zealand benefits to "
+        "New Zealand superannuation and veteran's pension, and Articles 6 to 11 "
+        'regulate those benefits. Those pension entitlement and amount surfaces are '
+        'outside AS, main benefits, and WEP; any pension receipt used by WEP is an '
+        'input fact rather than a value this order makes the module compute.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/185/en/latest/': (
+        'superseded_regime',
+        'Inserted Schedule 8 Part 33 cash-asset and income exemptions for the '
+        'cost-of-living payment. The operative exemption is consolidated into the '
+        'pinned Social Security Regulations 2018 version dated 2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/250/en/latest/': (
+        'spine_excluded_surface',
+        'Amended health-entitlement-card use, including transport-card treatment. '
+        'It bears only on card use and health-card administration, outside the '
+        'three certified computed surfaces.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/251/en/latest/': (
+        'superseded_regime',
+        'Amended regulations 3, 290, and 291 for SuperGold and '
+        'community-services-card public-transport use. The operative provisions are '
+        'consolidated into the pinned regulations and bear only on '
+        'card-administration outputs excluded from these certified surfaces.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/27/en/latest/': (
+        'superseded_regime',
+        'Made annual amendments to regulations 55 and 71 and Schedules 2 and 8. '
+        'These historical parameters and rules are superseded by the pinned '
+        'consolidated 2026-04-05 regulations.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/34/en/latest/': (
+        'spine_excluded_surface',
+        'Changed Health Entitlement Cards Regulations 1993 community-services-card '
+        'thresholds. It bears only on a health-card output outside the three '
+        'certified computed surfaces.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/188/en/latest/': (
+        'superseded_regime',
+        'Amended regulation 263 and inserted regulations 294A and 294B for '
+        'classification of child-support payments. The operative '
+        'child-support-payment rules are consolidated into the pinned Social '
+        'Security Regulations 2018 version dated 2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/208/en/latest/': (
+        'superseded_regime',
+        'Amended regulations 57, 69, and 71 for the North Island Weather Events '
+        'temporary-accommodation-assistance programme. The programme-specific '
+        'historical rule is superseded; the pinned consolidated regulations contain '
+        'the operative certified-period text.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/255/en/latest/': (
+        'superseded_regime',
+        'Amended regulations 57, 69, and 71 to replace the North Island programme '
+        'with the Severe Weather Events TAA programme. The operative programme rule '
+        'is consolidated into the pinned Social Security Regulations 2018 version '
+        'dated 2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/274/en/latest/': (
+        'superseded_regime',
+        'Inserted Schedule 8 Part 38 cash-asset and income exemptions for specified '
+        'severe-weather-event payments. The operative exemption is consolidated '
+        'into the pinned Social Security Regulations 2018 version dated 2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/37/en/latest/': (
+        'superseded_regime',
+        'Made annual amendments to regulations 55 and 71 and Schedules 2 and 8. '
+        'These historical parameters and rules are superseded by the pinned '
+        'consolidated 2026-04-05 regulations.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/41/en/latest/': (
+        'spine_excluded_surface',
+        'Changed Health Entitlement Cards Regulations 1993 community-services-card '
+        'thresholds. It bears only on a health-card output outside the three '
+        'certified computed surfaces.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/63/en/latest/': (
+        'superseded_regime',
+        'Inserted Schedule 8 Part 34 to exempt the Kāinga Ora energy subsidy from '
+        'income. The operative exemption is consolidated into the pinned Social '
+        'Security Regulations 2018 version dated 2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/10/en/latest/': (
+        'superseded_regime',
+        'Made annual amendments to regulations 55 and 71 and Schedules 2 and 8. '
+        'These historical parameters and rules are superseded by the pinned '
+        'consolidated 2026-04-05 regulations.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/12/en/latest/': (
+        'spine_excluded_surface',
+        'Changed Health Entitlement Cards Regulations 1993 regulation 8 thresholds. '
+        'It bears only on a health-card output outside the three certified computed '
+        'surfaces.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/137/en/latest/': (
+        'superseded_regime',
+        'Amended regulations 3 and 209 and Schedule 1 for emergency-housing '
+        'assistance and debt treatment. The operative emergency-housing rules are '
+        'consolidated into the pinned Social Security Regulations 2018 version '
+        'dated 2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/163/en/latest/': (
+        'superseded_regime',
+        'Inserted Schedule 8 Part 39 cash-asset and income exemptions for '
+        'FamilyBoost payments. The operative exemption is consolidated into the '
+        'pinned Social Security Regulations 2018 version dated 2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/26/en/latest/': (
+        'superseded_regime',
+        'Amended regulation 57 and related provisions for the Severe Weather Events '
+        'TAA programme. The operative programme rule is consolidated into the '
+        'pinned Social Security Regulations 2018 version dated 2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/50/en/latest/': (
+        'superseded_regime',
+        'Amended regulations 20 and 23 for childcare-subsidy fees and hours. The '
+        'operative childcare rules are consolidated into the pinned Social Security '
+        'Regulations 2018 version dated 2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/10/en/latest/': (
+        'superseded_regime',
+        'Made annual amendments to regulations 55 and 71 and Schedules 2 and 8. '
+        'These historical parameters and rules are superseded by the pinned '
+        'consolidated 2026-04-05 regulations.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/121/en/latest/': (
+        'superseded_regime',
+        'Amended regulations 282, 290, and 291 for SuperGold and rates-rebate '
+        'evidence and card administration. The operative provisions are '
+        'consolidated into the pinned regulations and bear only on excluded '
+        'card/rates-rebate administration surfaces.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/13/en/latest/': (
+        'spine_excluded_surface',
+        'Changed Health Entitlement Cards Regulations 1993 regulation 8 thresholds. '
+        'It bears only on a health-card output outside the three certified computed '
+        'surfaces.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/157/en/latest/': (
+        'superseded_regime',
+        'Inserted a Schedule 8 exemption, without a time limit, for specified Lake '
+        'Alice compensation or ex gratia payments. The operative exemption is '
+        'consolidated into the pinned Social Security Regulations 2018 version '
+        'dated 2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/223/en/latest/': (
+        'superseded_regime',
+        'Amended regulations 3, 69, 194, and 195 and Schedule 8 for youth money '
+        'management and programme references. The operative rules are consolidated '
+        'into the pinned Social Security Regulations 2018 version dated 2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/250/en/latest/': (
+        'superseded_regime',
+        'Amended regulation 165 and inserted subpart 1A from regulation 176A for '
+        'mandatory reviews; commenced 2 March 2026. Its pre-certified-period '
+        'commencement and operative review rules are included in the pinned Social '
+        'Security Regulations version dated 2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/306/en/latest/': (
+        'superseded_regime',
+        'Amended regulations 57, 66, 71, and 173 and Schedule 1 to align with the '
+        'Accommodation Supplement and income-related-rent reforms; commenced 2 '
+        'March 2026. Its operative rules are included in the pinned Social Security '
+        'Regulations version dated 2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2026/37/en/latest/': (
+        'superseded_regime',
+        'Made annual amendments to regulations 55 and 71 and Schedules 2 and 8 from '
+        "1 April 2026. The instrument's in-period operative changes are included in "
+        'the pinned consolidated Social Security Regulations version dated '
+        '2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2026/38/en/latest/': (
+        'spine_excluded_surface',
+        'Changed Health Entitlement Cards Regulations 1993 community-services-card '
+        'thresholds from 1 April 2026. It bears only on the in-period health-card '
+        'threshold/output, outside the three certified computed surfaces.'
+    ),
+}
+
+
+def _social_security_graph_exclusion(eli: str, title: str) -> tuple[str, str]:
+    """Return the source-reviewed B2 disposition for an SSA graph row."""
+
+    decision = _SOCIAL_SECURITY_GRAPH_EXCLUSIONS.get(eli)
+    if decision is None:
+        raise ClosureError(f"unreviewed Social Security instrument: {title} ({eli})")
+    return decision
+
+
 def _seed_instrument_decision(program: str, row: Mapping[str, Any]) -> dict[str, Any]:
     eli = str(row["eli"])
     title = str(row["title"])
@@ -3655,6 +4010,15 @@ def _seed_instrument_decision(program: str, row: Mapping[str, Any]) -> dict[str,
             reason=reason,
             bears_on_computed_surface=False,
         )
+    if row.get("act_citation_path") == "nz/statute/act/public/2018/0032":
+        classification, reason = _social_security_graph_exclusion(eli, title)
+        return _reviewed_decision(
+            eli,
+            "excluded-with-reason",
+            classification=classification,
+            reason=reason,
+            bears_on_computed_surface=False,
+        )
     return _decision("pending")
 
 
@@ -3761,21 +4125,22 @@ def _subject_search_supplements() -> list[dict[str, Any]]:
             "eli": "https://www.legislation.govt.nz/act/public/2025/27/en/latest/",
             "title_short": "Social Assistance Legislation (Accommodation Supplement and Income-related Rent) Amendment Act 2025",
             "programs": ["nz/accommodation-supplement"],
-            "status": "pending",
-            "provenance": "Official legislation page and provisions read 2026-08-20.",
+            "status": "excluded-with-reason",
+            "classification": "superseded_regime",
+            "provenance": "Official legislation page, provisions, and consolidated principal text read 2026-08-21.",
             "discovery_channels": ["subject_matter_search"],
-            "bears_on_computed_surface": True,
+            "bears_on_computed_surface": False,
             "reason": (
-                "Sections 2 and 4–15 change accommodation-cost definitions, "
-                "entitlement/zero-rate rules, review mechanics, income exclusions, "
-                "and weekly qualifying-cost/income terms."
+                "Sections 4–15 amend Accommodation Supplement cost definitions, "
+                "entitlement and zero-rate rules, review mechanics, income "
+                "exclusions, and weekly qualifying-cost/income terms; section 2 "
+                "brought the Act into force on 2 March 2026. Every operative change "
+                "commenced before the certified period and is consolidated into the "
+                "pinned Social Security Act version dated 2026-04-01, to which the "
+                "Accommodation Supplement RuleSpec is proof-bound."
             ),
-            "bearing": "Accommodation Supplement eligibility, cost, income, and payment surface",
-            "defining_provision": "Social Assistance Legislation (Accommodation Supplement and Income-related Rent) Amendment Act 2025 ss 2, 4–15",
-            "target_module": [
-                "nz/statutes/social_security/accommodation_supplement/core.yaml"
-            ],
-            "size_class": "L",
+            "source_url": "https://www.legislation.govt.nz/act/public/2025/27/en/latest/",
+            "source_checked_at": B2_INSTRUMENT_REVIEW_DATE,
         },
         {
             "eli": "https://www.legislation.govt.nz/act/public/2026/27/en/latest/",
@@ -3802,6 +4167,8 @@ def _subject_search_supplements() -> list[dict[str, Any]]:
                 "nz/statutes/social_security/winter_energy_payment/core.yaml",
             ],
             "size_class": "L",
+            "source_url": "https://www.legislation.govt.nz/act/public/2026/27/en/latest/",
+            "source_checked_at": B2_INSTRUMENT_REVIEW_DATE,
         },
         {
             "eli": "https://www.taxtechnical.ird.govt.nz/case-summaries/2023/csum-23-04",
@@ -3939,6 +4306,8 @@ def _subject_search_supplements() -> list[dict[str, Any]]:
                     "nz/statutes/social_security/accommodation_supplement/core.yaml"
                 ],
                 "size_class": "M",
+                "source_url": "https://www.legislation.govt.nz/act/public/1992/76/en/latest/",
+                "source_checked_at": B2_INSTRUMENT_REVIEW_DATE,
             },
             {
                 "eli": "https://www.legislation.govt.nz/act/public/1994/166/en/latest/",
@@ -4046,6 +4415,8 @@ def _subject_search_supplements() -> list[dict[str, Any]]:
                     "nz/statutes/social_security/accommodation_supplement/core.yaml"
                 ],
                 "size_class": "L",
+                "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/1998/277/en/latest/",
+                "source_checked_at": B2_INSTRUMENT_REVIEW_DATE,
             },
         ]
     )
