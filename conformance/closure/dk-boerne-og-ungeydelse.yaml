@@ -1943,29 +1943,52 @@ committed_decisions:
       comparison behind the § 2, stk. 1, nr. 4 condition, expressly relying on CIR 148 pkt. 7.'
     bears_on_computed_surface: true
   - eli: https://retsinformation.dk/eli/retsinfo/1996/9261
-    status: pending
+    status: classified-with-reason
     title_short: KEN nr 9261 af 15/07/1996 (B-9-96)
     relation: bears_on
-    provenance: launch-audit official-source search 2026-08-20; located via documentsearch, body not yet
-      read — pending disposition
+    provenance: launch-audit official-source search 2026-08-20; body read in full 2026-08-20 (pdf staged
+      in ops/dk-lane/wave2/instruments/)
+    classification: input_derivation_rule
+    reason: 'Ankestyrelsen principafgørelse B-9-96: while a placement decision under the social-services
+      rules stands, the child counts as placed even during unauthorized stays at home, and the § 3 first-day-of-quarter
+      timing applies to that status; expressly applies CIR 148 pkt. 7. Governs the placement branch of
+      the § 2, stk. 1, nr. 4 condition and its § 3 timing.'
+    bears_on_computed_surface: true
   - eli: https://retsinformation.dk/eli/retsinfo/1997/9246
-    status: pending
+    status: classified-with-reason
     title_short: KEN nr 9246 af 15/01/1997 (B-1-97)
     relation: bears_on
-    provenance: launch-audit official-source search 2026-08-20; located via documentsearch, body not yet
-      read — pending disposition
+    provenance: launch-audit official-source search 2026-08-20; body read in full 2026-08-20 (pdf staged
+      in ops/dk-lane/wave2/instruments/)
+    classification: input_derivation_rule
+    reason: 'Ankestyrelsen principafgørelse B-1-97: a produktionsskole work allowance (arbejdsdusør) is
+      not maintenance by public funds — the home-living arrangement and who bears the substantive support
+      costs decide the § 2, stk. 1, nr. 4 predicate. Supersedes SM B-3-91. Governs establishment of the
+      case-supplied public-maintenance condition consumed by the encoded § 2 surface.'
+    bears_on_computed_surface: true
   - eli: https://retsinformation.dk/eli/retsinfo/1998/9196
-    status: pending
+    status: classified-with-reason
     title_short: KEN nr 9196 af 15/06/1998 (B-5-98)
     relation: bears_on
-    provenance: launch-audit official-source search 2026-08-20; located via documentsearch, body not yet
-      read — pending disposition
+    provenance: launch-audit official-source search 2026-08-20; body read in full 2026-08-20 (pdf staged
+      in ops/dk-lane/wave2/instruments/)
+    classification: input_derivation_rule
+    reason: 'Ankestyrelsen principafgørelse B-5-98: a child housed with a parent in pre-trial detention
+      is maintained by public funds (benefit refusal upheld; no repayment of amounts already paid). Governs
+      the § 2, stk. 1, nr. 4 predicate for detention arrangements.'
+    bears_on_computed_surface: true
   - eli: https://retsinformation.dk/eli/retsinfo/2007/11117
-    status: pending
+    status: classified-with-reason
     title_short: KEN nr 11117 af 02/11/2007 (B-5-07)
     relation: bears_on
-    provenance: launch-audit official-source search 2026-08-20; located via documentsearch, body not yet
-      read — pending disposition
+    provenance: launch-audit official-source search 2026-08-20; body read in full 2026-08-20 (pdf staged
+      in ops/dk-lane/wave2/instruments/)
+    classification: input_derivation_rule
+    reason: 'Ankestyrelsen principafgørelse B-5-07: an undocumented address-less period defeats the residence
+      condition — de facto Danish residence must be documentable even though CPR registration is not itself
+      a precondition (the counterpoint to principafgørelse 64-13). Governs the documentation standard
+      for the § 2, stk. 1, nr. 2 condition fact.'
+    bears_on_computed_surface: true
   - eli: https://retsinformation.dk/eli/retsinfo/2008/10901
     status: classified-with-reason
     title_short: KEN nr 10901 af 01/02/2008 (B-1-08)
@@ -2326,15 +2349,11 @@ computed:
     counts:
       total: 35
       encoded: 0
-      classified-with-reason: 20
+      classified-with-reason: 24
       excluded-with-reason: 11
-      pending: 4
-    pending:
-    - https://retsinformation.dk/eli/retsinfo/1996/9261
-    - https://retsinformation.dk/eli/retsinfo/1997/9246
-    - https://retsinformation.dk/eli/retsinfo/1998/9196
-    - https://retsinformation.dk/eli/retsinfo/2007/11117
-    complete: false
+      pending: 0
+    pending: []
+    complete: true
     ledger:
     - eli: https://retsinformation.dk/eli/lta/2013/1563
       relation: basis_for
@@ -2683,27 +2702,50 @@ computed:
     - eli: https://retsinformation.dk/eli/retsinfo/1996/9261
       relation: bears_on
       title_short: KEN nr 9261 af 15/07/1996 (B-9-96)
-      provenance: launch-audit official-source search 2026-08-20; located via documentsearch, body not
-        yet read — pending disposition
-      status: pending
+      provenance: launch-audit official-source search 2026-08-20; body read in full 2026-08-20 (pdf staged
+        in ops/dk-lane/wave2/instruments/)
+      status: classified-with-reason
+      classification: input_derivation_rule
+      reason: 'Ankestyrelsen principafgørelse B-9-96: while a placement decision under the social-services
+        rules stands, the child counts as placed even during unauthorized stays at home, and the § 3 first-day-of-quarter
+        timing applies to that status; expressly applies CIR 148 pkt. 7. Governs the placement branch
+        of the § 2, stk. 1, nr. 4 condition and its § 3 timing.'
+      bears_on_computed_surface: true
     - eli: https://retsinformation.dk/eli/retsinfo/1997/9246
       relation: bears_on
       title_short: KEN nr 9246 af 15/01/1997 (B-1-97)
-      provenance: launch-audit official-source search 2026-08-20; located via documentsearch, body not
-        yet read — pending disposition
-      status: pending
+      provenance: launch-audit official-source search 2026-08-20; body read in full 2026-08-20 (pdf staged
+        in ops/dk-lane/wave2/instruments/)
+      status: classified-with-reason
+      classification: input_derivation_rule
+      reason: 'Ankestyrelsen principafgørelse B-1-97: a produktionsskole work allowance (arbejdsdusør)
+        is not maintenance by public funds — the home-living arrangement and who bears the substantive
+        support costs decide the § 2, stk. 1, nr. 4 predicate. Supersedes SM B-3-91. Governs establishment
+        of the case-supplied public-maintenance condition consumed by the encoded § 2 surface.'
+      bears_on_computed_surface: true
     - eli: https://retsinformation.dk/eli/retsinfo/1998/9196
       relation: bears_on
       title_short: KEN nr 9196 af 15/06/1998 (B-5-98)
-      provenance: launch-audit official-source search 2026-08-20; located via documentsearch, body not
-        yet read — pending disposition
-      status: pending
+      provenance: launch-audit official-source search 2026-08-20; body read in full 2026-08-20 (pdf staged
+        in ops/dk-lane/wave2/instruments/)
+      status: classified-with-reason
+      classification: input_derivation_rule
+      reason: 'Ankestyrelsen principafgørelse B-5-98: a child housed with a parent in pre-trial detention
+        is maintained by public funds (benefit refusal upheld; no repayment of amounts already paid).
+        Governs the § 2, stk. 1, nr. 4 predicate for detention arrangements.'
+      bears_on_computed_surface: true
     - eli: https://retsinformation.dk/eli/retsinfo/2007/11117
       relation: bears_on
       title_short: KEN nr 11117 af 02/11/2007 (B-5-07)
-      provenance: launch-audit official-source search 2026-08-20; located via documentsearch, body not
-        yet read — pending disposition
-      status: pending
+      provenance: launch-audit official-source search 2026-08-20; body read in full 2026-08-20 (pdf staged
+        in ops/dk-lane/wave2/instruments/)
+      status: classified-with-reason
+      classification: input_derivation_rule
+      reason: 'Ankestyrelsen principafgørelse B-5-07: an undocumented address-less period defeats the
+        residence condition — de facto Danish residence must be documentable even though CPR registration
+        is not itself a precondition (the counterpoint to principafgørelse 64-13). Governs the documentation
+        standard for the § 2, stk. 1, nr. 2 condition fact.'
+      bears_on_computed_surface: true
     - eli: https://retsinformation.dk/eli/retsinfo/2008/10901
       relation: bears_on
       title_short: KEN nr 10901 af 01/02/2008 (B-1-08)
@@ -2777,6 +2819,10 @@ computed:
     - https://retsinformation.dk/eli/lta/2019/1063
     - https://retsinformation.dk/eli/mt/1986/148
     - https://retsinformation.dk/eli/retsinfo/1996/9256
+    - https://retsinformation.dk/eli/retsinfo/1996/9261
+    - https://retsinformation.dk/eli/retsinfo/1997/9246
+    - https://retsinformation.dk/eli/retsinfo/1998/9196
+    - https://retsinformation.dk/eli/retsinfo/2007/11117
     - https://retsinformation.dk/eli/retsinfo/2008/10901
     - https://retsinformation.dk/eli/retsinfo/2013/9724
     - https://retsinformation.dk/eli/retsinfo/2014/9267
@@ -2785,7 +2831,7 @@ computed:
     - https://retsinformation.dk/eli/retsinfo/2023/9456
     - https://retsinformation.dk/eli/retsinfo/2024/9493
     - https://retsinformation.dk/eli/retsinfo/2025/9372
-    open_dependency_count: 67
+    open_dependency_count: 71
     closed: false
   non_encoded_reasons_complete: true
   closed: false

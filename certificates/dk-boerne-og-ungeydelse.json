@@ -71,7 +71,7 @@
       "artifact": "conformance/closure/dk-boerne-og-ungeydelse.yaml",
       "claim": "closed:dk/boerne-og-ungeydelse",
       "mode": "computed",
-      "sha256": "19ff3133286d860a744b5145687b3889db125f0ae0b6797f95aba2a1b5ac015f",
+      "sha256": "0480ef16e7a3295fbeacf35f9928bca5252eca8d6a80de55f7c70188952fc288",
       "verification": "producer_artifact_validation"
     },
     {
@@ -304,6 +304,10 @@
           "https://retsinformation.dk/eli/lta/2019/1063",
           "https://retsinformation.dk/eli/mt/1986/148",
           "https://retsinformation.dk/eli/retsinfo/1996/9256",
+          "https://retsinformation.dk/eli/retsinfo/1996/9261",
+          "https://retsinformation.dk/eli/retsinfo/1997/9246",
+          "https://retsinformation.dk/eli/retsinfo/1998/9196",
+          "https://retsinformation.dk/eli/retsinfo/2007/11117",
           "https://retsinformation.dk/eli/retsinfo/2008/10901",
           "https://retsinformation.dk/eli/retsinfo/2013/9724",
           "https://retsinformation.dk/eli/retsinfo/2014/9267",
@@ -370,24 +374,19 @@
           "total_contributions_to_qualifying_pension_accounts",
           "youth_benefit_is_payable_for_young_person"
         ],
-        "open_dependency_count": 67
+        "open_dependency_count": 71
       },
       "instrument_frontier": {
-        "complete": false,
+        "complete": true,
         "counts": {
-          "classified-with-reason": 20,
+          "classified-with-reason": 24,
           "encoded": 0,
           "excluded-with-reason": 11,
-          "pending": 4,
+          "pending": 0,
           "total": 35
         },
         "instrument_count": 27,
-        "pending": [
-          "https://retsinformation.dk/eli/retsinfo/1996/9261",
-          "https://retsinformation.dk/eli/retsinfo/1997/9246",
-          "https://retsinformation.dk/eli/retsinfo/1998/9196",
-          "https://retsinformation.dk/eli/retsinfo/2007/11117"
-        ],
+        "pending": [],
         "supplemental_count": 8
       },
       "mode": "computed",
