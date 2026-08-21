@@ -1,0 +1,203 @@
+{
+  "schema": "axiom_oracles.closure.de_subject_query_set.v1",
+  "version": "de-subject-matter-2026-08-21-v1",
+  "date": "2026-08-21",
+  "target_period": "2025",
+  "protocol": {
+    "publication_date_cutoff": null,
+    "pagination": "exhaust every issuer result page when a searchable result set is available",
+    "candidate_rule": "a document named by the preregistered seed set or returned by an issuer query enters the pending frontier; retrieval alone is not a bearing or legal disposition",
+    "metadata_rule": "record document metadata only from bytes actually retrieved or from the pinned corpus release"
+  },
+  "sources": [
+    {
+      "id": "bundesanzeiger",
+      "issuer": "Bundesanzeiger Verlag on behalf of the Federal Ministry of Justice",
+      "url": "https://www.bundesanzeiger.de/pub/de/suche?0"
+    },
+    {
+      "id": "behoerden-vwv",
+      "issuer": "Federal administrative-regulation portal",
+      "url": "https://www.verwaltungsvorschriften-im-internet.de/volltextsuche.html"
+    },
+    {
+      "id": "bmas",
+      "issuer": "Bundesministerium für Arbeit und Soziales",
+      "url": "https://www.bmas.de/DE/Service/Service-Suche/suche.html"
+    },
+    {
+      "id": "bmf",
+      "issuer": "Bundesministerium der Finanzen",
+      "url": "https://www.bundesfinanzministerium.de/Web/DE/Service/Publikationen/BMF_Schreiben/bmf_schreiben.html"
+    },
+    {
+      "id": "bmfsfj",
+      "issuer": "Federal family ministry",
+      "url": "https://www.bmfsfj.de/bmfsfj/themen/familie/familienleistungen/unterhaltsvorschuss/unterhaltsvorschuss-73558"
+    },
+    {
+      "id": "bzst",
+      "issuer": "Bundeszentralamt für Steuern",
+      "url": "https://www.bzst.de/DE/Privatpersonen/Kindergeldberechtigte/kindergeldberechtigte_node.html?lv2=90790"
+    },
+    {
+      "id": "gesetze-im-internet",
+      "issuer": "Bundesministerium der Justiz / juris",
+      "url": "https://www.gesetze-im-internet.de/"
+    },
+    {
+      "id": "tacheles-mirror",
+      "issuer": "Tacheles e.V. mirror named in issue #502",
+      "url": "https://www.tacheles-sozialhilfe.de/"
+    }
+  ],
+  "queries": [
+    {
+      "id": "de-subject-001",
+      "programs": [
+        "de/kindergeld"
+      ],
+      "source_id": "bzst",
+      "query": "Dienstanweisung zum Kindergeld nach dem Einkommensteuergesetz 2025",
+      "url": "https://www.bzst.de/DE/Privatpersonen/Kindergeldberechtigte/kindergeldberechtigte_node.html?lv2=90790",
+      "candidate_seed": "de-kg-instr-001"
+    },
+    {
+      "id": "de-subject-002",
+      "programs": [
+        "de/kindergeld"
+      ],
+      "source_id": "bzst",
+      "query": "DA-KG Stand 2025 PDF linked from the BZSt Kindergeld listing",
+      "url": "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2",
+      "candidate_seed": "de-kg-instr-001"
+    },
+    {
+      "id": "de-subject-003",
+      "programs": [
+        "de/kindergeld"
+      ],
+      "source_id": "tacheles-mirror",
+      "query": "DA-KG 2025 PDF mirror URL supplied by issue #502; provenance is the BZSt listing in de-subject-001",
+      "url": "https://www.tacheles-sozialhilfe.de/files/Aktuelles/2025/DA-KG%202025..pdf",
+      "candidate_seed": "de-kg-instr-001"
+    },
+    {
+      "id": "de-subject-004",
+      "programs": [
+        "de/kindergeld"
+      ],
+      "source_id": "bmf",
+      "query": "Kindergeld Familienleistungsausgleich § 31 EStG §§ 62 bis 78 EStG",
+      "url": "https://www.bundesfinanzministerium.de/Web/DE/Service/Publikationen/BMF_Schreiben/bmf_schreiben.html"
+    },
+    {
+      "id": "de-subject-005",
+      "programs": [
+        "de/kindergeld",
+        "de/unterhaltsvorschuss"
+      ],
+      "source_id": "gesetze-im-internet",
+      "query": "Bundeskindergeldgesetz BKGG",
+      "url": "https://www.gesetze-im-internet.de/bkgg_1996/",
+      "candidate_seed": "de-kg-instr-002"
+    },
+    {
+      "id": "de-subject-006",
+      "programs": [
+        "de/kindergeld"
+      ],
+      "source_id": "gesetze-im-internet",
+      "query": "Bundeselterngeld- und Elternzeitgesetz BEEG Elternzeit Kindergeld",
+      "url": "https://www.gesetze-im-internet.de/beeg/"
+    },
+    {
+      "id": "de-subject-007",
+      "programs": [
+        "de/unterhaltsvorschuss"
+      ],
+      "source_id": "gesetze-im-internet",
+      "query": "Unterhaltsvorschussgesetz UhVorschG",
+      "url": "https://www.gesetze-im-internet.de/uhvorschg/"
+    },
+    {
+      "id": "de-subject-008",
+      "programs": [
+        "de/unterhaltsvorschuss"
+      ],
+      "source_id": "bmfsfj",
+      "query": "Richtlinien zur Durchführung des Unterhaltsvorschussgesetzes 2025",
+      "url": "https://www.bmfsfj.de/bmfsfj/themen/familie/familienleistungen/unterhaltsvorschuss/unterhaltsvorschuss-73558",
+      "candidate_seed": "de-uhv-instr-guidance"
+    },
+    {
+      "id": "de-subject-009",
+      "programs": [
+        "de/unterhaltsvorschuss"
+      ],
+      "source_id": "behoerden-vwv",
+      "query": "Richtlinien zur Durchführung des Unterhaltsvorschussgesetzes",
+      "url": "https://www.verwaltungsvorschriften-im-internet.de/volltextsuche.html",
+      "candidate_seed": "de-uhv-instr-guidance"
+    },
+    {
+      "id": "de-subject-010",
+      "programs": [
+        "de/rv-employee-contribution"
+      ],
+      "source_id": "bmas",
+      "query": "Sozialversicherungs-Rechengrößenverordnung 2025",
+      "url": "https://www.bmas.de/DE/Service/Gesetze-und-Gesetzesvorhaben/sozialversicherungs-rechengroessenverordnung-2025.html"
+    },
+    {
+      "id": "de-subject-011",
+      "programs": [
+        "de/rv-employee-contribution"
+      ],
+      "source_id": "bmas",
+      "query": "Bekanntmachung der Geringfügigkeitsgrenze nach § 8 Absatz 1a SGB IV 2025",
+      "url": "https://www.bmas.de/SharedDocs/Downloads/DE/Arbeitsrecht/bekanntmachung-bundesanzeiger-geringfuegigkeitsgrenze-2022.html",
+      "candidate_seed": "de-rv-instr-geringfuegigkeitsgrenze"
+    },
+    {
+      "id": "de-subject-012",
+      "programs": [
+        "de/rv-employee-contribution"
+      ],
+      "source_id": "bmas",
+      "query": "Beitragssatz allgemeine Rentenversicherung 2025 Weitergeltung",
+      "url": "https://www.bmas.de/DE/Service/Service-Suche/suche.html",
+      "candidate_seed": "de-rv-instr-contribution-rate-2025"
+    },
+    {
+      "id": "de-subject-013",
+      "programs": [
+        "de/rv-employee-contribution"
+      ],
+      "source_id": "bundesanzeiger",
+      "query": "Bekanntmachung des durchschnittlichen Zusatzbeitragssatzes 2025",
+      "url": "https://www.bundesanzeiger.de/pub/de/suche?0",
+      "candidate_seed": "de-rv-instr-zusatzbeitrag-2025"
+    },
+    {
+      "id": "de-subject-014",
+      "programs": [
+        "de/rv-employee-contribution"
+      ],
+      "source_id": "bmas",
+      "query": "Bekanntmachung des durchschnittlichen Gesamtsozialversicherungsbeitragssatzes und des Faktors F 2025 Übergangsbereich Midijob",
+      "url": "https://www.bmas.de/DE/Soziales/Sozialversicherung/Geringfuegige-Beschaeftigung/bekanntmachung-des-durchschnittlichen-gesamtsozialversicherungsbeitrages-und-des-faktors-f.html",
+      "candidate_seed": "de-rv-instr-faktor-f-2025"
+    },
+    {
+      "id": "de-subject-015",
+      "programs": [
+        "de/rv-employee-contribution"
+      ],
+      "source_id": "gesetze-im-internet",
+      "query": "Beitragsverfahrensverordnung Beschäftigte 2025",
+      "url": "https://www.gesetze-im-internet.de/bvv/",
+      "candidate_seed": "de-rv-instr-bvv"
+    }
+  ]
+}
